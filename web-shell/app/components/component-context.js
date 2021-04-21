@@ -17,11 +17,13 @@ export default class ComponentContextComponent extends Component {
 	@action
 	registerListener(element) {
 		element.addEventListener('example-event', this.listener);
+		element.addEventListener('example-nest-event', this.listener);
 	}
 
 	@action
 	unregisterListener(element) {
 		element.removeEventListener('example-event', this.listener);
+		element.removeEventListener('example-nest-event', this.listener);
 	}
 }
 

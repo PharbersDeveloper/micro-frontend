@@ -2,11 +2,11 @@ import { DireflowComponent } from 'direflow-component';
 import App from './App';
 
 export default DireflowComponent.create({
-	name: "pahrbers-react-component-example",
-	useShadow: true,
+	name: "pahrbers-react-component-nested",
+	useShadow: false,
 	component: App,
 	configuration: {
-		tagname: 'react-example-components',
+		tagname: 'react-nested-components',
 	},
 	plugins: [
 		{
@@ -22,4 +22,4 @@ export default DireflowComponent.create({
 		componentTitle: 'Example React App',
 		color: undefined
 	}
-})
+});

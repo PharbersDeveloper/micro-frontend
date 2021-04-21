@@ -9,7 +9,7 @@
  * It can be left blank if not needed.
  */
 
-import ReactExampleComponents from './direflow-components/react-example-components';
+import ReactExampleComponents from './direflow-components/react-example-components'
 
 ReactExampleComponents.then((element) => {
 
@@ -17,4 +17,11 @@ ReactExampleComponents.then((element) => {
 	 * Access DOM node when it's mounted
 	 */
 	console.log('react-example-components is mounted on the DOM', element);
-});
+	console.log("mounted")
+	element.addEventListener("example-nest-event", (e) => {
+		console.log("example nested event")
+	})
+	element.addEventListener("example-event", (e) => {
+		console.log("example event")
+	})
+})

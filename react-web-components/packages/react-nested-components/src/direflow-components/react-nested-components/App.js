@@ -1,18 +1,16 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { EventContext, Styled } from 'direflow-component';
 import styles from './App.css';
-import "@pharbers-node/react-nested-components"
 
 const App = (props) => {
 	const dispatch = useContext(EventContext);
 
 	const handleClick = () => {
-		const event = new Event('example-event');
+		console.log("alfred handle click")
+		const event = new Event('example-nest-event');
 		dispatch(event);
 	};
-
-	const exampleRef = useRef()
 
 	return (
 		<Styled styles={styles}>
@@ -28,7 +26,6 @@ const App = (props) => {
 					<button className='button' onClick={handleClick}>
 						Emit new color event
 					</button>
-					<react-nested-components componentTitle="alfred title" ref={exampleRef}></react-nested-components>
 				</div>
 			</div>
 		</Styled>
@@ -37,7 +34,7 @@ const App = (props) => {
 
 App.propTypes = {
 	componentTitle: PropTypes.string,
-	color: PropTypes.string,
+	color: PropTypes.string
 };
 
 export default App;

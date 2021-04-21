@@ -334,10 +334,12 @@
 
     registerListener(element) {
       element.addEventListener('example-event', this.listener);
+      element.addEventListener('example-nest-event', this.listener);
     }
 
     unregisterListener(element) {
       element.removeEventListener('example-event', this.listener);
+      element.removeEventListener('example-nest-event', this.listener);
     }
 
   }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
@@ -2442,7 +2444,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+3bc767cc"});
           }
         
 //# sourceMappingURL=web-shell.map

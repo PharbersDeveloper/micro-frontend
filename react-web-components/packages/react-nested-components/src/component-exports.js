@@ -9,7 +9,7 @@
  * this file can be safely deleted.
  */
 
-import App from './direflow-components/react-example-components/App';
+import App from './direflow-components/react-nested-components/App';
 
 export {
 	App
