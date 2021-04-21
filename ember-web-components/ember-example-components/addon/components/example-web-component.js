@@ -6,6 +6,6 @@ export default class ExampleWebComponentComponent extends Component {
 	handleClick() {
 		console.log("alfred test")
 		const event = new Event("example-event")
-		this.dispatchEvent(event)
+		document.dispatchEvent(event)
 	}
 }
