@@ -2,7 +2,8 @@ import React, { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { EventContext, Styled } from 'direflow-component';
 import styles from './App.css';
-import "@pharbers-node/react-nested-components"
+import BridgeComp from './BridgeComp';
+// import "@pharbers-node/react-nested-components"
 
 const App = (props) => {
 	const dispatch = useContext(EventContext);
@@ -12,7 +13,10 @@ const App = (props) => {
 		dispatch(event);
 	};
 
-	const exampleRef = useRef()
+	const handleNestEvent = (e) => {
+		const event = new Event(e.type)
+		dispatch(event);
+	}
 
 	return (
 		<Styled styles={styles}>
@@ -28,7 +32,7 @@ const App = (props) => {
 					<button className='button' onClick={handleClick}>
 						Emit new color event
 					</button>
-					<react-nested-components componentTitle="alfred title" ref={exampleRef}></react-nested-components>
+					<BridgeComp onEventCallback={handleNestEvent}/>
 				</div>
 			</div>
 		</Styled>
