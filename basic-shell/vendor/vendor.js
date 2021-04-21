@@ -90970,52 +90970,34 @@ define("simple-html-tokenizer", ["exports"], function (_exports) {
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+  var _dec, _class;
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
     <button type="button" {{on "click" this.handleClick}}>
-      {{componentTitle}}
+      {{@componenttitle}}
   </button>
   {{yield}}
   
   */
   {
-    "id": "eenW32b2",
-    "block": "[[[11,\"button\"],[24,4,\"button\"],[4,[38,0],[\"click\",[30,0,[\"handleClick\"]]],null],[12],[1,\"\\n    \"],[1,[34,1]],[1,\"\\n\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"on\",\"componentTitle\",\"yield\"]]",
+    "id": "j+LCW2yo",
+    "block": "[[[11,\"button\"],[24,4,\"button\"],[4,[38,0],[\"click\",[30,0,[\"handleClick\"]]],null],[12],[1,\"\\n    \"],[1,[30,1]],[1,\"\\n\"],[13],[1,\"\\n\"],[18,2,null],[1,\"\\n\"]],[\"@componenttitle\",\"&default\"],false,[\"on\",\"yield\"]]",
     "moduleName": "ember-example-components/components/example-web-component.hbs",
     "isStrictMode": false
   });
 
-  let ExampleWebComponentComponent = (_dec = Ember._tracked, _dec2 = Ember._action, (_class = class ExampleWebComponentComponent extends _component.default {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "componentTitle", _descriptor, this);
-    }
-
+  let ExampleWebComponentComponent = (_dec = Ember._action, (_class = class ExampleWebComponentComponent extends _component.default {
+    // @tracked componenttitle = "example component title"
     handleClick() {
       console.log("alfred test");
       const event = new Event("example-event");
       this.dispatchEvent(event);
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "componentTitle", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: function () {
-      return "example component title";
-    }
-  }), _applyDecoratedDescriptor(_class.prototype, "handleClick", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "handleClick"), _class.prototype)), _class));
+  }, (_applyDecoratedDescriptor(_class.prototype, "handleClick", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "handleClick"), _class.prototype)), _class));
   _exports.default = ExampleWebComponentComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ExampleWebComponentComponent);
@@ -92256,36 +92238,36 @@ var __ember_auto_import__ =
 /************************************************************************/
 /******/ ({
 
-/***/ "../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js":
-/*!***************************************************************************************************************************!*\
-  !*** /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js ***!
-  \***************************************************************************************************************************/
+/***/ "../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js":
+/*!****************************************************************************************************************************!*\
+  !*** /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("\nif (typeof document !== 'undefined') {\n  __webpack_require__.p = (function(){\n    var scripts = document.querySelectorAll('script');\n    return scripts[scripts.length - 1].src.replace(/\\/[^/]*$/, '/');\n  })();\n}\n\nmodule.exports = (function(){\n  var d = _eai_d;\n  var r = _eai_r;\n  window.emberAutoImportDynamic = function(specifier) {\n    if (arguments.length === 1) {\n      return r('_eai_dyn_' + specifier);\n    } else {\n      return r('_eai_dynt_' + specifier)(Array.prototype.slice.call(arguments, 1))\n    }\n  };\n})();\n\n\n//# sourceURL=webpack://__ember_auto_import__//private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js?");
+eval("\nif (typeof document !== 'undefined') {\n  __webpack_require__.p = (function(){\n    var scripts = document.querySelectorAll('script');\n    return scripts[scripts.length - 1].src.replace(/\\/[^/]*$/, '/');\n  })();\n}\n\nmodule.exports = (function(){\n  var d = _eai_d;\n  var r = _eai_r;\n  window.emberAutoImportDynamic = function(specifier) {\n    if (arguments.length === 1) {\n      return r('_eai_dyn_' + specifier);\n    } else {\n      return r('_eai_dynt_' + specifier)(Array.prototype.slice.call(arguments, 1))\n    }\n  };\n})();\n\n\n//# sourceURL=webpack://__ember_auto_import__//private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js?");
 
 /***/ }),
 
-/***/ "../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js":
-/*!*************************************************************************************************************************!*\
-  !*** /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js ***!
-  \*************************************************************************************************************************/
+/***/ "../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js":
+/*!**************************************************************************************************************************!*\
+  !*** /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\nwindow._eai_r = require;\nwindow._eai_d = define;\n\n\n//# sourceURL=webpack://__ember_auto_import__//private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js?");
+eval("\nwindow._eai_r = require;\nwindow._eai_d = define;\n\n\n//# sourceURL=webpack://__ember_auto_import__//private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js?");
 
 /***/ }),
 
 /***/ 0:
-/*!***************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js ***!
-  \***************************************************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js */\"../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js\");\nmodule.exports = __webpack_require__(/*! /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js */\"../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js\");\n\n\n//# sourceURL=webpack://__ember_auto_import__/multi_/private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/l.js_/private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-8960GmX9acBgbyQ9/cache-157-bundler/staging/app.js?");
+eval("__webpack_require__(/*! /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js */\"../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js\");\nmodule.exports = __webpack_require__(/*! /private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js */\"../../../../../../../../private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js\");\n\n\n//# sourceURL=webpack://__ember_auto_import__/multi_/private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/l.js_/private/var/folders/rq/9f0qlnv16b5f0gnwyp7czq3m0000gn/T/broccoli-12434B4h5UxLBgxb8/cache-157-bundler/staging/app.js?");
 
 /***/ })
 

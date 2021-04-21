@@ -204,8 +204,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "gmTHVPef",
-    "block": "[[[1,[28,[35,0],[\"Dummy\"],null]],[1,\"\\n\\n\"],[10,\"h2\"],[14,1,\"title\"],[12],[1,\"Welcome to Ember\"],[13],[1,\"\\n\"],[1,[34,1]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"example-web-component\",\"component\",\"-outlet\"]]",
+    "id": "DQX40HSt",
+    "block": "[[[1,[28,[35,0],[\"Dummy\"],null]],[1,\"\\n\\n\"],[10,\"h2\"],[14,1,\"title\"],[12],[1,\"Welcome to Ember\"],[13],[1,\"\\n\"],[8,[39,1],null,[[\"@componenttitle\"],[\"alfred test\"]],[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"example-web-component\",\"component\",\"-outlet\"]]",
     "moduleName": "dummy/templates/application.hbs",
     "isStrictMode": false
   });
