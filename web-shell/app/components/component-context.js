@@ -12,7 +12,6 @@ export default class ComponentContextComponent extends Component {
 		// passing color value to react context via props
 		const webcomponent = e.target;
 		webcomponent.color = newColor;
-		debugger
 		console.log("alfred listener action")
 	}
 

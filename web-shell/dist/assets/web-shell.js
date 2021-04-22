@@ -334,7 +334,6 @@
 
       const webcomponent = e.target;
       webcomponent.color = newColor;
-      debugger;
       console.log("alfred listener action");
     }
 
@@ -2454,7 +2453,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+20d772b8"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+51210222"});
           }
         
 //# sourceMappingURL=web-shell.map
