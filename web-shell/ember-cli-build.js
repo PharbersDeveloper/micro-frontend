@@ -17,7 +17,9 @@ module.exports = function (defaults) {
 		]
 	})
 
-	app.import("./vendor/react-example-components.js")
-	app.import("./vendor/react-nested-components.js")
+	app.import("./vendor/react/react-example-components.js")
+	app.import("./vendor/react/react-nested-components.js")
+	app.import("./vendor/ember/vendor.js")
+	app.import("./vendor/ember/dummy.js")
 	return app.toTree();
 };

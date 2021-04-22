@@ -310,14 +310,18 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </react-example-components>
+              <example-web-component componenttitle="alfred"
+                  {{did-insert this.registerListener}}
+                  {{will-destroy this.unregisterListener}} >
+              </example-web-component>
           </div>
       </div>
   </div>
   
   */
   {
-    "id": "T9DyUm3O",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "3HuDRkT9",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"example-web-component\"],[24,\"componenttitle\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
@@ -330,11 +334,17 @@
 
       const webcomponent = e.target;
       webcomponent.color = newColor;
+      debugger;
+      console.log("alfred listener action");
     }
 
     registerListener(element) {
       element.addEventListener('example-event', this.listener);
       element.addEventListener('example-nest-event', this.listener);
+      element.testobject = {
+        a: 1,
+        b: 2
+      };
     }
 
     unregisterListener(element) {
@@ -2444,7 +2454,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+ea79e60b"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+20d772b8"});
           }
         
 //# sourceMappingURL=web-shell.map

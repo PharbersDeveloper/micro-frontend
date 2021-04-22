@@ -12,12 +12,15 @@ export default class ComponentContextComponent extends Component {
 		// passing color value to react context via props
 		const webcomponent = e.target;
 		webcomponent.color = newColor;
+		debugger
+		console.log("alfred listener action")
 	}
 
 	@action
 	registerListener(element) {
 		element.addEventListener('example-event', this.listener);
 		element.addEventListener('example-nest-event', this.listener);
+		element.testobject = { a: 1, b: 2 }
 	}
 
 	@action
