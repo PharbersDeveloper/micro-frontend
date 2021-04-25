@@ -58,3 +58,14 @@ Vuejs 比较简单，但是在编译的过程中，发现Vue3对现有的web com
 我们的整体任务还是基于整体的emberjs把CI/CD以及Component合并在现有的牛逼的Shell中。
 
 [emberjs]:https://emberjs.com/
+
+# 运行启动
+
+1. ember component 编译 把
+2. Vue 编译
+3. react编译
+4. 把编译文件拷贝到web-shell的vender文件夹下
+
+我已经给你们弄好了，你们不需要自己编译
+除非你们已经学会了要不然请联系我。
+
