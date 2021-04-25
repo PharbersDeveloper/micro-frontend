@@ -1,17 +1,27 @@
 <div class="content">
     <h1>Web components inside Ember</h1>
     <div class="ember">
-        <h2>Ember context</h2>
+        <h2>Ember shell context</h2>
         <div class="react">
             <h2>React context</h2>
             <react-example-components
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}} >
             </react-example-components>
+        </div>
+        <div class="react">
+            <h2>Ember context</h2>
             <example-web-component componenttitle="alfred"
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}} >
             </example-web-component>
+        </div>
+        <div class="react">
+            <h2>Vue context</h2>
+            <vue-example-component msg="alfred" msg_title="button title"
+                {{did-insert this.registerListener}}
+                {{will-destroy this.unregisterListener}} >
+            </vue-example-component>
         </div>
     </div>
 </div>

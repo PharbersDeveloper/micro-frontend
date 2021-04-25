@@ -15,7 +15,7 @@
     }
   });
 });
-;define("web-shell/adapters/application", ["exports", "ember-data", "ember-inflector", "web-shell/config/environment", "web-shell/helpers/PhSigV4AWSClientFactory", "web-shell/helpers/PhSigV4ClientUtils", "web-shell/helpers/PhUrlTemplate"], function (_exports, _emberData, _emberInflector, _environment, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate) {
+;define("web-shell/adapters/application", ["exports", "web-shell/config/environment", "web-shell/helpers/PhSigV4AWSClientFactory", "web-shell/helpers/PhSigV4ClientUtils", "web-shell/helpers/PhUrlTemplate", "@ember-data/adapter/json-api"], function (_exports, _environment, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate, _jsonApi) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -23,10 +23,11 @@
   });
   _exports.default = void 0;
 
-  var _default = _emberData.default.JSONAPIAdapter.extend({
+  // eslint-disable-next-line ember/no-classic-classes
+  var _default = _jsonApi.default.extend({
     cookies: Ember.inject.service(),
     oauthRequest: false,
-    // host: 'http://www.pharbers.com', 
+    // host: 'http://www.pharbers.com',
     namespace: _environment.default.namespace,
 
     // 根据后端发布版本修改命名空间, 生产环境用这个，nginx 做了转发
@@ -41,7 +42,7 @@
 
       const curType = url.split("/").splice(2, 2); // ["activities" , ... ]
 
-      this.set('modelName', modelName);
+      this.set("modelName", modelName);
 
       if (modelName === "account" || modelName === "applyuser") {
         this.toggleProperty("oauthRequest");
@@ -96,28 +97,28 @@
 
       return "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn" + newUrl;
     },
-    headers: Ember.computed('cookies', 'oauthRequest', 'requestURL', "newUrl", "queryParamsAWS", function () {
+    headers: Ember.computed("auth", "cookies", "newUrl", "oauthRequest", "oauthRequestComponentQuery", "oauthRequestTokenQuery", "queryParamsAWS", "queryParamsArr", "requestURL", "token", function () {
       const factory = _PhSigV4AWSClientFactory.default;
       const utils = _PhSigV4ClientUtils.default;
       const uriTemp = _PhUrlTemplate.default;
       const config = {
         accessKey: _environment.default.APP.AWS_ACCESS_KEY,
         secretKey: _environment.default.APP.AWS_SECRET_KEY,
-        sessionToken: '',
-        region: 'cn-northwest-1',
+        sessionToken: "",
+        region: "cn-northwest-1",
         apiKey: undefined,
-        defaultContentType: 'application/vnd.api+json',
-        defaultAcceptType: 'application/vnd.api+json'
+        defaultContentType: "application/vnd.api+json",
+        defaultAcceptType: "application/vnd.api+json"
       }; // extract endpoint and path from url
 
-      const invokeUrl = 'https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0';
+      const invokeUrl = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0";
       const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
       const pathComponent = invokeUrl.substring(endpoint.length);
       const sigV4ClientConfig = {
         accessKey: config.accessKey,
         secretKey: config.secretKey,
         sessionToken: config.sessionToken,
-        serviceName: 'execute-api',
+        serviceName: "execute-api",
         region: config.region,
         endpoint: endpoint,
         defaultContentType: config.defaultContentType,
@@ -125,15 +126,16 @@
       };
       const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig); // 请求login hbs的时候使用
 
-      if (this.get("auth") && this.get("oauthRequestComponentQuery")) {
+      if (this.auth && this.oauthRequestComponentQuery) {
+        // eslint-disable-next-line ember/no-side-effects
         this.set("auth", 0);
         let req = {
-          verb: 'get'.toUpperCase(),
+          verb: "get".toUpperCase(),
           path: "/v0/common/components/OXE67oMY7RuFJ_rmBUzL",
           headers: {
-            Accept: 'text/html'
+            Accept: "text/html"
           },
-          queryParams: this.get("oauthRequestComponentQuery"),
+          queryParams: this.oauthRequestComponentQuery,
           body: {}
         }; // console.log("req", req)
 
@@ -142,12 +144,13 @@
         return request.headers;
       }
 
-      if (this.get("token") && this.get("oauthRequestTokenQuery")) {
+      if (this.token && this.oauthRequestTokenQuery) {
+        // eslint-disable-next-line ember/no-side-effects
         this.set("token", 0);
         let req = {
-          verb: 'get'.toUpperCase(),
+          verb: "get".toUpperCase(),
           path: "/v0/oauth/token",
-          queryParams: this.get("oauthRequestTokenQuery"),
+          queryParams: this.oauthRequestTokenQuery,
           body: {}
         }; // console.log("req", req)
 
@@ -157,14 +160,14 @@
       } // apiGateway.core.utils.assertParametersDefined(params, ['type', 'Accept'], ['body']);
 
 
-      const requestURL = this.get("requestURL").split("/"); // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
+      const requestURL = this.requestURL.split("/"); // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
       // const curType = requestURL[2]
 
-      const curType = requestURL[2];
-      let curId = "";
-      let curRelationship = "";
+      const curType = requestURL[2]; // let curId = ""
+      // let curRelationship = ""
+
       let paramsArr = [];
-      let urlArr = ['type']; // type id relationship
+      let urlArr = ["type"]; // type id relationship
 
       let awsPath = "/offweb/{type}"; // 如果有id 和relationship 加上
 
@@ -172,7 +175,7 @@
         type: curType,
         Accept: "application/vnd.api+json"
       };
-      let queryParamsAWS = this.get("queryParamsAWS");
+      let queryParamsAWS = this.queryParamsAWS;
 
       if (requestURL.length >= 4) {
         urlArr.push("id");
@@ -182,7 +185,7 @@
       }
 
       if (Object.keys(queryParamsAWS).length) {
-        let queryParamsArr = this.get("queryParamsArr"); // console.log('queryParamsAWS',queryParamsAWS[queryParamsArr[0]])
+        let queryParamsArr = this.queryParamsArr; // console.log('queryParamsAWS',queryParamsAWS[queryParamsArr[0]])
 
         if (queryParamsArr == "ids[]") {
           let encodeURIEle = encodeURI(queryParamsArr[0]);
@@ -201,20 +204,20 @@
             paramsArr.push(encodeURIEle);
             params[encodeURIEle] = queryParamsAWS[element];
           });
-        } // Object.assign( params, queryParamsAWS )			
+        } // Object.assign( params, queryParamsAWS )
 
       } // { verb: 'GET',
       // path: '/v0/offweb/proposals',
       // headers: { Accept: 'application/vnd.api+json' },
       // queryParams: {},
-      // body: {} 
+      // body: {}
       // }
 
 
       let req = {
-        verb: 'get'.toUpperCase(),
+        verb: "get".toUpperCase(),
         path: pathComponent + uriTemp.PhUriTemplate(awsPath).expand(utils.parseParametersToObject(params, urlArr)),
-        headers: utils.parseParametersToObject(params, ['Accept']),
+        headers: utils.parseParametersToObject(params, ["Accept"]),
         queryParams: utils.parseParametersToObject(params, paramsArr),
         // queryParams: queryParamsAWS,
         body: {}
@@ -237,7 +240,7 @@
       // 		'AWS4-HMAC-SHA256 Credential=AKIAWPBDTVEAJ6CCFVCP/20200605/cn-northwest-1/execute-api/aws4_request, SignedHeaders=accept;host;x-amz-date, Signature=1295d2ea428819bc40d6cd35a7dc0dca20d0ef335ccfda5e7e346b17223ae0d9',
       // 		'Content-Type': 'application/vnd.api+json' },
       // 	data: '',
-      // 	timeout: 30000 
+      // 	timeout: 30000
       // }
       // console.log("request", request)
 
@@ -303,25 +306,35 @@
     <div class="content">
       <h1>Web components inside Ember</h1>
       <div class="ember">
-          <h2>Ember context</h2>
+          <h2>Ember shell context</h2>
           <div class="react">
               <h2>React context</h2>
               <react-example-components
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </react-example-components>
+          </div>
+          <div class="react">
+              <h2>Ember context</h2>
               <example-web-component componenttitle="alfred"
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </example-web-component>
+          </div>
+          <div class="react">
+              <h2>Vue context</h2>
+              <vue-example-component msg="alfred" msg_title="button title"
+                  {{did-insert this.registerListener}}
+                  {{will-destroy this.unregisterListener}} >
+              </vue-example-component>
           </div>
       </div>
   </div>
   
   */
   {
-    "id": "3HuDRkT9",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"example-web-component\"],[24,\"componenttitle\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "UqxNLMQY",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember shell context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n            \"],[11,\"example-web-component\"],[24,\"componenttitle\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[11,\"vue-example-component\"],[24,\"msg\",\"alfred\"],[24,\"msg_title\",\"button title\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
@@ -338,8 +351,8 @@
     }
 
     registerListener(element) {
-      element.addEventListener('example-event', this.listener);
-      element.addEventListener('example-nest-event', this.listener);
+      element.addEventListener("example-event", this.listener);
+      element.addEventListener("example-nest-event", this.listener);
       element.testobject = {
         a: 1,
         b: 2
@@ -347,16 +360,16 @@
     }
 
     unregisterListener(element) {
-      element.removeEventListener('example-event', this.listener);
-      element.removeEventListener('example-nest-event', this.listener);
+      element.removeEventListener("example-event", this.listener);
+      element.removeEventListener("example-nest-event", this.listener);
     }
 
   }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = ComponentContextComponent;
 
   function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
+    const letters = "0123456789ABCDEF";
+    let color = "#";
 
     for (var i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
@@ -367,7 +380,7 @@
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
 });
-;define("web-shell/components/returned-page", ["exports", "web-shell/templates/components/returned-page"], function (_exports, _returnedPage) {
+;define("web-shell/components/returned-page", ["exports", "@glimmer/component", "web-shell/templates/components/returned-page"], function (_exports, _component, _returnedPage) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -375,7 +388,7 @@
   });
   _exports.default = void 0;
 
-  var _default = Ember.Component.extend({
+  var _default = _component.default.extend({
     layout: _returnedPage.default,
     elementId: "oauth",
     accountDescribe: "账号",
@@ -385,7 +398,7 @@
     didInsertElement() {
       this._super(...arguments);
 
-      const a = Handlebars.compile(this.get("content"))({
+      const a = Handlebars.compile(this.content)({
         accountDescribe: "账号",
         passwordDescribe: "密码",
         btnDescribe: "登录"
@@ -446,6 +459,7 @@
    * express or implied. See the License for the specific language governing
    * permissions and limitations under the License.
    */
+  // eslint-disable-next-line no-undef
   const CryptoJS = require("crypto-js"); // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
 
 
@@ -453,13 +467,13 @@
   _exports.PhSigV4AWSClientFactory = PhSigV4AWSClientFactory;
 
   PhSigV4AWSClientFactory.newClient = function (config) {
-    const AWS_SHA_256 = 'AWS4-HMAC-SHA256';
-    const AWS4_REQUEST = 'aws4_request';
-    const AWS4 = 'AWS4';
-    const X_AMZ_DATE = 'x-amz-date';
-    const X_AMZ_SECURITY_TOKEN = 'x-amz-security-token';
-    const HOST = 'host';
-    const AUTHORIZATION = 'Authorization';
+    const AWS_SHA_256 = "AWS4-HMAC-SHA256";
+    const AWS4_REQUEST = "aws4_request";
+    const AWS4 = "AWS4";
+    const X_AMZ_DATE = "x-amz-date";
+    const X_AMZ_SECURITY_TOKEN = "x-amz-security-token";
+    const HOST = "host";
+    const AUTHORIZATION = "Authorization";
 
     function hash(value) {
       return CryptoJS.SHA256(value);
@@ -476,7 +490,7 @@
     }
 
     function buildCanonicalRequest(method, path, queryParams, headers, payload) {
-      return method + '\n' + buildCanonicalUri(path) + '\n' + buildCanonicalQueryString(queryParams) + '\n' + buildCanonicalHeaders(headers) + '\n' + buildCanonicalSignedHeaders(headers) + '\n' + hexEncode(hash(payload));
+      return method + "\n" + buildCanonicalUri(path) + "\n" + buildCanonicalQueryString(queryParams) + "\n" + buildCanonicalHeaders(headers) + "\n" + buildCanonicalSignedHeaders(headers) + "\n" + hexEncode(hash(payload));
     }
 
     function hashCanonicalRequest(request) {
@@ -489,22 +503,23 @@
 
     function buildCanonicalQueryString(queryParams) {
       if (Object.keys(queryParams).length < 1) {
-        return '';
+        return "";
       }
 
       let sortedQueryParams = [];
 
       for (const property in queryParams) {
+        // eslint-disable-next-line no-prototype-builtins
         if (queryParams.hasOwnProperty(property)) {
           sortedQueryParams.push(property);
         }
       }
 
       sortedQueryParams.sort();
-      let canonicalQueryString = '';
+      let canonicalQueryString = "";
 
       for (let i = 0; i < sortedQueryParams.length; i++) {
-        canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
+        canonicalQueryString += sortedQueryParams[i] + "=" + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + "&";
       }
 
       return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
@@ -512,7 +527,7 @@
 
     function fixedEncodeURIComponent(str) {
       let newStr = encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+        return "%" + c.charCodeAt(0).toString(16).toUpperCase();
       });
       newStr = newStr.replace(/%26/g, "&");
       newStr = newStr.replace(/%3D/g, "=");
@@ -522,10 +537,11 @@
     }
 
     function buildCanonicalHeaders(headers) {
-      let canonicalHeaders = '';
+      let canonicalHeaders = "";
       let sortedKeys = [];
 
       for (const property in headers) {
+        // eslint-disable-next-line no-prototype-builtins
         if (headers.hasOwnProperty(property)) {
           sortedKeys.push(property);
         }
@@ -534,7 +550,7 @@
       sortedKeys.sort();
 
       for (let i = 0; i < sortedKeys.length; i++) {
-        canonicalHeaders += sortedKeys[i].toLowerCase() + ':' + headers[sortedKeys[i]] + '\n';
+        canonicalHeaders += sortedKeys[i].toLowerCase() + ":" + headers[sortedKeys[i]] + "\n";
       }
 
       return canonicalHeaders;
@@ -544,21 +560,22 @@
       let sortedKeys = [];
 
       for (const property in headers) {
+        // eslint-disable-next-line no-prototype-builtins
         if (headers.hasOwnProperty(property)) {
           sortedKeys.push(property.toLowerCase());
         }
       }
 
       sortedKeys.sort();
-      return sortedKeys.join(';');
+      return sortedKeys.join(";");
     }
 
     function buildStringToSign(datetime, credentialScope, hashedCanonicalRequest) {
-      return AWS_SHA_256 + '\n' + datetime + '\n' + credentialScope + '\n' + hashedCanonicalRequest;
+      return AWS_SHA_256 + "\n" + datetime + "\n" + credentialScope + "\n" + hashedCanonicalRequest;
     }
 
     function buildCredentialScope(datetime, region, service) {
-      return datetime.substr(0, 8) + '/' + region + '/' + service + '/' + AWS4_REQUEST;
+      return datetime.substr(0, 8) + "/" + region + "/" + service + "/" + AWS4_REQUEST;
     }
 
     function calculateSigningKey(secretKey, datetime, region, service) {
@@ -570,7 +587,7 @@
     }
 
     function buildAuthorizationHeader(accessKey, credentialScope, headers, signature) {
-      return AWS_SHA_256 + ' Credential=' + accessKey + '/' + credentialScope + ', SignedHeaders=' + buildCanonicalSignedHeaders(headers) + ', Signature=' + signature;
+      return AWS_SHA_256 + " Credential=" + accessKey + "/" + credentialScope + ", SignedHeaders=" + buildCanonicalSignedHeaders(headers) + ", Signature=" + signature;
     }
 
     let awsSigV4Client = {};
@@ -579,17 +596,17 @@
       return awsSigV4Client;
     }
 
-    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, 'accessKey');
-    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, 'secretKey');
+    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, "accessKey");
+    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, "secretKey");
     awsSigV4Client.sessionToken = config.sessionToken;
-    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, 'serviceName');
-    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, 'region');
-    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, 'endpoint');
+    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, "serviceName");
+    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, "region");
+    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, "endpoint");
 
     awsSigV4Client.makeRequest = function (request) {
-      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, 'verb');
+      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, "verb");
 
-      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, 'path');
+      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, "path");
 
       let queryParams = _PhSigV4ClientUtils.default.copy(request.queryParams);
 
@@ -605,30 +622,30 @@
       } //If the user has not specified an override for Content type the use default
 
 
-      if (headers['Content-Type'] === undefined) {
-        headers['Content-Type'] = config.defaultContentType;
+      if (headers["Content-Type"] === undefined) {
+        headers["Content-Type"] = config.defaultContentType;
       } //If the user has not specified an override for Accept type the use default
 
 
-      if (headers['Accept'] === undefined) {
-        headers['Accept'] = config.defaultAcceptType;
+      if (headers["Accept"] === undefined) {
+        headers["Accept"] = config.defaultAcceptType;
       }
 
       let body = _PhSigV4ClientUtils.default.copy(request.body);
 
-      if (body === undefined || verb === 'GET') {
+      if (body === undefined || verb === "GET") {
         // override request body and set to empty when signing GET requests
-        body = '';
+        body = "";
       } else {
         body = JSON.stringify(body);
       } //If there is no body remove the content-type header so it is not included in SigV4 calculation
 
 
-      if (body === '' || body === undefined || body === null) {
-        delete headers['Content-Type'];
+      if (body === "" || body === undefined || body === null) {
+        delete headers["Content-Type"];
       }
 
-      const datetime = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/[:\-]|\.\d{3}/g, '');
+      const datetime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z").replace(/[:\-]|\.\d{3}/g, "");
       headers[X_AMZ_DATE] = datetime; // const parser = document.createElement('a');
       // parser.href = awsSigV4Client.endpoint;
 
@@ -641,7 +658,7 @@
       const signature = calculateSignature(signingKey, stringToSign);
       headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
 
-      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== '') {
+      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== "") {
         headers[X_AMZ_SECURITY_TOKEN] = awsSigV4Client.sessionToken;
       }
 
@@ -649,13 +666,13 @@
       let url = config.endpoint + path;
       const queryString = buildCanonicalQueryString(queryParams);
 
-      if (queryString !== '') {
-        url += '?' + queryString;
+      if (queryString !== "") {
+        url += "?" + queryString;
       } //Need to re-attach Content-Type if it is not specified at this point
 
 
-      if (headers['Content-Type'] === undefined) {
-        headers['Content-Type'] = config.defaultContentType;
+      if (headers["Content-Type"] === undefined) {
+        headers["Content-Type"] = config.defaultContentType;
       }
 
       return {
@@ -696,7 +713,7 @@
   let PhSigV4ClientUtils = {
     assertDefined: function (object, name) {
       if (object === undefined) {
-        throw name + ' must be defined';
+        throw name + " must be defined";
       } else {
         return object;
       }
@@ -749,6 +766,7 @@
       const copy = obj.constructor();
 
       for (const attr in obj) {
+        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
       }
 
@@ -759,13 +777,16 @@
       const merged = baseObj.constructor();
 
       for (const attr in baseObj) {
+        // eslint-disable-next-line no-prototype-builtins
         if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr];
       }
 
-      if (null == additionalProps || "object" != typeof additionalProps) return baseObj;
+      if (null == additionalProps || "object" != typeof additionalProps) return baseObj; // eslint-disable-next-line no-undef
 
       for (attr in additionalProps) {
-        if (additionalProps.hasOwnProperty(attr)) merged[attr] = additionalProps[attr];
+        // eslint-disable-next-line no-prototype-builtins,no-undef
+        if (additionalProps.hasOwnProperty(attr)) // eslint-disable-next-line no-undef
+          merged[attr] = additionalProps[attr];
       }
 
       return merged;
@@ -787,13 +808,11 @@
    (c) marc.portier@gmail.com - 2011-2012
    Licensed under APLv2 (http://opensource.org/licenses/Apache-2.0)
    */
-  ;
-
   var PhUriTemplate = function () {
     // Below are the functions we originally used from jQuery.
     // The implementations below are often more naive then what is inside jquery, but they suffice for our needs.
     function isFunction(fn) {
-      return typeof fn == 'function';
+      return typeof fn == "function";
     }
 
     function isEmptyObject(obj) {
@@ -857,13 +876,13 @@
       if (result !== undefined) {
         return result;
       } else {
-        var keyparts = key.split('.');
+        var keyparts = key.split(".");
         var i = 0,
             keysplits = keyparts.length - 1;
 
         for (i = 0; i < keysplits; i++) {
-          var leadKey = keyparts.slice(0, keysplits - i).join('.');
-          var trailKey = keyparts.slice(-i - 1).join('.');
+          var leadKey = keyparts.slice(0, keysplits - i).join(".");
+          var trailKey = keyparts.slice(-i - 1).join(".");
           var leadContext = context[leadKey];
 
           if (leadContext !== undefined) {
@@ -893,8 +912,8 @@
     }; //TODO: change since draft-0.6 about characters in literals
 
     /* extract:
-     The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
-     */
+        The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
+        */
 
 
     function Literal(txt) {
@@ -1009,35 +1028,35 @@
       var conf;
 
       switch (ops) {
-        case '':
+        case "":
           conf = simpleConf;
           break;
 
-        case '+':
+        case "+":
           conf = reservedConf;
           break;
 
-        case '#':
+        case "#":
           conf = fragmentConf;
           break;
 
-        case ';':
+        case ";":
           conf = pathParamConf;
           break;
 
-        case '?':
+        case "?":
           conf = formParamConf;
           break;
 
-        case '&':
+        case "&":
           conf = formContinueConf;
           break;
 
-        case '/':
+        case "/":
           conf = pathHierarchyConf;
           break;
 
-        case '.':
+        case ".":
           conf = labelConf;
           break;
 
@@ -1128,9 +1147,10 @@
       var k;
 
       for (k in obj) {
+        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty(k)) {
           if (obj[k] !== null && obj[k] !== undefined) {
-            buffer.append(joiner + k + ',').append(obj[k], encoder);
+            buffer.append(joiner + k + ",").append(obj[k], encoder);
             joiner = ",";
           }
         }
@@ -1166,6 +1186,7 @@
         var k;
 
         for (k in val) {
+          // eslint-disable-next-line no-prototype-builtins
           if (val.hasOwnProperty(k)) {
             adder(k, encoder(val[k]));
           }
@@ -1201,9 +1222,9 @@
     }
 
     VarSpec.build = function (name, expl, part, nums) {
-      var valueHandler, valueModifier;
+      var valueHandler; //, valueModifier;
 
-      if (!!expl) {
+      if (expl) {
         //interprete as boolean
         valueHandler = explodeValueHandler;
       } else {
@@ -1248,8 +1269,8 @@
     // (as expected by the spec - see tests.html "reserved operators")
 
     var match2expression = function (m) {
-      var expr = m[0];
-      var ops = m[2] || '';
+      // var expr = m[0];
+      var ops = m[2] || "";
       var vars = m[3].split(LISTSEP);
       var i = 0,
           len = vars.length;
@@ -1633,7 +1654,7 @@
     }
   });
 });
-;define("web-shell/serializers/application", ["exports", "ember-data", "ember-inflector"], function (_exports, _emberData, _emberInflector) {
+;define("web-shell/serializers/application", ["exports", "ember-inflector", "@ember-data/serializer/json-api"], function (_exports, _emberInflector, _jsonApi) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1641,7 +1662,8 @@
   });
   _exports.default = void 0;
 
-  var _default = _emberData.default.JSONAPISerializer.extend({
+  // eslint-disable-next-line ember/no-classic-classes
+  var _default = _jsonApi.default.extend({
     modelNameFromPayloadKey(key) {
       return (0, _emberInflector.singularize)(Ember.String.dasherize(key));
     },
@@ -1665,7 +1687,7 @@
     // 		if (ele === "start-date" || ele === "end-date" || ele === "date" ) {
     // 			obj[k] = Date.parse(resourceHash.attributes[ele])
     // 		}
-    // 	})		
+    // 	})
     // 	return obj
     // }
 
@@ -1692,12 +1714,13 @@
   });
   _exports.default = void 0;
 
+  // eslint-disable-next-line ember/no-classic-classes
   var _default = Ember.Service.extend({
-    loading: document.getElementById('loadingio-spinner-double-ring-ho1zizxmctu'),
+    loading: document.getElementById("loadingio-spinner-double-ring-ho1zizxmctu"),
     afterLoading: Ember.computed(function () {
       let loadingNum = 0;
 
-      if (document.readyState === 'complete') {
+      if (document.readyState === "complete") {
         loadingNum = 1;
       }
 
@@ -1731,11 +1754,11 @@
       lY8 = lY & 0x80000000;
       lX4 = lX & 0x40000000;
       lY4 = lY & 0x40000000;
-      lResult = (lX & 0x3FFFFFFF) + (lY & 0x3FFFFFFF);
+      lResult = (lX & 0x3fffffff) + (lY & 0x3fffffff);
       if (lX4 & lY4) return lResult ^ 0x80000000 ^ lX8 ^ lY8;
 
       if (lX4 | lY4) {
-        if (lResult & 0x40000000) return lResult ^ 0xC0000000 ^ lX8 ^ lY8;else return lResult ^ 0x40000000 ^ lX8 ^ lY8;
+        if (lResult & 0x40000000) return lResult ^ 0xc0000000 ^ lX8 ^ lY8;else return lResult ^ 0x40000000 ^ lX8 ^ lY8;
       } else return lResult ^ lX8 ^ lY8;
     }
 
@@ -1837,8 +1860,8 @@
     x = ConvertToWordArray(sMessage); // Step 3. Initialise
 
     a = 0x67452301;
-    b = 0xEFCDAB89;
-    c = 0x98BADCFE;
+    b = 0xefcdab89;
+    c = 0x98badcfe;
     d = 0x10325476; // Step 4. Process the message in 16-word blocks
 
     for (k = 0; k < x.length; k += 16) {
@@ -1846,70 +1869,70 @@
       BB = b;
       CC = c;
       DD = d;
-      a = FF(a, b, c, d, x[k + 0], S11, 0xD76AA478);
-      d = FF(d, a, b, c, x[k + 1], S12, 0xE8C7B756);
-      c = FF(c, d, a, b, x[k + 2], S13, 0x242070DB);
-      b = FF(b, c, d, a, x[k + 3], S14, 0xC1BDCEEE);
-      a = FF(a, b, c, d, x[k + 4], S11, 0xF57C0FAF);
-      d = FF(d, a, b, c, x[k + 5], S12, 0x4787C62A);
-      c = FF(c, d, a, b, x[k + 6], S13, 0xA8304613);
-      b = FF(b, c, d, a, x[k + 7], S14, 0xFD469501);
-      a = FF(a, b, c, d, x[k + 8], S11, 0x698098D8);
-      d = FF(d, a, b, c, x[k + 9], S12, 0x8B44F7AF);
-      c = FF(c, d, a, b, x[k + 10], S13, 0xFFFF5BB1);
-      b = FF(b, c, d, a, x[k + 11], S14, 0x895CD7BE);
-      a = FF(a, b, c, d, x[k + 12], S11, 0x6B901122);
-      d = FF(d, a, b, c, x[k + 13], S12, 0xFD987193);
-      c = FF(c, d, a, b, x[k + 14], S13, 0xA679438E);
-      b = FF(b, c, d, a, x[k + 15], S14, 0x49B40821);
-      a = GG(a, b, c, d, x[k + 1], S21, 0xF61E2562);
-      d = GG(d, a, b, c, x[k + 6], S22, 0xC040B340);
-      c = GG(c, d, a, b, x[k + 11], S23, 0x265E5A51);
-      b = GG(b, c, d, a, x[k + 0], S24, 0xE9B6C7AA);
-      a = GG(a, b, c, d, x[k + 5], S21, 0xD62F105D);
+      a = FF(a, b, c, d, x[k + 0], S11, 0xd76aa478);
+      d = FF(d, a, b, c, x[k + 1], S12, 0xe8c7b756);
+      c = FF(c, d, a, b, x[k + 2], S13, 0x242070db);
+      b = FF(b, c, d, a, x[k + 3], S14, 0xc1bdceee);
+      a = FF(a, b, c, d, x[k + 4], S11, 0xf57c0faf);
+      d = FF(d, a, b, c, x[k + 5], S12, 0x4787c62a);
+      c = FF(c, d, a, b, x[k + 6], S13, 0xa8304613);
+      b = FF(b, c, d, a, x[k + 7], S14, 0xfd469501);
+      a = FF(a, b, c, d, x[k + 8], S11, 0x698098d8);
+      d = FF(d, a, b, c, x[k + 9], S12, 0x8b44f7af);
+      c = FF(c, d, a, b, x[k + 10], S13, 0xffff5bb1);
+      b = FF(b, c, d, a, x[k + 11], S14, 0x895cd7be);
+      a = FF(a, b, c, d, x[k + 12], S11, 0x6b901122);
+      d = FF(d, a, b, c, x[k + 13], S12, 0xfd987193);
+      c = FF(c, d, a, b, x[k + 14], S13, 0xa679438e);
+      b = FF(b, c, d, a, x[k + 15], S14, 0x49b40821);
+      a = GG(a, b, c, d, x[k + 1], S21, 0xf61e2562);
+      d = GG(d, a, b, c, x[k + 6], S22, 0xc040b340);
+      c = GG(c, d, a, b, x[k + 11], S23, 0x265e5a51);
+      b = GG(b, c, d, a, x[k + 0], S24, 0xe9b6c7aa);
+      a = GG(a, b, c, d, x[k + 5], S21, 0xd62f105d);
       d = GG(d, a, b, c, x[k + 10], S22, 0x2441453);
-      c = GG(c, d, a, b, x[k + 15], S23, 0xD8A1E681);
-      b = GG(b, c, d, a, x[k + 4], S24, 0xE7D3FBC8);
-      a = GG(a, b, c, d, x[k + 9], S21, 0x21E1CDE6);
-      d = GG(d, a, b, c, x[k + 14], S22, 0xC33707D6);
-      c = GG(c, d, a, b, x[k + 3], S23, 0xF4D50D87);
-      b = GG(b, c, d, a, x[k + 8], S24, 0x455A14ED);
-      a = GG(a, b, c, d, x[k + 13], S21, 0xA9E3E905);
-      d = GG(d, a, b, c, x[k + 2], S22, 0xFCEFA3F8);
-      c = GG(c, d, a, b, x[k + 7], S23, 0x676F02D9);
-      b = GG(b, c, d, a, x[k + 12], S24, 0x8D2A4C8A);
-      a = HH(a, b, c, d, x[k + 5], S31, 0xFFFA3942);
-      d = HH(d, a, b, c, x[k + 8], S32, 0x8771F681);
-      c = HH(c, d, a, b, x[k + 11], S33, 0x6D9D6122);
-      b = HH(b, c, d, a, x[k + 14], S34, 0xFDE5380C);
-      a = HH(a, b, c, d, x[k + 1], S31, 0xA4BEEA44);
-      d = HH(d, a, b, c, x[k + 4], S32, 0x4BDECFA9);
-      c = HH(c, d, a, b, x[k + 7], S33, 0xF6BB4B60);
-      b = HH(b, c, d, a, x[k + 10], S34, 0xBEBFBC70);
-      a = HH(a, b, c, d, x[k + 13], S31, 0x289B7EC6);
-      d = HH(d, a, b, c, x[k + 0], S32, 0xEAA127FA);
-      c = HH(c, d, a, b, x[k + 3], S33, 0xD4EF3085);
-      b = HH(b, c, d, a, x[k + 6], S34, 0x4881D05);
-      a = HH(a, b, c, d, x[k + 9], S31, 0xD9D4D039);
-      d = HH(d, a, b, c, x[k + 12], S32, 0xE6DB99E5);
-      c = HH(c, d, a, b, x[k + 15], S33, 0x1FA27CF8);
-      b = HH(b, c, d, a, x[k + 2], S34, 0xC4AC5665);
-      a = II(a, b, c, d, x[k + 0], S41, 0xF4292244);
-      d = II(d, a, b, c, x[k + 7], S42, 0x432AFF97);
-      c = II(c, d, a, b, x[k + 14], S43, 0xAB9423A7);
-      b = II(b, c, d, a, x[k + 5], S44, 0xFC93A039);
-      a = II(a, b, c, d, x[k + 12], S41, 0x655B59C3);
-      d = II(d, a, b, c, x[k + 3], S42, 0x8F0CCC92);
-      c = II(c, d, a, b, x[k + 10], S43, 0xFFEFF47D);
-      b = II(b, c, d, a, x[k + 1], S44, 0x85845DD1);
-      a = II(a, b, c, d, x[k + 8], S41, 0x6FA87E4F);
-      d = II(d, a, b, c, x[k + 15], S42, 0xFE2CE6E0);
-      c = II(c, d, a, b, x[k + 6], S43, 0xA3014314);
-      b = II(b, c, d, a, x[k + 13], S44, 0x4E0811A1);
-      a = II(a, b, c, d, x[k + 4], S41, 0xF7537E82);
-      d = II(d, a, b, c, x[k + 11], S42, 0xBD3AF235);
-      c = II(c, d, a, b, x[k + 2], S43, 0x2AD7D2BB);
-      b = II(b, c, d, a, x[k + 9], S44, 0xEB86D391);
+      c = GG(c, d, a, b, x[k + 15], S23, 0xd8a1e681);
+      b = GG(b, c, d, a, x[k + 4], S24, 0xe7d3fbc8);
+      a = GG(a, b, c, d, x[k + 9], S21, 0x21e1cde6);
+      d = GG(d, a, b, c, x[k + 14], S22, 0xc33707d6);
+      c = GG(c, d, a, b, x[k + 3], S23, 0xf4d50d87);
+      b = GG(b, c, d, a, x[k + 8], S24, 0x455a14ed);
+      a = GG(a, b, c, d, x[k + 13], S21, 0xa9e3e905);
+      d = GG(d, a, b, c, x[k + 2], S22, 0xfcefa3f8);
+      c = GG(c, d, a, b, x[k + 7], S23, 0x676f02d9);
+      b = GG(b, c, d, a, x[k + 12], S24, 0x8d2a4c8a);
+      a = HH(a, b, c, d, x[k + 5], S31, 0xfffa3942);
+      d = HH(d, a, b, c, x[k + 8], S32, 0x8771f681);
+      c = HH(c, d, a, b, x[k + 11], S33, 0x6d9d6122);
+      b = HH(b, c, d, a, x[k + 14], S34, 0xfde5380c);
+      a = HH(a, b, c, d, x[k + 1], S31, 0xa4beea44);
+      d = HH(d, a, b, c, x[k + 4], S32, 0x4bdecfa9);
+      c = HH(c, d, a, b, x[k + 7], S33, 0xf6bb4b60);
+      b = HH(b, c, d, a, x[k + 10], S34, 0xbebfbc70);
+      a = HH(a, b, c, d, x[k + 13], S31, 0x289b7ec6);
+      d = HH(d, a, b, c, x[k + 0], S32, 0xeaa127fa);
+      c = HH(c, d, a, b, x[k + 3], S33, 0xd4ef3085);
+      b = HH(b, c, d, a, x[k + 6], S34, 0x4881d05);
+      a = HH(a, b, c, d, x[k + 9], S31, 0xd9d4d039);
+      d = HH(d, a, b, c, x[k + 12], S32, 0xe6db99e5);
+      c = HH(c, d, a, b, x[k + 15], S33, 0x1fa27cf8);
+      b = HH(b, c, d, a, x[k + 2], S34, 0xc4ac5665);
+      a = II(a, b, c, d, x[k + 0], S41, 0xf4292244);
+      d = II(d, a, b, c, x[k + 7], S42, 0x432aff97);
+      c = II(c, d, a, b, x[k + 14], S43, 0xab9423a7);
+      b = II(b, c, d, a, x[k + 5], S44, 0xfc93a039);
+      a = II(a, b, c, d, x[k + 12], S41, 0x655b59c3);
+      d = II(d, a, b, c, x[k + 3], S42, 0x8f0ccc92);
+      c = II(c, d, a, b, x[k + 10], S43, 0xffeff47d);
+      b = II(b, c, d, a, x[k + 1], S44, 0x85845dd1);
+      a = II(a, b, c, d, x[k + 8], S41, 0x6fa87e4f);
+      d = II(d, a, b, c, x[k + 15], S42, 0xfe2ce6e0);
+      c = II(c, d, a, b, x[k + 6], S43, 0xa3014314);
+      b = II(b, c, d, a, x[k + 13], S44, 0x4e0811a1);
+      a = II(a, b, c, d, x[k + 4], S41, 0xf7537e82);
+      d = II(d, a, b, c, x[k + 11], S42, 0xbd3af235);
+      c = II(c, d, a, b, x[k + 2], S43, 0x2ad7d2bb);
+      b = II(b, c, d, a, x[k + 9], S44, 0xeb86d391);
       a = AddUnsigned(a, AA);
       b = AddUnsigned(b, BB);
       c = AddUnsigned(c, CC);
@@ -1921,11 +1944,12 @@
     } else {
       return WordToHex(b) + WordToHex(c);
     }
-  };
+  }; // eslint-disable-next-line ember/no-classic-classes
+
 
   var _default = Ember.Service.extend({
     // environment: equal(ENV.environment, 'production'),
-    environment: Ember.computed.equal(_environment.default.environment, 'production'),
+    environment: Ember.computed.equal(_environment.default.environment, "production"),
     ajax: Ember.inject.service(),
     cookies: Ember.inject.service(),
     router: Ember.inject.service(),
@@ -1933,41 +1957,41 @@
     store: Ember.inject.service(),
     toastOptions: Ember.Object.create({
       closeButton: false,
-      positionClass: 'toast-top-center',
+      positionClass: "toast-top-center",
       progressBar: false,
-      timeOut: '2000'
+      timeOut: "2000"
     }),
     loginSuccess: "登录成功",
     loginFail: "登录失败",
     logoutSuceees: "注销成功",
     // host: ENV.host,
     host: "http://oauth.pharbers.com",
-    version: 'v0',
+    version: "v0",
     // clientId: "5cc54e32ceb3c45854b80e9d", 旧官网
     // clientId: "5e4e14205bb3bc61bcbfc90a", // 新官网
     clientId: "5ed86c5ac4e1f0330eec3d2e",
     // eks-oauth-server暂时使用阿里云数据（mongo&redis）直接外部IP访问
-    clientSecret: '5c90db71eeefcc082c0823b2',
+    clientSecret: "5c90db71eeefcc082c0823b2",
     scope: "APP/Pharbers",
     isLogin: false,
     isRegister: false,
     account: null,
 
     accountLogin(a, p, adapter) {
-      const cookies = this.cookies;
+      // const cookies = this.cookies;
       let loginSuccess = this.loginSuccess;
-      let loginFail = this.loginFail;
-      let logoutSuceees = this.logoutSuceees;
-      let host = `${this.get('host')}`,
-          version = `${this.get('version')}`,
-          resource = 'PasswordLogin',
-          url = '';
-      url = `?client_id=${this.get('clientId')}
-                    &client_secret=${this.get('clientSecret')}
-                    &scope=${this.get('scope')}`.replace(/\n/gm, '').replace(/ /gm, '').replace(/\t/gm, '');
-      this.get("ajax").request([host, version, resource].join('/') + url, {
+      let loginFail = this.loginFail; // let logoutSuceees = this.logoutSuceees;
+
+      let host = `${this.host}`,
+          version = `${this.version}`,
+          resource = "PasswordLogin",
+          url = "";
+      url = `?client_id=${this.clientId}
+                    &client_secret=${this.clientSecret}
+                    &scope=${this.scope}`.replace(/\n/gm, "").replace(/ /gm, "").replace(/\t/gm, "");
+      this.ajax.request([host, version, resource].join("/") + url, {
         type: "POST",
-        contentType: 'application/json',
+        contentType: "application/json",
         data: {
           username: a,
           password: p
@@ -1978,8 +2002,8 @@
         }
 
         if (response.error != undefined) {
-          this.toast.error('', loginFail, this.toastOptions);
-          this.get('router').transitionTo('login');
+          this.toast.error("", loginFail, this.toastOptions);
+          this.router.transitionTo("login");
           return Ember.RSVP.reject(response);
         }
 
@@ -1990,7 +2014,7 @@
         // });
 
         adapter.set("oauthRequest", 1);
-        return this.store.findRecord('account', data.account_id);
+        return this.store.findRecord("account", data.account_id);
       }).then(data => {
         if (!this.environment) {
           window.console.log(data);
@@ -2000,42 +2024,42 @@
           account: data,
           isLogin: true
         });
-        this.toast.success('', loginSuccess, this.toastOptions);
-        this.get('router').transitionTo('product-list'); // window.location.href = "product-list"
+        this.toast.success("", loginSuccess, this.toastOptions);
+        this.router.transitionTo("product-list"); // window.location.href = "product-list"
       }, err => {
         if (!this.environment) {
           window.console.log(err);
         }
 
         this.clearAllCookie(1);
-        this.toast.error('', loginFail, this.toastOptions);
-        this.get('router').transitionTo('login');
+        this.toast.error("", loginFail, this.toastOptions);
+        this.router.transitionTo("login");
       }).catch(err => {
         if (!this.environment) {
           window.console.log(err);
         }
 
-        this.toast.error('', loginFail, this.toastOptions);
-        this.get('router').transitionTo('login');
+        this.toast.error("", loginFail, this.toastOptions);
+        this.router.transitionTo("login");
       });
     },
 
     cookiesOperation(response) {
       // response.scope = "APP/MAXBI,CHC:Nhwa"
-      let cookies = this.get('cookies');
+      let cookies = this.cookies;
       let expiry = new Date(response.expiry);
       let options = {
-        domain: 'ph-offweb.s3-website.cn-northwest-1.amazonaws.com.cn',
-        path: '/',
+        domain: "ph-offweb.s3-website.cn-northwest-1.amazonaws.com.cn",
+        path: "/",
         expires: expiry
       };
-      cookies.write('token', response.access_token, options);
-      cookies.write('account_id', response.account_id, options);
-      cookies.write('access_token', response.access_token, options);
-      cookies.write('refresh_token', response.refresh_token, options);
-      cookies.write('token_type', response.token_type, options);
-      cookies.write('scope', response.scope, options);
-      cookies.write('expiry', response.expiry, options); // let appScopesList = '';
+      cookies.write("token", response.access_token, options);
+      cookies.write("account_id", response.account_id, options);
+      cookies.write("access_token", response.access_token, options);
+      cookies.write("refresh_token", response.refresh_token, options);
+      cookies.write("token_type", response.token_type, options);
+      cookies.write("scope", response.scope, options);
+      cookies.write("expiry", response.expiry, options); // let appScopesList = '';
       // // let result = response.scope.match(/\[(.+)\]/);
       // let result = response.scope.split("/");
       // let scopes = result[1].split(",");
@@ -2096,11 +2120,11 @@
     // },
     judgeAuth() {
       let tokenFlag = false,
-          token = this.get('cookies').read('token'); // let scope = this.get('cookies').read('scope');
+          token = this.cookies.read("token"); // let scope = this.get('cookies').read('scope');
       // let account = this.get('cookies').read('account');
 
-      if (token != undefined && token != null && token != '') {
-        this.set('isLogin', true);
+      if (token != undefined && token != null && token != "") {
+        this.set("isLogin", true);
         tokenFlag = true;
       } // if(account != undefined && account != null && account != '') {
       // 	this.set('account', account)
@@ -2135,17 +2159,17 @@
         for (var i = keys.length; i--;) // domains.forEach(elem => {
         // 	document.cookie = keys[i] + '=0;domain=' + elem + ';expires=' + new Date(0).toUTCString()+";path=/";
         // })
-        document.cookie = keys[i] + '=0;domain=' + '.pharbers.com' + ';expires=' + new Date(0).toUTCString() + ";path=/";
+        document.cookie = keys[i] + "=0;domain=" + ".pharbers.com" + ";expires=" + new Date(0).toUTCString() + ";path=/";
 
-        document.cookie = keys[i] + '=0;domain=' + 'www.pharbers.com' + ';expires=' + new Date(0).toUTCString() + ";path=/";
+        document.cookie = keys[i] + "=0;domain=" + "www.pharbers.com" + ";expires=" + new Date(0).toUTCString() + ";path=/";
       }
 
-      this.set('isLogin', false);
+      this.set("isLogin", false);
       this.store.unloadAll();
 
       if (param == undefined) {
-        this.toast.success('', logoutSuceees, this.toastOptions);
-        this.get('router').transitionTo('login'); // window.location.href = "/login"
+        this.toast.success("", logoutSuceees, this.toastOptions);
+        this.router.transitionTo("login"); // window.location.href = "/login"
       }
     }
 
@@ -2161,6 +2185,7 @@
   });
   _exports.default = void 0;
 
+  // eslint-disable-next-line ember/no-classic-classes
   var _default = Ember.Service.extend({
     cookies: Ember.inject.service(),
     ajax: Ember.inject.service(),
@@ -2168,15 +2193,15 @@
     store: Ember.inject.service(),
 
     oauthCallback(transition) {
-      const cookies = this.get("cookies");
-      const ajax = this.get("ajax");
+      const cookies = this.cookies;
+      const ajax = this.ajax;
       const {
         queryParams
       } = transition.to;
-      const applicationAdapter = this.get("store").adapterFor("application"); // console.log("?", transition, queryParams)
+      const applicationAdapter = this.store.adapterFor("application"); // console.log("?", transition, queryParams)
 
       if (queryParams.code && queryParams.state) {
-        // 获取oauth-callback 中的query 
+        // 获取oauth-callback 中的query
         const redirectUri = queryParams.redirect_uri;
         const clientId = queryParams.client_id;
         const code = queryParams.code;
@@ -2187,11 +2212,11 @@
         applicationAdapter.set("token", 1);
         applicationAdapter.toggleProperty("oauthRequest");
         applicationAdapter.set("oauthRequestTokenQuery", {
-          "redirect_uri": redirectUri,
-          "client_id": clientId,
-          "code": code,
-          "grant_type": grantType,
-          "state": state
+          redirect_uri: redirectUri,
+          client_id: clientId,
+          code: code,
+          grant_type: grantType,
+          state: state
         });
         const a = applicationAdapter.get("headers");
         ajax.request(url, {
@@ -2208,18 +2233,18 @@
           cookies.write("refresh_token", response.refresh_token, options);
           cookies.write("token_type", response.token_type, options);
           cookies.write("expires_in", response.expires_in, options);
-          this.get("router").transitionTo("product-list");
+          this.router.transitionTo("product-list");
         }).catch(() => {
-          this.get("router").transitionTo("product-list");
+          this.router.transitionTo("product-list");
         });
       } else {
-        this.get("router").transitionTo("product-list");
+        this.router.transitionTo("product-list");
       }
     },
 
     judgeAuth() {
       let tokenFlag = false;
-      let token = this.get("cookies").read("access_token");
+      let token = this.cookies.read("access_token");
 
       if (typeof token !== "undefined" && token !== null && token !== "") {
         tokenFlag = true;
@@ -2288,6 +2313,7 @@
   });
   _exports.default = void 0;
 
+  // eslint-disable-next-line ember/no-classic-classes
   var _default = Ember.Service.extend({
     ossService: Ember.inject.service("services/oss"),
     ajax: Ember.inject.service(),
@@ -2318,22 +2344,22 @@
     },
 
     genDownloadUrl(index) {
-      let curLanguage = window.localStorage.getItem('lang');
+      let curLanguage = window.localStorage.getItem("lang");
       let bookName;
       let uuid;
 
       if (index == 0) {
         bookName = curLanguage === "中文" ? "广阔市场用药分析及展望" : "Analysis and Prospects for Broad Medication Market";
-        uuid = 'Blue Book.pdf';
+        uuid = "Blue Book.pdf";
       } else if (index == 1) {
         bookName = curLanguage === "中文" ? "带量采购对中国医药市场格局的影响" : "VBP's impact on the Chinese Pharmaceutical Market";
-        uuid = 'Blue Book2020.pdf';
+        uuid = "Blue Book2020.pdf";
       } // let uuid = 'Blue Book.pdf';
 
 
-      let accept = 'pdf';
-      let client = this.ossService.get('ossClient');
-      let url = client.signatureUrl(accept + '/' + uuid, {
+      let accept = "pdf";
+      let client = this.ossService.get("ossClient");
+      let url = client.signatureUrl(accept + "/" + uuid, {
         expires: 43200
       });
       window.console.log(url);
@@ -2453,7 +2479,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+51210222"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+f2913310"});
           }
         
 //# sourceMappingURL=web-shell.map
