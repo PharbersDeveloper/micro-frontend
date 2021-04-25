@@ -42,6 +42,8 @@
         methods: {
 			handleClick() {
                 console.log("alfred web component tests")
+                const event = new Event("example-event")
+				this.$emit('example-event', event)
             }
         }
 	}
