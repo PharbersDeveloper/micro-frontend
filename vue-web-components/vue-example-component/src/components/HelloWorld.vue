@@ -28,7 +28,7 @@
             <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
         </ul>
 
-        <button @click="handleClick">{{ msg_title }}</button>
+        <button @click="handleClick">{{ msg_title.test }}</button>
     </div>
 </template>
 
@@ -37,7 +37,10 @@
 		name: 'HelloWorld',
 		props: {
 			msg: String,
-			msg_title: String
+			msg_title: {
+				default() { return { test: 'yuan' } },
+				type: Object
+			}
 		},
         methods: {
 			handleClick() {

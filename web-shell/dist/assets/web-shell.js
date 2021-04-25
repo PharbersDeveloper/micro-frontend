@@ -323,7 +323,7 @@
           </div>
           <div class="react">
               <h2>Vue context</h2>
-              <vue-example-component msg="alfred" msg_title="button title"
+              <vue-example-component msg="alfred"
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </vue-example-component>
@@ -333,8 +333,8 @@
   
   */
   {
-    "id": "UqxNLMQY",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember shell context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n            \"],[11,\"example-web-component\"],[24,\"componenttitle\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[11,\"vue-example-component\"],[24,\"msg\",\"alfred\"],[24,\"msg_title\",\"button title\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "DGLoQ7Ut",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember shell context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n            \"],[11,\"example-web-component\"],[24,\"componenttitle\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[11,\"vue-example-component\"],[24,\"msg\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
@@ -347,6 +347,9 @@
 
       const webcomponent = e.target;
       webcomponent.color = newColor;
+      webcomponent.msg_title = {
+        test: "alfred"
+      };
       console.log("alfred listener action");
     }
 
@@ -2479,7 +2482,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+42295280"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+425a6297"});
           }
         
 //# sourceMappingURL=web-shell.map
