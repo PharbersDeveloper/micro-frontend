@@ -304,10 +304,10 @@
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
     <div class="content">
-      <h1>Web components inside Ember</h1>
+      {{!-- <h1>Web components inside Ember</h1> --}}
       <div class="ember">
-          <h2>Ember shell context</h2>
-          <div class="react">
+          {{!-- <h2>Ember shell context</h2> --}}
+          {{!-- <div class="react">
               <h2>React context</h2>
               <react-example-components
                   {{did-insert this.registerListener}}
@@ -320,21 +320,21 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </example-web-component>
-          </div>
+          </div> --}}
           <div class="react">
               <h2>Vue context</h2>
-              <vue-example-component msg="alfred"
+              <vue-components
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
-              </vue-example-component>
+              </vue-components>
           </div>
       </div>
   </div>
   
   */
   {
-    "id": "DGLoQ7Ut",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n    \"],[10,\"h1\"],[12],[1,\"Web components inside Ember\"],[13],[1,\"\\n    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n        \"],[10,\"h2\"],[12],[1,\"Ember shell context\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"React context\"],[13],[1,\"\\n            \"],[11,\"react-example-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Ember context\"],[13],[1,\"\\n            \"],[11,\"example-web-component\"],[24,\"componenttitle\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[11,\"vue-example-component\"],[24,\"msg\",\"alfred\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "n6uL+neH",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[11,\"vue-components\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
@@ -2482,7 +2482,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+425a6297"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+ccfabf9a"});
           }
         
 //# sourceMappingURL=web-shell.map
