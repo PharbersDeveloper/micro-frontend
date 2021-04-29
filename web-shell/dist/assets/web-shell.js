@@ -323,7 +323,7 @@
           </div> --}}
           <div class="react">
               <h2>Vue context</h2>
-              <vue-components
+              <vue-components 
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </vue-components>
@@ -354,8 +354,8 @@
     }
 
     registerListener(element) {
-      element.addEventListener("example-event", this.listener);
-      element.addEventListener("example-nest-event", this.listener);
+      element.addEventListener("click", this.listener);
+      element.addEventListener("dbclick", this.listener);
       element.testobject = {
         a: 1,
         b: 2
@@ -2482,7 +2482,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+ccfabf9a"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+fc3b3e9f"});
           }
         
 //# sourceMappingURL=web-shell.map

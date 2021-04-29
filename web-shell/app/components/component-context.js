@@ -17,8 +17,8 @@ export default class ComponentContextComponent extends Component {
 
 	@action
 	registerListener(element) {
-		element.addEventListener("example-event", this.listener)
-		element.addEventListener("example-nest-event", this.listener)
+		element.addEventListener("click", this.listener)
+		element.addEventListener("dbclick", this.listener)
 		element.testobject = { a: 1, b: 2 }
 	}
 
