@@ -15,7 +15,6 @@
         <img svg-inline class="svg-icon" src="../assets/icons/data.svg" alt="example" />
         {{text}}
     </button>
-
 </div>
 </template>
 
