@@ -10,14 +10,15 @@
     <script src="https://unpkg.com/vue"></script>
     <!--Load the web component polyfill-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/webcomponents-loader.js"></script>
-    <script src="../dist/vue-basic-components.js"></script>
+<!--    <script src="../dist/main.js"></script>-->
+    <script src="../dist/pharbers.js"></script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-   <div id="app"></div>
+<!--   <div id="app"></div>-->
     <!-- built files will be auto injected -->
-    <vue-basic-components msg="alfred test" msg_title="alfred msg"></vue-basic-components>
+    <pharbers-bp-button text="alfred test" ></pharbers-bp-button>
   </body>
 </html>

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <button 
+    <button
         class="bp-button"
         @click="handleClick"
         @dblclick="handleDBClick"
@@ -10,12 +10,9 @@
             type ? 'button-' + type : 'button-primary',
             density ? 'button-density-' + density : 'button-density-default',
             {'btn-block': block}
-        ]" 
+        ]"
     >
-        <svg-icon 
-            :iconClass="icon"
-            :class="{'hide': !icon || icon=='null'}"
-        ></svg-icon>
+        <img svg-inline class="svg-icon" src="../assets/icons/data.svg" alt="example" />
         {{text}}
     </button>
 
@@ -26,20 +23,21 @@
 // import '../assets/css/variables.scss'
 // import '../assets/css/addon.scss'
 // import '../assets/css/_base.scss'
-import '../icons';
+// import '../icons';
+// import "./bp-svg-icon"
 export default {
     props: {
         text: String,
-        type: String, // standard, subtle, destructive, warning, 
+        type: String, // standard, subtle, destructive, warning,
         density: String, // comfy, default, compact
         block: Boolean, //button是否占满一行
         disabled: Boolean, //加了disabled就是disabled
         icon: {
             type: String,
-            default: "null"
-        }
+            default: ""
+        },
     },
-    computed: {
+	computed: {
         buttonDisabled() {
             return this.disabled;
         },
@@ -66,6 +64,15 @@ export default {
 </script>
 
 <style lang=scss scoped>
+    .svg-icon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        margin-right: 4px;
+    }
+
     .hide {
         display: none
     }
