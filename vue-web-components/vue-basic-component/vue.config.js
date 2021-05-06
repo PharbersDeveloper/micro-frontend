@@ -6,8 +6,6 @@ function resolve (dir) {
 }
 
 module.exports = {
-    outputDir: "./dist", //打包后的文件夹名字及路径
-    publicPath: "./dist/",
     chainWebpack: config => {
         config.module
         .rule('svg')
