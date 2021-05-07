@@ -18,10 +18,23 @@
         </div> --}}
         <div class="react">
             <h2>Vue context</h2>
+            <pharbers-bp-input states="info" placeholder="测试">
+            </pharbers-bp-input>
             <pharbers-bp-button text="alfred test"
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}} >
             </pharbers-bp-button>
+            <pharbers-bp-img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" text="alfred test"
+                {{did-insert this.registerListener}}
+                {{will-destroy this.unregisterListener}} >
+            </pharbers-bp-img>
+            <pharbers-bp-label text="测试label" 
+                {{did-insert this.registerListener}}
+                {{will-destroy this.unregisterListener}}></pharbers-bp-label>
+            <pharbers-bp-link text="测试link" 
+                {{did-insert this.registerListener}}
+                {{will-destroy this.unregisterListener}}>
+            </pharbers-bp-link>
         </div>
     </div>
 </div>

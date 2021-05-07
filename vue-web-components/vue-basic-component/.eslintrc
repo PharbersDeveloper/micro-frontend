@@ -3,11 +3,12 @@
         "ga": true,
         "chrome": true
     },
-    "plugins": ["html", "json"],
-    "extends": "elemefe",
     "rules": {
-        "no-restricted-globals": ["error", "event", "fdescribe"],
-        "indent": ["error", 4] // 4个空格缩进
+        // "no-restricted-globals": ["error", "event", "fdescribe"],
+        // "indent": ["error", 4], // 4个空格缩进
+        // "no-multi-spaces": 2, //不允许出现多余的空格
+        // "no-redeclare": 2, //不允许变量重复声明
+        // "comma-dangle": ["error", "never"] //不允许对象中出现结尾逗号
     },
     "parserOptions": {
         "ecmaVersion": 6 //ECMAscript版本
