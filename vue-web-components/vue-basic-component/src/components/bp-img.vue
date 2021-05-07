@@ -1,9 +1,6 @@
 <template>
 <div>
-    <img 
-        class="bp-img"
-        :src="src" 
-    />
+    <img  class="bp-img" :src="src" />
 
 </div>
 </template>

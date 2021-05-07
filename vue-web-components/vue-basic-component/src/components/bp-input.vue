@@ -20,9 +20,6 @@
 </template>
 
 <script>
-// import '../assets/css/variables.scss'
-// import '../assets/css/addon.scss'
-// import '../assets/css/_base.scss'
 export default {
     name: 'bpInput',
 
