@@ -42,7 +42,8 @@
         "rules": {
             "no-debugger": "off",
             "no-console": "off"
-        }
+        },
+        "parser": "babel-eslint"
     },
     "browserslist": [
         "> 1%",
