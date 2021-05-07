@@ -40,11 +40,14 @@
         />
 
         <h1>vue label</h1>
-        <bpLabel text="我是label1"/>
-        <bpLabel text="我是label2"/>
+        <bpLabel text="我是label1" />
+        <bpLabel text="我是label2" />
 
         <h1>vue link</h1>
         <bpLink text="这是链接" />
+
+        <h1>vue tag</h1>
+        <bpTag text="这是tag" :subtle="false" type="teals"/>
     </div>
 </template>
 
@@ -54,6 +57,7 @@ import bpImg from '../components/bp-img.vue'
 import bpInput from '../components/bp-input.vue'
 import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
+import bpTag from '../components/bp-tag.vue'
 
 export default {
     name: 'bp-button',
@@ -62,7 +66,8 @@ export default {
         bpImg,
         bpInput,
         bpLabel,
-        bpLink
+        bpLink,
+        bpTag
     },
     methods: {
         // button
