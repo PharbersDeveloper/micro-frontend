@@ -48,6 +48,9 @@
 
         <h1>vue tag</h1>
         <bpTag text="这是tag" :subtle="false" type="teals"/>
+
+        <h1>vue status</h1>
+        <bpStatus text="这是status" :subtle="true" type="in-progress"/>
     </div>
 </template>
 
@@ -58,6 +61,7 @@ import bpInput from '../components/bp-input.vue'
 import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
 import bpTag from '../components/bp-tag.vue'
+import bpStatus from '../components/bp-status.vue'
 
 export default {
     name: 'bp-button',
@@ -67,7 +71,8 @@ export default {
         bpInput,
         bpLabel,
         bpLink,
-        bpTag
+        bpTag,
+        bpStatus
     },
     methods: {
         // button
