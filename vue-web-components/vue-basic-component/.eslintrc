@@ -1,0 +1,15 @@
+{
+    "globals": {
+        "ga": true,
+        "chrome": true
+    },
+    "plugins": ["html", "json"],
+    "extends": "elemefe",
+    "rules": {
+        "no-restricted-globals": ["error", "event", "fdescribe"],
+        "indent": ["error", 4] // 4个空格缩进
+    },
+    "parserOptions": {
+        "ecmaVersion": 6 //ECMAscript版本
+    }
+}
