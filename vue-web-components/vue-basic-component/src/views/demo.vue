@@ -1,14 +1,14 @@
 <template>
     <div class="button-area">
         <h1>vue button</h1>
-        <bpButton type="primary" text="primary" icon="case"
+        <bpButton type="primary" text="primary"
             @click="click1"
             @dbclick="click2"
          />
         <bpButton type="warning" text="warning"
             @click="click1"
             @dbclick="click2"/>
-        <bpButton type="standard" text="standard" icon="data"
+        <bpButton type="standard" text="standard"
             @click="click1"
             @dbclick="click2"/>
 
