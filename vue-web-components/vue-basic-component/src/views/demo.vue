@@ -45,6 +45,9 @@
 
         <h1>vue link</h1>
         <bpLink text="这是链接" />
+
+        <h1>vue text</h1>
+        <bpText title="这里是bp-text">这里是bp-text</bpText>
     </div>
 </template>
 
@@ -54,6 +57,7 @@ import bpImg from '../components/bp-img.vue'
 import bpInput from '../components/bp-input.vue'
 import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
+import bpText from '../components/bp-text.vue'
 
 export default {
     name: 'bp-button',
@@ -62,7 +66,8 @@ export default {
         bpImg,
         bpInput,
         bpLabel,
-        bpLink
+        bpLink,
+        bpText
     },
     methods: {
         // button
