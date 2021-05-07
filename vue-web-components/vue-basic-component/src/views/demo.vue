@@ -47,10 +47,10 @@
         <bpLink text="这是链接" />
 
         <h1>vue tag</h1>
-        <bpTag text="这是tag" :subtle="false" type="teals"/>
+        <bpTag text="这是tag" subtle type="teals"/>
 
         <h1>vue status</h1>
-        <bpStatus text="这是status" :subtle="true" type="in-progress"/>
+        <bpStatus text="这是status" subtle type="in-progress"/>
     </div>
 </template>
 

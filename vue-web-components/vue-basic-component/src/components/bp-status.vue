@@ -21,7 +21,10 @@ export default {
             type: String,
             default: "status test"
         },
-        subtle: Boolean,
+        subtle: {
+            type: Boolean,
+            default: false
+        },
         type: {
             type: String,
             default: "success"
@@ -63,7 +66,25 @@ export default {
     $color-notice-y075: #ff991f;
     $color-neutrals-n800: rgba(#091e42,0.95);
     $color-notice-y500: #fffae6;
-
+    
+    .bp-status {
+        height: 16px;
+        width: max-content;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        background: #FFFFFF;
+        padding: 0 4px;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        border-radius: 4px;
+    }
     /* status 通用样式 */
 
     .status-default.status-subtle {
