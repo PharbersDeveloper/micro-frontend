@@ -56,6 +56,12 @@
         <bpBadge result=100 primary/>
         <bpBadge result=98 primary reverse/>
         <bpBadge/>
+
+        <h1>vue button group</h1>
+        <bpButtonGroup>
+            <bpButtonItem active></bpButtonItem>
+            <bpButtonItem></bpButtonItem>
+        </bpButtonGroup>
     </div>
 </template>
 
@@ -68,6 +74,8 @@ import bpLink from '../components/bp-link.vue'
 import bpTag from '../components/bp-tag.vue'
 import bpStatus from '../components/bp-status.vue'
 import bpBadge from '../components/bp-badge.vue'
+import bpButtonItem from '../components/bp-button-item.vue'
+import bpButtonGroup from '../components/bp-button-group.vue'
 
 export default {
     name: 'bp-button',
@@ -79,7 +87,9 @@ export default {
         bpLink,
         bpTag,
         bpStatus,
-        bpBadge
+        bpBadge,
+        bpButtonItem,
+        bpButtonGroup
     },
     methods: {
         // button
