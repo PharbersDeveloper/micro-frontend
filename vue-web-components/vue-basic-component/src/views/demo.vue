@@ -51,6 +51,11 @@
 
         <h1>vue status</h1>
         <bpStatus text="这是status" subtle type="in-progress"/>
+
+         <h1>vue badge</h1>
+        <bpBadge result=100 primary/>
+        <bpBadge result=98 primary reverse/>
+        <bpBadge/>
     </div>
 </template>
 
@@ -62,6 +67,7 @@ import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
 import bpTag from '../components/bp-tag.vue'
 import bpStatus from '../components/bp-status.vue'
+import bpBadge from '../components/bp-badge.vue'
 
 export default {
     name: 'bp-button',
@@ -72,7 +78,8 @@ export default {
         bpLabel,
         bpLink,
         bpTag,
-        bpStatus
+        bpStatus,
+        bpBadge
     },
     methods: {
         // button
