@@ -48,6 +48,14 @@
 
         <h1>vue text</h1>
         <bpText title="这里是bp-text">这里是bp-text</bpText>
+
+        <h1>vue menu</h1>
+        <bpMenu>
+            <bpMenuItem text="bp-menu-item"></bpMenuItem>
+            <bpSubMenu text="bp-sub-menu">
+                <bpMenuItem text="bp-menu-item"></bpMenuItem>
+            </bpSubMenu>
+        </bpMenu>
     </div>
 </template>
 
@@ -58,6 +66,9 @@ import bpInput from '../components/bp-input.vue'
 import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
 import bpText from '../components/bp-text.vue'
+import bpMenu from '../components/bp-menu.vue'
+import bpMenuItem from '../components/bp-menu-item.vue'
+import bpSubMenu from '../components/bp-sub-menu.vue'
 
 export default {
     name: 'bp-button',
@@ -67,7 +78,10 @@ export default {
         bpInput,
         bpLabel,
         bpLink,
-        bpText
+        bpText,
+        bpMenu,
+        bpMenuItem,
+        bpSubMenu
     },
     methods: {
         // button
@@ -101,6 +115,9 @@ export default {
 <style lang="scss">
     .button-area{
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         ul, li{
             list-style: none;
             padding: 0;

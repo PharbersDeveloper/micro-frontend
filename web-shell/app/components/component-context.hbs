@@ -35,11 +35,16 @@
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}>
             </pharbers-bp-link>
-            <pharbers-bp-text title="bp-text test" 
-                {{did-insert this.registerListener}}
-                {{will-destroy this.unregisterListener}}>
+            <pharbers-bp-text title="bp-text test">
                 这里是bp-text
             </pharbers-bp-text>
+            <h1>vue menu</h1>
+            <pharbers-bp-menu>
+                <pharbers-bp-menu-item text="bp-menu-item"></pharbers-bp-menu-item>
+                <pharbers-bp-sub-menu text="bp-sub-menu">
+                    <pharbers-bp-menu-item text="bp-menu-item"></pharbers-bp-menu-item>
+                </pharbers-bp-sub-menu>
+            </pharbers-bp-menu>
         </div>
     </div>
 </div>
