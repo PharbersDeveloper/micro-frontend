@@ -59,8 +59,9 @@
 
         <h1>vue button group</h1>
         <bpButtonGroup>
-            <bpButtonItem active></bpButtonItem>
-            <bpButtonItem></bpButtonItem>
+            <bpButtonItem active first></bpButtonItem>
+            <bpButtonItem ></bpButtonItem>
+            <bpButtonItem last></bpButtonItem>
         </bpButtonGroup>
     </div>
 </template>

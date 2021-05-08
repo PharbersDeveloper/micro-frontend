@@ -6,7 +6,9 @@
         :disabled="disabled"
         :class="[
             density ? 'button-density-' + density : 'button-density-default',
-            {'active': active}
+            {'active': active},
+            {'first': first},
+            {'last': last}
         ]"
     >
         {{text}}
@@ -22,7 +24,9 @@ export default {
         },
         active: Boolean,
         density: String, // comfy, default, compact
-        disabled: Boolean //加了disabled就是disabled
+        disabled: Boolean, //加了disabled就是disabled
+        first: Boolean,
+        last: Boolean
     },
     methods: {
         handleClick(data) {
@@ -63,7 +67,7 @@ export default {
 
     /*button group*/
 
-    .button-group .button-item {
+    .button-item {
         background: $color-neutrals-n020;
         color: $color-neutrals-n400;
         font-size: $font-size-2;
@@ -73,16 +77,16 @@ export default {
         margin-right: $spacing-compact-1x;
     }
 
-    .button-group button:first-child{
+    button.button-item.first{
         border-radius: $radius-medium $radius-none $radius-none $radius-medium;
     }
 
-    .button-group button:last-child {
+    button.button-item.last {
         border-radius: $radius-none $radius-medium $radius-medium $radius-none;
         margin-right: $spacing-none;
     }
 
-    .button-group .button-item.active {
+    .button-item.active {
         background: $color-neutrals-n400;
         color: $color-neutrals-n000;
     }
