@@ -63,6 +63,13 @@
             <bpButtonItem ></bpButtonItem>
             <bpButtonItem last></bpButtonItem>
         </bpButtonGroup>
+
+        <h1>vue carousel</h1>
+        <bp-carousel height="250px">
+            <bp-carousel-item v-for="item in 3" :key="item">
+                <h3>{{item}}</h3>
+            </bp-carousel-item>
+        </bp-carousel>
     </div>
 </template>
 
@@ -77,6 +84,8 @@ import bpStatus from '../components/bp-status.vue'
 import bpBadge from '../components/bp-badge.vue'
 import bpButtonItem from '../components/bp-button-item.vue'
 import bpButtonGroup from '../components/bp-button-group.vue'
+import bpCarousel from '../components/bp-carousel.vue'
+import bpCarouselItem from '../components/bp-carousel-item.vue'
 
 export default {
     name: 'bp-button',
@@ -90,7 +99,9 @@ export default {
         bpStatus,
         bpBadge,
         bpButtonItem,
-        bpButtonGroup
+        bpButtonGroup,
+        bpCarousel,
+        bpCarouselItem
     },
     methods: {
         // button
@@ -130,5 +141,20 @@ export default {
             margin: 0;
             line-height: 2;
         }
+    }
+    .el-carousel__item h3 {
+        color: #475669;
+        font-size: 14px;
+        opacity: 0.75;
+        line-height: 150px;
+        margin: 0;
+    }
+
+    .el-carousel__item:nth-child(2n) {
+        background-color: #99a9bf;
+    }
+    
+    .el-carousel__item:nth-child(2n+1) {
+        background-color: #d3dce6;
     }
 </style>
