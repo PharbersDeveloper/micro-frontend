@@ -45,6 +45,13 @@
                     <pharbers-bp-menu-item text="bp-menu-item"></pharbers-bp-menu-item>
                 </pharbers-bp-sub-menu>
             </pharbers-bp-menu>
+
+            <h1>vue select option</h1>
+            <pharbers-bp-select choosedValue={{curLanguage}}>
+                <pharbers-bp-option text="中文" onClick={{action changeLanguage}} choosedValue={{curLanguage}}></pharbers-bp-option>
+                <pharbers-bp-option text="English" onClick={{action changeLanguage}} choosedValue={{curLanguage}}></pharbers-bp-option>
+                <pharbers-bp-option text="韩文" onClick={{action changeLanguage}} choosedValue={{curLanguage}}></pharbers-bp-option>
+            </pharbers-bp-select>
         </div>
     </div>
 </div>

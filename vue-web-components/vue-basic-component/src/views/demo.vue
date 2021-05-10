@@ -58,8 +58,10 @@
         </bpMenu>
 
         <h1>vue select</h1>
-        <bpSelect>
-            <bpOption></bpOption>
+        <bpSelect :choosedValue="curLanguage">
+            <bpOption text="中文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOption>
+            <bpOption text="English" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOption>
+            <bpOption text="韩文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOption>
         </bpSelect>
 
     </div>
@@ -117,6 +119,14 @@ export default {
         input(data) {
             console.log("input input")
             console.log(data)
+        },
+        changeLanguage(value) {
+            this.curLanguage = value
+        }
+    },
+    data: function() {
+        return {
+            curLanguage: "中文"
         }
     }
 }

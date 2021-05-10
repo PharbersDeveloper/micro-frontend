@@ -1,8 +1,8 @@
 <template>
-    <div class="bp-select" :class="{'select-disabled': disabled}" @focusout="focusOut">
+    <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
         <div class="bp-select-title" @click="toggleShow">
             <span>{{choosedValue}}</span>
-            <img svg-inline class="svg-icon" src="../assets/icons/download.svg" alt="example" />
+            <img svg-inline src="../assets/icons/down.svg" alt="example" :class="iconClass" />
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
             <slot></slot>
@@ -11,10 +11,20 @@
 </template>
 <script>
 export default {
+    props: {
+        iconClass: {
+            type: String,
+            default: "svg-icon"
+        },
+        classNames: String,
+        choosedValue: {
+            type: String,
+            default: '请选择'
+        }
+    },
     data: function() {
         return {
             disabled: false,
-            choosedValue: '请选择',
             show: false
         }
     },
@@ -23,11 +33,14 @@ export default {
             if(!this.disabled) {
                 this.show = !this.show
             }
-        },
-        focusOut(e) {
-            console.log("11", e)
-            this.show = false
         }
+    },
+    mounted() {
+        // document.addEventListener("click", e => {
+        //     if(!this.$el.contains(e.target)) {
+        //         this.show = false
+        //     }
+        // })
     }
 }
 </script>
@@ -50,5 +63,42 @@ export default {
         background: $color-neutrals-n000;
         box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25);
         border-radius: 3px;
+    }
+    .bp-select-title {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 8px;
+        justify-content: space-between;
+    }
+    .d-none {
+        display: none;
+    }
+    svg:focus {
+        outline: none;
+    }
+    .bp-select {
+        height: 40px;
+        width: 240px;
+        margin-left: 8;
+        margin-right: 8;
+        margin-top: 8;
+        margin-bottom: 8;
+        padding-left: 8;
+        padding-right: 8;
+        padding-top: 8;
+        padding-bottom: 8;
+        background: rgba(9,30,66,0.04);
+        padding: 0;
+        margin: 0;
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+    
+    .bp-select:hover {
+        background: #EBECF0;
     }
 </style>

@@ -1,7 +1,15 @@
 import Component from "@glimmer/component"
 import { action } from "@ember/object"
-
+import { tracked } from '@glimmer/tracking';
 export default class ComponentContextComponent extends Component {
+	@tracked curLanguage = "中文"
+
+	@action
+	changeLanguage(value) {
+		console.log("value",value)
+		this.curLanguage = value
+	}
+
 	@action
 	listener(e) {
 		// coloring ember body

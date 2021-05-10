@@ -1,7 +1,12 @@
 <template>
-    <li class="bp-option" :disabled="disabled">
-        <img svg-inline class="svg-icon" src="../assets/icons/download.svg" alt="example" />
-        <span>{{text}}</span>
+    <li class="bp-option" :disabled="disabled" @click="close" :class="{'option-active': isChoosed}">
+        <!-- <img svg-inline class="svg-icon" src="" alt="" /> -->
+        <div style="display: flex;flex-direction: column;">
+            <span>{{text}}</span>
+            <div>
+                <slot></slot>
+            </div>
+        </div>
     </li>
 </template>
 <script>
@@ -19,10 +24,18 @@ export default {
         isChoosed() {
             return this.text === this.choosedValue
         }
+    },
+    methods: {
+        close() {
+            this.$parent.$data.show = false
+            this.$emit("onClick", this.text)
+        }
     }
 }
 </script>
 <style lang=scss scoped>
+    $color-neutrals-n000: #ffffff;
+    $color-neutrals-n400: rgba(#091e42,0.71);
     .svg-icon {
         width: 1em;
         height: 1em;
@@ -30,5 +43,35 @@ export default {
         fill: currentColor;
         overflow: hidden;
         margin-right: 4px;
+    }
+    svg:focus {
+        outline: none;
+    }
+    .option-active {
+        color: $color-neutrals-n000;
+        background-color: $color-neutrals-n400;
+    }
+    .option-active .icon path {
+        fill: $color-neutrals-n000;
+    }
+    .bp-option {
+        height: 32px;
+        width: 100%;
+        margin-left: 8;
+        margin-right: 8;
+        margin-top: 8;
+        margin-bottom: 8;
+        padding-left: 8;
+        padding-right: 8;
+        padding-top: 8;
+        padding-bottom: 8;
+        background: transparent;
+        color: #344563;
+        display: flex;
+        padding: 0 16px;
+        align-items: center;
+    }
+    .bp-option:hover {
+        background-color: #EBECF0;
     }
 </style>
