@@ -56,6 +56,12 @@
                 <bpMenuItem text="bp-menu-item"></bpMenuItem>
             </bpSubMenu>
         </bpMenu>
+
+        <h1>vue select</h1>
+        <bpSelect>
+            <bpOption></bpOption>
+        </bpSelect>
+
     </div>
 </template>
 
@@ -69,6 +75,8 @@ import bpText from '../components/bp-text.vue'
 import bpMenu from '../components/bp-menu.vue'
 import bpMenuItem from '../components/bp-menu-item.vue'
 import bpSubMenu from '../components/bp-sub-menu.vue'
+import bpSelect from '../components/bp-select.vue'
+import bpOption from '../components/bp-option.vue'
 
 export default {
     name: 'bp-button',
@@ -81,7 +89,9 @@ export default {
         bpText,
         bpMenu,
         bpMenuItem,
-        bpSubMenu
+        bpSubMenu,
+        bpSelect,
+        bpOption
     },
     methods: {
         // button
