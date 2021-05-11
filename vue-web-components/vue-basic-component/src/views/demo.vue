@@ -66,7 +66,7 @@
 
         <h1>vue carousel</h1>
         <bp-carousel height="250px">
-            <bp-carousel-item v-for="item in 3" :key="item">
+            <bp-carousel-item v-for="item in 4" :key="item">
                 <h3>{{item}}</h3>
             </bp-carousel-item>
         </bp-carousel>
@@ -151,10 +151,13 @@ export default {
     }
 
     .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
+        background-color: #666;
     }
     
     .el-carousel__item:nth-child(2n+1) {
-        background-color: #d3dce6;
+        background-color: #ddd;
+    }
+    h3 {
+        color: red;
     }
 </style>
