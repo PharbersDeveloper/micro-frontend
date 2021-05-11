@@ -459,6 +459,7 @@ export default {
 
 .el-carousel__indicator.is-active button {
     opacity: 1;
+    background-color: #2A7AFE;
 }
 
 .el-carousel__button {
@@ -466,7 +467,7 @@ export default {
     opacity: 0.48;
     width: 15px;
     height: 15px;
-    background-color: #FFFFFF;
+    background-color: #cccccc;
     border: none;
     outline: none;
     padding: 0;
