@@ -2,31 +2,8 @@ import Component from "@glimmer/component"
 import { action } from "@ember/object"
 import { tracked } from '@glimmer/tracking';
 export default class ComponentContextComponent extends Component {
-	@tracked test
-
-	options_data = [
-		{
-			text: "中文",
-			second_text: "",
-			click_event: function() {
-				console.log("http://www.baidu.com")
-			}
-		},
-		{
-			text: "英文",
-			second_text: "",
-			click_event: function() {
-				console.log("http://www.google.com")
-			}
-		},
-		{
-			text: "韩文",
-			second_text: "",
-			click_event: function() {
-				console.log("http://www.jd.com")
-			}
-		}
-	]
+	@tracked choosed_value
+	@tracked options_data
 
 	@action
 	listener(e) {
@@ -46,7 +23,6 @@ export default class ComponentContextComponent extends Component {
 		element.addEventListener("click", this.listener)
 		element.addEventListener("dbclick", this.listener)
 		element.testobject = { a: 1, b: 2 }
-		this.test = "中文1"
 
 	}
 
@@ -54,6 +30,34 @@ export default class ComponentContextComponent extends Component {
 	unregisterListener(element) {
 		element.removeEventListener("example-event", this.listener)
 		element.removeEventListener("example-nest-event", this.listener)
+	}
+
+	@action
+	transferData(element) {
+		this.choosed_value = "中文"
+		this.options_data = [
+			{
+				text: "中文",
+				second_text: "",
+				click_event: function() {
+					console.log("http://www.baidu.com")
+				}
+			},
+			{
+				text: "英文",
+				second_text: "",
+				click_event: function() {
+					console.log("http://www.google.com")
+				}
+			},
+			{
+				text: "韩文",
+				second_text: "",
+				click_event: function() {
+					console.log("http://www.jd.com")
+				}
+			}
+		]
 	}
 }
 

@@ -22,17 +22,13 @@ export default {
         },
         classNames: String,
         choosed_value: String,
-        text: {
-            type: String,
-            default: ''
-        },
         options_data: Array
     },
     data: function() {
         return {
             disabled: false,
             show: false,
-            choosed_text: ''
+            choosed_text: this.choosed_value
         }
     },
     methods: {
@@ -50,16 +46,9 @@ export default {
             this.show = false
         }
     },
-    mounted() {
-        // document.addEventListener("click", e => {
-        //     if(!this.$el.contains(e.target)) {
-        //         this.show = false
-        //     }
-        // })
-        if (this.choosed_value) {
-            this.choosed_text = this.choosed_value
-        } else {
-            this.choosed_text = this.text
+    watch: {
+        choosed_value: function(val) {
+            this.choosed_text = val
         }
     }
 }
