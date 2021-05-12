@@ -39,7 +39,7 @@
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}>
             </pharbers-bp-status>
-            <pharbers-bp-tag text="这是tag" type="teals" subtle
+            <pharbers-bp-tag text={{this.tag}} type="teals" subtle
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}>
             </pharbers-bp-tag>
@@ -48,9 +48,9 @@
                 {{will-destroy this.unregisterListener}}>
             </pharbers-bp-badge>
             <pharbers-bp-button-group
+                buttonArr={{this.bpButtonGroupdata}}
                 {{did-insert this.registerListener}}
-                {{will-destroy this.unregisterListener}}
-                buttonArr="">
+                {{will-destroy this.unregisterListener}}>
             </pharbers-bp-button-group>
         </div>
     </div>

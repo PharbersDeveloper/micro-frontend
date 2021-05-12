@@ -297,7 +297,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -350,7 +350,7 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-status>
-              <pharbers-bp-tag text="这是tag" type="teals" subtle
+              <pharbers-bp-tag text={{this.tag}} type="teals" subtle
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-tag>
@@ -359,9 +359,9 @@
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-badge>
               <pharbers-bp-button-group
+                  buttonArr={{this.bpButtonGroupdata}}
                   {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}
-                  buttonArr="">
+                  {{will-destroy this.unregisterListener}}>
               </pharbers-bp-button-group>
           </div>
       </div>
@@ -369,22 +369,23 @@
   
   */
   {
-    "id": "Af2/EvbS",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[24,\"text\",\"这是tag\"],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[24,\"buttonArr\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "ToZnCsMX",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
 
-  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._action, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
+  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember._action, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
-      _initializerDefineProperty(this, "arr", _descriptor, this);
+      _initializerDefineProperty(this, "bpButtonGroupdata", _descriptor, this);
+
+      _initializerDefineProperty(this, "tag", _descriptor2, this);
     }
 
     listener(e) {
       // coloring ember body
-      debugger;
       const newColor = getRandomColor();
       document.body.style.backgroundColor = newColor; // passing color value to react context via props
 
@@ -399,6 +400,15 @@
     registerListener(element) {
       element.addEventListener("click", this.listener);
       element.addEventListener("dbclick", this.listener);
+      this.bpButtonGroupdata = [{
+        text: "222"
+      }, {
+        text: "aaa",
+        active: true
+      }, {
+        text: "wode222"
+      }];
+      this.tag = "aaa";
       element.testobject = {
         a: 1,
         b: 2
@@ -410,21 +420,17 @@
       element.removeEventListener("example-nest-event", this.listener);
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "arr", [_dec], {
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "bpButtonGroupdata", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
-    initializer: function () {
-      return [{
-        text: "ceshi"
-      }, {
-        text: "测试",
-        active: true
-      }, {
-        text: "wode"
-      }];
-    }
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = ComponentContextComponent;
 
   function getRandomColor() {
@@ -2539,7 +2545,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+5cad804c"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+973c63b9"});
           }
         
 //# sourceMappingURL=web-shell.map

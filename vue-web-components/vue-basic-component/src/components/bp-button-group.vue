@@ -3,8 +3,8 @@
         <div class="bp-button-group button-group">
             <!-- <slot></slot> -->
             <bpButtonItem 
-                v-for="item in buttonArr" 
-                :key="item" 
+                v-for="(item,index) in buttonArr" 
+                :key="index" 
                 :active="item.active" 
                 :text="item.text">
             </bpButtonItem>
@@ -19,13 +19,32 @@ export default {
     components: {
         bpButtonItem
     },
+    data() {
+        return {
+        }
+    },
     props: {
         buttonArr: {
             type: Array,
-            default: []
+            default: function() {
+                return [{
+                    text:"test",
+                    active: true
+                },{
+                    text:"test"
+                }]
+            }
         }
     },
     watch: {
+        buttonArr: {
+            handler(n, o) {
+                debugger
+                console.log("vue",this.buttonArr)
+                return this.buttonArr
+            },
+            deep: true
+        }
     }
 }
 </script>

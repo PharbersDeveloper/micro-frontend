@@ -3,26 +3,13 @@ import { tracked } from "@glimmer/tracking"
 import { action } from "@ember/object"
 
 export default class ComponentContextComponent extends Component {
-	@tracked arr = [
-		{
-			text: "ceshi"
-		},
-		{
-			text: "测试",
-			active: true
-		},
-		{
-			text: "wode"
-		}
-	]
-
+	@tracked bpButtonGroupdata
+	@tracked tag
 	@action
 	listener(e) {
 		// coloring ember body
-		debugger
 		const newColor = getRandomColor()
 		document.body.style.backgroundColor = newColor
-
 		// passing color value to react context via props
 		const webcomponent = e.target
 		webcomponent.color = newColor
@@ -34,6 +21,19 @@ export default class ComponentContextComponent extends Component {
 	registerListener(element) {
 		element.addEventListener("click", this.listener)
 		element.addEventListener("dbclick", this.listener)
+		this.bpButtonGroupdata = [
+			{
+				text: "222"
+			},
+			{
+				text: "aaa",
+				active: true
+			},
+			{
+				text: "wode222"
+			}
+		]
+        this.tag = "aaa"
 		element.testobject = { a: 1, b: 2 }
 	}
 
