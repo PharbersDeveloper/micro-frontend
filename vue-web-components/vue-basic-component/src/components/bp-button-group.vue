@@ -1,14 +1,32 @@
 <template>
     <div>
         <div class="bp-button-group button-group">
-            <slot></slot>
+            <!-- <slot></slot> -->
+            <bpButtonItem 
+                v-for="item in buttonArr" 
+                :key="item" 
+                :active="item.active" 
+                :text="item.text">
+            </bpButtonItem>
         </div>
     </div>
 </template>
 
 <script>
+import bpButtonItem from "./bp-button-item"
 export default {
-    name: 'bp-button-group'
+    name: 'bp-button-group',
+    components: {
+        bpButtonItem
+    },
+    props: {
+        buttonArr: {
+            type: Array,
+            default: []
+        }
+    },
+    watch: {
+    }
 }
 </script>
 <style lang=scss scoped>

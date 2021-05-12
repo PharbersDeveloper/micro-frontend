@@ -6,9 +6,7 @@
         :disabled="disabled"
         :class="[
             density ? 'button-density-' + density : 'button-density-default',
-            {'active': active},
-            {'first': first},
-            {'last': last}
+            {'active': active}
         ]"
     >
         {{text}}
@@ -35,15 +33,16 @@ export default {
             clearTimeout(that.time)
             that.time = setTimeout(() => {
                 // 写单击事件执行的逻辑代码
-                console.log("单击事件")
-                this.$emit('click', data);
+                console.log("item单击事件")
+                let event = new Event("click")
+                event.data = data
+                this.$emit('click', event);
             },300)
         },
         handleDBClick(data) {
             clearTimeout(this.time)
-            console.log("双击事件")
+            console.log("item双击事件")
             this.$emit('dbclick', data)
-
         }
     }
 }
@@ -67,7 +66,7 @@ export default {
 
     /*button group*/
 
-    .button-item {
+    .button-group .button-item {
         background: $color-neutrals-n020;
         color: $color-neutrals-n400;
         font-size: $font-size-2;
@@ -77,16 +76,16 @@ export default {
         margin-right: $spacing-compact-1x;
     }
 
-    button.button-item.first{
+    .button-group button:first-child {
         border-radius: $radius-medium $radius-none $radius-none $radius-medium;
     }
 
-    button.button-item.last {
+    .button-group button:last-child {
         border-radius: $radius-none $radius-medium $radius-medium $radius-none;
         margin-right: $spacing-none;
     }
 
-    .button-item.active {
+    .button-group .button-item.active {
         background: $color-neutrals-n400;
         color: $color-neutrals-n000;
     }

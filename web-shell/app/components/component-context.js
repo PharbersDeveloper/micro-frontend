@@ -1,10 +1,25 @@
 import Component from "@glimmer/component"
+import { tracked } from "@glimmer/tracking"
 import { action } from "@ember/object"
 
 export default class ComponentContextComponent extends Component {
+	@tracked arr = [
+		{
+			text: "ceshi"
+		},
+		{
+			text: "测试",
+			active: true
+		},
+		{
+			text: "wode"
+		}
+	]
+
 	@action
 	listener(e) {
 		// coloring ember body
+		debugger
 		const newColor = getRandomColor()
 		document.body.style.backgroundColor = newColor
 

@@ -297,9 +297,15 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class;
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
@@ -333,7 +339,7 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </pharbers-bp-img>
-              <pharbers-bp-label text="测试label" 
+              <pharbers-bp-label text=arr 
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}></pharbers-bp-label>
               <pharbers-bp-link text="测试link" 
@@ -352,21 +358,10 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-badge>
-              <pharbers-bp-button-group 
+              <pharbers-bp-button-group
                   {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}>
-                  <pharbers-bp-button-item active first text="测试1"
-                      {{did-insert this.registerListener}}
-                      {{will-destroy this.unregisterListener}}>
-                  </pharbers-bp-button-item>
-                  <pharbers-bp-button-item text="测试"
-                      {{did-insert this.registerListener}}
-                      {{will-destroy this.unregisterListener}}>
-                  </pharbers-bp-button-item>
-                  <pharbers-bp-button-item text="测试2" last
-                      {{did-insert this.registerListener}}
-                      {{will-destroy this.unregisterListener}}>
-                  </pharbers-bp-button-item>
+                  {{will-destroy this.unregisterListener}}
+                  buttonArr="">
               </pharbers-bp-button-group>
           </div>
       </div>
@@ -374,15 +369,22 @@
   
   */
   {
-    "id": "u29PXmzA",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"测试label\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[24,\"text\",\"这是tag\"],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[11,\"pharbers-bp-button-item\"],[24,\"active\",\"\"],[24,\"first\",\"\"],[24,\"text\",\"测试1\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n                \"],[11,\"pharbers-bp-button-item\"],[24,\"text\",\"测试\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n                \"],[11,\"pharbers-bp-button-item\"],[24,\"text\",\"测试2\"],[24,\"last\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "Af2/EvbS",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[24,\"text\",\"这是tag\"],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[24,\"buttonArr\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
 
-  let ComponentContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
+  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._action, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "arr", _descriptor, this);
+    }
+
     listener(e) {
       // coloring ember body
+      debugger;
       const newColor = getRandomColor();
       document.body.style.backgroundColor = newColor; // passing color value to react context via props
 
@@ -408,7 +410,21 @@
       element.removeEventListener("example-nest-event", this.listener);
     }
 
-  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "arr", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return [{
+        text: "ceshi"
+      }, {
+        text: "测试",
+        active: true
+      }, {
+        text: "wode"
+      }];
+    }
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = ComponentContextComponent;
 
   function getRandomColor() {
@@ -2523,7 +2539,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+6aa79318"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+5cad804c"});
           }
         
 //# sourceMappingURL=web-shell.map

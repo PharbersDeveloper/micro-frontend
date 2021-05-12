@@ -28,7 +28,7 @@
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}} >
             </pharbers-bp-img>
-            <pharbers-bp-label text="测试label" 
+            <pharbers-bp-label text=arr 
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}></pharbers-bp-label>
             <pharbers-bp-link text="测试link" 
@@ -47,21 +47,10 @@
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}>
             </pharbers-bp-badge>
-            <pharbers-bp-button-group 
+            <pharbers-bp-button-group
                 {{did-insert this.registerListener}}
-                {{will-destroy this.unregisterListener}}>
-                <pharbers-bp-button-item active first text="测试1"
-                    {{did-insert this.registerListener}}
-                    {{will-destroy this.unregisterListener}}>
-                </pharbers-bp-button-item>
-                <pharbers-bp-button-item text="测试"
-                    {{did-insert this.registerListener}}
-                    {{will-destroy this.unregisterListener}}>
-                </pharbers-bp-button-item>
-                <pharbers-bp-button-item text="测试2" last
-                    {{did-insert this.registerListener}}
-                    {{will-destroy this.unregisterListener}}>
-                </pharbers-bp-button-item>
+                {{will-destroy this.unregisterListener}}
+                buttonArr="">
             </pharbers-bp-button-group>
         </div>
     </div>
