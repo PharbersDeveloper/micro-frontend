@@ -1,5 +1,5 @@
 <template>
-    <li class="bp-option" :disabled="disabled" @click="close" :class="{'option-active': isChoosed}">
+    <li class="bp-option" :disabled="disabled" @click="chooseOption" :class="{'option-active': isChoosed}">
         <!-- <img svg-inline class="svg-icon" src="" alt="" /> -->
         <div style="display: flex;flex-direction: column;">
             <span>{{text}}</span>
@@ -18,17 +18,18 @@ export default {
     },
     props: {
         text: String,
-        choosedValue: String
+        choosed_value: String,
+        click_event: Function
     },
     computed: {
         isChoosed() {
-            return this.text === this.choosedValue
+            return this.text === this.choosed_value
         }
     },
     methods: {
-        close() {
-            this.$parent.$data.show = false
-            this.$emit("onClick", this.text)
+        chooseOption() {
+            this.$emit("chooseOption", this.text )
+            this.click_event()
         }
     }
 }
@@ -36,6 +37,9 @@ export default {
 <style lang=scss scoped>
     $color-neutrals-n000: #ffffff;
     $color-neutrals-n400: rgba(#091e42,0.71);
+    * {
+        box-sizing: border-box;
+    }
     .svg-icon {
         width: 1em;
         height: 1em;
@@ -48,8 +52,8 @@ export default {
         outline: none;
     }
     .option-active {
-        color: $color-neutrals-n000;
-        background-color: $color-neutrals-n400;
+        color: $color-neutrals-n000 !important;
+        background-color: $color-neutrals-n400 !important;
     }
     .option-active .icon path {
         fill: $color-neutrals-n000;

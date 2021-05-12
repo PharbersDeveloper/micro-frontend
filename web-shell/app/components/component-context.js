@@ -2,13 +2,31 @@ import Component from "@glimmer/component"
 import { action } from "@ember/object"
 import { tracked } from '@glimmer/tracking';
 export default class ComponentContextComponent extends Component {
-	@tracked curLanguage = "中文"
+	@tracked test
 
-	@action
-	changeLanguage(value) {
-		console.log("value",value)
-		this.curLanguage = value
-	}
+	options_data = [
+		{
+			text: "中文",
+			second_text: "",
+			click_event: function() {
+				console.log("http://www.baidu.com")
+			}
+		},
+		{
+			text: "英文",
+			second_text: "",
+			click_event: function() {
+				console.log("http://www.google.com")
+			}
+		},
+		{
+			text: "韩文",
+			second_text: "",
+			click_event: function() {
+				console.log("http://www.jd.com")
+			}
+		}
+	]
 
 	@action
 	listener(e) {
@@ -28,6 +46,8 @@ export default class ComponentContextComponent extends Component {
 		element.addEventListener("click", this.listener)
 		element.addEventListener("dbclick", this.listener)
 		element.testobject = { a: 1, b: 2 }
+		this.test = "中文1"
+
 	}
 
 	@action

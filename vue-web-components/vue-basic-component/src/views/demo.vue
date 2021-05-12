@@ -58,10 +58,10 @@
         </bpMenu>
 
         <h1>vue select</h1>
-        <bpSelect :choosedValue="curLanguage">
-            <bpOption text="中文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOption>
-            <bpOption text="English" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOption>
-            <bpOption text="韩文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOption>
+        <bpSelect :choosed_value="choosed_value" :options_data="options_data">
+            <!-- <bpOption text="中文" @onClick="changeLanguage" :choosed_value="curLanguage"></bpOption>
+            <bpOption text="English" @onClick="changeLanguage" :choosed_value="curLanguage"></bpOption>
+            <bpOption text="韩文" @onClick="changeLanguage" :choosed_value="curLanguage"></bpOption> -->
         </bpSelect>
 
     </div>
@@ -78,7 +78,6 @@ import bpMenu from '../components/bp-menu.vue'
 import bpMenuItem from '../components/bp-menu-item.vue'
 import bpSubMenu from '../components/bp-sub-menu.vue'
 import bpSelect from '../components/bp-select.vue'
-import bpOption from '../components/bp-option.vue'
 
 export default {
     name: 'bp-button',
@@ -92,8 +91,7 @@ export default {
         bpMenu,
         bpMenuItem,
         bpSubMenu,
-        bpSelect,
-        bpOption
+        bpSelect
     },
     methods: {
         // button
@@ -119,14 +117,38 @@ export default {
         input(data) {
             console.log("input input")
             console.log(data)
-        },
-        changeLanguage(value) {
-            this.curLanguage = value
         }
+        // changeLanguage(e) {
+        //     console.log(e);
+        //     this.curLanguage = e
+        // }
     },
     data: function() {
         return {
-            curLanguage: "中文"
+            choosed_value: "中文",
+            options_data: [
+                {
+                    text: "中文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.baidu.com")
+                    }
+                },
+                {
+                    text: "英文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.google.com")
+                    }
+                },
+                {
+                    text: "韩文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.jd.com")
+                    }
+                }
+            ]
         }
     }
 }

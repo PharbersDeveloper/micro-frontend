@@ -1,31 +1,38 @@
 <template>
     <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
         <div class="bp-select-title" @click="toggleShow">
-            <span>{{choosedValue}}</span>
-            <img svg-inline src="../assets/icons/down.svg" alt="example" :class="iconClass" />
+            <span>{{choosed_text}}</span>
+            <img svg-inline src="../assets/icons/down.svg" alt="example" :class="icon_class" />
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
-            <slot></slot>
+            <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close"></bpOption>
         </ul>
     </div>
 </template>
 <script>
+import bpOption from "./bp-option.vue"
 export default {
+    components: {
+        bpOption
+    },
     props: {
-        iconClass: {
+        icon_class: {
             type: String,
             default: "svg-icon"
         },
         classNames: String,
-        choosedValue: {
+        choosed_value: String,
+        text: {
             type: String,
-            default: '请选择'
-        }
+            default: ''
+        },
+        options_data: Array
     },
     data: function() {
         return {
             disabled: false,
-            show: false
+            show: false,
+            choosed_text: ''
         }
     },
     methods: {
@@ -33,6 +40,14 @@ export default {
             if(!this.disabled) {
                 this.show = !this.show
             }
+        },
+        changeLanguage(value) {
+            if (this.choosed_value) {
+                this.choosed_text = value
+            }
+        },
+        close() {
+            this.show = false
         }
     },
     mounted() {
@@ -41,6 +56,11 @@ export default {
         //         this.show = false
         //     }
         // })
+        if (this.choosed_value) {
+            this.choosed_text = this.choosed_value
+        } else {
+            this.choosed_text = this.text
+        }
     }
 }
 </script>
@@ -48,6 +68,9 @@ export default {
     $spacing-none: 0px;
     $spacing-compact-2x: 2*2px;
     $color-neutrals-n000: #ffffff;
+    * {
+        box-sizing: border-box;
+    }
     .svg-icon {
         width: 1em;
         height: 1em;
