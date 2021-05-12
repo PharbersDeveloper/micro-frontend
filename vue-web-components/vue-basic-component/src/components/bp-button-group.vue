@@ -35,16 +35,6 @@ export default {
                 }]
             }
         }
-    },
-    watch: {
-        buttonArr: {
-            handler(n, o) {
-                debugger
-                console.log("vue",this.buttonArr)
-                return this.buttonArr
-            },
-            deep: true
-        }
     }
 }
 </script>
