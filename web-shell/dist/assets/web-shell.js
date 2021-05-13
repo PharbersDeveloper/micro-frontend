@@ -297,7 +297,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -347,6 +347,14 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-link>
+              <pharbers-bp-text title="bp-text test">
+                  这里是bp-text
+              </pharbers-bp-text>
+              <h1>vue menu</h1>
+              <pharbers-bp-menu menu_data={{this.menu_data}} {{did-insert this.transferMenuData}}></pharbers-bp-menu>
+  
+              <h1>vue select option</h1>
+              <pharbers-bp-select choosed_value={{this.choosed_value}} options_data={{this.options_data}} {{did-insert this.transferData}}></pharbers-bp-select>
               <pharbers-bp-status text="这是status" type="in-progress" subtle
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}>
@@ -380,25 +388,31 @@
   
   */
   {
-    "id": "H/bWvtL+",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,[28,[35,0],[\"nav.productAndService\"],null]],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[16,\"text\",[29,[[36,1]]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"t\",\"buttonText\",\"did-insert\",\"will-destroy\"]]",
+    "id": "58hfyQ4m",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,[28,[35,0],[\"nav.productAndService\"],null]],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[16,\"text\",[29,[[36,1]]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-text\"],[14,\"title\",\"bp-text test\"],[12],[1,\"\\n                这里是bp-text\\n            \"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,\"vue menu\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-menu\"],[16,\"menu_data\",[30,0,[\"menu_data\"]]],[4,[38,2],[[30,0,[\"transferMenuData\"]]],null],[12],[13],[1,\"\\n\\n            \"],[10,\"h1\"],[12],[1,\"vue select option\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-select\"],[16,\"choosed_value\",[30,0,[\"choosed_value\"]]],[16,\"options_data\",[30,0,[\"options_data\"]]],[4,[38,2],[[30,0,[\"transferData\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"t\",\"buttonText\",\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
 
-  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, _dec8 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
+  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember.inject.service, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, _dec12 = Ember._action, _dec13 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
-      _initializerDefineProperty(this, "bpButtonGroupdata", _descriptor, this);
+      _initializerDefineProperty(this, "choosed_value", _descriptor, this);
 
-      _initializerDefineProperty(this, "tag", _descriptor2, this);
+      _initializerDefineProperty(this, "options_data", _descriptor2, this);
 
-      _initializerDefineProperty(this, "itemArr", _descriptor3, this);
+      _initializerDefineProperty(this, "menu_data", _descriptor3, this);
 
-      _initializerDefineProperty(this, "buttonText", _descriptor4, this);
+      _initializerDefineProperty(this, "bpButtonGroupdata", _descriptor4, this);
 
-      _initializerDefineProperty(this, "intl", _descriptor5, this);
+      _initializerDefineProperty(this, "tag", _descriptor5, this);
+
+      _initializerDefineProperty(this, "itemArr", _descriptor6, this);
+
+      _initializerDefineProperty(this, "buttonText", _descriptor7, this);
+
+      _initializerDefineProperty(this, "intl", _descriptor8, this);
     }
 
     listener(e) {
@@ -439,32 +453,111 @@
       element.removeEventListener("example-nest-event", this.listener);
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "bpButtonGroupdata", [_dec], {
+    transferData(element) {
+      this.choosed_value = "中文";
+      this.options_data = [{
+        text: "中文",
+        second_text: "",
+        click_event: function () {
+          console.log("http://www.baidu.com");
+        }
+      }, {
+        text: "英文",
+        second_text: "",
+        click_event: function () {
+          console.log("http://www.google.com");
+        }
+      }, {
+        text: "韩文",
+        second_text: "",
+        click_event: function () {
+          console.log("http://www.jd.com");
+        }
+      }];
+    }
+
+    transferMenuData() {
+      this.menu_data = [{
+        type: "sub",
+        text: "sub1",
+        click_event: function () {},
+        item_data: [{
+          text: "sub_item1",
+          click_event: function () {
+            console.log("sub_item1");
+          }
+        }, {
+          text: "sub_item2",
+          click_event: function () {
+            console.log("sub_item2");
+          }
+        }]
+      }, {
+        type: "item",
+        text: "item1",
+        click_event: function () {
+          console.log("item1");
+        }
+      }, {
+        type: "item",
+        text: "item2",
+        click_event: function () {
+          console.log("item2");
+        }
+      }, {
+        type: "sub",
+        text: "sub2",
+        click_event: function () {},
+        item_data: [{
+          text: "sub_item3",
+          click_event: function () {
+            console.log("sub_item3");
+          }
+        }]
+      }];
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "choosed_value", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "options_data", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "itemArr", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "menu_data", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "buttonText", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "bpButtonGroupdata", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "itemArr", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "buttonText", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transferData", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "transferData"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transferMenuData", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "transferMenuData"), _class.prototype)), _class));
   _exports.default = ComponentContextComponent;
 
   function getRandomColor() {
@@ -2769,7 +2862,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+1fd228fe"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+9134dcc8"});
           }
         
 //# sourceMappingURL=web-shell.map

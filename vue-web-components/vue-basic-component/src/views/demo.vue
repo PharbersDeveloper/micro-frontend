@@ -73,7 +73,7 @@
 
         <h1>vue carousel</h1>
         <div style="width:100%">
-            <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px" autoplay>
+            <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px">
             </bpCarouselUnit>
         </div>
     </div>
