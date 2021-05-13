@@ -40,11 +40,42 @@
         />
 
         <h1>vue label</h1>
-        <bpLabel text="我是label1"/>
-        <bpLabel text="我是label2"/>
+        <bpLabel text="我是label1" />
+        <bpLabel text="我是label2" />
 
         <h1>vue link</h1>
         <bpLink text="这是链接" />
+
+        <h1>vue text</h1>
+        <bpText title="这里是bp-text">这里是bp-text</bpText>
+
+        <h1>vue menu</h1>
+        <bpMenu :menu_data="menu_data"></bpMenu>
+
+        <h1>vue select</h1>
+        <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
+
+
+        <h1>vue tag</h1>
+        <bpTag text="这是tag" subtle type="teals"/>
+
+        <h1>vue status</h1>
+        <bpStatus text="这是status" subtle type="in-progress"/>
+
+         <h1>vue badge</h1>
+        <bpBadge result=100 primary/>
+        <bpBadge result=98 primary reverse/>
+        <bpBadge/>
+
+        <h1>vue button group</h1>
+        <bpButtonGroup :buttonArr="barr">
+        </bpButtonGroup>
+
+        <h1>vue carousel</h1>
+        <div style="width:100%">
+            <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px">
+            </bpCarouselUnit>
+        </div>
     </div>
 </template>
 
@@ -54,6 +85,19 @@ import bpImg from '../components/bp-img.vue'
 import bpInput from '../components/bp-input.vue'
 import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
+import bpText from '../components/bp-text.vue'
+import bpMenu from '../components/bp-menu.vue'
+import bpMenuItem from '../components/bp-menu-item.vue'
+import bpSubMenu from '../components/bp-sub-menu.vue'
+import bpSelect from '../components/bp-select.vue'
+import bpTag from '../components/bp-tag.vue'
+import bpStatus from '../components/bp-status.vue'
+import bpBadge from '../components/bp-badge.vue'
+import bpButtonItem from '../components/bp-button-item.vue'
+import bpButtonGroup from '../components/bp-button-group.vue'
+import bpCarousel from '../components/bp-carousel.vue'
+import bpCarouselItem from '../components/bp-carousel-item.vue'
+import bpCarouselUnit from '../components/bp-carousel-unit.vue'
 
 export default {
     name: 'bp-button',
@@ -62,7 +106,20 @@ export default {
         bpImg,
         bpInput,
         bpLabel,
-        bpLink
+        bpLink,
+        bpText,
+        bpMenu,
+        bpMenuItem,
+        bpSubMenu,
+        bpSelect,
+        bpTag,
+        bpStatus,
+        bpBadge,
+        bpButtonItem,
+        bpButtonGroup,
+        bpCarousel,
+        bpCarouselItem,
+        bpCarouselUnit
     },
     methods: {
         // button
@@ -89,6 +146,103 @@ export default {
             console.log("input input")
             console.log(data)
         }
+        // changeLanguage(e) {
+        //     console.log(e);
+        //     this.curLanguage = e
+        // }
+    },
+    data: function() {
+        return {
+            bpCarouselItemArr: [
+                "https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png",
+                'https://dss2.bdstatic.com/5bVYsj_p_tVS5dKfpU_Y_D3/res/r/image/2021-3-4/hao123%20logo.png'
+            ],
+            barr: [
+                {
+                    text: "ceshi"
+                },
+                {
+                    text: "测试",
+                    active: true
+                }
+            ],
+            choosed_value: "中文",
+            options_data: [
+                {
+                    text: "中文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.baidu.com")
+                    }
+                },
+                {
+                    text: "英文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.google.com")
+                    }
+                },
+                {
+                    text: "韩文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.jd.com")
+                    }
+                }
+            ],
+            menu_data: [
+                {
+                    type: "sub",
+                    text: "sub1",
+                    click_event: function() {
+                    
+                    },
+                    item_data: [
+                        {
+                            text: "sub_item1",
+                            click_event: function() {
+                                console.log("sub_item1")
+                            }
+                        },
+                        {
+                            text: "sub_item2",
+                            click_event: function() {
+                                console.log("sub_item2")
+                            }
+                        }
+                    ]
+                },
+                {
+                    type: "item",
+                    text: "item1",
+                    click_event: function() {
+                        console.log("item1")
+                    }
+                },
+                {
+                    type: "item",
+                    text: "item2",
+                    click_event: function() {
+                        console.log("item2")
+                    }
+                },
+                {
+                    type: "sub",
+                    text: "sub2",
+                    click_event: function() {
+                    
+                    },
+                    item_data: [
+                        {
+                            text: "sub_item3",
+                            click_event: function() {
+                                console.log("sub_item3")
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     }
 }
 </script>
@@ -96,11 +250,32 @@ export default {
 <style lang="scss">
     .button-area{
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         ul, li{
             list-style: none;
             padding: 0;
             margin: 0;
             line-height: 2;
         }
+    }
+    .el-carousel__item h3 {
+        color: #475669;
+        font-size: 14px;
+        opacity: 0.75;
+        line-height: 150px;
+        margin: 0;
+    }
+
+    .el-carousel__item:nth-child(2n) {
+        background-color: #666;
+    }
+    
+    .el-carousel__item:nth-child(2n+1) {
+        background-color: #ddd;
+    }
+    h3 {
+        color: red;
     }
 </style>

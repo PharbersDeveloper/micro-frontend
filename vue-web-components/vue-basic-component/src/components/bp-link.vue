@@ -29,12 +29,12 @@ export default {
             type: String,
             default: "default"
         },
-        disabled: Boolean,
+        disabled: Boolean
     },
     computed: {
         linkDisabled() {
             return this.disabled;
-        },
+        }
     },
     methods: {
         handleClick(data) {

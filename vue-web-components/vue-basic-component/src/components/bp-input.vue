@@ -26,11 +26,11 @@ export default {
     componentName: 'bpInput',
 
     data() {
-      return {
-        hovering: false,
-        focused: false,
-        isComposing: false
-      };
+        return {
+            hovering: false,
+            focused: false,
+            isComposing: false
+        };
     },
 
     props: {
@@ -48,12 +48,12 @@ export default {
             type: String,
             default: "comfy"
         },
-        type: String,
+        type: String
     },
     computed: {
         inputDisabled() {
             return this.disabled;
-        },
+        }
     },
     watch: {
         nativeInputValue() {
@@ -63,7 +63,7 @@ export default {
             if (this.validateEvent) {
                 this.dispatch('ElFormItem', 'el.form.change', [val]);
             }
-        },
+        }
     },
     methods: {
         handleBlur(event) {
@@ -80,7 +80,7 @@ export default {
         },
         getInput() {
             return this.$refs.input;
-        },
+        }
     }
 }
 </script>

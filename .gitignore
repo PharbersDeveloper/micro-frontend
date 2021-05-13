@@ -1,5 +1,11 @@
 **/node_modules/
 **/.idea/
+**/dist/
+**/yarn.lock/
+
 
 node_modules/
 .idea/
+dist/
+yarn-error.log
+yarn.lock
