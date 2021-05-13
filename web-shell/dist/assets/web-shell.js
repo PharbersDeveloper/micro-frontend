@@ -297,7 +297,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -329,9 +329,10 @@
           </div> --}}
           <div class="react">
               <h2>Vue context</h2>
+              <h1>{{t "nav.productAndService"}}</h1>
               <pharbers-bp-input states="info" placeholder="测试">
               </pharbers-bp-input>
-              <pharbers-bp-button text="alfred test"
+              <pharbers-bp-button text="{{buttonText}}"
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </pharbers-bp-button>
@@ -379,13 +380,13 @@
   
   */
   {
-    "id": "OvM3rVPe",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"did-insert\",\"will-destroy\"]]",
+    "id": "H/bWvtL+",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,[28,[35,0],[\"nav.productAndService\"],null]],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[16,\"text\",[29,[[36,1]]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"t\",\"buttonText\",\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
 
-  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._action, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
+  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, _dec8 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -394,6 +395,10 @@
       _initializerDefineProperty(this, "tag", _descriptor2, this);
 
       _initializerDefineProperty(this, "itemArr", _descriptor3, this);
+
+      _initializerDefineProperty(this, "buttonText", _descriptor4, this);
+
+      _initializerDefineProperty(this, "intl", _descriptor5, this);
     }
 
     listener(e) {
@@ -420,6 +425,7 @@
       }, {
         text: "wode222"
       }];
+      this.buttonText = this.intl.t("nav.login");
       this.itemArr = ["https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png", "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/head1200_B.png"];
       this.tag = "aaa";
       element.testobject = {
@@ -448,7 +454,17 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "buttonText", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = ComponentContextComponent;
 
   function getRandomColor() {
@@ -508,6 +524,18 @@
     }
   });
 });
+;define("web-shell/controllers/application", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class ApplicationController extends Ember.Controller {}
+
+  _exports.default = ApplicationController;
+});
 ;define("web-shell/data-adapter", ["exports", "@ember-data/debug"], function (_exports, _debug) {
   "use strict";
 
@@ -520,6 +548,44 @@
       return _debug.default;
     }
   });
+});
+;define("web-shell/formats", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = {
+    time: {
+      hhmmss: {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }
+    },
+    date: {
+      hhmmss: {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }
+    },
+    number: {
+      compact: {
+        notation: 'compact'
+      },
+      EUR: {
+        style: 'currency',
+        currency: 'EUR'
+      },
+      USD: {
+        style: 'currency',
+        currency: 'USD'
+      }
+    }
+  };
+  _exports.default = _default;
 });
 ;define("web-shell/helpers/PhSigV4AWSClientFactory", ["exports", "web-shell/helpers/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
   "use strict";
@@ -1444,6 +1510,71 @@
 
   _exports.default = _default;
 });
+;define("web-shell/helpers/format-date", ["exports", "ember-intl/helpers/format-date"], function (_exports, _formatDate) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatDate.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-message", ["exports", "ember-intl/helpers/format-message"], function (_exports, _formatMessage) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatMessage.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-number", ["exports", "ember-intl/helpers/format-number"], function (_exports, _formatNumber) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatNumber.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-relative", ["exports", "ember-intl/helpers/format-relative"], function (_exports, _formatRelative) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatRelative.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-time", ["exports", "ember-intl/helpers/format-time"], function (_exports, _formatTime) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatTime.default;
+    }
+  });
+});
 ;define("web-shell/helpers/loc", ["exports", "@ember/string/helpers/loc"], function (_exports, _loc) {
   "use strict";
 
@@ -1492,6 +1623,19 @@
   _exports.default = void 0;
   var _default = _singularize.default;
   _exports.default = _default;
+});
+;define("web-shell/helpers/t", ["exports", "ember-intl/helpers/t"], function (_exports, _t) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _t.default;
+    }
+  });
 });
 ;define("web-shell/initializers/app-version", ["exports", "ember-cli-app-version/initializer-factory", "web-shell/config/environment"], function (_exports, _initializerFactory, _environment) {
   "use strict";
@@ -1697,7 +1841,82 @@
   }
 
   _exports.default = Router;
-  Router.map(function () {});
+  Router.map(function () {
+    this.route('about');
+    this.route('cart');
+  });
+});
+;define("web-shell/routes/about", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class AboutRoute extends Ember.Route {}
+
+  _exports.default = AboutRoute;
+});
+;define("web-shell/routes/application", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ApplicationRoute = (_dec = Ember.inject.service, (_class = class ApplicationRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "intl", _descriptor, this);
+    }
+
+    beforeModel() {
+      let curLang = window.localStorage.getItem("lang");
+
+      if (curLang) {
+        if (curLang === "中文") {
+          this.intl.setLocale(["zh-cn"]);
+        } else {
+          this.intl.setLocale(["en-us"]);
+        }
+      } else {
+        this.intl.setLocale(["zh-cn"]);
+        window.localStorage.setItem("lang", "中文");
+      }
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ApplicationRoute;
+});
+;define("web-shell/routes/cart", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class CartRoute extends Ember.Route {}
+
+  _exports.default = CartRoute;
 });
 ;define("web-shell/serializers/-default", ["exports", "@ember-data/serializer/json"], function (_exports, _json) {
   "use strict";
@@ -1789,6 +2008,19 @@
   _exports.default = void 0;
   var _default = _cookies.default;
   _exports.default = _default;
+});
+;define("web-shell/services/intl", ["exports", "ember-intl/services/intl"], function (_exports, _intl) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _intl.default;
+    }
+  });
 });
 ;define("web-shell/services/loading", ["exports"], function (_exports) {
   "use strict";
@@ -2471,6 +2703,23 @@
     }
   });
 });
+;define("web-shell/templates/about", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "uyW0GXzB",
+    "block": "[[[1,[28,[35,0],[\"About\"],null]],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/about.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
 ;define("web-shell/templates/application", ["exports"], function (_exports) {
   "use strict";
 
@@ -2483,6 +2732,23 @@
     "id": "qCUtcsJJ",
     "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\\n\"],[8,[39,1],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"component-context\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/templates/cart", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "kzX1Ttdi",
+    "block": "[[[1,[28,[35,0],[\"Cart\"],null]],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/cart.hbs",
     "isStrictMode": false
   });
 
@@ -2540,6 +2806,19 @@
     }
   });
 });
+;define("web-shell/utils/intl/missing-message", ["exports", "ember-intl/-private/utils/missing-message"], function (_exports, _missingMessage) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _missingMessage.default;
+    }
+  });
+});
 ;
 
 ;define('web-shell/config/environment', [], function() {
@@ -2563,7 +2842,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+a07d9082"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+35efcc83"});
           }
         
 //# sourceMappingURL=web-shell.map

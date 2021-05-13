@@ -1,11 +1,14 @@
 import Component from "@glimmer/component"
 import { tracked } from "@glimmer/tracking"
 import { action } from "@ember/object"
+import { inject as service } from '@ember/service'
 
 export default class ComponentContextComponent extends Component {
 	@tracked bpButtonGroupdata
 	@tracked tag
 	@tracked itemArr
+    @tracked buttonText
+    @service intl
 	@action
 	listener(e) {
 		// coloring ember body
@@ -34,6 +37,7 @@ export default class ComponentContextComponent extends Component {
 				text: "wode222"
 			}
 		]
+        this.buttonText = this.intl.t("nav.login")
 		this.itemArr = [
 			"https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png",
 			"https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/head1200_B.png"
