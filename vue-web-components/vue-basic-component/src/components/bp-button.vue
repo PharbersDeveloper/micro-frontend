@@ -19,21 +19,18 @@
 </template>
 
 <script>
-// import '../assets/css/variables.scss'
-// import '../assets/css/addon.scss'
-// import '../assets/css/_base.scss'
 export default {
     props: {
         text: String,
         type: String, // standard, subtle, destructive, warning,
         density: String, // comfy, default, compact
         block: Boolean, //button是否占满一行
-        disabled: Boolean, //加了disabled就是disabled
+        disabled: Boolean //加了disabled就是disabled
     },
-	computed: {
+    computed: {
         buttonDisabled() {
-            return this.disabled;
-        },
+            return this.disabled
+        }
     },
     methods: {
         handleClick(data) {

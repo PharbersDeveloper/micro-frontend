@@ -39,7 +39,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .el-carousel__item h3 {
         color: #475669;
         font-size: 14px;

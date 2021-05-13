@@ -72,14 +72,10 @@
         </bpButtonGroup>
 
         <h1>vue carousel</h1>
-        <!-- <bp-carousel height="400px" :autoplay=false>
-            <bp-carousel-item v-for="item in arr" :key="item">
-                <img :src="item" alt="">
-            </bp-carousel-item>
-        </bp-carousel> -->
-        <bpCarouselUnit :itemArr="arr" height="500px" autoplay>
-
-        </bpCarouselUnit>
+        <div style="width:100%">
+            <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px" autoplay>
+            </bpCarouselUnit>
+        </div>
     </div>
 </template>
 
@@ -115,7 +111,7 @@ export default {
         bpMenu,
         bpMenuItem,
         bpSubMenu,
-        bpSelect
+        bpSelect,
         bpTag,
         bpStatus,
         bpBadge,
@@ -124,23 +120,6 @@ export default {
         bpCarousel,
         bpCarouselItem,
         bpCarouselUnit
-    },
-    data() {
-        return {
-            arr: [
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/head1200_B.png",
-                'https://dss2.bdstatic.com/5bVYsj_p_tVS5dKfpU_Y_D3/res/r/image/2021-3-4/hao123%20logo.png'
-            ],
-            barr: [
-                {
-                    text: "ceshi"
-                },
-                {
-                    text: "测试",
-                    active: true
-                }
-            ]
-        }
     },
     methods: {
         // button
@@ -174,6 +153,19 @@ export default {
     },
     data: function() {
         return {
+            bpCarouselItemArr: [
+                "https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png",
+                'https://dss2.bdstatic.com/5bVYsj_p_tVS5dKfpU_Y_D3/res/r/image/2021-3-4/hao123%20logo.png'
+            ],
+            barr: [
+                {
+                    text: "ceshi"
+                },
+                {
+                    text: "测试",
+                    active: true
+                }
+            ],
             choosed_value: "中文",
             options_data: [
                 {

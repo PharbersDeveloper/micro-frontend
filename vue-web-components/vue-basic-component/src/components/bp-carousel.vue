@@ -316,7 +316,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .el-carousel__container {
     text-align: center;
 }
