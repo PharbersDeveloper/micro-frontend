@@ -46,6 +46,16 @@
         <h1>vue link</h1>
         <bpLink text="这是链接" />
 
+        <h1>vue text</h1>
+        <bpText title="这里是bp-text">这里是bp-text</bpText>
+
+        <h1>vue menu</h1>
+        <bpMenu :menu_data="menu_data"></bpMenu>
+
+        <h1>vue select</h1>
+        <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
+
+
         <h1>vue tag</h1>
         <bpTag text="这是tag" subtle type="teals"/>
 
@@ -79,6 +89,11 @@ import bpImg from '../components/bp-img.vue'
 import bpInput from '../components/bp-input.vue'
 import bpLabel from '../components/bp-label.vue'
 import bpLink from '../components/bp-link.vue'
+import bpText from '../components/bp-text.vue'
+import bpMenu from '../components/bp-menu.vue'
+import bpMenuItem from '../components/bp-menu-item.vue'
+import bpSubMenu from '../components/bp-sub-menu.vue'
+import bpSelect from '../components/bp-select.vue'
 import bpTag from '../components/bp-tag.vue'
 import bpStatus from '../components/bp-status.vue'
 import bpBadge from '../components/bp-badge.vue'
@@ -96,6 +111,11 @@ export default {
         bpInput,
         bpLabel,
         bpLink,
+        bpText,
+        bpMenu,
+        bpMenuItem,
+        bpSubMenu,
+        bpSelect
         bpTag,
         bpStatus,
         bpBadge,
@@ -147,6 +167,90 @@ export default {
             console.log("input input")
             console.log(data)
         }
+        // changeLanguage(e) {
+        //     console.log(e);
+        //     this.curLanguage = e
+        // }
+    },
+    data: function() {
+        return {
+            choosed_value: "中文",
+            options_data: [
+                {
+                    text: "中文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.baidu.com")
+                    }
+                },
+                {
+                    text: "英文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.google.com")
+                    }
+                },
+                {
+                    text: "韩文",
+                    second_text: "",
+                    click_event: function() {
+                        console.log("http://www.jd.com")
+                    }
+                }
+            ],
+            menu_data: [
+                {
+                    type: "sub",
+                    text: "sub1",
+                    click_event: function() {
+                    
+                    },
+                    item_data: [
+                        {
+                            text: "sub_item1",
+                            click_event: function() {
+                                console.log("sub_item1")
+                            }
+                        },
+                        {
+                            text: "sub_item2",
+                            click_event: function() {
+                                console.log("sub_item2")
+                            }
+                        }
+                    ]
+                },
+                {
+                    type: "item",
+                    text: "item1",
+                    click_event: function() {
+                        console.log("item1")
+                    }
+                },
+                {
+                    type: "item",
+                    text: "item2",
+                    click_event: function() {
+                        console.log("item2")
+                    }
+                },
+                {
+                    type: "sub",
+                    text: "sub2",
+                    click_event: function() {
+                    
+                    },
+                    item_data: [
+                        {
+                            text: "sub_item3",
+                            click_event: function() {
+                                console.log("sub_item3")
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     }
 }
 </script>
@@ -154,6 +258,9 @@ export default {
 <style lang="scss">
     .button-area{
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         ul, li{
             list-style: none;
             padding: 0;

@@ -1,0 +1,116 @@
+<template>
+    <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
+        <div class="bp-select-title" @click="toggleShow">
+            <span>{{choosed_text}}</span>
+            <img svg-inline src="../assets/icons/down.svg" alt="example" :class="icon_class" />
+        </div>
+        <ul :class="show ? 'bp-option-group' : 'd-none'">
+            <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close"></bpOption>
+        </ul>
+    </div>
+</template>
+<script>
+import bpOption from "./bp-option.vue"
+export default {
+    components: {
+        bpOption
+    },
+    props: {
+        icon_class: {
+            type: String,
+            default: "svg-icon"
+        },
+        classNames: String,
+        choosed_value: String,
+        options_data: Array
+    },
+    data: function() {
+        return {
+            disabled: false,
+            show: false,
+            choosed_text: this.choosed_value
+        }
+    },
+    methods: {
+        toggleShow() {
+            if(!this.disabled) {
+                this.show = !this.show
+            }
+        },
+        changeLanguage(value) {
+            if (this.choosed_value) {
+                this.choosed_text = value
+            }
+        },
+        close() {
+            this.show = false
+        }
+    },
+    watch: {
+        choosed_value: function(val) {
+            this.choosed_text = val
+        }
+    }
+}
+</script>
+<style lang=scss scoped>
+    $spacing-none: 0px;
+    $spacing-compact-2x: 2*2px;
+    $color-neutrals-n000: #ffffff;
+    * {
+        box-sizing: border-box;
+    }
+    .svg-icon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        margin-right: 4px;
+    }
+
+    .bp-option-group {
+        margin: $spacing-none;
+        padding: $spacing-compact-2x $spacing-none;
+        background: $color-neutrals-n000;
+        box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25);
+        border-radius: 3px;
+    }
+    .bp-select-title {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 8px;
+        justify-content: space-between;
+    }
+    .d-none {
+        display: none;
+    }
+    svg:focus {
+        outline: none;
+    }
+    .bp-select {
+        height: 40px;
+        width: 240px;
+        margin-left: 8;
+        margin-right: 8;
+        margin-top: 8;
+        margin-bottom: 8;
+        padding-left: 8;
+        padding-right: 8;
+        padding-top: 8;
+        padding-bottom: 8;
+        background: rgba(9,30,66,0.04);
+        padding: 0;
+        margin: 0;
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+    
+    .bp-select:hover {
+        background: #EBECF0;
+    }
+</style>

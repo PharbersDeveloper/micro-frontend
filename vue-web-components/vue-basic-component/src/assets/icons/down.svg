@@ -1,1 +1,7 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1551769404386" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1496" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32"><defs><style type="text/css"></style></defs><path d="M481.83 627.074L285.867 431.111c-16.495-16.495-16.495-43.238 0-59.733 16.495-16.495 43.238-16.495 59.733 0l166.4 166.4 166.4-166.4c16.495-16.495 43.238-16.495 59.733 0 16.495 16.495 16.495 43.238 0 59.733L542.17 627.074c-16.662 16.663-43.678 16.663-60.34 0z"  p-id="1497"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>down</title>
+    <g id="down" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M8.98802642,14.5991109 L2.41496116,8.31297349 C1.86167961,7.78384382 1.86167961,6.92597691 2.41496116,6.39684725 C2.9682427,5.86771758 3.86526655,5.86771758 4.4185481,6.39684725 L10,11.7346573 L15.5814519,6.39684725 C16.1347334,5.86771758 17.0317573,5.86771758 17.5850388,6.39684725 C18.1383204,6.92597691 18.1383204,7.78384382 17.5850388,8.31297349 L11.0119736,14.5991109 C10.4530905,15.1336297 9.54690954,15.1336297 8.98802642,14.5991109 Z" id="Path" fill="#57565F"></path>
+    </g>
+</svg>

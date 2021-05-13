@@ -36,6 +36,14 @@
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}>
             </pharbers-bp-link>
+            <pharbers-bp-text title="bp-text test">
+                这里是bp-text
+            </pharbers-bp-text>
+            <h1>vue menu</h1>
+            <pharbers-bp-menu menu_data={{this.menu_data}} {{did-insert this.transferMenuData}}></pharbers-bp-menu>
+
+            <h1>vue select option</h1>
+            <pharbers-bp-select choosed_value={{this.choosed_value}} options_data={{this.options_data}} {{did-insert this.transferData}}></pharbers-bp-select>
             <pharbers-bp-status text="这是status" type="in-progress" subtle
                 {{did-insert this.registerListener}}
                 {{will-destroy this.unregisterListener}}>
