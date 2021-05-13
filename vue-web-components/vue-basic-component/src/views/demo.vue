@@ -50,19 +50,10 @@
         <bpText title="这里是bp-text">这里是bp-text</bpText>
 
         <h1>vue menu</h1>
-        <bpMenu>
-            <bpMenuItem text="bp-menu-item"></bpMenuItem>
-            <bpSubMenu text="bp-sub-menu">
-                <bpMenuItem text="bp-menu-item"></bpMenuItem>
-            </bpSubMenu>
-        </bpMenu>
+        <bpMenu :menu_data="menu_data"></bpMenu>
 
         <h1>vue select</h1>
-        <bpSelect :choosed_value="choosed_value" :options_data="options_data">
-            <!-- <bpOption text="中文" @onClick="changeLanguage" :choosed_value="curLanguage"></bpOption>
-            <bpOption text="English" @onClick="changeLanguage" :choosed_value="curLanguage"></bpOption>
-            <bpOption text="韩文" @onClick="changeLanguage" :choosed_value="curLanguage"></bpOption> -->
-        </bpSelect>
+        <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
 
     </div>
 </template>
@@ -147,6 +138,58 @@ export default {
                     click_event: function() {
                         console.log("http://www.jd.com")
                     }
+                }
+            ],
+            menu_data: [
+                {
+                    type: "sub",
+                    text: "sub1",
+                    click_event: function() {
+                    
+                    },
+                    item_data: [
+                        {
+                            text: "sub_item1",
+                            click_event: function() {
+                                console.log("sub_item1")
+                            }
+                        },
+                        {
+                            text: "sub_item2",
+                            click_event: function() {
+                                console.log("sub_item2")
+                            }
+                        }
+                    ]
+                },
+                {
+                    type: "item",
+                    text: "item1",
+                    click_event: function() {
+                        console.log("item1")
+                    }
+                },
+                {
+                    type: "item",
+                    text: "item2",
+                    click_event: function() {
+                        console.log("item2")
+                    }
+                },
+                {
+                    type: "sub",
+                    text: "sub2",
+                    click_event: function() {
+                    
+                    },
+                    item_data: [
+                        {
+                            text: "sub_item3",
+                            click_event: function() {
+                                console.log("sub_item3")
+                            }
+                        }
+                    ]
                 }
             ]
         }

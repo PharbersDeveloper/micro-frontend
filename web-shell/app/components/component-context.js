@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 export default class ComponentContextComponent extends Component {
 	@tracked choosed_value
 	@tracked options_data
+	@tracked menu_data
 
 	@action
 	listener(e) {
@@ -56,6 +57,62 @@ export default class ComponentContextComponent extends Component {
 				click_event: function() {
 					console.log("http://www.jd.com")
 				}
+			}
+		]
+	}
+	
+	@action
+	transferMenuData() {
+		this.menu_data = [
+			{
+				type: "sub",
+				text: "sub1",
+				click_event: function() {
+				
+				},
+				item_data: [
+					{
+						text: "sub_item1",
+						click_event: function() {
+							console.log("sub_item1")
+						}
+					},
+					{
+						text: "sub_item2",
+						click_event: function() {
+							console.log("sub_item2")
+						}
+					}
+				]
+			},
+			{
+				type: "item",
+				text: "item1",
+				click_event: function() {
+					console.log("item1")
+				}
+			},
+			{
+				type: "item",
+				text: "item2",
+				click_event: function() {
+					console.log("item2")
+				}
+			},
+			{
+				type: "sub",
+				text: "sub2",
+				click_event: function() {
+				
+				},
+				item_data: [
+					{
+						text: "sub_item3",
+						click_event: function() {
+							console.log("sub_item3")
+						}
+					}
+				]
 			}
 		]
 	}

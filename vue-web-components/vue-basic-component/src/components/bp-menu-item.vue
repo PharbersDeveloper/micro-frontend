@@ -1,34 +1,26 @@
 <template>
-    <li class="bp-push-button bp-menu-item" :disabled="disabled" :class="{ 'menu-active': isActive}">
+    <li class="bp-push-button bp-menu-item" :disabled="disabled" @click="menu_item_data.click_event">
         <img svg-inline class="svg-icon" src="../assets/icons/case.svg" alt="example" />
-        <span>{{text}}</span>
+        <span>{{menu_item_data.text}}</span>
     </li>
 </template>
 
 <script>
 export default {
     props: {
-        text: String,
+        menu_item_data: Object,
         disabled: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        isActive: function() {
-            // for( let i = 0; i < this.$parent.$children.length; i++ ) {
-            //     if ( this.$parent.$children[i].$el === this.$el ) {
-            //         return true
-            //     }
-            // } 
-            // return false
-            return true
         }
     }
 }
 </script>
 
 <style lang=scss scoped>
+    * {
+        box-sizing: border-box;
+    }
 	.svg-icon {
         width: 1em;
         height: 1em;

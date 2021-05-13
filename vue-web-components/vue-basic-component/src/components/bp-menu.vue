@@ -1,22 +1,34 @@
 <template>
 <div>
 	<ul class="bp-menu">
-		<slot></slot>
+		<bpSubMenu v-for="single_data in menu_data" :key="single_data.text" :sub_menu_data="single_data"></bpSubMenu>
 	</ul>
 </div>
 </template>
 
 <script>
+import bpSubMenu from "./bp-sub-menu.vue"
+import bpMenuItem from "./bp-menu-item.vue"
 export default {
+    components: {
+        bpSubMenu,
+        bpMenuItem
+    },
     data: function() {
         return {
             currentIndex: 0
         }
+    },
+    props: {
+        menu_data: Array
     }
 }
 </script>
 
 <style lang=scss scoped>
+	* {
+        box-sizing: border-box;
+    }
 	.bp-menu {
 		height: auto;
 		width: 208px;
