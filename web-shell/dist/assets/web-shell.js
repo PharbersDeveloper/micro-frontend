@@ -524,18 +524,6 @@
     }
   });
 });
-;define("web-shell/controllers/application", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  class ApplicationController extends Ember.Controller {}
-
-  _exports.default = ApplicationController;
-});
 ;define("web-shell/data-adapter", ["exports", "@ember-data/debug"], function (_exports, _debug) {
   "use strict";
 
@@ -1841,22 +1829,7 @@
   }
 
   _exports.default = Router;
-  Router.map(function () {
-    this.route('about');
-    this.route('cart');
-  });
-});
-;define("web-shell/routes/about", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  class AboutRoute extends Ember.Route {}
-
-  _exports.default = AboutRoute;
+  Router.map(function () {});
 });
 ;define("web-shell/routes/application", ["exports"], function (_exports) {
   "use strict";
@@ -1905,18 +1878,6 @@
     initializer: null
   })), _class));
   _exports.default = ApplicationRoute;
-});
-;define("web-shell/routes/cart", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  class CartRoute extends Ember.Route {}
-
-  _exports.default = CartRoute;
 });
 ;define("web-shell/serializers/-default", ["exports", "@ember-data/serializer/json"], function (_exports, _json) {
   "use strict";
@@ -2703,23 +2664,6 @@
     }
   });
 });
-;define("web-shell/templates/about", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = Ember.HTMLBars.template({
-    "id": "uyW0GXzB",
-    "block": "[[[1,[28,[35,0],[\"About\"],null]],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
-    "moduleName": "web-shell/templates/about.hbs",
-    "isStrictMode": false
-  });
-
-  _exports.default = _default;
-});
 ;define("web-shell/templates/application", ["exports"], function (_exports) {
   "use strict";
 
@@ -2732,23 +2676,6 @@
     "id": "qCUtcsJJ",
     "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\\n\"],[8,[39,1],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"component-context\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
-    "isStrictMode": false
-  });
-
-  _exports.default = _default;
-});
-;define("web-shell/templates/cart", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = Ember.HTMLBars.template({
-    "id": "kzX1Ttdi",
-    "block": "[[[1,[28,[35,0],[\"Cart\"],null]],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
-    "moduleName": "web-shell/templates/cart.hbs",
     "isStrictMode": false
   });
 
@@ -2842,7 +2769,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+35efcc83"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+1fd228fe"});
           }
         
 //# sourceMappingURL=web-shell.map
