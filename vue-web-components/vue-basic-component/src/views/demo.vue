@@ -1,7 +1,7 @@
 <template>
     <div class="button-area">
         <h1>vue button</h1>
-        <bpButton type="primary" text="primary"
+        <bpButton type="primary" text="primary" :src="require('../assets/icons/check-circle.svg')"
             @click="click1"
             @dbclick="click2"
          />
@@ -77,6 +77,10 @@
             </bpCarouselUnit>
         </div>
 
+        <div class="yanjie-test-area">
+            <bp-page-bottom></bp-page-bottom>
+        </div>
+
         <h1>bpNavTopResponse</h1>
         <!-- <bpNavTopResponse></bpNavTopResponse> -->
         <div style="position: fixed; top: 0">
@@ -104,6 +108,7 @@ import bpButtonGroup from '../components/bp-button-group.vue'
 import bpCarousel from '../components/bp-carousel.vue'
 import bpCarouselItem from '../components/bp-carousel-item.vue'
 import bpCarouselUnit from '../components/bp-carousel-unit.vue'
+import bpPageBottom from '../components/panel/bp-page-bottom.vue'
 import bpNavTopResponse from '../components/panel/bp-nav-top-response'
 import bpNavTop from '../components/panel/bp-nav-top'
 
@@ -128,6 +133,7 @@ export default {
         bpCarousel,
         bpCarouselItem,
         bpCarouselUnit,
+        bpPageBottom,
         bpNavTopResponse,
         bpNavTop
     },
@@ -288,5 +294,11 @@ export default {
     }
     h3 {
         color: red;
+    }
+    .yanjie-test-area {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

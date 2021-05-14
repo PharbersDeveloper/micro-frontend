@@ -34,7 +34,7 @@ export default {
     }
 }
 </script>
-<style lang=scss scoped>
+<style lang="scss" scoped>
     $color-neutrals-n000: #ffffff;
     $color-neutrals-n400: rgba(#091e42,0.71);
     * {
