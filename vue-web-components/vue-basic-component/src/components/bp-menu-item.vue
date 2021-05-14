@@ -1,6 +1,6 @@
 <template>
     <li class="bp-push-button bp-menu-item" :disabled="disabled" @click="menu_item_data.click_event">
-        <img svg-inline class="svg-icon" src="../assets/icons/case.svg" alt="example" />
+        <img svg-inline class="svg-icon" :src="menu_item_data.src" alt="example" v-if="menu_item_data.src" />
         <span>{{menu_item_data.text}}</span>
     </li>
 </template>

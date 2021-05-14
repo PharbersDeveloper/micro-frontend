@@ -5,7 +5,7 @@
             <img svg-inline src="../assets/icons/down.svg" alt="example" :class="icon_class" />
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
-            <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close"></bpOption>
+            <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :src="optionData.src" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close"></bpOption>
         </ul>
     </div>
 </template>

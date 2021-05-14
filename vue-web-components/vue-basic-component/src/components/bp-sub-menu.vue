@@ -1,14 +1,14 @@
 <template>
     <li :class="[{'bp-sub-menu': sub_menu_data.type === 'sub'}, {'bp-push-button bp-menu-item': sub_menu_data.type === 'item'}]" :disabled="disabled" @click="sub_menu_data.click_event">
         <div class="bp-submenu-title" @click="toggleShow" v-if="sub_menu_data.type === 'sub'">
-            <img svg-inline class="svg-icon" src="../assets/icons/case.svg" alt="example" />
+            <img svg-inline class="svg-icon" :src="sub_menu_data.src" alt="example" v-if="sub_menu_data.src" />
             <span>{{sub_menu_data.text}}</span>
         </div>
         <ul :class="show ? 'menu-sub' : 'd-none'" v-if="sub_menu_data.type === 'sub'">
             <bpMenuItem v-for="sub_menu_item in sub_menu_data.item_data" :key="sub_menu_item.text" :menu_item_data="sub_menu_item"></bpMenuItem>
         </ul>
 
-        <img svg-inline class="svg-icon" src="../assets/icons/case.svg" alt="example" v-if="sub_menu_data.type === 'item'"/>
+        <img svg-inline class="svg-icon" :src="sub_menu_data.src" alt="example" v-if="sub_menu_data.src && sub_menu_data.type === 'item'"/>
         <span v-if="sub_menu_data.type === 'item'">{{sub_menu_data.text}}</span>
         <!-- <bpMenuItem v-if="sub_menu_data.type === 'item'" :menu_item_data="sub_menu_data"></bpMenuItem> -->
     </li>
