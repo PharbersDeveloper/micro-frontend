@@ -10,7 +10,7 @@
 
                     </bp-text>
                 </div>
-                <bp-button type="standard" text="contactUs.contactUs" @click="contactUs"></bp-button>
+                <bp-button type="standard" text="contactUs.contactUs" @click="contactUs" class="contact-us-button"></bp-button>
             </div>
         </div>
     </div>
@@ -46,12 +46,42 @@ export default {
             height: 313px;
             max-width: 1200px;
             width: 100%;
-            
             background: transparent;
             display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
+
+            .contact-content {
+                height: 153px;
+                width: 914px;
+                border-radius: 4px;
+                padding: 0 100px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: transparent;
+                background-image: conic-gradient(from 90deg,#f9fafe,#e5e7f0);
+                background-image: -webkit-linear-gradient(from 90deg,#f9fafe,#e5e7f0);
+                background-image: -moz-linear-gradient(from 90deg,#f9fafe,#e5e7f0);
+                background:-moz-linear-gradient(top, #f9fafe, #e5e7f0);
+
+                .contact-slogan-part  {
+                    height: auto;
+                    width: auto;
+                    background: transparent;
+                }
+
+                .contact-us-button {
+                    height: 40px;
+                    width: 137px;
+                    border: none;
+                    background: #161C39;
+                    color: #FFFFFF;
+                    font-size: 14px;
+                    border-radius: 2px;
+                }
+            }
         }
 
         .page-bottom {
