@@ -1,5 +1,4 @@
 <template>
-<div>
     <button
         class="bp-button"
         @click="handleClick"
@@ -15,7 +14,6 @@
         <img svg-inline class="svg-icon" :src="src" alt="example" v-if="src"/>
         {{text}}
     </button>
-</div>
 </template>
 
 <script>
