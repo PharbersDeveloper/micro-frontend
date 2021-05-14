@@ -38,7 +38,7 @@ export default {
 };
 </script>
 
-<style lang=scss scoped>
+<style lang="scss" scoped>
     $size-5x: 5*8px;
     $spacing-5x: 5*8px;
     * {
@@ -55,6 +55,9 @@ export default {
         fill: currentColor;
         overflow: hidden;
         margin-right: 4px;
+    }
+    svg:focus {
+        outline: none;
     }
     .bp-sub-menu {
         height: auto;

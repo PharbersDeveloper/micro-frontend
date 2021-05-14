@@ -12,7 +12,7 @@
             {'btn-block': block}
         ]"
     >
-        <img svg-inline class="svg-icon" src="../assets/icons/case.svg" alt="example" />
+        <img svg-inline class="svg-icon" :src="src" alt="example" />
         {{text}}
     </button>
 </div>
@@ -25,7 +25,8 @@ export default {
         type: String, // standard, subtle, destructive, warning,
         density: String, // comfy, default, compact
         block: Boolean, //button是否占满一行
-        disabled: Boolean //加了disabled就是disabled
+        disabled: Boolean, //加了disabled就是disabled
+        src: String
     },
     computed: {
         buttonDisabled() {
@@ -81,6 +82,9 @@ export default {
         fill: currentColor;
         overflow: hidden;
         margin-right: 4px;
+    }
+    svg:focus {
+        outline: none;
     }
     .hide {
         display: none

@@ -53,7 +53,7 @@ export default {
     }
 }
 </script>
-<style lang=scss scoped>
+<style lang="scss" scoped>
     $spacing-none: 0px;
     $spacing-compact-2x: 2*2px;
     $color-neutrals-n000: #ffffff;

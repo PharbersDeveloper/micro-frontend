@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang=scss scoped>
+<style lang="scss" scoped>
     * {
         box-sizing: border-box;
     }
@@ -29,7 +29,9 @@ export default {
         overflow: hidden;
         margin-right: 4px;
     }
-
+    svg:focus {
+        outline: none;
+    }
     .bp-menu-item {
         height: 40px;
         width: 100%;

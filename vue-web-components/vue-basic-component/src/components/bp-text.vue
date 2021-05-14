@@ -14,7 +14,7 @@ export default {
 }
 </script>
 
-<style lang=scss scoped>
+<style lang="scss" scoped>
 	$color-neutrals-n800: rgba(#091e42,0.95);
 	.bp-text {
 		height: auto;

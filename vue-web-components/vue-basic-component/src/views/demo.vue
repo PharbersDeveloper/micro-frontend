@@ -1,7 +1,7 @@
 <template>
     <div class="button-area">
         <h1>vue button</h1>
-        <bpButton type="primary" text="primary"
+        <bpButton type="primary" text="primary" :src="require('../assets/icons/check-circle.svg')"
             @click="click1"
             @dbclick="click2"
          />
@@ -76,6 +76,10 @@
             <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px">
             </bpCarouselUnit>
         </div>
+
+        <div class="yanjie-test-area">
+            <bp-page-bottom></bp-page-bottom>
+        </div>
     </div>
 </template>
 
@@ -98,6 +102,7 @@ import bpButtonGroup from '../components/bp-button-group.vue'
 import bpCarousel from '../components/bp-carousel.vue'
 import bpCarouselItem from '../components/bp-carousel-item.vue'
 import bpCarouselUnit from '../components/bp-carousel-unit.vue'
+import bpPageBottom from '../components/panel/bp-page-bottom.vue'
 
 export default {
     name: 'bp-button',
@@ -119,7 +124,8 @@ export default {
         bpButtonGroup,
         bpCarousel,
         bpCarouselItem,
-        bpCarouselUnit
+        bpCarouselUnit,
+        bpPageBottom
     },
     methods: {
         // button
@@ -277,5 +283,11 @@ export default {
     }
     h3 {
         color: red;
+    }
+    .yanjie-test-area {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>
