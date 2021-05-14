@@ -458,6 +458,7 @@
       this.options_data = [{
         text: "中文",
         second_text: "",
+        src: "assets/case.svg",
         click_event: function () {
           console.log("http://www.baidu.com");
         }
@@ -480,6 +481,7 @@
       this.menu_data = [{
         type: "sub",
         text: "sub1",
+        src: "assets/case.svg",
         click_event: function () {},
         item_data: [{
           text: "sub_item1",
@@ -488,6 +490,7 @@
           }
         }, {
           text: "sub_item2",
+          src: "assets/case.svg",
           click_event: function () {
             console.log("sub_item2");
           }
@@ -495,6 +498,7 @@
       }, {
         type: "item",
         text: "item1",
+        src: "assets/case.svg",
         click_event: function () {
           console.log("item1");
         }

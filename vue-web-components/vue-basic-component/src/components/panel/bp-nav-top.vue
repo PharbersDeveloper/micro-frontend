@@ -16,8 +16,8 @@
                     <span class="bp-text">关于我们</span>
                 </div>
                 <div class="navButton">
-                    <bpButton text="联系我们"></bpButton>
-                    <bpButton text="登录"></bpButton>
+                    <bpButton text="联系我们" class="concact"></bpButton>
+                    <bpButton text="登录" class="login"></bpButton>
                 </div>
             </div>
         </div>
@@ -31,18 +31,15 @@ import bpButton from '../bp-button.vue'
 export default {
     mounted() {
         window.onscroll = () => {
-            let top = document.scrollingElement.scrollTop; //触发滚动条，记录数值
+            let top = document.scrollingElement.scrollTop; //触发滚动条
             //回到页面顶部
             if (top == 0) {
                 this.bgWhite = false;
                 this.borderNone = false
-                console.log("↑");
             } else {
                 //不在页面顶部
-                this.show = false;
                 this.bgWhite = true;
                 this.borderNone = true
-                console.log("↓");
             }
         }
     },
@@ -58,6 +55,7 @@ export default {
     },
     data: function () {
         return {
+            bgWhite: false,
             borderNone: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
             choosed_value: "产品与服务",
@@ -149,7 +147,7 @@ export default {
             .bp-select .bp-option:hover {
                 background-color: #EBECF0;
             }
-            .bp-select-title {
+            /deep/.bp-select-title {
                 height: 100%;
                 // width: 170px !important;
                 width: max-content !important;
@@ -158,23 +156,16 @@ export default {
                 padding: 0 8px;
                 justify-content: space-between;
             }
-            .bp-option-group {
-                height: auto;
-                min-height: 32px;
-                width: 100%;
-                background: transparent;
-                color: #344563;
-                display: flex;
-                padding: 0 16px;
-                align-items: center;
-                margin-bottom: 16px;
-                margin: $spacing-none;
-                padding: $spacing-compact-2x $spacing-none;
-                background: $color-neutrals-n000;
-                box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25);
-                border-radius: 3px;
+            /deep/.bp-option-group {
+                position: absolute;
+                width: max-content !important;
+                background: #fff;
                 padding-top: 16px;
                 max-width: 300px;
+                margin: 0;
+                padding: 4px 0;
+                border-radius: 3px;
+                box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25);
             }
             .bp-option:hover {
                 background-color: #EBECF0;
@@ -237,7 +228,31 @@ export default {
         align-content: flex-start;
         align-items: stretch;
         justify-content: flex-start;
-        
+        /deep/ .concact .bp-button {
+            background: #FFDD4D!important;
+            border: none;
+            border-radius: 40px!important;
+            line-height: 32px!important;
+            height: 32px!important;
+            color: #2D334D!important;
+            text-align: center!important;
+            display: inline-block!important;
+            padding: 0 10px;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        /deep/ .login .bp-button {
+            color: #2D334D!important;
+            border: 1px solid rgba(22,28,57,.12)!important;
+            border-radius: 40px!important;
+            line-height: 32px!important;
+            height: 32px!important;
+            width: 80px!important;
+            background: 0 0!important;
+            text-align: center!important;
+            display: inline-block!important;
+            font-size: 14px;
+        }
     }
 
     .fade-enter-active, .fade-leave-active {
