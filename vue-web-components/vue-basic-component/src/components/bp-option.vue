@@ -1,6 +1,6 @@
 <template>
     <li class="bp-option" :disabled="disabled" @click="chooseOption" :class="{'option-active': isChoosed}">
-        <!-- <img svg-inline class="svg-icon" src="" alt="" /> -->
+        <img svg-inline class="svg-icon" :src="src" alt="" v-if="src"/>
         <div style="display: flex;flex-direction: column;">
             <span>{{text}}</span>
             <div>
@@ -19,7 +19,8 @@ export default {
     props: {
         text: String,
         choosed_value: String,
-        click_event: Function
+        click_event: Function,
+        src: String
     },
     computed: {
         isChoosed() {

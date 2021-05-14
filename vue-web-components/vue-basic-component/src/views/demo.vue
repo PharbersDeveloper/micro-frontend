@@ -187,6 +187,7 @@ export default {
                 {
                     text: "中文",
                     second_text: "",
+                    src: require('../assets/icons/check.svg'),
                     click_event: function() {
                         console.log("http://www.baidu.com")
                     }
@@ -194,6 +195,7 @@ export default {
                 {
                     text: "英文",
                     second_text: "",
+                    src: "",
                     click_event: function() {
                         console.log("http://www.google.com")
                     }
@@ -201,6 +203,7 @@ export default {
                 {
                     text: "韩文",
                     second_text: "",
+                    src: "",
                     click_event: function() {
                         console.log("http://www.jd.com")
                     }
@@ -210,12 +213,14 @@ export default {
                 {
                     type: "sub",
                     text: "sub1",
+                    src: require('../assets/icons/check.svg'),
                     click_event: function() {
                     
                     },
                     item_data: [
                         {
                             text: "sub_item1",
+                            src: require('../assets/icons/check.svg'),
                             click_event: function() {
                                 console.log("sub_item1")
                             }
@@ -238,6 +243,7 @@ export default {
                 {
                     type: "item",
                     text: "item2",
+                    src: require('../assets/icons/check.svg'),
                     click_event: function() {
                         console.log("item2")
                     }

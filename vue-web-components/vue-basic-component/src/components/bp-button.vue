@@ -12,7 +12,7 @@
             {'btn-block': block}
         ]"
     >
-        <img svg-inline class="svg-icon" :src="src" alt="example" />
+        <img svg-inline class="svg-icon" :src="src" alt="example" v-if="src"/>
         {{text}}
     </button>
 </div>
