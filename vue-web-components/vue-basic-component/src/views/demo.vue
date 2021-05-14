@@ -76,6 +76,12 @@
             <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px">
             </bpCarouselUnit>
         </div>
+
+        <h1>bpNavTopResponse</h1>
+        <!-- <bpNavTopResponse></bpNavTopResponse> -->
+        <div style="position: fixed; top: 0">
+            <bpNavTop></bpNavTop>
+        </div>
     </div>
 </template>
 
@@ -98,6 +104,8 @@ import bpButtonGroup from '../components/bp-button-group.vue'
 import bpCarousel from '../components/bp-carousel.vue'
 import bpCarouselItem from '../components/bp-carousel-item.vue'
 import bpCarouselUnit from '../components/bp-carousel-unit.vue'
+import bpNavTopResponse from '../components/panel/bp-nav-top-response'
+import bpNavTop from '../components/panel/bp-nav-top'
 
 export default {
     name: 'bp-button',
@@ -119,7 +127,9 @@ export default {
         bpButtonGroup,
         bpCarousel,
         bpCarouselItem,
-        bpCarouselUnit
+        bpCarouselUnit,
+        bpNavTopResponse,
+        bpNavTop
     },
     methods: {
         // button
@@ -249,16 +259,17 @@ export default {
 
 <style lang="scss">
     .button-area{
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        ul, li{
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            line-height: 2;
-        }
+        // text-align: center;
+        // display: flex;
+        // flex-direction: column;
+        // align-items: center;
+        // ul, li{
+        //     list-style: none;
+        //     padding: 0;
+        //     margin: 0;
+        //     line-height: 2;
+        // }
+        margin-top: 100px;
     }
     .el-carousel__item h3 {
         color: #475669;
