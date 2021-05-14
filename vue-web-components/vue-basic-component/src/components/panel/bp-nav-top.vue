@@ -12,7 +12,8 @@
                 class="nav-border" >
                 <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
                 <div class="selectMenu">
-                    <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
+                    <bpSelect 
+                        :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
                     <span class="bp-text">关于我们</span>
                 </div>
                 <div class="navButton">
@@ -61,22 +62,22 @@ export default {
             choosed_value: "产品与服务",
             options_data: [
                 {
-                    text: "中文",
-                    second_text: "",
+                    text: "MAX",
+                    spanText: "自患者信息的多视角深度挖掘",
                     click_event: function() {
                         console.log("http://www.baidu.com")
                     }
                 },
                 {
-                    text: "英文",
-                    second_text: "",
+                    text: "真实数据研究",
+                    spanText: "自患者信息的多视角深度挖掘",
                     click_event: function() {
                         console.log("http://www.google.com")
                     }
                 },
                 {
                     text: "韩文",
-                    second_text: "",
+                    spanText: "自患者信息的多视角深度挖掘",
                     click_event: function() {
                         console.log("http://www.jd.com")
                     }
@@ -104,6 +105,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         z-index: 1000;
+        font-family: system,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",Roboto,"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
         .selectMenu {
             height: auto;
             width: auto;
@@ -134,14 +136,17 @@ export default {
             .bp-select:focus {
                 outline: none;
             }
-            .bp-select .bp-option {
-                height: 32px;
+            /deep/.bp-select .bp-option {
+                height: auto;
+                min-height: 32px;
                 width: 100%;
-                background: transparent;
+                background: 0 0;
                 color: #344563;
                 display: flex;
-                padding: 16px;
+                padding: 0 16px;
                 align-items: center;
+                margin-bottom: 16px;
+                text-align: left;
             }
 
             .bp-select .bp-option:hover {
@@ -228,7 +233,7 @@ export default {
         align-content: flex-start;
         align-items: stretch;
         justify-content: flex-start;
-        /deep/ .concact .bp-button {
+        .concact {
             background: #FFDD4D!important;
             border: none;
             border-radius: 40px!important;
@@ -241,7 +246,7 @@ export default {
             font-size: 14px;
             margin-right: 8px;
         }
-        /deep/ .login .bp-button {
+        .login {
             color: #2D334D!important;
             border: 1px solid rgba(22,28,57,.12)!important;
             border-radius: 40px!important;
