@@ -2,7 +2,11 @@
     <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
         <div class="bp-select-title" @click="toggleShow">
             <span>{{choosed_text}}</span>
-            <img svg-inline src="../assets/icons/down.svg" alt="example" :class="icon_class" />
+            <img svg-inline 
+                :src="src" alt="example" 
+                :class="icon_class" 
+                v-if="src"
+            />
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
             <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :src="optionData.src" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close">
@@ -30,7 +34,8 @@ export default {
         changeValue: {
             type: Boolean,
             default: false
-        }
+        },
+        src: String
     },
     data: function() {
         return {
