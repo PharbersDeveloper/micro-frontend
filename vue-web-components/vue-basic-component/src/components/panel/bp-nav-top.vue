@@ -111,7 +111,6 @@ export default {
         justify-content: space-between;
         align-items: center;
         z-index: 1000;
-        font-family: system,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",Roboto,"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
         .selectMenu {
             height: auto;
             width: auto;
@@ -200,72 +199,87 @@ export default {
                 padding: 0;
             }
         }
-    }
 
-    .borderNone {
-        border-bottom: 0px !important;
-    }
-
-    .nav {
-        background: #fff;
-        border-bottom: 1px solid rgba(22, 28, 57, 0.12);
-        text-align: center;
-        font-size: 14px;
-    }
-
-    .navInverse {
-        background: #666;
-        border-bottom: 1px solid rgba(22, 28, 57, 0.12);
-        text-align: center;
-        font-size: 14px;
-        position: fixed;
-    }
-
-    .bgWhite {
-        background-color: #fff !important;
-    }
-
-    .nav-border {
-        height: 80px;
-        width: 100%;
-        display: flex;
-        align-content: flex-start;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .navButton {
-        display: flex;
-        align-content: flex-start;
-        align-items: stretch;
-        justify-content: flex-start;
-        .concact {
-            background: #FFDD4D!important;
-            border: none;
-            border-radius: 40px!important;
-            line-height: 32px!important;
-            height: 32px!important;
-            color: #2D334D!important;
-            text-align: center!important;
-            display: inline-block!important;
-            padding: 0 10px;
-            font-size: 14px;
-            margin-right: 8px;
+        .borderNone {
+            border-bottom: 0px !important;
         }
-        .login {
-            color: #2D334D!important;
-            border: 1px solid rgba(22,28,57,.12)!important;
-            border-radius: 40px!important;
-            line-height: 32px!important;
-            height: 32px!important;
-            width: 80px!important;
-            background: 0 0!important;
-            text-align: center!important;
-            display: inline-block!important;
+
+        .nav {
+            background: #fff;
+            border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+            text-align: center;
             font-size: 14px;
         }
-    }
 
+        .navInverse {
+            background: #666;
+            border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+            text-align: center;
+            font-size: 14px;
+            position: fixed;
+        }
+
+        .bgWhite {
+            background-color: #fff !important;
+        }
+
+        .nav-border {
+            height: 80px;
+            width: 100%;
+            display: flex;
+            align-content: flex-start;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navButton {
+            display: flex;
+            align-content: flex-start;
+            align-items: stretch;
+            justify-content: flex-start;
+            .concact {
+                background: #FFDD4D!important;
+                border: none;
+                border-radius: 40px!important;
+                line-height: 32px!important;
+                height: 32px!important;
+                color: #2D334D!important;
+                text-align: center!important;
+                display: inline-block!important;
+                padding: 0 10px;
+                font-size: 14px;
+                margin-right: 8px;
+            }
+            .login {
+                color: #2D334D!important;
+                border: 1px solid rgba(22,28,57,.12)!important;
+                border-radius: 40px!important;
+                line-height: 32px!important;
+                height: 32px!important;
+                width: 80px!important;
+                background: 0 0!important;
+                text-align: center!important;
+                display: inline-block!important;
+                font-size: 14px;
+            }
+        }
+    }
+    @media (max-width: 992px) and (min-width: 769px) {
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+        .fixed-nav {
+            padding: 0 60px !important;
+        }
+    }
+    @media (max-width: 768px) and (min-width: 480px) {
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+        .fixed-nav, .fixed-nav-inverse {
+            padding: 0 40px !important;
+        }
+    }
     .fade-enter-active, .fade-leave-active {
         transition: all 1s;
     }

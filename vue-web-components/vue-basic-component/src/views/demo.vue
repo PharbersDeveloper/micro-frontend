@@ -98,7 +98,8 @@
         <h1>bpNavTopResponse</h1>
         <!-- <bpNavTopResponse></bpNavTopResponse> -->
         <div style="position: fixed; top: 0">
-            <bpNavTop></bpNavTop>
+            <!-- <bpNavTop></bpNavTop> -->
+            <bpNavTopResponse></bpNavTopResponse>
         </div>
 
     </div>
