@@ -60,9 +60,15 @@
         <h1>vue menu</h1>
         <bpMenu :menu_data="menu_data"></bpMenu>
 
-        <h1>vue select</h1>
+        <h1>webcomponents select</h1>
         <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
 
+        <h1>vue select</h1>
+        <bpSelectVue :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
+            <bpOptionVue text="中文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="English" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="韩文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+        </bpSelectVue>
 
         <h1>vue tag</h1>
         <bpTag text="这是tag" subtle type="teals"/>
@@ -70,7 +76,7 @@
         <h1>vue status</h1>
         <bpStatus text="这是status" subtle type="in-progress"/>
 
-         <h1>vue badge</h1>
+        <h1>vue badge</h1>
         <bpBadge result=100 primary/>
         <bpBadge result=98 primary reverse/>
         <bpBadge/>
@@ -86,7 +92,7 @@
         </div>
 
         <div class="yanjie-test-area">
-            <bp-page-bottom></bp-page-bottom>
+            <bp-page-bottom :translation_data="page_bottom_translation_data"></bp-page-bottom>
         </div>
 
         <h1>bpNavTopResponse</h1>
@@ -109,6 +115,8 @@ import bpMenu from '../components/bp-menu.vue'
 import bpMenuItem from '../components/bp-menu-item.vue'
 import bpSubMenu from '../components/bp-sub-menu.vue'
 import bpSelect from '../components/bp-select.vue'
+import bpSelectVue from '../components/bp-select-vue.vue'
+import bpOptionVue from '../components/bp-option-vue.vue'
 import bpTag from '../components/bp-tag.vue'
 import bpStatus from '../components/bp-status.vue'
 import bpBadge from '../components/bp-badge.vue'
@@ -135,6 +143,8 @@ export default {
         bpMenuItem,
         bpSubMenu,
         bpSelect,
+        bpSelectVue,
+        bpOptionVue,
         bpTag,
         bpStatus,
         bpBadge,
@@ -172,14 +182,14 @@ export default {
         input(data) {
             console.log("input input")
             console.log(data)
+        },
+        changeLanguage(value) {
+            this.curLanguage = value
         }
-        // changeLanguage(e) {
-        //     console.log(e);
-        //     this.curLanguage = e
-        // }
     },
     data: function() {
         return {
+            curLanguage: "中文",
             bpCarouselItemArr: [
                 "https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png",
                 'https://dss2.bdstatic.com/5bVYsj_p_tVS5dKfpU_Y_D3/res/r/image/2021-3-4/hao123%20logo.png'
@@ -274,7 +284,14 @@ export default {
                         }
                     ]
                 }
-            ]
+            ],
+            page_bottom_translation_data: {
+                contactUs: {
+                    contactUs: "联系我们",
+                    leadingForHealthcareIndustry: "医药健康行业领先的数据融合与洞见",
+                    provideSolution: "为您提供一体化解决方案"
+                }
+            }
         }
     }
 }

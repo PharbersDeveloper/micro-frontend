@@ -4,13 +4,13 @@
             <div class="contact-content">
                 <div class="contact-slogan-part">
                     <bp-text class="ph-body-medium response-text-center">
-
+                        {{translation_data.contactUs.leadingForHealthcareIndustry}}
                     </bp-text>
                     <bp-text class="ph-H-Large_2 response-text-center">
-
+                        {{translation_data.contactUs.provideSolution}}
                     </bp-text>
                 </div>
-                <bp-button type="standard" text="contactUs.contactUs" @click="contactUs" class="contact-us-button"></bp-button>
+                <bp-button type="standard" :text="translation_data.contactUs.contactUs" @click="contactUs" class="contact-us-button"></bp-button>
             </div>
         </div>
     </div>
@@ -25,6 +25,9 @@ export default {
         bpText,
         bpButton
     },
+    props: {
+        translation_data: Object
+    },
     methods: {
         contactUs() {
 
@@ -34,6 +37,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    * {
+        letter-spacing: .4px;
+        line-height: 1.6;
+        box-sizing: border-box;
+    }
+    .ph-body-medium {
+        font-size: 16px;
+        color: #747789;
+    }
+    .ph-H-Large_2 {
+        font-size: 24px;
+        color: #2D334D;
+    }
+
     .page-bottom-part {
         height: auto;
         width: 100%;
@@ -75,11 +92,16 @@ export default {
                 .contact-us-button {
                     height: 40px;
                     width: 137px;
+                    padding: 1px 6px;
+                    line-height: 32px;
                     border: none;
                     background: #161C39;
                     color: #FFFFFF;
                     font-size: 14px;
                     border-radius: 2px;
+                    outline: 0;
+                    cursor: pointer;
+                    justify-content: center;
                 }
             }
         }
