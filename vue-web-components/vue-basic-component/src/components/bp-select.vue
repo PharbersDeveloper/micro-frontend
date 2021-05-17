@@ -3,13 +3,20 @@
         <div class="bp-select-title" @click="toggleShow">
             <span>{{choosed_text}}</span>
             <img svg-inline 
-                :src="src" alt="example" 
-                :class="icon_class" 
+                :src="src" 
+                alt="example" 
+                :class="[iconClass,'svg-icon']"
                 v-if="src"
             />
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
-            <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :src="optionData.src" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close">
+            <bpOption 
+                v-for="optionData in options_data" 
+                :key="optionData.text" 
+                :text="optionData.text" 
+                :choosed_value="choosed_text" 
+                :src="optionData.src" 
+                :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close">
                 <div class="bp-text ph-body-xsmall-tertiary">
                     {{optionData.spanText}}
                 </div>
@@ -24,7 +31,7 @@ export default {
         bpOption
     },
     props: {
-        icon_class: {
+        iconClass: {
             type: String,
             default: "svg-icon"
         },
@@ -35,7 +42,11 @@ export default {
             type: Boolean,
             default: false
         },
-        src: String
+        src: String,
+        disSelected: {
+            type: Boolean,
+            default: false
+        }
     },
     data: function() {
         return {
@@ -51,7 +62,7 @@ export default {
             }
         },
         changeLanguage(value) {
-            if (this.choosed_value) {
+            if (this.choosed_value && !this.disSelected) {
                 this.choosed_text = value
             }
         },

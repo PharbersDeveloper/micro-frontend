@@ -64,7 +64,7 @@
         <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
 
         <h1>vue select</h1>
-        <bpSelectVue :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
+        <bpSelectVue :disabled="true" :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
             <bpOptionVue text="中文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
             <bpOptionVue text="English" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
             <bpOptionVue text="韩文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>

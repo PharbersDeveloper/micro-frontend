@@ -13,6 +13,8 @@
                 <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
                 <div class="selectMenu">
                     <bpSelect 
+                        :disSelected="true"
+                        :src="require('../../assets/icons/down.svg')"
                         :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
                     <span class="bp-text">关于我们</span>
                 </div>
@@ -29,6 +31,8 @@
 <script>
 import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
+import bpSelectVue from '../bp-select-vue.vue'
+import bpOptionVue from '../bp-option-vue.vue'
 export default {
     mounted() {
         window.onscroll = () => {
@@ -46,7 +50,9 @@ export default {
     },
     components: {
         bpSelect,
-        bpButton
+        bpButton,
+        bpSelectVue,
+        bpOptionVue
     },
     props: {
         inverse: {
