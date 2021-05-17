@@ -1,5 +1,13 @@
 <template>
     <div class="button-area">
+
+        <h1>bpCard</h1>
+        <div style="display:flex;flex-direction:row">
+            <bpCard logoImg="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" title="aaaaaaaaaaaa" data="2021-05-12" city="北京"></bpCard>
+            <bpCard></bpCard>
+        </div>
+        
+
         <h1>vue button</h1>
         <bpButton type="primary" text="primary" :src="require('../assets/icons/check-circle.svg')"
             @click="click1"
@@ -86,6 +94,7 @@
         <div style="position: fixed; top: 0">
             <bpNavTop></bpNavTop>
         </div>
+
     </div>
 </template>
 
@@ -111,6 +120,7 @@ import bpCarouselUnit from '../components/bp-carousel-unit.vue'
 import bpPageBottom from '../components/panel/bp-page-bottom.vue'
 import bpNavTopResponse from '../components/panel/bp-nav-top-response'
 import bpNavTop from '../components/panel/bp-nav-top'
+import bpCard from '../components/panel/bp-card-activity'
 
 export default {
     name: 'bp-button',
@@ -135,7 +145,8 @@ export default {
         bpCarouselUnit,
         bpPageBottom,
         bpNavTopResponse,
-        bpNavTop
+        bpNavTop,
+        bpCard
     },
     methods: {
         // button
