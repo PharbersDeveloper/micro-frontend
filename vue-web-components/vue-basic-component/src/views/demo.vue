@@ -2,10 +2,10 @@
     <div class="button-area">
 
         <h1>bpCard</h1>
-        <div style="display:flex;flex-direction:row">
+        <!-- <div style="display:flex;flex-direction:row">
             <bpCard logoImg="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" title="aaaaaaaaaaaa" data="2021-05-12" city="北京"></bpCard>
             <bpCard></bpCard>
-        </div>
+        </div> -->
         
 
         <h1>vue button</h1>
@@ -132,6 +132,13 @@ import bpNavTop from '../components/panel/bp-nav-top'
 import bpCard from '../components/panel/bp-card-activity'
 
 export default {
+    metaInfo: {
+        title: 'demo',
+        meta: [
+            { charset: 'utf-8' },
+            { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        ]
+    },
     name: 'bp-button',
     components: {
         bpButton,
