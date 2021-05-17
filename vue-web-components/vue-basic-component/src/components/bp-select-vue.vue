@@ -2,7 +2,7 @@
     <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
         <div class="bp-select-title" @click="toggleShow">
             <span>{{choosedValue}}</span>
-            <img svg-inline :src="src" alt="example" :class="iconClass" v-if="src"/>
+            <img svg-inline :src="src" alt="example" :class="[iconClass,'svg-icon']" v-if="src"/>
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
             <slot></slot>

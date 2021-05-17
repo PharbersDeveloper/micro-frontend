@@ -1,6 +1,6 @@
 <template>
     <li class="bp-option" :disabled="disabled" @click="close" :class="{'option-active': isChoosed}">
-        <img svg-inline :class="iconClass" :src="src" alt="" v-if="src"/>
+        <img svg-inline :class="[iconClass, 'svg-icon']" :src="src" alt="" v-if="src"/>
         <div style="display: flex;flex-direction: column;">
             <span>{{text}}</span>
             <div>
@@ -33,7 +33,7 @@ export default {
     methods: {
         close() {
             this.$parent.$data.show = false
-            this.$emit("onClick", this.text)
+            this.$emit("click", this.text)
         }
     }
 }
