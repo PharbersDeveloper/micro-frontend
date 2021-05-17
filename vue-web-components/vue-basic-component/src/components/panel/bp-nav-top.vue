@@ -1,31 +1,32 @@
 <template>
-<div id="demo">
-    <!-- 淡入淡出动画 -->
-    <transition name="fade">
-        <!-- 导航条 -->
-        <div class="fixed-nav">
-            <div :class="[
-                inverse ? 'navInverse' : 'nav',
-                {'borderNone': borderNone},
-                {'bgWhite': bgWhite}
-                ]"
-                class="nav-border" >
-                <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
-                <div class="selectMenu">
-                    <bpSelect 
-                        :disSelected="true"
-                        :src="require('../../assets/icons/down.svg')"
-                        :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
-                    <span class="bp-text">关于我们</span>
-                </div>
-                <div class="navButton">
-                    <bpButton text="联系我们" class="concact"></bpButton>
-                    <bpButton text="登录" class="login"></bpButton>
-                </div>
+<!-- 淡入淡出动画 -->
+<transition name="fade">
+    <!-- 导航条 -->
+    <div class="fixed-nav" :class="[
+            inverse ? 'navInverse' : 'nav',
+            {'borderNone': borderNone},
+            {'bgWhite': bgWhite}]">
+        <div :class="[
+            inverse ? 'bordernavInverse' : 'nav',
+            {'borderNone': borderNone},
+            {'bgWhite': bgWhite}
+            ]"
+            class="nav-border" >
+            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
+            <div class="selectMenu">
+                <bpSelect 
+                    :disSelected="true"
+                    :src="require('../../assets/icons/down.svg')"
+                    :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
+                <span class="bp-text">关于我们</span>
+            </div>
+            <div class="navButton">
+                <bpButton text="联系我们" class="concact"></bpButton>
+                <bpButton text="登录" class="login"></bpButton>
             </div>
         </div>
-    </transition>
-</div>
+    </div>
+</transition>
 </template>
 
 <script>
@@ -99,7 +100,30 @@ export default {
     $spacing-compact-2x: 2*2px;
     $color-neutrals-n000: #ffffff;
     $color-neutrals-n400: rgba(#091e42,0.71);
+    .borderNone {
+        border-bottom: 0px !important;
+    }
 
+    .nav {
+        background: #fff;
+        border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+        text-align: center;
+        font-size: 14px;
+    }
+    
+    .bordernavInverse {
+        border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+    }
+
+    .navInverse {
+        background: #666;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .bgWhite {
+        background-color: #fff !important;
+    }
     .fixed-nav {
         height: 80px;
         width: 100%;
@@ -200,28 +224,7 @@ export default {
             }
         }
 
-        .borderNone {
-            border-bottom: 0px !important;
-        }
-
-        .nav {
-            background: #fff;
-            border-bottom: 1px solid rgba(22, 28, 57, 0.12);
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .navInverse {
-            background: #666;
-            border-bottom: 1px solid rgba(22, 28, 57, 0.12);
-            text-align: center;
-            font-size: 14px;
-            position: fixed;
-        }
-
-        .bgWhite {
-            background-color: #fff !important;
-        }
+        
 
         .nav-border {
             height: 80px;
