@@ -57,9 +57,9 @@
 
         <h1>vue select</h1>
         <bpSelectVue :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
-            <bpOptionVue text="中文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
-            <bpOptionVue text="English" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
-            <bpOptionVue text="韩文" @onClick="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="中文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="English" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="韩文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
         </bpSelectVue>
 
         <h1>vue tag</h1>
