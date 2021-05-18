@@ -2,15 +2,15 @@
     <transition name="fade">
         <div class="vue_container fixed-nav" :class="[
             inverse ? 'navInverse' : 'nav',
-            {'borderNone': borderNone},
             {'bgWhite': bgWhite}]"
         >
             <div 
                 class="nav-border" 
                 :class="[
-                    inverse ? 'bordernavInverse' : 'nav',
+                    borderNone ? 'borderNone' : 'bordernavInverse',
                     {'borderNone': borderNone},
-                    {'bgWhite': bgWhite}]"
+                    {'bgWhite': bgWhite}
+                ]"
             >
                 <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
                 <div class="response-icon-menu" @click="clickMenu"></div>
@@ -52,7 +52,7 @@ export default {
     data() {
         return {
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
-            menu: true,
+            menu: false,
             bgWhite: false,
             borderNone: false
         }
@@ -76,7 +76,7 @@ export default {
     }
     .nav {
         background: #fff;
-        border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+        // border-bottom: 1px solid rgba(22, 28, 57, 0.12);
         text-align: center;
         font-size: 14px;
     }

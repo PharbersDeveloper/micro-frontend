@@ -3,15 +3,15 @@
 <transition name="fade">
     <!-- 导航条 -->
     <div class="fixed-nav" :class="[
-            inverse ? 'navInverse' : 'nav',
-            {'borderNone': borderNone},
-            {'bgWhite': bgWhite}]">
+        inverse ? 'navInverse' : 'nav',
+        {'bgWhite': bgWhite}]"
+    >
         <div :class="[
-            inverse ? 'bordernavInverse' : 'nav',
+            orderNone ? 'borderNone' : 'bordernavInverse',
             {'borderNone': borderNone},
-            {'bgWhite': bgWhite}
-            ]"
-            class="nav-border" >
+            {'bgWhite': bgWhite}]"
+            class="nav-border"
+        >
             <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
             <div class="selectMenu">
                 <bpSelect 
@@ -106,7 +106,7 @@ export default {
 
     .nav {
         background: #fff;
-        border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+        // border-bottom: 1px solid rgba(22, 28, 57, 0.12);
         text-align: center;
         font-size: 14px;
     }
