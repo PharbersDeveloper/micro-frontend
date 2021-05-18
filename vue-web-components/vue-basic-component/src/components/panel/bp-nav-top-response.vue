@@ -31,7 +31,6 @@
             </div>
         </div>
     </transition>
-
 </template>
 <script>
 export default {

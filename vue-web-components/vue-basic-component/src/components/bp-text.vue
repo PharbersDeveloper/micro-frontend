@@ -1,9 +1,7 @@
 <template>
-<div>
-	<span class="bp-text" :title="title">
-		<slot></slot>
-	</span>
-</div>
+    <span class="bp-text" :title="title">
+        <slot></slot>
+    </span>
 </template>
 
 <script>

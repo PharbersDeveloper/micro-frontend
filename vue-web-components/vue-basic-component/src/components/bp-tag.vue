@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <span
-            class="bp-tag"
-            @click="handleClick"
-            @mouseenter="onMouseEnter"
-            @mouseleave="onMouseLeave"
-            :class="[
-                subtle ? 'tag-subtle' : 'tag-bold',
-                type ? 'tag-' + type : 'tag-blue',
-                {'hide': hide}
-            ]">
-            {{text}}
-        </span>
-    </div>
+    <span
+        class="bp-tag"
+        @click="handleClick"
+        @mouseenter="onMouseEnter"
+        @mouseleave="onMouseLeave"
+        :class="[
+            subtle ? 'tag-subtle' : 'tag-bold',
+            type ? 'tag-' + type : 'tag-blue',
+            {'hide': hide}
+        ]">
+        {{text}}
+    </span>
 </template>
 
 <script>

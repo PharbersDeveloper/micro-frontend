@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <span
-            class="bp-status"
-            @click="handleClick"
-            @mouseenter="onMouseEnter"
-            @mouseleave="onMouseLeave"
-            :class="[
-                subtle ? 'status-subtle' : 'status-bold',
-                type ? 'status-' + type : 'status-success'
-            ]">
-            {{text}}
-        </span>
-    </div>
+    <span
+        class="bp-status"
+        @click="handleClick"
+        @mouseenter="onMouseEnter"
+        @mouseleave="onMouseLeave"
+        :class="[
+            subtle ? 'status-subtle' : 'status-bold',
+            type ? 'status-' + type : 'status-success'
+        ]">
+        {{text}}
+    </span>
 </template>
 
 <script>

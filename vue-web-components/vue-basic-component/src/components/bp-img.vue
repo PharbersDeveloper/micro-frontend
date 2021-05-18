@@ -1,8 +1,5 @@
 <template>
-<div>
     <img  class="bp-img" :src="src" />
-
-</div>
 </template>
 
 <script>

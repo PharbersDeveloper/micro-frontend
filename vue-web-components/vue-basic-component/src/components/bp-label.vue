@@ -1,11 +1,9 @@
 <template>
-<div>
     <label 
         class="body-primary"
         :for="forLabel">
         {{text}}
     </label>
-</div>
 </template>
 
 <script>
