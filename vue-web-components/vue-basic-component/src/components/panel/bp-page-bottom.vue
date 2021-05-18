@@ -13,17 +13,26 @@
                 <bp-button type="standard" :text="translation_data.contactUs.contactUs" @click="contactUs" class="contact-us-button"></bp-button>
             </div>
         </div>
+
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal"/>
     </div>
 </template>
 
 <script>
 import bpText from '../bp-text.vue'
 import bpButton from '../bp-button.vue'
+import bpModalForm from './bp-modal-form.vue'
 
 export default {
     components: {
         bpText,
-        bpButton
+        bpButton,
+        bpModalForm
+    },
+    data: function() {
+        return {
+            contactForm: false
+        }
     },
     props: {
         translation_data: Object
@@ -31,6 +40,9 @@ export default {
     methods: {
         contactUs() {
             this.contactForm = true
+        },
+        closeModal() {
+            this.contactForm = false
         }
     }
 }
@@ -58,6 +70,7 @@ export default {
         background: transparent;
         display: flex;
         flex-direction: column;
+        align-items: center;
         
         .contact-container {
             height: 313px;
@@ -87,6 +100,8 @@ export default {
                     height: auto;
                     width: auto;
                     background: transparent;
+                    display: flex;
+                    flex-direction: column;
                 }
 
                 .contact-us-button {
@@ -114,4 +129,72 @@ export default {
             padding: 100px 100px 0;
         }
     }
+
+@media screen and (max-width: 992px) {
+    .page-bottom-part {
+        .contact-container {
+            .contact-content {
+                width: 88%;
+                height: auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 40px 80px;
+                flex-wrap: wrap;
+            }
+        }
+    }        
+}
+
+@media screen and (max-width: 768px) {
+    .page-bottom-part {
+        .contact-container {
+            .contact-content {
+                width: 90%;
+                height: auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 40px 80px;
+                flex-direction: column;
+
+                .response-text-center {
+                    text-align: center;
+                }
+
+                .contact-us-button {
+                    margin-top: 24px; 
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .page-bottom-part {
+        .contact-container {
+            height: 307px;
+            .contact-content {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-content: center;
+                padding: 40px 0;
+                flex-wrap: wrap;
+                margin-right: 24px;
+                margin-left: 24px;
+
+                .response-text-center {
+                    text-align: center;
+                }
+
+                .contact-us-button {
+                    margin-top: 24px; 
+                }
+            }
+        }
+    }
+}
 </style>

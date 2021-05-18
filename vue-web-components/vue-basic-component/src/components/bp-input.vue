@@ -1,5 +1,4 @@
 <template>
-<div>
     <input 
         class="bp-input"
         ref="input"
@@ -15,8 +14,6 @@
             size ? 'input-' + size : 'input-default'
         ]" 
     />
-
-</div>
 </template>
 
 <script>
