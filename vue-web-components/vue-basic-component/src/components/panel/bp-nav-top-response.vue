@@ -105,7 +105,6 @@ export default {
         z-index: 1000;
         padding: 0 16px!important;
         
-
         .nav-border {
             height: 80px;
             width: 100%;
@@ -156,7 +155,7 @@ export default {
                 display: flex;
                 flex-direction: column;
                 align-content: flex-start;
-                align-items: stretch;
+                align-items: flex-start;
                 justify-content: flex-start;
                 margin-bottom: 24px;
                 height: auto;

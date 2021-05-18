@@ -1,13 +1,12 @@
 <template>
 <!-- 淡入淡出动画 -->
 <transition name="fade">
-    <!-- 导航条 -->
-    <div class="fixed-nav" :class="[
-        inverse ? 'navInverse' : 'nav',
-        {'bgWhite': bgWhite}]"
+    <div class="fixed-nav" 
+        :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
+        v-if="!En"
     >
         <div :class="[
-            orderNone ? 'borderNone' : 'bordernavInverse',
+            borderNone ? 'borderNone' : 'bordernavInverse',
             {'borderNone': borderNone},
             {'bgWhite': bgWhite}]"
             class="nav-border"
@@ -26,6 +25,30 @@
             </div>
         </div>
     </div>
+    <div class="fixed-nav" 
+        :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
+        v-if="En"
+    >
+        <div :class="[
+            borderNone ? 'borderNone' : 'bordernavInverse',
+            {'borderNone': borderNone},
+            {'bgWhite': bgWhite}]"
+            class="nav-border"
+        >
+            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
+            <div class="selectMenu">
+                <bpSelect 
+                    :disSelected="true"
+                    :src="require('../../assets/icons/down.svg')"
+                    :choosed_value="choosed_value_en" :options_data="options_data_en"></bpSelect>
+                <span class="bp-text">COMPANY</span>
+            </div>
+            <div class="navButton">
+                <bpButton text="Contact Us" class="concact"></bpButton>
+                <bpButton text="Log in" class="login"></bpButton>
+            </div>
+        </div>
+    </div>
 </transition>
 </template>
 
@@ -38,8 +61,8 @@ export default {
     mounted() {
         window.onscroll = () => {
             let top = document.scrollingElement.scrollTop; //触发滚动条
-            //回到页面顶部
             if (top == 0) {
+                //回到页面顶部
                 this.bgWhite = false;
                 this.borderNone = false
             } else {
@@ -57,6 +80,11 @@ export default {
     },
     props: {
         inverse: {
+            //是否背景透明
+            type: Boolean,
+            default: false
+        },
+        En: {
             type: Boolean,
             default: false
         }
@@ -67,26 +95,50 @@ export default {
             borderNone: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
             choosed_value: "产品与服务",
+            choosed_value_en: "PRODUCTS",
             options_data: [
                 {
                     text: "MAX",
-                    spanText: "自患者信息的多视角深度挖掘",
+                    spanText: "全息市场监测利器",
                     click_event: function() {
-                        console.log("http://www.baidu.com")
+                        console.log("MAX")
                     }
                 },
                 {
                     text: "真实数据研究",
-                    spanText: "自患者信息的多视角深度挖掘",
+                    spanText: "来自患者信息的多视角深度挖掘",
                     click_event: function() {
-                        console.log("http://www.google.com")
+                        console.log("真实数据研究")
                     }
                 },
                 {
-                    text: "韩文",
-                    spanText: "自患者信息的多视角深度挖掘",
+                    text: "循证咨询",
+                    spanText: "多层面精准预测，营销资源配置与优化",
                     click_event: function() {
-                        console.log("http://www.jd.com")
+                        console.log("循证咨询")
+                    }
+                }
+            ],
+            options_data_en: [
+                {
+                    text: "MAX©",
+                    spanText: "Holographic Market Monitoring Tool",
+                    click_event: function() {
+                        console.log("MAX")
+                    }
+                },
+                {
+                    text: "Real World Research",
+                    spanText: "Multi-perspective Deep Mining from Patient Information",
+                    click_event: function() {
+                        console.log("真实数据研究")
+                    }
+                },
+                {
+                    text: "Evidence-based Consulting",
+                    spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
+                    click_event: function() {
+                        console.log("循证咨询")
                     }
                 }
             ]

@@ -12,4 +12,10 @@
         color: #2c3e50;
         min-height: 100vh;
     }
+
+    body {
+        margin: 0!important;
+        padding: 0;
+        font-family: system,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",Roboto,"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
 </style>

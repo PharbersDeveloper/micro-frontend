@@ -1,8 +1,8 @@
 <template>
-<div class="content-active">
+<div class="content-active-panel">
     <div class="active-img">
         <img class="active-img-bgc" :src="bgImg" alt="">
-        <img class="above-data-logo" :src="logoImg" alt="">
+        <img class="above-data-logo" v-show="logoImg != 'null'" :src="logoImg" alt="">
     </div>
     <div class="active-info">
         <div class="home-avtive-names">
@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content-active {
+.content-active-panel {
     height: 367px;
     width: 279px;
     position: relative;
@@ -81,8 +81,10 @@ export default {
         }
 
         .above-data-logo {
-            width: 72px;
-            height: 72px;
+            // width: 72px!important;
+            // height: 72px!important;
+            width: 52px;
+            height: 52px;
             border-radius: 2px 2px 0 0;
             z-index: 2;
             object-fit: fill;
