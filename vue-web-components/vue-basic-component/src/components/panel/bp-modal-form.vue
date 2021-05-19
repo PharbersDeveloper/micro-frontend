@@ -63,6 +63,12 @@
                 <bp-text :class="[tag2 ? 'official-form-tag-active' : 'official-form-tag', 'ph-body-small', 'mr-2']" @click="toggleTagClass($event, 'tag2')">{{translation_data.consulting.consult}}</bp-text>
                 <bp-text :class="[tag3 ? 'official-form-tag-active' : 'official-form-tag', 'ph-body-small', 'mr-2']" @click="toggleTagClass($event, 'tag3')">{{translation_data.modalForm.dataService}}</bp-text>
             </div>
+            <bp-textarea :maxlength='140' @input="inputTextarea"></bp-textarea>
+
+            <div class="form-submit-button-container" @click="submit">
+                <bp-button type='official-yellow-line-compact' density='compact' :text="translation_data.modalForm.submit"></bp-button>
+                <img class="button-go" src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg" alt="success"/>
+            </div>
         </div>
     </div>
 </template>
@@ -71,11 +77,13 @@
 import bpText from '../bp-text.vue'
 import bpButton from '../bp-button.vue'
 import bpInput from '../bp-input.vue'
+import bpTextarea from '../bp-textarea.vue'
 export default {
     components: {
         bpText,
         bpButton,
-        bpInput
+        bpInput,
+        bpTextarea
     },
     data: function() {
         return {
@@ -92,7 +100,8 @@ export default {
             intentionTag: [],
             tag1: false,
             tag2: false,
-            tag3: false
+            tag3: false,
+            intention: ''
         }
     },
     props: {
@@ -113,6 +122,55 @@ export default {
             } else if ( !this[tag] && this.intentionTag.includes(text) ) {
                 let index = this.intentionTag.indexOf(text)
                 this.intentionTag.splice(index,1)
+            }
+        },
+        inputTextarea(value) {
+            this.intention = value
+        },
+        submit() {
+            let pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+                name = this.name,
+                company = this.company,
+                email = this.email,
+                intention = this.intention,
+                department = this.department,
+                position = this.position
+
+            if (name) {
+                this.nameBlank = false
+            } else {
+                this.nameBlank = true
+            }
+
+            if (company) {
+                this.companyBlank = false
+            } else {
+                this.companyBlank = true
+            }
+
+            if (!email) {
+                this.emailBlank = true
+            } else if (!pattern.test(email)) {
+                this.emailWaring = true
+                this.emailBlank = false
+            } else {
+                this.emailWaring = false
+                this.emailBlank = false
+            }
+
+            if (name && company && email && pattern.test(email)) {
+                this.successSubmit = true
+
+                intention = intention + "\nTag:" + this.intentionTag.join(";")
+                let value = {
+                    name,
+                    company,
+                    email,
+                    department,
+                    position,
+                    intention
+                }
+                this.$emit('submitClientData', value)
             }
         }
     }
@@ -258,7 +316,8 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            overflow: scroll;
+            overflow-x: hidden;
+            overflow-y: scroll;
 
             .form-warning-text {
                 font-size: 12px;
@@ -338,6 +397,28 @@ export default {
                     background: #F5C924!important;
                 }
             }
+
+            .form-textarea {
+                margin-bottom: 36px;
+                min-height: 80px;
+            }
+
+            .form-submit-button-container {
+                height: auto;
+                width: 100%;
+                background: transparent;
+                right: 0;
+                bottom: 40px;
+                display: flex;
+                justify-content: flex-end;
+                .button-go  {
+                    height: 40px;
+                    width: 40px;
+                    background: #FFDD4D;
+                    padding: 6px;
+                    cursor: pointer;
+                }
+            }
         }
     }
 
@@ -358,7 +439,6 @@ export default {
             width: 100%;
             height: 70%;
             padding: 24px;
-            overflow: scroll;
 
             .official-width-default {
                 flex-wrap: wrap;
@@ -371,6 +451,10 @@ export default {
                     width: 100%;
                 }
             }
+
+            .form-submit-button-container {
+                justify-content: center;
+            }
         }
     }
 }
@@ -378,13 +462,9 @@ export default {
 @media screen and (max-width: 480px) {
     .bp-modal-form {
         .bp-modal-form-content {
-            width: 100%;
             height: auto;
-            padding: 0 24px;
-            overflow: scroll;
-            -webkit-overflow-scrolling: touch;
-
-            
+            padding: 8px 24px;
+            -webkit-overflow-scrolling: touch;            
         }
     }
 }

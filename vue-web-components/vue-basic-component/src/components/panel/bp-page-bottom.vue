@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal"/>
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
     </div>
 </template>
 
@@ -43,6 +43,9 @@ export default {
         },
         closeModal() {
             this.contactForm = false
+        },
+        submitClientData(value) {
+            this.$emit('submitClientData', value)
         }
     }
 }
