@@ -1,14 +1,12 @@
 <template>
-    <div>
-        <div class="bp-button-group button-group">
-            <!-- <slot></slot> -->
-            <bpButtonItem 
-                v-for="(item,index) in buttonArr" 
-                :key="index" 
-                :active="item.active" 
-                :text="item.text">
-            </bpButtonItem>
-        </div>
+    <div class="bp-button-group button-group">
+        <!-- <slot></slot> -->
+        <bpButtonItem 
+            v-for="(item,index) in buttonArr" 
+            :key="index" 
+            :active="item.active" 
+            :text="item.text">
+        </bpButtonItem>
     </div>
 </template>
 

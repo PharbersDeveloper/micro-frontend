@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <span
-            class="bp-badge"
-            @click="handleClick"
-            @mouseenter="onMouseEnter"
-            @mouseleave="onMouseLeave"
-            :class="[
-                {'primary': primary},
-                {'reverse': reverse}
-            ]">
-            {{resultData}}
-        </span>
-    </div>
+    <span
+        class="bp-badge"
+        @click="handleClick"
+        @mouseenter="onMouseEnter"
+        @mouseleave="onMouseLeave"
+        :class="[
+            {'primary': primary},
+            {'reverse': reverse}
+        ]">
+        {{resultData}}
+    </span>
 </template>
 
 <script>

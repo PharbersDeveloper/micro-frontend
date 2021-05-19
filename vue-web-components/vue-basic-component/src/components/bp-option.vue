@@ -29,7 +29,7 @@ export default {
     },
     methods: {
         chooseOption() {
-            this.$emit("chooseOption", this.text )
+            this.$emit("chooseOption", this.text)
             this.click_event()
         }
     }

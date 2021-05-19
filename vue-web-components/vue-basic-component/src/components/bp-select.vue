@@ -2,10 +2,25 @@
     <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
         <div class="bp-select-title" @click="toggleShow">
             <span>{{choosed_text}}</span>
-            <img svg-inline src="../assets/icons/down.svg" alt="example" :class="icon_class" />
+            <img svg-inline 
+                :src="src" 
+                alt="example" 
+                :class="[iconClass,'svg-icon']"
+                v-if="src"
+            />
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
-            <bpOption v-for="optionData in options_data" :key="optionData.text" :text="optionData.text" :choosed_value="choosed_text" :src="optionData.src" :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close"></bpOption>
+            <bpOption 
+                v-for="optionData in options_data" 
+                :key="optionData.text" 
+                :text="optionData.text" 
+                :choosed_value="choosed_text" 
+                :src="optionData.src" 
+                :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close">
+                <div class="bp-text ph-body-xsmall-tertiary">
+                    {{optionData.spanText}}
+                </div>
+            </bpOption>
         </ul>
     </div>
 </template>
@@ -16,13 +31,22 @@ export default {
         bpOption
     },
     props: {
-        icon_class: {
+        iconClass: {
             type: String,
             default: "svg-icon"
         },
         classNames: String,
         choosed_value: String,
-        options_data: Array
+        options_data: Array,
+        changeValue: {
+            type: Boolean,
+            default: false
+        },
+        src: String,
+        disSelected: {
+            type: Boolean,
+            default: false
+        }
     },
     data: function() {
         return {
@@ -38,7 +62,7 @@ export default {
             }
         },
         changeLanguage(value) {
-            if (this.choosed_value) {
+            if (this.choosed_value && !this.disSelected) {
                 this.choosed_text = value
             }
         },
@@ -112,5 +136,15 @@ export default {
     
     .bp-select:hover {
         background: #EBECF0;
+    }
+    .bp-text {
+        height: auto;
+        width: auto;
+        background: 0 0;
+        padding: 0;
+    }
+    .ph-body-xsmall-tertiary {
+        font-size: 12px;
+        color: #A2A5B0;
     }
 </style>

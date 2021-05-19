@@ -1,5 +1,13 @@
 <template>
     <div class="button-area">
+
+        <h1>bpCard</h1>
+        <div style="display:flex;flex-direction:row">
+            <bpCard logoImg="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" title="aaaaaaaaaaaa" data="2021-05-12" city="北京"></bpCard>
+            <bpCard></bpCard>
+        </div>
+        
+
         <h1>vue button</h1>
         <bpButton type="primary" text="primary" :src="require('../assets/icons/check-circle.svg')"
             @click="click1"
@@ -56,7 +64,7 @@
         <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
 
         <h1>vue select</h1>
-        <bpSelectVue :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
+        <bpSelectVue :disabled="true" :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
             <bpOptionVue text="中文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
             <bpOptionVue text="English" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
             <bpOptionVue text="韩文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
@@ -86,6 +94,14 @@
         <div class="yanjie-test-area">
             <bp-page-bottom :translation_data="page_bottom_translation_data"></bp-page-bottom>
         </div>
+
+        <h1>bpNavTopResponse</h1>
+        <!-- <bpNavTopResponse></bpNavTopResponse> -->
+        <div style="position: fixed; top: 0">
+            <bpNavTop></bpNavTop>
+            <!-- <bpNavTopResponse inverse></bpNavTopResponse> -->
+        </div>
+
     </div>
 </template>
 
@@ -111,8 +127,19 @@ import bpCarousel from '../components/bp-carousel.vue'
 import bpCarouselItem from '../components/bp-carousel-item.vue'
 import bpCarouselUnit from '../components/bp-carousel-unit.vue'
 import bpPageBottom from '../components/panel/bp-page-bottom.vue'
+import bpNavTopResponse from '../components/panel/bp-nav-top-response'
+import bpNavTop from '../components/panel/bp-nav-top'
+import bpCard from '../components/panel/bp-card-activity'
+import Vue from 'vue'
 
 export default {
+    metaInfo: {
+        title: 'demo',
+        meta: [
+            { charset: 'utf-8' },
+            { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }
+        ]
+    },
     name: 'bp-button',
     components: {
         bpButton,
@@ -135,7 +162,10 @@ export default {
         bpCarousel,
         bpCarouselItem,
         bpCarouselUnit,
-        bpPageBottom
+        bpPageBottom,
+        bpNavTopResponse,
+        bpNavTop,
+        bpCard
     },
     methods: {
         // button
@@ -313,16 +343,17 @@ export default {
         width: 100vw;
     }
     .button-area{
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        ul, li{
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            line-height: 2;
-        }
+        // text-align: center;
+        // display: flex;
+        // flex-direction: column;
+        // align-items: center;
+        // ul, li{
+        //     list-style: none;
+        //     padding: 0;
+        //     margin: 0;
+        //     line-height: 2;
+        // }
+        margin-top: 100px;
     }
     .el-carousel__item h3 {
         color: #475669;
