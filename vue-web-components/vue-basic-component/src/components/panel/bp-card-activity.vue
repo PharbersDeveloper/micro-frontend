@@ -43,6 +43,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+    box-sizing: border-box;
+}
 .content-active-panel {
     height: 367px;
     width: 279px;
@@ -81,10 +84,8 @@ export default {
         }
 
         .above-data-logo {
-            // width: 72px!important;
-            // height: 72px!important;
-            width: 52px;
-            height: 52px;
+            width: 72px!important;
+            height: 72px!important;
             border-radius: 2px 2px 0 0;
             z-index: 2;
             object-fit: fill;

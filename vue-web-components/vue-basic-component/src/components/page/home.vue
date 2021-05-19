@@ -134,11 +134,15 @@
                     <bpImg :src="advisoryRightImg" class="advisory-right-img"></bpImg>
                 </div>
             </div>
+            <iconLine v-if="!response" class="case-icon-contaniner"></iconLine>
+            <iconLineRes v-if="response" class="case-icon-contaniner-response"></iconLineRes>
         </div>
     </div>
 </template>
 <script>
 import navTop from '../panel/bp-nav-top'
+import iconLine from '../panel/bp-icon-line'
+import iconLineRes from '../panel/bp-icon-line-response'
 import navTopRes from '../panel/bp-nav-top-response'
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
@@ -230,7 +234,9 @@ export default {
         bpImg,
         bpCardActive,
         bpButton,
-        BpText
+        BpText,
+        iconLine,
+        iconLineRes
     },
     methods: {
         aaa() {
@@ -917,6 +923,31 @@ export default {
                     background: 0 0;
                 }
             }
+        }
+
+        .case-icon-contaniner {
+            height: max-content;
+            width: 100%;
+            max-width: 1200px;
+            background: 0 0;
+            padding: 96px 125px 0;
+            justify-content: space-between;
+            opacity: 0.6;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        .case-icon-contaniner-response {
+            height: max-content;
+            width: 100%;
+            max-width: 1200px;
+            background: 0 0;
+            justify-content: space-between;
+            opacity: 0.6;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            padding: 100px 4px 0;
         }
     }
 </style>
