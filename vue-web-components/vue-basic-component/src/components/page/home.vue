@@ -58,7 +58,7 @@
                             <div class="more-reports-button">
                                 <div class="more-reports">
                                     <bpText>{{moreReportsText}}</bpText>
-                                    <bpImg class="more-reports-img" :src="moreReportsImg"></bpImg>
+                                    <bpImg class="more-reports-img" :src="showMoreButtonGo"></bpImg>
                                 </div>
                             </div>
                         </div>
@@ -70,8 +70,8 @@
                 <bpText class="home-about-us-peoples">{{dataShowAboutUs}}</bpText>
                 <bpText class="ph-H-xLarge">{{dataShowTitle}}</bpText>
                 <div class="show-more-button-container">
-                    <bpButton :text="dataShowMoreButton" class="button-official-yellow-line-compact"></bpButton>
-                    <bpImg :src="dataButtonGo" class="button-go"></bpImg>
+                    <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                    <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                 </div>
                 <div class="data-show-text-part">
                     <bpText class="ph-body-medium_brand">{{dataTextPart1}}</bpText>
@@ -85,9 +85,53 @@
             <div class="max-show">
                 <div class="max-show-left">
                     <div class="max-show-left-text-line"></div>
+                    <div class="max-show-left-text-row-1">
+                        <bpText class="ph-H-xLarge">{{maxTitle}}</bpText>
+                        <bpText class="ph-body-xsmall-tertiary">{{maxTitleDes}}</bpText>
+                    </div>
+                    <bpText class="max-text-center">{{maxTextCenter}}</bpText>
+                    <bpText class="max-text-center-brand">{{maxTextCenterBrand}}</bpText>
+                    <div class="max-show-more-button-container">
+                        <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                        <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
+                    </div>
                 </div>
-                <div class="max-show-right-container">
-
+                <div class="max-show-right-img-container">
+                    <bpImg :src="maxRightImg" class="max-show-right-img"></bpImg>
+                </div>
+            </div>
+            <div class="real-world">
+                <div class="real-world-left-img-container">
+                    <bpImg :src="realWorldLeftImg" class="real-world-left-img"></bpImg>
+                </div>
+                <div class="real-world-right">
+                    <div class="real-world-right-line"></div>
+                    <div class="real-world-right-text-line-1">
+                        <bpText class="ph-H-xLarge">{{realWorldTitle}}</bpText>
+                    </div>
+                    <bpText class="ph-H-Large">{{realWorldTitleSmall}}</bpText>
+                    <bpText class="ph-H-Large_brand">{{realWorldBrand}}</bpText>
+                    <div class="real-show-more-button-container">
+                        <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                        <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
+                    </div>
+                </div>
+            </div>
+            <div class="advisory">
+                <div class="advisory-left">
+                    <div class="advisory-left-line"></div>
+                    <div class="advisory-left-text-line-1">
+                        <bpText class="ph-H-xLarge">{{advisoryTitle}}</bpText>
+                    </div>
+                    <bpText class="ph-H-Large">{{advisoryTitleSmall}}</bpText>
+                    <bpText class="ph-H-Large_brand">{{advisoryBrand}}</bpText>
+                    <div class="advisory-show-more-button-container">
+                        <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                        <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
+                    </div>
+                </div>
+                <div class="advisory-right-img-container">
+                    <bpImg :src="advisoryRightImg" class="advisory-right-img"></bpImg>
                 </div>
             </div>
         </div>
@@ -141,17 +185,32 @@ export default {
             reportLargeTitle: "《带量采购对中国医药市场格局的影响》",
             reportTertiary: "2020年6月5日",
             reportButton: "获取报告",
-            moreReportsImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
+            // moreReportsImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
             moreReportsText: "更多报告",
             reportConnectImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
             dataShowAboutUs: "法伯凝聚顶尖数据分析师与数据科学家",
             dataShowTitle: "重新定义，您的数据价值",
             dataShowImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_corevalue.png",
-            dataShowMoreButton: "了解更多",
-            dataButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
+            showMoreButton: "了解更多",
+            showMoreButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
             dataTextPart1: "丰富的数据源",
             dataTextPart2: "强劲算能",
-            dataTextPart3: "超群智能算法"
+            dataTextPart3: "超群智能算法",
+            maxTitle: "MAX",
+            maxTitleDes: " Market Analytic Box",
+            maxTextCenter: "城市、县域、CHC，及时掌握市场动态",
+            maxTextCenterBrand: "全息市场监测利器",
+            maxButtonMore: "了解更多",
+            // maxButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
+            maxRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max.png",
+            realWorldLeftImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_realworld.png",
+            realWorldTitle: "真实世界数据研究",
+            realWorldTitleSmall: "来自患者信息的多视角深度挖掘",
+            realWorldBrand: "发现不同",
+            advisoryTitle: "循证咨询",
+            advisoryTitleSmall: "多层面精准预测，营销资源配置与优化",
+            advisoryBrand: "提升ROI",
+            advisoryRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_consulting.png"
         }
     },
     props: {
@@ -210,9 +269,30 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    /* 公共样式 */
     * {
         box-sizing: border-box;
     }
+    .show-more-button-go {
+        height: 40px;
+        width: 40px;
+        background: #FFDD4D;
+        padding: 8px;
+        cursor: pointer;
+    }
+    .button-official-yellow-line-compact {
+        height: 40px;
+        padding: 0 24px;
+        line-height: 40px;
+        background: linear-gradient(45deg,rgba(255,221,77,.5) 0,rgba(255,221,77,.5) 5%,transparent 5%,transparent 50%,rgba(255,221,77,.5) 50%,rgba(255,221,77,.5) 55%,transparent 55%,transparent)!important;
+        background-size: 8px 8px!important;
+        border: none;
+        font-weight: 500;
+        font-size: 14px;
+        color: #2D334D !important;
+    }
+    /* 公共样式 end */
+
     .bp-home {
         width: 100%;
         min-width: 375px;
@@ -579,24 +659,6 @@ export default {
                 justify-content: flex-start;
                 align-items: stretch;
                 align-content: flex-start;
-                .button-official-yellow-line-compact {
-                    height: 40px;
-                    padding: 0 24px;
-                    line-height: 40px;
-                    background: linear-gradient(45deg, rgba(255,221,77,.5) 0,rgba(255,221,77,.5) 5%,transparent 5%,transparent 50%,rgba(255,221,77,.5) 50%,rgba(255,221,77,.5) 55%,transparent 55%,transparent)!important;
-                    background-size: 8px 8px!important;
-                    border: none;
-                    font-weight: 500;
-                    font-size: 14px;
-                    color: #2D334D;
-                }
-                .button-go {
-                    height: 40px;
-                    width: 40px;
-                    background: #FFDD4D;
-                    padding: 8px;
-                    cursor: pointer;
-                }
             }
             .data-show-text-part {
                 height: auto;
@@ -638,6 +700,223 @@ export default {
             flex-direction: row;
             flex-wrap: wrap-reverse;
             align-content: flex-start;
+            align-items: stretch;
+            justify-content: flex-start;
+            .max-show-left {
+                height: auto;
+                width: auto;
+                padding-left: 100px;
+                background: 0 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1;
+                align-content: flex-start;
+                align-items: stretch;
+                .max-show-left-text-line {
+                    height: 40px;
+                    width: 60px;
+                    background: 0 0;
+                    border-top: 1px solid #FFCC30;
+                }
+                .max-show-left-text-row-1 {
+                    height: auto;
+                    width: auto;
+                    margin-bottom: 40px;
+                    background: 0 0;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: stretch;
+                    align-content: flex-start;
+                    .ph-H-xLarge {
+                        margin-right: 4px;
+                        font-size: 40px;
+                        font-weight: 200;
+                        color: #2D334D;
+                    }
+                    .ph-body-xsmall-tertiary {
+                        padding-top: 28px;
+                        font-size: 12px;
+                        color: #A2A5B0;
+                    }
+                }
+                .max-text-center {
+                    white-space: pre-line;
+                    font-size: 24px;
+                    color: #747789;
+                }
+                .max-text-center-brand {
+                    font-size: 24px;
+                    color: #F5C924;
+                }
+                .max-show-more-button-container {
+                    height: auto;
+                    width: max-content;
+                    margin-top: 40px;
+                    background: 0 0;
+                    cursor: pointer;
+                    display: flex;
+                    .max-button-go {
+                        height: 40px;
+                        width: 40px;
+                        background: #FFDD4D;
+                        padding: 8px;
+                    }
+                }
+            }
+            .max-show-right-img-container {
+                height: auto;
+                width: auto;
+                background: 0 0;
+                flex: 1;
+                display: flex;
+                .max-show-right-img {
+                    height: 688px;
+                    width: 600px;
+                    object-fit: contain;
+                    background: 0 0;
+                }
+            }
+        }
+        .real-world {
+            width: 100%;
+            height: auto;
+            background: 0 0;
+            flex-direction: row;
+            flex-wrap: wrap;
+            min-height: 498px;
+            max-width: 1200px;
+            display: flex;
+            .real-world-left-img-container {
+                height: auto;
+                width: auto;
+                background: 0 0;
+                flex: 1;
+                padding: 62px 77px;
+                display: flex;
+                .real-world-left-img {
+                    height: 397px;
+                    width: 457px;
+                    object-fit: fill;
+                    background: 0 0;
+                }
+            }
+            .real-world-right {
+                height: auto;
+                width: auto;
+                padding-right: 100px;
+                padding-left: 32px;
+                background: 0 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1;
+                .real-world-right-line {
+                    height: 40px;
+                    width: 60px;
+                    background: 0 0;
+                    border-top: 1px solid #FFCC30;
+                }
+                .real-world-right-text-line-1 {
+                    height: auto;
+                    width: auto;
+                    margin-bottom: 40px;
+                    background: 0 0;
+                    display: flex;
+                    flex-direction: row;
+                    .ph-H-xLarge {
+                        font-size: 40px;
+                        font-weight: 200;
+                        color: #2D334D;
+                    }
+                }
+                .ph-H-Large {
+                    font-size: 24px;
+                    color: #747789;
+                }
+                .ph-H-Large_brand {
+                    font-size: 24px;
+                    color: #F5C924;
+                }
+                .real-show-more-button-container {
+                    height: auto;
+                    width: max-content;
+                    margin-top: 40px;
+                    background: 0 0;
+                    cursor: pointer;
+                    display: flex;
+                }
+            }
+        }
+
+        .advisory {
+            width: 100%;
+            height: auto;
+            background: 0 0;
+            flex-direction: row;
+            flex-wrap: wrap-reverse;
+            min-height: 498px;
+            max-width: 1200px;
+            display: flex;
+            .advisory-left {
+                height: auto;
+                width: auto;
+                padding-left: 100px;
+                background: 0 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1;
+                .advisory-left-line {
+                    height: 40px;
+                    width: 60px;
+                    background: 0 0;
+                    border-top: 1px solid #FFCC30;
+                }
+                .advisory-left-text-line-1 {
+                    height: auto;
+                    width: auto;
+                    margin-bottom: 40px;
+                    background: 0 0;
+                    display: flex;
+                    flex-direction: row;
+                    .ph-H-xLarge {
+                        font-size: 40px;
+                        font-weight: 200;
+                        color: #2D334D;
+                    }
+                }
+                .ph-H-Large {
+                    white-space: pre-line;
+                    font-size: 24px;
+                    color: #747789;
+                }
+                .ph-H-Large_brand {
+                    font-size: 24px;
+                    color: #F5C924;
+                }
+                .advisory-show-more-button-container {
+                    height: auto;
+                    width: max-content;
+                    margin-top: 40px;
+                    background: 0 0;
+                    cursor: pointer;
+                    display: flex;
+                }
+            }
+            .advisory-right-img-container {
+                height: auto;
+                width: auto;
+                background: 0 0;
+                flex: 1;
+                display: flex;
+                .advisory-right-img {
+                    height: 498px;
+                    width: 600px;
+                    background: 0 0;
+                }
+            }
         }
     }
 </style>
