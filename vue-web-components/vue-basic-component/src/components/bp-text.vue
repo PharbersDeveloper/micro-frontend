@@ -1,13 +1,18 @@
 <template>
-    <span class="bp-text" :title="title">
-        <slot></slot>
-    </span>
+	<span class="bp-text" :title="title" @click="click_event">
+		<slot></slot>
+	</span>
 </template>
 
 <script>
 export default {
     props: {
         title: String
+    },
+    methods: {
+        click_event(event) {
+            this.$emit('click', event)
+        }
     }
 }
 </script>

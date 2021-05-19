@@ -21,7 +21,7 @@
             @dbclick="click2"/>
 
         <h1>vue img</h1>
-        <bpImg src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" />
+        <!-- <bpImg src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" /> -->
 
         <h1>vue input</h1>
         <!-- 
@@ -299,6 +299,32 @@ export default {
                     contactUs: "联系我们",
                     leadingForHealthcareIndustry: "医药健康行业领先的数据融合与洞见",
                     provideSolution: "为您提供一体化解决方案"
+                },
+                modalForm: {
+                    download: "下载报告",
+                    contactUs: "联系我们",
+                    name: "如何称呼您",
+                    nameBlank: "请填写您的姓名",
+                    company: "您所在的团队",
+                    companyBlank: "请填写您的团队名称",
+                    department: "您所在的部门",
+                    position: "您的职位",
+                    email: "您的工作邮箱",
+                    emailBlank: "请填写您的邮箱",
+                    emailWrong: "邮箱格式有误，请填写正确的邮箱地址",
+                    intention: "您感兴趣的内容",
+                    dataService: "数据研究服务",
+                    submit: "提交",
+                    "submit&download": "提交并下载",
+                    submitSuccess: "提交成功",
+                    submitFeedback: "已收到您的信息，我们将尽快与您联系",
+                    ok: "好的"
+                },
+                MAX: {
+                    max: "Max"
+                },
+                consulting: {
+                    consult: "循证咨询"
                 }
             }
         }
@@ -307,6 +333,15 @@ export default {
 </script>
 
 <style lang="scss">
+    body {
+        box-sizing: border-box;
+        font-family: system,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",Roboto,"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+        padding: 0;
+        margin: 0;
+    }
+    #app {
+        width: 100vw;
+    }
     .button-area{
         // text-align: center;
         // display: flex;
