@@ -1,15 +1,17 @@
 <template>
     <div class="home-container">
-        <navTop v-if="!response" En></navTop>
-        <navTopRes v-if="response"></navTopRes>
+        <navTop v-if="!responseMini"></navTop>
+        <navTopRes v-if="responseMini"></navTopRes>
         <div class="bp-home">
-            <div class="home-content-area" ref="aaa">
+            <!-- truth -->
+            <div class="truth-content-area">
                 <div class="title">
-                    <bpText class="ph-H-Display">{{title}}</bpText>
-                    <bpText class="ph-body-medium">{{des}}</bpText>
+                    <bpText class="ph-H-Display">{{truthTitle}}</bpText>
+                    <bpText class="ph-body-medium">{{truthDes}}</bpText>
                 </div>
                 <bpImg :src="src" class="home-header-img"></bpImg>
             </div>
+            <!-- activity -->
             <div class="content-active-area">
                 <div class="active-line">
                     <div class="active-yellow-line"></div>
@@ -33,6 +35,7 @@
                 <div class="content-active-bg-yellow"></div>
                 <div class="content-active-bg-line-right"></div>
             </div>
+            <!-- report -->
             <div class="report-download-container">
                 <div class="report-download">
                     <bpImg 
@@ -65,6 +68,7 @@
                     </div>
                 </div>
             </div>
+            <!-- data-show -->
             <div class="data-show">
                 <bpImg :src="reportConnectImg" class="report-connect-img"></bpImg>
                 <bpText class="home-about-us-peoples">{{dataShowAboutUs}}</bpText>
@@ -82,6 +86,7 @@
                 </div>
                 <bpImg class="data-show-img" :src="dataShowImg"></bpImg>
             </div>
+            <!-- max-show -->
             <div class="max-show">
                 <div class="max-show-left">
                     <div class="max-show-left-text-line"></div>
@@ -100,6 +105,7 @@
                     <bpImg :src="maxRightImg" class="max-show-right-img"></bpImg>
                 </div>
             </div>
+            <!-- real-world -->
             <div class="real-world">
                 <div class="real-world-left-img-container">
                     <bpImg :src="realWorldLeftImg" class="real-world-left-img"></bpImg>
@@ -117,6 +123,7 @@
                     </div>
                 </div>
             </div>
+            <!-- advisory -->
             <div class="advisory">
                 <div class="advisory-left">
                     <div class="advisory-left-line"></div>
@@ -134,6 +141,7 @@
                     <bpImg :src="advisoryRightImg" class="advisory-right-img"></bpImg>
                 </div>
             </div>
+            <!-- iconLine -->
             <iconLine v-if="!response" class="case-icon-contaniner"></iconLine>
             <iconLineRes v-if="response" class="case-icon-contaniner-response"></iconLineRes>
         </div>
@@ -156,6 +164,9 @@ export default {
             windowWidth: document.documentElement.clientWidth,
             windowHeight: document.documentElement.clientHeight,
             response: false,
+            responseMini: false,
+            truthTitle: "还原真实 可见未来",
+            truthDes: "医药数据融合与洞见者",
             src: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_hero.png",
             buttonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go_yellow.svg",
             activeArr: [
@@ -164,21 +175,24 @@ export default {
                     logoImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_bylt_v.svg",
                     title: "带量采购对中国医药市场的改变",
                     date: "2020-06-04",
-                    city: "苏州"
+                    city: "苏州",
+                    logoText: ''
                 },
                 {
                     bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
                     logoImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_above-data.svg",
                     title: "Above Data 2020 第一期",
                     date: "2020-01-09",
-                    city: "北京"
+                    city: "北京",
+                    logoText: "Above Data"
                 },
                 {
                     bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
                     logoImg: "null",
                     title: "第八届中国医药决策科学峰会暨 CphMRA 2019 年度会议",
                     date: "2019-10-23",
-                    city: "南京"
+                    city: "南京",
+                    logoText: "行业活动"
                 }
             ],
             reportLeftDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
@@ -218,14 +232,8 @@ export default {
         }
     },
     props: {
-        title: {
-            type: String,
-            default: "还原真实 可见未来"
-        },
-        des: {
-            type: String,
-            default: "医药数据融合与洞见者"
-        }
+        language: String,
+        default: "chinese"
     },
     components: {
         navTop,
@@ -238,17 +246,20 @@ export default {
         iconLine,
         iconLineRes
     },
-    methods: {
-        aaa() {
-            debugger
-        }
+    methods: {},
+    computed: {
     },
     watch: {
         windowWidth(val) {
-            if(val <= 480) {
+            if(val < 1100) {
                 this.response = true
             } else {
                 this.response = false
+            }
+            if(val <= 449) {
+                this.responseMini = true
+            } else {
+                this.responseMini = false
             }
         },
         windowHeight(val) {
@@ -257,10 +268,15 @@ export default {
     },
     mounted() {
         const that = this;
-        if(this.windowWidth <= 480) {
+        if(this.windowWidth < 1100) {
             this.response = true
         } else {
             this.response = false
+        }
+        if(this.windowWidth <= 449) {
+            this.responseMini = true
+        } else {
+            this.responseMini = false
         }
         window.onresize = () => {
             return (() => {
@@ -278,6 +294,7 @@ export default {
     /* 公共样式 */
     * {
         box-sizing: border-box;
+        line-height: 1.6;
     }
     .show-more-button-go {
         height: 40px;
@@ -305,8 +322,8 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-
-        .home-content-area {
+        // truth
+        .truth-content-area {
             height: 620px;
             max-width: 1200px;
             width: 100%;
@@ -350,7 +367,8 @@ export default {
                 pointer-events: none;
             }
         }
-
+        // truth end
+        // active
         .content-active-area {
             height: 421px;
             width: 100%;
@@ -463,7 +481,8 @@ export default {
                 border-left: 1px solid #161C39;
             }
         }
-
+        // active end
+        // report
         .report-download-container {
             height: 459px;
             max-width: 1200px;
@@ -624,7 +643,8 @@ export default {
                 }
             }
         }
-
+        // report end 
+        // data-show
         .data-show {
             height: 778px;
             width: 1200px;
@@ -695,7 +715,8 @@ export default {
                 background: 0 0;
             }
         }
-
+        // data-show end 
+        // max-show
         .max-show {
             width: 100%;
             height: auto;
@@ -785,6 +806,8 @@ export default {
                 }
             }
         }
+        // max-show end 
+        // real-world
         .real-world {
             width: 100%;
             height: auto;
@@ -855,7 +878,8 @@ export default {
                 }
             }
         }
-
+        // real-world end 
+        // advisory
         .advisory {
             width: 100%;
             height: auto;
@@ -924,7 +948,8 @@ export default {
                 }
             }
         }
-
+        // advisory end 
+        // case-icon
         .case-icon-contaniner {
             height: max-content;
             width: 100%;
@@ -948,6 +973,167 @@ export default {
             flex-direction: column;
             flex-wrap: wrap;
             padding: 100px 4px 0;
+        }
+        @media (max-width: 992px) and (min-width: 769px) {
+            // truth
+            .truth-content-area {
+                padding: 0 60px !important
+            }
+            .home-header-img {
+                width: 45% !important;
+                object-fit: contain !important;
+                margin-top: 64px !important;
+            }
+            //active
+            .content-active-panel {
+                width: 23% !important;
+                height: 357px !important;
+                /deep/.active-img {
+                    width: 100% !important;
+                    height: 220px !important;
+                }
+                /deep/.active-info {
+                    width: 100% !important;
+                    height: 117px !important;
+                    padding: 24px !important;
+                }
+            }
+            .content-active-bg-yellow {
+                width: 70% !important;
+                top: 220px !important;
+                height: 200px !important;
+            }
+            .active-line {
+                position: absolute !important;
+                left: 60px !important;
+                height: 635px !important;
+            }
+            .content-active-bg-line-right {
+                right: 60px !important;
+                height: 250px !important;
+            }
+            .content-active-area .active-text {
+                left: 70px !important;
+            }
+            // report
+            .report-download-container {
+                margin-bottom: 60px !important;
+                margin-top: 30px !important;
+                .report-download {
+                    height: auto !important;
+                    margin: 0 60px !important;
+                    padding: 24px 0 !important;
+                    .report-download-info {
+                        width: 56% !important;
+                        height: auto !important;
+                        text-align: center;
+                        .show-more-button-container {
+                            width: 100% !important;
+                            justify-content: center !important;
+                        }
+                    }
+                    .report-download-img-container {
+                        height: 251px;
+                        width: 44% !important;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+            }
+            //data-show
+            .data-show {
+                width: 100% !important;
+                padding: 0 50px !important;
+                .data-show-text-part {
+                    width: 85% !important;
+                }
+                .data-show-img {
+                    height: 388px !important;
+                    width: 64% !important;
+                }
+            }
+            //max-show {
+            .max-show-left {
+                padding: 60px !important;
+            }
+            .max-show-right-img, .real-world-left-img, .advisory-right-img {
+                width: 100% !important;
+                object-fit: cover;
+                min-width: 312px !important;
+            }
+            //advisory
+            .advisory-left {
+                padding-left: 60px !important;
+            }
+            //icon
+            .case-icon-contaniner {
+                padding: 100px 24px !important;
+            }
+        }
+        @media (max-width: 768px) and (min-width: 550px) {
+            // truth
+            .truth-content-area {
+                height: auto !important;
+                width: 100% !important;
+                padding: 0 8%!important;
+                margin-top: 150px;
+                flex-wrap: wrap;
+                justify-content: center !important;
+                .ph-H-Display {
+                    text-align: center;
+                }
+                .home-header-img {
+                    width: 70% !important;
+                    object-fit: contain !important;
+                    margin-top: 64px !important;
+                }
+                .ph-body-medium {
+                    text-align: center;
+                }
+            }
+            // active
+            .content-active-area {
+                flex-wrap: wrap;
+                height: auto !important;
+                .active-line{
+                    position: absolute !important;
+                    left: 40px !important;
+                }
+                .active-text {
+                    left: 50px !important;
+                }
+                
+                .content-active-panel {
+                    width: 74% !important;
+                    height: 172px !important;
+                    flex-wrap: wrap;
+                    margin-top: 24px !important;
+                    /deep/.active-img {
+                        width: 50% !important;
+                        height: 172px !important;
+                        .above-data-logo {
+                            display: none !important;
+                        }
+                    }
+                    /deep/.active-info {
+                        width: 50% !important;
+                        height: 172px !important;
+                        padding: 12px !important;
+                    }
+                    /deep/.home-avtive-names {
+                        height: 90px !important;
+                    }
+                    /deep/.home-active-logo {
+                        display: flex !important;
+                    }
+                }
+                .content-active-bg-yellow {
+                    height: 440px !important;
+                    width: 73% !important;
+                    top: 185px !important;
+                }
+            }
+            
         }
     }
 </style>

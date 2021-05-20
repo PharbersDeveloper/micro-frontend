@@ -6,6 +6,7 @@
     </div>
     <div class="active-info">
         <div class="home-avtive-names">
+            <span class="active-logo">{{logoText}}</span>
             <span class="active-title">{{title}}</span>
         </div>
         <span class="position-info">{{date}}  {{city}}</span>
@@ -37,6 +38,10 @@ export default {
         city: {
             type: String,
             default: "苏州"
+        },
+        logoText: {
+            type: String,
+            default: "行业活动"
         }
     }
 }
@@ -45,6 +50,7 @@ export default {
 <style lang="scss" scoped>
 * {
     box-sizing: border-box;
+    line-height: 1.6;
 }
 .content-active-panel {
     height: 367px;
@@ -129,6 +135,17 @@ export default {
                 color: #2d334d;
                 letter-spacing: .35px;
                 font-weight: 700;
+                padding: 0;
+            }
+            .active-logo {
+                display: none;
+                height: auto;
+                width: auto;
+                background: 0 0;
+                margin-bottom: 8px;
+                color: #454A61;
+                letter-spacing: 1px;
+                font-size: 12px;
                 padding: 0;
             }
         }

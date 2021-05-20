@@ -15,7 +15,7 @@
             <div class="selectMenu">
                 <bpSelect 
                     :disSelected="true"
-                    :src="require('../../assets/icons/down.svg')"
+                    src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
                     :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
                 <span class="bp-text">关于我们</span>
             </div>
@@ -39,7 +39,7 @@
             <div class="selectMenu">
                 <bpSelect 
                     :disSelected="true"
-                    :src="require('../../assets/icons/down.svg')"
+                    src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
                     :choosed_value="choosed_value_en" :options_data="options_data_en"></bpSelect>
                 <span class="bp-text">COMPANY</span>
             </div>
