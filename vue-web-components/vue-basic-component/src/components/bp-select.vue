@@ -85,12 +85,8 @@ export default {
         box-sizing: border-box;
     }
     .svg-icon {
-        width: 1em;
-        height: 1em;
-        vertical-align: -0.15em;
-        fill: currentColor;
-        overflow: hidden;
-        margin-right: 4px;
+        width: 16px;
+        height: 16px;
     }
 
     .bp-option-group {

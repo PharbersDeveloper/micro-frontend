@@ -91,11 +91,13 @@
                 </div>
             </div>
         </div>
+        <bp-page-bottom @submitClientData='submitClientData' @toMax='toMax' @toRW='toRW' @toConsulting='toConsulting' @toAboutUs='toAboutUs'></bp-page-bottom>
     </div>
 </template>
 <script>
 import navTop from '../panel/bp-nav-top'
 import navTopRes from '../panel/bp-nav-top-response'
+import bpPageBottom from '../panel/bp-page-bottom'
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpCardActive from '../panel/bp-card-activity'
@@ -167,6 +169,7 @@ export default {
     components: {
         navTop,
         navTopRes,
+        bpPageBottom,
         bpText,
         bpImg,
         bpCardActive,
@@ -176,6 +179,21 @@ export default {
     methods: {
         aaa() {
             debugger
+        },
+        submitClientData(value) {
+            this.$emit('submitClientData', value)
+        },
+        toMax(value) {
+            this.$emit('toMax', value)
+        },
+        toRW(value) {
+            this.$emit('toRW', value)
+        },
+        toConsulting(value) {
+            this.$emit('toConsulting', value)
+        },
+        toAboutUs(value) {
+            this.$emit('toAboutUs', value)
         }
     },
     watch: {
@@ -188,6 +206,16 @@ export default {
         },
         windowHeight(val) {
             console.log('height', val, this.windowHeight)
+        }
+    },
+    created() {
+        let originalSetItem = localStorage.setItem;
+        localStorage.setItem = function(key,newValue){
+            let event = new Event("setItemEvent");
+            event.key = key;
+            event.newValue = newValue;
+            window.dispatchEvent(event);
+            originalSetItem.apply(this,arguments);
         }
     },
     mounted() {

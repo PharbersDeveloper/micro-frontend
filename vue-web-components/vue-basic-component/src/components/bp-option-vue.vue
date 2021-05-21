@@ -42,21 +42,17 @@ export default {
     $color-neutrals-n000: #ffffff;
     $color-neutrals-n400: rgba(#091e42,0.71);
     .svg-icon {
-        width: 1em;
-        height: 1em;
-        vertical-align: -0.15em;
-        fill: currentColor;
-        overflow: hidden;
-        margin-right: 4px;
+        width: 16px;
+        height: 16px;
     }
     svg:focus {
         outline: none;
     }
-    .option-active {
-        color: $color-neutrals-n000;
-        background-color: $color-neutrals-n400;
+    li.option-active {
+        color: $color-neutrals-n000 !important;
+        background-color: $color-neutrals-n400 !important;
     }
-    .option-active .icon path {
+    li.option-active .icon path {
         fill: $color-neutrals-n000;
     }
     .bp-option {

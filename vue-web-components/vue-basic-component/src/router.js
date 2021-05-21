@@ -1,5 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import demo from './views/demo.vue'
+import home from './components/page/home.vue'
+import max from './components/page/max.vue'
+import rw from './components/page/rw.vue'
+import consulting from './components/page/consulting.vue'
+import aboutUs from './components/page/about-us.vue'
 
 Vue.use(Router)
 
@@ -10,18 +16,32 @@ export default new Router({
         {
             path: '/',
             name: 'demo',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './views/demo.vue')
+            component: demo
         },
         {
             path: '/home',
             name: 'home',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './components/page/home.vue')
+            component: home
+        },
+        {
+            path: '/max',
+            name: 'max',
+            component: max
+        },
+        {
+            path: '/rw',
+            name: 'rw',
+            component: rw
+        },
+        {
+            path: '/consulting',
+            name: 'consulting',
+            component: consulting
+        },
+        {
+            path: '/about-us',
+            name: 'about-us',
+            component: aboutUs
         }
     ]
 })
