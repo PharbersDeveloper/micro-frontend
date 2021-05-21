@@ -83,7 +83,7 @@ export default {
     .case-icon-line-three {
         padding: 0 100px;
     }
-    @media (max-width: 992px) and (min-width: 769px) {
+    @media screen and (max-width: 992px) and (min-width: 769px) { // ?
         .case-icon-line-three {
             padding: 0 8px!important;
         }

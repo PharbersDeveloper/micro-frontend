@@ -273,7 +273,7 @@ export default {
             } else {
                 this.response = false
             }
-            if(val <= 449) {
+            if(val <= 600) {
                 this.responseMini = true
             } else {
                 this.responseMini = false
@@ -300,7 +300,7 @@ export default {
         } else {
             this.response = false
         }
-        if(this.windowWidth <= 449) {
+        if(this.windowWidth <= 600) {
             this.responseMini = true
         } else {
             this.responseMini = false
@@ -349,6 +349,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+        overflow-x: hidden;
         // truth
         .truth-content-area {
             height: 620px;

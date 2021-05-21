@@ -3,7 +3,7 @@
 <transition name="fade">
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
-        v-if="!En"
+        v-if="language === '中文'"
     >
         <div :class="[
             borderNone ? 'borderNone' : 'bordernavInverse',
@@ -27,7 +27,7 @@
     </div>
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
-        v-if="En"
+        v-if="language === 'English'"
     >
         <div :class="[
             borderNone ? 'borderNone' : 'bordernavInverse',
@@ -58,7 +58,13 @@ import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
 export default {
+    created() {
+        let curLang = window.localStorage.getItem('lang')
+
+        this.language = curLang
+    },
     mounted() {
+        const that = this
         window.onscroll = () => {
             let top = document.scrollingElement.scrollTop; //触发滚动条
             if (top == 0) {
@@ -71,6 +77,10 @@ export default {
                 this.borderNone = true
             }
         }
+
+        window.addEventListener('setItemEvent', function(e) {
+            that.language = e.newValue
+        })
     },
     components: {
         bpSelect,
@@ -83,14 +93,11 @@ export default {
             //是否背景透明
             type: Boolean,
             default: false
-        },
-        En: {
-            type: Boolean,
-            default: false
         }
     },
     data: function () {
         return {
+            language: '中文',
             bgWhite: false,
             borderNone: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
@@ -319,7 +326,7 @@ export default {
             }
         }
     }
-    @media (max-width: 992px) and (min-width: 769px) {
+    @media screen and (max-width: 992px) and (min-width: 769px) {
         ::-webkit-scrollbar-thumb {
             background: transparent;
         }
@@ -327,7 +334,7 @@ export default {
             padding: 0 60px !important;
         }
     }
-    @media (max-width: 768px) and (min-width: 480px) {
+    @media screen and (max-width: 768px) and (min-width: 480px) {
         ::-webkit-scrollbar-thumb {
             background: transparent;
         }
