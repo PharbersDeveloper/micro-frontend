@@ -1,9 +1,7 @@
 <template>
-<div>
-	<ul class="bp-menu">
-		<bpSubMenu v-for="single_data in menu_data" :key="single_data.text" :sub_menu_data="single_data"></bpSubMenu>
-	</ul>
-</div>
+    <ul class="bp-menu">
+        <bpSubMenu v-for="single_data in menu_data" :key="single_data.text" :sub_menu_data="single_data"></bpSubMenu>
+    </ul>
 </template>
 
 <script>
@@ -25,7 +23,7 @@ export default {
 }
 </script>
 
-<style lang=scss scoped>
+<style lang="scss" scoped>
 	* {
         box-sizing: border-box;
     }

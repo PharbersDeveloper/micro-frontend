@@ -6,7 +6,7 @@
 body {
     margin: $spacing-none;
     // padding: $spacing-none;
-    padding: 100px;
+    // padding: 100px;
 }
 
 a {
@@ -2221,7 +2221,7 @@ input[type="checkbox"]+label {
 }
 
 .bp-option-group {
-    width: 160px !important;
+    width: 160px;
 }
 
 .fixed-nav-text {

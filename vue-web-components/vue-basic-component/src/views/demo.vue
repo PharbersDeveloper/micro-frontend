@@ -1,7 +1,15 @@
 <template>
     <div class="button-area">
+
+        <h1>bpCard</h1>
+        <div style="display:flex;flex-direction:row">
+            <bpCard logoImg="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" title="aaaaaaaaaaaa" data="2021-05-12" city="北京"></bpCard>
+            <bpCard></bpCard>
+        </div>
+        
+
         <h1>vue button</h1>
-        <bpButton type="primary" text="primary"
+        <bpButton type="primary" text="primary" :src="require('../assets/icons/check-circle.svg')"
             @click="click1"
             @dbclick="click2"
          />
@@ -13,7 +21,7 @@
             @dbclick="click2"/>
 
         <h1>vue img</h1>
-        <bpImg src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" />
+        <!-- <bpImg src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" /> -->
 
         <h1>vue input</h1>
         <!-- 
@@ -52,9 +60,15 @@
         <h1>vue menu</h1>
         <bpMenu :menu_data="menu_data"></bpMenu>
 
-        <h1>vue select</h1>
+        <h1>webcomponents select</h1>
         <bpSelect :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
 
+        <h1>vue select</h1>
+        <bpSelectVue :choosedValue="curLanguage" :src="require('../assets/icons/down.svg')">
+            <bpOptionVue text="中文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="English" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+            <bpOptionVue text="韩文" @click="changeLanguage" :choosedValue="curLanguage"></bpOptionVue>
+        </bpSelectVue>
 
         <h1>vue tag</h1>
         <bpTag text="这是tag" subtle type="teals"/>
@@ -62,7 +76,7 @@
         <h1>vue status</h1>
         <bpStatus text="这是status" subtle type="in-progress"/>
 
-         <h1>vue badge</h1>
+        <h1>vue badge</h1>
         <bpBadge result=100 primary/>
         <bpBadge result=98 primary reverse/>
         <bpBadge/>
@@ -76,6 +90,18 @@
             <bpCarouselUnit :itemArr="bpCarouselItemArr" height="500px">
             </bpCarouselUnit>
         </div>
+
+        <div class="yanjie-test-area">
+            <bp-page-bottom language="ch"></bp-page-bottom>
+        </div>
+
+        <h1>bpNavTopResponse</h1>
+        <!-- <bpNavTopResponse></bpNavTopResponse> -->
+        <div style="position: fixed; top: 0">
+            <bpNavTop></bpNavTop>
+            <!-- <bpNavTopResponse inverse></bpNavTopResponse> -->
+        </div>
+
     </div>
 </template>
 
@@ -90,6 +116,8 @@ import bpMenu from '../components/bp-menu.vue'
 import bpMenuItem from '../components/bp-menu-item.vue'
 import bpSubMenu from '../components/bp-sub-menu.vue'
 import bpSelect from '../components/bp-select.vue'
+import bpSelectVue from '../components/bp-select-vue.vue'
+import bpOptionVue from '../components/bp-option-vue.vue'
 import bpTag from '../components/bp-tag.vue'
 import bpStatus from '../components/bp-status.vue'
 import bpBadge from '../components/bp-badge.vue'
@@ -98,8 +126,20 @@ import bpButtonGroup from '../components/bp-button-group.vue'
 import bpCarousel from '../components/bp-carousel.vue'
 import bpCarouselItem from '../components/bp-carousel-item.vue'
 import bpCarouselUnit from '../components/bp-carousel-unit.vue'
+import bpPageBottom from '../components/panel/bp-page-bottom.vue'
+import bpNavTopResponse from '../components/panel/bp-nav-top-response'
+import bpNavTop from '../components/panel/bp-nav-top'
+import bpCard from '../components/panel/bp-card-activity'
+import Vue from 'vue'
 
 export default {
+    metaInfo: {
+        title: 'demo',
+        meta: [
+            { charset: 'utf-8' },
+            { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }
+        ]
+    },
     name: 'bp-button',
     components: {
         bpButton,
@@ -112,6 +152,8 @@ export default {
         bpMenuItem,
         bpSubMenu,
         bpSelect,
+        bpSelectVue,
+        bpOptionVue,
         bpTag,
         bpStatus,
         bpBadge,
@@ -119,7 +161,11 @@ export default {
         bpButtonGroup,
         bpCarousel,
         bpCarouselItem,
-        bpCarouselUnit
+        bpCarouselUnit,
+        bpPageBottom,
+        bpNavTopResponse,
+        bpNavTop,
+        bpCard
     },
     methods: {
         // button
@@ -145,14 +191,14 @@ export default {
         input(data) {
             console.log("input input")
             console.log(data)
+        },
+        changeLanguage(value) {
+            this.curLanguage = value
         }
-        // changeLanguage(e) {
-        //     console.log(e);
-        //     this.curLanguage = e
-        // }
     },
     data: function() {
         return {
+            curLanguage: "中文",
             bpCarouselItemArr: [
                 "https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png",
                 'https://dss2.bdstatic.com/5bVYsj_p_tVS5dKfpU_Y_D3/res/r/image/2021-3-4/hao123%20logo.png'
@@ -171,6 +217,7 @@ export default {
                 {
                     text: "中文",
                     second_text: "",
+                    src: require('../assets/icons/check.svg'),
                     click_event: function() {
                         console.log("http://www.baidu.com")
                     }
@@ -178,6 +225,7 @@ export default {
                 {
                     text: "英文",
                     second_text: "",
+                    src: "",
                     click_event: function() {
                         console.log("http://www.google.com")
                     }
@@ -185,6 +233,7 @@ export default {
                 {
                     text: "韩文",
                     second_text: "",
+                    src: "",
                     click_event: function() {
                         console.log("http://www.jd.com")
                     }
@@ -194,12 +243,14 @@ export default {
                 {
                     type: "sub",
                     text: "sub1",
+                    src: require('../assets/icons/check.svg'),
                     click_event: function() {
                     
                     },
                     item_data: [
                         {
                             text: "sub_item1",
+                            src: require('../assets/icons/check.svg'),
                             click_event: function() {
                                 console.log("sub_item1")
                             }
@@ -222,6 +273,7 @@ export default {
                 {
                     type: "item",
                     text: "item2",
+                    src: require('../assets/icons/check.svg'),
                     click_event: function() {
                         console.log("item2")
                     }
@@ -248,17 +300,27 @@ export default {
 </script>
 
 <style lang="scss">
+    body {
+        box-sizing: border-box;
+        font-family: system,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",Roboto,"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+        padding: 0;
+        margin: 0;
+    }
+    #app {
+        width: 100vw;
+    }
     .button-area{
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        ul, li{
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            line-height: 2;
-        }
+        // text-align: center;
+        // display: flex;
+        // flex-direction: column;
+        // align-items: center;
+        // ul, li{
+        //     list-style: none;
+        //     padding: 0;
+        //     margin: 0;
+        //     line-height: 2;
+        // }
+        margin-top: 100px;
     }
     .el-carousel__item h3 {
         color: #475669;
@@ -277,5 +339,11 @@ export default {
     }
     h3 {
         color: red;
+    }
+    .yanjie-test-area {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

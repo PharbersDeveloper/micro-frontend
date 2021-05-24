@@ -1,6 +1,6 @@
 <template>
     <li class="bp-push-button bp-menu-item" :disabled="disabled" @click="menu_item_data.click_event">
-        <img svg-inline class="svg-icon" src="../assets/icons/case.svg" alt="example" />
+        <img  class="svg-icon" :src="menu_item_data.src" alt="example" v-if="menu_item_data.src" />
         <span>{{menu_item_data.text}}</span>
     </li>
 </template>
@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang=scss scoped>
+<style lang="scss" scoped>
     * {
         box-sizing: border-box;
     }
@@ -29,7 +29,9 @@ export default {
         overflow: hidden;
         margin-right: 4px;
     }
-
+    svg:focus {
+        outline: none;
+    }
     .bp-menu-item {
         height: 40px;
         width: 100%;

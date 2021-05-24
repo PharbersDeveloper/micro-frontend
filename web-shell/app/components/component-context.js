@@ -63,6 +63,7 @@ export default class ComponentContextComponent extends Component {
 			{
 				text: "中文",
 				second_text: "",
+				src: "assets/case.svg",
 				click_event: function() {
 					console.log("http://www.baidu.com")
 				}
@@ -90,6 +91,7 @@ export default class ComponentContextComponent extends Component {
 			{
 				type: "sub",
 				text: "sub1",
+				src: "assets/case.svg",
 				click_event: function() {
 				
 				},
@@ -102,6 +104,7 @@ export default class ComponentContextComponent extends Component {
 					},
 					{
 						text: "sub_item2",
+						src: "assets/case.svg",
 						click_event: function() {
 							console.log("sub_item2")
 						}
@@ -111,6 +114,7 @@ export default class ComponentContextComponent extends Component {
 			{
 				type: "item",
 				text: "item1",
+				src: "assets/case.svg",
 				click_event: function() {
 					console.log("item1")
 				}

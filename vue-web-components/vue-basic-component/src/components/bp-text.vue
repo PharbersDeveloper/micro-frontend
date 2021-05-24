@@ -1,20 +1,23 @@
 <template>
-<div>
-	<span class="bp-text" :title="title">
+	<span class="bp-text" :title="title" @click="click_event">
 		<slot></slot>
 	</span>
-</div>
 </template>
 
 <script>
 export default {
     props: {
         title: String
+    },
+    methods: {
+        click_event(event) {
+            this.$emit('click', event)
+        }
     }
 }
 </script>
 
-<style lang=scss scoped>
+<style lang="scss" scoped>
 	$color-neutrals-n800: rgba(#091e42,0.95);
 	.bp-text {
 		height: auto;

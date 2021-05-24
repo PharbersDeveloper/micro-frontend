@@ -1,5 +1,4 @@
 <template>
-<div>
     <button 
         class="bp-link"
         @click="handleClick"
@@ -12,7 +11,6 @@
     >
         {{text}}
     </button>
-</div>
 </template>
 
 <script>
