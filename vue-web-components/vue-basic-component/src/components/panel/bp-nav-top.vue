@@ -3,7 +3,6 @@
 <transition name="fade">
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
-        v-if="language === '中文'"
     >
         <div :class="[
             borderNone ? 'borderNone' : 'bordernavInverse',
@@ -16,37 +15,12 @@
                 <bpSelect 
                     :disSelected="true"
                     src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
-                    :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
-                <span class="bp-text" @click="toAboutUs">关于我们</span>
+                    :choosed_value="translation_data.choosed_value" :options_data="translation_data.options_data"></bpSelect>
+                <span class="bp-text" @click="toAboutUs">{{translation_data.aboutUs}}</span>
             </div>
             <div class="navButton">
-                <bpButton text="联系我们" class="concact" @click="contactUs"></bpButton>
-                <bpButton text="登录" class="login"></bpButton>
-            </div>
-        </div>
-        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
-    </div>
-    <div class="fixed-nav" 
-        :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
-        v-if="language === 'English'"
-    >
-        <div :class="[
-            borderNone ? 'borderNone' : 'bordernavInverse',
-            {'borderNone': borderNone},
-            {'bgWhite': bgWhite}]"
-            class="nav-border"
-        >
-            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
-            <div class="selectMenu">
-                <bpSelect 
-                    :disSelected="true"
-                    src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
-                    :choosed_value="choosed_value_en" :options_data="options_data_en"></bpSelect>
-                <span class="bp-text" @click="toAboutUs">COMPANY</span>
-            </div>
-            <div class="navButton">
-                <bpButton text="Contact Us" class="concact" @click="contactUs"></bpButton>
-                <bpButton text="Log in" class="login"></bpButton>
+                <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
+                <bpButton :text="translation_data.login" class="login"></bpButton>
             </div>
         </div>
         <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
@@ -72,12 +46,12 @@ export default {
             let top = document.scrollingElement.scrollTop; //触发滚动条
             if (top == 0) {
                 //回到页面顶部
-                this.bgWhite = false;
-                this.borderNone = false
+                that.bgWhite = false;
+                that.borderNone = false
             } else {
                 //不在页面顶部
-                this.bgWhite = true;
-                this.borderNone = true
+                that.bgWhite = true;
+                that.borderNone = true
             }
         }
 
@@ -106,54 +80,6 @@ export default {
             borderNone: false,
             contactForm: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
-            choosed_value: "产品与服务",
-            choosed_value_en: "PRODUCTS",
-            options_data: [
-                {
-                    text: "MAX",
-                    spanText: "全息市场监测利器",
-                    click_event: function() {
-                        this.$emit('toMax', 'max')
-                    }
-                },
-                {
-                    text: "真实数据研究",
-                    spanText: "来自患者信息的多视角深度挖掘",
-                    click_event: function() {
-                        this.$emit('toRW', 'rw')
-                    }
-                },
-                {
-                    text: "循证咨询",
-                    spanText: "多层面精准预测，营销资源配置与优化",
-                    click_event: function() {
-                        this.$emit('toConsulting', 'consulting')
-                    }
-                }
-            ],
-            options_data_en: [
-                {
-                    text: "MAX©",
-                    spanText: "Holographic Market Monitoring Tool",
-                    click_event: function() {
-                        this.$emit('toMax', 'max')
-                    }
-                },
-                {
-                    text: "Real World Research",
-                    spanText: "Multi-perspective Deep Mining from Patient Information",
-                    click_event: function() {
-                        this.$emit('toRW', 'rw')
-                    }
-                },
-                {
-                    text: "Evidence-based Consulting",
-                    spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
-                    click_event: function() {
-                        this.$emit('toConsulting', 'consulting')
-                    }
-                }
-            ],
             translation_basedata: {
                 cn: {
                     MAX: {
@@ -162,6 +88,33 @@ export default {
                     consulting: {
                         consult: "循证咨询"
                     },
+                    choosed_value: "产品与服务",
+                    aboutUs: "关于我们",
+                    contactUs: "联系我们",
+                    login: "登录",
+                    options_data: [
+                        {
+                            text: "MAX",
+                            spanText: "全息市场监测利器",
+                            click_event: function() {
+                                this.$emit('toMax', 'max')
+                            }
+                        },
+                        {
+                            text: "真实数据研究",
+                            spanText: "来自患者信息的多视角深度挖掘",
+                            click_event: function() {
+                                this.$emit('toRW', 'rw')
+                            }
+                        },
+                        {
+                            text: "循证咨询",
+                            spanText: "多层面精准预测，营销资源配置与优化",
+                            click_event: function() {
+                                this.$emit('toConsulting', 'consulting')
+                            }
+                        }
+                    ],
                     modalForm: {
                         download: "下载报告",
                         contactUs: "联系我们",
@@ -190,6 +143,33 @@ export default {
                     consulting: {
                         consult: "Evidence-based Consulting"
                     },
+                    choosed_value: "PRODUCTS",
+                    aboutUs: "COMPANY",
+                    contactUs: "Contact Us",
+                    login: "Log in",
+                    options_data: [
+                        {
+                            text: "MAX©",
+                            spanText: "Holographic Market Monitoring Tool",
+                            click_event: function() {
+                                this.$emit('toMax', 'max')
+                            }
+                        },
+                        {
+                            text: "Real World Research",
+                            spanText: "Multi-perspective Deep Mining from Patient Information",
+                            click_event: function() {
+                                this.$emit('toRW', 'rw')
+                            }
+                        },
+                        {
+                            text: "Evidence-based Consulting",
+                            spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
+                            click_event: function() {
+                                this.$emit('toConsulting', 'consulting')
+                            }
+                        }
+                    ],
                     modalForm:{
                         download: "Download Report",
                         contactUs: "Contact Us",
