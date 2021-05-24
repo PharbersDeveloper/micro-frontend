@@ -241,8 +241,8 @@ export default {
         },
         changeLanguage(value) {
             localStorage.setItem('lang', value)
-            // document.documentElement.scrollTop = 0
-            // document.body.scrollTop = 0
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         },
         toMiit() {
             window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501')
@@ -489,6 +489,7 @@ export default {
                             font-size: 14px;
                             color: #747789;
                             height: 24px;
+                            width: max-content;
 
                             .select-language-icon {
                                 padding: 3px;
