@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <navTop v-if="!responseMini"></navTop>
+        <navTop v-if="!responseMini" @toHome='toHome'></navTop>
         <navTopRes v-if="responseMini"></navTopRes>
         <div class="bp-home">
             <!-- truth -->
@@ -310,6 +310,9 @@ export default {
         },
         toAboutUs(value) {
             this.$emit('toAboutUs', value)
+        },
+        toHome(value) {
+            this.$emit('toHome', value)
         }
     },
     computed: {

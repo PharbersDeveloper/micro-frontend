@@ -11,19 +11,20 @@
             {'bgWhite': bgWhite}]"
             class="nav-border"
         >
-            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
+            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
             <div class="selectMenu">
                 <bpSelect 
                     :disSelected="true"
                     src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
                     :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
-                <span class="bp-text">关于我们</span>
+                <span class="bp-text" @click="toAboutUs">关于我们</span>
             </div>
             <div class="navButton">
-                <bpButton text="联系我们" class="concact"></bpButton>
+                <bpButton text="联系我们" class="concact" @click="contactUs"></bpButton>
                 <bpButton text="登录" class="login"></bpButton>
             </div>
         </div>
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
     </div>
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
@@ -35,19 +36,20 @@
             {'bgWhite': bgWhite}]"
             class="nav-border"
         >
-            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
+            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
             <div class="selectMenu">
                 <bpSelect 
                     :disSelected="true"
                     src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
                     :choosed_value="choosed_value_en" :options_data="options_data_en"></bpSelect>
-                <span class="bp-text">COMPANY</span>
+                <span class="bp-text" @click="toAboutUs">COMPANY</span>
             </div>
             <div class="navButton">
-                <bpButton text="Contact Us" class="concact"></bpButton>
+                <bpButton text="Contact Us" class="concact" @click="contactUs"></bpButton>
                 <bpButton text="Log in" class="login"></bpButton>
             </div>
         </div>
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
     </div>
 </transition>
 </template>
@@ -57,6 +59,7 @@ import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
+import bpModalForm from './bp-modal-form.vue'
 export default {
     created() {
         let curLang = window.localStorage.getItem('lang')
@@ -86,7 +89,8 @@ export default {
         bpSelect,
         bpButton,
         bpSelectVue,
-        bpOptionVue
+        bpOptionVue,
+        bpModalForm
     },
     props: {
         inverse: {
@@ -100,6 +104,7 @@ export default {
             language: '中文',
             bgWhite: false,
             borderNone: false,
+            contactForm: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
             choosed_value: "产品与服务",
             choosed_value_en: "PRODUCTS",
@@ -108,21 +113,21 @@ export default {
                     text: "MAX",
                     spanText: "全息市场监测利器",
                     click_event: function() {
-                        console.log("MAX")
+                        this.$emit('toMax', 'max')
                     }
                 },
                 {
                     text: "真实数据研究",
                     spanText: "来自患者信息的多视角深度挖掘",
                     click_event: function() {
-                        console.log("真实数据研究")
+                        this.$emit('toRW', 'rw')
                     }
                 },
                 {
                     text: "循证咨询",
                     spanText: "多层面精准预测，营销资源配置与优化",
                     click_event: function() {
-                        console.log("循证咨询")
+                        this.$emit('toConsulting', 'consulting')
                     }
                 }
             ],
@@ -131,24 +136,108 @@ export default {
                     text: "MAX©",
                     spanText: "Holographic Market Monitoring Tool",
                     click_event: function() {
-                        console.log("MAX")
+                        this.$emit('toMax', 'max')
                     }
                 },
                 {
                     text: "Real World Research",
                     spanText: "Multi-perspective Deep Mining from Patient Information",
                     click_event: function() {
-                        console.log("真实数据研究")
+                        this.$emit('toRW', 'rw')
                     }
                 },
                 {
                     text: "Evidence-based Consulting",
                     spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
                     click_event: function() {
-                        console.log("循证咨询")
+                        this.$emit('toConsulting', 'consulting')
                     }
                 }
-            ]
+            ],
+            translation_basedata: {
+                cn: {
+                    MAX: {
+                        max: "Max"
+                    },
+                    consulting: {
+                        consult: "循证咨询"
+                    },
+                    modalForm: {
+                        download: "下载报告",
+                        contactUs: "联系我们",
+                        name: "如何称呼您",
+                        nameBlank: "请填写您的姓名",
+                        company: "您所在的团队",
+                        companyBlank: "请填写您的团队名称",
+                        department: "您所在的部门",
+                        position: "您的职位",
+                        email: "您的工作邮箱",
+                        emailBlank: "请填写您的邮箱",
+                        emailWrong: "邮箱格式有误，请填写正确的邮箱地址",
+                        intention: "您感兴趣的内容",
+                        dataService: "数据研究服务",
+                        submit: "提交",
+                        'submit&download': "提交并下载",
+                        submitSuccess: "提交成功",
+                        submitFeedback: "已收到您的信息，我们将尽快与您联系",
+                        ok: "好的"
+                    }
+                },
+                en: {
+                    MAX: {
+                        max: "MAX©"
+                    },
+                    consulting: {
+                        consult: "Evidence-based Consulting"
+                    },
+                    modalForm:{
+                        download: "Download Report",
+                        contactUs: "Contact Us",
+                        name: "Full Name",
+                        nameBlank: "Please enter your first and last name.",
+                        company: "Company",
+                        companyBlank: "Please enter your company name.",
+                        department: "Department",
+                        position: "Job Title",
+                        email: "Work Email",
+                        emailBlank: "Please enter your work email.",
+                        emailWrong: "Please enter a vaild email.",
+                        intention: "Which one is your interested part?",
+                        dataService: "Data Service",
+                        submit: "Submit",
+                        'submit&download': "Submit and Download",
+                        submitSuccess: "Submitted successfully",
+                        submitFeedback: "Information received and we will contact you as soon as possible",
+                        ok: "OK"
+                    }
+                }
+            }
+        }
+    },
+    computed: {
+        translation_data: function() {
+            if (this.language === '中文') {
+                return this.translation_basedata.cn
+            } else if (this.language === 'English') {
+                return this.translation_basedata.en
+            }
+        }
+    },
+    methods: {
+        contactUs() {
+            this.contactForm = true
+        },
+        closeModal() {
+            this.contactForm = false
+        },
+        submitClientData(value) {
+            this.$emit('submitClientData', value)
+        },
+        toAboutUs() {
+            this.$emit('toAboutUs', 'about-us')
+        },
+        toHome() {
+            this.$emit('toHome', 'home')
         }
     }
 };

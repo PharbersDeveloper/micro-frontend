@@ -73,6 +73,6 @@ export default {
         align-items: center;
     }
     .bp-option:hover {
-        background-color: #EBECF0;
+        background-color: #EBECF0 !important;
     }
 </style>
