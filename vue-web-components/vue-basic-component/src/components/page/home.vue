@@ -6,8 +6,8 @@
             <!-- truth -->
             <div class="truth-content-area">
                 <div class="title">
-                    <bpText class="ph-H-Display">{{truthTitle}}</bpText>
-                    <bpText class="ph-body-medium">{{truthDes}}</bpText>
+                    <bpText class="ph-H-Display">{{translation_data.truthTitle}}</bpText>
+                    <bpText class="ph-body-medium">{{translation_data.truthDes}}</bpText>
                 </div>
                 <bpImg :src="src" class="home-header-img"></bpImg>
             </div>
@@ -16,7 +16,7 @@
                 <div class="active-line">
                     <div class="active-yellow-line"></div>
                 </div>
-                <bpText class="active-text">{{"EVENTS"}}</bpText>
+                <bpText class="active-text">{{translation_data.activeEvents}}</bpText>
                 <bpCardActive 
                     v-for="card in activeArr"
                     :key="card.title"
@@ -29,7 +29,7 @@
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
-                        <bpButton text="更多活动" class="button-official-gray-line"></bpButton>
+                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line"></bpButton>
                         <bpImg class="active-button-go" :src="buttonGo"></bpImg>
                     </div>
                 </div>
@@ -50,18 +50,18 @@
                     </div>
                     <div class="report-download-info">
                         <div class="report-right-head">
-                            <bpText class="ph-H-small-theme">{{reportThemeSmall}}</bpText>
-                            <bpText class="ph-body-small">{{reportBodySmall}}</bpText>
+                            <bpText class="ph-H-small-theme">{{translation_data.reportThemeSmall}}</bpText>
+                            <bpText class="ph-body-small">{{translation_data.reportBodySmall}}</bpText>
                         </div>
                         <div class="report-right-center">
-                            <bpText class="ph-H-large-title">{{reportLargeTitle}}</bpText>
-                            <bpText class="pb-body-small-tertiary">{{reportTertiary}}</bpText>
+                            <bpText class="ph-H-large-title">{{translation_data.reportLargeTitle}}</bpText>
+                            <bpText class="pb-body-small-tertiary">{{translation_data.reportTertiary}}</bpText>
                         </div>
                         <div class="show-more-button-container">
-                            <bpButton :text="reportButton" class="report-down-button"></bpButton>
+                            <bpButton :text="translation_data.reportButton" class="report-down-button"></bpButton>
                             <div class="more-reports-button">
                                 <div class="more-reports">
-                                    <bpText>{{moreReportsText}}</bpText>
+                                    <bpText>{{translation_data.moreReportsText}}</bpText>
                                     <bpImg class="more-reports-img" :src="showMoreButtonGo"></bpImg>
                                 </div>
                             </div>
@@ -72,18 +72,18 @@
             <!-- data-show -->
             <div class="data-show">
                 <bpImg :src="reportConnectImg" class="report-connect-img"></bpImg>
-                <bpText class="home-about-us-peoples">{{dataShowAboutUs}}</bpText>
-                <bpText class="ph-H-xLarge">{{dataShowTitle}}</bpText>
+                <bpText class="home-about-us-peoples">{{translation_data.dataShowAboutUs}}</bpText>
+                <bpText class="ph-H-xLarge">{{translation_data.dataShowTitle}}</bpText>
                 <div class="show-more-button-container">
-                    <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                     <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                 </div>
                 <div class="data-show-text-part">
-                    <bpText class="ph-body-medium_brand">{{dataTextPart1}}</bpText>
+                    <bpText class="ph-body-medium_brand">{{translation_data.dataTextPart1}}</bpText>
                     <div class="home-data-value-text-line"></div>
-                    <bpText class="ph-body-medium_brand">{{dataTextPart2}}</bpText>
+                    <bpText class="ph-body-medium_brand">{{translation_data.dataTextPart2}}</bpText>
                     <div class="home-data-value-text-line"></div>
-                    <bpText class="ph-body-medium_brand">{{dataTextPart3}}</bpText>
+                    <bpText class="ph-body-medium_brand">{{translation_data.dataTextPart3}}</bpText>
                 </div>
                 <bpImg class="data-show-img" :src="dataShowImg"></bpImg>
             </div>
@@ -92,13 +92,13 @@
                 <div class="max-show-left">
                     <div class="max-show-left-text-line"></div>
                     <div class="max-show-left-text-row-1">
-                        <bpText class="ph-H-xLarge">{{maxTitle}}</bpText>
-                        <bpText class="ph-body-xsmall-tertiary">{{maxTitleDes}}</bpText>
+                        <bpText class="ph-H-xLarge">{{translation_data.maxTitle}}</bpText>
+                        <bpText class="ph-body-xsmall-tertiary">{{translation_data.maxTitleDes}}</bpText>
                     </div>
-                    <bpText class="max-text-center">{{maxTextCenter}}</bpText>
-                    <bpText class="max-text-center-brand">{{maxTextCenterBrand}}</bpText>
+                    <bpText class="max-text-center">{{translation_data.maxTextCenter}}</bpText>
+                    <bpText class="max-text-center-brand">{{translation_data.maxTextCenterBrand}}</bpText>
                     <div class="max-show-more-button-container">
-                        <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -114,12 +114,12 @@
                 <div class="real-world-right">
                     <div class="real-world-right-line"></div>
                     <div class="real-world-right-text-line-1">
-                        <bpText class="ph-H-xLarge">{{realWorldTitle}}</bpText>
+                        <bpText class="ph-H-xLarge">{{translation_data.realWorldTitle}}</bpText>
                     </div>
-                    <bpText class="ph-H-Large">{{realWorldTitleSmall}}</bpText>
-                    <bpText class="ph-H-Large_brand">{{realWorldBrand}}</bpText>
+                    <bpText class="ph-H-Large">{{translation_data.realWorldTitleSmall}}</bpText>
+                    <bpText class="ph-H-Large_brand">{{translation_data.realWorldBrand}}</bpText>
                     <div class="real-show-more-button-container">
-                        <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -129,12 +129,12 @@
                 <div class="advisory-left">
                     <div class="advisory-left-line"></div>
                     <div class="advisory-left-text-line-1">
-                        <bpText class="ph-H-xLarge">{{advisoryTitle}}</bpText>
+                        <bpText class="ph-H-xLarge">{{translation_data.advisoryTitle}}</bpText>
                     </div>
-                    <bpText class="ph-H-Large">{{advisoryTitleSmall}}</bpText>
-                    <bpText class="ph-H-Large_brand">{{advisoryBrand}}</bpText>
+                    <bpText class="ph-H-Large">{{translation_data.advisoryTitleSmall}}</bpText>
+                    <bpText class="ph-H-Large_brand">{{translation_data.advisoryBrand}}</bpText>
                     <div class="advisory-show-more-button-container">
-                        <bpButton :text="showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -164,12 +164,84 @@ export default {
     name: 'home',
     data() {
         return {
+            language: '中文', // 中英切换
             windowWidth: document.documentElement.clientWidth,
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            truthTitle: "还原真实 可见未来",
-            truthDes: "医药数据融合与洞见者",
+            translation_basedata: {
+                cn: {
+                    //truth
+                    truthTitle: "还原真实 可见未来",
+                    truthDes: "医药数据融合与洞见者",
+                    //active
+                    activeEvents: "EVENTS",
+                    moreActivity: "更多活动",
+                    //report
+                    reportThemeSmall: "最新发布",
+                    reportBodySmall: "深度医药市场行业分析报告",
+                    reportLargeTitle: "《带量采购对中国医药市场格局的影响》",
+                    reportTertiary: "2020年6月5日",
+                    reportButton: "获取报告",
+                    moreReportsText: "更多报告",
+                    //data-show
+                    dataShowAboutUs: "法伯凝聚顶尖数据分析师与数据科学家",
+                    dataShowTitle: "重新定义，您的数据价值",
+                    showMoreButton: "了解更多",
+                    dataTextPart1: "丰富的数据源",
+                    dataTextPart2: "强劲算能",
+                    dataTextPart3: "超群智能算法",
+                    //max-show
+                    maxTitle: "MAX",
+                    maxTitleDes: " Market Analytic Box",
+                    maxTextCenter: "城市、县域、CHC，及时掌握市场动态",
+                    maxTextCenterBrand: "全息市场监测利器",
+                    //real-world
+                    realWorldTitle: "真实世界数据研究",
+                    realWorldTitleSmall: "来自患者信息的多视角深度挖掘",
+                    realWorldBrand: "发现不同",
+                    // advisory
+                    advisoryTitle: "循证咨询",
+                    advisoryTitleSmall: "多层面精准预测，营销资源配置与优化",
+                    advisoryBrand: "提升ROI"
+                },
+                en: {
+                    //truth
+                    truthTitle: "See The Truth \nSee The Future",
+                    truthDes: "Leading Fusion and Insight in Medical Data",
+                    //active
+                    activeEvents: "Events",
+                    moreActivity: "MORE",
+                    //report
+                    reportThemeSmall: "Latest Released",
+                    reportBodySmall: "In-depth Industry Analysis Report of Pharmaceutical Market",
+                    reportLargeTitle: "VBP's Impact on the Chinese Pharmaceutical Market",
+                    reportTertiary: "2020-06-05",
+                    reportButton: "DOWNLOAD",
+                    moreReportsText: "MORE",
+                    //data-show
+                    dataShowAboutUs: "Pharbers Gathers Top Data Analysts and Scientists",
+                    dataShowTitle: "Re-define the value of your data assets",
+                    showMoreButton: "Learn More",
+                    dataTextPart1: "Multiple Exclusive Data Sources",
+                    dataTextPart2: "Powerful Algorithm",
+                    dataTextPart3: "Superior Intelligence",
+                    //max-show
+                    maxTitle: "MAX©",
+                    maxTitleDes: " Market Analytic Box",
+                    maxTextCenter: "Cities, Counties, and CHC\nKeeping Tracking Market Trends",
+                    maxTextCenterBrand: "Holographic Market Monitoring Tool",
+                    //real-world
+                    realWorldTitle: "Real World Research",
+                    realWorldTitleSmall: "Multi-perspective Deep Mining from Patient Information",
+                    realWorldBrand: "Find Differences",
+                    // advisory
+                    advisoryTitle: "Evidence-based Consulting",
+                    advisoryTitleSmall: "Multi-level Accurate Prediction\nAllocating and Optimizing Marketing Resource",
+                    advisoryBrand: "Improve ROI"
+                }
+            },
+           
             src: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_hero.png",
             buttonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go_yellow.svg",
             activeArr: [
@@ -201,42 +273,15 @@ export default {
             reportLeftDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
             reportRightDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
             reportDownImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_paper-cover_VPB.jpg",
-            reportThemeSmall: "最新发布",
-            reportBodySmall: "深度医药市场行业分析报告",
-            reportLargeTitle: "《带量采购对中国医药市场格局的影响》",
-            reportTertiary: "2020年6月5日",
-            reportButton: "获取报告",
-            // moreReportsImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            moreReportsText: "更多报告",
             reportConnectImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
-            dataShowAboutUs: "法伯凝聚顶尖数据分析师与数据科学家",
-            dataShowTitle: "重新定义，您的数据价值",
             dataShowImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_corevalue.png",
-            showMoreButton: "了解更多",
             showMoreButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            dataTextPart1: "丰富的数据源",
-            dataTextPart2: "强劲算能",
-            dataTextPart3: "超群智能算法",
-            maxTitle: "MAX",
-            maxTitleDes: " Market Analytic Box",
-            maxTextCenter: "城市、县域、CHC，及时掌握市场动态",
-            maxTextCenterBrand: "全息市场监测利器",
-            maxButtonMore: "了解更多",
-            // maxButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
             maxRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max.png",
             realWorldLeftImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_realworld.png",
-            realWorldTitle: "真实世界数据研究",
-            realWorldTitleSmall: "来自患者信息的多视角深度挖掘",
-            realWorldBrand: "发现不同",
-            advisoryTitle: "循证咨询",
-            advisoryTitleSmall: "多层面精准预测，营销资源配置与优化",
-            advisoryBrand: "提升ROI",
             advisoryRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_consulting.png"
         }
     },
     props: {
-        language: String,
-        default: "chinese"
     },
     components: {
         navTop,
@@ -270,6 +315,15 @@ export default {
             this.$emit('toHome', value)
         }
     },
+    computed: {
+        translation_data: function() {
+            if (this.language === '中文') {
+                return this.translation_basedata.cn
+            } else if (this.language === 'English') {
+                return this.translation_basedata.en
+            }
+        }
+    },
     watch: {
         windowWidth(val) {
             if(val < 1100) {
@@ -290,14 +344,15 @@ export default {
     created() {
         let originalSetItem = localStorage.setItem,
             lang = window.localStorage.getItem('lang')
-
         if (!lang) {
             lang = navigator.language || navigator.userLanguage
-            if (lang === 'en') {
+            if (lang === 'English') {
                 localStorage.setItem('lang', 'English')
             } else {
                 localStorage.setItem('lang', '中文')
             }
+        } else {
+            this.language = lang
         }
         localStorage.setItem = function(key,newValue){
             let event = new Event("setItemEvent");
@@ -327,6 +382,9 @@ export default {
                 that.windowHeight = window.windowHeight;
             })()
         }
+        window.addEventListener('setItemEvent', function(e) {
+            that.language = e.newValue
+        })
     }
 
 }
