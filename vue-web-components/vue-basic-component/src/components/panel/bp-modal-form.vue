@@ -463,7 +463,12 @@ export default {
         .bp-modal-form-content {
             height: auto;
             padding: 8px 24px;
-            -webkit-overflow-scrolling: touch;            
+            -webkit-overflow-scrolling: touch;
+            .form-textarea {
+                width: 100%!important;
+                flex-shrink: 0;
+                margin-bottom: 5px!important;
+            }
         }
     }
 }
