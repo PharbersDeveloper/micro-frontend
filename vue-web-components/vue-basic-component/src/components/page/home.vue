@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="max-show-right-img-container">
-                    <bpImg :src="maxRightImg" class="max-show-right-img"></bpImg>
+                    <bpImg :src="responseMini ? maxRightImg_480 : maxRightImg" class="max-show-right-img"></bpImg>
                 </div>
             </div>
             <!-- real-world -->
@@ -277,6 +277,7 @@ export default {
             dataShowImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_corevalue.png",
             showMoreButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
             maxRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max.png",
+            maxRightImg_480: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max_480.png",
             realWorldLeftImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_realworld.png",
             advisoryRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_consulting.png"
         }
