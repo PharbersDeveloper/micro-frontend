@@ -22,7 +22,7 @@
                         <span class="ph-body-xsmall">全息市场监测利器</span>
                     </div>
                     <div class="responsee-menu-item">
-                        <span class="ph-H-Small">真是数据研究</span>
+                        <span class="ph-H-Small">真实数据研究</span>
                         <span class="ph-body-xsmall">来自患者信息的多视角深度挖掘</span>
                     </div>
                     <button class="contact-us">联系我们</button>

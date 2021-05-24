@@ -87,10 +87,6 @@ export default {
     .svg-icon {
         width: 16px;
         height: 16px;
-        vertical-align: -0.15em;
-        fill: currentColor;
-        overflow: hidden;
-        margin-right: 4px;
     }
 
     .bp-option-group {

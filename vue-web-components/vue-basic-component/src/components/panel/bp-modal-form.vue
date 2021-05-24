@@ -381,7 +381,6 @@ export default {
                 
                 .official-form-tag, .official-form-tag-active {
                     border-radius: 12px;
-                    height: 24px;
                     padding: 0 8px;
                     line-height: 24px;
                     cursor: pointer;
