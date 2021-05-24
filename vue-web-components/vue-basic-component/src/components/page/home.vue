@@ -285,7 +285,17 @@ export default {
         }
     },
     created() {
-        let originalSetItem = localStorage.setItem;
+        let originalSetItem = localStorage.setItem,
+            lang = window.localStorage.getItem('lang')
+
+        if (!lang) {
+            lang = navigator.language || navigator.userLanguage
+            if (lang === 'en') {
+                localStorage.setItem('lang', 'English')
+            } else {
+                localStorage.setItem('lang', '中文')
+            }
+        }
         localStorage.setItem = function(key,newValue){
             let event = new Event("setItemEvent");
             event.key = key;
