@@ -1,6 +1,4 @@
 <template>
-<!-- 淡入淡出动画 -->
-<transition name="fade">
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
     >
@@ -25,7 +23,6 @@
         </div>
         <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
     </div>
-</transition>
 </template>
 
 <script>
@@ -410,8 +407,5 @@ export default {
         .fixed-nav, .fixed-nav-inverse {
             padding: 0 40px !important;
         }
-    }
-    .fade-enter-active, .fade-leave-active {
-        transition: all 1s;
     }
 </style>
