@@ -69,9 +69,9 @@
                     {{did-insert this.registerListener}}
                     {{will-destroy this.unregisterListener}}>
                 </pharbers-bp-carousel-unit>
-            </div>
-            <h1>vue home page</h1> --}}
-            <pharbers-home>
+            </div> --}}
+            <h1>vue home page</h1>
+            <pharbers-home {{on 'toMore' this.buttonClick}}>
             </pharbers-home>
         </div>
     </div>
