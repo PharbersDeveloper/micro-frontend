@@ -23,7 +23,7 @@
                         <span class="ph-H-Small">{{item.text}}</span>
                         <span class="ph-body-xsmall" v-if="item.spanText">{{item.spanText}}</span>
                     </div>
-                     <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
+                    <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
                     <bpButton :text="translation_data.login" class="login"></bpButton>
                 </div>
             </div>

@@ -2959,7 +2959,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+922558e7"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8ab5b88f"});
           }
         
 //# sourceMappingURL=web-shell.map
