@@ -221,6 +221,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    *{
+        box-sizing: border-box;
+    }
     $spacing-none: 0px;
     $spacing-compact-2x: 2*2px;
     $color-neutrals-n000: #ffffff;
