@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Component from "@glimmer/component"
 import { tracked } from "@glimmer/tracking"
 import { action } from "@ember/object"
@@ -84,6 +85,12 @@ export default class ComponentContextComponent extends Component {
 			}
 		]
 	}
+
+    //button more 点击事件
+    @action
+    buttonClick(data) {
+        console.log(data)
+    }
 	
 	@action
 	transferMenuData() {
