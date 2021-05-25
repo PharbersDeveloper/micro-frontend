@@ -20,10 +20,7 @@ module.exports = function (defaults) {
 	app.import("./vendor/react/react-nested-components.js")
 	app.import("./vendor/ember/vendor.js")
 	app.import("./vendor/ember/dummy.js")
-	// app.import("./vendor/vue/vue-components.js")
 	app.import("./vendor/vue/pharbers.js")
-	app.import("./vendor/vue/pharberspanel.js")
-	app.import("./vendor/vue/pharberspage.js")
 
 	return app.toTree()
 }

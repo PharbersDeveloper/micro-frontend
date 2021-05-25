@@ -2040,8 +2040,7 @@
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0; // 请求数据
       // const activityList = this.store.findAll("activity")
-
-      debugger;
+      // debugger
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
@@ -2846,8 +2845,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "9U5WYby6",
-    "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\"],[10,\"pharberspanel-bp-nav-top\"],[12],[13],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"  \\n\\n\"],[10,\"pharbersPanel-bp-page-bottom\"],[12],[13],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "id": "Ml0C3Q90",
+    "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\"],[10,\"pharbers-bp-nav-top\"],[12],[13],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"  \\n\\n\"],[10,\"pharbers-bp-page-bottom\"],[12],[13],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
@@ -2863,8 +2862,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "U68gxSZC",
-    "block": "[[[1,[28,[35,0],[\"Home\"],null]],[1,\"\\n\"],[10,\"pharberspage-home\"],[12],[13],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "id": "tdBXVuyW",
+    "block": "[[[1,[28,[35,0],[\"Home\"],null]],[1,\"\\n\"],[10,\"pharbers-home\"],[12],[13],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/home.hbs",
     "isStrictMode": false
   });
@@ -2959,7 +2958,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8ab5b88f"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8eac81e0"});
           }
         
 //# sourceMappingURL=web-shell.map
