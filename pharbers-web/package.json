@@ -70,6 +70,7 @@
 	"dependencies": {
 		"@ember/render-modifiers": "^1.0.2",
 		"crypto-js": "^4.0.0",
+		"@types/crypto-js": "^3.1.47",
 		"ember-cookies": "^0.5.2"
 	}
 }
