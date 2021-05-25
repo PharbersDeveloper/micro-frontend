@@ -290,19 +290,19 @@ export default {
     .cursor-pointer {
         cursor: pointer;
     }
-    .ph-body-medium {
+    span.ph-body-medium {
         font-size: 16px;
         color: #747789;
     }
-    .ph-body-small {
+    span.ph-body-small {
         font-size: 14px;
         color: #747789;
     }
-    .ph-H-Large_2 {
+    span.ph-H-Large_2 {
         font-size: 24px;
         color: #2D334D;
     }
-    .ph-body-xsmall-tertiary {
+    span.ph-body-xsmall-tertiary {
         font-size: 12px;
         color: #A2A5B0;
     }
