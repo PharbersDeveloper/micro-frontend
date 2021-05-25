@@ -15,7 +15,7 @@
 
 
 import PhSigV4ClientUtils from "./PhSigV4ClientUtils"
-const CryptoJS = require("crypto-js");
+import * as CryptoJS from 'crypto-js'
 // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
 
 

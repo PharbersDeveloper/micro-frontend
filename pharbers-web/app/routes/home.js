@@ -9,7 +9,10 @@ export default class HomeRoute extends Route {
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0
         // 请求数据
-        // const activityList = this.store.query("activity", { 'sort': "-startDate", "page[limit]": 6,"page[offset]": 0})
+        const activityList = this.store.query("activity", { 'sort': "-startDate", "page[limit]": 6,"page[offset]": 0})
         // debugger
+        return {
+
+        }
     }
 }
