@@ -328,7 +328,7 @@
               </example-web-component>
           </div> --}}
           <div class="react">
-              {{!-- <h2>Vue context</h2>
+              <h2>Vue context</h2>
               <h1>{{t "nav.productAndService"}}</h1>
               <pharbers-bp-input states="info" placeholder="测试">
               </pharbers-bp-input>
@@ -381,17 +381,16 @@
                       {{will-destroy this.unregisterListener}}>
                   </pharbers-bp-carousel-unit>
               </div>
-              <h1>vue home page</h1> --}}
-               <pharbers-home>
-              </pharbers-home>
+              <h1>vue home page</h1>
+             
           </div>
       </div>
   </div>
   
   */
   {
-    "id": "bOdOrcdP",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n\"],[1,\"             \"],[10,\"pharbers-home\"],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[]]",
+    "id": "evR2f4ZW",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,[28,[35,0],[\"nav.productAndService\"],null]],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[16,\"text\",[29,[[36,1]]]],[24,\"src\",\"assets/abord.svg\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-text\"],[14,\"title\",\"bp-text test\"],[12],[1,\"\\n                这里是bp-text\\n            \"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,\"vue menu\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-menu\"],[16,\"menu_data\",[30,0,[\"menu_data\"]]],[4,[38,2],[[30,0,[\"transferMenuData\"]]],null],[12],[13],[1,\"\\n\\n            \"],[10,\"h1\"],[12],[1,\"vue select option\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-select\"],[16,\"choosed_value\",[30,0,[\"choosed_value\"]]],[16,\"options_data\",[30,0,[\"options_data\"]]],[4,[38,2],[[30,0,[\"transferData\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,\"vue home page\"],[13],[1,\"\\n           \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"t\",\"buttonText\",\"did-insert\",\"will-destroy\"]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
@@ -1867,6 +1866,35 @@
   };
   _exports.default = _default;
 });
+;define("web-shell/models/activity", ["exports", "ember-data"], function (_exports, _emberData) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = _emberData.default.Model.extend({
+    title: _emberData.default.attr('string'),
+    subTitle: _emberData.default.attr('string'),
+    startDate: _emberData.default.attr('date'),
+    endDate: _emberData.default.attr('date'),
+    location: _emberData.default.attr('string'),
+    city: _emberData.default.attr('string'),
+    activityType: _emberData.default.attr('string'),
+    contentTitle: _emberData.default.attr('string'),
+    contentDesc: _emberData.default.attr('string'),
+    gallery: _emberData.default.hasMany('image'),
+    attachments: _emberData.default.hasMany("report"),
+    agendas: _emberData.default.hasMany("zone"),
+    logo: _emberData.default.belongsTo('image'),
+    logoOnTime: _emberData.default.belongsTo('image'),
+    partners: _emberData.default.hasMany('cooperation'),
+    language: _emberData.default.attr('number')
+  });
+
+  _exports.default = _default;
+});
 ;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
   "use strict";
 
@@ -1928,7 +1956,11 @@
   }
 
   _exports.default = Router;
-  Router.map(function () {});
+  Router.map(function () {
+    this.route('home', {
+      path: "/"
+    });
+  });
 });
 ;define("web-shell/routes/application", ["exports"], function (_exports) {
   "use strict";
@@ -1977,6 +2009,48 @@
     initializer: null
   })), _class));
   _exports.default = ApplicationRoute;
+});
+;define("web-shell/routes/home", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  // import { action } from '@ember/object';
+  let HomeRoute = (_dec = Ember.inject.service, (_class = class HomeRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "store", _descriptor, this);
+    }
+
+    model() {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0; // 请求数据
+      // const activityList = this.store.findAll("activity")
+
+      debugger;
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = HomeRoute;
 });
 ;define("web-shell/serializers/-default", ["exports", "@ember-data/serializer/json"], function (_exports, _json) {
   "use strict";
@@ -2772,9 +2846,26 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "qCUtcsJJ",
-    "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\\n\"],[8,[39,1],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"component-context\",\"component\",\"-outlet\"]]",
+    "id": "9U5WYby6",
+    "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\"],[10,\"pharberspanel-bp-nav-top\"],[12],[13],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"  \\n\\n\"],[10,\"pharbersPanel-bp-page-bottom\"],[12],[13],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/templates/home", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "U68gxSZC",
+    "block": "[[[1,[28,[35,0],[\"Home\"],null]],[1,\"\\n\"],[10,\"pharberspage-home\"],[12],[13],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/home.hbs",
     "isStrictMode": false
   });
 
@@ -2868,7 +2959,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8ab5b88f"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+922558e7"});
           }
         
 //# sourceMappingURL=web-shell.map

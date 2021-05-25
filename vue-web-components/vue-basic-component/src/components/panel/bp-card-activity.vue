@@ -49,8 +49,9 @@ export default {
 
 <style lang="scss" scoped>
 * {
-    box-sizing: border-box;
+    letter-spacing: .4px;
     line-height: 1.6;
+    box-sizing: border-box;
 }
 .content-active-panel {
     height: 367px;
