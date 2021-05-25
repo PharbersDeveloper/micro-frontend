@@ -5,7 +5,6 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function (defaults) {
     let app = new EmberApp(defaults, {
         // Add options here
-        // Add options here
         minifyJS: { enabled: true },
         fingerprint: { enabled: false },
         SRI: { enabled: false }
@@ -20,7 +19,6 @@ module.exports = function (defaults) {
     app.import("./vendor/react/react-nested-components.js")
     app.import("./vendor/ember/vendor.js")
     app.import("./vendor/ember/dummy.js")
-    // app.import("./vendor/vue/vue-components.js")
     app.import("./vendor/vue/pharbers.js")
 
     return app.toTree();
