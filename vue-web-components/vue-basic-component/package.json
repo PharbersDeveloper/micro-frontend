@@ -6,9 +6,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "build:component": "vue-cli-service build --target wc --name pharbers 'src/components/*.vue'",
-        "build:panel": "vue-cli-service build --target wc --name pharberspanel 'src/components/panel/*.vue'",
-        "build:page": "vue-cli-service build --target wc --name pharberspage 'src/components/page/*.vue'",
+        "build:component": "vue-cli-service build --target wc --name pharbers 'src/components/**/*.vue'",
         "build:demo": "vue-cli-service build --target wc --name demo-components ./src/views/demo.vue"
     },
     "dependencies": {
