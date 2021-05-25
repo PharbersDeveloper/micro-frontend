@@ -328,7 +328,7 @@
               </example-web-component>
           </div> --}}
           <div class="react">
-              <h2>Vue context</h2>
+              {{!-- <h2>Vue context</h2>
               <h1>{{t "nav.productAndService"}}</h1>
               <pharbers-bp-input states="info" placeholder="测试">
               </pharbers-bp-input>
@@ -381,15 +381,17 @@
                       {{will-destroy this.unregisterListener}}>
                   </pharbers-bp-carousel-unit>
               </div>
-              
+              <h1>vue home page</h1> --}}
+               <pharbers-home>
+              </pharbers-home>
           </div>
       </div>
   </div>
   
   */
   {
-    "id": "B7/FnZJ6",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,[28,[35,0],[\"nav.productAndService\"],null]],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[16,\"text\",[29,[[36,1]]]],[24,\"src\",\"assets/abord.svg\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-text\"],[14,\"title\",\"bp-text test\"],[12],[1,\"\\n                这里是bp-text\\n            \"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,\"vue menu\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-menu\"],[16,\"menu_data\",[30,0,[\"menu_data\"]]],[4,[38,2],[[30,0,[\"transferMenuData\"]]],null],[12],[13],[1,\"\\n\\n            \"],[10,\"h1\"],[12],[1,\"vue select option\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-select\"],[16,\"choosed_value\",[30,0,[\"choosed_value\"]]],[16,\"options_data\",[30,0,[\"options_data\"]]],[4,[38,2],[[30,0,[\"transferData\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"t\",\"buttonText\",\"did-insert\",\"will-destroy\"]]",
+    "id": "bOdOrcdP",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n\"],[1,\"             \"],[10,\"pharbers-home\"],[12],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
@@ -2866,7 +2868,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+a83b928a"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8ab5b88f"});
           }
         
 //# sourceMappingURL=web-shell.map

@@ -6,7 +6,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "build:component": "vue-cli-service build --target wc --name pharbers 'src/components/*.vue'",
+        "build:component": "vue-cli-service build --target wc --name pharbers 'src/components/page/*.vue'",
         "build:demo": "vue-cli-service build --target wc --name demo-components ./src/views/demo.vue"
     },
     "dependencies": {
