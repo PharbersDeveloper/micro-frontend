@@ -228,6 +228,13 @@ export default {
     $spacing-compact-2x: 2*2px;
     $color-neutrals-n000: #ffffff;
     $color-neutrals-n400: rgba(#091e42,0.71);
+    
+    * {
+        letter-spacing: .4px;
+        line-height: 1.6;
+        box-sizing: border-box;
+    }
+
     .borderNone {
         border-bottom: 0px !important;
     }

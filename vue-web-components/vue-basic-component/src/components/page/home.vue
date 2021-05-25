@@ -1,7 +1,7 @@
 <template>
     <div class="home-container">
-        <navTop v-if="!responseMini" @toHome='toHome'></navTop>
-        <navTopRes v-if="responseMini"></navTopRes>
+        <!-- <navTop v-if="!responseMini" @toHome='toHome'></navTop>
+        <navTopRes v-if="responseMini"></navTopRes> -->
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -146,7 +146,7 @@
             <iconLine v-if="!response" class="case-icon-contaniner"></iconLine>
             <iconLineRes v-if="response" class="case-icon-contaniner-response"></iconLineRes>
         </div>
-        <bp-page-bottom @submitClientData='submitClientData' @toMax='toMax' @toRW='toRW' @toConsulting='toConsulting' @toAboutUs='toAboutUs'></bp-page-bottom>
+        <!-- <bp-page-bottom @submitClientData='submitClientData' @toMax='toMax' @toRW='toRW' @toConsulting='toConsulting' @toAboutUs='toAboutUs'></bp-page-bottom> -->
     </div>
 </template>
 <script>

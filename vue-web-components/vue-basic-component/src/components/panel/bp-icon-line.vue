@@ -62,6 +62,8 @@ export default {
 
 <style lang="scss" scoped>
     * {
+        letter-spacing: .4px;
+        line-height: 1.6;
         box-sizing: border-box;
     }
     .case-icon-line {

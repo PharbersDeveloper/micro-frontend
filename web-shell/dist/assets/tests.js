@@ -57,6 +57,17 @@ define("web-shell/tests/unit/controllers/application-test", ["qunit", "ember-qun
     });
   });
 });
+define("web-shell/tests/unit/routes/home-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | home', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:home');
+      assert.ok(route);
+    });
+  });
+});
 define('web-shell/config/environment', [], function() {
   var prefix = 'web-shell';
 try {
