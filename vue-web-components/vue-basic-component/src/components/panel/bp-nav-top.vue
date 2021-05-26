@@ -256,7 +256,7 @@ export default {
     }
 
     .navInverse {
-        background: #666;
+         background: transparent;
         text-align: center;
         font-size: 14px;
     }
