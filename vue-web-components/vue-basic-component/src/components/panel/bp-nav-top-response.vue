@@ -107,27 +107,27 @@ export default {
                             text: "MAX",
                             spanText: "全息市场监测利器",
                             click_event: function() {
-                                this.$emit('toMax', 'max')
+                                this.$emit('linkToPage', 'max')
                             }
                         },
                         {
                             text: "真实数据研究",
                             spanText: "来自患者信息的多视角深度挖掘",
                             click_event: function() {
-                                this.$emit('toRW', 'rw')
+                                this.$emit('linkToPage', 'rw')
                             }
                         },
                         {
                             text: "循证咨询",
                             spanText: "多层面精准预测，营销资源配置与优化",
                             click_event: function() {
-                                this.$emit('toConsulting', 'consulting')
+                                this.$emit('linkToPage', 'consulting')
                             }
                         },
                         {
                             text: "关于我们",
                             click_event: function() {
-                                this.$emit('toAboutUs', 'aboutUs')
+                                this.$emit('linkToPage', 'about-us')
                             }
                         }
                     ]
@@ -166,27 +166,27 @@ export default {
                             text: "MAX©",
                             spanText: "Holographic Market Monitoring Tool",
                             click_event: function() {
-                                this.$emit('toMax', 'max')
+                                this.$emit('linkToPage', 'max')
                             }
                         },
                         {
                             text: "Real World Research",
                             spanText: "Multi-perspective Deep Mining from Patient Information",
                             click_event: function() {
-                                this.$emit('toRW', 'rw')
+                                this.$emit('linkToPage', 'rw')
                             }
                         },
                         {
                             text: "Evidence-based Consulting",
                             spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
                             click_event: function() {
-                                this.$emit('toConsulting', 'consulting')
+                                this.$emit('linkToPage', 'consulting')
                             }
                         },
                         {
                             text: "COMPANY",
                             click_event: function() {
-                                this.$emit('toAboutUs', 'aboutUs')
+                                this.$emit('linkToPage', 'about-us')
                             }
                         }
                     ]
@@ -224,10 +224,10 @@ export default {
             this.$emit('submitClientData', value)
         },
         toAboutUs() {
-            this.$emit('toAboutUs', 'about-us')
+            this.$emit('linkToPage', 'about-us')
         },
         toHome() {
-            this.$emit('toHome', 'home')
+            this.$emit('linkToPage', 'home')
         }
     }
 }

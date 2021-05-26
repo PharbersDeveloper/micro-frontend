@@ -1,6 +1,8 @@
 {{page-title "Pharbers"}}
-<pharbers-bp-nav-top></pharbers-bp-nav-top>
-
-{{outlet}}  
-
+{{#if this.topResponseMini}}
+    <pharbers-bp-nav-top-response {{on "linkToPage" linkToPage}}></pharbers-bp-nav-top-response>
+{{else}} 
+    <pharbers-bp-nav-top {{on "linkToPage" linkToPage}}></pharbers-bp-nav-top>
+{{/if}}
+{{outlet}}
 <pharbers-bp-page-bottom></pharbers-bp-page-bottom>

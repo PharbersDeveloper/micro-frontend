@@ -1,7 +1,6 @@
 <template>
     <div class="home-container">
-        <!-- <navTop v-if="!responseMini" @toHome='toHome'></navTop>
-        <navTopRes v-if="responseMini"></navTopRes> -->
+        <navTop @linkToPage="linkToPage"></navTop>
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -29,7 +28,7 @@
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
-                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="toMore('active')"></bpButton>
+                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="toMore('activity-list')"></bpButton>
                         <bpImg class="active-button-go" :src="buttonGo"></bpImg>
                     </div>
                 </div>
@@ -58,8 +57,8 @@
                             <bpText class="pb-body-small-tertiary">{{translation_data.reportTertiary}}</bpText>
                         </div>
                         <div class="show-more-button-container">
-                            <bpButton :text="translation_data.reportButton" @click="toMore('report')" class="report-down-button"></bpButton>
-                            <div class="more-reports-button">
+                            <bpButton :text="translation_data.reportButton" @click="downloadReport('download-report')" class="report-down-button"></bpButton>
+                            <div class="more-reports-button" @click="toMore('report-list')">
                                 <div class="more-reports">
                                     <bpText>{{translation_data.moreReportsText}}</bpText>
                                     <bpImg class="more-reports-img" :src="showMoreButtonGo"></bpImg>
@@ -75,7 +74,7 @@
                 <bpText class="home-about-us-peoples">{{translation_data.dataShowAboutUs}}</bpText>
                 <bpText class="ph-H-xLarge">{{translation_data.dataShowTitle}}</bpText>
                 <div class="show-more-button-container">
-                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
+                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact" @click="toMore('about-us')"></bpButton>
                     <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                 </div>
                 <div class="data-show-text-part">
@@ -98,7 +97,7 @@
                     <bpText class="max-text-center">{{translation_data.maxTextCenter}}</bpText>
                     <bpText class="max-text-center-brand">{{translation_data.maxTextCenterBrand}}</bpText>
                     <div class="max-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('maxShow')"
+                        <bpButton :text="translation_data.showMoreButton" @click="toMore('max')"
                         class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
@@ -120,7 +119,7 @@
                     <bpText class="ph-H-Large">{{translation_data.realWorldTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.realWorldBrand}}</bpText>
                     <div class="real-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('realWorld')" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" @click="toMore('rw')" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -135,7 +134,7 @@
                     <bpText class="ph-H-Large">{{translation_data.advisoryTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.advisoryBrand}}</bpText>
                     <div class="advisory-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('advisory')" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" @click="toMore('consulting')" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -151,11 +150,9 @@
     </div>
 </template>
 <script>
-import navTop from '../panel/bp-nav-top'
 import iconLine from '../panel/bp-icon-line'
 import iconLineRes from '../panel/bp-icon-line-response'
-import navTopRes from '../panel/bp-nav-top-response'
-import bpPageBottom from '../panel/bp-page-bottom'
+import navTop from '../panel/bp-nav-top'
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpCardActive from '../panel/bp-card-activity'
@@ -286,38 +283,27 @@ export default {
     props: {
     },
     components: {
-        navTop,
-        navTopRes,
-        bpPageBottom,
         bpText,
         bpImg,
         bpCardActive,
         bpButton,
         BpText,
         iconLine,
-        iconLineRes
+        iconLineRes,
+        navTop
     },
     methods: {
         submitClientData(value) {
             this.$emit('submitClientData', value)
         },
-        toMax(value) {
-            this.$emit('toMax', value)
-        },
-        toRW(value) {
-            this.$emit('toRW', value)
-        },
-        toConsulting(value) {
-            this.$emit('toConsulting', value)
-        },
-        toAboutUs(value) {
-            this.$emit('toAboutUs', value)
-        },
-        toHome(value) {
-            this.$emit('toHome', value)
-        },
         toMore(data) {
-            this.$emit('toMore', data)
+            this.$emit('linkToPage', data)
+        },
+        downloadReport(value) {
+            this.$emit('downloadReport', value)
+        },
+        linkToPage(value) {
+            console.log(value);
         }
     },
     computed: {
