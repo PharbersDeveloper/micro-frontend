@@ -331,7 +331,7 @@ export default {
                 color: #747789;
             }
         }
-        @media (max-width: 992px) and (min-width: 769px) {
+        @media (max-width: 992px) {
             ::-webkit-scrollbar-thumb {
                 background: transparent;
             }
@@ -354,6 +354,30 @@ export default {
                 }
                 .about-us-text-date-row {
                     padding: 0 16px !important;
+                }
+            }
+        }
+        @media (max-width: 768px){
+            .abount-us-text-info {
+                padding: 100px 40px !important;
+            }
+            .about-us-header {
+                padding: 0 40px !important;
+            }
+        }
+        @media (max-width: 549px), (width: 549px) {
+            .abount-us-text-info {
+                padding: 100px 24px !important;
+                .page-header-anton-font {
+                    line-height: 80px;
+                }
+            }
+            .about-us-header {
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+
+                .about-us-header-slogan-b {
+                    top: -70px !important;
                 }
             }
         }

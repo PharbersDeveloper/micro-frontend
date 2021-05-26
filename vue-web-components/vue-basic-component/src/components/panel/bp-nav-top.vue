@@ -1,23 +1,22 @@
 <template>
     <div class="fixed-nav" 
-        :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
+        :class="[inverse ? 'navInverse' : 'nav']"
     >
         <div :class="[
-            borderNone ? 'borderNone' : 'bordernavInverse',
-            {'borderNone': borderNone},
-            {'bgWhite': bgWhite}]"
+            {borderNone},
+            inverse ? 'bordernavInverse' : 'bordernav']"
             class="nav-border"
         >
-            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
-            <div class="selectMenu">
+            <img :src="inverse ? imgSrcLight : imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
+            <div class="selectMenu" :class="{'inverseColor': inverse}">
                 <bpSelect 
                     :disSelected="true"
-                    src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
+                    :src='selectSrc'
                     :choosed_value="translation_data.choosed_value" :options_data="translation_data.options_data"
                     @linkToPage="linkToPage"></bpSelect>
                 <span class="bp-text" @click="toAboutUs">{{translation_data.aboutUs}}</span>
             </div>
-            <div class="navButton">
+            <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
                 <bpButton :text="translation_data.login" class="login"></bpButton>
             </div>
@@ -45,11 +44,13 @@ export default {
             if (top == 0) {
                 //回到页面顶部
                 that.bgWhite = false;
-                that.borderNone = false
+                that.borderNone = false;
+                that.inverse = true;
             } else {
                 //不在页面顶部
                 that.bgWhite = true;
-                that.borderNone = true
+                that.borderNone = true;
+                that.inverse = false;
             }
         }
 
@@ -78,6 +79,9 @@ export default {
             borderNone: false,
             contactForm: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
+            imgSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_light.svg",
+            selectSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg",
+            selectSrcLight: "",
             translation_basedata: {
                 cn: {
                     MAX: {
@@ -251,8 +255,11 @@ export default {
         font-size: 14px;
     }
     
-    .bordernavInverse {
+    .bordernav {
         border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+    }
+    .bordernavInverse {
+        border-bottom: 1px solid rgba(255,255,255,0.12);
     }
 
     .navInverse {
@@ -405,6 +412,19 @@ export default {
                 display: inline-block!important;
                 font-size: 14px;
             }
+        }
+
+        .inverseColor {
+            .concact {
+                background: #FFF!important;
+            }
+            .login {
+                color: rgba(255,255,255,.9)!important;
+                border: 1px solid rgba(255,255,255,.6)!important;
+            }
+        }
+        .inverseColor .bp-text, .inverseColor .bp-select {
+            color: #fff !important;
         }
     }
     @media screen and (max-width: 992px) and (min-width: 769px) {
