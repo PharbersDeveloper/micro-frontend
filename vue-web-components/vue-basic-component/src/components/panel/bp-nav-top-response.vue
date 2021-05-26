@@ -251,7 +251,7 @@ export default {
         border-bottom: 1px solid rgba(22, 28, 57, 0.12);
     }
     .navInverse {
-        background: #666 !important;
+        background: transparent !important;
         text-align: center;
         font-size: 14px;
     }
