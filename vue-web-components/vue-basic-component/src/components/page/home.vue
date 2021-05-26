@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <navTop @linkToPage="linkToPage"></navTop>
+        <!-- <navTop @linkToPage="linkToPage"></navTop> -->
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -303,7 +303,7 @@ export default {
             this.$emit('downloadReport', value)
         },
         linkToPage(value) {
-            console.log(value);
+            console.log('vue-home-linkToPage');
         }
     },
     computed: {
