@@ -191,12 +191,12 @@ export default {
     .mb-5 {
         margin-bottom: 32px;
     }
-    .ph-H-small {
+    span.ph-H-small {
         font-size: 12px;
         color: #161C39;
         opacity: .8;
     }
-    .ph-body-small {
+    span.ph-body-small {
         font-size: 14px;
         color: #747789;
     }
@@ -245,6 +245,11 @@ export default {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                &::-webkit-scrollbar { 
+                    width: 0 !important;
+                    display: none;
+                }
+                -ms-overflow-style: none;
 
                 .submit-success-img {
                     height: 40px;

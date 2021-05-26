@@ -3,7 +3,12 @@ import { action } from "@ember/object"
 
 export default class HomeController extends Controller {
     @action
-    toMore123(data) {
+    linkToPage(data) {
         console.log(data);
+    }
+
+    @action 
+    downloadReport(value) {
+        console.log(value);
     }
 }

@@ -16,7 +16,8 @@
                 :text="optionData.text" 
                 :choosed_value="choosed_text" 
                 :src="optionData.src" 
-                :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close">
+                :click_event="optionData.click_event" @chooseOption="changeLanguage" @click.native="close"
+                @linkToPage="linkToPage">
                 <div class="bp-text ph-body-xsmall-tertiary">
                     {{optionData.spanText}}
                 </div>
@@ -68,6 +69,9 @@ export default {
         },
         close() {
             this.show = false
+        },
+        linkToPage(value) {
+            this.$emit("linkToPage", value)
         }
     },
     watch: {
