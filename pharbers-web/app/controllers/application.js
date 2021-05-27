@@ -4,6 +4,7 @@ import { action } from "@ember/object"
 
 export default class ApplicationController extends Controller {
     @tracked topResponseMini;
+    @tracked inverse = false;
     init() {
         super.init(...arguments)
         const that = this

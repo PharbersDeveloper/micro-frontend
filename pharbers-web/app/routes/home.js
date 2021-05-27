@@ -5,6 +5,9 @@ import { inject as service } from '@ember/service';
 
 export default class HomeRoute extends Route {
     @service store;
+    beforeModel() {
+        this.controllerFor('application').set('inverse', false)
+    }
     model() {
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0

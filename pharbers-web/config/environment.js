@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'pharbers-web',
     environment,
@@ -22,7 +22,7 @@ module.exports = function(environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
       AWS_ACCESS_KEY: 'AKIAWPBDTVEAPOX3QT6U',
-			AWS_SECRET_KEY: 'Vy7bMX1KCVK9Vow00ovt7r4VmMzhVlpKiE1Cbsor',
+      AWS_SECRET_KEY: 'Vy7bMX1KCVK9Vow00ovt7r4VmMzhVlpKiE1Cbsor',
     }
   };
 
@@ -33,7 +33,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.oauthCallback = "http://www.pharbers.com:4300"
-		ENV.generalUri = "http://general.pharbers.com:4200"
+    ENV.generalUri = "http://general.pharbers.com:4200"
   }
 
   if (environment === 'test') {
@@ -51,7 +51,7 @@ module.exports = function(environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
     ENV.oauthCallback = "http://www.pharbers.com"
-		ENV.generalUri = "http://general.pharbers.com"
+    ENV.generalUri = "http://general.pharbers.com"
   }
 
   return ENV;
