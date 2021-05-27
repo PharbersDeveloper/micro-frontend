@@ -1,7 +1,7 @@
 <template>
     <div>
-         <navTop v-if="!responseMini"  inverse></navTop>
-        <navTopRes v-if="responseMini"></navTopRes>
+        <navTop v-if="!responseMini" inversebase></navTop>
+        <navTopRes v-if="responseMini" inversebase></navTopRes>
         <div class="bp-about-us">
             <div class="about-us-header">
                 <bpImg :src="headerImg" class="above-data-detail-header-img"></bpImg>

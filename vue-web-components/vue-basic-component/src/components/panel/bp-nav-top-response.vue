@@ -1,35 +1,30 @@
 <template>
-    <transition name="fade">
-        <div class="vue_container fixed-nav" :class="[
-            inverse ? 'navInverse' : 'nav',
-            {'bgWhite': bgWhite}]"
+    <div class="vue_container fixed-nav" 
+        :class="[inverse ? 'navInverse' : 'nav']"
+    >
+        <div 
+            :class="[
+                {borderNone},
+                inverse ? 'bordernavInverse' : 'bordernav']" 
+            class="nav-border"
         >
-            <div 
-                class="nav-border" 
-                :class="[
-                    borderNone ? 'borderNone' : 'bordernavInverse',
-                    {'borderNone': borderNone},
-                    {'bgWhite': bgWhite}
-                ]"
-            >
-                <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome"/>
-                <div class="response-icon-menu" @click="clickMenu"></div>
-                <div class="meau-shade" v-if="menu">
-                </div>
-
-                <div class="response-menu" v-if="menu">
-                    <div class="responsee-menu-item" 
-                        v-for="item in translation_data.options_data" :key="item.text">
-                        <span class="ph-H-Small">{{item.text}}</span>
-                        <span class="ph-body-xsmall" v-if="item.spanText">{{item.spanText}}</span>
-                    </div>
-                    <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
-                    <bpButton :text="translation_data.login" class="login"></bpButton>
-                </div>
+            <img :src="inverse ? imgSrcLight : imgSrc" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome"/>
+            <div :class="inverse ? 'response-icon-menu-light' : 'response-icon-menu'" @click="clickMenu"></div>
+            <div class="meau-shade" v-if="menu">
             </div>
-            <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
+
+            <div class="response-menu" v-if="menu">
+                <div class="responsee-menu-item" 
+                    v-for="item in translation_data.options_data" :key="item.text">
+                    <span class="ph-H-Small">{{item.text}}</span>
+                    <span class="ph-body-xsmall" v-if="item.spanText">{{item.spanText}}</span>
+                </div>
+                <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
+                <bpButton :text="translation_data.login" class="login"></bpButton>
+            </div>
         </div>
-    </transition>
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
+    </div>
 </template>
 <script>
 import bpModalForm from './bp-modal-form.vue'
@@ -43,16 +38,19 @@ export default {
     },
     mounted() {
         const that = this
+        this.inverse = this.inversebase
         window.onscroll = () => {
             let top = document.scrollingElement.scrollTop; //触发滚动条
-            //回到页面顶部
             if (top == 0) {
-                this.bgWhite = false;
-                this.borderNone = false
+                //回到页面顶部
+                this.borderNone = false;
+                if(that.inversebase) {
+                    that.inverse = true;
+                }
             } else {
                 //不在页面顶部
-                this.bgWhite = true;
-                this.borderNone = true
+                this.borderNone = true;
+                that.inverse = false;
             }
         }
 
@@ -64,12 +62,19 @@ export default {
         bpModalForm,
         bpButton
     },
+    props: {
+        inversebase: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
+            imgSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_light.svg",
             menu: false,
-            bgWhite: false,
             borderNone: false,
+            inverse: false,
             contactForm: false,
             language: '中文',
             translation_basedata: {
@@ -194,13 +199,6 @@ export default {
             }
         }
     },
-    props: {
-        inverse: {
-            //是否背景透明
-            type: Boolean,
-            default: false
-        }
-    },
     computed: {
         translation_data: function() {
             if (this.language === '中文') {
@@ -247,22 +245,20 @@ export default {
         text-align: center;
         font-size: 14px;
     }
-    .bordernavInverse {
+    .bordernav {
         border-bottom: 1px solid rgba(22, 28, 57, 0.12);
     }
+    .bordernavInverse {
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
     .navInverse {
-        background: transparent !important;
+        background: transparent;
         text-align: center;
         font-size: 14px;
-    }
-
-    .bgWhite {
-        background-color: #fff !important;
     }
     .fixed-nav {
         height: 80px;
         width: 100%;
-        background: 0 0;
         display: flex;
         flex-direction: row;
         top: 0;
@@ -276,7 +272,6 @@ export default {
         .nav-border {
             height: 80px;
             width: 100%;
-            border-bottom: 1px solid rgba(22,28,57,.12);
             display: flex;
             flex-direction: row;
             align-content: flex-start;
@@ -293,6 +288,11 @@ export default {
             width: 24px;
             height: 24px;
             background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 10h20v2H1v-2zm0-7h20v2H1V3zm0 14h20v2H1v-2z' fill='%232D334D' fill-rule='evenodd'/%3E%3C/svg%3E") center/100% no-repeat!important;
+        }
+        .response-icon-menu-light {
+            width: 24px;
+            height: 24px;
+            background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 10h20v2H1v-2zm0-7h20v2H1V3zm0 14h20v2H1v-2z' fill='%23ffffff' fill-rule='evenodd'/%3E%3C/svg%3E") center/100% no-repeat!important;
         }
         .meau-shade {
             width: 100vw!important;

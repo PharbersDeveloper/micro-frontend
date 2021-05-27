@@ -3,15 +3,15 @@
         :class="[inverse ? 'navInverse' : 'nav']"
     >
         <div :class="[
-            {borderNone},
-            inverse ? 'bordernavInverse' : 'bordernav']"
+                {borderNone},
+                inverse ? 'bordernavInverse' : 'bordernav']" 
             class="nav-border"
         >
-            <img :src="inverse ? imgSrcLight : imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
+            <img :src="inverse ? imgSrcLight : imgSrc" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
             <div class="selectMenu" :class="{'inverseColor': inverse}">
                 <bpSelect 
                     :disSelected="true"
-                    :src='selectSrc'
+                    :src='inverse ? selectSrcLight : selectSrc'
                     :choosed_value="translation_data.choosed_value" :options_data="translation_data.options_data"
                     @linkToPage="linkToPage"></bpSelect>
                 <span class="bp-text" @click="toAboutUs">{{translation_data.aboutUs}}</span>
@@ -39,16 +39,17 @@ export default {
     },
     mounted() {
         const that = this
+        this.inverse = this.inversebase
         window.onscroll = () => {
             let top = document.scrollingElement.scrollTop; //触发滚动条
             if (top == 0) {
                 //回到页面顶部
-                that.bgWhite = false;
                 that.borderNone = false;
-                that.inverse = true;
+                if(that.inversebase) {
+                    that.inverse = true;
+                }
             } else {
                 //不在页面顶部
-                that.bgWhite = true;
                 that.borderNone = true;
                 that.inverse = false;
             }
@@ -66,22 +67,21 @@ export default {
         bpModalForm
     },
     props: {
-        inverse: {
-            //是否背景透明
+        inversebase: {
             type: Boolean,
             default: false
         }
     },
-    data: function () {
+    data() {
         return {
             language: '中文',
-            bgWhite: false,
             borderNone: false,
             contactForm: false,
+            inverse: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
             imgSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_light.svg",
             selectSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg",
-            selectSrcLight: "",
+            selectSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop_light.svg",
             translation_basedata: {
                 cn: {
                     MAX: {
@@ -263,13 +263,9 @@ export default {
     }
 
     .navInverse {
-         background: transparent;
+        background: transparent;
         text-align: center;
         font-size: 14px;
-    }
-
-    .bgWhite {
-        background-color: #fff !important;
     }
     .fixed-nav {
         height: 80px;
