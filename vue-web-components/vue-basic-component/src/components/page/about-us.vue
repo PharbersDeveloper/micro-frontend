@@ -1,12 +1,12 @@
 <template>
     <div>
-        <navTop v-if="!responseMini" inversebase></navTop>
-        <navTopRes v-if="responseMini" inversebase></navTopRes>
+        <!-- <navTop v-if="!responseMini" inversebase></navTop>
+        <navTopRes v-if="responseMini" inversebase></navTopRes> -->
         <div class="bp-about-us">
             <div class="about-us-header">
                 <bpImg :src="headerImg" class="above-data-detail-header-img"></bpImg>
                 <bpText class="ph-body-small-inverse top-breadcrumb">
-                    <span class="mr-0">{{translation_data.home}}</span>
+                    <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
                     <span class="mr-0">/</span>
                     <span>{{translation_data.aboutUs}}</span>
                 </bpText>
@@ -40,26 +40,26 @@
                 <bpText class="about-us-text-desc">{{translation_data.descB}}</bpText>
             </div>
         </div>
-         <bp-page-bottom></bp-page-bottom>
+         <!-- <bp-page-bottom></bp-page-bottom> -->
     </div>
 </template>
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import navTop from '../panel/bp-nav-top'
-import navTopRes from '../panel/bp-nav-top-response'
-import bpPageBottom from '../panel/bp-page-bottom'
+// import navTop from '../panel/bp-nav-top'
+// import navTopRes from '../panel/bp-nav-top-response'
+// import bpPageBottom from '../panel/bp-page-bottom'
 
 export default {
     name: "about-us",
     components: {
         bpText,
         bpImg,
-        bpButton,
-        navTop,
-        navTopRes,
-        bpPageBottom
+        bpButton
+        // navTop,
+        // navTopRes,
+        // bpPageBottom
     },
     data() {
         return {
@@ -164,6 +164,11 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
+    },
+    methods: {
+        toHome() {
+            this.$emit('linkToPage', 'home')
+        }
     }
 }
 </script>
