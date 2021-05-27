@@ -2,7 +2,7 @@
 <div class="content-active-panel">
     <div class="active-img">
         <img class="active-img-bgc" :src="bgImg" alt="">
-        <img class="above-data-logo" v-show="logoImg != 'null'" :src="logoImg" alt="">
+        <img class="above-data-logo" v-if="logoImg != 'null'" :src="logoImg" alt="">
     </div>
     <div class="active-info">
         <div class="home-avtive-names">

@@ -24,7 +24,7 @@ export default class ApplicationController extends Controller {
     }
 
     @action
-    linkToPage(value) {
-        console.log(value);
+    linkToPage(data) {
+        this.transitionToRoute(data.detail[0])
     }
 }

@@ -4,11 +4,11 @@ import { action } from "@ember/object"
 export default class HomeController extends Controller {
     @action
     linkToPage(data) {
-        console.log(data);
+        this.transitionToRoute(data.detail[0])
     }
 
     @action 
-    downloadReport(value) {
-        console.log(value);
+    downloadReport(data) {
+        this.transitionToRoute(data.detail[0], 0)
     }
 }
