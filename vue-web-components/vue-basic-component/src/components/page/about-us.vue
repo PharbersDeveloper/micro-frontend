@@ -89,7 +89,21 @@ export default {
                     textC: "患者脱敏信息"
                 },
                 en: {
-
+                    home: "Home",
+                    aboutUs: "About Us",
+                    aboutUsEn: "About Us",
+                    sloganA: "Pharbers, leading fusion and insight in Medical Data,",
+                    sloganB: "is devoting to the field of medical data for 10 years, established in 2008.",
+                    infoTitleA: "Pharbers Gathers Top Data Analysts and Data Scientists from Mathematic, Medical, and IT industry.",
+                    infoTitleB: "Build Business Intelligence Algorithm.",
+                    descA: "With self-developed data platform, integrating medicare, tenders, medical examination, and other exclusive data sources, Pharbers builds a highly available, unified, trusted medical data assets, covering more than 5,000 hospitals, 2,000 community health centers and 100 million patient information.",
+                    descB: "Pharbers upholds the concept of data as a service, provides enterprises with holographic data products and consulting services, based on our in-depth industry comprehension, strong data mining capabilities, and observation in changing market and policy environments. We offer various data solutions according to different application scenarios, like market monitoring & forecasting, marketing resource allocation & optimization, and Real World Research, served nearly hundreds of leading pharmaceutical companies and healthcare institutions in the domestic and overseas.",
+                    numberHospital: "5,000+",
+                    numberHealthCenter: "2,000+",
+                    numberInfo: "100 million",
+                    textA: "Hospital",
+                    textB: "Community Health Center",
+                    textC: "Patient Desensitization Information"
                 }
             }
         }
