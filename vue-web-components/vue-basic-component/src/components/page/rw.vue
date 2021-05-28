@@ -219,6 +219,9 @@ export default {
         }
     },
     created() {
+        window.addEventListener('beforeunload', e => {
+            window.scrollTo(0,0)
+        });
         let originalSetItem = localStorage.setItem,
             lang = window.localStorage.getItem('lang')
         if (!lang) {
