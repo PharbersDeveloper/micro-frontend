@@ -154,7 +154,7 @@ export default {
                     }
                 },
                 en: {
-                    home: "主页",
+                    home: "Home",
                     realWorldResearch: "Real World Research",
                     realWorldResearchEN: "REAL WORLD RESEARCH",
                     multiPerspectiveDeepMining: "Multi-perspective Deep Mining from Patient Information",
