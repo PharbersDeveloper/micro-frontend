@@ -380,7 +380,7 @@ export default {
                 font-size: 100px;
                 color: #FFF;
                 letter-spacing: 2.5px;
-                background-image: -webkit-linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,0) 80%);
+                background-image: linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,0) 80%);
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
             }
