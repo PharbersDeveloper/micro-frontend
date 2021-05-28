@@ -298,12 +298,14 @@ export default {
         },
         toMore(data) {
             this.$emit('linkToPage', data)
+            this.returnToTop()
         },
         downloadReport(value) {
             this.$emit('downloadReport', value)
         },
-        linkToPage(value) {
-            console.log('vue-home-linkToPage');
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
     },
     computed: {

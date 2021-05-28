@@ -230,18 +230,24 @@ export default {
         },
         toAboutUs() {
             this.$emit('linkToPage', 'about-us')
+            this.returnToTop()
         },
         toHome() {
             this.$emit('linkToPage', 'home')
         },
         linkToPage(value) {
             this.$emit('linkToPage', value)
+            this.returnToTop()
         },
         toGeneral() {
             window.location.href = "http://general.pharbers.com"
         },
         logout() {
             this.$emit('logout')
+        },
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
     }
 };

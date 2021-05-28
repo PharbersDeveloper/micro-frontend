@@ -237,6 +237,7 @@ export default {
         },
         toHome() {
             this.$emit('linkToPage', 'home')
+            this.returnToTop()
         },
         toGeneral() {
             window.location.href = "http://general.pharbers.com"
@@ -247,6 +248,11 @@ export default {
         runClickEvent(click_event) {
             click_event.call(this)
             this.menu = false
+            this.returnToTop()
+        },
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
     }
 }
