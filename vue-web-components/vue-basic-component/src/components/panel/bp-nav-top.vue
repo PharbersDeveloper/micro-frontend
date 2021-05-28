@@ -18,7 +18,12 @@
             </div>
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
-                <bpButton :text="translation_data.login" class="login"></bpButton>
+                
+                <bp-select-vue v-if="isLogin" choosedValue="" src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
+                    <bp-option-vue :text="translation_data.general" @click="toGeneral" ></bp-option-vue>
+                    <bp-option-vue :text="translation_data.logout" @click="logout" ></bp-option-vue>
+                </bp-select-vue>
+                <bpButton v-else :text="translation_data.login" class="login" @click="toGeneral"></bpButton>
             </div>
         </div>
         <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
@@ -70,6 +75,10 @@ export default {
         inversebase: {
             type: Boolean,
             default: false
+        },
+        isLogin: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -94,6 +103,8 @@ export default {
                     aboutUs: "关于我们",
                     contactUs: "联系我们",
                     login: "登录",
+                    general: "法伯数据平台",
+                    logout: "退出登录",
                     options_data: [
                         {
                             text: "MAX",
@@ -149,6 +160,8 @@ export default {
                     aboutUs: "COMPANY",
                     contactUs: "Contact Us",
                     login: "Log in",
+                    general: "General",
+                    logout: "Logout",
                     options_data: [
                         {
                             text: "MAX©",
@@ -223,6 +236,12 @@ export default {
         },
         linkToPage(value) {
             this.$emit('linkToPage', value)
+        },
+        toGeneral() {
+            window.location.href = "http://general.pharbers.com"
+        },
+        logout() {
+            this.$emit('logout')
         }
     }
 };
@@ -337,10 +356,9 @@ export default {
                 position: absolute;
                 width: max-content !important;
                 background: #fff;
-                padding-top: 16px;
                 max-width: 300px;
                 margin: 0;
-                padding: 4px 0;
+                padding: 16px 0 4px 0;
                 border-radius: 3px;
                 box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25);
             }
@@ -383,6 +401,28 @@ export default {
             align-content: flex-start;
             align-items: stretch;
             justify-content: flex-start;
+
+            .home-user-select {
+                width: auto;
+                height: auto;
+                background: 0 0;
+
+                /deep/.bp-select-title {
+                    padding: 0;
+
+                    .svg-icon {
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+
+                /deep/.bp-option-group {
+                    position: absolute;
+                    font-size: 14px;
+                    width: 120px;
+                }
+            }
+
             .concact {
                 background: #FFDD4D!important;
                 border: none;

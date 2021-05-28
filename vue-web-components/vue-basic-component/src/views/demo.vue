@@ -92,15 +92,15 @@
         </div>
 
         <div class="yanjie-test-area">
-            <bp-page-bottom language="ch"></bp-page-bottom>
+            <bp-page-bottom></bp-page-bottom>
         </div>
 
         <h1>bpNavTopResponse</h1>
         <!-- <bpNavTopResponse></bpNavTopResponse> -->
-        <div style="position: fixed; top: 0">
-            <bpNavTop></bpNavTop>
-            <!-- <bpNavTopResponse inverse></bpNavTopResponse> -->
-        </div>
+        <!-- <div style="position: fixed; top: 0"> -->
+            <!-- <bpNavTop :isLogin=true @logout="logout"></bpNavTop> -->
+            <bpNavTopResponse :isLogin=true @logout="logout"></bpNavTopResponse>
+        <!-- </div> -->
 
     </div>
 </template>
@@ -194,6 +194,9 @@ export default {
         },
         changeLanguage(value) {
             this.curLanguage = value
+        },
+        logout() {
+            console.log(123);
         }
     },
     data: function() {

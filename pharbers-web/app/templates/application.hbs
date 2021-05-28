@@ -1,8 +1,8 @@
 {{page-title "Pharbers"}}
 {{#if this.topResponseMini}}
-    <pharbers-bp-nav-top-response {{on "linkToPage" linkToPage}}></pharbers-bp-nav-top-response>
+    <pharbers-bp-nav-top-response {{on "linkToPage" linkToPage}} {{on "logout" logout}} is-login={{isLogin}}></pharbers-bp-nav-top-response>
 {{else}} 
-    <pharbers-bp-nav-top {{on "linkToPage" linkToPage}}></pharbers-bp-nav-top>
+    <pharbers-bp-nav-top {{on "linkToPage" linkToPage}} {{on "logout" logout}} is-login={{isLogin}}></pharbers-bp-nav-top>
 {{/if}}
 {{outlet}}
 <pharbers-bp-page-bottom></pharbers-bp-page-bottom>

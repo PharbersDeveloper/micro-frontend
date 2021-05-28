@@ -15,12 +15,17 @@
 
             <div class="response-menu" v-if="menu">
                 <div class="responsee-menu-item" 
-                    v-for="item in translation_data.options_data" :key="item.text">
+                    v-for="item in translation_data.options_data" :key="item.text" @click="runClickEvent(item.click_event)">
                     <span class="ph-H-Small">{{item.text}}</span>
                     <span class="ph-body-xsmall" v-if="item.spanText">{{item.spanText}}</span>
                 </div>
                 <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
-                <bpButton :text="translation_data.login" class="login"></bpButton>
+
+                <div v-if="isLogin" class="button-response-group">
+                    <bp-text class="ph-H-Small button-response-general" @click="toGeneral">{{translation_data.general}}</bp-text>
+                    <bp-text class="ph-H-Small button-response-logout" @click="logout">{{translation_data.logout}}</bp-text>
+                </div>
+                <bpButton v-else :text="translation_data.login" class="login" @click="toGeneral">{{translation_data.logout}}</bpButton>
             </div>
         </div>
         <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
@@ -29,7 +34,7 @@
 <script>
 import bpModalForm from './bp-modal-form.vue'
 import bpButton from '../bp-button.vue'
-
+import bpText from '../bp-text.vue'
 export default {
     created() {
         let curLang = window.localStorage.getItem('lang')
@@ -60,10 +65,15 @@ export default {
     },
     components: {
         bpModalForm,
-        bpButton
+        bpButton,
+        bpText
     },
     props: {
         inversebase: {
+            type: Boolean,
+            default: false
+        },
+        isLogin: {
             type: Boolean,
             default: false
         }
@@ -87,6 +97,8 @@ export default {
                     },
                     contactUs: "联系我们",
                     login: "登录",
+                    general: "法伯数据平台",
+                    logout: "退出登录",
                     modalForm: {
                         download: "下载报告",
                         contactUs: "联系我们",
@@ -146,6 +158,8 @@ export default {
                     },
                     contactUs: "Contact Us",
                     login: "Log in",
+                    general: "General",
+                    logout: "Logout",
                     modalForm:{
                         download: "Download Report",
                         contactUs: "Contact Us",
@@ -221,11 +235,18 @@ export default {
         submitClientData(value) {
             this.$emit('submitClientData', value)
         },
-        toAboutUs() {
-            this.$emit('linkToPage', 'about-us')
-        },
         toHome() {
             this.$emit('linkToPage', 'home')
+        },
+        toGeneral() {
+            window.location.href = "http://general.pharbers.com"
+        },
+        logout() {
+            this.$emit('logout')
+        },
+        runClickEvent(click_event) {
+            click_event.call(this)
+            this.menu = false
         }
     }
 }
@@ -392,6 +413,27 @@ export default {
                 cursor: pointer;
                 outline: 0;
                 justify-content: center;
+            }
+
+            .button-response-group {
+                padding-top: 4px;
+                display: flex;
+                flex-direction: column;
+                .button-response-general {
+                    font-size: 14px;
+                    color: #2D334D;
+                    letter-spacing: 1px;
+                    display: block;
+                    text-align: center;
+                    line-height: 40px;
+                    border-radius: 2px;
+                    border: 1px solid rgba(22,28,57,.12);
+                    margin-bottom: 24px;
+                }
+
+                .button-response-logout {
+                    text-align: center;
+                }
             }
         }
     }

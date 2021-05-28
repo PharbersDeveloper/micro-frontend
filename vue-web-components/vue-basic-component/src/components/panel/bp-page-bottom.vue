@@ -96,9 +96,6 @@ export default {
         bpSelectVue,
         bpOptionVue
     },
-    props: {
-        changeLocale: Function
-    },
     data: function() {
         return {
             contactForm: false,
