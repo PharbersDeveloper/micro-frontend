@@ -442,6 +442,8 @@ export default {
                         border-radius: 2px;
                         padding: 40px 32px 48px;
                         position: relative;
+                        display: flex;
+                        flex-direction: column;
                         .max-advantage-card-icon {
                             height: 22px;
                             width: 19px;
@@ -490,6 +492,83 @@ export default {
                             color: #FFF;
                         }
                     }
+                }
+            }
+        }
+        @media (max-width: 992px) {
+            .consulting-header {
+                padding-left: 60px !important;
+                .page-header-anton-font {
+                    font-size: 60px!important;
+                }
+            }
+            .consulting-text-info  {
+                width: 100% !important;
+                padding: 100px 176px !important;
+
+                .consult-text-info-title-a,
+                .consult-text-info-title-b,
+                .consult-text-info-text {
+                    width: 100% !important;
+                }
+            }
+            .consult-advantage-card-container {
+                width: 100% !important;
+
+                .consult-cards-row-a {
+                    width: 100% !important;
+                    padding: 0 16% !important;
+                    flex-wrap: wrap;
+
+                    .consult-advantage-card-nav {
+                        margin-left: 12px !important;
+                        margin-bottom: 40px !important;
+                    }
+                    
+                    .consulting-advantage-card-container {
+                        width: 100% !important;
+                        // overflow: scroll;
+
+                        .consulting-advantage-card {
+                            margin: 0 12px !important;
+                            flex-shrink: 0;
+                        }
+                    }
+                }
+            }
+        }
+        @media (max-width: 768px) {
+            .consulting-header {
+                padding-left: 40px !important;
+            }
+            .consulting-text-info  {
+                padding: 100px 40px !important;
+            }
+            .consult-advantage-card-container {
+                .consult-cards-row-a {
+                    padding: 0 24px !important;
+                }
+            }
+        }
+        @media (max-width: 549px), (width: 549px) {
+            .consulting-header {
+                padding-left: 24px !important;
+
+                .consulting-header-slogan-b {
+                    top: -70px !important;
+                }
+                .page-header-anton-font {
+                    font-size: 60px!important;
+                    line-height: 80px;
+                }
+            }
+            .consulting-text-info  {
+                width: 100% !important;
+                padding: 100px 24px !important;
+            }
+            .consult-advantage-card-container {
+                .consulting-advantage-card-container {
+                    overflow: scroll;
                 }
             }
         }
