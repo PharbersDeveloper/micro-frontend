@@ -1,3 +1,5 @@
 {{page-title "Home"}}
-<pharbers-home {{on "linkToPage" linkToPage}} {{on "downloadReport" downloadReport}}></pharbers-home>
-{{outlet}}
+
+<pharbers-home {{on "linkToPage" linkToPage}} {{on "downloadReport" downloadReport}} all-data={{allData}}></pharbers-home>
+
+{{log allData}}

@@ -11,20 +11,17 @@ import JSONAPIAdapter from "@ember-data/adapter/json-api"
 export default JSONAPIAdapter.extend({
   cookies: service(),
   oauthRequest: false,
-  // host: 'http://www.pharbers.com',
-  namespace: ENV.namespace, // 根据后端发布版本修改命名空间, 生产环境用这个，nginx 做了转发
+  namespace: ENV.namespace,
   sortQueryParams(params) {
     this.set("queryParamsAWS", params)
   },
   buildURL: function (modelName, id, snapshot, requestType, query) {
-    this.set("modelName", modelName)
     let url = this._super(...arguments)
-    const curType = url.split("/").splice(2, 2) // ["activities" , ... ]
-    this.set("modelName", modelName)
-    if (modelName === "account" || modelName === "applyuser") {
-      this.toggleProperty("oauthRequest")
-      return "http://oauth.pharbers.com/" + url
-    }
+    const curType = url.split("/").splice(2, 2)
+    // if (modelName === "account" || modelName === "applyuser") {
+    //   this.toggleProperty("oauthRequest")
+    //   return "http://oauth.pharbers.com/" + url
+    // }
     if (modelName === "cooperation") {
       curType[0] = "cooperation"
       url = url.split("/")
@@ -46,16 +43,12 @@ export default JSONAPIAdapter.extend({
           index++
         ) {
           const element = queryParamsArr[0]
-          // console.log('element',element)
           if (index === 0) {
-            // console.log('query[element][0]',query[element][index])
             queryString += `${element}=${query[element][index]}`
-            // console.log(queryString)
           } else {
             queryString += `&${element}=${query[element][index]}`
           }
         }
-        // queryString = `ids[]=AFxTm_-JK5HX9_Gzu-BS&ids[]=AFxTm_-JK5HX9_Gzu-BS`
       } else {
         for (let index = 0; index < queryParamsArr.length; index++) {
           const element = queryParamsArr[index]
@@ -70,12 +63,8 @@ export default JSONAPIAdapter.extend({
       newUrl += "?" + encodeURI(queryString)
     }
     this.set("newUrl", newUrl)
-    // if(modelName === "zone")
-    // 	return "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/zones?ids%5B%5D=AFxTm_-JK5HX9_Gzu-BS&ids%5B%5D=yhwPulzG0J_2qMnN8PKo&ids%5B%5D=mgFzuAWjaZZcgEdmFD8C&ids%5B%5D=Jbg2caAVuJt6iIjqIQL6"
-    return (
-      "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn" +
-      newUrl
-    )
+    return `https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn${newUrl}`
+    
   },
 
   headers: computed(
@@ -226,31 +215,8 @@ export default JSONAPIAdapter.extend({
         // queryParams: queryParamsAWS,
         body: {}
       }
-      // console.log('req.queryParams',req.queryParams)
-      // console.log("req", req)
-
-      // if (this.get('modelName') === "zone"){
-      // 	let SortArr = ['AFxTm_-JK5HX9_Gzu-BS','yhwPulzG0J_2qMnN8PKo','mgFzuAWjaZZcgEdmFD8C','Jbg2caAVuJt6iIjqIQL6'].sort()
-      // 	console.log('SortArr',SortArr)
-      // 	req.queryParams = {'ids%5B%5D': `${SortArr[0]}&ids[]=${SortArr[1]}&ids[]=${SortArr[2]}&ids[]=${SortArr[3]}`}
-      // }
 
       const request = client.makeRequest(req)
-      // console.log("request", request)
-      // {   method: 'GET',
-      // 	url:
-      // 	'https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/proposals',
-      // 	headers:
-      // 	{ Accept: 'application/vnd.api+json',
-      // 		'x-amz-date': '20200605T073304Z',
-      // 		Authorization:
-      // 		'AWS4-HMAC-SHA256 Credential=AKIAWPBDTVEAJ6CCFVCP/20200605/cn-northwest-1/execute-api/aws4_request, SignedHeaders=accept;host;x-amz-date, Signature=1295d2ea428819bc40d6cd35a7dc0dca20d0ef335ccfda5e7e346b17223ae0d9',
-      // 		'Content-Type': 'application/vnd.api+json' },
-      // 	data: '',
-      // 	timeout: 30000
-      // }
-
-      // console.log("request", request)
       return request.headers
     }
   )
