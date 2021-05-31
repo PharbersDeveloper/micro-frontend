@@ -6,7 +6,7 @@ import { computed } from '@ember/object';
 export default class ApplicationController extends Controller {
     @service('oauth') oauthService
     @tracked topResponseMini;
-    @tracked inverse = false;
+    @tracked inverse = true;
     @tracked isLogin = this.oauthService.judgeAuth()
 
     init() {

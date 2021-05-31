@@ -3,6 +3,7 @@ import { computed, set, action } from '@ember/object'
 import { tracked } from '@glimmer/tracking';
 export default class HomeController extends Controller {
     @tracked language;
+    @tracked allDataAction = [];
     init() {
         super.init(...arguments)
         let that = this
@@ -12,6 +13,11 @@ export default class HomeController extends Controller {
             that.language = event.newValue
         })
     }
+
+    @action
+	transferData(element) {
+		this.allDataAction = this.allData
+	}
 
     @action
     linkToPage(data) {
@@ -31,7 +37,6 @@ export default class HomeController extends Controller {
         } else {
             activities = this.model.activityDataEN
         }
-
         return [activities]
     }
 }

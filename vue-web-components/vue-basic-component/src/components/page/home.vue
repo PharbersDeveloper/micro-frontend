@@ -2,6 +2,8 @@
     <div class="home-container">
         <!-- <navTop @linkToPage="linkToPage"></navTop> -->
         <div class="bp-home">
+            {{allData}}
+            <div v-for="(item,index) in allData" :key="index">{{item.text}}</div>
             <!-- truth -->
             <div class="truth-content-area">
                 <div class="title">
@@ -281,7 +283,12 @@ export default {
         }
     },
     props: {
-        allData: []
+        allData: {
+            type: Array,
+            default: function() {
+                return []
+            }
+        }
     },
     components: {
         bpText,
@@ -336,6 +343,9 @@ export default {
         }
     },
     created() {
+        window.addEventListener('beforeunload', e => {
+            window.scrollTo(0,0)
+        });
         let lang = window.localStorage.getItem('lang')
         if (!lang) {
             lang = navigator.language || navigator.userLanguage
@@ -371,7 +381,7 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
-
+        debugger
         console.log('allData',this.allData);
     }
 
