@@ -281,6 +281,7 @@ export default {
         }
     },
     props: {
+        allData: []
     },
     components: {
         bpText,
@@ -335,8 +336,7 @@ export default {
         }
     },
     created() {
-        let originalSetItem = localStorage.setItem,
-            lang = window.localStorage.getItem('lang')
+        let lang = window.localStorage.getItem('lang')
         if (!lang) {
             lang = navigator.language || navigator.userLanguage
             if (lang === 'English') {
@@ -346,13 +346,6 @@ export default {
             }
         } else {
             this.language = lang
-        }
-        localStorage.setItem = function(key,newValue){
-            let event = new Event("setItemEvent");
-            event.key = key;
-            event.newValue = newValue;
-            window.dispatchEvent(event);
-            originalSetItem.apply(this,arguments);
         }
     },
     mounted() {
@@ -378,6 +371,8 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
+
+        console.log('allData',this.allData);
     }
 
 }
