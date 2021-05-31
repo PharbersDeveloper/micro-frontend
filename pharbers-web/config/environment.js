@@ -6,6 +6,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
+    host: 'https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn',
     namespace: 'v0',
     EmberENV: {
       FEATURES: {
