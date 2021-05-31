@@ -236,6 +236,11 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
+    },
+    methods: {
+        toHome() {
+            this.$emit('linkToPage', 'home')
+        }
     }
 }
 </script>
