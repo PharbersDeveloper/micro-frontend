@@ -2,8 +2,6 @@
     <div class="home-container">
         <!-- <navTop @linkToPage="linkToPage"></navTop> -->
         <div class="bp-home">
-            {{allData}}
-            <div v-for="(item,index) in allData" :key="index">{{item.text}}</div>
             <!-- truth -->
             <div class="truth-content-area">
                 <div class="title">
@@ -380,9 +378,8 @@ export default {
         }
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
+            console.log('allData',that.allData);
         })
-        debugger
-        console.log('allData',this.allData);
     }
 
 }

@@ -11,6 +11,7 @@ export default class HomeController extends Controller {
         this.language = localStorage.getItem('lang')
         window.addEventListener('setItemEvent', function(event) {
             that.language = event.newValue
+            that.transferData()
         })
     }
 
