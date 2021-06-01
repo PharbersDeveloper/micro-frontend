@@ -8,6 +8,6 @@ export default class ReportModel extends Model {
     @attr('date') date;
     @attr('number') language;
     @belongsTo('image') cover;
-    @belongsTo('activity') activity;
+    @belongsTo('activity') actAttachments;
     @hasMany("participant") writers;
 }
