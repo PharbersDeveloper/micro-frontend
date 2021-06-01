@@ -2,8 +2,6 @@
     <div class="home-container">
         <!-- <navTop @linkToPage="linkToPage"></navTop> -->
         <div class="bp-home">
-            {{allData}}
-            <div v-for="(item,index) in allData" :key="index">{{item.text}}</div>
             <!-- truth -->
             <div class="truth-content-area">
                 <div class="title">
@@ -19,14 +17,14 @@
                 </div>
                 <bpText class="active-text">{{translation_data.activeEvents}}</bpText>
                 <bpCardActive 
-                    v-for="card in activeArr"
+                    v-for="card in allData.activities"
                     :key="card.title"
-                    :bgImg="card.bgImg"
-                    :logoImg="card.logoImg"
+                    :bgImgs="card.gallery"
+                    :logoImg="card.logo.get('path')"
                     :title="card.title"
-                    :date="card.date"
+                    :date="card.startDate"
                     :city="card.city"
-                    :logoText="card.logoText"
+                    :type="card.activityType"
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
@@ -284,9 +282,9 @@ export default {
     },
     props: {
         allData: {
-            type: Array,
+            type: Object,
             default: function() {
-                return []
+                return {}
             }
         }
     },
@@ -381,8 +379,6 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
-        debugger
-        console.log('allData',this.allData);
     }
 
 }
@@ -1416,7 +1412,7 @@ export default {
                         display: inherit !important;
                     }
                     /deep/.active-title {
-                        height: 65px;
+                        height: 65px !important;
                     }
                 }
                 /deep/.content-active-review-more-button  {
