@@ -25,7 +25,7 @@ export default class HomeController extends Controller {
 
     @action 
     downloadReport(data) {
-        this.transitionToRoute(data.detail[0], 0)
+        this.transitionToRoute(data.detail[0], this.model.reportsList[0].id)
     }
 
     @action
