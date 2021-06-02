@@ -27,4 +27,12 @@ export default class HomeController extends Controller {
     downloadReport(data) {
         this.transitionToRoute(data.detail[0], 0)
     }
+
+    @action
+    toActivityPage(data) {
+        let curType = data.detail[0],
+            id = data.detail[1]
+        
+        this.transitionToRoute(curType, id)
+    }
 }

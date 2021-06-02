@@ -15,4 +15,7 @@ Router.map(function () {
   this.route('consulting');
   this.route('report-list');
   this.route('download-report', { path: '/download-report/:report_id' });
+  this.route('above-data-detail', { path: '/above-data-detail/:activity_id' });
+  this.route('industry-activity-detail', { path: '/industry-activity-detail/:industry_id' });
+  this.route('boyunhui', { path: '/boyunhui/:boyunhui_id' });
 });

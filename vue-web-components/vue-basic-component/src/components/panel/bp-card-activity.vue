@@ -1,5 +1,5 @@
 <template>
-<div class="content-active-panel">
+<div class="content-active-panel" @click="toActivityPage">
     <div class="active-img">
         <img class="active-img-bgc" :src="imgPath(bgImgs, 'cover')" alt="">
         <img class="above-data-logo" v-if="logoImg" :src="imgPath(logoImg)" alt="">
@@ -70,9 +70,22 @@ export default {
                 const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
                 return ipath;
             } 
+        },
+        toActivityPage() {
+            let curType = ""
+            
+            if (this.type === "Above Data") {
+                curType = "above-data-detail"
+            } else if (this.type === "industry") {
+                curType = "industry-activity-detail"
+            } else if (this.type === "boyunhui") {
+                curType = "boyunhui"
+            }
+            this.$emit('toActivityPage', curType, this.id)
         }
     },
     props: {
+        id: String,
         bgImgs: Object,
         logoImg: String,
         title: String,
