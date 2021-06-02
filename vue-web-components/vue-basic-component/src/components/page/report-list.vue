@@ -16,7 +16,7 @@
                 :key="index">
                 <div class="report-list-content-left">
                     <div class="report-list-imgcontainer">
-                        <bpImg class="report-list-img" :src="item.cover.get('path')"></bpImg>
+                        <bpImg class="report-list-img" :src="imgPath(item.cover.get('path'))"></bpImg>
                         <div class="report-list-img-mask"></div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                         <bpText class="latest-release">{{translation_data.latest}}</bpText>
                     </div>
                     <bpText class="ph-H-Large_2">{{item.title}}</bpText>
-                    <bpText class="ph-body-small">{{item.date}}</bpText>
+                    <bpText class="ph-body-small">{{transDate(item.date)}}</bpText>
                     <bpText class="report-list-content-desc">{{item.description}}</bpText>
                     <div class="main-flex-start">
                         <bpText class="ph-H-Small">{{translation_data.download}}</bpText>
@@ -161,6 +161,25 @@ export default {
     methods: {
         toHome() {
             this.$emit('linkToPage', 'home')
+        },
+        imgPath(...params) {
+            if ( params.length === 2 && params[1] === "cover") {
+                const arr = params[0]
+                const cover = arr.find(it => it.tag === "cover")
+                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+            } else if (params[0]) {
+                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                return ipath;
+            } 
+        },
+        transDate(param) {
+            let date = new Date(param)
+
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth()
+
+            return y + "年" + (m+1) + "月" + d + "日"
         }
     }
 }
@@ -320,6 +339,35 @@ export default {
                         margin-left: 8px;
                         object-fit: cover;
                     }
+                }
+            }
+        }
+        @media (max-width: 768px) {
+            .report-list-content-left {
+                margin-right: 10px;
+            }
+            .report-list-content-right {
+                margin-left: 10px;
+            }
+        }
+        @media (max-width: 549px), (width: 549px) {
+            .report-list-header {
+                padding: 0 24px !important;
+            }
+            .report-list-content .report-list-content-each {
+                width: 90% !important;
+                flex-direction: column;
+                align-items: center;
+
+                .report-list-content-left {
+                    width: 100% !important;
+                    align-items: center;
+                    justify-content: flex-start;
+                    margin-bottom: 40px;
+                }
+
+                .report-list-content-right {
+                    width: 100% !important;
                 }
             }
         }
