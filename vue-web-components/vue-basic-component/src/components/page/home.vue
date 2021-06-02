@@ -19,12 +19,14 @@
                 <bpCardActive 
                     v-for="card in allData.activities"
                     :key="card.title"
+                    @toActivityPage="toActivityPage"
                     :bgImgs="card.gallery"
                     :logoImg="card.logo.get('path')"
                     :title="card.title"
                     :date="card.startDate"
                     :city="card.city"
                     :type="card.activityType"
+                    :id="card.id"
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
@@ -305,6 +307,9 @@ export default {
         toMore(data) {
             this.$emit('linkToPage', data)
             this.returnToTop()
+        },
+        toActivityPage(curType, id) {
+            this.$emit('toActivityPage', curType, id)
         },
         downloadReport(value) {
             this.$emit('downloadReport', value)
