@@ -208,6 +208,7 @@ export default JSONAPIAdapter.extend({
       if(this.get('findRecordInclude')) {
         paramsArr.push('include')
         params.include = this.get('findRecordInclude')
+        this.set('findRecordInclude', null)
       }
       let req = {
         verb: "get".toUpperCase(),
