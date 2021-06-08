@@ -14,7 +14,8 @@ export default class HomeController extends Controller {
     @action
 	transferData() {
 		this.allData = {
-            activities: this.model.activityData
+            activities: this.model.activityData,
+            reports: this.model.reportsList
         }
 	}
 
