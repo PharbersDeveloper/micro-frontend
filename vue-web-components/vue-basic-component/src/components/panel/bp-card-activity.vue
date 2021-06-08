@@ -1,15 +1,15 @@
 <template>
-<div class="content-active-panel">
+<div class="content-active-panel" @click="toActivityPage">
     <div class="active-img">
-        <img class="active-img-bgc" :src="bgImg" alt="">
-        <img class="above-data-logo" v-show="logoImg != 'null'" :src="logoImg" alt="">
+        <img class="active-img-bgc" :src="imgPath(bgImgs, 'cover')" alt="">
+        <img class="above-data-logo" v-if="logoImg" :src="imgPath(logoImg)" alt="">
     </div>
     <div class="active-info">
         <div class="home-avtive-names">
             <span class="active-logo">{{logoText}}</span>
             <span class="active-title">{{title}}</span>
         </div>
-        <span class="position-info">{{date}}  {{city}}</span>
+        <span class="position-info">{{transDate()}}  {{city}}</span>
     </div>
 </div>
 </template>
@@ -17,40 +17,90 @@
 <script>
 export default {
     components: {},
-    methods: {},
-    props: {
-        bgImg: {
-            type: String,
-            default: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg"
-        },
-        logoImg: {
-            type: String,
-            default: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_bylt_v.svg"
-        },
-        title: {
-            type: String,
-            default: "带量采购对中国医药市场的改变"
-        },
-        date: {
-            type: String,
-            default: "2020-06-04"
-        },
-        city: {
-            type: String,
-            default: "苏州"
-        },
-        logoText: {
-            type: String,
-            default: "行业活动"
+    data() {
+        return {
+            language: '中文',
+            translation_basedata: {
+                cn: {
+                    boyunhui: "伯云论坛",
+                    "Above Data": "Above Data",
+                    industry: "行业活动"
+                },
+                en: {
+                    boyunhui: "Boyun Forum",
+                    "Above Data": "Above Data",
+                    industry: "Event"
+                }
+            }
         }
+    },
+    created() {
+        this.language = window.localStorage.getItem('lang')
+    },
+    computed: {
+        translation_data: function() {
+            if (this.language === '中文') {
+                return this.translation_basedata.cn
+            } else if (this.language === 'English') {
+                return this.translation_basedata.en
+            }
+        },
+        logoText: function() {
+            return this.translation_data[this.type]
+        }
+    },
+    methods: {
+        transDate() {
+            let date = new Date(this.date)
+
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth()
+
+            m = m + 1 < 10 ? "0" + (m+1) : m+1
+            d = d < 10 ? "0"+ d : d   
+            return y + "-" + m + "-" + d
+        },
+        imgPath(...params) {
+            if ( params.length === 2 && params[1] === "cover") {
+                const arr = params[0]
+                const cover = arr.find(it => it.tag === "cover")
+                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+            } else if (params[0]) {
+                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                return ipath;
+            } 
+        },
+        toActivityPage() {
+            let curType = ""
+            
+            if (this.type === "Above Data") {
+                curType = "above-data-detail"
+            } else if (this.type === "industry") {
+                curType = "industry-activity-detail"
+            } else if (this.type === "boyunhui") {
+                curType = "boyunhui"
+            }
+            this.$emit('toActivityPage', curType, this.id)
+        }
+    },
+    props: {
+        id: String,
+        bgImgs: Object,
+        logoImg: String,
+        title: String,
+        date: Date,
+        city: String,
+        type: String
     }
 }
 </script>
 
 <style lang="scss" scoped>
 * {
-    box-sizing: border-box;
+    letter-spacing: .4px;
     line-height: 1.6;
+    box-sizing: border-box;
 }
 .content-active-panel {
     height: 367px;

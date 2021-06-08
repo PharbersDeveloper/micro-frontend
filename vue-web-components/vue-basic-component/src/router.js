@@ -6,6 +6,7 @@ import max from './components/page/max.vue'
 import rw from './components/page/rw.vue'
 import consulting from './components/page/consulting.vue'
 import aboutUs from './components/page/about-us.vue'
+import reportList from './components/page/report-list.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
             path: '/about-us',
             name: 'about-us',
             component: aboutUs
+        },
+        {
+            path: '/report-list',
+            name: 'report-list',
+            component: reportList
         }
     ]
 })

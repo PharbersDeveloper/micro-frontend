@@ -96,9 +96,6 @@ export default {
         bpSelectVue,
         bpOptionVue
     },
-    props: {
-        changeLocale: Function
-    },
     data: function() {
         return {
             contactForm: false,
@@ -241,23 +238,30 @@ export default {
         },
         changeLanguage(value) {
             localStorage.setItem('lang', value)
-            document.documentElement.scrollTop = 0
-            document.body.scrollTop = 0
+            this.returnToTop()
         },
         toMiit() {
             window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501')
         },
         toMax() {
-            this.$emit('toMax', 'max')
+            this.$emit('linkToPage', 'max')
+            this.returnToTop()
         },
         toRW() {
-            this.$emit('toRW', 'rw')
+            this.$emit('linkToPage', 'rw')
+            this.returnToTop()
         },
         toConsulting() {
-            this.$emit('toConsulting', 'consulting')
+            this.$emit('linkToPage', 'consulting')
+            this.returnToTop()
         },
         toAboutUs() {
-            this.$emit('toAboutUs', 'about-us')
+            this.$emit('linkToPage', 'about-us')
+            this.returnToTop()
+        },
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
     },
     created() {
@@ -290,19 +294,19 @@ export default {
     .cursor-pointer {
         cursor: pointer;
     }
-    .ph-body-medium {
+    span.ph-body-medium {
         font-size: 16px;
         color: #747789;
     }
-    .ph-body-small {
+    span.ph-body-small {
         font-size: 14px;
         color: #747789;
     }
-    .ph-H-Large_2 {
+    span.ph-H-Large_2 {
         font-size: 24px;
         color: #2D334D;
     }
-    .ph-body-xsmall-tertiary {
+    span.ph-body-xsmall-tertiary {
         font-size: 12px;
         color: #A2A5B0;
     }

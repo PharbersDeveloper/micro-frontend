@@ -1,55 +1,33 @@
 <template>
-<!-- 淡入淡出动画 -->
-<transition name="fade">
     <div class="fixed-nav" 
-        :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
-        v-if="language === '中文'"
+        :class="[inverse ? 'navInverse' : 'nav']"
     >
         <div :class="[
-            borderNone ? 'borderNone' : 'bordernavInverse',
-            {'borderNone': borderNone},
-            {'bgWhite': bgWhite}]"
+                {borderNone},
+                inverse ? 'bordernavInverse' : 'bordernav']" 
             class="nav-border"
         >
-            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
-            <div class="selectMenu">
+            <img :src="inverse ? imgSrcLight : imgSrc" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome" />
+            <div class="selectMenu" :class="{'inverseColor': inverse}">
                 <bpSelect 
                     :disSelected="true"
-                    src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
-                    :choosed_value="choosed_value" :options_data="options_data"></bpSelect>
-                <span class="bp-text">关于我们</span>
+                    :src='inverse ? selectSrcLight : selectSrc'
+                    :choosed_value="translation_data.choosed_value" :options_data="translation_data.options_data"
+                    @linkToPage="linkToPage"></bpSelect>
+                <span class="bp-text" @click="toAboutUs">{{translation_data.aboutUs}}</span>
             </div>
-            <div class="navButton">
-                <bpButton text="联系我们" class="concact"></bpButton>
-                <bpButton text="登录" class="login"></bpButton>
-            </div>
-        </div>
-    </div>
-    <div class="fixed-nav" 
-        :class="[inverse ? 'navInverse' : 'nav', {'bgWhite': bgWhite}]"
-        v-if="language === 'English'"
-    >
-        <div :class="[
-            borderNone ? 'borderNone' : 'bordernavInverse',
-            {'borderNone': borderNone},
-            {'bgWhite': bgWhite}]"
-            class="nav-border"
-        >
-            <img :src="imgSrc" alt="" class="bp-img fixed-nav-icon cursor-pointer" />
-            <div class="selectMenu">
-                <bpSelect 
-                    :disSelected="true"
-                    src='https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg'
-                    :choosed_value="choosed_value_en" :options_data="options_data_en"></bpSelect>
-                <span class="bp-text">COMPANY</span>
-            </div>
-            <div class="navButton">
-                <bpButton text="Contact Us" class="concact"></bpButton>
-                <bpButton text="Log in" class="login"></bpButton>
+            <div class="navButton" :class="{'inverseColor': inverse}">
+                <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
+                
+                <bp-select-vue v-if="isLogin" choosedValue="" src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
+                    <bp-option-vue :text="translation_data.general" @click="toGeneral" ></bp-option-vue>
+                    <bp-option-vue :text="translation_data.logout" @click="logout" ></bp-option-vue>
+                </bp-select-vue>
+                <bpButton v-else :text="translation_data.login" class="login" @click="toGeneral"></bpButton>
             </div>
         </div>
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
     </div>
-</transition>
 </template>
 
 <script>
@@ -57,6 +35,7 @@ import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
+import bpModalForm from './bp-modal-form.vue'
 export default {
     created() {
         let curLang = window.localStorage.getItem('lang')
@@ -65,16 +44,19 @@ export default {
     },
     mounted() {
         const that = this
+        this.inverse = this.inversebase
         window.onscroll = () => {
             let top = document.scrollingElement.scrollTop; //触发滚动条
             if (top == 0) {
                 //回到页面顶部
-                this.bgWhite = false;
-                this.borderNone = false
+                that.borderNone = false;
+                if(that.inversebase) {
+                    that.inverse = true;
+                }
             } else {
                 //不在页面顶部
-                this.bgWhite = true;
-                this.borderNone = true
+                that.borderNone = true;
+                that.inverse = false;
             }
         }
 
@@ -86,69 +68,186 @@ export default {
         bpSelect,
         bpButton,
         bpSelectVue,
-        bpOptionVue
+        bpOptionVue,
+        bpModalForm
     },
     props: {
-        inverse: {
-            //是否背景透明
+        inversebase: {
+            type: Boolean,
+            default: false
+        },
+        isLogin: {
             type: Boolean,
             default: false
         }
     },
-    data: function () {
+    data() {
         return {
             language: '中文',
-            bgWhite: false,
             borderNone: false,
+            contactForm: false,
+            inverse: false,
             imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
-            choosed_value: "产品与服务",
-            choosed_value_en: "PRODUCTS",
-            options_data: [
-                {
-                    text: "MAX",
-                    spanText: "全息市场监测利器",
-                    click_event: function() {
-                        console.log("MAX")
+            imgSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_light.svg",
+            selectSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg",
+            selectSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop_light.svg",
+            translation_basedata: {
+                cn: {
+                    MAX: {
+                        max: "Max"
+                    },
+                    consulting: {
+                        consult: "循证咨询"
+                    },
+                    choosed_value: "产品与服务",
+                    aboutUs: "关于我们",
+                    contactUs: "联系我们",
+                    login: "登录",
+                    general: "法伯数据平台",
+                    logout: "退出登录",
+                    options_data: [
+                        {
+                            text: "MAX",
+                            spanText: "全息市场监测利器",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'max')
+                            }
+                        },
+                        {
+                            text: "真实数据研究",
+                            spanText: "来自患者信息的多视角深度挖掘",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'rw')
+                            }
+                        },
+                        {
+                            text: "循证咨询",
+                            spanText: "多层面精准预测，营销资源配置与优化",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'consulting')
+                            }
+                        }
+                    ],
+                    modalForm: {
+                        download: "下载报告",
+                        contactUs: "联系我们",
+                        name: "如何称呼您",
+                        nameBlank: "请填写您的姓名",
+                        company: "您所在的团队",
+                        companyBlank: "请填写您的团队名称",
+                        department: "您所在的部门",
+                        position: "您的职位",
+                        email: "您的工作邮箱",
+                        emailBlank: "请填写您的邮箱",
+                        emailWrong: "邮箱格式有误，请填写正确的邮箱地址",
+                        intention: "您感兴趣的内容",
+                        dataService: "数据研究服务",
+                        submit: "提交",
+                        'submit&download': "提交并下载",
+                        submitSuccess: "提交成功",
+                        submitFeedback: "已收到您的信息，我们将尽快与您联系",
+                        ok: "好的"
                     }
                 },
-                {
-                    text: "真实数据研究",
-                    spanText: "来自患者信息的多视角深度挖掘",
-                    click_event: function() {
-                        console.log("真实数据研究")
-                    }
-                },
-                {
-                    text: "循证咨询",
-                    spanText: "多层面精准预测，营销资源配置与优化",
-                    click_event: function() {
-                        console.log("循证咨询")
+                en: {
+                    MAX: {
+                        max: "MAX©"
+                    },
+                    consulting: {
+                        consult: "Evidence-based Consulting"
+                    },
+                    choosed_value: "PRODUCTS",
+                    aboutUs: "COMPANY",
+                    contactUs: "Contact Us",
+                    login: "Log in",
+                    general: "General",
+                    logout: "Logout",
+                    options_data: [
+                        {
+                            text: "MAX©",
+                            spanText: "Holographic Market Monitoring Tool",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'max')
+                            }
+                        },
+                        {
+                            text: "Real World Research",
+                            spanText: "Multi-perspective Deep Mining from Patient Information",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'rw')
+                            }
+                        },
+                        {
+                            text: "Evidence-based Consulting",
+                            spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'consulting')
+                            }
+                        }
+                    ],
+                    modalForm:{
+                        download: "Download Report",
+                        contactUs: "Contact Us",
+                        name: "Full Name",
+                        nameBlank: "Please enter your first and last name.",
+                        company: "Company",
+                        companyBlank: "Please enter your company name.",
+                        department: "Department",
+                        position: "Job Title",
+                        email: "Work Email",
+                        emailBlank: "Please enter your work email.",
+                        emailWrong: "Please enter a vaild email.",
+                        intention: "Which one is your interested part?",
+                        dataService: "Data Service",
+                        submit: "Submit",
+                        'submit&download': "Submit and Download",
+                        submitSuccess: "Submitted successfully",
+                        submitFeedback: "Information received and we will contact you as soon as possible",
+                        ok: "OK"
                     }
                 }
-            ],
-            options_data_en: [
-                {
-                    text: "MAX©",
-                    spanText: "Holographic Market Monitoring Tool",
-                    click_event: function() {
-                        console.log("MAX")
-                    }
-                },
-                {
-                    text: "Real World Research",
-                    spanText: "Multi-perspective Deep Mining from Patient Information",
-                    click_event: function() {
-                        console.log("真实数据研究")
-                    }
-                },
-                {
-                    text: "Evidence-based Consulting",
-                    spanText: "Multi-level Accurate Prediction Allocating and Optimizing Marketing Resource",
-                    click_event: function() {
-                        console.log("循证咨询")
-                    }
-                }
-            ]
+            }
+        }
+    },
+    computed: {
+        translation_data: function() {
+            if (this.language === '中文') {
+                return this.translation_basedata.cn
+            } else if (this.language === 'English') {
+                return this.translation_basedata.en
+            }
+        }
+    },
+    methods: {
+        contactUs() {
+            this.contactForm = true
+        },
+        closeModal() {
+            this.contactForm = false
+        },
+        submitClientData(value) {
+            this.$emit('submitClientData', value)
+        },
+        toAboutUs() {
+            this.$emit('linkToPage', 'about-us')
+            this.returnToTop()
+        },
+        toHome() {
+            this.$emit('linkToPage', 'home')
+        },
+        linkToPage(value) {
+            this.$emit('linkToPage', value)
+            this.returnToTop()
+        },
+        toGeneral() {
+            window.location.href = "http://general.pharbers.com"
+        },
+        logout() {
+            this.$emit('logout')
+        },
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
     }
 };
@@ -159,6 +258,17 @@ export default {
     $spacing-compact-2x: 2*2px;
     $color-neutrals-n000: #ffffff;
     $color-neutrals-n400: rgba(#091e42,0.71);
+    
+    * {
+        letter-spacing: .4px;
+        line-height: 1.6;
+        box-sizing: border-box;
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
     .borderNone {
         border-bottom: 0px !important;
     }
@@ -170,18 +280,17 @@ export default {
         font-size: 14px;
     }
     
-    .bordernavInverse {
+    .bordernav {
         border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+    }
+    .bordernavInverse {
+        border-bottom: 1px solid rgba(255,255,255,0.12);
     }
 
     .navInverse {
-        background: #666;
+        background: transparent;
         text-align: center;
         font-size: 14px;
-    }
-
-    .bgWhite {
-        background-color: #fff !important;
     }
     .fixed-nav {
         height: 80px;
@@ -253,10 +362,9 @@ export default {
                 position: absolute;
                 width: max-content !important;
                 background: #fff;
-                padding-top: 16px;
                 max-width: 300px;
                 margin: 0;
-                padding: 4px 0;
+                padding: 16px 0 4px 0;
                 border-radius: 3px;
                 box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25);
             }
@@ -299,6 +407,28 @@ export default {
             align-content: flex-start;
             align-items: stretch;
             justify-content: flex-start;
+
+            .home-user-select {
+                width: auto;
+                height: auto;
+                background: 0 0;
+
+                /deep/.bp-select-title {
+                    padding: 0;
+
+                    .svg-icon {
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+
+                /deep/.bp-option-group {
+                    position: absolute;
+                    font-size: 14px;
+                    width: 120px;
+                }
+            }
+
             .concact {
                 background: #FFDD4D!important;
                 border: none;
@@ -325,6 +455,19 @@ export default {
                 font-size: 14px;
             }
         }
+
+        .inverseColor {
+            .concact {
+                background: #FFF!important;
+            }
+            .login {
+                color: rgba(255,255,255,.9)!important;
+                border: 1px solid rgba(255,255,255,.6)!important;
+            }
+        }
+        .inverseColor .bp-text, .inverseColor .bp-select {
+            color: #fff !important;
+        }
     }
     @media screen and (max-width: 992px) and (min-width: 769px) {
         ::-webkit-scrollbar-thumb {
@@ -341,8 +484,5 @@ export default {
         .fixed-nav, .fixed-nav-inverse {
             padding: 0 40px !important;
         }
-    }
-    .fade-enter-active, .fade-leave-active {
-        transition: all 1s;
     }
 </style>
