@@ -39,14 +39,15 @@
             </div>
             <!-- report -->
             <div class="report-download-container">
-                <div class="report-download">
+                <div v-for="report in allData.reports" :key="report.id" class="report-download">
                     <bpImg 
                         :src="reportLeftDown" class="report-download-left-corner"></bpImg>
                     <bpImg 
                         :src="reportRightDown" class="report-download-right-corner"></bpImg>
                     <div class="report-download-img-container">
+                        
                         <bpImg 
-                            :src="reportDownImg" class="report-down-img"></bpImg>
+                            :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
                         <div class="report-down-img-mask"></div>
                     </div>
                     <div class="report-download-info">
@@ -55,8 +56,8 @@
                             <bpText class="ph-body-small">{{translation_data.reportBodySmall}}</bpText>
                         </div>
                         <div class="report-right-center">
-                            <bpText class="ph-H-large-title">{{translation_data.reportLargeTitle}}</bpText>
-                            <bpText class="pb-body-small-tertiary">{{translation_data.reportTertiary}}</bpText>
+                            <bpText class="ph-H-large-title">{{report.title}}</bpText>
+                            <bpText class="pb-body-small-tertiary">{{transDate(report.date)}}</bpText>
                         </div>
                         <div class="show-more-button-container">
                             <bpButton :text="translation_data.reportButton" @click="downloadReport" class="report-down-button"></bpButton>
@@ -317,6 +318,19 @@ export default {
         returnToTop() {
             document.documentElement.scrollTop = 0
             document.body.scrollTop = 0
+        },
+        transDate(param) {
+            let date = new Date(param)
+
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth()
+            
+            if (this.language === '中文') {
+                return y + "年" + (m+1) + "月" + d + "日"
+            } else {
+                return y + "-" + (m+1) + "-" + d
+            }
         }
     },
     computed: {
