@@ -29,6 +29,9 @@ export default JSONAPIAdapter.extend({
       url = url.join("/")
     }
     this.set("requestURL", url)
+    if (requestType === 'findRecord' && snapshot.include) {
+      this.set('findRecordInclude', snapshot.include)
+    }
     const curPath = curType.join("/")
     let newUrl = `/${ENV.namespace}/offweb/${curPath}`
     if (query && Object.keys(query).length) {
@@ -96,7 +99,6 @@ export default JSONAPIAdapter.extend({
         "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0"
       const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]
       const pathComponent = invokeUrl.substring(endpoint.length)
-
       const sigV4ClientConfig = {
         accessKey: config.accessKey,
         secretKey: config.secretKey,
@@ -110,7 +112,6 @@ export default JSONAPIAdapter.extend({
       const client = factory.PhSigV4AWSClientFactory.newClient(
         sigV4ClientConfig
       )
-
       // 请求login hbs的时候使用
       if (this.auth && this.oauthRequestComponentQuery) {
         // eslint-disable-next-line ember/no-side-effects
@@ -203,6 +204,12 @@ export default JSONAPIAdapter.extend({
       // queryParams: {},
       // body: {}
       // }
+      
+      if(this.get('findRecordInclude')) {
+        paramsArr.push('include')
+        params.include = this.get('findRecordInclude')
+        this.set('findRecordInclude', null)
+      }
       let req = {
         verb: "get".toUpperCase(),
         path:
@@ -215,7 +222,6 @@ export default JSONAPIAdapter.extend({
         // queryParams: queryParamsAWS,
         body: {}
       }
-
       const request = client.makeRequest(req)
       return request.headers
     }

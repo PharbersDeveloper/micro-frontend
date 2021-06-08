@@ -59,7 +59,7 @@
                             <bpText class="pb-body-small-tertiary">{{translation_data.reportTertiary}}</bpText>
                         </div>
                         <div class="show-more-button-container">
-                            <bpButton :text="translation_data.reportButton" @click="downloadReport('download-report')" class="report-down-button"></bpButton>
+                            <bpButton :text="translation_data.reportButton" @click="downloadReport" class="report-down-button"></bpButton>
                             <div class="more-reports-button" @click="toMore('report-list')">
                                 <div class="more-reports">
                                     <bpText>{{translation_data.moreReportsText}}</bpText>
@@ -311,8 +311,8 @@ export default {
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)
         },
-        downloadReport(value) {
-            this.$emit('downloadReport', value)
+        downloadReport() {
+            this.$emit('downloadReport', 'download-report')
         },
         returnToTop() {
             document.documentElement.scrollTop = 0

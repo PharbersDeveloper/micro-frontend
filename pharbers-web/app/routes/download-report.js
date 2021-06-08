@@ -7,16 +7,12 @@ export default class DownloadReportRoute extends Route {
     beforeModel() {
         this.controllerFor('application').set('inverse', false)
     }
-    model() {
-        let lang = localStorage.getItem('lang')
-        if (lang === "中文") {
-            lang = 1
-        } else {
-            lang = 0
-        }
-        const reportsData = this.store.findRecord("report", "MzsAreGknrYrBiSax9Xk")
+    model(params) {
+        console.log(params);
+        const id = params.report_id
+        const reportsList = this.store.findRecord("report", id, { include: "cover"})
         return hash({
-            data: reportsData
+            data: reportsList
         })
     }
 }
