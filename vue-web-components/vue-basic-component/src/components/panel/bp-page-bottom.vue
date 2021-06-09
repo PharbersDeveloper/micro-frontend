@@ -238,6 +238,7 @@ export default {
         },
         changeLanguage(value) {
             localStorage.setItem('lang', value)
+            window.location.reload(true)
             this.returnToTop()
         },
         toMiit() {

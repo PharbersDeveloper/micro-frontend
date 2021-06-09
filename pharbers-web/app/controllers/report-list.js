@@ -22,4 +22,9 @@ export default class ReportListController extends Controller {
     linkToPage(data) {
         this.transitionToRoute(data.detail[0])
     }
+
+    @action
+    toDownloadPage(data) {
+        this.transitionToRoute( 'download-report', data.detail[0])
+    }
 }
