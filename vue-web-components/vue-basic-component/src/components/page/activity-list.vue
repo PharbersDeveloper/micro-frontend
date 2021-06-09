@@ -12,7 +12,7 @@
             <bpText class="ph-H-Large-2-inverse"></bpText>
         </div>
         <div class="activity-list-container">
-            <bpTabs></bpTabs>
+            <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini"></bpTabs>
         </div>
     </div>
 </template>
@@ -42,50 +42,44 @@ export default {
                     home: "主页",
                     events: "活动资讯",
                     activity: "EVENTS",
-                    reviewActivities: "精彩回顾",
-                    powerOfAlgorithms: "意会，在“算法时代下的力量”",
-                    more: "了解更多",
-                    titleA: "Above Data 分享会",
-                    titleB: "2020 第一期",
-                    position: "北京市 朝阳区",
-                    time: "2020-01-09",
-                    activityA: {
-                        title: "第八届中国医药决策科学峰会",
-                        host: "主办方 中国医药市场研究协会",
-                        position: "2019-10-23 南京"
+                    tabArr: [{
+                        componentName: "伯云论坛",
+                        componentId: "bpPane"
                     },
-                    activityB: {
-                        title: "县域/广阔医药市场准入和营销专家论坛",
-                        host: "主办方 E药经理人、法伯科技",
-                        position: "2019-05-24 厦门"
+                    {
+                        componentName: "Above Data",
+                        componentId: "bpPane"
                     },
-                    moreActivity: "更多活动",
-                    register: "立即报名"
+                    {
+                        componentName: "行业活动",
+                        componentId: "bpPane"
+                    }]
                 },
                 en: {
                     home: "Home",
                     events: "Events",
                     activity: "Events",
-                    reviewActivities: "Latest from Pharbers",
-                    powerOfAlgorithms: "Power under Algorithms Era",
-                    more: "MORE",
-                    titleA: "Above Data Seminar",
-                    titleB: "2020 1st",
-                    position: "Chaoyang District, Beijing",
-                    time: "2020-01-09",
-                    activityA: {
-                        title: "The 8th China Pharmaceutical Decision Science Summit",
-                        host: "China Pharmaceutical Market Research Association",
-                        position: "2019-10-23 Nanjing"
+                    tabArr: [{
+                        componentName: "Boyun Forum",
+                        componentId: "bpPane"
                     },
-                    activityB: {
-                        title: "County / Broad Pharmaceutical Marketing Expert Forum",
-                        host: "Healthcare excutive & Pharbers",
-                        position: "2019-05-24 Xiamen"
+                    {
+                        componentName: "Above Data",
+                        componentId: "bpPane"
                     },
-                    moreActivity: "MORE",
-                    register: "Meet Us"
+                    {
+                        componentName: "Events",
+                        componentId: "bpPane"
+                    }]
                 }
+            }
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {}
             }
         }
     },

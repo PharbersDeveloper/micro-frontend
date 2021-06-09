@@ -2,69 +2,62 @@
 <div>
     <div class="fixed-tabs">
         <div class="activity-tabs">
-            <div class="activity-tab"  v-for="(item, index) in cardArr" :key="index" @click="
-            whichIndex = index;
-            componentId = item.componentId;
-            content = item.list;
+            <div class="activity-tab"  
+                v-for="(item, index) in tabArr" :key="index" @click="
+                whichIndex = index
+                componentId = item.componentId
             ">
                 <bpText :class="{ highLight: whichIndex == index }">{{ item.componentName }}</bpText>
             </div>
         </div>
     </div>
     <keep-alive>
-        <bpPane :is="componentId" :content="content"></bpPane>
+        <bpPane :is="componentId" :content="content" :responseMini="responseMini"></bpPane>
     </keep-alive>
 </div>
 </template>
 
 <script>
-import bpPane from "./bp-tabs-pane"
+import bpPane from "./bp-tabs-pane.vue"
+import bpText from "./bp-text.vue"
 export default {
     components: {
-        bpPane
+        bpPane,
+        bpText
     },
     data() {
         return {
             whichIndex: 0,
-            componentId: "bpPane",
-            content: [{
-                title: "带量采购对中国医药市场的改变",
-                subTitle: "伯云论坛 2020",
-                time: "2020-06-04  |  中国 苏州"
-            }],
-            cardArr: [
-                {
-                    componentName: "动态组件一",
-                    componentId: "bpPane",
-                    list: [{
-                        title: "带量采购对中国医药市场的改变",
-                        subTitle: "伯云论坛 2020",
-                        time: "2020-06-04  |  中国 苏州"
-                    }]
-                },
-                {
-                    componentName: "动态组件二",
-                    componentId: "bpPane",
-                    list: [{
-                        title: "222",
-                        subTitle: "伯云论坛 2020",
-                        time: "2020-06-04  |  中国 苏州"
-                    }]
-                },
-                {
-                    componentName: "动态组件三",
-                    componentId: "bpPane",
-                    list: [{
-                        title: "333",
-                        subTitle: "伯云论坛 2020",
-                        time: "2020-06-04  |  中国 苏州"
-                    },{
-                        title: "444",
-                        subTitle: "伯云论坛 2020",
-                        time: "2020-06-04  |  中国 苏州"
-                    }]
-                }
-            ]
+            componentId: "bpPane"
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        },
+        tabArr: {
+            type: Array,
+            default: function() {
+                return []
+            }
+        },
+        responseMini: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        content: function(val) {
+            if(this.whichIndex === 0) {
+                return this.allData.byhData
+            } else if (this.whichIndex === 1) {
+                return this.allData.AboveData
+            } else if (this.whichIndex === 2) {
+                return this.allData.industryData
+            }
         }
     }
 };

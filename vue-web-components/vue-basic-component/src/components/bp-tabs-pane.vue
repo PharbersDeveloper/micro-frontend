@@ -1,19 +1,35 @@
 <template>
-<div class="activity-list-container">
-    <div class="activity-in-large" v-for="item in content" :key="item.title">
-        <div class="little-space">
-            <bpText class="ph-H-Large_2">{{item.title}}</bpText>
-            <bpText class="ph-body-small">{{item.subTitle}}</bpText>
-            <bpText class="ph-body-small">{{item.time}}</bpText>
+<div>
+    <div class="activity-list-container" v-if="!responseMini">
+        <div class="activity-in-large" v-for="item in content" :key="item.activity.title">
+            <div class="little-space">
+                <bpText class="ph-H-Large_2">{{item.activity.title}}</bpText>
+                <bpText class="ph-body-small">{{item.activity.subTitle}}</bpText>
+                <bpText class="ph-body-small">{{transDate(item.activity.startDate)}} | {{item.activity.location}}</bpText>
+                <div class="main-flex-start">
+                    <bpText class="more-photo-text">查看详情</bpText>
+                    <bpImg :src="moreIcon" class="icon_go"></bpImg>
+                </div>
+            </div>
+            <div class="activity-img-container">
+                <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+item.image.get('path')" class="above-data-detail-header-img"></bpImg>
+            </div>
+        </div>
+    </div>
+     <div class="activity-list-container" v-if="responseMini">
+        <div class="activity-in-little"  v-for="item in content" :key="item.activity.title">
+            <div class="activity-img-container">
+                <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+item.image.get('path')" class="activity-img"></bpImg>
+            </div>
+            <bpText class="ph-H-Large_2">{{item.activity.title}}</bpText>
+            <bpText class="ph-body-small">{{item.activity.subTitle}}</bpText>
+            <bpText class="ph-body-small">{{transDate(item.activity.startDate)}} | {{item.activity.location}}</bpText>
             <div class="main-flex-start">
                 <bpText class="more-photo-text">查看详情</bpText>
                 <bpImg :src="moreIcon" class="icon_go"></bpImg>
             </div>
         </div>
-        <div class="activity-img-container">
-            <bpImg :src="activityImg" class="activity-img"></bpImg>
-        </div>
-    </div>
+     </div>
 </div>
 </template>
 
@@ -27,12 +43,12 @@ export default {
         content: {
             type: Array,
             default: function() {
-                return [{
-                    title: "带量采购对中国医药市场的改变",
-                    subTitle: "伯云论坛 2020",
-                    time: "2020-06-04  |  中国 苏州"
-                }]
+                return []
             }
+        },
+        responseMini: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -66,6 +82,17 @@ export default {
 
     updated() {
         this.$parent.$emit('tab-nav-update');
+    },
+
+    methods: {
+        transDate(param) {
+            let date = new Date(param)
+
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth()
+            return y + "-" + (m+1) + "-" + d
+        }
     }
 };
 </script>
@@ -74,6 +101,34 @@ export default {
     .activity-list-container {
         display: flex;
         flex-direction: column;
+        .ph-H-Large_2 {
+            width: 500px;
+            margin-bottom: 16px;
+            font-size: 24px;
+            color: #2D334D;
+        }
+        .ph-body-small {
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #747789;
+        }
+        .main-flex-start {
+            display: flex;
+            cursor: pointer!important;
+            .more-photo-text {
+                font-weight: 600;
+                font-size: 14px;
+                color: #2D334D;
+                letter-spacing: 1px;
+                line-height: 24px;
+                margin-right: 8px;
+                cursor: pointer!important;
+            }
+            .icon_go {
+                width: 24px;
+                height: 24px;
+            }
+        }
         .activity-in-large {
             border-bottom: 1px solid rgba(22,28,57,.08);
             padding-bottom: 64px;
@@ -85,34 +140,6 @@ export default {
                 margin-top: 108px;
                 display: flex;
                 flex-direction: column;
-                .ph-H-Large_2 {
-                    width: 500px;
-                    margin-bottom: 16px;
-                    font-size: 24px;
-                    color: #2D334D;
-                }
-                .ph-body-small {
-                    margin-bottom: 16px;
-                    font-size: 14px;
-                    color: #747789;
-                }
-                .main-flex-start {
-                    display: flex;
-                    cursor: pointer!important;
-                    .more-photo-text {
-                        font-weight: 600;
-                        font-size: 14px;
-                        color: #2D334D;
-                        letter-spacing: 1px;
-                        line-height: 24px;
-                        margin-right: 8px;
-                        cursor: pointer!important;
-                    }
-                    .icon_go {
-                        width: 24px;
-                        height: 24px;
-                    }
-                }
             }
             .activity-img-container {
                 width: 418px;
@@ -131,6 +158,49 @@ export default {
         .activity-in-large:nth-last-of-type(1) {
             border-bottom: none;
             padding-bottom: 0;
+        }
+        @media (max-width: 549px), (width: 549px) {
+            .activity-in-little {
+                display: flex;
+                flex-direction: column;
+                margin-top: 40px;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer!important;
+                .activity-img-container {
+                    width: 90%;
+                    height: 242px;
+                    border-radius: 2px;
+                    display: flex;
+                    .activity-img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 2px;
+                        cursor: pointer!important;
+                    }
+                }
+                .ph-H-Large_2 {
+                    width: 90%;
+                    margin-top: 24px;
+                    margin-bottom: 16px;
+                }
+                .ph-body-small {
+                    width: 90%;
+                    margin-bottom: 16px;
+                }
+                .main-flex-start {
+                    width: 90%;
+                    border-bottom: 1px solid rgba(22,28,57,.08);
+                    padding-bottom: 39px;
+                }
+            }
+            .activity-in-little:nth-last-of-type(1) {
+                .main-flex-start {
+                    border-bottom: none;
+                    padding-bottom: 0;
+                }
+            }
         }
     }
 </style>
