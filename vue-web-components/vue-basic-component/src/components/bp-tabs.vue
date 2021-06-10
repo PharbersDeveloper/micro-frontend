@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="activity-list-container">
     <div class="fixed-tabs">
         <div class="activity-tabs">
             <div class="activity-tab"  
@@ -106,5 +106,13 @@ export default {
         }
     }
 }
-    
+ @media (max-width: 549px), (width: 549px) {
+    .fixed-tabs {
+        height: 48px !important;
+        display: flex;
+        justify-content: flex-start;
+        width: 90%;
+    } 
+ }
+                  
 </style>

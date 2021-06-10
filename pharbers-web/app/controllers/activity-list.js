@@ -30,7 +30,6 @@ export default class ActivityListController extends Controller {
             AboveData: dataAll.filter(it => it.activity.activityType === "Above Data"),
             industryData: dataAll.filter(it => it.activity.activityType === "industry")
         }
-        debugger
 	}
 
     @action
