@@ -7,21 +7,87 @@
                 <span class="mr-0">/</span>
                 <span class="mr-0" @click="toActivityList">{{translation_data.activityList}}</span>
                 <span class="mr-0">/</span>
-                <span>{{translation_data.activityName}}</span>
+                <span>{{translation_data.title}}</span>
             </bpText>
+            <div class="header-img-mask">
+            </div>
+            <bpText class="ph-H-xLarge-inverse">{{translation_data.title}}</bpText>
+            <div class="above-data-detail-header-info-row">
+                <div class="above-data-detail-header-divider">
+                    <div class="date">
+                        <div class="icon_date"></div>
+                        <bpText class="ph-H-Medium-inverse">{{translation_data.startDate}}</bpText>
+                    </div>
+                    <div class="address">
+                        <div class="icon_location"></div>
+                        <bpText class="ph-H-Medium-inverse">{{translation_data.location}}</bpText>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="above-data-detail-desc">
+            <bpImg :src="lineImg" class="above-data-connect-img"></bpImg>
+            <bpText class="ph-H-Large_2">{{translation_data.contentTitle}}</bpText>
+            <bpText class="ph-body-medium">{{translation_data.contentDesc}}</bpText>
+        </div>
+        <div class="main-flex-start">
+            <bpImg class="line-img" :src="lineImg"></bpImg>
+        </div>
+        <div class="main-flex-start">
+            <bpText class="ph-H-Large_2">{{translation_data.agenda}}</bpText>
+        </div>
+        <div class="agenda-container">
+            <div class="main-center" v-for="agenda in translation_data.agendas" :key="agenda.title">
+                <bpText class="ph-body-xsmall-tertiary">
+                    {{agenda.startDate}} ~ {{agenda.endDate}}
+                </bpText>
+                <div class="main-flex-start">
+                    <div class="agenda-dot">
+                    </div>
+                </div>
+                <div class="agenda-text-box">
+                    <bpText class="ph-H-Medium">{{agenda.title}}</bpText>
+                    <bpText class="ph-body-medium">{{agenda.name}}</bpText>
+                </div>
+            </div>
+        </div>
+        <div class="main-flex-start">
+            <bpImg class="line-img" :src="lineImg"></bpImg>
+        </div>
+        <div class="main-flex-start">
+            <bpText class="ph-H-Large_2">{{translation_data.speaker}}</bpText>
+        </div>
+        <div class="speaker-img-container">
+            <div class="speaker-img-box" v-for="speaker in translation_data.participants" :key="speaker.name">
+                <bpImg class="speaker-img" :src="speaker.avatar.path"></bpImg>
+                <div class="speaker-img-info">
+                    <bpText class="ph-H-Medium">{{speaker.name}}</bpText>
+                    <bpText class="ph-body-small">{{speaker.occupation}}</bpText>
+                    <bpText class="ph-body-small">{{speaker.title}}</bpText>
+                </div>
+            </div>
+        </div>
+        <div class="main-flex-start">
+            <bpImg class="line-img" :src="lineImg"></bpImg>
+        </div>
+        <div class="gallery-text-container">
+            <bpText class="ph-H-Large_2">{{translation_data.gallery}}</bpText>
+        </div>
+        <bpPhoto></bpPhoto>
     </div>
 </template>
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",
     components: {
         bpText,
         bpImg,
-        bpButton
+        bpButton,
+        bpPhoto
     },
     data() {
         return {
@@ -31,13 +97,72 @@ export default {
             response: false,
             responseMini: false,
             headerImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
+            lineImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
             translation_basedata: {
                 cn: {
-                    
+                    home: "主页",
+                    activityList: "活动资讯",
+                    agenda: "会议议程",
+                    speaker: "嘉宾讲者",
+                    gallery: "精彩回顾",
+
+                    title: "Above Data 2020 第一期",
+                    startDate: "2020-01-09",
+                    location: "北京市 朝阳区 东外56号文创园A座 屋顶露台咖啡厅",
+                    contentTitle: "ABOVE DATA已经伴我们走过了一年的时间",
+                    contentDesc: "2019年来自辉瑞、拜耳、赛诺菲、施维雅等10余家顶级公司市场部门的同仁及多位行业专家在ABOVE DATA的活动中分享了数据应用方面的心得以及新政策下的思考。在2020年，ABOVE DATA第一期活动中，将从HIS系统、真实世界数据应用案例分析等角度，对当下大家感兴趣的真实世界数据及其应用，提供分享、沟通和交流的平台。",
+                    agendas: [
+                        {
+                            startDate: "14:00",
+                            endDate: "14:30",
+                            title: "嘉宾签到",
+                            name: "薛林桐"
+                        },
+                        {
+                            startDate: "14:00",
+                            endDate: "14:30",
+                            title: "嘉宾签到1",
+                            name: "薛林桐"
+                        }
+                    ],
+                    participants: [
+                        {
+                            avatar:{
+                                path: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png"
+                            },
+                            name: "连春玲",
+                            occupation: "法伯科技·法伯研究院院长",
+                            title: ""
+                        },
+                        {
+                            avatar:{
+                                path: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png"
+                            },
+                            name: "连春玲1",
+                            occupation: "法伯科技·法伯研究院院长",
+                            title: ""
+                        },
+                        {
+                            avatar:{
+                                path: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png"
+                            },
+                            name: "连春玲1",
+                            occupation: "法伯科技·法伯研究院院长",
+                            title: ""
+                        }
+                    ]
                 },
                 en: {
 
                 }
+            }
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {}
             }
         }
     },
@@ -118,14 +243,249 @@ export default {
     methods: {
         toHome() {
             this.$emit('linkToPage', 'home')
+        },
+        toActivityList() {
+            this.$emit('linkToPage', 'home')
         }
     }
 }
 </script>
 <style lang="scss" scoped>
-    * {
-        letter-spacing: .4px;
-        line-height: 1.6;
-        box-sizing: border-box;
+* {
+    letter-spacing: .4px;
+    line-height: 1.6;
+    box-sizing: border-box;
+}
+.bp-above-data-detail {
+    width: 100%;
+    min-width: 375px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .above-data-detail-header {
+        height: 600px;
+        width: 100%;
+        background: 0 0;
+        background-image: linear-gradient(rgba(22,28,57,.5),rgba(22,28,57,.5));
+        padding: 0 100px;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        .above-data-detail-header-img {
+            object-fit: cover;
+            height: 600px;
+            width: 100%;
+            position: absolute;
+            z-index: -2;
+            left: 0;
+        }
+        .ph-body-small-inverse {
+            opacity: .7;
+            font-size: 14px;
+            color: #FFF;
+            cursor: pointer!important;
+        }
+        .top-breadcrumb {
+            position: absolute;
+            top: 104px;
+        }
+        .mr-0 {
+            margin-right: 2px;
+        }
+        .header-img-mask {
+            height: 600px!important;
+            width: 100%!important;
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            background: rgba(22,28,57,.5)!important;
+            display: flex;
+        }
+        .ph-H-xLarge-inverse {
+            margin-bottom: 32px!important;
+            font-size: 40px;
+            color: rgba(255,255,255,.9);
+        }
+        .above-data-detail-header-info-row {
+            display: flex;
+            flex-direction: row;
+            .above-data-detail-header-divider {
+                padding-top: 38px;
+                margin-top: 40px;
+                border-top: 1px solid rgba(255,255,255,.2);
+                display: flex;
+                flex-direction: column;
+                .date {
+                    display: flex;
+                    flex-direction: row;
+                    margin-bottom: 16px;
+                    .icon_date {
+                        background: url("data:image/svg+xml,%3Csvg width='1024' height='1024' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M810.667 147.2H768V64h-85.333v83.2H341.333V64H256v83.2h-42.667c-47.36 0-84.906 37.44-84.906 83.2L128 812.8c0 45.76 37.973 83.2 85.333 83.2h597.334C857.6 896 896 858.56 896 812.8V230.4c0-45.76-38.4-83.2-85.333-83.2zm0 665.6H213.333V355.2h597.334v457.6zm-512-374.4H512v208H298.667v-208z' fill='%23FFF' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important;
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+                .address {
+                    display: flex;
+                    flex-direction: row;
+                    .icon_location {
+                        background: url("data:image/svg+xml,%3Csvg width='1024' height='1024' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M500.136 64c-94.976 0-189.952 36.224-262.4 108.736-145.024 144.896-145.024 379.84 0 524.736L500.136 960l262.4-262.528c145.088-145.024 145.088-379.968 0-524.736C690.152 100.224 595.112 64 500.136 64zm0 512c-35.328 0-67.328-14.4-90.496-37.504-23.168-23.104-37.504-55.104-37.504-90.496 0-70.72 57.28-128 128-128s128 57.28 128 128c0 35.392-14.4 67.392-37.504 90.496S535.464 576 500.136 576z' fill='%23FFF' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important;
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+                .ph-H-Medium-inverse {
+                    margin-left: 16px;
+                    font-size: 16px;
+                    color: rgba(255,255,255,.9);
+                }
+            }
+        }
     }
+    .above-data-detail-desc {
+        height: auto;
+        width: 640px;
+        background: 0 0;
+        padding: 104px 0 64px;
+        position: relative;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        .above-data-connect-img {
+            height: auto;
+            width: auto;
+            background: 0 0;
+            position: absolute;
+            top: -40px;
+            object-fit: cover;
+        }
+        .ph-H-Large_2 {
+            margin-bottom: 32px!important;
+            font-size: 24px;
+            color: #2D334D;
+            align-self: flex-start;
+            display: flex;
+        }
+        .ph-body-medium {
+            white-space: pre-line;
+            font-size: 16px;
+            color: #747789;
+            display: flex;
+        }
+    }
+    .main-flex-start {
+        display: flex;
+        height: auto;
+        width: auto;
+        background: 0 0;
+        display: flex;
+        padding: 0;
+        .line-img {
+            object-fit: cover;
+            margin-bottom: 64px!important;
+        }
+        .ph-H-Large_2 {
+            font-size: 24px;
+        }
+    }
+    .agenda-container {
+        height: auto;
+        width: 100%;
+        background: 0 0;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        .main-center {
+            display: flex;
+            flex-direction: row;
+            align-items: center!important;
+            justify-content: center;
+            .ph-body-xsmall-tertiary {
+                line-height: 104px;
+                width: 90px!important;
+                margin-right: 32px;
+                font-size: 12px;
+                color: #A2A5B0;
+            }
+            .agenda-dot {
+                height: 7px;
+                width: 7px;
+                background: #F5C924;
+                border-radius: 50%;
+                display: flex;
+            }
+            .agenda-text-box {
+                height: 104px;
+                width: 420px;
+                margin: 16px 0 16px 64px;
+                padding: 0 24px;
+                background: rgba(22,28,57,.02);
+                border-left: 1px solid #F5C924;
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+                .ph-H-Medium {
+                    font-size: 16px;
+                    color: #2D334D!important;
+                    margin-bottom: 8px;
+                    font-weight: 700;
+                }
+                .ph-body-medium {
+                    font-size: 16px;
+                    color: #747789;
+                }
+            }
+        }
+    }
+    .speaker-img-container {
+        height: auto;
+        width: 848px;
+        background: 0 0;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+        .speaker-img-box {
+            height: auto;
+            width: 349px;
+            margin-bottom: 100px;
+            background: 0 0;
+            display: flex;
+            flex-direction: row;
+            .speaker-img {
+                height: 200px;
+                width: 200px;
+                margin-right: 48px;
+                background: 0 0;
+                box-shadow: 8px 8px 0 0 #161c39, 14px 14px 12px 0 rgba(22, 28, 57,0.22);
+            }
+            .speaker-img-info {
+                height: auto;
+                background: 0 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: auto;
+                max-width: 100px;
+                .ph-H-Medium {
+                    margin-bottom: 8px;
+                    font-size: 16px;
+                    color: #2D334D!important;
+                    font-weight: 700;
+                }
+                .ph-body-small {
+                    font-size: 14px;
+                    color: #747789;
+                }
+            }
+        }
+    }
+    .gallery-text-container {
+        height: auto;   
+        width: auto;
+        background: 0 0;
+        margin: 64px 0;
+    }
+}
 </style>
