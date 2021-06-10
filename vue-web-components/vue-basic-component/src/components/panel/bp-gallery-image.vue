@@ -27,11 +27,13 @@
     <div class="bp-modal-photos" v-if="showPhoto">
         <div class="bp-modal-photos-content">
             <div @click="closeModel" class="aaa">
-                <bpImg :src="more" class="closeMorePhoto_icon_and"></bpImg>
+                <div class="photos-cross-icon">
+                    <div class="closeMorePhoto_icon_and"></div>
+                </div>
             </div>
             <div id="bp-viewport-photo" style="height:605px;width:1032px;" class="bp-viewport-photo">
-                <div @click="prev">
-                    <bpImg :src="bylt"  class="official-icon-style-left"></bpImg>
+                <div @click="previ">
+                    <bpImg :src="prev"  class="official-icon-style-left"></bpImg>
                 </div>
                 
                 <div class="photos-content">
@@ -40,7 +42,7 @@
                     </div>
                 </div>
                 <div @click="next">
-                    <bpImg :src="more" class="official-icon-style-right" ></bpImg>
+                    <bpImg :src="prev" class="official-icon-style-right" ></bpImg>
                 </div>
             </div>
             <bpText class="text-white">{{n}} / {{galleryList.length}}</bpText>
@@ -64,7 +66,8 @@ export default {
             showPhoto: false,
             n: 2,
             more: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            bylt: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_bylt_v.svg"
+            prev: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/next_icon.svg",
+            close: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/close_icon.svg"
         }
     },
     created() {
@@ -86,7 +89,7 @@ export default {
         closeModel() {
             this.showPhoto = !this.showPhoto
         },
-        prev() {
+        previ() {
             if(this.n > 0) {
                 this.n--
             } else {
@@ -284,7 +287,7 @@ export default {
             color: #FFF;
             font-size: 14px;
         }
-        .closeMorePhoto_icon_and {
+        .photos-cross-icon {
             padding: 5px;
             height: 32px;
             width: 32px;
@@ -299,7 +302,12 @@ export default {
             right: 0;
             cursor: pointer !important;
             z-index: 2;
+            .closeMorePhoto_icon_and {
+                background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FFF' fill-rule='nonzero' d='M20 .588L10.588 10 20 19.412l-.588.588L10 10.588.588 20 0 19.412 9.412 10 0 .588.588 0 10 9.411 19.412 0z'/%3E%3C/svg%3E")  no-repeat center/100% !important;
+                padding: 5px;
+            }
         }
+        
         
     }
     .bp-viewport-photo {
@@ -311,7 +319,7 @@ export default {
         background: 0 0;
         display: flex;
         .official-icon-style-left {
-            transform: rotate(90deg);
+            transform: rotate(180deg);
             height: 48px;
             width: 48px;
             border-radius: 50%;
@@ -322,7 +330,7 @@ export default {
             cursor: pointer;
         }
         .official-icon-style-right {
-            transform: rotate(270deg);
+            transform: rotate(0deg);
             height: 48px;
             width: 48px;
             border-radius: 50%;

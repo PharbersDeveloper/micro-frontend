@@ -1,6 +1,15 @@
 <template>
-    <div class="">
-       
+    <div class="bp-above-data-detail">
+        <div class="above-data-detail-header">
+            <bpImg class="above-data-detail-header-img" :src="headerImg"></bpImg>
+            <bpText class="ph-body-small-inverse top-breadcrumb">
+                <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
+                <span class="mr-0">/</span>
+                <span class="mr-0" @click="toActivityList">{{translation_data.activityList}}</span>
+                <span class="mr-0">/</span>
+                <span>{{translation_data.activityName}}</span>
+            </bpText>
+        </div>
     </div>
 </template>
 <script>
@@ -21,9 +30,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
+            headerImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
             translation_basedata: {
                 cn: {
-
+                    
                 },
                 en: {
 
