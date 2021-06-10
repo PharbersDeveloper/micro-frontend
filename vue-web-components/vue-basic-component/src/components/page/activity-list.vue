@@ -11,9 +11,7 @@
             <bpText class="ph-H-xLarge-inverse">{{translation_data.events}}</bpText>
             <bpText class="ph-H-Large-2-inverse"></bpText>
         </div>
-        <div class="activity-list-container">
-            <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini"></bpTabs>
-        </div>
+        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini"></bpTabs>
     </div>
 </template>
 <script>
@@ -230,6 +228,19 @@ export default {
             width: auto;
             background: 0 0;
             padding: 0;
+        }
+        @media (max-width: 549px), (width: 549px) {
+            .activity-list-header  {
+                padding-left: 24px !important;
+            }
+            .activity-list-container {
+                align-items: center;
+            }
+            .page-header-anton-font-a {
+                font-size: 60px !important;
+                position: absolute;
+                top: 140px;
+            }
         }
     }
 </style>
