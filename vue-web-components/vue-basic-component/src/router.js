@@ -8,6 +8,7 @@ import consulting from './components/page/consulting.vue'
 import aboutUs from './components/page/about-us.vue'
 import reportList from './components/page/report-list.vue'
 import downloadReport from './components/page/download-report.vue'
+import activityList from './components/page/activity-list.vue'
 
 Vue.use(Router)
 
@@ -49,6 +50,10 @@ export default new Router({
             path: '/report-list',
             name: 'report-list',
             component: reportList
+        },{
+            path: '/activity-list',
+            name: 'activity-list',
+            component: activityList
         },
         {
             path: '/download-report',
