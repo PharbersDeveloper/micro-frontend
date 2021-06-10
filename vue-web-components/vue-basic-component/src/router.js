@@ -59,7 +59,6 @@ export default new Router({
             path: '/download-report',
             name: 'download-report',
             component: downloadReport
->>>>>>>>> Temporary merge branch 2
         }
     ]
 })
