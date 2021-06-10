@@ -106,6 +106,8 @@
 </template>
 
 <script>
+// import bpTabs from '../components/bp-tabs.vue'
+// import bpPane from '../components/bp-tabs-pane.vue'
 import bpButton from '../components/bp-button.vue'
 import bpImg from '../components/bp-img.vue'
 import bpInput from '../components/bp-input.vue'
@@ -166,6 +168,8 @@ export default {
         bpNavTopResponse,
         bpNavTop,
         bpCard
+        // bpTabs,
+        // bpPane
     },
     methods: {
         // button
@@ -197,10 +201,14 @@ export default {
         },
         logout() {
             console.log(123);
+        },
+        handleClick(tab, event) {
+            console.log(tab, event);
         }
     },
     data: function() {
         return {
+            activeName: 'second',
             curLanguage: "中文",
             bpCarouselItemArr: [
                 "https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png",

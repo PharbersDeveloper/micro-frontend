@@ -5,7 +5,7 @@ import { hash } from 'rsvp'
 export default class ReportListRoute extends Route {
     @service store;
     beforeModel() {
-        this.controllerFor('application').set('inverse', false)
+        this.controllerFor('application').set('inverse', true)
     }
     model() {
         let lang = localStorage.getItem('lang')

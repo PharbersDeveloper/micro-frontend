@@ -13,7 +13,7 @@
         <div class="report-list-content">
             <div class="report-list-content-each" 
                 v-for="(item,index) in allData.reportsList"
-                :key="index">
+                :key="index" @click="toDownloadPage(index)">
                 <div class="report-list-content-left">
                     <div class="report-list-imgcontainer">
                         <bpImg class="report-list-img" :src="imgPath(item.cover.get('path'))"></bpImg>
@@ -161,6 +161,9 @@ export default {
     methods: {
         toHome() {
             this.$emit('linkToPage', 'home')
+        },
+        toDownloadPage(id) {
+            this.$emit('toDownloadPage', id)
         },
         imgPath(...params) {
             if ( params.length === 2 && params[1] === "cover") {
