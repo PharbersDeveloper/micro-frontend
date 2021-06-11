@@ -39,7 +39,7 @@
         <div class="agenda-container">
             <div class="main-center" v-for="agenda in translation_data.agendas" :key="agenda.title">
                 <bpText class="ph-body-xsmall-tertiary">
-                    {{agenda.startDate}} ~ {{agenda.endDate}}
+                    {{agenda.startDate}}~{{agenda.endDate}}
                 </bpText>
                 <div class="main-flex-start">
                     <div class="agenda-dot">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="main-flex-start">
-            <bpImg class="line-img" :src="lineImg"></bpImg>
+            <bpImg class="line-img line-img-speaker" :src="lineImg"></bpImg>
         </div>
         <div class="main-flex-start">
             <bpText class="ph-H-Large_2">{{translation_data.speaker}}</bpText>
@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="main-flex-start">
-            <bpImg class="line-img" :src="lineImg"></bpImg>
+            <bpImg class="line-img line-img-gallery" :src="lineImg"></bpImg>
         </div>
         <div class="gallery-text-container">
             <bpText class="ph-H-Large_2">{{translation_data.gallery}}</bpText>
@@ -383,10 +383,19 @@ export default {
         padding: 0;
         .line-img {
             object-fit: cover;
-            margin-bottom: 64px!important;
+            margin-bottom: 32px!important;
         }
         .ph-H-Large_2 {
             font-size: 24px;
+            margin-top: 32px;
+            margin-bottom: 40px;
+            color: #2D334D;
+        }
+        .line-img-speaker {
+            margin-top: 32px;
+        }
+        .line-img-gallery {
+            margin-bottom: 0px !important;
         }
     }
     .agenda-container {
@@ -403,7 +412,7 @@ export default {
             justify-content: center;
             .ph-body-xsmall-tertiary {
                 line-height: 104px;
-                width: 90px!important;
+                width: 70px!important;
                 margin-right: 32px;
                 font-size: 12px;
                 color: #A2A5B0;
@@ -486,6 +495,108 @@ export default {
         width: auto;
         background: 0 0;
         margin: 64px 0;
+    }
+
+    @media (max-width: 992px) and (min-width: 769px) {
+        .above-data-detail-header {
+            padding: 0 60px !important;
+        }
+        .above-data-detail-desc {
+            width: 100% !important;
+            padding: 100px 18% !important;
+        }
+
+        .agenda-container {
+            padding: 0 16px;
+            
+            .agenda-text-box {
+                height: auto !important;
+                padding: 24px !important;
+                margin-left: 24px !important;
+                margin-right: 0 !important;
+            }
+        }
+    }
+
+    @media (max-width: 768px) and (min-width: 550px) {
+        .above-data-detail-header {
+            padding: 0 40px !important;
+        }
+        .above-data-detail-desc {
+            width: 100% !important;
+            padding: 100px 40px !important;
+        }
+        .speaker-img-container {
+            width: 100% !important;
+            padding: 0 16px !important;
+            .speaker-img-box {
+                width: 50% !important;
+                margin-bottom: 40px !important;
+                flex-wrap: wrap;
+                align-content: center !important;
+                flex-direction: column !important;
+                .speaker-img {
+                    width: 115px !important;
+                    height: 115px !important;
+                    margin-bottom: 24px !important;
+                    margin-right: 0 !important;
+                }
+            }
+        }
+        .agenda-container {
+            padding: 0 16px;
+            
+            .agenda-text-box {
+                height: auto !important;
+                padding: 24px !important;
+                margin-left: 24px !important;
+                margin-right: 0 !important;
+            }
+
+            .agenda-time-line {
+                height: 0 !important;
+            }
+        }
+    }
+    @media (max-width: 549px), (width: 549px)  {
+        .above-data-detail-header {
+            padding: 0 24px !important;
+        }
+        .above-data-detail-desc {
+            width: 100% !important;
+            padding: 100px 24px !important;
+        }
+        .speaker-img-container {
+            width: 100% !important;
+            padding: 0 16px !important;
+            .speaker-img-box {
+                width: 50% !important;
+                margin-bottom: 40px !important;
+                flex-wrap: wrap;
+                align-content: center !important;
+                flex-direction: column !important;
+                .speaker-img {
+                    width: 115px !important;
+                    height: 115px !important;
+                    margin-bottom: 24px !important;
+                    margin-right: 0 !important;
+                }
+            }
+        }
+        .agenda-container {
+            padding: 0 16px;
+            
+            .agenda-text-box {
+                height: auto !important;
+                padding: 24px !important;
+                margin-left: 24px !important;
+                margin-right: 0 !important;
+            }
+
+            .agenda-time-line {
+                height: 0 !important;
+            }
+        }
     }
 }
 </style>

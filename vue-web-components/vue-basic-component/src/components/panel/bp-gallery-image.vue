@@ -26,10 +26,8 @@
     </div>
     <div class="bp-modal-photos" v-if="showPhoto">
         <div class="bp-modal-photos-content">
-            <div @click="closeModel" class="aaa">
-                <div class="photos-cross-icon">
-                    <div class="closeMorePhoto_icon_and"></div>
-                </div>
+            <div class="photos-cross-icon" @click="closeModel">
+                <div class="closeMorePhoto_icon_and"></div>
             </div>
             <div id="bp-viewport-photo" style="height:605px;width:1032px;" class="bp-viewport-photo">
                 <div @click="previ">
@@ -359,6 +357,69 @@ export default {
             }
         }
         
+    }
+}
+@media (max-width: 992px) and (min-width: 769px) {
+    .gallery-img-container, .gallery-img-container .gallery-img-box {
+        width: 100% !important;
+
+        .gallery-img-a,
+        .gallery-img-b,
+        .gallery-img-c,
+        .gallery-img-d,
+        .gallery-img-e,
+        .gallery-img-f {
+            margin-right: 12px !important;
+            margin-bottom: 12px !important;
+        }
+  
+        .gallery-img-a {
+            width: 38% !important;
+            height: 277px !important;
+        }
+
+        .gallery-img-b {
+            width: 56% !important;
+            height: 370px !important;
+        }
+
+        .gallery-img-c {
+            width: 84% !important;
+            height: 314px !important;
+        }
+
+        .gallery-right-top .gallery-img-d {
+            width: 64% !important;
+            height: 420px !important;
+        }
+
+        .gallery-right-top .gallery-img-e {
+            width: 44% !important;
+            height: 278px !important;
+        }
+    }
+    .bp-modal-photos .bp-modal-photos-content {
+        width: 100% !important;
+        height: 460px !important;
+
+        .photos-cross-icon {
+            top: -50px !important;
+        }
+
+        .bp-viewport-photo {
+            height: 100% !important;
+            width: 100% !important;
+
+            .photos-content {
+                height: 100% !important;
+                width: 100% !important;
+
+                .photo {
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+            }
+        }
     }
 }
 @media (max-width: 768px) and (min-width: 550px) {
