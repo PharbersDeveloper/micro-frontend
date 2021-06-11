@@ -15,7 +15,13 @@ export default class AboveDataDetailController extends Controller {
     @action
 	transferData() {
         this.allData = { 
-            activity: this.model.data
+            cover: this.model.cover,
+            data: this.model.data,
+            eventList: this.model.eventList,
+            participantList: this.model.participantList,
+            galleryShow: this.model.galleryShow,
+            galleryList: this.model.galleryList
         }
+        console.log(this.allData)
     }
 }

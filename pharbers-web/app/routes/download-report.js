@@ -8,6 +8,7 @@ export default class DownloadReportRoute extends Route {
         this.controllerFor('application').set('inverse', false)
     }
     model(params) {
+        debugger
         let lang = localStorage.getItem('lang')
         if (lang === "中文") {
             lang = 1

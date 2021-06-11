@@ -1,5 +1,9 @@
 <template>
     <div class="bp-above-data-detail">
+        eventList: {{allData.eventList}}
+        data: {{allData.data}}
+        participantList: {{allData.participantList}}
+        galleryShow: {{allData.galleryShow}}
         <div class="above-data-detail-header">
             <bpImg class="above-data-detail-header-img" :src="headerImg"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
@@ -7,28 +11,28 @@
                 <span class="mr-0">/</span>
                 <span class="mr-0" @click="toActivityList">{{translation_data.activityList}}</span>
                 <span class="mr-0">/</span>
-                <span>{{translation_data.title}}</span>
+                <span>{{allData.data[0].title}}</span>
             </bpText>
             <div class="header-img-mask">
             </div>
-            <bpText class="ph-H-xLarge-inverse">{{translation_data.title}}</bpText>
+            <bpText class="ph-H-xLarge-inverse">{{allData.data[0].title}}</bpText>
             <div class="above-data-detail-header-info-row">
                 <div class="above-data-detail-header-divider">
                     <div class="date">
                         <div class="icon_date"></div>
-                        <bpText class="ph-H-Medium-inverse">{{translation_data.startDate}}</bpText>
+                        <bpText class="ph-H-Medium-inverse">{{allData.data[0].startDate}}</bpText>
                     </div>
                     <div class="address">
                         <div class="icon_location"></div>
-                        <bpText class="ph-H-Medium-inverse">{{translation_data.location}}</bpText>
+                        <bpText class="ph-H-Medium-inverse">{{allData.data[0].location}}</bpText>
                     </div>
                 </div>
             </div>
         </div>
         <div class="above-data-detail-desc">
             <bpImg :src="lineImg" class="above-data-connect-img"></bpImg>
-            <bpText class="ph-H-Large_2">{{translation_data.contentTitle}}</bpText>
-            <bpText class="ph-body-medium">{{translation_data.contentDesc}}</bpText>
+            <bpText class="ph-H-Large_2">{{allData.data[0].contentTitle}}</bpText>
+            <bpText class="ph-body-medium">{{allData.data[0].contentDesc}}</bpText>
         </div>
         <div class="main-flex-start">
             <bpImg class="line-img" :src="lineImg"></bpImg>
@@ -37,9 +41,10 @@
             <bpText class="ph-H-Large_2">{{translation_data.agenda}}</bpText>
         </div>
         <div class="agenda-container">
-            <div class="main-center" v-for="agenda in translation_data.agendas" :key="agenda.title">
+            <div class="main-center" v-for="(agenda,index) in allData.eventList" :key="index">
+                <!-- translation_data.agendas -->
                 <bpText class="ph-body-xsmall-tertiary">
-                    {{agenda.startDate}}~{{agenda.endDate}}
+                    {{transDate(agenda.startDate)}}~{{transDate(agenda.endDate)}}
                 </bpText>
                 <div class="main-flex-start">
                     <div class="agenda-dot">
@@ -47,7 +52,7 @@
                 </div>
                 <div class="agenda-text-box">
                     <bpText class="ph-H-Medium">{{agenda.title}}</bpText>
-                    <bpText class="ph-body-medium">{{agenda.name}}</bpText>
+                    <!-- <bpText class="ph-body-medium">{{agenda.speakers.get('path')}}</bpText> -->
                 </div>
             </div>
         </div>
@@ -58,8 +63,10 @@
             <bpText class="ph-H-Large_2">{{translation_data.speaker}}</bpText>
         </div>
         <div class="speaker-img-container">
-            <div class="speaker-img-box" v-for="speaker in translation_data.participants" :key="speaker.name">
+            <div class="speaker-img-box" v-for="(speaker,index) in translation_data.participants" :key="index">
+                <!-- <bpImg class="speaker-img" :src="speaker.avatar.get(path)"></bpImg> -->
                 <bpImg class="speaker-img" :src="speaker.avatar.path"></bpImg>
+
                 <div class="speaker-img-info">
                     <bpText class="ph-H-Medium">{{speaker.name}}</bpText>
                     <bpText class="ph-body-small">{{speaker.occupation}}</bpText>
@@ -73,7 +80,7 @@
         <div class="gallery-text-container">
             <bpText class="ph-H-Large_2">{{translation_data.gallery}}</bpText>
         </div>
-        <bpPhoto></bpPhoto>
+        <bpPhoto :galleryShow="allData.galleryShow" :galleryList="allData.galleryList"></bpPhoto>
     </div>
 </template>
 <script>
@@ -162,7 +169,41 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {}
+                return {
+                    data: 
+                    [
+                        {
+                            "title": "Above Data 2020 第一期",
+                            "subTitle": "",
+                            "startDate": "2020-01-09T00:00:00.000Z",
+                            "endDate": null,
+                            "location": "北京市 朝阳区 东外56号文创园A座 屋顶露台咖啡厅",
+                            "city": "北京",
+                            "activityType": "Above Data",
+                            "contentTitle": "ABOVE DATA已经伴我们走过了一年的时间",
+                            "contentDesc": "2019年来自辉瑞、拜耳、赛诺菲、施维雅等10余家顶级公司市场部门的同仁及多位行业专家在ABOVE DATA的活动中分享了数据应用方面的心得以及新政策下的思考。在2020年，ABOVE DATA第一期活动中，将从HIS系统、真实世界数据应用案例分析等角度，对当下大家感兴趣的真实世界数据及其应用，提供分享、沟通和交流的平台。",
+                            "language": 1,
+                            "gallery": [
+                                "hAfmFr18f-PjEd6iRlSa",
+                                "tlUL2KoztDvYHzICj2Lk",
+                                "sdNF2XK96PFe6PqJFta1",
+                                "nFH05r2L5NPg0L0cGntx",
+                                "tgjUgHp5Afd210qWEuGo",
+                                "9E_HVJZkb-ipp33wOpon",
+                                "VcX1_q_hpFWGWsWkapd1",
+                                "PEJxfZ52pfLSPPTuBROg",
+                                "u2ZPA2TG5aWESp4PQBZY",
+                                "dzb2E2zwlgw2THoyHr40"
+                            ],
+                            "agendas": [
+                                "cY-ohk2RotoF410CmPwC"
+                            ],
+                            "logo": "Md1Q6SGSVOEwZ5waMePL",
+                            "logoOnTime": null,
+                            "partners": []
+                        }
+                    ]
+                }
             }
         }
     },
@@ -246,6 +287,12 @@ export default {
         },
         toActivityList() {
             this.$emit('linkToPage', 'home')
+        },
+        transDate(param) {
+            let date = new Date(param)
+            let hour = date.getUTCHours() < 10 ? "0" + date.getUTCHours() : date.getUTCHours()
+            let minute = date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()
+            return hour + ":" + minute
         }
     }
 }
