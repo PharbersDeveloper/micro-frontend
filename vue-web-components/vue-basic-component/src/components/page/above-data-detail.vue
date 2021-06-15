@@ -1,9 +1,11 @@
 <template>
     <div class="bp-above-data-detail">
-        eventList: {{allData.eventList}}
+        <!-- eventList: {{allData.eventList}}
         data: {{allData.data}}
         participantList: {{allData.participantList}}
         galleryShow: {{allData.galleryShow}}
+        galleryList: {{allData.galleryList}}
+        imageList: {{allData.imageList}} -->
         <div class="above-data-detail-header">
             <bpImg class="above-data-detail-header-img" :src="headerImg"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
@@ -63,9 +65,10 @@
             <bpText class="ph-H-Large_2">{{translation_data.speaker}}</bpText>
         </div>
         <div class="speaker-img-container">
-            <div class="speaker-img-box" v-for="(speaker,index) in translation_data.participants" :key="index">
-                <!-- <bpImg class="speaker-img" :src="speaker.avatar.get(path)"></bpImg> -->
-                <bpImg class="speaker-img" :src="speaker.avatar.path"></bpImg>
+            <div class="speaker-img-box" v-for="(speaker,index) in allData.participantList" :key="index">
+                <bpImg class="speaker-img" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+allData.imageList[index].path"></bpImg>
+                <!-- <bpImg class="speaker-img" :src="head"></bpImg> -->
+
 
                 <div class="speaker-img-info">
                     <bpText class="ph-H-Medium">{{speaker.name}}</bpText>
@@ -80,7 +83,7 @@
         <div class="gallery-text-container">
             <bpText class="ph-H-Large_2">{{translation_data.gallery}}</bpText>
         </div>
-        <bpPhoto :galleryShow="allData.galleryShow" :galleryList="allData.galleryList"></bpPhoto>
+        <bpPhoto :galleryShow="allData.galleryShow[0]" :galleryList="allData.galleryList"></bpPhoto>
     </div>
 </template>
 <script>
@@ -105,6 +108,7 @@ export default {
             responseMini: false,
             headerImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
             lineImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
+            head: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -170,8 +174,73 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    data: 
-                    [
+                    "eventList": [
+                        {
+                            "title": "嘉宾签到",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T13:30:00.000Z",
+                            "endDate": "2020-01-09T14:00:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "开场",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T14:00:00.000Z",
+                            "endDate": "2020-01-09T14:10:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "医疗大数据简介及行业应用",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T14:10:00.000Z",
+                            "endDate": "2020-01-09T14:40:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "Real World Data",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T14:40:00.000Z",
+                            "endDate": "2020-01-09T15:10:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "茶歇",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T15:10:00.000Z",
+                            "endDate": "2020-01-09T15:30:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "大数据到Insight之间的三道弯",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T15:30:00.000Z",
+                            "endDate": "2020-01-09T16:00:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "大数据应用Case分享",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T16:00:00.000Z",
+                            "endDate": "2020-01-09T16:30:00.000Z",
+                            "language": 1
+                        },
+                        {
+                            "title": "交流讨论",
+                            "subTitle": "",
+                            "description": "",
+                            "startDate": "2020-01-09T16:30:00.000Z",
+                            "endDate": "2020-01-09T16:50:00.000Z",
+                            "language": 1
+                        }
+                    ],
+                    "data": [
                         {
                             "title": "Above Data 2020 第一期",
                             "subTitle": "",
@@ -201,6 +270,142 @@ export default {
                             "logo": "Md1Q6SGSVOEwZ5waMePL",
                             "logoOnTime": null,
                             "partners": []
+                        }
+                    ],
+                    "participantList": [
+                        {
+                            "name": "连春玲",
+                            "title": "",
+                            "occupation": "法伯科技·法伯研究院院长",
+                            "language": 1,
+                            "avatar": "Dn2xhyf-otCf1sf4HPaG",
+                            "event": "1dc46xzlBmNlOpzLlZoN",
+                            "zone": null
+                        },
+                        {
+                            "name": "王威",
+                            "title": "",
+                            "occupation": "拜耳制药·数据洞察总监",
+                            "language": 1,
+                            "avatar": "pzo_JVUmUUYUYwQqcR9C",
+                            "event": "CMIPx2Mecphi6us92I48",
+                            "zone": null
+                        },
+                        {
+                            "name": "向娟",
+                            "title": "",
+                            "occupation": "医联·高级总监",
+                            "language": 1,
+                            "avatar": "1lfaRhn8LhXXz9Q18Kzp",
+                            "event": "xwYNwi8k7dyPxEUB2-bu",
+                            "zone": null
+                        },
+                        {
+                            "name": "常宇航",
+                            "title": "",
+                            "occupation": "国华网络科技·医疗事业部总监",
+                            "language": 1,
+                            "avatar": "HcqnXchiiFhwdGtJjDyR",
+                            "event": "aJSVO-rKkHS8-IaQSbEw",
+                            "zone": null
+                        },
+                        {
+                            "name": "薛林桐",
+                            "title": "",
+                            "occupation": "法伯科技·创始人",
+                            "language": 1,
+                            "avatar": "Vfa5jGc5dnlS72H72_Sn",
+                            "event": "2gsP2Ik2F6pA96U_qK31",
+                            "zone": null
+                        }
+                    ],
+                    "galleryShow": [
+                        {
+                            "f": "/public/photo_events_abovedata_2020-01-09_00006.jpg",
+                            "d": "/public/photo_events_abovedata_2020-01-09_00007.jpg",
+                            "c": "/public/photo_events_abovedata_2020-01-09_00008.jpg",
+                            "a": "/public/photo_events_abovedata_2020-01-09_00000.jpg",
+                            "e": "/public/photo_events_abovedata_2020-01-09_00004.jpg",
+                            "b": "/public/photo_events_abovedata_2020-01-09_00003.jpg"
+                        }
+                    ],
+                    "galleryList": [
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00005.jpg",
+                            "tag": "cover",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00006.jpg",
+                            "tag": "galleryshow-f",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00007.jpg",
+                            "tag": "galleryshow-d",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00008.jpg",
+                            "tag": "galleryshow-c",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00000.jpg",
+                            "tag": "galleryshow-a",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00009.jpg",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00002.jpg",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00001.jpg",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00004.jpg",
+                            "tag": "galleryshow-e",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/photo_events_abovedata_2020-01-09_00003.jpg",
+                            "tag": "galleryshow-b",
+                            "report": null
+                        }
+                    ],
+                    "imageList": [
+                        {
+                            "path": "/public/avatar_ww.png",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/avatar_xj.png",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/avatar_cyh.png",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/avatar_xlt.png",
+                            "tag": "",
+                            "report": null
+                        },
+                        {
+                            "path": "/public/avatar_cl.png",
+                            "tag": "",
+                            "report": null
                         }
                     ]
                 }

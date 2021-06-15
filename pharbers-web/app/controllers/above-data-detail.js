@@ -20,7 +20,8 @@ export default class AboveDataDetailController extends Controller {
             eventList: this.model.eventList,
             participantList: this.model.participantList,
             galleryShow: this.model.galleryShow,
-            galleryList: this.model.galleryList
+            galleryList: this.model.galleryList,
+            imageList: this.model.imageList
         }
         console.log(this.allData)
     }

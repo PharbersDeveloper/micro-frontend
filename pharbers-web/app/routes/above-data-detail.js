@@ -54,8 +54,7 @@ export default class AboveDataDetailRoute extends Route {
             const pids = ids.map( x => {
                 return "`" + `${x}` + "`"
             }).join(",")
-
-            return this.store.query("participant", {'ids[]': ids })
+            return this.store.query("participant", {'ids[]': ids})
         })
         // get images
         const imageList = participantList.then(x => {
@@ -67,7 +66,7 @@ export default class AboveDataDetailRoute extends Route {
 
         // get gallery
         const galleryList = activityList.then(x => {
-                        const idArr = x.map(activity => {
+            const idArr = x.map(activity => {
                 return activity.hasMany( "gallery" ).ids()
             })
             const ids = [...new Set(idArr.reduce((acc, val) => acc.concat(val), []))]
@@ -108,8 +107,8 @@ export default class AboveDataDetailRoute extends Route {
             agendas: zoneList,
             eventList: eventList.then(x => x.filter(it => it.title != "")),
             participantList: participantList.then(x =>  x.filter(it => it.language === lang )),
-            imageList: imageList,
-            galleryList: galleryList,
+            imageList: imageList.then(x => x.filter(it => it.path != "")),
+            galleryList: galleryList.then(x => x.filter(it => it.path != "")),
             galleryShow: galleryShow,
             index: id
         })
