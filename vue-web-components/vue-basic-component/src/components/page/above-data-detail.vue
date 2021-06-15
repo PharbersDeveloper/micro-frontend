@@ -5,7 +5,8 @@
         participantList: {{allData.participantList}}
         galleryShow: {{allData.galleryShow}}
         galleryList: {{allData.galleryList}}
-        imageList: {{allData.imageList}} -->
+        imageList: {{allData.imageList}}
+        participantListAll: {{allData.participantListAll}} -->
         <div class="above-data-detail-header">
             <bpImg class="above-data-detail-header-img" :src="headerImg"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
@@ -65,15 +66,12 @@
             <bpText class="ph-H-Large_2">{{translation_data.speaker}}</bpText>
         </div>
         <div class="speaker-img-container">
-            <div class="speaker-img-box" v-for="(speaker,index) in allData.participantList" :key="index">
-                <bpImg class="speaker-img" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+allData.imageList[index].path"></bpImg>
-                <!-- <bpImg class="speaker-img" :src="head"></bpImg> -->
-
-
+            <div class="speaker-img-box" v-for="(speaker,index) in allData.participantListAll" :key="index">
+                <bpImg class="speaker-img" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+speaker.image.path"></bpImg>
                 <div class="speaker-img-info">
-                    <bpText class="ph-H-Medium">{{speaker.name}}</bpText>
-                    <bpText class="ph-body-small">{{speaker.occupation}}</bpText>
-                    <bpText class="ph-body-small">{{speaker.title}}</bpText>
+                    <bpText class="ph-H-Medium">{{speaker.participant.name}}</bpText>
+                    <bpText class="ph-body-small">{{speaker.participant.occupation}}</bpText>
+                    <bpText class="ph-body-small">{{speaker.participant.title}}</bpText>
                 </div>
             </div>
         </div>
@@ -406,6 +404,88 @@ export default {
                             "path": "/public/avatar_cl.png",
                             "tag": "",
                             "report": null
+                        }
+                    ],
+                    "participantListAll": [
+                        {
+                            "participant": {
+                                "name": "连春玲",
+                                "title": "",
+                                "occupation": "法伯科技·法伯研究院院长",
+                                "language": 1,
+                                "avatar": "Dn2xhyf-otCf1sf4HPaG",
+                                "event": "1dc46xzlBmNlOpzLlZoN",
+                                "zone": null
+                            },
+                            "image": {
+                                "path": "/public/avatar_cl.png",
+                                "tag": "",
+                                "report": null
+                            }
+                        },
+                        {
+                            "participant": {
+                                "name": "王威",
+                                "title": "",
+                                "occupation": "拜耳制药·数据洞察总监",
+                                "language": 1,
+                                "avatar": "pzo_JVUmUUYUYwQqcR9C",
+                                "event": "CMIPx2Mecphi6us92I48",
+                                "zone": null
+                            },
+                            "image": {
+                                "path": "/public/avatar_ww.png",
+                                "tag": "",
+                                "report": null
+                            }
+                        },
+                        {
+                            "participant": {
+                                "name": "向娟",
+                                "title": "",
+                                "occupation": "医联·高级总监",
+                                "language": 1,
+                                "avatar": "1lfaRhn8LhXXz9Q18Kzp",
+                                "event": "xwYNwi8k7dyPxEUB2-bu",
+                                "zone": null
+                            },
+                            "image": {
+                                "path": "/public/avatar_xj.png",
+                                "tag": "",
+                                "report": null
+                            }
+                        },
+                        {
+                            "participant": {
+                                "name": "常宇航",
+                                "title": "",
+                                "occupation": "国华网络科技·医疗事业部总监",
+                                "language": 1,
+                                "avatar": "HcqnXchiiFhwdGtJjDyR",
+                                "event": "aJSVO-rKkHS8-IaQSbEw",
+                                "zone": null
+                            },
+                            "image": {
+                                "path": "/public/avatar_cyh.png",
+                                "tag": "",
+                                "report": null
+                            }
+                        },
+                        {
+                            "participant": {
+                                "name": "薛林桐",
+                                "title": "",
+                                "occupation": "法伯科技·创始人",
+                                "language": 1,
+                                "avatar": "Vfa5jGc5dnlS72H72_Sn",
+                                "event": "2gsP2Ik2F6pA96U_qK31",
+                                "zone": null
+                            },
+                            "image": {
+                                "path": "/public/avatar_xlt.png",
+                                "tag": "",
+                                "report": null
+                            }
                         }
                     ]
                 }

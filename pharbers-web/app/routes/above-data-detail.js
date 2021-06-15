@@ -63,7 +63,13 @@ export default class AboveDataDetailRoute extends Route {
             })
             return this.store.query("image", {'ids[]': idArr })
         })
-
+        const imageIds = participantList.then(x => {
+            const isArr = x.filter(it => it.language === lang )
+            const idArr = isArr.map(event => {
+                return event.belongsTo('avatar').id()
+            })
+            return idArr
+        })
         // get gallery
         const galleryList = activityList.then(x => {
             const idArr = x.map(activity => {
@@ -110,7 +116,8 @@ export default class AboveDataDetailRoute extends Route {
             imageList: imageList.then(x => x.filter(it => it.path != "")),
             galleryList: galleryList.then(x => x.filter(it => it.path != "")),
             galleryShow: galleryShow,
-            index: id
+            index: id,
+            imageIds:imageIds
         })
     }
 }
