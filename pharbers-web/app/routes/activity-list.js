@@ -9,7 +9,13 @@ export default class ActivityListRoute extends Route {
         this.controllerFor('application').set('inverse', true)
     }
     model() {
-        const activityList = this.store.query("activity", { 'sort': "-startDate" })
+        let lang = localStorage.getItem('lang')
+        if (lang === "中文") {
+            lang = 1
+        } else {
+            lang = 0
+        }
+        const activityList = this.store.query("activity", { 'filter[language]': lang,'sort': "-startDate" })
         const galleryList = activityList.then(x => {
             const idArr = x.map(activity => {
                 return activity.hasMany( "gallery" ).ids()
@@ -26,7 +32,7 @@ export default class ActivityListRoute extends Route {
             return this.store.query("image", {'filter[tag]': 'cover' })
         })
         const galleryIds = activityList.then(x => {
-            const isArr = x.filter(it => it.language === 1 )
+            const isArr = x.filter(it => it.language === lang )
             const idArr = isArr.map(activity => {
                 return activity.hasMany( "gallery" ).ids()
             })
@@ -35,7 +41,7 @@ export default class ActivityListRoute extends Route {
         })
         return hash({
             galleryIds: galleryIds,
-            data: activityList.then(x => x.filter( it => it.language === 1)),
+            data: activityList.then(x => x.filter( it => it.language === lang)),
             galleryList: galleryList
         })
     }

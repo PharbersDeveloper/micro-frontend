@@ -9,6 +9,7 @@ import aboutUs from './components/page/about-us.vue'
 import reportList from './components/page/report-list.vue'
 import downloadReport from './components/page/download-report.vue'
 import activityList from './components/page/activity-list.vue'
+import aboveDataDetail from './components/page/above-data-detail.vue'
 import boyunhui from './components/page/boyunhui.vue'
 
 Vue.use(Router)
@@ -60,11 +61,10 @@ export default new Router({
             path: '/download-report',
             name: 'download-report',
             component: downloadReport
-        },
-        {
-            path: '/boyunhui',
-            name: 'boyunhui',
-            component: boyunhui
+        },{
+            path: '/above-data',
+            name: 'above-data',
+            component: aboveDataDetail
         }
     ]
 })
