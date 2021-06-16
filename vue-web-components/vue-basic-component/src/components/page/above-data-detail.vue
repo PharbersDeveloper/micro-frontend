@@ -23,7 +23,7 @@
                 <div class="above-data-detail-header-divider">
                     <div class="date">
                         <div class="icon_date"></div>
-                        <bpText class="ph-H-Medium-inverse">{{allData.data[0].startDate}}</bpText>
+                        <bpText class="ph-H-Medium-inverse">{{transDate(allData.data[0].startDate, 0)}}</bpText>
                     </div>
                     <div class="address">
                         <div class="icon_location"></div>
@@ -47,7 +47,7 @@
             <div class="main-center" v-for="(agenda,index) in allData.eventListAll" :key="index">
                 <!-- translation_data.agendas -->
                 <bpText class="ph-body-xsmall-tertiary">
-                    {{transDate(agenda.eventList.startDate)}}~{{transDate(agenda.eventList.endDate)}}
+                    {{transDate(agenda.eventList.startDate, 1)}}~{{transDate(agenda.eventList.endDate, 1)}}
                 </bpText>
                 <div class="main-flex-start">
                     <div class="agenda-dot">
@@ -573,11 +573,22 @@ export default {
         toActivityList() {
             this.$emit('linkToPage', 'home')
         },
-        transDate(param) {
+        transDate(param, type) {
             let date = new Date(param)
-            let hour = date.getUTCHours() < 10 ? "0" + date.getUTCHours() : date.getUTCHours()
-            let minute = date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()
-            return hour + ":" + minute
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth() 
+
+            if(type == 1) {
+                let hour = date.getUTCHours() < 10 ? "0" + date.getUTCHours() : date.getUTCHours()
+                let minute = date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()
+                return hour + ":" + minute
+            } else if(type == 0) {
+                m = m + 1 < 10 ? "0" + (m+1) : m+1
+                d = d < 10 ? "0"+ d : d   
+                return y + "-" + m + "-" + d
+            }
+            
         }
     }
 }
@@ -827,6 +838,12 @@ export default {
         width: auto;
         background: 0 0;
         margin: 64px 0;
+        .ph-H-Large_2 {
+            font-size: 24px;
+            margin-top: 32px;
+            margin-bottom: 40px;
+            color: #2D334D;
+        }
     }
 
     @media (max-width: 992px) and (min-width: 769px) {

@@ -1,6 +1,6 @@
 <template>
 <!--页面容器-->
-<div>
+<div class="gallery-box">
     <div class="gallery-img-container">
         <div class="gallery-img-box" @click="showMorePhoto">
             <div class="gallery-left">
@@ -64,7 +64,7 @@ export default {
             showPhoto: false,
             n: 2,
             more: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            prev: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/next_icon.svg",
+            prev: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop_new.svg",
             close: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/close_icon.svg"
         }
     },
@@ -126,6 +126,10 @@ export default {
 * {
     box-sizing: border-box;
     line-height: 1.6;
+}
+.gallery-box {
+    width: 100vw;
+    height: 100vh;
 }
 .gallery-img-container {
     height: auto;
@@ -307,7 +311,7 @@ export default {
         background: 0 0;
         display: flex;
         .official-icon-style-left {
-            transform: rotate(180deg);
+            transform: rotate(90deg);
             height: 48px;
             width: 48px;
             border-radius: 50%;
@@ -318,7 +322,7 @@ export default {
             cursor: pointer;
         }
         .official-icon-style-right {
-            transform: rotate(0deg);
+            transform: rotate(270deg);
             height: 48px;
             width: 48px;
             border-radius: 50%;

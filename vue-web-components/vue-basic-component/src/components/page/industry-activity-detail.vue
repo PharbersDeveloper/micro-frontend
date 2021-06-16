@@ -61,7 +61,7 @@
             <bpImg class="line-img" :src="lineImg"></bpImg>
         </div>
         <div class="main-flex-start">
-            <bpText class="ph-H-Large_2">{{translation_data.gallery}}</bpText>
+            <bpText class="ph-H-Large_2 mb-64">{{translation_data.gallery}}</bpText>
         </div>
 
         <bpPhoto :galleryShow="allData.galleryShow[0]" :galleryList="allData.galleryList"></bpPhoto>
@@ -541,6 +541,9 @@ export default {
             }
             .line-img-gallery {
                 margin-bottom: 0px !important;
+            }
+            .mb-64 {
+                margin-bottom: 64px !important;
             }
         }
         .industry-activity-detail-speaker-container {
