@@ -62,7 +62,7 @@ export default class IndustryActivityDetailRoute extends Route {
            return this.store.query("image", {'ids[]': idArr })
         })
         const imageIds = participantList.then(x => {
-           const isArr = x.filter(it => it.language === 1 )
+           const isArr = x.filter(it => it.language === lang )
            const idArr = isArr.map(event => {
                return event.belongsTo('avatar').id()
            })
