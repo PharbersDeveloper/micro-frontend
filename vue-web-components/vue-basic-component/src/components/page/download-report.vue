@@ -5,15 +5,15 @@
         </bp-text>
 
         <div class="download-report-main">
-            <div v-if="report" class="download-report-left">
+            <div v-for="(report,index) in reports" :key="index" class="download-report-left">
                 <div class="opacity-background"></div>
                 <div class="download-report-imgcontainer">
-                    <bp-img :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+report.cover.get('path')" class="download-report-img"></bp-img>
+                    <bp-img v-if="report" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+report.cover.get('path')" class="download-report-img"></bp-img>
                     <div class="download-report-img-mask"></div>
                 </div>
-                <div class="ph-H-Medium download-report-name">{{report.title}}</div>
+                <div v-if="report" class="ph-H-Medium download-report-name">{{report.title}}</div>
                 <div class="download-report-desc">
-                    <bp-text class="ph-body-small white-pre-line">{{report.description}}</bp-text>
+                    <bp-text v-if="report" class="ph-body-small white-pre-line">{{report.description}}</bp-text>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@ export default {
         bpTextarea
     },
     props: {
-        report: Object
+        reports: Array
     },
     data() {
         return {

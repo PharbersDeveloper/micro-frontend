@@ -1,6 +1,7 @@
 <template>
     <div class="button-area">
-
+        <h1>bpPhoto</h1>
+        <bpPhoto></bpPhoto>
         <h1>bpCard</h1>
         <div style="display:flex;flex-direction:row">
             <bpCard logoImg="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" title="aaaaaaaaaaaa" data="2021-05-12" city="北京"></bpCard>
@@ -132,6 +133,7 @@ import bpPageBottom from '../components/panel/bp-page-bottom.vue'
 import bpNavTopResponse from '../components/panel/bp-nav-top-response'
 import bpNavTop from '../components/panel/bp-nav-top'
 import bpCard from '../components/panel/bp-card-activity'
+import bpPhoto from '../components/panel/bp-gallery-image'
 import Vue from 'vue'
 
 export default {
@@ -167,7 +169,8 @@ export default {
         bpPageBottom,
         bpNavTopResponse,
         bpNavTop,
-        bpCard
+        bpCard,
+        bpPhoto
         // bpTabs,
         // bpPane
     },
