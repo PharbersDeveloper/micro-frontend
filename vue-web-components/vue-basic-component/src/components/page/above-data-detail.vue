@@ -44,18 +44,18 @@
             <bpText class="ph-H-Large_2">{{translation_data.agenda}}</bpText>
         </div>
         <div class="agenda-container">
-            <div class="main-center" v-for="(agenda,index) in allData.eventList" :key="index">
+            <div class="main-center" v-for="(agenda,index) in allData.eventListAll" :key="index">
                 <!-- translation_data.agendas -->
                 <bpText class="ph-body-xsmall-tertiary">
-                    {{transDate(agenda.startDate)}}~{{transDate(agenda.endDate)}}
+                    {{transDate(agenda.eventList.startDate)}}~{{transDate(agenda.eventList.endDate)}}
                 </bpText>
                 <div class="main-flex-start">
                     <div class="agenda-dot">
                     </div>
                 </div>
                 <div class="agenda-text-box">
-                    <bpText class="ph-H-Medium">{{agenda.title}}</bpText>
-                    <!-- <bpText class="ph-body-medium">{{agenda.speakers.get('path')}}</bpText> -->
+                    <bpText class="ph-H-Medium">{{agenda.eventList.title}}</bpText>
+                    <bpText class="ph-body-medium">{{agenda.speaker}}</bpText>
                 </div>
             </div>
         </div>

@@ -10,13 +10,13 @@ export default class AboveDataDetailController extends Controller {
         window.addEventListener('setItemEvent', function(event) {
             window.location.reload(true)
         })
-    }
+    } 
 
     @action
 	transferData() {
         let image = []
         let participantListAll = []
-        let sss = []
+        let eventListAll = []
         for(let x = 0; x < this.model.imageList.length; x++){
             image[x] = this.model.imageList.filter(it => (this.model.imageIds[x].indexOf(it.id) != -1))
         }
@@ -25,18 +25,21 @@ export default class AboveDataDetailController extends Controller {
         }
         for(let x = 0; x < this.model.eventList.length; x++) {
             this.model.eventList[x].speakers.then(a => {
-                console.log(a)
+                eventListAll[x] = {
+                    eventList: this.model.eventList[x], speaker: a.firstObject ? a.firstObject.name : ''
+                }
             })
         }
         this.allData = { 
-            cover: this.model.cover,
+            // cover: this.model.cover,
             data: this.model.data,
-            eventList: this.model.eventList,
-            participantList: this.model.participantList,
+            // eventList: this.model.eventList,
+            // participantList: this.model.participantList,
             galleryShow: this.model.galleryShow,
             galleryList: this.model.galleryList,
-            imageList: this.model.imageList,
-            participantListAll: participantListAll
+            // imageList: this.model.imageList,
+            participantListAll: participantListAll,
+            eventListAll: eventListAll
         }
         console.log(this.allData)
     }
