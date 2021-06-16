@@ -23,7 +23,7 @@
                 <div class="industry-activity-detail-header-divider">
                     <div class="date">
                         <div class="icon_date"></div>
-                        <bpText class="ph-H-Medium-inverse">{{allData.data[0].startDate}}</bpText>
+                        <bpText class="ph-H-Medium-inverse">{{transDate(allData.data[0].startDate, 0)}}</bpText>
                     </div>
                     <div class="address">
                         <div class="icon_location"></div>
@@ -100,7 +100,10 @@ export default {
                     gallery: "精彩回顾"
                 },
                 en: {
-
+                    home: "Home",
+                    activityList: "Events",
+                    speaker: "Speaker",
+                    gallery: "Gallery"
                 }
             }
         }
@@ -377,13 +380,24 @@ export default {
             this.$emit('linkToPage', 'home')
         },
         toActivityList() {
-            this.$emit('linkToPage', 'home')
+            this.$emit('linkToActivity', 'activity-list')
         },
-        transDate(param) {
+        transDate(param, type) {
             let date = new Date(param)
-            let hour = date.getUTCHours() < 10 ? "0" + date.getUTCHours() : date.getUTCHours()
-            let minute = date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()
-            return hour + ":" + minute
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth() 
+
+            if(type == 1) {
+                let hour = date.getUTCHours() < 10 ? "0" + date.getUTCHours() : date.getUTCHours()
+                let minute = date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()
+                return hour + ":" + minute
+            } else if(type == 0) {
+                m = m + 1 < 10 ? "0" + (m+1) : m+1
+                d = d < 10 ? "0"+ d : d   
+                return y + "-" + m + "-" + d
+            }
+            
         }
     }
 }
@@ -444,6 +458,10 @@ export default {
                 margin-bottom: 32px!important;
                 font-size: 40px;
                 color: rgba(255,255,255,.9);
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
             }
             .ph-H-Large-2-inverse {
                 width: 771px;
@@ -623,6 +641,120 @@ export default {
                         padding-left: 16px;
                         font-size: 14px;
                         color: #747789;
+                    }
+                }
+            }
+        }
+        @media (max-width: 1200px) and (min-width: 992px) {
+            .industry-activity-detail-speaker-container {
+                width: 100% !important;
+                padding: 0 24px !important;
+
+
+                .industry-activity-detail-speaker .speaker-info-left {
+                    margin-right: 24px !important;
+                }
+                .self-cross-flex-end {
+                    align-self: flex-start;
+                }
+                .activity-speaker-content {
+                    width: 100% !important;
+                }
+            }
+        }
+        @media (max-width: 992px) and (min-width: 769px) {
+            .industry-activity-detail-header {
+                padding: 0px 60px !important;
+                height: 800px !important;
+
+                .above-data-detail-header-img, .industry-activity-detail-header-img {
+                    height: 800px !important;
+                }
+                .header-img-mask {
+                    height: 800px !important;
+                }
+                .header-desc-with {
+                    width: 100% !important;
+                }
+            }
+            .industry-activity-detail-desc {
+                width: 100% !important;
+                padding: 100px 16% !important;
+            }
+            .industry-activity-detail-speaker-container {
+                width: 100% !important;
+                padding: 0 24px !important;
+
+                .industry-activity-detail-speaker .speaker-info-left {
+                    margin-right: 24px !important;
+                }
+                .activity-speaker-content {
+                    width: 100% !important;
+                }
+            }
+        }
+        @media (max-width: 768px) and (min-width: 550px) {
+            .industry-activity-detail-header {
+                padding: 0px 40px !important;
+                height: 800px !important;
+                .above-data-detail-header-img, .industry-activity-detail-header-img {
+                    height: 800px !important;
+                }
+                .header-img-mask {
+                    height: 800px !important;
+                }
+                .header-desc-with {
+                    width: 100% !important;
+                }
+            }
+            .industry-activity-detail-desc {
+                width: 100% !important;
+                padding: 100px 40px !important;
+            }
+            .industry-activity-detail-speaker-container {
+                width: 100% !important;
+                padding: 0 24px !important;
+
+                .industry-activity-detail-speaker .speaker-info-left {
+                    margin-right: 24px !important;
+                }
+                .activity-speaker-content {
+                    width: 100% !important;
+                }
+            }
+        }
+        @media (max-width: 549px), (width: 549px) {
+            .industry-activity-detail-header {
+                padding: 0px 24px !important;
+                height: 800px !important;
+
+                .above-data-detail-header-img, .industry-activity-detail-header-img {
+                    height: 800px !important;
+                }
+                .header-img-mask {
+                    height: 800px !important;
+                }
+                .header-desc-with {
+                    width: 100% !important;
+                }
+            }
+            .industry-activity-detail-desc {
+                width: 100% !important;
+                padding: 100px 24px !important;
+            }
+            .industry-activity-detail-speaker-container {
+                width: 100% !important;
+                padding: 0 24px !important;
+
+                .industry-activity-detail-speaker {
+                    .speaker-info-left {
+                        margin-right: 24px !important;
+                    } 
+                    .activity-speaker-content {
+                        width: 100% !important;
+                    }
+                    .ph-body-small {
+                        display: none;
                     }
                 }
             }

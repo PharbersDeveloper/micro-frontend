@@ -113,56 +113,14 @@ export default {
                     activityList: "活动资讯",
                     agenda: "会议议程",
                     speaker: "嘉宾讲者",
-                    gallery: "精彩回顾",
-
-                    title: "Above Data 2020 第一期",
-                    startDate: "2020-01-09",
-                    location: "北京市 朝阳区 东外56号文创园A座 屋顶露台咖啡厅",
-                    contentTitle: "ABOVE DATA已经伴我们走过了一年的时间",
-                    contentDesc: "2019年来自辉瑞、拜耳、赛诺菲、施维雅等10余家顶级公司市场部门的同仁及多位行业专家在ABOVE DATA的活动中分享了数据应用方面的心得以及新政策下的思考。在2020年，ABOVE DATA第一期活动中，将从HIS系统、真实世界数据应用案例分析等角度，对当下大家感兴趣的真实世界数据及其应用，提供分享、沟通和交流的平台。",
-                    agendas: [
-                        {
-                            startDate: "14:00",
-                            endDate: "14:30",
-                            title: "嘉宾签到",
-                            name: "薛林桐"
-                        },
-                        {
-                            startDate: "14:00",
-                            endDate: "14:30",
-                            title: "嘉宾签到1",
-                            name: "薛林桐"
-                        }
-                    ],
-                    participants: [
-                        {
-                            avatar:{
-                                path: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png"
-                            },
-                            name: "连春玲",
-                            occupation: "法伯科技·法伯研究院院长",
-                            title: ""
-                        },
-                        {
-                            avatar:{
-                                path: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png"
-                            },
-                            name: "连春玲1",
-                            occupation: "法伯科技·法伯研究院院长",
-                            title: ""
-                        },
-                        {
-                            avatar:{
-                                path: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png"
-                            },
-                            name: "连春玲1",
-                            occupation: "法伯科技·法伯研究院院长",
-                            title: ""
-                        }
-                    ]
+                    gallery: "精彩回顾"
                 },
                 en: {
-
+                    home: "Home",
+                    activityList: "Events",
+                    agenda: "Agendas",
+                    speaker: "Speakers",
+                    gallery: "Gallery"
                 }
             }
         }
@@ -571,7 +529,7 @@ export default {
             this.$emit('linkToPage', 'home')
         },
         toActivityList() {
-            this.$emit('linkToPage', 'home')
+            this.$emit('linkToActivity', 'activity-list')
         },
         transDate(param, type) {
             let date = new Date(param)

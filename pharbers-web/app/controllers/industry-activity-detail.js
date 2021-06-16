@@ -13,6 +13,16 @@ export default class IndustryActivityDetailController extends Controller {
     }
 
     @action
+    linkToPage(data) {
+        this.transitionToRoute(data.detail[0])
+    }
+
+    @action
+    linkToActivity(data) {
+        this.transitionToRoute(data.detail[0])
+    }
+    
+    @action
 	transferData() {
         let image = []
         let eventAll = []
