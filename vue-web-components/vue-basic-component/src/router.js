@@ -67,13 +67,13 @@ export default new Router({
             name: 'above-data',
             component: aboveDataDetail
         },{
-            path: '/above-data',
-            name: 'above-data',
-            component: aboveDataDetail
-        },{
             path: '/boyunhui',
             name: 'boyunhui',
             component: boyunhui
+        },{
+            path: '/above-data',
+            name: 'above-data',
+            component: aboveDataDetail
         },{
             path: '/industry-activity-detail',
             name: 'industry-activity-detail',
