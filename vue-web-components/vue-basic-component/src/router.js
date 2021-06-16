@@ -65,6 +65,10 @@ export default new Router({
             path: '/above-data',
             name: 'above-data',
             component: aboveDataDetail
+        },{
+            path: '/boyunhui',
+            name: 'boyunhui',
+            component: boyunhui
         }
     ]
 })
