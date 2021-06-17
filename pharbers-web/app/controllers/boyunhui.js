@@ -47,9 +47,9 @@ export default class BoyunhuiController extends Controller {
             reportList: this.model.reportList,
             participants: this.model.participantList.filter(x => x.avatar.content != null),
             cooperationListA: this.model.cooperationListA,
-            cooperationListB: this.model.cooperationListB
-            // galleryShow: this.model.galleryShow,
-            // galleryList: this.model.galleryList,
+            cooperationListB: this.model.cooperationListB,
+            galleryShow: this.model.galleryShow,
+            galleryList: this.model.galleryList,
             // participantListAll: participantListAll,
             // eventListAll: eventListAll
         }
