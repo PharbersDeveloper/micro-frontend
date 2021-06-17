@@ -27,6 +27,7 @@ export default {
     },
     data() {
         return {
+            whichIndex: 0,
             componentId: "bpPane"
         }
     },
@@ -47,21 +48,29 @@ export default {
             type: Boolean,
             default: false
         },
-        whichIndex: {
+        tabIndex: {
             type: Number,
             default: 0
         }
     },
     computed: {
         content: function(val) {
-            if(this.whichIndex === 0) {
+            if(this.whichIndex == 0) {
                 return this.allData.byhData
-            } else if (this.whichIndex === 1) {
+            } else if (this.whichIndex == 1) {
                 return this.allData.AboveData
-            } else if (this.whichIndex === 2) {
+            } else if (this.whichIndex == 2) {
                 return this.allData.industryData
             }
         }
+    },
+    watch: {
+        tabIndex(val) {
+            this.whichIndex = val
+        }
+    },
+    mounted() {
+        this.whichIndex = this.tabIndex
     },
     methods: {
         linkToActivity: function(data) {

@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class ActivityListController extends Controller {
     @tracked allData = {};
+    @tracked tabIndex;
     init() {
         super.init(...arguments)
 
@@ -16,6 +17,7 @@ export default class ActivityListController extends Controller {
 	transferData() {
         let gallery = []
         let dataAll = []
+        this.tabIndex = 0
         for(let x = 0; x < this.model.galleryList.length; x++){
             gallery[x] = this.model.galleryList.filter(it => (this.model.galleryIds[x].indexOf(it.id) != -1))
         }

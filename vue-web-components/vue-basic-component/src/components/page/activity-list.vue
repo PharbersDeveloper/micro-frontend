@@ -11,7 +11,7 @@
             <bpText class="ph-H-xLarge-inverse">{{translation_data.events}}</bpText>
             <bpText class="ph-H-Large-2-inverse"></bpText>
         </div>
-        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini" @linkToActivity="linkToActivity"></bpTabs>
+        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini" @linkToActivity="linkToActivity" :tabIndex="tabIndex"></bpTabs>
     </div>
 </template>
 <script>
@@ -79,6 +79,10 @@ export default {
             default: function() {
                 return {}
             }
+        },
+        tabIndex: {
+            type: Number,
+            default: 0
         }
     },
     computed: {
