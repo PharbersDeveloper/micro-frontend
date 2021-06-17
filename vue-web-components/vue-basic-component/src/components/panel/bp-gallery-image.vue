@@ -129,7 +129,6 @@ export default {
 }
 .gallery-box {
     width: 100vw;
-    height: 100vh;
 }
 .gallery-img-container {
     height: auto;
