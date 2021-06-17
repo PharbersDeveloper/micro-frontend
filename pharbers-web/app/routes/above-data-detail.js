@@ -17,7 +17,7 @@ export default class AboveDataDetailRoute extends Route {
         }
         const id = params.activity_id
         // filter activity type
-        const activityList = this.store.query( "activity",  { 'filter[activityType]': "Above Data" ,'filter[language]': lang, "page[limit]": 2, "page[offset]": 2 * id,'sort': "-startDate"} ) 
+        const activityList = this.store.query( "activity",  { 'filter[activityType]': "Above Data" ,'filter[language]': lang, "page[limit]": 1, "page[offset]": id,'sort': "-startDate", include: "agendas"} ) 
         
         // get zones
         const zoneList = activityList.then(x => {
@@ -29,14 +29,15 @@ export default class AboveDataDetailRoute extends Route {
                 return "`" + `${x}` + "`"
             }).join(",")
 
-            return this.store.query("zone", { 'ids[]': ids })
+            return this.store.queryRecord("zone", { 'ids[]': ids })
         })
         
         // get events
         const eventList = zoneList.then(x => {
-            const eidArr = x.map(zone => {
-                return zone.hasMany( "agendas" ).ids()
-            })
+            // const eidArr = x.map(zone => {
+            //     return zone.hasMany( "agendas" ).ids()
+            // })
+            const eidArr = x.hasMany( "agendas" ).ids()
             const ids = [...new Set(eidArr.reduce((acc, val) => acc.concat(val), []))]
             const eids = ids.map( x => {
                 return "`" + `${x}` + "`"
@@ -44,7 +45,6 @@ export default class AboveDataDetailRoute extends Route {
 
             return this.store.query("event", {'ids[]': ids })
         })
-
         // get participant
         const participantList = eventList.then(x => {
             const pidArr = x.map(event => {
@@ -54,41 +54,30 @@ export default class AboveDataDetailRoute extends Route {
             const pids = ids.map( x => {
                 return "`" + `${x}` + "`"
             }).join(",")
-
-            return this.store.query("participant", {'ids[]': ids })
+            return this.store.query("participant", {'ids[]': ids})
         })
         // get images
         const imageList = participantList.then(x => {
-            // const idArr = x.map(event => {
-            //     return event.belongsTo( "avatar" ).id()
-            // })
-            // const isArr = x.filter(it => it.language === 1 )
             const idArr = x.map(event => {
                 return event.belongsTo('avatar').id()
             })
-            
-            // console.log('idArr',idArr)
-            // const ids = [...new Set(idArr.reduce((acc, val) => acc.concat(val), []))]
-            // const imageids = ids.map( x => {
-            //     return "`" + `${x}` + "`"
-            // }).join(",")
-            // console.log('ids',ids)
-
             return this.store.query("image", {'ids[]': idArr })
         })
-
+        const imageIds = participantList.then(x => {
+            const isArr = x.filter(it => it.language === lang )
+            const idArr = isArr.map(event => {
+                return event.belongsTo('avatar').id()
+            })
+            return idArr
+        })
         // get gallery
         const galleryList = activityList.then(x => {
-                        const idArr = x.map(activity => {
+            const idArr = x.map(activity => {
                 return activity.hasMany( "gallery" ).ids()
             })
             const ids = [...new Set(idArr.reduce((acc, val) => acc.concat(val), []))]
-            // const imageids = ids.map( x => {
-            //     return "`" + `${x}` + "`"
-            // }).join(",")
             return this.store.query("image", {'ids[]': ids })
         })
-
         // get gallery show,six photos
         const galleryShow = galleryList.then(x => {
             let obj = {}
@@ -121,13 +110,14 @@ export default class AboveDataDetailRoute extends Route {
         return hash({
             cover: galleryList.then(x => x.find(it => it.tag === "cover")),
             data: activityList.then(x =>  x.filter(it => it.language === lang )),
-            agenda: zoneList,
-            eventList: eventList,
+            agendas: zoneList,
+            eventList: eventList.then(x => x.filter(it => it.title != "")),
             participantList: participantList.then(x =>  x.filter(it => it.language === lang )),
-            imageList: imageList,
-            galleryList: galleryList,
+            imageList: imageList.then(x => x.filter(it => it.path != "")),
+            galleryList: galleryList.then(x => x.filter(it => it.path != "")),
             galleryShow: galleryShow,
-            index: id
+            index: id,
+            imageIds:imageIds
         })
     }
 }

@@ -34,6 +34,6 @@ export default class HomeController extends Controller {
         let curType = data.detail[0],
             id = data.detail[1]
         
-        this.transitionToRoute(curType, id)
+        this.transitionToRoute(curType, 0)
     }
 }

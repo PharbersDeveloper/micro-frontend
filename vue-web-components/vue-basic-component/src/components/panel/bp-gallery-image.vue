@@ -1,21 +1,21 @@
 <template>
 <!--页面容器-->
-<div>
+<div class="gallery-box">
     <div class="gallery-img-container">
         <div class="gallery-img-box" @click="showMorePhoto">
             <div class="gallery-left">
                 <div class="gallery-left-top">
-                    <bpImg :src="galleryShow.a" class="gallery-img-a"></bpImg>
-                    <bpImg :src="galleryShow.b" class="gallery-img-b"></bpImg>
+                    <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+galleryShow.a" class="gallery-img-a"></bpImg>
+                    <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+galleryShow.b" class="gallery-img-b"></bpImg>
                 </div>
-                <bpImg :src="galleryShow.c" class="gallery-img-c"></bpImg>
+                <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+galleryShow.c" class="gallery-img-c"></bpImg>
             </div>
             <div class="gallery-right">
                 <div class="gallery-right-top">
-                    <bpImg :src="galleryShow.d" class="gallery-img-d"></bpImg>
-                    <bpImg :src="galleryShow.e" class="gallery-img-e"></bpImg>
+                    <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+galleryShow.d" class="gallery-img-d"></bpImg>
+                    <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+galleryShow.e" class="gallery-img-e"></bpImg>
                 </div>
-                <bpImg :src="galleryShow.f" class="gallery-img-c"></bpImg>
+                <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+galleryShow.f" class="gallery-img-c"></bpImg>
             </div>
         </div>
         <div class="gallery-mask"></div>
@@ -26,10 +26,8 @@
     </div>
     <div class="bp-modal-photos" v-if="showPhoto">
         <div class="bp-modal-photos-content">
-            <div @click="closeModel" class="aaa">
-                <div class="photos-cross-icon">
-                    <div class="closeMorePhoto_icon_and"></div>
-                </div>
+            <div class="photos-cross-icon" @click="closeModel">
+                <div class="closeMorePhoto_icon_and"></div>
             </div>
             <div id="bp-viewport-photo" style="height:605px;width:1032px;" class="bp-viewport-photo">
                 <div @click="previ">
@@ -38,7 +36,7 @@
                 
                 <div class="photos-content">
                     <div class="transform-list">
-                        <bpImg v-for="(src,i) in galleryList" :key="i" :src="src" v-show="i==n" class="photo"></bpImg>
+                        <bpImg v-for="(item,i) in galleryList" :key="i" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+item.path" v-show="i==n" class="photo"></bpImg>
                     </div>
                 </div>
                 <div @click="next">
@@ -66,7 +64,7 @@ export default {
             showPhoto: false,
             n: 2,
             more: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            prev: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/next_icon.svg",
+            prev: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop_new.svg",
             close: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/close_icon.svg"
         }
     },
@@ -111,23 +109,13 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    a: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00000.jpg",
-                    b: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00003.jpg",
-                    c: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00008.jpg",
-                    d: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00007.jpg",
-                    e: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00004.jpg",
-                    f: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00006.jpg"
                 }
             }
         },
         galleryList: {
             type: Array,
             default: function() {
-                return [
-                    "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00000.jpg",
-                    "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00003.jpg",
-                    "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00008.jpg"
-                ]
+                return []
             }
         }
     }
@@ -138,6 +126,10 @@ export default {
 * {
     box-sizing: border-box;
     line-height: 1.6;
+}
+.gallery-box {
+    width: 100vw;
+    height: 100vh;
 }
 .gallery-img-container {
     height: auto;
@@ -319,7 +311,7 @@ export default {
         background: 0 0;
         display: flex;
         .official-icon-style-left {
-            transform: rotate(180deg);
+            transform: rotate(90deg);
             height: 48px;
             width: 48px;
             border-radius: 50%;
@@ -330,7 +322,7 @@ export default {
             cursor: pointer;
         }
         .official-icon-style-right {
-            transform: rotate(0deg);
+            transform: rotate(270deg);
             height: 48px;
             width: 48px;
             border-radius: 50%;
@@ -359,6 +351,69 @@ export default {
             }
         }
         
+    }
+}
+@media (max-width: 992px) and (min-width: 769px) {
+    .gallery-img-container, .gallery-img-container .gallery-img-box {
+        width: 100% !important;
+
+        .gallery-img-a,
+        .gallery-img-b,
+        .gallery-img-c,
+        .gallery-img-d,
+        .gallery-img-e,
+        .gallery-img-f {
+            margin-right: 12px !important;
+            margin-bottom: 12px !important;
+        }
+  
+        .gallery-img-a {
+            width: 38% !important;
+            height: 277px !important;
+        }
+
+        .gallery-img-b {
+            width: 56% !important;
+            height: 370px !important;
+        }
+
+        .gallery-img-c {
+            width: 84% !important;
+            height: 314px !important;
+        }
+
+        .gallery-right-top .gallery-img-d {
+            width: 64% !important;
+            height: 420px !important;
+        }
+
+        .gallery-right-top .gallery-img-e {
+            width: 44% !important;
+            height: 278px !important;
+        }
+    }
+    .bp-modal-photos .bp-modal-photos-content {
+        width: 100% !important;
+        height: 460px !important;
+
+        .photos-cross-icon {
+            top: -50px !important;
+        }
+
+        .bp-viewport-photo {
+            height: 100% !important;
+            width: 100% !important;
+
+            .photos-content {
+                height: 100% !important;
+                width: 100% !important;
+
+                .photo {
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+            }
+        }
     }
 }
 @media (max-width: 768px) and (min-width: 550px) {

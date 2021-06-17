@@ -10,6 +10,5 @@ export default class HomeRoute extends Route {
         document.body.scrollTop = 0
         // 请求数据
         // const activityList = this.store.findAll("activity")
-        // debugger
     }
 }
