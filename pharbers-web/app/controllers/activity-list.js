@@ -36,4 +36,13 @@ export default class ActivityListController extends Controller {
     linkToPage(data) {
         this.transitionToRoute(data.detail[0])
     }
+
+    @action
+    linkToActivity(data) {
+        var str = data.detail[0]
+        let index = str.lastIndexOf("/")
+        let url = str.substring(0, index)
+        let param = str.substring(index+1, str.length)
+        this.transitionToRoute(url, param)
+    }
 }

@@ -12,7 +12,7 @@
         </div>
     </div>
     <keep-alive>
-        <bpPane :is="componentId" :content="content" :responseMini="responseMini"></bpPane>
+        <bpPane :is="componentId" :content="content" :responseMini="responseMini" :tabIndex="whichIndex" @linkToActivity="linkToActivity"></bpPane>
     </keep-alive>
 </div>
 </template>
@@ -27,7 +27,6 @@ export default {
     },
     data() {
         return {
-            whichIndex: 0,
             componentId: "bpPane"
         }
     },
@@ -47,6 +46,10 @@ export default {
         responseMini: {
             type: Boolean,
             default: false
+        },
+        whichIndex: {
+            type: Number,
+            default: 0
         }
     },
     computed: {
@@ -58,6 +61,11 @@ export default {
             } else if (this.whichIndex === 2) {
                 return this.allData.industryData
             }
+        }
+    },
+    methods: {
+        linkToActivity: function(data) {
+            this.$emit('linkToActivity', data)
         }
     }
 };

@@ -11,7 +11,7 @@
             <bpText class="ph-H-xLarge-inverse">{{translation_data.events}}</bpText>
             <bpText class="ph-H-Large-2-inverse"></bpText>
         </div>
-        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini"></bpTabs>
+        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini" @linkToActivity="linkToActivity"></bpTabs>
     </div>
 </template>
 <script>
@@ -158,6 +158,9 @@ export default {
     methods: {
         toHome() {
             this.$emit('linkToPage', 'home')
+        },
+        linkToActivity(data) {
+            this.$emit('linkToActivity', data)
         }
     }
 }

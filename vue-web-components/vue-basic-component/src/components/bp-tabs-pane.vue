@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="activity-list-container" v-if="!responseMini">
-        <div class="activity-in-large" v-for="item in content" :key="item.activity.title">
+        <div class="activity-in-large" v-for="(item,index) in content" :key="index" @click="toActivity(index)">
             <div class="little-space">
                 <bpText class="ph-H-Large_2">{{item.activity.title}}</bpText>
                 <bpText class="ph-body-small">{{item.activity.subTitle}}</bpText>
@@ -49,7 +49,8 @@ export default {
         responseMini: {
             type: Boolean,
             default: false
-        }
+        },
+        tabIndex: Number
     },
     components: {
         bpText,
@@ -87,11 +88,21 @@ export default {
     methods: {
         transDate(param) {
             let date = new Date(param)
-
             let y = date.getUTCFullYear()
             let d = date.getUTCDate()
             let m = date.getUTCMonth()
             return y + "-" + (m+1) + "-" + d
+        },
+        toActivity(index) {
+            let avtivityType = ''
+            if(this.tabIndex == 0) {
+                avtivityType = 'boyunhui/' + index
+            } else if(this.tabIndex == 1) {
+                avtivityType = 'above-data-detail/' + index
+            } else if(this.tabIndex == 2) {
+                avtivityType = 'industry-activity-detail/' + index
+            }
+            this.$emit('linkToActivity', avtivityType)
         }
     }
 };
@@ -136,6 +147,7 @@ export default {
             width: 1000px;
             height: auto;
             display: flex;
+            cursor: pointer!important;
             .little-space {
                 margin-top: 108px;
                 display: flex;
