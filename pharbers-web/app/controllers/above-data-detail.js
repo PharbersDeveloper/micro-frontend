@@ -51,6 +51,5 @@ export default class AboveDataDetailController extends Controller {
             participantListAll: participantListAll,
             eventListAll: eventListAll
         }
-        console.log(this.allData)
     }
 }

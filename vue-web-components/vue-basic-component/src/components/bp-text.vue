@@ -18,7 +18,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	$color-neutrals-n800: rgba(#091e42,0.95);
 	.bp-text {
 		height: auto;
 		width: auto;
@@ -32,6 +31,5 @@ export default {
 		padding-bottom: 8;
 		background: transparent;
 		padding: 0;
-		color: $color-neutrals-n800;
 	}
 </style>

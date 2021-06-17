@@ -129,7 +129,6 @@ export default {
 }
 .gallery-box {
     width: 100vw;
-    height: 100vh;
 }
 .gallery-img-container {
     height: auto;
@@ -320,6 +319,7 @@ export default {
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            position: absolute;
         }
         .official-icon-style-right {
             transform: rotate(270deg);
@@ -331,6 +331,8 @@ export default {
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            position: absolute;
+            right: 0;
         }
         .photos-content {
             height: 468px;

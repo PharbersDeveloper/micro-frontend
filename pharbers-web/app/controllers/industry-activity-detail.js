@@ -40,6 +40,5 @@ export default class IndustryActivityDetailController extends Controller {
             galleryList: this.model.galleryList,
             imageList: this.model.imageList
         }
-        console.log(this.allData)
     }
 }
