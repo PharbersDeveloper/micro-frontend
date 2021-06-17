@@ -1,27 +1,27 @@
 <template>
     <div class="bp-boyunhui">
-        <div class="boyunhui-header">
-            <bp-img class="boyunhui-header-img" src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg"></bp-img>
+        <div v-for="(activity,index) in allData.activitys" :key="index + '1'" class="boyunhui-header">
+            <bp-img class="boyunhui-header-img" :src="imgPath(activity.gallery, 'cover')"></bp-img>
             <bp-text class="ph-body-small-inverse top-breadcrumb">
-                <span>{{translation_data.home}}</span>
+                <span @click="toHome">{{translation_data.home}}</span>
                 <span class="mr-0 ml-0">/</span>
-                <span>{{translation_data.events}}</span>
+                <span @click="toActivityList">{{translation_data.events}}</span>
                 <span class="mr-0 ml-0">/</span>
-                <!-- <span>{{allData.activities.}}</span> -->
+                <span>{{activity.title}}</span>
             </bp-text>
             <div class="header-img-mask"></div>
-            <bp-text class="ph-H-xLarge-inverse header-title">title</bp-text>
-            <bp-text class="ph-H-Large-2-inverse header-subtitle">subTitle</bp-text>
+            <bp-text class="ph-H-xLarge-inverse header-title">{{activity.title}}</bp-text>
+            <bp-text class="ph-H-Large-2-inverse header-subtitle">{{activity.subTitle}}</bp-text>
 
             <div class="activity-position-date-container">
                 <div class="activity-date">
                     <div class="icon_date"></div>
-                    <bp-text class="ph-H-Medium-inverse ml-3">startDate</bp-text>
+                    <bp-text class="ph-H-Medium-inverse ml-3">{{transDate(activity.startDate)}}</bp-text>
                 </div>
 
                 <div class="activity-position">
                     <div class="icon_location"></div>
-                    <bp-text class="ph-H-Medium-inverse ml-3">location</bp-text>
+                    <bp-text class="ph-H-Medium-inverse ml-3">{{activity.location}}</bp-text>
                 </div>
             </div>
         </div>
@@ -56,24 +56,24 @@
             </div>
         </div>
 
-        <div class="boyunhui-desc">
-            <bp-text class="ph-H-Large_2 mb-5">{{"还原真实 可见未来\n大变化伴随着新机遇，新的格局渐次形成。"}}</bp-text>
-            <bp-text class="ph-body-medium">{{"作为医保支付改革甚至是三医联动医改设计的先锋，带量采购（VBP）启动一年多来，带给医药行业的不仅仅是医保控费和药价陡降，在其持续影响下，我国国医改的方向，医保支付政策的走势，医药市场的格局和后续发展，医药产业的创新升级，医药营销的策略，以及医疗机构的在医疗服务中的角色均将发生变化。"}}</bp-text>
+        <div v-for="(activity,index) in allData.activitys" :key="index+'2'" class="boyunhui-desc">
+            <bp-text class="ph-H-Large_2 mb-5">{{activity.contentTitle}}</bp-text>
+            <bp-text class="ph-body-medium">{{activity.contentDesc}}</bp-text>
         </div>
 
         <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
         <bp-text class="ph-H-Large_2">{{translation_data.blueBook}}</bp-text>
-        <div class="active-report-container">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_paper-cover_VPB.jpg" class="report-img"></bp-img>
+        <div v-for="(report,index) in allData.reportList" :key="index+'3'" class="active-report-container">
+            <bp-img :src="imgPath(report.cover.get('path'))" class="report-img"></bp-img>
             <div class="report-img-mask"></div>
             <div class="report-text">
                 <div class="little-media-report-img">
-                    <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_paper-cover_VPB.jpg" class="report-img"></bp-img>
+                    <bp-img :src="imgPath(report.cover.get('path'))" class="report-img"></bp-img>
                     <div class="report-img-mask-2"></div>
                 </div>
                 <div class="book-center">
-                    <bp-text class="report-name ph-H-Medium">《带量采购对中国医药市场格局的影响》</bp-text>
-                    <bp-text class="report-time ph-body-xsmall">{{translation_data.date}} 2020-06-05</bp-text>
+                    <bp-text class="report-name ph-H-Medium">{{report.title}}</bp-text>
+                    <bp-text class="report-time ph-body-xsmall">{{translation_data.date}} {{transDate(report.date)}} </bp-text>
                     <bp-button @click="downloadReport" class="report-download-button" type='report-download-2' :text="translation_data.downloadReport"></bp-button>
                 </div>
             </div>
@@ -96,14 +96,14 @@
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
-                                <div v-for="(agenda,i) in agendas.agendas" :key="i" class="form-one-line">
-                                    <bp-text class="agenda-time agenda-time-marginR">{{"00"}}-{{"00"}}</bp-text>
+                                <!-- <div v-for="(agenda,index) in agendas.agendas" :key="index" class="form-one-line">
+                                    <bp-text class="agenda-time agenda-time-marginR">{{transDateHour(agenda.startDate)}}-{{transDateHour(agenda.endDate)}}</bp-text>
                                     <div class="different-style">
-                                        <bp-text class="agenda-title">{{"agenda.title"}}</bp-text>
-                                        <bp-text class="agenda-speaker">{{"name"}}</bp-text>
-                                        <bp-text class="agenda-desc">{{"occupation"}}</bp-text>
+                                        <bp-text class="agenda-title">{{agenda.title}}</bp-text>
+                                        <bp-text class="agenda-speaker">{{agenda.speakers[0].name}}</bp-text>
+                                        <bp-text class="agenda-desc">{{agenda.speakers[0].occupation}}</bp-text>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </template>
 <!--                         
@@ -120,10 +120,10 @@
         <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
-            <div v-for="(speaker,index) in participants" :key="index" class="speaker-img-newbox">
+            <div v-for="(speaker,index) in allData.participants" :key="index" class="speaker-img-newbox">
                 <div class="same-width">
                     <div class="speaker-img-black"></div>
-                    <!-- <bp-img :src="speaker.avatar.path" class="speaker-img"></bp-img> -->
+                    <bp-img :src="imgPath(speaker.avatar.get('path'))" class="speaker-img"></bp-img>
                     <bp-text class="ph-H-Medium mb-2">{{speaker.name}}</bp-text>
                     <bp-text class="ph-body-small">{{speaker.occupation}}</bp-text>
                     <bp-text class="ph-body-small">{{speaker.title}}</bp-text>
@@ -136,103 +136,45 @@
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
             <bp-text class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
             <div class="guidanceUnit-img-container">
-                <bp-img v-for="(partner, index) in cooperationListA" :key="index" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/'+partner.logo.path" class="cooperator-img"></bp-img>
+                <bp-img v-for="(partner, index) in allData.cooperationListA" :key="index" :src="imgPath(partner.logo.get('path'))" class="cooperator-img"></bp-img>
             </div>
             <bp-text class="ph-body-medium mt-7">{{translation_data.sponsor}}</bp-text>
             <div class="guidanceUnit-img-container">
-                <bp-img v-for="(partner, index) in cooperationListB" :key="index" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/'+partner.logo.path" class="cooperator-img"></bp-img>
+                <bp-img v-for="(partner, index) in allData.cooperationListB" :key="index" :src="imgPath(partner.logo.get('path'))" class="cooperator-img"></bp-img>
             </div>
         </div>
 
         <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+        <bp-text class="ph-H-Large_2">{{translation_data.gallery}}</bp-text>
+        <bpPhoto :galleryShow="allData.galleryShow[0]" :galleryList="allData.galleryList" class="mt-7"></bpPhoto>
     </div>
 </template>
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",
     components: {
         bpText,
         bpImg,
-        bpButton
+        bpButton,
+        bpPhoto
     },
     props: {
-        allData: Object
+        allData: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        }
     },
     data() {
         return {
             language: '中文',
             curTab: 0,
             dateTab: 0,
-            zone: [
-                {
-                    title: "医药•势",
-                    agendas: [
-                        {
-                            startDate: '',
-                            endDate: ''                            
-                        },
-                        {
-                            startDate: '',
-                            endDate: ''                            
-                        }
-                    ]
-                },
-                {
-                    title: "VBP•策",
-                    agendas: [
-                        {
-                            startDate: '',
-                            endDate: ''                            
-                        },
-                        {
-                            startDate: '',
-                            endDate: ''                            
-                        }
-                    ]
-                },
-                {
-                    title: "伯云•变",
-                    agendas: [
-                        {
-                            startDate: '',
-                            endDate: ''                            
-                        },
-                        {
-                            startDate: '',
-                            endDate: ''                            
-                        }
-                    ]
-                }
-            ],
-            participants: [
-                {
-
-                }, 
-                {
-
-                }, 
-                {
-
-                },
-                {
-
-                },
-                {
-
-                }, 
-                {
-
-                }, 
-                {
-
-                },
-                {
-
-                }
-            ],
             cooperationListA: [],
             cooperationListB: [],
             activityDays: ['2020-06-04', '2020-06-05'],
@@ -283,6 +225,19 @@ export default {
             } else if (this.language === 'English') {
                 return this.translation_basedata.en
             }
+        },
+        zone: function(){ 
+            if(this.allData.activitys) {
+                let x = this.allData.activitys[0].agendas.filter(x => {
+                    if(this.dateTab){
+                        return x.subTitle === "2020-06-05"
+                    } else{
+                        return x.subTitle === "2020-06-04"
+                    }
+                })
+
+                return x
+            }
         }
     },
     created() {
@@ -314,12 +269,36 @@ export default {
         toHome() {
             this.$emit('linkToPage', 'home')
         },
-        transDate(param) {
+        toActivityList() {
+            this.$emit('linkToActivity', 'activity-list')
+        },
+        transDateHour(param) {
             let date = new Date(param)
 
             let hour = date.getUTCHours() < 10 ? "0" + date.getUTCHours() : date.getUTCHours()
             let minute = date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()
             return hour + ":" + minute
+        },
+        transDate(param) {
+            let date = new Date(param)
+
+            let y = date.getUTCFullYear()
+            let d = date.getUTCDate()
+            let m = date.getUTCMonth() 
+
+            m = m + 1 < 10 ? "0" + (m+1) : m+1
+            d = d < 10 ? "0"+ d : d   
+            return y + "-" + m + "-" + d
+        },
+        imgPath(...params) {
+            if ( params.length === 2 && params[1] === "cover") {
+                const arr = params[0]
+                const cover = arr.find(it => it.tag === "cover")
+                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+            } else if (params[0]) {
+                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                return ipath;
+            } 
         },
         curTabSelect(index) {
             switch(index){
@@ -853,11 +832,18 @@ export default {
 
                 .cooperator-img {
                     max-height: 58px;
-                    width: 300px;
                     margin-right: 81px;
                     object-fit: contain;
+
+                    &:last-of-type {
+                        margin-right: 0;
+                    }
                 }
             }
+        }
+
+        #position-gallery {
+            margin: 40px 0 64px;
         }
     }
 
