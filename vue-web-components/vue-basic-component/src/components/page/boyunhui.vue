@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div id="position-introduction"></div>
+        <div id="position-introduction" ref="position-introduction"></div>
 
         <div class="boyunhui-tab">
             <div class="activity-tabs">
@@ -61,7 +61,10 @@
             <bp-text class="ph-body-medium">{{activity.contentDesc}}</bp-text>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+        <div ref="position-bluebook">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+        </div>
+
         <bp-text class="ph-H-Large_2">{{translation_data.blueBook}}</bp-text>
         <div v-for="(report,index) in allData.reportList" :key="index+'3'" class="active-report-container">
             <bp-img :src="imgPath(report.cover.get('path'))" class="report-img img-media-large"></bp-img>
@@ -79,7 +82,9 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+        <div ref="position-meeting">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+        </div>
         <bp-text class="ph-H-Large_2">{{translation_data.agenda}}</bp-text>
         <div class="agenda-containers">
             <div class="date-tabs">
@@ -117,7 +122,9 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+        <div ref="position-speaker">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+        </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
             <div v-for="(speaker,index) in allData.participants" :key="index" class="speaker-img-newbox">
@@ -131,7 +138,9 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+        <div ref="position-cooperation">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+        </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
             <bp-text class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
@@ -144,7 +153,10 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+        <div ref="position-gallery">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+        </div>
+
         <bp-text class="ph-H-Large_2">{{translation_data.gallery}}</bp-text>
         <bpPhoto :galleryShow="allData.galleryShow[0]" :galleryList="allData.galleryList" class="mt-7"></bpPhoto>
     </div>
@@ -316,27 +328,27 @@ export default {
             switch(index){
             case 0:
                 this.curTab = 0
-                window.location.hash = "#position-introduction"
+                this.$refs['position-introduction'].scrollIntoView()
                 break;
             case 1:
                 this.curTab = 1
-                window.location.hash = "#position-bluebook"
+                this.$refs['position-bluebook'].scrollIntoView()
                 break;
             case 2:
                 this.curTab = 2
-                window.location.hash = "#position-meeting"
+                this.$refs['position-meeting'].scrollIntoView()
                 break;    
             case 3:
                 this.curTab = 3
-                window.location.hash = "#position-speaker"
+                this.$refs['position-speaker'].scrollIntoView()
                 break;
             case 4:
                 this.curTab = 4
-                window.location.hash = "#position-cooperation"
+                this.$refs['position-cooperation'].scrollIntoView()
                 break;
             case 5:
                 this.curTab = 5
-                window.location.hash = "#position-gallery"
+                this.$refs['position-gallery'].scrollIntoView()
                 break;
             }
         },
@@ -351,11 +363,6 @@ export default {
         letter-spacing: .4px;
         line-height: 1.6;
         box-sizing: border-box;
-        &::-webkit-scrollbar { 
-            width: 0 !important;
-            display: none;
-        }
-        -ms-overflow-style: none;
     }
 
     .mr-0 {
@@ -436,6 +443,12 @@ export default {
         display:flex;
         flex-direction:column;
         align-items:center;
+
+        &::-webkit-scrollbar { 
+            width: 0 !important;
+            display: none;
+        }
+        -ms-overflow-style: none;
 
         .boyunhui-header {
             height: 600px;
