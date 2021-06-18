@@ -319,7 +319,7 @@ export default {
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            position: absolute;
+            // position: absolute;
         }
         .official-icon-style-right {
             transform: rotate(270deg);
@@ -331,7 +331,7 @@ export default {
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            position: absolute;
+            // position: absolute;
             right: 0;
         }
         .photos-content {
@@ -548,6 +548,12 @@ export default {
                     height: 100% !important;
                     // margin: 0 10px !important;
                 }
+            }
+            .official-icon-style-left {
+                position: absolute;
+            }
+            .official-icon-style-right {
+                position: absolute;
             }
         }
     }
