@@ -5,7 +5,7 @@ import { hash } from 'rsvp';
 export default class BoyunhuiRoute extends Route {
     @service store;
 
-    model(params) {
+    async model(params) {
         let lang = localStorage.getItem('lang')
         if (lang === "中文") {
             lang = 1
@@ -29,10 +29,7 @@ export default class BoyunhuiRoute extends Route {
             const eidArr = x.map(zone => {
                 return zone.hasMany( "agendas" ).ids()
             })
-            const ids = [...new Set(eidArr.reduce((acc, val) => acc.concat(val), []))]
-            const eids = ids.map( x => {
-                return "`" + `${x}` + "`"
-            }).join(",")            
+            const ids = [...new Set(eidArr.reduce((acc, val) => acc.concat(val), []))]      
 
             return this.store.query("event", {'ids[]': ids})
         })
@@ -51,12 +48,19 @@ export default class BoyunhuiRoute extends Route {
         })
 
         //get days
-        const activityDays = zoneList.then(x => {
+        const activityDays = await zoneList.then(x => {
             let days = x.map(it => {
                 return it.subTitle
             })
             return  [...new Set(days.reduce((acc, val) => acc.concat(val), []))]
         })
+
+        let allZone = []
+
+        activityDays.forEach(async function(day,i) {
+            allZone[i] = await zoneList.then(x => x.filter(it => it.subTitle === day))
+        })
+
         // // get images
         const imageList = participantList.then(x => {
             const idArr = x.map(event => {
@@ -139,20 +143,22 @@ export default class BoyunhuiRoute extends Route {
             return this.store.query("image", { 'ids[]': ids })
             
         })
-
         return hash({
             activitys: activityList.then(x =>  x.filter(it => it.language === lang )),
             reportList: reportList.then(x => x.filter(it => it.language === lang)),
-            imageList: imageList,
-            eventList: eventList.then(x =>  x.filter(it => it.language === 1 )),
-            eventListEN: eventList.then(x =>  x.filter(it => it.language === 0 )),
-            participantList: participantList.then(x =>  x.filter(it => it.language === lang)),
             activityDays: activityDays,
             cooperationListA: cooperationList.then(x => x.filter(it => it.companyType === "指导单位" && it.language === 1)),
             cooperationListB: cooperationList.then(x => x.filter(it => it.companyType === "主办单位" && it.language === 1)),
-            cooperationLogoList: cooperationLogoList,
             galleryList: galleryList.then(x => x.filter(it => it.path != "")),
             galleryShow: galleryShow,
+            zoneList: zoneList,
+            allZone: allZone,
+
+
+            imageList: imageList,
+            eventList: eventList.then(x =>  x.filter(it => it.language === lang )),
+            participantList: participantList.then(x =>  x.filter(it => it.language === lang)),
+            cooperationLogoList: cooperationLogoList,
             index: id
         })
     }
