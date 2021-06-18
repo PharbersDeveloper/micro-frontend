@@ -24,23 +24,12 @@ export default class BoyunhuiController extends Controller {
 
     @action
 	transferData() {
-        let image = []
-        let participantListAll = []
-        let eventListAll = []
-        
-        // for(let x = 0; x < this.model.imageList.length; x++){
-        //     image[x] = this.model.imageList.filter(it => (this.model.imageIds[x].indexOf(it.id) != -1))
-        // }
-        // for(let i=0; i < this.model.participantList.length; i++){
-        //     participantListAll[i] = {participant: this.model.participantList[i], image: image[i][0]}
-        // }
-        // for(let x = 0; x < this.model.eventList.length; x++) {
-        //     this.model.eventList[x].speakers.then(a => {
-        //         eventListAll[x] = {
-        //             eventList: this.model.eventList[x], speaker: a.firstObject ? a.firstObject.name : ''
-        //         }
-        //     })
-        // }
+        let activityDays = this.model.activityDays
+
+        // activityDays.forEach((day,i) => {
+        //     allZone[i] = zoneList.then(x => x.filter(it => it.subTitle === day))
+        // })
+        console.log(this.model.eventList);
 
         this.allData = { 
             activitys: this.model.activitys,
@@ -48,8 +37,10 @@ export default class BoyunhuiController extends Controller {
             participants: this.model.participantList.filter(x => x.avatar.content != null),
             cooperationListA: this.model.cooperationListA,
             cooperationListB: this.model.cooperationListB,
+            activityDays: activityDays,
             galleryShow: this.model.galleryShow,
             galleryList: this.model.galleryList,
+            allZone: this.model.allZone
             // participantListAll: participantListAll,
             // eventListAll: eventListAll
         }
