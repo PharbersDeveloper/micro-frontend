@@ -112,10 +112,10 @@ export default class IndustryActivityDetailRoute extends Route {
        })
         return hash({
             imageIds:imageIds,
-            data: activityList.then(x =>  x.filter(it => it.language === 1 )),
+            data: activityList.then(x =>  x.filter(it => it.language === lang)),
             agenda: zoneList,
-            eventList: eventList.then(x =>  x.filter(it => it.language === 1 )),
-            participantList: participantList.then(x =>  x.filter(it => it.language === 1 )),
+            eventList: eventList.then(x =>  x.filter(it => it.language === lang )),
+            participantList: participantList.then(x =>  x.filter(it => it.language === lang )),
             imageList:imageList.then(x => x.filter(it => it.path != "")),
             galleryList: galleryList.then(x => x.filter(it => it.path != "")),
             galleryShow: galleryShow,

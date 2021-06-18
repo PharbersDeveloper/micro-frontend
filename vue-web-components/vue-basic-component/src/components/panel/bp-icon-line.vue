@@ -6,7 +6,7 @@
         <div class="case-icon-line">
             <bpImg class="case-icon" v-for="item in imgArr2" :key="item" :src="item"></bpImg>
         </div>
-        <div class="case-icon-line case-icon-line-three">
+        <div class="case-icon-line">
             <bpImg class="case-icon" v-for="item in imgArr3" :key="item" :src="item"></bpImg>
         </div>
         <div class="case-icon-line case-icon-line-three">
@@ -36,24 +36,24 @@ export default {
             imgArr2: [
                 "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_bayer_04.png",
                 "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_gilead_05.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_bristolmyerssquibb_06.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_amgen_07.png"
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_Jessen_08.png",
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/servier_07.png"
             ],
             imgArr3: [
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_Jessen_08.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_servier_09.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_novo-nordisk_10.png"
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_novo-nordisk_10.png",
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_mylan_11.png",
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/astellas_10.png",
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_merck_13.png"
             ],
             imgArr4: [
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_mylan_11.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_astellas_12.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_merck_13.png"
-
-            ],
-            imgArr5: [
                 "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_msd_14.png",
                 "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_lilly_15.png",
-                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/logo_ucb_16.png"
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/Daiichi-Sankyo_14.png"
+            ],
+            imgArr5: [
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/Takeda_15.png",
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/Salubris_16.png",
+                "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/Lmdbeck_17.png"
             ]
         }
     }
