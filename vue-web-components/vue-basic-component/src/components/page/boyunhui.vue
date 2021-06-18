@@ -96,13 +96,13 @@
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
-                                <div v-for="(agenda,index) in agendas.agendas" :key="index" class="form-one-line">
-                                    <!-- <bp-text class="agenda-time agenda-time-marginR">{{transDateHour(agenda.startDate)}}-{{transDateHour(agenda.endDate)}}</bp-text>
+                                <div v-for="(agenda,index) in agendas.events" :key="index" class="form-one-line">
+                                    <bp-text class="agenda-time agenda-time-marginR">{{transDateHour(agenda.startDate)}}-{{transDateHour(agenda.endDate)}}</bp-text>
                                     <div class="different-style">
                                         <bp-text class="agenda-title">{{agenda.title}}</bp-text>
-                                        <bp-text class="agenda-speaker">{{agenda.speakers[0].name}}</bp-text>
-                                        <bp-text class="agenda-desc">{{agenda.speakers[0].occupation}}</bp-text>
-                                    </div> -->
+                                        <bp-text v-if="agenda.speaker" class="agenda-speaker">{{agenda.speaker.name}}</bp-text>
+                                        <bp-text v-if="agenda.speaker" class="agenda-desc">{{agenda.speaker.occupation}}</bp-text>
+                                    </div>
                                 </div>
                             </div>
                         </template>
@@ -227,15 +227,28 @@ export default {
         },
         zone: function(){ 
             if(this.allData.activitys) {
-                let x = this.allData.activitys[0].agendas.filter(x => {
+                let zoneList = this.allData.activitys[0].agendas.filter(x => {
                     if(this.dateTab){
                         return x.subTitle === "2020-06-05"
                     } else{
                         return x.subTitle === "2020-06-04"
                     }
                 })
+                let agendas = []
 
-                return x
+                zoneList.forEach((zone,i) => {
+                    agendas[i] = []
+                    zone.agendas.filter((agenda,x) => {
+                        if (agenda.title) {
+                            agenda.speakers.filter(speaker => {
+                                agenda['speaker'] = speaker
+                            })
+                            agendas[i].push(agenda)
+                        }
+                    })
+                    zoneList[i]['events'] = agendas[i]
+                })
+                return zoneList
             }
         }
     },
@@ -328,7 +341,7 @@ export default {
             }
         },
         downloadReport() {
-
+            this.$emit('downloadReport', 'download-report')
         }
     }
 }

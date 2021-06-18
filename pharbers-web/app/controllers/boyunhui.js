@@ -29,8 +29,12 @@ export default class BoyunhuiController extends Controller {
         // activityDays.forEach((day,i) => {
         //     allZone[i] = zoneList.then(x => x.filter(it => it.subTitle === day))
         // })
-        console.log(this.model.eventList);
+        // console.log(this.model.activitys[0].agendas);
 
+        // let x = this.model.activitys[0].agendas.filter(x => {
+        //     return x.subTitle === "2020-06-04"
+        // })[0].agendas.filter(x => x)
+        // console.log(x);
         this.allData = { 
             activitys: this.model.activitys,
             reportList: this.model.reportList,
@@ -44,5 +48,10 @@ export default class BoyunhuiController extends Controller {
             // participantListAll: participantListAll,
             // eventListAll: eventListAll
         }
+    }
+
+    @action 
+    downloadReport(data) {
+        this.transitionToRoute(data.detail[0], this.index)
     }
 }
