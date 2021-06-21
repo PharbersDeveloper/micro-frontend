@@ -7,35 +7,35 @@
         galleryList: {{allData.galleryList}}
         imageList: {{allData.imageList}}
         participantListAll: {{allData.participantListAll}} -->
-        <div class="above-data-detail-header">
-            <bpImg class="above-data-detail-header-img" :src="headerImg"></bpImg>
+        <div class="above-data-detail-header" v-for="(activity,index) in allData.data" :key="index + '1'">
+            <bpImg class="above-data-detail-header-img" :src="imgPath(activity.gallery, 'cover')"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
                 <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
                 <span class="mr-0">/</span>
                 <span class="mr-0" @click="toActivityList">{{translation_data.activityList}}</span>
                 <span class="mr-0">/</span>
-                <span>{{allData.data[0].title}}</span>
+                <span>{{activity.title}}</span>
             </bpText>
             <div class="header-img-mask">
             </div>
-            <bpText class="ph-H-xLarge-inverse">{{allData.data[0].title}}</bpText>
+            <bpText class="ph-H-xLarge-inverse">{{activity.title}}</bpText>
             <div class="above-data-detail-header-info-row">
                 <div class="above-data-detail-header-divider">
                     <div class="date">
                         <div class="icon_date"></div>
-                        <bpText class="ph-H-Medium-inverse">{{transDate(allData.data[0].startDate, 0)}}</bpText>
+                        <bpText class="ph-H-Medium-inverse">{{transDate(activity.startDate, 0)}}</bpText>
                     </div>
                     <div class="address">
                         <div class="icon_location"></div>
-                        <bpText class="ph-H-Medium-inverse">{{allData.data[0].location}}</bpText>
+                        <bpText class="ph-H-Medium-inverse">{{activity.location}}</bpText>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="above-data-detail-desc">
+        <div class="above-data-detail-desc" v-for="(activity,index) in allData.data" :key="index + '2'">
             <bpImg :src="lineImg" class="above-data-connect-img"></bpImg>
-            <bpText class="ph-H-Large_2">{{allData.data[0].contentTitle}}</bpText>
-            <bpText class="ph-body-medium">{{allData.data[0].contentDesc}}</bpText>
+            <bpText class="ph-H-Large_2">{{activity.contentTitle}}</bpText>
+            <bpText class="ph-body-medium">{{activity.contentDesc}}</bpText>
         </div>
         <div class="main-flex-start">
             <bpImg class="line-img" :src="lineImg"></bpImg>
@@ -130,322 +130,7 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    "eventList": [
-                        {
-                            "title": "嘉宾签到",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T13:30:00.000Z",
-                            "endDate": "2020-01-09T14:00:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "开场",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T14:00:00.000Z",
-                            "endDate": "2020-01-09T14:10:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "医疗大数据简介及行业应用",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T14:10:00.000Z",
-                            "endDate": "2020-01-09T14:40:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "Real World Data",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T14:40:00.000Z",
-                            "endDate": "2020-01-09T15:10:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "茶歇",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T15:10:00.000Z",
-                            "endDate": "2020-01-09T15:30:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "大数据到Insight之间的三道弯",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T15:30:00.000Z",
-                            "endDate": "2020-01-09T16:00:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "大数据应用Case分享",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T16:00:00.000Z",
-                            "endDate": "2020-01-09T16:30:00.000Z",
-                            "language": 1
-                        },
-                        {
-                            "title": "交流讨论",
-                            "subTitle": "",
-                            "description": "",
-                            "startDate": "2020-01-09T16:30:00.000Z",
-                            "endDate": "2020-01-09T16:50:00.000Z",
-                            "language": 1
-                        }
-                    ],
-                    "data": [
-                        {
-                            "title": "Above Data 2020 第一期",
-                            "subTitle": "",
-                            "startDate": "2020-01-09T00:00:00.000Z",
-                            "endDate": null,
-                            "location": "北京市 朝阳区 东外56号文创园A座 屋顶露台咖啡厅",
-                            "city": "北京",
-                            "activityType": "Above Data",
-                            "contentTitle": "ABOVE DATA已经伴我们走过了一年的时间",
-                            "contentDesc": "2019年来自辉瑞、拜耳、赛诺菲、施维雅等10余家顶级公司市场部门的同仁及多位行业专家在ABOVE DATA的活动中分享了数据应用方面的心得以及新政策下的思考。在2020年，ABOVE DATA第一期活动中，将从HIS系统、真实世界数据应用案例分析等角度，对当下大家感兴趣的真实世界数据及其应用，提供分享、沟通和交流的平台。",
-                            "language": 1,
-                            "gallery": [
-                                "hAfmFr18f-PjEd6iRlSa",
-                                "tlUL2KoztDvYHzICj2Lk",
-                                "sdNF2XK96PFe6PqJFta1",
-                                "nFH05r2L5NPg0L0cGntx",
-                                "tgjUgHp5Afd210qWEuGo",
-                                "9E_HVJZkb-ipp33wOpon",
-                                "VcX1_q_hpFWGWsWkapd1",
-                                "PEJxfZ52pfLSPPTuBROg",
-                                "u2ZPA2TG5aWESp4PQBZY",
-                                "dzb2E2zwlgw2THoyHr40"
-                            ],
-                            "agendas": [
-                                "cY-ohk2RotoF410CmPwC"
-                            ],
-                            "logo": "Md1Q6SGSVOEwZ5waMePL",
-                            "logoOnTime": null,
-                            "partners": []
-                        }
-                    ],
-                    "participantList": [
-                        {
-                            "name": "连春玲",
-                            "title": "",
-                            "occupation": "法伯科技·法伯研究院院长",
-                            "language": 1,
-                            "avatar": "Dn2xhyf-otCf1sf4HPaG",
-                            "event": "1dc46xzlBmNlOpzLlZoN",
-                            "zone": null
-                        },
-                        {
-                            "name": "王威",
-                            "title": "",
-                            "occupation": "拜耳制药·数据洞察总监",
-                            "language": 1,
-                            "avatar": "pzo_JVUmUUYUYwQqcR9C",
-                            "event": "CMIPx2Mecphi6us92I48",
-                            "zone": null
-                        },
-                        {
-                            "name": "向娟",
-                            "title": "",
-                            "occupation": "医联·高级总监",
-                            "language": 1,
-                            "avatar": "1lfaRhn8LhXXz9Q18Kzp",
-                            "event": "xwYNwi8k7dyPxEUB2-bu",
-                            "zone": null
-                        },
-                        {
-                            "name": "常宇航",
-                            "title": "",
-                            "occupation": "国华网络科技·医疗事业部总监",
-                            "language": 1,
-                            "avatar": "HcqnXchiiFhwdGtJjDyR",
-                            "event": "aJSVO-rKkHS8-IaQSbEw",
-                            "zone": null
-                        },
-                        {
-                            "name": "薛林桐",
-                            "title": "",
-                            "occupation": "法伯科技·创始人",
-                            "language": 1,
-                            "avatar": "Vfa5jGc5dnlS72H72_Sn",
-                            "event": "2gsP2Ik2F6pA96U_qK31",
-                            "zone": null
-                        }
-                    ],
-                    "galleryShow": [
-                        {
-                            "f": "/public/photo_events_abovedata_2020-01-09_00006.jpg",
-                            "d": "/public/photo_events_abovedata_2020-01-09_00007.jpg",
-                            "c": "/public/photo_events_abovedata_2020-01-09_00008.jpg",
-                            "a": "/public/photo_events_abovedata_2020-01-09_00000.jpg",
-                            "e": "/public/photo_events_abovedata_2020-01-09_00004.jpg",
-                            "b": "/public/photo_events_abovedata_2020-01-09_00003.jpg"
-                        }
-                    ],
-                    "galleryList": [
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00005.jpg",
-                            "tag": "cover",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00006.jpg",
-                            "tag": "galleryshow-f",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00007.jpg",
-                            "tag": "galleryshow-d",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00008.jpg",
-                            "tag": "galleryshow-c",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00000.jpg",
-                            "tag": "galleryshow-a",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00009.jpg",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00002.jpg",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00001.jpg",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00004.jpg",
-                            "tag": "galleryshow-e",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/photo_events_abovedata_2020-01-09_00003.jpg",
-                            "tag": "galleryshow-b",
-                            "report": null
-                        }
-                    ],
-                    "imageList": [
-                        {
-                            "path": "/public/avatar_ww.png",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/avatar_xj.png",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/avatar_cyh.png",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/avatar_xlt.png",
-                            "tag": "",
-                            "report": null
-                        },
-                        {
-                            "path": "/public/avatar_cl.png",
-                            "tag": "",
-                            "report": null
-                        }
-                    ],
-                    "participantListAll": [
-                        {
-                            "participant": {
-                                "name": "连春玲",
-                                "title": "",
-                                "occupation": "法伯科技·法伯研究院院长",
-                                "language": 1,
-                                "avatar": "Dn2xhyf-otCf1sf4HPaG",
-                                "event": "1dc46xzlBmNlOpzLlZoN",
-                                "zone": null
-                            },
-                            "image": {
-                                "path": "/public/avatar_cl.png",
-                                "tag": "",
-                                "report": null
-                            }
-                        },
-                        {
-                            "participant": {
-                                "name": "王威",
-                                "title": "",
-                                "occupation": "拜耳制药·数据洞察总监",
-                                "language": 1,
-                                "avatar": "pzo_JVUmUUYUYwQqcR9C",
-                                "event": "CMIPx2Mecphi6us92I48",
-                                "zone": null
-                            },
-                            "image": {
-                                "path": "/public/avatar_ww.png",
-                                "tag": "",
-                                "report": null
-                            }
-                        },
-                        {
-                            "participant": {
-                                "name": "向娟",
-                                "title": "",
-                                "occupation": "医联·高级总监",
-                                "language": 1,
-                                "avatar": "1lfaRhn8LhXXz9Q18Kzp",
-                                "event": "xwYNwi8k7dyPxEUB2-bu",
-                                "zone": null
-                            },
-                            "image": {
-                                "path": "/public/avatar_xj.png",
-                                "tag": "",
-                                "report": null
-                            }
-                        },
-                        {
-                            "participant": {
-                                "name": "常宇航",
-                                "title": "",
-                                "occupation": "国华网络科技·医疗事业部总监",
-                                "language": 1,
-                                "avatar": "HcqnXchiiFhwdGtJjDyR",
-                                "event": "aJSVO-rKkHS8-IaQSbEw",
-                                "zone": null
-                            },
-                            "image": {
-                                "path": "/public/avatar_cyh.png",
-                                "tag": "",
-                                "report": null
-                            }
-                        },
-                        {
-                            "participant": {
-                                "name": "薛林桐",
-                                "title": "",
-                                "occupation": "法伯科技·创始人",
-                                "language": 1,
-                                "avatar": "Vfa5jGc5dnlS72H72_Sn",
-                                "event": "2gsP2Ik2F6pA96U_qK31",
-                                "zone": null
-                            },
-                            "image": {
-                                "path": "/public/avatar_xlt.png",
-                                "tag": "",
-                                "report": null
-                            }
-                        }
-                    ]
+                    "galleryShow": []
                 }
             }
         }
@@ -547,6 +232,16 @@ export default {
                 return y + "-" + m + "-" + d
             }
             
+        },
+        imgPath(...params) {
+            if ( params.length === 2 && params[1] === "cover") {
+                const arr = params[0]
+                const cover = arr.find(it => it.tag === "cover")
+                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+            } else if (params[0]) {
+                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                return ipath;
+            } 
         }
     }
 }

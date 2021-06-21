@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div id="position-introduction"></div>
+        <div id="position-introduction" ref="position-introduction"></div>
 
         <div class="boyunhui-tab">
             <div class="activity-tabs">
@@ -61,10 +61,13 @@
             <bp-text class="ph-body-medium">{{activity.contentDesc}}</bp-text>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+        <div ref="position-bluebook">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+        </div>
+
         <bp-text class="ph-H-Large_2">{{translation_data.blueBook}}</bp-text>
         <div v-for="(report,index) in allData.reportList" :key="index+'3'" class="active-report-container">
-            <bp-img :src="imgPath(report.cover.get('path'))" class="report-img"></bp-img>
+            <bp-img :src="imgPath(report.cover.get('path'))" class="report-img img-media-large"></bp-img>
             <div class="report-img-mask"></div>
             <div class="report-text">
                 <div class="little-media-report-img">
@@ -79,12 +82,14 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+        <div ref="position-meeting">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+        </div>
         <bp-text class="ph-H-Large_2">{{translation_data.agenda}}</bp-text>
         <div class="agenda-containers">
             <div class="date-tabs">
                 <div class="activity-tabs">
-                    <div v-for="(day, index) in activityDays" :key="index" :class="dateTab === index ? 'activity-tab active' : 'activity-tab'" @click="dateTab = index">{{day}}</div>
+                    <div v-for="(day, index) in allData.activityDays" :key="index" :class="dateTab === index ? 'activity-tab active' : 'activity-tab'" @click="dateTab = index">{{day}}</div>
                 </div>
             </div>
 
@@ -96,14 +101,14 @@
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
-                                <!-- <div v-for="(agenda,index) in agendas.agendas" :key="index" class="form-one-line">
+                                <div v-for="(agenda,index) in agendas.events" :key="index" class="form-one-line">
                                     <bp-text class="agenda-time agenda-time-marginR">{{transDateHour(agenda.startDate)}}-{{transDateHour(agenda.endDate)}}</bp-text>
                                     <div class="different-style">
                                         <bp-text class="agenda-title">{{agenda.title}}</bp-text>
-                                        <bp-text class="agenda-speaker">{{agenda.speakers[0].name}}</bp-text>
-                                        <bp-text class="agenda-desc">{{agenda.speakers[0].occupation}}</bp-text>
+                                        <bp-text v-if="agenda.speaker" class="agenda-speaker">{{agenda.speaker.name}}</bp-text>
+                                        <bp-text v-if="agenda.speaker" class="agenda-desc">{{agenda.speaker.occupation}}</bp-text>
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                         </template>
 <!--                         
@@ -117,7 +122,9 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+        <div ref="position-speaker">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+        </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
             <div v-for="(speaker,index) in allData.participants" :key="index" class="speaker-img-newbox">
@@ -131,7 +138,9 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+        <div ref="position-cooperation">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+        </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
             <bp-text class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
@@ -144,7 +153,10 @@
             </div>
         </div>
 
-        <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+        <div ref="position-gallery">
+            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+        </div>
+
         <bp-text class="ph-H-Large_2">{{translation_data.gallery}}</bp-text>
         <bpPhoto :galleryShow="allData.galleryShow[0]" :galleryList="allData.galleryList" class="mt-7"></bpPhoto>
     </div>
@@ -166,7 +178,9 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {}
+                return {
+                    galleryShow: []
+                }
             }
         }
     },
@@ -175,9 +189,6 @@ export default {
             language: '中文',
             curTab: 0,
             dateTab: 0,
-            cooperationListA: [],
-            cooperationListB: [],
-            activityDays: ['2020-06-04', '2020-06-05'],
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -228,15 +239,28 @@ export default {
         },
         zone: function(){ 
             if(this.allData.activitys) {
-                let x = this.allData.activitys[0].agendas.filter(x => {
+                let zoneList = this.allData.activitys[0].agendas.filter(x => {
                     if(this.dateTab){
                         return x.subTitle === "2020-06-05"
                     } else{
                         return x.subTitle === "2020-06-04"
                     }
                 })
+                let agendas = []
 
-                return x
+                zoneList.forEach((zone,i) => {
+                    agendas[i] = []
+                    zone.agendas.filter((agenda,x) => {
+                        if (agenda.title) {
+                            agenda.speakers.filter(speaker => {
+                                agenda['speaker'] = speaker
+                            })
+                            agendas[i].push(agenda)
+                        }
+                    })
+                    zoneList[i]['events'] = agendas[i]
+                })
+                return zoneList
             }
         }
     },
@@ -304,32 +328,32 @@ export default {
             switch(index){
             case 0:
                 this.curTab = 0
-                window.location.hash = "#position-introduction"
+                this.$refs['position-introduction'].scrollIntoView()
                 break;
             case 1:
                 this.curTab = 1
-                window.location.hash = "#position-bluebook"
+                this.$refs['position-bluebook'].scrollIntoView()
                 break;
             case 2:
                 this.curTab = 2
-                window.location.hash = "#position-meeting"
+                this.$refs['position-meeting'].scrollIntoView()
                 break;    
             case 3:
                 this.curTab = 3
-                window.location.hash = "#position-speaker"
+                this.$refs['position-speaker'].scrollIntoView()
                 break;
             case 4:
                 this.curTab = 4
-                window.location.hash = "#position-cooperation"
+                this.$refs['position-cooperation'].scrollIntoView()
                 break;
             case 5:
                 this.curTab = 5
-                window.location.hash = "#position-gallery"
+                this.$refs['position-gallery'].scrollIntoView()
                 break;
             }
         },
         downloadReport() {
-
+            this.$emit('downloadReport', 'download-report')
         }
     }
 }
@@ -419,6 +443,12 @@ export default {
         display:flex;
         flex-direction:column;
         align-items:center;
+
+        &::-webkit-scrollbar { 
+            width: 0 !important;
+            display: none;
+        }
+        -ms-overflow-style: none;
 
         .boyunhui-header {
             height: 600px;
@@ -852,6 +882,161 @@ export default {
         .boyunhui-header {
             padding: 0 24px;
             overflow-x: hidden;
+        }
+
+        .boyunhui-tab {
+            overflow: auto;
+            padding-left: 0;
+            margin-top: 40px;
+            margin-bottom: 33px;
+            justify-content: center;
+
+            .activity-tabs {
+                position: relative;
+                transform: translateX(40px);
+
+                .activity-tab {
+                    margin-right: 10px;
+
+                    &:nth-last-of-type(1) {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+
+        .boyunhui-desc {
+            height: auto;
+            width: 90vw;
+            background: transparent;
+            position: relative;
+            white-space: pre-line;
+        }
+
+        .active-report-container {
+            width: 90%;
+            height: 270px;
+            background-image: linear-gradient(148deg,rgba(61,86,210,.05) 4%,rgba(102,113,169,.14) 100%);
+            padding: 32px 40px;
+            margin-top: 109px;
+            margin-bottom: 65px;
+
+            .img-media-large, .report-img-mask {
+                display: none;
+            }
+            
+            .report-text {
+                width: 375px;
+
+                .little-media-report-img {
+                    display: flex;
+                    justify-content: center;
+                    .report-img {
+                        width: 111px;
+                        height: 158px;
+                        position: relative;
+                        top: -111px;
+                        object-fit: cover;
+                    }
+
+                    .report-img-mask-2 {
+                        display: inherit;
+                        width: 100px;
+                        height: 158px;
+                        position: absolute;
+                        top: -58px;
+                        border-radius: 2px;
+                        z-index: -1;
+                        background: #747789;
+                        box-shadow: 0 4px 5px 0 rgba(22,28,57,0.36);
+                        border-radius: 1.6px;
+                        -webkit-transform-origin:0 158px;
+                        -moz-transform-origin:0 158px;
+                        -o-transform-origin:0 158px;
+                        -webkit-transform:rotate(4deg) translate(-6px,-20px);
+                        -moz-transform:rotate(4deg) translate(-6px,-20px);
+                        -o-transform:rotate(4deg) translate(-6px,-20px);
+                    }
+                }
+
+                .book-center {
+                    align-items: center;
+                    margin-top: -81px;
+
+                    .report-name, .report-time {
+                        display: flex;
+                        text-align: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+
+        .agenda-containers {
+            width: 90%;
+
+            .date-tabs {
+                .activity-tabs {
+                    width: 100%;
+                }
+            }
+
+            .boyunhui-form .moderate-width {
+                width: 100%;
+                .border-dashed-container .form-one-line {
+                    .agenda-time {
+                        width: 75px;
+                        margin-right: 5%;
+                    }
+
+                    .different-style {
+                        flex-direction: column;
+
+                        .agenda-title {
+                            width: 279px;
+                            margin-right: 0;
+                            margin-bottom: 6px;
+                        }
+
+                        .agenda-speaker {
+                            width: 100%;
+                            margin-right: 8px;
+                        }
+
+                        .agenda-desc {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .speaker-img-newcontainer {
+            width: 90%;
+
+            .speaker-img-newbox {
+                width: 45%;
+
+                .same-width {
+                    width: 144px;
+
+                    .speaker-img-black {
+                        width: 144px;
+                        height: 144px;
+                    }
+                }
+            }
+        }
+
+        .gallery-text-container {
+            .guidanceUnit-img-container {
+                flex-direction: column;
+
+                .cooperator-img {
+                    max-height: 40px;
+                    margin-right: 0;
+                }
+            }
         }
     }
 }
