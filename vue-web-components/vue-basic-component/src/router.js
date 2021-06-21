@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import demo from './views/demo.vue'
+import dag from './views/dag-demo.vue'
 import home from './components/page/home.vue'
 import max from './components/page/max.vue'
 import rw from './components/page/rw.vue'
@@ -23,6 +24,11 @@ export default new Router({
             path: '/',
             name: 'demo',
             component: demo
+        },
+        {
+            path: '/dag',
+            name: 'dag',
+            component: dag
         },
         {
             path: '/home',
