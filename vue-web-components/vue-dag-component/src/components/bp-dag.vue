@@ -332,7 +332,7 @@ export default {
                 this.addEdges(edgeData, g)
 
                 window.onload = function() {
-                    let svg = d3.select( document.getElementsByTagName("pharbers-bp-dag")[0].shadowRoot ).select("#svg-canvas")
+                    let svg = d3.select( document.getElementsByTagName("ph-dag")[0].shadowRoot ).select("#svg-canvas")
                     // let svg = d3.select("#svg-canvas")
 
                     // 绘图的容器
