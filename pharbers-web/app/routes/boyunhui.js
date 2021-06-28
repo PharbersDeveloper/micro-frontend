@@ -34,14 +34,14 @@ export default class BoyunhuiRoute extends Route {
             return this.store.query("event", {'ids[]': ids})
         })
         //get hosts
+        let hostIds = []
         const hostList = zoneList.then(x => {
             const hostArr = x.map(zone => {
                 return zone.hasMany("hosts").ids()
             })
-            debugger
-            const ids = [...new Set(hostArr.reduce((acc, val) => acc.concat(val), []))]      
+            hostIds = [...new Set(hostArr.reduce((acc, val) => acc.concat(val), []))]
 
-            return this.store.query("participant", {'ids[]': ids})
+            return this.store.query("participant", {'ids[]': hostIds})
         })
 
         //get participant
@@ -49,6 +49,7 @@ export default class BoyunhuiRoute extends Route {
             const pidArr = x.map(event => {
                 return event.hasMany( "speakers" ).ids()
             })
+            pidArr.push(hostIds);
             const ids = [...new Set(pidArr.reduce((acc, val) => acc.concat(val), []))]
             const pids = ids.map( x => {
                 return "`" + `${x}` + "`"

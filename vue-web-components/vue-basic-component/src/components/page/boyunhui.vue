@@ -99,10 +99,7 @@
                         <!-- <template v-if="dateTab"> -->
                             <div class="boyunhui-form-subtitle mt-6">
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
-                                <!-- <bp-text v-if="agendas.hosts"> 
-                                    <bp-text v-for="(item, index) in agendas.hosts" :key="'host' + index" class="official-yellow-line-inverse font-weight-bold">主持人:</bp-text>
-                                </bp-text> -->
-
+                                <bp-text v-if="agendas.host" class="official-yellow-line-inverse-host">主持人:{{agendas.host.name}} - {{agendas.host.occupation}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
                                 <div v-for="(agenda,index) in agendas.events" :key="index" class="form-one-line">
@@ -260,6 +257,8 @@ export default {
                 let firstDate = ''
                 let lastDate = ''
                 //标题数组
+                let hosts = this.allData.hostList.filter(x => x.name != null)
+                
                 let zoneList = this.allData.activitys[0].agendas.filter((x,index) => {
                     if(index == 0) {
                         let date = x.subTitle.slice(0,4)
@@ -301,6 +300,14 @@ export default {
                             }
                         }
                     })
+                    for(let x = 0; x < hosts.length; x++) {
+                        hosts[x].zone.then(a => {
+                            if(a.id == zone.id) {
+                                zone['host'] = hosts[x]
+                                this.$forceUpdate();
+                            }
+                        })
+                    }
                     zoneList[i]['events'] = agendas[i]
                 })
                 return zoneList
@@ -764,6 +771,14 @@ export default {
                             color: #2D334D;
                             letter-spacing: 0.4px;
                             margin-bottom: 11px;
+                        }
+                        .official-yellow-line-inverse-host {
+                            font-family: PingFangSC-Medium;
+                            font-size: 12px;
+                            color: #454A61;
+                            letter-spacing: 1px;
+                            font-weight: 500;
+                            margin-left: 20px;
                         }
                     }
 

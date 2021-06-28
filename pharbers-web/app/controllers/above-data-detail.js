@@ -27,10 +27,10 @@ export default class AboveDataDetailController extends Controller {
         let image = []
         let participantListAll = []
         let eventListAll = []
-        for(let x = 0; x < this.model.imageList.length; x++){
+        for(let x = 0; x < this.model.imageList.length; x++) {
             image[x] = this.model.imageList.filter(it => (this.model.imageIds[x].indexOf(it.id) != -1))
         }
-        for(let i=0; i < this.model.participantList.length; i++){
+        for(let i=0; i < this.model.participantList.length; i++) {
             participantListAll[i] = {participant: this.model.participantList[i], image: image[i][0]}
         }
         for(let x = 0; x < this.model.eventList.length; x++) {
