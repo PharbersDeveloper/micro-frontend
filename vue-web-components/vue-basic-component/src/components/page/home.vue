@@ -17,7 +17,7 @@
                 </div>
                 <bpText class="active-text">{{translation_data.activeEvents}}</bpText>
                 <bpCardActive 
-                    v-for="card in allData.activities"
+                    v-for="(card,index) in allData.activities"
                     :key="card.title"
                     @toActivityPage="toActivityPage"
                     :bgImgs="card.gallery"
@@ -27,6 +27,7 @@
                     :city="card.city"
                     :type="card.activityType"
                     :id="card.id"
+                    :index="index"
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">

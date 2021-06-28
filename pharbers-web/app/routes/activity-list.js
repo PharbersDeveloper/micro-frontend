@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp'
+import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
 
 export default class ActivityListRoute extends Route {
@@ -39,7 +39,7 @@ export default class ActivityListRoute extends Route {
         
             return idArr
         })
-        return hash({
+        return RSVP.hash({
             galleryIds: galleryIds,
             data: activityList.then(x => x.filter( it => it.language === lang)),
             galleryList: galleryList

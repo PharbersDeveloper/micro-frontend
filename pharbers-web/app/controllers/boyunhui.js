@@ -44,7 +44,8 @@ export default class BoyunhuiController extends Controller {
             activityDays: activityDays,
             galleryShow: this.model.galleryShow,
             galleryList: this.model.galleryList,
-            allZone: this.model.allZone
+            allZone: this.model.allZone,
+            hostList: this.model.hostList.filter(x => x.avatar.content != null),
             // participantListAll: participantListAll,
             // eventListAll: eventListAll
         }

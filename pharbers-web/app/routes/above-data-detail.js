@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp'
+import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
 
 export default class AboveDataDetailRoute extends Route {
@@ -107,7 +107,7 @@ export default class AboveDataDetailRoute extends Route {
             })
             return [obj]
         })
-        return hash({
+        return RSVP.hash({
             cover: galleryList.then(x => x.find(it => it.tag === "cover")),
             data: activityList.then(x =>  x.filter(it => it.language === lang )),
             agendas: zoneList,

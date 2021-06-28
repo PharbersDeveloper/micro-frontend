@@ -32,8 +32,11 @@ export default class HomeController extends Controller {
     @action
     toActivityPage(data) {
         let curType = data.detail[0],
-            id = data.detail[1]
-        
-        this.transitionToRoute(curType, 0)
+            index = data.detail[1]
+        if(curType == "boyunhui") {
+            this.transitionToRoute(curType, index)
+        } else {
+            this.transitionToRoute(curType, 0)
+        }
     }
 }

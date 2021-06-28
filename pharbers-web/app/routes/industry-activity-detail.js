@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp'
+import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
 
 export default class IndustryActivityDetailRoute extends Route {
@@ -110,7 +110,7 @@ export default class IndustryActivityDetailRoute extends Route {
            })
            return [obj]
        })
-        return hash({
+        return RSVP.hash({
             imageIds:imageIds,
             data: activityList.then(x =>  x.filter(it => it.language === lang)),
             agenda: zoneList,

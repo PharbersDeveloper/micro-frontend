@@ -99,7 +99,9 @@
                         <!-- <template v-if="dateTab"> -->
                             <div class="boyunhui-form-subtitle mt-6">
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
-                                <!-- <bp-text v-if="agendas.hosts" class="official-yellow-line-inverse font-weight-bold">主持人:{{agendas.hosts}}</bp-text> -->
+                                <!-- <bp-text v-if="agendas.hosts"> 
+                                    <bp-text v-for="(item, index) in agendas.hosts" :key="'host' + index" class="official-yellow-line-inverse font-weight-bold">主持人:</bp-text>
+                                </bp-text> -->
 
                             </div>
                             <div class="border-dashed-container">
@@ -159,8 +161,8 @@
         </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
-            <bp-text v-if="allData.cooperationListA.length > 0" class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
-            <div v-if="allData.cooperationListA.length > 0" class="guidanceUnit-img-container">
+            <bp-text v-if="allData.cooperationListA && allData.cooperationListA.length > 0" class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
+            <div v-if="allData.cooperationListA && allData.cooperationListA.length > 0" class="guidanceUnit-img-container">
                 <bp-img v-for="(partner, index) in allData.cooperationListA" :key="index" :src="imgPath(partner.logo.get('path'))" class="cooperator-img"></bp-img>
             </div>
             <bp-text class="ph-body-medium mt-7">{{translation_data.sponsor}}</bp-text>

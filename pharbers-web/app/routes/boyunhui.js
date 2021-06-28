@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash } from 'rsvp';
+import RSVP from 'rsvp';
 
 export default class BoyunhuiRoute extends Route {
     @service store;
@@ -32,6 +32,16 @@ export default class BoyunhuiRoute extends Route {
             const ids = [...new Set(eidArr.reduce((acc, val) => acc.concat(val), []))]      
 
             return this.store.query("event", {'ids[]': ids})
+        })
+        //get hosts
+        const hostList = zoneList.then(x => {
+            const hostArr = x.map(zone => {
+                return zone.hasMany("hosts").ids()
+            })
+            debugger
+            const ids = [...new Set(hostArr.reduce((acc, val) => acc.concat(val), []))]      
+
+            return this.store.query("participant", {'ids[]': ids})
         })
 
         //get participant
@@ -143,7 +153,7 @@ export default class BoyunhuiRoute extends Route {
             return this.store.query("image", { 'ids[]': ids })
             
         })
-        return hash({
+        return RSVP.hash({
             activitys: activityList.then(x =>  x.filter(it => it.language === lang )),
             reportList: reportList.then(x => x.filter(it => it.language === lang)),
             activityDays: activityDays,
@@ -153,8 +163,7 @@ export default class BoyunhuiRoute extends Route {
             galleryShow: galleryShow,
             zoneList: zoneList,
             allZone: allZone,
-
-
+            hostList: hostList,
             imageList: imageList,
             eventList: eventList.then(x =>  x.filter(it => it.language === lang )),
             participantList: participantList.then(x =>  x.filter(it => it.language === lang)),
