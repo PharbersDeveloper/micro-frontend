@@ -857,7 +857,7 @@ export default {
                 flex-direction: column;
                 min-height: 246px;
                 width: 238px;
-                margin-bottom: 16px;
+                margin-bottom: 40px;
                 background: 0 0;
 
                 .same-width {
