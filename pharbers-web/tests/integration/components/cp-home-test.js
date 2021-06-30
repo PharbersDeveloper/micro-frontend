@@ -3,24 +3,24 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | component-context', function (hooks) {
+module('Integration | Component | cp-home', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<ComponentContext />`);
+    await render(hbs`<CpHome />`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
 
     // Template block usage:
     await render(hbs`
-      <ComponentContext>
+      <CpHome>
         template block text
-      </ComponentContext>
+      </CpHome>
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom(this.element).hasText('template block text');
   });
 });

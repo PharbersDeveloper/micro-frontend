@@ -1,45 +1,46 @@
 import Controller from '@ember/controller';
-import { computed, set, action } from '@ember/object'
+import { computed, set, action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 export default class HomeController extends Controller {
-    @tracked allData = {};
-    // init() {
-    //     super.init(...arguments)
-    //     // window.addEventListener('setItemEvent', function(event) {
-    //     //     window.location.reload(true)
-    //     // })
-    // }
+  testdata = "asdfl"
+  // // init() {
+  // //     super.init(...arguments)
+  // //     // window.addEventListener('setItemEvent', function(event) {
+  // //     //     window.location.reload(true)
+  // //     // })
+  // // }
 
-    @action
-	transferData() {
-		this.allData = {
-            activities: this.model.activityData,
-            reports: this.model.reportsList
-        }
-        // this.allData = {
-        //     activities: this.model
-        // }
-        console.log(this.allData)
-	}
+  // @action
+  // transferData() {
+  //   debugger
+  //   this.allData = {
+  //     activities: this.model.activityData,
+  //     reports: this.model.reportsList,
+  //   };
+  //   // this.allData = {
+  //   //     activities: this.model
+  //   // }
+  //   console.log(this.allData);
+  // }
 
-    @action
-    linkToPage(data) {
-        this.transitionToRoute(data.detail[0])
-    }
+  // @action
+  // linkToPage(data) {
+  //   this.transitionToRoute(data.detail[0]);
+  // }
 
-    @action 
-    downloadReport(data) {
-        this.transitionToRoute(data.detail[0], 0)
-    }
+  // @action
+  // downloadReport(data) {
+  //   this.transitionToRoute(data.detail[0], 0);
+  // }
 
-    @action
-    toActivityPage(data) {
-        let curType = data.detail[0],
-            index = data.detail[1]
-        if(curType == "boyunhui") {
-            this.transitionToRoute(curType, index)
-        } else {
-            this.transitionToRoute(curType, 0)
-        }
-    }
+  // @action
+  // toActivityPage(data) {
+  //   let curType = data.detail[0],
+  //     index = data.detail[1];
+  //   if (curType == 'boyunhui') {
+  //     this.transitionToRoute(curType, index);
+  //   } else {
+  //     this.transitionToRoute(curType, 0);
+  //   }
+  // }
 }

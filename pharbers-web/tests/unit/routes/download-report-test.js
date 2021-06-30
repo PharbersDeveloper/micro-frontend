@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Route | download-report', function(hooks) {
+module('Unit | Route | download-report', function (hooks) {
   setupTest(hooks);
 
-  test('it exists', function(assert) {
+  test('it exists', function (assert) {
     let route = this.owner.lookup('route:download-report');
     assert.ok(route);
   });
