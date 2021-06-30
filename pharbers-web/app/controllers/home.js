@@ -2,13 +2,12 @@ import Controller from '@ember/controller';
 import { computed, set, action } from '@ember/object'
 import { tracked } from '@glimmer/tracking';
 export default class HomeController extends Controller {
-    @tracked allData = [];
+    @tracked allData = {};
     // init() {
     //     super.init(...arguments)
-
-    //     window.addEventListener('setItemEvent', function(event) {
-    //         window.location.reload(true)
-    //     })
+    //     // window.addEventListener('setItemEvent', function(event) {
+    //     //     window.location.reload(true)
+    //     // })
     // }
 
     @action
@@ -17,6 +16,10 @@ export default class HomeController extends Controller {
             activities: this.model.activityData,
             reports: this.model.reportsList
         }
+        // this.allData = {
+        //     activities: this.model
+        // }
+        console.log(this.allData)
 	}
 
     @action

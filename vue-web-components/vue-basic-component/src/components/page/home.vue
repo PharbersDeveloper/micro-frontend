@@ -21,7 +21,7 @@
                     :key="card.title"
                     @toActivityPage="toActivityPage"
                     :bgImgs="card.gallery"
-                    :logoImg="card.logo.get('path')"
+                    :logoImg="card.logo?card.logo.get('path'):''"
                     :title="card.title"
                     :date="card.startDate"
                     :city="card.city"
