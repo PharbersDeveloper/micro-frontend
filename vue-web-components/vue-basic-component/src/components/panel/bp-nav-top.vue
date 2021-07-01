@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="fixed-nav" 
+    <div class="fixed-nav yesss" 
         :class="[inverse ? 'navInverse' : 'nav']"
     >
         <div :class="[
@@ -330,9 +330,6 @@ export default {
         text-align: center;
         font-size: 14px;
     }
-    .fixed-nav-response {
-        display: none !important;
-    }
     .fixed-nav {
         height: 80px;
         width: 100%;
@@ -510,34 +507,10 @@ export default {
             color: #fff !important;
         }
     }
-    @media screen and (max-width: 992px) and (min-width: 769px) {
-        ::-webkit-scrollbar-thumb {
-            background: transparent;
-        }
-        .fixed-nav {
-            padding: 0 60px !important;
-        }
-    }
-    @media screen and (max-width: 768px) and (min-width: 480px) {
-        ::-webkit-scrollbar-thumb {
-            background: transparent;
-        }
-        .fixed-nav, .fixed-nav-inverse {
-            padding: 0 40px !important;
-        }
-    }
-    @media (max-width: 549px), (width: 549px) {
-        .fixed-nav {
-            display: none !important;
-        }
-        .fixed-nav-response {
-            display: flex !important;
-        }
-    }
     .fixed-nav-response {
         height: 80px;
         width: 100%;
-        display: flex;
+        display: flex !important;
         flex-direction: row;
         top: 0;
         padding: 0 100px;
@@ -692,6 +665,38 @@ export default {
                     text-align: center;
                 }
             }
+        }
+    }
+    @media screen and (max-width: 992px) and (min-width: 769px) {
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+        .fixed-nav {
+            padding: 0 60px !important;
+        }
+    }
+    @media screen and (max-width: 768px) and (min-width: 480px) {
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+        .fixed-nav, .fixed-nav-inverse {
+            padding: 0 40px !important;
+        }
+    }
+    @media (min-width: 549px) {
+        .fixed-nav {
+            display: flex !important;
+        }
+        .fixed-nav-response {
+            display: none !important;
+        }
+    }
+    @media (max-width: 549px), (width: 549px) {
+        .fixed-nav {
+            display: none !important;
+        }
+        .fixed-nav-response {
+            display: flex !important;
         }
     }
 </style>

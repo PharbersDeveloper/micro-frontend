@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <!-- <navTop @linkToPage="linkToPage"></navTop> -->
+        <navTop @linkToPage="linkToPage"></navTop>
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -303,10 +303,10 @@ export default {
         navTop
     },
     methods: {
-        // linkToPage(value) {
-        //     this.$emit('linkToPage', value)
-        //     this.returnToTop()
-        // },
+        linkToPage(value) {
+            this.$emit('linkToPage', value)
+            this.returnToTop()
+        },
         submitClientData(value) {
             this.$emit('submitClientData', value)
         },

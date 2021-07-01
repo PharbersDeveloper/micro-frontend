@@ -1,13 +1,5 @@
 {{#if this.inverse}}
-    {{#if this.topResponseMini}}
-        <pharbers-bp-nav-top-response inversebase {{on "linkToPage" linkToPage}} {{on "logout" logout}} is-login={{isLogin}}></pharbers-bp-nav-top-response>
-    {{else}}
         <pharbers-bp-nav-top inversebase {{on "linkToPage" linkToPage}} {{on "logout" logout}} is-login={{isLogin}}></pharbers-bp-nav-top>
-    {{/if}}
 {{else}}
-    {{#if this.topResponseMini}}
-        <pharbers-bp-nav-top-response {{on "linkToPage" linkToPage}} {{on "logout" logout}} is-login={{isLogin}}></pharbers-bp-nav-top-response>
-    {{else}}
         <pharbers-bp-nav-top {{on "linkToPage" linkToPage}} {{on "logout" logout}} is-login={{isLogin}}></pharbers-bp-nav-top>
-    {{/if}}
 {{/if}}
