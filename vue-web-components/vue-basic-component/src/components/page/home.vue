@@ -283,6 +283,7 @@ export default {
             realWorldLeftImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_realworld.png",
             advisoryRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_consulting.png"
         }
+        
     },
     props: {
         allData: {
@@ -304,6 +305,9 @@ export default {
     },
     methods: {
         linkToPage(value) {
+            // {
+            //     callback:string, element:vue component object, args:object
+            // }
             this.$emit('linkToPage', value)
             this.returnToTop()
         },
@@ -381,6 +385,7 @@ export default {
         }
     },
     mounted() {
+        debugger
         const that = this;
         if(this.windowWidth < 1100) {
             this.response = true
