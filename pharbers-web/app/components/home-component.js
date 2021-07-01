@@ -11,10 +11,7 @@ export default class HomeComponentComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 console.log("linkTopage")
-                this.router.transitonTo(e.detail[0].args.param)
-                break
-            case "requestData":
-                debugger
+                this.router.transitionTo(e.detail[0].args.param)
                 break
             default: 
                 console.log("submit event to parent")

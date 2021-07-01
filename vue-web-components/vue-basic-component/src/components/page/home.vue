@@ -390,9 +390,6 @@ export default {
         //     param: {}
         // }
         // this.$emit('event', event)
-    },
-    updated() {
-        debugger
     }
 }
 </script>
