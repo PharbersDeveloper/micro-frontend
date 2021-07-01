@@ -61,7 +61,7 @@
                             <bpText class="pb-body-small-tertiary">{{transDate(report.date)}}</bpText>
                         </div>
                         <div class="show-more-button-container">
-                            <bpButton :text="translation_data.reportButton" @click="downloadReport" class="report-down-button"></bpButton>
+                            <bpButton :text="translation_data.reportButton" @click="linkToPage('download-report')" class="report-down-button"></bpButton>
                             <div class="more-reports-button" @click="linkToPage('report-list')">
                                 <div class="more-reports">
                                     <bpText>{{translation_data.moreReportsText}}</bpText>
@@ -297,9 +297,9 @@ export default {
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)
         },
-        downloadReport() {
-            this.$emit('downloadReport', 'download-report')
-        },
+        // downloadReport(value) {
+        //     this.$emit('downloadReport', value)
+        // },
         returnToTop() {
             document.documentElement.scrollTop = 0
             document.body.scrollTop = 0
