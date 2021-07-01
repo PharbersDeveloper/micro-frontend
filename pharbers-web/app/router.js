@@ -10,4 +10,5 @@ Router.map(function () {
   this.route('home', {path: '/'});
   this.route('about-us');
   this.route('rw');
+  this.route('max');
 });
