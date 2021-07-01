@@ -303,6 +303,10 @@ export default {
         navTop
     },
     methods: {
+        // linkToPage(value) {
+        //     this.$emit('linkToPage', value)
+        //     this.returnToTop()
+        // },
         submitClientData(value) {
             this.$emit('submitClientData', value)
         },
