@@ -330,7 +330,13 @@ export default {
     },
     methods: {
         toHome() {
-            this.$emit('linkToPage', 'home')
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: 'home'
+            }
+            this.$emit('event', event)
         }
     }
 }
