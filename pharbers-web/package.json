@@ -64,7 +64,9 @@
     "node": "10.* || >= 12"
   },
   "ember": {
-    "edition": "octane",
+    "edition": "octane"
+  },
+  "dependencies": {
     "@types/crypto-js": "^4.0.1",
     "crypto-js": "^4.0.0",
     "ember-cookies": "^0.5.2",
