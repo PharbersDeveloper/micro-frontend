@@ -48,7 +48,7 @@
                     <div class="report-download-img-container">
                         
                         <bpImg 
-                            :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
+                            :src="'https://www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
                         <div class="report-down-img-mask"></div>
                     </div>
                     <div class="report-download-info">
@@ -243,45 +243,18 @@ export default {
                     advisoryBrand: "Improve ROI"
                 }
             },
-           
-            src: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_hero.png",
-            buttonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go_yellow.svg",
-            activeArr: [
-                {
-                    bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg",
-                    logoImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_bylt_v.svg",
-                    title: "带量采购对中国医药市场的改变",
-                    date: "2020-06-04",
-                    city: "苏州",
-                    logoText: ''
-                },
-                {
-                    bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
-                    logoImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_above-data.svg",
-                    title: "Above Data 2020 第一期",
-                    date: "2020-01-09",
-                    city: "北京",
-                    logoText: "Above Data"
-                },
-                {
-                    bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
-                    logoImg: "null",
-                    title: "第八届中国医药决策科学峰会暨 CphMRA 2019 年度会议",
-                    date: "2019-10-23",
-                    city: "南京",
-                    logoText: "行业活动"
-                }
-            ],
-            reportLeftDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
-            reportRightDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
-            reportDownImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_paper-cover_VPB.jpg",
-            reportConnectImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
-            dataShowImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_corevalue.png",
-            showMoreButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            maxRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max.png",
-            maxRightImg_480: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max_480.png",
-            realWorldLeftImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_realworld.png",
-            advisoryRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_consulting.png"
+            src: "https://www.pharbers.com/public/img_home_hero.png",
+            buttonGo: "https://www.pharbers.com/public/icon_go_yellow.svg",
+            reportLeftDown: "https://www.pharbers.com/public/img_deco_corner.svg",
+            reportRightDown: "https://www.pharbers.com/public/img_deco_corner.svg",
+            reportDownImg: "https://www.pharbers.com/public/img_paper-cover_VPB.jpg",
+            reportConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            dataShowImg: "https://www.pharbers.com/public/img_corevalue.png",
+            showMoreButtonGo: "https://www.pharbers.com/public/icon_go.svg",
+            maxRightImg: "https://www.pharbers.com/public/img_home_max.png",
+            maxRightImg_480: "https://www.pharbers.com/public/img_home_max_480.png",
+            realWorldLeftImg: "https://www.pharbers.com/public/img_home_realworld.png",
+            advisoryRightImg: "https://www.pharbers.com/public/img_home_consulting.png"
         }
         
     },

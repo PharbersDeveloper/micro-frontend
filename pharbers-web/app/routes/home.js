@@ -19,8 +19,8 @@ export default class HomeRoute extends Route {
 
         const reportsList = this.store.query("report", { 'sort': "-date",'page[limit]': 1, "filter[language]": lang, include: "cover"})
         return hash({
-            activityData: activityList.then(x => x.filter(it => it.language === lang)),
-            reportsList: reportsList.then(x => x.filter(it => it.language === lang))
+            activities: activityList.then(x => x.filter(it => it.language === lang)),
+            reports: reportsList.then(x => x.filter(it => it.language === lang))
         })
     }
 }
