@@ -12,6 +12,7 @@ export default class ComponentContextComponent extends Component {
 	@tracked itemArr
     @tracked buttonText
     @service intl
+    
 	@action
 	listener(e) {
 		// coloring ember body

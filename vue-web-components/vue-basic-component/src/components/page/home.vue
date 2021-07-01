@@ -304,11 +304,19 @@ export default {
         navTop
     },
     methods: {
+        // handleClick() {
+        //     console.log("alfred web component tests")
+        //     const event = new Event("example-event")
+        //     this.$emit('example-event', event)
+        // },
         linkToPage(value) {
             // {
             //     callback:string, element:vue component object, args:object
             // }
-            this.$emit('linkToPage', value)
+            debugger
+            const event = new Event("home-event")
+            event.args = value
+            this.$emit('linkToPage', event)
             this.returnToTop()
         },
         submitClientData(value) {
