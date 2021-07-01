@@ -61,7 +61,7 @@
                             <bpText class="pb-body-small-tertiary">{{transDate(report.date)}}</bpText>
                         </div>
                         <div class="show-more-button-container">
-                            <bpButton :text="translation_data.reportButton" @click="linkToPage('download-report')" class="report-down-button"></bpButton>
+                            <bpButton :text="translation_data.reportButton" @click="linkToPage('download-report', 0)" class="report-down-button"></bpButton>
                             <div class="more-reports-button" @click="linkToPage('report-list')">
                                 <div class="more-reports">
                                     <bpText>{{translation_data.moreReportsText}}</bpText>
@@ -277,12 +277,15 @@ export default {
         navTop
     },
     methods: {
-        linkToPage(value) {
+        linkToPage(value, idx) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
-                param: value
+                param: {
+                    name: value,
+                    index: idx
+                }
             }
             this.$emit('event', event)
             this.returnToTop()

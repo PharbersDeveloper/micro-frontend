@@ -2,18 +2,14 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-
-export default class HomeComponentComponent extends Component {
+export default class DownloadReportComponent extends Component {
     @service router
     @action
 	listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-                if(e.detail[0].args.param.index != undefined) {
-                    this.router.transitionTo(e.detail[0].args.param.name, e.detail[0].args.param.index)
-                } else {
-                    this.router.transitionTo(e.detail[0].args.param.name)
-                }
+                console.log("linkTopage")
+                this.router.transitionTo(e.detail[0].args.param)
                 break
             default: 
                 console.log("submit event to parent")
@@ -22,7 +18,7 @@ export default class HomeComponentComponent extends Component {
 
     @action
 	registerListener(element) {
-        element.allData = this.args.model
+        element.reports = this.args.model.reports
 		element.addEventListener("event", this.listener)
 	}
 

@@ -12,4 +12,5 @@ Router.map(function () {
   this.route('rw');
   this.route('max');
   this.route('consulting');
+  this.route('download-report',{ path: '/download-report/:report_id' });
 });
