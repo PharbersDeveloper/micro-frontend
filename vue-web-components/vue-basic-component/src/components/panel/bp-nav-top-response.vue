@@ -1,5 +1,5 @@
 <template>
-    <div class="vue_container fixed-nav" 
+    <div class="vue_container fixed-nav-response" 
         :class="[inverse ? 'navInverse' : 'nav']"
     >
         <div 
@@ -283,7 +283,7 @@ export default {
         text-align: center;
         font-size: 14px;
     }
-    .fixed-nav {
+    .fixed-nav-response {
         height: 80px;
         width: 100%;
         display: flex;
