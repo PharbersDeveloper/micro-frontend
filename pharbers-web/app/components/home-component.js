@@ -12,18 +12,23 @@ export default class HomeComponentComponent extends Component {
             case "linkToPage":
                 console.log("linkTopage")
                 this.router.transitonTo(e.detail[0].args.param)
+                break
+            case "requestData":
+                debugger
+                break
+            default: 
+                console.log("submit event to parent")
         }
 	}
 
     @action
 	registerListener(element) {
-        debugger
+        element.allData = this.args.model
 		element.addEventListener("event", this.listener)
 	}
 
 	@action
 	unregisterListener(element) {
-        debugger
 		element.removeEventListener("event", this.listener)
 	}
 }

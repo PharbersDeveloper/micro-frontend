@@ -278,7 +278,7 @@ export default {
     },
     methods: {
         linkToPage(value) {
-            const event = new Event("home-event")
+            const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
@@ -306,11 +306,9 @@ export default {
         },
         transDate(param) {
             let date = new Date(param)
-
             let y = date.getUTCFullYear()
             let d = date.getUTCDate()
             let m = date.getUTCMonth()
-            
             if (this.language === '中文') {
                 return y + "年" + (m+1) + "月" + d + "日"
             } else {
@@ -345,9 +343,11 @@ export default {
         }
     },
     created() {
+        // todo
         window.addEventListener('beforeunload', e => {
             window.scrollTo(0,0)
         });
+        
         let lang = window.localStorage.getItem('lang')
         if (!lang) {
             lang = navigator.language || navigator.userLanguage
@@ -361,7 +361,6 @@ export default {
         }
     },
     mounted() {
-        debugger
         const that = this;
         if(this.windowWidth < 1100) {
             this.response = true
@@ -384,8 +383,17 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
+        // const event = new Event("event")
+        // event.args = {
+        //     callback: "requestData",
+        //     element: this,
+        //     param: {}
+        // }
+        // this.$emit('event', event)
+    },
+    updated() {
+        debugger
     }
-
 }
 </script>
 <style lang="scss" scoped>
