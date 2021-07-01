@@ -11,4 +11,5 @@ Router.map(function () {
   this.route('about-us');
   this.route('rw');
   this.route('max');
+  this.route('consulting');
 });

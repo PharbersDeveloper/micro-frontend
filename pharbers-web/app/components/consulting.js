@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class AboutUsComponent extends Component {
+export default class ConsultingComponent extends Component {
     @service router
     @action
 	listener(e) {
