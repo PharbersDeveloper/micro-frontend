@@ -31,7 +31,7 @@
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
-                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="toMore('activity-list')"></bpButton>
+                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="linkToPage('activity-list')"></bpButton>
                         <bpImg class="active-button-go" :src="buttonGo"></bpImg>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="show-more-button-container">
                             <bpButton :text="translation_data.reportButton" @click="downloadReport" class="report-down-button"></bpButton>
-                            <div class="more-reports-button" @click="toMore('report-list')">
+                            <div class="more-reports-button" @click="linkToPage('report-list')">
                                 <div class="more-reports">
                                     <bpText>{{translation_data.moreReportsText}}</bpText>
                                     <bpImg class="more-reports-img" :src="showMoreButtonGo"></bpImg>
@@ -78,7 +78,7 @@
                 <bpText class="home-about-us-peoples">{{translation_data.dataShowAboutUs}}</bpText>
                 <bpText class="ph-H-xLarge">{{translation_data.dataShowTitle}}</bpText>
                 <div class="show-more-button-container">
-                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact" @click="toMore('about-us')"></bpButton>
+                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact" @click="linkToPage('about-us')"></bpButton>
                     <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                 </div>
                 <div class="data-show-text-part">
@@ -101,7 +101,7 @@
                     <bpText class="max-text-center">{{translation_data.maxTextCenter}}</bpText>
                     <bpText class="max-text-center-brand">{{translation_data.maxTextCenterBrand}}</bpText>
                     <div class="max-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('max')"
+                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('max')"
                         class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
@@ -123,7 +123,7 @@
                     <bpText class="ph-H-Large">{{translation_data.realWorldTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.realWorldBrand}}</bpText>
                     <div class="real-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('rw')" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('rw')" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                     <bpText class="ph-H-Large">{{translation_data.advisoryTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.advisoryBrand}}</bpText>
                     <div class="advisory-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('consulting')" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('consulting')" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -285,15 +285,15 @@ export default {
                 param: value
             }
             this.$emit('event', event)
-            // this.returnToTop()
+            this.returnToTop()
         },
-        submitClientData(value) {
-            this.$emit('submitClientData', value)
-        },
-        toMore(data) {
-            this.$emit('linkToPage', data)
-            // this.returnToTop()
-        },
+        // submitClientData(value) {
+        //     this.$emit('submitClientData', value)
+        // },
+        // linkToPage(data) {
+        //     this.$emit('linkToPage', data)
+        //     // this.returnToTop()
+        // },
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)
         },
