@@ -17,9 +17,14 @@ export default class HomeRoute extends Route {
         const activityList = this.store.query("activity", { 'sort': "-startDate", "page[limit]": 3,"page[offset]": 0, "filter[language]": lang, include: "logo,gallery" })
 
         const reportsList = this.store.query("report", { 'sort': "-date",'page[limit]': 1, "filter[language]": lang, include: "cover"})
+        
         return RSVP.hash({
             activities: activityList.then(x => x.filter(it => it.language === lang)),
             reports: reportsList.then(x => x.filter(it => it.language === lang))
         })
+        // return RSVP.hash({
+        //     activities: activityList,
+        //     reports: reportsList
+        // })
     }
 }
