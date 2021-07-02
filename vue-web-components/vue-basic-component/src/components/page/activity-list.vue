@@ -172,7 +172,7 @@ export default {
             }
             this.$emit('event', event)
             this.returnToTop()
-        },
+        }
         // toHome() {
         //     this.$emit('linkToPage', 'home')
         // },
