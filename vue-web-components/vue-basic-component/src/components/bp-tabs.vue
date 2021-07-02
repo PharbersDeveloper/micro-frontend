@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         linkToActivity: function(data) {
-            this.$emit('linkToActivity', data)
+            this.$emit('linkToActivity', data.avtivityType, data.idx)
         }
     }
 };

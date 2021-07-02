@@ -94,15 +94,24 @@ export default {
             return y + "-" + (m+1) + "-" + d
         },
         toActivity(index) {
-            let avtivityType = ''
+            let param = {}
             if(this.tabIndex == 0) {
-                avtivityType = 'boyunhui/' + index
+                param = {
+                    avtivityType: 'boyunhui',
+                    idx: index
+                }
             } else if(this.tabIndex == 1) {
-                avtivityType = 'above-data-detail/' + index
+                param = {
+                    avtivityType: 'above-data-detail',
+                    idx: index
+                }
             } else if(this.tabIndex == 2) {
-                avtivityType = 'industry-activity-detail/' + index
+                param = {
+                    avtivityType: 'industry-activity-detail',
+                    idx: index
+                }
             }
-            this.$emit('linkToActivity', avtivityType)
+            this.$emit('linkToActivity', param)
         }
     }
 };

@@ -177,12 +177,6 @@ export default {
             document.documentElement.scrollTop = 0
             document.body.scrollTop = 0
         }
-        // toHome() {
-        //     this.$emit('linkToPage', 'home')
-        // },
-        // linkToActivity(data) {
-        //     this.$emit('linkToActivity', data)
-        // }
     }
 }
 </script>
