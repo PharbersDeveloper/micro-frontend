@@ -142,15 +142,17 @@
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
-            <div v-for="(speaker,index) in allData.participants" :key="index" class="speaker-img-newbox">
-                <div class="same-width">
-                    <div class="speaker-img-black"></div>
-                    <bp-img :src="imgPath(speaker.avatar.get('path'))" class="speaker-img"></bp-img>
-                    <bp-text class="ph-H-Medium mb-2">{{speaker.name}}</bp-text>
-                    <bp-text class="ph-body-small">{{speaker.occupation}}</bp-text>
-                    <bp-text class="ph-body-small">{{speaker.title}}</bp-text>
+            <template v-for="speaker in allData.participants">
+                <div v-if="speaker.avatar.get('path')" class="speaker-img-newbox">
+                    <div class="same-width">
+                        <div class="speaker-img-black"></div>
+                        <bp-img :src="imgPath(speaker.avatar.get('path'))" class="speaker-img"></bp-img>
+                        <bp-text class="ph-H-Medium mb-2">{{speaker.name}}</bp-text>
+                        <bp-text class="ph-body-small">{{speaker.occupation}}</bp-text>
+                        <bp-text class="ph-body-small">{{speaker.title}}</bp-text>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <div ref="position-cooperation">
