@@ -18,7 +18,8 @@ export default class DownloadReportComponent extends Component {
 
     @action
 	registerListener(element) {
-        element.reports = this.args.model.reports
+        // element.reports = this.args.model.reports
+        element.reports = this.calAllData
 		element.addEventListener("event", this.listener)
 	}
 
@@ -26,4 +27,9 @@ export default class DownloadReportComponent extends Component {
 	unregisterListener(element) {
 		element.removeEventListener("event", this.listener)
 	}
+
+    get calAllData() {
+        this.args.model.reports._isVue = true
+        return this.args.model.reports
+    }
 }

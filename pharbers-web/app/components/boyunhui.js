@@ -21,7 +21,7 @@ export default class BoyunhuiComponent extends Component {
 
     @action
 	registerListener(element) {
-        element.allData = this.args.model
+        element.allData = this.calAllData
 		element.addEventListener("event", this.listener)
 	}
 
@@ -29,4 +29,9 @@ export default class BoyunhuiComponent extends Component {
 	unregisterListener(element) {
 		element.removeEventListener("event", this.listener)
 	}
+
+    get calAllData() {
+        this.args.model._isVue = true
+        return this.args.model
+    }
 }
