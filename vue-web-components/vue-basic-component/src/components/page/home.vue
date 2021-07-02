@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <navTop @linkToPage="linkToPage"></navTop>
+        <!-- <navTop @linkToPage="linkToPage"></navTop> -->
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
