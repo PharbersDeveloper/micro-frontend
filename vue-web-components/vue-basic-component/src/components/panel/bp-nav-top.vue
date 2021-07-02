@@ -20,7 +20,7 @@
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
                 
-                <bp-select-vue v-if="isLogin" choosedValue="" src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
+                <bp-select-vue v-if="isLogin" choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
                     <bp-option-vue :text="translation_data.general" @click="toGeneral" ></bp-option-vue>
                     <bp-option-vue :text="translation_data.logout" @click="logout" ></bp-option-vue>
                 </bp-select-vue>
@@ -121,10 +121,10 @@ export default {
             contactForm: false,
             menu: false,
             inverse: false,
-            imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
-            imgSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_light.svg",
-            selectSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg",
-            selectSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop_light.svg",
+            imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
+            imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
+            selectSrc: "https://www.pharbers.com/public/icon_drop.svg",
+            selectSrcLight: "https://www.pharbers.com/public/icon_drop_light.svg",
             translation_basedata: {
                 cn: {
                     MAX: {
