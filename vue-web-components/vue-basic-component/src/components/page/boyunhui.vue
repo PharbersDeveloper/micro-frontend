@@ -99,29 +99,14 @@
                         <!-- <template v-if="dateTab"> -->
                             <div class="boyunhui-form-subtitle mt-6">
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
-                                <bp-text v-if="agendas.host" class="official-yellow-line-inverse-host">主持人:{{agendas.host.name}} - {{agendas.host.occupation}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
                                 <div v-for="(agenda,index) in agendas.events" :key="index" class="form-one-line">
                                     <bp-text class="agenda-time agenda-time-marginR">{{transDateHour(agenda.startDate)}}-{{transDateHour(agenda.endDate)}}</bp-text>
-                                    <div class="different-style" v-if="!agenda.speakerArr">
+                                    <div class="different-style">
                                         <bp-text class="agenda-title">{{agenda.title}}</bp-text>
                                         <bp-text v-if="agenda.speaker" class="agenda-speaker">{{agenda.speaker.name}}</bp-text>
                                         <bp-text v-if="agenda.speaker" class="agenda-desc">{{agenda.speaker.occupation}}</bp-text>
-                                    </div>
-                                    <div class="different-style" v-if="agenda.speakerArr">
-                                        <bp-text class="agenda-title">{{agenda.title}}</bp-text>
-                                        <div class="speakersArea">
-                                            <div v-for="(item,index) in agenda.speakerArr" class="speakerItem" :key="'speaker' + index">
-                                                <bp-text v-if="item.name" class="agenda-speaker">
-                                                    <bp-text v-if="index == 0" class="speakerTitle">主持人:</bp-text>
-                                                    <bp-text v-if="index == 1" class="speakerTitle">嘉 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 宾:</bp-text>
-                                                    <bp-text v-if="index != 0 && index != 1" class="speakerTitle"></bp-text>
-                                                    {{item.name}}
-                                                </bp-text>
-                                                <bp-text v-if="item.name" class="agenda-desc">{{item.occupation}}</bp-text>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -158,8 +143,8 @@
         </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
-            <bp-text v-if="allData.cooperationListA && allData.cooperationListA.length > 0" class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
-            <div v-if="allData.cooperationListA && allData.cooperationListA.length > 0" class="guidanceUnit-img-container">
+            <bp-text class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
+            <div class="guidanceUnit-img-container">
                 <bp-img v-for="(partner, index) in allData.cooperationListA" :key="index" :src="imgPath(partner.logo.get('path'))" class="cooperator-img"></bp-img>
             </div>
             <bp-text class="ph-body-medium mt-7">{{translation_data.sponsor}}</bp-text>
@@ -254,60 +239,25 @@ export default {
         },
         zone: function(){ 
             if(this.allData.activitys) {
-                let firstDate = ''
-                let lastDate = ''
-                //标题数组
-                let hosts = this.allData.hostList.filter(x => x.name != null)
-                
-                let zoneList = this.allData.activitys[0].agendas.filter((x,index) => {
-                    if(index == 0) {
-                        let date = x.subTitle.slice(0,4)
-                        if(date == '2021') {
-                            firstDate = '2021-04-15'
-                            lastDate = '2021-04-16'
-                        } else if(date == '2020') {
-                            firstDate = '2020-06-04'
-                            lastDate = '2020-06-05'
-                        }
-                    }
+                let zoneList = this.allData.activitys[0].agendas.filter(x => {
                     if(this.dateTab){
-                        return x.subTitle === lastDate
+                        return x.subTitle === "2020-06-05"
                     } else{
-                        return x.subTitle === firstDate
+                        return x.subTitle === "2020-06-04"
                     }
                 })
                 let agendas = []
+
                 zoneList.forEach((zone,i) => {
                     agendas[i] = []
-                    // 标题下的event数组
                     zone.agendas.filter((agenda,x) => {
                         if (agenda.title) {
-                            if(agenda.speakers.length > 1) {
-                                agenda['speakerArr'] = []
-                                agenda.speakers.filter(speaker => {
-                                    agenda['speakerArr'].push(speaker)
-                                })
-                            } else {
-                                agenda.speakers.filter(speaker => {
-                                    agenda['speaker'] = speaker
-                                })
-                            }
-                            //根据开始时间对event进行排序
-                            if(agendas[i][x-1] && agendas[i][x-1].startDate < agenda.startDate) {
-                                agendas[i].push(agenda)
-                            } else {
-                                agendas[i].unshift(agenda)
-                            }
+                            agenda.speakers.filter(speaker => {
+                                agenda['speaker'] = speaker
+                            })
+                            agendas[i].push(agenda)
                         }
                     })
-                    for(let x = 0; x < hosts.length; x++) {
-                        hosts[x].zone.then(a => {
-                            if(a.id == zone.id) {
-                                zone['host'] = hosts[x]
-                                this.$forceUpdate();
-                            }
-                        })
-                    }
                     zoneList[i]['events'] = agendas[i]
                 })
                 return zoneList
@@ -772,14 +722,6 @@ export default {
                             letter-spacing: 0.4px;
                             margin-bottom: 11px;
                         }
-                        .official-yellow-line-inverse-host {
-                            font-family: PingFangSC-Medium;
-                            font-size: 12px;
-                            color: #454A61;
-                            letter-spacing: 1px;
-                            font-weight: 500;
-                            margin-left: 20px;
-                        }
                     }
 
                     .border-dashed-container {
@@ -809,14 +751,7 @@ export default {
                                 display: flex;
                                 flex-direction: row;
                                 flex-grow: 1;
-                                .speakersArea {
-                                    display: flex;
-                                    flex-direction: column;
-                                    .speakerItem {
-                                        display: flex;
-                                        flex-direction: row;
-                                    }
-                                }
+
                                 .agenda-title {
                                     width: 299px;
                                     font-size: 16px;
@@ -836,9 +771,6 @@ export default {
                                     display: flex;
                                     align-items: center;
                                     margin-right: 10vw;
-                                    .speakerTitle {
-                                        width: 60px;
-                                    }
                                 }
 
                                 .agenda-desc {
@@ -874,7 +806,7 @@ export default {
                 flex-direction: column;
                 min-height: 246px;
                 width: 238px;
-                margin-bottom: 40px;
+                margin-bottom: 16px;
                 background: 0 0;
 
                 .same-width {
