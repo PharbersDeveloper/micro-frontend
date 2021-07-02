@@ -172,6 +172,10 @@ export default {
             }
             this.$emit('event', event)
             this.returnToTop()
+        },
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
         // toHome() {
         //     this.$emit('linkToPage', 'home')

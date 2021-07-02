@@ -10,9 +10,9 @@
         <div class="above-data-detail-header" v-for="(activity,index) in allData.data" :key="index + '1'">
             <bpImg class="above-data-detail-header-img" :src="imgPath(activity.gallery, 'cover')"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
-                <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
+                <span class="mr-0" @click="linkToPage('home')">{{translation_data.home}}</span>
                 <span class="mr-0">/</span>
-                <span class="mr-0" @click="toActivityList">{{translation_data.activityList}}</span>
+                <span class="mr-0" @click="linkToPage('activity-list')">{{translation_data.activityList}}</span>
                 <span class="mr-0">/</span>
                 <span>{{activity.title}}</span>
             </bpText>
@@ -67,7 +67,7 @@
         </div>
         <div class="speaker-img-container">
             <div class="speaker-img-box" v-for="(speaker,index) in allData.participantListAll" :key="index">
-                <bpImg class="speaker-img" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+speaker.image.path"></bpImg>
+                <bpImg class="speaker-img" :src="'https://www.pharbers.com'+speaker.image.path"></bpImg>
                 <div class="speaker-img-info">
                     <bpText class="ph-H-Medium">{{speaker.participant.name}}</bpText>
                     <bpText class="ph-body-small">{{speaker.participant.occupation}}</bpText>
@@ -104,9 +104,9 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
-            lineImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
-            head: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png",
+            headerImg: "https://www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
+            lineImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            head: "https://www.pharbers.com/public/avatar_cl.png",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -210,11 +210,22 @@ export default {
         })
     },
     methods: {
-        toHome() {
-            this.$emit('linkToPage', 'home')
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
+            this.returnToTop()
         },
-        toActivityList() {
-            this.$emit('linkToActivity', 'activity-list')
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         },
         transDate(param, type) {
             let date = new Date(param)
@@ -237,9 +248,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+                return "https://www.pharbers.com" + cover.path
             } else if (params[0]) {
-                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                const ipath =  "https://www.pharbers.com" + params[0]
                 return ipath;
             } 
         }
