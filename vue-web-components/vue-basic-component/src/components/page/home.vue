@@ -17,9 +17,9 @@
                 </div>
                 <bpText class="active-text">{{translation_data.activeEvents}}</bpText>
                 <bpCardActive 
-                    v-for="(card,index) in allData.activities"
+                    v-for="card in activities"
                     :key="card.title"
-                    @toActivityPage="toActivityPage"
+                    @toActivityPage="linkToPage"
                     :bgImgs="card.gallery"
                     :logoImg="card.logo?card.logo.get('path'):''"
                     :title="card.title"
@@ -27,7 +27,7 @@
                     :city="card.city"
                     :type="card.activityType"
                     :id="card.id"
-                    :index="index"
+                    :curIndex="card.curIndex"
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
@@ -290,19 +290,9 @@ export default {
             this.$emit('event', event)
             this.returnToTop()
         },
-        // submitClientData(value) {
-        //     this.$emit('submitClientData', value)
-        // },
-        // linkToPage(data) {
-        //     this.$emit('linkToPage', data)
-        //     // this.returnToTop()
-        // },
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)
         },
-        // downloadReport(value) {
-        //     this.$emit('downloadReport', value)
-        // },
         returnToTop() {
             document.documentElement.scrollTop = 0
             document.body.scrollTop = 0
@@ -326,6 +316,24 @@ export default {
             } else if (this.language === 'English') {
                 return this.translation_basedata.en
             }
+        },
+        activities: function() {
+            let typeArr = []
+            if(this.allData.activities) {
+                this.allData.activities.forEach(item => {
+                    let type = item.activityType
+                    let ind = 0
+                    for(let i=0; i< typeArr.length; i++) {
+                        if(typeArr[i] == type) {
+                            ind++
+                        }
+                    }
+                    item.curIndex = ind
+                    typeArr.push(type)
+                })
+            }
+            debugger
+            return this.allData.activities
         }
     },
     watch: {

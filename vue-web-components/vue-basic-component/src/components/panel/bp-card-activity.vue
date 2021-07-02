@@ -81,7 +81,7 @@ export default {
             } else if (this.type === "boyunhui") {
                 curType = "boyunhui"
             }
-            this.$emit('toActivityPage', curType, this.index)
+            this.$emit('toActivityPage', curType, this.curIndex)
         }
     },
     props: {
@@ -92,7 +92,7 @@ export default {
         date: Date,
         city: String,
         type: String,
-        index: Number
+        curIndex: Number
     }
 }
 </script>
