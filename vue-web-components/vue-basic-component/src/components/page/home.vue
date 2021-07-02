@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <!-- <navTop @linkToPage="linkToPage"></navTop> -->
+        <navTop @linkToPage="linkToPage"></navTop>
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -17,20 +17,21 @@
                 </div>
                 <bpText class="active-text">{{translation_data.activeEvents}}</bpText>
                 <bpCardActive 
-                    v-for="card in allData.activities"
+                    v-for="(card,index) in allData.activities"
                     :key="card.title"
                     @toActivityPage="toActivityPage"
                     :bgImgs="card.gallery"
-                    :logoImg="card.logo.get('path')"
+                    :logoImg="card.logo?card.logo.get('path'):''"
                     :title="card.title"
                     :date="card.startDate"
                     :city="card.city"
                     :type="card.activityType"
                     :id="card.id"
+                    :index="index"
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
                     <div class="show-more-button-container">
-                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="toMore('activity-list')"></bpButton>
+                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="linkToPage('activity-list')"></bpButton>
                         <bpImg class="active-button-go" :src="buttonGo"></bpImg>
                     </div>
                 </div>
@@ -47,7 +48,7 @@
                     <div class="report-download-img-container">
                         
                         <bpImg 
-                            :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
+                            :src="'https://www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
                         <div class="report-down-img-mask"></div>
                     </div>
                     <div class="report-download-info">
@@ -60,8 +61,8 @@
                             <bpText class="pb-body-small-tertiary">{{transDate(report.date)}}</bpText>
                         </div>
                         <div class="show-more-button-container">
-                            <bpButton :text="translation_data.reportButton" @click="downloadReport" class="report-down-button"></bpButton>
-                            <div class="more-reports-button" @click="toMore('report-list')">
+                            <bpButton :text="translation_data.reportButton" @click="linkToPage('download-report', 0)" class="report-down-button"></bpButton>
+                            <div class="more-reports-button" @click="linkToPage('report-list')">
                                 <div class="more-reports">
                                     <bpText>{{translation_data.moreReportsText}}</bpText>
                                     <bpImg class="more-reports-img" :src="showMoreButtonGo"></bpImg>
@@ -77,7 +78,7 @@
                 <bpText class="home-about-us-peoples">{{translation_data.dataShowAboutUs}}</bpText>
                 <bpText class="ph-H-xLarge">{{translation_data.dataShowTitle}}</bpText>
                 <div class="show-more-button-container">
-                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact" @click="toMore('about-us')"></bpButton>
+                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact" @click="linkToPage('about-us')"></bpButton>
                     <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                 </div>
                 <div class="data-show-text-part">
@@ -100,7 +101,7 @@
                     <bpText class="max-text-center">{{translation_data.maxTextCenter}}</bpText>
                     <bpText class="max-text-center-brand">{{translation_data.maxTextCenterBrand}}</bpText>
                     <div class="max-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('max')"
+                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('max')"
                         class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
@@ -122,7 +123,7 @@
                     <bpText class="ph-H-Large">{{translation_data.realWorldTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.realWorldBrand}}</bpText>
                     <div class="real-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('rw')" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('rw')" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -137,7 +138,7 @@
                     <bpText class="ph-H-Large">{{translation_data.advisoryTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.advisoryBrand}}</bpText>
                     <div class="advisory-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="toMore('consulting')" class="button-official-yellow-line-compact"></bpButton>
+                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('consulting')" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -242,46 +243,20 @@ export default {
                     advisoryBrand: "Improve ROI"
                 }
             },
-           
-            src: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_hero.png",
-            buttonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go_yellow.svg",
-            activeArr: [
-                {
-                    bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg",
-                    logoImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_bylt_v.svg",
-                    title: "带量采购对中国医药市场的改变",
-                    date: "2020-06-04",
-                    city: "苏州",
-                    logoText: ''
-                },
-                {
-                    bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
-                    logoImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_above-data.svg",
-                    title: "Above Data 2020 第一期",
-                    date: "2020-01-09",
-                    city: "北京",
-                    logoText: "Above Data"
-                },
-                {
-                    bgImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
-                    logoImg: "null",
-                    title: "第八届中国医药决策科学峰会暨 CphMRA 2019 年度会议",
-                    date: "2019-10-23",
-                    city: "南京",
-                    logoText: "行业活动"
-                }
-            ],
-            reportLeftDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
-            reportRightDown: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_deco_corner.svg",
-            reportDownImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_paper-cover_VPB.jpg",
-            reportConnectImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
-            dataShowImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_corevalue.png",
-            showMoreButtonGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
-            maxRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max.png",
-            maxRightImg_480: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_max_480.png",
-            realWorldLeftImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_realworld.png",
-            advisoryRightImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_home_consulting.png"
+            src: "https://www.pharbers.com/public/img_home_hero.png",
+            buttonGo: "https://www.pharbers.com/public/icon_go_yellow.svg",
+            reportLeftDown: "https://www.pharbers.com/public/img_deco_corner.svg",
+            reportRightDown: "https://www.pharbers.com/public/img_deco_corner.svg",
+            reportDownImg: "https://www.pharbers.com/public/img_paper-cover_VPB.jpg",
+            reportConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            dataShowImg: "https://www.pharbers.com/public/img_corevalue.png",
+            showMoreButtonGo: "https://www.pharbers.com/public/icon_go.svg",
+            maxRightImg: "https://www.pharbers.com/public/img_home_max.png",
+            maxRightImg_480: "https://www.pharbers.com/public/img_home_max_480.png",
+            realWorldLeftImg: "https://www.pharbers.com/public/img_home_realworld.png",
+            advisoryRightImg: "https://www.pharbers.com/public/img_home_consulting.png"
         }
+        
     },
     props: {
         allData: {
@@ -302,30 +277,41 @@ export default {
         navTop
     },
     methods: {
-        submitClientData(value) {
-            this.$emit('submitClientData', value)
-        },
-        toMore(data) {
-            this.$emit('linkToPage', data)
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
             this.returnToTop()
         },
+        // submitClientData(value) {
+        //     this.$emit('submitClientData', value)
+        // },
+        // linkToPage(data) {
+        //     this.$emit('linkToPage', data)
+        //     // this.returnToTop()
+        // },
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)
         },
-        downloadReport() {
-            this.$emit('downloadReport', 'download-report')
-        },
+        // downloadReport(value) {
+        //     this.$emit('downloadReport', value)
+        // },
         returnToTop() {
             document.documentElement.scrollTop = 0
             document.body.scrollTop = 0
         },
         transDate(param) {
             let date = new Date(param)
-
             let y = date.getUTCFullYear()
             let d = date.getUTCDate()
             let m = date.getUTCMonth()
-            
             if (this.language === '中文') {
                 return y + "年" + (m+1) + "月" + d + "日"
             } else {
@@ -360,9 +346,11 @@ export default {
         }
     },
     created() {
+        // todo
         window.addEventListener('beforeunload', e => {
             window.scrollTo(0,0)
         });
+        
         let lang = window.localStorage.getItem('lang')
         if (!lang) {
             lang = navigator.language || navigator.userLanguage
@@ -398,8 +386,14 @@ export default {
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
+        // const event = new Event("event")
+        // event.args = {
+        //     callback: "requestData",
+        //     element: this,
+        //     param: {}
+        // }
+        // this.$emit('event', event)
     }
-
 }
 </script>
 <style lang="scss" scoped>
