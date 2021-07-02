@@ -3,9 +3,9 @@
         <div v-for="(activity,index) in allData.activitys" :key="index + '1'" class="boyunhui-header">
             <bp-img class="boyunhui-header-img" :src="imgPath(activity.gallery, 'cover')"></bp-img>
             <bp-text class="ph-body-small-inverse top-breadcrumb">
-                <span @click="toHome">{{translation_data.home}}</span>
+                <span @click="linkToPage('home')">{{translation_data.home}}</span>
                 <span class="mr-0 ml-0">/</span>
-                <span @click="toActivityList">{{translation_data.events}}</span>
+                <span @click="linkToPage('activity-list')">{{translation_data.events}}</span>
                 <span class="mr-0 ml-0">/</span>
                 <span>{{activity.title}}</span>
             </bp-text>
@@ -62,7 +62,7 @@
         </div>
 
         <div ref="position-bluebook">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
         </div>
 
         <bp-text class="ph-H-Large_2">{{translation_data.blueBook}}</bp-text>
@@ -77,13 +77,13 @@
                 <div class="book-center">
                     <bp-text class="report-name ph-H-Medium">{{report.title}}</bp-text>
                     <bp-text class="report-time ph-body-xsmall">{{translation_data.date}} {{transDate(report.date)}} </bp-text>
-                    <bp-button @click="downloadReport" class="report-download-button" type='report-download-2' :text="translation_data.downloadReport"></bp-button>
+                    <bp-button @click="linkToPage('download-report', allData.index)" class="report-download-button" type='report-download-2' :text="translation_data.downloadReport"></bp-button>
                 </div>
             </div>
         </div>
 
         <div ref="position-meeting">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.agenda}}</bp-text>
         <div class="agenda-containers">
@@ -138,7 +138,7 @@
         </div>
 
         <div ref="position-speaker">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
@@ -154,7 +154,7 @@
         </div>
 
         <div ref="position-cooperation">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
         </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
@@ -169,7 +169,7 @@
         </div>
 
         <div ref="position-gallery">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
         </div>
 
         <bp-text class="ph-H-Large_2">{{translation_data.gallery}}</bp-text>
@@ -332,19 +332,22 @@ export default {
     },
     mounted() {
         const that = this;
-        window.onresize = () => {
-            
-        }
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
     },
     methods: {
-        toHome() {
-            this.$emit('linkToPage', 'home')
-        },
-        toActivityList() {
-            this.$emit('linkToActivity', 'activity-list')
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
         },
         transDateHour(param) {
             let date = new Date(param)
@@ -368,9 +371,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+                return "https://www.pharbers.com" + cover.path
             } else if (params[0]) {
-                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                const ipath =  "https://www.pharbers.com" + params[0]
                 return ipath;
             } 
         },
@@ -401,9 +404,6 @@ export default {
                 this.$refs['position-gallery'].scrollIntoView()
                 break;
             }
-        },
-        downloadReport() {
-            this.$emit('downloadReport', 'download-report')
         }
     }
 }

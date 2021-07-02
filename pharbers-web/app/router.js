@@ -14,6 +14,6 @@ Router.map(function () {
   this.route('consulting');
   this.route('report-list');
   this.route('download-report',{ path: '/download-report/:report_id' });
-  this.route('boyunhui');
+  this.route('boyunhui',{ path: '/boyunhui/:boyunhui_id' });
   this.route('activity-list');
 });
