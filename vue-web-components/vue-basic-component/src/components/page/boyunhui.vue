@@ -128,7 +128,7 @@
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
             <div v-for="(speaker,index) in allData.participants" :key="index" class="speaker-img-newbox">
-                <div class="same-width">
+                <div v-if="speaker.avatar.get('path')" class="same-width">
                     <div class="speaker-img-black"></div>
                     <bp-img :src="imgPath(speaker.avatar.get('path'))" class="speaker-img"></bp-img>
                     <bp-text class="ph-H-Medium mb-2">{{speaker.name}}</bp-text>
@@ -282,19 +282,30 @@ export default {
     },
     mounted() {
         const that = this;
-        window.onresize = () => {
-            
-        }
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
     },
     methods: {
         toHome() {
-            this.$emit('linkToPage', 'home')
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
+            this.returnToTop()
         },
         toActivityList() {
             this.$emit('linkToActivity', 'activity-list')
+        },
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         },
         transDateHour(param) {
             let date = new Date(param)
