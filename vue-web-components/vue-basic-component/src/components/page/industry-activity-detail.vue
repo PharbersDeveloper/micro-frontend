@@ -9,9 +9,9 @@
         <div class="industry-activity-detail-header" v-for="(activity,index) in allData.data" :key="index + '1'">
             <bpImg class="industry-activity-detail-header-img" :src="imgPath(activity.gallery, 'cover')"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
-                <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
+                <span class="mr-0" @click="linkToPage('home')">{{translation_data.home}}</span>
                 <span class="mr-0">/</span>
-                <span class="mr-0" @click="toActivityList">{{translation_data.activityList}}</span>
+                <span class="mr-0" @click="linkToPage('activity-list')">{{translation_data.activityList}}</span>
                 <span class="mr-0">/</span>
                 <span>{{activity.title}}</span>
             </bpText>
@@ -47,7 +47,7 @@
             <div class="industry-activity-detail-speaker" v-for="(speaker, index) in allData.eventAll" :key="index" :class="[index == 0?'self-cross-flex-end':'self-cross-flex-start']">
                 <div class="speaker-info-left">
                     <div class="pharbers-speaker-bg"></div>
-                    <bpImg class="pharbers-speaker-avatar" :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+speaker.image.path"></bpImg>
+                    <bpImg class="pharbers-speaker-avatar" :src="'https://www.pharbers.com'+speaker.image.path"></bpImg>
                     <bpText class="ph-H-Medium">{{speaker.speaker}}</bpText>
                 </div>
                 <div class="speaker-info-right">
@@ -88,10 +88,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
-            lineImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
-            headTest: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/avatar_cl.png",
-            quotataion: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_bg_view.svg",
+            headerImg: "https://www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
+            lineImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            headTest: "https://www.pharbers.com/public/avatar_cl.png",
+            quotataion: "https://www.pharbers.com/public/img_bg_view.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -193,11 +193,22 @@ export default {
         })
     },
     methods: {
-        toHome() {
-            this.$emit('linkToPage', 'home')
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
+            this.returnToTop()
         },
-        toActivityList() {
-            this.$emit('linkToActivity', 'activity-list')
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         },
         transDate(param, type) {
             let date = new Date(param)
@@ -220,9 +231,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+                return "https://www.pharbers.com" + cover.path
             } else if (params[0]) {
-                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                const ipath =  "https://www.pharbers.com" + params[0]
                 return ipath;
             } 
         }

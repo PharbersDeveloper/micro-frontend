@@ -17,4 +17,5 @@ Router.map(function () {
   this.route('boyunhui',{ path: '/boyunhui/:boyunhui_id' });
   this.route('activity-list');
   this.route('above-data-detail', { path: '/above-data-detail/:activity_id' });
+  this.route('industry-activity-detail', {path: '/industry-activity-detail/:industry_id'});
 });
