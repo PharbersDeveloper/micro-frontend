@@ -11,6 +11,7 @@ import JSONAPIAdapter from "@ember-data/adapter/json-api"
 export default JSONAPIAdapter.extend({
   cookies: service(),
   oauthRequest: false,
+  reverse: true,
   namespace: ENV.namespace,
   sortQueryParams(params) {
     this.set("queryParamsAWS", params)

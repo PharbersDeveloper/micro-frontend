@@ -189,6 +189,8 @@ export default class BoyunhuiRoute extends Route {
 
 			return this.store.query('image', { 'ids[]': ids });
 		});
+
+		console.log(this.store.adapterFor("application").reverse);
 		return RSVP.hash({
 			activitys: activityList.then((x) =>
 				x.filter((it) => it.language === lang)
