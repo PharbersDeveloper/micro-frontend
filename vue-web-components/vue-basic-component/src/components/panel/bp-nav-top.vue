@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="fixed-nav yesss" 
+    <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav']"
     >
         <div :class="[

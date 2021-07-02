@@ -8,7 +8,6 @@ export default class ActivityListComponent extends Component {
     listener(e) {
         switch (e.detail[0].args.callback) {
             case "linkToPage":
-                debugger
                 if (e.detail[0].args.param.index != undefined) {
                     this.router.transitionTo(e.detail[0].args.param.name, e.detail[0].args.param.index)
                 } else {
@@ -32,7 +31,6 @@ export default class ActivityListComponent extends Component {
     }
 
     get calAllData() {
-        this.args.model._isVue = true
         let gallery = [];
         let dataAll = [];
         this.tabIndex = 0;
@@ -56,6 +54,7 @@ export default class ActivityListComponent extends Component {
                 (it) => it.activity.activityType === 'industry'
             ),
         };
+        this.allData._isVue = true
         return this.allData
     }
 }

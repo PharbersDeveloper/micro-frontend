@@ -332,7 +332,6 @@ export default {
                     typeArr.push(type)
                 })
             }
-            debugger
             return this.allData.activities
         }
     },
