@@ -42,7 +42,7 @@ export default class ActivityListRoute extends Route {
         return RSVP.hash({
             galleryIds: galleryIds,
             data: activityList.then((x) => x.filter((it) => it.language === lang)),
-            galleryList: galleryList,
+            galleryList: galleryList
         });
     }
 }
