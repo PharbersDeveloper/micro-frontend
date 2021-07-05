@@ -793,6 +793,7 @@ export default {
                             align-items: center;
                             min-height: 70px;
                             border-bottom: 1px dashed rgba(22, 28, 57, .12);
+                            padding: 22px 0;
                             &:last-child {
                                 border-bottom: none;
                             }
