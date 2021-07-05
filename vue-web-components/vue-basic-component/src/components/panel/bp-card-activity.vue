@@ -65,9 +65,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+                return "https://www.pharbers.com" + cover.path
             } else if (params[0]) {
-                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                const ipath =  "https://www.pharbers.com" + params[0]
                 return ipath;
             } 
         },
@@ -81,7 +81,7 @@ export default {
             } else if (this.type === "boyunhui") {
                 curType = "boyunhui"
             }
-            this.$emit('toActivityPage', curType, this.id)
+            this.$emit('toActivityPage', curType, this.curIndex)
         }
     },
     props: {
@@ -91,7 +91,8 @@ export default {
         title: String,
         date: Date,
         city: String,
-        type: String
+        type: String,
+        curIndex: Number
     }
 }
 </script>

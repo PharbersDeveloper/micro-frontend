@@ -122,10 +122,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            maxHeaderImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_detail-page_head_MAX.jpg",
-            maxConnectImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
-            maxAdvantageIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_point.svg",
-            maxAdvantageImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_bg_doublehexagon.svg",
+            maxHeaderImg: "https://www.pharbers.com/public/img_detail-page_head_MAX.jpg",
+            maxConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            maxAdvantageIcon: "https://www.pharbers.com/public/icon_point.svg",
+            maxAdvantageImg: "https://www.pharbers.com/public/img_bg_doublehexagon.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -330,7 +330,13 @@ export default {
     },
     methods: {
         toHome() {
-            this.$emit('linkToPage', 'home')
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: 'home'
+            }
+            this.$emit('event', event)
         }
     }
 }

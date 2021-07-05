@@ -1,4 +1,5 @@
 <template>
+<div>
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav']"
     >
@@ -19,7 +20,7 @@
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
                 
-                <bp-select-vue v-if="isLogin" choosedValue="" src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
+                <bp-select-vue v-if="isLogin" choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
                     <bp-option-vue :text="translation_data.general" @click="toGeneral" ></bp-option-vue>
                     <bp-option-vue :text="translation_data.logout" @click="logout" ></bp-option-vue>
                 </bp-select-vue>
@@ -28,6 +29,38 @@
         </div>
         <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
     </div>
+    <div class="vue_container fixed-nav-response" 
+        :class="[inverse ? 'navInverse' : 'nav']"
+    >
+        <div 
+            :class="[
+                {borderNone},
+                inverse ? 'bordernavInverse' : 'bordernav']" 
+            class="nav-border"
+        >
+            <img :src="inverse ? imgSrcLight : imgSrc" class="bp-img fixed-nav-icon cursor-pointer" @click="toHome"/>
+            <div :class="inverse ? 'response-icon-menu-light' : 'response-icon-menu'" @click="clickMenu"></div>
+            <div class="meau-shade" v-if="menu">
+            </div>
+
+            <div class="response-menu" v-if="menu">
+                <div class="responsee-menu-item" 
+                    v-for="item in translation_data.options_data" :key="item.text" @click="runClickEvent(item.click_event)">
+                    <span class="ph-H-Small">{{item.text}}</span>
+                    <span class="ph-body-xsmall" v-if="item.spanText">{{item.spanText}}</span>
+                </div>
+                <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
+
+                <div v-if="isLogin" class="button-response-group">
+                    <bp-text class="ph-H-Small button-response-general" @click="toGeneral">{{translation_data.general}}</bp-text>
+                    <bp-text class="ph-H-Small button-response-logout" @click="logout">{{translation_data.logout}}</bp-text>
+                </div>
+                <bpButton v-else :text="translation_data.login" class="login" @click="toGeneral">{{translation_data.logout}}</bpButton>
+            </div>
+        </div>
+        <bp-modal-form v-if="contactForm" :translation_data="translation_data" @closeModal="closeModal" @submitClientData="submitClientData"/>
+    </div>
+</div>
 </template>
 
 <script>
@@ -86,11 +119,12 @@ export default {
             language: '中文',
             borderNone: false,
             contactForm: false,
+            menu: false,
             inverse: false,
-            imgSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_theme.svg",
-            imgSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_logo_ph_light.svg",
-            selectSrc: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop.svg",
-            selectSrcLight: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_drop_light.svg",
+            imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
+            imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
+            selectSrc: "https://www.pharbers.com/public/icon_drop.svg",
+            selectSrcLight: "https://www.pharbers.com/public/icon_drop_light.svg",
             translation_basedata: {
                 cn: {
                     MAX: {
@@ -219,6 +253,9 @@ export default {
         }
     },
     methods: {
+        clickMenu() {
+            return this.menu = !this.menu
+        },
         contactUs() {
             this.contactForm = true
         },
@@ -234,6 +271,7 @@ export default {
         },
         toHome() {
             this.$emit('linkToPage', 'home')
+            this.returnToTop()
         },
         linkToPage(value) {
             this.$emit('linkToPage', value)
@@ -469,6 +507,166 @@ export default {
             color: #fff !important;
         }
     }
+    .fixed-nav-response {
+        height: 80px;
+        width: 100%;
+        display: flex !important;
+        flex-direction: row;
+        top: 0;
+        padding: 0 100px;
+        position: fixed;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        padding: 0 16px!important;
+        
+        .nav-border {
+            height: 80px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-content: flex-start;
+            align-items: center!important;
+            justify-content: space-between;
+
+        }
+        .bp-img {
+            object-fit: cover;
+            cursor: pointer!important;
+            pointer-events: all;
+        }
+        .response-icon-menu {
+            width: 24px;
+            height: 24px;
+            background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 10h20v2H1v-2zm0-7h20v2H1V3zm0 14h20v2H1v-2z' fill='%232D334D' fill-rule='evenodd'/%3E%3C/svg%3E") center/100% no-repeat!important;
+        }
+        .response-icon-menu-light {
+            width: 24px;
+            height: 24px;
+            background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 10h20v2H1v-2zm0-7h20v2H1V3zm0 14h20v2H1v-2z' fill='%23ffffff' fill-rule='evenodd'/%3E%3C/svg%3E") center/100% no-repeat!important;
+        }
+        .meau-shade {
+            width: 100vw!important;
+            // width: 100%;
+            height: 100vh!important;
+            background: #8b8d9b!important;
+            opacity: .8;
+            position: absolute;
+            top: 80px;
+            transform: translateX(-16px);
+            overflow: hidden!important;
+        }
+        .response-menu {
+            position: absolute;
+            top: 80px;
+            background-color: #fff;
+            width: 100%!important;
+            padding: 40px;
+            min-width: 375px;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-content: flex-start;
+            align-items: stretch;
+            justify-content: flex-start;
+            height: auto;
+            .responsee-menu-item {
+                display: flex;
+                flex-direction: column;
+                align-content: flex-start;
+                align-items: flex-start;
+                justify-content: flex-start;
+                margin-bottom: 24px;
+                height: auto;
+                width: auto;
+                background: 0 0;
+                padding: 0;
+            }
+            .ph-H-Small {
+                height: auto;
+                width: auto;
+                background: 0 0;
+                margin-bottom: 4px;
+                font-size: 14px;
+                color: #2D334D;
+                letter-spacing: .35px;
+                font-weight: 700;
+                padding: 0;
+            }
+            .ph-body-xsmall{
+                height: auto;
+                width: auto;
+                background: 0 0;
+                font-size: 12px;
+                color: #A2A5B0;
+                padding: 0;
+                text-align: left;
+            }
+            .contact-us {
+                background: #FFDD4D;
+                border-radius: 2px;
+                border: none;
+                width: 100%;
+                height: 40px;
+                font-size: 14px;
+                color: #2D334D;
+                letter-spacing: 1px;
+                display: block;
+                text-align: center;
+                margin-bottom: 24px;
+                line-height: 24px;
+                padding: 0 12px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+                outline: 0;
+                justify-content: center;
+            }
+            .login {
+                line-height: 40px;
+                background: #FFF;
+                border-radius: 2px;
+                border: 1px solid rgba(22,28,57,.12);
+                width: 100%;
+                height: 40px;
+                font-size: 14px;
+                color: #2D334D;
+                letter-spacing: 1px;
+                display: block;
+                text-align: center;
+                line-height: 24px;
+                padding: 0 12px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+                outline: 0;
+                justify-content: center;
+            }
+
+            .button-response-group {
+                padding-top: 4px;
+                display: flex;
+                flex-direction: column;
+                .button-response-general {
+                    font-size: 14px;
+                    color: #2D334D;
+                    letter-spacing: 1px;
+                    display: block;
+                    text-align: center;
+                    line-height: 40px;
+                    border-radius: 2px;
+                    border: 1px solid rgba(22,28,57,.12);
+                    margin-bottom: 24px;
+                }
+
+                .button-response-logout {
+                    text-align: center;
+                }
+            }
+        }
+    }
     @media screen and (max-width: 992px) and (min-width: 769px) {
         ::-webkit-scrollbar-thumb {
             background: transparent;
@@ -483,6 +681,22 @@ export default {
         }
         .fixed-nav, .fixed-nav-inverse {
             padding: 0 40px !important;
+        }
+    }
+    @media (min-width: 549px) {
+        .fixed-nav {
+            display: flex !important;
+        }
+        .fixed-nav-response {
+            display: none !important;
+        }
+    }
+    @media (max-width: 549px), (width: 549px) {
+        .fixed-nav {
+            display: none !important;
+        }
+        .fixed-nav-response {
+            display: flex !important;
         }
     }
 </style>

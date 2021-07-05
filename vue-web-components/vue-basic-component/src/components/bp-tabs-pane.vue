@@ -12,14 +12,14 @@
                 </div>
             </div>
             <div class="activity-img-container">
-                <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+item.image.get('path')" class="above-data-detail-header-img"></bpImg>
+                <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="above-data-detail-header-img"></bpImg>
             </div>
         </div>
     </div>
      <div class="activity-list-container" v-if="responseMini">
         <div class="activity-in-little"  v-for="item in content" :key="item.activity.title">
             <div class="activity-img-container">
-                <bpImg :src="'https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com'+item.image.get('path')" class="activity-img"></bpImg>
+                <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="activity-img"></bpImg>
             </div>
             <bpText class="ph-H-Large_2">{{item.activity.title}}</bpText>
             <bpText class="ph-body-small">{{item.activity.subTitle}}</bpText>
@@ -60,8 +60,8 @@ export default {
         return {
             index: null,
             loaded: false,
-            activityImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg",
-            moreIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg"
+            activityImg: "https://www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg",
+            moreIcon: "https://www.pharbers.com/public/icon_go.svg"
         };
     },
 
@@ -94,15 +94,24 @@ export default {
             return y + "-" + (m+1) + "-" + d
         },
         toActivity(index) {
-            let avtivityType = ''
+            let param = {}
             if(this.tabIndex == 0) {
-                avtivityType = 'boyunhui/' + index
+                param = {
+                    avtivityType: 'boyunhui',
+                    idx: index
+                }
             } else if(this.tabIndex == 1) {
-                avtivityType = 'above-data-detail/' + index
+                param = {
+                    avtivityType: 'above-data-detail',
+                    idx: index
+                }
             } else if(this.tabIndex == 2) {
-                avtivityType = 'industry-activity-detail/' + index
+                param = {
+                    avtivityType: 'industry-activity-detail',
+                    idx: index
+                }
             }
-            this.$emit('linkToActivity', avtivityType)
+            this.$emit('linkToActivity', param)
         }
     }
 };

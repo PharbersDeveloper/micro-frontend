@@ -3,7 +3,7 @@
         <div class="report-list-header">
             <bpImg :src="reportListHeader" class="above-data-detail-header-img"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
-                <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
+                <span class="mr-0" @click="linkToPage('home')">{{translation_data.home}}</span>
                 <span class="mr-0">/</span>
                 <span>{{translation_data.report}}</span>
             </bpText>
@@ -13,7 +13,7 @@
         <div class="report-list-content">
             <div class="report-list-content-each" 
                 v-for="(item,index) in allData.reportsList"
-                :key="index" @click="toDownloadPage(index)">
+                :key="index" @click="linkToPage('download-report', index)">
                 <div class="report-list-content-left">
                     <div class="report-list-imgcontainer">
                         <bpImg class="report-list-img" :src="imgPath(item.cover.get('path'))"></bpImg>
@@ -62,8 +62,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            reportListHeader: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_report-list_hero_bg.jpg",
-            iconGo: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/icon_go.svg",
+            reportListHeader: "https://www.pharbers.com/public/img_report-list_hero_bg.jpg",
+            iconGo: "https://www.pharbers.com/public/icon_go.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -159,29 +159,38 @@ export default {
         })
     },
     methods: {
-        toHome() {
-            this.$emit('linkToPage', 'home')
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
+            this.returnToTop()
         },
-        toDownloadPage(id) {
-            this.$emit('toDownloadPage', id)
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         },
         imgPath(...params) {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+                return "https://www.pharbers.com" + cover.path
             } else if (params[0]) {
-                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                const ipath =  "https://www.pharbers.com" + params[0]
                 return ipath;
             } 
         },
         transDate(param) {
             let date = new Date(param)
-
             let y = date.getUTCFullYear()
             let d = date.getUTCDate()
             let m = date.getUTCMonth()
-
             return y + "年" + (m+1) + "月" + d + "日"
         }
     }

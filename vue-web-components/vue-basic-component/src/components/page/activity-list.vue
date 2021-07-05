@@ -3,7 +3,7 @@
         <div class="activity-list-header">
             <bpImg :src="aboveDataImg" class="above-data-detail-header-img"></bpImg>
             <bpText class="ph-body-small-inverse top-breadcrumb">
-                <span class="mr-0" @click="toHome">{{translation_data.home}}</span>
+                <span class="mr-0" @click="linkToPage('home')">{{translation_data.home}}</span>
                 <span class="mr-0">/</span>
                 <span>{{translation_data.events}}</span>
             </bpText>
@@ -11,7 +11,7 @@
             <bpText class="ph-H-xLarge-inverse">{{translation_data.events}}</bpText>
             <bpText class="ph-H-Large-2-inverse"></bpText>
         </div>
-        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini" @linkToActivity="linkToActivity" :tabIndex="tabIndex"></bpTabs>
+        <bpTabs :allData="allData" :tabArr="translation_data.tabArr" :responseMini="responseMini" @linkToActivity="linkToPage" :tabIndex="tabIndex"></bpTabs>
     </div>
 </template>
 <script>
@@ -34,7 +34,7 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            aboveDataImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_event-list_hero_bg.jpg",
+            aboveDataImg: "https://www.pharbers.com/public/img_event-list_hero_bg.jpg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -160,11 +160,22 @@ export default {
         })
     },
     methods: {
-        toHome() {
-            this.$emit('linkToPage', 'home')
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
+            this.returnToTop()
         },
-        linkToActivity(data) {
-            this.$emit('linkToActivity', data)
+        returnToTop() {
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
         }
     }
 }

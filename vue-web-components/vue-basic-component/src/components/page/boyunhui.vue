@@ -3,9 +3,9 @@
         <div v-for="(activity,index) in allData.activitys" :key="index + '1'" class="boyunhui-header">
             <bp-img class="boyunhui-header-img" :src="imgPath(activity.gallery, 'cover')"></bp-img>
             <bp-text class="ph-body-small-inverse top-breadcrumb">
-                <span @click="toHome">{{translation_data.home}}</span>
+                <span @click="linkToPage('home')">{{translation_data.home}}</span>
                 <span class="mr-0 ml-0">/</span>
-                <span @click="toActivityList">{{translation_data.events}}</span>
+                <span @click="linkToPage('activity-list')">{{translation_data.events}}</span>
                 <span class="mr-0 ml-0">/</span>
                 <span>{{activity.title}}</span>
             </bp-text>
@@ -62,7 +62,7 @@
         </div>
 
         <div ref="position-bluebook">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
         </div>
 
         <bp-text class="ph-H-Large_2">{{translation_data.blueBook}}</bp-text>
@@ -77,13 +77,13 @@
                 <div class="book-center">
                     <bp-text class="report-name ph-H-Medium">{{report.title}}</bp-text>
                     <bp-text class="report-time ph-body-xsmall">{{translation_data.date}} {{transDate(report.date)}} </bp-text>
-                    <bp-button @click="downloadReport" class="report-download-button" type='report-download-2' :text="translation_data.downloadReport"></bp-button>
+                    <bp-button @click="linkToPage('download-report', allData.index)" class="report-download-button" type='report-download-2' :text="translation_data.downloadReport"></bp-button>
                 </div>
             </div>
         </div>
 
         <div ref="position-meeting">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.agenda}}</bp-text>
         <div class="agenda-containers">
@@ -99,14 +99,29 @@
                         <!-- <template v-if="dateTab"> -->
                             <div class="boyunhui-form-subtitle mt-6">
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
+                                <bp-text v-if="agendas.host" class="official-yellow-line-inverse-host">主持人:{{agendas.host.name}} - {{agendas.host.occupation}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
                                 <div v-for="(agenda,index) in agendas.events" :key="index" class="form-one-line">
                                     <bp-text class="agenda-time agenda-time-marginR">{{transDateHour(agenda.startDate)}}-{{transDateHour(agenda.endDate)}}</bp-text>
-                                    <div class="different-style">
+                                    <div class="different-style" v-if="!agenda.speakerArr">
                                         <bp-text class="agenda-title">{{agenda.title}}</bp-text>
                                         <bp-text v-if="agenda.speaker" class="agenda-speaker">{{agenda.speaker.name}}</bp-text>
                                         <bp-text v-if="agenda.speaker" class="agenda-desc">{{agenda.speaker.occupation}}</bp-text>
+                                    </div>
+                                    <div class="different-style" v-if="agenda.speakerArr">
+                                        <bp-text class="agenda-title">{{agenda.title}}</bp-text>
+                                        <div class="speakersArea">
+                                            <div v-for="(item,index) in agenda.speakerArr" class="speakerItem" :key="'speaker' + index">
+                                                <bp-text v-if="item.name" class="agenda-speaker">
+                                                    <bp-text v-if="index == 0" class="speakerTitle">主持人:</bp-text>
+                                                    <bp-text v-if="index == 1" class="speakerTitle">嘉 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 宾:</bp-text>
+                                                    <bp-text v-if="index != 0 && index != 1" class="speakerTitle"></bp-text>
+                                                    {{item.name}}
+                                                </bp-text>
+                                                <bp-text v-if="item.name" class="agenda-desc">{{item.occupation}}</bp-text>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -123,28 +138,30 @@
         </div>
 
         <div ref="position-speaker">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
-            <div v-for="(speaker,index) in allData.participants" :key="index" class="speaker-img-newbox">
-                <div class="same-width">
-                    <div class="speaker-img-black"></div>
-                    <bp-img :src="imgPath(speaker.avatar.get('path'))" class="speaker-img"></bp-img>
-                    <bp-text class="ph-H-Medium mb-2">{{speaker.name}}</bp-text>
-                    <bp-text class="ph-body-small">{{speaker.occupation}}</bp-text>
-                    <bp-text class="ph-body-small">{{speaker.title}}</bp-text>
+            <template v-for="speaker in allData.participants">
+                <div v-if="speaker.avatar.get('path')" class="speaker-img-newbox">
+                    <div class="same-width">
+                        <div class="speaker-img-black"></div>
+                        <bp-img :src="imgPath(speaker.avatar.get('path'))" class="speaker-img"></bp-img>
+                        <bp-text class="ph-H-Medium mb-2">{{speaker.name}}</bp-text>
+                        <bp-text class="ph-body-small">{{speaker.occupation}}</bp-text>
+                        <bp-text class="ph-body-small">{{speaker.title}}</bp-text>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <div ref="position-cooperation">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
         </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
-            <bp-text class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
-            <div class="guidanceUnit-img-container">
+            <bp-text v-if="allData.cooperationListA && allData.cooperationListA.length > 0" class="ph-body-medium">{{translation_data.guidanceUnit}}</bp-text>
+            <div v-if="allData.cooperationListA && allData.cooperationListA.length > 0" class="guidanceUnit-img-container">
                 <bp-img v-for="(partner, index) in allData.cooperationListA" :key="index" :src="imgPath(partner.logo.get('path'))" class="cooperator-img"></bp-img>
             </div>
             <bp-text class="ph-body-medium mt-7">{{translation_data.sponsor}}</bp-text>
@@ -154,7 +171,7 @@
         </div>
 
         <div ref="position-gallery">
-            <bp-img src="https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
         </div>
 
         <bp-text class="ph-H-Large_2">{{translation_data.gallery}}</bp-text>
@@ -239,25 +256,60 @@ export default {
         },
         zone: function(){ 
             if(this.allData.activitys) {
-                let zoneList = this.allData.activitys[0].agendas.filter(x => {
+                let firstDate = ''
+                let lastDate = ''
+                //标题数组
+                let hosts = this.allData.hostList.filter(x => x.name != null)
+                
+                let zoneList = this.allData.activitys[0].agendas.filter((x,index) => {
+                    if(index == 0) {
+                        let date = x.subTitle.slice(0,4)
+                        if(date == '2021') {
+                            firstDate = '2021-04-15'
+                            lastDate = '2021-04-16'
+                        } else if(date == '2020') {
+                            firstDate = '2020-06-04'
+                            lastDate = '2020-06-05'
+                        }
+                    }
                     if(this.dateTab){
-                        return x.subTitle === "2020-06-05"
+                        return x.subTitle === lastDate
                     } else{
-                        return x.subTitle === "2020-06-04"
+                        return x.subTitle === firstDate
                     }
                 })
                 let agendas = []
-
                 zoneList.forEach((zone,i) => {
                     agendas[i] = []
+                    // 标题下的event数组
                     zone.agendas.filter((agenda,x) => {
                         if (agenda.title) {
-                            agenda.speakers.filter(speaker => {
-                                agenda['speaker'] = speaker
-                            })
-                            agendas[i].push(agenda)
+                            if(agenda.speakers.length > 1) {
+                                agenda['speakerArr'] = []
+                                agenda.speakers.filter(speaker => {
+                                    agenda['speakerArr'].push(speaker)
+                                })
+                            } else {
+                                agenda.speakers.filter(speaker => {
+                                    agenda['speaker'] = speaker
+                                })
+                            }
+                            //根据开始时间对event进行排序
+                            if(agendas[i][x-1] && agendas[i][x-1].startDate < agenda.startDate) {
+                                agendas[i].push(agenda)
+                            } else {
+                                agendas[i].unshift(agenda)
+                            }
                         }
                     })
+                    for(let x = 0; x < hosts.length; x++) {
+                        hosts[x].zone.then(a => {
+                            if(a.id == zone.id) {
+                                zone['host'] = hosts[x]
+                                this.$forceUpdate();
+                            }
+                        })
+                    }
                     zoneList[i]['events'] = agendas[i]
                 })
                 return zoneList
@@ -282,19 +334,22 @@ export default {
     },
     mounted() {
         const that = this;
-        window.onresize = () => {
-            
-        }
         window.addEventListener('setItemEvent', function(e) {
             that.language = e.newValue
         })
     },
     methods: {
-        toHome() {
-            this.$emit('linkToPage', 'home')
-        },
-        toActivityList() {
-            this.$emit('linkToActivity', 'activity-list')
+        linkToPage(value, idx) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: value,
+                    index: idx
+                }
+            }
+            this.$emit('event', event)
         },
         transDateHour(param) {
             let date = new Date(param)
@@ -318,9 +373,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + cover.path
+                return "https://www.pharbers.com" + cover.path
             } else if (params[0]) {
-                const ipath =  "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com" + params[0]
+                const ipath =  "https://www.pharbers.com" + params[0]
                 return ipath;
             } 
         },
@@ -351,9 +406,6 @@ export default {
                 this.$refs['position-gallery'].scrollIntoView()
                 break;
             }
-        },
-        downloadReport() {
-            this.$emit('downloadReport', 'download-report')
         }
     }
 }
@@ -722,6 +774,14 @@ export default {
                             letter-spacing: 0.4px;
                             margin-bottom: 11px;
                         }
+                        .official-yellow-line-inverse-host {
+                            font-family: PingFangSC-Medium;
+                            font-size: 12px;
+                            color: #454A61;
+                            letter-spacing: 1px;
+                            font-weight: 500;
+                            margin-left: 20px;
+                        }
                     }
 
                     .border-dashed-container {
@@ -751,7 +811,14 @@ export default {
                                 display: flex;
                                 flex-direction: row;
                                 flex-grow: 1;
-
+                                .speakersArea {
+                                    display: flex;
+                                    flex-direction: column;
+                                    .speakerItem {
+                                        display: flex;
+                                        flex-direction: row;
+                                    }
+                                }
                                 .agenda-title {
                                     width: 299px;
                                     font-size: 16px;
@@ -771,6 +838,9 @@ export default {
                                     display: flex;
                                     align-items: center;
                                     margin-right: 10vw;
+                                    .speakerTitle {
+                                        width: 60px;
+                                    }
                                 }
 
                                 .agenda-desc {
@@ -806,7 +876,7 @@ export default {
                 flex-direction: column;
                 min-height: 246px;
                 width: 238px;
-                margin-bottom: 16px;
+                margin-bottom: 40px;
                 background: 0 0;
 
                 .same-width {

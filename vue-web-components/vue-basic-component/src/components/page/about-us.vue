@@ -68,8 +68,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_detail-page_head_about-us.jpg",
-            aboutUsConnectImg: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/img_connect_line.svg",
+            headerImg: "https://www.pharbers.com/public/img_detail-page_head_about-us.jpg",
+            aboutUsConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -184,7 +184,13 @@ export default {
     },
     methods: {
         toHome() {
-            this.$emit('linkToPage', 'home')
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: 'home'
+            }
+            this.$emit('event', event)
         }
     }
 }

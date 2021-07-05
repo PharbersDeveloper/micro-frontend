@@ -1,20 +1,15 @@
-import { inject as service } from "@ember/service"
-import Route from "@ember/routing/route"
+import Route from '@ember/routing/route';
 
 export default class ApplicationRoute extends Route {
-	@service intl
+    model() {
+        let originalSetItem = localStorage.setItem;
 
-	beforeModel() {
-		let curLang = window.localStorage.getItem("lang")
-		if (curLang) {
-			if (curLang === "中文") {
-				this.intl.setLocale(["zh-cn"])
-			} else {
-				this.intl.setLocale(["en-us"])
-			}
-		} else {
-			this.intl.setLocale(["zh-cn"])
-			window.localStorage.setItem("lang", "中文")
-		}
-	}
+        localStorage.setItem = function (key, newValue) {
+            let event = new Event('setItemEvent');
+            event.key = key;
+            event.newValue = newValue;
+            window.dispatchEvent(event);
+            originalSetItem.apply(this, arguments);
+        }
+    }
 }
