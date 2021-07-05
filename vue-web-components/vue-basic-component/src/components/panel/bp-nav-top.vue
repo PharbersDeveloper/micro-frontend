@@ -13,8 +13,11 @@
                 <bpSelect 
                     :disSelected="true"
                     :src='inverse ? selectSrcLight : selectSrc'
-                    :choosed_value="translation_data.choosed_value" :options_data="translation_data.options_data"
-                    @linkToPage="linkToPage"></bpSelect>
+                    :choosed_value="translation_data.choosed_value" 
+                    :options_data="translation_data.options_data"
+                    :show="selectShow"
+                    @linkToPage="linkToPage"
+                    @clickEvent="clickEvent"></bpSelect>
                 <span class="bp-text" @click="toAboutUs">{{translation_data.aboutUs}}</span>
             </div>
             <div class="navButton" :class="{'inverseColor': inverse}">
@@ -112,7 +115,8 @@ export default {
         isLogin: {
             type: Boolean,
             default: false
-        }
+        },
+        selectShow: Boolean
     },
     data() {
         return {
@@ -276,6 +280,9 @@ export default {
         linkToPage(value) {
             this.$emit('linkToPage', value)
             this.returnToTop()
+        },
+        clickEvent(value) {
+            this.$emit("event", value)
         },
         toGeneral() {
             window.location.href = "http://general.pharbers.com"

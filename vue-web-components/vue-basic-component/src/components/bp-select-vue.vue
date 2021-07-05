@@ -22,6 +22,10 @@ export default {
             default: '请选择'
         },
         src: String
+        // show: {
+        //     type: String,
+        //     default: false
+        // }
     },
     data: function() {
         return {
@@ -34,6 +38,18 @@ export default {
             if(!this.disabled) {
                 this.show = !this.show
             }
+            // if(this.disabled) {
+            //     const event = new Event("event")
+            //     event.args = {
+            //         callback: "clickSelect",
+            //         element: this,
+            //         param: {
+            //             name: "show",
+            //             value: this.show
+            //         }
+            //     }
+            //     this.$emit('clickEvent', event)
+            // }
         }
     },
     mounted() {
