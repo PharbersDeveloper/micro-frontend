@@ -14,6 +14,7 @@ export default class HomeComponentComponent extends Component {
                 } else {
                     this.router.transitionTo(e.detail[0].args.param.name)
                 }
+                e.detail[0].args.element.returnToTop()
                 break
             default: 
                 console.log("submit event to parent")

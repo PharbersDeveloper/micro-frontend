@@ -204,7 +204,7 @@ export default {
                 }
             }
             this.$emit('event', event)
-            this.returnToTop()
+            // this.returnToTop()
         },
         returnToTop() {
             document.documentElement.scrollTop = 0

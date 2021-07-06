@@ -288,7 +288,6 @@ export default {
                 }
             }
             this.$emit('event', event)
-            this.returnToTop()
         },
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)

@@ -1092,8 +1092,8 @@ export default {
                     width: 144px;
 
                     .speaker-img-black {
-                        width: 144px;
-                        height: 144px;
+                        width: 160px;
+                        height: 160px;
                     }
                 }
             }

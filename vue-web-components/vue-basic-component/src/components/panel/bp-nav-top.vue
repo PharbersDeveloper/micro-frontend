@@ -271,15 +271,15 @@ export default {
         },
         toAboutUs() {
             this.$emit('linkToPage', 'about-us')
-            this.returnToTop()
+            // this.returnToTop()
         },
         toHome() {
             this.$emit('linkToPage', 'home')
-            this.returnToTop()
+            // this.returnToTop()
         },
         linkToPage(value) {
             this.$emit('linkToPage', value)
-            this.returnToTop()
+            // this.returnToTop()
         },
         clickEvent(value) {
             this.$emit("event", value)
