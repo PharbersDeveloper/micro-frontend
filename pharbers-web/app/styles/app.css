@@ -1,3 +1,7 @@
+@font-face {
+    font-family: Anton-Regular;
+    src: url('https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/assets/Anton-Regular.ttf')
+}
 * {
     margin: 0;
     padding: 0;
