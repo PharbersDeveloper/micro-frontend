@@ -113,7 +113,6 @@ export default class BoyunhuiRoute extends Route {
 					return '`' + `${x}` + '`';
 				})
 				.join(',');
-
 			return this.store.query('image', { 'ids[]': ids });
 		});
 

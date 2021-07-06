@@ -142,7 +142,7 @@
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
-            <template v-for="speaker in allData.participants">
+            <template v-for="speaker in allData.participantsImageList">
                 <div v-if="speaker.avatar.get('path')" class="speaker-img-newbox">
                     <div class="same-width">
                         <div class="speaker-img-black"></div>
