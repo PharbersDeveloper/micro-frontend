@@ -63,7 +63,6 @@ export default {
     mounted() {
         let that = this
         document.addEventListener('click',function (e) {
-            console.log(e.clientY)
             //获取鼠标最新的坐标
             if(e.clientY > 80) {
                 that.show = false

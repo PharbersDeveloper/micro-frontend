@@ -18,7 +18,8 @@
                     :show="selectShow"
                     @linkToPage="linkToPage"
                     @clickEvent="clickEvent"></bpSelect>
-                <span class="bp-text" @click="toAboutUs">{{translation_data.aboutUs}}</span>
+                <span class="bp-text" @click="toActivity">{{translation_data.activity}}</span>
+                <span class="bp-text topButton" @click="toAboutUs">{{translation_data.aboutUs}}</span>
             </div>
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
@@ -52,6 +53,12 @@
                     <span class="ph-H-Small">{{item.text}}</span>
                     <span class="ph-body-xsmall" v-if="item.spanText">{{item.spanText}}</span>
                 </div>
+                <div class="response-menu-link"
+                    v-for="item in translation_data.links_data"
+                    :key="item.text"
+                    @click="runClickEvent(item.click_event)">
+                    <bp-text class="linkItem">{{item.text}}</bp-text>
+                </div>
                 <bpButton :text="translation_data.contactUs" class="contact-us" @click="contactUs"></bpButton>
 
                 <div v-if="isLogin" class="button-response-group">
@@ -72,6 +79,7 @@ import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
 import bpModalForm from './bp-modal-form.vue'
+import bpText from '../bp-text.vue'
 export default {
     created() {
         let curLang = window.localStorage.getItem('lang')
@@ -105,7 +113,8 @@ export default {
         bpButton,
         bpSelectVue,
         bpOptionVue,
-        bpModalForm
+        bpModalForm,
+        bpText
     },
     props: {
         inversebase: {
@@ -139,6 +148,7 @@ export default {
                     },
                     choosed_value: "产品与服务",
                     aboutUs: "关于我们",
+                    activity: "活动资讯",
                     contactUs: "联系我们",
                     login: "登录",
                     general: "法伯数据平台",
@@ -163,6 +173,20 @@ export default {
                             spanText: "多层面精准预测，营销资源配置与优化",
                             click_event: function() {
                                 this.$emit('linkToPage', 'consulting')
+                            }
+                        }
+                    ],
+                    links_data: [
+                        {
+                            text: "活动资讯",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'activity-list')
+                            }
+                        },
+                        {
+                            text: "关于我们",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'about-us')
                             }
                         }
                     ],
@@ -271,15 +295,15 @@ export default {
         },
         toAboutUs() {
             this.$emit('linkToPage', 'about-us')
-            // this.returnToTop()
+        },
+        toActivity() {
+            this.$emit('linkToPage', 'activity-list')
         },
         toHome() {
             this.$emit('linkToPage', 'home')
-            // this.returnToTop()
         },
         linkToPage(value) {
             this.$emit('linkToPage', value)
-            // this.returnToTop()
         },
         clickEvent(value) {
             this.$emit("event", value)
@@ -293,6 +317,10 @@ export default {
         returnToTop() {
             document.documentElement.scrollTop = 0
             document.body.scrollTop = 0
+        },
+        runClickEvent(click_event) {
+            click_event.call(this)
+            this.menu = false
         }
     }
 };
@@ -372,6 +400,9 @@ export default {
                 box-sizing: border-box;
                 color: #2D334D;
             }
+            .topButton {
+                margin-left: 40px !important;
+            }
             .bp-select:hover {
                 background: transparent;
             }
@@ -400,7 +431,7 @@ export default {
                 width: max-content !important;
                 display: flex;
                 align-items: center;
-                padding: 0 8px;
+                // padding: 0 8px;
                 justify-content: space-between;
             }
             /deep/.bp-option-group {
@@ -577,6 +608,22 @@ export default {
             align-items: stretch;
             justify-content: flex-start;
             height: auto;
+            .response-menu-link {
+                display: flex;
+                justify-content: flex-start;
+                border-top: 1px solid #ededf0;
+                font-size: 14px;
+                color: #2D334D;
+                letter-spacing: .35px;
+                font-weight: 700;
+                .linkItem {
+                    margin: 32px 0;
+                }
+            }
+            .response-menu-link:last-of-type {
+                border-bottom: 1px solid #ededf0;
+                margin-bottom: 32px;
+            }
             .responsee-menu-item {
                 display: flex;
                 flex-direction: column;
