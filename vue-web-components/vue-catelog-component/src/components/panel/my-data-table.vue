@@ -23,9 +23,13 @@
                     <span class="heading-xsmall member-text">Owner</span>
                     <span class="subscribe-number-header"></span>
                     <span class="heading-xsmall time-text">
-                        <!-- <bp-select-vue>
-                            <bp-option-vue></bp-option-vue>
-                        </bp-select-vue> -->
+                        <bp-select-vue beforeSrc="https://general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
+                            <bp-option-vue text="Updated Time"></bp-option-vue>
+                            <bp-option-vue text="Created Time"></bp-option-vue>
+                            <div class="option-line mt-1 mb-1"></div>
+                            <bp-option-vue text="Ascending"></bp-option-vue>
+                            <bp-option-vue text="Descending"></bp-option-vue>
+                        </bp-select-vue>
                     </span>
                 </div>
             </div>
@@ -39,15 +43,41 @@
 </template>
 <script>
 import bpPagination from '../bp-pagination.vue'
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 
 export default {
     components: {
-        bpPagination
+        bpPagination,
+        bpSelectVue,
+        bpOptionVue
     },
     data() {
         return {
             haveData: true,
             myDataTab: 0
+        }
+    },
+    props: {
+        sort: {
+            type: String,
+            default: "-created"
+        }
+    },
+    computed: {
+        iconSort() {
+            if (this.sort.indexOf('-') === -1) {
+                return 'https://general.pharbers.com/icon_sorting-ascending'
+            } else {
+                return 'https://general.pharbers.com/icon_sorting-descending'
+            }        
+        },
+        mineSortText() {
+            if (this.sort.indexOf('created') === -1) {
+                return "Updated Time"
+            } else {
+                return "Created Time"
+            }
         }
     },
     methods: {
@@ -147,6 +177,14 @@ export default {
                         width: 5.3%;
                         height: 100%;
                         padding: 0 8px;
+                    }
+
+                    .time-text {
+                        display: flex;
+                        align-items: center;
+                        width: 155px;
+                        padding: 0 6px;
+                        cursor: pointer;
                     }
                 }
             }
