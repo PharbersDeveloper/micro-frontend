@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 
 export default class ActivityListComponent extends Component {
     @service router
+
     @action
     listener(e) {
         switch (e.detail[0].args.callback) {

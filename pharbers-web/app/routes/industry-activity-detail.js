@@ -1,10 +1,15 @@
 import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class IndustryActivityDetailRoute extends Route {
     @service store;
-
+    @action
+    didTransition(){
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+    }
     // beforeModel() {
     //     this.controllerFor('application').set('inverse', true);
     // }
