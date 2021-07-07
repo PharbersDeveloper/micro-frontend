@@ -24,13 +24,20 @@
                     <span class="subscribe-number-header"></span>
                     <span class="heading-xsmall time-text">
                         <bp-select-vue beforeSrc="https://general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
-                            <bp-option-vue text="Updated Time"></bp-option-vue>
-                            <bp-option-vue text="Created Time"></bp-option-vue>
+                            <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
+                            <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
                             <div class="option-line mt-1 mb-1"></div>
-                            <bp-option-vue text="Ascending"></bp-option-vue>
-                            <bp-option-vue text="Descending"></bp-option-vue>
+                            <bp-option-vue text="Ascending" :src="mineSortAscendingIcon" @click="myDataSort('', 1)"></bp-option-vue>
+                            <bp-option-vue text="Descending" :src="mineSortDescendingIcon" @click="myDataSort('-', 1)"></bp-option-vue>
                         </bp-select-vue>
                     </span>
+                    <span class="blank-action-header"></span>
+                </div>
+
+                <div class="main-container">
+                    <!-- <div v-for="file in allData.files"> -->
+
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -54,29 +61,58 @@ export default {
     },
     data() {
         return {
-            haveData: true,
-            myDataTab: 0
+            myDataTab: 0,
+            mineSortUpdatedTimeIcon: '',
+            mineSortAscendingIcon: ''
         }
     },
     props: {
-        sort: {
-            type: String,
-            default: "-created"
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    sort: '-created'
+                }
+            }
         }
     },
     computed: {
+        haveData() {
+            // if (!this.allData.files.meta.count) {
+            //     return false
+            // }
+            return true
+        },
         iconSort() {
-            if (this.sort.indexOf('-') === -1) {
-                return 'https://general.pharbers.com/icon_sorting-ascending'
+            if (this.allData.sort.indexOf('-') === -1) {
+                return 'https://general.pharbers.com/icon_sorting-ascending.svg'
             } else {
-                return 'https://general.pharbers.com/icon_sorting-descending'
-            }        
+                return 'https://general.pharbers.com/icon_sorting-descending.svg'
+            }
         },
         mineSortText() {
-            if (this.sort.indexOf('created') === -1) {
+            if (this.allData.sort.indexOf('created') === -1) {
                 return "Updated Time"
             } else {
                 return "Created Time"
+            }
+        },
+        mineSortCreatedTimeIcon() {
+            if (this.allData.sort.indexOf('created') != -1) {
+                this.mineSortUpdatedTimeIcon = ''
+                return 'https://general.pharbers.com/icon_check.svg'
+            } else {
+                this.mineSortUpdatedTimeIcon = 'https://general.pharbers.com/icon_check.svg'
+                return ''
+            }
+        },
+        mineSortDescendingIcon() {
+            if (this.allData.sort.indexOf('-') != -1) {
+                this.mineSortAscendingIcon = ''
+                return 'https://general.pharbers.com/icon_check.svg'
+            } else {
+                this.mineSortAscendingIcon = 'https://general.pharbers.com/icon_check.svg'
+                return ''
             }
         }
     },
@@ -84,6 +120,35 @@ export default {
         changeTab(num) {
             this.myDataTab = num
             this.$emit('changeTab', num)
+        },
+        myDataSort(sortType, type) {
+            const event = new Event("event")
+            let sortString = ''
+            
+            if (type === 0) {
+                if (this.mineSortDescendingIcon) {
+                    sortString = `sort=-${sortType}`
+                } else {
+                    sortString = `sort=${sortType}`
+                }
+            } else {
+                if (this.mineSortCreatedTimeIcon) {
+                    sortString = `sort=${sortType}created`
+                } else {
+                    sortString = `sort=${sortType}modified`
+                }
+            }
+            
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: 'download/mine',
+                    index: this.allData.page,
+                    params: sortString
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
@@ -100,6 +165,14 @@ export default {
         line-height: 16px;
         text-align: left;
         font-weight: 500;
+    }
+
+    @mixin body-primary {
+        font-family: SFProText-Light;
+        font-size: 14px;
+        color: #302F39;
+        letter-spacing: 0.25px;
+        line-height: 20px;
     }
 
     .cursor-pointer {
@@ -185,6 +258,59 @@ export default {
                         width: 155px;
                         padding: 0 6px;
                         cursor: pointer;
+
+                        /deep/.bp-select {
+                            width: 155px;
+                            height: 100%;
+                            background-color: #fff;
+                            margin-right: 1px;
+                            
+                            .bp-select-title {
+                                padding: 0;
+                                display: flex;
+                                justify-content: flex-start;
+
+                                .svg-icon {
+                                    width: 12px;
+                                    height: 12px;
+                                }
+                            }
+
+                            .bp-option-group {
+                                width: 134px;
+                                padding: 4px 0;
+                                position: absolute;
+                                z-index: 98;
+                                right: 0;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                .bp-option {
+                                    display: flex;
+                                    height: 28px;
+                                    margin: 0;
+                                    padding: 0 0 0 8px;
+                                    position: relative;
+                                    &:hover {
+                                        background: #E5EAEC;
+                                    }
+                                    .icon {
+                                        height: 12px;
+                                        width: 12px;
+                                    }
+                                    &>div {
+                                        @include body-primary;
+                                        position: absolute;
+                                        left: 28px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .blank-action-header {
+                        width: 4.8%;
+                        height: 100%;
                     }
                 }
             }
