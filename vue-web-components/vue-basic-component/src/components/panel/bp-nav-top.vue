@@ -2,6 +2,7 @@
 <div>
     <div class="fixed-nav" 
         :class="[inverse ? 'navInverse' : 'nav']"
+        :style="bgc"
     >
         <div :class="[
                 {borderNone},
@@ -96,11 +97,14 @@ export default {
                 that.borderNone = false;
                 if(that.inversebase) {
                     that.inverse = true;
+                    that.bgc = "background: rgba(255,255,255,0)"
                 }
             } else {
                 //不在页面顶部
                 that.borderNone = true;
                 that.inverse = false;
+                that.bgc = "background: rgba(255,255,255," + top/80 +")"
+
             }
         }
 
@@ -133,6 +137,7 @@ export default {
             borderNone: false,
             contactForm: false,
             menu: false,
+            bgc: "background: rgba(255,255,255,0)",
             inverse: false,
             imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
             imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
@@ -347,8 +352,7 @@ export default {
     }
 
     .nav {
-        background: #fff;
-        // border-bottom: 1px solid rgba(22, 28, 57, 0.12);
+        // background: #fff;
         text-align: center;
         font-size: 14px;
     }
@@ -361,7 +365,7 @@ export default {
     }
 
     .navInverse {
-        background: transparent;
+        // background: transparent;
         text-align: center;
         font-size: 14px;
     }
