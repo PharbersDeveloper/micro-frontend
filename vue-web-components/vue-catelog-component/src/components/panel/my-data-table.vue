@@ -33,6 +33,12 @@
                     </span>
                     <span class="blank-action-header"></span>
                 </div>
+
+                <div class="main-container">
+                    <!-- <div v-for="file in allData.files"> -->
+
+                    <!-- </div> -->
+                </div>
             </div>
 
             <div v-else>
