@@ -9,7 +9,6 @@ export default class ActivityListRoute extends Route {
 
     @action
     didTransition() {
-        debugger
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0
     }

@@ -36,7 +36,6 @@ export default {
     },
     methods: {
         handleClick(data) {
-            console.log("点击事件")
             this.$emit('click', data);
         }
     }
