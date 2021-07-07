@@ -63,7 +63,7 @@
                 <bp-text :class="[tag2 ? 'official-form-tag-active' : 'official-form-tag', 'ph-body-small', 'mr-2']" @click="toggleTagClass($event, 'tag2')">{{translation_data.consulting.consult}}</bp-text>
                 <bp-text :class="[tag3 ? 'official-form-tag-active' : 'official-form-tag', 'ph-body-small', 'mr-2']" @click="toggleTagClass($event, 'tag3')">{{translation_data.modalForm.dataService}}</bp-text>
             </div>
-            <bp-textarea :maxlength='140' @input="inputTextarea"></bp-textarea>
+            <bp-textarea class="textarea-width" :maxlength='140' @input="inputTextarea"></bp-textarea>
 
             <div class="form-submit-button-container" @click="submit">
                 <bp-button type='official-yellow-line-compact' density='compact' :text="translation_data.modalForm.submit"></bp-button>
@@ -380,7 +380,11 @@ export default {
                     color: #747789;
                 }
             }
-
+            .textarea-width {
+                width: 536px;
+                max-width: 536px;
+                min-width: 536px;
+            }
             .intention-container {
                 display: flex;
                 
