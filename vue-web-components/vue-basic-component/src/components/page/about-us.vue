@@ -50,7 +50,6 @@ import bpButton from '../bp-button'
 // import navTop from '../panel/bp-nav-top'
 // import navTopRes from '../panel/bp-nav-top-response'
 // import bpPageBottom from '../panel/bp-page-bottom'
-
 export default {
     name: "about-us",
     components: {
@@ -129,9 +128,6 @@ export default {
             } else {
                 this.responseMini = false
             }
-        },
-        windowHeight(val) {
-            console.log('height', val, this.windowHeight)
         }
     },
     created() {

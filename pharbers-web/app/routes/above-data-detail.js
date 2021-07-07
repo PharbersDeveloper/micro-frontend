@@ -1,13 +1,18 @@
 import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class AboveDataDetailRoute extends Route {
     @service store;
-
     // beforeModel() {
     //     this.controllerFor('application').set('inverse', true);
     // }
+    @action
+    didTransition() {
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+    }
     model(params) {
         let lang = localStorage.getItem('lang');
         if (lang === '中文') {

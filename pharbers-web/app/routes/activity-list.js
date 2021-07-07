@@ -1,9 +1,18 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import RSVP from 'rsvp'
+import { action } from '@ember/object';
 
 export default class ActivityListRoute extends Route {
     @service store;
+
+
+    @action
+    didTransition() {
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+    }
+
     model() {
         let lang = localStorage.getItem('lang');
         if (lang === '中文') {

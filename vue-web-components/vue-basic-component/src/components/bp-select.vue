@@ -48,6 +48,10 @@ export default {
             type: Boolean,
             default: false
         }
+        // show: {
+        //     type: Boolean,
+        //     default: false
+        // }
     },
     data: function() {
         return {
@@ -56,11 +60,32 @@ export default {
             choosed_text: this.choosed_value
         }
     },
+    mounted() {
+        let that = this
+        document.addEventListener('click',function (e) {
+            //获取鼠标最新的坐标
+            if(e.clientY > 80) {
+                that.show = false
+            }
+        })
+    },
     methods: {
         toggleShow() {
             if(!this.disabled) {
                 this.show = !this.show
             }
+            // if(!this.disabled) {
+            //     const event = new Event("event")
+            //     event.args = {
+            //         callback: "clickSelect",
+            //         element: this,
+            //         param: {
+            //             name: "show",
+            //             value: this.show
+            //         }
+            //     }
+            //     this.$emit('clickEvent', event)
+            // }
         },
         changeLanguage(value) {
             if (this.choosed_value && !this.disSelected) {

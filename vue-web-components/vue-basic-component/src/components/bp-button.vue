@@ -43,7 +43,6 @@ export default {
         },
         handleDBClick(data) {
             clearTimeout(this.time)
-            // console.log("双击事件")
             this.$emit('dbclick', data)
 
         }

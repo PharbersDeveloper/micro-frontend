@@ -33,7 +33,6 @@ export default {
             clearTimeout(that.time)
             that.time = setTimeout(() => {
                 // 写单击事件执行的逻辑代码
-                console.log("item单击事件")
                 let event = new Event("click")
                 event.data = data
                 this.$emit('click', event);
@@ -41,7 +40,6 @@ export default {
         },
         handleDBClick(data) {
             clearTimeout(this.time)
-            console.log("item双击事件")
             this.$emit('dbclick', data)
         }
     }

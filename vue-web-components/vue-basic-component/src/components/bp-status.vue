@@ -30,15 +30,12 @@ export default {
     },
     methods: {
         handleClick(data) {
-            console.log("点击tag")
             this.$emit('click', data);
         },
         onMouseEnter(data) {
-            console.log("鼠标滑入tag")
             this.$emit('mouseenter', data);
         },
         onMouseLeave(data) {
-            console.log("鼠标滑出tag")
             this.$emit('mouseleave', data);
         }
     }

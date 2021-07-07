@@ -239,26 +239,26 @@ export default {
         changeLanguage(value) {
             localStorage.setItem('lang', value)
             window.location.reload(true)
-            this.returnToTop()
+            // this.returnToTop()
         },
         toMiit() {
             window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501')
         },
         toMax() {
             this.$emit('linkToPage', 'max')
-            this.returnToTop()
+            // this.returnToTop()
         },
         toRW() {
             this.$emit('linkToPage', 'rw')
-            this.returnToTop()
+            // this.returnToTop()
         },
         toConsulting() {
             this.$emit('linkToPage', 'consulting')
-            this.returnToTop()
+            // this.returnToTop()
         },
         toAboutUs() {
             this.$emit('linkToPage', 'about-us')
-            this.returnToTop()
+            // this.returnToTop()
         },
         returnToTop() {
             document.documentElement.scrollTop = 0

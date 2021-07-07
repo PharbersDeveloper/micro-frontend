@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 export default class HeadComponent extends Component {
     @service('oauth') oauthService;
     @tracked topResponseMini;
-    @tracked inverse = false;
+    // @tracked inverse = false;
     @tracked isLogin = this.oauthService.judgeAuth();
     @service router
 

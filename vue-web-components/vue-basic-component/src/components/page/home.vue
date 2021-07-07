@@ -288,7 +288,6 @@ export default {
                 }
             }
             this.$emit('event', event)
-            this.returnToTop()
         },
         toActivityPage(curType, id) {
             this.$emit('toActivityPage', curType, id)
@@ -347,9 +346,6 @@ export default {
             } else {
                 this.responseMini = false
             }
-        },
-        windowHeight(val) {
-            console.log('height', val, this.windowHeight)
         }
     },
     created() {

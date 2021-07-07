@@ -1,12 +1,18 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import RSVP from 'rsvp'
+import { action } from '@ember/object';
 
 export default class HomeRoute extends Route {
     @service store;
     // beforeModel() {
     //     this.controllerFor('application').set('inverse', false)
     // }
+    @action
+    didTransition() {
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+    }
     model() {
         let lang = localStorage.getItem('lang')
         if (lang === "中文") {
@@ -22,9 +28,5 @@ export default class HomeRoute extends Route {
             activities: activityList.then(x => x.filter(it => it.language === lang)),
             reports: reportsList.then(x => x.filter(it => it.language === lang))
         })
-        // return RSVP.hash({
-        //     activities: activityList,
-        //     reports: reportsList
-        // })
     }
 }

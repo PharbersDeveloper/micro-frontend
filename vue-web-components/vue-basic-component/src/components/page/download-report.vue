@@ -68,7 +68,7 @@
                     <bp-text :class="[tag2 ? 'official-form-tag-active' : 'official-form-tag', 'ph-body-small', 'mr-2']" @click="toggleTagClass($event, 'tag2')">{{translation_data.consult}}</bp-text>
                     <bp-text :class="[tag3 ? 'official-form-tag-active' : 'official-form-tag', 'ph-body-small', 'mr-2']" @click="toggleTagClass($event, 'tag3')">{{translation_data.dataService}}</bp-text>
                 </div>
-                <bp-textarea :maxlength='140' @input="inputTextarea" class="form-textarea"></bp-textarea>
+                <bp-textarea :maxlength='140' @input="inputTextarea" class="form-textarea textarea-width"></bp-textarea>
 
                 <bp-text class="ph-body-xsmall mb-3">{{translation_data.tips}}</bp-text>
 
@@ -515,7 +515,11 @@ export default {
                     display: flex;
                     justify-content: space-between;
                 }
-
+                .textarea-width {
+                    width: 536px;
+                    max-width: 536px;
+                    min-width: 536px;
+                }
                 .intention-content {
                     display: flex;
                     .official-form-tag {

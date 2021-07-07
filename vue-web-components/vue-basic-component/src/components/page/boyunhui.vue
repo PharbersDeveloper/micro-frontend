@@ -142,7 +142,7 @@
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
-            <template v-for="speaker in allData.participants">
+            <template v-for="speaker in allData.participantsImageList">
                 <div v-if="speaker.avatar.get('path')" class="speaker-img-newbox">
                     <div class="same-width">
                         <div class="speaker-img-black"></div>
@@ -793,6 +793,7 @@ export default {
                             align-items: center;
                             min-height: 70px;
                             border-bottom: 1px dashed rgba(22, 28, 57, .12);
+                            padding: 22px 0;
                             &:last-child {
                                 border-bottom: none;
                             }
@@ -1091,8 +1092,8 @@ export default {
                     width: 144px;
 
                     .speaker-img-black {
-                        width: 144px;
-                        height: 144px;
+                        width: 160px;
+                        height: 160px;
                     }
                 }
             }

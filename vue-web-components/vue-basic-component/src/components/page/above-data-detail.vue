@@ -156,9 +156,6 @@ export default {
             } else {
                 this.responseMini = false
             }
-        },
-        windowHeight(val) {
-            console.log('height', val, this.windowHeight)
         }
     },
     created() {
@@ -221,7 +218,7 @@ export default {
                 }
             }
             this.$emit('event', event)
-            this.returnToTop()
+            // this.returnToTop()
         },
         returnToTop() {
             document.documentElement.scrollTop = 0
