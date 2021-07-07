@@ -13,10 +13,7 @@
 <script>
 export default {
     props: {
-        iconClass: {
-            type: String,
-            default: "svg-icon"
-        },
+        iconClass: String,
         classNames: String,
         choosedValue: {
             type: String,
