@@ -19,10 +19,7 @@ export default {
     props: {
         text: String,
         choosedValue: String,
-        iconClass: {
-            default: "svg-icon",
-            type: String
-        },
+        iconClass: String,
         src: String
     },
     computed: {

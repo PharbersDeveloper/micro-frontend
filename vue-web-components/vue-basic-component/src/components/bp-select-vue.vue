@@ -1,8 +1,9 @@
 <template>
     <div class="bp-select" :class="[{'select-disabled': disabled},classNames]">
         <div class="bp-select-title" @click="toggleShow">
+            <img svg-inline :src="beforeSrc" :alt="beforeAlt" :class="[iconClass,'svg-icon']" v-if="beforeSrc"/>
             <span>{{choosedValue}}</span>
-            <img svg-inline :src="src" alt="example" :class="[iconClass,'svg-icon']" v-if="src"/>
+            <img svg-inline :src="src" :alt="alt" :class="[iconClass,'svg-icon']" v-if="src"/>
         </div>
         <ul :class="show ? 'bp-option-group' : 'd-none'">
             <slot></slot>
@@ -12,20 +13,16 @@
 <script>
 export default {
     props: {
-        iconClass: {
-            type: String,
-            default: "svg-icon"
-        },
+        iconClass: String,
         classNames: String,
         choosedValue: {
             type: String,
             default: '请选择'
         },
-        src: String
-        // show: {
-        //     type: String,
-        //     default: false
-        // }
+        src: String,
+        beforeSrc: String,
+        alt: String,
+        beforeAlt: String
     },
     data: function() {
         return {
