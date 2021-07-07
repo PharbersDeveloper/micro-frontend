@@ -97,14 +97,13 @@ export default {
                 that.borderNone = false;
                 if(that.inversebase) {
                     that.inverse = true;
-                    that.bgc = "background: rgba(255,255,255,0)"
+                    that.bgc = "background: transparent; transition: all 0.5s;"
                 }
             } else {
                 //不在页面顶部
                 that.borderNone = true;
                 that.inverse = false;
-                that.bgc = "background: rgba(255,255,255," + top/80 +")"
-
+                that.bgc = "background: white; transition: all 0.5s;"
             }
         }
 
@@ -137,8 +136,8 @@ export default {
             borderNone: false,
             contactForm: false,
             menu: false,
-            bgc: "background: rgba(255,255,255,0)",
             inverse: false,
+            bgc: "background: transparent",
             imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
             imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
             selectSrc: "https://www.pharbers.com/public/icon_drop.svg",
