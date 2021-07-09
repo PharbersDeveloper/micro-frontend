@@ -89,7 +89,9 @@ export default class BoyunhuiRoute extends Route {
 			let days = x.map((it) => {
 				return it.subTitle;
 			});
-			return [...new Set(days.reduce((acc, val) => acc.concat(val), []))];
+			let arr = [...new Set(days.reduce((acc, val) => acc.concat(val), []))];
+            //日期升序排序
+            return arr.sort(function (a, b) {return Date.parse(a) - Date.parse(b);});
 		});
 
 		let allZone = [];
@@ -204,10 +206,10 @@ export default class BoyunhuiRoute extends Route {
 			),
 			activityDays: activityDays,
 			cooperationListA: cooperationList.then((x) =>
-				x.filter((it) => it.companyType === '指导单位' && it.language === 1)
+				x.filter((it) => it.companyType === '指导单位' && it.language === lang)
 			),
 			cooperationListB: cooperationList.then((x) =>
-				x.filter((it) => it.companyType === '主办单位' && it.language === 1)
+				x.filter((it) => it.companyType === '主办单位' && it.language === lang)
 			),
 			galleryList: galleryList.then((x) => x.filter((it) => it.path != '')),
 			galleryShow: galleryShow,
