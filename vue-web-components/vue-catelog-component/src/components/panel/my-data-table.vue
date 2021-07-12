@@ -39,7 +39,7 @@
                         <div class="icon_datafile"></div>
                         <div class="data-name-container">
                             <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
-                            <div class="data-name-bottom">
+                            <div v-if="file.labels.length" class="data-name-bottom">
                                 <template v-for="label in file.labels">
                                     <editable-component :tagName="label"></editable-component>
                                 </template>
@@ -57,8 +57,22 @@
 
                         <div class="mine-time">
                             <bp-text class="body-tertiary">
-                                
+                                {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}}
                             </bp-text>
+                        </div>
+
+                        <div class="action-menu">
+                            <bp-select-vue class="bp-select-option" choosedValue="">
+                                <bp-option-vue text="Go to Data Instance" class="cursor-not-allow"></bp-option-vue>
+                                <div class="option-line"></div>
+                                <bp-option-vue text="Edit Tags" class="cursor-not-allow"></bp-option-vue>
+                                <bp-option-vue text="Rename" @click="changeName(file)" class="rename-button"></bp-option-vue>
+                                <div class="option-line"></div>
+                                <bp-option-vue text="Share" class="cursor-not-allow"></bp-option-vue>
+                                <bp-option-vue text="Download" @click="downloadFileService(file)" class="download-button"></bp-option-vue>
+                                <div class="option-line"></div>
+                                <bp-option-vue text="Remove" @click="deleteData(file)" class="remove-file"></bp-option-vue>
+                            </bp-select-vue>
                         </div>
                     </div>
                 </div>
@@ -89,6 +103,8 @@ export default {
     data() {
         return {
             myDataTab: 0,
+            rename: false,
+            renameFile: '',
             mineSortUpdatedTimeIcon: '',
             mineSortAscendingIcon: '',
             userName: 'jyan',
@@ -191,6 +207,13 @@ export default {
                 this.mineSortAscendingIcon = 'https://general.pharbers.com/icon_check.svg'
                 return ''
             }
+        },
+        timeDisplay() {
+            if (this.allData.sort.indexOf('created') !== -1) {
+                return true
+            } else {
+                return false
+            }
         }
     },
     methods: {
@@ -247,14 +270,75 @@ export default {
                 }
             }
             return resname
+        },
+        formatDateStandard(...params) {
+            if(params.length === 2) {
+                let date = new Date( params[0] ),
+                    Y = date.getFullYear(),
+                    M =
+                        ( date.getMonth() + 1 < 10 ?
+                            `0${date.getMonth() + 1}` :
+                            date.getMonth() + 1 ),
+                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+
+                    h =
+                        ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
+                    m =
+                        ( date.getMinutes() < 10 ?
+                            `0${date.getMinutes()}` :
+                            date.getMinutes() ) ,
+                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+
+                // 输出结果：yyyy/mm/dd hh:mm
+                if(params[1] === 0){
+                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                }else if(params[1] === 1) {
+                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                }
+            }
+        },
+        changeName(file) {
+            this.rename = true
+            this.renameFile = file
+        },
+        downloadFileService(file) {
+            const event = new Event("event")
+            event.args = {
+                callback: "service",
+                element: this,
+                param: {
+                    name: 'downloadFile',
+                    use: 'downloadFile',
+                    file: file
+                }
+            }
+            this.$emit('event', event)
+        },
+        deleteData(file) {
+            const event = new Event("event")
+            event.args = {
+                callback: "service",
+                element: this,
+                param: {
+                    name: 'deleteFile',
+                    use: 'deleteFile',
+                    file: file
+                }
+            }
+            this.$emit('event', event)
         }
-    }
+    } 
 }
 </script>
 <style lang="scss" scoped>
     * {
         box-sizing: border-box;
     }
+    .cursor-not-allow {
+        cursor: not-allowed;
+    }
+
     .heading-xsmall {
         font-family: SFProText-Regular;
         font-size: 12px;
@@ -280,6 +364,14 @@ export default {
         color: #302F39;
         letter-spacing: 0.25px;
         line-height: 20px;
+    }
+
+    .body-tertiary {
+        font-family: SFProText-Light;
+        font-size: 12px;
+        color: #706F79;
+        letter-spacing: 0.25px;
+        line-height: 16px;
     }
 
     @mixin body-primary {
@@ -385,7 +477,7 @@ export default {
 
                     .member-text {
                         width: 10%;
-                        padding: 0 9px;
+                        padding: 0 8px;
                     }
 
                     .subscribe-number-header {
@@ -473,10 +565,9 @@ export default {
                         height: 66px;
                         display: flex;
                         align-items: center;
-                        line-height: 66px;
                         border-bottom: 1px solid rgba(37, 35, 45, 0.08);
                         // 文件logo
-                        .icon_dashboardreport {
+                        .icon_datafile {
                             width: 24px;
                             height: 24px;
                             margin-right: 18px;
@@ -522,7 +613,7 @@ export default {
                         }
                         //订阅人数
                         .subscribe-number {
-                            width: 60px;
+                            width: 5.3%;
                             padding: 0 8px;
                             display: flex;
                             align-items: center;
@@ -540,9 +631,12 @@ export default {
                         }
                         // 功能键
                         .action-menu {
-                            width: 40px;
+                            width: 4.8%;
                             height: 100%;
-                            .bp-select-option {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            /deep/.bp-select-option {
                                 width: 20px;
                                 height: 20px;
                                 background-color: #fff;
@@ -552,7 +646,7 @@ export default {
                                     @include icon_more-v;
                                 }
                                 .button-focus {
-                                        // @include icon_more-v-focus;
+                                    // @include icon_more-v-focus;
                                 }
                                 .bp-option-group {
                                     position: absolute;
@@ -583,6 +677,13 @@ export default {
                                             @include body-primary;
                                         }
                                     }
+
+                                    .option-line {
+                                        height: 0.5px;
+                                        background: rgba(31, 36, 49, 0.08);
+                                        margin: 0.5px 0;
+                                    }
+
                                     .remove-file span {
                                         @include body-primary-red-light;
                                     }
