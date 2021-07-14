@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import test from './views/test.vue'
 import myDataTable from './components/panel/my-data-table.vue'
+import menu from './components/panel/menu.vue'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
             path: '/my-data-table',
             name: 'myDataTable',
             component: myDataTable
+        },
+        {
+            path: '/menu',
+            name: 'menu',
+            component: menu
         }
     ]
 })
