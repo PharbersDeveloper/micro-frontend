@@ -75,11 +75,18 @@
                             </bp-select-vue>
                         </div>
                     </div>
+
+                    <div v-if="allPage" class="page-container">
+                        <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
+                    </div>
                 </div>
             </div>
 
-            <div v-else>
-
+            <div v-else class="blank">
+                <div class="no_data-icon"></div>
+                <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
+                <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
+                <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
             </div>
         </div>
     </div>
@@ -90,6 +97,7 @@ import bpPagination from '../bp-pagination.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
+import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
 
 export default {
@@ -98,6 +106,7 @@ export default {
         bpSelectVue,
         bpOptionVue,
         bpText,
+        bpButton,
         editableComponent
     },
     data() {
@@ -107,6 +116,8 @@ export default {
             renameFile: '',
             mineSortUpdatedTimeIcon: '',
             mineSortAscendingIcon: '',
+
+            curPage: 1,
             userName: 'jyan',
             allData: {
                 sort: '-created',
@@ -154,8 +165,206 @@ export default {
                         source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
                         type: "file",
                         version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },{
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
+                    },
+                    {
+                        accessibility: null,
+                        created: "2021-02-26T07:06:13.700Z",
+                        dateCover: [],
+                        description: null,
+                        extension: "xlsx",
+                        geoCover: [],
+                        isNewVersion: true,
+                        labels: [],
+                        markets: [],
+                        modified: "2021-02-26T07:06:13.941Z",
+                        molecules: [],
+                        name: "test1",
+                        owner: "5SCsFDZn09FT4QpaSP6y",
+                        partners: "zudIcG_17yj8CEUoCTHg",
+                        providers: [],
+                        shared: null,
+                        size: 8550,
+                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
+                        type: "file",
+                        version: null
                     }
                 ]
+                // files: []
             }
         }
     },
@@ -171,10 +380,18 @@ export default {
     },
     computed: {
         haveData() {
-            // if (!this.allData.files.meta.count) {
-            //     return false
-            // }
+            if (!this.allData.files.length) {
+                return false
+            }
             return true
+        },
+        allPage() {
+            const total = this.allData.files.length
+            const perPage = 10
+            if (Math.ceil(total / perPage) <= 1) {
+                return 0
+            }
+            return Math.max(1, Math.ceil(total / perPage))
         },
         iconSort() {
             if (this.allData.sort.indexOf('-') === -1) {
@@ -327,6 +544,21 @@ export default {
                 }
             }
             this.$emit('event', event)
+        },
+        changePage(page) {
+            
+        },
+        upload() {
+            const event = new Event("event")
+            event.args = {
+                callback: "service",
+                element: this,
+                param: {
+                    name: 'uploadFile',
+                    use: 'uploadFile'
+                }
+            }
+            this.$emit('event', event)
         }
     } 
 }
@@ -338,6 +570,48 @@ export default {
     .cursor-not-allow {
         cursor: not-allowed;
     }
+
+    @mixin btn_primary-initial {
+        font-family: SFProText-Medium;
+        font-size: 14px;
+        color: #FFFFFF;
+        text-align: center;
+        line-height: 20px;
+    }
+
+    @mixin btn_disabled {
+        font-family: SFProText-Medium;
+        font-size: 14px;
+        color: #BCBAC4;
+        text-align: center;
+        line-height: 20px;
+    }
+
+    button.btn_primary {
+        background: #7163C5 !important;
+        border-radius: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include btn_primary-initial;
+
+        &:hover {
+            background: #9084D2 !important; 
+            @include btn_primary-initial;
+        }
+
+        &:active {
+            background: #5342B3 !important;
+            @include btn_primary-initial; 
+        }
+
+        &:disabled {
+            background: rgba(37, 35, 45, 0.04) !important;
+            @include btn_disabled;
+        }
+    }
+
+    
 
     .heading-xsmall {
         font-family: SFProText-Regular;
@@ -374,6 +648,14 @@ export default {
         line-height: 16px;
     }
 
+    .body-secondary {
+        font-family: SFProText-Light;
+        font-size: 14px;
+        color: #706F79;
+        letter-spacing: 0.25px;
+        line-height: 20px;
+    }
+
     @mixin body-primary {
         font-family: SFProText-Light;
         font-size: 14px;
@@ -394,6 +676,12 @@ export default {
         width: 20px;
         height: 20px;
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.5 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0 6a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100%;
+    }
+
+    .no_data-icon {
+        width: 160px;
+        height: 160px;
+        background: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cellipse fill='%23F5F5F6' cx='80' cy='147' rx='56' ry='5'/%3E%3Cpath d='M150.25 47.75v30.5h-12.636c.407.83.636 1.763.636 2.75a6.23 6.23 0 0 1-1.83 4.42 6.23 6.23 0 0 1-4.42 1.83 6.23 6.23 0 0 1-4.42-1.83 6.23 6.23 0 0 1-1.83-4.42c0-.987.229-1.92.636-2.75H9.75v-30.5h140.5z' stroke='%23E6E6E6' stroke-width='.5' fill='%23FFF'/%3E%3Cpath d='M150 48v30h-12.803a6 6 0 1 1-10.395 0H80V48h70z' fill='%23F2F2F3'/%3E%3Cpath d='M150.25 89.75v30.5H34.002c.161.556.248 1.143.248 1.75a6.23 6.23 0 0 1-1.83 4.42 6.23 6.23 0 0 1-4.42 1.83 6.23 6.23 0 0 1-4.42-1.83 6.23 6.23 0 0 1-1.83-4.42c0-.607.087-1.194.248-1.75H9.75v-30.5h116.957a5.731 5.731 0 0 0-.457 2.25c0 1.588.644 3.025 1.684 4.066A5.732 5.732 0 0 0 132 97.75a5.732 5.732 0 0 0 4.066-1.684A5.732 5.732 0 0 0 137.75 92c0-.798-.163-1.559-.457-2.25h12.957z' stroke='%23E6E6E6' stroke-width='.5' fill='%23FFF'/%3E%3Cpath d='M150 90v30H80V90h46.341a6 6 0 1 0 11.317 0H150z' fill='%23F2F2F3'/%3E%3Cpath fill='%23E8E8E9' d='M16 66h64v-8H16zM16 108h64v-8H16z'/%3E%3Cpath fill='%239794A7' d='M80 66h64v-8H80zM80 108h64v-8H80z'/%3E%3Cpath fill='%23E8E8E9' d='M16 72h16v-4H16zM16 114h16v-4H16z'/%3E%3Cpath d='M148 31.75c.621 0 1.184.252 1.591.659.407.407.659.97.659 1.591v14.25H34.002c.161.556.248 1.143.248 1.75a6.23 6.23 0 0 1-1.83 4.42A6.23 6.23 0 0 1 28 56.25a6.23 6.23 0 0 1-4.42-1.83A6.23 6.23 0 0 1 21.75 50c0-.607.087-1.194.248-1.75H9.75V34c0-.621.252-1.184.659-1.591.407-.407.97-.659 1.591-.659z' stroke='%23E6E6E6' stroke-width='.5' fill='%23FFF'/%3E%3Cpath d='M80 32h68a2 2 0 0 1 2 2v14H80V32z' fill='%23F2F2F3'/%3E%3Ccircle fill='%239B9AAB' cx='18' cy='40' r='2'/%3E%3Ccircle fill='%23BEBBC8' cx='24' cy='40' r='2'/%3E%3Ccircle fill='%23DEDDE2' cx='30' cy='40' r='2'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
     }
 
     .icon_datafile {
@@ -691,6 +979,43 @@ export default {
                             }
                         }
                     }
+
+                    .page-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 64px;
+                        width: 100%;
+                        padding: 20px 0;
+                    }
+                }
+            }
+
+            .blank {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+                overflow: scroll;
+
+                .no_data-icon {
+                    margin-bottom: 20px;
+                }
+
+                .body-secondary {
+                    padding: 0 2px;
+                    width: 312px;
+                    text-align: center;
+                    margin-top: 16px;
+                }
+                button {
+                    width: 80px;
+                    height: 32px;
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
         }
