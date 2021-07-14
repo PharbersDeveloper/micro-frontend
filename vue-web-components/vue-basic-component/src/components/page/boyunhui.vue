@@ -99,7 +99,7 @@
                         <!-- <template v-if="dateTab"> -->
                             <div class="boyunhui-form-subtitle mt-6">
                                 <bp-text class="official-yellow-line-inverse font-weight-bold">{{agendas.title}}</bp-text>
-                                <bp-text v-if="agendas.host" class="official-yellow-line-inverse-host">主持人:{{agendas.host.name}} - {{agendas.host.occupation}}</bp-text>
+                                <bp-text v-if="agendas.host" class="official-yellow-line-inverse-host">{{translation_data.host}}:{{agendas.host.name}} - {{agendas.host.occupation}}</bp-text>
                             </div>
                             <div class="border-dashed-container">
                                 <div v-for="(agenda,index) in agendas.events" :key="index" class="form-one-line">
@@ -114,8 +114,8 @@
                                         <div class="speakersArea">
                                             <div v-for="(item,index) in agenda.speakerArr" class="speakerItem" :key="'speaker' + index">
                                                 <bp-text v-if="item.name" class="agenda-speaker">
-                                                    <bp-text v-if="index == 0" class="speakerTitle">主持人:</bp-text>
-                                                    <bp-text v-if="index == 1" class="speakerTitle">嘉 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 宾:</bp-text>
+                                                    <bp-text v-if="index == 0" class="speakerTitle">{{translation_data.host}}:</bp-text>
+                                                    <bp-text v-if="index == 1" class="speakerTitle">{{translation_data.guests}}:</bp-text>
                                                     <bp-text v-if="index != 0 && index != 1" class="speakerTitle"></bp-text>
                                                     {{item.name}}
                                                 </bp-text>
@@ -223,7 +223,9 @@ export default {
                     speaker: "嘉宾讲者",
                     partner: "合作单位",
                     guidanceUnit: "指导单位",
-                    sponsor: "主办单位"
+                    sponsor: "主办单位",
+                    host: "主持人",
+                    guests: "嘉宾"
                 },
                 en: {
                     home: "Home",
@@ -241,7 +243,9 @@ export default {
                     speaker: "Speaker",
                     partner: "Sponsor",
                     guidanceUnit: "Guide by",
-                    sponsor: "Host by"
+                    sponsor: "Host by",
+                    host: "Presenter",
+                    guests: "Guests"
                 }
             }
         }
@@ -832,7 +836,7 @@ export default {
                                 }
 
                                 .agenda-speaker {
-                                    width: 111px;
+                                    width: 180px;
                                     font-size: 16px;
                                     color: #747789;
                                     letter-spacing: .4px;
@@ -840,7 +844,7 @@ export default {
                                     align-items: center;
                                     margin-right: 10vw;
                                     .speakerTitle {
-                                        width: 60px;
+                                        width: 80px;
                                     }
                                 }
 

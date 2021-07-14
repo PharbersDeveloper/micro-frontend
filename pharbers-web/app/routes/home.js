@@ -5,13 +5,14 @@ import { action } from '@ember/object';
 
 export default class HomeRoute extends Route {
     @service store;
-    // beforeModel() {
-    //     this.controllerFor('application').set('inverse', false)
-    // }
+    @service('loading') loadingService;
     @action
     didTransition() {
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0
+    }
+    beforeModel() {
+		this.loadingService.loading.style.display = 'inline-block'
     }
     model() {
         let lang = localStorage.getItem('lang')
@@ -24,6 +25,11 @@ export default class HomeRoute extends Route {
 
         const reportsList = this.store.query("report", { 'sort': "-date",'page[limit]': 1, "filter[language]": lang, include: "cover"})
         
+        this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
         return RSVP.hash({
             activities: activityList.then(x => x.filter(it => it.language === lang)),
             reports: reportsList.then(x => x.filter(it => it.language === lang))

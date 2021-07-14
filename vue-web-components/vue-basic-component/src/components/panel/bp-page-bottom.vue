@@ -238,8 +238,9 @@ export default {
         },
         changeLanguage(value) {
             localStorage.setItem('lang', value)
-            window.location.reload(true)
-            // this.returnToTop()
+            this.$emit('linkToPage', 'home')
+            // reload方法在部署到s3时会找不到当前页面报错
+            // window.location.reload(true)
         },
         toMiit() {
             window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501')
