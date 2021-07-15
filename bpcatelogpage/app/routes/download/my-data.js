@@ -27,7 +27,7 @@ export default class DownloadMyDataRoute extends Route {
 			page = 0
 		}
 
-        let files = this.store.query( "asset", { "filter[type]": "file", "filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
+        let files = await this.store.query( "asset", { "filter[type]": "file", "filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
             // .then()
             // .catch(err => {
             //     // this.toast.error( "", this.get('intl').t('permission.permissionDenied'), this.toastOptions )
@@ -38,15 +38,16 @@ export default class DownloadMyDataRoute extends Route {
             //     // }
             // })
 
-        if ( files.length === 0 && page !== 0 ) {
-            this.transitionTo( `/download/my-data?tab=${tab}&page=${page}sort=${sortType}`)
-        }
+        // if ( files.length === 0 && page !== 0 ) {
+        //     this.transitionTo( `/download/my-data?tab=${tab}&page=${page}sort=${sortType}`)
+        // }
 
         return RSVP.hash({
-            files: files.then(file => file.filter(it => it)),
+            files: files.filter( it => it),
             tab: tab,
             page: page,
-            sort: sortType
+            sort: sortType,
+            count: files.meta.count
         })
     }
 }

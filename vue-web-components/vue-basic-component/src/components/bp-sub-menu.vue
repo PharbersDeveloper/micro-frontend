@@ -2,14 +2,14 @@
 <li :class="[{'bp-sub-menu': sub_menu_data.type === 'sub'}, {'bp-push-button bp-menu-item': sub_menu_data.type === 'item'}, {'active-menu': activeIndex == index && menuType === 'item'}]" :disabled="disabled" @click="sub_menu_data.click_event(index)">
     <!-- 二级菜单 -->
     <div class="bp-submenu-title" @click="toggleShow" v-if="sub_menu_data.type === 'sub'">
-		<div class="text-area">
-			<img svg-inline class="svg-icon" :src="sub_menu_data.src" alt="example" v-if="sub_menu_data.src" />
-			<span>{{sub_menu_data.text}}</span>
-		</div>
-		<!-- <img class="svg-icon-big" :src="icon-right" alt="" v-if="!this.show">
-		<img class="svg-icon-big" :src="icon-down" alt="" v-if="this.show"> -->
-		<div class="icon-right" v-if="!this.show"></div>
-		<div class="icon-down" v-if="this.show"></div>
+        <div class="text-area">
+            <img svg-inline class="svg-icon" :src="sub_menu_data.src" alt="example" v-if="sub_menu_data.src" />
+            <span>{{sub_menu_data.text}}</span>
+        </div>
+        <!-- <img class="svg-icon-big" :src="icon-right" alt="" v-if="!this.show">
+        <img class="svg-icon-big" :src="icon-down" alt="" v-if="this.show"> -->
+        <div class="icon-right" v-if="!this.show"></div>
+        <div class="icon-down" v-if="this.show"></div>
     </div>
     <ul :class="show ? 'menu-sub' : 'd-none'" v-if="sub_menu_data.type === 'sub'">
         <bpMenuItem v-for="(sub_menu_item,itemIndex) in sub_menu_data.item_data" :key="sub_menu_item.text" :menu_item_data="sub_menu_item" :itemIndex="itemIndex" :subIndex="index" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpMenuItem>
@@ -39,8 +39,8 @@ export default {
         sub_menu_data: Object,
         index: Number,
         activeIndex: Number,
-		activeSubIndex: Number,
-		menuType: String
+        activeSubIndex: Number,
+        menuType: String
     },
     methods: {
         toggleShow() {
@@ -113,18 +113,18 @@ svg:focus {
     height: $size-5x;
     align-items: center;
     cursor: pointer;
-	width: 100%;
-	justify-content: space-between;
-	.text-area {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-	}
+    width: 100%;
+    justify-content: space-between;
+    .text-area {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 }
 
 .menu-sub {
     /* padding-left: $spacing-5x; */
-	width: 100%;
+    width: 100%;
 }
 
 .d-none {

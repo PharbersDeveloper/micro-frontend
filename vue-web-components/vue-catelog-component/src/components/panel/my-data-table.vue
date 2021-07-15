@@ -17,77 +17,83 @@
             </span>
         </div>
         <div class="data-main-container">
-            <div v-if="haveData" class="myData-mine">
-                <div class="subtitle">
-                    <span class="heading-xsmall file-name-text">Name</span>
-                    <span class="heading-xsmall member-text">Owner</span>
-                    <span class="subscribe-number-header"></span>
-                    <span class="heading-xsmall time-text">
-                        <bp-select-vue beforeSrc="https://general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
-                            <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
-                            <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
-                            <div class="option-line mt-1 mb-1"></div>
-                            <bp-option-vue text="Ascending" :src="mineSortAscendingIcon" @click="myDataSort('', 1)"></bp-option-vue>
-                            <bp-option-vue text="Descending" :src="mineSortDescendingIcon" @click="myDataSort('-', 1)"></bp-option-vue>
-                        </bp-select-vue>
-                    </span>
-                    <span class="blank-action-header"></span>
-                </div>
+            <template v-if="myDataTab === 0">
+                <div v-if="haveData" class="myData-mine">
+                    <div class="subtitle">
+                        <span class="heading-xsmall file-name-text">Name</span>
+                        <span class="heading-xsmall member-text">Owner</span>
+                        <span class="subscribe-number-header"></span>
+                        <span class="heading-xsmall time-text">
+                            <bp-select-vue beforeSrc="https://general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
+                                <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
+                                <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
+                                <div class="option-line mt-1 mb-1"></div>
+                                <bp-option-vue text="Ascending" :src="mineSortAscendingIcon" @click="myDataSort('', 1)"></bp-option-vue>
+                                <bp-option-vue text="Descending" :src="mineSortDescendingIcon" @click="myDataSort('-', 1)"></bp-option-vue>
+                            </bp-select-vue>
+                        </span>
+                        <span class="blank-action-header"></span>
+                    </div>
 
-                <div class="main-container">
-                    <div v-for="(file,index) in allData.files" :key="index" class="OneRecord">
-                        <div class="icon_datafile"></div>
-                        <div class="data-name-container">
-                            <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
-                            <div v-if="file.labels.length" class="data-name-bottom">
-                                <template v-for="label in file.labels">
-                                    <editable-component :tagName="label"></editable-component>
-                                </template>
+                    <div class="main-container">
+                        <div v-for="(file,index) in allData.files" :key="index" class="OneRecord">
+                            <div class="icon_datafile"></div>
+                            <div class="data-name-container">
+                                <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
+                                <div v-if="file.labels.length" class="data-name-bottom">
+                                    <template v-for="label in file.labels">
+                                        <editable-component :tagName="label"></editable-component>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="members">
+                                <bp-text class="body-primary">{{userName}}</bp-text>
+                            </div>
+
+                            <div class="subscribe-number">
+                                <div class="icon_subscribed"></div>
+                                <bp-text class="body-tertiary"></bp-text>
+                            </div>
+
+                            <div class="mine-time">
+                                <bp-text class="body-tertiary">
+                                    {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}}
+                                </bp-text>
+                            </div>
+
+                            <div class="action-menu">
+                                <bp-select-vue class="bp-select-option" choosedValue="">
+                                    <bp-option-vue text="Go to Data Instance" class="cursor-not-allow"></bp-option-vue>
+                                    <div class="option-line"></div>
+                                    <bp-option-vue text="Edit Tags" class="cursor-not-allow"></bp-option-vue>
+                                    <bp-option-vue text="Rename" @click="changeName(file)" class="rename-button"></bp-option-vue>
+                                    <div class="option-line"></div>
+                                    <bp-option-vue text="Share" class="cursor-not-allow"></bp-option-vue>
+                                    <bp-option-vue text="Download" @click="downloadFileService(file)" class="download-button"></bp-option-vue>
+                                    <div class="option-line"></div>
+                                    <bp-option-vue text="Remove" @click="deleteData(file)" class="remove-file"></bp-option-vue>
+                                </bp-select-vue>
                             </div>
                         </div>
 
-                        <div class="members">
-                            <bp-text class="body-primary">{{userName}}</bp-text>
+                        <div v-if="allPage && curPage" class="page-container">
+                            <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
                         </div>
-
-                        <div class="subscribe-number">
-                            <div class="icon_subscribed"></div>
-                            <bp-text class="body-tertiary"></bp-text>
-                        </div>
-
-                        <div class="mine-time">
-                            <bp-text class="body-tertiary">
-                                {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}}
-                            </bp-text>
-                        </div>
-
-                        <div class="action-menu">
-                            <bp-select-vue class="bp-select-option" choosedValue="">
-                                <bp-option-vue text="Go to Data Instance" class="cursor-not-allow"></bp-option-vue>
-                                <div class="option-line"></div>
-                                <bp-option-vue text="Edit Tags" class="cursor-not-allow"></bp-option-vue>
-                                <bp-option-vue text="Rename" @click="changeName(file)" class="rename-button"></bp-option-vue>
-                                <div class="option-line"></div>
-                                <bp-option-vue text="Share" class="cursor-not-allow"></bp-option-vue>
-                                <bp-option-vue text="Download" @click="downloadFileService(file)" class="download-button"></bp-option-vue>
-                                <div class="option-line"></div>
-                                <bp-option-vue text="Remove" @click="deleteData(file)" class="remove-file"></bp-option-vue>
-                            </bp-select-vue>
-                        </div>
-                    </div>
-
-                    <div v-if="allPage" class="page-container">
-                        <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
                     </div>
                 </div>
-            </div>
 
-            <div v-else class="blank">
-                <div class="no_data-icon"></div>
-                <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
-                <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
-            </div>
+                <div v-else class="blank">
+                    <div class="no_data-icon"></div>
+                    <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
+                    <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
+                    <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
+                </div>
+            </template>
+            
+            <template v-if="myDataTab === 1">
+
+            </template>
         </div>
     </div>
     
@@ -99,6 +105,7 @@ import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
+import util from '../util.vue'
 
 export default {
     components: {
@@ -116,282 +123,37 @@ export default {
             renameFile: '',
             mineSortUpdatedTimeIcon: '',
             mineSortAscendingIcon: '',
-
-            curPage: 1,
-            userName: 'jyan',
-            allData: {
-                sort: '-created',
-                files: [
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:16:25.808Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: ['aaa','bbb'],
-                        markets: [],
-                        modified: "2021-03-09T03:59:30.859Z",
-                        molecules: [],
-                        name: "test22",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/9878d-8ffb-4914-9524-92475/test22.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },{
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    },
-                    {
-                        accessibility: null,
-                        created: "2021-02-26T07:06:13.700Z",
-                        dateCover: [],
-                        description: null,
-                        extension: "xlsx",
-                        geoCover: [],
-                        isNewVersion: true,
-                        labels: [],
-                        markets: [],
-                        modified: "2021-02-26T07:06:13.941Z",
-                        molecules: [],
-                        name: "test1",
-                        owner: "5SCsFDZn09FT4QpaSP6y",
-                        partners: "zudIcG_17yj8CEUoCTHg",
-                        providers: [],
-                        shared: null,
-                        size: 8550,
-                        source: "user/5SCsFDZn09FT4QpaSP6y/b9864-ba60-48ce-8e42-957c6/test1.xlsx",
-                        type: "file",
-                        version: null
-                    }
-                ]
-                // files: []
-            }
+            userName: util.methods.getCookie('user_name')
         }
     },
     props: {
-        // allData: {
-        //     type: Object,
-        //     default: function() {
-        //         return {
-        //             sort: '-created'
-        //         }
-        //     }
-        // }
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    sort: '-created',
+                    files: []
+                }
+            }
+        }
     },
     computed: {
         haveData() {
-            if (!this.allData.files.length) {
+            if (!this.allData.count) {
                 return false
             }
             return true
         },
         allPage() {
-            const total = this.allData.files.length
+            const total = this.allData.count
             const perPage = 10
             if (Math.ceil(total / perPage) <= 1) {
                 return 0
             }
             return Math.max(1, Math.ceil(total / perPage))
+        },
+        curPage() {
+            return this.allData.page + 1
         },
         iconSort() {
             if (this.allData.sort.indexOf('-') === -1) {
@@ -518,6 +280,7 @@ export default {
         changeName(file) {
             this.rename = true
             this.renameFile = file
+            // 这里需要一个rename的组件
         },
         downloadFileService(file) {
             const event = new Event("event")

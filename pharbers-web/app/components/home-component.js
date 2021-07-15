@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 export default class HomeComponentComponent extends Component {
     @service router
     @action
-	listener(e) {
+    listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 if(e.detail[0].args.param.index != undefined) {
@@ -19,18 +19,18 @@ export default class HomeComponentComponent extends Component {
             default: 
                 console.log("submit event to parent")
         }
-	}
+    }
 
     @action
-	registerListener(element) {
+    registerListener(element) {
         element.allData = this.calAllData
-		element.addEventListener("event", this.listener)
-	}
+        element.addEventListener("event", this.listener)
+    }
 
-	@action
-	unregisterListener(element) {
-		element.removeEventListener("event", this.listener)
-	}
+    @action
+    unregisterListener(element) {
+        element.removeEventListener("event", this.listener)
+    }
 
     get calAllData() {
         this.args.model._isVue = true
