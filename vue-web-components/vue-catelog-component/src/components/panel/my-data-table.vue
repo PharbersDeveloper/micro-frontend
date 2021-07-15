@@ -118,7 +118,7 @@ export default {
             mineSortAscendingIcon: '',
 
             curPage: 1,
-            userName: this.$cookies.get('user_name'),
+            userName: this.$cookies.get('user_name')
             // allData: {
             //     sort: '-created',
             //     files: [

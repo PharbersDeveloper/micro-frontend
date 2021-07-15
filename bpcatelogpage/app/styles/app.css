@@ -12,3 +12,12 @@ body {
 p {
 	margin: 0;
 }
+.download-container {
+	display: flex;
+	background-color: #fff;
+    height: fit-content;
+    position: relative;
+}
+.download-right-part {
+	width: 100%;
+}
