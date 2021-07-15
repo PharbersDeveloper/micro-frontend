@@ -1,6 +1,6 @@
 <template>
     <ul class="bp-menu">
-        <bpSubMenu v-for="single_data in menu_data" :key="single_data.text" :sub_menu_data="single_data"></bpSubMenu>
+        <bpSubMenu v-for="(single_data, index) in menu_data" :key="single_data.text" :sub_menu_data="single_data" :index="index" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpSubMenu>
     </ul>
 </template>
 
@@ -18,7 +18,10 @@ export default {
         }
     },
     props: {
-        menu_data: Array
+        menu_data: Array,
+		activeIndex: Number,
+		activeSubIndex: Number,
+		menuType: String
     }
 }
 </script>
@@ -29,7 +32,7 @@ export default {
     }
 	.bp-menu {
 		height: auto;
-		width: 208px;
+		width: 200px;
 		margin-left: 8;
 		margin-right: 8;
 		margin-top: 8;

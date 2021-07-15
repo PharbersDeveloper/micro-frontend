@@ -1,8 +1,10 @@
 <template>
-    <li class="bp-push-button bp-menu-item" :disabled="disabled" @click="menu_item_data.click_event">
-        <img  class="svg-icon" :src="menu_item_data.src" alt="example" v-if="menu_item_data.src" />
+<div>
+    <li class="bp-push-button bp-menu-item" :disabled="disabled" @click="menu_item_data.click_event(subIndex,itemIndex)" :class="[{'active-menu': activeIndex == itemIndex && activeSubIndex == subIndex && menuType == 'subitem'}]">
+        <!--<img  class="svg-icon" :src="menu_item_data.src" alt="example" v-if="menu_item_data.src" />-->
         <span>{{menu_item_data.text}}</span>
     </li>
+</div>
 </template>
 
 <script>
@@ -12,7 +14,12 @@ export default {
         disabled: {
             type: Boolean,
             default: false
-        }
+        },
+		subIndex: Number,
+		itemIndex: Number,
+		activeSubIndex: Number,
+		activeIndex: Number,
+		menuType: String
     }
 }
 </script>
@@ -51,8 +58,11 @@ export default {
         color: #505F79;
         box-sizing: border-box;
     }
-
     .bp-menu-item:hover {
         color: #3172E0;
     }
+	.active-menu {
+		background: rgba(37,35,45,.2);
+    	align-items: center;
+	}
 </style>
