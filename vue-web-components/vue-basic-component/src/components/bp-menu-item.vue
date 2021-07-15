@@ -15,11 +15,11 @@ export default {
             type: Boolean,
             default: false
         },
-		subIndex: Number,
-		itemIndex: Number,
-		activeSubIndex: Number,
-		activeIndex: Number,
-		menuType: String
+        subIndex: Number,
+        itemIndex: Number,
+        activeSubIndex: Number,
+        activeIndex: Number,
+        menuType: String
     }
 }
 </script>
@@ -28,7 +28,7 @@ export default {
     * {
         box-sizing: border-box;
     }
-	.svg-icon {
+    .svg-icon {
         width: 1em;
         height: 1em;
         vertical-align: -0.15em;
@@ -61,8 +61,8 @@ export default {
     .bp-menu-item:hover {
         color: #3172E0;
     }
-	.active-menu {
-		background: rgba(37,35,45,.2);
-    	align-items: center;
-	}
+    .active-menu {
+        background: rgba(37,35,45,.2);
+        align-items: center;
+    }
 </style>
