@@ -71,7 +71,7 @@ export default {
                     click_event: function (data) {
                         this.content.activeIndex = data
                         this.content.menuType = this.type
-						const event = new Event("event")
+                        const event = new Event("event")
                         event.args = {
                             callback: "linkToPage",
                             element: this.content,
