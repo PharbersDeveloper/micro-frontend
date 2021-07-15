@@ -2,7 +2,7 @@
 <div class="menu-download-left-part">
 	<div class="user-info">
 		<div class="user-name-container">
-			<bpText class="inverse-heading-medium">张鹭</bpText>
+			<bpText class="inverse-heading-medium">{{username}}</bpText>
 			<div id="icon_notification" class="icon_notification-initial"></div>
 		</div>
 		<bpText class="body-tertiary-inverse">{{company}}</bpText>
@@ -30,6 +30,10 @@ export default {
 		company: {
 			type: String,
 			default: "法伯宏业科技发展有限公司"
+		},
+		username: {
+			type: String,
+			default: "username"
 		}
 	},
     data() {
