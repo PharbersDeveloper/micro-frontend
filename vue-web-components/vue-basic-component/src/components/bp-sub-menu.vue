@@ -6,8 +6,10 @@
 			<img svg-inline class="svg-icon" :src="sub_menu_data.src" alt="example" v-if="sub_menu_data.src" />
 			<span>{{sub_menu_data.text}}</span>
 		</div>
-		<img class="svg-icon-big" :src="shouqi" alt="" v-if="!this.show">
-		<img class="svg-icon-big" :src="zhankai" alt="" v-if="this.show">
+		<!-- <img class="svg-icon-big" :src="icon-right" alt="" v-if="!this.show">
+		<img class="svg-icon-big" :src="icon-down" alt="" v-if="this.show"> -->
+		<div class="icon-right" v-if="!this.show"></div>
+		<div class="icon-down" v-if="this.show"></div>
     </div>
     <ul :class="show ? 'menu-sub' : 'd-none'" v-if="sub_menu_data.type === 'sub'">
         <bpMenuItem v-for="(sub_menu_item,itemIndex) in sub_menu_data.item_data" :key="sub_menu_item.text" :menu_item_data="sub_menu_item" :itemIndex="itemIndex" :subIndex="index" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpMenuItem>
@@ -26,9 +28,7 @@ export default {
     components: { bpMenuItem },
     data: function () {
         return {
-            show: false,
-			shouqi: "https://www.pharbers.com/public/icon_drop_light.svg",
-			zhankai: ""
+            show: false
         }
     },
     props: {
@@ -158,5 +158,15 @@ svg:focus {
 .active-menu{
     background: rgba(37,35,45,.2);
     align-items: center;
+}
+.icon-right {
+    width: 20px;
+    height: 20px;
+    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h20v20H0z'/%3E%3Cpath d='M8.854 7.146a.5.5 0 0 0-.765.638l.057.07 2.647 2.646-2.647 2.646a.5.5 0 0 0-.057.638l.057.07a.5.5 0 0 0 .638.057l.07-.057 3-3a.5.5 0 0 0 .057-.638l-.057-.07-3-3z' fill='%23ffffff'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+}
+.icon-down {
+    width: 20px;
+    height: 20px;
+    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.646 8.854a.5.5 0 0 1 .638-.765l.07.057L10 10.793l2.646-2.647a.5.5 0 0 1 .638-.057l.07.057a.5.5 0 0 1 .057.638l-.057.07-3 3a.5.5 0 0 1-.638.057l-.07-.057-3-3z' fill='%23ffffff' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important; 
 }
 </style>
