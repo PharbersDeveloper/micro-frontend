@@ -83,7 +83,6 @@ export default {
                             text: "MAX自动化",
 							content: this,
                     		type: "subitem",
-                            src: require("../../../node_modules/vue-components/src/assets/icons/check.svg"),
                             click_event: function (subIndex,itemIndex) {
 								this.content.activeIndex = itemIndex
 								this.content.activeSubIndex = subIndex
@@ -94,7 +93,6 @@ export default {
                             text: "数据提数",
 							content: this,
                     		type: "subitem",
-                            src: require("../../../node_modules/vue-components/src/assets/icons/check.svg"),
                             click_event: function (subIndex,itemIndex) {
 								this.content.activeIndex = itemIndex
 								this.content.activeSubIndex = subIndex
