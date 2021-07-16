@@ -29,6 +29,7 @@
 		"@glimmer/tracking": "^1.0.3",
 		"babel-eslint": "^10.1.0",
 		"broccoli-asset-rev": "^3.0.0",
+		"ember-ajax": "^5.0.0",
 		"ember-auto-import": "^1.10.1",
 		"ember-cli": "~3.24.0",
 		"ember-cli-app-version": "^4.0.0",
@@ -67,9 +68,9 @@
 		"edition": "octane"
 	},
 	"dependencies": {
+		"@ember/render-modifiers": "^1.0.2",
 		"@types/crypto-js": "^4.0.1",
 		"crypto-js": "^4.0.0",
-		"ember-cookies": "^0.5.2",
-		"@ember/render-modifiers": "^1.0.2"
+		"ember-cookies": "^0.5.2"
 	}
 }

@@ -11,4 +11,5 @@ Router.map(function () {
     this.route('my-data', { path: "/download/my-data" });
     this.route('enterprise', { path: "/download/enterprise" });
   });
+  this.route('oauth-callback');
 });
