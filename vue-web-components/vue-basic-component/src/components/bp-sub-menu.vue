@@ -1,5 +1,5 @@
 <template>
-<li :class="[{'bp-sub-menu': sub_menu_data.type === 'sub'}, {'bp-push-button bp-menu-item': sub_menu_data.type === 'item'}, {'active-menu': activeIndex == index && menuType === 'item'}]" :disabled="disabled" @click="sub_menu_data.click_event(index)">
+<li :class="[{'bp-sub-menu': sub_menu_data.type === 'sub'}, {'bp-push-button bp-menu-item': sub_menu_data.type === 'item'}, {'active-menu': activeIndex == index && menuType === 'item'}, {'first-item': index == 0}]" :disabled="disabled" @click="sub_menu_data.click_event(index)">
     <!-- 二级菜单 -->
     <div class="bp-submenu-title" @click="toggleShow" v-if="sub_menu_data.type === 'sub'">
         <div class="text-area">
@@ -130,7 +130,15 @@ svg:focus {
 .d-none {
     display: none;
 }
-
+.first-item {
+	padding: 17px 0 !important;
+    border-top: 1px solid rgba(37,35,45,0.08);
+    box-sizing: content-box !important;
+    margin-bottom: 17px !important;
+    border-bottom: 1px solid rgba(37,35,45,0.08);
+	margin: 0 12px 17px!important;
+    width: 176px !important;
+}
 .bp-menu-item {
     height: 40px;
     width: 100%;
@@ -156,7 +164,7 @@ svg:focus {
 }
 
 .active-menu{
-    background: rgba(37,35,45,.2);
+    background: rgba(37,35,45,0.08);
     align-items: center;
 }
 .icon-right {
