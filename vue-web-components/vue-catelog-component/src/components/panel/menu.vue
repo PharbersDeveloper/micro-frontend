@@ -142,6 +142,9 @@ export default {
             padding: 0 12px;
             display: flex;
         }
+		/deep/.bp-menu-item:hover {
+			color: #57565F !important;
+		}
         .user-info {
             background: #FCFCFD;
             height: 44px;

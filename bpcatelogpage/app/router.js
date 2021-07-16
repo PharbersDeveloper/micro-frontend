@@ -7,8 +7,8 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('download', function() {
-    this.route('my-data');
-    this.route('enterprise');
+  this.route('download', { path: "/" }, function() {
+    this.route('my-data', { path: "/download/my-data" });
+    this.route('enterprise', { path: "/download/enterprise" });
   });
 });
