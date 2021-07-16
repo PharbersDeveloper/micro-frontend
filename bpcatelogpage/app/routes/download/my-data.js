@@ -38,9 +38,9 @@ export default class DownloadMyDataRoute extends Route {
             //     // }
             // })
 
-        if ( files.length === 0 && page !== 0 ) {
-            this.transitionTo( `/download/my-data?tab=${tab}&page=${page}sort=${sortType}`)
-        }
+        // if ( files.length === 0 && page !== 0 ) {
+        //     this.transitionTo( `/download/my-data?tab=${tab}&page=${page}sort=${sortType}`)
+        // }
 
         return RSVP.hash({
             files: files.filter( it => it),
