@@ -3,13 +3,13 @@
     <div class="user-info">
         <div class="user-name-container">
             <div class="user-name-area">
-                <bpText class="inverse-heading-medium">{{username}}</bpText>
+                <bpText class="inverse-heading-medium">{{allData.personalData.firstName}} {{allData.personalData.lastName}}</bpText>
                 <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dropdown.svg" alt="">
             </div>
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_data.svg" alt="">
             <!-- <div id="icon_notification" class="icon_notification-initial"></div> -->
         </div>
-        <bpText class="body-tertiary-inverse">{{company}}</bpText>
+        <bpText class="body-tertiary-inverse">{{allData.employerData.name}}</bpText>
     </div>
     <!-- <div class="upload-button">
         <span class="fileinput-button">
@@ -31,13 +31,14 @@ export default {
         bpText
     },
     props: {
-        company: {
-            type: String,
-            default: "法伯宏业科技发展有限公司"
-        },
-        username: {
-            type: String,
-            default: "username"
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    personalData: {},
+                    employerData: {}
+                }
+            }
         }
     },
     data() {
@@ -142,9 +143,9 @@ export default {
             padding: 0 12px;
             display: flex;
         }
-		/deep/.bp-menu-item:hover {
-			color: #57565F !important;
-		}
+        /deep/.bp-menu-item:hover {
+            color: #57565F !important;
+        }
         .user-info {
             background: #FCFCFD;
             height: 44px;

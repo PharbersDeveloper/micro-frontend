@@ -22,7 +22,7 @@ export default class LeftMenuComponent extends Component {
 
     @action
     registerListener(element) {
-        // element.allData = this.calAllData
+        element.allData = this.calAllData
         element.addEventListener("event", this.listener)
     }
 
@@ -31,8 +31,8 @@ export default class LeftMenuComponent extends Component {
         element.removeEventListener("event", this.listener)
     }
 
-    // get calAllData() {
-    //     this.args.model._isVue = true
-    //     return this.args.model
-    // }
+    get calAllData() {
+        this.args.model._isVue = true
+        return this.args.model
+    }
 }
