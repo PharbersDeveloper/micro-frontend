@@ -25,6 +25,9 @@ export default class DownloadEnterpriseRoute extends Route {
         // const powerBItoken = await this.ajax.request(tokenURL, {
         //     urlHeader
         // })
+
+		// TODO
+        applicationAdapter.set( "pbiToken", 0 )
         return RSVP.hash( {
 			curReportId:curReportId,
 			curGroupId:curGroupId,
