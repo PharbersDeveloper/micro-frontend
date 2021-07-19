@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from "@ember/service"
 import RSVP from 'rsvp';
+import fetch, { Headers, Request, Response, AbortController } from 'fetch';
 
 export default class DownloadEnterpriseRoute extends Route {
     @service store
@@ -22,16 +23,16 @@ export default class DownloadEnterpriseRoute extends Route {
         const tokenURL = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/pbi/token?"
                         + "rid=" + curReportId
                         + "&gid=" + curGroupId
-        // const powerBItoken = await this.ajax.request(tokenURL, {
-        //     urlHeader
-        // })
+        const powerBItoken = await fetch(tokenURL, {
+            urlHeader
+        })
 
 		// TODO
         applicationAdapter.set( "pbiToken", 0 )
         return RSVP.hash( {
 			curReportId:curReportId,
 			curGroupId:curGroupId,
-            // token: powerBItoken
+            token: powerBItoken
         } )
 	}
 }
