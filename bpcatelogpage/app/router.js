@@ -7,9 +7,9 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('download', { path: "/" }, function() {
-    this.route('my-data', { path: "/download/my-data" });
-    this.route('enterprise', { path: "/download/enterprise" });
+  this.route('download', function() {
+    this.route('my-data', { path: "/my-data" });
+    this.route('enterprise', { path: "/enterprise" });
   });
   this.route('oauth-callback');
 });
