@@ -62,7 +62,7 @@ export default {
         color: #3172E0;
     }
     .active-menu {
-        background: rgba(37,35,45,.2);
+        background: rgba(37,35,45,0.08);
         align-items: center;
     }
 </style>

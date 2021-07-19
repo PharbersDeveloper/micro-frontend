@@ -1,5 +1,10 @@
 <template>
     <div class="my-data-content-container">
+        <div class="header">
+            <span class="header-large">
+                {{title}}
+            </span>
+        </div>
         <div class="tabs">
             <span 
                 :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
@@ -123,7 +128,8 @@ export default {
             renameFile: '',
             mineSortUpdatedTimeIcon: '',
             mineSortAscendingIcon: '',
-            userName: util.methods.getCookie('user_name')
+            userName: util.methods.getCookie('user_name'),
+            title: "数据资产"
         }
     },
     props: {
@@ -202,19 +208,19 @@ export default {
         },
         myDataSort(sortType, type) {
             const event = new Event("event")
-            let sortString = ''
+            let sort
             
             if (type === 0) {
                 if (this.mineSortDescendingIcon) {
-                    sortString = `sort=-${sortType}`
+                    sort = `-${sortType}`
                 } else {
-                    sortString = `sort=${sortType}`
+                    sort = sortType
                 }
             } else {
                 if (this.mineSortCreatedTimeIcon) {
-                    sortString = `sort=${sortType}created`
+                    sort = `${sortType}created`
                 } else {
-                    sortString = `sort=${sortType}modified`
+                    sort = `${sortType}modified`
                 }
             }
             
@@ -222,9 +228,8 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: 'download/mine',
-                    index: this.allData.page,
-                    params: sortString
+                    name: '/download/my-data',
+                    queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
                 }
             }
             this.$emit('event', event)
@@ -309,7 +314,16 @@ export default {
             this.$emit('event', event)
         },
         changePage(page) {
-            
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/download/my-data',
+                    queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
+                }
+            }
+            this.$emit('event', event)
         },
         upload() {
             const event = new Event("event")
@@ -488,13 +502,26 @@ export default {
         height: 100%;
         display: flex;
         flex-direction: column;
+        .header {
+            height: 62px;
+            width: 100%;
+            padding: 20px 24px 0;
+            border-bottom: 1px solid rgba(37,35,45,.08);
+            .header-large {
+                font-family: SFProText-Regular;
+                font-size: 20px;
+                color: #302F39;
+                letter-spacing: .25px;
+                line-height: 28px;
+            }
+        }
 
         .tabs {
             height: 24px;
             width: 100%;
             padding: 0 24px 0 20px;
             display: flex;
-
+            margin-top: 12px;
             .tab-active {
                 border-bottom: 2px solid #7163C5;
             }
@@ -505,7 +532,6 @@ export default {
             flex-direction: column;
             flex: 1;
             position: relative;
-
             .myData-mine {
                 flex: 1;
                 display: flex;

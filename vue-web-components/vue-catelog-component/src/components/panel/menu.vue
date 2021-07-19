@@ -2,19 +2,23 @@
 <div class="menu-download-left-part">
     <div class="user-info">
         <div class="user-name-container">
-            <bpText class="inverse-heading-medium">{{username}}</bpText>
-            <div id="icon_notification" class="icon_notification-initial"></div>
+            <div class="user-name-area">
+                <bpText class="inverse-heading-medium">{{allData.personalData.firstName}} {{allData.personalData.lastName}}</bpText>
+                <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dropdown.svg" alt="">
+            </div>
+            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_data.svg" alt="">
+            <!-- <div id="icon_notification" class="icon_notification-initial"></div> -->
         </div>
-        <bpText class="body-tertiary-inverse">{{company}}</bpText>
+        <bpText class="body-tertiary-inverse">{{allData.employerData.name}}</bpText>
     </div>
-    <div class="upload-button">
+    <!-- <div class="upload-button">
         <span class="fileinput-button">
             <div class="icon_upload"></div>
             <span class="btn_secondary_initial">
                 数据上传
             </span>
         </span>
-    </div>
+    </div> -->
     <bpMenu :menu_data="menu_data" class="" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpMenu>
 </div>
 </template>
@@ -27,13 +31,14 @@ export default {
         bpText
     },
     props: {
-        company: {
-            type: String,
-            default: "法伯宏业科技发展有限公司"
-        },
-        username: {
-            type: String,
-            default: "username"
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    personalData: {},
+                    employerData: {}
+                }
+            }
         }
     },
     data() {
@@ -42,6 +47,26 @@ export default {
             activeSubIndex: 0,
             menuType: "",
             menu_data: [
+                {
+                    type: "item",
+                    text: "开放资源",
+                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_projects-fill.svg",
+                    content: this,
+                    click_event: function (data) {
+                        this.content.activeIndex = data
+                        this.content.menuType = this.type
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "linkToPage",
+                            element: this.content,
+                            param: {
+                                name: this.text,
+                                index: 0
+                            }
+                        }
+                        this.content.$emit('event', event)
+                    }
+                },
                 {
                     type: "item",
                     text: "数据资产",
@@ -57,26 +82,6 @@ export default {
                             element: this.content,
                             param: {
                                 name: this.text,
-                                index: 0
-                            }
-                        }
-                        this.content.$emit('event', event)
-                    }
-                },
-                {
-                    type: "item",
-                    text: "开放资源",
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_enterprise-open.svg",
-                    content: this,
-                    click_event: function (data) {
-                        this.content.activeIndex = data
-                        this.content.menuType = this.type
-                        const event = new Event("event")
-                        event.args = {
-                            callback: "linkToPage",
-                            element: this.content,
-                            param: {
-                                name: this.text,
                                 index: 1
                             }
                         }
@@ -85,42 +90,24 @@ export default {
                 },
                 {
                     type: "item",
-                    text: "联络名单",
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_cooperation.svg",
-                    content: this,
-                    click_event: function (data) {
-                        this.content.activeIndex = data
-                        this.content.menuType = this.type
-                    }
-                },
-                {
-                    type: "sub",
                     text: "工作平台",
                     content: this,
                     src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_projects-fill.svg",
-                    click_event: function (data) {},
-                    item_data: [
-                        {
-                            text: "MAX自动化",
-                            content: this,
-                            type: "subitem",
-                            click_event: function (subIndex,itemIndex) {
-                                this.content.activeIndex = itemIndex
-                                this.content.activeSubIndex = subIndex
-                                this.content.menuType = this.type
-                            }
-                        },
-                        {
-                            text: "数据提数",
-                            content: this,
-                            type: "subitem",
-                            click_event: function (subIndex,itemIndex) {
-                                this.content.activeIndex = itemIndex
-                                this.content.activeSubIndex = subIndex
-                                this.content.menuType = this.type
+                    click_event: function (data) {
+                        this.content.activeIndex = data
+                        this.content.menuType = this.type
+
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "linkToPage",
+                            element: this.content,
+                            param: {
+                                name: this.text,
+                                index: 2
                             }
                         }
-                    ]
+                        this.content.$emit('event', event)
+                    }
                 }
             ]
         }
@@ -136,15 +123,17 @@ export default {
     .menu-download-left-part {
         width: 200px;
         min-height: 100vh;
-        background: #595574 !important;
+        background: #FCFCFD !important;
         padding-top: 20px;
         position: relative;
+        border-right: 2px solid #f6f6f7;
         /deep/.bp-menu-item, /deep/.bp-sub-menu {
             font-family: SFProText-Medium;
             font-size: 14px;
+            color: #57565F;
             letter-spacing: 0;
             line-height: 20px;
-            color: #fff !important;
+            font-weight: 500;
         }
         /deep/.bp-menu-item {
             height: 28px !important;
@@ -154,18 +143,31 @@ export default {
             padding: 0 12px;
             display: flex;
         }
+        /deep/.bp-menu-item:hover {
+            color: #57565F !important;
+        }
         .user-info {
-            background: #595574;
+            background: #FCFCFD;
             height: 44px;
-            margin: 0 12px;
+            margin: 0 12px 20px;
             .user-name-container {
                 height: 24px;
-                background: #595574;
+                background: #FCFCFD;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+                .user-name-area {
+                    display: flex;
+                    align-items: center;
+                }
                 .inverse-heading-medium {
-                    color: rgba(255,255,255,.95);
+                    font-family: SFProText-Regular;
+                    font-size: 14px;
+                    color: #25232D;
+                    letter-spacing: 0.25px;
+                    text-align: left;
+                    line-height: 20px;
+                    font-weight: 400;
                 }
                 .icon_notification-initial {
                     width: 20px;
@@ -174,11 +176,12 @@ export default {
                 }
             }
             .body-tertiary-inverse {
-                color: rgba(255,255,255,.55);
-                letter-spacing: .25px;
-                font-size: 12px;
-                line-height: 16px;
                 font-family: SFProText-Light;
+                font-size: 12px;
+                color: #706F79;
+                letter-spacing: 0.25px;
+                line-height: 16px;
+                font-weight: 200;
             }
          }
         .upload-button {

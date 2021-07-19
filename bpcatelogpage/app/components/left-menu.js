@@ -10,9 +10,9 @@ export default class LeftMenuComponent extends Component {
             case "linkToPage":
 				let idx = e.detail[0].args.param.index
 				if(idx == 0) {
-					this.router.transitionTo( `/download/my-data` )
+					this.router.transitionTo( `/download/enterprise` )
 				} else if(idx == 1) {
-					this.router.transitionTo(`/download/enterprise`)
+					this.router.transitionTo(`/download/my-data`)
 				}
                 break
             default: 
@@ -22,7 +22,7 @@ export default class LeftMenuComponent extends Component {
 
     @action
     registerListener(element) {
-        // element.allData = this.calAllData
+        element.allData = this.calAllData
         element.addEventListener("event", this.listener)
     }
 
@@ -31,8 +31,8 @@ export default class LeftMenuComponent extends Component {
         element.removeEventListener("event", this.listener)
     }
 
-    // get calAllData() {
-    //     this.args.model._isVue = true
-    //     return this.args.model
-    // }
+    get calAllData() {
+        this.args.model._isVue = true
+        return this.args.model
+    }
 }

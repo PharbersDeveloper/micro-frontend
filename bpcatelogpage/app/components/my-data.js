@@ -8,8 +8,20 @@ export default class MyDataComponent extends Component {
 	listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-                console.log("linkTopage")
-                this.router.transitionTo(e.detail[0].args.param)
+                let param = e.detail[0].args.param
+                if (param.index != undefined) {
+                    if (param.queryParams) {
+                        this.router.transitionTo(`${param.name}/${param.index}?${param.queryParams}`)
+                    } else {
+                        this.router.transitionTo(`${param.name}/${param.index}`)
+                    }
+                } else {
+                    if (param.queryParams) {
+                        this.router.transitionTo(`${param.name}?${param.queryParams}`)
+                    } else {
+                        this.router.transitionTo(param.name)
+                    }
+                }
                 break
             default: 
                 console.log("submit event to parent")
