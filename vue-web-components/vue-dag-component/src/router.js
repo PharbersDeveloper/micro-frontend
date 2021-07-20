@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import dag from './views/dag-demo.vue'
+import dag from './components/page/dag-page.vue'
 
 Vue.use(Router)
 

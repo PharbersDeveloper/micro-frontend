@@ -18,6 +18,9 @@ export default {
     mounted() {
         this.main()
     },
+    updated() {
+        this.main()
+    },
     methods: {
         // @return {String} 随机的id
         guid() {
@@ -332,8 +335,8 @@ export default {
                 this.addEdges(edgeData, g)
 
                 window.onload = function() {
-                    let svg = d3.select( document.getElementsByTagName("ph-dag")[0].shadowRoot ).select("#svg-canvas")
-                    // let svg = d3.select("#svg-canvas")
+                    // let svg = d3.select( document.getElementsByTagName("ph-dag")[0].shadowRoot ).select("#svg-canvas")
+                    let svg = d3.select("#svg-canvas")
 
                     // 绘图的容器
                     let svgGroup = svg.append( "g" )
@@ -359,7 +362,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+    * {
+        box-sizing: border-box;
+    }
     #svg-canvas {
         width: 100%;
         height: 100%;
