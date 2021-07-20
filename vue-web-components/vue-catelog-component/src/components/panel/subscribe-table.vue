@@ -2,42 +2,25 @@
     <div class="my-data-content-container">
         <div class="header">
             <span class="header-large">
-                {{title}}
-            </span>
-        </div>
-        <div class="tabs">
-            <span 
-                :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
-                class="cursor-pointer mr-3"
-                @click="changeTab(0)"
-            >
-                Mine
-            </span>
-            <span 
-                :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
-                class="cursor-pointer"
-                @click="changeTab(1)"
-            >
-                Subscribed
+                {{allData.title}}
             </span>
         </div>
         <div class="data-main-container">
-            <template v-if="myDataTab === 0">
-                <div v-if="haveData" class="myData-mine">
+            <template >
+                <div class="myData-mine">
                     <div class="subtitle">
-                        <span class="heading-xsmall file-name-text">Name</span>
-                        <span class="heading-xsmall member-text">Owner</span>
-                        <span class="subscribe-number-header"></span>
-                        <span class="heading-xsmall time-text">
-                            <bp-select-vue beforeSrc="https://general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
-                                <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
-                                <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
-                                <div class="option-line mt-1 mb-1"></div>
-                                <bp-option-vue text="Ascending" :src="mineSortAscendingIcon" @click="myDataSort('', 1)"></bp-option-vue>
-                                <bp-option-vue text="Descending" :src="mineSortDescendingIcon" @click="myDataSort('-', 1)"></bp-option-vue>
-                            </bp-select-vue>
+                        <span class="heading-xsmall file-name-text">文件名称
+                            <bp-img :src="iconSortDescending"></bp-img>
                         </span>
-                        <span class="blank-action-header"></span>
+                        <span class="heading-xsmall database-name">数据库
+                            <bp-img :src="iconSortDescending"></bp-img>
+                        </span>
+                        <span class="heading-xsmall subscribe-location">位置
+                            <bp-img :src="iconSortDescending"></bp-img>
+                        </span>
+                        <span class="heading-xsmall last-time">上次更新时间
+                            <bp-img :src="iconSortDescending"></bp-img>
+                        </span>
                     </div>
 
                     <div class="main-container">
@@ -45,40 +28,21 @@
                             <div class="icon_datafile"></div>
                             <div class="data-name-container">
                                 <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
-                                <div v-if="file.labels.length" class="data-name-bottom">
-                                    <template v-for="label in file.labels">
-                                        <editable-component :tagName="label"></editable-component>
-                                    </template>
-                                </div>
                             </div>
 
-                            <div class="members">
-                                <bp-text class="body-primary">{{userName}}</bp-text>
+                            <div class="database">
+                                <bp-text class="body-primary">{{file.database}}</bp-text>
                             </div>
 
-                            <div class="subscribe-number">
-                                <div class="icon_subscribed"></div>
-                                <bp-text class="body-tertiary"></bp-text>
+                            <div class="subscribe-location">
+                                <bp-text class="body-tertiary">{{file.location}}</bp-text>
                             </div>
 
-                            <div class="mine-time">
+                            <div class="last-time">
                                 <bp-text class="body-tertiary">
-                                    {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}}
+                                    <!-- {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}} -->
+                                    {{file.time}}
                                 </bp-text>
-                            </div>
-
-                            <div class="action-menu">
-                                <bp-select-vue class="bp-select-option" choosedValue="">
-                                    <bp-option-vue text="Go to Data Instance" class="cursor-not-allow"></bp-option-vue>
-                                    <div class="option-line"></div>
-                                    <bp-option-vue text="Edit Tags" class="cursor-not-allow"></bp-option-vue>
-                                    <bp-option-vue text="Rename" @click="changeName(file)" class="rename-button"></bp-option-vue>
-                                    <div class="option-line"></div>
-                                    <bp-option-vue text="Share" class="cursor-not-allow"></bp-option-vue>
-                                    <bp-option-vue text="Download" @click="downloadFileService(file)" class="download-button"></bp-option-vue>
-                                    <div class="option-line"></div>
-                                    <bp-option-vue text="Remove" @click="deleteData(file)" class="remove-file"></bp-option-vue>
-                                </bp-select-vue>
                             </div>
                         </div>
 
@@ -88,28 +52,12 @@
                     </div>
                 </div>
 
-                <div v-else class="blank">
+                <!-- <div v-else class="blank">
                     <div class="no_data-icon"></div>
                     <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
                     <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
                     <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
-                </div>
-            </template>
-            
-            <template v-if="myDataTab === 1">
-                <div class="subscribed-container">
-                    <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
-                    <div class="subscribed-item" v-for="file in dataDirectory" :key="file.name">
-                        <div class="left-text">
-                            <img :src="fileIconDark" class="file-icon-dark" alt="">
-                            <div class="text-area" >
-                                <bp-text class="title">{{file.name}}</bp-text>
-                                <bp-text class="subtitle">{{file.subName}}</bp-text>
-                            </div>
-                        </div>
-                        <bp-text class="subscribed-button">{{goDetail}}</bp-text>
-                    </div>
-                </div>
+                </div> -->
             </template>
         </div>
     </div>
@@ -121,6 +69,7 @@ import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
+import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
 import editableComponent from '../editable-component.vue'
 import util from '../util.vue'
 
@@ -131,7 +80,8 @@ export default {
         bpOptionVue,
         bpText,
         bpButton,
-        editableComponent
+        editableComponent,
+        bpImg
     },
     data() {
         return {
@@ -141,10 +91,11 @@ export default {
             mineSortUpdatedTimeIcon: '',
             mineSortAscendingIcon: '',
             userName: util.methods.getCookie('user_name'),
-            title: "数据资产",
             subscribedTitle: "文件名称",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
-            goDetail: "查看详情"
+            goDetail: "查看详情",
+            iconSortAscending: "https://general.pharbers.com/icon_sorting-ascending.svg",
+            iconSortDescending: "https://general.pharbers.com/icon_sorting-descending.svg"
         }
     },
     props: {
@@ -152,18 +103,22 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    sort: '-created',
-                    files: []
+                    title: "subscribed表单",
+                    files: [
+                        {
+                            name: "cpa_pha_mapping",
+                            database: "database",
+                            location: "s3://ph-platform/2020-11-11/etl/readable_files/...",
+                            time: "YYYY/MM/DD hh:mm"
+                        },
+                        {
+                            name: "cpa_pha_mapping",
+                            database: "database",
+                            location: "s3://ph-platform/2020-11-11/etl/readable_files/...",
+                            time: "YYYY/MM/DD hh:mm"
+                        }
+                    ]
                 }
-            }
-        },
-        dataDirectory: {
-            type: Array,
-            default: function() {
-                return [
-                    {name: "phdatacat", subName: "暂无描述"},
-                    {name: "phdatatemp", subName: "存放中间文件"}
-                ]
             }
         }
     },
@@ -557,76 +512,10 @@ export default {
             flex: 1;
             position: relative;
             .subscribed-container {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                padding: 12px 20px 8px 20px;
-                height: 507px;
-                min-height: 0;
-                .subscribed-title {
-                    font-family: SFProText-Regular;
-                    font-size: 12px;
-                    color: #706F79;
-                    letter-spacing: 0.25px;
-                    text-align: left;
-                    line-height: 16px;
-                    font-weight: 400;
-                    padding: 9px 0;
-                    border-bottom: 1px solid  rgba(37,35,45,0.08);
-                }
                 .subscribed-item {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    align-items: center;
-                    border-bottom: 1px solid  rgba(37,35,45,0.08);
-                    padding: 12px 0;
-                    .left-text {
-                        display: flex;
-                        .file-icon-dark {
-                            width: 38px;
-                            height: 38px;
-                            margin-right: 14px;
-                        }
-                        .text-area {
-                            display: flex;
-                            flex-direction: column;
-                            .title {
-                                font-family: SFProText-Regular;
-                                font-size: 14px;
-                                color: #25232D;
-                                letter-spacing: 0.25px;
-                                text-align: left;
-                                line-height: 20px;
-                                font-weight: 400;
-                                margin-bottom: 3px;
-                            }
-                            .subtitle {
-                                font-family: SFProText-Light;
-                                font-size: 12px;
-                                color: #706F79;
-                                letter-spacing: 0.25px;
-                                line-height: 16px;
-                                font-weight: 200;
-                            }
-                        }
-                    }
-                    .subscribed-button {
-                        width: 80px;
-                        height: 32px;
-                        background: #f6f6f7;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-family: SFProText-Medium;
-                        font-size: 14px;
-                        color: #57565F;
-                        letter-spacing: 0;
-                        text-align: center;
-                        line-height: 20px;
-                        font-weight: 500;
-                        border-radius: 2px;
-                        cursor: pointer;
+                    .file-icon-dark {
+                        width: 38px;
+                        height: 38px;
                     }
                 }
             }
@@ -647,79 +536,26 @@ export default {
                     border-bottom: 0.5px solid rgba(31, 37, 50, 0.08);
 
                     .file-name-text {
+                        // flex: 1;
+                        width: 276px;
+                        min-width: 276px;
+                    }
+
+                    .database-name {
+                        min-width: 200px;
+                        width: 200px;
+                        padding: 0 8px;
+                    }
+
+                    .subscribe-location {
                         flex: 1;
-                    }
-
-                    .member-text {
-                        width: 10%;
+                        min-width: 300px;
                         padding: 0 8px;
                     }
 
-                    .subscribe-number-header {
-                        width: 5.3%;
-                        height: 100%;
-                        padding: 0 8px;
-                    }
-
-                    .time-text {
-                        display: flex;
-                        align-items: center;
-                        width: 155px;
-                        padding: 0 6px;
-                        cursor: pointer;
-
-                        /deep/.bp-select {
-                            width: 155px;
-                            height: 100%;
-                            background-color: #fff;
-                            margin-right: 1px;
-                            
-                            .bp-select-title {
-                                padding: 0;
-                                display: flex;
-                                justify-content: flex-start;
-
-                                .svg-icon {
-                                    width: 12px;
-                                    height: 12px;
-                                }
-                            }
-
-                            .bp-option-group {
-                                width: 134px;
-                                padding: 4px 0;
-                                position: absolute;
-                                z-index: 98;
-                                right: 0;
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                .bp-option {
-                                    display: flex;
-                                    height: 28px;
-                                    margin: 0;
-                                    padding: 0 0 0 8px;
-                                    position: relative;
-                                    &:hover {
-                                        background: #E5EAEC;
-                                    }
-                                    .icon {
-                                        height: 12px;
-                                        width: 12px;
-                                    }
-                                    &>div {
-                                        @include body-primary;
-                                        position: absolute;
-                                        left: 28px;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    .blank-action-header {
-                        width: 4.8%;
-                        height: 100%;
+                    .last-time {
+                        width: 160px;
+                        min-width: 160px;
                     }
                 }
 
@@ -741,6 +577,7 @@ export default {
                         display: flex;
                         align-items: center;
                         border-bottom: 1px solid rgba(37, 35, 45, 0.08);
+                        cursor: pointer;
                         // 文件logo
                         .icon_datafile {
                             width: 24px;
@@ -749,7 +586,9 @@ export default {
                         }
                         // 文件名称及tag
                         .data-name-container {
-                            flex: 1;
+                            // flex: 1;
+                            width: 234px;
+                            min-width: 234px;
                             display: flex;
                             flex-direction: column;
                             justify-content: center;
@@ -773,8 +612,9 @@ export default {
                             }
                         }
                         // 拥有者owner
-                        .members {
-                            width: 10%;
+                        .database {
+                            min-width: 200px;
+                            width: 200px;
                             height: 100%;
                             padding: 0 8px;
                             display: flex;
@@ -787,15 +627,17 @@ export default {
                             }
                         }
                         //订阅人数
-                        .subscribe-number {
-                            width: 5.3%;
+                        .subscribe-location {
+                            flex: 1;
+                            min-width: 300px;
                             padding: 0 8px;
                             display: flex;
                             align-items: center;
                         }
                         // 排序功能
-                        .mine-time {
-                            width: 155px;
+                        .last-time {
+                            min-width: 160px;
+                            width: 160px;
                             height: 100%;
                             padding: 0 8px;
                             display: flex;
