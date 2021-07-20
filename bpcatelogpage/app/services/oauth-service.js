@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { inject as service } from "@ember/service"
 import ENV from "bpcatelogpage/config/environment"
+import fetch, { Headers, Request, Response, AbortController } from 'fetch';
 
 export default class OauthServiceService extends Service {
 	@service cookies;
@@ -14,7 +15,12 @@ export default class OauthServiceService extends Service {
 
 	oauthCallback( transition ) {
 		const cookies = this.get( "cookies" )
-		const ajax = this.get( "ajax" )
+		// TODO
+		let urli = window.location.href
+		transition.queryParams = {
+			"code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
+			"state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
+		}
 		const { queryParams } = transition
 
 		if ( queryParams.code && queryParams.state ) {
@@ -26,15 +32,25 @@ export default class OauthServiceService extends Service {
 			const code = queryParams.code
 			const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
 			const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`
+			const data = {
+				code: code,
+				grant_type: grantType,
+				redirect_uri: redirectUri
+			}
 			const b64 = window.btoa(`${clientId}:${secret}`)
 			const authorization = `Basic ${b64}`
 
-			ajax.request(url, {
+			let options = {
 				method: "POST",
 				headers: {
-					authorization
+					authorization,
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+					"accept": "application/json, text/javascript, */*; q=0.01"
 				},
-				data: body
+				body: body
+			}
+			fetch(url, options).then(res=> {
+				return res.json()
 			}).then( response => {
 				this.removeAuth()
 
@@ -53,13 +69,13 @@ export default class OauthServiceService extends Service {
 				cookies.write( "account_id", response.user.id, options )
 				
 				// this.mqttService.mqttConnect()
-				this.get( "router" ).transitionTo( '/download/mine/0?sort=-created') 
+				this.get( "router" ).transitionTo( '/download/enterprise') 
 			})
 			.catch(err => {
-				this.get( "router" ).transitionTo( '/download/mine/0?sort=-created') 
+				this.get( "router" ).transitionTo( '/download/enterprise') 
 			})
 		} else {
-			this.get( "router" ).transitionTo( '/download/mine/0?sort=-created') 
+			this.get( "router" ).transitionTo( '/download/enterprise') 
 		}
 	}
 
