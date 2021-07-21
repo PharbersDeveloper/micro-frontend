@@ -1,11 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
-export default class MyDataComponent extends Component {
-    @tracked tabIndex;
-    @service router
+export default class DataDirectoryComponent extends Component {
+	@service router
     @action
 	listener(e) {
         switch(e.detail[0].args.callback) {
@@ -44,6 +42,7 @@ export default class MyDataComponent extends Component {
 
     get calAllData() {
         this.args.model._isVue = true
-        return this.args.model
+        return this.args.model.allDate
     }
 }
+

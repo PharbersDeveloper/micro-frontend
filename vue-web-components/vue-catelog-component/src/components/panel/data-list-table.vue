@@ -94,8 +94,8 @@ export default {
             subscribedTitle: "文件名称",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
             goDetail: "查看详情",
-            iconSortAscending: "https://general.pharbers.com/icon_sorting-ascending.svg",
-            iconSortDescending: "https://general.pharbers.com/icon_sorting-descending.svg"
+            iconSortAscending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
+            iconSortDescending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg"
         }
     },
     props: {

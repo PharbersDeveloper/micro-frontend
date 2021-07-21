@@ -107,7 +107,7 @@
                                 <bp-text class="subtitle">{{file.subName}}</bp-text>
                             </div>
                         </div>
-                        <bp-text class="subscribed-button">{{goDetail}}</bp-text>
+                        <bp-text @click="linkToPage(file.id)" class="subscribed-button">{{goDetail}}</bp-text>
                     </div>
                 </div>
             </template>
@@ -161,8 +161,8 @@ export default {
             type: Array,
             default: function() {
                 return [
-                    {name: "phdatacat", subName: "暂无描述"},
-                    {name: "phdatatemp", subName: "存放中间文件"}
+                    {name: "phdatacat", subName: "暂无描述", id: "1"},
+                    {name: "phdatatemp", subName: "存放中间文件", id: "2"}
                 ]
             }
         }
@@ -254,6 +254,18 @@ export default {
                 param: {
                     name: '/download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
+                }
+            }
+            this.$emit('event', event)
+        },
+        linkToPage(param) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/download/data-directory-table',
+                    queryParams: `tab=dataDirectory&page=${this.allData.page}`
                 }
             }
             this.$emit('event', event)
