@@ -10,21 +10,21 @@
                 <div class="myData-mine">
                     <div class="subtitle">
                         <span class="heading-xsmall file-name-text">文件名称
-                            <bp-img :src="iconSortDescending"></bp-img>
+                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall database-name">数据库
-                            <bp-img :src="iconSortDescending"></bp-img>
+                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall subscribe-location">位置
-                            <bp-img :src="iconSortDescending"></bp-img>
+                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall last-time">上次更新时间
-                            <bp-img :src="iconSortDescending"></bp-img>
+                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                     </div>
 
                     <div class="main-container">
-                        <div v-for="(file,index) in allData.files" :key="index" class="OneRecord">
+                        <div v-for="(file,index) in allData.files" :key="index" class="OneRecord" @click="showDetail(file)">
                             <div class="icon_datafile"></div>
                             <div class="data-name-container">
                                 <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
@@ -45,23 +45,15 @@
                                 </bp-text>
                             </div>
                         </div>
-
                         <div v-if="allPage && curPage" class="page-container">
                             <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
                         </div>
                     </div>
                 </div>
-
-                <!-- <div v-else class="blank">
-                    <div class="no_data-icon"></div>
-                    <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
-                    <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                    <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
-                </div> -->
             </template>
         </div>
+        <data-detail @closeModal="closeModal" v-if="showDataDetail" :allDate="detailData"></data-detail>
     </div>
-    
 </template>
 <script>
 import bpPagination from '../bp-pagination.vue'
@@ -72,6 +64,7 @@ import bpButton from '../../../node_modules/vue-components/src/components/bp-but
 import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
 import editableComponent from '../editable-component.vue'
 import util from '../util.vue'
+import dataDetail from '../panel/data-list-detail.vue'
 
 export default {
     components: {
@@ -81,7 +74,8 @@ export default {
         bpText,
         bpButton,
         editableComponent,
-        bpImg
+        bpImg,
+        dataDetail
     },
     data() {
         return {
@@ -95,7 +89,9 @@ export default {
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
             goDetail: "查看详情",
             iconSortAscending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
-            iconSortDescending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg"
+            iconSortDescending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
+            detailData: null,
+            showDataDetail: false
         }
     },
     props: {
@@ -123,12 +119,6 @@ export default {
         }
     },
     computed: {
-        haveData() {
-            if (!this.allData.count) {
-                return false
-            }
-            return true
-        },
         allPage() {
             const total = this.allData.count
             const perPage = 10
@@ -140,38 +130,6 @@ export default {
         curPage() {
             return this.allData.page + 1
         },
-        iconSort() {
-            if (this.allData.sort.indexOf('-') === -1) {
-                return 'https://general.pharbers.com/icon_sorting-ascending.svg'
-            } else {
-                return 'https://general.pharbers.com/icon_sorting-descending.svg'
-            }
-        },
-        mineSortText() {
-            if (this.allData.sort.indexOf('created') === -1) {
-                return "Updated Time"
-            } else {
-                return "Created Time"
-            }
-        },
-        mineSortCreatedTimeIcon() {
-            if (this.allData.sort.indexOf('created') != -1) {
-                this.mineSortUpdatedTimeIcon = ''
-                return 'https://general.pharbers.com/icon_check.svg'
-            } else {
-                this.mineSortUpdatedTimeIcon = 'https://general.pharbers.com/icon_check.svg'
-                return ''
-            }
-        },
-        mineSortDescendingIcon() {
-            if (this.allData.sort.indexOf('-') != -1) {
-                this.mineSortAscendingIcon = ''
-                return 'https://general.pharbers.com/icon_check.svg'
-            } else {
-                this.mineSortAscendingIcon = 'https://general.pharbers.com/icon_check.svg'
-                return ''
-            }
-        },
         timeDisplay() {
             if (this.allData.sort.indexOf('created') !== -1) {
                 return true
@@ -181,37 +139,12 @@ export default {
         }
     },
     methods: {
-        changeTab(num) {
-            this.myDataTab = num
-            this.$emit('changeTab', num)
+        showDetail(data) {
+            this.detailData = data
+            this.showDataDetail = true
         },
-        myDataSort(sortType, type) {
-            const event = new Event("event")
-            let sort
-            
-            if (type === 0) {
-                if (this.mineSortDescendingIcon) {
-                    sort = `-${sortType}`
-                } else {
-                    sort = sortType
-                }
-            } else {
-                if (this.mineSortCreatedTimeIcon) {
-                    sort = `${sortType}created`
-                } else {
-                    sort = `${sortType}modified`
-                }
-            }
-            
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: '/download/my-data',
-                    queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
-                }
-            }
-            this.$emit('event', event)
+        closeModal() {
+            this.showDataDetail = false
         },
         formatFileName(...params) {
             let resname = params[0]
@@ -261,37 +194,6 @@ export default {
                 }
             }
         },
-        changeName(file) {
-            this.rename = true
-            this.renameFile = file
-            // 这里需要一个rename的组件
-        },
-        downloadFileService(file) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'downloadFile',
-                    use: 'downloadFile',
-                    file: file
-                }
-            }
-            this.$emit('event', event)
-        },
-        deleteData(file) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'deleteFile',
-                    use: 'deleteFile',
-                    file: file
-                }
-            }
-            this.$emit('event', event)
-        },
         changePage(page) {
             const event = new Event("event")
             event.args = {
@@ -300,18 +202,6 @@ export default {
                 param: {
                     name: '/download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
-                }
-            }
-            this.$emit('event', event)
-        },
-        upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'uploadFile',
-                    use: 'uploadFile'
                 }
             }
             this.$emit('event', event)

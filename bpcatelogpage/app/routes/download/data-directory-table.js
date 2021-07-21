@@ -29,7 +29,7 @@ export default class DownloadDataDirectoryTableRoute extends Route {
             tab: tab,
             page: page,
 			allDate: {
-				title: "subscribed表单",
+				title: "data表单",
 				files: [
 					{
 						name: "cpa_pha_mapping",
