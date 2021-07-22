@@ -63,6 +63,10 @@ export default DS.JSONAPIAdapter.extend( {
 			newUrl = `/phproject/${curPath}`
 		}
 
+		if(modelName === "database" || modelName === "table") {
+			newUrl = `/phcatlog/${curPath}`
+		}
+
 		if ( query && Object.keys( query ).length ) {
 			let queryString = ""
 			const queryParamsArr = Object.keys( query )
@@ -113,8 +117,8 @@ export default DS.JSONAPIAdapter.extend( {
 		const utils = PhSigV4ClientUtils
 		const uriTemp = PhUrlTemplate
 		const config = {
-			accessKey: '',
-			secretKey: '',
+			accessKey: 'AKIAWPBDTVEAPOX3QT6U',
+			secretKey: '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',
 			sessionToken: '',
 			region: 'cn-northwest-1',
 			sessionToken: "",
