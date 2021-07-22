@@ -35,7 +35,7 @@ export default DS.JSONAPIAdapter.extend( {
 		let url = this._super( ...arguments ) // url: http://general.pharbers.com:4200/v0/assets
 		let curType = url.split( "/" ).splice( 4,2 ) // ["activities" , ... ]
 		let curPath = curType.join( "/" )
-		let newUrl = `/${ENV.namespace}/entry/${curPath}` // newUrl: "/v0/entry/assets"
+		let newUrl = `/entry/${curPath}` // newUrl: "/v0/entry/assets"
 
 		this.set( "curMethod", requestMethod[requestType] )
 		this.set( "modelName", modelName )
@@ -43,24 +43,24 @@ export default DS.JSONAPIAdapter.extend( {
 
 		// login components
 		if ( modelName === "component" ) {
-			newUrl = `/${ENV.namespace}/common/${curPath}`
+			newUrl = `/common/${curPath}`
 		}
 		//account component
 		if(modelName === "account" || modelName === "role" || modelName === "scope") {
-			newUrl = `/${ENV.namespace}/phcommon/${curPath}`
+			newUrl = `/phcommon/${curPath}`
 		}
 		if(modelName === "partner") {
-			newUrl = `/${ENV.namespace}/phcommon/${curPath}`
+			newUrl = `/phcommon/${curPath}`
 			if(query && Object.keys(query).indexOf("filter[pid]") !== -1){
-				newUrl = `/${ENV.namespace}/reports/${curPath}`
+				newUrl = `/reports/${curPath}`
 			}
 		}
 		if(modelName === "template") {
-			newUrl = `/${ENV.namespace}/reports/${curPath}`
+			newUrl = `/reports/${curPath}`
 		}
 
 		if(modelName === "trigger") {
-			newUrl = `/${ENV.namespace}/phproject/${curPath}`
+			newUrl = `/phproject/${curPath}`
 		}
 
 		if ( query && Object.keys( query ).length ) {
@@ -93,7 +93,7 @@ export default DS.JSONAPIAdapter.extend( {
 			this.set( "queryParamsAWS", {} )
 		}
 		this.set( "newUrl", newUrl )
-		return "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn" + newUrl
+		return "https://api.pharbers.com" + newUrl
 	},
 	attributesToDeal( data ){
 		// data is object
@@ -123,7 +123,7 @@ export default DS.JSONAPIAdapter.extend( {
 			defaultAcceptType: "application/vnd.api+json"
 		}
 		// extract endpoint and path from url
-		const invokeUrl = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0"
+		const invokeUrl = "https://api.pharbers.com/v0"
 		const endpoint = /(^https?:\/\/[^\/]+)/g.exec( invokeUrl )[1]
 		const pathComponent = invokeUrl.substring( endpoint.length )
 		const sigV4ClientConfig = {
@@ -344,7 +344,7 @@ export default DS.JSONAPIAdapter.extend( {
 		/**
 		 * 	{   method: 'GET',
 			url:
-			'https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/proposals',
+			'https://api.pharbers.com/v0/offweb/proposals',
 			headers:
 			{ Accept: 'application/vnd.api+json',
 				'x-amz-date': '20200605T073304Z',
