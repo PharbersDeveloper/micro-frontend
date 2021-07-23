@@ -1,5 +1,8 @@
 <template>
     <div class="phdag">
+        <div class="dag-states">
+            <span v-for="(state, index) in states" :key="index" class="dag-state" :id="state">{{state}}</span>
+        </div>
         <svg id="svg-canvas" width="960" height="990"></svg>
     </div>
 </template>
@@ -13,6 +16,11 @@ export default {
     props: {
         dag: {
             type: Object
+        }
+    },
+    data(){
+        return {
+            states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status']
         }
     },
     mounted() {
@@ -334,23 +342,20 @@ export default {
                 }
                 this.addEdges(edgeData, g)
 
-                window.onload = function() {
-                    // let svg = d3.select( document.getElementsByTagName("ph-dag")[0].shadowRoot ).select("#svg-canvas")
-                    let svg = d3.select("#svg-canvas")
+                // let svg = d3.select( document.getElementsByTagName("ph-dag")[0].shadowRoot ).select("#svg-canvas")
+                let svg = d3.select("#svg-canvas")
 
-                    // 绘图的容器
-                    let svgGroup = svg.append( "g" )
-                    // 开始渲染
-                    render( svgGroup, g )
+                // 绘图的容器
+                let svgGroup = svg.append( "g" )
+                // 开始渲染
+                render( svgGroup, g )
 
-                    let zoom = d3.zoom()
-                        .scaleExtent( [.5, 4] )
-                        .on( "zoom", function( event ) {
-                            svgGroup.attr( "transform", event.transform )
-                        } )
-                    svg.call( zoom )
-                    // console.log("111",svg )
-                }
+                let zoom = d3.zoom()
+                    .scaleExtent( [.5, 4] )
+                    .on( "zoom", function( event ) {
+                        svgGroup.attr( "transform", event.transform )
+                    } )
+                svg.call( zoom )
             }
         }
     },
@@ -366,6 +371,56 @@ export default {
     * {
         box-sizing: border-box;
     }
+
+    @mixin body-tertiary {
+        font-family: SFProText-Light;
+        font-size: 12px;
+        color: #706F79;
+        letter-spacing: 0.25px;
+        text-align: center;
+        line-height: 16px;
+        font-weight: 200;
+    }
+    #queued {
+        border: 1px solid #63616B;
+    }
+
+    #running {
+        border: 1px solid #7163C5;
+    }
+
+    #success {
+        border: 1px solid #23A959;
+    }
+
+    #failed {
+        border: 1px solid #DB4D71;
+    }
+
+    #up_for_retry {
+        border: 1px solid #F7E54B;
+    }
+
+    #up_for_reschedule {
+        border: 1px solid #5EDED1;
+    }
+
+    #upstream_failed {
+        border: 1px solid #E0C00B;
+    }
+
+    #skipped {
+        border: 1px solid #EA99AE;
+    }
+
+    #scheduled {
+        border: 1px solid #CB88D3;
+    }
+
+    #no_status {
+        border: 1px solid #F2F0F9;
+    }
+
     #svg-canvas {
         width: 100%;
         height: 100%;
@@ -381,5 +436,20 @@ export default {
         width: 40px;
         height: 40px;
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.87 10.18c0 .2-.205.401-.412.401a.438.438 0 0 1-.413-.4c0-.201.207-.403.413-.403.207 0 .413.101.413.402h-.001zm-1.856 0c0 .802.619 1.404 1.444 1.404s1.444-.602 1.444-1.404c0-.803-.62-1.504-1.444-1.504-.825 0-1.444.701-1.444 1.504zm-1.65-1.404c0-.1 0-.1.103-.1l-.104.1zm8.148-.601a17.816 17.816 0 0 0-5.467-.602h-.62c.723-1.003 1.446-1.906 2.167-2.607 1.135-1.003 1.65-1.103 1.858-1.003.206.1.413 1.003-.103 2.707l1.03.301c.62-2.005.517-3.409-.308-3.81-.515-.302-1.444-.302-3.094 1.103-1.031.802-1.96 2.005-2.888 3.31-.413.1-.723.1-1.135.2-.722-2.006-.722-3.21-.412-3.41.206-.1 1.03.1 2.372 1.404l.722-.702C8.086 3.462 6.848 2.96 6.023 3.462c-1.033.501-.826 2.306-.103 4.412-.517.1-.93.2-1.341.3C2.413 8.777 2 9.579 2 10.18c0 .903 1.135 1.704 3.197 2.206l.206-1.002c-1.65-.402-2.372-.903-2.372-1.103 0-.201.413-.602 1.857-1.104.413-.1.928-.2 1.445-.3.102.3.309.7.515 1.103-.62 1.203-1.134 2.406-1.34 3.51-.517 2.105 0 2.907.514 3.208.207.1.413.2.62.2.72 0 1.753-.6 2.888-1.704l-.722-.7c-1.238 1.302-2.063 1.502-2.27 1.402-.206-.1-.412-.602 0-2.106.104-.902.413-1.805.825-2.808.104.201.207.301.31.502 1.032 1.705 2.166 3.209 3.3 4.211C12.109 16.698 12.83 17 13.449 17c.31 0 .516-.101.619-.202.825-.5.928-1.805.31-3.71a17.847 17.847 0 0 0-1.444-3.31l-.825.503c.618 1.103 1.03 2.206 1.34 3.108.516 1.705.31 2.507.104 2.607-.207.1-.722 0-1.857-1.003-1.031-.902-2.166-2.406-3.094-4.01-.31-.403-.517-.702-.62-1.104.104-.301.31-.601.516-.902.104-.1.207-.302.207-.401h1.34c1.96 0 3.817.2 5.158.601 1.444.402 1.857.903 1.857 1.104 0 .3-.62.802-2.476 1.203l.206 1.003c2.166-.502 3.198-1.305 3.198-2.206.103-.703-.413-1.505-2.476-2.106z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important;
+    }
+
+    .phdag {
+        .dag-states {
+            display: flex;
+            padding: 0 20px;
+            margin-top: 20px;
+
+            .dag-state {
+                @include body-tertiary;
+                padding: 2px 4px;
+                border-radius: 2px;
+                margin-right: 8px;
+            }
+        }
     }
 </style>
