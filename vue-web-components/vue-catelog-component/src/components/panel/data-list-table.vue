@@ -1,8 +1,10 @@
 <template>
     <div class="my-data-content-container">
         <div class="header">
+                {{detailData}}
+
             <span class="header-large">
-                {{allData.title}}
+                {{allData.name}}
             </span>
         </div>
         <div class="data-main-container">
@@ -23,15 +25,15 @@
                         </span>
                     </div>
 
-                    <div class="main-container">
-                        <div v-for="(file,index) in allData.files" :key="index" class="OneRecord" @click="showDetail(file)">
+                    <div class="main-container" v-if="allData.tables">
+                        <div v-for="(file,index) in allData.tables" :key="index" class="OneRecord" @click="showDetail(index)">
                             <div class="icon_datafile"></div>
                             <div class="data-name-container">
-                                <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
+                                <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{file.name}}</div>
                             </div>
 
                             <div class="database">
-                                <bp-text class="body-primary">{{file.database}}</bp-text>
+                                <bp-text class="body-primary">{{allData.name}}</bp-text>
                             </div>
 
                             <div class="subscribe-location">
@@ -40,8 +42,7 @@
 
                             <div class="last-time">
                                 <bp-text class="body-tertiary">
-                                    <!-- {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}} -->
-                                    {{file.time}}
+                                    {{formatDateStandard(file.lastModifyTime, 0)}}
                                 </bp-text>
                             </div>
                         </div>
@@ -52,7 +53,7 @@
                 </div>
             </template>
         </div>
-        <data-detail @closeModal="closeModal" v-if="showDataDetail" :allDate="detailData"></data-detail>
+        <data-detail @closeModal="closeModal" v-if="showDataDetail" :detailData="allData" :index="clickIndex"></data-detail>
     </div>
 </template>
 <script>
@@ -90,7 +91,7 @@ export default {
             goDetail: "查看详情",
             iconSortAscending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
             iconSortDescending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
-            detailData: null,
+            clickIndex: 0,
             showDataDetail: false
         }
     },
@@ -98,23 +99,7 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {
-                    title: "subscribed表单",
-                    files: [
-                        {
-                            name: "cpa_pha_mapping",
-                            database: "database",
-                            location: "s3://ph-platform/2020-11-11/etl/readable_files/...",
-                            time: "YYYY/MM/DD hh:mm"
-                        },
-                        {
-                            name: "cpa_pha_mapping",
-                            database: "database",
-                            location: "s3://ph-platform/2020-11-11/etl/readable_files/...",
-                            time: "YYYY/MM/DD hh:mm"
-                        }
-                    ]
-                }
+                return {}
             }
         }
     },
@@ -139,8 +124,8 @@ export default {
         }
     },
     methods: {
-        showDetail(data) {
-            this.detailData = data
+        showDetail(index) {
+            this.clickIndex = index
             this.showDataDetail = true
         },
         closeModal() {
@@ -484,7 +469,7 @@ export default {
                             justify-content: center;
                             .overflow-text {
                                 height: 20px;
-                                width: fit-content;
+                                width: 230px !important;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;

@@ -99,15 +99,16 @@
             <template v-if="myDataTab === 1">
                 <div class="subscribed-container">
                     <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
-                    <div class="subscribed-item" v-for="file in dataDirectory" :key="file.name">
+                    <div class="subscribed-item" v-for="file in allData.database" :key="file.name">
                         <div class="left-text">
                             <img :src="fileIconDark" class="file-icon-dark" alt="">
                             <div class="text-area" >
                                 <bp-text class="title">{{file.name}}</bp-text>
-                                <bp-text class="subtitle">{{file.subName}}</bp-text>
+                                <bp-text v-if="file.describe != ''" class="subtitle">{{file.describe}}</bp-text>
+                                <bp-text v-if="file.describe == ''" class="subtitle">暂无描述</bp-text>
                             </div>
                         </div>
-                        <bp-text @click="linkToPage(file.id)" class="subscribed-button">{{goDetail}}</bp-text>
+                        <bp-text @click="linkToPage(file.name)" class="subscribed-button">{{goDetail}}</bp-text>
                     </div>
                 </div>
             </template>
@@ -153,17 +154,9 @@ export default {
             default: function() {
                 return {
                     sort: '-created',
-                    files: []
+                    files: [],
+                    database: []
                 }
-            }
-        },
-        dataDirectory: {
-            type: Array,
-            default: function() {
-                return [
-                    {name: "phdatacat", subName: "暂无描述", id: "1"},
-                    {name: "phdatatemp", subName: "存放中间文件", id: "2"}
-                ]
             }
         }
     },
@@ -265,7 +258,7 @@ export default {
                 element: this,
                 param: {
                     name: '/download/data-directory-table',
-                    queryParams: `tab=dataDirectory&page=${this.allData.page}`
+                    queryParams: `database=${param}`
                 }
             }
             this.$emit('event', event)
