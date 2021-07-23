@@ -6,7 +6,7 @@
                 <img :src="closeIcon" class="icon-close" alt="" @click="closeJsonModel">
             </div>
             <div class="json-show">
-                <JsonViewer :value="allData" copyable expand-depth="5" :expanded="true"></JsonViewer>
+                <JsonViewer :value="allData" copyable :expand-depth=5 :expanded="true"></JsonViewer>
             </div>
         </div>
     </div>

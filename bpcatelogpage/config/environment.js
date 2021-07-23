@@ -47,9 +47,9 @@ module.exports = function ( environment ) {
 		// ENV.accountsUri = "http://accounts.pharbers.com:4300"
 		// ENV.scope = "APP|*|R"
 
-		ENV.clientId = "V5I67BHIRVR2Z59kq-a-"
+		ENV.clientId = "wsOelHMK2tLAVhj0"
 		ENV.clientSecret = "961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72"
-		ENV.redirectUri = "http://general.pharbers.com/oauth-callback"
+		ENV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.host = "http://oauth.pharbers.com"
 		ENV.namespace = "v0"
 		ENV.pharbersUri = "http://www.pharbers.com"

@@ -1,13 +1,13 @@
 <template>
     <div class="data-list-detail">
-        <div class="data-detail-container">
+        <div  class="data-detail-container">
             <div class="header-area">
-                <bp-text class="header-title">{{allData.name}}</bp-text>
+                <bp-text class="header-title">{{detailData.name}}</bp-text>
                 <img :src="closeIcon" class="icon-close" alt="" @click="closeModel">
             </div>
             <div class="body-area" v-if="!showPart">
                 <div class="view-part">
-                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{allData.lastModifyTime}}
+                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{haveData.lastModifyTime}}
                     </bp-text>
                     <bp-button  :text="viewPart" class="btn_primary" @click="viewPartClick"></bp-button>
                 </div>
@@ -16,35 +16,36 @@
                     <div class="name-value-area">
                         <div class="name-value">
                             <bp-text class="subtitle">名称：</bp-text>
-                            <bp-text class="subvalue">{{allData.name}}</bp-text>
+                            <bp-text class="subvalue">{{haveData.name}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">描述：</bp-text>
-                            <bp-text class="subvalue">{{allData.describe}}</bp-text>
+                            <bp-text v-if="haveData.describe != ''" class="subvalue">{{haveData.describe}}</bp-text>
+                            <bp-text v-if="haveData.describe == ''" class="subvalue">暂无描述</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">数据库：</bp-text>
-                            <bp-text class="subvalue">{{allData.database.name}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.name}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">分类：</bp-text>
-                            <bp-text class="subvalue">{{allData.source}}</bp-text>
+                            <bp-text class="subvalue">{{haveData.category}}</bp-text>
                         </div>
                         <div class="name-value mb-5">
                             <bp-text class="subtitle">上次更新时间：</bp-text>
-                            <bp-text class="subvalue">{{allData.lastModifyTime}}</bp-text>
+                            <bp-text class="subvalue">{{formatDateStandard(haveData.lastModifyTime, 0)}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">输入格式：</bp-text>
-                            <bp-text class="subvalue">{{allData.inputFormat}}</bp-text>
+                            <bp-text class="subvalue">{{haveData.inputFormat}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">输出格式：</bp-text>
-                            <bp-text class="subvalue">{{allData.outputFormat}}</bp-text>
+                            <bp-text class="subvalue">{{haveData.outputFormat}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">Serde 序列化库：</bp-text>
-                            <bp-text class="subvalue">{{allData.serdeLib}}</bp-text>
+                            <bp-text class="subvalue">{{haveData.serdeLib}}</bp-text>
                         </div>
                     </div>
                 </div>
@@ -54,8 +55,8 @@
                             <bp-text class="subtitle">Serde 参数：</bp-text>
                             <div class="name-value-area">
                                 <div class="parameter">
-                                    <bp-text class="name">serialization.format</bp-text>
-                                    <bp-text class="value">2</bp-text>
+                                    <bp-text class="name">"serialization.format"</bp-text>
+                                    <bp-text v-if="haveData.serdeArguments" class="value">{{haveData.serdeArguments["serialization.format"]}}</bp-text>
                                 </div>
                             </div>
                         </div>
@@ -63,28 +64,28 @@
                             <bp-text class="subtitle">表属性：</bp-text>
                             <div class="name-value-list">
                                 <div class="parameter">
-                                    <bp-text class="name">CrawlerSchemaSerializerVersion</bp-text>
-                                    <bp-text class="value">1.0</bp-text>
+                                    <bp-text class="name">"crawlerSchemaSerializerVersion"</bp-text>
+                                    <bp-text class="value">{{ haveData.crawlerSchemaSerializerVersion }}</bp-text>
                                 </div>
                                 <div class="parameter">
-                                    <bp-text class="name">recordCount</bp-text>
-                                    <bp-text class="value">1.0</bp-text>
+                                    <bp-text class="name">"recordCount"</bp-text>
+                                    <bp-text class="value">{{haveData.recordCount }}</bp-text>
                                 </div>
                                 <div class="parameter">
-                                    <bp-text class="name">averageRecordSize</bp-text>
-                                    <bp-text class="value">1.0</bp-text>
+                                    <bp-text class="name">"averageRecordSize"</bp-text>
+                                    <bp-text class="value">{{haveData.averageRecordSize }}</bp-text>
                                 </div>
                                 <div class="parameter">
-                                    <bp-text class="name">CrawlerSchemaDeserializerVersion</bp-text>
-                                    <bp-text class="value">1.0</bp-text>
+                                    <bp-text class="name">"crawlerSchemaDeserializerVersion"</bp-text>
+                                    <bp-text class="value">{{haveData.crawlerSchemaDeserializerVersion }}</bp-text>
                                 </div>
                                 <div class="parameter">
-                                    <bp-text class="name">compressionType</bp-text>
-                                    <bp-text class="value">1.0</bp-text>
+                                    <bp-text class="name">"compressionType"</bp-text>
+                                    <bp-text class="value">{{haveData.compressionType }}</bp-text>
                                 </div>
                                 <div class="parameter">
-                                    <bp-text class="name">typeOfData</bp-text>
-                                    <bp-text class="value">1.0</bp-text>
+                                    <bp-text class="name">"typeOfData"</bp-text>
+                                    <bp-text class="value">{{haveData.typeOfData }}</bp-text>
                                 </div>
                             </div>
                         </div>
@@ -106,23 +107,23 @@
                         </div>
 
                         <div class="main-container">
-                            <div v-for="(file,index) in allData.table" :key="index" class="OneRecord">
+                            <div v-for="(file,index) in haveData.schemas" :key="index" class="OneRecord">
                                 <div class="index-text">{{index+1}}</div>
                                 <div class="column-name">
-                                    <div class="column-name-text overflow-text" :title="file.name">{{formatFileName(file.name)}}</div>
+                                    <div class="column-name-text overflow-text" :title="file.field">{{file.field}}</div>
                                 </div>
 
                                 <div class="data-type">
-                                    <bp-text class="body-primary">{{file.database}}</bp-text>
+                                    <bp-text class="body-primary">{{file.type}}</bp-text>
                                 </div>
 
                                 <div class="partition">
-                                    <bp-text class="body-tertiary">{{file.location}}</bp-text>
+                                    <bp-text class="body-tertiary">{{file.comment}}</bp-text>
                                 </div>
 
                                 <div class="comment">
                                     <bp-text class="body-tertiary">
-                                        {{file.time}}
+                                        {{file.parameters}}
                                     </bp-text>
                                 </div>
                             </div>
@@ -132,7 +133,7 @@
             </div>
             <div class="body-area" v-if="showPart">
                 <div class="view-part">
-                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{allData.lastModifyTime}}
+                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{haveData.lastModifyTime}}
                     </bp-text>
                     <bp-button  :text="closePart" class="btn_primary" @click="closePartClick"></bp-button>
                 </div>
@@ -149,18 +150,18 @@
                         </div>
 
                         <div class="main-container">
-                            <div v-for="(file,index) in allData.table" :key="index" class="OneRecord">
+                            <div v-for="(file,index) in haveData.partitionKeys" :key="index" class="OneRecord">
                                 <div class="column-name">
-                                    <div class="column-name-text overflow-text" :title="file.name">{{formatFileName(file.name)}}</div>
+                                    <div class="column-name-text overflow-text" :title="file.name">{{file.name}}</div>
                                 </div>
 
                                 <div class="data-type">
-                                    <bp-text class="body-primary">{{file.database}}</bp-text>
+                                    <bp-text class="body-primary">{{file.parameters}}</bp-text>
                                 </div>
 
                                 <div class="comment">
                                     <bp-text class="body-tertiary">
-                                        {{file.time}}
+                                        {{file.type}}
                                     </bp-text>
                                 </div>
 
@@ -206,98 +207,19 @@ export default {
         }
     },
     props: {
-        allData: {
+        detailData: {
             type: Object,
             default: function() {
-                return {
-                    name: "cpa_pha_mapping",
-                    database: {
-                        name: "datebase"
-                    },
-                    describe: "String",
-                    source: "String",
-                    connect: "String",
-                    deprecated: "String",
-                    lastModifyTime: " YYYY/MM/DD hh:mm ",
-                    inputFormat: "String",
-                    outputFormat: "String",
-                    serdeLib: "String",
-                    table: [
-                        {
-                            name: "cpa_pha_mapping",
-                            database: "database",
-                            location: "Partition (0)",
-                            time: "YYYY/MM/DD hh:mm"
-                        },
-                        {
-                            name: "cpa_pha_mapping",
-                            database: "database",
-                            location: "Partition (0)",
-                            time: "YYYY/MM/DD hh:mm"
-                        }
-                    ],
-                    schemas: [
-
-                    ]
-                }
+                return []
             }
-        }
+        },
+        index: Number
     },
     computed: {
         haveData() {
-            if (!this.allData.count) {
-                return false
-            }
-            return true
-        },
-        allPage() {
-            const total = this.allData.count
-            const perPage = 10
-            if (Math.ceil(total / perPage) <= 1) {
-                return 0
-            }
-            return Math.max(1, Math.ceil(total / perPage))
-        },
-        curPage() {
-            return this.allData.page + 1
-        },
-        iconSort() {
-            if (this.allData.sort.indexOf('-') === -1) {
-                return 'https://general.pharbers.com/icon_sorting-ascending.svg'
-            } else {
-                return 'https://general.pharbers.com/icon_sorting-descending.svg'
-            }
-        },
-        mineSortText() {
-            if (this.allData.sort.indexOf('created') === -1) {
-                return "Updated Time"
-            } else {
-                return "Created Time"
-            }
-        },
-        mineSortCreatedTimeIcon() {
-            if (this.allData.sort.indexOf('created') != -1) {
-                this.mineSortUpdatedTimeIcon = ''
-                return 'https://general.pharbers.com/icon_check.svg'
-            } else {
-                this.mineSortUpdatedTimeIcon = 'https://general.pharbers.com/icon_check.svg'
-                return ''
-            }
-        },
-        mineSortDescendingIcon() {
-            if (this.allData.sort.indexOf('-') != -1) {
-                this.mineSortAscendingIcon = ''
-                return 'https://general.pharbers.com/icon_check.svg'
-            } else {
-                this.mineSortAscendingIcon = 'https://general.pharbers.com/icon_check.svg'
-                return ''
-            }
-        },
-        timeDisplay() {
-            if (this.allData.sort.indexOf('created') !== -1) {
-                return true
-            } else {
-                return false
+            if(this.detailData && this.detailData.tables.length > 0) {
+                console.log(this.detailData.tables[this.index])
+                return this.detailData.tables[this.index]
             }
         }
     },
@@ -307,6 +229,16 @@ export default {
         },
         viewChar() {
             this.showJson = true
+            const event = new Event("event")
+            event.args = {
+                callback: "requestData",
+                element: this,
+                param: {
+                    // name: '/download/my-data',
+                    // queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
+                }
+            }
+            this.$emit('event', event)
         },
         closeModel() {
             this.$emit("closeModal")
@@ -316,27 +248,6 @@ export default {
         },
         closePartClick() {
             this.showPart = false
-        },
-        formatFileName(...params) {
-            let resname = params[0]
-            let len = 0
-
-            if (resname === null) {
-                return "nameless"
-            }
-
-            for (let i = 0; i < resname.length; i++) {
-                if (resname.charCodeAt(i)>127 || resname.charCodeAt(i)==94) {
-                    len += 2
-                } else {
-                    len ++
-                }
-                if (len > 64) {
-                    resname = resname.substring(0, i) + '...'
-                    break
-                }
-            }
-            return resname
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
@@ -364,61 +275,6 @@ export default {
                     return Y + "-" + M + "-" + D0 + " " + h + ":" + m
                 }
             }
-        },
-        changeName(file) {
-            this.rename = true
-            this.renameFile = file
-            // 这里需要一个rename的组件
-        },
-        downloadFileService(file) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'downloadFile',
-                    use: 'downloadFile',
-                    file: file
-                }
-            }
-            this.$emit('event', event)
-        },
-        deleteData(file) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'deleteFile',
-                    use: 'deleteFile',
-                    file: file
-                }
-            }
-            this.$emit('event', event)
-        },
-        changePage(page) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: '/download/my-data',
-                    queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
-                }
-            }
-            this.$emit('event', event)
-        },
-        upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'uploadFile',
-                    use: 'uploadFile'
-                }
-            }
-            this.$emit('event', event)
         }
     } 
 }
@@ -677,7 +533,7 @@ export default {
                             }
                             .overflow-text {
                                 height: 20px;
-                                width: fit-content;
+                                width: auto;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;

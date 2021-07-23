@@ -42,7 +42,7 @@ export default class DataDirectoryComponent extends Component {
 
     get calAllData() {
         this.args.model._isVue = true
-        return this.args.model.allDate
+        return this.args.model
     }
 }
 

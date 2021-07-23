@@ -26,28 +26,16 @@ export default class DownloadMyDataRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-
         let files = await this.store.query( "asset", { "filter[type]": "file", "filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
-            // .then()
-            // .catch(err => {
-            //     // this.toast.error( "", this.get('intl').t('permission.permissionDenied'), this.toastOptions )
-            //     // return {
-            //     //     meta: {
-            //     //         count: 1
-            //     //     }
-            //     // }
-            // })
-
-        // if ( files.length === 0 && page !== 0 ) {
-        //     this.transitionTo( `/download/my-data?tab=${tab}&page=${page}sort=${sortType}`)
-        // }
+		let database = await this.store.query("database", {})
 
         return RSVP.hash({
             files: files.filter( it => it),
             tab: tab,
             page: page,
             sort: sortType,
-            count: files.meta.count
+            count: files.meta.count,
+			database: database.filter( it => it)
         })
     }
 }
