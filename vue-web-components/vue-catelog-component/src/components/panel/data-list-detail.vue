@@ -7,7 +7,7 @@
             </div>
             <div class="body-area" v-if="!showPart">
                 <div class="view-part">
-                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{haveData.lastModifyTime}}
+                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}
                     </bp-text>
                     <bp-button  :text="viewPart" class="btn_primary" @click="viewPartClick"></bp-button>
                 </div>
@@ -16,12 +16,12 @@
                     <div class="name-value-area">
                         <div class="name-value">
                             <bp-text class="subtitle">名称：</bp-text>
-                            <bp-text class="subvalue">{{haveData.name}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].name}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">描述：</bp-text>
-                            <bp-text v-if="haveData.describe != ''" class="subvalue">{{haveData.describe}}</bp-text>
-                            <bp-text v-if="haveData.describe == ''" class="subvalue">暂无描述</bp-text>
+                            <bp-text v-if="detailData.tables[index].describe != ''" class="subvalue">{{detailData.tables[index].describe}}</bp-text>
+                            <bp-text v-if="detailData.tables[index].describe == ''" class="subvalue">暂无描述</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">数据库：</bp-text>
@@ -29,23 +29,23 @@
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">分类：</bp-text>
-                            <bp-text class="subvalue">{{haveData.category}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].category}}</bp-text>
                         </div>
                         <div class="name-value mb-5">
                             <bp-text class="subtitle">上次更新时间：</bp-text>
-                            <bp-text class="subvalue">{{formatDateStandard(haveData.lastModifyTime, 0)}}</bp-text>
+                            <bp-text class="subvalue">{{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">输入格式：</bp-text>
-                            <bp-text class="subvalue">{{haveData.inputFormat}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].inputFormat}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">输出格式：</bp-text>
-                            <bp-text class="subvalue">{{haveData.outputFormat}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].outputFormat}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">Serde 序列化库：</bp-text>
-                            <bp-text class="subvalue">{{haveData.serdeLib}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].serdeLib}}</bp-text>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                             <div class="name-value-area">
                                 <div class="parameter">
                                     <bp-text class="name">"serialization.format"</bp-text>
-                                    <bp-text v-if="haveData.serdeArguments" class="value">{{haveData.serdeArguments["serialization.format"]}}</bp-text>
+                                    <bp-text v-if="detailData.tables[index].serdeArguments" class="value">{{detailData.tables[index].serdeArguments["serialization.format"]}}</bp-text>
                                 </div>
                             </div>
                         </div>
@@ -65,27 +65,27 @@
                             <div class="name-value-list">
                                 <div class="parameter">
                                     <bp-text class="name">"crawlerSchemaSerializerVersion"</bp-text>
-                                    <bp-text class="value">{{ haveData.crawlerSchemaSerializerVersion }}</bp-text>
+                                    <bp-text class="value">{{ detailData.tables[index].crawlerSchemaSerializerVersion }}</bp-text>
                                 </div>
                                 <div class="parameter">
                                     <bp-text class="name">"recordCount"</bp-text>
-                                    <bp-text class="value">{{haveData.recordCount }}</bp-text>
+                                    <bp-text class="value">{{detailData.tables[index].recordCount }}</bp-text>
                                 </div>
                                 <div class="parameter">
                                     <bp-text class="name">"averageRecordSize"</bp-text>
-                                    <bp-text class="value">{{haveData.averageRecordSize }}</bp-text>
+                                    <bp-text class="value">{{detailData.tables[index].averageRecordSize }}</bp-text>
                                 </div>
                                 <div class="parameter">
                                     <bp-text class="name">"crawlerSchemaDeserializerVersion"</bp-text>
-                                    <bp-text class="value">{{haveData.crawlerSchemaDeserializerVersion }}</bp-text>
+                                    <bp-text class="value">{{detailData.tables[index].crawlerSchemaDeserializerVersion }}</bp-text>
                                 </div>
                                 <div class="parameter">
                                     <bp-text class="name">"compressionType"</bp-text>
-                                    <bp-text class="value">{{haveData.compressionType }}</bp-text>
+                                    <bp-text class="value">{{detailData.tables[index].compressionType }}</bp-text>
                                 </div>
                                 <div class="parameter">
                                     <bp-text class="name">"typeOfData"</bp-text>
-                                    <bp-text class="value">{{haveData.typeOfData }}</bp-text>
+                                    <bp-text class="value">{{detailData.tables[index].typeOfData }}</bp-text>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="main-container">
-                            <div v-for="(file,index) in haveData.schemas" :key="index" class="OneRecord">
+                            <div v-for="(file,index) in detailData.tables[index].schemas" :key="index" class="OneRecord">
                                 <div class="index-text">{{index+1}}</div>
                                 <div class="column-name">
                                     <div class="column-name-text overflow-text" :title="file.field">{{file.field}}</div>
@@ -133,7 +133,7 @@
             </div>
             <div class="body-area" v-if="showPart">
                 <div class="view-part">
-                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{haveData.lastModifyTime}}
+                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}
                     </bp-text>
                     <bp-button  :text="closePart" class="btn_primary" @click="closePartClick"></bp-button>
                 </div>
@@ -150,23 +150,23 @@
                         </div>
 
                         <div class="main-container">
-                            <div v-for="(file,index) in haveData.partitionKeys" :key="index" class="OneRecord">
+                            <div v-for="(file,index) in detailData.partTables" :key="index" class="OneRecord">
                                 <div class="column-name">
-                                    <div class="column-name-text overflow-text" :title="file.name">{{file.name}}</div>
+                                    <div class="column-name-text overflow-text" :title="file.name">{{file.schema.provider}}</div>
                                 </div>
 
                                 <div class="data-type">
-                                    <bp-text class="body-primary">{{file.parameters}}</bp-text>
+                                    <bp-text class="body-primary">{{file.schema.version}}</bp-text>
                                 </div>
 
                                 <div class="comment">
                                     <bp-text class="body-tertiary">
-                                        {{file.type}}
+                                        {{file.schema.filetype}}
                                     </bp-text>
                                 </div>
 
                                 <div class="partition">
-                                    <bp-text class="view-char" @click="viewChar">查看属性</bp-text>
+                                    <bp-text class="view-char" @click="viewChar(file)">查看属性</bp-text>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                 </div>
             </div>
         </div>
-        <jsonModel v-if="showJson" @closeJsonModal="closeJsonModal"></jsonModel>
+        <jsonModel :JsonData="JsonData" v-if="showJson" @closeJsonModal="closeJsonModal" ></jsonModel>
     </div>
 </template>
 <script>
@@ -202,52 +202,41 @@ export default {
             closePart: "关闭分区",
             overTitle: "概述",
             architecture: "架构",
-            showPart: false,
-            showJson: false
+            // showPart: false
+            showJson: false,
+            JsonData: {}
         }
     },
     props: {
         detailData: {
             type: Object,
             default: function() {
-                return []
+                return {}
             }
         },
-        index: Number
+        index: Number,
+        showPart: Boolean
     },
     computed: {
-        haveData() {
-            if(this.detailData && this.detailData.tables.length > 0) {
-                console.log(this.detailData.tables[this.index])
-                return this.detailData.tables[this.index]
-            }
-        }
     },
     methods: {
         closeJsonModal() {
             this.showJson = false
         },
-        viewChar() {
+        viewChar(data) {
+            this.JsonData = JSON.parse(data.attribute)
             this.showJson = true
-            const event = new Event("event")
-            event.args = {
-                callback: "requestData",
-                element: this,
-                param: {
-                    // name: '/download/my-data',
-                    // queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
-                }
-            }
-            this.$emit('event', event)
         },
         closeModel() {
             this.$emit("closeModal")
         },
         viewPartClick() {
-            this.showPart = true
+            // this.showPart = true
+            this.$emit("viewPartClick")
         },
         closePartClick() {
-            this.showPart = false
+            // this.showPart = false
+            this.$emit("closePartClick")
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
@@ -475,8 +464,8 @@ export default {
                     }
 
                     .data-type {
-                        min-width: 200px;
-                        width: 200px;
+                        min-width: 300px;
+                        width: 300px;
                         padding: 0 8px;
                     }
 
@@ -552,8 +541,8 @@ export default {
                         }
                         // 数据类型
                         .data-type {
-                            min-width: 200px;
-                            width: 200px;
+                            min-width: 300px;
+                            width: 300px;
                             height: 100%;
                             padding: 0 8px;
                             display: flex;

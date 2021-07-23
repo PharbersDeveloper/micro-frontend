@@ -4,8 +4,11 @@ import { inject as service } from '@ember/service';
 
 export default class DataDirectoryComponent extends Component {
 	@service router
+	@service store
+    @service cookies
+    @service ajax
     @action
-	listener(e) {
+	async listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 let param = e.detail[0].args.param
@@ -23,6 +26,14 @@ export default class DataDirectoryComponent extends Component {
                     }
                 }
                 break
+			case "requestData":
+				let that = this
+                let requestParam = e.detail[0].args.param
+				let partTables = await this.store.query( requestParam.name, { "filter[database]": requestParam.queryParams.database, "filter[table]": requestParam.queryParams.table} )
+				e.target.allData.partTables = partTables.filter(function(item) {
+					return item.schema !== null
+				})
+				break
             default: 
                 console.log("submit event to parent")
         }
