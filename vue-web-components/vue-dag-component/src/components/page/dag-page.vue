@@ -5,10 +5,9 @@
             <button>返回列表</button>
         </div>
         
-        <div class="dag-states">
-            <span v-for="(state, index) in states" :key="index" class="dag-state" :id="state">{{state}}</span>
+        <div class="dag-main-container">
+
         </div>
-        
         <bp-dag :dag="dag"></bp-dag>
 
         <div class="dag-run-container">
@@ -61,46 +60,129 @@ export default {
     },
     data() {
         return {
-            dag: {
-                "Comment": "An example of the Amazon States Language using a parallel state to execute two branches at the same time.",
-                "StartAt": "Parallel",
-                "States": {
-                    "Parallel": {
-                        "Type": "Parallel",
-                        "Next": "Final State",
-                        "Branches": [
-                            {
-                                "StartAt": "Wait 20s",
-                                "States": {
-                                    "Wait 20s": {
-                                        "Type": "Wait",
-                                        "Seconds": 20,
-                                        "End": true
-                                    }
-                                }
-                            },
-                            {
-                                "StartAt": "Pass",
-                                "States": {
-                                    "Pass": {
-                                        "Type": "Pass",
-                                        "Next": "Wait 10s"
-                                    },
-                                    "Wait 10s": {
-                                        "Type": "Wait",
-                                        "Seconds": 10,
-                                        "End": true
-                                    }
-                                }
-                            }
-                        ]
-                    },
-                    "Final State": {
-                        "Type": "Pass",
-                        "End": true
-                    }
-                }
-            },
+            // dag: {
+            //     "Comment": "An example of the Amazon States Language using a parallel state to execute two branches at the same time.",
+            //     "StartAt": "Parallel",
+            //     "States": {
+            //         "Parallel": {
+            //             "Type": "Parallel",
+            //             "Next": "Final State",
+            //             "Branches": [
+            //                 {
+            //                     "StartAt": "Wait 20s",
+            //                     "States": {
+            //                         "Wait 20s": {
+            //                             "Type": "Wait",
+            //                             "Seconds": 20,
+            //                             "End": true
+            //                         }
+            //                     }
+            //                 },
+            //                 {
+            //                     "StartAt": "Pass",
+            //                     "States": {
+            //                         "Pass": {
+            //                             "Type": "Pass",
+            //                             "Next": "Wait 10s"
+            //                         },
+            //                         "Wait 10s": {
+            //                             "Type": "Wait",
+            //                             "Seconds": 10,
+            //                             "End": true
+            //                         }
+            //                     }
+            //                 }
+            //             ]
+            //         },
+            //         "Final State": {
+            //             "Type": "Pass",
+            //             "End": true
+            //         }
+            //     }
+            // },
+            // dag: {
+            //     "Comment": "Iterator ETL",
+            //     "StartAt": "ConfigureCount",
+            //     "States": {
+            //         "ConfigureCount": {
+            //             "Type": "Pass",
+            //             "Result": {
+            //                 "count": 2,
+            //                 "index": 0,
+            //                 "step": 1
+            //             },
+            //             "ResultPath": null,
+            //             "Next": "Iterator"
+            //         },
+            //         "Iterator": {
+            //             "Type": "Task",
+            //             "Resource": "arn:aws-cn:lambda:cn-northwest-1:444603803904:function:Iterator",
+            //             "ResultPath": "$.iterator",
+            //             "Next": "IsCountReached"
+            //         },
+            //         "IsCountReached": {
+            //             "Type": "Choice",
+            //             "Choices": [
+            //                 {
+            //                     "Variable": "$.iterator.continue",
+            //                     "BooleanEquals": true,
+            //                     "Next": "process-step-input"
+            //                 }
+            //             ],
+            //             "Default": "Done"
+            //         },
+            //         "process-step-input": {
+            //             "Type": "Task",
+            //             "Resource": "arn:aws-cn:lambda:cn-northwest-1:444603803904:function:process_step_parameters",
+            //             "ResultPath": "$.parameter",
+            //             "Next": "choice-type"
+            //         },
+            //         "choice-type": {
+            //             "Type": "Choice",
+            //             "Choices": [
+            //                 {
+            //                     "Variable": "$.parameter.next_step",
+            //                     "StringEquals": "move-to-readable",
+            //                     "Next": "move-to-readable"
+            //                 },
+            //                 {
+            //                     "Variable": "$.parameter.next_step",
+            //                     "StringEquals": "start_glue_job",
+            //                     "Next": "start_glue_job"
+            //                 }
+            //             ],
+            //             "Default": "move-to-readable"
+            //         },
+            //         "start_glue_job": {
+            //             "Type": "Task",
+            //             "Resource": "arn:aws-cn:lambda:cn-northwest-1:444603803904:function:Run_Glue_job",
+            //             "ResultPath": "$.parameter",
+            //             "Next": "move-to-readable"
+            //         },
+            //         "move-to-readable": {
+            //             "Next": "Iterator",
+            //             "Type": "Task",
+            //             "Resource": "arn:aws-cn:states:::elasticmapreduce:addStep.sync",
+            //             "Parameters": {
+            //                 "ClusterId.$": "$.clusterId",
+            //                 "Step": {
+            //                     "Name": "My EMR step",
+            //                     "ActionOnFailure": "CONTINUE",
+            //                     "HadoopJarStep": {
+            //                         "Jar": "command-runner.jar",
+            //                         "Args.$": "$.parameter.args"
+            //                     }
+            //                 }
+            //             },
+            //             "ResultPath": "$.firstStep"
+            //         },
+            //         "Done": {
+            //             "Type": "Pass",
+            //             "End": true
+            //         }
+            //     }
+            // },
+            dag: null,
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
             buttonState: "finished"
         }
@@ -133,6 +215,24 @@ export default {
                 return "finished-text"
             }
         }
+    },
+    created() {
+        let that = this
+        const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
+        fetch("ETL_Iterator.json").then(res => res.json())
+            .then(data => {
+                that.dag = data
+            })
+
+        fetch("https://api.pharbers.com/phstartetl", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/vnd.api+json",
+                "Accept": "application/vnd.api+json",
+                "Authorization": accessToken
+            }
+        })
     }
 }
 </script>
@@ -276,45 +376,7 @@ export default {
         font-weight: 200;
     }
 
-    #queued {
-        border: 1px solid #63616B;
-    }
-
-    #running {
-        border: 1px solid #7163C5;
-    }
-
-    #success {
-        border: 1px solid #23A959;
-    }
-
-    #failed {
-        border: 1px solid #DB4D71;
-    }
-
-    #up_for_retry {
-        border: 1px solid #F7E54B;
-    }
-
-    #up_for_reschedule {
-        border: 1px solid #5EDED1;
-    }
-
-    #upstream_failed {
-        border: 1px solid #E0C00B;
-    }
-
-    #skipped {
-        border: 1px solid #EA99AE;
-    }
-
-    #scheduled {
-        border: 1px solid #CB88D3;
-    }
-
-    #no_status {
-        border: 1px solid #F2F0F9;
-    }
+    
 
     .dag-page {
         overflow-x: hidden;
@@ -326,6 +388,7 @@ export default {
             display: none;
         }
         -ms-overflow-style: none;
+
         .dag-header {
             display: flex;
             justify-content: space-between;
@@ -346,19 +409,6 @@ export default {
                 cursor: pointer;
                 @include btn_secondary_initial;
                 margin-top: 16px;
-            }
-        }
-
-        .dag-states {
-            display: flex;
-            padding: 0 20px;
-            margin-top: 20px;
-
-            .dag-state {
-                @include body-tertiary;
-                padding: 2px 4px;
-                border-radius: 2px;
-                margin-right: 8px;
             }
         }
 
