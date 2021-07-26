@@ -6,49 +6,49 @@
         </div>
         
         <div class="dag-main-container">
+            <bp-dag :dag="dag"></bp-dag>
 
-        </div>
-        <bp-dag :dag="dag"></bp-dag>
-
-        <div class="dag-run-container">
-            <div class="toggle-panel">
-                <div class="icon_chevron-right icon"></div>
-            </div>
-
-            <div class="dag-run-content">
-                <div class="run-button-container">
-                    <button :class="buttonState" @click="runDag">
-                        <div class="icon"></div>
-                        <span class="run-text">RUN</span>
-                    </button>
-
-                    <div v-if="runState" class="run-state-container">
-                        <div :class="runIconClass"></div>
-                        <span :class="runTextClass">{{runState}}</span>
-                    </div>
+            <div class="dag-run-container">
+                <div class="toggle-panel">
+                    <div :class="toggleIcon" class="icon" @click="togglePanel"></div>
                 </div>
 
-                <div class="dag-message-contaner">
-                    <span class="task-id margin-bottom-20">Task_ID:data_matching_cleaning_data_normalization</span>
-                    <div class="status-container margin-bottom-20">
-                        <span class="heading-small mr-0">Status:</span>
-                        <span class="body-tertiary">no_status</span>
+                <div v-if="togglePanelId" class="dag-run-content">
+                    <div class="run-button-container">
+                        <button :class="buttonState" @click="runDag">
+                            <div class="icon"></div>
+                            <span class="run-text">RUN</span>
+                        </button>
+
+                        <div v-if="runState" class="run-state-container">
+                            <div :class="runIconClass"></div>
+                            <span :class="runTextClass">{{runState}}</span>
+                        </div>
                     </div>
-                    <div class="run-container mb-2">
-                        <span class="heading-small">Run:</span>
-                        <span class="body-default">2021-4-29,15:13:24</span>
-                    </div>
-                    <div class="run-container mb-2">
-                        <span class="heading-small">Started:</span>
-                        <span class="body-default">2021-4-29,15:13:24</span>
-                    </div>
-                    <div class="run-container mb-2">
-                        <span class="heading-small">Duration:</span>
-                        <span class="body-default">1 Hours 10 Min 29.080 Sec</span>
+
+                    <div class="dag-message-contaner">
+                        <span class="task-id margin-bottom-20">Task_ID:data_matching_cleaning_data_normalization</span>
+                        <div class="status-container margin-bottom-20">
+                            <span class="heading-small mr-0">Status:</span>
+                            <span class="body-tertiary">no_status</span>
+                        </div>
+                        <div class="run-container mb-2">
+                            <span class="heading-small">Run:</span>
+                            <span class="body-default">2021-4-29,15:13:24</span>
+                        </div>
+                        <div class="run-container mb-2">
+                            <span class="heading-small">Started:</span>
+                            <span class="body-default">2021-4-29,15:13:24</span>
+                        </div>
+                        <div class="run-container mb-2">
+                            <span class="heading-small">Duration:</span>
+                            <span class="body-default">1 Hours 10 Min 29.080 Sec</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
     </div>
 </template>
 
@@ -64,36 +64,38 @@ export default {
             startReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
+            togglePanelId: 1,
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
-            buttonState: "finished"
+            buttonState: ""
         }
     },
     computed: {
         runState() {
-            if (this.buttonState === "default") {
+            if (!this.buttonState) {
                 return
-            } else if (this.buttonState === "running") {
-                return "Running"
-            } else if (this.buttonState === "finished") {
-                return "Finished"
+            } else {
+                return this.buttonState
             }
         },
         runIconClass() {
-            if (this.buttonState === "default") {
+            if (!this.buttonState) {
                 return
-            } else if (this.buttonState === "running") {
-                return "icon_running"
-            } else if (this.buttonState === "finished") {
-                return "icon_finished"
+            } else {
+                return `icon_${this.buttonState}`
             }
         },
         runTextClass() {
-            if (this.buttonState === "default") {
+            if (!this.buttonState) {
                 return
-            } else if (this.buttonState === "running") {
-                return "running-text"
-            } else if (this.buttonState === "finished") {
-                return "finished-text"
+            } else {
+                return `${this.buttonState}-text`
+            }
+        },
+        toggleIcon() {
+            if (this.togglePanelId) {
+                return "icon_chevron-right"
+            } else {
+                return "icon_chevron-left"
             }
         }
     },
@@ -168,7 +170,9 @@ export default {
                 if (this.dagStatus.execution_status !== "RUNNING") {
                     storage.removeItem("startReturn")
                     clearInterval(this.cycleCheckDagStatus)
+                    console.log(222)
                 }
+                console.log(this.dagStatus)
             }
         },
         cycle() {
@@ -178,12 +182,16 @@ export default {
             if ( storage.getItem("startReturn") ) {
                 this.checkDagStatus()
                 this.cycleCheckDagStatus = setInterval(function() {
+                    console.log(111);
                     that.checkDagStatus()
                     if (!storage.getItem("startReturn")) {
                         clearInterval(this.cycleCheckDagStatus)
                     }
                 },60000)
             }
+        },
+        togglePanel() {
+            this.togglePanelId = !this.togglePanelId
         }
     }
 }
@@ -286,6 +294,12 @@ export default {
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.825 14.867L13 10 7.825 5.133a.505.505 0 0 0-.683 0 .435.435 0 0 0-.056.58l.056.063L11.633 10l-4.491 4.224a.435.435 0 0 0-.056.58l.056.063a.507.507 0 0 0 .616.052l.067-.052z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100%;
     }
 
+    .icon_chevron-left {
+        width: 20px;
+        height: 20px;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.175 14.867L7 10l5.175-4.867a.505.505 0 0 1 .683 0 .435.435 0 0 1 .056.58l-.056.063L8.367 10l4.491 4.224a.435.435 0 0 1 .056.58l-.056.063a.507.507 0 0 1-.616.052l-.067-.052z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important; 
+    }
+
     @mixin icon_play-white {
         width: 20px;
         height: 20px;
@@ -298,19 +312,19 @@ export default {
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 2.524v14.952a.521.521 0 0 0 .776.455l12.963-7.476a.526.526 0 0 0 0-.91L4.776 2.07A.516.516 0 0 0 4 2.524z' fill='%23BCBAC4' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100%;
     }
 
-    .icon_finished {
+    .icon_Succeeded {
         width: 32px;
         height: 32px;
         background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M16 8c4.416 0 8 3.584 8 8s-3.584 8-8 8-8-3.584-8-8 3.584-8 8-8zm0 1c-3.864 0-7 3.136-7 7s3.136 7 7 7 7-3.136 7-7-3.136-7-7-7zm4.354 3.646a.5.5 0 0 1 .057.638l-.057.07-5.854 5.853-2.854-2.853a.5.5 0 0 1 .638-.765l.07.057 2.146 2.147 5.146-5.147a.5.5 0 0 1 .708 0z' fill='%2323A959' fill-rule='nonzero'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
     }
 
-    .icon_running {
+    .icon_Running {
         width: 32px;
         height: 32px;
         background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M15.833 10.587v2.752L19.5 9.67 15.833 6v2.752a7.334 7.334 0 0 0-7.333 7.34c0 1.44.422 2.78 1.137 3.908l1.338-1.34a5.39 5.39 0 0 1-.642-2.568 5.507 5.507 0 0 1 5.5-5.505zM22.363 12l-1.338 1.34c.403.77.642 1.642.642 2.568a5.507 5.507 0 0 1-5.5 5.505V18.66L12.5 22.33 16.167 26v-2.752a7.334 7.334 0 0 0 7.333-7.34A7.28 7.28 0 0 0 22.363 12z' fill='%237163C5'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
     }
 
-    .running-text {
+    .Running-text {
         font-family: PingFangSC-Light;
         font-size: 14px;
         color: #7163C5;
@@ -319,7 +333,7 @@ export default {
         font-weight: 200;
     }
 
-    .finished-text {
+    .Succeeded-text {
         font-family: PingFangSC-Light;
         font-size: 14px;
         color: #23A959;
@@ -334,7 +348,8 @@ export default {
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
-        position: relative;
+        height: 100vh;
+        width: 100%;
         &::-webkit-scrollbar { 
             width: 0 !important;
             display: none;
@@ -364,121 +379,137 @@ export default {
             }
         }
 
-        .dag-run-container {
+        .dag-main-container {
+            height: 100%;
             display: flex;
-            position: absolute;
-            width: 295px;
-            height: calc(100% - 58px);
-            top: 58px;
-            right: 0;
 
-            .toggle-panel {
-                width: 40px;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                border-left: 1px solid rgba(37,35,45,0.08);
-                border-right: 1px solid rgba(37,35,45,0.08);
-
-                .icon {
-                    margin: 15px 10px 0 10px;
-                    cursor: pointer;
-                }
+            .phdag {
+                min-width: 863px;
+                height: 288px;
+                overflow-y: hidden;
+                flex: 1;
+                border: 1px solid rgba(37,35,45,0.12);
+                border-radius: 2px;
+                margin: 20px;
             }
 
-            .dag-run-content {
+            .dag-run-container {
                 display: flex;
-                flex-direction: column;
-                width: 255px;
-                padding: 0 20px;
+                // width: 295px;
+                height: 100%;
 
-                .run-button-container {
+                .toggle-panel {
+                    width: 42px;
+                    height: 100%;
                     display: flex;
-                    width: 100%;
-                    flex-direction: column;
-                    border-bottom: 1px solid rgba(37,35,45,0.08);
+                    justify-content: center;
+                    border-left: 1px solid rgba(37,35,45,0.08);
+                    border-right: 1px solid rgba(37,35,45,0.08);
 
-                    button {
-                        width: 215px;
-                        height: 40px;
-                        border-radius: 2px;
-                        border: none;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        margin-top: 20px;
-                        padding: 0;
+                    .icon {
+                        margin: 15px 10px 0 10px;
                         cursor: pointer;
-
-                        .icon {
-                            margin-right: 4px;
-                        }
-                    }
-
-                    button.default {
-                        margin-bottom: 20px;
-                    }
-
-                    button.default,
-                    button.finished {
-                        background: #7163C5;
-
-                        .icon {
-                            @include icon_play-white;
-                        }
-
-                        .run-text {
-                            @include btn_primary-initial;
-                        }
-                    }
-
-                    button.running {
-                        background: rgba(37, 35, 45, 0.04);
-
-                        .icon {
-                            @include icon_play-gray;
-                        }
-
-                        .run-text {
-                            @include btn_disabled;
-                        }
-                    }
-
-                    .run-state-container {
-                        display: flex;
-                        align-items: center;
-                        margin: 7px 0 10px 8px;
                     }
                 }
 
-                .dag-message-contaner {
-                    // overflow: hidden;
-                    width: 100%;
-                    margin-top: 10px;
+                .dag-run-content {
+                    display: flex;
+                    flex-direction: column;
+                    width: 255px;
+                    padding: 0 20px;
 
-                    .task-id {
+                    .run-button-container {
+                        display: flex;
                         width: 100%;
-                        word-wrap: break-word;
-                        margin-bottom: 20px;
-                        font-family: SFProText-Regular;
-                        font-size: 16px;
-                        color: #25232D;
-                        letter-spacing: 0.25px;
-                        line-height: 24px;
-                        font-weight: 400;
-                    }
-
-                    .status-container {
-                        display: flex;
-                        align-items: center;
-                    }
-
-                    .run-container {
-                        display: flex;
                         flex-direction: column;
+                        border-bottom: 1px solid rgba(37,35,45,0.08);
+
+                        button {
+                            width: 215px;
+                            height: 40px;
+                            border-radius: 2px;
+                            border: none;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-top: 20px;
+                            padding: 0;
+                            cursor: pointer;
+
+                            .icon {
+                                margin-right: 4px;
+                            }
+                        }
+
+                        button.default {
+                            margin-bottom: 20px;
+                        }
+
+                        button.Default,
+                        button.Succeeded,
+                        button.Failed,
+                        button.Timed_out,
+                        button.Aborted {
+                            background: #7163C5;
+
+                            .icon {
+                                @include icon_play-white;
+                            }
+
+                            .run-text {
+                                @include btn_primary-initial;
+                            }
+                        }
+
+                        button.Running {
+                            background: rgba(37, 35, 45, 0.04);
+
+                            .icon {
+                                @include icon_play-gray;
+                            }
+
+                            .run-text {
+                                @include btn_disabled;
+                            }
+                        }
+
+                        .run-state-container {
+                            display: flex;
+                            align-items: center;
+                            margin: 7px 0 10px 8px;
+                        }
+                    }
+
+                    .dag-message-contaner {
+                        // overflow: hidden;
+                        width: 100%;
+                        margin-top: 10px;
+
+                        .task-id {
+                            width: 100%;
+                            word-wrap: break-word;
+                            margin-bottom: 20px;
+                            font-family: SFProText-Regular;
+                            font-size: 16px;
+                            color: #25232D;
+                            letter-spacing: 0.25px;
+                            line-height: 24px;
+                            font-weight: 400;
+                        }
+
+                        .status-container {
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .run-container {
+                            display: flex;
+                            flex-direction: column;
+                        }
                     }
                 }
             }
         }
+        
     }
 </style>
