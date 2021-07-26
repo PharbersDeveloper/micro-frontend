@@ -175,6 +175,7 @@ export default {
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
+                params[0] = Number(params[0])
                 let date = new Date( params[0] ),
                     Y = date.getFullYear(),
                     M =
@@ -452,6 +453,8 @@ export default {
                     .last-time {
                         width: 160px;
                         min-width: 160px;
+                        display: block;
+                        text-align: right;
                     }
                 }
 
@@ -535,9 +538,9 @@ export default {
                             min-width: 160px;
                             width: 160px;
                             height: 100%;
-                            padding: 0 8px;
-                            display: flex;
-                            align-items: center;
+                            display: block;
+                            text-align: right;
+                            line-height: 65px;
                             .bp-text {
                                 height: 16px;
                             }
