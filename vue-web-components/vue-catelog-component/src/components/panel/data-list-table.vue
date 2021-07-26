@@ -1,8 +1,6 @@
 <template>
     <div class="my-data-content-container">
         <div class="header">
-                {{detailData}}
-
             <span class="header-large">
                 {{allData.name}}
             </span>
@@ -53,7 +51,7 @@
                 </div>
             </template>
         </div>
-        <data-detail @closeModal="closeModal" v-if="showDataDetail" :detailData="allData" :index="clickIndex"></data-detail>
+        <data-detail @closeModal="closeModal" v-if="showDataDetail" :detailData="allData" :index="clickIndex" @viewPartClick="viewPartClick" @closePartClick="closePartClick" :showPart="showPart"></data-detail>
     </div>
 </template>
 <script>
@@ -92,7 +90,8 @@ export default {
             iconSortAscending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
             iconSortDescending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
             clickIndex: 0,
-            showDataDetail: false
+            showDataDetail: false,
+            showPart: false
         }
     },
     props: {
@@ -125,10 +124,32 @@ export default {
     },
     methods: {
         showDetail(index) {
+            let data = this.allData.tables[index]
+            const event = new Event("event")
+            event.args = {
+                callback: "requestData",
+                element: this,
+                param: {
+                    name: 'partition',
+                    queryParams: {
+                        "database": this.allData.name,
+                        "table": data.name
+                    }
+                }
+            }
+            this.$emit('event', event)
             this.clickIndex = index
             this.showDataDetail = true
         },
+        closePartClick() {
+            this.showPart = false
+        },
+        viewPartClick() {
+            this.$forceUpdate();
+            this.showPart = true
+        },
         closeModal() {
+            this.showPart = false
             this.showDataDetail = false
         },
         formatFileName(...params) {
@@ -154,6 +175,7 @@ export default {
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
+                params[0] = Number(params[0])
                 let date = new Date( params[0] ),
                     Y = date.getFullYear(),
                     M =
@@ -431,6 +453,8 @@ export default {
                     .last-time {
                         width: 160px;
                         min-width: 160px;
+                        display: block;
+                        text-align: right;
                     }
                 }
 
@@ -514,9 +538,9 @@ export default {
                             min-width: 160px;
                             width: 160px;
                             height: 100%;
-                            padding: 0 8px;
-                            display: flex;
-                            align-items: center;
+                            display: block;
+                            text-align: right;
+                            line-height: 65px;
                             .bp-text {
                                 height: 16px;
                             }

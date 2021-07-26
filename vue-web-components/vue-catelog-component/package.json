@@ -26,7 +26,8 @@
         "resize-observer-polyfill": "^1.5.1",
         "sass-loader": "^8.0.2",
         "vue-svg-inline-loader": "^2.1.2",
-        "vue-template-compiler": "^2.6.11"
+        "vue-template-compiler": "^2.6.11",
+        "vue-json-viewer": "^2.2.19"
     },
     "eslintConfig": {
         "root": true,
