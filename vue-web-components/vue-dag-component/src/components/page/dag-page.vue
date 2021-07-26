@@ -63,6 +63,7 @@ export default {
             dag: null,
             startReturn: null,
             dagStatus: null,
+            cycleCheckDagStatus: null,
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
             buttonState: "finished"
         }
@@ -104,11 +105,13 @@ export default {
                 that.dag = data
             })
         
+        this.cycle()
     },
     methods: {
-        runDag() {
+        async runDag() {
             const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
             const startBody = {
+                "dag_name": "ETL_Iterator",
                 "parameters": [
                     {
                         "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
@@ -132,7 +135,7 @@ export default {
             }
             let storage = window.localStorage
 
-            fetch("https://api.pharbers.com/phstartetl", {
+            let response = await fetch("https://api.pharbers.com/phstartetl", {
                 method: "POST",
                 mode: "cors",
                 headers: {
@@ -141,18 +144,16 @@ export default {
                     "Authorization": accessToken
                 },
                 body: JSON.stringify(startBody)
-            }).then(res => res.json())
-                .then(data => {
-                    this.startReturn = data
-                    storage.setItem("startReturn", JSON.stringify(data))
-                    this.cycle()
-                })
+            })
+            this.startReturn = await response.json()
+            storage.setItem("startReturn", JSON.stringify(this.startReturn))
+            this.cycle()
         },
-        checkDagStatus() {
+        async checkDagStatus() {
             const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
             let storage = window.localStorage
             if ( storage.getItem("startReturn") ) {
-                fetch("https://api.pharbers.com/phstepstatus", {
+                let response = await fetch("https://api.pharbers.com/phstepstatus", {
                     method: "POST",
                     mode: "cors",
                     headers: {
@@ -161,31 +162,28 @@ export default {
                         "Authorization": accessToken
                     },
                     body: storage.getItem("startReturn")
-                }).then(res => res.json())
-                    .then(data => {
-                        this.dagStatus = data
-                        console.log(this.dagStatus);
-                    })
+                })
+                this.dagStatus = await response.json()
+
+                if (this.dagStatus.execution_status !== "RUNNING") {
+                    storage.removeItem("startReturn")
+                    clearInterval(this.cycleCheckDagStatus)
+                }
             }
         },
         cycle() {
             let storage = window.localStorage
             let that = this
 
-            that.checkDagStatus()
-            let cycleCheckDagStatus = setInterval(function() {
-                that.checkDagStatus()
-
-                if (!storage.getItem("startReturn")) {
-                    clearInterval(cycleCheckDagStatus)
-                }
-                else if (that.dagStatus && that.dagStatus.execution_status !== "RUNNING") {
-                    storage.removeItem("startReturn")
-                    
-
-                    clearInterval(cycleCheckDagStatus)
-                }
-            },60000)
+            if ( storage.getItem("startReturn") ) {
+                this.checkDagStatus()
+                this.cycleCheckDagStatus = setInterval(function() {
+                    that.checkDagStatus()
+                    if (!storage.getItem("startReturn")) {
+                        clearInterval(this.cycleCheckDagStatus)
+                    }
+                },60000)
+            }
         }
     }
 }
