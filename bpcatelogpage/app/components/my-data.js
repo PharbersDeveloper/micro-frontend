@@ -1,11 +1,14 @@
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
+import Component from '@glimmer/component'
+import { action } from '@ember/object'
+import { inject as service } from "@ember/service"
+import { tracked } from '@glimmer/tracking'
+
 
 export default class MyDataComponent extends Component {
     @tracked tabIndex;
     @service router
+	@service downloadFile
+
     @action
 	listener(e) {
         switch(e.detail[0].args.callback) {
@@ -25,6 +28,10 @@ export default class MyDataComponent extends Component {
                     }
                 }
                 break
+			case "service":
+				let source = e.detail[0].args.param.file.source
+				this.downloadFile.downloadFile(source)
+				break
             default: 
                 console.log("submit event to parent")
         }
