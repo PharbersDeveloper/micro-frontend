@@ -40,6 +40,9 @@ export default class MyDataComponent extends Component {
     @action
 	registerListener(element) {
         element.allData = this.calAllData
+		if(element.allData.tab == "1") {
+			element.allData.curTab = 1
+		}
         console.log(this.calAllData);
 		element.addEventListener("event", this.listener)
 	}
