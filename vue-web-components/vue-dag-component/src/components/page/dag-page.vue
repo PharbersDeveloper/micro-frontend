@@ -15,7 +15,7 @@
 
                 <div v-if="togglePanelId" class="dag-run-content">
                     <div class="run-button-container">
-                        <button :class="buttonState" @click="runDag">
+                        <button :class="buttonState ? buttonState : 'DEFAULT'" @click="runDag">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
@@ -27,10 +27,10 @@
                     </div>
 
                     <div class="dag-message-contaner">
-                        <span class="task-id margin-bottom-20">Task_ID:data_matching_cleaning_data_normalization</span>
+                        <span class="task-id margin-bottom-20">Task_ID:{{task_id}}</span>
                         <div class="status-container margin-bottom-20">
                             <span class="heading-small mr-0">Status:</span>
-                            <span class="body-tertiary">no_status</span>
+                            <span class="body-tertiary">{{status}}</span>
                         </div>
                         <div class="run-container mb-2">
                             <span class="heading-small">Run:</span>
@@ -66,14 +66,18 @@ export default {
             cycleCheckDagStatus: null,
             togglePanelId: 1,
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
-            buttonState: ""
+            buttonState: "",
+            task_id: "",
+            status: ""
         }
     },
     computed: {
         runState() {
             if (!this.buttonState) {
+                this.status = "no_status"
                 return
             } else {
+                this.status = this.buttonState.toLowerCase()
                 return this.buttonState
             }
         },
@@ -137,6 +141,9 @@ export default {
             }
             let storage = window.localStorage
 
+            // 只要点击了run就必然先改变样式的状态为running
+            this.buttonState = "RUNNING"
+
             let response = await fetch("https://api.pharbers.com/phstartetl", {
                 method: "POST",
                 mode: "cors",
@@ -167,12 +174,13 @@ export default {
                 })
                 this.dagStatus = await response.json()
 
+                this.buttonState = this.dagStatus.execution_status
+                this.task_id = this.dagStatus.steps[0]
+
                 if (this.dagStatus.execution_status !== "RUNNING") {
                     storage.removeItem("startReturn")
                     clearInterval(this.cycleCheckDagStatus)
-                    console.log(222)
                 }
-                console.log(this.dagStatus)
             }
         },
         cycle() {
@@ -182,7 +190,6 @@ export default {
             if ( storage.getItem("startReturn") ) {
                 this.checkDagStatus()
                 this.cycleCheckDagStatus = setInterval(function() {
-                    console.log(111);
                     that.checkDagStatus()
                     if (!storage.getItem("startReturn")) {
                         clearInterval(this.cycleCheckDagStatus)
@@ -312,19 +319,37 @@ export default {
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 2.524v14.952a.521.521 0 0 0 .776.455l12.963-7.476a.526.526 0 0 0 0-.91L4.776 2.07A.516.516 0 0 0 4 2.524z' fill='%23BCBAC4' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100%;
     }
 
-    .icon_Succeeded {
+    .icon_SUCCEEDED {
         width: 32px;
         height: 32px;
         background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M16 8c4.416 0 8 3.584 8 8s-3.584 8-8 8-8-3.584-8-8 3.584-8 8-8zm0 1c-3.864 0-7 3.136-7 7s3.136 7 7 7 7-3.136 7-7-3.136-7-7-7zm4.354 3.646a.5.5 0 0 1 .057.638l-.057.07-5.854 5.853-2.854-2.853a.5.5 0 0 1 .638-.765l.07.057 2.146 2.147 5.146-5.147a.5.5 0 0 1 .708 0z' fill='%2323A959' fill-rule='nonzero'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
     }
 
-    .icon_Running {
+    .icon_RUNNING {
         width: 32px;
         height: 32px;
         background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M15.833 10.587v2.752L19.5 9.67 15.833 6v2.752a7.334 7.334 0 0 0-7.333 7.34c0 1.44.422 2.78 1.137 3.908l1.338-1.34a5.39 5.39 0 0 1-.642-2.568 5.507 5.507 0 0 1 5.5-5.505zM22.363 12l-1.338 1.34c.403.77.642 1.642.642 2.568a5.507 5.507 0 0 1-5.5 5.505V18.66L12.5 22.33 16.167 26v-2.752a7.334 7.334 0 0 0 7.333-7.34A7.28 7.28 0 0 0 22.363 12z' fill='%237163C5'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
     }
 
-    .Running-text {
+    .icon_FAILED {
+        width: 32px;
+        height: 32px;
+        background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M16 8c4.416 0 8 3.584 8 8s-3.584 8-8 8-8-3.584-8-8 3.584-8 8-8zm0 1c-3.864 0-7 3.136-7 7s3.136 7 7 7 7-3.136 7-7-3.136-7-7-7zm-3.073 3.16L16 15.231l3.073-3.073a.543.543 0 1 1 .768.768L16.768 16l3.073 3.073a.543.543 0 1 1-.768.768l-3.074-3.074-3.072 3.074a.543.543 0 1 1-.768-.768l3.072-3.074-3.072-3.072a.543.543 0 1 1 .768-.768z' fill='%23DB4D71' fill-rule='nonzero'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
+    }
+
+    .icon_TIMED_OUT {
+        width: 32px;
+        height: 32px;
+        background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M16 8c4.416 0 8 3.584 8 8s-3.584 8-8 8-8-3.584-8-8 3.584-8 8-8zm0 1c-3.864 0-7 3.136-7 7s3.136 7 7 7 7-3.136 7-7-3.136-7-7-7zm0 5.5a.5.5 0 0 1 .492.41l.008.09v4l-.008.09a.5.5 0 0 1-.984 0L15.5 19v-4l.008-.09A.5.5 0 0 1 16 14.5zm0-2.5a.5.5 0 0 1 .492.41l.008.09v.5l-.008.09a.5.5 0 0 1-.984 0L15.5 13v-.5l.008-.09A.5.5 0 0 1 16 12z' fill='%23E0C00B'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
+    }
+
+    .icon_ABORTED {
+        width: 32px;
+        height: 32px;
+        background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h32v32H0z'/%3E%3Cpath d='M16 8c4.416 0 8 3.584 8 8s-3.584 8-8 8-8-3.584-8-8 3.584-8 8-8zm0 1c-3.864 0-7 3.136-7 7s3.136 7 7 7 7-3.136 7-7-3.136-7-7-7zm3.5 6.5a.5.5 0 1 1 0 1h-7a.5.5 0 1 1 0-1h7z' fill='%23DB4D71'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
+    }
+
+    .RUNNING-text {
         font-family: PingFangSC-Light;
         font-size: 14px;
         color: #7163C5;
@@ -333,7 +358,7 @@ export default {
         font-weight: 200;
     }
 
-    .Succeeded-text {
+    .SUCCEEDED-text {
         font-family: PingFangSC-Light;
         font-size: 14px;
         color: #23A959;
@@ -342,7 +367,32 @@ export default {
         font-weight: 200;
     }
 
-    
+    .FAILED-text {
+        font-family: SFProText-Light;
+        font-size: 14px;
+        color: #DB4D71;
+        letter-spacing: 0.25px;
+        text-align: right;
+        line-height: 20px;
+        font-weight: 200;
+    }
+
+    .TIMED_OUT-text {
+        font-family: PingFangSC-Light;
+        font-size: 14px;
+        color: #E0C00B;
+        letter-spacing: 0.25px;
+        font-weight: 200;
+    }
+
+    .ABORTED-text {
+        font-family: SFProText-Light;
+        font-size: 14px;
+        color: #DB4D71;
+        letter-spacing: 0.25px;
+        line-height: 20px;
+        font-weight: 200;
+    }
 
     .dag-page {
         overflow-x: hidden;
@@ -441,15 +491,15 @@ export default {
                             }
                         }
 
-                        button.default {
+                        button.DEFAULT {
                             margin-bottom: 20px;
                         }
 
-                        button.Default,
-                        button.Succeeded,
-                        button.Failed,
-                        button.Timed_out,
-                        button.Aborted {
+                        button.DEFAULT,
+                        button.SUCCEEDED,
+                        button.FAILED,
+                        button.TIMED_OUT,
+                        button.ABORTED {
                             background: #7163C5;
 
                             .icon {
@@ -461,7 +511,7 @@ export default {
                             }
                         }
 
-                        button.Running {
+                        button.RUNNING {
                             background: rgba(37, 35, 45, 0.04);
 
                             .icon {
