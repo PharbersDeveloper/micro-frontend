@@ -7,6 +7,10 @@ export default class FooterComponent extends Component {
 
     @action
     linkToPage(data) {
-        this.router.transitionTo(data.detail[0])
+		if(data.detail[0] == "home" && this.router.currentRouteName == "home") {
+			window.location.reload()
+		} else {
+			this.router.transitionTo(data.detail[0])
+		}
     }
 }
