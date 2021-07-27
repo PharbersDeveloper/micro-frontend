@@ -16,7 +16,7 @@
                         <span class="heading-xsmall database-name">数据库
                             <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
-                        <span class="heading-xsmall subscribe-location">位置
+                        <span class="heading-xsmall subscribe-location">来源
                             <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall last-time">上次更新时间
@@ -36,7 +36,8 @@
                             </div>
 
                             <div class="subscribe-location">
-                                <bp-text class="body-tertiary">{{file.location}}</bp-text>
+                                <!-- <bp-text class="body-tertiary">{{file.location}}</bp-text> -->
+                                <bp-text class="body-tertiary">Pharbers</bp-text>
                             </div>
 
                             <div class="last-time">
