@@ -33,16 +33,12 @@
                             <span class="body-tertiary">{{status}}</span>
                         </div>
                         <div class="run-container mb-2">
-                            <span class="heading-small">Run:</span>
-                            <span class="body-default">2021-4-29,15:13:24</span>
-                        </div>
-                        <div class="run-container mb-2">
                             <span class="heading-small">Started:</span>
-                            <span class="body-default">2021-4-29,15:13:24</span>
+                            <span class="body-default">{{started}}</span>
                         </div>
                         <div class="run-container mb-2">
                             <span class="heading-small">Duration:</span>
-                            <span class="body-default">1 Hours 10 Min 29.080 Sec</span>
+                            <span class="body-default">{{duration}}</span>
                         </div>
                     </div>
                 </div>
@@ -68,7 +64,9 @@ export default {
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
             buttonState: "",
             task_id: "",
-            status: ""
+            status: "",
+            started: "",
+            duration: ""
         }
     },
     computed: {
@@ -143,6 +141,7 @@ export default {
 
             // 只要点击了run就必然先改变样式的状态为running
             this.buttonState = "RUNNING"
+            this.task_id = "START"
 
             let response = await fetch("https://api.pharbers.com/phstartetl", {
                 method: "POST",
@@ -173,9 +172,19 @@ export default {
                     body: storage.getItem("startReturn")
                 })
                 this.dagStatus = await response.json()
-
                 this.buttonState = this.dagStatus.execution_status
-                this.task_id = this.dagStatus.steps[0]
+                this.started = this.formatDateStandard(this.dagStatus.execution_startDate)
+                if ( this.dagStatus.execution_status === "RUNNING" && !this.dagStatus.steps.length ) {
+                    this.task_id = "START"
+                } else if ( this.dagStatus.execution_status === "SUCCEEDED" && !this.dagStatus.steps.length ) {
+                    this.task_id = "END"
+                } else {
+                    this.task_id = this.dagStatus.steps[0]
+                }
+
+                if (this.dagStatus.execution_stopDate) {
+                    this.duration = this.formatDateDuration(new Date(this.dagStatus.execution_stopDate) - new Date(this.dagStatus.execution_startDate))
+                }
 
                 if (this.dagStatus.execution_status !== "RUNNING") {
                     storage.removeItem("startReturn")
@@ -199,6 +208,31 @@ export default {
         },
         togglePanel() {
             this.togglePanelId = !this.togglePanelId
+        },
+        formatDateStandard(params) {
+            let date = new Date( params ),
+                Y = date.getFullYear(),
+                M =
+                    ( date.getMonth() + 1 < 10 ?
+                        `0${date.getMonth() + 1}` :
+                        date.getMonth() + 1 ),
+                D = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+
+                h =
+                    ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
+                m =
+                    ( date.getMinutes() < 10 ?
+                        `0${date.getMinutes()}` :
+                        date.getMinutes() ) ,
+                s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+
+            return Y + "-" + M + "-" + D + "," + h + ":" + m + ":" + s
+        },
+        formatDateDuration(result) {
+            var h = Math.floor(result / 3600000);
+            var m = Math.floor((result % 3600000 / 60000));
+            var s = Math.floor((result % 60000 / 1000));
+            return h + " Hours " + m + " Min " + s + " Sec";
         }
     }
 }
