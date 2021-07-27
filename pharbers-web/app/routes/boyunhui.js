@@ -5,6 +5,10 @@ import { action } from '@ember/object';
 
 export default class BoyunhuiRoute extends Route {
 	@service store;
+	@service('loading') loadingService;
+	beforeModel() {
+		this.loadingService.loading.style.display = 'inline-block'
+    }
     @action
     didTransition() {
         document.documentElement.scrollTop = 0
@@ -195,8 +199,11 @@ export default class BoyunhuiRoute extends Route {
 
 			return this.store.query('image', { 'ids[]': ids });
 		});
-
-		console.log(this.store.adapterFor("application").reverse);
+		this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
 		return RSVP.hash({
 			activitys: activityList.then((x) =>
 				x.filter((it) => it.language === lang)
