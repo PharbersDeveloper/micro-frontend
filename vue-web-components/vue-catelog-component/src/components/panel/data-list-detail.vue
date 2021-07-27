@@ -240,7 +240,7 @@ export default {
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
-                let date = new Date( params[0] ),
+                let date = new Date( Number(params[0]) ),
                     Y = date.getFullYear(),
                     M =
                         ( date.getMonth() + 1 < 10 ?

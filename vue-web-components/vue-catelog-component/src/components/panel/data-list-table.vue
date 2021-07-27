@@ -4,6 +4,7 @@
             <span class="header-large">
                 {{allData.name}}
             </span>
+            <bp-button  text="返回列表" @click="goBack(1)"></bp-button>
         </div>
         <div class="data-main-container">
             <template >
@@ -175,8 +176,7 @@ export default {
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
-                params[0] = Number(params[0])
-                let date = new Date( params[0] ),
+                let date = new Date( Number(params[0]) ),
                     Y = date.getFullYear(),
                     M =
                         ( date.getMonth() + 1 < 10 ?
@@ -209,6 +209,18 @@ export default {
                 param: {
                     name: '/download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
+                }
+            }
+            this.$emit('event', event)
+        },
+        goBack(param) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/download/my-data',
+                    queryParams: `tab=${param}`
                 }
             }
             this.$emit('event', event)
@@ -381,14 +393,30 @@ export default {
         .header {
             height: 62px;
             width: 100%;
-            padding: 20px 24px 0;
+            padding: 20px 24px 24px;
             border-bottom: 1px solid rgba(37,35,45,.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             .header-large {
                 font-family: SFProText-Regular;
                 font-size: 20px;
                 color: #302F39;
                 letter-spacing: .25px;
                 line-height: 28px;
+            }
+            .button-density-default {
+                width: 80px;
+                height: 32px;
+                background: #f6f6f7;
+                border-radius: 2px;
+                font-family: SFProText-Medium;
+                font-size: 14px;
+                color: #57565F;
+                letter-spacing: 0;
+                text-align: center;
+                line-height: 20px;
+                font-weight: 500;
             }
         }
 
