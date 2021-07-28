@@ -29,7 +29,7 @@
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">分类：</bp-text>
-                            <bp-text class="subvalue">{{detailData.tables[index].category}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].tableAttributes.classification}}</bp-text>
                         </div>
                         <div class="name-value mb-5">
                             <bp-text class="subtitle">上次更新时间：</bp-text>
@@ -54,38 +54,20 @@
                         <div class="name-value">
                             <bp-text class="subtitle">Serde 参数：</bp-text>
                             <div class="name-value-area">
-                                <div class="parameter">
-                                    <bp-text class="name">"serialization.format"</bp-text>
-                                    <bp-text v-if="detailData.tables[index].serdeArguments" class="value">{{detailData.tables[index].serdeArguments["serialization.format"]}}</bp-text>
+                                <div class="parameter" v-for="(val, key, index) in detailData.tables[index].serdeArguments" :key="index+'Serde'">
+                                    <bp-text class="name">{{key}}</bp-text>
+                                    <bp-text class="value">{{val}}</bp-text>
                                 </div>
                             </div>
                         </div>
                          <div class="name-value">
                             <bp-text class="subtitle">表属性：</bp-text>
                             <div class="name-value-list">
-                                <div class="parameter">
-                                    <bp-text class="name">"crawlerSchemaSerializerVersion"</bp-text>
-                                    <bp-text class="value">{{ detailData.tables[index].crawlerSchemaSerializerVersion }}</bp-text>
-                                </div>
-                                <div class="parameter">
-                                    <bp-text class="name">"recordCount"</bp-text>
-                                    <bp-text class="value">{{detailData.tables[index].recordCount }}</bp-text>
-                                </div>
-                                <div class="parameter">
-                                    <bp-text class="name">"averageRecordSize"</bp-text>
-                                    <bp-text class="value">{{detailData.tables[index].averageRecordSize }}</bp-text>
-                                </div>
-                                <div class="parameter">
-                                    <bp-text class="name">"crawlerSchemaDeserializerVersion"</bp-text>
-                                    <bp-text class="value">{{detailData.tables[index].crawlerSchemaDeserializerVersion }}</bp-text>
-                                </div>
-                                <div class="parameter">
-                                    <bp-text class="name">"compressionType"</bp-text>
-                                    <bp-text class="value">{{detailData.tables[index].compressionType }}</bp-text>
-                                </div>
-                                <div class="parameter">
-                                    <bp-text class="name">"typeOfData"</bp-text>
-                                    <bp-text class="value">{{detailData.tables[index].typeOfData }}</bp-text>
+                                <div class="parameter" v-for="(val, key, index) in detailData.tables[index].tableAttributes" :key="index+'table'">
+                                    <template v-if="key != 'classification'">
+                                    <bp-text class="name">{{key}}</bp-text>
+                                    <bp-text class="value">{{val}}</bp-text>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +89,7 @@
                         </div>
 
                         <div class="main-container">
-                            <div v-for="(file,index) in detailData.tables[index].schemas" :key="index" class="OneRecord">
+                            <div v-for="(file,index) in schemas" :key="index" class="OneRecord">
                                 <div class="index-text">{{index+1}}</div>
                                 <div class="column-name">
                                     <div class="column-name-text overflow-text" :title="file.field">{{file.field}}</div>
@@ -118,12 +100,12 @@
                                 </div>
 
                                 <div class="partition">
-                                    <bp-text class="body-tertiary">{{file.comment}}</bp-text>
+                                    <bp-text class="body-tertiary">{{file.parameters}}</bp-text>
                                 </div>
 
                                 <div class="comment">
                                     <bp-text class="body-tertiary">
-                                        {{file.parameters}}
+                                        {{file.comment}}
                                     </bp-text>
                                 </div>
                             </div>
@@ -131,6 +113,7 @@
                     </div>
                 </div>
             </div>
+            <!-- 查看分区 -->
             <div class="body-area" v-if="showPart">
                 <div class="view-part">
                     <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}
@@ -138,34 +121,19 @@
                     <bp-button  :text="closePart" class="btn_primary" @click="closePartClick"></bp-button>
                 </div>
                 <div class="architecture">
-                    <div class="architecture-table">
-                        <div class="table-title">
-                            <span class="column-name">提供者
-                            </span>
-                            <span class="data-type">版本
-                            </span>
-                            <span class="comment">文件类型
+                    <div class="architecture-table architecture-table-part">
+                        <div class="table-title-part">
+                            <span class="column-name-part" v-for="tableName in detailData.tables[index].partitionKeys" :key="tableName.field">{{tableName.field}}
                             </span>
                             <span class="partition"></span>
                         </div>
 
                         <div class="main-container">
-                            <div v-for="(file,index) in detailData.partTables" :key="index" class="OneRecord">
-                                <div class="column-name">
-                                    <div class="column-name-text overflow-text" :title="file.name">{{file.schema.provider}}</div>
+                            <div v-for="(file,idx) in detailData.partTables" :key="idx" class="OneRecord-part">
+                                <div class="column-name-part" v-for="tableField in detailData.tables[index].partitionKeys" :key="tableField.field+'0'">
+                                    <div class="column-name-text" >{{file.schema[tableField.field]}}</div>
                                 </div>
-
-                                <div class="data-type">
-                                    <bp-text class="body-primary">{{file.schema.version}}</bp-text>
-                                </div>
-
-                                <div class="comment">
-                                    <bp-text class="body-tertiary">
-                                        {{file.schema.filetype}}
-                                    </bp-text>
-                                </div>
-
-                                <div class="partition">
+                                <div class="partition-part">
                                     <bp-text class="view-char" @click="viewChar(file)">查看属性</bp-text>
                                 </div>
                             </div>
@@ -218,6 +186,16 @@ export default {
         showPart: Boolean
     },
     computed: {
+        schemas() {
+            // 分区键
+            if(this.detailData.tables[this.index] && this.detailData.tables[this.index].partitionKeys.length > 0) {
+                this.detailData.tables[this.index].partitionKeys.forEach((item, index) => {
+                    item.parameters = "Partition (" + index + ")"
+                })
+            }
+            let schemasArr =  this.detailData.tables[this.index].schemas.concat(this.detailData.tables[this.index].partitionKeys)
+            return schemasArr
+        }
     },
     methods: {
         closeJsonModal() {
@@ -231,11 +209,9 @@ export default {
             this.$emit("closeModal")
         },
         viewPartClick() {
-            // this.showPart = true
             this.$emit("viewPartClick")
         },
         closePartClick() {
-            // this.showPart = false
             this.$emit("closePartClick")
         },
         formatDateStandard(...params) {
@@ -294,7 +270,6 @@ export default {
             height: 90%;
             background: #FFFFFF;
             border-radius: 2px;
-            overflow-y: auto;
             .header-area {
                 height: 56px;
                 background: #fbfbfb;
@@ -319,6 +294,12 @@ export default {
                 padding: 12px 20px 20px;
                 display: flex;
                 flex-direction: column;
+                height: 90%;
+                overflow-y: auto;
+                //隐藏滚动条
+                &::-webkit-scrollbar {
+                    width: 0 !important;
+                }
                 .title {
                     font-family: PingFangSC-Regular;
                     font-size: 14px;
@@ -435,6 +416,10 @@ export default {
         .architecture {
             display: flex;
             flex-direction: column;
+            height: 90%;
+            .architecture-table-part {
+                overflow-x: auto;
+            }
             .architecture-table {
                 flex: 1;
                 display: flex;
@@ -443,6 +428,33 @@ export default {
                 min-height: 100px;
                 .index-text {
                     width: 100px;
+                }
+                .table-title-part {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    font-family: SFProText-Regular;
+                    font-size: 12px;
+                    color: #57565F;
+                    letter-spacing: 0.25px;
+                    text-align: left;
+                    line-height: 16px;
+                    font-weight: 400;
+                    .column-name-part {
+                        display: flex;
+                        align-items: center;
+                        width: 200px;
+                        min-width: 200px;
+                        height: 33px !important;
+                        border-bottom: 0.5px solid rgba(31, 37, 50, 0.08);
+                    }
+                    .partition {
+                        flex: 1;
+                        min-width: 200px;
+                        padding: 0 8px;
+                        height: 33px !important;
+                        border-bottom: 0.5px solid rgba(31, 37, 50, 0.08);
+                    }
                 }
                 .table-title {
                     display: flex;
@@ -458,7 +470,6 @@ export default {
                     line-height: 16px;
                     font-weight: 400;
                     .column-name {
-                        // flex: 1;
                         width: 200px;
                         min-width: 200px;
                     }
@@ -483,7 +494,7 @@ export default {
 
                 .main-container {
                     width: 100%;
-                    overflow: scroll;
+                    // overflow: scroll;
                     display: flex;
                     flex-direction: column;
                     flex: 1;
@@ -492,7 +503,59 @@ export default {
                         width: 0 !important;
                     }
                     -ms-overflow-style: none;
-
+                    .OneRecord-part {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                        font-family: SFProText-Light;
+                        font-size: 12px;
+                        color: #706F79;
+                        letter-spacing: 0.25px;
+                        line-height: 16px;
+                        font-weight: 200;
+                        .column-name-part{
+                            display: flex;
+                            align-items: center;
+                            width: 200px;
+                            min-width: 200px;
+                            border-bottom: 1px solid rgba(37, 35, 45, 0.08);
+                            height: 44px;
+                            .column-name-text {
+                                font-family: SFProText-Regular;
+                                font-size: 14px;
+                                color: #25232D;
+                                letter-spacing: 0.25px;
+                                text-align: left;
+                                line-height: 20px;
+                                font-weight: 400;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                padding-right: 10px;
+                            }
+                        }
+                        //分区
+                        .partition-part {
+                            width: 200px;
+                            min-width: 200px;
+                            padding: 0 8px;
+                            display: flex;
+                            justify-content: flex-end;
+                            align-items: center;
+                            border-bottom: 1px solid rgba(37, 35, 45, 0.08);
+                            height: 44px;
+                            flex: 1;
+                            .view-char {
+                                font-family: PingFangSC-Medium;
+                                font-size: 14px;
+                                color: #5342B3;
+                                letter-spacing: 0;
+                                line-height: 20px;
+                                font-weight: 500;
+                            }
+                        }
+                    }
                     .OneRecord {
                         width: 100%;
                         height: 44px;
@@ -508,7 +571,6 @@ export default {
                         font-weight: 200;
                         // 列名
                         .column-name{
-                            // flex: 1;
                             width: 200px;
                             min-width: 200px;
                             .column-name-text {
@@ -526,17 +588,6 @@ export default {
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                            }
-                            .data-name-bottom {
-                                display: flex;
-                                height: 18px;
-                                
-                                .editable-component {
-                                    margin-right: 2px;
-                                    &:last-of-type {
-                                        margin-right: 0;
-                                    }
-                                }
                             }
                         }
                         // 数据类型
