@@ -114,7 +114,6 @@ export default {
             } )
         },
         main() {
-            // console.log("dag",this.dag);
             // 创建graph对象和渲染器
             let g = new dagreD3.graphlib.Graph({compound:true})
                 .setGraph( {
@@ -139,38 +138,12 @@ export default {
                     edgeData = [],
                     mapClusters = []
 
-                // 添加start节点(如果第一步的type为Parallel就需要把所有的next的名称放到next数组中待生成边时进行处理)
-                if (dag.States[firstStep].Type === "Parallel") {
-                    let parallel_start_next = []
-                    dag.States[firstStep].Branches.forEach(branch => {
-                        parallel_start_next.push(branch.StartAt)
-                    })
-                    nodeData.push({
-                        id: this.guid(),
-                        label: "START",
-                        type: "Start",
-                        next: parallel_start_next
-                    })
-                } else if (dag.States[firstStep].Type === "Map") {
-                    nodeData.push({
-                        id: this.guid(),
-                        label: "START",
-                        type: "Start",
-                        next: dag.States[firstStep].Iterator.StartAt
-                    })
-                } else {
-                    nodeData.push({
-                        id: this.guid(),
-                        label: "START",
-                        type: "Start",
-                        next: firstStep
-                    })
-                }
+                nodeData.push(this.nodeDataInput(dag.States, "START", dag.States, firstStep))
 
                 // States中包含了状态机的所有状态
                 // 添加state节点数据
                 for (let state in dag.States) {
-                    let next = dag.States[state].Next ? dag.States[state].Next : "END",
+                    let next = dag.States[state].Next || "END",
                         catchNext = [],
                         catchNextLength = dag.States[state].Catch ? dag.States[state].Catch.length : 0,
                         type = dag.States[state].Type
@@ -201,6 +174,24 @@ export default {
                         })
                         continue
                     }
+
+                    if (next !== "END" && type != "Map" && type != "Parallel" && dag.States[next].Type === "Choice") {
+                        let choice_next = []
+                        dag.States[next].Choices.forEach(choice => {
+                            choice_next.push(choice.Next)
+                        })
+                        choice_next.push(dag.States[next].Default)
+                        choice_next = Array.from(new Set(choice_next))
+
+                        // nodeData.push({
+                        //     id: this.guid(),
+                        //     label: state,
+                        //     type: dag.States[state].Type,
+                        //     next: choice_next,
+                        //     catchNext: []
+                        // })
+                    }
+
                     // 处理type为Parallel(并行)情况下的节点数据
                     if ( type === "Parallel") {
                         let branches = dag.States[state].Branches
@@ -281,6 +272,7 @@ export default {
                         catchNext: catchNext
                     })
                 }
+
                 // 添加end节点
                 nodeData.push({
                     id: this.guid(),
@@ -288,7 +280,7 @@ export default {
                     type: "End",
                     next: ""
                 })
-                // console.log("nodeData", nodeData);
+                console.log("nodeData", nodeData);
 
                 // 添加所有的边数据
                 for (let node of nodeData) {
@@ -342,7 +334,6 @@ export default {
                 }
                 this.addEdges(edgeData, g)
 
-                // let svg = d3.select( document.getElementsByTagName("ph-dag")[0].shadowRoot ).select("#svg-canvas")
                 let svg = d3.select("#svg-canvas")
 
                 // 绘图的容器
@@ -356,6 +347,45 @@ export default {
                         svgGroup.attr( "transform", event.transform )
                     } )
                 svg.call( zoom )
+            }
+        },
+        nodeDataInput( parentState, label, state, nextName) {
+            let next = [],
+                nextDag = state[nextName],
+                type = ""
+
+            switch ( nextDag.Type ) {
+            case "Parallel":
+                nextDag.Branches.forEach(branch => {
+                    next.push(branch.StartAt)
+                })
+                break;
+            case "Map":
+                next.push(nextDag.Iterator.StartAt)
+                break;
+            case "Choice":
+                nextDag.Choices.forEach(choice => {
+                    next.push(choice.Next)
+                })
+                next.push(nextDag.Default)
+                break;
+            default:
+                next.push(nextName)
+            }
+
+            if ( next.length === 1 ) {
+                next = next[0]
+            }
+
+            if (label === "START") {
+                type = "Start"
+            }
+
+            return {
+                id: this.guid(),
+                label: label,
+                type: type,
+                next: next
             }
         }
     },

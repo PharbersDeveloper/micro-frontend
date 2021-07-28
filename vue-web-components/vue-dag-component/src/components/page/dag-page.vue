@@ -446,6 +446,8 @@ export default {
             height: 58px;
             border-bottom: 1px solid rgba(37,35,45,0.08);
             padding: 0 20px;
+            flex-shrink: 0;
+            
             .header-text {
                 @include heading-large;
                 margin-top: 20px;
