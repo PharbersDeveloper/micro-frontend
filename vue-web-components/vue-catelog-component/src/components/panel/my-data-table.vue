@@ -6,20 +6,30 @@
             </span>
         </div>
         <div class="tabs">
-            <span 
-                :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
-                class="cursor-pointer mr-3"
-                @click="changeTab(0)"
-            >
-                Mine
-            </span>
-            <span 
-                :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
-                class="cursor-pointer"
-                @click="changeTab(1)"
-            >
-                Subscribed
-            </span>
+            <div class="left">
+                <span 
+                    :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
+                    class="cursor-pointer mr-3"
+                    @click="changeTab(0)"
+                >
+                    我的文件
+                </span>
+                <span 
+                    :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
+                    class="cursor-pointer"
+                    @click="changeTab(1)"
+                >
+                    数据目录
+                </span>
+            </div>
+            <div class="upload-button" @click="upload">
+                <span class="fileinput-button">
+                    <div class="icon_upload"></div>
+                    <span class="btn_secondary_initial">
+                        上传文件
+                    </span>
+                </span>
+            </div>
         </div>
         <div class="data-main-container">
             <template v-if="myDataTab === 0">
@@ -367,6 +377,7 @@ export default {
                     use: 'uploadFile'
                 }
             }
+            debugger
             this.$emit('event', event)
         }
     } 
@@ -554,8 +565,40 @@ export default {
             padding: 0 24px 0 20px;
             display: flex;
             margin-top: 12px;
+            justify-content: space-between;
+            align-items: center;
             .tab-active {
                 border-bottom: 2px solid #7163C5;
+            }
+            .upload-button {
+                width: 96px;
+                height: 32px;
+                background: #7163C5;
+                border-radius: 2px;
+                margin: 12px 20px;
+                cursor: pointer;
+                .btn_secondary_initial {
+                    font-family: SFProText-Medium;
+                    font-size: 14px;
+                    color: #FFFFFF;
+                    line-height: 20px;
+                    font-weight: 500;
+                }
+                .fileinput-button {
+                    height: 32px;
+                    width: 100%;
+                    position: relative;
+                    border-radius: 2px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .icon_upload {
+                    width: 20px;
+                    height: 20px;
+                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+                }
             }
         }
 

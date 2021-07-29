@@ -23,6 +23,7 @@
 		"test:ember": "ember test"
 	},
 	"devDependencies": {
+		"@ember/jquery": "^2.0.0",
 		"@ember/optional-features": "^2.0.0",
 		"@ember/test-helpers": "^2.1.4",
 		"@glimmer/component": "^1.0.3",
@@ -70,6 +71,8 @@
 	"dependencies": {
 		"@ember/render-modifiers": "^1.0.2",
 		"@types/crypto-js": "^4.0.1",
+		"aws-crt": "^1.8.5",
+		"aws-iot-device-sdk-v2": "^1.5.5",
 		"crypto-js": "^4.0.0",
 		"ember-cookies": "^0.5.2"
 	}
