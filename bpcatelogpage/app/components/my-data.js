@@ -50,6 +50,7 @@ export default class MyDataComponent extends Component {
 				}
 				break
 			case "closeToast":
+				this.closeuploadToast = '1'
 				break
             default: 
                 console.log("submit event to parent")
