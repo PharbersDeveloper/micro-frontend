@@ -22,7 +22,15 @@
                     数据目录
                 </span>
             </div>
-            <div class="upload-button" @click="upload">
+            <div class="upload-button" @click="upload" v-if="uploadToastBorder != 'blue' && myDataTab === 0">
+                <span class="fileinput-button">
+                    <div class="icon_upload"></div>
+                    <span class="btn_secondary_initial">
+                        上传文件
+                    </span>
+                </span>
+            </div>
+            <div class="upload-button disbutton" v-if="uploadToastBorder == 'blue' || myDataTab === 1">
                 <span class="fileinput-button">
                     <div class="icon_upload"></div>
                     <span class="btn_secondary_initial">
@@ -102,7 +110,8 @@
                     <div class="no_data-icon"></div>
                     <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
                     <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                    <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
+                    <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder != 'blue'"></bp-button>
+                    <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
                 </div>
             </template>
             
@@ -139,7 +148,7 @@
             </div>
             <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
             <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
-            <bp-text class="size-12-6B7376" v-if="showProgress">
+            <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
                 {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
             </bp-text>
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
@@ -197,12 +206,9 @@ export default {
         uploadText: String,
         closeuploadToast: {
             type: String,
-            default: '0'
+            default: '1'
         },
-        showProgress: {
-            type: Boolean,
-            default: true
-        },
+        showProgress: String,
         uploadLoadedSize: Number,
         uploadFileSize: Number
     },
@@ -278,7 +284,6 @@ export default {
                     value: 0
                 }
             }
-            debugger
             this.$emit('event', event)
         },
         changeTab(num) {
@@ -495,7 +500,19 @@ export default {
         }
     }
 
-    
+    button.btn_primary_dis {
+        background: #f6f6f7 !important;
+        color: #AAAAAA !important;
+        &:hover {
+            background: #f6f6f7 !important; 
+            @include btn_primary-initial;
+        }
+
+        &:active {
+            background: #f6f6f7 !important;
+            @include btn_primary-initial; 
+        }
+    }
 
     .heading-xsmall {
         font-family: SFProText-Regular;
@@ -639,7 +656,7 @@ export default {
                 height: 32px;
                 background: #7163C5;
                 border-radius: 2px;
-                margin: 12px 20px;
+                margin: 12px 0;
                 cursor: pointer;
                 .btn_secondary_initial {
                     font-family: SFProText-Medium;
@@ -662,6 +679,17 @@ export default {
                     width: 20px;
                     height: 20px;
                     background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+                }
+            }
+            .disbutton {
+                background: #f6f6f7 !important;
+                .btn_secondary_initial {
+                    color: #aaa !important;
+                }
+                .icon_upload {
+                    width: 20px;
+                    height: 20px;
+                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23AAAAAA' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
                 }
             }
         }
@@ -1072,6 +1100,7 @@ export default {
             .size-14-6B7376 {
                 font-size: 14px;
                 color: #6B7376;
+                margin-right: .5rem!important;
             }
             .size-12-6B7376 {
                 font-family: Lato-Regular;

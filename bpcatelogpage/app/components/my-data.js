@@ -18,6 +18,7 @@ export default class MyDataComponent extends Component {
 	@tracked closeuploadToast
 	@tracked uploadFileSize
 	@tracked uploadLoadedSize
+	@tracked showProgress
 
     @action
 	listener(e) {
@@ -63,10 +64,12 @@ export default class MyDataComponent extends Component {
 		this.uploadToastBorder = "blue"
 		this.uploadTextStatus = "正在上传"
 		this.uploadText = ""
-		this.closeuploadToast = "0"
+		this.closeuploadToast = "0" //显示上传弹框
 
+		//禁用上传文件input
 		let dom = $( event.target )
 		dom[0].disabled = true
+
 		function guid() {
 			return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
 				var r = Math.random() * 16 | 0,
@@ -79,12 +82,8 @@ export default class MyDataComponent extends Component {
 		/**
 		 * 1. 初始化上传流程
 		 */
-		const traceId = guid(),
-		name = new Date().getTime()
-
-		let uploadLink = traceId + "/" + name // 续传，不续传的话用 const 就好了
+		const traceId = guid()
 		let uploadMessage = {}
-		// uploadMessage.accountId = "5d7f1f90bd33a522bf1ba79c" // 测试id
 		uploadMessage.accountId = this.cookies.read( "account_id" )
 		uploadMessage.file = document.getElementById( "my-file" ).files[0]
 
@@ -92,7 +91,7 @@ export default class MyDataComponent extends Component {
 		 * 2. upload file to OSS
 		 */
 		let that = this
-		this.showProgress = true //上传进度条
+		this.showProgress = '1' //显示上传进度
 		that.uploadFileSize = uploadMessage.file.size  // 上传文件总大小
 
 		// aws s3 upload
@@ -111,15 +110,15 @@ export default class MyDataComponent extends Component {
 			await s3Client
 				.upload( uploadFileParams )
 				.on( "httpUploadProgress", function ( progress ) {
-					that.uploadLoadedSize = progress.loaded 
+					that.uploadLoadedSize = progress.loaded //实时进度
 				} )
 				.promise()
+		
 			/**
 			 * 3. create file metadata for database
 			 */
 
 			const applicationAdapter = this.store.adapterFor( "application" )
-
 			const fileBodyObj = {
 				name: uploadMessage.file.name.split( "." )[0],
 				owner: accountId,
@@ -141,8 +140,6 @@ export default class MyDataComponent extends Component {
 				description: "",
 				partners: that.args.model.employerId
 			}
-
-
 			applicationAdapter.set( "reqBody", fileBodyObj )
 			//数据库上传数据
 			await this.store
@@ -151,37 +148,15 @@ export default class MyDataComponent extends Component {
 
 			that.router.transitionTo( "/" )
 			that.router.transitionTo( title.router.currentURL )
-
-			let fileObj = {
-				name: uploadMessage.file.name.split( "." )[0],
-				size: uploadMessage.file.size,
-				status: 1
-			}
-			that.showProgress = false// 关闭上传进度条
-			// that.set( "uploadFileStatus", fileObj )
+			that.showProgress = '0'// 关闭上传进度条
 
 			//上传成功提示
-			// that.toast.success( "", "上传成功", that.toastOptions )
 			that.uploadTextStatus = "上传成功"
 			that.uploadText = "在“我的数据”中查看结果"
 			that.uploadToastBorder = "green"
 		} catch ( e ) {
-			// that.set( "loadedFailed", uploadMessage.file ) // 上传失败，记录上传的文件，用于续传
-			// that.set( "uploadLink", uploadLink ) // 上传失败，记录上传的链接，用于续传
-			let info = e.name === "cancel" ? "取消上传" : ""
-
-			// 多种不同错误处理
-			that.showProgress = false
-			let fileObj = {
-				name: uploadMessage.file.name.split( "." )[0],
-				status: 0,
-				info: info
-			}
-
-			// that.set( "uploadFileStatus", fileObj )
-
+			that.showProgress = '0' //关闭上传进度条
 			//上传失败提示
-			// that.toast.error( "", "上传失败", that.toastOptions )
 			that.uploadTextStatus = "上传失败" 
 			that.uploadText = ""
 			that.uploadToastBorder = "red"
@@ -189,16 +164,11 @@ export default class MyDataComponent extends Component {
 
 		// 不管上传成功还是失败，都把按键的disabled取消，样式还原,loaded大小还原
 		dom[0].disabled = false
-		// this.set( "fileinputButton", false )
-		// $( "#tooltips" )[0].title = ""
 		that.uploadLoadedSize = 0
 
 		// 不管上传成功还是失败，都把文件清空
 		let fileContainer = document.getElementById( "my-file" )
-
 		fileContainer.value = null
-		// that.set( "curUploadFileSize", 0 )
-		// that.set( "curProgress", 0 )
 	}
 
     @action
