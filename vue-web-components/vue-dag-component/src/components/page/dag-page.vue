@@ -15,7 +15,7 @@
 
                 <div v-if="togglePanelId" class="dag-run-content">
                     <div class="run-button-container">
-                        <button :class="buttonState ? buttonState : 'DEFAULT'" @click="runDag">
+                        <button :class="buttonState ? buttonState : 'DEFAULT'" @click="runDag" :disabled="buttonState === 'RUNNING'">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
@@ -142,6 +142,7 @@ export default {
             // 只要点击了run就必然先改变样式的状态为running
             this.buttonState = "RUNNING"
             this.task_id = "START"
+            this.duration = ""
 
             let response = await fetch("https://api.pharbers.com/phstartetl", {
                 method: "POST",
@@ -181,7 +182,7 @@ export default {
                 } else {
                     this.task_id = this.dagStatus.steps[0]
                 }
-
+                console.log(this.dagStatus.execution_status);
                 if (this.dagStatus.execution_stopDate) {
                     this.duration = this.formatDateDuration(new Date(this.dagStatus.execution_stopDate) - new Date(this.dagStatus.execution_startDate))
                 }
@@ -190,6 +191,8 @@ export default {
                     storage.removeItem("startReturn")
                     clearInterval(this.cycleCheckDagStatus)
                 }
+            } else {
+                clearInterval(this.cycleCheckDagStatus)
             }
         },
         cycle() {
@@ -200,9 +203,6 @@ export default {
                 this.checkDagStatus()
                 this.cycleCheckDagStatus = setInterval(function() {
                     that.checkDagStatus()
-                    if (!storage.getItem("startReturn")) {
-                        clearInterval(this.cycleCheckDagStatus)
-                    }
                 },60000)
             }
         },
@@ -525,6 +525,10 @@ export default {
                             .icon {
                                 margin-right: 4px;
                             }
+                        }
+                        
+                        button:disabled {
+                            cursor: not-allowed;
                         }
 
                         button.DEFAULT {

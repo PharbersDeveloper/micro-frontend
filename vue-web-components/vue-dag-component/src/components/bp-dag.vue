@@ -108,7 +108,7 @@ export default {
         addEdges(edgeData, g) {
             edgeData.forEach( item => {
                 g.setEdge( item.source, item.target, {
-                    style: "fill:#fff;stroke:#63616B;stroke-width:1px;cursor: pointer",
+                    style: "fill:transparent;stroke:#63616B;stroke-width:1px;cursor: pointer",
                     curve: d3.curveBasis
                 } )
             } )
@@ -173,23 +173,6 @@ export default {
                             catchNext: []
                         })
                         continue
-                    }
-
-                    if (next !== "END" && type != "Map" && type != "Parallel" && dag.States[next].Type === "Choice") {
-                        let choice_next = []
-                        dag.States[next].Choices.forEach(choice => {
-                            choice_next.push(choice.Next)
-                        })
-                        choice_next.push(dag.States[next].Default)
-                        choice_next = Array.from(new Set(choice_next))
-
-                        // nodeData.push({
-                        //     id: this.guid(),
-                        //     label: state,
-                        //     type: dag.States[state].Type,
-                        //     next: choice_next,
-                        //     catchNext: []
-                        // })
                     }
 
                     // 处理type为Parallel(并行)情况下的节点数据
@@ -258,6 +241,25 @@ export default {
                         continue
                     }
 
+                    if ( type === "Choice" ) {
+                        let choices = dag.States[state].Choices
+                        let choice_next = []
+                        choices.forEach( choice => {
+                            choice_next.push(choice.Next)
+                        })
+                        choice_next.push(dag.States[state].Default)
+                        choice_next = Array.from(new Set(choice_next))
+
+                        nodeData.push({
+                            id: this.guid(),
+                            label: state,
+                            type: dag.States[state].Type,
+                            next: choice_next,
+                            catchNext: []
+                        })
+                        continue
+                    }
+
                     if ( catchNextLength ) {
                         dag.States[state].Catch.forEach(x => {
                             catchNext.push(x.Next)
@@ -280,7 +282,6 @@ export default {
                     type: "End",
                     next: ""
                 })
-                console.log("nodeData", nodeData);
 
                 // 添加所有的边数据
                 for (let node of nodeData) {
@@ -362,12 +363,6 @@ export default {
                 break;
             case "Map":
                 next.push(nextDag.Iterator.StartAt)
-                break;
-            case "Choice":
-                nextDag.Choices.forEach(choice => {
-                    next.push(choice.Next)
-                })
-                next.push(nextDag.Default)
                 break;
             default:
                 next.push(nextName)
