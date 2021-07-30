@@ -3,7 +3,9 @@
         <div class="dag-states">
             <span v-for="(state, index) in states" :key="index" class="dag-state" :id="state">{{state}}</span>
         </div>
-        <svg id="svg-canvas" width="960" height="990"></svg>
+        <svg id="svg-canvas" width="960" height="990">
+            <g/>
+        </svg>
     </div>
 </template>
 
@@ -14,9 +16,9 @@ import * as d3 from "d3"
 export default {
     name: "phdag",
     props: {
-        dag: {
-            type: Object
-        }
+        dag: Object,
+        succeed_step: Array,
+        task_id: String
     },
     data(){
         return {
@@ -47,7 +49,7 @@ export default {
         addNodes(nodeData, g, hasParent) {
             nodeData.forEach( item => {
                 let shape = ""
-                let style = "fill:#fff;stroke:#000;cursor: pointer"
+                let style = "fill:#fff;stroke-width:2;cursor: pointer;"
                 let labelStyle,width,labelType
 
                 switch (item.type) {
@@ -76,7 +78,14 @@ export default {
                     style: style,
                     rx: 2,
                     ry: 2,
-                    class: 'test_dag_status'  //可以根据不同的状态给不同的class以变化不同的边框颜色
+                    class: 'no_status-stroke'  //可以根据不同的状态给不同的class以变化不同的边框颜色
+                }
+                
+                if (this.succeed_step.indexOf(params.label) !== -1) {
+                    params.class = 'success-stroke'
+                }
+                if ( this.task_id !== "END" && this.task_id === params.label) {
+                    params.class = 'running-stroke'
                 }
 
                 if (labelStyle) {
@@ -108,7 +117,7 @@ export default {
         addEdges(edgeData, g) {
             edgeData.forEach( item => {
                 g.setEdge( item.source, item.target, {
-                    style: "fill:transparent;stroke:#63616B;stroke-width:1px;cursor: pointer",
+                    style: "fill:transparent;stroke:#bcbac4;stroke-width:1px;cursor: pointer",
                     curve: d3.curveBasis
                 } )
             } )
@@ -338,7 +347,7 @@ export default {
                 let svg = d3.select("#svg-canvas")
 
                 // 绘图的容器
-                let svgGroup = svg.append( "g" )
+                let svgGroup = svg.select( "g" )
                 // 开始渲染
                 render( svgGroup, g )
 
@@ -385,7 +394,10 @@ export default {
         }
     },
     watch: {
-        dag: function(newDag) {
+        dag() {
+            this.main()
+        },
+        succeed_step(newVal) {
             this.main()
         }
     }
@@ -397,6 +409,17 @@ export default {
         box-sizing: border-box;
     }
 
+    $queued: #63616B;
+    $running: #7163C5;
+    $success: #23A959;
+    $failed: #DB4D71;
+    $up_for_retry: #F7E54B;
+    $up_for_reschedule: #5EDED1;
+    $upstream_failed: #E0C00B;
+    $skipped:  #EA99AE;
+    $scheduled:  #CB88D3;
+    $no_status:  #F2F0F9;
+
     @mixin body-tertiary {
         font-family: SFProText-Light;
         font-size: 12px;
@@ -406,44 +429,79 @@ export default {
         line-height: 16px;
         font-weight: 200;
     }
+
+    .queued-stroke {
+        stroke: $queued;
+    }
+    
+    .running-stroke {
+        stroke: $running;
+    }
+
+    .success-stroke {
+        stroke: $success;
+    }
+
+    .failed-stroke {
+        stroke: $failed;
+    }
+    .up_for_retry-stroke {
+        stroke: $up_for_retry;
+    }
+    .up_for_reschedule-stroke {
+        stroke: $up_for_reschedule;
+    }
+    .upstream_failed-stroke {
+        stroke: $upstream_failed;
+    }
+    .skipped-stroke {
+        stroke: $skipped;
+    }
+    .scheduled-stroke {
+        stroke: $scheduled;
+    }
+    .no_status-stroke {
+        stroke: $no_status;
+    }
+
     #queued {
-        border: 1px solid #63616B;
+        border: 1px solid $queued;
     }
 
     #running {
-        border: 1px solid #7163C5;
+        border: 1px solid $running;
     }
 
     #success {
-        border: 1px solid #23A959;
+        border: 1px solid $success;
     }
 
     #failed {
-        border: 1px solid #DB4D71;
+        border: 1px solid $failed;
     }
 
     #up_for_retry {
-        border: 1px solid #F7E54B;
+        border: 1px solid $up_for_retry;
     }
 
     #up_for_reschedule {
-        border: 1px solid #5EDED1;
+        border: 1px solid $up_for_reschedule;
     }
 
     #upstream_failed {
-        border: 1px solid #E0C00B;
+        border: 1px solid $upstream_failed;
     }
 
     #skipped {
-        border: 1px solid #EA99AE;
+        border: 1px solid $skipped;
     }
 
     #scheduled {
-        border: 1px solid #CB88D3;
+        border: 1px solid $scheduled;
     }
 
     #no_status {
-        border: 1px solid #F2F0F9;
+        border: 1px solid $no_status;
     }
 
     #svg-canvas {
