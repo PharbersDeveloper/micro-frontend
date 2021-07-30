@@ -16,7 +16,7 @@
                         <span class="heading-xsmall database-name">数据库
                             <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
-                        <span class="heading-xsmall subscribe-location">位置
+                        <span class="heading-xsmall subscribe-location">来源
                             <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall last-time">上次更新时间
@@ -36,7 +36,8 @@
                             </div>
 
                             <div class="subscribe-location">
-                                <bp-text class="body-tertiary">{{file.location}}</bp-text>
+                                <!-- <bp-text class="body-tertiary">{{file.location}}</bp-text> -->
+                                <bp-text class="body-tertiary">Pharbers</bp-text>
                             </div>
 
                             <div class="last-time">
@@ -99,7 +100,109 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {}
+                return {
+                    name: "phdatacat",
+                    partTables: [
+                        {
+                            "id": "phdatacatchemdata0",
+                            "schema": {
+                                "provider": "pharbers",
+                                "version": "chemdata_20210707_v1",
+                                "filetype": "chemdata",
+                                "provider1": "pharbers1",
+                                "version1": "chemdata_20210707_v11",
+                                "filetype1": "chemdata1"
+                            },
+                            "attribute": "{\"BucketColumns\":[],\"Columns\":[{\"Name\":\"title\",\"Type\":\"string\"},{\"Name\":\"cas_registry_number\",\"Type\":\"string\"},{\"Name\":\"cas_name\",\"Type\":\"string\"},{\"Name\":\"additional_names\",\"Type\":\"string\"},{\"Name\":\"manufacturers'_codes\",\"Type\":\"string\"},{\"Name\":\"molecular_formula\",\"Type\":\"string\"},{\"Name\":\"molecular_weight\",\"Type\":\"string\"},{\"Name\":\"percent_composition\",\"Type\":\"string\"},{\"Name\":\"literature_references\",\"Type\":\"string\"},{\"Name\":\"properties\",\"Type\":\"string\"},{\"Name\":\"melting_point\",\"Type\":\"string\"},{\"Name\":\"pka\",\"Type\":\"string\"},{\"Name\":\"opticalrotation\",\"Type\":\"string\"},{\"Name\":\"log_p\",\"Type\":\"string\"},{\"Name\":\"absorption_maximum\",\"Type\":\"string\"},{\"Name\":\"derivative_type\",\"Type\":\"string\"},{\"Name\":\"trademarks\",\"Type\":\"string\"},{\"Name\":\"therap_cat\",\"Type\":\"string\"},{\"Name\":\"keywords\",\"Type\":\"string\"},{\"Name\":\"owner\",\"Type\":\"string\"},{\"Name\":\"title_ch\",\"Type\":\"string\"}],\"Compressed\":false,\"InputFormat\":\"org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat\",\"Location\":\"s3://ph-platform/2020-11-11/etl/readable_files/chemdata/provider=pharbers/version=chemdata_20210707_v1/filetype=chemdata/\",\"NumberOfBuckets\":-1,\"OutputFormat\":\"org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat\",\"Parameters\":{\"averageRecordSize\":\"919\",\"classification\":\"parquet\",\"compressionType\":\"none\",\"objectCount\":\"1\",\"recordCount\":\"10727\",\"sizeKey\":\"5803776\",\"typeOfData\":\"file\"},\"SerdeInfo\":{\"Parameters\":{\"serialization.format\":\"1\"},\"SerializationLibrary\":\"org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe\"},\"SortColumns\":[],\"StoredAsSubDirectories\":false}"
+                        }
+                    ],
+                    tables: [{
+                        "id": "phdatacatchemdata",
+                        "name": "chemdata",
+                        "partitionKeys": [
+                            {
+                                "type": "string",
+                                "comment": "",
+                                "parameters": "",
+                                "field": "provider"
+                            },
+                            {
+                                "type": "string",
+                                "comment": "",
+                                "parameters": "",
+                                "field": "version"
+                            },
+                            {
+                                "type": "string",
+                                "comment": "",
+                                "parameters": "",
+                                "field": "filetype"
+                            },
+                            {
+                                "type": "string",
+                                "comment": "",
+                                "parameters": "",
+                                "field": "provider1"
+                            },
+                            {
+                                "type": "string",
+                                "comment": "",
+                                "parameters": "",
+                                "field": "version1"
+                            },
+                            {
+                                "type": "string",
+                                "comment": "",
+                                "parameters": "",
+                                "field": "filetype1"
+                            }
+                        ],
+                        "schemas": [
+                            {
+                                "field": "title",
+                                "type": "string",
+                                "comment": "",
+                                "parameters": ""
+                            },
+                            {
+                                "field": "cas_registry_number",
+                                "type": "string",
+                                "comment": "",
+                                "parameters": ""
+                            },
+                            {
+                                "field": "cas_name",
+                                "type": "string",
+                                "comment": "",
+                                "parameters": ""
+                            }
+                        ],
+                        "describe": "",
+                        "connect": "",
+                        "location": "s3://ph-platform/2020-11-11/etl/readable_files/chemdata/",
+                        "deprecated": 0,
+                        "lastModifyTime": 1625797508000,
+                        "inputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
+                        "outputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
+                        "serdeLib": "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe",
+                        "serdeArguments": {
+                            "serialization.format": "1"
+                        },
+                        "tableAttributes": {
+                            "CrawlerSchemaDeserializerVersion": "1.0",
+                            "CrawlerSchemaSerializerVersion": "1.0",
+                            "UPDATED_BY_CRAWLER": "PH_CATALOG_CRAWLER",
+                            "averageRecordSize": "910",
+                            "classification": "parquet",
+                            "compressionType": "none",
+                            "objectCount": "4",
+                            "recordCount": "32181",
+                            "sizeKey": "17320610",
+                            "typeOfData": "file"
+                        }
+                    
+                    }]
+                }
             }
         }
     },

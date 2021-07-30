@@ -6,20 +6,38 @@
             </span>
         </div>
         <div class="tabs">
-            <span 
-                :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
-                class="cursor-pointer mr-3"
-                @click="changeTab(0)"
-            >
-                Mine
-            </span>
-            <span 
-                :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
-                class="cursor-pointer"
-                @click="changeTab(1)"
-            >
-                Subscribed
-            </span>
+            <div class="left">
+                <span 
+                    :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
+                    class="cursor-pointer mr-3"
+                    @click="changeTab(0)"
+                >
+                    我的文件
+                </span>
+                <span 
+                    :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
+                    class="cursor-pointer"
+                    @click="changeTab(1)"
+                >
+                    数据目录
+                </span>
+            </div>
+            <div class="upload-button" @click="upload" v-if="uploadToastBorder != 'blue' && myDataTab === 0">
+                <span class="fileinput-button">
+                    <div class="icon_upload"></div>
+                    <span class="btn_secondary_initial">
+                        上传文件
+                    </span>
+                </span>
+            </div>
+            <div class="upload-button disbutton" v-if="uploadToastBorder == 'blue' || myDataTab === 1">
+                <span class="fileinput-button">
+                    <div class="icon_upload"></div>
+                    <span class="btn_secondary_initial">
+                        上传文件
+                    </span>
+                </span>
+            </div>
         </div>
         <div class="data-main-container">
             <template v-if="myDataTab === 0">
@@ -92,7 +110,8 @@
                     <div class="no_data-icon"></div>
                     <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
                     <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                    <bp-button text="Upload" class="btn_primary" @click="upload"></bp-button>
+                    <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder != 'blue'"></bp-button>
+                    <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
                 </div>
             </template>
             
@@ -112,6 +131,29 @@
                     </div>
                 </div>
             </template>
+        </div>
+        <div v-if="closeuploadToast == '0'"
+            class="upload-toast" 
+            :class="[
+                {'upload-toast-border-green': uploadToastBorder == 'green'},
+                {'upload-toast-border-blue': uploadToastBorder == 'blue'},
+                {'upload-toast-border-red': uploadToastBorder == 'red'}
+            ]">
+            <div class="upload-toast-img-container">
+                <div :class="[
+                    {'check_circle-24px': uploadToastBorder == 'green'},
+                    {'upload-24px': uploadToastBorder == 'blue'},
+                    {'cancel-24px': uploadToastBorder == 'red'}
+                ]"></div>
+            </div>
+            <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
+            <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
+            <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
+                {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
+            </bp-text>
+            <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
+                <div class="cross"></div>
+            </div>
         </div>
     </div>
     
@@ -158,7 +200,17 @@ export default {
                     database: []
                 }
             }
-        }
+        },
+        uploadToastBorder: String,
+        uploadTextStatus: String,
+        uploadText: String,
+        closeuploadToast: {
+            type: String,
+            default: '1'
+        },
+        showProgress: String,
+        uploadLoadedSize: Number,
+        uploadFileSize: Number
     },
     computed: {
         haveData() {
@@ -222,6 +274,18 @@ export default {
         }
     },
     methods: {
+        closeToast() {
+            const event = new Event("event")
+            event.args = {
+                callback: "closeToast",
+                element: this,
+                param: {
+                    name: 'closeToast',
+                    value: 0
+                }
+            }
+            this.$emit('event', event)
+        },
         changeTab(num) {
             this.myDataTab = num
             this.$emit('changeTab', num)
@@ -265,6 +329,22 @@ export default {
                 }
             }
             this.$emit('event', event)
+        },
+        formatFileSize(...params) {
+            if ( !params[0] ) {
+                return 0
+            }
+            let fsize = params[0]
+            if ( fsize < 0.1 * 1024 ) {
+                fsize = fsize.toFixed( 2 ) + "B"
+            } else if ( fsize < 0.1 * 1024 * 1024 ) {
+                fsize = ( fsize / 1024 ).toFixed( 2 ) + "KB"
+            } else if ( fsize < 0.1 * 1024 * 1024 * 1024 ) {
+                fsize = ( fsize / ( 1024 * 1024 ) ).toFixed( 2 ) + "MB"
+            } else {
+                fsize = ( fsize / ( 1024 * 1024 * 1024 ) ).toFixed( 2 ) + "GB"
+            }
+            return fsize
         },
         formatFileName(...params) {
             let resname = params[0]
@@ -420,7 +500,19 @@ export default {
         }
     }
 
-    
+    button.btn_primary_dis {
+        background: #f6f6f7 !important;
+        color: #AAAAAA !important;
+        &:hover {
+            background: #f6f6f7 !important; 
+            @include btn_primary-initial;
+        }
+
+        &:active {
+            background: #f6f6f7 !important;
+            @include btn_primary-initial; 
+        }
+    }
 
     .heading-xsmall {
         font-family: SFProText-Regular;
@@ -554,8 +646,51 @@ export default {
             padding: 0 24px 0 20px;
             display: flex;
             margin-top: 12px;
+            justify-content: space-between;
+            align-items: center;
             .tab-active {
                 border-bottom: 2px solid #7163C5;
+            }
+            .upload-button {
+                width: 96px;
+                height: 32px;
+                background: #7163C5;
+                border-radius: 2px;
+                margin: 12px 0;
+                cursor: pointer;
+                .btn_secondary_initial {
+                    font-family: SFProText-Medium;
+                    font-size: 14px;
+                    color: #FFFFFF;
+                    line-height: 20px;
+                    font-weight: 500;
+                }
+                .fileinput-button {
+                    height: 32px;
+                    width: 100%;
+                    position: relative;
+                    border-radius: 2px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .icon_upload {
+                    width: 20px;
+                    height: 20px;
+                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+                }
+            }
+            .disbutton {
+                background: #f6f6f7 !important;
+                .btn_secondary_initial {
+                    color: #aaa !important;
+                }
+                .icon_upload {
+                    width: 20px;
+                    height: 20px;
+                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23AAAAAA' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+                }
             }
         }
 
@@ -911,6 +1046,76 @@ export default {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                }
+            }
+        }
+        //与upload-toast是一体的
+        .upload-toast-border-blue {
+            border-left: 2px solid #1C9DD9;
+        }
+
+        .upload-toast-border-green {
+            border-left: 2px solid #78A013;
+        }
+
+        .upload-toast-border-red {
+            border-left: 2px solid #E74D32;
+        }
+
+        .upload-toast {
+            display: flex;
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 320px;
+            height: 36px;
+            background: #FFF;
+            box-shadow: 0 0 1px 0 rgba(7, 10, 14, 0.12), 0 8px 16px -4px rgba(9, 30, 66, 0.25);
+            border-radius: 2px; 
+            span {
+                display: flex;
+                align-items: center;
+            }
+            .upload-toast-img-container {
+                display: flex;
+                align-items: center;
+                margin: 0 8px 0 16px;
+                //底部上传弹窗小icon
+                .check_circle-24px {
+                    width: 16px;
+                    height: 16px;
+                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none'/%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' fill='%2378A013' /%3E%3C/svg%3E") no-repeat center/100% !important;
+                }
+                .cancel-24px {
+                    width: 16px;
+                    height: 16px;
+                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none' opacity='.87'/%3E%3Cpath d='M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z' fill='%23E74D32' /%3E%3C/svg%3E") no-repeat center/100% !important;
+                }
+                .upload-24px {
+                    width: 16px;
+                    height: 16px;
+                    background: url("data:image/svg+xml,%3Csvg class='icon' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M384 682.667v-256H213.333L512 128l298.667 298.667H640v256H384M213.333 853.333V768h597.334v85.333H213.333z' fill='%231C9DD9' /%3E%3C/svg%3E") no-repeat center/100% !important;
+                }
+            }
+            .size-14-6B7376 {
+                font-size: 14px;
+                color: #6B7376;
+                margin-right: .5rem!important;
+            }
+            .size-12-6B7376 {
+                font-family: Lato-Regular;
+                font-size: 12px;
+                color: #6B7376;
+                line-height: 16px;
+            }
+            .upload-toast-close-container {
+                position: absolute;
+                right: 16px;
+                top: 10px;
+                .cross {
+                    width: 16px;
+                    height: 16px;
+                    background: url("data:image/svg+xml,%3Csvg class='icon' width='200' height='200' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%2351585C' d='M512 451.66l225.83-225.83c16.662-16.662 43.678-16.662 60.34 0 16.662 16.662 16.662 43.678 0 60.34L572.34 512l225.83 225.83c16.662 16.662 16.662 43.678 0 60.34-16.662 16.662-43.678 16.662-60.34 0L512 572.34 286.17 798.17c-16.662 16.662-43.678 16.662-60.34 0-16.662-16.662-16.662-43.678 0-60.34L451.66 512 225.83 286.17c-16.662-16.662-16.662-43.678 0-60.34 16.662-16.662 43.678-16.662 60.34 0L512 451.66z'/%3E%3C/svg%3E") no-repeat center/100%;
                 }
             }
         }

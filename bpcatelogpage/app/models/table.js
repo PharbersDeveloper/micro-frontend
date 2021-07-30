@@ -13,6 +13,7 @@ export default class TableModel extends Model {
 	@attr("string") outputFormat;
 	@attr("string") serdeLib;
     @attr serdeArguments;
+    @attr tableAttributes;
 	@attr("string") sizeKey;
 	@attr("string") objectCount;
 	@attr("string") updateByCrawler;
@@ -23,7 +24,7 @@ export default class TableModel extends Model {
 	@attr("string") compressionType;
 	@attr("string") typeOfData;
 	@attr("string") location;
-	@attr("string") category;
+	// @attr("string") category;
     // @hasMany("partition-key") partitionKey;
 	@attr partitionKeys;
 
