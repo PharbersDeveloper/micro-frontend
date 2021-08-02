@@ -6,7 +6,7 @@
         </div>
         
         <div class="dag-main-container">
-            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id"></bp-dag>
+            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState"></bp-dag>
 
             <div class="dag-run-container">
                 <div class="toggle-panel">

@@ -18,7 +18,8 @@ export default {
     props: {
         dag: Object,
         succeed_step: Array,
-        task_id: String
+        task_id: String,
+        status: String
     },
     data(){
         return {
@@ -78,18 +79,20 @@ export default {
                     style: style,
                     rx: 2,
                     ry: 2,
-                    class: 'no_status-stroke'  //可以根据不同的状态给不同的class以变化不同的边框颜色
+                    class: 'no_status-stroke',
+                    labelStyle: labelStyle
                 }
-                
+
                 if (this.succeed_step.indexOf(params.label) !== -1) {
                     params.class = 'success-stroke'
                 }
-                if ( this.task_id !== "END" && this.task_id === params.label) {
-                    params.class = 'running-stroke'
-                }
-
-                if (labelStyle) {
-                    params['labelStyle'] = labelStyle
+                if ( this.task_id !== "END" && this.task_id === params.label ) {
+                    if ( this.status === 'RUNNING' ) {
+                        params.class = 'running-stroke'
+                    }
+                    else if ( this.status === 'FAILED' ) {
+                        params.class = 'failed-stroke'
+                    }
                 }
 
                 if (width) {
