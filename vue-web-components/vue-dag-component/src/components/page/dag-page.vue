@@ -6,7 +6,7 @@
         </div>
         
         <div class="dag-main-container">
-            <bp-dag :dag="dag"></bp-dag>
+            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState"></bp-dag>
 
             <div class="dag-run-container">
                 <div class="toggle-panel">
@@ -66,7 +66,8 @@ export default {
             task_id: "",
             status: "",
             started: "",
-            duration: ""
+            duration: "",
+            succeed_step: []
         }
     },
     computed: {
@@ -102,11 +103,9 @@ export default {
         }
     },
     created() {
-        let that = this
-        
         fetch("ETL_Iterator.json").then(res => res.json())
             .then(data => {
-                that.dag = data
+                this.dag = data
             })
         
         this.cycle()
@@ -182,7 +181,8 @@ export default {
                 } else {
                     this.task_id = this.dagStatus.steps[0]
                 }
-                console.log(this.dagStatus.execution_status);
+                this.succeed_step = Array.from(new Set(this.dagStatus.succeed_step))
+
                 if (this.dagStatus.execution_stopDate) {
                     this.duration = this.formatDateDuration(new Date(this.dagStatus.execution_stopDate) - new Date(this.dagStatus.execution_startDate))
                 }
