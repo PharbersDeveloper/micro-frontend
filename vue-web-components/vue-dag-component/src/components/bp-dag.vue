@@ -1,11 +1,9 @@
 <template>
-    <div class="phdag">
+    <div class="phdag" id="phdag">
         <div class="dag-states">
             <span v-for="(state, index) in states" :key="index" class="dag-state" :id="state">{{state}}</span>
         </div>
-        <svg id="svg-canvas" width="960" height="990">
-            <g/>
-        </svg>
+        <svg id="svg-canvas" width="960" height="990"></svg>
     </div>
 </template>
 
@@ -349,8 +347,14 @@ export default {
 
                 let svg = d3.select("#svg-canvas")
 
+                svg.remove()
+                svg = d3.select("#phdag")
+                    .append("svg")
+                    .attr("id", "svg-canvas")
+
                 // 绘图的容器
-                let svgGroup = svg.select( "g" )
+                let svgGroup = svg.append( "g" )
+                
                 // 开始渲染
                 render( svgGroup, g )
 
