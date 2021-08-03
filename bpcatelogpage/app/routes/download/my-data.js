@@ -39,7 +39,8 @@ export default class DownloadMyDataRoute extends Route {
             sort: sortType,
 			employerId: employerId,
             count: files.meta.count,
-			database: database.filter( it => it)
+			database: database.filter( it => it),
+			_isVue: true
         })
     }
 }
