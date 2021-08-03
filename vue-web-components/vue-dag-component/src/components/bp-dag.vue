@@ -21,7 +21,7 @@ export default {
     },
     data(){
         return {
-            states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status']
+            states: [ 'RUNNING', 'SUCCEEDED', 'FAILED', 'TIMED_OUT', 'ABORTED', 'NO_STATUS']
         }
     },
     mounted() {
@@ -77,20 +77,15 @@ export default {
                     style: style,
                     rx: 2,
                     ry: 2,
-                    class: 'no_status-stroke',
+                    class: 'NO_STATUS-stroke',
                     labelStyle: labelStyle
                 }
 
                 if (this.succeed_step.indexOf(params.label) !== -1) {
-                    params.class = 'success-stroke'
+                    params.class = 'SUCCEEDED-stroke'
                 }
                 if ( this.task_id !== "END" && this.task_id === params.label ) {
-                    if ( this.status === 'RUNNING' ) {
-                        params.class = 'running-stroke'
-                    }
-                    else if ( this.status === 'FAILED' ) {
-                        params.class = 'failed-stroke'
-                    }
+                    params.class = `${this.status}-stroke`
                 }
 
                 if (width) {
@@ -416,19 +411,15 @@ export default {
         box-sizing: border-box;
     }
 
-    $queued: #63616B;
     $running: #7163C5;
-    $success: #23A959;
+    $succeeded: #23A959;
     $failed: #DB4D71;
-    $up_for_retry: #F7E54B;
-    $up_for_reschedule: #5EDED1;
-    $upstream_failed: #E0C00B;
-    $skipped:  #EA99AE;
-    $scheduled:  #CB88D3;
+    $timed_out: #F7E54B;
+    $aborted: #CB88D3;
     $no_status:  #F2F0F9;
 
     @mixin body-tertiary {
-        font-family: SFProText-Light;
+        font-family: PingFangSC-Light;
         font-size: 12px;
         color: #706F79;
         letter-spacing: 0.25px;
@@ -436,78 +427,48 @@ export default {
         line-height: 16px;
         font-weight: 200;
     }
-
-    .queued-stroke {
-        stroke: $queued;
-    }
     
-    .running-stroke {
+    .RUNNING-stroke {
         stroke: $running;
     }
 
-    .success-stroke {
-        stroke: $success;
+    .SUCCEEDED-stroke {
+        stroke: $succeeded;
     }
 
-    .failed-stroke {
+    .FAILED-stroke {
         stroke: $failed;
     }
-    .up_for_retry-stroke {
-        stroke: $up_for_retry;
+
+    .TIMED_OUT-stroke {
+        stroke: $timed_out;
     }
-    .up_for_reschedule-stroke {
-        stroke: $up_for_reschedule;
-    }
-    .upstream_failed-stroke {
-        stroke: $upstream_failed;
-    }
-    .skipped-stroke {
-        stroke: $skipped;
-    }
-    .scheduled-stroke {
-        stroke: $scheduled;
-    }
-    .no_status-stroke {
+
+    .NO_STATUS-stroke {
         stroke: $no_status;
     }
 
-    #queued {
-        border: 1px solid $queued;
-    }
-
-    #running {
+    #RUNNING {
         border: 1px solid $running;
     }
 
-    #success {
-        border: 1px solid $success;
+    #SUCCEEDED {
+        border: 1px solid $succeeded;
     }
 
-    #failed {
+    #FAILED {
         border: 1px solid $failed;
     }
 
-    #up_for_retry {
-        border: 1px solid $up_for_retry;
+    #TIMED_OUT {
+        border: 1px solid $timed_out;
     }
 
-    #up_for_reschedule {
-        border: 1px solid $up_for_reschedule;
+    #ABORTED {
+        border: 1px solid $aborted;
     }
 
-    #upstream_failed {
-        border: 1px solid $upstream_failed;
-    }
-
-    #skipped {
-        border: 1px solid $skipped;
-    }
-
-    #scheduled {
-        border: 1px solid $scheduled;
-    }
-
-    #no_status {
+    #NO_STATUS {
         border: 1px solid $no_status;
     }
 
