@@ -26,7 +26,11 @@
                         </div>
                     </div>
 
-                    <div class="dag-message-contaner">
+                    <div class="dag-message-switch">
+                        <span class="heading-small">属性详情</span>
+                        <div class="icon" :class="dagMessageIcon" @click="dagMessageId = !dagMessageId"></div>
+                    </div>
+                    <div v-if="dagMessageId" class="dag-message-contaner">
                         <span class="task-id margin-bottom-20">Task_ID:{{task_id}}</span>
                         <div class="status-container margin-bottom-20">
                             <span class="heading-small mr-0">Status:</span>
@@ -36,9 +40,24 @@
                             <span class="heading-small">Started:</span>
                             <span class="body-default">{{started}}</span>
                         </div>
-                        <div class="run-container mb-2">
+                        <div class="run-container">
                             <span class="heading-small">Duration:</span>
                             <span class="body-default">{{duration}}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-line"></div>
+                    <div class="dag-plugin-application-switch">
+                        <span class="heading-small">插件应用</span>
+                        <div class="icon" :class="dagPluginIcon" @click="dagPluginId = !dagPluginId"></div>
+                    </div>
+
+                    <div v-if="dagPluginId" class="dag-plugin-application-container">
+                        <div class="dag-single-plugin-container">
+                            <div class="dag-single-plugin-icon">
+                                <div class="icon icon_project-avatar"></div>
+                            </div>
+                            <span class="body-tertiary">上传文件</span>
                         </div>
                     </div>
                 </div>
@@ -60,7 +79,9 @@ export default {
             startReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
-            togglePanelId: 1,
+            togglePanelId: true,
+            dagMessageId: true,
+            dagPluginId: true,
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
             buttonState: "",
             task_id: "",
@@ -99,6 +120,20 @@ export default {
                 return "icon_chevron-right"
             } else {
                 return "icon_chevron-left"
+            }
+        },
+        dagMessageIcon() {
+            if (this.dagMessageId) {
+                return "icon_chevron-up"
+            } else {
+                return "icon_chevron-down"
+            }
+        },
+        dagPluginIcon() {
+            if (this.dagPluginId) {
+                return "icon_chevron-up"
+            } else {
+                return "icon_chevron-down"
             }
         }
     },
@@ -283,7 +318,7 @@ export default {
     }
 
     .heading-small {
-        font-family: SFProText-Regular;
+        font-family: PingFangSC-Regular;
         font-size: 14px;
         color: #25232D;
         letter-spacing: 0.25px;
@@ -293,7 +328,7 @@ export default {
     }
 
     @mixin body-tertiary {
-        font-family: SFProText-Light;
+        font-family: PingFangSC-Light;
         font-size: 12px;
         color: #706F79;
         letter-spacing: 0.25px;
@@ -303,7 +338,7 @@ export default {
     }
 
     .body-tertiary {
-        font-family: SFProText-Light;
+        font-family: PingFangSC-Light;
         font-size: 12px;
         color: #706F79;
         letter-spacing: 0.25px;
@@ -329,16 +364,34 @@ export default {
         font-weight: 500;
     }
 
-    .icon_chevron-right {
+    .icon_chevron-up {
         width: 20px;
         height: 20px;
-        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.825 14.867L13 10 7.825 5.133a.505.505 0 0 0-.683 0 .435.435 0 0 0-.056.58l.056.063L11.633 10l-4.491 4.224a.435.435 0 0 0-.056.58l.056.063a.507.507 0 0 0 .616.052l.067-.052z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100%;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.133 12.175L10 7l4.867 5.175a.505.505 0 0 1 0 .683.435.435 0 0 1-.58.056l-.063-.056L10 8.367l-4.224 4.491a.435.435 0 0 1-.58.056l-.063-.056a.507.507 0 0 1-.052-.616l.052-.067z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important; 
+    }
+
+    .icon_chevron-down {
+        width: 20px;
+        height: 20px;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.133 7.825L10 13l4.867-5.175a.505.505 0 0 0 0-.683.435.435 0 0 0-.58-.056l-.063.056L10 11.633 5.776 7.142a.435.435 0 0 0-.58-.056l-.063.056a.507.507 0 0 0-.052.616l.052.067z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important; 
     }
 
     .icon_chevron-left {
         width: 20px;
         height: 20px;
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.175 14.867L7 10l5.175-4.867a.505.505 0 0 1 .683 0 .435.435 0 0 1 .056.58l-.056.063L8.367 10l4.491 4.224a.435.435 0 0 1 .056.58l-.056.063a.507.507 0 0 1-.616.052l-.067-.052z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important; 
+    }
+
+    .icon_chevron-right {
+        width: 20px;
+        height: 20px;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.825 14.867L13 10 7.825 5.133a.505.505 0 0 0-.683 0 .435.435 0 0 0-.056.58l.056.063L11.633 10l-4.491 4.224a.435.435 0 0 0-.056.58l.056.063a.507.507 0 0 0 .616.052l.067-.052z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100%;
+    }
+
+    .icon_project-avatar {
+        width: 20px;
+        height: 20px;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M4 2h12a1 1 0 0 1 1 1v11l-4.083 4H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z' fill='%23FFFFFF'/%3E%3Cpath d='M10 9v1H5V9h5zm4-3v1H5V6h9z' fill='%23A3A1AB'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100%;
     }
 
     @mixin icon_play-white {
@@ -443,7 +496,7 @@ export default {
         .dag-header {
             display: flex;
             justify-content: space-between;
-            height: 58px;
+            height: 72px;
             border-bottom: 1px solid rgba(37,35,45,0.08);
             padding: 0 20px;
             flex-shrink: 0;
@@ -461,7 +514,7 @@ export default {
                 border: none;
                 cursor: pointer;
                 @include btn_secondary_initial;
-                margin-top: 16px;
+                margin-top: 20px;
             }
         }
 
@@ -495,6 +548,7 @@ export default {
                     .icon {
                         margin: 15px 10px 0 10px;
                         cursor: pointer;
+                        user-select: none;
                     }
                 }
 
@@ -502,13 +556,13 @@ export default {
                     display: flex;
                     flex-direction: column;
                     width: 255px;
-                    padding: 0 20px;
 
                     .run-button-container {
                         display: flex;
                         width: 100%;
                         flex-direction: column;
                         border-bottom: 1px solid rgba(37,35,45,0.08);
+                        padding: 0 20px;
 
                         button {
                             width: 215px;
@@ -570,10 +624,22 @@ export default {
                         }
                     }
 
-                    .dag-message-contaner {
-                        // overflow: hidden;
-                        width: 100%;
+                    .dag-message-switch {
+                        display: flex;
+                        justify-content: space-between;
                         margin-top: 10px;
+                        padding: 0 20px;
+
+                        .icon {
+                            cursor: pointer;
+                            user-select: none;
+                        }
+                    }
+
+                    .dag-message-contaner {
+                        width: 100%;
+                        margin-top: 20px;
+                        padding: 0 20px;
 
                         .task-id {
                             width: 100%;
@@ -595,6 +661,54 @@ export default {
                         .run-container {
                             display: flex;
                             flex-direction: column;
+                        }
+                    }
+
+                    .space-line {
+                        height: 1px;
+                        width: 100%;
+                        background: rgba(0, 0, 0, 0.08);
+                        margin-top: 20px;
+                    }
+
+                    .dag-plugin-application-switch {
+                        display: flex;
+                        justify-content: space-between;
+                        margin: 10px 0 20px 0;
+                        padding: 0 20px;
+                        
+                        .icon {
+                            cursor: pointer;
+                            user-select: none;
+                        }
+                    }
+
+                    .dag-plugin-application-container {
+                        display: flex;
+                        width: 100%;
+                        padding: 0 20px;
+                        
+
+                        .dag-single-plugin-container {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+
+                            .dag-single-plugin-icon {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                width: 32px;
+                                height: 32px;
+                                background: #7163C5;
+                                border-radius: 2px;
+                                margin-bottom: 4px;
+
+                                .icon {
+                                    cursor: pointer;
+                                    user-select: none;
+                                }
+                            }
                         }
                     }
                 }
