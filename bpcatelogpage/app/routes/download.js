@@ -47,7 +47,8 @@ export default class DownloadRoute extends Route {
 		return RSVP.hash( {
 			personalData: userData,
 			employerId: employerId,
-			employerData: employerData
+			employerData: employerData,
+			_isVue: true
 		} )
 	}
 
