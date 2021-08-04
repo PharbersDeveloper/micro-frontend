@@ -11,10 +11,9 @@ Router.map(function () {
     this.route('my-data', { path: "/my-data" });
     this.route('enterprise', { path: "/enterprise" });
     this.route('data-directory-table', { path: "/data-directory-table" });
-	
-    this.route('project', function() {
-      this.route('max');
-    });
+    this.route('project');
   });
   this.route('oauth-callback');
+  this.route('max');
+  this.route('etl');
 });

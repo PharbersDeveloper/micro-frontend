@@ -2,7 +2,7 @@
     <div class="dag-page">
         <div class="dag-header">
             <span class="header-text">DAG</span>
-            <button>返回列表</button>
+            <button @click="linkToPage">返回列表</button>
         </div>
         
         <div class="dag-main-container">
@@ -138,7 +138,7 @@ export default {
         }
     },
     created() {
-        fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
+        fetch("https://components.pharbers.com/jsonfile/Auto_max_refactor.json").then(res => res.json())
             .then(data => {
                 this.dag = data
             })
@@ -149,28 +149,54 @@ export default {
         async runDag() {
             const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
             const startBody = {
-                "dag_name": "ETL_Iterator",
-                "parameters": [
-                    {
-                        "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
-                        "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-                        "g_partition": "provider, version",
-                        "g_filldefalut": "provider:common,version:20210623_u0079u0079u0077,owner:pharbers",
-                        "g_bucket": "NONE",
-                        "g_mapping": "NONE",
-                        "type": "csv"
-                    },
-                    {
-                        "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/奥鸿/202012/prod_mapping",
-                        "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-                        "g_partition": "provider, version",
-                        "g_filldefalut": "provider:奥鸿,version:202012_u0079u0079u0077,owner:pharbers",
-                        "g_bucket": "NONE",
-                        "g_mapping": "NONE",
-                        "type": "parquet"
+                "dag_name": "Auto_max_refactor",
+                "parameters": {
+                    "project_name": "Takeda",
+                    "monthly_update": "True",
+                    "model_month_left": "202001",
+                    "model_month_right": "202012",
+                    "all_models": "TK1",
+                    "time_left": "202101",
+                    "time_right": "202103",
+                    "first_month": "1",
+                    "current_month": "3",
+                    "if_two_source": "True",
+                    "add_47": "True",
+                    "current_year": "2021",
+                    "g_input_version": {
+                        "raw_data": {
+                            "data": "202103_u0079u0079u0077",
+                            "data_std": "202103_u0079u0079u0077",
+                            "data_delivery": "202103_u0079u0079u0077"
+                        },
+                        "prod_mapping": "202103_u0079u0079u0077",
+                        "universe_base": "2020_u0079u0079u0077",
+                        "universe_base_common": "2020_u0079u0079u0077",
+                        "weight": {
+                            "weight": "20210624_u0079u0079u0077",
+                            "weight_default": "20210624_u0079u0079u0077"
+                        },
+                        "factor": {
+                            "TK1": "20210623_u0079u0079u0077"
+                        },
+                        "universe_outlier": {
+                            "TK1": "20210623_u0079u0079u0077"
+                        },
+                        "cpa_pha_mapping": "20210623_u0079u0079u0077",
+                        "cpa_pha_mapping_common": "20210623_u0079u0079u0077",
+                        "id_bedsize": "20210623_u0079u0079u0077",
+                        "product_map_all_atc": "20210617",
+                        "master_data_map": "20210623_u0079u0079u0077",
+                        "mkt_mapping": "20210623_u0079u0079u0077",
+                        "province_city_mapping": "20210623_u0079u0079u0077",
+                        "province_city_mapping_common": "20210623_u0079u0079u0077",
+                        "poi": "20210623_u0079u0079u0077",
+                        "not_arrived": "202103_u0079u0079u0077, 202012_u0079u0079u0077, 201912_u0079u0079u0077, 201812_u0079u0079u0077",
+                        "published": "2017_u0079u0079u0077, 2018_u0079u0079u0077, 2019_u0079u0079u0077, 2020_u0079u0079u0077, 2021_u0079u0079u0077"
                     }
-                ]
+                }
             }
+            
             let storage = window.localStorage
 
             // 只要点击了run就必然先改变样式的状态为running
@@ -268,6 +294,19 @@ export default {
             var m = Math.floor((result % 3600000 / 60000));
             var s = Math.floor((result % 60000 / 1000));
             return h + " Hours " + m + " Min " + s + " Sec";
+        },
+        linkToPage() {
+            debugger
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/download/project',
+                    route: 'max'
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }

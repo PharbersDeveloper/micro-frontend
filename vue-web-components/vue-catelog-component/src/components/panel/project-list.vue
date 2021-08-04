@@ -112,7 +112,7 @@ export default {
                 element: this,
                 param: {
                     name: '/download/project/',
-                    name: params.name
+                    route: params.name
                 }
             }
             this.$emit('event', event)
@@ -225,6 +225,7 @@ export default {
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
+						cursor: pointer;
                         .text-area {
                             display: flex;
                             flex-direction: column;
@@ -268,6 +269,7 @@ export default {
                     align-items: center;
                     border-bottom: 1px solid  rgba(37,35,45,0.08);
                     padding: 12px 0;
+					cursor: pointer;
                     .subtitle {
                         font-family: SFProText-Light;
                         font-size: 14px;
