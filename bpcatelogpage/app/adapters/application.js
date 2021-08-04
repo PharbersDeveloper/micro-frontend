@@ -59,7 +59,7 @@ export default DS.JSONAPIAdapter.extend( {
 			newUrl = `/reports/${curPath}`
 		}
 
-		if(modelName === "trigger") {
+		if(modelName === "trigger" || modelName === "project") {
 			newUrl = `/phproject/${curPath}`
 		}
 

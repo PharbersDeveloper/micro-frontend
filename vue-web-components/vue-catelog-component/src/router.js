@@ -6,6 +6,7 @@ import menu from './components/panel/menu.vue'
 import subscribeTable from './components/panel/data-list-table.vue'
 import dataListDetail from './components/panel/data-list-detail.vue'
 import viewJson from './components/panel/view-json.vue'
+import project from './components/panel/project-list.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,12 @@ export default new Router({
             path: '/view-json',
             name: 'viewJson',
             component: viewJson
+        },
+
+        {
+            path: '/project',
+            name: 'project',
+            component: project
         }
     ]
 })
