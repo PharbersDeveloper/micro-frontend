@@ -1,7 +1,7 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">DAG</span>
+            <span class="header-text">ETL</span>
             <button>返回列表</button>
         </div>
         
@@ -53,7 +53,7 @@
                     </div>
 
                     <div v-if="dagPluginId" class="dag-plugin-application-container">
-                        <div class="dag-single-plugin-container">
+                        <div class="dag-single-plugin-container" @click="openUploadWindow = true">
                             <div class="dag-single-plugin-icon">
                                 <div class="icon icon_project-avatar"></div>
                             </div>
@@ -63,15 +63,18 @@
                 </div>
             </div>
         </div>
-        
+
+        <upload-file v-if="openUploadWindow" @closeUploadWindow="openUploadWindow = false"></upload-file>
     </div>
 </template>
 
 <script>
 import bpDag from '../bp-dag.vue'
+import uploadFile from '../upload-file.vue'
 export default {
     components: {
-        bpDag
+        bpDag,
+        uploadFile
     },
     data() {
         return {
@@ -82,13 +85,13 @@ export default {
             togglePanelId: true,
             dagMessageId: true,
             dagPluginId: true,
-            states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
             buttonState: "",
             task_id: "",
             status: "",
             started: "",
             duration: "",
-            succeed_step: []
+            succeed_step: [],
+            openUploadWindow: false
         }
     },
     computed: {
@@ -147,7 +150,7 @@ export default {
     },
     methods: {
         async runDag() {
-            const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
+            const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
             const startBody = {
                 "dag_name": "ETL_Iterator",
                 "parameters": [
@@ -193,7 +196,7 @@ export default {
             this.cycle()
         },
         async checkDagStatus() {
-            const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
+            const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
             let storage = window.localStorage
             if ( storage.getItem("startReturn") ) {
                 let response = await fetch("https://api.pharbers.com/phstepstatus", {
@@ -268,6 +271,13 @@ export default {
             var m = Math.floor((result % 3600000 / 60000));
             var s = Math.floor((result % 60000 / 1000));
             return h + " Hours " + m + " Min " + s + " Sec";
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         }
     }
 }
@@ -693,6 +703,7 @@ export default {
                             display: flex;
                             flex-direction: column;
                             align-items: center;
+                            cursor: pointer;
 
                             .dag-single-plugin-icon {
                                 display: flex;
@@ -705,7 +716,6 @@ export default {
                                 margin-bottom: 4px;
 
                                 .icon {
-                                    cursor: pointer;
                                     user-select: none;
                                 }
                             }

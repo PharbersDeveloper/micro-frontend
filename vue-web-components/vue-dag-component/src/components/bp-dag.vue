@@ -341,8 +341,10 @@ export default {
                 this.addEdges(edgeData, g)
 
                 let svg = d3.select("#svg-canvas")
+                // let svg = d3.select( document.getElementsByTagName("phdag-dag-page")[0].shadowRoot ).select("#svg-canvas")
 
                 svg.remove()
+                // svg = d3.select( document.getElementsByTagName("phdag-dag-page")[0].shadowRoot ).select("#phdag")
                 svg = d3.select("#phdag")
                     .append("svg")
                     .attr("id", "svg-canvas")
