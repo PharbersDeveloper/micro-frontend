@@ -147,7 +147,7 @@ export default {
     },
     methods: {
         async runDag() {
-            const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
+            const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             const startBody = {
                 "dag_name": "Auto_max_refactor",
                 "parameters": {
@@ -219,7 +219,7 @@ export default {
             this.cycle()
         },
         async checkDagStatus() {
-            const accessToken = "bc3679bab4e87dca0dc28bf4716fd0ee7d59582ce9bc744556f1a50d8e41b229"
+            const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             let storage = window.localStorage
             if ( storage.getItem("startReturn") ) {
                 let response = await fetch("https://api.pharbers.com/phstepstatus", {
@@ -296,7 +296,6 @@ export default {
             return h + " Hours " + m + " Min " + s + " Sec";
         },
         linkToPage() {
-            debugger
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",

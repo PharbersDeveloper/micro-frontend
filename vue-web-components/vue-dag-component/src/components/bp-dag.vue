@@ -127,7 +127,6 @@ export default {
                     marginy: 50
                 } )
                 .setDefaultEdgeLabel(function() { return {}; });
-
             let render = new dagreD3.render(),
                 dag = this.dag
 
@@ -341,15 +340,17 @@ export default {
                 this.addEdges(edgeData, g)
 
                 let svg = d3.select("#svg-canvas")
+                //嵌入ember需要
+                // let svg = d3.select(document.querySelector('#dom-shadow').shadowRoot.querySelector('#svg-canvas'))
 
                 svg.remove()
-                svg = d3.select("#phdag")
-                    .append("svg")
-                    .attr("id", "svg-canvas")
 
+                svg = d3.select("#phdag").append("svg") .attr("id", "svg-canvas")
+                //嵌入ember需要
+                // svg = d3.select(document.querySelector('#dom-shadow').shadowRoot.querySelector('#phdag')).append("svg").attr("id", "svg-canvas")
+                
                 // 绘图的容器
                 let svgGroup = svg.append( "g" )
-                
                 // 开始渲染
                 render( svgGroup, g )
 

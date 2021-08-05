@@ -53,7 +53,7 @@
                     </div>
 
                     <div v-if="dagPluginId" class="dag-plugin-application-container">
-                        <div class="dag-single-plugin-container" @click="openUploadWindow = true">
+                        <div class="dag-single-plugin-container">
                             <div class="dag-single-plugin-icon">
                                 <div class="icon icon_project-avatar"></div>
                             </div>
@@ -63,18 +63,15 @@
                 </div>
             </div>
         </div>
-
-        <upload-file v-if="openUploadWindow" @closeUploadWindow="openUploadWindow = false"></upload-file>
+        
     </div>
 </template>
 
 <script>
 import bpDag from '../bp-dag.vue'
-import uploadFile from '../upload-file.vue'
 export default {
     components: {
-        bpDag,
-        uploadFile
+        bpDag
     },
     data() {
         return {
@@ -85,13 +82,13 @@ export default {
             togglePanelId: true,
             dagMessageId: true,
             dagPluginId: true,
+            states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
             buttonState: "",
             task_id: "",
             status: "",
             started: "",
             duration: "",
-            succeed_step: [],
-            openUploadWindow: false
+            succeed_step: []
         }
     },
     computed: {
@@ -141,7 +138,7 @@ export default {
         }
     },
     created() {
-        fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
+        fetch("https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/jsonfile/Auto_extract_refactor.json").then(res => res.json())
             .then(data => {
                 this.dag = data
             })
@@ -152,28 +149,16 @@ export default {
         async runDag() {
             const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             const startBody = {
-                "dag_name": "ETL_Iterator",
-                "parameters": [
-                    {
-                        "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
-                        "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-                        "g_partition": "provider, version",
-                        "g_filldefalut": "provider:common,version:20210623_u0079u0079u0077,owner:pharbers",
-                        "g_bucket": "NONE",
-                        "g_mapping": "NONE",
-                        "type": "csv"
-                    },
-                    {
-                        "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/奥鸿/202012/prod_mapping",
-                        "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-                        "g_partition": "provider, version",
-                        "g_filldefalut": "provider:奥鸿,version:202012_u0079u0079u0077,owner:pharbers",
-                        "g_bucket": "NONE",
-                        "g_mapping": "NONE",
-                        "type": "parquet"
-                    }
-                ]
+                "dag_name": "Auto_extract_refactor",
+                "parameters": {
+                    "time_left": "201801",
+                    "time_right": "201912",
+                    "project": "Servier",
+                    "molecule": "二甲双胍, 格列喹酮",
+                    "out_suffix": "test3_project_molecule"
+                }
             }
+            
             let storage = window.localStorage
 
             // 只要点击了run就必然先改变样式的状态为running
@@ -271,13 +256,6 @@ export default {
             var m = Math.floor((result % 3600000 / 60000));
             var s = Math.floor((result % 60000 / 1000));
             return h + " Hours " + m + " Min " + s + " Sec";
-        },
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
         },
         linkToPage() {
             const event = new Event("event")
@@ -715,7 +693,6 @@ export default {
                             display: flex;
                             flex-direction: column;
                             align-items: center;
-                            cursor: pointer;
 
                             .dag-single-plugin-icon {
                                 display: flex;
@@ -728,6 +705,7 @@ export default {
                                 margin-bottom: 4px;
 
                                 .icon {
+                                    cursor: pointer;
                                     user-select: none;
                                 }
                             }

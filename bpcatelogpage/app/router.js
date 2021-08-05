@@ -16,4 +16,5 @@ Router.map(function () {
   this.route('oauth-callback');
   this.route('max');
   this.route('etl');
+  this.route('max-extract');
 });

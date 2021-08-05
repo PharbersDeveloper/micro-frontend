@@ -9,7 +9,6 @@ export default class MaxComponent extends Component {
     listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-				debugger
 				this.router.transitionTo( e.detail[0].args.param.name )
                 break
             default: 
