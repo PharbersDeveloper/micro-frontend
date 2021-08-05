@@ -2,7 +2,7 @@
     <div class="dag-page">
         <div class="dag-header">
             <span class="header-text">DAG</span>
-            <button>返回列表</button>
+            <button @click="linkToPage">返回列表</button>
         </div>
         
         <div class="dag-main-container">
@@ -138,7 +138,7 @@ export default {
         }
     },
     created() {
-        fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
+        fetch("https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/jsonfile/Auto_extract_refactor.json").then(res => res.json())
             .then(data => {
                 this.dag = data
             })
@@ -149,28 +149,16 @@ export default {
         async runDag() {
             const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             const startBody = {
-                "dag_name": "ETL_Iterator",
-                "parameters": [
-                    {
-                        "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
-                        "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-                        "g_partition": "provider, version",
-                        "g_filldefalut": "provider:common,version:20210623_u0079u0079u0077,owner:pharbers",
-                        "g_bucket": "NONE",
-                        "g_mapping": "NONE",
-                        "type": "csv"
-                    },
-                    {
-                        "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/奥鸿/202012/prod_mapping",
-                        "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-                        "g_partition": "provider, version",
-                        "g_filldefalut": "provider:奥鸿,version:202012_u0079u0079u0077,owner:pharbers",
-                        "g_bucket": "NONE",
-                        "g_mapping": "NONE",
-                        "type": "parquet"
-                    }
-                ]
+                "dag_name": "Auto_extract_refactor",
+                "parameters": {
+                    "time_left": "201801",
+                    "time_right": "201912",
+                    "project": "Servier",
+                    "molecule": "二甲双胍, 格列喹酮",
+                    "out_suffix": "test3_project_molecule"
+                }
             }
+            
             let storage = window.localStorage
 
             // 只要点击了run就必然先改变样式的状态为running
@@ -268,6 +256,18 @@ export default {
             var m = Math.floor((result % 3600000 / 60000));
             var s = Math.floor((result % 60000 / 1000));
             return h + " Hours " + m + " Min " + s + " Sec";
+        },
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/download/project',
+                    route: 'max'
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
