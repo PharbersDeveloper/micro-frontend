@@ -13,6 +13,8 @@ export default class LeftMenuComponent extends Component {
 					this.router.transitionTo( `/download/enterprise` )
 				} else if(idx == 1) {
 					this.router.transitionTo(`/download/my-data`)
+				} else if(idx == 2) {
+					this.router.transitionTo(`/download/project`)
 				}
                 break
             default: 

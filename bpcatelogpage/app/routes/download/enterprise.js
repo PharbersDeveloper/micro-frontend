@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from "@ember/service"
 import RSVP from 'rsvp';
-import fetch, { Headers, Request, Response, AbortController } from 'fetch';
+import fetch from 'fetch';
 
 export default class DownloadEnterpriseRoute extends Route {
     @service store
