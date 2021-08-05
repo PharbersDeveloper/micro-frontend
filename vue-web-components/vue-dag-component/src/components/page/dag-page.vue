@@ -2,7 +2,7 @@
     <div class="dag-page">
         <div class="dag-header">
             <span class="header-text">DAG</span>
-            <button>返回列表</button>
+            <button @click="linkToPage">返回列表</button>
         </div>
         
         <div class="dag-main-container">
@@ -268,6 +268,18 @@ export default {
             var m = Math.floor((result % 3600000 / 60000));
             var s = Math.floor((result % 60000 / 1000));
             return h + " Hours " + m + " Min " + s + " Sec";
+        },
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/download/project',
+                    route: 'max'
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
