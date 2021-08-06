@@ -20,9 +20,9 @@ export default new Router({
             name: 'maxdag',
             component: maxdag
         },{
-			path: '/extract',
-			name: 'extract',
-			component: extract
-		}
+            path: '/extract',
+            name: 'extract',
+            component: extract
+        }
     ]
 })
