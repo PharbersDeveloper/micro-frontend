@@ -1,7 +1,7 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">DAG</span>
+            <span class="header-text">MAX提数</span>
             <button @click="linkToPage">返回列表</button>
         </div>
         
