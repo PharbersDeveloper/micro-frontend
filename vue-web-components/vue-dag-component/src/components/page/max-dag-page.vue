@@ -6,7 +6,7 @@
         </div>
         
         <div class="dag-main-container">
-            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState"></bp-dag>
+            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState" :domid="domid"></bp-dag>
 
             <div class="dag-run-container">
                 <div class="toggle-panel">
@@ -76,7 +76,7 @@ export default {
     data() {
         return {
             dag: null,
-            startReturn: null,
+            maxStartReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
             togglePanelId: true,
@@ -90,6 +90,9 @@ export default {
             duration: "",
             succeed_step: []
         }
+    },
+    props: {
+        domid: String
     },
     computed: {
         runState() {
@@ -214,14 +217,14 @@ export default {
                 },
                 body: JSON.stringify(startBody)
             })
-            this.startReturn = await response.json()
-            storage.setItem("startReturn", JSON.stringify(this.startReturn))
+            this.maxStartReturn = await response.json()
+            storage.setItem("maxStartReturn", JSON.stringify(this.maxStartReturn))
             this.cycle()
         },
         async checkDagStatus() {
             const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             let storage = window.localStorage
-            if ( storage.getItem("startReturn") ) {
+            if ( storage.getItem("maxStartReturn") ) {
                 let response = await fetch("https://api.pharbers.com/phstepstatus", {
                     method: "POST",
                     mode: "cors",
@@ -230,7 +233,7 @@ export default {
                         "Accept": "application/vnd.api+json",
                         "Authorization": accessToken
                     },
-                    body: storage.getItem("startReturn")
+                    body: storage.getItem("maxStartReturn")
                 })
                 this.dagStatus = await response.json()
                 this.buttonState = this.dagStatus.execution_status
@@ -249,7 +252,7 @@ export default {
                 }
 
                 if (this.dagStatus.execution_status !== "RUNNING") {
-                    storage.removeItem("startReturn")
+                    storage.removeItem("maxStartReturn")
                     clearInterval(this.cycleCheckDagStatus)
                 }
             } else {
@@ -260,7 +263,7 @@ export default {
             let storage = window.localStorage
             let that = this
 
-            if ( storage.getItem("startReturn") ) {
+            if ( storage.getItem("maxStartReturn") ) {
                 this.checkDagStatus()
                 this.cycleCheckDagStatus = setInterval(function() {
                     that.checkDagStatus()
