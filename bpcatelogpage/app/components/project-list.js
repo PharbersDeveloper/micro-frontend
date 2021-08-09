@@ -14,11 +14,11 @@ export default class ProjectListComponent extends Component {
             case "linkToPage":
 				let param = e.detail[0].args.param;
 				if(param.route == "ETL") {
-					this.router.transitionTo( `etl` )
+					this.router.transitionTo( `/projects/etl-dag` )
 				} else if(param.route == "Max") {
-					this.router.transitionTo( `max` )
+					this.router.transitionTo( `/projects/max-dag` )
 				} else if(param.route == "Max提数") {
-					this.router.transitionTo( `max-extract` )
+					this.router.transitionTo( `/projects/extract-dag` )
 				}
                 break
             default: 

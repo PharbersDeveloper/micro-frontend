@@ -9,7 +9,7 @@ export default class EtlComponent extends Component {
     listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-				this.router.transitionTo( e.detail[0].args.param.name )
+				this.router.transitionTo( '/projects' )
                 break
             default: 
                 console.log("other click event!")
