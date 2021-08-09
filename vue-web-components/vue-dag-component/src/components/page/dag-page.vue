@@ -1,7 +1,7 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">DAG</span>
+            <span class="header-text">ETL</span>
             <button @click="linkToPage">返回列表</button>
         </div>
         
@@ -150,7 +150,7 @@ export default {
     },
     methods: {
         async runDag() {
-            const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
+            const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
             const startBody = {
                 "dag_name": "ETL_Iterator",
                 "parameters": [
@@ -196,7 +196,7 @@ export default {
             this.cycle()
         },
         async checkDagStatus() {
-            const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
+            const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
             let storage = window.localStorage
             if ( storage.getItem("startReturn") ) {
                 let response = await fetch("https://api.pharbers.com/phstepstatus", {
