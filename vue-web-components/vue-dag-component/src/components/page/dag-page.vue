@@ -1,12 +1,12 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">DAG</span>
+            <span class="header-text">ETL</span>
             <button @click="linkToPage">返回列表</button>
         </div>
         
         <div class="dag-main-container">
-            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState"></bp-dag>
+            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
 
             <div class="dag-run-container">
                 <div class="toggle-panel">
@@ -15,7 +15,7 @@
 
                 <div v-if="togglePanelId" class="dag-run-content">
                     <div class="run-button-container">
-                        <button :class="buttonState ? buttonState : 'DEFAULT'" @click="runDag" :disabled="buttonState === 'RUNNING'">
+                        <button :class="maxButtonState ? maxButtonState : 'DEFAULT'" @click="runDag" :disabled="maxButtonState === 'RUNNING'">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
@@ -85,7 +85,7 @@ export default {
             togglePanelId: true,
             dagMessageId: true,
             dagPluginId: true,
-            buttonState: "",
+            maxButtonState: "",
             task_id: "",
             status: "",
             started: "",
@@ -94,28 +94,31 @@ export default {
             openUploadWindow: false
         }
     },
+    props: {
+        domid: String
+    },
     computed: {
         runState() {
-            if (!this.buttonState) {
+            if (!this.maxButtonState) {
                 this.status = "no_status"
                 return
             } else {
-                this.status = this.buttonState.toLowerCase()
-                return this.buttonState
+                this.status = this.maxButtonState.toLowerCase()
+                return this.maxButtonState
             }
         },
         runIconClass() {
-            if (!this.buttonState) {
+            if (!this.maxButtonState) {
                 return
             } else {
-                return `icon_${this.buttonState}`
+                return `icon_${this.maxButtonState}`
             }
         },
         runTextClass() {
-            if (!this.buttonState) {
+            if (!this.maxButtonState) {
                 return
             } else {
-                return `${this.buttonState}-text`
+                return `${this.maxButtonState}-text`
             }
         },
         toggleIcon() {
@@ -177,7 +180,7 @@ export default {
             let storage = window.localStorage
 
             // 只要点击了run就必然先改变样式的状态为running
-            this.buttonState = "RUNNING"
+            this.maxButtonState = "RUNNING"
             this.task_id = "START"
             this.duration = ""
 
@@ -195,7 +198,7 @@ export default {
             storage.setItem("startReturn", JSON.stringify(this.startReturn))
             this.cycle()
         },
-        async checkDagStatus() {
+        async checkDagStatus () {
             const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             let storage = window.localStorage
             if ( storage.getItem("startReturn") ) {
@@ -210,7 +213,7 @@ export default {
                     body: storage.getItem("startReturn")
                 })
                 this.dagStatus = await response.json()
-                this.buttonState = this.dagStatus.execution_status
+                this.maxButtonState = this.dagStatus.execution_status
                 this.started = this.formatDateStandard(this.dagStatus.execution_startDate)
                 if ( this.dagStatus.execution_status === "RUNNING" && !this.dagStatus.steps.length ) {
                     this.task_id = "START"
