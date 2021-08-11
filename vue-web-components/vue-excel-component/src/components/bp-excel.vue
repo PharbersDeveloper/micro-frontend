@@ -32,16 +32,16 @@ export default {
                         type:'numeric' //定义值的类型为数字类型
                     }
                 ],
+                rowHeaders: true,
                 dropdownMenu: true,//头部是否显示menu
-                copyable: true, // 允许键盘复制
-                mergeCells: true, //表示允许单元格合并
-                manualColumnMove: true, //列可拖动
-                manualRowMove: true, //行可拖动
-                manualColumnResize: true, //列可拖拽 调大小
-                manualRowResize: true, //行可拖拽 调大小
-                // autoColumnSize: false, //当值为true且列宽未设置时，自适应列大小
-                columnSorting: true, // 排序
-                contextMenu: true, //右键菜单
+                copyable: true,
+                mergeCells: true,
+                manualColumnMove: true,
+                manualRowMove: true,
+                manualColumnResize: true,
+                manualRowResize: true,
+                columnSorting: true,
+                contextMenu: true,
                 afterChange(changes, source) {
                     console.log(this.getData(),changes,source)
                 }
@@ -53,5 +53,15 @@ export default {
 <style lang="scss">
     #hot-display-license-info {
         display: none !important;
+    }
+
+    .htMenu {
+        font-family: SFProText-Regular;
+        font-size: 14px;
+        color: #25232D;
+        letter-spacing: 0.25px;
+        text-align: left;
+        line-height: 20px;
+        font-weight: 400;
     }
 </style>
