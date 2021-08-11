@@ -14,7 +14,5 @@ Router.map(function () {
     this.route('project', {path: "/projects"});
   });
   this.route('oauth-callback');
-  this.route('max', {path: "/projects/max-dag"});
-  this.route('etl', {path: "/projects/etl-dag"});
-  this.route('max-extract', {path: "/projects/extract-dag"});
+  this.route('dag', {path: "/projects/:project_id"});
 });
