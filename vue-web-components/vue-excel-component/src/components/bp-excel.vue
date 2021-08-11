@@ -10,14 +10,20 @@ export default {
     components: {
         HotTable
     },
+    props: {
+        dataSource: {
+            type: Array,
+            default: () => [
+                ["2016", 10, 11, 12],
+                ["2017", 20, 11, 14],
+                ["2018", 30, 15, 12]
+            ]
+        }
+    },
     data() {
         return {
             hotSettings: {
-                data: [
-                    ["2016", 10, 11, 12],
-                    ["2017", 20, 11, 14],
-                    ["2018", 30, 15, 12]
-                ],
+                data: this.dataSource,
                 //定义表结构
                 colHeaders:[
                     "问题序号","问题类型","定性法规","问题金额"
