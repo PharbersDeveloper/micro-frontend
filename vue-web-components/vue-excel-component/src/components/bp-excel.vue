@@ -1,5 +1,9 @@
 <template>
-    <hot-table :settings="hotSettings"></hot-table>
+    <div>
+        <input type="search" id="search_field" placeholder="Search"/>
+        <!-- <hot-table :settings="hotSettings"></hot-table> -->
+        <div id="hot-table"></div>
+    </div>
 </template>
 <script>
 import { HotTable } from '@handsontable/vue';
@@ -11,7 +15,7 @@ export default {
         HotTable
     },
     props: {
-        dataSource: {
+        data: {
             type: Array,
             default: () => [
                 ["2016", 10, 11, 12],
@@ -23,7 +27,8 @@ export default {
     data() {
         return {
             hotSettings: {
-                data: this.dataSource,
+                data: this.data,
+                height: "auto",
                 //定义表结构
                 colHeaders:[
                     "问题序号","问题类型","定性法规","问题金额"
@@ -48,11 +53,23 @@ export default {
                 manualRowResize: true,
                 columnSorting: true,
                 contextMenu: true,
+                search: true,
                 afterChange(changes, source) {
-                    console.log(this.getData(),changes,source)
+                    // console.log(this.getData(),changes,source)
                 }
             }
         }
+    },
+    mounted() {
+        const container = document.querySelector('#hot-table')
+        const searchField = document.querySelector('#search_field')
+
+        const hot = new Handsontable(container, this.hotSettings)
+        Handsontable.dom.addEvent(searchField, 'keyup', function(event) {
+            const search = hot.getPlugin('search')
+            const queryResult = search.query(this.value)
+            hot.render()
+        })
     }
 }
 </script>
@@ -69,5 +86,11 @@ export default {
         text-align: left;
         line-height: 20px;
         font-weight: 400;
+    }
+
+    #search_field {
+        width: 200px;
+        height: 32px;
+        margin-bottom: 20px;
     }
 </style>
