@@ -31,9 +31,8 @@ export default {
                 language: zhCN.languageCode,
                 height: "auto",
                 //定义表结构
-                colHeaders:[
-                    "问题序号","问题类型","定性法规","问题金额"
-                ],
+                colHeaders:["问题序号","问题类型","定性法规","问题金额"],
+                rowHeaders: true,
                 //定义属性
                 columns: [
                     {},
@@ -45,7 +44,6 @@ export default {
                     }
                 ],
                 licenseKey: 'non-commercial-and-evaluation',
-                rowHeaders: true,
                 dropdownMenu: true,//头部是否显示menu
                 copyable: true,
                 mergeCells: true,
@@ -54,7 +52,14 @@ export default {
                 manualColumnResize: true,
                 manualRowResize: true,
                 columnSorting: true,
-                contextMenu: true,
+                // contextMenu: true,
+                contextMenu: {
+                    callback(key, selection, clickEvent) {
+                        console.log(key, selection, clickEvent);
+                    },
+                    disableSelection: true,
+                    isCommand: false
+                },
                 search: {
                     queryMethod: this.onlyExactMatch,
                     searchResultClass: "search-result"
