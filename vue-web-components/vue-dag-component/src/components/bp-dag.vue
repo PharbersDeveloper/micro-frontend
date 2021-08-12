@@ -17,7 +17,8 @@ export default {
         dag: Object,
         succeed_step: Array,
         task_id: String,
-        status: String
+        status: String,
+        domid: String
     },
     data(){
         return {
@@ -129,7 +130,6 @@ export default {
                 .setDefaultEdgeLabel(function() { return {}; });
             let render = new dagreD3.render(),
                 dag = this.dag
-
             if (dag) {
                 /*
                 * firstStep {String} 状态机的起始state
@@ -339,15 +339,24 @@ export default {
                 }
                 this.addEdges(edgeData, g)
 
-                let svg = d3.select("#svg-canvas")
+                let svg = null
+                // let svg = d3.select("#svg-canvas")
                 //嵌入ember需要
-                // let svg = d3.select(document.querySelector('#dom-shadow').shadowRoot.querySelector('#svg-canvas'))
+                if(document.querySelector(`#${this.domid}`)) {
+                    svg = d3.select(document.querySelector(`#${this.domid}`).shadowRoot.querySelector('#svg-canvas'))
+                } else {
+                    svg = d3.select("#svg-canvas")
+                }
 
                 svg.remove()
 
-                svg = d3.select("#phdag").append("svg") .attr("id", "svg-canvas")
+                // svg = d3.select("#phdag").append("svg") .attr("id", "svg-canvas")
                 //嵌入ember需要
-                // svg = d3.select(document.querySelector('#dom-shadow').shadowRoot.querySelector('#phdag')).append("svg").attr("id", "svg-canvas")
+                if(document.querySelector(`#${this.domid}`)) {
+                    svg = d3.select(document.querySelector(`#${this.domid}`).shadowRoot.querySelector('#phdag')).append("svg").attr("id", "svg-canvas")
+                } else {
+                    svg = d3.select("#phdag").append("svg") .attr("id", "svg-canvas")
+                }
                 
                 // 绘图的容器
                 let svgGroup = svg.append( "g" )

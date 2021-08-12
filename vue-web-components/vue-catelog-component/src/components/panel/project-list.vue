@@ -37,7 +37,7 @@
                                     <bp-text class="subtitle">{{file.provider}}</bp-text>
                                 </div>
                             </div>
-                            <bp-text class="subtitle right-text">{{formatDateStandard(file.created,0)}}</bp-text>
+                            <bp-text class="subtitle right-text">{{formatDateStandard(file.meta.created,0)}}</bp-text>
                         </div>
                     </template>
                     <div v-if="!toggle" class="project-card">
@@ -47,7 +47,7 @@
                                 <bp-text class="subtitle">{{file.provider}}</bp-text>
                             </div>
                             <div class="last-date">
-                                <bp-text class="subtitle bottom-text">{{formatDateStandard(file.created,0)}}</bp-text>
+                                <bp-text class="subtitle bottom-text">{{formatDateStandard(file.meta.created,0)}}</bp-text>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,11 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projects: []
+                    projects: [{
+                        name: "name",
+                        provider: "provider",
+                        meta: {}
+                    }]
                 }
             }
         }
@@ -111,8 +115,8 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/project/',
-                    route: params.name
+                    name: params.name,
+                    pid: params.id
                 }
             }
             this.$emit('event', event)
@@ -214,6 +218,16 @@ export default {
                     list-style: none;
                     margin-bottom: 24px;
                     margin-top: 12px;
+                    .project-card-item:hover {
+                        border: 1px solid #7163C5;
+                        background: url("https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/35531628231509_.pic.jpg");
+                        box-shadow: 0 0 1px 0 rgba(37,35,45,0.12), 0 4px 8px -2px rgba(37,35,45,0.25);
+                    }
+                    .project-card-item:active {
+                        border: 1px solid #7163C5;
+                        background: url("https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/35531628231509_.pic.jpg");
+                        box-shadow: 0 0 1px 0 rgba(37,35,45,0), 0 4px 8px -2px rgba(37,35,45,0);
+                    }
                     .project-card-item {
                         width: 225px;
                         height: 100px;
@@ -225,7 +239,7 @@ export default {
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
-						cursor: pointer;
+                        cursor: pointer;
                         .text-area {
                             display: flex;
                             flex-direction: column;
@@ -269,7 +283,7 @@ export default {
                     align-items: center;
                     border-bottom: 1px solid  rgba(37,35,45,0.08);
                     padding: 12px 0;
-					cursor: pointer;
+                    cursor: pointer;
                     .subtitle {
                         font-family: SFProText-Light;
                         font-size: 14px;

@@ -2,14 +2,14 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class MaxExtractComponent extends Component {
+export default class DagComponent extends Component {
 	@service router
 
 	@action
     listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-				this.router.transitionTo( e.detail[0].args.param.name )
+				this.router.transitionTo( '/projects' )
                 break
             default: 
                 console.log("other click event!")
@@ -18,6 +18,7 @@ export default class MaxExtractComponent extends Component {
 
     @action
 	registerListener(element) {
+		element.allData = this.calAllData
 		element.addEventListener("event", this.listener)
 	}
 
@@ -25,4 +26,9 @@ export default class MaxExtractComponent extends Component {
 	unregisterListener(element) {
 		element.removeEventListener("event", this.listener)
 	}
+
+	get calAllData() {
+        this.args.model._isVue = true
+        return this.args.model
+    }
 }

@@ -59,7 +59,7 @@ export default DS.JSONAPIAdapter.extend( {
 			newUrl = `/reports/${curPath}`
 		}
 
-		if(modelName === "trigger" || modelName === "project") {
+		if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
 			newUrl = `/phproject/${curPath}`
 		}
 
@@ -110,6 +110,21 @@ export default DS.JSONAPIAdapter.extend( {
 			obj[key] = data[k]
 		} )
 		return obj
+	},
+	handleResponse: function(status, headers, payload, requestData) {
+		//处理project list数据
+		if(payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
+			payload.data.forEach((item,index)=> {
+				item.attributes.meta = item.meta
+			})
+			console.log(payload)
+		}
+		//处理dag数据
+		if(payload.data.meta) {
+			payload.data.attributes.meta = payload.data.meta
+			console.log(payload)
+		}
+		return payload
 	},
 	headers: computed( "cookies", "requestURL", "newUrl", "curMethod","queryParamsAWS", "oauthRequest",function() {
 		const curMethod = this.get( "curMethod" )

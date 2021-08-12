@@ -13,13 +13,7 @@ export default class ProjectListComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
 				let param = e.detail[0].args.param;
-				if(param.route == "ETL") {
-					this.router.transitionTo( `etl` )
-				} else if(param.route == "Max") {
-					this.router.transitionTo( `max` )
-				} else if(param.route == "Max提数") {
-					this.router.transitionTo( `max-extract` )
-				}
+				this.router.transitionTo( `/projects/`+ param.pid )
                 break
             default: 
                 console.log("other click event!")

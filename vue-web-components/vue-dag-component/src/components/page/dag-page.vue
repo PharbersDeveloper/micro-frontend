@@ -1,13 +1,11 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">ETL</span>
+            <span class="header-text">{{allData.dagDetail.name}}</span>
             <button @click="linkToPage">返回列表</button>
         </div>
-        
         <div class="dag-main-container">
-            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState"></bp-dag>
-
+            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
             <div class="dag-run-container">
                 <div class="toggle-panel">
                     <div :class="toggleIcon" class="icon" @click="togglePanel"></div>
@@ -15,7 +13,7 @@
 
                 <div v-if="togglePanelId" class="dag-run-content">
                     <div class="run-button-container">
-                        <button :class="buttonState ? buttonState : 'DEFAULT'" @click="runDag" :disabled="buttonState === 'RUNNING'">
+                        <button :class="maxButtonState ? maxButtonState : 'DEFAULT'" @click="runDag" :disabled="maxButtonState === 'RUNNING'">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
@@ -78,14 +76,15 @@ export default {
     },
     data() {
         return {
-            dag: null,
+            // dag: null,
+            dagData: null,
             startReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
             togglePanelId: true,
             dagMessageId: true,
             dagPluginId: true,
-            buttonState: "",
+            maxButtonState: "",
             task_id: "",
             status: "",
             started: "",
@@ -94,28 +93,49 @@ export default {
             openUploadWindow: false
         }
     },
+    props: {
+        domid: String,
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    dagDetail: {
+                        meta: {}
+                    }
+                }
+            }
+        } 
+    },
     computed: {
+        dag() {
+            if(this.allData.dagDetail.meta.define) {
+                this.dagData = JSON.parse(this.allData.dagDetail.meta.define)
+                this.cycle()
+            }
+            console.log(this.dagData)
+            return this.dagData
+        },
         runState() {
-            if (!this.buttonState) {
+            if (!this.maxButtonState) {
                 this.status = "no_status"
                 return
             } else {
-                this.status = this.buttonState.toLowerCase()
-                return this.buttonState
+                this.status = this.maxButtonState.toLowerCase()
+                return this.maxButtonState
             }
         },
         runIconClass() {
-            if (!this.buttonState) {
+            if (!this.maxButtonState) {
                 return
             } else {
-                return `icon_${this.buttonState}`
+                return `icon_${this.maxButtonState}`
             }
         },
         runTextClass() {
-            if (!this.buttonState) {
+            if (!this.maxButtonState) {
                 return
             } else {
-                return `${this.buttonState}-text`
+                return `${this.maxButtonState}-text`
             }
         },
         toggleIcon() {
@@ -141,12 +161,10 @@ export default {
         }
     },
     created() {
-        fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
-            .then(data => {
-                this.dag = data
-            })
-        
-        this.cycle()
+        // fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
+        //     .then(data => {
+        //         this.dag = data
+        //     })
     },
     methods: {
         async runDag() {
@@ -177,7 +195,7 @@ export default {
             let storage = window.localStorage
 
             // 只要点击了run就必然先改变样式的状态为running
-            this.buttonState = "RUNNING"
+            this.maxButtonState = "RUNNING"
             this.task_id = "START"
             this.duration = ""
 
@@ -210,7 +228,7 @@ export default {
                     body: storage.getItem("startReturn")
                 })
                 this.dagStatus = await response.json()
-                this.buttonState = this.dagStatus.execution_status
+                this.maxButtonState = this.dagStatus.execution_status
                 this.started = this.formatDateStandard(this.dagStatus.execution_startDate)
                 if ( this.dagStatus.execution_status === "RUNNING" && !this.dagStatus.steps.length ) {
                     this.task_id = "START"

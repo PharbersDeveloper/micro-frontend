@@ -7,14 +7,12 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('download', function() {
-    this.route('my-data', { path: "/my-data" });
-    this.route('enterprise', { path: "/enterprise" });
-    this.route('data-directory-table', { path: "/data-directory-table" });
-    this.route('project');
+  this.route('download', { path: "/" }, function() {
+    this.route('my-data', { path: "/download/my-data" });
+    this.route('enterprise', { path: "/download/enterprise" });
+    this.route('data-directory-table', { path: "/download/data-directory-table" });
+    this.route('project', {path: "/projects"});
   });
   this.route('oauth-callback');
-  this.route('max');
-  this.route('etl');
-  this.route('max-extract');
+  this.route('dag', {path: "/projects/:project_id"});
 });

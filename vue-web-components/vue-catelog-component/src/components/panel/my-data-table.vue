@@ -22,16 +22,15 @@
                     数据目录
                 </span>
             </div>
-            <div class="upload-button"  v-if="allData.uploadToastBorder != 'blue' && myDataTab === 0">
+            <div class="upload-button" @click="upload" v-if="uploadToastBorder != 'blue' && myDataTab === 0">
                 <span class="fileinput-button">
                     <div class="icon_upload"></div>
                     <span class="btn_secondary_initial">
                         上传文件
                     </span>
                 </span>
-                <input ref="inputUpload"  type="file" name="" id="myFile"  @change="uploadFiles" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.csv,.xlsx,.xls,.xlsm">
             </div>
-            <div class="upload-button disbutton" v-if="allData.uploadToastBorder == 'blue' || myDataTab === 1">
+            <div class="upload-button disbutton" v-if="uploadToastBorder == 'blue' || myDataTab === 1">
                 <span class="fileinput-button">
                     <div class="icon_upload"></div>
                     <span class="btn_secondary_initial">
@@ -44,7 +43,7 @@
             <template v-if="myDataTab === 0">
                 <div v-if="haveData" class="myData-mine">
                     <div class="subtitle">
-                        <span class="heading-xsmall file-name-text" id="heading">Name</span>
+                        <span class="heading-xsmall file-name-text">Name</span>
                         <span class="heading-xsmall member-text">Owner</span>
                         <span class="subscribe-number-header"></span>
                         <span class="heading-xsmall time-text">
@@ -111,8 +110,8 @@
                     <div class="no_data-icon"></div>
                     <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
                     <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                    <bp-button text="Upload" class="btn_primary" @click="upload" v-if="allData.uploadToastBorder != 'blue'"></bp-button>
-                    <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="allData.uploadToastBorder == 'blue'"></bp-button>
+                    <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder != 'blue'"></bp-button>
+                    <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
                 </div>
             </template>
             
@@ -133,26 +132,26 @@
                 </div>
             </template>
         </div>
-        <div v-if="allData.closeuploadToast == '0'"
+        <div v-if="closeuploadToast == '0'"
             class="upload-toast" 
             :class="[
-                {'upload-toast-border-green': allData.uploadToastBorder == 'green'},
-                {'upload-toast-border-blue': allData.uploadToastBorder == 'blue'},
-                {'upload-toast-border-red': allData.uploadToastBorder == 'red'}
+                {'upload-toast-border-green': uploadToastBorder == 'green'},
+                {'upload-toast-border-blue': uploadToastBorder == 'blue'},
+                {'upload-toast-border-red': uploadToastBorder == 'red'}
             ]">
             <div class="upload-toast-img-container">
                 <div :class="[
-                    {'check_circle-24px': allData.uploadToastBorder == 'green'},
-                    {'upload-24px': allData.uploadToastBorder == 'blue'},
-                    {'cancel-24px': allData.uploadToastBorder == 'red'}
+                    {'check_circle-24px': uploadToastBorder == 'green'},
+                    {'upload-24px': uploadToastBorder == 'blue'},
+                    {'cancel-24px': uploadToastBorder == 'red'}
                 ]"></div>
             </div>
-            <bp-text class="size-14-6B7376">{{allData.uploadTextStatus}}</bp-text>
-            <bp-text class="size-12-6B7376">{{allData.uploadText}}</bp-text>
-            <bp-text class="size-12-6B7376" v-if="allData.showProgress == '1'">
-                {{formatFileSize(allData.uploadLoadedSize)}} / {{formatFileSize(allData.uploadFileSize)}}
+            <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
+            <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
+            <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
+                {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
             </bp-text>
-            <div class="upload-toast-close-container" @click="closeToast" v-if="allData.uploadToastBorder != 'blue'">
+            <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
                 <div class="cross"></div>
             </div>
         </div>
@@ -275,19 +274,6 @@ export default {
         }
     },
     methods: {
-        uploadFiles(uploadEvent) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'uploadFile',
-                    use: 'uploadFile',
-                    uploadEvent: uploadEvent
-                }
-            }
-            this.$emit('event', event)
-        },
         closeToast() {
             const event = new Event("event")
             event.args = {
@@ -473,6 +459,7 @@ export default {
     .cursor-not-allow {
         cursor: not-allowed;
     }
+
     @mixin btn_primary-initial {
         font-family: SFProText-Medium;
         font-size: 14px;
@@ -671,14 +658,6 @@ export default {
                 border-radius: 2px;
                 margin: 12px 0;
                 cursor: pointer;
-                #myFile {
-                    width: 96px;
-                    height: 32px;
-                    cursor: pointer;
-                    opacity: 0;
-                    position: absolute;
-                    top: 70px;
-                }
                 .btn_secondary_initial {
                     font-family: SFProText-Medium;
                     font-size: 14px;

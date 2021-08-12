@@ -1,12 +1,12 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">DAG</span>
+            <span class="header-text">MAX提数</span>
             <button @click="linkToPage">返回列表</button>
         </div>
         
         <div class="dag-main-container">
-            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.buttonState"></bp-dag>
+            <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.extractButtonState" :domid="domid"></bp-dag>
 
             <div class="dag-run-container">
                 <div class="toggle-panel">
@@ -15,7 +15,7 @@
 
                 <div v-if="togglePanelId" class="dag-run-content">
                     <div class="run-button-container">
-                        <button :class="buttonState ? buttonState : 'DEFAULT'" @click="runDag" :disabled="buttonState === 'RUNNING'">
+                        <button :class="extractButtonState ? extractButtonState : 'DEFAULT'" @click="runDag" :disabled="extractButtonState === 'RUNNING'">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
@@ -76,14 +76,14 @@ export default {
     data() {
         return {
             dag: null,
-            startReturn: null,
+            extractStartReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
             togglePanelId: true,
             dagMessageId: true,
             dagPluginId: true,
             states: ['queued', 'running', 'success', 'failed', 'up_for_retry', 'up_for_reschedule', 'upstream_failed', 'skipped', 'scheduled', 'no_status'],
-            buttonState: "",
+            extractButtonState: "",
             task_id: "",
             status: "",
             started: "",
@@ -91,28 +91,31 @@ export default {
             succeed_step: []
         }
     },
+    props: {
+        domid: String
+    },
     computed: {
         runState() {
-            if (!this.buttonState) {
+            if (!this.extractButtonState) {
                 this.status = "no_status"
                 return
             } else {
-                this.status = this.buttonState.toLowerCase()
-                return this.buttonState
+                this.status = this.extractButtonState.toLowerCase()
+                return this.extractButtonState
             }
         },
         runIconClass() {
-            if (!this.buttonState) {
+            if (!this.extractButtonState) {
                 return
             } else {
-                return `icon_${this.buttonState}`
+                return `icon_${this.extractButtonState}`
             }
         },
         runTextClass() {
-            if (!this.buttonState) {
+            if (!this.extractButtonState) {
                 return
             } else {
-                return `${this.buttonState}-text`
+                return `${this.extractButtonState}-text`
             }
         },
         toggleIcon() {
@@ -162,7 +165,7 @@ export default {
             let storage = window.localStorage
 
             // 只要点击了run就必然先改变样式的状态为running
-            this.buttonState = "RUNNING"
+            this.extractButtonState = "RUNNING"
             this.task_id = "START"
             this.duration = ""
 
@@ -176,14 +179,14 @@ export default {
                 },
                 body: JSON.stringify(startBody)
             })
-            this.startReturn = await response.json()
-            storage.setItem("startReturn", JSON.stringify(this.startReturn))
+            this.extractStartReturn = await response.json()
+            storage.setItem("extractStartReturn", JSON.stringify(this.extractStartReturn))
             this.cycle()
         },
         async checkDagStatus() {
             const accessToken = "0b34a46ec19ab36ebe895a71e17a046040435f3b6c80c5039d65f66f4d16cb32"
             let storage = window.localStorage
-            if ( storage.getItem("startReturn") ) {
+            if ( storage.getItem("extractStartReturn") ) {
                 let response = await fetch("https://api.pharbers.com/phstepstatus", {
                     method: "POST",
                     mode: "cors",
@@ -192,10 +195,10 @@ export default {
                         "Accept": "application/vnd.api+json",
                         "Authorization": accessToken
                     },
-                    body: storage.getItem("startReturn")
+                    body: storage.getItem("extractStartReturn")
                 })
                 this.dagStatus = await response.json()
-                this.buttonState = this.dagStatus.execution_status
+                this.extractButtonState = this.dagStatus.execution_status
                 this.started = this.formatDateStandard(this.dagStatus.execution_startDate)
                 if ( this.dagStatus.execution_status === "RUNNING" && !this.dagStatus.steps.length ) {
                     this.task_id = "START"
@@ -211,7 +214,7 @@ export default {
                 }
 
                 if (this.dagStatus.execution_status !== "RUNNING") {
-                    storage.removeItem("startReturn")
+                    storage.removeItem("extractStartReturn")
                     clearInterval(this.cycleCheckDagStatus)
                 }
             } else {
@@ -222,7 +225,7 @@ export default {
             let storage = window.localStorage
             let that = this
 
-            if ( storage.getItem("startReturn") ) {
+            if ( storage.getItem("extractStartReturn") ) {
                 this.checkDagStatus()
                 this.cycleCheckDagStatus = setInterval(function() {
                     that.checkDagStatus()
