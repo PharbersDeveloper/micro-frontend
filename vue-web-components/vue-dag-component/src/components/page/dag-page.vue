@@ -1,13 +1,11 @@
 <template>
     <div class="dag-page">
         <div class="dag-header">
-            <span class="header-text">ETL</span>
+            <span class="header-text">{{allData.dagDetail.name}}</span>
             <button @click="linkToPage">返回列表</button>
         </div>
-        
         <div class="dag-main-container">
             <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
-
             <div class="dag-run-container">
                 <div class="toggle-panel">
                     <div :class="toggleIcon" class="icon" @click="togglePanel"></div>
@@ -78,7 +76,8 @@ export default {
     },
     data() {
         return {
-            dag: null,
+            // dag: null,
+            dagData: null,
             startReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
@@ -95,9 +94,27 @@ export default {
         }
     },
     props: {
-        domid: String
+        domid: String,
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    dagDetail: {
+                        meta: {}
+                    }
+                }
+            }
+        } 
     },
     computed: {
+        dag() {
+            if(this.allData.dagDetail.meta.define) {
+                this.dagData = JSON.parse(this.allData.dagDetail.meta.define)
+                this.cycle()
+            }
+            console.log(this.dagData)
+            return this.dagData
+        },
         runState() {
             if (!this.maxButtonState) {
                 this.status = "no_status"
@@ -144,12 +161,10 @@ export default {
         }
     },
     created() {
-        fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
-            .then(data => {
-                this.dag = data
-            })
-        
-        this.cycle()
+        // fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
+        //     .then(data => {
+        //         this.dag = data
+        //     })
     },
     methods: {
         async runDag() {

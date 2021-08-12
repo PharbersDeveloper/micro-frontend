@@ -2,16 +2,15 @@ import Route from '@ember/routing/route';
 import { inject as service } from "@ember/service"
 import RSVP from 'rsvp';
 
-export default class DownloadProjectRoute extends Route {
+export default class DagRoute extends Route {
 	@service store
     @service cookies
-
+	
 	async model( params ) {
-        let projects = await this.store.query( "project", { "filter[provider]": "pharbers"})
+        let dagDetail = await this.store.findRecord( "project", params.project_id)
         return RSVP.hash({
-            projects: projects.filter( it => it),
+            dagDetail: dagDetail,
 			_isVue: true
         })
     }
-
 }

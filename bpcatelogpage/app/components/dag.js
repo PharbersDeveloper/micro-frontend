@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class MaxComponent extends Component {
+export default class DagComponent extends Component {
 	@service router
 
 	@action
@@ -18,6 +18,7 @@ export default class MaxComponent extends Component {
 
     @action
 	registerListener(element) {
+		element.allData = this.calAllData
 		element.addEventListener("event", this.listener)
 	}
 
@@ -25,4 +26,9 @@ export default class MaxComponent extends Component {
 	unregisterListener(element) {
 		element.removeEventListener("event", this.listener)
 	}
+
+	get calAllData() {
+        this.args.model._isVue = true
+        return this.args.model
+    }
 }

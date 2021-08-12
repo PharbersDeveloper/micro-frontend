@@ -130,7 +130,6 @@ export default {
                 .setDefaultEdgeLabel(function() { return {}; });
             let render = new dagreD3.render(),
                 dag = this.dag
-
             if (dag) {
                 /*
                 * firstStep {String} 状态机的起始state

@@ -37,7 +37,7 @@
                                     <bp-text class="subtitle">{{file.provider}}</bp-text>
                                 </div>
                             </div>
-                            <bp-text class="subtitle right-text">{{formatDateStandard(file.created,0)}}</bp-text>
+                            <bp-text class="subtitle right-text">{{formatDateStandard(file.meta.created,0)}}</bp-text>
                         </div>
                     </template>
                     <div v-if="!toggle" class="project-card">
@@ -47,7 +47,7 @@
                                 <bp-text class="subtitle">{{file.provider}}</bp-text>
                             </div>
                             <div class="last-date">
-                                <bp-text class="subtitle bottom-text">{{formatDateStandard(file.created,0)}}</bp-text>
+                                <bp-text class="subtitle bottom-text">{{formatDateStandard(file.meta.created,0)}}</bp-text>
                             </div>
                         </div>
                     </div>
@@ -83,8 +83,9 @@ export default {
             default: function() {
                 return {
                     projects: [{
-                        name: "qqq",
-                        provider: "sss"
+                        name: "name",
+                        provider: "provider",
+                        meta: {}
                     }]
                 }
             }
@@ -114,8 +115,8 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/project/',
-                    route: params.name
+                    name: params.name,
+                    pid: params.id
                 }
             }
             this.$emit('event', event)
