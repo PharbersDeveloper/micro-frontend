@@ -8,6 +8,7 @@
 import { HotTable } from '@handsontable/vue';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.css'
+import { registerLanguageDictionary, zhCN } from 'handsontable/i18n'
 
 export default {
     components: {
@@ -27,6 +28,7 @@ export default {
         return {
             hotSettings: {
                 data: this.data,
+                language: zhCN.languageCode,
                 height: "auto",
                 //定义表结构
                 colHeaders:[
@@ -55,8 +57,7 @@ export default {
                 contextMenu: true,
                 search: {
                     queryMethod: this.onlyExactMatch,
-                    searchResultClass: "search-result",
-                    callback: this.searchResult
+                    searchResultClass: "search-result"
                 },
                 afterChange(changes, source) {
                     // console.log(this.getData(),changes,source)
@@ -67,15 +68,12 @@ export default {
     methods: {
         onlyExactMatch(queryStr, value) {
             return queryStr.toString() === value.toString()
-        },
-        searchResult(instance, row, col, value, result) {
-            
         }
     },
     mounted() {
         const container = document.querySelector('#hot-table')
         const searchField = document.querySelector('#search_field')
-
+        registerLanguageDictionary(zhCN)
         const hot = new Handsontable(container, this.hotSettings)
         Handsontable.dom.addEvent(searchField, 'keyup', function(event) {
             const search = hot.getPlugin('search')
