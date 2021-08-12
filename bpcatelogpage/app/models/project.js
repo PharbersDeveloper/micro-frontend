@@ -1,4 +1,4 @@
-import Model, { attr } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class ProjectModel extends Model {
 	@attr("string") name;
@@ -6,5 +6,7 @@ export default class ProjectModel extends Model {
 	@attr("string") provider;
 	@attr("string") arn;
 	@attr executions
+    @hasMany("execution", {inverse: "projectExecution"}) executions;
+    // @hasMany("execution") executions;
 	@attr meta
 }

@@ -117,15 +117,27 @@ export default DS.JSONAPIAdapter.extend( {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
-			console.log(payload)
+			console.log("projects",payload)
+		}
+		//处理executions数据
+		if(payload.data.length > 0 && payload.data[0].meta) {
+			payload.data.forEach((item,index)=> {
+				item.attributes.meta = item.meta
+			})
+			console.log("executions",payload)
 		}
 		//处理dag数据
-		if(payload.data.meta) {
+		else if(payload.data.meta) {
 			payload.data.attributes.meta = payload.data.meta
-			console.log(payload)
+			console.log("dag", payload)
 		}
 		return payload
 	},
+	// urlForFindHasMany(id, modelName, snapshot) {
+	// 	debugger
+	// 	let baseUrl = this.buildURL(modelName, id);
+	// 	return `${baseUrl}/relationships`;
+	// },
 	headers: computed( "cookies", "requestURL", "newUrl", "curMethod","queryParamsAWS", "oauthRequest",function() {
 		const curMethod = this.get( "curMethod" )
 		const factory = PhSigV4AWSClientFactory
