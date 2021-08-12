@@ -134,7 +134,6 @@ export default DS.JSONAPIAdapter.extend( {
 		return payload
 	},
 	// urlForFindHasMany(id, modelName, snapshot) {
-	// 	debugger
 	// 	let baseUrl = this.buildURL(modelName, id);
 	// 	return `${baseUrl}/relationships`;
 	// },

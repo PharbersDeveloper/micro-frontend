@@ -5,5 +5,5 @@ export default class ExecutionModel extends Model {
 	@attr('string') name
     @belongsTo("project", {inverse: "executions"}) projectExecution;
 	@attr meta
-
+	@attr('string') input
 }
