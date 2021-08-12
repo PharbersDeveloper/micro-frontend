@@ -1,7 +1,6 @@
 <template>
     <div>
         <input type="search" id="search_field" placeholder="Search"/>
-        <!-- <hot-table :settings="hotSettings"></hot-table> -->
         <div id="hot-table"></div>
     </div>
 </template>
@@ -43,6 +42,7 @@ export default {
                         type:'numeric' //定义值的类型为数字类型
                     }
                 ],
+                licenseKey: 'non-commercial-and-evaluation',
                 rowHeaders: true,
                 dropdownMenu: true,//头部是否显示menu
                 copyable: true,
@@ -53,11 +53,23 @@ export default {
                 manualRowResize: true,
                 columnSorting: true,
                 contextMenu: true,
-                search: true,
+                search: {
+                    queryMethod: this.onlyExactMatch,
+                    searchResultClass: "search-result",
+                    callback: this.searchResult
+                },
                 afterChange(changes, source) {
                     // console.log(this.getData(),changes,source)
                 }
             }
+        }
+    },
+    methods: {
+        onlyExactMatch(queryStr, value) {
+            return queryStr.toString() === value.toString()
+        },
+        searchResult(instance, row, col, value, result) {
+            
         }
     },
     mounted() {
@@ -74,10 +86,6 @@ export default {
 }
 </script>
 <style lang="scss">
-    #hot-display-license-info {
-        display: none !important;
-    }
-
     .htMenu {
         font-family: SFProText-Regular;
         font-size: 14px;
@@ -92,5 +100,10 @@ export default {
         width: 200px;
         height: 32px;
         margin-bottom: 20px;
+    }
+
+    .search-result {
+        color: #ff0000;
+        font-weight: 800;
     }
 </style>
