@@ -14,10 +14,10 @@ export default class DagRunRoute extends Route {
 		}
         let dagDetail = await this.store.findRecord( "project", params.project_id)
         let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
+		let targetExecution = await this.store.findRecord( "execution", params.execution_id)
 		//arn通过model传给component
-
         return RSVP.hash({
-			targetExecution: executions.filter( it => it.id == params.execution_id),
+			targetExecution: targetExecution,
             page: page,
             count: executions.meta.count,
             dagDetail: dagDetail,

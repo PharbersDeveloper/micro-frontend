@@ -35,7 +35,9 @@ export default class DagRunComponent extends Component {
 	@action
 	registerListener(element) {
 		element.allData = this.calAllData
-		element.allData.arn = element.allData.targetExecution[0].arn
+		if(element.allData.targetExecution) {
+			element.allData.arn = element.allData.targetExecution.arn
+		}
 		if(element.allData.arn) {
 			this.dagid = element.allData.arn.split("execution:")[1].split(":")[0]+'_id'
 		}
