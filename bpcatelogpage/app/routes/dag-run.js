@@ -12,16 +12,17 @@ export default class DagRunRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
+		debugger
         let dagDetail = await this.store.peekRecord( "project", params.project_id)
         let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
 		//arn通过model传给component
 
         return RSVP.hash({
-			arn: "",
+			targetExecution: executions.filter( it => it.id == params.execution_id),
             page: page,
             count: executions.meta.count,
             dagDetail: dagDetail,
-			executions: executions.filter( it => it),
+			executions: executions.filter( it => it.id != ''),
 			_isVue: true
         })
 	}

@@ -34,6 +34,7 @@ export default class DagRunComponent extends Component {
 	registerListener(element) {
 		debugger
 		element.allData = this.calAllData
+		element.allData.arn = element.allData.targetExecution[0].arn
 		element.addEventListener("event", this.listener)
 	}
 

@@ -40,7 +40,8 @@ export default class DagComponent extends Component {
 						projectExecution: project
 					}).save()
 					debugger
-					this.router.transitionTo( `/projects/`+ param.pid + `/` +  execution.id)
+					// this.router.transitionTo( `/projects/`+ param.pid + `/` +  execution.id)
+					this.router.transitionTo( `/projects/`+ param.pid + `/` +  'sV3S4O9TmqIZz2by')
 				} else if(param.name == 'toProjectsList') {
 					this.router.transitionTo( route )
 				}
