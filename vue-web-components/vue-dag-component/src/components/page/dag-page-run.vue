@@ -8,50 +8,7 @@
             <div class="left-area">
                 <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
                 <template >
-                    <span class="execution-table">执行列表</span>
-                    <div class="myData-mine">
-                        <div class="subtitle">
-                            <span class="heading-xsmall file-name-text">执行ID
-                            </span>
-                            <span class="heading-xsmall database-name">当前状态
-                            </span>
-                            <span class="heading-xsmall subscribe-location">启动时间
-                            </span>
-                            <span class="heading-xsmall last-time">结束时间
-                            </span>
-                        </div>
-
-                        <div class="main-container" v-if="allData.executions">
-                            <div v-for="(file,index) in allData.executions" :key="index" class="OneRecord">
-                                <div class="data-name-container">
-                                    <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{file.name}}</div>
-                                </div>
-                                <div class="database">
-                                    <div v-if="file.meta.status == 'SUCCEEDED'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
-                                        <span class="heading-small SUCCEEDED-text">已成功</span>
-                                    </div>
-                                    <div v-else class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_fail.svg" alt="">
-                                        <span class="heading-small FAILED-text">失败</span>
-                                    </div>
-                                </div>
-                                <div class="subscribe-location">
-                                    <span class="body-tertiary-table">
-                                    {{formatDateStandard(file.meta['start-time'], 0)}}
-                                    </span>
-                                </div>
-                                <div class="last-time">
-                                    <span class="body-tertiary-table">
-                                        {{formatDateStandard(file.meta['stop-time'], 0)}}
-                                    </span>
-                                </div>
-                            </div>
-                            <div v-if="allPage && curPage" class="page-container">
-                                <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="execution-table">log</span>
                 </template >
             </div>
             <div class="dag-run-container">
@@ -171,6 +128,7 @@ export default {
         curPage() {
             return this.allData.page + 1
         },
+		// 渲染dag的数据
         dag() {
             if(this.allData.dagDetail.meta.define) {
                 this.dagData = JSON.parse(this.allData.dagDetail.meta.define)
@@ -224,69 +182,23 @@ export default {
             }
         }
     },
-    created() {
-        // fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
-        //     .then(data => {
-        //         this.dag = data
-        //     })
+    watch: {
+        'allData.arn': function(val) {
+            debugger
+			this.runDag()
+        }
     },
+    created() {},
     methods: {
         runDag() {
-            // const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
-            // const startBody = {
-            //     "dag_name": "ETL_Iterator",
-            //     "parameters": [
-            //         {
-            //             "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
-            //             "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-            //             "g_partition": "provider, version",
-            //             "g_filldefalut": "provider:common,version:20210623_u0079u0079u0077,owner:pharbers",
-            //             "g_bucket": "NONE",
-            //             "g_mapping": "NONE",
-            //             "type": "csv"
-            //         },
-            //         {
-            //             "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/奥鸿/202012/prod_mapping",
-            //             "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-            //             "g_partition": "provider, version",
-            //             "g_filldefalut": "provider:奥鸿,version:202012_u0079u0079u0077,owner:pharbers",
-            //             "g_bucket": "NONE",
-            //             "g_mapping": "NONE",
-            //             "type": "parquet"
-            //         }
-            //     ]
-            // }
-            // let storage = window.localStorage
-
             // 只要点击了run就必然先改变样式的状态为running
-            // this.maxButtonState = "RUNNING"
-            // this.task_id = "START"
-            // this.duration = ""
-
-            // let response = await fetch("https://api.pharbers.com/phstartetl", {
-            //     method: "POST",
-            //     mode: "cors",
-            //     headers: {
-            //         "Content-Type": "application/vnd.api+json",
-            //         "Accept": "application/vnd.api+json",
-            //         "Authorization": accessToken
-            //     },
-            //     body: JSON.stringify(startBody)
-            // })
-            // this.startReturn = await response.json()
+            this.maxButtonState = "RUNNING"
+            this.task_id = "START"
+            this.duration = ""
+			debugger
+            let storage = window.localStorage
             // storage.setItem("startReturn", JSON.stringify(this.startReturn))
-            // this.cycle()
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: 'toDagPageList',
-                    route: '/dag-run',
-                    pid: this.allData.dagDetail.id
-                }
-            }
-            this.$emit('event', event)
+            this.cycle()
         },
         async checkDagStatus() {
             const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
@@ -378,8 +290,8 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: 'toProjectsList',
-                    route: '/download/projects'
+                    name: '/download/project',
+                    route: 'max'
                 }
             }
             this.$emit('event', event)
@@ -676,167 +588,6 @@ export default {
                     line-height: 20px;
                     font-weight: 400;
                     margin: 20px 20px 8px;
-                }
-                .myData-mine {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px 20px 8px 20px;
-                    height: 507px;
-                    min-height: 0;
-
-                    .subtitle {
-                        display: flex;
-                        align-items: center;
-                        width: 100%;
-                        height: 33px !important;
-                        border-bottom: 0.5px solid rgba(31, 37, 50, 0.08);
-
-                        .file-name-text {
-                            flex:1;
-                            width: 400px;
-                            min-width: 400px;
-                        }
-
-                        .database-name {
-                            flex: 1;
-                            min-width: 200px;
-                            width: 200px;
-                            padding: 0 8px;
-                        }
-
-                        .subscribe-location {
-                            // flex: 1;
-                            width: 260px;
-                            min-width: 200px;
-                            padding: 0 8px;
-                        }
-
-                        .last-time {
-                            width: 260px;
-                            min-width: 200px;
-                            display: block;
-                            text-align: right;
-                        }
-                    }
-
-                    .main-container {
-                        width: 100%;
-                        overflow: scroll;
-                        display: flex;
-                        flex-direction: column;
-                        flex: 1;
-                        //隐藏滚动条
-                        &::-webkit-scrollbar {
-                            width: 0 !important;
-                        }
-                        -ms-overflow-style: none;
-
-                        .OneRecord {
-                            width: 100%;
-                            height: 44px;
-                            display: flex;
-                            align-items: center;
-                            border-bottom: 1px solid rgba(37, 35, 45, 0.08);
-                            cursor: pointer;
-                            // 文件logo
-                            .icon_datafile {
-                                width: 24px;
-                                height: 24px;
-                                margin-right: 18px;
-                            }
-                            // 文件名称及tag
-                            .data-name-container {
-                                flex: 1;
-                                width: 400px;
-                                min-width: 400px;
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                .overflow-text {
-                                    height: 20px;
-                                    width: 230px !important;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                }
-                                .data-name-bottom {
-                                    display: flex;
-                                    height: 18px;
-                                    
-                                    .editable-component {
-                                        margin-right: 2px;
-                                        &:last-of-type {
-                                            margin-right: 0;
-                                        }
-                                    }
-                                }
-                            }
-                            // 拥有者owner
-                            .database {
-                                flex: 1;
-                                min-width: 200px;
-                                width: 200px;
-                                height: 100%;
-                                padding: 0 8px;
-                                display: flex;
-                                align-items: center;
-                                .bp-text {
-                                    height: 20px;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                }
-                                .status {
-                                    display: flex;
-                                    align-items: center;
-                                    img {
-                                        margin-right: 2px;
-                                    }
-                                    span {font-size: 12px !important};
-                                }
-                            }
-                            //订阅人数
-                            .subscribe-location {
-                                // flex: 1;
-                                width: 260px;
-                                min-width: 200px;
-                                padding: 0 8px;
-                                display: flex;
-                                align-items: center;
-                            }
-                            // 排序功能
-                            .last-time {
-                                min-width: 200px;
-                                width: 260px;
-                                // height: 100%;
-                                display: block;
-                                text-align: right;
-                                line-height: 65px;
-                                .bp-text {
-                                    height: 16px;
-                                }
-                            }
-                            // 功能键
-                            .action-menu {
-                                width: 4.8%;
-                                height: 100%;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
-                        }
-
-                        .page-container {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 64px;
-                            width: 100%;
-                            padding: 20px 0;
-                        }
-                    }
                 }
             }
             .phdag {

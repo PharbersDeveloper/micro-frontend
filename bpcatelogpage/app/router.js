@@ -15,4 +15,5 @@ Router.map(function () {
   });
   this.route('oauth-callback');
   this.route('dag', {path: "/projects/:project_id"});
+  this.route('dag-run', {path: "/projects/:project_id/:execution_id"});
 });

@@ -10,7 +10,40 @@ export default class DagComponent extends Component {
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-				this.router.transitionTo( '/download/projects' )
+				let param = e.detail[0].args.param
+				if(param.name == 'toDagPageList') {
+					let project = this.store.peekRecord('project', param.pid)
+					let execution = await this.store.createRecord('execution', {
+						input: JSON.stringify({
+							"dag_name": "ETL_Iterator",
+							"parameters": [
+								{
+									"p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
+									"p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
+									"g_partition": "provider, version",
+									"g_filldefalut": "provider:common,version:20210623_u0079u0079u0077,owner:pharbers",
+									"g_bucket": "NONE",
+									"g_mapping": "NONE",
+									"type": "csv"
+								},
+								{
+									"p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/奥鸿/202012/prod_mapping",
+									"p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
+									"g_partition": "provider, version",
+									"g_filldefalut": "provider:奥鸿,version:202012_u0079u0079u0077,owner:pharbers",
+									"g_bucket": "NONE",
+									"g_mapping": "NONE",
+									"type": "parquet"
+								}
+							]
+						}),
+						projectExecution: project
+					}).save()
+					debugger
+					this.router.transitionTo( `/projects/`+ param.pid + `/` +  execution.id)
+				} else if(param.name == 'toProjectsList') {
+					this.router.transitionTo( route )
+				}
                 break
 			case "changePage":
 				//执行列表 分页

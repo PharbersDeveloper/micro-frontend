@@ -30,7 +30,8 @@ export default DS.JSONAPIAdapter.extend( {
 			"findRecord": "GET",
 			"createRecord": "POST",
 			"updateRecord": "PATCH",
-			"deleteRecord": "DELETE"
+			"deleteRecord": "DELETE",
+			"push": "POST"
 		}
 		let url = this._super( ...arguments ) // url: http://general.pharbers.com:4200/v0/assets
 		let curType = url.split( "/" ).splice( 4,2 ) // ["activities" , ... ]
@@ -113,21 +114,21 @@ export default DS.JSONAPIAdapter.extend( {
 	},
 	handleResponse: function(status, headers, payload, requestData) {
 		//处理project list数据
-		if(payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
+		if(payload.data && payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
 			console.log("projects",payload)
 		}
 		//处理executions数据
-		if(payload.data.length > 0 && payload.data[0].meta) {
+		if(payload.data && payload.data.length > 0 && payload.data[0].meta) {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
 			console.log("executions",payload)
 		}
 		//处理dag数据
-		else if(payload.data.meta) {
+		else if(payload.data && payload.data.meta) {
 			payload.data.attributes.meta = payload.data.meta
 			console.log("dag", payload)
 		}
