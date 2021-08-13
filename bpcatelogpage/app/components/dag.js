@@ -1,10 +1,13 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking'
+
 
 export default class DagComponent extends Component {
 	@service router
 	@service store
+    @tracked executionsData;
 
 	@action
     async listener(e) {
@@ -70,7 +73,7 @@ export default class DagComponent extends Component {
 				e.target.allData.executions = executions.filter(function(item) {
 					return item.id !== ''
 				})
-				console.log(e.target.allData.executions)
+				this.executionsData = e.target.allData.executions
 				break
             default: 
                 console.log("other click event!")

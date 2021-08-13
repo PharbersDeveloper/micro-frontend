@@ -152,7 +152,8 @@ export default {
                     executions: []
                 }
             }
-        } 
+        },
+        executionsData: []
     },
     computed: {
         allPage() {
@@ -220,56 +221,14 @@ export default {
         }
     },
     watch: {
-        'allData.executions': function(val) {
+        // 分页后数据更新
+        'executionsData': function(val) {
+            this.allData.executions = val
         }
     },
     created() {},
     methods: {
         runDag() {
-            // const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
-            // const startBody = {
-            //     "dag_name": "ETL_Iterator",
-            //     "parameters": [
-            //         {
-            //             "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/Common_files/extract_data_files/MAX_city_normalize.csv",
-            //             "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-            //             "g_partition": "provider, version",
-            //             "g_filldefalut": "provider:common,version:20210623_u0079u0079u0077,owner:pharbers",
-            //             "g_bucket": "NONE",
-            //             "g_mapping": "NONE",
-            //             "type": "csv"
-            //         },
-            //         {
-            //             "p_input": "s3://ph-max-auto/v0.0.1-2020-06-08/奥鸿/202012/prod_mapping",
-            //             "p_output": "s3://ph-platform/2020-11-11/etl/readable_files/test",
-            //             "g_partition": "provider, version",
-            //             "g_filldefalut": "provider:奥鸿,version:202012_u0079u0079u0077,owner:pharbers",
-            //             "g_bucket": "NONE",
-            //             "g_mapping": "NONE",
-            //             "type": "parquet"
-            //         }
-            //     ]
-            // }
-            // let storage = window.localStorage
-
-            // 只要点击了run就必然先改变样式的状态为running
-            // this.maxButtonState = "RUNNING"
-            // this.task_id = "START"
-            // this.duration = ""
-
-            // let response = await fetch("https://api.pharbers.com/phstartetl", {
-            //     method: "POST",
-            //     mode: "cors",
-            //     headers: {
-            //         "Content-Type": "application/vnd.api+json",
-            //         "Accept": "application/vnd.api+json",
-            //         "Authorization": accessToken
-            //     },
-            //     body: JSON.stringify(startBody)
-            // })
-            // this.startReturn = await response.json()
-            // storage.setItem("startReturn", JSON.stringify(this.startReturn))
-            // this.cycle()
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
