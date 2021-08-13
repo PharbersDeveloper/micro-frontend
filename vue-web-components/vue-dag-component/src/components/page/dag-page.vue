@@ -22,9 +22,9 @@
                         </div>
 
                         <div class="main-container" v-if="allData.executions">
-                            <div v-for="(file,index) in allData.executions" :key="index" class="OneRecord">
+                            <div v-for="(file,index) in allData.executions" :key="index" class="OneRecord" @click="linkToDagPageList(file)">
                                 <div class="data-name-container">
-                                    <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{file.name}}</div>
+                                    <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.meta">{{file.meta.name}}</div>
                                 </div>
                                 <div class="database">
                                     <div v-if="file.meta.status == 'SUCCEEDED'" class="status">
@@ -61,15 +61,10 @@
 
                 <div v-if="togglePanelId" class="dag-run-content">
                     <div class="run-button-container">
-                        <button :class="maxButtonState ? maxButtonState : 'DEFAULT'" @click="runDag" :disabled="maxButtonState === 'RUNNING'">
+                        <button class='DEFAULT' @click="runDag">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
-
-                        <div v-if="runState" class="run-state-container">
-                            <div :class="runIconClass"></div>
-                            <span :class="runTextClass">{{runState}}</span>
-                        </div>
                     </div>
 
                     <div class="dag-message-switch">
@@ -224,12 +219,11 @@ export default {
             }
         }
     },
-    created() {
-        // fetch("https://components.pharbers.com/jsonfile/ETL_Iterator.json").then(res => res.json())
-        //     .then(data => {
-        //         this.dag = data
-        //     })
+    watch: {
+        'allData.executions': function(val) {
+        }
     },
+    created() {},
     methods: {
         runDag() {
             // const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
@@ -327,15 +321,15 @@ export default {
             }
         },
         cycle() {
-            let storage = window.localStorage
-            let that = this
+            // let storage = window.localStorage
+            // let that = this
 
-            if ( storage.getItem("startReturn") ) {
-                this.checkDagStatus()
-                this.cycleCheckDagStatus = setInterval(function() {
-                    that.checkDagStatus()
-                },60000)
-            }
+            // if ( storage.getItem("startReturn") ) {
+            //     this.checkDagStatus()
+            //     this.cycleCheckDagStatus = setInterval(function() {
+            //         that.checkDagStatus()
+            //     },60000)
+            // }
         },
         togglePanel() {
             this.togglePanelId = !this.togglePanelId
@@ -393,6 +387,20 @@ export default {
                     name: '/dag',
                     project_id: this.allData.dagDetail.id,
                     page: page - 1
+                }
+            }
+            this.$emit('event', event)
+        },
+        linkToDagPageList(param) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: 'tabletoDagPageList',
+                    route: '/dag-run',
+                    execid: param.id,
+                    pid: this.allData.dagDetail.id
                 }
             }
             this.$emit('event', event)

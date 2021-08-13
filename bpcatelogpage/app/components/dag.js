@@ -13,8 +13,21 @@ export default class DagComponent extends Component {
 				let param = e.detail[0].args.param
 				if(param.name == 'toDagPageList') {
 					let project = this.store.peekRecord('project', param.pid)
-					let execution = await this.store.createRecord('execution', {
-						input: JSON.stringify({
+					let datas = {}
+					//input暂时写死
+					if(project.name == 'MAX') {
+						datas = {
+							"dag_name": "Auto_extract_refactor",
+							"parameters": {
+								"time_left": "201801",
+								"time_right": "201912",
+								"project": "Servier",
+								"molecule": "二甲双胍, 格列喹酮",
+								"out_suffix": "test3_project_molecule"
+							}
+						}
+					} else if(project.name == "ETL") {
+						datas = {
 							"dag_name": "ETL_Iterator",
 							"parameters": [
 								{
@@ -36,14 +49,18 @@ export default class DagComponent extends Component {
 									"type": "parquet"
 								}
 							]
-						}),
+						}
+					}
+					let execution = await this.store.createRecord('execution', {
+						input: JSON.stringify(datas),
 						projectExecution: project
 					}).save()
-					debugger
-					// this.router.transitionTo( `/projects/`+ param.pid + `/` +  execution.id)
-					this.router.transitionTo( `/projects/`+ param.pid + `/` +  'sV3S4O9TmqIZz2by')
+					this.router.transitionTo( `/projects/`+ param.pid + `/` +  execution.id)
+					// this.router.transitionTo( `/projects/`+ param.pid + `/` +  'sV3S4O9TmqIZz2by')
 				} else if(param.name == 'toProjectsList') {
-					this.router.transitionTo( route )
+					this.router.transitionTo( '/projects' )
+				} else if(param.name == 'tabletoDagPageList') {
+					this.router.transitionTo( `/projects/`+ param.pid + `/` +  param.execid)
 				}
                 break
 			case "changePage":
@@ -51,8 +68,9 @@ export default class DagComponent extends Component {
 				let params = e.detail[0].args.param
 				let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": 10, "page[offset]": params.page * 10} )
 				e.target.allData.executions = executions.filter(function(item) {
-					return item.name !== ''
+					return item.id !== ''
 				})
+				console.log(e.target.allData.executions)
 				break
             default: 
                 console.log("other click event!")

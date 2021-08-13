@@ -12,8 +12,7 @@ export default class DagRunRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-		debugger
-        let dagDetail = await this.store.peekRecord( "project", params.project_id)
+        let dagDetail = await this.store.findRecord( "project", params.project_id)
         let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
 		//arn通过model传给component
 

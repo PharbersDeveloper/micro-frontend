@@ -91,7 +91,7 @@ export default {
             startReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
-            togglePanelId: true,
+            togglePanelId: false,
             dagMessageId: true,
             dagPluginId: true,
             maxButtonState: "",
@@ -133,7 +133,6 @@ export default {
         dag() {
             if(this.allData.dagDetail.meta.define) {
                 this.dagData = JSON.parse(this.allData.dagDetail.meta.define)
-                this.cycle()
             }
             console.log(this.dagData)
             return this.dagData
@@ -186,7 +185,6 @@ export default {
     watch: {
         'allData.arn': function(val) {
             this.dagName = val.split("execution:")[1].split(":")[0]
-            debugger
             this.runDag()
         }
     },
@@ -197,9 +195,9 @@ export default {
             this.maxButtonState = "RUNNING"
             this.task_id = "START"
             this.duration = ""
-            debugger
+            // 将execution arn存到storage
             let storage = window.localStorage
-            storage.setItem(this.dagName+"_startReturn", JSON.stringify(this.allData.arn))
+            storage.setItem(this.dagName+"_startReturn", JSON.stringify({"executionArn":this.allData.arn}))
             this.cycle()
         },
         async checkDagStatus() {
@@ -292,8 +290,9 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/project',
-                    route: 'max'
+                    name: 'linkToPageDag',
+                    route: '/dag-run',
+                    project_id: this.allData.dagDetail.id
                 }
             }
             this.$emit('event', event)

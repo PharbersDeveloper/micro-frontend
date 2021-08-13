@@ -1,20 +1,22 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking'
 
 export default class DagRunComponent extends Component {
+    @tracked dagid;
+	@service router
+	@service store
 
 	@action
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-				let name = e.detail[0].args.param.name
-				let route = e.detail[0].args.param.route
-				debugger
-				if(name == 'toDagPageList') {
-					this.router.transitionTo( 'projects/dag-run' )
-				} else if(name == 'toProjectsList') {
-					this.router.transitionTo( route )
+				let linkParam = e.detail[0].args.param
+				if(linkParam.name == 'linkToPageDag'){
+					this.router.transitionTo( `/projects/`+ linkParam.project_id )
+				} else {
+					this.router.transitionTo( '/projects' )
 				}
                 break
 			case "changePage":
@@ -32,9 +34,11 @@ export default class DagRunComponent extends Component {
 
 	@action
 	registerListener(element) {
-		debugger
 		element.allData = this.calAllData
 		element.allData.arn = element.allData.targetExecution[0].arn
+		if(element.allData.arn) {
+			this.dagid = element.allData.arn.split("execution:")[1].split(":")[0]+'_id'
+		}
 		element.addEventListener("event", this.listener)
 	}
 
