@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="activity-img-container">
-                <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="above-data-detail-header-img"></bpImg>
+                <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="activity-list-img"></bpImg>
             </div>
         </div>
     </div>
@@ -168,6 +168,10 @@ export default {
                 border-radius: 2px;
                 margin-top: 64px;
                 display: flex;
+				.activity-list-img {
+					width: 380px;
+					height: 235px;
+				}
                 .activity-img {
                     width: 100%;
                     height: 100%;
