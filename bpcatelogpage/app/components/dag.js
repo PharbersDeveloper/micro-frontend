@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking'
 export default class DagComponent extends Component {
 	@service router
 	@service store
-    @tracked executionsData;
+	@tracked random
 
 	@action
     async listener(e) {
@@ -124,7 +124,7 @@ export default class DagComponent extends Component {
 				e.target.allData.executions = executions.filter(function(item) {
 					return item.id !== ''
 				})
-				this.executionsData = e.target.allData.executions
+				this.random = Math.random()
 				break
             default: 
                 console.log("other click event!")
