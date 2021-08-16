@@ -64,7 +64,7 @@ export default DS.JSONAPIAdapter.extend( {
 			newUrl = `/phproject/${curPath}`
 		}
 
-		if(modelName === "database" || modelName === "table" || modelName === "partition") {
+		if(modelName === "db" || modelName === "table" || modelName === "partition") {
 			newUrl = `/phcatlog/${curPath}`
 		}
 
