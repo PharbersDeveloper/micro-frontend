@@ -16,10 +16,12 @@ export default class OauthServiceService extends Service {
 	oauthCallback( transition ) {
 		const cookies = this.get( "cookies" )
 		// TODO
-		let urli = window.location.href
+		// let urli = window.location.href
 		transition.queryParams = {
-			"code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
-			"state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
+			// "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
+			// "state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
+			"code": transition.intent.router._lastQueryParams.code,
+			"state": transition.intent.router._lastQueryParams.state
 		}
 		const { queryParams } = transition
 
