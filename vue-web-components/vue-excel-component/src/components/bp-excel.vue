@@ -18,9 +18,22 @@ export default {
         data: {
             type: Array,
             default: () => [
-                ["2016", 10, 11, 12],
-                ["2017", 20, 11, 14],
-                ["2018", 30, 15, 12]
+                {
+                    project: "<span>AZ</span>",
+                    upload: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    import: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    manual_cleaning: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    data_calculation: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    data_report:  "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>"
+                },
+                {
+                    project: "<span>AZ</span>",
+                    upload: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    import: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    manual_cleaning: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    data_calculation: "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>",
+                    data_report:  "<div><div><span>操作人</span><span>2021/08/29 18:30:43</span></div><div><button>1</button><button>2</button></div></div>"
+                }
             ]
         }
     },
@@ -30,18 +43,18 @@ export default {
                 data: this.data,
                 language: zhCN.languageCode,
                 height: "auto",
+                readOnly: true,
                 //定义表结构
-                colHeaders:["问题序号","问题类型","定性法规","问题金额"],
-                rowHeaders: true,
+                colHeaders:["项目名","上传","导入","人工清洗","数据计算","数据报告"],
+                // rowHeaders: true,
                 //定义属性
                 columns: [
-                    {},
-                    {},
-                    {},
-                    {
-                        colHeaders:'问题金额',
-                        type:'numeric' //定义值的类型为数字类型
-                    }
+                    {data: 'project', renderer: 'html'},
+                    {data: 'upload', renderer: 'html'},
+                    {data: 'import', renderer: 'html'},
+                    {data: 'manual_cleaning', renderer: 'html'},
+                    {data: 'data_calculation', renderer: 'html'},
+                    {data: 'data_report', renderer: 'html'}
                 ],
                 licenseKey: 'non-commercial-and-evaluation',
                 dropdownMenu: true,//头部是否显示menu
@@ -61,18 +74,12 @@ export default {
                     isCommand: false
                 },
                 search: {
-                    queryMethod: this.onlyExactMatch,
                     searchResultClass: "search-result"
                 },
                 afterChange(changes, source) {
                     // console.log(this.getData(),changes,source)
                 }
             }
-        }
-    },
-    methods: {
-        onlyExactMatch(queryStr, value) {
-            return queryStr.toString() === value.toString()
         }
     },
     mounted() {
