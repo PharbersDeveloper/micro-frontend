@@ -31,6 +31,18 @@
                                         <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
                                         <span class="heading-small SUCCEEDED-text">已成功</span>
                                     </div>
+									<div v-else-if="file.meta.status == 'RUNNING'" class="status">
+                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <span class="heading-small RUNNING-text">正在运行</span>
+                                    </div>
+									<div v-else-if="file.meta.status == 'ABORTED'" class="status">
+                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <span class="heading-small ABORTED-text">已中止</span>
+                                    </div>
+									<div v-else-if="file.meta.status == 'TIMED_OUT'" class="status">
+                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <span class="heading-small ABORTED-text">已超时</span>
+                                    </div>
                                     <div v-else class="status">
                                         <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_fail.svg" alt="">
                                         <span class="heading-small FAILED-text">失败</span>
@@ -79,7 +91,7 @@
                         </div>
                         <div class="run-container mb-2">
                             <span class="heading-small">project:</span>
-                            <span class="body-default">{{allData.dagDetail.name}}</span>
+                            <span class="body-default">{{allData.dagDetail.projectName}}</span>
                         </div>
                         <div class="run-container">
                             <span class="heading-small">provider:</span>

@@ -5,6 +5,7 @@ export default class ProjectModel extends Model {
 	@attr("string") version;
 	@attr("string") provider;
 	@attr("string") arn;
+	@attr("string") projectName;
 	@attr executions
     @hasMany("execution", {inverse: "projectExecution"}) executions;
     // @hasMany("execution") executions;
