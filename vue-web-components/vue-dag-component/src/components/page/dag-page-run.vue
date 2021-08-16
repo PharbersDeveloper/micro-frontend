@@ -17,7 +17,7 @@
                 </div>
 
                 <div v-if="togglePanelId" class="dag-run-content">
-                    <div class="run-button-container">
+                    <!-- <div class="run-button-container">
                         <button :class="maxButtonState ? maxButtonState : 'DEFAULT'" @click="runDag" :disabled="maxButtonState === 'RUNNING'">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
@@ -27,14 +27,14 @@
                             <div :class="runIconClass"></div>
                             <span :class="runTextClass">{{runState}}</span>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="dag-message-switch">
                         <span class="heading-small">属性详情</span>
                         <div class="icon" :class="dagMessageIcon" @click="dagMessageId = !dagMessageId"></div>
                     </div>
                     <div v-if="dagMessageId" class="dag-message-contaner">
-                        <span class="task-id margin-bottom-20">Task_ID:{{task_id}}</span>
+                        <span class="task-id margin-bottom-20">Task_ID:{{allData.targetExecution.id}}</span>
                         <div class="status-container margin-bottom-20">
                             <span class="heading-small mr-0">Status:</span>
                             <span class="body-tertiary">{{status}}</span>
@@ -91,12 +91,12 @@ export default {
             startReturn: null,
             dagStatus: null,
             cycleCheckDagStatus: null,
-            togglePanelId: false,
+            togglePanelId: true,
             dagMessageId: true,
             dagPluginId: true,
             maxButtonState: "",
             task_id: "",
-            status: "",
+            // status: "",
             started: "",
             duration: "",
             succeed_step: [],
@@ -112,7 +112,8 @@ export default {
                     dagDetail: {
                         meta: {}
                     },
-                    executions: []
+                    executions: [],
+                    targetExecution:{}
                 }
             }
         } 
@@ -134,18 +135,20 @@ export default {
             if(this.allData.dagDetail.meta.define) {
                 this.dagData = JSON.parse(this.allData.dagDetail.meta.define)
             }
-            console.log(this.dagData)
             return this.dagData
         },
-        runState() {
-            if (!this.maxButtonState) {
-                this.status = "no_status"
-                return
-            } else {
-                this.status = this.maxButtonState.toLowerCase()
-                return this.maxButtonState
-            }
+        status() {
+            return this.maxButtonState.toLowerCase()
         },
+        // runState() {
+        //     if (!this.maxButtonState) {
+        //         this.status = "no_status"
+        //         return
+        //     } else {
+        //         this.status = this.maxButtonState.toLowerCase()
+        //         return this.maxButtonState
+        //     }
+        // },
         runIconClass() {
             if (!this.maxButtonState) {
                 return

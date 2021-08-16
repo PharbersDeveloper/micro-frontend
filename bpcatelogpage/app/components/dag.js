@@ -58,11 +58,13 @@ export default class DagComponent extends Component {
 						input: JSON.stringify(datas),
 						projectExecution: project
 					}).save()
+					// run执行execution
 					this.router.transitionTo( `/projects/`+ param.pid + `/` +  execution.id)
-					// this.router.transitionTo( `/projects/`+ param.pid + `/` +  'sV3S4O9TmqIZz2by')
 				} else if(param.name == 'toProjectsList') {
+					// 返回工作平台
 					this.router.transitionTo( '/projects' )
 				} else if(param.name == 'tabletoDagPageList') {
+					// 执行列表跳转execution
 					this.router.transitionTo( `/projects/`+ param.pid + `/` +  param.execid)
 				}
                 break

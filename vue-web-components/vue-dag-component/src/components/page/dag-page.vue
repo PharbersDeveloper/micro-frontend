@@ -72,18 +72,18 @@
                         <div class="icon" :class="dagMessageIcon" @click="dagMessageId = !dagMessageId"></div>
                     </div>
                     <div v-if="dagMessageId" class="dag-message-contaner">
-                        <span class="task-id margin-bottom-20">Task_ID:{{task_id}}</span>
+                        <span class="task-id margin-bottom-20">id:{{allData.dagDetail.id}}</span>
                         <div class="status-container margin-bottom-20">
-                            <span class="heading-small mr-0">Status:</span>
-                            <span class="body-tertiary">{{status}}</span>
+                            <span class="heading-small mr-0">name:</span>
+                            <span class="body-tertiary">{{allData.dagDetail.name}}</span>
                         </div>
                         <div class="run-container mb-2">
-                            <span class="heading-small">Started:</span>
-                            <span class="body-default">{{started}}</span>
+                            <span class="heading-small">project:</span>
+                            <span class="body-default">{{allData.dagDetail.name}}</span>
                         </div>
                         <div class="run-container">
-                            <span class="heading-small">Duration:</span>
-                            <span class="body-default">{{duration}}</span>
+                            <span class="heading-small">provider:</span>
+                            <span class="body-default">{{allData.dagDetail.provider}}</span>
                         </div>
                     </div>
 

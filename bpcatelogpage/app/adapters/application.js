@@ -118,19 +118,16 @@ export default DS.JSONAPIAdapter.extend( {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
-			console.log("projects",payload)
 		}
 		//处理executions数据
 		if(payload.data && payload.data.length > 0 && payload.data[0].meta) {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
-			console.log("executions",payload)
 		}
 		//处理dag数据
 		else if(payload.data && payload.data.meta) {
 			payload.data.attributes.meta = payload.data.meta
-			console.log("dag", payload)
 		}
 		return payload
 	},
