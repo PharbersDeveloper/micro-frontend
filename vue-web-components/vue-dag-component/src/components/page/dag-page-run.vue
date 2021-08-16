@@ -299,19 +299,6 @@ export default {
                 }
             }
             this.$emit('event', event)
-        },
-        changePage(page) {
-            const event = new Event("event")
-            event.args = {
-                callback: "changePage",
-                element: this,
-                param: {
-                    name: '/dag',
-                    project_id: this.allData.dagDetail.id,
-                    page: page - 1
-                }
-            }
-            this.$emit('event', event)
         }
     }
 }

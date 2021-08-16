@@ -32,15 +32,15 @@
                                         <span class="heading-small SUCCEEDED-text">已成功</span>
                                     </div>
 									<div v-else-if="file.meta.status == 'RUNNING'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_running.svg" alt="">
                                         <span class="heading-small RUNNING-text">正在运行</span>
                                     </div>
 									<div v-else-if="file.meta.status == 'ABORTED'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_suspension.svg" alt="">
                                         <span class="heading-small ABORTED-text">已中止</span>
                                     </div>
 									<div v-else-if="file.meta.status == 'TIMED_OUT'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_timeout.svg" alt="">
                                         <span class="heading-small ABORTED-text">已超时</span>
                                     </div>
                                     <div v-else class="status">

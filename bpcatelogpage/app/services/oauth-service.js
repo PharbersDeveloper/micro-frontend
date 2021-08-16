@@ -15,7 +15,6 @@ export default class OauthServiceService extends Service {
 
 	oauthCallback( transition ) {
 		const cookies = this.get( "cookies" )
-		// TODO
 		// let urli = window.location.href
 		transition.queryParams = {
 			// "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
