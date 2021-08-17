@@ -29,7 +29,9 @@
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">分类：</bp-text>
-                            <bp-text class="subvalue">{{detailData.tables[index].tableAttributes.classification}}</bp-text>
+                            <template v-if="detailData.tables[index].parameters">
+                                <bp-text class="subvalue">{{detailData.tables[index].parameters.classification}}</bp-text>
+                            </template>
                         </div>
                         <div class="name-value mb-5">
                             <bp-text class="subtitle">上次更新时间：</bp-text>
@@ -54,21 +56,25 @@
                         <div class="name-value">
                             <bp-text class="subtitle">Serde 参数：</bp-text>
                             <div class="name-value-area">
-                                <div class="parameter" v-for="(val, key, index) in detailData.tables[index].serdeArguments" :key="index+'Serde'">
-                                    <bp-text class="name">{{key}}</bp-text>
-                                    <bp-text class="value">{{val}}</bp-text>
-                                </div>
+                                <template v-if="detailData.tables[index].serdeInfo">
+                                    <div class="parameter" v-for="(val, key, index) in detailData.tables[index].serdeInfo.Parameters" :key="index+'Serde'">
+                                        <bp-text class="name">{{key}}</bp-text>
+                                        <bp-text class="value">{{val}}</bp-text>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                          <div class="name-value">
                             <bp-text class="subtitle">表属性：</bp-text>
                             <div class="name-value-list">
-                                <div class="parameter" v-for="(val, key, index) in detailData.tables[index].tableAttributes" :key="index+'table'">
-                                    <template v-if="key != 'classification'">
-                                    <bp-text class="name">{{key}}</bp-text>
-                                    <bp-text class="value">{{val}}</bp-text>
-                                    </template>
-                                </div>
+                                <template v-if="detailData.tables[index].meta">
+                                    <div class="parameter" v-for="(val, key, index) in detailData.tables[index].meta.parameters" :key="index+'table'">
+                                        <template v-if="key != 'classification'">
+                                        <bp-text class="name">{{key}}</bp-text>
+                                        <bp-text class="value">{{val}}</bp-text>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -188,12 +194,12 @@ export default {
     computed: {
         schemas() {
             // 分区键
-            if(this.detailData.tables[this.index] && this.detailData.tables[this.index].partitionKeys.length > 0) {
+            if(this.detailData.tables[this.index] && this.detailData.tables[this.index].partitionKeys && this.detailData.tables[this.index].partitionKeys.length > 0) {
                 this.detailData.tables[this.index].partitionKeys.forEach((item, index) => {
                     item.parameters = "Partition (" + index + ")"
                 })
             }
-            let schemasArr =  this.detailData.tables[this.index].schemas.concat(this.detailData.tables[this.index].partitionKeys)
+            let schemasArr =  this.detailData.tables[this.index].meta.schemas.concat(this.detailData.tables[this.index].partitionKeys)
             return schemasArr
         }
     },

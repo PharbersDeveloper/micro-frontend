@@ -11,16 +11,12 @@
                 <div class="myData-mine">
                     <div class="subtitle">
                         <span class="heading-xsmall file-name-text">文件名称
-                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall database-name">数据库
-                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall subscribe-location">来源
-                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                         <span class="heading-xsmall last-time">上次更新时间
-                            <!-- <bp-img :src="iconSortDescending"></bp-img> -->
                         </span>
                     </div>
 
@@ -36,13 +32,12 @@
                             </div>
 
                             <div class="subscribe-location">
-                                <!-- <bp-text class="body-tertiary">{{file.location}}</bp-text> -->
-                                <bp-text class="body-tertiary">Pharbers</bp-text>
+                                <bp-text class="body-tertiary">{{file.provider}}</bp-text>
                             </div>
 
                             <div class="last-time">
                                 <bp-text class="body-tertiary">
-                                    {{formatDateStandard(file.lastModifyTime, 0)}}
+									<template v-if="file.meta">{{formatDateStandard(file.meta.updated, 0)}}</template>
                                 </bp-text>
                             </div>
                         </div>
