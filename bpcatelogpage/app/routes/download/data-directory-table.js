@@ -16,7 +16,7 @@ export default class DownloadDataDirectoryTableRoute extends Route {
     }
 
 	async model( params ) {
-		const limit =50
+		const limit =10
 		let page = parseInt( params.page, 10 )
         if ( isNaN( page ) ) {
 			page = 0
@@ -25,7 +25,10 @@ export default class DownloadDataDirectoryTableRoute extends Route {
 		let name = params.database
         return RSVP.hash({
 			tables: tables.filter( it => it),
-			name: name
+			name: name,
+            count: tables.meta.count,
+            page: page,
+			_isVue: true
         })
     }
 }

@@ -146,12 +146,16 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="allPage && curPage" class="page-container">
+                    <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
+                </div>
             </div>
         </div>
         <jsonModel :JsonData="JsonData" v-if="showJson" @closeJsonModal="closeJsonModal" ></jsonModel>
     </div>
 </template>
 <script>
+import bpPagination from '../bp-pagination.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
@@ -161,6 +165,7 @@ import jsonModel from '../panel/view-json.vue'
 
 export default {
     components: {
+        bpPagination,
         bpSelectVue,
         bpOptionVue,
         bpText,
@@ -205,9 +210,21 @@ export default {
             type: Number,
             default: 0
         },
-        showPart: Boolean
+        showPart: Boolean,
+        random: Number
     },
     computed: {
+        allPage() {
+            const total = this.detailData.count
+            const perPage = 10
+            if (Math.ceil(total / perPage) <= 1) {
+                return 0
+            }
+            return Math.max(1, Math.ceil(total / perPage))
+        },
+        curPage() {
+            return this.detailData.page + 1
+        },
         schemas() {
             // 分区键
             if(this.detailData.tables[this.index] && this.detailData.tables[this.index].meta && this.detailData.tables[this.index].meta['partition-keys'] && this.detailData.tables[this.index].meta['partition-keys'].length > 0) {
@@ -219,7 +236,15 @@ export default {
             return schemasArr
         }
     },
+    watch: {
+        random: function() {
+            this.$forceUpdate()
+        }
+    },
     methods: {
+        changePage(page) {
+            this.$emit('changePartPage', page, this.index)
+        },
         closeJsonModal() {
             this.showJson = false
         },
@@ -434,6 +459,14 @@ export default {
                     }
                 }
             }
+        }
+        .page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 64px;
+            width: 100%;
+            padding: 20px 0;
         }
         .architecture {
             display: flex;
