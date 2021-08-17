@@ -8,62 +8,7 @@
             <div class="left-area">
                 <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
                 <template >
-                    <span class="execution-table">执行列表</span>
-                    <div class="myData-mine">
-                        <div class="subtitle">
-                            <span class="heading-xsmall file-name-text">执行ID
-                            </span>
-                            <span class="heading-xsmall database-name">当前状态
-                            </span>
-                            <span class="heading-xsmall subscribe-location">启动时间
-                            </span>
-                            <span class="heading-xsmall last-time">结束时间
-                            </span>
-                        </div>
-
-                        <div class="main-container" v-if="allData.executions">
-                            <div v-for="(file,index) in allData.executions" :key="index" class="OneRecord" @click="linkToDagPageList(file)">
-                                <div class="data-name-container">
-                                    <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.meta">{{file.meta.name}}</div>
-                                </div>
-                                <div class="database">
-                                    <div v-if="file.meta.status == 'SUCCEEDED'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
-                                        <span class="heading-small SUCCEEDED-text">已成功</span>
-                                    </div>
-                                    <div v-else-if="file.meta.status == 'RUNNING'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_running.svg" alt="">
-                                        <span class="heading-small RUNNING-text">正在运行</span>
-                                    </div>
-                                    <div v-else-if="file.meta.status == 'ABORTED'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_suspension.svg" alt="">
-                                        <span class="heading-small ABORTED-text">已中止</span>
-                                    </div>
-                                    <div v-else-if="file.meta.status == 'TIMED_OUT'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_timeout.svg" alt="">
-                                        <span class="heading-small ABORTED-text">已超时</span>
-                                    </div>
-                                    <div v-else class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_fail.svg" alt="">
-                                        <span class="heading-small FAILED-text">失败</span>
-                                    </div>
-                                </div>
-                                <div class="subscribe-location">
-                                    <span class="body-tertiary-table">
-                                    {{formatDateStandard(file.meta['start-time'], 0)}}
-                                    </span>
-                                </div>
-                                <div class="last-time">
-                                    <span class="body-tertiary-table">
-                                        {{formatDateStandard(file.meta['stop-time'], 0)}}
-                                    </span>
-                                </div>
-                            </div>
-                            <div v-if="allPage && curPage" class="page-container">
-                                <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="execution-table">log</span>
                 </template >
             </div>
             <div class="dag-run-container">
@@ -72,30 +17,35 @@
                 </div>
 
                 <div v-if="togglePanelId" class="dag-run-content">
-                    <div class="run-button-container">
-                        <button class='DEFAULT' @click="runDag">
+                    <!-- <div class="run-button-container">
+                        <button :class="maxButtonState ? maxButtonState : 'DEFAULT'" @click="runDag" :disabled="maxButtonState === 'RUNNING'">
                             <div class="icon"></div>
                             <span class="run-text">RUN</span>
                         </button>
-                    </div>
+
+                        <div v-if="runState" class="run-state-container">
+                            <div :class="runIconClass"></div>
+                            <span :class="runTextClass">{{runState}}</span>
+                        </div>
+                    </div> -->
 
                     <div class="dag-message-switch">
                         <span class="heading-small">属性详情</span>
                         <div class="icon" :class="dagMessageIcon" @click="dagMessageId = !dagMessageId"></div>
                     </div>
                     <div v-if="dagMessageId" class="dag-message-contaner">
-                        <span class="task-id margin-bottom-20">id:{{allData.dagDetail.id}}</span>
+                        <span class="task-id margin-bottom-20">Task_ID:{{allData.targetExecution.id}}</span>
                         <div class="status-container margin-bottom-20">
-                            <span class="heading-small mr-0">name:</span>
-                            <span class="body-tertiary">{{allData.dagDetail.name}}</span>
+                            <span class="heading-small mr-0">Status:</span>
+                            <span class="body-tertiary">{{status}}</span>
                         </div>
                         <div class="run-container mb-2">
-                            <span class="heading-small">project:</span>
-                            <span class="body-default">{{allData.dagDetail.projectName}}</span>
+                            <span class="heading-small">Started:</span>
+                            <span class="body-default">{{started}}</span>
                         </div>
                         <div class="run-container">
-                            <span class="heading-small">provider:</span>
-                            <span class="body-default">{{allData.dagDetail.provider}}</span>
+                            <span class="heading-small">Duration:</span>
+                            <span class="body-default">{{duration}}</span>
                         </div>
                     </div>
 
@@ -136,6 +86,7 @@ export default {
     data() {
         return {
             // dag: null,
+            dagName: '',
             dagData: null,
             startReturn: null,
             dagStatus: null,
@@ -145,7 +96,7 @@ export default {
             dagPluginId: true,
             maxButtonState: "",
             task_id: "",
-            status: "",
+            // status: "",
             started: "",
             duration: "",
             succeed_step: [],
@@ -161,11 +112,11 @@ export default {
                     dagDetail: {
                         meta: {}
                     },
-                    executions: []
+                    executions: [],
+                    targetExecution:{}
                 }
             }
-        },
-        random: Number
+        } 
     },
     computed: {
         allPage() {
@@ -179,23 +130,25 @@ export default {
         curPage() {
             return this.allData.page + 1
         },
+        // 渲染dag的数据
         dag() {
             if(this.allData.dagDetail.meta.define) {
                 this.dagData = JSON.parse(this.allData.dagDetail.meta.define)
-                this.cycle()
             }
-            console.log(this.dagData)
             return this.dagData
         },
-        runState() {
-            if (!this.maxButtonState) {
-                this.status = "no_status"
-                return
-            } else {
-                this.status = this.maxButtonState.toLowerCase()
-                return this.maxButtonState
-            }
+        status() {
+            return this.maxButtonState.toLowerCase()
         },
+        // runState() {
+        //     if (!this.maxButtonState) {
+        //         this.status = "no_status"
+        //         return
+        //     } else {
+        //         this.status = this.maxButtonState.toLowerCase()
+        //         return this.maxButtonState
+        //     }
+        // },
         runIconClass() {
             if (!this.maxButtonState) {
                 return
@@ -233,28 +186,27 @@ export default {
         }
     },
     watch: {
-        random: function() {
-            this.$forceUpdate()
+        'allData.arn': function(val) {
+            this.dagName = val.split("execution:")[1].split(":")[0]
+            this.runDag()
         }
     },
+    created() {},
     methods: {
         runDag() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: 'toDagPageList',
-                    route: '/dag-run',
-                    pid: this.allData.dagDetail.id
-                }
-            }
-            this.$emit('event', event)
+            // 只要点击了run就必然先改变样式的状态为running
+            this.maxButtonState = "RUNNING"
+            this.task_id = "START"
+            this.duration = ""
+            // 将execution arn存到storage
+            let storage = window.localStorage
+            storage.setItem(this.dagName+"_startReturn", JSON.stringify({"executionArn":this.allData.arn}))
+            this.cycle()
         },
         async checkDagStatus() {
             const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
             let storage = window.localStorage
-            if ( storage.getItem("startReturn") ) {
+            if ( storage.getItem(this.dagName+"_startReturn") ) {
                 let response = await fetch("https://api.pharbers.com/phstepstatus", {
                     method: "POST",
                     mode: "cors",
@@ -263,7 +215,7 @@ export default {
                         "Accept": "application/vnd.api+json",
                         "Authorization": accessToken
                     },
-                    body: storage.getItem("startReturn")
+                    body: storage.getItem(this.dagName+"_startReturn")
                 })
                 this.dagStatus = await response.json()
                 this.maxButtonState = this.dagStatus.execution_status
@@ -282,7 +234,7 @@ export default {
                 }
 
                 if (this.dagStatus.execution_status !== "RUNNING") {
-                    storage.removeItem("startReturn")
+                    storage.removeItem(this.dagName+"_startReturn")
                     clearInterval(this.cycleCheckDagStatus)
                 }
             } else {
@@ -290,15 +242,15 @@ export default {
             }
         },
         cycle() {
-            // let storage = window.localStorage
-            // let that = this
+            let storage = window.localStorage
+            let that = this
 
-            // if ( storage.getItem("startReturn") ) {
-            //     this.checkDagStatus()
-            //     this.cycleCheckDagStatus = setInterval(function() {
-            //         that.checkDagStatus()
-            //     },60000)
-            // }
+            if ( storage.getItem(this.dagName+"_startReturn") ) {
+                this.checkDagStatus()
+                this.cycleCheckDagStatus = setInterval(function() {
+                    that.checkDagStatus()
+                },60000)
+            }
         },
         togglePanel() {
             this.togglePanelId = !this.togglePanelId
@@ -341,35 +293,9 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: 'toProjectsList',
-                    route: '/download/projects'
-                }
-            }
-            this.$emit('event', event)
-        },
-        changePage(page) {
-            const event = new Event("event")
-            event.args = {
-                callback: "changePage",
-                element: this,
-                param: {
-                    name: '/dag',
-                    project_id: this.allData.dagDetail.id,
-                    page: page - 1
-                }
-            }
-            this.$emit('event', event)
-        },
-        linkToDagPageList(param) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: 'tabletoDagPageList',
+                    name: 'linkToPageDag',
                     route: '/dag-run',
-                    execid: param.id,
-                    pid: this.allData.dagDetail.id
+                    project_id: this.allData.dagDetail.id
                 }
             }
             this.$emit('event', event)
@@ -653,167 +579,6 @@ export default {
                     line-height: 20px;
                     font-weight: 400;
                     margin: 20px 20px 8px;
-                }
-                .myData-mine {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 12px 20px 8px 20px;
-                    height: 507px;
-                    min-height: 0;
-
-                    .subtitle {
-                        display: flex;
-                        align-items: center;
-                        width: 100%;
-                        height: 33px !important;
-                        border-bottom: 0.5px solid rgba(31, 37, 50, 0.08);
-
-                        .file-name-text {
-                            flex:1;
-                            width: 400px;
-                            min-width: 400px;
-                        }
-
-                        .database-name {
-                            flex: 1;
-                            min-width: 200px;
-                            width: 200px;
-                            padding: 0 8px;
-                        }
-
-                        .subscribe-location {
-                            // flex: 1;
-                            width: 260px;
-                            min-width: 200px;
-                            padding: 0 8px;
-                        }
-
-                        .last-time {
-                            width: 260px;
-                            min-width: 200px;
-                            display: block;
-                            text-align: right;
-                        }
-                    }
-
-                    .main-container {
-                        width: 100%;
-                        overflow: scroll;
-                        display: flex;
-                        flex-direction: column;
-                        flex: 1;
-                        //隐藏滚动条
-                        &::-webkit-scrollbar {
-                            width: 0 !important;
-                        }
-                        -ms-overflow-style: none;
-
-                        .OneRecord {
-                            width: 100%;
-                            height: 44px;
-                            display: flex;
-                            align-items: center;
-                            border-bottom: 1px solid rgba(37, 35, 45, 0.08);
-                            cursor: pointer;
-                            // 文件logo
-                            .icon_datafile {
-                                width: 24px;
-                                height: 24px;
-                                margin-right: 18px;
-                            }
-                            // 文件名称及tag
-                            .data-name-container {
-                                flex: 1;
-                                width: 400px;
-                                min-width: 400px;
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                .overflow-text {
-                                    height: 20px;
-                                    width: 230px !important;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                }
-                                .data-name-bottom {
-                                    display: flex;
-                                    height: 18px;
-                                    
-                                    .editable-component {
-                                        margin-right: 2px;
-                                        &:last-of-type {
-                                            margin-right: 0;
-                                        }
-                                    }
-                                }
-                            }
-                            // 拥有者owner
-                            .database {
-                                flex: 1;
-                                min-width: 200px;
-                                width: 200px;
-                                height: 100%;
-                                padding: 0 8px;
-                                display: flex;
-                                align-items: center;
-                                .bp-text {
-                                    height: 20px;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                }
-                                .status {
-                                    display: flex;
-                                    align-items: center;
-                                    img {
-                                        margin-right: 2px;
-                                    }
-                                    span {font-size: 12px !important};
-                                }
-                            }
-                            //订阅人数
-                            .subscribe-location {
-                                // flex: 1;
-                                width: 260px;
-                                min-width: 200px;
-                                padding: 0 8px;
-                                display: flex;
-                                align-items: center;
-                            }
-                            // 排序功能
-                            .last-time {
-                                min-width: 200px;
-                                width: 260px;
-                                // height: 100%;
-                                display: block;
-                                text-align: right;
-                                line-height: 65px;
-                                .bp-text {
-                                    height: 16px;
-                                }
-                            }
-                            // 功能键
-                            .action-menu {
-                                width: 4.8%;
-                                height: 100%;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
-                        }
-
-                        .page-container {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 64px;
-                            width: 100%;
-                            padding: 20px 0;
-                        }
-                    }
                 }
             }
             .phdag {

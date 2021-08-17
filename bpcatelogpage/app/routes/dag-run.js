@@ -2,16 +2,10 @@ import Route from '@ember/routing/route';
 import { inject as service } from "@ember/service"
 import RSVP from 'rsvp';
 
-export default class DagRoute extends Route {
+export default class DagRunRoute extends Route {
 	@service store
     @service cookies
 
-	queryParams = {
-        page: {
-            refreshModel: true
-        }
-    }
-	
 	async model( params ) {
 		const limit = 10
 		let page = parseInt( params.page, 10 )
@@ -20,18 +14,15 @@ export default class DagRoute extends Route {
 		}
         let dagDetail = await this.store.findRecord( "project", params.project_id)
         let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
-
-		// let executionsIdArr = dagDetail.hasMany('executions').ids()
-		// let ids = [
-		// 	...new Set(executionsIdArr.reduce((acc, val) => acc.concat(val), [])),
-		// ];
-		// let executions = await this.store.query('execution', { 'ids[]': ids });
+		let targetExecution = await this.store.findRecord( "execution", params.execution_id)
+		//arn通过model传给component
         return RSVP.hash({
+			targetExecution: targetExecution,
             page: page,
             count: executions.meta.count,
             dagDetail: dagDetail,
-			executions: executions.filter( it => it),
+			executions: executions.filter( it => it.id != ''),
 			_isVue: true
         })
-    }
+	}
 }

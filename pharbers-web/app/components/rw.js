@@ -6,10 +6,8 @@ export default class RwComponent extends Component {
     @service router
     @action
 	listener(e) {
-        console.log(e)
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-                console.log("linkTopage")
                 this.router.transitionTo(e.detail[0].args.param)
                 break
             default: 

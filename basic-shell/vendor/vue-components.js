@@ -2564,14 +2564,12 @@ var bp_buttonvue_type_template_id_05b8dc5e_scoped_true_staticRenderFns = []
       clearTimeout(that.time);
       that.time = setTimeout(() => {
         // 写单击事件执行的逻辑代码
-        console.log("单击事件");
         this.$emit('click', data);
       }, 300);
     },
 
     handleDBClick(data) {
       clearTimeout(this.time);
-      console.log("双击事件");
       this.$emit('dbclick', data);
     }
 
@@ -2636,12 +2634,10 @@ demovue_type_script_lang_js_shadow_requireAll(demovue_type_script_lang_js_shadow
   },
   methods: {
     click1(data) {
-      console.log("11111");
       console.log(data);
     },
 
     click2(data) {
-      console.log(2222);
       console.log(data);
     }
 

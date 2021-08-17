@@ -8,7 +8,6 @@ export default class ConsultingComponent extends Component {
 	listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-                console.log("linkTopage")
                 this.router.transitionTo(e.detail[0].args.param)
                 break
             default: 
