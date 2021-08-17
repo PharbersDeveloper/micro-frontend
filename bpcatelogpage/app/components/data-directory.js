@@ -43,7 +43,6 @@ export default class DataDirectoryComponent extends Component {
 	registerListener(element) {
         element.allData = this.calAllData
 		console.log(element.allData)
-		debugger
 		element.addEventListener("event", this.listener)
 	}
 
