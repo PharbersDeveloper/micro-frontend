@@ -1,6 +1,6 @@
 <template>
     <div class="table-cell-border">
-        <span>Operator</span>
+        <span>{{value}}</span>
         <div class='button-container'>
             <div class='button-background-grey' @click="this.clickButton">
                 <button class='icon_QC'></button>
@@ -18,7 +18,8 @@ export default {
         type: {
             type: String,
             default: "upload"
-        }
+        },
+        value: String
     },
     methods: {
         clickButton() {
@@ -85,6 +86,7 @@ export default {
     }
 
     .table-cell-border {
+        width: 209px;
         height: 36px;
         border: 1px solid #E1DFE9;
         display: flex;

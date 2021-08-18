@@ -2,7 +2,7 @@
     <div class="max-table-container">
         <div class="max-table-header">
             <div class="max-table-row">
-                <div class="max-table-cell">项目名</div>
+                <div class="max-table-cell" id="project-name-text">项目名</div>
                 <div class="max-table-cell">上传</div>
                 <div class="max-table-cell">导入</div>
                 <div class="max-table-cell">人工清洗</div>
@@ -11,13 +11,13 @@
             </div>
         </div>
         <div class="max-table-body">
-            <div class="max-table-row">
-                <div class="max-table-cell" id="project-name"><div>AZ</div></div>
-                <div class="max-table-cell"><ph-table-cell type="upload"></ph-table-cell></div>
-                <div class="max-table-cell"><ph-table-cell type="import"></ph-table-cell></div>
-                <div class="max-table-cell"><ph-table-cell type="clean"></ph-table-cell></div>
-                <div class="max-table-cell"><ph-table-cell type="calculation"></ph-table-cell></div>
-                <div class="max-table-cell"><ph-table-cell type="report"></ph-table-cell></div>
+            <div class="max-table-row" v-for="(row,index) in rows" :key="index">
+                <div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
+                <div class="max-table-cell"><ph-table-cell type="upload" :value="row.upload"></ph-table-cell></div>
+                <div class="max-table-cell"><ph-table-cell type="import" :value="row.import"></ph-table-cell></div>
+                <div class="max-table-cell"><ph-table-cell type="clean" :value="row.clean"></ph-table-cell></div>
+                <div class="max-table-cell"><ph-table-cell type="calculation" :value="row.calculation"></ph-table-cell></div>
+                <div class="max-table-cell"><ph-table-cell type="report" :value="row.report"></ph-table-cell></div>
             </div>
         </div>
     </div>
@@ -28,6 +28,47 @@ import phTableCell from './ph-table-cell.vue'
 export default {
     components: {
         phTableCell
+    },
+    props: {
+        rows: {
+            type: Array,
+            default() {
+                return [
+                    {
+                        project: "AZ",
+                        upload: "Operator1",
+                        import: "Operator2",
+                        clean: "Operator3",
+                        calculation: "Operator4",
+                        report: "Operator5"
+                    },
+                    {
+                        project: "AZ",
+                        upload: "Operator1",
+                        import: "Operator2",
+                        clean: "Operator3",
+                        calculation: "Operator4",
+                        report: "Operator5"
+                    },
+                    {
+                        project: "AZ",
+                        upload: "Operator1",
+                        import: "Operator2",
+                        clean: "Operator3",
+                        calculation: "Operator4",
+                        report: "Operator5"
+                    },
+                    {
+                        project: "AZ",
+                        upload: "Operator1",
+                        import: "Operator2",
+                        clean: "Operator3",
+                        calculation: "Operator4",
+                        report: "Operator5"
+                    }
+                ]
+            }
+        }
     }
 }
 </script>
@@ -48,8 +89,6 @@ export default {
 
     .max-table-container {
         display: table;
-        border-collapse: separate;
-        border-spacing: 4px 0;
 
         .max-table-header {
             display: table-header-group;
@@ -58,12 +97,21 @@ export default {
             .max-table-row {
                 display: table-row;
 
+                #project-name-text {
+                    padding-right: 2px;
+                }
+
                 .max-table-cell {
                     display: table-cell;
                     vertical-align: middle;
                     text-align: center;
                     border-bottom: 1px solid rgba(37,35,45,0.08);
                     @include heading-xsmall;
+
+                    &:last-of-type {
+                        width: 211px;
+                        padding-right: 0;
+                    }
                 }
             }
         }
@@ -73,10 +121,11 @@ export default {
 
             .max-table-row {
                 display: table-row;
-                height: 42px; 
+                height: 44px;
 
                 #project-name {
-                    width: 95px;
+                    width: 97px;
+                    padding-right: 2px;
                     @include heading-xsmall;
                 }
 
@@ -84,9 +133,14 @@ export default {
                     display: table-cell;
                     vertical-align: middle;
                     text-align: center;
-                    width: 209px;
+                    padding: 0 2px;
+                    width: 213px;
+                    border-bottom: 1px solid rgba(37,35,45,0.08);
 
-                    
+                    &:last-of-type {
+                        width: 211px;
+                        padding-right: 0;
+                    }
                 }
             }
         }
