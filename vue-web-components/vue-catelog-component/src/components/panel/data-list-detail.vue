@@ -215,8 +215,8 @@ export default {
     },
     computed: {
         allPage() {
-            const total = this.detailData.count
-            const perPage = 10
+            const total = this.detailData.partitionsCount
+            const perPage = 100
             if (Math.ceil(total / perPage) <= 1) {
                 return 0
             }

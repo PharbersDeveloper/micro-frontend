@@ -30,7 +30,7 @@ export default class DataDirectoryComponent extends Component {
                 }
                 break
 			case "requestData":
-				const limit =10
+				const limit = 100
 				let storage = window.localStorage
                 let requestParam = e.detail[0].args.param
 				let page = requestParam.queryParams.page || 0
@@ -42,6 +42,7 @@ export default class DataDirectoryComponent extends Component {
 				if(partTables.meta && partTables.meta.token && partTables.meta.token.length > 0) {
 					storage.setItem('partitionsToken', JSON.stringify(partTables.meta.token))
 				}
+				e.target.allData.partitionsCount = partTables.meta.count
 				e.target.allData.partTables = partTables.filter(function(item) {
 					return item.schema !== null
 				})
