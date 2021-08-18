@@ -7,8 +7,18 @@
         <div class="dag-main-container">
             <div class="left-area">
                 <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
-                <template >
-                    <span class="execution-table">log</span>
+                <template>
+                    <div class="log">
+                        <div class="title-area">
+                            <span class="execution-table">详情日志</span>
+                            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_enlarge.svg" alt="" class="enlarge" @click="viewLogBox">
+                        </div>
+                        <div class="log-area">
+                            <span class="log-option">Log more</span>
+                            <span class="log-content"></span>
+                            <span class="log-option">resume</span>
+                        </div>
+                    </div>
                 </template >
             </div>
             <div class="dag-run-container">
@@ -66,7 +76,21 @@
                 </div>
             </div>
         </div>
-
+        <div class="log-box" v-if="logBox">
+            <div class="log-box-container">
+                <div class="header-area">
+                    <span class="header-title">详情日志</span>
+                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="icon-close" @click="closeLogBox">
+                </div>
+                <div class="body-area">
+                    <div class="log-area">
+                        <span class="log-option">Log more</span>
+                        <span class="log-content"></span>
+                        <span class="log-option">resume</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <upload-file v-if="openUploadWindow" @closeUploadWindow="openUploadWindow = false"></upload-file>
     </div>
 </template>
@@ -100,7 +124,8 @@ export default {
             started: "",
             duration: "",
             succeed_step: [],
-            openUploadWindow: false
+            openUploadWindow: false,
+            logBox: false
         }
     },
     props: {
@@ -193,6 +218,12 @@ export default {
     },
     created() {},
     methods: {
+        viewLogBox() {
+            this.logBox = true;
+        },
+        closeLogBox() {
+            this.logBox = false;
+        },
         runDag() {
             // 只要点击了run就必然先改变样式的状态为running
             this.maxButtonState = "RUNNING"
@@ -518,7 +549,76 @@ export default {
         line-height: 20px;
         font-weight: 200;
     }
-
+    .log-area {
+        height: 450px;
+        border: 1px solid rgba(37, 35, 45, 0.12);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 4px;
+        .log-option {
+            font-family: PingFangSC-Medium;
+            font-size: 14px;
+            color: #5342B3;
+            letter-spacing: 0;
+            line-height: 20px;
+            font-weight: 500;
+        }
+        .log-content {
+            font-family: SFProText-Thin;
+            font-size: 14px;
+            color: #25232D;
+            letter-spacing: 0.25px;
+            line-height: 20px;
+            font-weight: 200;
+        }
+    }
+    .log-box {
+        height: 100vh;
+        width: 100vw;
+        background: rgba(37,35,45,.55);
+        display: flex;
+        flex-direction: row;
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        .log-box-container {
+            width: 1158px;
+            height: 90%;
+            background: #fff;
+            border-radius: 2px;
+            .header-area {
+                height: 56px;
+                background: #fbfbfb;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 20px 12px;
+                border-bottom: 1px solid rgba(37,35,45,.08);
+                .header-title {
+                    font-family: SFProText-Regular;
+                    font-size: 16px;
+                    color: #25232d;
+                    letter-spacing: .25px;
+                    line-height: 24px;
+                    font-weight: 400;
+                }
+                .icon-close {
+                    cursor: pointer;
+                }
+            }
+        }
+        .body-area {
+            padding: 12px 20px 20px;
+            height: 90%;
+            .log-area {
+                height: 100% !important;
+            }
+        }
+    }
     .dag-page {
         overflow-x: hidden;
         display: flex;
@@ -561,6 +661,21 @@ export default {
             display: flex;
             .left-area {
                 width: 100%;
+                .log {
+                    margin: 20px;
+                    .title-area {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        .enlarge {
+                            width: 24px;
+                            height: 24px;
+                            background: #f6f6f7;
+                            border-radius: 2px;
+                        }
+                    }
+                }
+                
                 .heading-xsmall {
                     font-family: PingFangSC-Regular;
                     font-size: 12px;
@@ -578,7 +693,7 @@ export default {
                     text-align: left;
                     line-height: 20px;
                     font-weight: 400;
-                    margin: 20px 20px 8px;
+                    margin: 20px 20px 8px 0;
                 }
             }
             .phdag {
