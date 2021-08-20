@@ -362,7 +362,23 @@ export default {
                 let svgGroup = svg.append( "g" )
                 // 开始渲染
                 render( svgGroup, g )
-
+                let that = this;
+                svgGroup.selectAll("g.node")
+                    .on("click", function (v) {
+                        let nodeName = v.target.childNodes[0].data
+                        console.log(nodeName);
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "clickNode",
+                            element: this,
+                            param: {
+                                name: nodeName,
+                                arn: ''
+                            }
+                        }
+                        that.$emit('clickNodeEvent', event)
+                    })
+                // 拖拽缩放
                 let zoom = d3.zoom()
                     .scaleExtent( [.5, 4] )
                     .on( "zoom", function( event ) {

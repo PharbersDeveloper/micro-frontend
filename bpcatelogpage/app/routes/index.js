@@ -18,7 +18,7 @@ export default class IndexRoute extends Route {
 			window.location.href =
 				`${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`
 		}else {
-			this.transitionTo("/download")
+			this.transitionTo("/download/my-data")
 		}
 	}
 }

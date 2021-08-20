@@ -70,13 +70,13 @@ export default class OauthServiceService extends Service {
 				cookies.write( "account_id", response.user.id, options )
 				
 				// this.mqttService.mqttConnect()
-				this.get( "router" ).transitionTo( '/download/enterprise') 
+				this.get( "router" ).transitionTo( '/download/my-data') 
 			})
 			.catch(err => {
-				this.get( "router" ).transitionTo( '/download/enterprise') 
+				this.get( "router" ).transitionTo( '/download/my-data') 
 			})
 		} else {
-			this.get( "router" ).transitionTo( '/download/enterprise') 
+			this.get( "router" ).transitionTo( '/download/my-data') 
 		}
 	}
 

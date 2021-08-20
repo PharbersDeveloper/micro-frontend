@@ -10,7 +10,7 @@ export default class LeftMenuComponent extends Component {
             case "linkToPage":
 				let idx = e.detail[0].args.param.index
 				if(idx == 0) {
-					this.router.transitionTo( `/download/enterprise` )
+					this.router.transitionTo(`/overview`)
 				} else if(idx == 1) {
 					this.router.transitionTo(`/download/my-data`)
 				} else if(idx == 2) {

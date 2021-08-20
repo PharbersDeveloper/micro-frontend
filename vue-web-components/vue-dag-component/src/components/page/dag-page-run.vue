@@ -6,18 +6,22 @@
         </div>
         <div class="dag-main-container">
             <div class="left-area">
-                <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid"></bp-dag>
+                <bp-dag :dag="dag" :succeed_step="succeed_step" :task_id="task_id" :status="this.maxButtonState" :domid="domid" @clickNodeEvent="clickNodeEvent"></bp-dag>
                 <template>
                     <div class="log">
                         <div class="title-area">
                             <span class="execution-table">详情日志</span>
                             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_enlarge.svg" alt="" class="enlarge" @click="viewLogBox">
                         </div>
-                        <div class="log-area">
+                        <div class="log-area" v-if="allData.logsData && allData.logsData!=''">
                             <span class="log-option">Log more</span>
-                            <span class="log-content"></span>
+                            <span class="log-content">{{allData.logsData}}</span>
                             <span class="log-option">resume</span>
                         </div>
+						<div class="log-area no-logs" v-if="!allData.logsData || allData.logsData==''">
+							<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/list.png" alt="">
+							<span>暂无Log数据</span>
+						</div>
                     </div>
                 </template >
             </div>
@@ -85,7 +89,7 @@
                 <div class="body-area">
                     <div class="log-area">
                         <span class="log-option">Log more</span>
-                        <span class="log-content"></span>
+                        <span class="log-content log-content-box">{{allData.logsData}}</span>
                         <span class="log-option">resume</span>
                     </div>
                 </div>
@@ -141,7 +145,8 @@ export default {
                     targetExecution:{}
                 }
             }
-        } 
+        },
+        random: Number
     },
     computed: {
         allPage() {
@@ -214,6 +219,9 @@ export default {
         'allData.arn': function(val) {
             this.dagName = val.split("execution:")[1].split(":")[0]
             this.runDag()
+        },
+        random: function() {
+            this.$forceUpdate()
         }
     },
     created() {},
@@ -329,6 +337,10 @@ export default {
                     project_id: this.allData.dagDetail.id
                 }
             }
+            this.$emit('event', event)
+        },
+        clickNodeEvent(event) {
+            event.args.param.arn = this.allData.targetExecution.arn
             this.$emit('event', event)
         }
     }
@@ -549,6 +561,15 @@ export default {
         line-height: 20px;
         font-weight: 200;
     }
+	.no-logs {
+		display: flex;
+		justify-content: center !important;
+		align-items: center !important;
+		img {
+			width: 160px;
+			height: 160px;
+		}
+	}
     .log-area {
         height: 450px;
         border: 1px solid rgba(37, 35, 45, 0.12);
@@ -565,13 +586,19 @@ export default {
             font-weight: 500;
         }
         .log-content {
+            height: 400px;
+            overflow: auto;
             font-family: SFProText-Thin;
             font-size: 14px;
             color: #25232D;
             letter-spacing: 0.25px;
             line-height: 20px;
             font-weight: 200;
+			white-space: pre-wrap;
         }
+		.log-content-box {
+			height: 100% !important;
+		}
     }
     .log-box {
         height: 100vh;
