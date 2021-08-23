@@ -365,8 +365,17 @@ export default {
                 let that = this;
                 svgGroup.selectAll("g.node")
                     .on("click", function (v) {
-                        let nodeName = v.target.childNodes[0].data
-                        console.log(nodeName);
+                        // 节点名称
+                        let nodeName = ''
+                        if(v.target.className == 'icon_dag') {
+                            nodeName = v.target.nextSibling.childNodes[0] ? v.target.nextSibling.childNodes[0].data : ''
+                        }  else if(v.target.className == 'icon_dag_container') {
+                            nodeName = v.target.childNodes[1] ? v.target.childNodes[1].lastChild.data : ''
+                        } else if(v.target.nodeName == 'rect') {
+                            nodeName = ''
+                        } else {
+                            nodeName = v.target.childNodes[0] ? v.target.childNodes[0].data : ''
+                        }
                         const event = new Event("event")
                         event.args = {
                             callback: "clickNode",

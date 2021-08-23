@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class LeftMenuComponent extends Component {
+	@service oauthService
 	@service router
     @action
     listener(e) {
@@ -17,6 +18,11 @@ export default class LeftMenuComponent extends Component {
 					this.router.transitionTo(`/projects`)
 				}
                 break
+			case "logOut":
+				this.oauthService.removeAuth()
+				window.localStorage.clear()
+				window.location = "/"
+				break
             default: 
                 console.log("other click event!")
         }
