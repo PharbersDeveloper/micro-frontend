@@ -365,8 +365,11 @@ export default {
                 let that = this;
                 svgGroup.selectAll("g.node")
                     .on("click", function (v) {
+						// 节点名称
                         let nodeName = v.target.childNodes[0].data
-                        console.log(nodeName);
+						if(!nodeName) {
+							nodeName = v.target.childNodes[1] ? v.target.childNodes[1].lastChild.data : ''
+						}
                         const event = new Event("event")
                         event.args = {
                             callback: "clickNode",
