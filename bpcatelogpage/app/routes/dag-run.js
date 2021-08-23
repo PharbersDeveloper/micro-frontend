@@ -37,7 +37,6 @@ export default class DagRunRoute extends Route {
             count: executions.meta.count,
             dagDetail: dagDetail,
 			executions: executions.filter( it => it.id != ''),
-			logResult: logResult,
 			_isVue: true
         })
 	}
