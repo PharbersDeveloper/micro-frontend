@@ -17,4 +17,5 @@ Router.map(function () {
   this.route('projects', {path: "/projects"});
   this.route('dag', {path: "/projects/:project_id"});
   this.route('dag-run', {path: "/projects/:project_id/:execution_id"});
+  this.route('overview');
 });

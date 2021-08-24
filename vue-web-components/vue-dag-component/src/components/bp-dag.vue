@@ -362,7 +362,32 @@ export default {
                 let svgGroup = svg.append( "g" )
                 // 开始渲染
                 render( svgGroup, g )
-
+                let that = this;
+                svgGroup.selectAll("g.node")
+                    .on("click", function (v) {
+                        // 节点名称
+                        let nodeName = ''
+                        if(v.target.className == 'icon_dag') {
+                            nodeName = v.target.nextSibling.childNodes[0] ? v.target.nextSibling.childNodes[0].data : ''
+                        }  else if(v.target.className == 'icon_dag_container') {
+                            nodeName = v.target.childNodes[1] ? v.target.childNodes[1].lastChild.data : ''
+                        } else if(v.target.nodeName == 'rect') {
+                            nodeName = ''
+                        } else {
+                            nodeName = v.target.childNodes[0] ? v.target.childNodes[0].data : ''
+                        }
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "clickNode",
+                            element: this,
+                            param: {
+                                name: nodeName,
+                                arn: ''
+                            }
+                        }
+                        that.$emit('clickNodeEvent', event)
+                    })
+                // 拖拽缩放
                 let zoom = d3.zoom()
                     .scaleExtent( [.5, 4] )
                     .on( "zoom", function( event ) {

@@ -7,7 +7,7 @@
             </div>
             <div class="body-area" v-if="!showPart">
                 <div class="view-part">
-                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}
+                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].meta.updated, 0)}}
                     </bp-text>
                     <bp-button  :text="viewPart" class="btn_primary" @click="viewPartClick"></bp-button>
                 </div>
@@ -20,8 +20,8 @@
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">描述：</bp-text>
-                            <bp-text v-if="detailData.tables[index].describe != ''" class="subvalue">{{detailData.tables[index].describe}}</bp-text>
-                            <bp-text v-if="detailData.tables[index].describe == ''" class="subvalue">暂无描述</bp-text>
+                            <bp-text v-if="detailData.tables[index].meta.describe != ''" class="subvalue">{{detailData.tables[index].meta.describe}}</bp-text>
+                            <bp-text v-if="detailData.tables[index].meta.describe == ''" class="subvalue">暂无描述</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">数据库：</bp-text>
@@ -29,23 +29,25 @@
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">分类：</bp-text>
-                            <bp-text class="subvalue">{{detailData.tables[index].tableAttributes.classification}}</bp-text>
+                            <template v-if="detailData.tables[index].meta.parameters">
+                                <bp-text class="subvalue">{{detailData.tables[index].meta.parameters.classification}}</bp-text>
+                            </template>
                         </div>
                         <div class="name-value mb-5">
                             <bp-text class="subtitle">上次更新时间：</bp-text>
-                            <bp-text class="subvalue">{{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}</bp-text>
+                            <bp-text class="subvalue">{{formatDateStandard(detailData.tables[index].meta.updated, 0)}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">输入格式：</bp-text>
-                            <bp-text class="subvalue">{{detailData.tables[index].inputFormat}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].meta['input-format']}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">输出格式：</bp-text>
-                            <bp-text class="subvalue">{{detailData.tables[index].outputFormat}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].meta['output-format']}}</bp-text>
                         </div>
                         <div class="name-value">
                             <bp-text class="subtitle">Serde 序列化库：</bp-text>
-                            <bp-text class="subvalue">{{detailData.tables[index].serdeLib}}</bp-text>
+                            <bp-text class="subvalue">{{detailData.tables[index].meta['serde-info'].SerializationLibrary}}</bp-text>
                         </div>
                     </div>
                 </div>
@@ -54,21 +56,25 @@
                         <div class="name-value">
                             <bp-text class="subtitle">Serde 参数：</bp-text>
                             <div class="name-value-area">
-                                <div class="parameter" v-for="(val, key, index) in detailData.tables[index].serdeArguments" :key="index+'Serde'">
-                                    <bp-text class="name">{{key}}</bp-text>
-                                    <bp-text class="value">{{val}}</bp-text>
-                                </div>
+                                <template v-if="detailData.tables[index].meta['serde-info']">
+                                    <div class="parameter" v-for="(val, key, index) in detailData.tables[index].meta['serde-info'].Parameters" :key="index+'Serde'">
+                                        <bp-text class="name">{{key}}</bp-text>
+                                        <bp-text class="value">{{val}}</bp-text>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                          <div class="name-value">
                             <bp-text class="subtitle">表属性：</bp-text>
                             <div class="name-value-list">
-                                <div class="parameter" v-for="(val, key, index) in detailData.tables[index].tableAttributes" :key="index+'table'">
-                                    <template v-if="key != 'classification'">
-                                    <bp-text class="name">{{key}}</bp-text>
-                                    <bp-text class="value">{{val}}</bp-text>
-                                    </template>
-                                </div>
+                                <template v-if="detailData.tables[index].meta">
+                                    <div class="parameter" v-for="(val, key, index) in detailData.tables[index].meta.parameters" :key="index+'table'">
+                                        <template v-if="key != 'classification'">
+                                        <bp-text class="name">{{key}}</bp-text>
+                                        <bp-text class="value">{{val}}</bp-text>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -92,11 +98,11 @@
                             <div v-for="(file,index) in schemas" :key="index" class="OneRecord">
                                 <div class="index-text">{{index+1}}</div>
                                 <div class="column-name">
-                                    <div class="column-name-text overflow-text" :title="file.field">{{file.field}}</div>
+                                    <div class="column-name-text overflow-text" >{{file.Name}}</div>
                                 </div>
 
                                 <div class="data-type">
-                                    <bp-text class="body-primary">{{file.type}}</bp-text>
+                                    <bp-text class="body-primary">{{file.Type}}</bp-text>
                                 </div>
 
                                 <div class="partition">
@@ -116,22 +122,22 @@
             <!-- 查看分区 -->
             <div class="body-area" v-if="showPart">
                 <div class="view-part">
-                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].lastModifyTime, 0)}}
+                    <bp-text class="last-modify-time">{{lastModifyTime}}: {{formatDateStandard(detailData.tables[index].meta.updated, 0)}}
                     </bp-text>
                     <bp-button  :text="closePart" class="btn_primary" @click="closePartClick"></bp-button>
                 </div>
                 <div class="architecture">
                     <div class="architecture-table architecture-table-part">
                         <div class="table-title-part">
-                            <span class="column-name-part" v-for="tableName in detailData.tables[index].partitionKeys" :key="tableName.field">{{tableName.field}}
+                            <span class="column-name-part" v-for="tableName in detailData.tables[index].meta['partition-keys']" :key="tableName.Name">{{tableName.Name}}
                             </span>
                             <span class="partition"></span>
                         </div>
 
                         <div class="main-container">
                             <div v-for="(file,idx) in detailData.partTables" :key="idx" class="OneRecord-part">
-                                <div class="column-name-part" v-for="tableField in detailData.tables[index].partitionKeys" :key="tableField.field+'0'">
-                                    <div class="column-name-text" >{{file.schema[tableField.field]}}</div>
+                                <div class="column-name-part" v-for="tableField in detailData.tables[index].meta['partition-keys']" :key="tableField.Name+'0'">
+                                    <div class="column-name-text" >{{file.schema[tableField.Name]}}</div>
                                 </div>
                                 <div class="partition-part">
                                     <bp-text class="view-char" @click="viewChar(file)">查看属性</bp-text>
@@ -140,12 +146,16 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="allPage && curPage" class="page-container">
+                    <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
+                </div>
             </div>
         </div>
         <jsonModel :JsonData="JsonData" v-if="showJson" @closeJsonModal="closeJsonModal" ></jsonModel>
     </div>
 </template>
 <script>
+import bpPagination from '../bp-pagination.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
@@ -155,6 +165,7 @@ import jsonModel from '../panel/view-json.vue'
 
 export default {
     components: {
+        bpPagination,
         bpSelectVue,
         bpOptionVue,
         bpText,
@@ -179,25 +190,61 @@ export default {
         detailData: {
             type: Object,
             default: function() {
-                return {}
+                return { 
+                    name: "phdatacat",
+                    partTables: [],
+                    tables:[{
+                        "meta": {
+                            "columns": [],
+                            "serde-info": {
+                                "Parameters": {}
+                            },
+                            "parameters": {},
+                            "partition-keys": []
+                        }
+                    }]
+                }
             }
         },
-        index: Number,
-        showPart: Boolean
+        index: {
+            type: Number,
+            default: 0
+        },
+        showPart: Boolean,
+        random: Number
     },
     computed: {
+        allPage() {
+            const total = this.detailData.partitionsCount
+            const perPage = 100
+            if (Math.ceil(total / perPage) <= 1) {
+                return 0
+            }
+            return Math.max(1, Math.ceil(total / perPage))
+        },
+        curPage() {
+            return this.detailData.page + 1
+        },
         schemas() {
             // 分区键
-            if(this.detailData.tables[this.index] && this.detailData.tables[this.index].partitionKeys.length > 0) {
-                this.detailData.tables[this.index].partitionKeys.forEach((item, index) => {
+            if(this.detailData.tables[this.index] && this.detailData.tables[this.index].meta && this.detailData.tables[this.index].meta['partition-keys'] && this.detailData.tables[this.index].meta['partition-keys'].length > 0) {
+                this.detailData.tables[this.index].meta['partition-keys'].forEach((item, index) => {
                     item.parameters = "Partition (" + index + ")"
                 })
             }
-            let schemasArr =  this.detailData.tables[this.index].schemas.concat(this.detailData.tables[this.index].partitionKeys)
+            let schemasArr =  this.detailData.tables[this.index].meta.columns.concat(this.detailData.tables[this.index].meta['partition-keys'])
             return schemasArr
         }
     },
+    watch: {
+        random: function() {
+            this.$forceUpdate()
+        }
+    },
     methods: {
+        changePage(page) {
+            this.$emit('changePartPage', page, this.index)
+        },
         closeJsonModal() {
             this.showJson = false
         },
@@ -412,6 +459,14 @@ export default {
                     }
                 }
             }
+        }
+        .page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 64px;
+            width: 100%;
+            padding: 20px 0;
         }
         .architecture {
             display: flex;

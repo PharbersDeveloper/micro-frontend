@@ -20,6 +20,12 @@
         </span>
     </div> -->
     <bpMenu :menu_data="menu_data" class="" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpMenu>
+	<div class="log-out" @click="logOut">
+		<span class="log-out-menu">
+            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sign_out.svg" alt="">
+            <span class="log-out-text">退出登录</span>
+        </span>
+	</div>
 </div>
 </template>
 <script>
@@ -111,6 +117,16 @@ export default {
                 }
             ]
         }
+    },
+    methods: {
+        logOut() {
+            const event = new Event('event')
+            event.args = {
+                callback: 'logOut',
+                element: this
+            }
+            this.$emit('event', event)
+        }
     }
 }
 </script>
@@ -145,6 +161,24 @@ export default {
         }
         /deep/.bp-menu-item:hover {
             color: #57565F !important;
+        }
+        .log-out {
+            position: absolute;
+            bottom: 40px;
+            padding-left: 12px;
+            cursor: pointer;
+            .log-out-menu {
+                display: flex;
+                align-items: center;
+                .log-out-text {
+                    font-family: SFProText-Medium;
+                    font-size: 14px;
+                    color: #57565F;
+                    letter-spacing: 0;
+                    line-height: 20px;
+                    font-weight: 500;
+                }
+            }
         }
         .user-info {
             background: #FCFCFD;
@@ -188,6 +222,18 @@ export default {
             width: 176px;
             height: 32px;
             margin: 20px 12px;
+			background: #7163c5;
+			.fileinput-button {
+				height: 32px;
+				width: 100%;
+				position: relative;
+				background: #fff;
+				border-radius: 2px;
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
             .btn_secondary_initial {
                 color: #57565F!important;
                 font-family: SFProText-Medium;
@@ -195,17 +241,6 @@ export default {
                 letter-spacing: 0;
                 line-height: 20px;
             }
-        }
-        .fileinput-button {
-            height: 32px;
-            width: 100%;
-            position: relative;
-            background: #fff;
-            border-radius: 2px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         .icon_upload {
             width: 20px;

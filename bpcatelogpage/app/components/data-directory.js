@@ -1,12 +1,15 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking'
 
 export default class DataDirectoryComponent extends Component {
 	@service router
 	@service store
     @service cookies
     @service ajax
+	@tracked random
+
     @action
 	async listener(e) {
         switch(e.detail[0].args.callback) {
@@ -27,12 +30,23 @@ export default class DataDirectoryComponent extends Component {
                 }
                 break
 			case "requestData":
-				let that = this
+				const limit = 100
+				let storage = window.localStorage
                 let requestParam = e.detail[0].args.param
-				let partTables = await this.store.query( requestParam.name, { "filter[database]": requestParam.queryParams.database, "filter[table]": requestParam.queryParams.table} )
+				let page = requestParam.queryParams.page || 0
+				let nextToken = ''
+				if(page != 0) {
+					nextToken = JSON.parse(storage.getItem('partitionsToken'))[page]
+				}
+				let partTables = await this.store.query( requestParam.name, { "filter[database]": requestParam.queryParams.database, "filter[table]": requestParam.queryParams.table, "page[limit]": limit, "nextToken": nextToken} )
+				if(partTables.meta && partTables.meta.token && partTables.meta.token.length > 0) {
+					storage.setItem('partitionsToken', JSON.stringify(partTables.meta.token))
+				}
+				e.target.allData.partitionsCount = partTables.meta.count
 				e.target.allData.partTables = partTables.filter(function(item) {
 					return item.schema !== null
 				})
+				this.random = Math.random()
 				break
             default: 
                 console.log("submit event to parent")
@@ -42,6 +56,7 @@ export default class DataDirectoryComponent extends Component {
     @action
 	registerListener(element) {
         element.allData = this.calAllData
+		console.log(element.allData)
 		element.addEventListener("event", this.listener)
 	}
 
