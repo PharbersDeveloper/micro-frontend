@@ -4,6 +4,7 @@ import bpExcel from './components/bp-excel.vue'
 import maxSaasTable from './components/max-saas-table.vue'
 import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
+import nav from './components/bp-nav-top.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
             path: '/custom-mapping',
             name: 'customMapping',
             component: customMapping
+        },
+        {
+            path: '/nav',
+            name: 'nav',
+            component: nav
         }
     ]
 })
