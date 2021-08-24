@@ -232,7 +232,10 @@ export default {
                     item.parameters = "Partition (" + index + ")"
                 })
             }
-            let schemasArr =  this.detailData.tables[this.index].meta.columns.concat(this.detailData.tables[this.index].meta['partition-keys'])
+			let schemasArr = []
+			if(this.detailData.tables[this.index].meta) {
+            	schemasArr =  this.detailData.tables[this.index].meta.columns.concat(this.detailData.tables[this.index].meta['partition-keys'])
+			}
             return schemasArr
         }
     },
