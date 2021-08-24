@@ -10,7 +10,8 @@
                 <span class="heading-small">源条目</span>
                 <div class="oneside-border">
                     <div class="oneside-main">
-                        <div v-for="(list,index) in list1" :key="index" class="single-list">{{list}}</div>
+                        <div v-for="(list,index) in data.list1" :key="index" class="single-list heading-small-inverse">{{list.name}}</div>
+                        <div class="single-list"><input type="text" v-model="source"></div>
                     </div>
                 </div>
             </div>
@@ -19,7 +20,8 @@
                 <span class="heading-small">Master文件检索结果</span>
                 <div class="oneside-border">
                     <div class="oneside-main">
-                        <div v-for="(list,index) in list2" :key="index" class="single-list">{{list}}</div>
+                        <div v-for="(list,index) in data.list2" :key="index" class="single-list heading-small-inverse">{{list.name}}</div>
+                        <div class="single-list"><input type="text" v-model="goal"></div>
                     </div>
                 </div>
             </div>
@@ -27,17 +29,45 @@
 
         <div class="mapping-bottom">
             <button class="cancel-button btn_secondary_initial">取消</button>
-            <button class="confirm-button btn_primary-initial">确认</button>
+            <button class="confirm-button btn_primary-initial" @click="confirm">确认</button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    props: {
+        data: {
+            type: Object,
+            default() {
+                return {
+                    list1: [{name: 'Name_1', tag: '1'},{name: 'Name_2', tag: '2'},{name: 'Name_3', tag: '3'}],
+                    list2: [{name: 'Name_4', tag: '1'},{name: 'Name_5', tag: '2'},{name: 'Name_6', tag: '3'}]
+                }
+            }
+        }
+    },
     data() {
         return {
-            list1: ['Name_1','Name_2','Name_3','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4'],
-            list2: ['Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4','Name_4']
+            source: '',
+            goal: ''
+        }
+    },
+    methods: {
+        confirm() {
+            if (this.source && this.goal) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "confirmMapping",
+                    element: this,
+                    param: {
+                        source: this.source,
+                        goal: this.goal
+                    }
+                }
+                this.$emit('event', event)
+                console.log(111);
+            }
         }
     }
 }
@@ -61,6 +91,16 @@ export default {
         font-family: PingFangSC-Regular;
         font-size: 14px;
         color: #25232D;
+        letter-spacing: 0.25px;
+        text-align: left;
+        line-height: 20px;
+        font-weight: 400;
+    }
+
+    .heading-small-inverse {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #FFFFFF;
         letter-spacing: 0.25px;
         text-align: left;
         line-height: 20px;
@@ -142,19 +182,26 @@ export default {
                         overflow-y: scroll;
                         padding-right: 4px;
                         &::-webkit-scrollbar { 
-                            width: 3px;
+                            width: 2px;
                         }
 
                         &::-webkit-scrollbar-thumb {
-                            background-color: #BCBAC4;
-                            border-radius: 3px;
+                            background-color: rgba(37,35,45,0.55);
+                            border-radius: 100px;
                         }
 
                         .single-list {
-                            height: 28px;
-                            padding: 4px 0 0 8px;
+                            height: 24px;
+                            padding-left: 9px;
+                            display: flex;
+                            align-items: center;
                             background-color: #BCBAC4;
                             border-bottom: 1px solid #CFCFCF;
+                        }
+
+                        input {
+                            border: 0;
+                            outline: none;
                         }
                     }
                 }
