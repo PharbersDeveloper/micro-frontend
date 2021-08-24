@@ -9,9 +9,9 @@
             <div class="mapping-main-oneside">
                 <span class="heading-small">源条目</span>
                 <div class="oneside-border">
-                    <div class="oneside-main">
+                    <div class="oneside-main" @dblclick="addList('source')">
                         <div v-for="(list,index) in data.list1" :key="index" class="single-list heading-small-inverse">{{list.name}}</div>
-                        <div class="single-list"><input type="text" v-model="source"></div>
+                        <div v-if="sourceDisplay" class="single-list"><input type="text" v-model="source"></div>
                     </div>
                 </div>
             </div>
@@ -19,9 +19,9 @@
             <div class="mapping-main-oneside">
                 <span class="heading-small">Master文件检索结果</span>
                 <div class="oneside-border">
-                    <div class="oneside-main">
+                    <div class="oneside-main" @dblclick="addList('goal')">
                         <div v-for="(list,index) in data.list2" :key="index" class="single-list heading-small-inverse">{{list.name}}</div>
-                        <div class="single-list"><input type="text" v-model="goal"></div>
+                        <div v-if="goalDisplay" class="single-list"><input type="text" v-model="goal"></div>
                     </div>
                 </div>
             </div>
@@ -50,10 +50,19 @@ export default {
     data() {
         return {
             source: '',
-            goal: ''
+            goal: '',
+            sourceDisplay: false,
+            goalDisplay: false
         }
     },
     methods: {
+        addList(key) {
+            if (key === 'source') {
+                this.sourceDisplay = true
+            } else {
+                this.goalDisplay = true
+            }
+        },
         confirm() {
             if (this.source && this.goal) {
                 const event = new Event("event")
