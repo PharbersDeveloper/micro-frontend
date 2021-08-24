@@ -4,6 +4,7 @@ import bpExcel from './components/bp-excel.vue'
 import maxSaasTable from './components/max-saas-table.vue'
 import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
+import test from './views/test.vue'
 
 Vue.use(Router)
 
@@ -13,8 +14,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'bpExcel',
-            component: bpExcel
+            name: 'test',
+            component: test
         },
         {
             path: '/max-saas-table',
@@ -30,6 +31,11 @@ export default new Router({
             path: '/custom-mapping',
             name: 'customMapping',
             component: customMapping
+        },
+        {
+            path: '/',
+            name: 'bpExcel',
+            component: bpExcel
         }
     ]
 })
