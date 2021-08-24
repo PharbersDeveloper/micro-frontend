@@ -18,14 +18,11 @@ export default {
         data: {
             type: Array,
             default: () => [
-                {
-                    project: `<span class='heading-xsmall'>AZ</span>`,
-                    upload: `<div class='row-container'><span class='body-primary'>Operator</span><div class='button-container'><div class='button-background-grey' onclick='this.clickButton'><button class='icon_QC'></button></div><div class='button-background-purple'><button class='icon_upload'></button></div></div></div>`,
-                    import: `<div class='row-container'><span class='body-primary'>Operator</span><div class='button-container'><div class='button-background-grey'><button class='icon_QC'></button></div><div class='button-background-purple'><button class='icon_export-table'></button></div></div></div>`,
-                    manual_cleaning: `<div class='row-container'><span class='body-primary'>Operator</span><div class='button-container'><div class='button-background-grey'><button class='icon_QC'></button></div><div class='button-background-purple'><button class='icon_update-time'></button></div></div></div>`,
-                    data_calculation: `<div class='row-container'><span class='body-primary'>Operator</span><div class='button-container'><div class='button-background-grey'><button class='icon_QC'></button></div><div class='button-background-purple'><button class='icon_database'></button></div></div></div>`,
-                    data_report:  `<div class='row-container'><span class='body-primary'>Operator</span><div class='button-container'><div class='button-background-grey'><button class='icon_QC'></button></div><div class='button-background-purple'><button class='icon_project-stroke'></button></div></div></div>`
-                }
+                [1,2,3,4,5,6,7,8],
+                [1,2,3,4,5,6,7,8],
+                [1,2,3,4,5,6,7,8],
+                [1,2,3,4,5,6,7,8],
+                [1,2,3,4,5,6,7,8]
             ]
         }
     },
@@ -36,18 +33,6 @@ export default {
                 language: zhCN.languageCode,
                 height: "auto",
                 readOnly: true,
-                //定义表结构
-                colHeaders:["项目名","上传","导入","人工清洗","数据计算","数据报告"],
-                // rowHeaders: true,
-                //定义属性
-                columns: [
-                    {data: 'project', renderer: this.projectNameRenderer},
-                    {data: 'upload', renderer: 'html'},
-                    {data: 'import', renderer: 'html'},
-                    {data: 'manual_cleaning', renderer: 'html'},
-                    {data: 'data_calculation', renderer: 'html'},
-                    {data: 'data_report', renderer: 'html'}
-                ],
                 licenseKey: 'non-commercial-and-evaluation',
                 // dropdownMenu: true,//头部是否显示menu
                 copyable: true,
@@ -84,16 +69,6 @@ export default {
         //     const queryResult = search.query(this.value)
         //     hot.render()
         // })
-    },
-    methods: {
-        projectNameRenderer(instance, td, row, col, prop, value, cellProperties) {
-            console.log('prop',prop)
-            td.innerHTML = value
-            td.className = "project-name-container"
-        },
-        clickButton() {
-            console.log('111')
-        }
     }
 }
 </script>
@@ -158,6 +133,8 @@ export default {
             border: 0;
             background-color: #FFFFFF;
             padding: 0 2px;
+            height: 24px;
+            width: 112px;
 
             .colHeader {
                 font-family: PingFangSC-Regular;
@@ -169,24 +146,15 @@ export default {
                 font-weight: 400;
             }
         }
-        
-        .project-name-container {
-            width: 95px;
-            padding: 0;
-        }
 
         td {
-            height: 44px;
+            height: 24px;
+            width: 112px;
             padding: 0 2px;
             text-align: center;
             vertical-align: middle;
             border-left: 0;
             border-right: 0;
-
-            .project-name {
-                width: 95px;
-                height: 16px;
-            }
 
             .row-container {
                 display: flex;
@@ -197,27 +165,6 @@ export default {
                 border: 1px solid #E1DFE9;
                 margin: auto 0;
                 padding: 0 10px;
-
-                .button-container {
-                    display: flex;
-
-                    .button-background-grey {
-                        width: 20px;
-                        height: 20px;
-                        background: rgba(37, 35, 45, 0.04);
-                        border-radius: 1.25px;
-                        margin-right: 4px;
-                        cursor: pointer;
-                    }
-
-                    .button-background-purple {
-                        width: 20px;
-                        height: 20px;
-                        background: #7163C5;
-                        border-radius: 1.25px;
-                        cursor: pointer;
-                    }
-                }
             }
         }
     }
