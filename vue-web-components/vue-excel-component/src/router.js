@@ -5,6 +5,7 @@ import maxSaasTable from './components/max-saas-table.vue'
 import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
 import test from './views/test.vue'
+import manualCleaning from './components/page/manual-cleaning.vue'
 
 Vue.use(Router)
 
@@ -33,9 +34,14 @@ export default new Router({
             component: customMapping
         },
         {
-            path: '/',
+            path: '/bp-excel',
             name: 'bpExcel',
             component: bpExcel
+        },
+        {
+            path: '/manual-cleaning',
+            name: 'manualCleaning',
+            component: manualCleaning
         }
     ]
 })

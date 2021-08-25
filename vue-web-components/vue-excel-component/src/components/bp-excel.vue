@@ -17,18 +17,24 @@ export default {
             default: () => [
                 [1,2,3,4,5,6,7,8]
             ]
-        }
+        },
+        headers: Array
     },
     data() {
         return {
             hotSettings: {
                 data: this.data,
                 language: zhCN.languageCode,
-                height: "auto",
+                height: "100%",
                 readOnly: true,
                 licenseKey: 'non-commercial-and-evaluation',
                 copyable: true
             }
+        }
+    },
+    created() {
+        if (this.headers) {
+            this.hotSettings['colHeaders'] = this.headers
         }
     },
     mounted() {

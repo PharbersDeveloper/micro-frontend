@@ -75,7 +75,6 @@ export default {
                     }
                 }
                 this.$emit('event', event)
-                console.log(111);
             }
         }
     }
