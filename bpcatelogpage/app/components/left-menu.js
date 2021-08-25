@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class LeftMenuComponent extends Component {
+	@service oauthService
 	@service router
     @action
     listener(e) {
@@ -10,13 +11,18 @@ export default class LeftMenuComponent extends Component {
             case "linkToPage":
 				let idx = e.detail[0].args.param.index
 				if(idx == 0) {
-					this.router.transitionTo( `/download/enterprise` )
+					this.router.transitionTo(`/overview`)
 				} else if(idx == 1) {
 					this.router.transitionTo(`/download/my-data`)
 				} else if(idx == 2) {
 					this.router.transitionTo(`/projects`)
 				}
                 break
+			case "logOut":
+				this.oauthService.removeAuth()
+				window.localStorage.clear()
+				window.location = "/"
+				break
             default: 
                 console.log("other click event!")
         }
