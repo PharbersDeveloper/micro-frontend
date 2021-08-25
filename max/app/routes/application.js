@@ -38,30 +38,33 @@ export default class ApplicationRoute extends Route {
 		applicationAdapter.set("getUserInfo", 1)
 		applicationAdapter.set("userAuthorization", accessToken)
 		let allUserData
-		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
-		//请求employer的数据
-		let employerId = userData.belongsTo('employer').id()
-		applicationAdapter.set("partner",1)
-		let employerData = await this.store.findRecord( "partner", employerId )
-		
-		const options = {
-			domain: ".pharbers.com",
-			path: "/",
-			maxAge: this.cookies.read( "expires_in" )
+		if(this.cookies.read('account_id')) {
+			let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
+			//请求employer的数据
+			let employerId = userData.belongsTo('employer').id()
+			applicationAdapter.set("partner",1)
+			let employerData = await this.store.findRecord( "partner", employerId )
+			
+			const options = {
+				domain: ".pharbers.com",
+				path: "/",
+				maxAge: this.cookies.read( "expires_in" )
+			}
+
+			this.cookies.write( "account_id", userData.id, options )
+			this.cookies.write( "user_email", userData.email, options )
+
+			applicationAdapter.toggleProperty( "oauthRequest" )
+			applicationAdapter.set("getUserInfo", 1)
+			applicationAdapter.set("userAuthorization", accessToken)
+			applicationAdapter.set('needUserData', allUserData)
+			return RSVP.hash( {
+				personalData: userData,
+				employerId: employerId,
+				employerData: employerData,
+				_isVue: true
+			} )
 		}
-
-		this.cookies.write( "account_id", userData.id, options )
-		this.cookies.write( "user_email", userData.email, options )
-
-		applicationAdapter.toggleProperty( "oauthRequest" )
-		applicationAdapter.set("getUserInfo", 1)
-		applicationAdapter.set("userAuthorization", accessToken)
-		applicationAdapter.set('needUserData', allUserData)
-		return RSVP.hash( {
-			personalData: userData,
-			employerId: employerId,
-			employerData: employerData,
-			_isVue: true
-		} )
+		
 	}
 }

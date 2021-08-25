@@ -23,16 +23,18 @@
                     <div class="max-table-cell">数据报告</div>
                 </div>
             </div>
-            <div class="max-table-body">
-                <div class="max-table-row" v-for="(row,index) in rows" :key="index">
-                    <div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
-                    <div class="max-table-cell"><ph-table-cell type="upload" :value="row.upload"></ph-table-cell></div>
-                    <div class="max-table-cell"><ph-table-cell type="import" :value="row.import"></ph-table-cell></div>
-                    <div class="max-table-cell"><ph-table-cell type="clean" :value="row.clean"></ph-table-cell></div>
-                    <div class="max-table-cell"><ph-table-cell type="calculation" :value="row.calculation"></ph-table-cell></div>
-                    <div class="max-table-cell"><ph-table-cell type="report" :value="row.report"></ph-table-cell></div>
-                </div>
-            </div>
+			<!-- <div class="max-table-body-area"> -->
+				<div class="max-table-body">
+					<div class="max-table-row" v-for="(row,index) in rows" :key="index">
+						<div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
+						<div class="max-table-cell"><ph-table-cell type="upload" :value="row.upload"></ph-table-cell></div>
+						<div class="max-table-cell"><ph-table-cell type="import" :value="row.import"></ph-table-cell></div>
+						<div class="max-table-cell"><ph-table-cell type="clean" :value="row.clean"></ph-table-cell></div>
+						<div class="max-table-cell"><ph-table-cell type="calculation" :value="row.calculation"></ph-table-cell></div>
+						<div class="max-table-cell"><ph-table-cell type="report" :value="row.report"></ph-table-cell></div>
+					</div>
+				</div>
+			<!-- </div> -->
         </div>
         <div class="header-option">
             <span class="header">操作信息</span>
@@ -148,7 +150,7 @@ export default {
     .max-saas {
         display: flex;
         flex-direction: column;
-        padding: 24px;
+        padding: 104px 24px 24px;
         .header-option {
             display: flex;
             justify-content: space-between;
