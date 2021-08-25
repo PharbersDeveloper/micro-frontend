@@ -19,11 +19,25 @@ export default {
             type: String,
             default: "upload"
         },
-        value: String
+        value: String,
+        date: String,
+        project: Object,
+        index: Number
     },
     methods: {
         clickButton() {
-            console.log(111)
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    type: this.type,
+                    name: this.value,
+                    date: this.date,
+                    project: this.project
+                }
+            }
+            this.$emit('tableClickEvent', event)
         }
     }
 }
@@ -105,9 +119,9 @@ export default {
                 border-radius: 1.25px;
                 margin-right: 4px;
                 cursor: pointer;
-				display: flex;
-				align-items: center;
-				justify-content: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             .button-background-purple {
@@ -116,9 +130,9 @@ export default {
                 background: #7163C5;
                 border-radius: 1.25px;
                 cursor: pointer;
-				display: flex;
-				align-items: center;
-				justify-content: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
     }

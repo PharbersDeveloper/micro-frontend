@@ -4,10 +4,10 @@
             <span class="header">项目信息</span>
             <div class="date-button">
                 <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="year">
-                    <bp-option-vue text="2020年" ></bp-option-vue>
+                    <bp-option-vue text="2020" ></bp-option-vue>
                 </bp-select-vue>
                 <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="month">
-                    <bp-option-vue text="1月" ></bp-option-vue>
+                    <bp-option-vue text="01" ></bp-option-vue>
                 </bp-select-vue>
                 <bp-button class="create" text="新建Max项目"></bp-button>
             </div>
@@ -23,18 +23,28 @@
                     <div class="max-table-cell">数据报告</div>
                 </div>
             </div>
-			<!-- <div class="max-table-body-area"> -->
-				<div class="max-table-body">
-					<div class="max-table-row" v-for="(row,index) in rows" :key="index">
-						<div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
-						<div class="max-table-cell"><ph-table-cell type="upload" :value="row.upload"></ph-table-cell></div>
-						<div class="max-table-cell"><ph-table-cell type="import" :value="row.import"></ph-table-cell></div>
-						<div class="max-table-cell"><ph-table-cell type="clean" :value="row.clean"></ph-table-cell></div>
-						<div class="max-table-cell"><ph-table-cell type="calculation" :value="row.calculation"></ph-table-cell></div>
-						<div class="max-table-cell"><ph-table-cell type="report" :value="row.report"></ph-table-cell></div>
-					</div>
-				</div>
-			<!-- </div> -->
+            <!-- <div class="max-table-body-area"> -->
+                <div class="max-table-body">
+                    <div class="max-table-row" v-for="(row,index) in rows" :key="index">
+                        <div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="upload" :value="row.upload" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="import" :value="row.import"  :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="clean" :value="row.clean" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="report" :value="row.report" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                    </div>
+                </div>
+            <!-- </div> -->
         </div>
         <div class="header-option">
             <span class="header">操作信息</span>
@@ -74,8 +84,8 @@ export default {
     },
     data() {
         return {
-            year: "2020年",
-            month: "1月"
+            year: "2020",
+            month: "01"
         }
     },
     props: {
@@ -129,6 +139,11 @@ export default {
                     status: "322"
                 }]
             }
+        }
+    },
+    methods: {
+        tableClickEvent(data) {
+            this.$emit('event', data)
         }
     }
 }

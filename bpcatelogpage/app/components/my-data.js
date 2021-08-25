@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking'
 
 
 export default class MyDataComponent extends Component {
-    @tracked tabIndex;
     @service router
 	@service downloadFile
 	@service cookies
