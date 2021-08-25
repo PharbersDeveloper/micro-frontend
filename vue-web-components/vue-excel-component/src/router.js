@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import bpExcel from './components/bp-excel.vue'
-import maxSaasTable from './components/max-saas-table.vue'
+import maxSaasTable from './components/max-saas.vue'
 import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
 import nav from './components/bp-nav-top.vue'
@@ -18,7 +18,7 @@ export default new Router({
             component: bpExcel
         },
         {
-            path: '/max-saas-table',
+            path: '/max-saas',
             name: 'maxSaasTable',
             component: maxSaasTable
         },
