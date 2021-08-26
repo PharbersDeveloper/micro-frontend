@@ -33,10 +33,11 @@ export default {
                 param: {
                     type: this.type,
                     name: this.value,
-                    date: this.date,
+                    date: new Date(this.date) ? new Date(this.date).getTime() : new Date(),
                     project: this.project
                 }
             }
+            console.log(event.args.param.date)
             this.$emit('tableClickEvent', event)
         }
     }

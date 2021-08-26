@@ -26,7 +26,13 @@ export default class MaxSaasComponent extends Component {
             case "linkToPage":
                 let param = e.detail[0].args.param
                 this.provider = param.project.project;
-                this.uploadDate = param.date;
+                let selectTime = new Date(param.date)
+                let year = selectTime.getFullYear()
+                let month = selectTime.getMonth() + 1
+                if(String(month).length == 1) {
+                    month = '0' + String(month)
+                }
+                this.uploadDate = String(year)+String(month) //年月202108
                 if(param.type == "upload") {
                     $('#my-file').click()
                 }

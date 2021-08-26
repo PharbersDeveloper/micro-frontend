@@ -3,11 +3,11 @@
         <div class="header-option">
             <span class="header">项目信息</span>
             <div class="date-button">
-                <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="year">
-                    <bp-option-vue text="2020" ></bp-option-vue>
+                <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="choosedYear">
+                    <bp-option-vue :text="item" v-for="item in yearArr" @click="clickYear(item)"></bp-option-vue>
                 </bp-select-vue>
-                <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="month">
-                    <bp-option-vue text="01" ></bp-option-vue>
+                <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="choosedMonth">
+                    <bp-option-vue :text="item" v-for="item in monthArr" @click="clickMonth"></bp-option-vue>
                 </bp-select-vue>
                 <bp-button class="create" text="新建Max项目"></bp-button>
             </div>
@@ -25,22 +25,22 @@
             </div>
             <!-- <div class="max-table-body-area"> -->
                 <div class="max-table-body">
-                    <div class="max-table-row" v-for="(row,index) in rows" :key="index">
-                        <div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
+                    <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
+                        <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="upload" :value="row.upload" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="year+month" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
                 </div>
@@ -84,11 +84,138 @@ export default {
     },
     data() {
         return {
-            year: "2020",
-            month: "01"
+            choosedYear: "2020",
+            choosedMonth: "01",
+            monthArr: [],
+            yearArr: ['2021', '2020'],
+            nowMonthArr: [],
+            lastMonthArr: []
         }
     },
+    created() {
+        const rangeArray = (start, end) => Array(end - start + 1).fill(0).map((v, i) => i + start)
+        const currentDate = new Date()
+        const year = currentDate.getFullYear()
+        const month = currentDate.getMonth() + 1
+        // let month  =3
+        this.choosedYear = String(year)
+        this.choosedMonth = '0'+String(month)
+        let yearArr = []
+        let monthArr = []
+        let nowMonthArr = []
+        let lastMonthArr = []
+        if(month > 5) {
+            monthArr = rangeArray(month - 5, month)
+            yearArr.push(year)
+            this.nowMonthArr = monthArr.map(item => {
+                item = String(item)
+                if(item.length  == 1) {
+                    return '0' + item
+                } else {
+                    return item
+                }
+            })
+        } else {
+            yearArr.push(year) //当年年份
+            yearArr.push(Number(year) - 1) //去年年份
+            nowMonthArr = rangeArray(1, month) //当年月份
+            let monthList = rangeArray(1, 12) //定义月份列表
+            lastMonthArr = monthList.slice((6 - nowMonthArr.length) * -1) //去年月份
+            this.nowMonthArr = nowMonthArr.map(item => {
+                item = String(item)
+                if(item.length  == 1) {
+                    return '0' + item
+                } else {
+                    return item
+                }
+            })
+            this.lastMonthArr = lastMonthArr.map(item => {
+                item = String(item)
+                if(item.length  == 1) {
+                    return '0' + item
+                } else {
+                    return item
+                }
+            })
+        }
+        this.yearArr = yearArr.map(item => String(item))
+        this.monthArr = this.nowMonthArr
+    },
     props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    projectsData: [
+                        {
+                            "provider": "汇宇",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Bayer",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Servier",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "奥鸿",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "泰德",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "BMS",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "UCB",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "倍特",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Amgen",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Lilly",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "恩华",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Astellas",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Pfize",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        }
+                    ]
+                }
+            }
+        },
         rows: {
             type: Array,
             default() {
@@ -144,6 +271,18 @@ export default {
     methods: {
         tableClickEvent(data) {
             this.$emit('event', data)
+        },
+        clickYear(data) {
+            this.choosedYear = data
+            if(Number(data) == new Date().getFullYear()) {
+                this.monthArr = this.nowMonthArr
+            } else {
+                this.monthArr = this.lastMonthArr
+            }
+            this.choosedMonth = this.monthArr[this.monthArr.length - 1]
+        },
+        clickMonth(data) {
+            this.choosedMonth = data
         }
     }
 }
