@@ -78,6 +78,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         z-index: 1000;
+		background: #fff;
 		// margin-bottom: 24px;
         .nav-border {
             height: 80px;
