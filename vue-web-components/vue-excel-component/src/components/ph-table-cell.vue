@@ -1,6 +1,6 @@
 <template>
     <div class="table-cell-border">
-        <span>{{value}}</span>
+        <span>{{project.showName}}</span>
         <div class='button-container'>
             <div class='button-background-grey' @click="this.clickButton">
                 <button class='icon_QC'></button>
