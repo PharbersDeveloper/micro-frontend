@@ -18,7 +18,7 @@ export default {
                 [1,2,3,4,5,6,7,8]
             ]
         },
-        headers: Array
+        colHeaders: Array
     },
     data() {
         return {
@@ -26,6 +26,7 @@ export default {
                 data: this.data,
                 language: zhCN.languageCode,
                 height: "100%",
+                width: "100%",
                 readOnly: true,
                 licenseKey: 'non-commercial-and-evaluation',
                 copyable: true
@@ -33,8 +34,8 @@ export default {
         }
     },
     created() {
-        if (this.headers) {
-            this.hotSettings['colHeaders'] = this.headers
+        if (this.colHeaders) {
+            this.hotSettings['colHeaders'] = this.colHeaders
         }
     },
     mounted() {
@@ -59,20 +60,46 @@ export default {
         font-weight: 400;
     }
 
+    @mixin heading-small-inverse {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #FFFFFF;
+        letter-spacing: 0.25px;
+        text-align: left;
+        line-height: 20px;
+        font-weight: 400;
+    }
+
+    .handsontable .wtHider {
+        width: 100% !important;
+
+        .wtSpreader {
+            width: 100%;
+        }
+    }
     .handsontable .htCore {
+        width: 100% !important;
         th {
             background-color: #FFFFFF;
             padding: 0 2px;
             height: 24px;
-            width: 112px;
+            min-width: 112px;
+            vertical-align: bottom;
+            text-align: left;
+            @include heading-small-inverse;
+            background-color: #BCBAC4;
+
+            .relative {
+                padding: 0;
+            }
         }
 
         td {
             height: 24px;
-            width: 112px;
+            min-width: 112px;
+            width: 100%;
             padding: 0 2px;
-            text-align: center;
-            vertical-align: middle;
+            vertical-align: bottom;
         }
     }
 </style>
