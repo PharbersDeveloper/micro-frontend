@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :data="data" :headers="headers"></bp-excel>
+                <bp-excel :data="data" :colHeaders="colHeaders"></bp-excel>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@ export default {
                 ]
             }
         },
-        headers: {
+        colHeaders: {
             type: Array,
             default: () => ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8','Name_9']
         }
