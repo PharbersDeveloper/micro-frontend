@@ -1,0 +1,14 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	height: 100%;
+	margin: 0;
+	min-width: 1200px;
+	width: 100%;
+}
+
+p {
+	margin: 0;
+}
