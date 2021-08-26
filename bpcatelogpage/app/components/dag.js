@@ -122,7 +122,7 @@ export default class DagComponent extends Component {
 				let params = e.detail[0].args.param
 				let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": 10, "page[offset]": params.page * 10} )
 				e.target.allData.executions = executions.filter(function(item) {
-					return item.id !== ''
+					return item
 				})
 				this.random = Math.random()
 				break

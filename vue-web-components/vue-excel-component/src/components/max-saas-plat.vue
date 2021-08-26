@@ -25,61 +25,59 @@
                     </div>
                 </div>
                 <!-- <div class="max-table-body-area"> -->
-                    <div class="max-table-body">
-                        <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
-                            <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
-                            <div class="max-table-cell">
-                                <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                            </div>
-                            <div class="max-table-cell">
-                                <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                            </div>
-                            <div class="max-table-cell">
-                                <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                            </div>
-                            <div class="max-table-cell">
-                                <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                            </div>
-                            <div class="max-table-cell">
-                                <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                            </div>
-            </div>
-            <!-- <div class="max-table-body-area"> -->
                 <div class="max-table-body">
                     <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
                         <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="parseData(row.actions)" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                        </div>
+                        <div class="max-table-cell">
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
-                <!-- </div> -->
-            </div>
-        </div>
-        <div class="header-option">
-            <span class="header">操作信息</span>
-        </div>
-        <div class="otp-table">
-            <div class="opt-table-header">
-                <div class="date">时间</div>
-                <div class="optioner">操作者</div>
-                <div class="optionData">操作信息</div>
-                <div class="memo">备注</div>
-                <div class="status">操作状态</div>
-            </div>
-            <div class="opt-table-body-area">
-                <div class="opt-table-body" v-for="opt in optTable" :key="opt.name">
-                    <div class="date">{{opt.time}}</div>
-                    <div class="optioner">{{opt.optioner}}</div>
-                    <div class="optionData">{{opt.data}}</div>
-                    <div class="memo">{{opt.memo}}</div>
-                    <div class="status">{{opt.status}}</div>
                 </div>
+            </div>
+        </div>
+        <div>
+            <div class="header-option">
+                <span class="header">操作信息</span>
+            </div>
+            <div class="otp-table">
+                <div class="opt-table-header">
+                    <div class="date">时间</div>
+                    <div class="optioner">操作者</div>
+                    <div class="optionData">操作信息</div>
+                    <div class="memo">备注</div>
+                    <div class="status">操作状态</div>
+                </div>
+                <div class="opt-table-body-area">
+                    <div class="opt-table-body" v-for="(opt,index) in allData.jobLogs" :key="index">
+                        <div class="date">{{formatDateStandard(opt.time, 0)}}</div>
+                        <div class="optioner">{{opt.provider}}</div>
+                        <div class="optionData">{{opt.message}}</div>
+                        <div class="memo">{{opt.comments}}</div>
+                        <div class="status">{{opt.jobDesc}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="allPage && curPage" class="page-container">
+                <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import bpPagination from './bp-pagination.vue'
 import phTableCell from './ph-table-cell.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
@@ -89,7 +87,8 @@ export default {
         phTableCell,
         bpSelectVue,
         bpOptionVue,
-        bpButton
+        bpButton,
+        bpPagination
     },
     data() {
         return {
@@ -99,6 +98,56 @@ export default {
             yearArr: ['2021', '2020'],
             nowMonthArr: [],
             lastMonthArr: []
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    projectsData: [
+                        {
+                            "provider": "汇宇",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        }
+                    ],
+                    jobsCount: 78,
+                    jobLogs: [
+                        {
+                            "provider": "倍特",
+                            "owner": "5UBSLZvV0w9zh7-lZQap",
+                            "time": "2021-02-28T16:00:00.000Z",
+                            "version": "测试文件.xlsx",
+                            "code": 0,
+                            "jobDesc": "success",
+                            "jobCat": "upload",
+                            "comments": "测试数据",
+                            "message": null,
+                            "date": "1629869854734"
+                        }
+                    ]
+                }
+            }
+        },
+        random: Number
+    },
+    computed: {
+        allPage() {
+            const total = this.allData.jobsCount
+            const perPage = 10
+            if (Math.ceil(total / perPage) <= 1) {
+                return 0
+            }
+            return Math.max(1, Math.ceil(total / perPage))
+        },
+        curPage() {
+            return this.allData.page + 1
+        }
+    },
+    watch: {
+        random: function() {
+            this.$forceUpdate()
         }
     },
     created() {
@@ -150,133 +199,6 @@ export default {
         this.yearArr = yearArr.map(item => String(item))
         this.monthArr = this.nowMonthArr
     },
-    props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    projectsData: [
-                        {
-                            "provider": "汇宇",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "Bayer",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "Servier",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "奥鸿",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "泰德",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "BMS",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "UCB",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "倍特",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "Amgen",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "Lilly",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "恩华",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "Astellas",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        },
-                        {
-                            "provider": "Pfize",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        }
-                    ]
-                }
-            }
-        },
-        rows: {
-            type: Array,
-            default() {
-                return [
-                    {
-                        project: "AZ",
-                        upload: "Operator1",
-                        import: "Operator2",
-                        clean: "Operator3",
-                        calculation: "Operator4",
-                        report: "Operator5"
-                    },
-                    {
-                        project: "AZ",
-                        upload: "Operator1",
-                        import: "Operator2",
-                        clean: "Operator3",
-                        calculation: "Operator4",
-                        report: "Operator5"
-                    },
-                    {
-                        project: "AZ",
-                        upload: "Operator1",
-                        import: "Operator2",
-                        clean: "Operator3",
-                        calculation: "Operator4",
-                        report: "Operator5"
-                    },
-                    {
-                        project: "AZ",
-                        upload: "Operator1",
-                        import: "Operator2",
-                        clean: "Operator3",
-                        calculation: "Operator4",
-                        report: "Operator5"
-                    }
-                ]
-            }
-        },
-        optTable: {
-            type: Array,
-            default: function() {
-                return [{
-                    time: "111",
-                    optioner: "222",
-                    data: "222",
-                    memo: "333",
-                    status: "322"
-                }]
-            }
-        }
-    },
     methods: {
         tableClickEvent(data) {
             this.$emit('event', data)
@@ -293,9 +215,49 @@ export default {
         clickMonth(data) {
             this.choosedMonth = data
         },
-        parseData(data) {
+        parseData(data, type) {
             let datas = JSON.parse(data)
-            return datas[0]
+            let filterData = datas.filter( it => it.jobCat == type)
+            return filterData[0]
+        },
+        changePage(page) {
+            const event = new Event("event")
+            event.args = {
+                callback: "changePage",
+                element: this,
+                param: {
+                    name: '/max-saas',
+                    page: page - 1
+                }
+            }
+            this.$emit('event', event)
+        },
+        formatDateStandard(...params) {
+            if(params.length === 2) {
+                let date = new Date( params[0] ),
+                    Y = date.getFullYear(),
+                    M =
+                        ( date.getMonth() + 1 < 10 ?
+                            `0${date.getMonth() + 1}` :
+                            date.getMonth() + 1 ),
+                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+
+                    h =
+                        ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
+                    m =
+                        ( date.getMinutes() < 10 ?
+                            `0${date.getMinutes()}` :
+                            date.getMinutes() ) ,
+                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+
+                // 输出结果：yyyy/mm/dd hh:mm
+                if(params[1] === 0){
+                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                }else if(params[1] === 1) {
+                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                }
+            }
         }
     }
 }
@@ -314,16 +276,22 @@ export default {
         line-height: 16px;
         font-weight: 400;
     }
+    .page-container {
+        display: flex;
+        justify-content: center;
+    }
     .max-saas {
         display: flex;
         flex-direction: column;
-        padding: 104px 24px 24px;
+        padding: 80px 24px 24px;
         width: 100%;
         height: 100%;
         .header-option {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
+            margin-top: 28px;
             .header {
                 font-family: PingFangSC-Regular;
                 font-size: 14px;
@@ -368,12 +336,14 @@ export default {
         }
         .table-container {
             width: 100%;
-            min-height: 347px;
+            min-height: 400px;
+            height:347px;
             overflow: scroll;
             .max-table-container {
                 display: table;
-                margin-top: 20px;
+                // margin-top: 20px;
                 margin-bottom: 28px;
+                width: 100%;
                 .max-table-header {
                     display: table-header-group;
                     height: 32px;
@@ -399,7 +369,7 @@ export default {
 
                 .max-table-body {
                     display: table-row-group;
-                    height: 314px !important;
+                    // height: 314px !important;
                     overflow: hidden;
                     .max-table-row {
                         display: table-row;
@@ -466,7 +436,8 @@ export default {
                 min-width: 150px;
             }
             .opt-table-body-area {
-                
+                height: 220px;
+                overflow: auto;
                 .opt-table-body {
                     display: flex;
                     height: 44px;

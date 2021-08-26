@@ -8,7 +8,13 @@ export default class MaxSaasRoute extends Route {
 	@service store
 	@service ajax
 
-	async model() {
+	async model(params) {
+		const limit = 10
+		let page = parseInt( params.page, 10 )
+        if ( isNaN( page ) ) {
+			page = 0
+		}
+
 		const accessToken = this.cookies.read( "access_token" )
 		const applicationAdapter = this.get( "store" ).adapterFor( "application" )
 		applicationAdapter.toggleProperty( "oauthRequest" )
@@ -33,9 +39,13 @@ export default class MaxSaasRoute extends Route {
 		let currentstamp = time.replace(/-/g, '/');
 		let timesTamp = new Date(currentstamp).getTime()
 		let projects = await this.store.query("project",{ "filter[time]": timesTamp})
+		let jobLogs = await this.store.query("jobLog", {"page[limit]": limit, "page[offset]": page * limit})
 		return RSVP.hash({
 			userData: userData,
 			projectsData: projects.filter( it => it),
+			jobLogs: jobLogs.filter( it => it),
+			jobsCount: jobLogs.meta.count,
+			page: page,
 			_isVue: true
         })
 	}

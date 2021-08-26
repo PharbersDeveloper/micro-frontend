@@ -10,6 +10,7 @@ export default class MaxSaasComponent extends Component {
     @service store
     @service router
 
+	@tracked random
     @tracked provider
     @tracked uploadDate
     @tracked uploadToastBorder
@@ -21,11 +22,11 @@ export default class MaxSaasComponent extends Component {
     @tracked showProgress
 
     @action
-    listener(e) {
+    async listener(e) {
         switch(e.detail[0].args.callback) {
-            case "linkToPage":
+            case "opt":
                 let param = e.detail[0].args.param
-                this.provider = param.project.project;
+                this.provider = param.provider;
                 let selectTime = new Date(param.date)
                 let year = selectTime.getFullYear()
                 let month = selectTime.getMonth() + 1
@@ -37,6 +38,15 @@ export default class MaxSaasComponent extends Component {
                     $('#my-file').click()
                 }
                 break
+            case "changePage":
+				//操作信息 分页
+				let params = e.detail[0].args.param
+				let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": params.page * 10} )
+				e.target.allData.jobLogs = jobLogs.filter(function(item) {
+					return item.id !== ''
+				})
+				this.random = Math.random()
+				break
             default: 
                 console.log("other click event!")
         }

@@ -67,8 +67,7 @@ export default DS.JSONAPIAdapter.extend( {
 		if(modelName === "db" || modelName === "table" || modelName === "partition") {
 			newUrl = `/phcatlog/${curPath}`
 		}
-
-		if(modelName == "project") {
+		if(modelName == "project" || modelName === "job-log") {
 			newUrl = `/phmax/${curPath}`
 		}
 		if ( query && Object.keys( query ).length ) {
