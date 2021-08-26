@@ -68,6 +68,9 @@ export default DS.JSONAPIAdapter.extend( {
 			newUrl = `/phcatlog/${curPath}`
 		}
 
+		if(modelName == "project") {
+			newUrl = `/phmax/${curPath}`
+		}
 		if ( query && Object.keys( query ).length ) {
 			let queryString = ""
 			const queryParamsArr = Object.keys( query )

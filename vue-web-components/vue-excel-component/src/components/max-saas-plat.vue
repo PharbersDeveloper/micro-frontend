@@ -25,8 +25,8 @@
             </div>
             <!-- <div class="max-table-body-area"> -->
                 <div class="max-table-body">
-                    <div class="max-table-row" v-for="(row,index) in rows" :key="index">
-                        <div class="max-table-cell" id="project-name"><div>{{row.project}}</div></div>
+                    <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
+                        <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
                         <div class="max-table-cell">
                             <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
@@ -96,8 +96,8 @@ export default {
         const rangeArray = (start, end) => Array(end - start + 1).fill(0).map((v, i) => i + start)
         const currentDate = new Date()
         const year = currentDate.getFullYear()
-        // const month = currentDate.getMonth() + 1
-        let month  =3
+        const month = currentDate.getMonth() + 1
+        // let month  =3
         this.choosedYear = String(year)
         this.choosedMonth = '0'+String(month)
         let yearArr = []
@@ -142,6 +142,80 @@ export default {
         this.monthArr = this.nowMonthArr
     },
     props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    projectsData: [
+                        {
+                            "provider": "汇宇",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Bayer",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Servier",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "奥鸿",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "泰德",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "BMS",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "UCB",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "倍特",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Amgen",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Lilly",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "恩华",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Astellas",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        },
+                        {
+                            "provider": "Pfize",
+                            "time": "1627747200000",
+                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+                        }
+                    ]
+                }
+            }
+        },
         rows: {
             type: Array,
             default() {
