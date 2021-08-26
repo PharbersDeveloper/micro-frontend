@@ -12,39 +12,41 @@
                 <bp-button class="create" text="新建Max项目"></bp-button>
             </div>
         </div>
-        <div class="max-table-container">
-            <div class="max-table-header">
-                <div class="max-table-row">
-                    <div class="max-table-cell" id="project-name-text">项目名</div>
-                    <div class="max-table-cell">上传</div>
-                    <div class="max-table-cell">导入</div>
-                    <div class="max-table-cell">人工清洗</div>
-                    <div class="max-table-cell">数据计算</div>
-                    <div class="max-table-cell">数据报告</div>
-                </div>
-            </div>
-            <!-- <div class="max-table-body-area"> -->
-                <div class="max-table-body">
-                    <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
-                        <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
-                        <div class="max-table-cell">
-                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                        </div>
-                        <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                        </div>
-                        <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                        </div>
-                        <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                        </div>
-                        <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
-                        </div>
+        <div class="table-container">
+            <div class="max-table-container">
+                <div class="max-table-header">
+                    <div class="max-table-row">
+                        <div class="max-table-cell" id="project-name-text">项目名</div>
+                        <div class="max-table-cell">上传</div>
+                        <div class="max-table-cell">导入</div>
+                        <div class="max-table-cell">人工清洗</div>
+                        <div class="max-table-cell">数据计算</div>
+                        <div class="max-table-cell">数据报告</div>
                     </div>
                 </div>
-            <!-- </div> -->
+                <!-- <div class="max-table-body-area"> -->
+                    <div class="max-table-body">
+                        <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
+                            <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
+                            <div class="max-table-cell">
+                                <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            </div>
+                            <div class="max-table-cell">
+                                <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            </div>
+                            <div class="max-table-cell">
+                                <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            </div>
+                            <div class="max-table-cell">
+                                <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            </div>
+                            <div class="max-table-cell">
+                                <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
         </div>
         <div class="header-option">
             <span class="header">操作信息</span>
@@ -305,6 +307,8 @@ export default {
         display: flex;
         flex-direction: column;
         padding: 104px 24px 24px;
+        width: 100%;
+        height: 100%;
         .header-option {
             display: flex;
             justify-content: space-between;
@@ -351,61 +355,69 @@ export default {
                 }
             }
         }
-        .max-table-container {
-            display: table;
-            margin-top: 20px;
-            margin-bottom: 28px;
-            .max-table-header {
-                display: table-header-group;
-                height: 32px;
-                .max-table-row {
-                    display: table-row;
-                    #project-name-text {
-                        padding-right: 2px;
-                    }
-                    .max-table-cell {
-                        display: table-cell;
-                        vertical-align: middle;
-                        text-align: center;
-                        border-bottom: 1px solid rgba(37,35,45,0.08);
-                        @include heading-xsmall;
+        .table-container {
+            width: 100%;
+            min-height: 347px;
+            overflow: scroll;
+            .max-table-container {
+                display: table;
+                margin-top: 20px;
+                margin-bottom: 28px;
+                .max-table-header {
+                    display: table-header-group;
+                    height: 32px;
+                    .max-table-row {
+                        display: table-row;
+                        #project-name-text {
+                            padding-right: 2px;
+                        }
+                        .max-table-cell {
+                            display: table-cell;
+                            vertical-align: middle;
+                            text-align: center;
+                            border-bottom: 1px solid rgba(37,35,45,0.08);
+                            @include heading-xsmall;
 
-                        &:last-of-type {
-                            width: 211px;
-                            padding-right: 0;
+                            &:last-of-type {
+                                width: 211px;
+                                padding-right: 0;
+                            }
                         }
                     }
                 }
-            }
 
-            .max-table-body {
-                display: table-row-group;
-                .max-table-row {
-                    display: table-row;
-                    height: 44px;
+                .max-table-body {
+                    display: table-row-group;
+                    height: 314px !important;
+                    overflow: hidden;
+                    .max-table-row {
+                        display: table-row;
+                        height: 44px;
 
-                    #project-name {
-                        width: 97px;
-                        padding-right: 2px;
-                        @include heading-xsmall;
-                    }
+                        #project-name {
+                            width: 97px;
+                            padding-right: 2px;
+                            @include heading-xsmall;
+                        }
 
-                    .max-table-cell {
-                        display: table-cell;
-                        vertical-align: middle;
-                        text-align: center;
-                        padding: 0 2px;
-                        width: 213px;
-                        border-bottom: 1px solid rgba(37,35,45,0.08);
+                        .max-table-cell {
+                            display: table-cell;
+                            vertical-align: middle;
+                            text-align: center;
+                            padding: 0 2px;
+                            width: 213px;
+                            border-bottom: 1px solid rgba(37,35,45,0.08);
 
-                        &:last-of-type {
-                            width: 211px;
-                            padding-right: 0;
+                            &:last-of-type {
+                                width: 211px;
+                                padding-right: 0;
+                            }
                         }
                     }
                 }
             }
         }
+        
         .otp-table {
             display: flex;
             flex-direction: column;
