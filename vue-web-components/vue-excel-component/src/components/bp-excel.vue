@@ -1,5 +1,5 @@
 <template>
-    <div id="hot-table"></div>
+    <div ref="table" id="hot-table"></div>
 </template>
 <script>
 import { HotTable } from '@handsontable/vue';
@@ -14,9 +14,11 @@ export default {
     props: {
         data: {
             type: Array,
-            default: () => [
-                [1,2,3,4,5,6,7,8]
-            ]
+            default(){
+                return [
+                    [1,2,3,4,5,6,7,8]
+                ]
+            }
         },
         colHeaders: Array
     },
@@ -39,7 +41,7 @@ export default {
         }
     },
     mounted() {
-        const container = document.querySelector('#hot-table')
+        const container = this.$refs.table
         registerLanguageDictionary(zhCN)
         const hot = new Handsontable(container, this.hotSettings)
     }

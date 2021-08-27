@@ -27,12 +27,70 @@
                 <button class="search-button btn_primary-initial">搜索</button>
             </div>
         </div>
+
+        <div class="source-entry-container">
+            <span class="heading-small">源条目</span>
+            <div class="source-entry-border">
+                <bp-excel :data="sourceData" :colHeaders="sourceColHeaders"></bp-excel>
+            </div>
+        </div>
+
+        <div class="master-container">
+            <span class="heading-small">Master文件检索结果</span>
+            <div class="master-border">
+                <bp-excel :data="masterData" :colHeaders="masterColHeaders"></bp-excel>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="btn_secondary_initial cancel-button">取消</button>
+            <button class="btn_secondary_initial">确认替换</button>
+        </div>
     </div>
 </template>
 
 <script>
+import bpExcel from './bp-excel.vue'
 export default {
-    
+    components: {
+        bpExcel
+    },
+    props: {
+        sourceData: {
+            type: Array,
+            default() {
+                return [
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
+                ]
+            }
+        },
+        sourceColHeaders: {
+            type: Array,
+            default() {
+                return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
+            }
+        },
+        masterData: {
+            type: Array,
+            default() {
+                return [
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
+                ]
+            }
+        },
+        masterColHeaders: {
+            type: Array,
+            default() {
+                return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
+            }
+        }
+    }
 }
 </script>
 
@@ -52,6 +110,16 @@ export default {
         letter-spacing: 0.25px;
         text-align: left;
         line-height: 16px;
+        font-weight: 400;
+    }
+
+    .heading-small {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #25232D;
+        letter-spacing: 0.25px;
+        text-align: left;
+        line-height: 20px;
         font-weight: 400;
     }
 
@@ -130,6 +198,7 @@ export default {
             display: flex;
             justify-content: space-between;
             padding: 0 20px;
+            margin-bottom: 32px;
 
             .entry-search-left {
                 display: flex;
@@ -162,6 +231,50 @@ export default {
                     background: #7163C5;
                     border-radius: 2px;
                 }
+            }
+        }
+
+        .source-entry-container {
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px;
+
+            .source-entry-border {
+                display: flex;
+                border: 1px solid rgba(37,35,45,0.12);
+                border-radius: 2px;
+                margin-top: 12px;
+                height: 64px;
+                overflow: hidden;
+            }
+        }
+
+        .master-container {
+            display: flex;
+            flex-direction: column;
+            margin: 25px 0 35px;
+            padding: 0 20px;
+
+            .master-border {
+                border: 1px solid rgba(37,35,45,0.12);
+                border-radius: 2px;
+                height: 320px;
+            }
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 20px;
+
+            .cancel-button {
+                margin-right: 4px;
+                background-color: #fff;
+            }
+
+            button {
+                width: 80px;
+                height: 32px;
             }
         }
     }
