@@ -23,7 +23,7 @@ export default {
         date: String,
         project: Object,
         index: Number,
-		provider: String
+        provider: String
     },
     methods: {
         clickButton() {
@@ -36,7 +36,7 @@ export default {
                     name: this.value,
                     date: new Date(this.date) ? new Date(this.date).getTime() : new Date(),
                     project: this.project,
-					provider: this.provider
+                    provider: this.provider
                 }
             }
             console.log(event.args.param.date)

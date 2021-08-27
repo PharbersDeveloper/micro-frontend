@@ -4,10 +4,10 @@
             <span class="header">项目信息</span>
             <div class="date-button">
                 <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="choosedYear">
-                    <bp-option-vue :text="item" v-for="item in yearArr" @click="clickYear(item)"></bp-option-vue>
+                    <bp-option-vue :text="item" :key="index+'year'" v-for="(item,index) in yearArr" @click="clickYear(item)"></bp-option-vue>
                 </bp-select-vue>
                 <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="choosedMonth">
-                    <bp-option-vue :text="item" v-for="item in monthArr" @click="clickMonth"></bp-option-vue>
+                    <bp-option-vue :text="item" :key="index+'month'" v-for="(item, index) in monthArr" @click="clickMonth"></bp-option-vue>
                 </bp-select-vue>
                 <bp-button class="create" text="新建Max项目"></bp-button>
             </div>
@@ -73,12 +73,14 @@
                 <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
             </div>
         </div>
+        <uploadBox :JsonData="JsonData" v-if="showUpload" @cancel="closeUploadModal" @confirm="confirmUpload" @selectFile="selectFile" :fileName="fileName"></uploadBox>
     </div>
 </template>
 
 <script>
 import bpPagination from './bp-pagination.vue'
 import phTableCell from './ph-table-cell.vue'
+import uploadBox from './upload-box.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import bpButton from '../../node_modules/vue-components/src/components/bp-button.vue'
@@ -88,7 +90,8 @@ export default {
         bpSelectVue,
         bpOptionVue,
         bpButton,
-        bpPagination
+        bpPagination,
+        uploadBox
     },
     data() {
         return {
@@ -97,7 +100,10 @@ export default {
             monthArr: [],
             yearArr: ['2021', '2020'],
             nowMonthArr: [],
-            lastMonthArr: []
+            lastMonthArr: [],
+            showUpload: false,
+            JsonData: {},
+            clickProjectEvent: {}
         }
     },
     props: {
@@ -130,7 +136,8 @@ export default {
                 }
             }
         },
-        random: Number
+        random: Number,
+        fileName: String
     },
     computed: {
         allPage() {
@@ -200,8 +207,22 @@ export default {
         this.monthArr = this.nowMonthArr
     },
     methods: {
+        selectFile() {
+            this.$emit('event', this.clickProjectEvent)
+        },
+        confirmUpload(data) {
+            let confirmEvent = this.clickProjectEvent;
+            confirmEvent.args.param.memo = data;
+            confirmEvent.args.callback = "confirmUpload";
+            this.$emit('event', confirmEvent)
+            this.showUpload = false
+
+        },
         tableClickEvent(data) {
-            this.$emit('event', data)
+            if(data.args.param.type == "upload") {
+                this.showUpload = true
+            }
+            this.clickProjectEvent = data
         },
         clickYear(data) {
             this.choosedYear = data
@@ -258,6 +279,9 @@ export default {
                     return Y + "-" + M + "-" + D0 + " " + h + ":" + m
                 }
             }
+        },
+        closeUploadModal() {
+            this.showUpload = false
         }
     }
 }
@@ -279,6 +303,7 @@ export default {
     .page-container {
         display: flex;
         justify-content: center;
+        margin-top: 20px;
     }
     .max-saas {
         display: flex;
