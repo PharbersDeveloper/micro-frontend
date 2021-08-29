@@ -25,7 +25,7 @@ export default class MaxSaasComponent extends Component {
     @action
     async listener(e) {
         switch(e.detail[0].args.callback) {
-            case "opt":
+            case "opt": // 文件上传
                 let param = e.detail[0].args.param
                 this.provider = param.provider;
                 let selectTime = new Date(param.date)
@@ -39,11 +39,10 @@ export default class MaxSaasComponent extends Component {
                     $('#my-file').click()
                 }
                 break
-            case "confirmUpload":
+            case "confirmUpload": // 确认上传
                 this.confirmUploadFiles(e.detail[0].args.param.memo);
                 break
-            case "changePage":
-                //操作信息 分页
+            case "changePage": // 操作信息 分页
                 let params = e.detail[0].args.param
                 let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": params.page * 10} )
                 e.target.allData.jobLogs = jobLogs.filter(function(item) {
@@ -51,6 +50,9 @@ export default class MaxSaasComponent extends Component {
                 })
                 this.random = Math.random()
                 break
+			case "closeToast": // 关闭上传进度条
+				this.closeuploadToast = '1'
+				break
             default: 
                 console.log("other click event!")
         }
@@ -101,7 +103,7 @@ export default class MaxSaasComponent extends Component {
         let uploadFileParams = {
             ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             Bucket: bucketName,
-            Key: fileKey.replace(/[(|)|（|）]/g, "_"),
+            Key: fileKey.replace(/[(|)|（|）| 【|】]/g, "_"),
             Body: uploadMessage.file
         }
 
@@ -157,9 +159,9 @@ export default class MaxSaasComponent extends Component {
                     ]
                 }
             }
+			// 上传文件打tag
             s3Client.putObjectTagging(tagParam, function(err, data) {
                 if (err) console.log(err, err.stack); // an error occurred
-                else     console.log(data);           // successful response
             });
             /**
              * 3. create file metadata for database
