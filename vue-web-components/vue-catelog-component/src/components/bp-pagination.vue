@@ -37,7 +37,6 @@ export default {
         changePageArray() {
             // 折叠符...位置的改变
             if (this.pageArray.length > 7) {
-                console.log(111);
                 let newArr = []
                 // 首页始终显示
                 newArr.push(this.pageArray[0])
