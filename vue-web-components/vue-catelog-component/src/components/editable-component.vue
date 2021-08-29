@@ -102,6 +102,10 @@ export default {
             .editable-tag-name {
                 @include label-tags;
                 line-height: 18px;
+				max-width: 100px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
             }
 
             .icon_cross {
