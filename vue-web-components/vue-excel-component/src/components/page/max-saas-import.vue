@@ -32,10 +32,10 @@
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
-                            <bp-option-vue text="自定映射"></bp-option-vue>
-                            <bp-option-vue text="显示条目"></bp-option-vue>
-                            <bp-option-vue text="换一批"></bp-option-vue>
-                            <bp-option-vue text="显示全部"></bp-option-vue>
+                            <bp-option-vue text="自定映射" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
                         </bp-select-vue>
                     </div>
                 </div>
