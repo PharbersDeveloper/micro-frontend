@@ -47,11 +47,13 @@ export default class MaxSaasComponent extends Component {
             case "changePage": // 操作信息 分页
                 let params = e.detail[0].args.param
 				this.optPageParam = params.page
-                let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": params.page * 10} )
-                e.target.allData.jobLogs = jobLogs.filter(function(item) {
-                    return item.id !== ''
-                })
-                this.random = Math.random()
+				this.router.transitionTo( "/" )
+            	this.router.transitionTo( `/max-saas?page=${this.optPageParam}` )
+                // let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": params.page * 10} )
+                // e.target.allData.jobLogs = jobLogs.filter(function(item) {
+                //     return item.id !== ''
+                // })
+                // this.random = Math.random()
                 break
 			case "closeToast": // 关闭上传进度条
 				this.closeuploadToast = '1'
