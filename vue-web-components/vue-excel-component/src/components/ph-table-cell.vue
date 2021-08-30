@@ -41,7 +41,6 @@ export default {
                     projectId: this.projectId
                 }
             }
-            console.log(event.args.param.date)
             this.$emit('tableClickEvent', event)
         }
     }

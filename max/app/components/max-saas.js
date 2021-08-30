@@ -69,10 +69,6 @@ export default class MaxSaasComponent extends Component {
         this.uploadText = ""
         this.closeuploadToast = "0" //显示上传弹框
 
-        //禁用上传文件input
-        // let dom = $( event.target )
-        // dom[0].disabled = true
-
         function guid() {
             return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
                 var r = Math.random() * 16 | 0,
@@ -103,7 +99,6 @@ export default class MaxSaasComponent extends Component {
         const s3Client = this.awsService.get( "s3Client" )
         const fileKey = `user/${accountId}/${traceId}/${uploadMessage.file.name}`
         let uploadFileParams = {
-            // ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             Bucket: bucketName,
             Key: fileKey.replace(/[(|)|（|）| 【|】| \[|\] ]/g, "_"),
             Body: uploadMessage.file
@@ -117,6 +112,11 @@ export default class MaxSaasComponent extends Component {
                     that.uploadLoadedSize = progress.loaded //实时进度
                 } )
                 .promise()
+				.catch((err)=> {
+					this.updateProject(uploadFileParams.Key, "failed", "upload", uploadMessage, [], memo)
+				})
+			if(!s3FileUpload) return
+			//文件名	
             fileVersion = s3FileUpload.Key.split("/").pop()
             // upload file tag
             let tagParam = {
@@ -200,49 +200,7 @@ export default class MaxSaasComponent extends Component {
             await this.store
                 .createRecord( "asset", fileBodyObj )
                 .save()
-			//todo: getCurrentDate
-			let currentDate = new Date().getTime()
-			let date = new Date(currentDate)
-			let y = date.getFullYear()
-			let m = date.getMonth() + 1
-			m = m < 10 ? ('0' + m) : m;
-			let time = y + '-' + m + '-' + '01';
-			let currentstamp = time.replace(/-/g, '/');
-			let timesTamp = new Date(currentstamp).getTime()
-			// message = 名字+文件大小+label
-			let message = `name: ${fileVersion},size: ${uploadMessage.file.size}, label: ${labelsArr.toString()}`
-			//push jobLogs
-			//time & date指什么，code是什么，failed需要发请求吗，message是什么
-			let jobLogsParam = {
-				"provider": this.provider,
-				"owner": this.args.model.userData.id,
-				"showName": this.args.model.userData.name,
-				"time": timesTamp,
-				"version": fileVersion,
-				"code": 0,
-				"jobDesc": "success",
-				"jobCat": "upload",
-				"comments": memo,
-				"message": JSON.stringify(s3FileUpload),
-				"date": new Date().getTime()
-			}
-			let jobLogs = await this.store.createRecord('jobLog', jobLogsParam).save()
-			// 更新project
-			// await this.store.push('project','c-t9DB9bJJVarkxcMncY', {
-			// 	"actions": JSON.stringify(jobLogsParam)
-			// })
-			await this.store.push({
-				data: {
-					id: this.projectId,
-					type: 'project',
-					attributes: {
-						"provider": this.provider,
-						"time": timesTamp,
-						"actions": JSON.stringify(jobLogsParam)
-					}
-
-				}
-			}).save()
+			this.updateProject(fileVersion, "success", "upload", uploadMessage, labelsArr, memo)
             that.router.transitionTo( "/" )
             that.router.transitionTo( `/max-saas?page=${this.optPageParam}` )
             that.showProgress = '0'// 关闭上传进度条
@@ -260,15 +218,56 @@ export default class MaxSaasComponent extends Component {
             that.uploadToastBorder = "red"
         }
 
-        // 不管上传成功还是失败，都把按键的disabled取消，样式还原,loaded大小还原
-        // dom[0].disabled = false
         that.uploadLoadedSize = 0
-
         // 不管上传成功还是失败，都把文件清空
         let fileContainer = document.getElementById( "my-file" )
         fileContainer.value = null
         this.fileName = '' //文件名称置空
     }
+
+	@action
+	async updateProject(fileVersion, status, option, uploadMessage, labelsArr, memo) {
+		//todo: getCurrentDate
+		let currentDate = new Date().getTime()
+		let date = new Date(currentDate)
+		let y = date.getFullYear()
+		let m = date.getMonth() + 1
+		m = m < 10 ? ('0' + m) : m;
+		let time = y + '-' + m + '-' + '01';
+		let currentstamp = time.replace(/-/g, '/');
+		let timesTamp = new Date(currentstamp).getTime()
+
+		// message: 名字+文件大小+label
+		let message = `name: ${fileVersion},size: ${uploadMessage.file.size}, label: ${labelsArr.toString()}`
+		//push jobLogs
+		let jobLogsParam = {
+			"provider": this.provider,
+			"owner": this.args.model.userData.id,
+			"showName": this.args.model.userData.name,
+			"time": timesTamp,
+			"version": fileVersion,
+			"code": 0,
+			"jobDesc": status,
+			"jobCat": option,
+			"comments": memo,
+			"message": message,
+			"date": new Date().getTime()
+		}
+		await this.store.createRecord('jobLog', jobLogsParam).save()
+		// patch project
+		await this.store.push({
+			data: {
+				id: this.projectId,
+				type: 'project',
+				attributes: {
+					"provider": this.provider,
+					"time": timesTamp,
+					"actions": JSON.stringify(jobLogsParam)
+				}
+
+			}
+		}).save()
+	}
 
     @action
     async uploadFiles(title, event) {

@@ -515,6 +515,11 @@ export default {
             .optionData {
                 flex: 1;
                 min-width: 300px;
+                min-width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding-right: 20px;
             }
             .memo {
                 width: 300px;
