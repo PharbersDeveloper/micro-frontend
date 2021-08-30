@@ -97,16 +97,15 @@ export default class MaxSaasComponent extends Component {
         let that = this
         this.showProgress = '1' //显示上传进度
         that.uploadFileSize = uploadMessage.file.size  // 上传文件总大小
-
         // aws s3 upload
         const accountId = this.cookies.read( "account_id" )
         const bucketName = "ph-origin-files"
         const s3Client = this.awsService.get( "s3Client" )
         const fileKey = `user/${accountId}/${traceId}/${uploadMessage.file.name}`
         let uploadFileParams = {
-            ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            // ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             Bucket: bucketName,
-            Key: fileKey.replace(/[(|)|（|）| 【|】]/g, "_"),
+            Key: fileKey.replace(/[(|)|（|）| 【|】| \[|\] ]/g, "_"),
             Body: uploadMessage.file
         }
 
@@ -158,7 +157,11 @@ export default class MaxSaasComponent extends Component {
                         {
                             Key: "sheet",
                             Value: "进口编码" 
-                        }
+                        },
+						{
+							Key: "outTable",
+							Value: "test"
+						}
                     ]
                 }
             }
