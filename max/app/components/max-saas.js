@@ -11,6 +11,7 @@ export default class MaxSaasComponent extends Component {
     @service router
 
 	@tracked optPageParam
+	@tracked selectedTime
     @tracked fileName
     @tracked random
     @tracked provider
@@ -48,7 +49,7 @@ export default class MaxSaasComponent extends Component {
                 let params = e.detail[0].args.param
 				this.optPageParam = params.page
 				this.router.transitionTo( "/" )
-            	this.router.transitionTo( `/max-saas?page=${this.optPageParam}` )
+            	this.router.transitionTo( `/max-saas?page=${this.optPageParam}&selectedTime=${this.selectedTime}` )
                 // let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": params.page * 10} )
                 // e.target.allData.jobLogs = jobLogs.filter(function(item) {
                 //     return item.id !== ''
@@ -57,6 +58,17 @@ export default class MaxSaasComponent extends Component {
                 break
 			case "closeToast": // 关闭上传进度条
 				this.closeuploadToast = '1'
+				break
+			case "selectYearMonth": // 选择年月
+				let paramDate = e.detail[0].args.param
+				let paramTime = paramDate.year + '-' + paramDate.month + '-' + '01';
+				let currentstamp = paramTime.replace(/-/g, '/');
+				let selectedTime = new Date(currentstamp).getTime()
+
+				this.selectedTime = selectedTime
+
+				this.router.transitionTo( "/" )
+            	this.router.transitionTo( `/max-saas?page=${this.optPageParam?this.optPageParam:0}&selectedTime=${this.selectedTime}` )
 				break
             default: 
                 console.log("other click event!")
@@ -143,7 +155,7 @@ export default class MaxSaasComponent extends Component {
                         {
                             Key: "date", 
                             Value: this.uploadDate
-                            // Value: "202108"
+                            // Value: "202008"
                         },{
                             Key: "time", 
                             Value: new Date().getTime().toString()
@@ -151,19 +163,17 @@ export default class MaxSaasComponent extends Component {
                         {
                             Key: "version", 
                             Value: fileVersion.split('.')[0]
+							// Value: "hdf_data_17"
                         },
                         {
                             Key: "filename", 
                             Value: fileVersion
+							// Value: "hdf_data_17.xlsx"
                         },
                         {
                             Key: "sheet",
-                            Value: "进口编码" 
-                        },
-						{
-							Key: "outTable",
-							Value: "test"
-						}
+                            Value: "Sheet1" 
+                        }
                     ]
                 }
             }
@@ -202,9 +212,21 @@ export default class MaxSaasComponent extends Component {
             await this.store
                 .createRecord( "asset", fileBodyObj )
                 .save()
-			this.updateProject(fileVersion, "success", "upload", uploadMessage, labelsArr, memo)
+
+			//todo: getCurrentDate
+			let currentDate = new Date().getTime()
+			let date = new Date(currentDate)
+			let y = date.getFullYear()
+			let m = date.getMonth() + 1
+			m = m < 10 ? ('0' + m) : m;
+			let time = y + '-' + m + '-' + '01';
+			let currentstamp = time.replace(/-/g, '/');
+			let timesTamp = new Date(currentstamp).getTime()
+
+			this.updateProject(fileVersion, "success", "upload", uploadMessage, labelsArr, memo, timesTamp)
+
             that.router.transitionTo( "/" )
-            that.router.transitionTo( `/max-saas?page=${this.optPageParam}` )
+            that.router.transitionTo( `/max-saas?page=${this.optPageParam}&selectedTime=${this.sele9ctedTime}` )
             that.showProgress = '0'// 关闭上传进度条
 
             //上传成功提示
@@ -228,17 +250,7 @@ export default class MaxSaasComponent extends Component {
     }
 
 	@action
-	async updateProject(fileVersion, status, option, uploadMessage, labelsArr, memo) {
-		//todo: getCurrentDate
-		let currentDate = new Date().getTime()
-		let date = new Date(currentDate)
-		let y = date.getFullYear()
-		let m = date.getMonth() + 1
-		m = m < 10 ? ('0' + m) : m;
-		let time = y + '-' + m + '-' + '01';
-		let currentstamp = time.replace(/-/g, '/');
-		let timesTamp = new Date(currentstamp).getTime()
-
+	async updateProject(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp) {
 		// message: 名字+文件大小+label
 		let message = `name: ${fileVersion},size: ${uploadMessage.file.size}, label: ${labelsArr.toString()}`
 		//push jobLogs

@@ -11,7 +11,10 @@ export default class MaxSaasRoute extends Route {
 	queryParams = {
         page: {
             refreshModel: true
-        }
+        },
+		selectedTime: {
+            refreshModel: true
+		}
     }
 	async model(params) {
 		const limit = 10
@@ -34,7 +37,7 @@ export default class MaxSaasRoute extends Route {
 			applicationAdapter.set("userAuthorization", accessToken)
 			applicationAdapter.set('needUserData', allUserData)
 		}
-		//todo: getCurrentDate
+		//todo: getCurrentDate 2020-08-01
 		let currentDate = new Date().getTime()
 		let date = new Date(currentDate)
 		let y = date.getFullYear()
@@ -43,7 +46,8 @@ export default class MaxSaasRoute extends Route {
 		let time = y + '-' + m + '-' + '01';
 		let currentstamp = time.replace(/-/g, '/');
 		let timesTamp = new Date(currentstamp).getTime()
-		let projects = await this.store.query("project",{ "filter[time]": timesTamp})
+		let times = params.selectedTime && params.selectedTime != "undefined" ? params.selectedTime : timesTamp
+		let projects = await this.store.query("project",{ "filter[time]": times})
 		let jobLogs = await this.store.query("jobLog", {"page[limit]": limit, "page[offset]": page * limit})
 		return RSVP.hash({
 			userData: userData,

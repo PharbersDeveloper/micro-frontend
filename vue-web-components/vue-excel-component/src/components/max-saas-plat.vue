@@ -296,9 +296,31 @@ export default {
                 this.monthArr = this.lastMonthArr
             }
             this.choosedMonth = this.monthArr[this.monthArr.length - 1]
+            const event = new Event("event")
+            event.args = {
+                callback: "selectYearMonth",
+                element: this,
+                param: {
+                    name: '/max-saas',
+                    year: this.choosedYear,
+                    month: this.choosedMonth
+                }
+            }
+            this.$emit('event', event)
         },
         clickMonth(data) {
             this.choosedMonth = data
+            const event = new Event("event")
+            event.args = {
+                callback: "selectYearMonth",
+                element: this,
+                param: {
+                    name: '/max-saas',
+                    year: this.choosedYear,
+                    month: this.choosedMonth
+                }
+            }
+            this.$emit('event', event)
         },
         parseData(data, type) {
             let datas = JSON.parse(data)
