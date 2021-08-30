@@ -10,6 +10,7 @@ export default class MaxSaasComponent extends Component {
     @service store
     @service router
 
+	@tracked optPageParam
     @tracked fileName
     @tracked random
     @tracked provider
@@ -28,6 +29,7 @@ export default class MaxSaasComponent extends Component {
             case "opt": // 文件上传
                 let param = e.detail[0].args.param
                 this.provider = param.provider;
+				this.projectId = param.projectId;
                 let selectTime = new Date(param.date)
                 let year = selectTime.getFullYear()
                 let month = selectTime.getMonth() + 1
@@ -44,6 +46,7 @@ export default class MaxSaasComponent extends Component {
                 break
             case "changePage": // 操作信息 分页
                 let params = e.detail[0].args.param
+				this.optPageParam = params.page
                 let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": params.page * 10} )
                 e.target.allData.jobLogs = jobLogs.filter(function(item) {
                     return item.id !== ''
@@ -87,7 +90,7 @@ export default class MaxSaasComponent extends Component {
         uploadMessage.accountId = this.cookies.read( "account_id" )
         uploadMessage.file = document.getElementById( "my-file" ).files[0]
         this.fileName = uploadMessage.file.name //文件名称传入component
-
+		let fileVersion = ''; //文件名，发送请求所需参数
         /**
          * 2. upload file to OSS
          */
@@ -115,7 +118,7 @@ export default class MaxSaasComponent extends Component {
                     that.uploadLoadedSize = progress.loaded //实时进度
                 } )
                 .promise()
-            let fileVersion = s3FileUpload.Key.split("/").pop()
+            fileVersion = s3FileUpload.Key.split("/").pop()
             // upload file tag
             let tagParam = {
                 Bucket: s3FileUpload.Bucket,
@@ -124,8 +127,8 @@ export default class MaxSaasComponent extends Component {
                     TagSet: [
                         {
                             Key: "owner", 
-                            // Value: this.args.model.userData.name
-                            Value: "pharbers"
+                            Value: this.args.model.userData.name
+                            // Value: "pharbers"
                         },
                         {
                             Key: "application", 
@@ -133,13 +136,13 @@ export default class MaxSaasComponent extends Component {
                         }, 
                         {
                             Key: "provider", 
-                            // Value: this.provider
-                            Value: "pharbers"
+                            Value: this.provider
+                            // Value: "pharbers"
                         },
                         {
                             Key: "date", 
-                            // Value: this.uploadDate
-                            Value: "202108"
+                            Value: this.uploadDate
+                            // Value: "202108"
                         },{
                             Key: "time", 
                             Value: new Date().getTime().toString()
@@ -166,7 +169,7 @@ export default class MaxSaasComponent extends Component {
             /**
              * 3. create file metadata for database
              */
-
+			let labelsArr = ["owner",this.args.model.userData.name, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", new Date().getTime().toString(), "version", fileVersion]
             const applicationAdapter = this.store.adapterFor( "application" )
             const fileBodyObj = {
                 name: uploadMessage.file.name.split( "." )[0],
@@ -183,7 +186,7 @@ export default class MaxSaasComponent extends Component {
                 molecules: [],
                 dateCover: [],
                 geoCover: [],
-                labels: ["owner",this.args.model.userData.name, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", new Date().getTime().toString(), "version", fileVersion],
+                labels: labelsArr,
                 created: new Date(),
                 modified: new Date(),
                 description: memo,
@@ -194,10 +197,51 @@ export default class MaxSaasComponent extends Component {
             await this.store
                 .createRecord( "asset", fileBodyObj )
                 .save()
+			//todo: getCurrentDate
+			let currentDate = new Date().getTime()
+			let date = new Date(currentDate)
+			let y = date.getFullYear()
+			let m = date.getMonth() + 1
+			m = m < 10 ? ('0' + m) : m;
+			let time = y + '-' + m + '-' + '01';
+			let currentstamp = time.replace(/-/g, '/');
+			let timesTamp = new Date(currentstamp).getTime()
+			// message = 名字+文件大小+label
+			let message = `name: ${fileVersion},size: ${uploadMessage.file.size}, label: ${labelsArr.toString()}`
+			//push jobLogs
+			//time & date指什么，code是什么，failed需要发请求吗，message是什么
+			let jobLogsParam = {
+				"provider": this.provider,
+				"owner": this.args.model.userData.id,
+				"showName": this.args.model.userData.name,
+				"time": timesTamp,
+				"version": fileVersion,
+				"code": 0,
+				"jobDesc": "success",
+				"jobCat": "upload",
+				"comments": memo,
+				"message": JSON.stringify(s3FileUpload),
+				"date": new Date().getTime()
+			}
+			let jobLogs = await this.store.createRecord('jobLog', jobLogsParam).save()
+			// 更新project
+			// await this.store.push('project','c-t9DB9bJJVarkxcMncY', {
+			// 	"actions": JSON.stringify(jobLogsParam)
+			// })
+			await this.store.push({
+				data: {
+					id: this.projectId,
+					type: 'project',
+					attributes: {
+						"provider": this.provider,
+						"time": timesTamp,
+						"actions": JSON.stringify(jobLogsParam)
+					}
 
+				}
+			}).save()
             that.router.transitionTo( "/" )
-            that.router.transitionTo( "/max-saas" )
-            // window.location.reload()
+            that.router.transitionTo( `/max-saas?page=${this.optPageParam}` )
             that.showProgress = '0'// 关闭上传进度条
 
             //上传成功提示

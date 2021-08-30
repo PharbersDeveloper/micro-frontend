@@ -8,6 +8,11 @@ export default class MaxSaasRoute extends Route {
 	@service store
 	@service ajax
 
+	queryParams = {
+        page: {
+            refreshModel: true
+        }
+    }
 	async model(params) {
 		const limit = 10
 		let page = parseInt( params.page, 10 )
