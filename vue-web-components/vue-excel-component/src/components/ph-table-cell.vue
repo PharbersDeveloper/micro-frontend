@@ -23,7 +23,8 @@ export default {
         date: String,
         project: Object,
         index: Number,
-		provider: String
+        provider: String,
+        projectId: String
     },
     methods: {
         clickButton() {
@@ -36,10 +37,10 @@ export default {
                     name: this.value,
                     date: new Date(this.date) ? new Date(this.date).getTime() : new Date(),
                     project: this.project,
-					provider: this.provider
+                    provider: this.provider,
+                    projectId: this.projectId
                 }
             }
-            console.log(event.args.param.date)
             this.$emit('tableClickEvent', event)
         }
     }
