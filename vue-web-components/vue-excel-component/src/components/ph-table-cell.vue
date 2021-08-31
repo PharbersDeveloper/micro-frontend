@@ -28,7 +28,6 @@ export default {
     },
     methods: {
         clickButton() {
-            debugger
             const event = new Event("event")
             event.args = {
                 callback: "opt",

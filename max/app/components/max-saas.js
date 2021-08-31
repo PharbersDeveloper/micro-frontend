@@ -44,6 +44,9 @@ export default class MaxSaasComponent extends Component {
             case "changePage": // 操作信息 分页
                 let changePageParams = e.detail[0].args.param
                 this.optPageParam = changePageParams.page
+				// 去掉url带的参数
+				let url = document.URL.split('?')[0]
+				history.pushState(null, null, url)
                 //请求操作信息数据
                 let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": changePageParams.page * 10} )
                 e.target.allData.jobLogs = jobLogs.filter(function(item) {
@@ -61,6 +64,9 @@ export default class MaxSaasComponent extends Component {
                 let currentstamp = paramTime.replace(/-/g, '/');
                 let selectedTime = new Date(currentstamp).getTime()
                 this.selectedTime = selectedTime
+				// 去掉url带的参数
+				let urls = document.URL.split('?')[0]
+				history.pushState(null, null, urls)
                 //请求项目信息
                 let projects = await this.store.query("project",{ "filter[time]": selectedTime})
                 e.target.allData.projectsData = projects.filter(function(item) {

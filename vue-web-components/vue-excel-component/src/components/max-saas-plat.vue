@@ -332,7 +332,13 @@ export default {
         },
         parseData(data, type) {
             let datas = JSON.parse(data)
-            let filterData = datas.filter( it => it.jobCat == type)
+            let filterData = []
+            if(datas.filter) {
+                filterData = datas.filter( it => it.jobCat == type)
+            } else {
+                console.log(datas)
+                filterData.push(datas)
+            }
             return filterData[0]
         },
         changePage(page) {
