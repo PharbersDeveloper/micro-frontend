@@ -9,7 +9,11 @@
             <div class="select">
                 <!-- <bp-input placeholder="文件名称" :value="fileName"></bp-input> -->
                 <span class="filename-input">{{fileName}}</span>
-                <bp-button text="选择文件" @click="selectFile"></bp-button>
+                <bp-button text="选择文件" @click="selectFile" ></bp-button>
+            </div>
+            <div class="sheet">
+                <span class="title">sheet</span>
+                <bp-input placeholder="请输入sheet名称" class="filename-input" @input="inputSheet"></bp-input>
             </div>
             <div class="memo">
                 <span class="title">备注</span>
@@ -39,7 +43,8 @@ export default {
         return {
             closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
             memo: "",
-            classNames: false
+            classNames: false,
+            sheet: ""
         }
     },
     props: {
@@ -63,11 +68,16 @@ export default {
         inputTextarea(value) {
             this.memo = value
         },
+        inputSheet(value) {
+            this.sheet = value
+        },
         confirm() {
             if(!this.memo || this.momo == '') {
                 alert("请输入备注信息")
+            }else if(!this.sheet || this.sheet == '') {
+                alert("请输入sheet名称")
             } else {
-                this.$emit("confirm", this.memo)
+                this.$emit("confirm", this.memo, this.sheet)
             }
         }
     }
@@ -96,7 +106,7 @@ export default {
     justify-content: center;
     align-items: center;
     .upload-data-area {
-        height: 312px;
+        height: 375px;
         width: 400px;
         background: #FFFFFF;
         border-radius: 2px;
@@ -108,7 +118,6 @@ export default {
         justify-content: space-between;
         align-items: center;
         padding: 20px 20px 12px;
-
         .icon-close {
             cursor: pointer;
         }
@@ -123,31 +132,39 @@ export default {
     }
     .upload-content {
         padding: 20px;
+        .filename-input {
+            margin-right: 4px;
+            width: 276px;
+            height: 32px;
+            border: 1px solid #E1DFE9;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            font-family: PingFangSC-Light;
+            font-size: 14px;
+            color: #706F79;
+            letter-spacing: 0.25px;
+            line-height: 20px;
+            font-weight: 200;
+            padding-left: 4px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .sheet {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            input {
+                width: 360px !important;
+            }
+        }
         .select {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            .filename-input {
-                margin-right: 4px;
-                width: 276px;
-                height: 32px;
-                border: 1px solid #E1DFE9;
-                border-radius: 2px;
-                display: flex;
-                align-items: center;
-                font-family: PingFangSC-Light;
-                font-size: 14px;
-                color: #706F79;
-                letter-spacing: 0.25px;
-                line-height: 20px;
-                font-weight: 200;
-                padding-left: 4px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
+            margin-bottom: 10px;
             button {
-                width: 80px;
+                width: 85px;
                 height: 32px;
                 background: #f6f6f7;
                 font-family: PingFangSC-Medium;
@@ -157,21 +174,25 @@ export default {
                 text-align: center;
                 line-height: 20px;
                 font-weight: 500;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
+        }
+        .title {
+            font-family: PingFangSC-Regular;
+            font-size: 12px;
+            color: #706F79;
+            letter-spacing: 0.25px;
+            text-align: left;
+            line-height: 16px;
+            font-weight: 400;
+            margin-bottom: 4px;
+            margin-right: 10px;
         }
         .memo {
             display: flex;
             flex-direction: column;
-            .title {
-                font-family: PingFangSC-Regular;
-                font-size: 12px;
-                color: #706F79;
-                letter-spacing: 0.25px;
-                text-align: left;
-                line-height: 16px;
-                font-weight: 400;
-                margin-bottom: 4px;
-            }
             .textarea {
                 width: 360px;
                 height: 80px;

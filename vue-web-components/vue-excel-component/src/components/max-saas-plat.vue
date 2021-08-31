@@ -274,9 +274,10 @@ export default {
         selectFile() {
             this.$emit('event', this.clickProjectEvent)
         },
-        confirmUpload(data) {
+        confirmUpload(memo, sheet) {
             let confirmEvent = this.clickProjectEvent;
-            confirmEvent.args.param.memo = data;
+            confirmEvent.args.param.memo = memo;
+            confirmEvent.args.param.sheet = sheet;
             confirmEvent.args.callback = "confirmUpload";
             this.$emit('event', confirmEvent)
             this.showUpload = false

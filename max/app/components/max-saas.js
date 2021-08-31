@@ -43,7 +43,7 @@ export default class MaxSaasComponent extends Component {
                 }
                 break
             case "confirmUpload": // 确认上传
-                this.confirmUploadFiles(e.detail[0].args.param.memo);
+                this.confirmUploadFiles(e.detail[0].args.param.memo, e.detail[0].args.param.sheet);
                 break
             case "changePage": // 操作信息 分页
                 let params = e.detail[0].args.param
@@ -76,7 +76,7 @@ export default class MaxSaasComponent extends Component {
     }
 
     @action
-    async confirmUploadFiles(memo) {
+    async confirmUploadFiles(memo, sheet) {
         //初始化变量
         this.uploadToastBorder = "blue"
         this.uploadTextStatus = "正在上传"
@@ -172,7 +172,8 @@ export default class MaxSaasComponent extends Component {
                         },
                         {
                             Key: "sheet",
-                            Value: "Sheet1" 
+							Value: sheet
+                            // Value: "Sheet1" 
                         }
                     ]
                 }
