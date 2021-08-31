@@ -8,5 +8,7 @@ export default class Router extends EmberRouter {
 
 Router.map(function () {
   this.route('oauth-callback');
-  this.route('max-saas');
+  this.route('max-saas', { path: "/max-saas" }, function() {
+    this.route('upload', { path: "/upload" });
+  });
 });

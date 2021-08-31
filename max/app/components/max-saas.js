@@ -220,7 +220,9 @@ export default class MaxSaasComponent extends Component {
             await this.store.createRecord( "asset", fileBodyObj ).save()
 
             that.router.transitionTo( "/" )
-            that.router.transitionTo( `/max-saas?page=${this.optPageParam}&selectedTime=${this.selectedTime}` )
+			if(!this.optPageParam) {this.optPageParam = 0}
+			if(!this.selectedTime) {this.selectedTime = timesTamp}
+            that.router.transitionTo( `/max-saas/upload?page=${this.optPageParam}&selectedTime=${this.selectedTime}`)
 
             //上传成功提示
             that.showProgress = '0'// 关闭上传进度条
@@ -245,6 +247,12 @@ export default class MaxSaasComponent extends Component {
 
     @action
     async updateProject(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp) {
+		let time
+		if(this.uploadDate) {
+			let ym = this.uploadDate.slice(0,4) + '/' + this.uploadDate.slice(4) +'/01'
+			time = new Date(ym).getTime()
+			
+		}
         // message: 名字+文件大小+label
         let message = `name: ${fileVersion},size: ${uploadMessage.file.size}, label: ${labelsArr.toString()}`
         //push jobLogs
@@ -252,7 +260,7 @@ export default class MaxSaasComponent extends Component {
             "provider": this.provider,
             "owner": this.args.model.userData.id,
             "showName": this.args.model.userData.name,
-            "time": timesTamp,
+            "time": time ? time : timesTamp,
             "version": fileVersion,
             "code": 0,
             "jobDesc": status,
@@ -269,7 +277,7 @@ export default class MaxSaasComponent extends Component {
                 type: 'project',
                 attributes: {
                     "provider": this.provider,
-                    "time": timesTamp,
+                    "time": time ? time : timesTamp,
                     "actions": JSON.stringify(jobLogsParam)
                 }
 
