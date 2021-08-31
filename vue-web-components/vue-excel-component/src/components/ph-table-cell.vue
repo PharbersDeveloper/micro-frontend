@@ -1,5 +1,8 @@
 <template>
-    <div class="table-cell-border">
+    <div class="table-cell-border" 
+		:class="[
+			project.jobDesc ? 'border-' + project.jobDesc : 'button-default',
+		]">
         <span>{{project.showName}}</span>
         <div class='button-container'>
             <div class='button-background-grey' @click="this.clickButton">
@@ -102,13 +105,21 @@ export default {
         height: 12.5px;
         background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpath d='M15.538 10c.227 0 .415.177.455.41l.007.09V16H4v-5.5c0-.276.207-.5.462-.5.226 0 .415.177.454.41l.007.09V15h10.154v-4.5a.49.49 0 0 1 .378-.492l.083-.008zm-5.495-6l.07.01.094.029.103.056.048.039 4 3.682.057.063c.132.177.11.42-.065.574a.543.543 0 0 1-.618.058l-.09-.065L10.5 5.552l.001 6.998-.008.08c-.042.21-.247.37-.492.37-.237 0-.435-.148-.487-.347L9.5 12.55l-.001-6.996-3.141 2.892-.07.052a.543.543 0 0 1-.638-.045.417.417 0 0 1-.078-.555l.07-.082 4-3.682.07-.053.066-.036.09-.03L9.957 4h.086z' id='a'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h20v20H0z'/%3E%3Cuse fill='%23FFF' xlink:href='%23a'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
     }
-    .border-success {
-        border: 1px solid red !important;
+    .border-failed {
+        border: 1px solid red ;
     }
+	.border-success {
+        border: 1px solid green;
+    }
+	.border-running {
+        border: 1px solid #7163C5;
+    }
+	.button-default {
+        border: 1px solid #E1DFE9;
+	}
     .table-cell-border {
         // width: 209px;
         height: 36px;
-        border: 1px solid #E1DFE9;
         display: flex;
         justify-content: space-between;
         align-items: center;

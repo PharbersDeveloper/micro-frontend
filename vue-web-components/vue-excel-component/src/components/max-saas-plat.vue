@@ -32,16 +32,16 @@
                             <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'import')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'clean')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'calculation')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'report')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
                 </div>
@@ -336,8 +336,10 @@ export default {
             if(datas.filter) {
                 filterData = datas.filter( it => it.jobCat == type)
             } else {
-                console.log(datas)
                 filterData.push(datas)
+            }
+            if(!filterData[0]) {
+                return {}
             }
             return filterData[0]
         },
