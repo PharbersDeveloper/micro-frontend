@@ -1,5 +1,5 @@
 <template>
-    <li class="bp-option" :disabled="disabled" @click="close" :class="{'option-active': isChoosed}">
+    <li class="bp-option" @click="close" :class="[{'option-active': isChoosed}, {'disabled': disabled}]">
         <img svg-inline :class="[iconClass, 'svg-icon']" :src="src" alt="" v-if="src"/>
         <div style="display: flex;flex-direction: column;">
             <span>{{text}}</span>
@@ -11,16 +11,15 @@
 </template>
 <script>
 export default {
-    data: function() {
-        return {
-            disabled: false
-        }
-    },
     props: {
         text: String,
         choosedValue: String,
         iconClass: String,
-        src: String
+        src: String,
+        disabled: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         isChoosed() {
@@ -71,5 +70,9 @@ export default {
     }
     .bp-option:hover {
         background-color: #EBECF0;
+    }
+
+    .disabled {
+        cursor: not-allowed;
     }
 </style>
