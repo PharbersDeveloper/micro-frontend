@@ -29,19 +29,19 @@
                     <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
                         <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
                 </div>
@@ -194,13 +194,20 @@ export default {
         }
     },
     created() {
+        //时间选择范围为当前日期向前推六个月
         const rangeArray = (start, end) => Array(end - start + 1).fill(0).map((v, i) => i + start)
+        //获取当前年月
         const currentDate = new Date()
         const year = currentDate.getFullYear()
         const month = currentDate.getMonth() + 1
-        // let month  =3
+        //赋默认值
         this.choosedYear = String(year)
-        this.choosedMonth = '0'+String(month)
+        if(month < 10) {
+            this.choosedMonth = '0' + String(month)
+        } else {
+            this.choosedMonth = String(month)
+        }
+        //日期范围数组
         let yearArr = []
         let monthArr = []
         let nowMonthArr = []

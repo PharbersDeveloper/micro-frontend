@@ -28,6 +28,7 @@ export default {
     },
     methods: {
         clickButton() {
+            debugger
             const event = new Event("event")
             event.args = {
                 callback: "opt",
@@ -35,7 +36,7 @@ export default {
                 param: {
                     type: this.type,
                     name: this.value,
-                    date: new Date(this.date) ? new Date(this.date).getTime() : new Date(),
+                    date: this.date,
                     project: this.project,
                     provider: this.provider,
                     projectId: this.projectId
