@@ -13,7 +13,7 @@ export default class MaxSaasRoute extends Route {
 		let cookies = this.get( "cookies" )
 
 		if ( !cookies.read( "access_token" ) ) {
-			this.transitionTo( "/index" )
+			this.transitionTo( "/" )
 		}
 	}
 

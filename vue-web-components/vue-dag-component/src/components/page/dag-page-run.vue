@@ -288,7 +288,7 @@ export default {
                 this.checkDagStatus()
                 this.cycleCheckDagStatus = setInterval(function() {
                     that.checkDagStatus()
-                },60000)
+                },60*1000)
             }
         },
         togglePanel() {

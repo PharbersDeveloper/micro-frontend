@@ -1,8 +1,8 @@
 <template>
     <div class="table-cell-border" 
-		:class="[
-			project.jobDesc ? 'border-' + project.jobDesc : 'button-default',
-		]">
+        :class="[
+            project.jobDesc ? 'border-' + project.jobDesc : 'button-default',
+        ]">
         <span>{{project.showName}}</span>
         <div class='button-container'>
             <div class='button-background-grey' @click="this.clickButton">
@@ -108,15 +108,30 @@ export default {
     .border-failed {
         border: 1px solid red ;
     }
-	.border-success {
+    .border-success {
         border: 1px solid green;
     }
-	.border-running {
+    .border-running {
         border: 1px solid #7163C5;
     }
-	.button-default {
+    .border-FAILED {
+        border: 1px solid red ;
+    }
+    .border-ABORTED {
+        border: 1px solid red ;
+    }
+    .border-TIMED_OUT {
+        border: 1px solid red ;
+    }
+    .border-SUCCEEDED {
+        border: 1px solid green;
+    }
+    .border-RUNNING {
+        border: 1px solid #7163C5;
+    }
+    .button-default {
         border: 1px solid #E1DFE9;
-	}
+    }
     .table-cell-border {
         // width: 209px;
         height: 36px;

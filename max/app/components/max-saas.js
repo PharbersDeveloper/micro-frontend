@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking'
+import fetch, { Headers, Request, Response, AbortController } from 'fetch';
 import { inject as service } from '@ember/service';
 
 export default class MaxSaasComponent extends Component {
@@ -23,6 +24,7 @@ export default class MaxSaasComponent extends Component {
     @tracked uploadFileSize
     @tracked uploadLoadedSize
     @tracked showProgress
+	@tracked jobLogsObj
 
     @action
     async listener(e) {
@@ -81,178 +83,248 @@ export default class MaxSaasComponent extends Component {
 
     @action
     async confirmUploadFiles(memo, sheet) {
-        //初始化变量
-        this.uploadToastBorder = "blue"
-        this.uploadTextStatus = "正在上传"
-        this.uploadText = ""
-        this.closeuploadToast = "0" //显示上传弹框
-        function guid() {
-            return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
-                var r = Math.random() * 16 | 0,
-                    v = c === "x" ? r : r & 0x3 | 0x8
+		if(sheet != "test") {
+			//初始化变量
+			this.uploadToastBorder = "blue"
+			this.uploadTextStatus = "正在上传"
+			this.uploadText = ""
+			this.closeuploadToast = "0" //显示上传弹框
+			function guid() {
+				return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
+					var r = Math.random() * 16 | 0,
+						v = c === "x" ? r : r & 0x3 | 0x8
 
-                return v.toString( 16 )
-            } )
-        }
+					return v.toString( 16 )
+				} )
+			}
 
-        //todo: getCurrentDate
-        let currentDate = new Date().getTime()
-        let date = new Date(currentDate)
-        let y = date.getFullYear()
-        let m = date.getMonth() + 1
-        m = m < 10 ? ('0' + m) : m;
-        let time = y + '-' + m + '-' + '01';
-        let currentstamp = time.replace(/-/g, '/');
-        let timesTamp = new Date(currentstamp).getTime()
-        
-        /**
-         * 1. 初始化上传流程
-         */
-        let that = this
-        const traceId = guid()
-        let uploadMessage = {}
-        uploadMessage.accountId = this.cookies.read( "account_id" )
-        uploadMessage.file = document.getElementById( "my-file" ).files[0]
-        this.fileName = uploadMessage.file.name
-        let fileVersion = ''; //文件名，发送请求所需参数
-        /**
-         * 2. upload file to OSS
-         */
-        this.showProgress = '1' //显示上传进度
-        that.uploadFileSize = uploadMessage.file.size  // 上传文件总大小
-        // aws s3 upload
-        const accountId = this.cookies.read( "account_id" )
-        const bucketName = "ph-origin-files"
-        const s3Client = this.awsService.get( "s3Client" )
-        const fileKey = `user/${accountId}/${traceId}/${uploadMessage.file.name}`
-        let uploadFileParams = {
-            Bucket: bucketName,
-            Key: fileKey.replace(/[(|)|（|）| 【|】| \[|\] ]/g, "_"),//文件名称格式化
-            Body: uploadMessage.file
-        }
+			//todo: getCurrentDate
+			let currentDate = new Date().getTime()
+			let date = new Date(currentDate)
+			let y = date.getFullYear()
+			let m = date.getMonth() + 1
+			m = m < 10 ? ('0' + m) : m;
+			let time = y + '-' + m + '-' + '01';
+			let currentstamp = time.replace(/-/g, '/');
+			let timesTamp = new Date(currentstamp).getTime()
+			
+			/**
+			 * 1. 初始化上传流程
+			 */
+			let that = this
+			const traceId = guid()
+			let uploadMessage = {}
+			uploadMessage.accountId = this.cookies.read( "account_id" )
+			uploadMessage.file = document.getElementById( "my-file" ).files[0]
+			this.fileName = uploadMessage.file.name
+			let fileVersion = ''; //文件名，发送请求所需参数
+			/**
+			 * 2. upload file to OSS
+			 */
+			this.showProgress = '1' //显示上传进度
+			that.uploadFileSize = uploadMessage.file.size  // 上传文件总大小
+			// aws s3 upload
+			const accountId = this.cookies.read( "account_id" )
+			const bucketName = "ph-origin-files"
+			const s3Client = this.awsService.get( "s3Client" )
+			const fileKey = `user/${accountId}/${traceId}/${uploadMessage.file.name}`
+			let uploadFileParams = {
+				Bucket: bucketName,
+				Key: fileKey.replace(/[(|)|（|）| 【|】| \[|\] ]/g, "_"),//文件名称格式化
+				Body: uploadMessage.file
+			}
+			try {
+				//S3 上传
+				let s3FileUpload = await s3Client
+					.upload( uploadFileParams )
+					.on( "httpUploadProgress", function ( progress ) {
+						that.uploadLoadedSize = progress.loaded //实时进度
+					} )
+					.promise()
+					.catch((err)=> {
+						this.pushJobLogs(uploadFileParams.Key, "failed", "upload", uploadMessage, [], memo)
+					})
+				if(!s3FileUpload) return
+				//文件名	
+				fileVersion = s3FileUpload.Key.split("/").pop()
+				let exArn = ''
+				let execution = await this.store.createRecord('execution', {}).save()
+				let executionId = execution.id
+				// 上传文件tag
+				let tagParam = {
+					Bucket: s3FileUpload.Bucket,
+					Key: s3FileUpload.Key,
+					Tagging: {
+						TagSet: [
+							{
+								Key: "owner", 
+								// Value: this.args.model.userData.name
+								Value: "pharbers"
+							},
+							{
+								Key: "application", 
+								Value: "max"
+							}, 
+							{
+								Key: "provider", 
+								// Value: this.provider
+								Value: "pharbers"
+							},
+							{
+								Key: "date", 
+								Value: this.uploadDate
+							},{
+								Key: "time", 
+								Value: parseInt(new Date().getTime()/1000).toString() //获取到秒级时间戳
+							},
+							{
+								Key: "version", 
+								Value: fileVersion.split('.')[0]
+							},
+							{
+								Key: "filename", 
+								Value: fileVersion
+							},
+							{
+								Key: "sheet",
+								Value: sheet
+							},
+							{
+								Key: "executionId",
+								Value: executionId
+							}
+						]
+					}
+				}
+				// 上传文件打tag
+				s3Client.putObjectTagging(tagParam, function(err, data) {
+					if (err) console.log(err, err.stack);
+				});
+				//push jobLogs
+				let labelsArr = ["owner",this.args.model.userData.name, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", new Date().getTime().toString(), "version", fileVersion]
+				this.pushJobLogs(fileVersion, "running", "upload", uploadMessage, labelsArr, memo, timesTamp)
+				/**
+				 * 3. create file metadata for database
+				 */
+				const applicationAdapter = this.store.adapterFor( "application" )
+				const fileBodyObj = {
+					name: uploadMessage.file.name.split( "." )[0],
+					owner: accountId,
+					extension: uploadMessage.file.name.split( "." )[1],
+					size: uploadMessage.file.size,
+					source: fileKey,
+					type: "file", // candidate: database, file, stream, application, mart, cube
+					accessibility: "",
+					version: "",
+					isNewVersion: true,
+					providers: [],
+					markets: [],
+					molecules: [],
+					dateCover: [],
+					geoCover: [],
+					labels: labelsArr,
+					created: new Date(),
+					modified: new Date(),
+					description: memo,
+					partners: that.args.model.employerId
+				}
+				applicationAdapter.set( "reqBody", fileBodyObj )
+				//数据库上传数据
+				await this.store.createRecord( "asset", fileBodyObj ).save()
+				this.uploadLoadedSize = 50 //文件上传成功，进度条到50%
 
-        try {
-            //S3 上传
-            let s3FileUpload = await s3Client
-                .upload( uploadFileParams )
-                .on( "httpUploadProgress", function ( progress ) {
-                    that.uploadLoadedSize = progress.loaded //实时进度
-                } )
-                .promise()
-                .catch((err)=> {
-                    this.updateProject(uploadFileParams.Key, "failed", "upload", uploadMessage, [], memo)
-                })
-            if(!s3FileUpload) return
-            //文件名	
-            fileVersion = s3FileUpload.Key.split("/").pop()
-            // 上传文件tag
-            let tagParam = {
-                Bucket: s3FileUpload.Bucket,
-                Key: s3FileUpload.Key,
-                Tagging: {
-                    TagSet: [
-                        {
-                            Key: "owner", 
-                            Value: this.args.model.userData.name
-                            // Value: "pharbers"
-                        },
-                        {
-                            Key: "application", 
-                            Value: "max"
-                        }, 
-                        {
-                            Key: "provider", 
-                            Value: this.provider
-                            // Value: "pharbers"
-                        },
-                        {
-                            Key: "date", 
-                            Value: this.uploadDate
-                        },{
-                            Key: "time", 
-                            Value: parseInt(new Date().getTime()/1000).toString() //获取到秒级时间戳
-                        },
-                        {
-                            Key: "version", 
-                            Value: fileVersion.split('.')[0]
-                        },
-                        {
-                            Key: "filename", 
-                            Value: fileVersion
-                        },
-                        {
-                            Key: "sheet",
-                            Value: sheet
-                        }
-                    ]
-                }
-            }
-            // 上传文件打tag
-            s3Client.putObjectTagging(tagParam, function(err, data) {
-                if (err) console.log(err, err.stack);
-            });
+				//create executions 得到arn
+				let executionInt = await setInterval(function() { 
+					that.store.findRecord('execution', executionId).then(executionData => {	
+						if (executionData.arn && executionData.arn != '') { 
+							clearInterval(executionInt); 
+							exArn = executionData.arn
+							//请求phstatus
+							let stateUrl = "https://api.pharbers.com/phstepstatus"
+							let options = {
+								method: "POST",
+								mode: "cors",
+								headers: {
+									"Authorization": that.cookies.read( "access_token" ),
+									"Content-Type": "application/vnd.api+json",
+									"Accept": "application/vnd.api+json",
+								},
+								body: JSON.stringify({"executionArn": exArn})
+							}
+							let dagStatusInt = setInterval(function() { 
+								fetch(stateUrl, options).then(res=>res.json()).then(response => {
+									let execution_status = response.execution_status
+									if (execution_status && execution_status !== 'RUNNING') {
+										clearInterval(dagStatusInt); 
+										let code = 1
+										if(execution_status = "SUCCEEDED") {
+											code = 0
+											that.uploadLoadedSize = 100
+										} else {
+											that.uploadLoadedSize = 99
+										}
+										//patch joblogs 为当前状态值
+										that.store.push({
+											data: {
+												id: that.jobLogsObj.id,
+												type: 'jobLog',
+												attributes: {
+													"code": code,
+													"jobDesc": execution_status,
+													"date": new Date().getTime()
+												}
+											}
+										}).save().then(()=> {
+											that.router.transitionTo( "/" )
+											if(!that.optPageParam) {that.optPageParam = 0}
+											if(!that.selectedTime) {that.selectedTime = timesTamp}
+											that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
+										})
+									}
+								}) 
+							}, 20*1000)
+						} 
+					})
+				}, 20*1000)
 
-            //patch project, push jobLogs
-            let labelsArr = ["owner",this.args.model.userData.name, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", new Date().getTime().toString(), "version", fileVersion]
-            this.updateProject(fileVersion, "success", "upload", uploadMessage, labelsArr, memo, timesTamp)
+				// that.router.transitionTo( "/" )
+				// if(!this.optPageParam) {this.optPageParam = 0}
+				// if(!this.selectedTime) {this.selectedTime = timesTamp}
+				// that.router.transitionTo( `/max-saas/upload?page=${this.optPageParam}&selectedTime=${this.selectedTime}`)
 
-            /**
-             * 3. create file metadata for database
-             */
-            const applicationAdapter = this.store.adapterFor( "application" )
-            const fileBodyObj = {
-                name: uploadMessage.file.name.split( "." )[0],
-                owner: accountId,
-                extension: uploadMessage.file.name.split( "." )[1],
-                size: uploadMessage.file.size,
-                source: fileKey,
-                type: "file", // candidate: database, file, stream, application, mart, cube
-                accessibility: "",
-                version: "",
-                isNewVersion: true,
-                providers: [],
-                markets: [],
-                molecules: [],
-                dateCover: [],
-                geoCover: [],
-                labels: labelsArr,
-                created: new Date(),
-                modified: new Date(),
-                description: memo,
-                partners: that.args.model.employerId
-            }
-            applicationAdapter.set( "reqBody", fileBodyObj )
-            //数据库上传数据
-            await this.store.createRecord( "asset", fileBodyObj ).save()
+				// that.showProgress = '0'// 关闭上传进度条
+				// //上传成功提示
+				// if(that.uploadLoadedSize == 100) {
+				// 	that.uploadTextStatus = "上传成功"
+				// 	that.uploadText = "在“我的数据”中查看结果"
+				// 	that.uploadToastBorder = "green"
+				// } else {
+				// //上传失败提示
+				// 	that.uploadTextStatus = "上传失败" 
+				// 	that.uploadText = ""
+				// 	that.uploadToastBorder = "red"
+				// }
+			} catch ( e ) {
+				console.log(e)
+				that.showProgress = '0' //关闭上传进度条
+				//上传失败提示
+				that.uploadTextStatus = "上传失败" 
+				that.uploadText = ""
+				that.uploadToastBorder = "red"
+			}
 
-            that.router.transitionTo( "/" )
-			if(!this.optPageParam) {this.optPageParam = 0}
-			if(!this.selectedTime) {this.selectedTime = timesTamp}
-            that.router.transitionTo( `/max-saas/upload?page=${this.optPageParam}&selectedTime=${this.selectedTime}`)
-
-            //上传成功提示
-            that.showProgress = '0'// 关闭上传进度条
-            that.uploadTextStatus = "上传成功"
-            that.uploadText = "在“我的数据”中查看结果"
-            that.uploadToastBorder = "green"
-        } catch ( e ) {
-            console.log(e)
-            that.showProgress = '0' //关闭上传进度条
-            //上传失败提示
-            that.uploadTextStatus = "上传失败" 
-            that.uploadText = ""
-            that.uploadToastBorder = "red"
-        }
-
-        that.uploadLoadedSize = 0
-        // 不管上传成功还是失败，都把文件清空
-        let fileContainer = document.getElementById( "my-file" )
-        fileContainer.value = null
-        this.fileName = '' //文件名称置空
+			// that.uploadLoadedSize = 0
+			// 不管上传成功还是失败，都把文件清空
+			let fileContainer = document.getElementById( "my-file" )
+			fileContainer.value = null
+			this.fileName = '' //文件名称置空
+		}
+		
+		
     }
 
     @action
-    async updateProject(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp) {
+    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp) {
 		let time
 		if(this.uploadDate) {
 			let ym = this.uploadDate.slice(0,4) + '/' + this.uploadDate.slice(4) +'/01'
@@ -275,20 +347,22 @@ export default class MaxSaasComponent extends Component {
             "message": message,
             "date": new Date().getTime()
         }
-        await this.store.createRecord('jobLog', jobLogsParam).save()
+       	let jobLogsObj = await this.store.createRecord('jobLog', jobLogsParam).save()
+		this.jobLogsObj = jobLogsObj
+		console.log(jobLogsObj)
         // patch project
-        await this.store.push({
-            data: {
-                id: this.projectId,
-                type: 'project',
-                attributes: {
-                    "provider": this.provider,
-                    "time": time ? time : timesTamp,
-                    "actions": JSON.stringify(jobLogsParam)
-                }
+        // await this.store.push({
+        //     data: {
+        //         id: this.projectId,
+        //         type: 'project',
+        //         attributes: {
+        //             "provider": this.provider,
+        //             "time": time ? time : timesTamp,
+        //             "actions": JSON.stringify([jobLogsParam])
+        //         }
 
-            }
-        }).save()
+        //     }
+        // }).save()
     }
 
     @action

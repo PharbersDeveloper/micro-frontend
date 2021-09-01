@@ -91,9 +91,13 @@
             </div>
             <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
             <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
-            <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
+            <!-- 进度条 -->
+            <div class="progress" v-if="showProgress == '1'"> 
+                <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
+            </div> 
+            <!-- <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
                 {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
-            </bp-text>
+            </bp-text> -->
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
                 <div class="cross"></div>
             </div>
@@ -129,7 +133,8 @@ export default {
             lastMonthArr: [],
             showUpload: false,
             JsonData: {},
-            clickProjectEvent: {}
+            clickProjectEvent: {},
+            proBar: 0
         }
     },
     props: {
@@ -165,13 +170,19 @@ export default {
         random: Number,
         fileName: String,
         uploadToastBorder: String,
-        uploadTextStatus: String,
+        uploadTextStatus: {
+            type: String,
+            default: "正在上传"
+        },
         uploadText: String,
         closeuploadToast: {
             type: String,
-            default: '1'
+            default: '0'
         },
-        showProgress: String,
+        showProgress: {
+            type: String,
+            default: '0'
+        },
         uploadLoadedSize: Number,
         uploadFileSize: Number
     },
@@ -191,6 +202,12 @@ export default {
     watch: {
         random: function() {
             this.$forceUpdate()
+        },
+        uploadLoadedSize: function() {
+            console.log("uploadLoadedSize", this.uploadLoadedSize)
+            if(this.uploadLoadedSize == 50) {
+                this.proBar = 50
+            }
         }
     },
     created() {
@@ -282,6 +299,17 @@ export default {
             this.$emit('event', this.clickProjectEvent)
         },
         confirmUpload(memo, sheet) {
+            //进度条
+            let that = this;
+            this.proBar = 0;
+            var clearInt = setInterval(function() { 
+                that.proBar++; 
+                console.log(that.proBar); 
+                if (that.proBar >= 49) { 
+                    clearInterval(clearInt); 
+                } 
+            }, 60)
+            //event
             let confirmEvent = this.clickProjectEvent;
             confirmEvent.args.param.memo = memo;
             confirmEvent.args.param.sheet = sheet;
@@ -609,6 +637,7 @@ export default {
 
         .upload-toast {
             display: flex;
+            align-items: center;
             position: absolute;
             bottom: 24px;
             right: 24px;
@@ -652,6 +681,25 @@ export default {
                 font-size: 12px;
                 color: #6B7376;
                 line-height: 16px;
+            }
+            .progress {
+                background-color: #F6F6F6;
+                border: 1px solid #fff;
+                height: 20px;
+                padding: 0.125rem;
+                width: 180px;
+                border-radius: 1000px;
+                .meter {
+                    background: #7163c5;
+                    display: block;
+                    height: 100%;
+                    float: left;
+                    width: 100%;
+                    border-radius: 999px;
+                    color: #fff;
+                    text-align: center;
+                    font-size: 12px;
+                }
             }
             .upload-toast-close-container {
                 position: absolute;
