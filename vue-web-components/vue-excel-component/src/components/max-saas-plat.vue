@@ -688,7 +688,7 @@ export default {
                 width: 180px;
                 border-radius: 1000px;
                 .meter {
-                    background: #7163c5;
+                    background: #1b9dd9;
                     display: block;
                     height: 100%;
                     float: left;
