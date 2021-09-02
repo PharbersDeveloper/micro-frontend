@@ -1,9 +1,9 @@
 <template>
     <div class="max-saas-import">
-        <div class="header">
+        <!-- <div class="header">
             <img src="https://www.pharbers.com/public/img_logo_ph_theme.svg" class="logo" alt="">
             <img src=" " class="user-img" alt="">
-        </div>
+        </div> -->
 
         <div class="main">
             <div class="import-introduction">
@@ -122,6 +122,7 @@ export default {
         text-align: left;
         line-height: 20px;
         font-weight: 400;
+		margin-bottom: 12px;
     }
 
     .max-saas-import {
@@ -130,7 +131,7 @@ export default {
         width: 100%;
         height: 100%;
         overflow: hidden;
-
+        padding: 80px 24px 24px;
         .header {
             display: flex;
             width: 100%;
@@ -157,7 +158,7 @@ export default {
         .main {
             display: flex;
             flex-direction: column;
-            padding: 0 20px;
+            // padding: 0 20px;
             margin-bottom: 20px;
             flex: 1;
 
@@ -224,8 +225,6 @@ export default {
                         display: flex;
                         flex-grow: 1;
                         width: 100%;
-                        margin-top: 20px;
-
                         .target-border {
                             width: 100%;
                             border: 1px solid rgba(37,35,45,0.12);
