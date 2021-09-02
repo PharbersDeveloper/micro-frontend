@@ -138,7 +138,7 @@ export default class MaxSaasComponent extends Component {
 				let s3FileUpload = await s3Client
 					.upload( uploadFileParams )
 					.on( "httpUploadProgress", function ( progress ) {
-						that.uploadLoadedSize = progress.loaded //实时进度
+						// that.uploadLoadedSize = progress.loaded //实时进度
 					} )
 					.promise()
 					.catch((err)=> {

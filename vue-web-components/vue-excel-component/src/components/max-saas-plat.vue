@@ -177,7 +177,7 @@ export default {
         uploadText: String,
         closeuploadToast: {
             type: String,
-            default: '0'
+            default: '1'
         },
         showProgress: {
             type: String,
@@ -205,9 +205,7 @@ export default {
         },
         uploadLoadedSize: function() {
             console.log("uploadLoadedSize", this.uploadLoadedSize)
-            if(this.uploadLoadedSize == 50) {
-                this.proBar = 50
-            }
+            this.proBar = this.uploadLoadedSize
         }
     },
     created() {
