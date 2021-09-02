@@ -232,12 +232,13 @@ export default class MaxSaasComponent extends Component {
 				//数据库上传数据
 				await this.store.createRecord( "asset", fileBodyObj ).save()
 				this.uploadLoadedSize = 50 //文件上传成功，进度条到50%
-
 				//create executions 得到arn
+				that.uploadTextStatus = "正在处理"
 				let executionInt = await setInterval(function() { 
 					that.store.findRecord('execution', executionId).then(executionData => {	
 						if (executionData.arn && executionData.arn != '') { 
 							clearInterval(executionInt); 
+							that.uploadLoadedSize = 70
 							exArn = executionData.arn
 							//请求phstatus
 							let stateUrl = "https://api.pharbers.com/phstepstatus"
@@ -256,8 +257,9 @@ export default class MaxSaasComponent extends Component {
 									let execution_status = response.execution_status
 									if (execution_status && execution_status !== 'RUNNING') {
 										clearInterval(dagStatusInt); 
+										that.uploadLoadedSize = 90
 										let code = 1
-										if(execution_status = "SUCCEEDED") {
+										if(execution_status == "SUCCEEDED") {
 											code = 0
 											that.uploadLoadedSize = 100
 										} else {
@@ -279,6 +281,13 @@ export default class MaxSaasComponent extends Component {
 											if(!that.optPageParam) {that.optPageParam = 0}
 											if(!that.selectedTime) {that.selectedTime = timesTamp}
 											that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
+											if(that.uploadLoadedSize == 100) {
+												that.uploadToastBorder = "green"
+												that.uploadTextStatus = "处理成功"
+											} else {
+												that.uploadToastBorder = "red"
+												that.uploadTextStatus = "处理失败"
+											}
 										})
 									}
 								}) 
