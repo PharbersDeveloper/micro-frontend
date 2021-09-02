@@ -114,19 +114,19 @@ export default DS.JSONAPIAdapter.extend( {
 	},
 	handleResponse: function(status, headers, payload, requestData) {
 		//处理project list数据
-		if(payload.data && payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
+		if(payload && payload.data && payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
 		}
 		//处理executions数据
-		if(payload.data && payload.data.length > 0 && payload.data[0].meta) {
+		if(payload && payload.data && payload.data.length > 0 && payload.data[0].meta) {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
 			})
 		}
 		//处理dag数据
-		else if(payload.data && payload.data.meta) {
+		else if(payload && payload.data && payload.data.meta) {
 			payload.data.attributes.meta = payload.data.meta
 		}
 		return payload

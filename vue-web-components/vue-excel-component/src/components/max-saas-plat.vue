@@ -29,19 +29,19 @@
                     <div class="max-table-row" v-for="(row,index) in allData.projectsData" :key="index">
                         <div class="max-table-cell" id="project-name"><div>{{row.provider}}</div></div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+ '-' +choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'import')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'clean')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'calculation')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+ '-' +choosedMonth" :project="row" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'report')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
                 </div>
@@ -91,9 +91,13 @@
             </div>
             <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
             <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
-            <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
+            <!-- 进度条 -->
+            <div class="progress" v-if="showProgress == '1'"> 
+                <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
+            </div> 
+            <!-- <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
                 {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
-            </bp-text>
+            </bp-text> -->
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
                 <div class="cross"></div>
             </div>
@@ -129,7 +133,8 @@ export default {
             lastMonthArr: [],
             showUpload: false,
             JsonData: {},
-            clickProjectEvent: {}
+            clickProjectEvent: {},
+            proBar: 0
         }
     },
     props: {
@@ -165,13 +170,19 @@ export default {
         random: Number,
         fileName: String,
         uploadToastBorder: String,
-        uploadTextStatus: String,
+        uploadTextStatus: {
+            type: String,
+            default: "正在上传"
+        },
         uploadText: String,
         closeuploadToast: {
             type: String,
             default: '1'
         },
-        showProgress: String,
+        showProgress: {
+            type: String,
+            default: '0'
+        },
         uploadLoadedSize: Number,
         uploadFileSize: Number
     },
@@ -191,16 +202,27 @@ export default {
     watch: {
         random: function() {
             this.$forceUpdate()
+        },
+        uploadLoadedSize: function() {
+            console.log("uploadLoadedSize", this.uploadLoadedSize)
+            this.proBar = this.uploadLoadedSize
         }
     },
     created() {
+        //时间选择范围为当前日期向前推六个月
         const rangeArray = (start, end) => Array(end - start + 1).fill(0).map((v, i) => i + start)
+        //获取当前年月
         const currentDate = new Date()
         const year = currentDate.getFullYear()
         const month = currentDate.getMonth() + 1
-        // let month  =3
+        //赋默认值
         this.choosedYear = String(year)
-        this.choosedMonth = '0'+String(month)
+        if(month < 10) {
+            this.choosedMonth = '0' + String(month)
+        } else {
+            this.choosedMonth = String(month)
+        }
+        //日期范围数组
         let yearArr = []
         let monthArr = []
         let nowMonthArr = []
@@ -275,6 +297,17 @@ export default {
             this.$emit('event', this.clickProjectEvent)
         },
         confirmUpload(memo, sheet) {
+            //进度条
+            let that = this;
+            this.proBar = 0;
+            var clearInt = setInterval(function() { 
+                that.proBar++; 
+                console.log(that.proBar); 
+                if (that.proBar >= 49) { 
+                    clearInterval(clearInt); 
+                } 
+            }, 60)
+            //event
             let confirmEvent = this.clickProjectEvent;
             confirmEvent.args.param.memo = memo;
             confirmEvent.args.param.sheet = sheet;
@@ -325,7 +358,15 @@ export default {
         },
         parseData(data, type) {
             let datas = JSON.parse(data)
-            let filterData = datas.filter( it => it.jobCat == type)
+            let filterData = []
+            if(datas.filter) {
+                filterData = datas.filter( it => it.jobCat == type)
+            } else {
+                filterData.push(datas)
+            }
+            if(!filterData[0]) {
+                return {}
+            }
             return filterData[0]
         },
         changePage(page) {
@@ -594,6 +635,7 @@ export default {
 
         .upload-toast {
             display: flex;
+            align-items: center;
             position: absolute;
             bottom: 24px;
             right: 24px;
@@ -637,6 +679,25 @@ export default {
                 font-size: 12px;
                 color: #6B7376;
                 line-height: 16px;
+            }
+            .progress {
+                background-color: #F6F6F6;
+                border: 1px solid #fff;
+                height: 20px;
+                padding: 0.125rem;
+                width: 180px;
+                border-radius: 1000px;
+                .meter {
+                    background: #1b9dd9;
+                    display: block;
+                    height: 100%;
+                    float: left;
+                    width: 100%;
+                    border-radius: 999px;
+                    color: #fff;
+                    text-align: center;
+                    font-size: 12px;
+                }
             }
             .upload-toast-close-container {
                 position: absolute;
