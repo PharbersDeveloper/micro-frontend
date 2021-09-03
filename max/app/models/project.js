@@ -4,4 +4,5 @@ export default class ProjectModel extends Model {
 	@attr("string") provider;
     @attr("string") time;
     @attr("string") actions;
+	@attr("string") mapper;
 }

@@ -4,7 +4,6 @@
             <img src="https://www.pharbers.com/public/img_logo_ph_theme.svg" class="logo" alt="">
             <img src=" " class="user-img" alt="">
         </div> -->
-
         <div class="main">
             <div class="import-introduction">
                 <div class="import-message">
@@ -19,7 +18,7 @@
                     <span class="heading-small">源文件：cpa_pchc_universe</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel></bp-excel>
+                            <bp-excel-second></bp-excel-second>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -28,7 +27,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel></bp-excel>
+                            <bp-excel-second></bp-excel-second>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -50,13 +49,13 @@
 
 <script>
 import importFileList from '../import-file-list.vue'
-import bpExcel from '../bp-excel.vue'
+import bpExcelSecond from '../bp-excel-second.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     components: {
         importFileList,
-        bpExcel,
+        bpExcelSecond,
         bpSelectVue,
         bpOptionVue
     }
@@ -143,30 +142,24 @@ export default {
             padding: 0 20px;
             margin-bottom: 20px;
             flex-shrink: 0;
-
             .logo {
                 width: 100px;
                 height: 32px;
             }
-
             .user-img {
                 width: 32px;
                 height: 32px;
             }
         }
-
         .main {
             display: flex;
             flex-direction: column;
-            // padding: 0 20px;
             margin-bottom: 20px;
             flex: 1;
-
             .import-introduction {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 20px;
-
+                margin: 20px 0;
                 .import-message {
                     display: flex;
                     flex-direction: column;
