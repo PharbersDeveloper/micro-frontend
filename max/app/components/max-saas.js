@@ -34,9 +34,12 @@ export default class MaxSaasComponent extends Component {
                 this.provider = optParam.provider;
                 this.projectId = optParam.projectId;
                 this.uploadDate = optParam.date
-
                 if(optParam.type == "upload") {
                     $('#my-file').click()
+                }
+				if(optParam.type == "import") {
+                    // this.router.transitionTo(`/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}`)
+					window.open(`http://deploy.pharbers.com:4200/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}`)
                 }
                 break
             case "confirmUpload": // 确认上传

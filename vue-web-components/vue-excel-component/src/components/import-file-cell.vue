@@ -1,10 +1,10 @@
 <template>
     <div class="import-file-cell" :id="selected ? 'is-selected' : ''">
         <div class="import-file-cell-left">
-            <span class="file-name">{{data.fileName}}</span>
+            <span class="file-name">{{data.name}}</span>
             <div class="user-icon-name">
                 <img :src="data.userIcon" alt="" class="icon">
-                <span class="user-name">{{data.username}}</span>
+                <span class="user-name">{{data.labels[5]}}</span>
             </div>
         </div>
 

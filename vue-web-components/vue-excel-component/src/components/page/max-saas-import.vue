@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="file-right-container">
-                    <import-file-list></import-file-list>
+                    <import-file-list :lists="allData.assets"></import-file-list>
                 </div>
             </div>
         </div>
@@ -58,6 +58,21 @@ export default {
         bpExcelSecond,
         bpSelectVue,
         bpOptionVue
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    assets: [{
+                        name: 'cpa_pchc_universe',
+                        provider: 'After dda',
+                        state: 'success',
+                        labels: [1,2,3,4,5,6]
+                    }]
+                }
+            }
+        }
     }
 }
 </script>
@@ -121,7 +136,7 @@ export default {
         text-align: left;
         line-height: 20px;
         font-weight: 400;
-		margin-bottom: 12px;
+        margin-bottom: 12px;
     }
 
     .max-saas-import {

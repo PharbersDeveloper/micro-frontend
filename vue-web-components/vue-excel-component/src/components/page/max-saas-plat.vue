@@ -32,16 +32,16 @@
                             <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'import')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'import')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'clean')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'clean')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'calculation')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'calculation')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'report')" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'report')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
                 </div>
@@ -106,13 +106,13 @@
 </template>
 
 <script>
-import bpPagination from './bp-pagination.vue'
-import phTableCell from './ph-table-cell.vue'
-import uploadBox from './upload-box.vue'
-import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import bpButton from '../../node_modules/vue-components/src/components/bp-button.vue'
-import bpText from '../../node_modules/vue-components/src/components/bp-text.vue'
+import bpPagination from '../bp-pagination.vue'
+import phTableCell from '../ph-table-cell.vue'
+import uploadBox from '../upload-box.vue'
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
+import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 export default {
     components: {
         phTableCell,
@@ -317,10 +317,14 @@ export default {
 
         },
         tableClickEvent(data) {
-            if(data.args.param.type == "upload") {
+            let type = data.args.param.type
+            this.clickProjectEvent = data
+            if(type == "upload") {
                 this.showUpload = true
             }
-            this.clickProjectEvent = data
+            if(type == "import") {
+                this.$emit('event', data)
+            }
         },
         clickYear(data) {
             this.choosedYear = data

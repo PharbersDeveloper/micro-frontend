@@ -2,7 +2,7 @@
     <div class="import-file-list">
         <span class="import-file-list-header">已导入文件</span>
         <div class="import-file-cell-container">
-            <import-file-cell v-for="(file,index) in fileList" :key="index" :data="file" :selected="select === index" @click.native="selectFile(index)"></import-file-cell>
+            <import-file-cell v-for="(file,index) in lists" :key="index" :data="file" :selected="select === index" @click.native="selectFile(index)"></import-file-cell>
         </div>
     </div>
 </template>
@@ -13,34 +13,11 @@ export default {
     components: {
         importFileCell
     },
+	props: {
+		lists: Array
+	},
     data () {
         return {
-            fileList: [
-                {
-                    fileName: 'cpa_pchc_universe',
-                    username: 'After dda',
-                    userIcon: '',
-                    state: 'success'
-                },
-                {
-                    fileName: 'cpa_pchc_universe',
-                    username: 'After dda',
-                    userIcon: '',
-                    state: 'success'
-                },
-                {
-                    fileName: 'cpa_pchc_universe',
-                    username: 'After dda',
-                    userIcon: '',
-                    state: 'failed'
-                },
-                {
-                    fileName: 'cpa_pchc_universe',
-                    username: 'After dda',
-                    userIcon: '',
-                    state: 'success'
-                }
-            ],
             select: 0
         }
     },

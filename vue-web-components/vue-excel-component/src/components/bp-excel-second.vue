@@ -5,7 +5,6 @@
 </template>
 <script>
 import HotTable from "@handsontable/vue";
-// import "handsontable/dist/handsontable.full.css";
 import "handsontable/languages/zh-CN";
 
 export default {
@@ -29,13 +28,13 @@ export default {
                 minRows: 1, //最小行列
                 minCols: 1,
                 colHeaders: [
-                    "所属机构",
-                    "检测时间",
-                    "工号",
-                    "姓名",
-                    "手机号",
-                    "性别",
-                    "出生日期"
+                    "12",
+                    "we",
+                    "sdf",
+                    "梵蒂冈",
+                    "发生的",
+                    "为",
+                    "分歧为人"
                 ], //自定义列表头or 布尔值
                 className: "htCenter",
                 currentRowClassName: "currentRow", //为选中行添加类名，可以更改样式
