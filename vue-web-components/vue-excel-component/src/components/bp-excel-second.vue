@@ -12,50 +12,39 @@ export default {
         return {
             test: "test-hot",
             hotSettings: {
-                data: [
-                    {
-                        a: "2222asd",
-                        b: "sss",
-                        c: "eqwq",
-                        e: "wdas",
-                        d: "sad",
-                        f: "说大幅度",
-                        g: "as打算"
-                    }
-                ], // 数据在这个里面,由数据填充表
-                startRows: 10, //初始行列数
-                startCols: 35,
-                minRows: 1, //最小行列
+                data: [ ], //数据填充表
+                height: 'auto',
+                minRows: 0, //最小行列
                 minCols: 1,
+                stretchH: 'all',
                 colHeaders: [
-                    "12",
+                    "1112222222222222222222222222222222222222222222222222",
                     "we",
                     "sdf",
-                    "梵蒂冈",
-                    "发生的",
-                    "为",
-                    "分歧为人"
-                ], //自定义列表头or 布尔值
+                    "sdfsad",
+                    "dasda",
+                    "213scxz"
+                ],
                 className: "htCenter",
                 currentRowClassName: "currentRow", //为选中行添加类名，可以更改样式
                 currentColClassName: "currentCol", //为选中列添加类名
                 autoWrapRow: true, //自动换行
                 language: "zh-CN",
                 licenseKey: "non-commercial-and-evaluation",
-
-                // licenseKey: 'non-commercial-and-evaluation',
                 columns: [
                     //添加每一列的数据类型和一些配置
-                    { data: "a" }, // data后面跟的这个字段是上传对应的字段
+                    { data: "a" },
                     { data: "b" },
                     { data: "c" },
-                    { data: "d" },
-                    { data: "e" },
-                    { data: "f" },
-                    { data: "g" }
+                    { data: "b" },
+                    { data: "c" },
+                    { data: "b" }
                 ]
             }
         };
+    },
+    props: {
+        colHeaders: Array
     },
     components: {
         HotTable
@@ -67,7 +56,21 @@ export default {
         submit: function () {
             console.log(this.getSourceData());
         }
-    }
+    },
+    watch: {
+        colHeaders: function(data) {
+            this.hotSettings.colHeaders = data
+            let columns = []
+            data.forEach((item,index) => {
+                if(item) {
+                    columns.push({ data: item.Name })
+                } else {
+                    columns.push({ data: index })
+                }
+            })
+            this.hotSettings.columns = columns
+        }
+    } 
 };
 </script>
  
@@ -78,56 +81,56 @@ export default {
     box-sizing: border-box;
 }
 .heading-xsmall {
-	font-family: PingFangSC-Regular;
-	font-size: 12px;
-	color: #706F79;
-	letter-spacing: 0.25px;
-	text-align: center;
-	line-height: 16px;
-	font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #706F79;
+    letter-spacing: 0.25px;
+    text-align: center;
+    line-height: 16px;
+    font-weight: 400;
 }
 
 @mixin heading-small-inverse {
-	font-family: PingFangSC-Regular;
-	font-size: 14px;
-	color: #FFFFFF;
-	letter-spacing: 0.25px;
-	text-align: left;
-	line-height: 20px;
-	font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0.25px;
+    text-align: left;
+    line-height: 20px;
+    font-weight: 400;
 }
 
 .handsontable .wtHider {
-	width: 100% !important;
+    width: 100% !important;
 
-	.wtSpreader {
-		width: 100%;
-	}
+    .wtSpreader {
+        width: 100%;
+    }
 }
 .handsontable .htCore {
-	width: 100% !important;
-	th {
-		background-color: #FFFFFF;
-		padding: 0 2px;
-		height: 24px;
-		min-width: 112px;
-		vertical-align: bottom;
-		text-align: left;
-		@include heading-small-inverse;
-		background-color: #BCBAC4;
+    width: 100% !important;
+    th {
+        background-color: #FFFFFF;
+        padding: 0 2px;
+        height: 24px;
+        min-width: 112px;
+        vertical-align: bottom;
+        text-align: left;
+        @include heading-small-inverse;
+        background-color: #BCBAC4;
 
-		.relative {
-			padding: 0;
-		}
-	}
+        .relative {
+            padding: 0;
+        }
+    }
 
-	td {
-		height: 24px;
-		min-width: 112px;
-		width: 100%;
-		padding: 0 2px;
-		vertical-align: bottom;
-	}
+    td {
+        height: 24px;
+        min-width: 112px;
+        width: 100%;
+        padding: 0 2px;
+        vertical-align: bottom;
+    }
 }
 /**
  * Fix for bootstrap styles
@@ -393,6 +396,9 @@ innerBorderBottom - Property controlled by bottom overlay
 .handsontable span.colHeader {
     display: inline-block;
     line-height: 1.1;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Selection */
@@ -488,7 +494,7 @@ innerBorderBottom - Property controlled by bottom overlay
 
 .ht_master .wtHolder {
     overflow: auto;
-	min-height: 100px;
+    // min-height: 100px;
 }
 
 .handsontable .ht_master thead,
@@ -501,7 +507,7 @@ innerBorderBottom - Property controlled by bottom overlay
 .ht_clone_left .wtHolder,
 .ht_clone_bottom .wtHolder {
     overflow: hidden;
-	min-height: 30px;
+    // min-height: 30px;
 }
 
 .handsontable {

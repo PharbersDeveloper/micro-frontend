@@ -2,7 +2,7 @@
     <div class="import-file-list">
         <span class="import-file-list-header">已导入文件</span>
         <div class="import-file-cell-container">
-            <import-file-cell v-for="(file,index) in lists" :key="index" :data="file" :selected="select === index" @click.native="selectFile(index)"></import-file-cell>
+            <import-file-cell v-for="(file,index) in lists" :key="index" :data="file" :selected="select === index" :index="index" @clickfile="clickfile"></import-file-cell>
         </div>
     </div>
 </template>
@@ -13,17 +13,18 @@ export default {
     components: {
         importFileCell
     },
-	props: {
-		lists: Array
-	},
+    props: {
+        lists: Array
+    },
     data () {
         return {
             select: 0
         }
     },
     methods: {
-        selectFile(index) {
-            this.select = index
+        clickfile(data) {
+            this.select = data.args.param.select
+            this.$emit('clickfile', data)
         }
     }
 }

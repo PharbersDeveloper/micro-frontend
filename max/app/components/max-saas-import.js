@@ -10,19 +10,36 @@ export default class MaxSaasImportComponent extends Component {
     @service awsService
     @service store
     @service router
+    @tracked random
 
 	@action
     async listener(e) {
         switch(e.detail[0].args.callback) {
-            case "opt": // 选择文件按钮
+            case "clickFile": // 选择文件按钮
                 let optParam = e.detail[0].args.param
-                this.provider = optParam.provider;
-                this.projectId = optParam.projectId;
-                this.uploadDate = optParam.date
-
-                if(optParam.type == "upload") {
-                    $('#my-file').click()
-                }
+				let schemas = []
+				let schemasName = []
+				debugger
+				if(optParam.attr) {
+					let fileName = optParam.attr.labels.length > 0 ? optParam.attr.labels[5] + '_' + optParam.attr.labels[11].split('.')[0] + '_' + optParam.attr.labels[9] : ''
+					let options = {
+						method: "GET",
+						mode: "cors",
+						headers: {
+							"Authorization": this.cookies.read( "access_token" ),
+							"Content-Type": "application/vnd.api+json",
+							"Accept": "application/vnd.api+json",
+						}
+					}
+					schemas = await fetch(encodeURI(`https://api.pharbers.com/phmax/findTableSchema?table=${fileName}`), options).then(res=>res.json())
+					schemas.forEach(item => {
+						if(item.Name) {
+							schemasName.push(item.Name)
+						}
+					})
+				}
+				e.target.allData.schemasNames = schemasName
+                this.random = Math.random()
                 break
             default: 
                 console.log("other click event!")

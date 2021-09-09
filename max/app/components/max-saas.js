@@ -3,6 +3,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking'
 import fetch, { Headers, Request, Response, AbortController } from 'fetch';
 import { inject as service } from '@ember/service';
+import ENV from "max/config/environment"
+
 
 export default class MaxSaasComponent extends Component {
     @service oauthService
@@ -38,8 +40,7 @@ export default class MaxSaasComponent extends Component {
                     $('#my-file').click()
                 }
 				if(optParam.type == "import") {
-                    // this.router.transitionTo(`/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}`)
-					window.open(`http://deploy.pharbers.com:4200/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}`)
+					window.open(`${ENV.windowUri}/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}`)
                 }
                 break
             case "confirmUpload": // 确认上传
@@ -161,8 +162,8 @@ export default class MaxSaasComponent extends Component {
 						TagSet: [
 							{
 								Key: "owner", 
-								// Value: this.args.model.userData.name
-								Value: "pharbers"
+								Value: this.args.model.userData.name
+								// Value: "pharbers"
 							},
 							{
 								Key: "application", 
@@ -170,8 +171,8 @@ export default class MaxSaasComponent extends Component {
 							}, 
 							{
 								Key: "provider", 
-								// Value: this.provider
-								Value: "pharbers"
+								Value: this.provider
+								// Value: "pharbers"
 							},
 							{
 								Key: "date", 
@@ -204,7 +205,7 @@ export default class MaxSaasComponent extends Component {
 					if (err) console.log(err, err.stack);
 				});
 				//push jobLogs
-				let labelsArr = ["owner",this.args.model.userData.name, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", new Date().getTime().toString(), "version", fileVersion]
+				let labelsArr = ["owner",this.args.model.userData.name, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", parseInt(new Date().getTime()/1000).toString(), "version", fileVersion.split('.')[0]]
 				this.pushJobLogs(fileVersion, "running", "upload", uploadMessage, labelsArr, memo, timesTamp)
 				/**
 				 * 3. create file metadata for database

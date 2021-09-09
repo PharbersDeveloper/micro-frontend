@@ -1,5 +1,5 @@
 <template>
-    <div class="import-file-cell" :id="selected ? 'is-selected' : ''">
+    <div class="import-file-cell" @click="selectFile" :id="selected ? 'is-selected' : ''">
         <div class="import-file-cell-left">
             <span class="file-name">{{data.name}}</span>
             <div class="user-icon-name">
@@ -21,7 +21,8 @@ export default {
         selected: {
             type: Boolean,
             default: false
-        }
+        },
+        index: Number
     },
     computed: {
         stateDisplay() {
@@ -30,6 +31,20 @@ export default {
             } else {
                 return '失败'
             }
+        }
+    },
+    methods: {
+        selectFile(file, index) {
+            const event = new Event("event")
+            event.args = {
+                callback: "clickFile",
+                element: this,
+                param: {
+                    attr: this.data,
+                    select: this.index
+                }
+            }
+            this.$emit('clickfile', event)
         }
     }
 }

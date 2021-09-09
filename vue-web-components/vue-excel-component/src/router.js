@@ -42,7 +42,7 @@ export default new Router({
             name: 'bpExcel',
             component: bpExcel
         },
-		{
+        {
             path: '/bp-excelC',
             name: 'bpExcelC',
             component: bpExcelC
