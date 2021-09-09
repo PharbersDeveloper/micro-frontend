@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" @confirm="confirmUpload" ></mapping-box>
+        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" @confirm="confirmUpload" :fileName="allData.fileName" :sourceList="allData.schemasNames"></mapping-box>
     </div>
 </template>
 
@@ -103,7 +103,8 @@ export default {
                         state: 'success',
                         labels: [1,2,3,4,5,6]
                     }],
-                    schemasNames: []
+                    schemasNames: Array,
+                    fileName: String
                 }
             }
         },

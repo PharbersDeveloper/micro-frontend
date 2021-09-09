@@ -41,6 +41,7 @@ export default class MaxSaasImportRoute extends Route {
             assets: filterData,
 			schemas: schemas.filter( it => it),
 			schemasNames: schemasName, //源文件数组
+			fileName: filterData[0] ? filterData[0].name : '',
 			_isVue: true
         })
     }

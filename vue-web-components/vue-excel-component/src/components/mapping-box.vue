@@ -11,7 +11,7 @@
                 <span class="file">目标文件</span>
                 <div class="shine-list">
                     <ul class="fixed-field">
-                        <li v-for="(field,index) in fieldList" :key="field+index">{{field}}</li>
+                        <li v-for="(field,index) in targetList" :key="field+index">{{field}}</li>
                     </ul>
                     <ul class="drag-field">
                         <li 
@@ -28,7 +28,7 @@
                 <span class="file">源文件：{{fileName}}</span>
                 <div class="shine-list" @dragover="allowDrop" @drop="fileDrop($event)">
                     <ul class="shine-ul">
-                        <li v-for="(ls,index) in relativeList" :key="index+'file'" draggable="true" @dragstart="fileDragStart($event, ls, index)" >
+                        <li v-for="(ls,index) in sourceList" :key="index+'file'" draggable="true" @dragstart="fileDragStart($event, ls, index)" >
                             {{ls}}
                         </li>
                     </ul>
@@ -60,12 +60,13 @@ export default {
             middleData: '',
             middleIndex: -1,
             fileMiddleData: '',
-            fileMddleIndex: -1
+            fileMddleIndex: -1,
+            infoList: ["r4","tr","df"]
         }
     },
     props: {
         fileName: String,
-        fieldList: {
+        targetList: {
             type: Array,
             default: function() {
                 return [
@@ -75,17 +76,7 @@ export default {
                 ]
             }
         },
-        infoList: {
-            type: Array,
-            default: function() {
-                return [
-                    "r4",
-                    "tr",
-                    "df"
-                ]
-            }
-        },
-        relativeList:  {
+        sourceList:  {
             type: Array,
             default: function() {
                 return [
@@ -128,14 +119,14 @@ export default {
             this.allowDrop(e);
             // 判断拖起的元素是映射表中的数据，还是当前备选表中的数据
             if(this.middleData !== ''){
-                if(this.infoList[index].id) {
-                    this.relativeList.push(this.infoList[index])
+                if(this.infoList[index]) {
+                    this.sourceList.push(this.infoList[index])
                 } 
                 // 放置到当前的数组中
                 this.infoList.splice(index, 1, this.middleData)
                 // 清除当前拖动的在另一个表中的数据
                 if(this.middleIndex!==-1){
-                    this.relativeList.splice(this.middleIndex, 1)
+                    this.sourceList.splice(this.middleIndex, 1)
                 }
             }else{
             // 拖动的元素在当前张表时，交换两个数据的位置
@@ -155,7 +146,7 @@ export default {
             //取消默认行为
             if(this.middleData == ''){
                 this.allowDrop(e);
-                this.relativeList.push(this.fileMiddleData) //源文件增加一条
+                this.sourceList.push(this.fileMiddleData) //源文件增加一条
                 this.fileMiddleData=''
                 this.infoList.splice(this.fileMddleIndex,1,this.fileMiddleData)
                 this.clearBakData()
@@ -232,6 +223,7 @@ export default {
             border: 1px solid rgba(37,35,45,0.12);
             border-radius: 2px;
             height: 566px;
+            overflow: auto;
             .title {
                 font-family: PingFangSC-Regular;
                 font-size: 14px;
@@ -275,6 +267,10 @@ export default {
                     align-items: center;
                     border-bottom: 1px solid rgba(37,35,45,0.12);
                     padding: 6px 8px;
+                    width: 160px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap
                 }
             }
         }

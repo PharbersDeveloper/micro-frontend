@@ -39,6 +39,7 @@ export default class MaxSaasImportComponent extends Component {
 					})
 				}
 				e.target.allData.schemasNames = schemasName
+				e.target.allData.fileName = optParam.attr.labels[11].split('.')[0]
                 this.random = Math.random()
                 break
             default: 
