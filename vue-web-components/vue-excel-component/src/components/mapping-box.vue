@@ -87,10 +87,12 @@ export default {
                     "3445df"
                 ]
             }
-        }
+        },
+        projectData: Array
     },
     computed: {},
     created() {
+        this.infoList = this.projectData
         // 未创建映射时，用空格填充中间一行
         if(this.targetList.length > 0 && this.infoList.length == 0) {
             const rangeArray = (start, end) => Array(end - start + 1).fill("")

@@ -38,7 +38,7 @@ export default class MaxSaasImportComponent extends Component {
 					})
 				}
 				e.target.allData.schemasNames = schemasName
-				e.target.allData.targetNames = schemasName.slice[0,5]
+				e.target.allData.targetNames = [1,2,3,4,5,6]
 				e.target.allData.fileName = optParam.attr.labels[11].split('.')[0]
                 this.random = Math.random()
                 break

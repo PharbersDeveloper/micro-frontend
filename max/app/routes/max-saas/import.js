@@ -12,12 +12,16 @@ export default class MaxSaasImportRoute extends Route {
         },
         provider: {
             refreshModel: true
-        }
+        },
+		projectId: {
+            refreshModel: true
+		}
     }
 	async model( params ) {
         let assets = await this.store.query( "asset", { "filter[type]": "file", "filter[labels]": params.ym+','+params.provider } )
 		let filterData = assets.filter( it => it)
 		let userData = await this.store.peekRecord( "account", this.cookies.read('account_id') )
+		let projectData = await this.store.findRecord( "project", params.projectId )
 		let schemas = []
 		let schemasName = []
 		if(filterData[0]) {
@@ -40,6 +44,7 @@ export default class MaxSaasImportRoute extends Route {
 		}
         return RSVP.hash({
 			userData: userData,
+			projectData: projectData,
             assets: filterData,
 			schemas: schemas.filter( it => it),
 			schemasNames: schemasName, //源文件数组

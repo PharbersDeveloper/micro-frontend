@@ -32,16 +32,16 @@
                             <ph-table-cell type="upload" :value="row.upload" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'upload')" :index="index"  :provider="row.provider" :projectId="row.id" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'import')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="import" :value="row.import"  :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'import')" :provider="row.provider" :projectId="row.id" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'clean')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="clean" :value="row.clean" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'clean')" :provider="row.provider" :projectId="row.id" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'calculation')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="calculation" :value="row.calculation" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'calculation')" :provider="row.provider" :projectId="row.id":index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                         <div class="max-table-cell">
-                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'report')" :provider="row.provider" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
+                            <ph-table-cell type="report" :value="row.report" :date="choosedYear+choosedMonth" :project="parseData(row.actions, 'report')" :provider="row.provider" :projectId="row.id" :index="index" @tableClickEvent="tableClickEvent"></ph-table-cell>
                         </div>
                     </div>
                 </div>

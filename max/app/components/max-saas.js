@@ -31,16 +31,18 @@ export default class MaxSaasComponent extends Component {
     @action
     async listener(e) {
         switch(e.detail[0].args.callback) {
-            case "opt": // 选择文件按钮
+            case "opt": // projectb表格按钮
                 let optParam = e.detail[0].args.param
                 this.provider = optParam.provider;
                 this.projectId = optParam.projectId;
                 this.uploadDate = optParam.date
+				//文件上传
                 if(optParam.type == "upload") {
                     $('#my-file').click()
                 }
+				//导入
 				if(optParam.type == "import") {
-					window.open(`${ENV.windowUri}/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}`)
+					window.open(`${ENV.windowUri}/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}&projectId=${this.projectId}`)
                 }
                 break
             case "confirmUpload": // 确认上传

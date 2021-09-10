@@ -1,6 +1,6 @@
 <template>
     <div id="example-container" class="wrapper">
-        <HotTable :root="test" ref="textHot" :settings="hotSettings"></HotTable>
+        <HotTable :root="test" :ref="name" :settings="hotSettings"></HotTable>
     </div>
 </template>
 <script>
@@ -40,11 +40,17 @@ export default {
                     { data: "c" },
                     { data: "b" }
                 ]
-            }
+            },
+            colorList: ["#A660EC", "#F3A250", "#5CA6EF", "#FF8B00", "#E9638F", "#C3DD41", "#BF2600", "#7D67E4", "#21A194", "#42526E", "#49CEEB", "#006644", "#F7D735", "#4ADDC5", "#44E494", "#459DBA", "#4D4B28", "#C5A97B", "#AF9235", "#AC5D83"],
         };
     },
     props: {
-        colHeaders: Array
+        colHeaders: Array,
+        middleList: Array,
+        name: {
+            type: String,
+            default: "targetFile"
+        }
     },
     components: {
         HotTable
@@ -57,9 +63,17 @@ export default {
             console.log(this.getSourceData());
         }
     },
+    mounted() {
+        this.infoList = ['','',"sdf", "sdfsad","dasda", '']
+        // this.infoList.forEach((item,index) => {
+        //     if(item !== '') {
+
+        //     }
+        // })
+    },
     watch: {
         colHeaders: function(data) {
-            debugger
+            if(!data) return false
             this.hotSettings.colHeaders = data
             let columns = []
             data.forEach((item,index) => {
@@ -72,6 +86,9 @@ export default {
                 }
             })
             this.hotSettings.columns = columns
+            if(this.name == "sourceFile") {
+
+            }
         }
     } 
 };
