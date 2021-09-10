@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel-second></bp-excel-second>
+                            <bp-excel-second :colHeaders="allData.targetNames"></bp-excel-second>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" @confirm="confirmUpload" :fileName="allData.fileName" :sourceList="allData.schemasNames"></mapping-box>
+        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemasNames" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent"></mapping-box>
     </div>
 </template>
 
@@ -67,11 +67,14 @@ export default {
     },
     data() {
         return {
-            mappingModelShow: true
+            mappingModelShow: false,
+            fileIndex: 0,
+            colorList: ["#A660EC", "#F3A250", "#5CA6EF", "#FF8B00", "#E9638F", "#C3DD41", "#BF2600", "#7D67E4", "#21A194", "#42526E", "#49CEEB", "#006644", "#F7D735", "#4ADDC5", "#44E494", "#459DBA", "#4D4B28", "#C5A97B", "#AF9235", "#AC5D83"]
         }
     },
     methods: {
         clickfile(data) {
+            this.fileIndex = data.args.param.select
             this.$emit('event', data)
         },
         confirmImport() {
@@ -83,8 +86,10 @@ export default {
         closeMappingModal() {
             this.mappingModelShow = false
         },
-        confirmUpload() {
-
+        confirmMappingEvent(data) {
+            data.args.param.userData = this.allData.userData
+            data.args.param.fileData = this.allData.assets[this.fileIndex]
+            this.$emit('event', data)
         }
     },
     props: {
@@ -103,8 +108,10 @@ export default {
                         state: 'success',
                         labels: [1,2,3,4,5,6]
                     }],
-                    schemasNames: Array,
-                    fileName: String
+                    schemasNames: ['1','2','3'],
+                    targetNames: ['q','s','f'],
+                    fileName: '',
+                    userData: {}
                 }
             }
         },
@@ -113,6 +120,9 @@ export default {
     watch: {
         random: function() {
             this.$forceUpdate()
+        },
+        "allData.middleList": function() {
+            debugger
         }
     }
 }
@@ -269,7 +279,7 @@ export default {
 
                         .source-border {
                             width: 100%;
-                            height: 46px;
+                            height: 52px;
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;

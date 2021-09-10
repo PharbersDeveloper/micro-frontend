@@ -362,7 +362,6 @@ export default class MaxSaasComponent extends Component {
         }
        	let jobLogsObj = await this.store.createRecord('jobLog', jobLogsParam).save()
 		this.jobLogsObj = jobLogsObj
-		console.log(jobLogsObj)
         // patch project
         // await this.store.push({
         //     data: {

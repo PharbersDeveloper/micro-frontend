@@ -61,7 +61,7 @@ export default {
             middleIndex: -1,
             fileMiddleData: '',
             fileMddleIndex: -1,
-            infoList: ["r4","tr","df"]
+            infoList: []
         }
     },
     props: {
@@ -90,6 +90,22 @@ export default {
         }
     },
     computed: {},
+    created() {
+        // 未创建映射时，用空格填充中间一行
+        if(this.targetList.length > 0 && this.infoList.length == 0) {
+            const rangeArray = (start, end) => Array(end - start + 1).fill("")
+            this.infoList = rangeArray(0, this.targetList.length - 1)
+        }
+    },
+    watch: {
+        targetList: function(data) {
+            // 未创建映射时，用空格填充中间一行
+            if(this.targetList.length > 0 && this.infoList.length == 0) {
+                const rangeArray = (start, end) => Array(end - start + 1).fill("")
+                this.infoList = rangeArray(0, this.targetList.length - 1)
+            }
+        }
+    },
     methods: {
         cancel() {
             this.$emit("cancel")
@@ -98,7 +114,15 @@ export default {
             this.$emit("selectFile")
         },
         confirm() {
-            debugger
+            const event = new Event("event")
+            event.args = {
+                callback: "confirmMapping",
+                element: this,
+                param: {
+                    mappingList: this.infoList
+                }
+            }
+            this.$emit('confirmMappingEvent', event)
         },
         // 目标文件表拖动
         dragStart(e, index, field){
@@ -261,13 +285,17 @@ export default {
                     width: 180px;
                     border-left: 1px solid rgba(37,35,45,0.12);
                 }
+                .shine-ul {
+                    li {
+                        width: 160px;
+                    }
+                }
                 li {
                     height: 32px;
                     display: flex;
                     align-items: center;
                     border-bottom: 1px solid rgba(37,35,45,0.12);
                     padding: 6px 8px;
-                    width: 160px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap

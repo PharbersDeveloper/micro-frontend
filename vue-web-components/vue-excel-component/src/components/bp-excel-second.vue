@@ -59,11 +59,14 @@ export default {
     },
     watch: {
         colHeaders: function(data) {
+            debugger
             this.hotSettings.colHeaders = data
             let columns = []
             data.forEach((item,index) => {
-                if(item) {
+                if(item && item.Name) {
                     columns.push({ data: item.Name })
+                } else if(item) {
+                    columns.push({ data: item })
                 } else {
                     columns.push({ data: index })
                 }
