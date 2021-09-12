@@ -1,17 +1,16 @@
 <template>
     <div class="max-saas-import">
-        <div class="header">
+        <!-- <div class="header">
             <img src="https://www.pharbers.com/public/img_logo_ph_theme.svg" class="logo" alt="">
             <img src=" " class="user-img" alt="">
-        </div>
-
+        </div> -->
         <div class="main">
             <div class="import-introduction">
                 <div class="import-message">
                     <span class="heading-large">导入<span class="body-secondary ml-2">de522809-937c-5</span></span>
                     <span class="body-tertiary">上次更新时间 17 Oct,2020 22:45</span>
                 </div>
-                <button>确认导入</button>
+                <button @click="confirmImport">确认导入</button>
             </div>
 
             <div class="file-main">
@@ -19,20 +18,25 @@
                     <span class="heading-small">源文件：cpa_pchc_universe</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel></bp-excel>
+                            <!-- <bp-excel-second :colHeaders="allData.schemasNames" :middleList="middleList" name="sourceFile"></bp-excel-second> -->
+                            <bp-excel :schemas="allData.schemas"></bp-excel>
                         </div>
 
-                        <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
+                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
+                            <bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
+                            <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
                         </bp-select-vue>
                     </div>
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel></bp-excel>
+                            <!-- <bp-excel-second :colHeaders="allData.targetNames" :middleList="middleList" name="targetFile"></bp-excel-second> -->
+                            <bp-excel :schemas="allData.targetNames"></bp-excel>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
-                            <bp-option-vue text="自定映射" :disabled=true></bp-option-vue>
                             <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
                             <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
@@ -41,24 +45,96 @@
                 </div>
 
                 <div class="file-right-container">
-                    <import-file-list></import-file-list>
+                    <import-file-list @clickfile="clickfile" :lists="allData.assets"></import-file-list>
                 </div>
             </div>
         </div>
+        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
     </div>
 </template>
 
 <script>
+import mappingBox from '../mapping-box.vue'
 import importFileList from '../import-file-list.vue'
+import bpExcelSecond from '../bp-excel-second.vue'
 import bpExcel from '../bp-excel.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     components: {
         importFileList,
-        bpExcel,
+        bpExcelSecond,
         bpSelectVue,
-        bpOptionVue
+        bpOptionVue,
+        mappingBox,
+        bpExcel
+    },
+    data() {
+        return {
+            mappingModelShow: false,
+            fileIndex: 0,
+            middleList: {},
+            jobLogs: null
+        }
+    },
+    methods: {
+        clickfile(data) {
+            this.fileIndex = data.args.param.select
+            //项目ID，用于请求表头数据
+            data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
+            this.$emit('event', data)
+        },
+        confirmImport() {
+            
+        },
+        mappingClick() {
+            this.mappingModelShow = true
+        },
+        closeMappingModal() {
+            this.mappingModelShow = false
+        },
+        confirmMappingEvent(data) {
+            data.args.param.userData = this.allData.userData
+            data.args.param.fileData = this.allData.assets[this.fileIndex]
+            this.$emit('event', data)
+            this.mappingModelShow = false
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    assets: [],
+                    schemas: {},
+                    targetNames: {},
+                    fileName: '',
+                    projectData: {},
+                    userData: {}
+                }
+            }
+        },
+        random: Number
+    },
+    watch: {
+        random: function() {
+            this.$forceUpdate()
+            if(this.allData.jobLogs) {
+                let arr = JSON.parse(this.allData.jobLogs.message)
+                if(importArr.length > 0) {
+                    this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
+                }
+            }
+            
+        },
+        "allData.projectData": function(data) {
+            //第一次进入页面 渲染mapping数据
+            let arr = JSON.parse(data.actions)
+            let importArr = arr.filter(it => it.jobCat == "import")
+            if(importArr.length > 0) {
+                this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
+            }
+        }
     }
 }
 </script>
@@ -122,6 +198,7 @@ export default {
         text-align: left;
         line-height: 20px;
         font-weight: 400;
+        margin-bottom: 12px;
     }
 
     .max-saas-import {
@@ -130,7 +207,7 @@ export default {
         width: 100%;
         height: 100%;
         overflow: hidden;
-
+        padding: 80px 24px 24px;
         .header {
             display: flex;
             width: 100%;
@@ -142,30 +219,24 @@ export default {
             padding: 0 20px;
             margin-bottom: 20px;
             flex-shrink: 0;
-
             .logo {
                 width: 100px;
                 height: 32px;
             }
-
             .user-img {
                 width: 32px;
                 height: 32px;
             }
         }
-
         .main {
             display: flex;
             flex-direction: column;
-            padding: 0 20px;
             margin-bottom: 20px;
             flex: 1;
-
             .import-introduction {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 20px;
-
+                margin-top: 20px;
                 .import-message {
                     display: flex;
                     flex-direction: column;
@@ -192,7 +263,26 @@ export default {
                     border-right: 1px solid rgba(37,35,45,0.08);
                     margin-right: 20px;
                     padding-right: 9px;
+                    .bp-select {
+                        width: 24px;
+                        height: 24px;
 
+                        /deep/.bp-select-title {
+                            padding: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        /deep/.bp-option-group {
+                            width: 81px;
+
+                            .bp-option {
+                                padding: 0 12px;
+                                @include body-primary;
+                            }
+                        }
+                    }
                     .source-content-container {
                         display: flex;
                         margin-bottom: 20px;
@@ -200,23 +290,11 @@ export default {
 
                         .source-border {
                             width: 100%;
-                            height: 46px;
+                            height: 52px;
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-                        }
-
-                        .bp-select {
-                            width: 24px;
-                            height: 24px;
-
-                            /deep/.bp-select-title {
-                                padding: 0;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
                         }
                     }
 
@@ -224,35 +302,12 @@ export default {
                         display: flex;
                         flex-grow: 1;
                         width: 100%;
-                        margin-top: 20px;
-
                         .target-border {
                             width: 100%;
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-                        }
-
-                        .bp-select {
-                            width: 24px;
-                            height: 24px;
-
-                            /deep/.bp-select-title {
-                                padding: 0;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
-
-                            /deep/.bp-option-group {
-                                width: 81px;
-
-                                .bp-option {
-                                    padding: 0 12px;
-                                    @include body-primary;
-                                }
-                            }
                         }
                     }
                 }

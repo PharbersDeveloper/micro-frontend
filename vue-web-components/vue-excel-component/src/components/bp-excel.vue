@@ -1,107 +1,116 @@
 <template>
-    <div ref="table" id="hot-table"></div>
+    <div class="excel_container">
+        <ag-grid-vue
+            style="height: 24px"
+            class="ag-theme-alpine ag-theme-balham table"
+            :columnDefs="columnDefs"
+            :rowData="rowData"
+            :grid-options="gridOptions"
+            @grid-ready="onGridReady"
+        >
+        </ag-grid-vue>
+    </div>
 </template>
 <script>
-import { HotTable } from '@handsontable/vue';
-import Handsontable from 'handsontable';
-import 'handsontable/dist/handsontable.full.css'
-import { registerLanguageDictionary, zhCN } from 'handsontable/i18n'
-
+import { AgGridVue } from "ag-grid-vue";
 export default {
-    components: {
-        HotTable
-    },
-    props: {
-        data: {
-            type: Array,
-            default(){
-                return [
-                    [1,2,3,4,5,6,7,8]
-                ]
-            }
-        },
-        colHeaders: Array
-    },
+    name: "App",
     data() {
         return {
-            hotSettings: {
-                data: this.data,
-                language: zhCN.languageCode,
-                height: "100%",
-                width: "100%",
-                readOnly: true,
-                licenseKey: 'non-commercial-and-evaluation',
-                copyable: true
+            columnDefs: null,
+            rowData: null,
+            gridApi: null,
+            gridColumnApi: null,
+            gridOptions: null
+        }
+    },
+    components: {
+        AgGridVue
+    },
+    props: {
+        schemas: Object
+    },
+    beforeMount() {
+        this.columnDefs = [
+            { field: 'athlete' },
+            { field: 'age' },
+            { field: 'country' },
+            { field: 'sport' },
+            { field: 'year' },
+            { field: 'date' },
+            { field: 'gold' },
+            { field: 'silver' },
+            { field: 'bronze' },
+            { field: 'total' },
+            { field: 'year1' },
+            { field: 'date1' },
+            { field: 'gold1' },
+            { field: 'silver1' },
+            { field: 'bronze1' },
+            { field: 'total1' }
+        ]
+        this.gridOptions = {
+            defaultColDef: {
+                sortable: true,
+                resizable: true,
+                width: 150,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true
+            },
+            sideBar: {
+                toolPanels: ['columns']
+            },
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            debug: true,
+            columnDefs: this.columnDefs,
+            rowData: null
+        }
+        // this.rowData = []
+        // this.rowData = [
+        //     { make: "Toyota", model: "Celica", price: 35000 },
+        //     { make: "Ford", model: "Mondeo", price: 32000 },
+        //     { make: "Porsche", model: "Boxter", price: 72000 }
+        // ]
+    },
+    methods: {
+        onGridReady(params) {
+            this.gridApi = params.api;
+            this.gridColumnApi = params.columnApi;
+            if(this.gridApi) {
+                this.gridApi.hideOverlay();
             }
         }
     },
-    created() {
-        if (this.colHeaders) {
-            this.hotSettings['colHeaders'] = this.colHeaders
+    watch: {
+        schemas: function (data) {
+            let headers = [];
+            if (data.headers && data.headers.length > 0) {
+                data.headers.forEach((item, index) => {
+                    if (item) {
+                        headers.push({ headerName: item }); //表头数据
+                    }
+                });
+            }
+            this.columnDefs = headers;
+            if(this.gridApi) {
+                this.gridApi.hideOverlay()
+            }
         }
-    },
-    mounted() {
-        const container = this.$refs.table
-        registerLanguageDictionary(zhCN)
-        const hot = new Handsontable(container, this.hotSettings)
     }
-}
+};
 </script>
 <style lang="scss">
-    * {
-        box-sizing: border-box;
-    }
-
-    .heading-xsmall {
-        font-family: PingFangSC-Regular;
-        font-size: 12px;
-        color: #706F79;
-        letter-spacing: 0.25px;
-        text-align: center;
-        line-height: 16px;
-        font-weight: 400;
-    }
-
-    @mixin heading-small-inverse {
-        font-family: PingFangSC-Regular;
-        font-size: 14px;
-        color: #FFFFFF;
-        letter-spacing: 0.25px;
-        text-align: left;
-        line-height: 20px;
-        font-weight: 400;
-    }
-
-    .handsontable .wtHider {
-        width: 100% !important;
-
-        .wtSpreader {
-            width: 100%;
-        }
-    }
-    .handsontable .htCore {
-        width: 100% !important;
-        th {
-            background-color: #FFFFFF;
-            padding: 0 2px;
-            height: 24px;
-            min-width: 112px;
-            vertical-align: bottom;
-            text-align: left;
-            @include heading-small-inverse;
-            background-color: #BCBAC4;
-
-            .relative {
-                padding: 0;
-            }
-        }
-
-        td {
-            height: 24px;
-            min-width: 112px;
-            width: 100%;
-            padding: 0 2px;
-            vertical-align: bottom;
-        }
-    }
+* {
+    box-sizing: border-box;
+}
+.ag-header-row-column,.ag-theme-alpine {
+    height: 24px !important;
+}
+.ag-header-viewport {
+    overflow: auto; 
+}
+@import "../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+@import "../../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 </style>

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import bpExcel from './components/bp-excel.vue'
-import maxSaas from './components/max-saas-plat.vue'
+import bpExcelC from './components/bp-excel-second.vue'
+import maxSaas from './components/page/max-saas-plat.vue'
 import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
 import test from './views/test.vue'
@@ -40,6 +41,11 @@ export default new Router({
             path: '/bp-excel',
             name: 'bpExcel',
             component: bpExcel
+        },
+        {
+            path: '/bp-excelC',
+            name: 'bpExcelC',
+            component: bpExcelC
         },
         {
             path: '/manual-cleaning',

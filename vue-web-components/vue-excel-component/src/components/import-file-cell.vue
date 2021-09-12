@@ -1,14 +1,14 @@
 <template>
-    <div class="import-file-cell" :id="selected ? 'is-selected' : ''">
+    <div class="import-file-cell" @click="selectFile" :id="selected ? 'is-selected' : ''">
         <div class="import-file-cell-left">
-            <span class="file-name">{{data.fileName}}</span>
+            <span class="file-name">{{fileArr.name}}</span>
             <div class="user-icon-name">
-                <img :src="data.userIcon" alt="" class="icon">
-                <span class="user-name">{{data.username}}</span>
+                <img :src="userIcon" alt="" class="icon">
+                <span class="user-name">{{fileArr.labels[1]}}</span>
             </div>
         </div>
 
-        <div class="import-file-cell-right" :class="data.state">
+        <div class="import-file-cell-right" :class="fileArr.state">
             {{stateDisplay}}
         </div>
     </div>
@@ -16,12 +16,19 @@
 
 <script>
 export default {
+    data() {
+        return {
+            fileArr: [],
+            userIcon: "https://www.pharbers.com/public/icon_home_user.svg"
+        }
+    },
     props: {
         data: Object,
         selected: {
             type: Boolean,
             default: false
-        }
+        },
+        index: Number
     },
     computed: {
         stateDisplay() {
@@ -29,6 +36,43 @@ export default {
                 return '成功'
             } else {
                 return '失败'
+            }
+        }
+    },
+    created() {
+        let message = null
+        if(this.isJSON(this.data.message)) {
+            message = JSON.parse(this.data.message);
+        }
+        this.fileArr = {name: message.name, labels: message.label.split(',')}
+    },
+    methods: {
+        selectFile(file, index) {
+            const event = new Event("event")
+            event.args = {
+                callback: "clickFile",
+                element: this,
+                param: {
+                    attr: this.data,
+                    select: this.index
+                }
+            }
+            this.$emit('clickfile', event)
+        },
+        isJSON(str) {
+            if (typeof str == 'string') {
+                try {
+                    var obj=JSON.parse(str);
+                    if(typeof obj == 'object' && obj ){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                } catch(e) {
+                    console.log('error：'+str+'!!!'+e);
+                    return false;
+                }
             }
         }
     }
@@ -93,6 +137,11 @@ export default {
                 .user-name {
                     @include body-tertiary;
                 }
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 4px;
+                }
             }
         }
 
@@ -119,6 +168,16 @@ export default {
         .failed {
             color: #DB4D71;
             border: 1px solid #DB4D71;
+        }
+
+        .mapping {
+            color: #7163C5;
+            border: 1px solid #7163C5;
+        }
+
+        .unmapping {
+            color: #706F79;
+            border: 1px solid #706F79;
         }
     }
 </style>
