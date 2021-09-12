@@ -30,7 +30,7 @@ export default class MaxSaasUploadRoute extends Route {
         let allUserData
         let userData
         if(this.cookies.read('account_id')) {
-            userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
+            userData = this.store.findRecord( "account", this.cookies.read('account_id') )
             applicationAdapter.toggleProperty( "oauthRequest" )
             applicationAdapter.set("getUserInfo", 1)
             applicationAdapter.set("userAuthorization", accessToken)
@@ -46,8 +46,11 @@ export default class MaxSaasUploadRoute extends Route {
         let currentstamp = time.replace(/-/g, '/');
         let timesTamp = new Date(currentstamp).getTime()
         let times = params.selectedTime && params.selectedTime != "undefined" ? params.selectedTime : timesTamp
-        let projects = await this.store.query("project",{ "filter[time]": times})
-        let jobLogs = await this.store.query("jobLog", {"page[limit]": limit, "page[offset]": page * limit})
+        let projects =  this.store.query("project",{ "filter[time]": times})
+        let jobLogs =  this.store.query("jobLog", {"page[limit]": limit, "page[offset]": page * limit})
+		let promiseArr = [];
+		promiseArr.push(userData, projects, jobLogs);
+		await Promise.all(promiseArr)
         return RSVP.hash({
             userData: userData,
             projectsData: projects.filter( it => it),

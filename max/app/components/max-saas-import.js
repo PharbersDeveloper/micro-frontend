@@ -52,7 +52,14 @@ export default class MaxSaasImportComponent extends Component {
 				let time = y + '-' + m + '-' + '01';
 				let currentstamp = time.replace(/-/g, '/');
 				let timesTamp = new Date(currentstamp).getTime()
+
 				let conParam = e.detail[0].args.param
+				let mapp = []
+				conParam.targetsList.forEach((item,index) => {
+					let obj = {}
+					obj[item] = conParam.mappingList[index]
+					mapp.push(obj)
+				})
 				let jobLogsParam = {
 					"provider": conParam.fileData.labels[5],
 					"owner": conParam.userData.id,
@@ -63,11 +70,10 @@ export default class MaxSaasImportComponent extends Component {
 					"jobDesc": "SUCCESS",
 					"jobCat": "import",
 					"comments": "import",
-					"message": JSON.stringify(conParam.mappingList),
+					"message": JSON.stringify(mapp),
 					"date": new Date().getTime()
 				}
-				let jobLogsObj = this.store.createRecord('jobLog', jobLogsParam).save()
-				// e.target.allData.middleList = jobLogsObj.message
+				this.store.createRecord('jobLog', jobLogsParam).save()
 				break
             default: 
                 console.log("other click event!")

@@ -22,34 +22,21 @@ export default class MaxSaasImportRoute extends Route {
 		let filterData = assets.filter( it => it)
 		let userData = await this.store.peekRecord( "account", this.cookies.read('account_id') )
 		let projectData = await this.store.findRecord( "project", params.projectId )
-		let schemas = []
-		let schemasName = []
-		if(filterData[0]) {
-			let fileName = filterData[0].labels.length > 0 ? filterData[0].labels[5] + '_' + filterData[0].labels[11].split('.')[0] + '_' + filterData[0].labels[9] : ''
-			let options = {
-				method: "GET",
-				mode: "cors",
-				headers: {
-					"Authorization": this.cookies.read( "access_token" ),
-					"Content-Type": "application/vnd.api+json",
-					"Accept": "application/vnd.api+json",
-				}
-			}
-			schemas = await fetch(encodeURI(`https://api.pharbers.com/phmax/findTableSchema?table=${fileName}`), options).then(res=>res.json())
-			schemas.forEach(item => {
-				if(item.Name) {
-					schemasName.push(item.Name)
-				}
-			})
+		let schemas = {}
+		if(projectData.actions) {
+			//获取源数据表头
+			let actions = JSON.parse(projectData.actions).filter(it => it.jobCat == "upload")
+			let message = actions[actions.length - 1].message
+			let sheetName =  JSON.parse(message).sheet
+			schemas = JSON.parse(message).schemas.filter(it => it.name == sheetName)[0]
 		}
         return RSVP.hash({
 			userData: userData,
 			projectData: projectData,
             assets: filterData,
-			schemas: schemas.filter( it => it),
-			schemasNames: schemasName, //源文件数组
+			schemas: schemas,
 			fileName: filterData[0] ? filterData[0].name : '',
-			targetNames: [1,2,3,4,5,6],
+			targetNames: {"headers":["test1","test2","test3","test4","test5","test6"], "name": "sourceList"},
 			_isVue: true
         })
     }

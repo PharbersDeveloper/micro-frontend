@@ -18,7 +18,8 @@
                     <span class="heading-small">源文件：cpa_pchc_universe</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel-second :colHeaders="allData.schemasNames" :middleList="middleList" name="sourceFile"></bp-excel-second>
+                            <!-- <bp-excel-second :colHeaders="allData.schemasNames" :middleList="middleList" name="sourceFile"></bp-excel-second> -->
+                            <bp-excel :schemas="allData.schemas"></bp-excel>
                         </div>
 
                          <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -31,7 +32,8 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel-second :colHeaders="allData.targetNames" :middleList="middleList" name="targetFile"></bp-excel-second>
+                            <!-- <bp-excel-second :colHeaders="allData.targetNames" :middleList="middleList" name="targetFile"></bp-excel-second> -->
+                            <bp-excel :schemas="allData.targetNames"></bp-excel>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -47,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemasNames" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
+        <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
     </div>
 </template>
 
@@ -55,6 +57,7 @@
 import mappingBox from '../mapping-box.vue'
 import importFileList from '../import-file-list.vue'
 import bpExcelSecond from '../bp-excel-second.vue'
+import bpExcel from '../bp-excel.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
@@ -63,13 +66,14 @@ export default {
         bpExcelSecond,
         bpSelectVue,
         bpOptionVue,
-        mappingBox
+        mappingBox,
+        bpExcel
     },
     data() {
         return {
             mappingModelShow: false,
             fileIndex: 0,
-            middleList: []
+            middleList: {}
         }
     },
     methods: {
@@ -78,7 +82,7 @@ export default {
             this.$emit('event', data)
         },
         confirmImport() {
-            this.allData.schemasNames = ["sadsad", "safas", "weq"]
+            
         },
         mappingClick() {
             this.mappingModelShow = true
@@ -109,8 +113,8 @@ export default {
                         state: 'success',
                         labels: [1,2,3,4,5,6]
                     }],
-                    schemasNames: ['1','2','3'],
-                    targetNames: ['q','s','f'],
+                    schemas: {},
+                    targetNames: {},
                     fileName: '',
                     projectData: {},
                     userData: {}
@@ -127,7 +131,7 @@ export default {
             let arr = JSON.parse(data.actions)
             let importArr = arr.filter(it => it.jobCat == "import")
             if(importArr.length > 0) {
-                this.middleList = JSON.parse(importArr[importArr.length - 1].message)
+                this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
             }
         }
     }

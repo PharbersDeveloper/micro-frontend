@@ -11,12 +11,12 @@
                 <span class="file">目标文件</span>
                 <div class="shine-list">
                     <ul class="fixed-field">
-                        <li v-for="(field,index) in targetList" :key="field+index">{{field}}</li>
+                        <li v-for="(field,index) in targetsList" :key="'target'+index">{{field}}</li>
                     </ul>
                     <ul class="drag-field">
                         <li 
                             v-for="(field, index) in infoList" 
-                            :key="field+index" 
+                            :key="'info'+index" 
                             draggable="true" @dragstart="dragStart($event, index, field)" @dragover="allowDrop" @drop="drop($event, index,field)"
                         >{{field}}</li>
                     </ul>
@@ -28,7 +28,7 @@
                 <span class="file">源文件：{{fileName}}</span>
                 <div class="shine-list" @dragover="allowDrop" @drop="fileDrop($event)">
                     <ul class="shine-ul">
-                        <li v-for="(ls,index) in sourceList" :key="index+'file'" draggable="true" @dragstart="fileDragStart($event, ls, index)" >
+                        <li v-for="(ls,index) in schemaList" :key="index+'source'" draggable="true" @dragstart="fileDragStart($event, ls, index)" >
                             {{ls}}
                         </li>
                     </ul>
@@ -61,52 +61,58 @@ export default {
             middleIndex: -1,
             fileMiddleData: '',
             fileMddleIndex: -1,
-            infoList: []
+            infoList: [],
+            schemaList: [],
+            targetsList:[]
         }
     },
     props: {
         fileName: String,
-        targetList: {
-            type: Array,
-            default: function() {
-                return [
-                    "fieldzn",
-                    "435",
-                    "asdsa45245d"
-                ]
-            }
-        },
-        sourceList:  {
-            type: Array,
-            default: function() {
-                return [
-                    "asad",
-                    "2vgh3",
-                    "sdter",
-                    "2er3",
-                    "3445df"
-                ]
-            }
-        },
-        projectData: Array
+        targetList: Object,
+        sourceList:  Object,
+        projectData: Object
     },
     computed: {},
     created() {
-        this.infoList = this.projectData
-        // 未创建映射时，用空格填充中间一行
-        if(this.targetList.length > 0 && this.infoList.length == 0) {
-            const rangeArray = (start, end) => Array(end - start + 1).fill("")
-            this.infoList = rangeArray(0, this.targetList.length - 1)
-        }
-    },
-    watch: {
-        targetList: function(data) {
-            // 未创建映射时，用空格填充中间一行
-            if(this.targetList.length > 0 && this.infoList.length == 0) {
-                const rangeArray = (start, end) => Array(end - start + 1).fill("")
-                this.infoList = rangeArray(0, this.targetList.length - 1)
-            }
-        }
+        this.infoList = []
+        this.targetsList = []
+        this.projectData.mappingList.forEach((item) => {
+            this.infoList.push(Object.values(item)[0])
+            this.targetsList.push(Object.keys(item)[0])
+        })
+        this.schemaList = this.sourceList.headers.filter((x) => x && !this.infoList.some((item) => x === item));
+        debugger
+        // this.infoList = this.projectData.mappingList ? this.projectData.mappingList : this.projectData
+        // // 未创建映射时，用空格填充中间一行
+        // if(this.targetList.headers && this.targetList.headers.length > 0 && this.infoList.length == 0) {
+        //     const rangeArray = (start, end) => Array(end - start + 1).fill("")
+        //     this.infoList = rangeArray(0, this.targetList.headers.length - 1)
+        // }
+        // if(this.projectData.targetsList) {
+        //     this.schemaList = this.projectData.sourceList
+        //     this.targetsList = this.projectData.targetsList
+        // } else {
+        //     //处理源文件
+        //     this.schemaList = []
+        //     let schemas= this.sourceList.headers
+        //     if(schemas.length > 0) {
+        //         schemas.forEach((item,index) => {
+        //             if(item) {
+        //                 this.schemaList.push(item)
+        //             }
+        //         })
+        //     }
+        //     //处理目标文件
+        //     this.targetsList = []
+        //     let targets= this.targetList.headers
+        //     if(targets.length > 0) {
+        //         targets.forEach((item,index) => {
+        //             if(item) {
+        //                 this.targetsList.push(item)
+        //             }
+        //         })
+        //     }
+        // }
     },
     methods: {
         cancel() {
@@ -121,7 +127,9 @@ export default {
                 callback: "confirmMapping",
                 element: this,
                 param: {
-                    mappingList: this.infoList
+                    mappingList: this.infoList,
+                    targetsList: this.targetsList,
+                    sourceList: this.schemaList
                 }
             }
             this.$emit('confirmMappingEvent', event)
@@ -146,13 +154,13 @@ export default {
             // 判断拖起的元素是映射表中的数据，还是当前备选表中的数据
             if(this.middleData !== ''){
                 if(this.infoList[index]) {
-                    this.sourceList.push(this.infoList[index])
+                    this.schemaList.push(this.infoList[index])
                 } 
                 // 放置到当前的数组中
                 this.infoList.splice(index, 1, this.middleData)
                 // 清除当前拖动的在另一个表中的数据
                 if(this.middleIndex!==-1){
-                    this.sourceList.splice(this.middleIndex, 1)
+                    this.schemaList.splice(this.middleIndex, 1)
                 }
             }else{
             // 拖动的元素在当前张表时，交换两个数据的位置
@@ -172,7 +180,7 @@ export default {
             //取消默认行为
             if(this.middleData == ''){
                 this.allowDrop(e);
-                this.sourceList.push(this.fileMiddleData) //源文件增加一条
+                this.schemaList.push(this.fileMiddleData) //源文件增加一条
                 this.fileMiddleData=''
                 this.infoList.splice(this.fileMddleIndex,1,this.fileMiddleData)
                 this.clearBakData()
@@ -277,17 +285,27 @@ export default {
                 display: flex;
                 padding: 8px;
                 align-items: center;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                min-height: 30px;
             }
             .shine-list {
                 display: flex;
                 .fixed-field, .shine-ul {
                     width: 180px;
+                    padding: 0;
+                    margin: 0;
                 }
                 .drag-field {
                     width: 180px;
+                    padding: 0;
+                    margin: 0;
                     border-left: 1px solid rgba(37,35,45,0.12);
                 }
                 .shine-ul {
+                    padding: 0;
+                    margin: 0;
                     li {
                         width: 160px;
                     }
