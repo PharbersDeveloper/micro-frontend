@@ -73,12 +73,15 @@ export default {
         return {
             mappingModelShow: false,
             fileIndex: 0,
-            middleList: {}
+            middleList: {},
+            jobLogs: null
         }
     },
     methods: {
         clickfile(data) {
             this.fileIndex = data.args.param.select
+            //项目ID，用于请求表头数据
+            data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
             this.$emit('event', data)
         },
         confirmImport() {
@@ -102,17 +105,7 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    assets: [{
-                        name: 'cpa_pchc_universe',
-                        provider: 'After dda',
-                        state: 'success',
-                        labels: [1,2,3,4,5,6]
-                    },{
-                        name: 'cpa_pchc_universe',
-                        provider: 'After dda',
-                        state: 'success',
-                        labels: [1,2,3,4,5,6]
-                    }],
+                    assets: [],
                     schemas: {},
                     targetNames: {},
                     fileName: '',
@@ -126,8 +119,16 @@ export default {
     watch: {
         random: function() {
             this.$forceUpdate()
+            if(this.allData.jobLogs) {
+                let arr = JSON.parse(this.allData.jobLogs.message)
+                if(importArr.length > 0) {
+                    this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
+                }
+            }
+            
         },
         "allData.projectData": function(data) {
+            //第一次进入页面 渲染mapping数据
             let arr = JSON.parse(data.actions)
             let importArr = arr.filter(it => it.jobCat == "import")
             if(importArr.length > 0) {

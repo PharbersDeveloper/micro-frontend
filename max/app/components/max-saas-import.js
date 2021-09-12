@@ -18,28 +18,18 @@ export default class MaxSaasImportComponent extends Component {
             case "clickFile": // 选择文件按钮
                 let optParam = e.detail[0].args.param
 				let schemas = []
-				let schemasName = []
-				if(optParam.attr) {
-					let fileName = optParam.attr.labels.length > 0 ? optParam.attr.labels[5] + '_' + optParam.attr.labels[11].split('.')[0] + '_' + optParam.attr.labels[9] : ''
-					let options = {
-						method: "GET",
-						mode: "cors",
-						headers: {
-							"Authorization": this.cookies.read( "access_token" ),
-							"Content-Type": "application/vnd.api+json",
-							"Accept": "application/vnd.api+json",
-						}
-					}
-					schemas = await fetch(encodeURI(`https://api.pharbers.com/phmax/findTableSchema?table=${fileName}`), options).then(res=>res.json())
-					schemas.forEach(item => {
-						if(item.Name) {
-							schemasName.push(item.Name)
-						}
-					})
+				let message = null
+				if(optParam.attr.message) {
+					//获取源数据表头
+					message = JSON.parse(optParam.attr.message)
+					let sheetName =  message.sheet //输入的sheet名是哪个就显示哪个
+					schemas = message.schemas.filter(it => it.name == sheetName)[0]
 				}
-				e.target.allData.schemasNames = schemasName
-				e.target.allData.targetNames = [1,2,3,4,5,6]
-				e.target.allData.fileName = optParam.attr.labels[11].split('.')[0]
+				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[date]": optParam.attr.date, "filter[version]": optParam.attr.version, "filter[jobCat]": "import"})
+				e.target.allData.jobLogs = jobLogs.filter(it => it)
+				e.target.allData.schemas = schemas
+				e.target.allData.targetNames = {"headers":["aaa1","aaa2","aaa3","aaa4","aaa5"], "name": "sourceList"}
+				e.target.allData.fileName = message.name
                 this.random = Math.random()
                 break
 			case "confirmMapping":
@@ -61,11 +51,11 @@ export default class MaxSaasImportComponent extends Component {
 					mapp.push(obj)
 				})
 				let jobLogsParam = {
-					"provider": conParam.fileData.labels[5],
-					"owner": conParam.userData.id,
-					"showName": conParam.userData.name,
+					"provider": conParam.fileData.provider,
+					"owner": conParam.fileData.owner,
+					"showName": conParam.fileData.showName,
 					"time": timesTamp,
-					"version": conParam.fileData.labels[11],
+					"version": conParam.fileData.version,
 					"code": 0,
 					"jobDesc": "SUCCESS",
 					"jobCat": "import",

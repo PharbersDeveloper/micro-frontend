@@ -50,27 +50,22 @@ export default {
             { field: 'total1' }
         ]
         this.gridOptions = {
-            onColumnResized: function(params) {
-                if (params.source === 'uiColumnDragged' && params.finished) {
-                    本问题需要处理的代码位置
-                }
-            },
             defaultColDef: {
                 sortable: true,
                 resizable: true,
-                width: 200,
+                width: 150,
                 enableRowGroup: true,
                 enablePivot: true,
-                enableValue: true,
+                enableValue: true
             },
             sideBar: {
-                toolPanels: ['columns'],
+                toolPanels: ['columns']
             },
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             debug: true,
             columnDefs: this.columnDefs,
-            rowData: null,
+            rowData: null
         }
         // this.rowData = []
         // this.rowData = [
@@ -90,7 +85,6 @@ export default {
     },
     watch: {
         schemas: function (data) {
-            debugger
             let headers = [];
             if (data.headers && data.headers.length > 0) {
                 data.headers.forEach((item, index) => {

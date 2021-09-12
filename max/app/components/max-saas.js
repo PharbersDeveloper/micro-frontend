@@ -302,7 +302,6 @@ export default class MaxSaasComponent extends Component {
 				// 		} 
 				// 	})
 				// }, 20*1000)
-				debugger
 				that.showProgress = '0'// 关闭上传进度条
 				// that.router.transitionTo( "/" )
 				// that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
