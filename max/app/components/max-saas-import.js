@@ -29,7 +29,7 @@ export default class MaxSaasImportComponent extends Component {
 				e.target.allData.eventName = "clickFile"
 				e.target.allData.jobLogs = jobLogs.filter(it => it) //mapping弹框数据
 				e.target.allData.schemas = schemas
-				e.target.allData.targetNames = {"headers":["aaa1","aaa2","aaa3","aaa4","aaa5"], "name": "sourceList"}
+				e.target.allData.targetNames = {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch"], "name": "sourceList"}
 				e.target.allData.fileName = message.name
                 this.random = Math.random()
                 break

@@ -29,12 +29,9 @@ export default class MaxSaasImportRoute extends Route {
 		// 文件列表状态显示
 		let mapperAssets = this.store.query("jobLog", { "filter[provider]": params.provider, "filter[time]": time, "filter[jobCat]": "mapper"})
 		let userData = this.store.peekRecord( "account", this.cookies.read('account_id') )
-		// let projectData = this.store.findRecord( "project", params.projectId )
 		await Promise.all([userData, assets, mapperAssets])
 		let filterData = assets.filter( it => it)
-		debugger
 		let jobLogs = await this.store.query("jobLog", { "filter[provider]": params.provider, "filter[version]": filterData[0] ? filterData[0].version : '', "filter[jobCat]": "mapper"})
-		// let projectDataPro = resultArr[2]
 		//excel表格数据
 		let schemas = {}
 		if(filterData[0].message) {
@@ -43,15 +40,14 @@ export default class MaxSaasImportRoute extends Route {
 			let sheetName =  message.sheet
 			schemas = message.schemas.filter(it => it.name == sheetName)[0]
 		}
-		debugger
         return RSVP.hash({
 			userData: userData,
-			jobLogs: jobLogs.filter( it => it),
+			jobLogs: jobLogs.filter( it => it), //mapper数据
             assets: filterData,
 			mapperAssets: mapperAssets.filter( it => it),
 			schemas: schemas,
 			fileName: filterData[0] ? filterData[0].name : '',
-			targetNames: {"headers":["test1","test2","test3","test4","test5","test6"], "name": "sourceList"},
+			targetNames: {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch"], "name": "sourceList"},
 			_isVue: true
         })
     }

@@ -135,7 +135,6 @@ export default {
             }
         },
         "allData.jobLogs": function(data) {
-            debugger
             //第一次进入页面 渲染mapping弹框数据
             this.middleList.mappingList = []
             if(this.allData.jobLogs.length > 0) {
