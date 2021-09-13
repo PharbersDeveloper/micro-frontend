@@ -1,6 +1,6 @@
 <template>
-    <div class="import-file-cell" @click="selectFile" :id="selected ? 'is-selected' : ''">
-        <div class="import-file-cell-left">
+    <div class="import-file-cell" :id="selected ? 'is-selected' : ''">
+        <div class="import-file-cell-left" @click="selectFile('file')">
             <span class="file-name">{{fileArr.name}}</span>
             <div class="user-icon-name">
                 <img :src="userIcon" alt="" class="icon">
@@ -10,9 +10,8 @@
 
         <div class="import-file-cell-right" >
             <span class="state" :class="state">{{stateDisplay}}</span>
-            <span class="import" v-if="state == 'mapped'">导入</span>
+            <span class="import" v-if="state == 'mapped'" @click="selectFile('import')">导入</span>
         </div>
-
     </div>
 </template>
 
@@ -73,14 +72,15 @@ export default {
         }
     },
     methods: {
-        selectFile(file, index) {
+        selectFile(name) {
             const event = new Event("event")
             event.args = {
                 callback: "clickFile",
                 element: this,
                 param: {
                     attr: this.data,
-                    select: this.index
+                    select: this.index,
+                    name: name
                 }
             }
             this.$emit('clickfile', event)

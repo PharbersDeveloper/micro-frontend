@@ -15,7 +15,7 @@ export default {
     },
     props: {
         lists: Array,
-		stateList: Array
+        stateList: Array
     },
     data () {
         return {

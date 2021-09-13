@@ -26,12 +26,39 @@ export default class MaxSaasImportComponent extends Component {
 					schemas = message.schemas.filter(it => it.name == sheetName)[0]
 				}
 				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
-				e.target.allData.eventName = "clickFile"
-				e.target.allData.jobLogs = jobLogs.filter(it => it) //mapping弹框数据
-				e.target.allData.schemas = schemas
-				e.target.allData.targetNames = {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch"], "name": "sourceList"}
-				e.target.allData.fileName = message.name
-                this.random = Math.random()
+				let jobLogsList = jobLogs.filter(it => it)
+				if(optParam.name == 'file') {
+					e.target.allData.eventName = "clickFile"
+					e.target.allData.jobLogs = jobLogsList //mapping弹框数据
+					e.target.allData.schemas = schemas
+					e.target.allData.targetNames = {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], "name": "sourceList"}
+					e.target.allData.fileName = message.name
+					this.random = Math.random()
+				} else if(optParam.name == 'import') {
+					// 1.处理mappers空值为null mapper_list
+					let mappers = JSON.parse(jobLogsList[jobLogsList.length - 1].message)
+					mappers.forEach(item => {
+						if(Object.values(item)[0] == '') {
+							item[Object.keys(item)[0]] = null
+						}
+					})
+					//2.获取文件位置
+					let stateUrl = "https://api.pharbers.com/phetlsfn"
+					let options = {
+						method: "POST",
+						mode: "cors",
+						headers: {
+							"Authorization": this.cookies.read( "access_token" ),
+							"Content-Type": "application/vnd.api+json",
+							"Accept": "application/vnd.api+json",
+						},
+						body: JSON.stringify({
+							mapper_list: mappers,
+							key: JSON.parse(optParam.attr.message).location
+						})
+					}
+					let datas = await fetch(stateUrl, options).then(res=>res.json())
+				}
                 break
 			case "confirmMapping":
 				//todo: getCurrentDate

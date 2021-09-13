@@ -33,7 +33,7 @@
                     <div class="target-content-container ">
                         <div class="target-border">
                             <!-- <bp-excel-second :colHeaders="allData.targetNames" :middleList="middleList" name="targetFile"></bp-excel-second> -->
-                            <bp-excel :schemas="allData.targetNames"></bp-excel>
+                            <bp-excel :schemas="allData.targetNames" :sourceData="allData.sourceData" name="targer"></bp-excel>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -74,7 +74,35 @@ export default {
             mappingModelShow: false,
             fileIndex: 0,
             middleList: {},
-            jobLogs: null
+            jobLogs: null,
+            sourceData: [
+                {
+                    atc4_code: "K01E1",
+                    corp_name_ch: "双鹤集团",
+                    dosage: "注射液",
+                    mnf_name_ch: "上海长征富民金山制药有限公司",
+                    mole_name_ch: "复方氨基酸(14AA)",
+                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                    pack: "1",
+                    pack_id: "0000202",
+                    prod_desc: "14-AMINO ACID CO   SCZ",
+                    prod_name_ch: "复方氨基酸注射液(14AA)",
+                    spec: "8.23% 250ML"
+                },
+                {
+                    atc4_code: "K01E1",
+                    corp_name_ch: "双鹤集团",
+                    dosage: "注射液",
+                    mnf_name_ch: "上海长征富民金山制药有限公司",
+                    mole_name_ch: "复方氨基酸(14AA)",
+                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                    pack: "1",
+                    pack_id: "0000202",
+                    prod_desc: "14-AMINO ACID CO   SCZ",
+                    prod_name_ch: "复方氨基酸注射液(14AA)",
+                    spec: "8.23% 250ML"
+                }
+            ]
         }
     },
     methods: {
@@ -110,7 +138,35 @@ export default {
                     targetNames: {},
                     fileName: '',
                     projectData: {},
-                    userData: {}
+                    userData: {},
+                    sourceData: [
+                        {
+                            atc4_code: "K01E1",
+                            corp_name_ch: "双鹤集团",
+                            dosage: "注射液",
+                            mnf_name_ch: "上海长征富民金山制药有限公司",
+                            mole_name_ch: "复方氨基酸(14AA)",
+                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                            pack: "1",
+                            pack_id: "0000202",
+                            prod_desc: "14-AMINO ACID CO   SCZ",
+                            prod_name_ch: "复方氨基酸注射液(14AA)",
+                            spec: "8.23% 250ML"
+                        },
+                        {
+                            atc4_code: "K01E1",
+                            corp_name_ch: "双鹤集团",
+                            dosage: "注射液",
+                            mnf_name_ch: "上海长征富民金山制药有限公司",
+                            mole_name_ch: "复方氨基酸(14AA)",
+                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                            pack: "1",
+                            pack_id: "0000202",
+                            prod_desc: "14-AMINO ACID CO   SCZ",
+                            prod_name_ch: "复方氨基酸注射液(14AA)",
+                            spec: "8.23% 250ML"
+                        }
+                    ]
                 }
             }
         },

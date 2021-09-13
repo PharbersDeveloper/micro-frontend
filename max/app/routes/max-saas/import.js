@@ -29,12 +29,24 @@ export default class MaxSaasImportRoute extends Route {
 		// 文件列表状态显示
 		let mapperAssets = this.store.query("jobLog", { "filter[provider]": params.provider, "filter[time]": time, "filter[jobCat]": "mapper"})
 		let userData = this.store.peekRecord( "account", this.cookies.read('account_id') )
-		await Promise.all([userData, assets, mapperAssets])
+		// datacource
+		let stateUrl = "https://api.pharbers.com/phdatasource"
+		let options = {
+			method: "GET",
+			mode: "cors",
+			headers: {
+				"Authorization": this.cookies.read( "access_token" ),
+				"Content-Type": "application/vnd.api+json",
+				"Accept": "application/vnd.api+json",
+			}
+		}
+		let datasource = await fetch(stateUrl, options).then(res=>res.json())
+		await Promise.all([userData, assets, mapperAssets, datasource])
 		let filterData = assets.filter( it => it)
 		let jobLogs = await this.store.query("jobLog", { "filter[provider]": params.provider, "filter[version]": filterData[0] ? filterData[0].version : '', "filter[jobCat]": "mapper"})
 		//excel表格数据
 		let schemas = {}
-		if(filterData[0].message) {
+		if(filterData[0] && filterData[0].message) {
 			//获取源数据表头
 			let message = JSON.parse(filterData[0].message)
 			let sheetName =  message.sheet
@@ -47,7 +59,8 @@ export default class MaxSaasImportRoute extends Route {
 			mapperAssets: mapperAssets.filter( it => it),
 			schemas: schemas,
 			fileName: filterData[0] ? filterData[0].name : '',
-			targetNames: {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch"], "name": "sourceList"},
+			sourceData: JSON.parse(datasource.body).slice(0,5),
+			targetNames: {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], "name": "sourceList"},
 			_isVue: true
         })
     }

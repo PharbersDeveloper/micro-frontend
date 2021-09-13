@@ -150,6 +150,7 @@ export default class MaxSaasComponent extends Component {
 					.catch((err)=> {
 						this.pushJobLogs(uploadFileParams.Key, "failed", "upload", uploadMessage, [], memo, sheet)
 					})
+					
 				if(!s3FileUpload) return
 				//文件名	
 				fileVersion = s3FileUpload.Key.split("/").pop()
@@ -236,7 +237,7 @@ export default class MaxSaasComponent extends Component {
 				applicationAdapter.set( "reqBody", fileBodyObj )
 				//数据库上传数据
 				await this.store.createRecord( "asset", fileBodyObj ).save()
-				await this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, uploadMessage.file, sheet)
+				await this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, uploadMessage.file, sheet, s3FileUpload)
 				this.uploadLoadedSize = 100 //文件上传成功，进度条到50%
 				//create executions 得到arn
 				// that.uploadTextStatus = "正在处理"
@@ -362,7 +363,7 @@ export default class MaxSaasComponent extends Component {
 	}
 
     @action
-    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, inputElement, sheet) {
+    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, inputElement, sheet, s3FileUpload) {
 		let that = this
 		let time
 		if(this.uploadDate) {
@@ -376,43 +377,54 @@ export default class MaxSaasComponent extends Component {
 			var arrayBuffer = reader.result;
 			let arr = []
 			var workbook = new ExcelJS.Workbook();
-			workbook.xlsx.load(arrayBuffer).then(async function(workbook) {
-				workbook.worksheets.forEach(function (sheetData, sheetNumber) {
-					sheetData.eachRow(function (row, rowNumber) {
-						if(rowNumber == 1) {
-							arr.push({name: sheetData.name,headers: row.values})
-						}
+			try {
+				workbook.xlsx.load(arrayBuffer).then(async function(workbook) {
+					workbook.worksheets.forEach(function (sheetData, sheetNumber) {
+						sheetData.eachRow(function (row, rowNumber) {
+							if(rowNumber == 1) {
+								arr.push({name: sheetData.name,headers: row.values})
+							}
+						})
 					})
+					/* 读文件结束 */
+					// message: 名字+文件大小+label
+					let message = {
+						name: fileVersion,
+						size: uploadMessage.file.size,
+						location: s3FileUpload.Key,
+						label: labelsArr.toString(),
+						sheet: sheet,
+						schemas: arr
+					}
+					//push jobLogs
+					let jobLogsParam = {
+						"provider": that.provider,
+						"owner": that.args.model.userData.id,
+						"showName": that.args.model.userData.name,
+						"time": time ? time : timesTamp,
+						"version": fileVersion +'_'+ Math.random(),
+						"code": 0,
+						"jobDesc": status,
+						"jobCat": option,
+						"comments": memo,
+						"message": JSON.stringify(message),
+						"date": new Date().getTime(),
+					}
+					let jobLogsObj = await that.store.createRecord('jobLog', jobLogsParam).save()
+					// that.jobLogsObj = jobLogsObj
+					//刷新页面状态
+					that.router.transitionTo( "/" )
+					that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
 				})
-				/* 读文件结束 */
-				// message: 名字+文件大小+label
-				let message = {
-					name: fileVersion,
-					size: uploadMessage.file.size, 
-					label: labelsArr.toString(),
-					sheet: sheet,
-					schemas: arr
-				}
-				//push jobLogs
-				let jobLogsParam = {
-					"provider": that.provider,
-					"owner": that.args.model.userData.id,
-					"showName": that.args.model.userData.name,
-					"time": time ? time : timesTamp,
-					"version": fileVersion +'_'+ Math.random(),
-					"code": 0,
-					"jobDesc": status,
-					"jobCat": option,
-					"comments": memo,
-					"message": JSON.stringify(message),
-					"date": new Date().getTime(),
-				}
-				let jobLogsObj = await that.store.createRecord('jobLog', jobLogsParam).save()
-				// that.jobLogsObj = jobLogsObj
-				//刷新页面状态
-				that.router.transitionTo( "/" )
-				that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
-			})
+			} catch ( e ) {
+				console.log(e)
+				that.showProgress = '0' //关闭上传进度条
+				//上传失败提示
+				that.uploadTextStatus = "上传失败" 
+				that.uploadText = ""
+				that.uploadToastBorder = "red"
+			}
+			
 		};
 		reader.readAsArrayBuffer(file);
     }
