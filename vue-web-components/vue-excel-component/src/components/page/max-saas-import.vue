@@ -119,20 +119,34 @@ export default {
     watch: {
         random: function() {
             this.$forceUpdate()
-            if(this.allData.jobLogs) {
-                let arr = JSON.parse(this.allData.jobLogs.message)
-                if(importArr.length > 0) {
-                    this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
-                }
+            this.middleList.mappingList = []
+            //点击文件列表 需要更新mapping数据
+            if(this.allData.eventName == "clickFile" && this.allData.jobLogs) {
+                //已创建映射
+                let message = JSON.parse(this.allData.jobLogs.message)
+                this.middleList.mappingList = message
+            } else if(this.allData.eventName == "clickFile" && !this.allData.jobLogs) {
+                //未创建映射
+                this.allData.targetNames.headers.forEach(item => {
+                    let it = {}
+                    it[item] = ''
+                    this.middleList.mappingList.push(it)
+                })
             }
-            
         },
         "allData.projectData": function(data) {
             //第一次进入页面 渲染mapping数据
             let arr = JSON.parse(data.actions)
             let importArr = arr.filter(it => it.jobCat == "import")
+            this.middleList.mappingList = []
             if(importArr.length > 0) {
                 this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
+            } else {
+                this.allData.targetNames.headers.forEach(item => {
+                    let it = {}
+                    it[item] = ''
+                    this.middleList.mappingList.push(it)
+                })
             }
         }
     }

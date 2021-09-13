@@ -1,8 +1,8 @@
 <template>
-    <div class="excel_container">
+    <div class="excel_container ag-theme-alpine">
         <ag-grid-vue
             style="height: 24px"
-            class="ag-theme-alpine ag-theme-balham table"
+            class="table"
             :columnDefs="columnDefs"
             :rowData="rowData"
             :grid-options="gridOptions"
