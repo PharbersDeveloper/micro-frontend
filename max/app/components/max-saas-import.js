@@ -25,9 +25,9 @@ export default class MaxSaasImportComponent extends Component {
 					let sheetName =  message.sheet //输入的sheet名是哪个就显示哪个
 					schemas = message.schemas.filter(it => it.name == sheetName)[0]
 				}
-				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "import"})
+				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
 				e.target.allData.eventName = "clickFile"
-				e.target.allData.jobLogs = jobLogs.filter(it => it)[0]
+				e.target.allData.jobLogs = jobLogs.filter(it => it) //mapping弹框数据
 				e.target.allData.schemas = schemas
 				e.target.allData.targetNames = {"headers":["aaa1","aaa2","aaa3","aaa4","aaa5"], "name": "sourceList"}
 				e.target.allData.fileName = message.name
@@ -45,6 +45,7 @@ export default class MaxSaasImportComponent extends Component {
 				let timesTamp = new Date(currentstamp).getTime()
 
 				let conParam = e.detail[0].args.param
+				// message数据
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
 					let obj = {}
@@ -58,13 +59,17 @@ export default class MaxSaasImportComponent extends Component {
 					"time": timesTamp,
 					"version": conParam.fileData.version,
 					"code": 0,
-					"jobDesc": "SUCCESS",
-					"jobCat": "import",
-					"comments": "import",
+					"jobDesc": "mapped",
+					"jobCat": "mapper",
+					"comments": "mapper",
 					"message": JSON.stringify(mapp),
 					"date": new Date().getTime()
 				}
-				this.store.createRecord('jobLog', jobLogsParam).save()
+				await this.store.createRecord('jobLog', jobLogsParam).save()
+				//刷新页面
+				this.router.transitionTo( "/" )
+				let urlParam = window.location.href.split('?')[1]
+				this.router.transitionTo( `/max-saas/import?${urlParam}`)
 				break
             default: 
                 console.log("other click event!")

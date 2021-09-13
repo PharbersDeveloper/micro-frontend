@@ -303,7 +303,7 @@ export default {
             var clearInt = setInterval(function() { 
                 that.proBar++; 
                 console.log(that.proBar); 
-                if (that.proBar >= 49) { 
+                if (that.proBar >= 99) { 
                     clearInterval(clearInt); 
                 } 
             }, 60)

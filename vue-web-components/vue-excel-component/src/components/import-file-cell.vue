@@ -8,9 +8,11 @@
             </div>
         </div>
 
-        <div class="import-file-cell-right" :class="fileArr.state">
-            {{stateDisplay}}
+        <div class="import-file-cell-right" >
+            <span class="state" :class="state">{{stateDisplay}}</span>
+            <span class="import" v-if="state == 'mapped'">导入</span>
         </div>
+
     </div>
 </template>
 
@@ -19,7 +21,8 @@ export default {
     data() {
         return {
             fileArr: [],
-            userIcon: "https://www.pharbers.com/public/icon_home_user.svg"
+            userIcon: "https://www.pharbers.com/public/icon_home_user.svg",
+            state: ''
         }
     },
     props: {
@@ -28,15 +31,35 @@ export default {
             type: Boolean,
             default: false
         },
-        index: Number
+        index: Number,
+        stateList: Array
     },
     computed: {
         stateDisplay() {
-            if (this.data.state === 'success') {
-                return '成功'
+            // 列表状态
+            let stateName= ''
+            let lists = this.stateList.filter(it => it.version == this.data.version)
+            if(lists.length > 0) {
+                lists.forEach(item => {
+                    if(item.jobDesc === 'succeed') {
+                        this.state = item.jobDesc
+                        stateName = '成功'
+                    } else if(item.jobDesc === 'mapped') {
+                        this.state = item.jobDesc
+                        stateName = '已映射'
+                    } else if(item.jobDesc === 'failed') {
+                        this.state = item.jobDesc
+                        stateName = '失败'
+                    } else {
+                        this.state = "unmapped"
+                        stateName = '未映射'
+                    }
+                })
             } else {
-                return '失败'
+                this.state = "unmapped"
+                stateName = '未映射'
             }
+            return stateName
         }
     },
     created() {
@@ -44,7 +67,10 @@ export default {
         if(this.isJSON(this.data.message)) {
             message = JSON.parse(this.data.message);
         }
-        this.fileArr = {name: message.name, labels: message.label.split(',')}
+        this.fileArr = {
+            name: message.name, 
+            labels: message.label.split(',')
+        }
     },
     methods: {
         selectFile(file, index) {
@@ -147,35 +173,61 @@ export default {
 
         .import-file-cell-right {
             width: 44px;
-            height: 18px;
+            // height: 18px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            border-radius: 2px;
             letter-spacing: 0;
             font-family: PingFangSC-Light;
             font-size: 12px;
             text-align: center;
             line-height: 16px;
             font-weight: 200;
+            flex-direction: column;
+            height: 40px;
+            justify-content: space-between;
+            .import {
+                width: 44px;
+                height: 24px;
+                background: #7163c5;
+                border-radius: 2px;
+                font-family: PingFangSC-Medium;
+                font-size: 8px;
+                color: #fff;
+                text-align: center;
+                line-height: 20px;
+                font-weight: 500;
+                margin-top: 4px;
+            }
         }
 
-        .success {
+        .succeed {
+            border-radius: 2px;
+            width: 44px;
+            height: 18px;
             color: #23A959;
             border: 1px solid #23A959;
         }
 
         .failed {
+            border-radius: 2px;
+            width: 44px;
+            height: 18px;
             color: #DB4D71;
             border: 1px solid #DB4D71;
         }
 
-        .mapping {
+        .mapped {
+            border-radius: 2px;
+            width: 44px;
+            height: 18px;
             color: #7163C5;
             border: 1px solid #7163C5;
         }
 
-        .unmapping {
+        .unmapped {
+            border-radius: 2px;
+            width: 44px;
+            height: 18px;
             color: #706F79;
             border: 1px solid #706F79;
         }

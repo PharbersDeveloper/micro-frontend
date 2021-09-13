@@ -371,14 +371,12 @@ export default class MaxSaasComponent extends Component {
 			
 		}
 		var file = inputElement;
-		console.time();
 		var reader = new FileReader();
 		reader.onloadend = function(event) {
 			var arrayBuffer = reader.result;
 			let arr = []
 			var workbook = new ExcelJS.Workbook();
 			workbook.xlsx.load(arrayBuffer).then(async function(workbook) {
-				console.timeEnd();
 				workbook.worksheets.forEach(function (sheetData, sheetNumber) {
 					sheetData.eachRow(function (row, rowNumber) {
 						if(rowNumber == 1) {
@@ -401,7 +399,7 @@ export default class MaxSaasComponent extends Component {
 					"owner": that.args.model.userData.id,
 					"showName": that.args.model.userData.name,
 					"time": time ? time : timesTamp,
-					"version": fileVersion + Math.random(),
+					"version": fileVersion +'_'+ Math.random(),
 					"code": 0,
 					"jobDesc": status,
 					"jobCat": option,

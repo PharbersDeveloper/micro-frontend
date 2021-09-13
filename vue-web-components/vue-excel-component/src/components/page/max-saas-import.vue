@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="file-right-container">
-                    <import-file-list @clickfile="clickfile" :lists="allData.assets"></import-file-list>
+                    <import-file-list @clickfile="clickfile" :lists="allData.assets" :stateList="allData.mapperAssets"></import-file-list>
                 </div>
             </div>
         </div>
@@ -121,11 +121,11 @@ export default {
             this.$forceUpdate()
             this.middleList.mappingList = []
             //点击文件列表 需要更新mapping数据
-            if(this.allData.eventName == "clickFile" && this.allData.jobLogs) {
+            if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
                 //已创建映射
-                let message = JSON.parse(this.allData.jobLogs.message)
+                let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
                 this.middleList.mappingList = message
-            } else if(this.allData.eventName == "clickFile" && !this.allData.jobLogs) {
+            } else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
                 //未创建映射
                 this.allData.targetNames.headers.forEach(item => {
                     let it = {}
@@ -134,14 +134,16 @@ export default {
                 })
             }
         },
-        "allData.projectData": function(data) {
-            //第一次进入页面 渲染mapping数据
-            let arr = JSON.parse(data.actions)
-            let importArr = arr.filter(it => it.jobCat == "import")
+        "allData.jobLogs": function(data) {
+            debugger
+            //第一次进入页面 渲染mapping弹框数据
             this.middleList.mappingList = []
-            if(importArr.length > 0) {
-                this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
+            if(this.allData.jobLogs.length > 0) {
+                //已创建映射
+                let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
+                this.middleList.mappingList = message
             } else {
+                //未创建映射
                 this.allData.targetNames.headers.forEach(item => {
                     let it = {}
                     it[item] = ''
@@ -269,7 +271,9 @@ export default {
                 display: flex;
                 height: 100%;
                 flex: 1;
-
+                .file-right-container {
+                    min-width: 218px;
+                }
                 .file-left-container {
                     display: flex;
                     flex-direction: column;
