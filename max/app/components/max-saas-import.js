@@ -25,8 +25,9 @@ export default class MaxSaasImportComponent extends Component {
 					let sheetName =  message.sheet //输入的sheet名是哪个就显示哪个
 					schemas = message.schemas.filter(it => it.name == sheetName)[0]
 				}
-				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[date]": optParam.attr.date, "filter[version]": optParam.attr.version, "filter[jobCat]": "import"})
-				e.target.allData.jobLogs = jobLogs.filter(it => it)
+				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "import"})
+				e.target.allData.eventName = "clickFile"
+				e.target.allData.jobLogs = jobLogs.filter(it => it)[0]
 				e.target.allData.schemas = schemas
 				e.target.allData.targetNames = {"headers":["aaa1","aaa2","aaa3","aaa4","aaa5"], "name": "sourceList"}
 				e.target.allData.fileName = message.name

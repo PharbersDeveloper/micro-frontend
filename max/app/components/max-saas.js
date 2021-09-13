@@ -401,7 +401,7 @@ export default class MaxSaasComponent extends Component {
 					"owner": that.args.model.userData.id,
 					"showName": that.args.model.userData.name,
 					"time": time ? time : timesTamp,
-					"version": fileVersion,
+					"version": fileVersion + Math.random(),
 					"code": 0,
 					"jobDesc": status,
 					"jobCat": option,
