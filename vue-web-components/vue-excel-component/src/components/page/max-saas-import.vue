@@ -18,7 +18,6 @@
                     <span class="heading-small">源文件：cpa_pchc_universe</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <!-- <bp-excel-second :colHeaders="allData.schemasNames" :middleList="middleList" name="sourceFile"></bp-excel-second> -->
                             <bp-excel :schemas="allData.schemas"></bp-excel>
                         </div>
 
@@ -32,7 +31,6 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <!-- <bp-excel-second :colHeaders="allData.targetNames" :middleList="middleList" name="targetFile"></bp-excel-second> -->
                             <bp-excel :schemas="allData.targetNames" :sourceData="allData.sourceData" name="targer"></bp-excel>
                         </div>
 
@@ -89,199 +87,198 @@ import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
-    components: {
-        importFileList,
-        bpExcelSecond,
-        bpSelectVue,
-        bpOptionVue,
-        mappingBox,
-        bpExcel,
-        bpText
-    },
-    data() {
-        return {
-            mappingModelShow: false,
-            fileIndex: 0,
-            middleList: {},
-            jobLogs: null,
-            sourceData: [
-                {
-                    atc4_code: "K01E1",
-                    corp_name_ch: "双鹤集团",
-                    dosage: "注射液",
-                    mnf_name_ch: "上海长征富民金山制药有限公司",
-                    mole_name_ch: "复方氨基酸(14AA)",
-                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                    pack: "1",
-                    pack_id: "0000202",
-                    prod_desc: "14-AMINO ACID CO   SCZ",
-                    prod_name_ch: "复方氨基酸注射液(14AA)",
-                    spec: "8.23% 250ML"
-                },
-                {
-                    atc4_code: "K01E1",
-                    corp_name_ch: "双鹤集团",
-                    dosage: "注射液",
-                    mnf_name_ch: "上海长征富民金山制药有限公司",
-                    mole_name_ch: "复方氨基酸(14AA)",
-                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                    pack: "1",
-                    pack_id: "0000202",
-                    prod_desc: "14-AMINO ACID CO   SCZ",
-                    prod_name_ch: "复方氨基酸注射液(14AA)",
-                    spec: "8.23% 250ML"
-                }
-            ],
-            proBar: 0
-        }
-    },
-    methods: {
-        // 关闭进度条
-        closeToast() {
-            const event = new Event("event")
-            event.args = {
-                callback: "closeToast",
-                element: this,
-                param: {
-                    name: 'closeToast',
-                    value: 0
-                }
-            }
-            this.$emit('event', event)
-        },
-        //点击文件，或确认导入
-        clickfile(data) {
-            let that = this;
-            this.fileIndex = data.args.param.select
-            //项目ID，用于请求表头数据
-            data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
-            if(data.args.param.name == "import") {
-                //进度条
-                this.proBar = 0;
-                var clearInt = setInterval(function() { 
-                    that.proBar++; 
-                    console.log(that.proBar); 
-                    if (that.proBar >= 60) { 
-                        clearInterval(clearInt); 
-                    } 
-                }, 60)
-            }
-            this.$emit('event', data)
-        },
-        mappingClick() {
-            this.mappingModelShow = true
-        },
-        closeMappingModal() {
-            this.mappingModelShow = false
-        },
-        confirmMappingEvent(data) {
-            data.args.param.userData = this.allData.userData
-            data.args.param.fileData = this.allData.assets[this.fileIndex]
-            this.$emit('event', data)
-            this.mappingModelShow = false
-        }
-    },
-    props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    assets: [],
-                    schemas: {},
-                    targetNames: {},
-                    fileName: '',
-                    projectData: {},
-                    userData: {},
-                    sourceData: [
-                        {
-                            atc4_code: "K01E1",
-                            corp_name_ch: "双鹤集团",
-                            dosage: "注射液",
-                            mnf_name_ch: "上海长征富民金山制药有限公司",
-                            mole_name_ch: "复方氨基酸(14AA)",
-                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                            pack: "1",
-                            pack_id: "0000202",
-                            prod_desc: "14-AMINO ACID CO   SCZ",
-                            prod_name_ch: "复方氨基酸注射液(14AA)",
-                            spec: "8.23% 250ML"
-                        },
-                        {
-                            atc4_code: "K01E1",
-                            corp_name_ch: "双鹤集团",
-                            dosage: "注射液",
-                            mnf_name_ch: "上海长征富民金山制药有限公司",
-                            mole_name_ch: "复方氨基酸(14AA)",
-                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                            pack: "1",
-                            pack_id: "0000202",
-                            prod_desc: "14-AMINO ACID CO   SCZ",
-                            prod_name_ch: "复方氨基酸注射液(14AA)",
-                            spec: "8.23% 250ML"
-                        }
-                    ]
-                }
-            }
-        },
-        random: Number,
-        uploadToastBorder: String,
-        uploadTextStatus: {
-            type: String,
-            default: "正在上传"
-        },
-        uploadText: String,
-        closeuploadToast: {
-            type: String,
-            default: '1'
-        },
-        showProgress: {
-            type: String,
-            default: '0'
-        },
-        uploadLoadedSize: Number,
-        uploadFileSize: Number
-    },
-    watch: {
-        random: function() {
-            this.$forceUpdate()
-            this.middleList.mappingList = []
-            //点击文件列表 需要更新mapping数据
-            if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
-                let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
-                //已创建映射
-                let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-                this.middleList.mappingList = message
-            } else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
-                //未创建映射
-                this.allData.targetNames.headers.forEach(item => {
-                    let it = {}
-                    it[item] = ''
-                    this.middleList.mappingList.push(it)
-                })
-            }
-        },
-        "allData.jobLogs": function(data) {
-            //第一次进入页面 渲染mapping弹框数据
-            this.middleList.mappingList = []
-            if(this.allData.jobLogs.length > 0) {
-                let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
-                //已创建映射
-                let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-                this.middleList.mappingList = message
-            } else {
-                //未创建映射
-                this.allData.targetNames.headers.forEach(item => {
-                    let it = {}
-                    it[item] = ''
-                    this.middleList.mappingList.push(it)
-                })
-            }
-        },
-        uploadLoadedSize: function() {
-            console.log("uploadLoadedSize", this.uploadLoadedSize)
-            this.proBar = this.uploadLoadedSize
-        }
-    }
+	components: {
+		importFileList,
+		bpSelectVue,
+		bpOptionVue,
+		mappingBox,
+		bpExcel,
+		bpText
+	},
+	data() {
+		return {
+			mappingModelShow: false,
+			fileIndex: 0,
+			middleList: {},
+			jobLogs: null,
+			sourceData: [
+				{
+					atc4_code: "K01E1",
+					corp_name_ch: "双鹤集团",
+					dosage: "注射液",
+					mnf_name_ch: "上海长征富民金山制药有限公司",
+					mole_name_ch: "复方氨基酸(14AA)",
+					mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+					pack: "1",
+					pack_id: "0000202",
+					prod_desc: "14-AMINO ACID CO   SCZ",
+					prod_name_ch: "复方氨基酸注射液(14AA)",
+					spec: "8.23% 250ML"
+				},
+				{
+					atc4_code: "K01E1",
+					corp_name_ch: "双鹤集团",
+					dosage: "注射液",
+					mnf_name_ch: "上海长征富民金山制药有限公司",
+					mole_name_ch: "复方氨基酸(14AA)",
+					mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+					pack: "1",
+					pack_id: "0000202",
+					prod_desc: "14-AMINO ACID CO   SCZ",
+					prod_name_ch: "复方氨基酸注射液(14AA)",
+					spec: "8.23% 250ML"
+				}
+			],
+			proBar: 0
+		}
+	},
+	methods: {
+		// 关闭进度条
+		closeToast() {
+			const event = new Event("event")
+			event.args = {
+				callback: "closeToast",
+				element: this,
+				param: {
+					name: 'closeToast',
+					value: 0
+				}
+			}
+			this.$emit('event', event)
+		},
+		//点击文件，或确认导入
+		clickfile(data) {
+			let that = this;
+			this.fileIndex = data.args.param.select
+			//项目ID，用于请求表头数据
+			data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
+			if(data.args.param.name == "import") {
+				//进度条
+				this.proBar = 0;
+				var clearInt = setInterval(function() { 
+					that.proBar++; 
+					console.log(that.proBar); 
+					if (that.proBar >= 60) { 
+						clearInterval(clearInt); 
+					} 
+				}, 60)
+			}
+			this.$emit('event', data)
+		},
+		mappingClick() {
+			this.mappingModelShow = true
+		},
+		closeMappingModal() {
+			this.mappingModelShow = false
+		},
+		confirmMappingEvent(data) {
+			data.args.param.userData = this.allData.userData
+			data.args.param.fileData = this.allData.assets[this.fileIndex]
+			this.$emit('event', data)
+			this.mappingModelShow = false
+		}
+	},
+	props: {
+		allData: {
+			type: Object,
+			default: function() {
+				return {
+					assets: [],
+					schemas: {},
+					targetNames: {},
+					fileName: '',
+					projectData: {},
+					userData: {},
+					sourceData: [
+						{
+							atc4_code: "K01E1",
+							corp_name_ch: "双鹤集团",
+							dosage: "注射液",
+							mnf_name_ch: "上海长征富民金山制药有限公司",
+							mole_name_ch: "复方氨基酸(14AA)",
+							mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+							pack: "1",
+							pack_id: "0000202",
+							prod_desc: "14-AMINO ACID CO   SCZ",
+							prod_name_ch: "复方氨基酸注射液(14AA)",
+							spec: "8.23% 250ML"
+						},
+						{
+							atc4_code: "K01E1",
+							corp_name_ch: "双鹤集团",
+							dosage: "注射液",
+							mnf_name_ch: "上海长征富民金山制药有限公司",
+							mole_name_ch: "复方氨基酸(14AA)",
+							mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+							pack: "1",
+							pack_id: "0000202",
+							prod_desc: "14-AMINO ACID CO   SCZ",
+							prod_name_ch: "复方氨基酸注射液(14AA)",
+							spec: "8.23% 250ML"
+						}
+					]
+				}
+			}
+		},
+		random: Number,
+		uploadToastBorder: String,
+		uploadTextStatus: {
+			type: String,
+			default: "正在上传"
+		},
+		uploadText: String,
+		closeuploadToast: {
+			type: String,
+			default: '1'
+		},
+		showProgress: {
+			type: String,
+			default: '0'
+		},
+		uploadLoadedSize: Number,
+		uploadFileSize: Number
+	},
+	watch: {
+		random: function() {
+			this.$forceUpdate()
+			this.middleList.mappingList = []
+			//点击文件列表 需要更新mapping数据
+			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
+				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
+				//已创建映射
+				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
+				this.middleList.mappingList = message
+			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
+				//未创建映射
+				this.allData.targetNames.headers.forEach(item => {
+					let it = {}
+					it[item] = ''
+					this.middleList.mappingList.push(it)
+				})
+			}
+		},
+		"allData.jobLogs": function(data) {
+			//第一次进入页面 渲染mapping弹框数据
+			this.middleList.mappingList = []
+			if(this.allData.jobLogs.length > 0) {
+				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
+				//已创建映射
+				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
+				this.middleList.mappingList = message
+			} else {
+				//未创建映射
+				this.allData.targetNames.headers.forEach(item => {
+					let it = {}
+					it[item] = ''
+					this.middleList.mappingList.push(it)
+				})
+			}
+		},
+		uploadLoadedSize: function() {
+			console.log("uploadLoadedSize", this.uploadLoadedSize)
+			this.proBar = this.uploadLoadedSize
+		}
+	}
 }
 </script>
 
