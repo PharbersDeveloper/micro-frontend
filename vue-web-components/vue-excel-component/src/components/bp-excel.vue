@@ -3,6 +3,8 @@
         <ag-grid-vue
             style="height: 1000px"
             class="table"
+            :columnDefs="columnDefs"
+            :rowData="rowData"
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
         >
@@ -57,10 +59,11 @@ export default {
             },
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
-            debug: true,
-            columnDefs: this.columnDefs,
-            rowData: this.sourceData
+            debug: true
+            // columnDefs: this.columnDefs,
+            // rowData: this.sourceData
         }
+        this.rowData = []
     },
     methods: {
         onGridReady(params) {
@@ -73,6 +76,7 @@ export default {
     },
     watch: {
         schemas: function (data) {
+            if(!data) return false
             let headers = [];
             if (data.headers && data.headers.length > 0) {
                 data.headers.forEach((item, index) => {
@@ -90,8 +94,8 @@ export default {
         },
         sourceData: function(data) {
             console.log("sourceData", data)
+            this.rowData = data
             this.gridOptions.rowData = data;
-            this.gridOptions.setsetRowData(data)
         }
     }
 };

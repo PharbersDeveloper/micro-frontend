@@ -77,11 +77,14 @@ export default {
         this.infoList = []
         this.targetsList = []
         //拆分对象
-        this.projectData.mappingList.forEach((item) => {
-            this.infoList.push(Object.values(item)[0])
-            this.targetsList.push(Object.keys(item)[0])
-        })
-        this.schemaList = this.sourceList.headers.filter((x) => x && !this.infoList.some((item) => x === item));
+        if(this.projectData.mappingList) {
+            this.projectData.mappingList.forEach((item) => {
+                this.infoList.push(Object.values(item)[0])
+                this.targetsList.push(Object.keys(item)[0])
+            })
+            this.schemaList = this.sourceList.headers.filter((x) => x && !this.infoList.some((item) => x === item));
+        }
+        
         // this.infoList = this.projectData.mappingList ? this.projectData.mappingList : this.projectData
         // // 未创建映射时，用空格填充中间一行
         // if(this.targetList.headers && this.targetList.headers.length > 0 && this.infoList.length == 0) {
