@@ -322,7 +322,7 @@ export default {
 			if(type == "upload") {
 				this.showUpload = true
 			}
-			if(type == "import") {
+			if(type == "import" || type == "clean") {
 				this.$emit('event', data)
 			}
 		},

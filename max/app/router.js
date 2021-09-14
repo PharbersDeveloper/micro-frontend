@@ -11,5 +11,6 @@ Router.map(function () {
   this.route('max-saas', { path: "/max-saas" }, function() {
     this.route('upload', { path: "/upload" });
     this.route('import');
+    this.route('cleaning');
   });
 });
