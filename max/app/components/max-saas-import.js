@@ -16,6 +16,16 @@ export default class MaxSaasImportComponent extends Component {
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "clickFile": // 选择文件按钮
+				//todo: getCurrentDate
+				let currentDate1 = new Date().getTime()
+				let date1 = new Date(currentDate1)
+				let y1 = date1.getFullYear()
+				let m1 = date1.getMonth() + 1
+				m1 = m1 < 10 ? ('0' + m1) : m1;
+				let time1 = y1 + '-' + m1 + '-' + '01';
+				let currentstamp1 = time1.replace(/-/g, '/');
+				let timesTamp1 = new Date(currentstamp1).getTime()
+				
                 let optParam = e.detail[0].args.param
 				let schemas = []
 				let message = null
@@ -58,6 +68,55 @@ export default class MaxSaasImportComponent extends Component {
 						})
 					}
 					let datas = await fetch(stateUrl, options).then(res=>res.json())
+					let that = this
+					// 暂时去掉上传文件触发ETL流程
+					if (datas.executionArn && datas.executionArn != '') {
+						that.uploadLoadedSize = 70
+						let exArn = datas.executionArn
+						//请求phstatus
+						let stateUrl = "https://api.pharbers.com/phstepstatus"
+						let options = {
+							method: "POST",
+							mode: "cors",
+							headers: {
+								"Authorization": that.cookies.read( "access_token" ),
+								"Content-Type": "application/vnd.api+json",
+								"Accept": "application/vnd.api+json",
+							},
+							body: JSON.stringify({"executionArn": exArn})
+						}
+						let dagStatusInt = setInterval(function() { 
+							fetch(stateUrl, options).then(res=>res.json()).then(response => {
+								let execution_status = response.execution_status
+								if (execution_status && execution_status !== 'RUNNING') {
+									clearInterval(dagStatusInt); //循环结束
+									let status = ''
+									if(execution_status == "SUCCEEDED") {
+										status = 'succeed'
+									} else {
+										status = 'failed'
+									}
+									let jobLogsParam = {
+										"provider": optParam.attr.provider,
+										"owner": optParam.attr.owner,
+										"showName": optParam.attr.showName,
+										"time": timesTamp1,
+										"version": optParam.attr.version,
+										"code": 0,
+										"jobDesc": status,
+										"jobCat": "mapper",
+										"comments": "mapper",
+										"message": optParam.attr.message,
+										"date": new Date().getTime()
+									}
+									that.store.createRecord('jobLog', jobLogsParam).save()
+									that.router.transitionTo( "/" )
+									let urlParam = window.location.href.split('?')[1]
+									that.router.transitionTo( `/max-saas/import?${urlParam}`)
+								}
+							}) 
+						}, 20*1000)
+					}
 				}
                 break
 			case "confirmMapping":
