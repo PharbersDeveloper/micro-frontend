@@ -17,36 +17,36 @@
 
 <script>
 export default {
-    props: {
-        type: {
-            type: String,
-            default: "upload"
-        },
-        value: String,
-        date: String,
-        project: Object,
-        index: Number,
-        provider: String,
-        projectId: String
-    },
-    methods: {
-        clickButton() {
-            const event = new Event("event")
-            event.args = {
-                callback: "opt",
-                element: this,
-                param: {
-                    type: this.type,
-                    name: this.value,
-                    date: this.date,
-                    project: this.project,
-                    provider: this.provider,
-                    projectId: this.projectId
-                }
-            }
-            this.$emit('tableClickEvent', event)
-        }
-    }
+	props: {
+		type: {
+			type: String,
+			default: "upload"
+		},
+		value: String,
+		date: String,
+		project: Object,
+		index: Number,
+		provider: String,
+		projectId: String
+	},
+	methods: {
+		clickButton() {
+			const event = new Event("event")
+			event.args = {
+				callback: "opt",
+				element: this,
+				param: {
+					type: this.type,
+					name: this.value,
+					date: this.date,
+					project: this.project,
+					provider: this.provider,
+					projectId: this.projectId
+				}
+			}
+			this.$emit('tableClickEvent', event)
+		}
+	}
 }
 </script>
 

@@ -12,82 +12,82 @@
 
 <script>
 export default {
-    data() {
-        return {
-            forEachArray: null,
-            data_curPage: this.curPage
-        }
-    },
-    props: {
-        curPage: {
-            type: Number,
-            default: 1
-        },
-        pages: {
-            type: Number,
-            default: 12
-        }
-    },
-    computed: {
-        pageArray() {
-            return [...Array(this.pages)].map( (it,i) => i + 1 )
-        }
-    },
-    methods: {
-        changePageArray() {
-            // 折叠符...位置的改变
-            if (this.pageArray.length > 7) {
-                let newArr = []
-                // 首页始终显示
-                newArr.push(this.pageArray[0])
-                // 与尾页距离大于5，... 在后方显示
-                // 与首页距离大于5，... 在前方显示
-                // 与首页尾页距离大于5，使用双 ...
-                if (this.data_curPage < 5) {
-                    for(let i = 2; i <= 5; i++) {
-                        newArr.push(i)
-                    }
-                    newArr.push('...')
-                } else if ((this.pageArray.length - this.data_curPage) < 4) {
-                    newArr.push('...')
-                    for(let i = this.pageArray.length - 4; i <= this.pageArray.length -1; i++) {
-                        newArr.push(i)
-                    }
-                } else {
-                    newArr.push('...')
-                    newArr.push(this.data_curPage -1)
-                    newArr.push(this.data_curPage)
-                    newArr.push(this.data_curPage + 1)
-                    newArr.push('...')
-                }
-                // 尾页始终显示
-                newArr.push(this.pageArray[this.pageArray.length-1])
-                this.forEachArray = newArr
-            }
-        },
-        changePage(type, page) {
-            if (type === 'next') {
-                this.data_curPage = Math.min(this.data_curPage + 1, this.pageArray.length)
-                this.changePageArray()
-                this.$emit('changePage', this.data_curPage)
-            } else if (type === 'pre') {
-                this.data_curPage = Math.max( this.data_curPage - 1, 1)
-                this.changePageArray()
-                this.$emit('changePage', this.data_curPage)
-            } else {
-                let cur = Number(page)
-                if (!isNaN(cur) && page !== this.data_curPage) {
-                    this.data_curPage = cur
-                    this.changePageArray()
-                    this.$emit('changePage', this.data_curPage)
-                }
-            }
-        }
-    },
-    created() {
-        this.forEachArray = this.pageArray
-        this.changePageArray()
-    }
+	data() {
+		return {
+			forEachArray: null,
+			data_curPage: this.curPage
+		}
+	},
+	props: {
+		curPage: {
+			type: Number,
+			default: 1
+		},
+		pages: {
+			type: Number,
+			default: 12
+		}
+	},
+	computed: {
+		pageArray() {
+			return [...Array(this.pages)].map( (it,i) => i + 1 )
+		}
+	},
+	methods: {
+		changePageArray() {
+			// 折叠符...位置的改变
+			if (this.pageArray.length > 7) {
+				let newArr = []
+				// 首页始终显示
+				newArr.push(this.pageArray[0])
+				// 与尾页距离大于5，... 在后方显示
+				// 与首页距离大于5，... 在前方显示
+				// 与首页尾页距离大于5，使用双 ...
+				if (this.data_curPage < 5) {
+					for(let i = 2; i <= 5; i++) {
+						newArr.push(i)
+					}
+					newArr.push('...')
+				} else if ((this.pageArray.length - this.data_curPage) < 4) {
+					newArr.push('...')
+					for(let i = this.pageArray.length - 4; i <= this.pageArray.length -1; i++) {
+						newArr.push(i)
+					}
+				} else {
+					newArr.push('...')
+					newArr.push(this.data_curPage -1)
+					newArr.push(this.data_curPage)
+					newArr.push(this.data_curPage + 1)
+					newArr.push('...')
+				}
+				// 尾页始终显示
+				newArr.push(this.pageArray[this.pageArray.length-1])
+				this.forEachArray = newArr
+			}
+		},
+		changePage(type, page) {
+			if (type === 'next') {
+				this.data_curPage = Math.min(this.data_curPage + 1, this.pageArray.length)
+				this.changePageArray()
+				this.$emit('changePage', this.data_curPage)
+			} else if (type === 'pre') {
+				this.data_curPage = Math.max( this.data_curPage - 1, 1)
+				this.changePageArray()
+				this.$emit('changePage', this.data_curPage)
+			} else {
+				let cur = Number(page)
+				if (!isNaN(cur) && page !== this.data_curPage) {
+					this.data_curPage = cur
+					this.changePageArray()
+					this.$emit('changePage', this.data_curPage)
+				}
+			}
+		}
+	},
+	created() {
+		this.forEachArray = this.pageArray
+		this.changePageArray()
+	}
 }
 </script>
 

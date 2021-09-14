@@ -52,45 +52,45 @@
 <script>
 import bpExcel from './bp-excel.vue'
 export default {
-    components: {
-        bpExcel
-    },
-    props: {
-        sourceData: {
-            type: Array,
-            default() {
-                return [
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-                ]
-            }
-        },
-        sourceColHeaders: {
-            type: Array,
-            default() {
-                return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
-            }
-        },
-        masterData: {
-            type: Array,
-            default() {
-                return [
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-                    ['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-                ]
-            }
-        },
-        masterColHeaders: {
-            type: Array,
-            default() {
-                return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
-            }
-        }
-    }
+	components: {
+		bpExcel
+	},
+	props: {
+		sourceData: {
+			type: Array,
+			default() {
+				return [
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
+				]
+			}
+		},
+		sourceColHeaders: {
+			type: Array,
+			default() {
+				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
+			}
+		},
+		masterData: {
+			type: Array,
+			default() {
+				return [
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
+					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
+				]
+			}
+		},
+		masterColHeaders: {
+			type: Array,
+			default() {
+				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
+			}
+		}
+	}
 }
 </script>
 

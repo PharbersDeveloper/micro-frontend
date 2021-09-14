@@ -49,154 +49,154 @@ import bpInput from '../../node_modules/vue-components/src/components/bp-input.v
 import bpTextarea from '../../node_modules/vue-components/src/components/bp-textarea.vue'
 
 export default {
-    components: {
-        bpButton,
-        bpInput,
-        bpTextarea
-    },
-    data() {
-        return {
-            closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
-            middleData: '',
-            middleIndex: -1,
-            fileMiddleData: '',
-            fileMddleIndex: -1,
-            infoList: [],
-            schemaList: [],
-            targetsList:[]
-        }
-    },
-    props: {
-        fileName: String,
-        targetList: Object,
-        sourceList:  Object,
-        projectData: Object
-    },
-    created() {
-        // 数据回显
-        this.infoList = []
-        this.targetsList = []
-        //拆分对象
-        this.projectData.mappingList.forEach((item) => {
-            this.infoList.push(Object.values(item)[0])
-            this.targetsList.push(Object.keys(item)[0])
-        })
-        this.schemaList = this.sourceList.headers.filter((x) => x && !this.infoList.some((item) => x === item));
-        // this.infoList = this.projectData.mappingList ? this.projectData.mappingList : this.projectData
-        // // 未创建映射时，用空格填充中间一行
-        // if(this.targetList.headers && this.targetList.headers.length > 0 && this.infoList.length == 0) {
-        //     const rangeArray = (start, end) => Array(end - start + 1).fill("")
-        //     this.infoList = rangeArray(0, this.targetList.headers.length - 1)
-        // }
-        // if(this.projectData.targetsList) {
-        //     this.schemaList = this.projectData.sourceList
-        //     this.targetsList = this.projectData.targetsList
-        // } else {
-        //     //处理源文件
-        //     this.schemaList = []
-        //     let schemas= this.sourceList.headers
-        //     if(schemas.length > 0) {
-        //         schemas.forEach((item,index) => {
-        //             if(item) {
-        //                 this.schemaList.push(item)
-        //             }
-        //         })
-        //     }
-        //     //处理目标文件
-        //     this.targetsList = []
-        //     let targets= this.targetList.headers
-        //     if(targets.length > 0) {
-        //         targets.forEach((item,index) => {
-        //             if(item) {
-        //                 this.targetsList.push(item)
-        //             }
-        //         })
-        //     }
-        // }
-    },
-    methods: {
-        cancel() {
-            this.$emit("cancel")
-        },
-        selectFile() {
-            this.$emit("selectFile")
-        },
-        confirm() {
-            const event = new Event("event")
-            event.args = {
-                callback: "confirmMapping",
-                element: this,
-                param: {
-                    mappingList: this.infoList,
-                    targetsList: this.targetsList,
-                    sourceList: this.schemaList
-                }
-            }
-            this.$emit('confirmMappingEvent', event)
-        },
-        // 目标文件表拖动
-        dragStart(e, index, field){
-            this.clearBakData() // 清空上一次拖动时保存的数据
-            e.dataTransfer.setData('Text', index);
-            this.fileMiddleData= field // 设置此次拖动时保存的数据
-            this.fileMddleIndex = index //设置此次拖动时保存的数据Index
-        },
-        // 源文件表的拖动
-        fileDragStart(e, field, index){
-            this.clearBakData() // 清空上一次拖动时保存的数据
-            e.dataTransfer.setData('Text', field);
-            this.middleData = field
-            this.middleIndex = index
-        },
-        drop(e, index,field){
-            // 取消默认行为
-            this.allowDrop(e);
-            // 判断拖起的元素是映射表中的数据，还是当前备选表中的数据
-            if(this.middleData !== ''){
-                if(this.infoList[index]) {
-                    this.schemaList.push(this.infoList[index])
-                } 
-                // 放置到当前的数组中
-                this.infoList.splice(index, 1, this.middleData)
-                // 清除当前拖动的在另一个表中的数据
-                if(this.middleIndex!==-1){
-                    this.schemaList.splice(this.middleIndex, 1)
-                }
-            }else{
-            // 拖动的元素在当前张表时，交换两个数据的位置
-                // this.clearBakData()
-                //使用一个新数组重新排序后赋给原变量
-                let arr = this.infoList.concat([])
-                let temp = arr[index];
-                arr[index] = arr[this.fileMddleIndex];
-                arr[this.fileMddleIndex] = temp;
+	components: {
+		bpButton,
+		bpInput,
+		bpTextarea
+	},
+	data() {
+		return {
+			closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+			middleData: '',
+			middleIndex: -1,
+			fileMiddleData: '',
+			fileMddleIndex: -1,
+			infoList: [],
+			schemaList: [],
+			targetsList:[]
+		}
+	},
+	props: {
+		fileName: String,
+		targetList: Object,
+		sourceList:  Object,
+		projectData: Object
+	},
+	created() {
+		// 数据回显
+		this.infoList = []
+		this.targetsList = []
+		//拆分对象
+		this.projectData.mappingList.forEach((item) => {
+			this.infoList.push(Object.values(item)[0])
+			this.targetsList.push(Object.keys(item)[0])
+		})
+		this.schemaList = this.sourceList.headers.filter((x) => x && !this.infoList.some((item) => x === item));
+		// this.infoList = this.projectData.mappingList ? this.projectData.mappingList : this.projectData
+		// // 未创建映射时，用空格填充中间一行
+		// if(this.targetList.headers && this.targetList.headers.length > 0 && this.infoList.length == 0) {
+		//     const rangeArray = (start, end) => Array(end - start + 1).fill("")
+		//     this.infoList = rangeArray(0, this.targetList.headers.length - 1)
+		// }
+		// if(this.projectData.targetsList) {
+		//     this.schemaList = this.projectData.sourceList
+		//     this.targetsList = this.projectData.targetsList
+		// } else {
+		//     //处理源文件
+		//     this.schemaList = []
+		//     let schemas= this.sourceList.headers
+		//     if(schemas.length > 0) {
+		//         schemas.forEach((item,index) => {
+		//             if(item) {
+		//                 this.schemaList.push(item)
+		//             }
+		//         })
+		//     }
+		//     //处理目标文件
+		//     this.targetsList = []
+		//     let targets= this.targetList.headers
+		//     if(targets.length > 0) {
+		//         targets.forEach((item,index) => {
+		//             if(item) {
+		//                 this.targetsList.push(item)
+		//             }
+		//         })
+		//     }
+		// }
+	},
+	methods: {
+		cancel() {
+			this.$emit("cancel")
+		},
+		selectFile() {
+			this.$emit("selectFile")
+		},
+		confirm() {
+			const event = new Event("event")
+			event.args = {
+				callback: "confirmMapping",
+				element: this,
+				param: {
+					mappingList: this.infoList,
+					targetsList: this.targetsList,
+					sourceList: this.schemaList
+				}
+			}
+			this.$emit('confirmMappingEvent', event)
+		},
+		// 目标文件表拖动
+		dragStart(e, index, field){
+			this.clearBakData() // 清空上一次拖动时保存的数据
+			e.dataTransfer.setData('Text', index);
+			this.fileMiddleData= field // 设置此次拖动时保存的数据
+			this.fileMddleIndex = index //设置此次拖动时保存的数据Index
+		},
+		// 源文件表的拖动
+		fileDragStart(e, field, index){
+			this.clearBakData() // 清空上一次拖动时保存的数据
+			e.dataTransfer.setData('Text', field);
+			this.middleData = field
+			this.middleIndex = index
+		},
+		drop(e, index,field){
+			// 取消默认行为
+			this.allowDrop(e);
+			// 判断拖起的元素是映射表中的数据，还是当前备选表中的数据
+			if(this.middleData !== ''){
+				if(this.infoList[index]) {
+					this.schemaList.push(this.infoList[index])
+				} 
+				// 放置到当前的数组中
+				this.infoList.splice(index, 1, this.middleData)
+				// 清除当前拖动的在另一个表中的数据
+				if(this.middleIndex!==-1){
+					this.schemaList.splice(this.middleIndex, 1)
+				}
+			}else{
+				// 拖动的元素在当前张表时，交换两个数据的位置
+				// this.clearBakData()
+				//使用一个新数组重新排序后赋给原变量
+				let arr = this.infoList.concat([])
+				let temp = arr[index];
+				arr[index] = arr[this.fileMddleIndex];
+				arr[this.fileMddleIndex] = temp;
 
-                this.infoList = arr;
-            }
-            this.clearBakData()
-        },
-        // 从目标文件拖拽到源文件
-        fileDrop(e){
-            //取消默认行为
-            if(this.middleData == ''){
-                this.allowDrop(e);
-                this.schemaList.push(this.fileMiddleData) //源文件增加一条
-                this.fileMiddleData=''
-                this.infoList.splice(this.fileMddleIndex,1,this.fileMiddleData)
-                this.clearBakData()
-            }
-        },
-        allowDrop(e){
-            e.preventDefault()
-        },
-        clearBakData(){
-            // 此处写清除各列表的操作
-            this.middleData=''
-            this.middleIndex=-1
-            this.fileMiddleData=''
-            this.fileMddleIndex=-1
-        }
-    }
+				this.infoList = arr;
+			}
+			this.clearBakData()
+		},
+		// 从目标文件拖拽到源文件
+		fileDrop(e){
+			//取消默认行为
+			if(this.middleData == ''){
+				this.allowDrop(e);
+				this.schemaList.push(this.fileMiddleData) //源文件增加一条
+				this.fileMiddleData=''
+				this.infoList.splice(this.fileMddleIndex,1,this.fileMiddleData)
+				this.clearBakData()
+			}
+		},
+		allowDrop(e){
+			e.preventDefault()
+		},
+		clearBakData(){
+			// 此处写清除各列表的操作
+			this.middleData=''
+			this.middleIndex=-1
+			this.fileMiddleData=''
+			this.fileMddleIndex=-1
+		}
+	}
 }
 </script>
 

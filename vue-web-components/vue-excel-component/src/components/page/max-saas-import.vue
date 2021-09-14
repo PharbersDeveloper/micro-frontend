@@ -56,157 +56,155 @@
 <script>
 import mappingBox from '../mapping-box.vue'
 import importFileList from '../import-file-list.vue'
-import bpExcelSecond from '../bp-excel-second.vue'
 import bpExcel from '../bp-excel.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
-    components: {
-        importFileList,
-        bpExcelSecond,
-        bpSelectVue,
-        bpOptionVue,
-        mappingBox,
-        bpExcel
-    },
-    data() {
-        return {
-            mappingModelShow: false,
-            fileIndex: 0,
-            middleList: {},
-            jobLogs: null,
-            sourceData: [
-                {
-                    atc4_code: "K01E1",
-                    corp_name_ch: "双鹤集团",
-                    dosage: "注射液",
-                    mnf_name_ch: "上海长征富民金山制药有限公司",
-                    mole_name_ch: "复方氨基酸(14AA)",
-                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                    pack: "1",
-                    pack_id: "0000202",
-                    prod_desc: "14-AMINO ACID CO   SCZ",
-                    prod_name_ch: "复方氨基酸注射液(14AA)",
-                    spec: "8.23% 250ML"
-                },
-                {
-                    atc4_code: "K01E1",
-                    corp_name_ch: "双鹤集团",
-                    dosage: "注射液",
-                    mnf_name_ch: "上海长征富民金山制药有限公司",
-                    mole_name_ch: "复方氨基酸(14AA)",
-                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                    pack: "1",
-                    pack_id: "0000202",
-                    prod_desc: "14-AMINO ACID CO   SCZ",
-                    prod_name_ch: "复方氨基酸注射液(14AA)",
-                    spec: "8.23% 250ML"
-                }
-            ]
-        }
-    },
-    methods: {
-        clickfile(data) {
-            this.fileIndex = data.args.param.select
-            //项目ID，用于请求表头数据
-            data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
-            this.$emit('event', data)
-        },
-        confirmImport() {
-            
-        },
-        mappingClick() {
-            this.mappingModelShow = true
-        },
-        closeMappingModal() {
-            this.mappingModelShow = false
-        },
-        confirmMappingEvent(data) {
-            data.args.param.userData = this.allData.userData
-            data.args.param.fileData = this.allData.assets[this.fileIndex]
-            this.$emit('event', data)
-            this.mappingModelShow = false
-        }
-    },
-    props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    assets: [],
-                    schemas: {},
-                    targetNames: {},
-                    fileName: '',
-                    projectData: {},
-                    userData: {},
-                    sourceData: [
-                        {
-                            atc4_code: "K01E1",
-                            corp_name_ch: "双鹤集团",
-                            dosage: "注射液",
-                            mnf_name_ch: "上海长征富民金山制药有限公司",
-                            mole_name_ch: "复方氨基酸(14AA)",
-                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                            pack: "1",
-                            pack_id: "0000202",
-                            prod_desc: "14-AMINO ACID CO   SCZ",
-                            prod_name_ch: "复方氨基酸注射液(14AA)",
-                            spec: "8.23% 250ML"
-                        },
-                        {
-                            atc4_code: "K01E1",
-                            corp_name_ch: "双鹤集团",
-                            dosage: "注射液",
-                            mnf_name_ch: "上海长征富民金山制药有限公司",
-                            mole_name_ch: "复方氨基酸(14AA)",
-                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-                            pack: "1",
-                            pack_id: "0000202",
-                            prod_desc: "14-AMINO ACID CO   SCZ",
-                            prod_name_ch: "复方氨基酸注射液(14AA)",
-                            spec: "8.23% 250ML"
-                        }
-                    ]
-                }
-            }
-        },
-        random: Number
-    },
-    watch: {
-        random: function() {
-            this.$forceUpdate()
-            this.middleList.mappingList = []
-            //点击文件列表 需要更新mapping数据
-            if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
-                //已创建映射
-                let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
-                this.middleList.mappingList = message
-            } else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
-                //未创建映射
-                this.allData.targetNames.headers.forEach(item => {
-                    let it = {}
-                    it[item] = ''
-                    this.middleList.mappingList.push(it)
-                })
-            }
-        },
-        "allData.jobLogs": function(data) {
-            //第一次进入页面 渲染mapping弹框数据
-            this.middleList.mappingList = []
-            if(this.allData.jobLogs.length > 0) {
-                //已创建映射
-                let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
-                this.middleList.mappingList = message
-            } else {
-                //未创建映射
-                this.allData.targetNames.headers.forEach(item => {
-                    let it = {}
-                    it[item] = ''
-                    this.middleList.mappingList.push(it)
-                })
-            }
-        }
-    }
+	components: {
+		importFileList,
+		bpSelectVue,
+		bpOptionVue,
+		mappingBox,
+		bpExcel
+	},
+	data() {
+		return {
+			mappingModelShow: false,
+			fileIndex: 0,
+			middleList: {},
+			jobLogs: null,
+			sourceData: [
+				{
+					atc4_code: "K01E1",
+					corp_name_ch: "双鹤集团",
+					dosage: "注射液",
+					mnf_name_ch: "上海长征富民金山制药有限公司",
+					mole_name_ch: "复方氨基酸(14AA)",
+					mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+					pack: "1",
+					pack_id: "0000202",
+					prod_desc: "14-AMINO ACID CO   SCZ",
+					prod_name_ch: "复方氨基酸注射液(14AA)",
+					spec: "8.23% 250ML"
+				},
+				{
+					atc4_code: "K01E1",
+					corp_name_ch: "双鹤集团",
+					dosage: "注射液",
+					mnf_name_ch: "上海长征富民金山制药有限公司",
+					mole_name_ch: "复方氨基酸(14AA)",
+					mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+					pack: "1",
+					pack_id: "0000202",
+					prod_desc: "14-AMINO ACID CO   SCZ",
+					prod_name_ch: "复方氨基酸注射液(14AA)",
+					spec: "8.23% 250ML"
+				}
+			]
+		}
+	},
+	methods: {
+		clickfile(data) {
+			this.fileIndex = data.args.param.select
+			//项目ID，用于请求表头数据
+			data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
+			this.$emit('event', data)
+		},
+		confirmImport() {
+
+		},
+		mappingClick() {
+			this.mappingModelShow = true
+		},
+		closeMappingModal() {
+			this.mappingModelShow = false
+		},
+		confirmMappingEvent(data) {
+			data.args.param.userData = this.allData.userData
+			data.args.param.fileData = this.allData.assets[this.fileIndex]
+			this.$emit('event', data)
+			this.mappingModelShow = false
+		}
+	},
+	props: {
+		allData: {
+			type: Object,
+			default: function() {
+				return {
+					assets: [],
+					schemas: {},
+					targetNames: {},
+					fileName: '',
+					projectData: {},
+					userData: {},
+					sourceData: [
+						{
+							atc4_code: "K01E1",
+							corp_name_ch: "双鹤集团",
+							dosage: "注射液",
+							mnf_name_ch: "上海长征富民金山制药有限公司",
+							mole_name_ch: "复方氨基酸(14AA)",
+							mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+							pack: "1",
+							pack_id: "0000202",
+							prod_desc: "14-AMINO ACID CO   SCZ",
+							prod_name_ch: "复方氨基酸注射液(14AA)",
+							spec: "8.23% 250ML"
+						},
+						{
+							atc4_code: "K01E1",
+							corp_name_ch: "双鹤集团",
+							dosage: "注射液",
+							mnf_name_ch: "上海长征富民金山制药有限公司",
+							mole_name_ch: "复方氨基酸(14AA)",
+							mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+							pack: "1",
+							pack_id: "0000202",
+							prod_desc: "14-AMINO ACID CO   SCZ",
+							prod_name_ch: "复方氨基酸注射液(14AA)",
+							spec: "8.23% 250ML"
+						}
+					]
+				}
+			}
+		},
+		random: Number
+	},
+	watch: {
+		random: function() {
+			this.$forceUpdate()
+			this.middleList.mappingList = []
+			//点击文件列表 需要更新mapping数据
+			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
+				//已创建映射
+				let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
+				this.middleList.mappingList = message
+			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
+				//未创建映射
+				this.allData.targetNames.headers.forEach(item => {
+					let it = {}
+					it[item] = ''
+					this.middleList.mappingList.push(it)
+				})
+			}
+		},
+		"allData.jobLogs": function(data) {
+			//第一次进入页面 渲染mapping弹框数据
+			this.middleList.mappingList = []
+			if(this.allData.jobLogs.length > 0) {
+				//已创建映射
+				let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
+				this.middleList.mappingList = message
+			} else {
+				//未创建映射
+				this.allData.targetNames.headers.forEach(item => {
+					let it = {}
+					it[item] = ''
+					this.middleList.mappingList.push(it)
+				})
+			}
+		}
+	}
 }
 </script>
 
