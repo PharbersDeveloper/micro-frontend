@@ -1,10 +1,8 @@
 <template>
     <div class="excel_container ag-theme-alpine">
         <ag-grid-vue
-            style="height: 24px"
+            style="height: 1000px"
             class="table"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
         >
@@ -28,26 +26,22 @@ export default {
         AgGridVue
     },
     props: {
-        schemas: Object
+        schemas: Object,
+        sourceData: Array
     },
     beforeMount() {
         this.columnDefs = [
-            { field: 'athlete' },
-            { field: 'age' },
-            { field: 'country' },
-            { field: 'sport' },
-            { field: 'year' },
-            { field: 'date' },
-            { field: 'gold' },
-            { field: 'silver' },
-            { field: 'bronze' },
-            { field: 'total' },
-            { field: 'year1' },
-            { field: 'date1' },
-            { field: 'gold1' },
-            { field: 'silver1' },
-            { field: 'bronze1' },
-            { field: 'total1' }
+            { field: 'pack_id' },
+            { field: 'mole_name_en' },
+            { field: 'mole_name_ch' },
+            { field: 'prod_desc' },
+            { field: 'prod_name_ch' },
+            { field: 'corp_name_ch' },
+            { field: 'mnf_name_ch' },
+            { field: 'spec' },
+            { field: 'pack' },
+            { field: 'dosage' },
+            { field: 'atc4_code' }
         ]
         this.gridOptions = {
             defaultColDef: {
@@ -65,14 +59,8 @@ export default {
             pivotPanelShow: 'always',
             debug: true,
             columnDefs: this.columnDefs,
-            rowData: null
+            rowData: this.sourceData
         }
-        // this.rowData = []
-        // this.rowData = [
-        //     { make: "Toyota", model: "Celica", price: 35000 },
-        //     { make: "Ford", model: "Mondeo", price: 32000 },
-        //     { make: "Porsche", model: "Boxter", price: 72000 }
-        // ]
     },
     methods: {
         onGridReady(params) {
@@ -94,9 +82,16 @@ export default {
                 });
             }
             this.columnDefs = headers;
+            this.gridOptions.columnDefs = headers;
+            console.log("this.gridOption:", this.gridOptions)
             if(this.gridApi) {
                 this.gridApi.hideOverlay()
             }
+        },
+        sourceData: function(data) {
+            console.log("sourceData", data)
+            this.gridOptions.rowData = data;
+            this.gridOptions.setsetRowData(data)
         }
     }
 };
@@ -105,12 +100,12 @@ export default {
 * {
     box-sizing: border-box;
 }
-.ag-header-row-column,.ag-theme-alpine {
-    height: 24px !important;
-}
-.ag-header-viewport {
-    overflow: auto; 
-}
+// .ag-header-row-column,.ag-theme-alpine {
+//     height: 24px !important;
+// }
+// .ag-header-viewport {
+//     overflow: auto; 
+// }
 @import "../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
 @import "../../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 </style>

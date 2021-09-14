@@ -33,7 +33,7 @@
                     <div class="target-content-container ">
                         <div class="target-border">
                             <!-- <bp-excel-second :colHeaders="allData.targetNames" :middleList="middleList" name="targetFile"></bp-excel-second> -->
-                            <bp-excel :schemas="allData.targetNames"></bp-excel>
+                            <bp-excel :schemas="allData.targetNames" :sourceData="allData.sourceData" name="targer"></bp-excel>
                         </div>
 
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="file-right-container">
-                    <import-file-list @clickfile="clickfile" :lists="allData.assets"></import-file-list>
+                    <import-file-list @clickfile="clickfile" :lists="allData.assets" :stateList="allData.mapperAssets"></import-file-list>
                 </div>
             </div>
         </div>
@@ -74,7 +74,35 @@ export default {
             mappingModelShow: false,
             fileIndex: 0,
             middleList: {},
-            jobLogs: null
+            jobLogs: null,
+            sourceData: [
+                {
+                    atc4_code: "K01E1",
+                    corp_name_ch: "双鹤集团",
+                    dosage: "注射液",
+                    mnf_name_ch: "上海长征富民金山制药有限公司",
+                    mole_name_ch: "复方氨基酸(14AA)",
+                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                    pack: "1",
+                    pack_id: "0000202",
+                    prod_desc: "14-AMINO ACID CO   SCZ",
+                    prod_name_ch: "复方氨基酸注射液(14AA)",
+                    spec: "8.23% 250ML"
+                },
+                {
+                    atc4_code: "K01E1",
+                    corp_name_ch: "双鹤集团",
+                    dosage: "注射液",
+                    mnf_name_ch: "上海长征富民金山制药有限公司",
+                    mole_name_ch: "复方氨基酸(14AA)",
+                    mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                    pack: "1",
+                    pack_id: "0000202",
+                    prod_desc: "14-AMINO ACID CO   SCZ",
+                    prod_name_ch: "复方氨基酸注射液(14AA)",
+                    spec: "8.23% 250ML"
+                }
+            ]
         }
     },
     methods: {
@@ -110,7 +138,35 @@ export default {
                     targetNames: {},
                     fileName: '',
                     projectData: {},
-                    userData: {}
+                    userData: {},
+                    sourceData: [
+                        {
+                            atc4_code: "K01E1",
+                            corp_name_ch: "双鹤集团",
+                            dosage: "注射液",
+                            mnf_name_ch: "上海长征富民金山制药有限公司",
+                            mole_name_ch: "复方氨基酸(14AA)",
+                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                            pack: "1",
+                            pack_id: "0000202",
+                            prod_desc: "14-AMINO ACID CO   SCZ",
+                            prod_name_ch: "复方氨基酸注射液(14AA)",
+                            spec: "8.23% 250ML"
+                        },
+                        {
+                            atc4_code: "K01E1",
+                            corp_name_ch: "双鹤集团",
+                            dosage: "注射液",
+                            mnf_name_ch: "上海长征富民金山制药有限公司",
+                            mole_name_ch: "复方氨基酸(14AA)",
+                            mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
+                            pack: "1",
+                            pack_id: "0000202",
+                            prod_desc: "14-AMINO ACID CO   SCZ",
+                            prod_name_ch: "复方氨基酸注射液(14AA)",
+                            spec: "8.23% 250ML"
+                        }
+                    ]
                 }
             }
         },
@@ -121,11 +177,11 @@ export default {
             this.$forceUpdate()
             this.middleList.mappingList = []
             //点击文件列表 需要更新mapping数据
-            if(this.allData.eventName == "clickFile" && this.allData.jobLogs) {
+            if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
                 //已创建映射
-                let message = JSON.parse(this.allData.jobLogs.message)
+                let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
                 this.middleList.mappingList = message
-            } else if(this.allData.eventName == "clickFile" && !this.allData.jobLogs) {
+            } else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
                 //未创建映射
                 this.allData.targetNames.headers.forEach(item => {
                     let it = {}
@@ -134,14 +190,15 @@ export default {
                 })
             }
         },
-        "allData.projectData": function(data) {
-            //第一次进入页面 渲染mapping数据
-            let arr = JSON.parse(data.actions)
-            let importArr = arr.filter(it => it.jobCat == "import")
+        "allData.jobLogs": function(data) {
+            //第一次进入页面 渲染mapping弹框数据
             this.middleList.mappingList = []
-            if(importArr.length > 0) {
-                this.middleList.mappingList = JSON.parse(importArr[importArr.length - 1].message)
+            if(this.allData.jobLogs.length > 0) {
+                //已创建映射
+                let message = JSON.parse(this.allData.jobLogs[this.allData.jobLogs.length - 1].message)
+                this.middleList.mappingList = message
             } else {
+                //未创建映射
                 this.allData.targetNames.headers.forEach(item => {
                     let it = {}
                     it[item] = ''
@@ -269,7 +326,9 @@ export default {
                 display: flex;
                 height: 100%;
                 flex: 1;
-
+                .file-right-container {
+                    min-width: 218px;
+                }
                 .file-left-container {
                     display: flex;
                     flex-direction: column;

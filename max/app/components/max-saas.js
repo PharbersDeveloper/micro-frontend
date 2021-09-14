@@ -150,6 +150,7 @@ export default class MaxSaasComponent extends Component {
 					.catch((err)=> {
 						this.pushJobLogs(uploadFileParams.Key, "failed", "upload", uploadMessage, [], memo, sheet)
 					})
+					
 				if(!s3FileUpload) return
 				//文件名	
 				fileVersion = s3FileUpload.Key.split("/").pop()
@@ -236,86 +237,20 @@ export default class MaxSaasComponent extends Component {
 				applicationAdapter.set( "reqBody", fileBodyObj )
 				//数据库上传数据
 				await this.store.createRecord( "asset", fileBodyObj ).save()
-				await this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, uploadMessage.file, sheet)
-				this.uploadLoadedSize = 100 //文件上传成功，进度条到50%
-				//create executions 得到arn
-				// that.uploadTextStatus = "正在处理"
-				// 暂时去掉上传文件触发ETL流程
-				// let executionInt = await setInterval(function() {
-				// 	that.store.findRecord('execution', executionId).then(executionData => {	
-				// 		if (executionData.arn && executionData.arn != '') { 
-				// 			clearInterval(executionInt); 
-				// 			that.uploadLoadedSize = 70
-				// 			exArn = executionData.arn
-				// 			//请求phstatus
-				// 			let stateUrl = "https://api.pharbers.com/phstepstatus"
-				// 			let options = {
-				// 				method: "POST",
-				// 				mode: "cors",
-				// 				headers: {
-				// 					"Authorization": that.cookies.read( "access_token" ),
-				// 					"Content-Type": "application/vnd.api+json",
-				// 					"Accept": "application/vnd.api+json",
-				// 				},
-				// 				body: JSON.stringify({"executionArn": exArn})
-				// 			}
-				// 			let dagStatusInt = setInterval(function() { 
-				// 				fetch(stateUrl, options).then(res=>res.json()).then(response => {
-				// 					let execution_status = response.execution_status
-				// 					if (execution_status && execution_status !== 'RUNNING') {
-				// 						clearInterval(dagStatusInt); 
-				// 						that.uploadLoadedSize = 90
-				// 						let code = 1
-				// 						if(execution_status == "SUCCEEDED") {
-				// 							code = 0
-				// 							that.uploadLoadedSize = 100
-				// 						} else {
-				// 							that.uploadLoadedSize = 99
-				// 						}
-				// 						//patch joblogs 为当前状态值
-				// 						that.store.push({
-				// 							data: {
-				// 								id: that.jobLogsObj.id,
-				// 								type: 'jobLog',
-				// 								attributes: {
-				// 									"code": code,
-				// 									"jobDesc": execution_status,
-				// 									"date": new Date().getTime()
-				// 								}
-				// 							}
-				// 						}).save().then(()=> {
-				// 							that.router.transitionTo( "/" )
-				// 							if(!that.optPageParam) {that.optPageParam = 0}
-				// 							if(!that.selectedTime) {that.selectedTime = timesTamp}
-				// 							that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
-				// 							if(that.uploadLoadedSize == 100) {
-				// 								that.uploadToastBorder = "green"
-				// 								that.uploadTextStatus = "处理成功"
-				// 							} else {
-				// 								that.uploadToastBorder = "red"
-				// 								that.uploadTextStatus = "处理失败"
-				// 							}
-				// 						})
-				// 					}
-				// 				}) 
-				// 			}, 20*1000)
-				// 		} 
-				// 	})
-				// }, 20*1000)
-				that.showProgress = '0'// 关闭上传进度条
-				// that.router.transitionTo( "/" )
-				// that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
-				//上传成功提示
-				if(that.uploadLoadedSize == 100) {
-					that.uploadTextStatus = "上传成功"
-					that.uploadText = "在“我的数据”中查看结果"
-					that.uploadToastBorder = "green"
-				} else {
-				//上传失败提示
-					that.uploadTextStatus = "上传失败" 
-					that.uploadText = ""
-					that.uploadToastBorder = "red"
-				}
+				await this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, uploadMessage.file, sheet, s3FileUpload)
+				// this.uploadLoadedSize = 100 //文件上传成功，进度条到50%
+				// that.showProgress = '0'// 关闭上传进度条
+				// //上传成功提示
+				// if(that.uploadLoadedSize == 100) {
+				// 	that.uploadTextStatus = "上传成功"
+				// 	that.uploadText = "在“我的数据”中查看结果"
+				// 	that.uploadToastBorder = "green"
+				// } else {
+				// //上传失败提示
+				// 	that.uploadTextStatus = "上传失败" 
+				// 	that.uploadText = ""
+				// 	that.uploadToastBorder = "red"
+				// }
 			} catch ( e ) {
 				console.log(e)
 				that.showProgress = '0' //关闭上传进度条
@@ -333,36 +268,8 @@ export default class MaxSaasComponent extends Component {
 		}
     }
 
-	@action
-    async  parseExcelFile2(inputElement) {
-		var file = inputElement;
-		console.time();
-		var reader = new FileReader();
-		reader.onloadend = function(event) {
-			var arrayBuffer = reader.result;
-			// var buffer = Buffer.from(arrayBuffer)
-			// debugger
-			let arr = []
-			var workbook = new ExcelJS.Workbook();
-			// workbook.xlsx.read(buffer)
-			workbook.xlsx.load(arrayBuffer).then(function(workbook) {
-				console.timeEnd();
-				workbook.worksheets.forEach(function (sheet, sheetNumber) {
-					sheet.eachRow(function (row, rowNumber) {
-						if(rowNumber == 1) {
-							console.log(sheet)
-							console.log(row.values)
-							arr.push({name: sheet.name,headers: row.values})
-						}
-					})
-				})
-			});
-		};
-		reader.readAsArrayBuffer(file);
-	}
-
     @action
-    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, inputElement, sheet) {
+    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, inputElement, sheet, s3FileUpload) {
 		let that = this
 		let time
 		if(this.uploadDate) {
@@ -371,50 +278,71 @@ export default class MaxSaasComponent extends Component {
 			
 		}
 		var file = inputElement;
-		console.time();
 		var reader = new FileReader();
 		reader.onloadend = function(event) {
 			var arrayBuffer = reader.result;
 			let arr = []
 			var workbook = new ExcelJS.Workbook();
-			workbook.xlsx.load(arrayBuffer).then(async function(workbook) {
-				console.timeEnd();
-				workbook.worksheets.forEach(function (sheetData, sheetNumber) {
-					sheetData.eachRow(function (row, rowNumber) {
-						if(rowNumber == 1) {
-							arr.push({name: sheetData.name,headers: row.values})
-						}
+			try {
+				workbook.xlsx.load(arrayBuffer).then(async function(workbook) {
+					workbook.worksheets.forEach(function (sheetData, sheetNumber) {
+						sheetData.eachRow(function (row, rowNumber) {
+							if(rowNumber == 1) {
+								arr.push({name: sheetData.name,headers: row.values})
+							}
+						})
 					})
+					/* 读文件结束 */
+					// message: 名字+文件大小+label
+					let message = {
+						name: fileVersion,
+						size: uploadMessage.file.size,
+						location: s3FileUpload.Key,
+						label: labelsArr.toString(),
+						sheet: sheet,
+						schemas: arr
+					}
+					//push jobLogs
+					let jobLogsParam = {
+						"provider": that.provider,
+						"owner": that.args.model.userData.id,
+						"showName": that.args.model.userData.name,
+						"time": time ? time : timesTamp,
+						"version": fileVersion +'_'+ Math.random(),
+						"code": 0,
+						"jobDesc": status,
+						"jobCat": option,
+						"comments": memo,
+						"message": JSON.stringify(message),
+						"date": new Date().getTime(),
+					}
+					await that.store.createRecord('jobLog', jobLogsParam).save()
+					that.uploadLoadedSize = 100 //文件上传成功，进度条到50%
+					that.showProgress = '0'// 关闭上传进度条
+					//上传成功提示
+					if(that.uploadLoadedSize == 100) {
+						that.uploadTextStatus = "上传成功"
+						that.uploadText = "在“我的数据”中查看结果"
+						that.uploadToastBorder = "green"
+					} else {
+					//上传失败提示
+						that.uploadTextStatus = "上传失败" 
+						that.uploadText = ""
+						that.uploadToastBorder = "red"
+					}
+					//刷新页面状态
+					that.router.transitionTo( "/" )
+					that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
 				})
-				/* 读文件结束 */
-				// message: 名字+文件大小+label
-				let message = {
-					name: fileVersion,
-					size: uploadMessage.file.size, 
-					label: labelsArr.toString(),
-					sheet: sheet,
-					schemas: arr
-				}
-				//push jobLogs
-				let jobLogsParam = {
-					"provider": that.provider,
-					"owner": that.args.model.userData.id,
-					"showName": that.args.model.userData.name,
-					"time": time ? time : timesTamp,
-					"version": fileVersion + Math.random(),
-					"code": 0,
-					"jobDesc": status,
-					"jobCat": option,
-					"comments": memo,
-					"message": JSON.stringify(message),
-					"date": new Date().getTime(),
-				}
-				let jobLogsObj = await that.store.createRecord('jobLog', jobLogsParam).save()
-				// that.jobLogsObj = jobLogsObj
-				//刷新页面状态
-				that.router.transitionTo( "/" )
-				that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
-			})
+			} catch ( e ) {
+				console.log(e)
+				that.showProgress = '0' //关闭上传进度条
+				//上传失败提示
+				that.uploadTextStatus = "上传失败" 
+				that.uploadText = ""
+				that.uploadToastBorder = "red"
+			}
+			
 		};
 		reader.readAsArrayBuffer(file);
     }

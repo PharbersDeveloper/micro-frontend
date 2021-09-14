@@ -2,7 +2,7 @@
     <div class="import-file-list">
         <span class="import-file-list-header">已导入文件</span>
         <div class="import-file-cell-container">
-            <import-file-cell v-for="(file,index) in lists" :key="index" :data="file" :selected="select === index" :index="index" @clickfile="clickfile"></import-file-cell>
+            <import-file-cell v-for="(file,index) in lists" :key="index" :data="file" :selected="select === index" :index="index" @clickfile="clickfile" :stateList="stateList"></import-file-cell>
         </div>
     </div>
 </template>
@@ -14,7 +14,8 @@ export default {
         importFileCell
     },
     props: {
-        lists: Array
+        lists: Array,
+        stateList: Array
     },
     data () {
         return {
