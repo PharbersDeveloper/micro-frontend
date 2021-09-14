@@ -36,48 +36,48 @@
 
 <script>
 export default {
-    props: {
-        data: {
-            type: Object,
-            default() {
-                return {
-                    list1: [{name: 'Name_1', tag: '1'},{name: 'Name_2', tag: '2'},{name: 'Name_3', tag: '3'}],
-                    list2: [{name: 'Name_4', tag: '1'},{name: 'Name_5', tag: '2'},{name: 'Name_6', tag: '3'}]
-                }
-            }
-        }
-    },
-    data() {
-        return {
-            source: '',
-            goal: '',
-            sourceDisplay: false,
-            goalDisplay: false
-        }
-    },
-    methods: {
-        addList(key) {
-            if (key === 'source') {
-                this.sourceDisplay = true
-            } else {
-                this.goalDisplay = true
-            }
-        },
-        confirm() {
-            if (this.source && this.goal) {
-                const event = new Event("event")
-                event.args = {
-                    callback: "confirmMapping",
-                    element: this,
-                    param: {
-                        source: this.source,
-                        goal: this.goal
-                    }
-                }
-                this.$emit('event', event)
-            }
-        }
-    }
+	props: {
+		data: {
+			type: Object,
+			default() {
+				return {
+					list1: [{name: 'Name_1', tag: '1'},{name: 'Name_2', tag: '2'},{name: 'Name_3', tag: '3'}],
+					list2: [{name: 'Name_4', tag: '1'},{name: 'Name_5', tag: '2'},{name: 'Name_6', tag: '3'}]
+				}
+			}
+		}
+	},
+	data() {
+		return {
+			source: '',
+			goal: '',
+			sourceDisplay: false,
+			goalDisplay: false
+		}
+	},
+	methods: {
+		addList(key) {
+			if (key === 'source') {
+				this.sourceDisplay = true
+			} else {
+				this.goalDisplay = true
+			}
+		},
+		confirm() {
+			if (this.source && this.goal) {
+				const event = new Event("event")
+				event.args = {
+					callback: "confirmMapping",
+					element: this,
+					param: {
+						source: this.source,
+						goal: this.goal
+					}
+				}
+				this.$emit('event', event)
+			}
+		}
+	}
 }
 </script>
 

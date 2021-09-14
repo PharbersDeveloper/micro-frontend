@@ -174,32 +174,32 @@ export default {
                 arr[index] = arr[this.fileMddleIndex];
                 arr[this.fileMddleIndex] = temp;
 
-                this.infoList = arr;
-            }
-            this.clearBakData()
-        },
-        // 从目标文件拖拽到源文件
-        fileDrop(e){
-            //取消默认行为
-            if(this.middleData == ''){
-                this.allowDrop(e);
-                this.schemaList.push(this.fileMiddleData) //源文件增加一条
-                this.fileMiddleData=''
-                this.infoList.splice(this.fileMddleIndex,1,this.fileMiddleData)
-                this.clearBakData()
-            }
-        },
-        allowDrop(e){
-            e.preventDefault()
-        },
-        clearBakData(){
-            // 此处写清除各列表的操作
-            this.middleData=''
-            this.middleIndex=-1
-            this.fileMiddleData=''
-            this.fileMddleIndex=-1
-        }
-    }
+				this.infoList = arr;
+			}
+			this.clearBakData()
+		},
+		// 从目标文件拖拽到源文件
+		fileDrop(e){
+			//取消默认行为
+			if(this.middleData == ''){
+				this.allowDrop(e);
+				this.schemaList.push(this.fileMiddleData) //源文件增加一条
+				this.fileMiddleData=''
+				this.infoList.splice(this.fileMddleIndex,1,this.fileMiddleData)
+				this.clearBakData()
+			}
+		},
+		allowDrop(e){
+			e.preventDefault()
+		},
+		clearBakData(){
+			// 此处写清除各列表的操作
+			this.middleData=''
+			this.middleIndex=-1
+			this.fileMiddleData=''
+			this.fileMddleIndex=-1
+		}
+	}
 }
 </script>
 

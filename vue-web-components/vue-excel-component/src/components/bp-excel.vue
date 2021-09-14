@@ -1,115 +1,85 @@
 <template>
-    <div class="excel_container ag-theme-alpine">
-        <ag-grid-vue
-            style="height: 1000px"
-            class="table"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :grid-options="gridOptions"
-            @grid-ready="onGridReady"
-        >
-        </ag-grid-vue>
-    </div>
+	<div class="excel_container ag-theme-alpine">
+		<grid
+				:auto-width="autoWidth"
+				:cols="cols"
+				:language="language"
+				:pagination="pagination"
+				:rows="rows"
+				:search="search"
+				:server="server"
+				:sort="sort"
+				:width="width"
+		></grid>
+	</div>
 </template>
 <script>
-import { AgGridVue } from "ag-grid-vue";
+import Grid from 'gridjs-vue'
 export default {
-    name: "App",
-    data() {
-        return {
-            columnDefs: null,
-            rowData: null,
-            gridApi: null,
-            gridColumnApi: null,
-            gridOptions: null
-        }
-    },
-    components: {
-        AgGridVue
-    },
-    props: {
-        schemas: Object,
-        sourceData: Array
-    },
-    beforeMount() {
-        this.columnDefs = [
-            { field: 'pack_id' },
-            { field: 'mole_name_en' },
-            { field: 'mole_name_ch' },
-            { field: 'prod_desc' },
-            { field: 'prod_name_ch' },
-            { field: 'corp_name_ch' },
-            { field: 'mnf_name_ch' },
-            { field: 'spec' },
-            { field: 'pack' },
-            { field: 'dosage' },
-            { field: 'atc4_code' }
-        ]
-        this.gridOptions = {
-            defaultColDef: {
-                sortable: true,
-                resizable: true,
-                width: 150,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true
-            },
-            sideBar: {
-                toolPanels: ['columns']
-            },
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
-            debug: true
-            // columnDefs: this.columnDefs,
-            // rowData: this.sourceData
-        }
-        this.rowData = []
-    },
-    methods: {
-        onGridReady(params) {
-            this.gridApi = params.api;
-            this.gridColumnApi = params.columnApi;
-            if(this.gridApi) {
-                this.gridApi.hideOverlay();
-            }
-        }
-    },
-    watch: {
-        schemas: function (data) {
-            if(!data) return false
-            let headers = [];
-            if (data.headers && data.headers.length > 0) {
-                data.headers.forEach((item, index) => {
-                    if (item) {
-                        headers.push({ headerName: item }); //表头数据
-                    }
-                });
-            }
-            this.columnDefs = headers;
-            this.gridOptions.columnDefs = headers;
-            console.log("this.gridOption:", this.gridOptions)
-            if(this.gridApi) {
-                this.gridApi.hideOverlay()
-            }
-        },
-        sourceData: function(data) {
-            console.log("sourceData", data)
-            this.rowData = data
-            this.gridOptions.rowData = data;
-        }
-    }
+	name: "ph-excel-online-component",
+	data() {
+		return {
+			// REQUIRED:
+			// An array containing strings of column headers
+			cols: ['pack_id', 'mole_name_en', 'mole_name_ch', 'prod_desc', 'prod_name_ch',
+				'corp_name_ch', 'mnf_name_ch', 'spec', 'pack', 'dosage', 'atc4_code'],
+			// AND EITHER an array containing row data
+			rows: [
+				['1234', 'mole', 'mole', 'mole', 'mole', 'mole','mole','mole','mole','mole', 'mole']
+			],
+
+			// OR a server settings object
+			server: {
+			// 	// url: 'http://ec2-69-230-210-235.cn-northwest-1.compute.amazonaws.com.cn:9090/?query=SELECT%20%2A%20FROM%20prod%20limit%20100',
+				url: 'https://api.pharbers.com/phdatasource/?query=SELECT%20%2A%20FROM%20prod%20limit%20100',
+				then: res => JSON.parse(res.body).map(col => [col.pack_id, col.mole_name_en, col.mole_name_ch, col.prod_desc,
+					col.prod_name_ch, col.corp_name_ch, col.mnf_name_ch, col.spec, col.pack, col.dosage, col.atc4_code]),
+				handle: res => res.status === 404 ? { data: [] } : res.ok ? res.json() : new Error('Something went wrong')
+			},
+
+			// OPTIONAL:
+
+			// Boolean to automatically set table width
+			autoWidth: true,
+
+			// Localization dictionary object
+			language: {},
+
+			// Boolean or pagination settings object
+			pagination: false,
+
+			// Boolean or search settings object
+			search: false,
+
+			// Boolean or sort settings object
+			sort: false,
+
+			// String with name of theme or 'none' to disable
+			theme: 'mermaid',
+
+			// String with css width value
+			width: '100%'
+		}
+	},
+	components: {
+		Grid
+	},
+	props: {
+
+	},
+	beforeMount() {
+
+	},
+	methods: {
+
+	},
+	watch: {
+
+	}
 };
 </script>
 <style lang="scss">
-* {
-    box-sizing: border-box;
-}
-// .ag-header-row-column,.ag-theme-alpine {
-//     height: 24px !important;
-// }
-// .ag-header-viewport {
-//     overflow: auto; 
-// }
-@import "../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
-@import "../../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+	* {
+		box-sizing: border-box;
+	}
 </style>

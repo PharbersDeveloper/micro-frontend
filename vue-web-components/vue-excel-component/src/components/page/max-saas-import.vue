@@ -84,7 +84,6 @@
 <script>
 import mappingBox from '../mapping-box.vue'
 import importFileList from '../import-file-list.vue'
-import bpExcelSecond from '../bp-excel-second.vue'
 import bpExcel from '../bp-excel.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'

@@ -114,308 +114,308 @@ import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-
 import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 export default {
-    components: {
-        phTableCell,
-        bpSelectVue,
-        bpOptionVue,
-        bpButton,
-        bpPagination,
-        uploadBox,
-        bpText
-    },
-    data() {
-        return {
-            choosedYear: "2020",
-            choosedMonth: "01",
-            monthArr: [],
-            yearArr: ['2021', '2020'],
-            nowMonthArr: [],
-            lastMonthArr: [],
-            showUpload: false,
-            JsonData: {},
-            clickProjectEvent: {},
-            proBar: 0
-        }
-    },
-    props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    projectsData: [
-                        {
-                            "provider": "汇宇",
-                            "time": "1627747200000",
-                            "actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
-                        }
-                    ],
-                    jobsCount: 78,
-                    jobLogs: [
-                        {
-                            "provider": "倍特",
-                            "owner": "5UBSLZvV0w9zh7-lZQap",
-                            "time": "2021-02-28T16:00:00.000Z",
-                            "version": "测试文件.xlsx",
-                            "code": 0,
-                            "jobDesc": "success",
-                            "jobCat": "upload",
-                            "comments": "测试数据",
-                            "message": null,
-                            "date": "1629869854734"
-                        }
-                    ]
-                }
-            }
-        },
-        random: Number,
-        fileName: String,
-        uploadToastBorder: String,
-        uploadTextStatus: {
-            type: String,
-            default: "正在上传"
-        },
-        uploadText: String,
-        closeuploadToast: {
-            type: String,
-            default: '1'
-        },
-        showProgress: {
-            type: String,
-            default: '0'
-        },
-        uploadLoadedSize: Number,
-        uploadFileSize: Number
-    },
-    computed: {
-        allPage() {
-            const total = this.allData.jobsCount
-            const perPage = 10
-            if (Math.ceil(total / perPage) <= 1) {
-                return 0
-            }
-            return Math.max(1, Math.ceil(total / perPage))
-        },
-        curPage() {
-            return this.allData.page + 1
-        }
-    },
-    watch: {
-        random: function() {
-            this.$forceUpdate()
-        },
-        uploadLoadedSize: function() {
-            console.log("uploadLoadedSize", this.uploadLoadedSize)
-            this.proBar = this.uploadLoadedSize
-        }
-    },
-    created() {
-        //时间选择范围为当前日期向前推六个月
-        const rangeArray = (start, end) => Array(end - start + 1).fill(0).map((v, i) => i + start)
-        //获取当前年月
-        const currentDate = new Date()
-        const year = currentDate.getFullYear()
-        const month = currentDate.getMonth() + 1
-        //赋默认值
-        this.choosedYear = String(year)
-        if(month < 10) {
-            this.choosedMonth = '0' + String(month)
-        } else {
-            this.choosedMonth = String(month)
-        }
-        //日期范围数组
-        let yearArr = []
-        let monthArr = []
-        let nowMonthArr = []
-        let lastMonthArr = []
-        if(month > 5) {
-            monthArr = rangeArray(month - 5, month)
-            yearArr.push(year)
-            this.nowMonthArr = monthArr.map(item => {
-                item = String(item)
-                if(item.length  == 1) {
-                    return '0' + item
-                } else {
-                    return item
-                }
-            })
-        } else {
-            yearArr.push(year) //当年年份
-            yearArr.push(Number(year) - 1) //去年年份
-            nowMonthArr = rangeArray(1, month) //当年月份
-            let monthList = rangeArray(1, 12) //定义月份列表
-            lastMonthArr = monthList.slice((6 - nowMonthArr.length) * -1) //去年月份
-            this.nowMonthArr = nowMonthArr.map(item => {
-                item = String(item)
-                if(item.length  == 1) {
-                    return '0' + item
-                } else {
-                    return item
-                }
-            })
-            this.lastMonthArr = lastMonthArr.map(item => {
-                item = String(item)
-                if(item.length  == 1) {
-                    return '0' + item
-                } else {
-                    return item
-                }
-            })
-        }
-        this.yearArr = yearArr.map(item => String(item))
-        this.monthArr = this.nowMonthArr
-    },
-    methods: {
-        closeToast() {
-            const event = new Event("event")
-            event.args = {
-                callback: "closeToast",
-                element: this,
-                param: {
-                    name: 'closeToast',
-                    value: 0
-                }
-            }
-            this.$emit('event', event)
-        },
-        formatFileSize(...params) {
-            if ( !params[0] ) {
-                return 0
-            }
-            let fsize = params[0]
-            if ( fsize < 0.1 * 1024 ) {
-                fsize = fsize.toFixed( 2 ) + "B"
-            } else if ( fsize < 0.1 * 1024 * 1024 ) {
-                fsize = ( fsize / 1024 ).toFixed( 2 ) + "KB"
-            } else if ( fsize < 0.1 * 1024 * 1024 * 1024 ) {
-                fsize = ( fsize / ( 1024 * 1024 ) ).toFixed( 2 ) + "MB"
-            } else {
-                fsize = ( fsize / ( 1024 * 1024 * 1024 ) ).toFixed( 2 ) + "GB"
-            }
-            return fsize
-        },
-        selectFile() {
-            this.$emit('event', this.clickProjectEvent)
-        },
-        confirmUpload(memo, sheet) {
-            //进度条
-            let that = this;
-            this.proBar = 0;
-            var clearInt = setInterval(function() { 
-                that.proBar++; 
-                console.log(that.proBar); 
-                if (that.proBar >= 99) { 
-                    clearInterval(clearInt); 
-                } 
-            }, 60)
-            //event
-            let confirmEvent = this.clickProjectEvent;
-            confirmEvent.args.param.memo = memo;
-            confirmEvent.args.param.sheet = sheet;
-            confirmEvent.args.callback = "confirmUpload";
-            this.$emit('event', confirmEvent)
-            this.showUpload = false
+	components: {
+		phTableCell,
+		bpSelectVue,
+		bpOptionVue,
+		bpButton,
+		bpPagination,
+		uploadBox,
+		bpText
+	},
+	data() {
+		return {
+			choosedYear: "2020",
+			choosedMonth: "01",
+			monthArr: [],
+			yearArr: ['2021', '2020'],
+			nowMonthArr: [],
+			lastMonthArr: [],
+			showUpload: false,
+			JsonData: {},
+			clickProjectEvent: {},
+			proBar: 0
+		}
+	},
+	props: {
+		allData: {
+			type: Object,
+			default: function() {
+				return {
+					projectsData: [
+						{
+							"provider": "汇宇",
+							"time": "1627747200000",
+							"actions": "[{\"owner\":\"5UBSLZvV0w9zh7-lZQap\",\"showName\":\"钱鹏\",\"version\":\"测试文件.xlsx\",\"code\":0,\"jobDesc\":\"success\",\"jobCat\":\"upload\",\"comments\":\"测试数据\",\"message\":\"\",\"date\":1629869854734}]"
+						}
+					],
+					jobsCount: 78,
+					jobLogs: [
+						{
+							"provider": "倍特",
+							"owner": "5UBSLZvV0w9zh7-lZQap",
+							"time": "2021-02-28T16:00:00.000Z",
+							"version": "测试文件.xlsx",
+							"code": 0,
+							"jobDesc": "success",
+							"jobCat": "upload",
+							"comments": "测试数据",
+							"message": null,
+							"date": "1629869854734"
+						}
+					]
+				}
+			}
+		},
+		random: Number,
+		fileName: String,
+		uploadToastBorder: String,
+		uploadTextStatus: {
+			type: String,
+			default: "正在上传"
+		},
+		uploadText: String,
+		closeuploadToast: {
+			type: String,
+			default: '1'
+		},
+		showProgress: {
+			type: String,
+			default: '0'
+		},
+		uploadLoadedSize: Number,
+		uploadFileSize: Number
+	},
+	computed: {
+		allPage() {
+			const total = this.allData.jobsCount
+			const perPage = 10
+			if (Math.ceil(total / perPage) <= 1) {
+				return 0
+			}
+			return Math.max(1, Math.ceil(total / perPage))
+		},
+		curPage() {
+			return this.allData.page + 1
+		}
+	},
+	watch: {
+		random: function() {
+			this.$forceUpdate()
+		},
+		uploadLoadedSize: function() {
+			console.log("uploadLoadedSize", this.uploadLoadedSize)
+			this.proBar = this.uploadLoadedSize
+		}
+	},
+	created() {
+		//时间选择范围为当前日期向前推六个月
+		const rangeArray = (start, end) => Array(end - start + 1).fill(0).map((v, i) => i + start)
+		//获取当前年月
+		const currentDate = new Date()
+		const year = currentDate.getFullYear()
+		const month = currentDate.getMonth() + 1
+		//赋默认值
+		this.choosedYear = String(year)
+		if(month < 10) {
+			this.choosedMonth = '0' + String(month)
+		} else {
+			this.choosedMonth = String(month)
+		}
+		//日期范围数组
+		let yearArr = []
+		let monthArr = []
+		let nowMonthArr = []
+		let lastMonthArr = []
+		if(month > 5) {
+			monthArr = rangeArray(month - 5, month)
+			yearArr.push(year)
+			this.nowMonthArr = monthArr.map(item => {
+				item = String(item)
+				if(item.length  == 1) {
+					return '0' + item
+				} else {
+					return item
+				}
+			})
+		} else {
+			yearArr.push(year) //当年年份
+			yearArr.push(Number(year) - 1) //去年年份
+			nowMonthArr = rangeArray(1, month) //当年月份
+			let monthList = rangeArray(1, 12) //定义月份列表
+			lastMonthArr = monthList.slice((6 - nowMonthArr.length) * -1) //去年月份
+			this.nowMonthArr = nowMonthArr.map(item => {
+				item = String(item)
+				if(item.length  == 1) {
+					return '0' + item
+				} else {
+					return item
+				}
+			})
+			this.lastMonthArr = lastMonthArr.map(item => {
+				item = String(item)
+				if(item.length  == 1) {
+					return '0' + item
+				} else {
+					return item
+				}
+			})
+		}
+		this.yearArr = yearArr.map(item => String(item))
+		this.monthArr = this.nowMonthArr
+	},
+	methods: {
+		closeToast() {
+			const event = new Event("event")
+			event.args = {
+				callback: "closeToast",
+				element: this,
+				param: {
+					name: 'closeToast',
+					value: 0
+				}
+			}
+			this.$emit('event', event)
+		},
+		formatFileSize(...params) {
+			if ( !params[0] ) {
+				return 0
+			}
+			let fsize = params[0]
+			if ( fsize < 0.1 * 1024 ) {
+				fsize = fsize.toFixed( 2 ) + "B"
+			} else if ( fsize < 0.1 * 1024 * 1024 ) {
+				fsize = ( fsize / 1024 ).toFixed( 2 ) + "KB"
+			} else if ( fsize < 0.1 * 1024 * 1024 * 1024 ) {
+				fsize = ( fsize / ( 1024 * 1024 ) ).toFixed( 2 ) + "MB"
+			} else {
+				fsize = ( fsize / ( 1024 * 1024 * 1024 ) ).toFixed( 2 ) + "GB"
+			}
+			return fsize
+		},
+		selectFile() {
+			this.$emit('event', this.clickProjectEvent)
+		},
+		confirmUpload(memo, sheet) {
+			//进度条
+			let that = this;
+			this.proBar = 0;
+			var clearInt = setInterval(function() { 
+				that.proBar++; 
+				console.log(that.proBar); 
+				if (that.proBar >= 99) { 
+					clearInterval(clearInt); 
+				} 
+			}, 60)
+			//event
+			let confirmEvent = this.clickProjectEvent;
+			confirmEvent.args.param.memo = memo;
+			confirmEvent.args.param.sheet = sheet;
+			confirmEvent.args.callback = "confirmUpload";
+			this.$emit('event', confirmEvent)
+			this.showUpload = false
 
-        },
-        tableClickEvent(data) {
-            let type = data.args.param.type
-            this.clickProjectEvent = data
-            if(type == "upload") {
-                this.showUpload = true
-            }
-            if(type == "import") {
-                this.$emit('event', data)
-            }
-        },
-        clickYear(data) {
-            this.choosedYear = data
-            if(Number(data) == new Date().getFullYear()) {
-                this.monthArr = this.nowMonthArr
-            } else {
-                this.monthArr = this.lastMonthArr
-            }
-            this.choosedMonth = this.monthArr[this.monthArr.length - 1]
-            const event = new Event("event")
-            event.args = {
-                callback: "selectYearMonth",
-                element: this,
-                param: {
-                    name: '/max-saas',
-                    year: this.choosedYear,
-                    month: this.choosedMonth
-                }
-            }
-            this.$emit('event', event)
-        },
-        clickMonth(data) {
-            this.choosedMonth = data
-            const event = new Event("event")
-            event.args = {
-                callback: "selectYearMonth",
-                element: this,
-                param: {
-                    name: '/max-saas',
-                    year: this.choosedYear,
-                    month: this.choosedMonth
-                }
-            }
-            this.$emit('event', event)
-        },
-        parseData(data, type) {
-            let datas = JSON.parse(data)
-            let filterData = []
-            if(datas.filter) {
-                filterData = datas.filter( it => it.jobCat == type)
-            } else {
-                filterData.push(datas)
-            }
-            if(!filterData[0]) {
-                return {}
-            }
-            return filterData[0]
-        },
-        changePage(page) {
-            const event = new Event("event")
-            event.args = {
-                callback: "changePage",
-                element: this,
-                param: {
-                    name: '/max-saas',
-                    page: page - 1
-                }
-            }
-            this.$emit('event', event)
-        },
-        formatDateStandard(...params) {
-            if(params.length === 2) {
-                let date = new Date( params[0] ),
-                    Y = date.getFullYear(),
-                    M =
+		},
+		tableClickEvent(data) {
+			let type = data.args.param.type
+			this.clickProjectEvent = data
+			if(type == "upload") {
+				this.showUpload = true
+			}
+			if(type == "import") {
+				this.$emit('event', data)
+			}
+		},
+		clickYear(data) {
+			this.choosedYear = data
+			if(Number(data) == new Date().getFullYear()) {
+				this.monthArr = this.nowMonthArr
+			} else {
+				this.monthArr = this.lastMonthArr
+			}
+			this.choosedMonth = this.monthArr[this.monthArr.length - 1]
+			const event = new Event("event")
+			event.args = {
+				callback: "selectYearMonth",
+				element: this,
+				param: {
+					name: '/max-saas',
+					year: this.choosedYear,
+					month: this.choosedMonth
+				}
+			}
+			this.$emit('event', event)
+		},
+		clickMonth(data) {
+			this.choosedMonth = data
+			const event = new Event("event")
+			event.args = {
+				callback: "selectYearMonth",
+				element: this,
+				param: {
+					name: '/max-saas',
+					year: this.choosedYear,
+					month: this.choosedMonth
+				}
+			}
+			this.$emit('event', event)
+		},
+		parseData(data, type) {
+			let datas = JSON.parse(data)
+			let filterData = []
+			if(datas.filter) {
+				filterData = datas.filter( it => it.jobCat == type)
+			} else {
+				filterData.push(datas)
+			}
+			if(!filterData[0]) {
+				return {}
+			}
+			return filterData[0]
+		},
+		changePage(page) {
+			const event = new Event("event")
+			event.args = {
+				callback: "changePage",
+				element: this,
+				param: {
+					name: '/max-saas',
+					page: page - 1
+				}
+			}
+			this.$emit('event', event)
+		},
+		formatDateStandard(...params) {
+			if(params.length === 2) {
+				let date = new Date( params[0] ),
+					Y = date.getFullYear(),
+					M =
                         ( date.getMonth() + 1 < 10 ?
-                            `0${date.getMonth() + 1}` :
-                            date.getMonth() + 1 ),
-                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
-                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                        	`0${date.getMonth() + 1}` :
+                        	date.getMonth() + 1 ),
+					D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+					D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
 
-                    h =
+					h =
                         ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
-                    m =
+					m =
                         ( date.getMinutes() < 10 ?
-                            `0${date.getMinutes()}` :
-                            date.getMinutes() ) ,
-                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+                        	`0${date.getMinutes()}` :
+                        	date.getMinutes() ) ,
+					s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
 
-                // 输出结果：yyyy/mm/dd hh:mm
-                if(params[1] === 0){
-                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
-                }else if(params[1] === 1) {
-                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
-                }
-            }
-        },
-        closeUploadModal() {
-            this.showUpload = false
-        }
-    }
+				// 输出结果：yyyy/mm/dd hh:mm
+				if(params[1] === 0){
+					return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+				}else if(params[1] === 1) {
+					return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+				}
+			}
+		},
+		closeUploadModal() {
+			this.showUpload = false
+		}
+	}
 }
 </script>
 
