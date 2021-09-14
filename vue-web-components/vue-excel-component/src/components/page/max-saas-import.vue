@@ -15,10 +15,10 @@
 
             <div class="file-main">
                 <div class="file-left-container">
-                    <span class="heading-small">源文件：cpa_pchc_universe</span>
+                    <span class="heading-small">源文件：{{allData.fileName}}</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel :schemas="allData.schemas"></bp-excel>
+                            <bp-excel-ag :schemas="allData.schemas"></bp-excel-ag>
                         </div>
 
                          <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -31,9 +31,8 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel :schemas="allData.targetNames" :sourceData="allData.sourceData" name="targer"></bp-excel>
+                            <bp-excel name="targer"></bp-excel>
                         </div>
-
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
                             <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
@@ -83,6 +82,7 @@
 import mappingBox from '../mapping-box.vue'
 import importFileList from '../import-file-list.vue'
 import bpExcel from '../bp-excel.vue'
+import bpExcelAg from '../bp-excel-ag-grid.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
@@ -93,7 +93,8 @@ export default {
 		bpOptionVue,
 		mappingBox,
 		bpExcel,
-		bpText
+		bpText,
+		bpExcelAg
 	},
 	data() {
 		return {
@@ -380,6 +381,7 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 margin-top: 20px;
+                margin-bottom: 20px;
                 .import-message {
                     display: flex;
                     flex-direction: column;

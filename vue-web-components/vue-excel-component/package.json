@@ -10,6 +10,8 @@
     },
     "dependencies": {
         "@vue/web-component-wrapper": "^1.3.0",
+        "ag-grid-community": "^26.0.0",
+        "ag-grid-vue": "^26.0.0",
         "core-js": "^3.6.5",
         "gridjs": "^4.0.0",
         "gridjs-vue": "^4.0.0",
