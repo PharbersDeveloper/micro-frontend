@@ -14,36 +14,36 @@
 
 <script>
 export default {
-    created() {},
-    mounted() {},
-    components: {
-    },
-    props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    personalData: {},
-                    employerData: {}
-                }
-            }
-        }
-    },
-    data() {
-        return {
-            imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg"
-        }
-    },
-    methods: {
-        logOut() {
-            const event = new Event('event')
-            event.args = {
-                callback: 'logOut',
-                element: this
-            }
-            this.$emit('event', event)
-        }
-    }
+	created() {},
+	mounted() {},
+	components: {
+	},
+	props: {
+		allData: {
+			type: Object,
+			default: function() {
+				return {
+					personalData: {},
+					employerData: {}
+				}
+			}
+		}
+	},
+	data() {
+		return {
+			imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg"
+		}
+	},
+	methods: {
+		logOut() {
+			const event = new Event('event')
+			event.args = {
+				callback: 'logOut',
+				element: this
+			}
+			this.$emit('event', event)
+		}
+	}
 };
 </script>
 
