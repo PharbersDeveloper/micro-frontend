@@ -193,7 +193,6 @@ export default class MaxSaasComponent extends Component {
 							// 插入一条jobLog,存tag
 							this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, sheet, res.tmpname, TagSet)
 						}
-						debugger
 					}
 				};
 				formData.append("file", uploadMessage.file);
@@ -202,30 +201,30 @@ export default class MaxSaasComponent extends Component {
 				/**
 				 * 3 create file metadata for database
 				 */
-				const applicationAdapter = this.store.adapterFor( "application" )
-				const fileBodyObj = {
-					name: uploadMessage.file.name.split( "." )[0],
-					owner: accountId,
-					extension: uploadMessage.file.name.split( "." )[1],
-					size: uploadMessage.file.size,
-					source: fileKey,
-					type: "file", // candidate: database, file, stream, application, mart, cube
-					accessibility: "",
-					version: "",
-					isNewVersion: true,
-					providers: [],
-					markets: [],
-					molecules: [],
-					dateCover: [],
-					geoCover: [],
-					labels: labelsArr,
-					created: new Date(),
-					modified: new Date(),
-					description: memo,
-					partners: that.args.model.employerId
-				}
-				applicationAdapter.set( "reqBody", fileBodyObj )
-				await this.store.createRecord( "asset", fileBodyObj ).save()
+				// const applicationAdapter = this.store.adapterFor( "application" )
+				// const fileBodyObj = {
+				// 	name: uploadMessage.file.name.split( "." )[0],
+				// 	owner: this.cookies.read( "account_id" ),
+				// 	extension: uploadMessage.file.name.split( "." )[1],
+				// 	size: uploadMessage.file.size,
+				// 	source: fileKey,
+				// 	type: "file", // candidate: database, file, stream, application, mart, cube
+				// 	accessibility: "",
+				// 	version: "",
+				// 	isNewVersion: true,
+				// 	providers: [],
+				// 	markets: [],
+				// 	molecules: [],
+				// 	dateCover: [],
+				// 	geoCover: [],
+				// 	labels: labelsArr,
+				// 	created: new Date(),
+				// 	modified: new Date(),
+				// 	description: memo,
+				// 	partners: that.args.model.employerId
+				// }
+				// applicationAdapter.set( "reqBody", fileBodyObj )
+				// await this.store.createRecord( "asset", fileBodyObj ).save()
 			} catch ( e ) {
 				console.log(e)
 				that.showProgress = '0' //关闭上传进度条
@@ -242,7 +241,7 @@ export default class MaxSaasComponent extends Component {
     }
 
     @action
-    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, sheet, tmpname) {
+    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, sheet, tmpname, TagSet) {
 		let that = this
 		let time
 		if(this.uploadDate) {
@@ -288,6 +287,19 @@ export default class MaxSaasComponent extends Component {
 		//刷新页面状态
 		that.router.transitionTo( "/" )
 		that.router.transitionTo( `/max-saas/upload?page=${that.optPageParam}&selectedTime=${that.selectedTime}`)
+    }
+
+    @action
+    async uploadFiles(title, event) {
+        //禁用上传文件input
+        let dom = $( event.target )
+        dom[0].disabled = true
+        
+        let uploadFile = {}
+        uploadFile.file = document.getElementById( "my-file" ).files[0]
+        this.fileName = uploadFile.file.name //文件名称传入component
+
+        dom[0].disabled = false
     }
 
     @action
