@@ -60,12 +60,12 @@ export default class OauthServiceService extends Service {
 					path: "/",
 					maxAge: response.expiresIn
 				}
-
 				cookies.write( "access_token", response.access_token, options )
 				cookies.write( "refresh_token", response.refresh_token, options )
 				cookies.write( "token_type", response.token_type, options )
 				cookies.write( "expires_in", response.expiresIn, options )
 				cookies.write( "user_name", response.user.name, options)
+				// cookies.write( "user_name_show", URLEncodor.encode(response.user.lastName+response.user.firstName, "utf-8"), options)
 				cookies.write( "user_email", response.user.email, options)
 				cookies.write( "account_id", response.user.id, options )
 				
