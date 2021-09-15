@@ -259,7 +259,7 @@ export default class MaxSaasComponent extends Component {
 		//push jobLogs
 		let jobLogsParam = {
 			"provider": that.provider,
-			"owner": that.args.model.userData.id,
+			"owner": that.cookies.read('account_id'),
 			"showName": decodeURI(that.cookies.read('user_name_show')),
 			"time": time ? time : timesTamp,
 			"version": fileVersion,

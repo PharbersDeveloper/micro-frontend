@@ -20,20 +20,27 @@ export default class MaxSaasImportComponent extends Component {
     @tracked uploadFileSize
     @tracked uploadLoadedSize
     @tracked showProgress
+
+	@action
+	getCurrentDate() {
+		//获取当前时间的时间戳，格式为 2020-10-01
+		let currentDate = new Date().getTime()
+		let date = new Date(currentDate)
+		let y = date.getFullYear()
+		let m = date.getMonth() + 1
+		m = m < 10 ? ('0' + m) : m;
+		let time = y + '-' + m + '-' + '01';
+		let currentstamp = time.replace(/-/g, '/');
+		let timesTamp = new Date(currentstamp).getTime()
+		return timesTamp
+	}
+
 	@action
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "clickFile": // 选择文件按钮
-				//todo: getCurrentDate
-				let currentDate1 = new Date().getTime()
-				let date1 = new Date(currentDate1)
-				let y1 = date1.getFullYear()
-				let m1 = date1.getMonth() + 1
-				m1 = m1 < 10 ? ('0' + m1) : m1;
-				let time1 = y1 + '-' + m1 + '-' + '01';
-				let currentstamp1 = time1.replace(/-/g, '/');
-				let timesTamp1 = new Date(currentstamp1).getTime()
-				
+				// 当月1号的时间戳,如2020-10-01
+				let clickFileTime = this.getCurrentDate()
                 let optParam = e.detail[0].args.param
 				let schemas = []
 				let message = null
@@ -115,7 +122,7 @@ export default class MaxSaasImportComponent extends Component {
 										"provider": optParam.attr.provider,
 										"owner": optParam.attr.owner,
 										"showName": optParam.attr.showName,
-										"time": timesTamp1,
+										"time": clickFileTime,
 										"version": optParam.attr.version,
 										"code": 0,
 										"jobDesc": status,
