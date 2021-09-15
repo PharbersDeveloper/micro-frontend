@@ -11,7 +11,15 @@ export default class MaxSaasImportComponent extends Component {
     @service store
     @service router
     @tracked random
-
+	//进度条
+	@tracked uploadDate
+    @tracked uploadToastBorder
+    @tracked uploadTextStatus
+    @tracked uploadText
+    @tracked closeuploadToast
+    @tracked uploadFileSize
+    @tracked uploadLoadedSize
+    @tracked showProgress
 	@action
     async listener(e) {
         switch(e.detail[0].args.callback) {
@@ -52,6 +60,13 @@ export default class MaxSaasImportComponent extends Component {
 							item[Object.keys(item)[0]] = null
 						}
 					})
+					// 显示导入弹框
+					this.uploadToastBorder = "blue"
+					this.uploadTextStatus = "正在导入"
+					this.uploadText = ""
+					this.closeuploadToast = "0" //显示导入弹框
+					this.showProgress = '1'// 显示导入进度条
+
 					//2.获取文件位置
 					let stateUrl = "https://api.pharbers.com/phetlsfn"
 					let options = {
@@ -69,7 +84,7 @@ export default class MaxSaasImportComponent extends Component {
 					}
 					let datas = await fetch(stateUrl, options).then(res=>res.json())
 					let that = this
-					// 暂时去掉上传文件触发ETL流程
+					// 触发ETL后获取状态
 					if (datas.executionArn && datas.executionArn != '') {
 						that.uploadLoadedSize = 70
 						let exArn = datas.executionArn
@@ -85,7 +100,7 @@ export default class MaxSaasImportComponent extends Component {
 							},
 							body: JSON.stringify({"executionArn": exArn})
 						}
-						let dagStatusInt = setInterval(function() { 
+						let dagStatusInt = setInterval(async function() { 
 							fetch(stateUrl, options).then(res=>res.json()).then(response => {
 								let execution_status = response.execution_status
 								if (execution_status && execution_status !== 'RUNNING') {
@@ -109,10 +124,26 @@ export default class MaxSaasImportComponent extends Component {
 										"message": optParam.attr.message,
 										"date": new Date().getTime()
 									}
-									that.store.createRecord('jobLog', jobLogsParam).save()
-									that.router.transitionTo( "/" )
-									let urlParam = window.location.href.split('?')[1]
-									that.router.transitionTo( `/max-saas/import?${urlParam}`)
+									that.store.createRecord('jobLog', jobLogsParam).save().then((res) => {
+										if(status == "succeed") {
+											that.uploadLoadedSize = 100 //文件导入成功
+										}
+										that.showProgress = '0'// 关闭导入进度条
+										//导入成功提示
+										if(that.uploadLoadedSize == 100) {
+											that.uploadTextStatus = "导入成功"
+											that.uploadText = "在“我的数据”中查看结果"
+											that.uploadToastBorder = "green"
+										} else {
+										//导入失败提示
+											that.uploadTextStatus = "导入失败" 
+											that.uploadText = ""
+											that.uploadToastBorder = "red"
+										}
+										that.router.transitionTo( "/" )
+										let urlParam = window.location.href.split('?')[1]
+										that.router.transitionTo( `/max-saas/import?${urlParam}`)
+									})
 								}
 							}) 
 						}, 20*1000)

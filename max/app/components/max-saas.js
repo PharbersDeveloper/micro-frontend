@@ -44,6 +44,11 @@ export default class MaxSaasComponent extends Component {
 				if(optParam.type == "import") {
 					window.open(`${ENV.windowUri}/max-saas/import?ym=${this.uploadDate}&provider=${this.provider}&projectId=${this.projectId}`)
                 }
+				//人工清洗
+				if(optParam.type == "clean") {
+					window.open(`${ENV.windowUri}/max-saas/cleaning`)
+                }
+
                 break
             case "confirmUpload": // 确认上传
                 let confirmParam = e.detail[0].args.param
@@ -154,9 +159,6 @@ export default class MaxSaasComponent extends Component {
 				if(!s3FileUpload) return
 				//文件名	
 				fileVersion = s3FileUpload.Key.split("/").pop()
-				let exArn = ''
-				let execution = await this.store.createRecord('execution', {}).save()
-				let executionId = execution.id
 				// 上传文件tag
 				let tagParam = {
 					Bucket: s3FileUpload.Bucket,
@@ -164,16 +166,16 @@ export default class MaxSaasComponent extends Component {
 					Tagging: {
 						TagSet: [
 							{
-								Key: "owner", 
+								Key: "owner",
 								Value: this.args.model.userData.name
 								// Value: "pharbers"
 							},
 							{
-								Key: "application", 
+								Key: "application",
 								Value: "max"
 							}, 
 							{
-								Key: "provider", 
+								Key: "provider",
 								Value: this.provider
 								// Value: "pharbers"
 							},
@@ -195,10 +197,6 @@ export default class MaxSaasComponent extends Component {
 							{
 								Key: "sheet",
 								Value: sheet
-							},
-							{
-								Key: "executionId",
-								Value: executionId
 							}
 						]
 					}

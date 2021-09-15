@@ -74,7 +74,7 @@
             </div>
         </div>
         <uploadBox :JsonData="JsonData" v-if="showUpload" @cancel="closeUploadModal" @confirm="confirmUpload" @selectFile="selectFile" :fileName="fileName"></uploadBox>
-
+		<!-- 进度条 -->
         <div v-if="closeuploadToast == '0'"
             class="upload-toast" 
             :class="[
@@ -322,7 +322,7 @@ export default {
 			if(type == "upload") {
 				this.showUpload = true
 			}
-			if(type == "import") {
+			if(type == "import" || type == "clean") {
 				this.$emit('event', data)
 			}
 		},

@@ -16,16 +16,6 @@ export default class ApplicationRoute extends Route {
 		window.console.log( "target route:" + targetName )
 		if ( targetName === "oauth-callback" ) {
 			return
-		} else if(this.oauthService.judgeAuth()) {
-			// this.mqttService.mqttConnect()
-			// let storage = window.localStorage
-			// for(let i = 0; i < storage.length; i++) {
-			// 	let key = storage.key(i),
-			// 		value = storage.getItem(key),
-			// 		content = JSON.parse(value)
-				
-			// 	this.store.pushPayload(content)
-			// }
 		}
 	}
 
