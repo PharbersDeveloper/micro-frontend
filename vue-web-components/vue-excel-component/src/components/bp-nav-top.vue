@@ -5,7 +5,7 @@
             <img :src="imgSrc" class="bp-img fixed-nav-icon cursor-pointer" />
             <div class="navButton">
                 <img src="https://www.pharbers.com/public/icon_home_user.svg" alt="" @click="logOut">
-                <span class="name">{{allData.personalData.firstName}} {{allData.personalData.lastName}}</span>
+                <span class="name">{{allData.name_show}}</span>
             </div>
         </div>
     </div>
@@ -23,8 +23,7 @@ export default {
 			type: Object,
 			default: function() {
 				return {
-					personalData: {},
-					employerData: {}
+					name_show: String
 				}
 			}
 		}

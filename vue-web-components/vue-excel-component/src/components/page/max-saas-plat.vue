@@ -62,7 +62,7 @@
                 <div class="opt-table-body-area">
                     <div class="opt-table-body" v-for="(opt,index) in allData.jobLogs" :key="index">
                         <div class="date">{{formatDateStandard(opt.time, 0)}}</div>
-                        <div class="optioner">{{opt.provider}}</div>
+                        <div class="optioner">{{opt.showName}}</div>
                         <div class="optionData">{{opt.message}}</div>
                         <div class="memo">{{opt.comments}}</div>
                         <div class="status">{{opt.jobDesc}}</div>
