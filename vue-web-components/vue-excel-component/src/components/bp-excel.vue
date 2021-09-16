@@ -1,6 +1,7 @@
 <template>
 	<div ref="viewport" class="excel_container ag-theme-alpine viewport">
 		<canvas ref="canvas" class="canvas"></canvas>
+		<div ref="select" class="row-select"></div>
 		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
 	</div>
 </template>
@@ -37,7 +38,12 @@ export default {
 
 			ctx: null,
 			needRefresh: 0,
-			cur_row: 0
+			cur_row: 0,
+			cur_page: 0,
+
+			// 双缓存
+			buffer_ctx: null,
+			buffer_canvas: null
 		}
 	},
 	components: {
@@ -55,11 +61,15 @@ export default {
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 1000
+			default: 600
 		},
 		cols_hit_width: {
 			type: Array,
 			default: () => []
+		},
+		page_size: {
+			type: Number,
+			default: 50
 		},
 		datasource: {
 			type: Object,
@@ -67,7 +77,7 @@ export default {
 				data: [],
 				sql: "",
 				buildQuery: () => {
-					return "https://api.pharbers.com/phdatasource/?query=SELECT%20%2A%20FROM%20prod%20limit%20100"
+					return "https://api.pharbers.com/phdatasource/?query=SELECT%20%2A%20FROM%20prod%20limit%20500"
 				},
 				refreshData: (ele) => {
 					fetch(ele.datasource.buildQuery())
@@ -78,6 +88,17 @@ export default {
 									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
 							})
 							ele.needRefresh++
+						})
+				},
+				appendData: (ele, cb) => {
+					fetch(ele.datasource.buildQuery())
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map((row) => {
+								return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,
+									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+							}))
+							cb()
 						})
 				}
 			}}
@@ -96,7 +117,8 @@ export default {
 				cols_hit_width = Array(this.cols.length).fill(this.cell_hit_width)
 			}
 
-			const rows = this.datasource.data.length
+			// const rows = this.datasource.data.length
+			const rows = this.page_size
 
 			return {
 				width: cols_hit_width.reduce((s, c) => s + c, 0) + 2 * this.sheet_margin,
@@ -108,9 +130,14 @@ export default {
 			const canvas = this.$refs.canvas
 			if (this.ctx === null) {
 				this.ctx = canvas.getContext('2d')
+				this.buffer_canvas = document.createElement('canvas')
+				this.buffer_ctx = this.buffer_canvas.getContext('2d')
 			}
+			this.ctx.clearRect(0, 0, canvas.width, canvas.height)
 			canvas.height = hit_size.height
 			canvas.width = hit_size.width
+			this.buffer_canvas.height = hit_size.height
+			this.buffer_canvas.width = hit_size.width
 		},
 		render() {
 			this.beforeRender()
@@ -121,86 +148,93 @@ export default {
 			this.afterRender()
 		},
 		afterRender() {
-
+			this.ctx.drawImage(this.buffer_canvas,
+				0, 0, this.buffer_canvas.width, this.buffer_canvas.height,
+				0, 0, this.buffer_canvas.width, this.buffer_canvas.height)
 		},
 		borderRender() {
-			this.ctx.strokeStyle = this.sheet_border_color
-			this.ctx.lineWidth = this.sheet_border_width
-			this.ctx.save()
-			this.ctx.beginPath()
-			this.ctx.rect(this.sheet_margin, this.sheet_margin,
+			const ctx = this.buffer_ctx
+			ctx.strokeStyle = this.sheet_border_color
+			ctx.lineWidth = this.sheet_border_width
+			ctx.save()
+			ctx.beginPath()
+			ctx.rect(this.sheet_margin, this.sheet_margin,
 				this.$refs.canvas.width - 2 * this.sheet_margin,
 				this.$refs.canvas.height - 2 * this.sheet_margin)
-			this.ctx.stroke()
-			this.ctx.restore()
+			ctx.stroke()
+			ctx.restore()
 		},
 		gridRender() {
+			const ctx = this.buffer_ctx
 			const that = this
 			// 横线
-			this.ctx.save()
-			this.ctx.beginPath()
+			ctx.save()
+			ctx.beginPath()
 			this.datasource.data.forEach((row, index) => {
-				that.ctx.strokeStyle = that.cell_border_color
-				that.ctx.lineWidth = that.cell_border_width
+				ctx.strokeStyle = that.cell_border_color
+				ctx.lineWidth = that.cell_border_width
 				{
 					const y = index * that.cell_hit_height
 					const x1 = that.sheet_margin
 					const x2 = that.$refs.canvas.width - 2 * that.sheet_margin
-					that.ctx.moveTo(x1, y)
-					that.ctx.lineTo(x2, y)
+					ctx.moveTo(x1, y)
+					ctx.lineTo(x2, y)
 				}
 			})
 			// 纵线
 			this.cols.forEach((col, index) => {
-				that.ctx.strokeStyle = that.cell_border_color
-				that.ctx.lineWidth = that.cell_border_width
+				ctx.strokeStyle = that.cell_border_color
+				ctx.lineWidth = that.cell_border_width
 				{
 					const x = index * that.cell_hit_width
 					const y1 = that.sheet_margin
 					const y2 = that.$refs.canvas.height - 2 * that.sheet_margin
-					that.ctx.moveTo(x, y1)
-					that.ctx.lineTo(x, y2)
+					ctx.moveTo(x, y1)
+					ctx.lineTo(x, y2)
 				}
 			})
-			this.ctx.stroke()
-			this.ctx.restore()
+			ctx.stroke()
+			ctx.restore()
 		},
 		textRender() {
-			this.ctx.save()
-			this.ctx.beginPath()
+			const ctx = this.buffer_ctx
+			ctx.save()
+			ctx.beginPath()
 
-			this.ctx.font = `${this.font_size}px ${this.font_family}`
-			this.ctx.fillStyle = this.font_color
-			this.ctx.textAlign = this.text_Align
+			ctx.font = `${this.font_size}px ${this.font_family}`
+			ctx.fillStyle = this.font_color
+			ctx.textAlign = this.text_Align
 
 			const that = this
-			this.datasource.data.forEach((row, row_index) => {
+			const start_index = this.cur_page * this.page_size
+			this.datasource.data.slice(start_index, start_index + this.page_size).forEach((row, row_index) => {
 				row.forEach((col, col_index) => {
 					const pos = that.getCellPosition(row_index, col_index)
-					const text = that.datasource.data[row_index][col_index]
-					that.ctx.fillText(text, that.cell_inner_margin + pos.x,
+					const text = that.datasource.data[row_index + start_index][col_index]
+					ctx.fillText(text, that.cell_inner_margin + pos.x,
 						pos.y + that.font_size / 2 + that.cell_inner_margin, pos.w, pos.h)
 				})
 			})
 
-			this.ctx.stroke()
-			this.ctx.restore()
+			ctx.stroke()
+			ctx.restore()
 		},
 		selectRender() {
-			this.ctx.save()
-			this.ctx.beginPath()
+			const ctx = this.buffer_ctx
+			ctx.save()
+			ctx.beginPath()
 
 			const x = 1
 			const y = this.cur_row * this.cell_hit_height - 1
 			const w = this.$refs.canvas.width - 2
 			const h = this.cell_hit_height + 2
 
-			this.ctx.fillStyle = this.select_bg_color
-			this.ctx.lineWidth = this.select_border_width
-			this.ctx.strokeStyle = this.select_border_color
-			this.ctx.fillRect(x, y, w, h)
-			this.ctx.stroke()
-			this.ctx.restore()
+			ctx.fillStyle = this.select_bg_color
+			ctx.lineWidth = this.select_border_width
+			ctx.strokeStyle = this.select_border_color
+			ctx.fillRect(x, y, w, h)
+			ctx.stroke()
+			ctx.restore()
 		},
 		getCellPosition(row, col) {
 			const x = this.sheet_margin + col * this.cell_hit_width
@@ -215,14 +249,34 @@ export default {
 				this.cur_row++
 				this.cur_row = this.cur_row > this.datasource.data.length - 1 ?
 					this.datasource.data.length - 1 : this.cur_row
-				this.render()
+				this.needRefresh++
 				break
 			}
 			case "ArrowUp": {
 				this.cur_row--
 				this.cur_row = this.cur_row < 0 ? 0 : this.cur_row
-				this.render()
+				this.needRefresh++
 				break
+			}
+			case "ArrowLeft": {
+				this.cur_page--
+				this.cur_page = this.cur_page < 0 ? 0 : this.cur_page
+				this.needRefresh++
+				break
+			}
+			case "ArrowRight": {
+				this.cur_page++
+				const that = this
+				function cbAddPage() {
+					that.cur_page = that.cur_page > that.datasource.data.length / that.page_size - 1 ?
+						that.datasource.data.length / that.page_size - 1 : that.cur_page
+					that.needRefresh++
+				}
+				if (this.cur_page > this.datasource.data.length / this.page_size - 1) {
+					this.datasource.appendData(this, cbAddPage)
+				} else {
+					cbAddPage()
+				}
 			}}
 		}
 	},
