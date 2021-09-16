@@ -1,5 +1,5 @@
 <template>
-	<div ref="viewport" class="excel_container ag-theme-alpine viewport">
+	<div ref="viewport" @click="focusHandler" class="excel_container ag-theme-alpine viewport">
 		<canvas ref="canvas" class="canvas"></canvas>
 		<div ref="select" class="row-select"></div>
 		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
@@ -108,7 +108,7 @@ export default {
 		this.datasource.refreshData(this)
 	},
 	mounted() {
-		this.$refs.hidden.focus()
+		this.focusHandler()
 	},
 	methods: {
 		sheetHitSize() {
@@ -242,6 +242,9 @@ export default {
 			const w = this.cell_hit_width
 			const h = this.cell_hit_width
 			return { x: x, y: y, w: w, h: h }
+		},
+		focusHandler(event) {
+			this.$refs.hidden.focus()
 		},
 		keyPressHandler(event) {
 			switch (event.code) {
