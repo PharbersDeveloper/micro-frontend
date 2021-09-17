@@ -66,9 +66,10 @@ export default {
 		if(this.isJSON(this.data.message)) {
 			message = JSON.parse(this.data.message);
 		}
+		console.log("message.label", message.label)
 		this.fileArr = {
 			name: message.name, 
-			labels: message.label.split(',')
+			labels: message.label ? message.label.split(',') : []
 		}
 	},
 	methods: {
