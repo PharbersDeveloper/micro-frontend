@@ -27,7 +27,7 @@ export default {
 			cell_bg_color: "#0000FF", // 暂时不支持渐变
 			cell_border_color: "#CFCFCF",
 			cell_border_width: 1,
-			cell_inner_margin: 24,
+			cell_inner_margin: 0,
 
 			select_border_color: "#FFFF00",
 			select_bg_color: "#FFFFF0F0",
@@ -225,7 +225,7 @@ export default {
 						pos.y + that.font_size / 2 + that.cell_inner_margin, pos.w, pos.h)
 				})
 			})
-
+			
 			ctx.stroke()
 			ctx.restore()
 		},
