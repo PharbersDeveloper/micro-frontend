@@ -1,85 +1,300 @@
 <template>
-	<div class="excel_container ag-theme-alpine">
-		<grid
-				:auto-width="autoWidth"
-				:cols="cols"
-				:language="language"
-				:pagination="pagination"
-				:rows="rows"
-				:search="search"
-				:server="server"
-				:sort="sort"
-				:width="width"
-		></grid>
+	<div ref="viewport" @click="focusHandler" class="excel_container ag-theme-alpine viewport">
+		<canvas ref="canvas" class="canvas"></canvas>
+		<div ref="select" class="row-select"></div>
+		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
 	</div>
 </template>
 <script>
-import Grid from 'gridjs-vue'
 export default {
 	name: "ph-excel-online-component",
 	data() {
 		return {
-			// REQUIRED:
-			// An array containing strings of column headers
-			cols: ['pack_id', 'mole_name_en', 'mole_name_ch', 'prod_desc', 'prod_name_ch',
-				'corp_name_ch', 'mnf_name_ch', 'spec', 'pack', 'dosage', 'atc4_code'],
-			// AND EITHER an array containing row data
-			rows: [
-				['1234', 'mole', 'mole', 'mole', 'mole', 'mole','mole','mole','mole','mole', 'mole']
-			],
+			sheet_margin: 10,
+			sheet_bg_color: "#FFFFFF", // 暂时不支持渐变
+			sheet_border_color: "#FF0000",
+			sheet_border_width: 3,
 
-			// OR a server settings object
-			server: {
-			// 	// url: 'http://ec2-69-230-210-235.cn-northwest-1.compute.amazonaws.com.cn:9090/?query=SELECT%20%2A%20FROM%20prod%20limit%20100',
-				url: 'https://api.pharbers.com/phdatasource/?query=SELECT%20%2A%20FROM%20prod%20limit%20100',
-				then: res => JSON.parse(res.body).map(col => [col.pack_id, col.mole_name_en, col.mole_name_ch, col.prod_desc,
-					col.prod_name_ch, col.corp_name_ch, col.mnf_name_ch, col.spec, col.pack, col.dosage, col.atc4_code]),
-				handle: res => res.status === 404 ? { data: [] } : res.ok ? res.json() : new Error('Something went wrong')
-			},
+			header_bg_color: "#FF0000",	// 暂时不支持渐变
+			header_border_color: "#00FF00",
+			header_border_width: 2,
 
-			// OPTIONAL:
+			cell_bg_color: "#0000FF", // 暂时不支持渐变
+			cell_border_color: "#00F0FF",
+			cell_border_width: 1,
+			cell_inner_margin: 20,
 
-			// Boolean to automatically set table width
-			autoWidth: true,
+			select_border_color: "#FFFF00",
+			select_bg_color: "#FFFFF0F0",
+			select_border_width: 5,
 
-			// Localization dictionary object
-			language: {},
+			font_family: "sans-serif",
+			font_size: 48,
+			font_color: "#F000FF",
 
-			// Boolean or pagination settings object
-			pagination: false,
+			text_Align: "left",
 
-			// Boolean or search settings object
-			search: false,
+			anchor: { x: 0, y: 0 },
 
-			// Boolean or sort settings object
-			sort: false,
+			ctx: null,
+			needRefresh: 0,
+			cur_row: 0,
+			cur_page: 0,
 
-			// String with name of theme or 'none' to disable
-			theme: 'mermaid',
-
-			// String with css width value
-			width: '100%'
+			// 双缓存
+			buffer_ctx: null,
+			buffer_canvas: null
 		}
 	},
 	components: {
-		Grid
+
 	},
 	props: {
-
+		cols: {
+			type: Array,
+			default: () => ["pack_id", "mole_name_en", "mole_name_ch", "prod_desc", "prod_name_ch", "corp_name_ch",
+				"mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
+		},
+		cell_hit_height: {
+			type: Number,
+			default: 100
+		},
+		cell_hit_width: {
+			type: Number,
+			default: 600
+		},
+		cols_hit_width: {
+			type: Array,
+			default: () => []
+		},
+		page_size: {
+			type: Number,
+			default: 50
+		},
+		datasource: {
+			type: Object,
+			default: () => { return {
+				data: [],
+				sql: "",
+				buildQuery: () => {
+					return "https://api.pharbers.com/phdatasource/?query=SELECT%20%2A%20FROM%20prod%20limit%20500"
+				},
+				refreshData: (ele) => {
+					fetch(ele.datasource.buildQuery())
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = JSON.parse(response.body).map((row) => {
+								return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,
+									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+							})
+							ele.needRefresh++
+						})
+				},
+				appendData: (ele, cb) => {
+					fetch(ele.datasource.buildQuery())
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map((row) => {
+								return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,
+									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+							}))
+							cb()
+						})
+				}
+			}}
+		}
 	},
 	beforeMount() {
-
+		this.datasource.refreshData(this)
+	},
+	mounted() {
+		this.focusHandler()
 	},
 	methods: {
+		sheetHitSize() {
+			let cols_hit_width = this.cols_hit_width
+			if (this.cols_hit_width.length === 0) {
+				cols_hit_width = Array(this.cols.length).fill(this.cell_hit_width)
+			}
 
+			// const rows = this.datasource.data.length
+			const rows = this.page_size
+
+			return {
+				width: cols_hit_width.reduce((s, c) => s + c, 0) + 2 * this.sheet_margin,
+				height: rows * this.cell_hit_height + 2 * this.sheet_margin
+			}
+		},
+		beforeRender() {
+			const hit_size = this.sheetHitSize()
+			const canvas = this.$refs.canvas
+			if (this.ctx === null) {
+				this.ctx = canvas.getContext('2d')
+				this.buffer_canvas = document.createElement('canvas')
+				this.buffer_ctx = this.buffer_canvas.getContext('2d')
+			}
+			this.ctx.clearRect(0, 0, canvas.width, canvas.height)
+			canvas.height = hit_size.height
+			canvas.width = hit_size.width
+			this.buffer_canvas.height = hit_size.height
+			this.buffer_canvas.width = hit_size.width
+		},
+		render() {
+			this.beforeRender()
+			this.borderRender()
+			this.gridRender()
+			this.textRender()
+			this.selectRender()
+			this.afterRender()
+		},
+		afterRender() {
+			this.ctx.drawImage(this.buffer_canvas,
+				0, 0, this.buffer_canvas.width, this.buffer_canvas.height,
+				0, 0, this.buffer_canvas.width, this.buffer_canvas.height)
+		},
+		borderRender() {
+			const ctx = this.buffer_ctx
+			ctx.strokeStyle = this.sheet_border_color
+			ctx.lineWidth = this.sheet_border_width
+			ctx.save()
+			ctx.beginPath()
+			ctx.rect(this.sheet_margin, this.sheet_margin,
+				this.$refs.canvas.width - 2 * this.sheet_margin,
+				this.$refs.canvas.height - 2 * this.sheet_margin)
+			ctx.stroke()
+			ctx.restore()
+		},
+		gridRender() {
+			const ctx = this.buffer_ctx
+			const that = this
+			// 横线
+			ctx.save()
+			ctx.beginPath()
+			this.datasource.data.forEach((row, index) => {
+				ctx.strokeStyle = that.cell_border_color
+				ctx.lineWidth = that.cell_border_width
+				{
+					const y = index * that.cell_hit_height
+					const x1 = that.sheet_margin
+					const x2 = that.$refs.canvas.width - 2 * that.sheet_margin
+					ctx.moveTo(x1, y)
+					ctx.lineTo(x2, y)
+				}
+			})
+			// 纵线
+			this.cols.forEach((col, index) => {
+				ctx.strokeStyle = that.cell_border_color
+				ctx.lineWidth = that.cell_border_width
+				{
+					const x = index * that.cell_hit_width
+					const y1 = that.sheet_margin
+					const y2 = that.$refs.canvas.height - 2 * that.sheet_margin
+					ctx.moveTo(x, y1)
+					ctx.lineTo(x, y2)
+				}
+			})
+			ctx.stroke()
+			ctx.restore()
+		},
+		textRender() {
+			const ctx = this.buffer_ctx
+			ctx.save()
+			ctx.beginPath()
+
+			ctx.font = `${this.font_size}px ${this.font_family}`
+			ctx.fillStyle = this.font_color
+			ctx.textAlign = this.text_Align
+
+			const that = this
+			const start_index = this.cur_page * this.page_size
+			this.datasource.data.slice(start_index, start_index + this.page_size).forEach((row, row_index) => {
+				row.forEach((col, col_index) => {
+					const pos = that.getCellPosition(row_index, col_index)
+					const text = that.datasource.data[row_index + start_index][col_index]
+					ctx.fillText(text, that.cell_inner_margin + pos.x,
+						pos.y + that.font_size / 2 + that.cell_inner_margin, pos.w, pos.h)
+				})
+			})
+
+			ctx.stroke()
+			ctx.restore()
+		},
+		selectRender() {
+			const ctx = this.buffer_ctx
+			ctx.save()
+			ctx.beginPath()
+
+			const x = 1
+			const y = this.cur_row * this.cell_hit_height - 1
+			const w = this.$refs.canvas.width - 2
+			const h = this.cell_hit_height + 2
+
+			ctx.fillStyle = this.select_bg_color
+			ctx.lineWidth = this.select_border_width
+			ctx.strokeStyle = this.select_border_color
+			ctx.fillRect(x, y, w, h)
+			ctx.stroke()
+			ctx.restore()
+		},
+		getCellPosition(row, col) {
+			const x = this.sheet_margin + col * this.cell_hit_width
+			const y = this.sheet_margin + row * this.cell_hit_height
+			const w = this.cell_hit_width
+			const h = this.cell_hit_width
+			return { x: x, y: y, w: w, h: h }
+		},
+		focusHandler(event) {
+			this.$refs.hidden.focus()
+		},
+		keyPressHandler(event) {
+			switch (event.code) {
+			case "ArrowDown": {
+				this.cur_row++
+				this.cur_row = this.cur_row > this.datasource.data.length - 1 ?
+					this.datasource.data.length - 1 : this.cur_row
+				this.needRefresh++
+				break
+			}
+			case "ArrowUp": {
+				this.cur_row--
+				this.cur_row = this.cur_row < 0 ? 0 : this.cur_row
+				this.needRefresh++
+				break
+			}
+			case "ArrowLeft": {
+				this.cur_page--
+				this.cur_page = this.cur_page < 0 ? 0 : this.cur_page
+				this.needRefresh++
+				break
+			}
+			case "ArrowRight": {
+				this.cur_page++
+				const that = this
+				function cbAddPage() {
+					that.cur_page = that.cur_page > that.datasource.data.length / that.page_size - 1 ?
+						that.datasource.data.length / that.page_size - 1 : that.cur_page
+					that.needRefresh++
+				}
+				if (this.cur_page > this.datasource.data.length / this.page_size - 1) {
+					this.datasource.appendData(this, cbAddPage)
+				} else {
+					cbAddPage()
+				}
+			}}
+		}
 	},
 	watch: {
-
+		needRefresh(n, o) {
+			this.render()
+		},
+		"datasource.sql"(n, o) {
+			this.datasource.refreshData(this)
+		}
 	}
 };
 </script>
 <style lang="scss">
-	* {
-		box-sizing: border-box;
+	.viewport {
+		overflow: scroll;
 	}
 </style>
