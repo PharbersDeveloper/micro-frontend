@@ -12,7 +12,7 @@ export default {
 		return {
 			sheet_margin: 10,
 			sheet_bg_color: "#FFFFFF", // 暂时不支持渐变
-			sheet_border_color: "#FF0000",
+			sheet_border_color: "#CFCFCF",
 			sheet_border_width: 3,
 
 			header_bg_color: "#FF0000",	// 暂时不支持渐变
@@ -20,7 +20,7 @@ export default {
 			header_border_width: 2,
 
 			cell_bg_color: "#0000FF", // 暂时不支持渐变
-			cell_border_color: "#00F0FF",
+			cell_border_color: "#CFCFCF",
 			cell_border_width: 1,
 			cell_inner_margin: 20,
 
@@ -29,8 +29,8 @@ export default {
 			select_border_width: 5,
 
 			font_family: "sans-serif",
-			font_size: 48,
-			font_color: "#F000FF",
+			font_size: 24,
+			font_color: "#706F79",
 
 			text_Align: "left",
 
@@ -61,7 +61,7 @@ export default {
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 600
+			default: 150
 		},
 		cols_hit_width: {
 			type: Array,
