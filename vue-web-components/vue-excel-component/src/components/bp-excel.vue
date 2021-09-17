@@ -1,9 +1,14 @@
 <template>
-	<div ref="viewport" @click="focusHandler" class="excel_container ag-theme-alpine viewport">
+<div class="excel_container">
+	<div class="schemas">
+		<div class="schema-item" v-for="(item,index) in schemas" :key="index+'schema'">{{item}}</div>
+	</div>
+	<div ref="viewport" @click="focusHandler" class="viewport">
 		<canvas ref="canvas" class="canvas"></canvas>
 		<div ref="select" class="row-select"></div>
 		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
 	</div>
+</div>
 </template>
 <script>
 export default {
@@ -29,7 +34,7 @@ export default {
 			select_border_width: 5,
 
 			font_family: "sans-serif",
-			font_size: 48,
+			font_size: 24,
 			font_color: "#F000FF",
 
 			text_Align: "left",
@@ -61,7 +66,7 @@ export default {
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 600
+			default: 150
 		},
 		cols_hit_width: {
 			type: Array,
@@ -102,6 +107,10 @@ export default {
 						})
 				}
 			}}
+		},
+		schemas: {
+			type: Array,
+			default: ['年', '月份', '季度', '省份', '城市', '区县', '医院库类型', '医院级别', '医院名称', '通用名', '药品名', '匹配名', '商品名', '剂型', '规格', '包装', '生产企业', '价格', '数量', '金额', '价格转换比', '最小使用单位数量', '备注']
 		}
 	},
 	beforeMount() {
@@ -294,7 +303,22 @@ export default {
 };
 </script>
 <style lang="scss">
+.excel_container {
 	.viewport {
 		overflow: scroll;
 	}
+	.schemas {
+		height: 46px;
+		display: flex;
+		.schema-item {
+			height: 24px;
+			min-width: 80px;
+			display: flex;
+			justify-content: center;
+		}
+	}
+	.canvas {
+		margin-top: 46px;
+	}
+}
 </style>

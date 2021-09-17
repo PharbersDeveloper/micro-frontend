@@ -63,9 +63,8 @@ export default class MaxSaasImportRoute extends Route {
 			let message = JSON.parse(filterData[0].message)
 			let sheetName =  message.sheet
 			let schemasResult = schemasData._result ? schemasData._result[0] : {}
-			schemas.headers = schemasResult.schema
+			schemas = schemasResult.schema
 		}
-
         return RSVP.hash({
 			jobLogs: jobLogs.filter( it => it), //mapper弹框数据
             assets: filterData, //文件列表
