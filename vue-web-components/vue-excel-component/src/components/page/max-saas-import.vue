@@ -447,7 +447,7 @@ export default {
 
                     .target-content-container {
                         display: flex;
-                        flex-grow: 1;
+                        // flex-grow: 1;
                         width: 100%;
                         .target-border {
                             width: 100%;

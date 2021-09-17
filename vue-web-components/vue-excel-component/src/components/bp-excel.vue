@@ -306,7 +306,8 @@ export default {
 <style lang="scss">
 .excel_container {
 	.viewport {
-		overflow: scroll;
+		height: 800px;
+		overflow: auto
 	}
 	.schemas {
 		height: 46px;
