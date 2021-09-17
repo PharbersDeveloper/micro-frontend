@@ -12,7 +12,6 @@
 </template>
 <script>
 export default {
-	name: "ph-excel-online-component",
 	data() {
 		return {
 			sheet_margin: 10,
@@ -123,9 +122,9 @@ export default {
 	},
 	mounted() {
 		//是否请求表体数据
-		if(!onlyHeaders) {
-			this.focusHandler()
-		}
+		// if(!this.onlyHeaders) {
+		this.focusHandler()
+		// }
 	},
 	methods: {
 		sheetHitSize() {
@@ -324,10 +323,13 @@ export default {
 			min-width: 80px;
 			display: flex;
 			justify-content: center;
+			background: #F0F0F0;
+    		border: 1px solid #CFCFCF;
+			padding: 0 5px;
 		}
 	}
 	.canvas {
-		margin-top: 46px;
+		// margin-top: 46px;
 	}
 }
 </style>

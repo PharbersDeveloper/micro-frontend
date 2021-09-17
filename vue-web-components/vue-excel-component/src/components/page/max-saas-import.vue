@@ -154,7 +154,7 @@ export default {
 				return {
 					assets: [],//文件列表
 					schemas: [],//源数据表头
-					targetNames: {},//目标文件表头
+					targetNames: [],//目标文件表头
 					fileName: '',
 					mapperAssets: [] //列表状态]
 				}
@@ -346,6 +346,7 @@ export default {
                     display: flex;
                     flex-direction: column;
                     flex: 1;
+					overflow: hidden;
                     border-right: 1px solid rgba(37,35,45,0.08);
                     margin-right: 20px;
                     padding-right: 9px;
@@ -381,6 +382,7 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
+							overflow: scroll;
                         }
                     }
 
