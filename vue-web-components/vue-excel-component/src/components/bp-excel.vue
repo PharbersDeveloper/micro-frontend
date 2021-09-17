@@ -29,9 +29,9 @@ export default {
 			cell_border_width: 1,
 			cell_inner_margin: 0,
 
-			select_border_color: "#FFFF00",
-			select_bg_color: "#23A959",
-			select_border_width: 5,
+			select_border_color: "#23A959",
+			select_bg_color: "rgba(35,169,89,0.20)",
+			select_border_width: 1,
 
 			font_family: "PingFangSC-Light",
 			font_size: 14,
