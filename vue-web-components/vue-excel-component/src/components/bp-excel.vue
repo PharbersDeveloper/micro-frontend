@@ -18,23 +18,23 @@ export default {
 			sheet_margin: 10,
 			sheet_bg_color: "#FFFFFF", // 暂时不支持渐变
 			sheet_border_color: "#CFCFCF",
-			sheet_border_width: 3,
+			sheet_border_width: 1,
 
 			header_bg_color: "#FF0000",	// 暂时不支持渐变
 			header_border_color: "#00FF00",
-			header_border_width: 2,
+			header_border_width: 1,
 
 			cell_bg_color: "#0000FF", // 暂时不支持渐变
 			cell_border_color: "#CFCFCF",
 			cell_border_width: 1,
-			cell_inner_margin: 20,
+			cell_inner_margin: 24,
 
 			select_border_color: "#FFFF00",
 			select_bg_color: "#FFFFF0F0",
 			select_border_width: 5,
 
-			font_family: "sans-serif",
-			font_size: 24,
+			font_family: "PingFangSC-Light",
+			font_size: 14,
 			font_color: "#706F79",
 
 			text_Align: "left",
@@ -62,11 +62,11 @@ export default {
 		},
 		cell_hit_height: {
 			type: Number,
-			default: 100
+			default: 24
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 150
+			default: 112
 		},
 		cols_hit_width: {
 			type: Array,
@@ -75,6 +75,7 @@ export default {
 		page_size: {
 			type: Number,
 			default: 50
+
 		},
 		datasource: {
 			type: Object,
