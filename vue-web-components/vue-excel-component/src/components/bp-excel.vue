@@ -30,7 +30,7 @@ export default {
 			cell_inner_margin: 0,
 
 			select_border_color: "#FFFF00",
-			select_bg_color: "#FFFFF0F0",
+			select_bg_color: "#23A959",
 			select_border_width: 5,
 
 			font_family: "PingFangSC-Light",
@@ -169,8 +169,8 @@ export default {
 			ctx.save()
 			ctx.beginPath()
 			ctx.rect(this.sheet_margin, this.sheet_margin,
-				this.$refs.canvas.width - 2 * this.sheet_margin,
-				this.$refs.canvas.height - 2 * this.sheet_margin)
+				this.$refs.canvas.width - 3 * this.sheet_margin,
+				this.$refs.canvas.height - 3 * this.sheet_margin)
 			ctx.stroke()
 			ctx.restore()
 		},
@@ -186,6 +186,8 @@ export default {
 				{
 					const y = index * that.cell_hit_height
 					const x1 = that.sheet_margin
+
+
 					const x2 = that.$refs.canvas.width - 2 * that.sheet_margin
 					ctx.moveTo(x1, y)
 					ctx.lineTo(x2, y)
