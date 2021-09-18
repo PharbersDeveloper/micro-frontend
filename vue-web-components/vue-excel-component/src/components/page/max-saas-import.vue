@@ -195,14 +195,15 @@ export default {
 			this.middleList.mappingList = []
 			//点击文件列表
 			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
-				//获取源文件列表数据
-				this.sourceData.data = this.allData.sourceData
 				//需要更新mapping数据
 				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
 				//已创建映射
 				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
 				this.middleList.mappingList = message
 			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
+				//获取源文件列表数据
+				this.sourceData.data = this.allData.sourceData
+				this.sourceData.sql = this.allData.fileName
 				//未创建映射
 				this.allData.targetNames.forEach(item => {
 					let it = {}
@@ -400,7 +401,8 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-							overflow: hidden;
+							overflow-y: hidden;
+    						overflow-x: scroll;
                         }
                     }
 

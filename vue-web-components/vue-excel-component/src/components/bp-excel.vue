@@ -69,7 +69,7 @@ export default {
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 112
+			default: 122
 		},
 		cols_hit_width: {
 			type: Array,
@@ -307,21 +307,24 @@ export default {
 .excel_container {
 	.viewport {
 		height: 800px;
-		overflow: auto;
+		overflow-y: auto;
+    	overflow-x: hidden;
 		position: relative;
 	
 	}
 	.schemas {
-		height: 46px;
+		height: 24px;
 		display: flex;
+		margin-left: 10px;
 		.schema-item {
 			height: 24px;
-			min-width: 80px;
+			// min-width: 80px;
+			min-width: 118px;
 			display: flex;
 			justify-content: center;
 			background: #F0F0F0;
     		border: 1px solid #CFCFCF;
-			padding: 0 5px;
+			// padding: 0 5px;
 			overflow: hidden;
 		}
 	}

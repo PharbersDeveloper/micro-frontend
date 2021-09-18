@@ -51,7 +51,7 @@ export default class MaxSaasImportComponent extends Component {
 					let reqBody = {
 						"tempfile": defaultMessage.tempfile,
 						"sheet": defaultMessage.sheet,
-						"out_number": 100
+						"out_number": 5
 					}
 					let schemaOptions = {
 						method: "POST",
