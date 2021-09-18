@@ -43,12 +43,28 @@ export default class MaxSaasImportComponent extends Component {
 				let clickFileTime = this.getCurrentDate()
                 let optParam = e.detail[0].args.param
 				let schemas = []
-				let message = null
+				let defaultMessage = null
 				if(optParam.attr.message) {
-					//获取源数据表头
-					message = JSON.parse(optParam.attr.message)
-					let sheetName =  message.sheet //输入的sheet名是哪个就显示哪个
-					schemas = message.schemas.filter(it => it.name == sheetName)[0]
+					// 1. 请求文件的schemas，获取源数据表头
+					defaultMessage = JSON.parse(optParam.attr.message)
+					let schemaUrl = "https://api.pharbers.com/schemaexplorer"
+					let reqBody = {
+						"tempfile": defaultMessage.tempfile,
+						"sheet": defaultMessage.sheet,
+						"out_number": 100
+					}
+					let schemaOptions = {
+						method: "POST",
+						mode: "cors",
+						headers: {
+							"Authorization": this.cookies.read( "access_token" ),
+							"Content-Type": "application/vnd.api+json",
+							"Accept": "application/vnd.api+json",
+						},
+						body: JSON.stringify(reqBody)
+					}
+					let schemasData = await fetch(schemaUrl, schemaOptions).then(res=>res.json())
+					schemas = schemasData[0] ? schemasData[0].schema : []
 				}
 				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
 				let jobLogsList = jobLogs.filter(it => it)
@@ -56,8 +72,8 @@ export default class MaxSaasImportComponent extends Component {
 					e.target.allData.eventName = "clickFile"
 					e.target.allData.jobLogs = jobLogsList //mapping弹框数据
 					e.target.allData.schemas = schemas
-					e.target.allData.targetNames = {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], "name": "sourceList"}
-					e.target.allData.fileName = message.name
+					e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
+					e.target.allData.fileName = defaultMessage.name
 					this.random = Math.random()
 				} else if(optParam.name == 'import') {
 					// 1.处理mappers空值为null mapper_list
@@ -169,6 +185,7 @@ export default class MaxSaasImportComponent extends Component {
 				let timesTamp = new Date(currentstamp).getTime()
 
 				let conParam = e.detail[0].args.param
+				let message = JSON.parse(conParam.fileData.message)
 				// message数据
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
@@ -176,6 +193,10 @@ export default class MaxSaasImportComponent extends Component {
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
+				let messageObj = {
+					tempfile: message.tempfile,
+					mapper: mapp
+				}
 				let jobLogsParam = {
 					"provider": conParam.fileData.provider,
 					"owner": conParam.fileData.owner,
@@ -186,7 +207,7 @@ export default class MaxSaasImportComponent extends Component {
 					"jobDesc": "mapped",
 					"jobCat": "mapper",
 					"comments": "mapper",
-					"message": JSON.stringify(mapp),
+					"message": JSON.stringify(messageObj),
 					"date": new Date().getTime()
 				}
 				await this.store.createRecord('jobLog', jobLogsParam).save()

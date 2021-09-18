@@ -34,7 +34,7 @@ export default class MaxSaasImportRoute extends Route {
 		let reqBody = {
 			"tempfile": defaultMessage.tempfile,
 			"sheet": defaultMessage.sheet,
-			"out_number": 100
+			"out_number": 5
 		}
 		let schemaOptions = {
 			method: "POST",
@@ -55,13 +55,14 @@ export default class MaxSaasImportRoute extends Route {
 		// 4. schemas默认数据处理
 		let schemasResult = schemasData._result ? schemasData._result[0] : {}
 		let schemas = schemasResult ? schemasResult.schema : []
-		console.log("jobLogs",defaultJobLog.filter( it => it))
-		console.log("mapperAssets",mapperAssets.filter( it => it))
+		let sourceData = schemasResult ? schemasResult.data : []
+		debugger
         return RSVP.hash({
 			jobLogs: defaultJobLog.filter( it => it), //mapper弹框数据
             assets: filterData, //文件列表
 			mapperAssets: mapperAssets.filter( it => it), //列表状态
-			schemas: schemas, //源数据表头
+			schemas: schemas, //源文件表头
+			sourceData: sourceData, //源文件数据
 			fileName: filterData[0] ? filterData[0].name : '', //当前文件名称
 			targetNames: ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], //目标文件表头
 			_isVue: true

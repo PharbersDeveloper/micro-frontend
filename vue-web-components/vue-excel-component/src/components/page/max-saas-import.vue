@@ -18,7 +18,7 @@
                     <span class="heading-small">源文件：{{allData.fileName}}</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel :schemas="allData.schemas" :onlyHeaders="true"></bp-excel>
+                            <bp-excel :schemas="allData.schemas" :datasource="sourceData"></bp-excel>
                         </div>
 
                          <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :schemas="allData.targetNames"></bp-excel>
+                            <bp-excel name="targer" :schemas="allData.targetNames" ></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
                             <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
@@ -100,7 +100,8 @@ export default {
 			fileIndex: 0,
 			middleList: {},
 			jobLogs: null,
-			proBar: 0
+			proBar: 0,
+			sourceData: {}
 		}
 	},
 	methods: {
@@ -156,7 +157,8 @@ export default {
 					schemas: [],//源数据表头
 					targetNames: [],//目标文件表头
 					fileName: '',
-					mapperAssets: [] //列表状态]
+					mapperAssets: [], //列表状态
+					sourceData: []
 				}
 			}
 		},
@@ -190,7 +192,7 @@ export default {
 				this.middleList.mappingList = message
 			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
 				//未创建映射
-				this.allData.targetNames.headers.forEach(item => {
+				this.allData.targetNames.forEach(item => {
 					let it = {}
 					it[item] = ''
 					this.middleList.mappingList.push(it)
@@ -217,6 +219,18 @@ export default {
 		uploadLoadedSize: function() {
 			console.log("uploadLoadedSize", this.uploadLoadedSize)
 			this.proBar = this.uploadLoadedSize
+		},
+		"allData.sourceData": function(data) {
+			this.sourceData = {
+				data: data,
+				sql: "",
+				refreshData:(ele) => {
+					ele.needRefresh++
+				},
+				appendData: (ele, cb) => {
+					cb()
+				}
+			}
 		}
 	}
 }
@@ -363,7 +377,8 @@ export default {
 
                         /deep/.bp-option-group {
                             width: 81px;
-
+							position: absolute;
+							right: 0px;
                             .bp-option {
                                 padding: 0 12px;
                                 @include body-primary;
@@ -377,7 +392,7 @@ export default {
 
                         .source-border {
                             width: 100%;
-                            height: 52px;
+                            height: 150px;
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;
@@ -396,6 +411,7 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
+							overflow: scroll;
                         }
                     }
                 }

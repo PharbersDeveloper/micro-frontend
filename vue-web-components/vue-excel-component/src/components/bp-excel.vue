@@ -3,7 +3,7 @@
 	<div class="schemas">
 		<div class="schema-item" v-for="(item,index) in schemas" :key="index+'schema'">{{item}}</div>
 	</div>
-	<div ref="viewport" @click="focusHandler" class="viewport" v-if="!onlyHeaders">
+	<div ref="viewport" @click="focusHandler" class="viewport">
 		<canvas ref="canvas" class="canvas"></canvas>
 		<div ref="select" class="row-select"></div>
 		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
@@ -111,20 +111,13 @@ export default {
 		schemas: {
 			type: Array,
 			default: () => []
-		},
-		onlyHeaders: {
-			type: Boolean,
-			default: false
 		}
 	},
 	beforeMount() {
 		this.datasource.refreshData(this)
 	},
 	mounted() {
-		//是否请求表体数据
-		// if(!this.onlyHeaders) {
 		this.focusHandler()
-		// }
 	},
 	methods: {
 		sheetHitSize() {
@@ -326,6 +319,7 @@ export default {
 			background: #F0F0F0;
     		border: 1px solid #CFCFCF;
 			padding: 0 5px;
+			overflow: hidden;
 		}
 	}
 	.canvas {
