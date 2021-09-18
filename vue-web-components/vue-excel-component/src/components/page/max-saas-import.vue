@@ -34,9 +34,9 @@
                             <bp-excel name="targer" :cols="allData.targetNames" :viewHeight="800"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
-                            <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
+                            <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
-                            <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="显示全部" :disabled=true></bp-option-vue> -->
                         </bp-select-vue>
                     </div>
                 </div>
@@ -98,7 +98,7 @@ export default {
 		return {
 			mappingModelShow: false,
 			fileIndex: 0,
-			middleList: {},
+			middleList: [],
 			jobLogs: null,
 			proBar: 0,
 			sourceData: {
@@ -194,40 +194,42 @@ export default {
 	watch: {
 		random: function() {
 			this.$forceUpdate()
-			this.middleList.mappingList = []
+			this.middleList = []
+			if(this.allData.eventName == "clickFile") {
+				//获取源文件列表数据
+				this.sourceData.data = this.allData.sourceData
+				this.sourceData.sql = this.allData.fileName
+			}
 			//点击文件列表
 			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
 				//需要更新mapping数据
 				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
 				//已创建映射
 				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-				this.middleList.mappingList = message
+				this.middleList = message.mapper
 			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
-				//获取源文件列表数据
-				this.sourceData.data = this.allData.sourceData
-				this.sourceData.sql = this.allData.fileName
 				//未创建映射
 				this.allData.targetNames.forEach(item => {
 					let it = {}
 					it[item] = ''
-					this.middleList.mappingList.push(it)
+					this.middleList.push(it)
 				})
 			}
 		},
 		"allData.jobLogs": function(data) {
 			//第一次进入页面 渲染mapping弹框数据
-			this.middleList.mappingList = []
+			this.middleList = []
 			if(this.allData.jobLogs.length > 0) {
 				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
 				//已创建映射
 				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-				this.middleList.mappingList = message
+				this.middleList = message.mapper
 			} else {
 				//未创建映射
 				this.allData.targetNames.forEach(item => {
 					let it = {}
 					it[item] = ''
-					this.middleList.mappingList.push(it)
+					this.middleList.push(it)
 				})
 			}
 		},

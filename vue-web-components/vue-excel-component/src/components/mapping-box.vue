@@ -70,15 +70,15 @@ export default {
 		fileName: String,
 		targetList: Array,
 		sourceList:  Array,
-		projectData: Object
+		projectData: Array
 	},
 	created() {
 		// 数据回显
 		this.infoList = []
 		this.targetsList = []
 		//拆分对象
-		if(this.projectData.mappingList) {
-			this.projectData.mappingList.forEach((item) => {
+		if(this.projectData) {
+			this.projectData.forEach((item) => {
 				this.infoList.push(Object.values(item)[0])
 				this.targetsList.push(Object.keys(item)[0])
 			})
