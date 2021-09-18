@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :data="data" :colHeaders="colHeaders"></bp-excel>
+                <bp-excel :viewHeight="1000"></bp-excel>
             </div>
         </div>
     </div>
