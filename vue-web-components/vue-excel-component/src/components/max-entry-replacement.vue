@@ -58,7 +58,9 @@ export default {
 		bpExcel
 	},
 	data() {
-		visible: this.showDialog
+		return {
+			visible: this.showDialog
+		}
 	},
 	watch: {
 		immediate:true,
