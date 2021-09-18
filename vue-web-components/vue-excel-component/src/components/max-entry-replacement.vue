@@ -39,7 +39,7 @@
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :viewHeight="300"></bp-excel>
+                <bp-excel :viewHeight="300" :page_size="10"></bp-excel>
             </div>
         </div>
 
@@ -108,7 +108,6 @@ export default {
 	},
 	methods: {
 		close() {
-			debugger
 			this.$emit('dialog-visible',false)
 		}
 	}
