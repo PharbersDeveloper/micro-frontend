@@ -11,7 +11,7 @@
                     <span class="heading-large">人工清洗<span class="body-secondary ml-2">de522809-937c-5</span></span>
                     <span class="body-tertiary">上次更新时间 17 Oct,2020 22:45</span>
                 </div>
-                <button>确认清洗</button>
+                <button @click="show(true)">确认清洗</button>
             </div>
 
             <div class="cleaning-function">
@@ -23,17 +23,31 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :data="data" :colHeaders="colHeaders"></bp-excel>
+                <bp-excel v-show="hidden" :data="data" :colHeaders="colHeaders"></bp-excel>
             </div>
         </div>
+		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" />
     </div>
 </template>
 
 <script>
 import bpExcel from '../bp-excel.vue'
+import maxEntry from '../max-entry-replacement.vue'
 export default {
+	data() {
+		return {
+			showDialog: false,
+			hidden:true
+		}
+	},
+	methods: {
+		show(val) {
+			this.showDialog = val
+		}
+	},
 	components: {
-		bpExcel
+		bpExcel,
+		maxEntry
 	},
 	props: {
 		data: {

@@ -1,8 +1,9 @@
 <template>
     <div class="max-entry-replacement">
-        <div class="entry-header">
+			<div class="max-entry-area">
+			<div class="entry-header">
             <span>条目替换</span>
-            <div class="icon_cross cursor-pointer"></div>
+            <div class="icon_cross cursor-pointer" @click="close"></div>
         </div>
 
         <div class="entry-search-container">
@@ -43,9 +44,10 @@
         </div>
 
         <div class="button-container">
-            <button class="btn_secondary_initial cancel-button">取消</button>
+            <button class="btn_secondary_initial cancel-button" @click="close">取消</button>
             <button class="btn_secondary_initial">确认替换</button>
         </div>
+		</div>
     </div>
 </template>
 
@@ -55,7 +57,20 @@ export default {
 	components: {
 		bpExcel
 	},
+	data() {
+		visible: this.showDialog
+	},
+	watch: {
+		immediate:true,
+		visible(val) {
+			this.showDialog = val
+		}
+	},
 	props: {
+		showDialog: {
+			type: Boolean,
+			default: false
+		},
 		sourceData: {
 			type: Array,
 			default() {
@@ -90,6 +105,12 @@ export default {
 				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
 			}
 		}
+	},
+	methods: {
+		close() {
+			this.$emit('dialog-visible',false)
+			this.$parent.show()
+		}
 	}
 }
 </script>
@@ -98,7 +119,6 @@ export default {
     * {
         box-sizing: border-box;
     }
-
     .cursor-pointer {
         cursor: pointer;
     }
@@ -178,11 +198,26 @@ export default {
         outline: 0;
         cursor: pointer;
     }
-
     .max-entry-replacement {
-        max-width: 1080px;
-        max-height: 718px;
-
+		height: 100vh;
+   	 	width: 100vw;
+    	background: rgba(37, 35, 45, 0.55);
+    	display: flex;
+    	flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		position: fixed;
+		top: 0;
+		right: 0;
+		z-index: 9999;
+		.max-entry-area {
+			width: 1080px;
+			height: 718px;
+			background-color: #fff;
+			overflow: hidden;
+		
+			
+		}
         .entry-header {
             display: flex;
             height: 55px;
@@ -254,6 +289,7 @@ export default {
             flex-direction: column;
             margin: 25px 0 35px;
             padding: 0 20px;
+			height: 320px;
 
             .master-border {
                 border: 1px solid rgba(37,35,45,0.12);
@@ -278,4 +314,5 @@ export default {
             }
         }
     }
+
 </style>
