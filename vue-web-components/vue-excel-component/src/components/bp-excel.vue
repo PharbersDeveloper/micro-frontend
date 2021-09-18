@@ -28,9 +28,9 @@ export default {
 			cell_border_width: 1,
 			cell_inner_margin: 0,
 
-			select_border_color: "#FFFF00",
-			select_bg_color: "#FFFFF0F0",
-			select_border_width: 5,
+			select_border_color: "#23A959",
+			select_bg_color: "rgba(35,169,89,0.20)",
+			select_border_width: 1,
 
 			font_family: "PingFangSC-Light",
 			font_size: 14,
@@ -168,8 +168,8 @@ export default {
 			ctx.save()
 			ctx.beginPath()
 			ctx.rect(this.sheet_margin, this.sheet_margin,
-				this.$refs.canvas.width - 2 * this.sheet_margin,
-				this.$refs.canvas.height - 2 * this.sheet_margin)
+				this.$refs.canvas.width - 3 * this.sheet_margin,
+				this.$refs.canvas.height - 3 * this.sheet_margin)
 			ctx.stroke()
 			ctx.restore()
 		},
@@ -183,8 +183,10 @@ export default {
 				ctx.strokeStyle = that.cell_border_color
 				ctx.lineWidth = that.cell_border_width
 				{
-					const y = index * that.cell_hit_height
+					const y = index * that.cell_hit_height + that.sheet_margin
 					const x1 = that.sheet_margin
+
+
 					const x2 = that.$refs.canvas.width - 2 * that.sheet_margin
 					ctx.moveTo(x1, y)
 					ctx.lineTo(x2, y)
@@ -221,7 +223,7 @@ export default {
 					const pos = that.getCellPosition(row_index, col_index)
 					const text = that.datasource.data[row_index + start_index][col_index]
 					ctx.fillText(text, that.cell_inner_margin + pos.x,
-						pos.y + that.font_size / 2 + that.cell_inner_margin, pos.w, pos.h)
+						pos.y + that.font_size / 2 + that.sheet_margin + that.cell_inner_margin, pos.w, pos.h)
 				})
 			})
 			
@@ -233,16 +235,16 @@ export default {
 			ctx.save()
 			ctx.beginPath()
 
-			const x = 1
-			const y = this.cur_row * this.cell_hit_height - 1
-			const w = this.$refs.canvas.width - 2
-			const h = this.cell_hit_height + 2
+			const x = this.sheet_margin - 1
+			const y = this.cur_row * this.cell_hit_height - 1 + this.sheet_margin
+			const w = this.$refs.canvas.width /*- 2 * this.select_border_width*/ - 3 * this.sheet_margin
+			const h = this.cell_hit_height + 2 * this.select_border_width
 
 			ctx.fillStyle = this.select_bg_color
 			ctx.lineWidth = this.select_border_width
 			ctx.strokeStyle = this.select_border_color
 			ctx.fillRect(x, y, w, h)
-			ctx.stroke()
+			ctx.strokeRect(x,y,w,h)
 			ctx.restore()
 		},
 		getCellPosition(row, col) {
