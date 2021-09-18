@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel v-show="hidden" :data="data" :colHeaders="colHeaders"></bp-excel>
+                <bp-excel :viewHeight="1000"></bp-excel>
             </div>
         </div>
 		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" />

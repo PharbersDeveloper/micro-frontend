@@ -42,41 +42,18 @@ export default class MaxSaasImportComponent extends Component {
 				// 当月1号的时间戳,如2020-10-01
 				let clickFileTime = this.getCurrentDate()
                 let optParam = e.detail[0].args.param
-				let schemas = []
-				let message = null
+				let schemas = [], sourceData = [], readNumber = 0
+				let defaultMessage = null
 				if(optParam.attr.message) {
-					//获取源数据表头
-					message = JSON.parse(optParam.attr.message)
-					let sheetName =  message.sheet //输入的sheet名是哪个就显示哪个
-					schemas = message.schemas.filter(it => it.name == sheetName)[0]
-				}
-				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
-				let jobLogsList = jobLogs.filter(it => it)
-				if(optParam.name == 'file') {
-					e.target.allData.eventName = "clickFile"
-					e.target.allData.jobLogs = jobLogsList //mapping弹框数据
-					e.target.allData.schemas = schemas
-					e.target.allData.targetNames = {"headers":["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], "name": "sourceList"}
-					e.target.allData.fileName = message.name
-					this.random = Math.random()
-				} else if(optParam.name == 'import') {
-					// 1.处理mappers空值为null mapper_list
-					let mappers = JSON.parse(jobLogsList[jobLogsList.length - 1].message)
-					mappers.forEach(item => {
-						if(Object.values(item)[0] == '') {
-							item[Object.keys(item)[0]] = null
-						}
-					})
-					// 显示导入弹框
-					this.uploadToastBorder = "blue"
-					this.uploadTextStatus = "正在导入"
-					this.uploadText = ""
-					this.closeuploadToast = "0" //显示导入弹框
-					this.showProgress = '1'// 显示导入进度条
-
-					//2.获取文件位置
-					let stateUrl = "https://api.pharbers.com/phetlsfn"
-					let options = {
+					// 1. 请求文件的schemas，获取源数据表头
+					defaultMessage = JSON.parse(optParam.attr.message)
+					let schemaUrl = "https://api.pharbers.com/schemaexplorer"
+					let reqBody = {
+						"tempfile": defaultMessage.tempfile,
+						"sheet": defaultMessage.sheet,
+						"out_number": 5
+					}
+					let schemaOptions = {
 						method: "POST",
 						mode: "cors",
 						headers: {
@@ -84,17 +61,100 @@ export default class MaxSaasImportComponent extends Component {
 							"Content-Type": "application/vnd.api+json",
 							"Accept": "application/vnd.api+json",
 						},
-						body: JSON.stringify({
-							mapper_list: mappers,
-							key: JSON.parse(optParam.attr.message).location
-						})
+						body: JSON.stringify(reqBody)
 					}
-					let datas = await fetch(stateUrl, options).then(res=>res.json())
+					let schemasData = await fetch(schemaUrl, schemaOptions).then(res=>res.json())
+					schemas = schemasData[0] ? schemasData[0].schema : []
+					sourceData = schemasData[0] ? schemasData[0].data : []
+					readNumber = schemasData[0] ? schemasData[0].readNumber : 1
+				}
+				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
+				let jobLogsList = jobLogs.filter(it => it)
+				if(optParam.name == 'file') {
+					e.target.allData.eventName = "clickFile"
+					e.target.allData.jobLogs = jobLogsList //mapping弹框数据
+					e.target.allData.schemas = schemas //源文件表头
+					e.target.allData.sourceData = sourceData //源文件数据
+					e.target.allData.sourceData.readNumber = readNumber //读取开始的行数
+					e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
+					e.target.allData.fileName = defaultMessage.name
+					this.random = Math.random()
+				} else if(optParam.name == 'import') {
+					// 显示导入弹框
+					this.uploadToastBorder = "blue"
+					this.uploadTextStatus = "正在导入"
+					this.uploadText = ""
+					this.closeuploadToast = "0" //显示导入弹框
+					this.showProgress = '1'// 显示导入进度条
+					let message = JSON.parse(optParam.attr.message)
+					//查询mapper joblog，获取tag
+					let Logs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
+					let mapperLog = Logs.filter(it => it)
+					let mapperData = mapperLog ? JSON.parse(mapperLog[0].message) : {}
+
+					let mapperTags = mapperData.tags
+					let tags = message.tags.concat(mapperTags)
+					let mapper = mapperData.mapper
+					// 1.新流程
+					let puts3_event = {
+						"asset": message.asset,
+						"owner": this.cookies.read('account_id'),
+						"tempfile": message.tempfile,
+						"tags": tags,
+					}	
+					let click_event = {
+						"file_path": `/mnt/tmp/${message.tempfile}`,
+						"sheet_name": message.sheet,
+						"database_name": "tempdb",
+						"table_name": "import_data_test",
+						"batch": 10000,
+						"begin_line": optParam.readNumber,
+						"mapper_args": mapper
+					}
+					let parameters = {
+						puts3_event: puts3_event,
+						click_event: click_event
+					}
+					// 2.调ETL
+					let executionUrl = "https://api.pharbers.com/phproject/execution"
+					let reqBody = {
+						"data": {
+							"attributes": {
+								"arn": null,
+								"name": null,
+								"input": JSON.stringify({
+									"dag_name": "ETL_to_clickhouse",
+									"parameters": parameters
+								})
+							},
+							"relationships": {
+								"projectExecution": {
+									"data": {
+										"type": "projects",
+										"id": "0iveStO4gzwMuyZx"
+									}
+								}
+							},
+							"type": "executions"
+						}
+					  }
+					let executionOptions = { 
+						method: "POST",
+						mode: "cors",
+						headers: {
+							"Authorization": this.cookies.read( "access_token" ),
+							"Content-Type": "application/vnd.api+json",
+							"Accept": "application/vnd.api+json",
+						},
+						body: JSON.stringify(reqBody)
+					}
+					let executionData = await fetch(executionUrl, executionOptions).then(res=>res.json())
+					let datas = executionData.data.attributes
 					let that = this
 					// 触发ETL后获取状态
-					if (datas.executionArn && datas.executionArn != '') {
+					if (datas.arn && datas.arn != '') {
 						that.uploadLoadedSize = 70
-						let exArn = datas.executionArn
+						let exArn = datas.arn
 						//请求phstatus
 						let stateUrl = "https://api.pharbers.com/phstepstatus"
 						let options = {
@@ -169,6 +229,7 @@ export default class MaxSaasImportComponent extends Component {
 				let timesTamp = new Date(currentstamp).getTime()
 
 				let conParam = e.detail[0].args.param
+				let message = JSON.parse(conParam.fileData.message)
 				// message数据
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
@@ -176,6 +237,13 @@ export default class MaxSaasImportComponent extends Component {
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
+				let messageObj = {
+					tempfile: message.tempfile,
+					mapper: mapp,
+					tags: [
+						{Key: 'mapper', Value: ''}
+					]
+				}
 				let jobLogsParam = {
 					"provider": conParam.fileData.provider,
 					"owner": conParam.fileData.owner,
@@ -186,7 +254,7 @@ export default class MaxSaasImportComponent extends Component {
 					"jobDesc": "mapped",
 					"jobCat": "mapper",
 					"comments": "mapper",
-					"message": JSON.stringify(mapp),
+					"message": JSON.stringify(messageObj),
 					"date": new Date().getTime()
 				}
 				await this.store.createRecord('jobLog', jobLogsParam).save()

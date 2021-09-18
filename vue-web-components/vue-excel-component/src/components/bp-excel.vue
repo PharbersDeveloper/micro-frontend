@@ -1,18 +1,19 @@
 <template>
 <div class="excel_container">
-	<div class="schemas">
-		<div class="schema-item" v-for="(item,index) in schemas" :key="index+'schema'">{{item}}</div>
-	</div>
-	<div ref="viewport" @click="focusHandler" class="viewport" v-if="!onlyHeaders">
-		<canvas ref="canvas" class="canvas"></canvas>
-		<div ref="select" class="row-select"></div>
-		<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
+	<div ref="viewport" @click="focusHandler" class="viewport">
+		<div class="schemas">
+			<div class="schema-item" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
+		</div>
+		<div class="body" :style="{height: viewHeight+'px'}">
+			<canvas ref="canvas" class="canvas"></canvas>
+			<div ref="select" class="row-select"></div>
+			<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
+		</div>
 	</div>
 </div>
 </template>
 <script>
 export default {
-	name: "ph-excel-online-component",
 	data() {
 		return {
 			sheet_margin: 10,
@@ -55,6 +56,10 @@ export default {
 
 	},
 	props: {
+		viewHeight: {
+			type: Number,
+			default: 100
+		},
 		cols: {
 			type: Array,
 			default: () => ["pack_id", "mole_name_en", "mole_name_ch", "prod_desc", "prod_name_ch", "corp_name_ch",
@@ -66,7 +71,7 @@ export default {
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 112
+			default: 122
 		},
 		cols_hit_width: {
 			type: Array,
@@ -75,7 +80,6 @@ export default {
 		page_size: {
 			type: Number,
 			default: 50
-
 		},
 		datasource: {
 			type: Object,
@@ -108,24 +112,13 @@ export default {
 						})
 				}
 			}}
-		},
-		schemas: {
-			type: Array,
-			default: () => []
-		},
-		onlyHeaders: {
-			type: Boolean,
-			default: false
 		}
 	},
 	beforeMount() {
 		this.datasource.refreshData(this)
 	},
 	mounted() {
-		//是否请求表体数据
-		if(!onlyHeaders) {
-			this.focusHandler()
-		}
+		this.focusHandler()
 	},
 	methods: {
 		sheetHitSize() {
@@ -316,23 +309,32 @@ export default {
 .excel_container {
 	.viewport {
 		height: 800px;
-		overflow: auto;
+		overflow: hidden;
+    	// overflow-x: hidden;
 		position: relative;
+		.body {
+			overflow: auto;
+		}
 	
 	}
 	.schemas {
-		height: 46px;
+		height: 24px;
 		display: flex;
+		margin-left: 10px;
 		.schema-item {
 			height: 24px;
-			min-width: 80px;
+			// min-width: 80px;
+			min-width: 118px;
 			display: flex;
 			justify-content: center;
+			background: #F0F0F0;
+    		border: 1px solid #CFCFCF;
+			// padding: 0 5px;
+			overflow: hidden;
 		}
 	}
 	.canvas {
-		margin-top: 46px;
-		
+		// margin-top: 46px;
 	}
 	.hidden {
 		position: absolute;
