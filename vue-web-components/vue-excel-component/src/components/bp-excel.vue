@@ -1,9 +1,9 @@
 <template>
 <div class="excel_container">
 	<div class="schemas">
-		<div class="schema-item" v-for="(item,index) in schemas" :key="index+'schema'">{{item}}</div>
+		<div class="schema-item" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
 	</div>
-	<div ref="viewport" @click="focusHandler" class="viewport">
+	<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight+'px'}">
 		<canvas ref="canvas" class="canvas"></canvas>
 		<div ref="select" class="row-select"></div>
 		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
@@ -54,6 +54,10 @@ export default {
 
 	},
 	props: {
+		viewHeight: {
+			type: Number,
+			default: 100
+		},
 		cols: {
 			type: Array,
 			default: () => ["pack_id", "mole_name_en", "mole_name_ch", "prod_desc", "prod_name_ch", "corp_name_ch",
@@ -74,7 +78,6 @@ export default {
 		page_size: {
 			type: Number,
 			default: 50
-
 		},
 		datasource: {
 			type: Object,
@@ -107,10 +110,6 @@ export default {
 						})
 				}
 			}}
-		},
-		schemas: {
-			type: Array,
-			default: () => []
 		}
 	},
 	beforeMount() {

@@ -56,7 +56,6 @@ export default class MaxSaasImportRoute extends Route {
 		let schemasResult = schemasData._result ? schemasData._result[0] : {}
 		let schemas = schemasResult ? schemasResult.schema : []
 		let sourceData = schemasResult ? schemasResult.data : []
-		debugger
         return RSVP.hash({
 			jobLogs: defaultJobLog.filter( it => it), //mapper弹框数据
             assets: filterData, //文件列表

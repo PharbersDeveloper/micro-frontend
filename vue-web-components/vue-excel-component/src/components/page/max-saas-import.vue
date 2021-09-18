@@ -18,7 +18,7 @@
                     <span class="heading-small">源文件：{{allData.fileName}}</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel :schemas="allData.schemas" :datasource="sourceData"></bp-excel>
+                            <bp-excel :cols="allData.schemas" :datasource="sourceData" :page_size="5" ></bp-excel>
                         </div>
 
                          <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :schemas="allData.targetNames" ></bp-excel>
+                            <bp-excel name="targer" :cols="allData.targetNames" :viewHeight="800"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
                             <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
@@ -101,7 +101,16 @@ export default {
 			middleList: {},
 			jobLogs: null,
 			proBar: 0,
-			sourceData: {}
+			sourceData: {
+				data: [],
+				sql: "",
+				refreshData:(ele) => {
+					ele.needRefresh++
+				},
+				appendData: (ele, cb) => {
+					cb()
+				}
+			}
 		}
 	},
 	methods: {
@@ -184,8 +193,11 @@ export default {
 		random: function() {
 			this.$forceUpdate()
 			this.middleList.mappingList = []
-			//点击文件列表 需要更新mapping数据
+			//点击文件列表
 			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
+				//获取源文件列表数据
+				this.sourceData.data = this.allData.sourceData
+				//需要更新mapping数据
 				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
 				//已创建映射
 				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
@@ -221,16 +233,7 @@ export default {
 			this.proBar = this.uploadLoadedSize
 		},
 		"allData.sourceData": function(data) {
-			this.sourceData = {
-				data: data,
-				sql: "",
-				refreshData:(ele) => {
-					ele.needRefresh++
-				},
-				appendData: (ele, cb) => {
-					cb()
-				}
-			}
+			this.sourceData.data = data
 		}
 	}
 }
@@ -397,7 +400,7 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-							overflow: scroll;
+							overflow: hidden;
                         }
                     }
 

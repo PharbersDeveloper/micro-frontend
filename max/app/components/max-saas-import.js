@@ -42,7 +42,7 @@ export default class MaxSaasImportComponent extends Component {
 				// 当月1号的时间戳,如2020-10-01
 				let clickFileTime = this.getCurrentDate()
                 let optParam = e.detail[0].args.param
-				let schemas = []
+				let schemas = [], sourceData = []
 				let defaultMessage = null
 				if(optParam.attr.message) {
 					// 1. 请求文件的schemas，获取源数据表头
@@ -65,6 +65,7 @@ export default class MaxSaasImportComponent extends Component {
 					}
 					let schemasData = await fetch(schemaUrl, schemaOptions).then(res=>res.json())
 					schemas = schemasData[0] ? schemasData[0].schema : []
+					sourceData = schemasData[0] ? schemasData[0].data : []
 				}
 				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
 				let jobLogsList = jobLogs.filter(it => it)
@@ -72,6 +73,7 @@ export default class MaxSaasImportComponent extends Component {
 					e.target.allData.eventName = "clickFile"
 					e.target.allData.jobLogs = jobLogsList //mapping弹框数据
 					e.target.allData.schemas = schemas
+					e.target.allData.sourceData = sourceData
 					e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
 					e.target.allData.fileName = defaultMessage.name
 					this.random = Math.random()
