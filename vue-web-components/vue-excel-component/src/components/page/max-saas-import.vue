@@ -400,7 +400,7 @@ export default {
 
                         .source-border {
                             width: 100%;
-                            height: 150px;
+                            height: 130px;
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;
