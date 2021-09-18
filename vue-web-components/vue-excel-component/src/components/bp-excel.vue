@@ -308,7 +308,7 @@ export default {
 <style lang="scss">
 .excel_container {
 	.viewport {
-		height: 800px;
+		// height: 800px;
 		overflow: hidden;
     	// overflow-x: hidden;
 		position: relative;
