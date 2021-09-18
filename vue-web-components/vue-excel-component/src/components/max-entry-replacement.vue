@@ -214,9 +214,6 @@ export default {
 			width: 1080px;
 			height: 718px;
 			background-color: #fff;
-			overflow: hidden;
-		
-			
 		}
         .entry-header {
             display: flex;
