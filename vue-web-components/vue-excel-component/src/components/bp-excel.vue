@@ -1,9 +1,9 @@
 <template>
 <div class="excel_container">
-	<div class="schemas">
-		<div class="schema-item" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
-	</div>
 	<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight+'px'}">
+		<div class="schemas">
+			<div class="schema-item" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
+		</div>
 		<canvas ref="canvas" class="canvas"></canvas>
 		<div ref="select" class="row-select"></div>
 		<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
@@ -307,8 +307,8 @@ export default {
 .excel_container {
 	.viewport {
 		height: 800px;
-		overflow-y: auto;
-    	overflow-x: hidden;
+		overflow: auto;
+    	// overflow-x: hidden;
 		position: relative;
 	
 	}

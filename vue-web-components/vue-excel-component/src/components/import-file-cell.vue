@@ -37,7 +37,9 @@ export default {
 		stateDisplay() {
 			// 列表状态
 			let stateName= ''
+			debugger
 			let lists = this.stateList.filter(it => it.version == this.data.version)
+			
 			if(lists.length > 0) {
 				lists.forEach(item => {
 					if(item.jobDesc === 'succeed') {

@@ -131,6 +131,7 @@ export default {
 		clickfile(data) {
 			let that = this;
 			this.fileIndex = data.args.param.select
+			data.args.param.readNumber = this.allData.readNumber
 			if(data.args.param.name == "import") {
 				//进度条
 				this.proBar = 0;
@@ -167,7 +168,8 @@ export default {
 					targetNames: [],//目标文件表头
 					fileName: '',
 					mapperAssets: [], //列表状态
-					sourceData: []
+					sourceData: [],
+					readNumber: 1
 				}
 			}
 		},
@@ -401,8 +403,7 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-							overflow-y: hidden;
-    						overflow-x: scroll;
+							overflow: hidden;
                         }
                     }
 

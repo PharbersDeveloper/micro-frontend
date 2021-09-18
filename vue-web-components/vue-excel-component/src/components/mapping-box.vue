@@ -68,8 +68,8 @@ export default {
 	},
 	props: {
 		fileName: String,
-		targetList: Object,
-		sourceList:  Object,
+		targetList: Array,
+		sourceList:  Array,
 		projectData: Object
 	},
 	created() {

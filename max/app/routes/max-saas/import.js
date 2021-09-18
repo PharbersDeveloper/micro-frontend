@@ -50,7 +50,7 @@ export default class MaxSaasImportRoute extends Route {
 		// 2. 请求mapper数据
 		let defaultJobLog = this.store.query("jobLog", { "filter[provider]": params.provider, "filter[version]": defaultVersion, "filter[jobCat]": "mapper"})
 		// 3. 文件列表状态显示
-		let mapperAssets = this.store.query("jobLog", { "filter[provider]": params.provider, "filter[time]": time, "filter[jobCat]": "mapper"})
+		let mapperAssets = this.store.query("jobLog", { "filter[provider]": params.provider, "filter[time]": time, "filter[jobCat]": "mapper", sort: "date"})
 		await Promise.all([schemasData, defaultJobLog, mapperAssets])
 		// 4. schemas默认数据处理
 		let schemasResult = schemasData._result ? schemasData._result[0] : {}

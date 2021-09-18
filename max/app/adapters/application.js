@@ -41,7 +41,6 @@ export default DS.JSONAPIAdapter.extend( {
 		this.set( "curMethod", requestMethod[requestType] )
 		this.set( "modelName", modelName )
 		this.set( "requestURL", curType.join( "/" ) )
-
 		// login components
 		if ( modelName === "component" ) {
 			newUrl = `/common/${curPath}`
@@ -60,7 +59,7 @@ export default DS.JSONAPIAdapter.extend( {
 			newUrl = `/reports/${curPath}`
 		}
 
-		if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
+		if(modelName === "trigger" || modelName === "execution") {
 			newUrl = `/phproject/${curPath}`
 		}
 
