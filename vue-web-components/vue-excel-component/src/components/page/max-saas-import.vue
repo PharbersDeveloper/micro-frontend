@@ -419,7 +419,7 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-							overflow: scroll;
+							overflow: hidden;
                         }
                     }
                 }
