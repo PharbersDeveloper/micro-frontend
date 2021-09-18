@@ -6,7 +6,7 @@
 	<div ref="viewport" @click="focusHandler" class="viewport" v-if="!onlyHeaders">
 		<canvas ref="canvas" class="canvas"></canvas>
 		<div ref="select" class="row-select"></div>
-		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
+		<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
 	</div>
 </div>
 </template>
@@ -176,8 +176,8 @@ export default {
 			ctx.save()
 			ctx.beginPath()
 			ctx.rect(this.sheet_margin, this.sheet_margin,
-				this.$refs.canvas.width - 3 * this.sheet_margin,
-				this.$refs.canvas.height - 3 * this.sheet_margin)
+				this.$refs.canvas.width - 2 * this.sheet_margin,
+				this.$refs.canvas.height - 2 * this.sheet_margin)
 			ctx.stroke()
 			ctx.restore()
 		},
@@ -245,15 +245,15 @@ export default {
 
 			const x = this.sheet_margin - 1
 			const y = this.cur_row * this.cell_hit_height - 1 + this.sheet_margin
-			const w = this.$refs.canvas.width /*- 2 * this.select_border_width*/ - 3 * this.sheet_margin
+			const w = this.$refs.canvas.width /*- 2 * this.select_border_width*/ - 2 * this.sheet_margin
 			const h = this.cell_hit_height + 2 * this.select_border_width
 
 			ctx.fillStyle = this.select_bg_color
 			ctx.lineWidth = this.select_border_width
 			ctx.strokeStyle = this.select_border_color
 			ctx.fillRect(x, y, w, h)
-			ctx.strokeRect(x,y,w,h)
-			ctx.restore()
+			ctx.strokeRect(x, y, w, h)
+			this.$refs.hidden.style.top = y + 'px'
 		},
 		getCellPosition(row, col) {
 			const x = this.sheet_margin + col * this.cell_hit_width
@@ -316,7 +316,9 @@ export default {
 .excel_container {
 	.viewport {
 		height: 800px;
-		overflow: auto
+		overflow: auto;
+		position: relative;
+	
 	}
 	.schemas {
 		height: 46px;
@@ -330,6 +332,13 @@ export default {
 	}
 	.canvas {
 		margin-top: 46px;
+		
+	}
+	.hidden {
+		position: absolute;
+		top:50px;
+		left:0;
+		margin-left:10px
 	}
 }
 </style>
