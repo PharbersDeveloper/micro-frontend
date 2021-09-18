@@ -39,7 +39,7 @@
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :data="masterData" :colHeaders="masterColHeaders"></bp-excel>
+                <bp-excel :viewHeight="300"></bp-excel>
             </div>
         </div>
 
@@ -108,8 +108,8 @@ export default {
 	},
 	methods: {
 		close() {
+			debugger
 			this.$emit('dialog-visible',false)
-			this.$parent.show()
 		}
 	}
 }
@@ -301,7 +301,7 @@ export default {
         .button-container {
             display: flex;
             justify-content: flex-end;
-            padding: 0 20px;
+            padding: 20px;
 
             .cancel-button {
                 margin-right: 4px;
