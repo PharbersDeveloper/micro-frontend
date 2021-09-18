@@ -18,7 +18,7 @@
                     <span class="heading-small">源文件：{{allData.fileName}}</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel-ag :schemas="allData.schemas"></bp-excel-ag>
+                            <bp-excel :cols="allData.schemas" :datasource="sourceData" :page_size="5" ></bp-excel>
                         </div>
 
                          <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
@@ -31,12 +31,12 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer"></bp-excel>
+                            <bp-excel name="targer" :cols="allData.targetNames" :viewHeight="800"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
-                            <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
+                            <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
-                            <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
+                            <bp-option-vue text="显示全部" :disabled=true></bp-option-vue> -->
                         </bp-select-vue>
                     </div>
                 </div>
@@ -82,7 +82,6 @@
 import mappingBox from '../mapping-box.vue'
 import importFileList from '../import-file-list.vue'
 import bpExcel from '../bp-excel.vue'
-import bpExcelAg from '../bp-excel-ag-grid.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
@@ -93,44 +92,25 @@ export default {
 		bpOptionVue,
 		mappingBox,
 		bpExcel,
-		bpText,
-		bpExcelAg
+		bpText
 	},
 	data() {
 		return {
 			mappingModelShow: false,
 			fileIndex: 0,
-			middleList: {},
+			middleList: [],
 			jobLogs: null,
-			sourceData: [
-				{
-					atc4_code: "K01E1",
-					corp_name_ch: "双鹤集团",
-					dosage: "注射液",
-					mnf_name_ch: "上海长征富民金山制药有限公司",
-					mole_name_ch: "复方氨基酸(14AA)",
-					mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-					pack: "1",
-					pack_id: "0000202",
-					prod_desc: "14-AMINO ACID CO   SCZ",
-					prod_name_ch: "复方氨基酸注射液(14AA)",
-					spec: "8.23% 250ML"
+			proBar: 0,
+			sourceData: {
+				data: [],
+				sql: "",
+				refreshData:(ele) => {
+					ele.needRefresh++
 				},
-				{
-					atc4_code: "K01E1",
-					corp_name_ch: "双鹤集团",
-					dosage: "注射液",
-					mnf_name_ch: "上海长征富民金山制药有限公司",
-					mole_name_ch: "复方氨基酸(14AA)",
-					mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-					pack: "1",
-					pack_id: "0000202",
-					prod_desc: "14-AMINO ACID CO   SCZ",
-					prod_name_ch: "复方氨基酸注射液(14AA)",
-					spec: "8.23% 250ML"
+				appendData: (ele, cb) => {
+					cb()
 				}
-			],
-			proBar: 0
+			}
 		}
 	},
 	methods: {
@@ -151,8 +131,7 @@ export default {
 		clickfile(data) {
 			let that = this;
 			this.fileIndex = data.args.param.select
-			//项目ID，用于请求表头数据
-			data.args.param.projectId = this.allData.projectData ? this.allData.projectData.id : ''
+			data.args.param.readNumber = this.allData.readNumber
 			if(data.args.param.name == "import") {
 				//进度条
 				this.proBar = 0;
@@ -184,40 +163,13 @@ export default {
 			type: Object,
 			default: function() {
 				return {
-					assets: [],
-					schemas: {},
-					targetNames: {},
+					assets: [],//文件列表
+					schemas: [],//源数据表头
+					targetNames: [],//目标文件表头
 					fileName: '',
-					projectData: {},
-					userData: {},
-					sourceData: [
-						{
-							atc4_code: "K01E1",
-							corp_name_ch: "双鹤集团",
-							dosage: "注射液",
-							mnf_name_ch: "上海长征富民金山制药有限公司",
-							mole_name_ch: "复方氨基酸(14AA)",
-							mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-							pack: "1",
-							pack_id: "0000202",
-							prod_desc: "14-AMINO ACID CO   SCZ",
-							prod_name_ch: "复方氨基酸注射液(14AA)",
-							spec: "8.23% 250ML"
-						},
-						{
-							atc4_code: "K01E1",
-							corp_name_ch: "双鹤集团",
-							dosage: "注射液",
-							mnf_name_ch: "上海长征富民金山制药有限公司",
-							mole_name_ch: "复方氨基酸(14AA)",
-							mole_name_en: "AMINOACIDS+CARBOHYDRATES+ELECTROLYTE SOLUTIONS+MULTIVITAMINS",
-							pack: "1",
-							pack_id: "0000202",
-							prod_desc: "14-AMINO ACID CO   SCZ",
-							prod_name_ch: "复方氨基酸注射液(14AA)",
-							spec: "8.23% 250ML"
-						}
-					]
+					mapperAssets: [], //列表状态
+					sourceData: [],
+					readNumber: 1
 				}
 			}
 		},
@@ -242,42 +194,51 @@ export default {
 	watch: {
 		random: function() {
 			this.$forceUpdate()
-			this.middleList.mappingList = []
-			//点击文件列表 需要更新mapping数据
+			this.middleList = []
+			if(this.allData.eventName == "clickFile") {
+				//获取源文件列表数据
+				this.sourceData.data = this.allData.sourceData
+				this.sourceData.sql = this.allData.fileName
+			}
+			//点击文件列表
 			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
+				//需要更新mapping数据
 				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
 				//已创建映射
 				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-				this.middleList.mappingList = message
+				this.middleList = message.mapper
 			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
 				//未创建映射
-				this.allData.targetNames.headers.forEach(item => {
+				this.allData.targetNames.forEach(item => {
 					let it = {}
 					it[item] = ''
-					this.middleList.mappingList.push(it)
+					this.middleList.push(it)
 				})
 			}
 		},
 		"allData.jobLogs": function(data) {
 			//第一次进入页面 渲染mapping弹框数据
-			this.middleList.mappingList = []
+			this.middleList = []
 			if(this.allData.jobLogs.length > 0) {
 				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
 				//已创建映射
 				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-				this.middleList.mappingList = message
+				this.middleList = message.mapper
 			} else {
 				//未创建映射
-				this.allData.targetNames.headers.forEach(item => {
+				this.allData.targetNames.forEach(item => {
 					let it = {}
 					it[item] = ''
-					this.middleList.mappingList.push(it)
+					this.middleList.push(it)
 				})
 			}
 		},
 		uploadLoadedSize: function() {
 			console.log("uploadLoadedSize", this.uploadLoadedSize)
 			this.proBar = this.uploadLoadedSize
+		},
+		"allData.sourceData": function(data) {
+			this.sourceData.data = data
 		}
 	}
 }
@@ -407,6 +368,7 @@ export default {
                     display: flex;
                     flex-direction: column;
                     flex: 1;
+					overflow: hidden;
                     border-right: 1px solid rgba(37,35,45,0.08);
                     margin-right: 20px;
                     padding-right: 9px;
@@ -423,7 +385,8 @@ export default {
 
                         /deep/.bp-option-group {
                             width: 81px;
-
+							position: absolute;
+							right: 0px;
                             .bp-option {
                                 padding: 0 12px;
                                 @include body-primary;
@@ -437,11 +400,12 @@ export default {
 
                         .source-border {
                             width: 100%;
-                            height: 52px;
+                            height: 130px;
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
+							overflow: hidden;
                         }
                     }
 
@@ -455,6 +419,7 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
+							overflow: hidden;
                         }
                     }
                 }

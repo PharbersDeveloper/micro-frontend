@@ -68,54 +68,22 @@ export default {
 	},
 	props: {
 		fileName: String,
-		targetList: Object,
-		sourceList:  Object,
-		projectData: Object
+		targetList: Array,
+		sourceList:  Array,
+		projectData: Array
 	},
 	created() {
 		// 数据回显
 		this.infoList = []
 		this.targetsList = []
 		//拆分对象
-		if(this.projectData.mappingList) {
-			this.projectData.mappingList.forEach((item) => {
+		if(this.projectData) {
+			this.projectData.forEach((item) => {
 				this.infoList.push(Object.values(item)[0])
 				this.targetsList.push(Object.keys(item)[0])
 			})
-			this.schemaList = this.sourceList.headers.filter((x) => x && !this.infoList.some((item) => x === item));
+			this.schemaList = this.sourceList.filter((x) => x && !this.infoList.some((item) => x === item));
 		}
-        
-		// this.infoList = this.projectData.mappingList ? this.projectData.mappingList : this.projectData
-		// // 未创建映射时，用空格填充中间一行
-		// if(this.targetList.headers && this.targetList.headers.length > 0 && this.infoList.length == 0) {
-		//     const rangeArray = (start, end) => Array(end - start + 1).fill("")
-		//     this.infoList = rangeArray(0, this.targetList.headers.length - 1)
-		// }
-		// if(this.projectData.targetsList) {
-		//     this.schemaList = this.projectData.sourceList
-		//     this.targetsList = this.projectData.targetsList
-		// } else {
-		//     //处理源文件
-		//     this.schemaList = []
-		//     let schemas= this.sourceList.headers
-		//     if(schemas.length > 0) {
-		//         schemas.forEach((item,index) => {
-		//             if(item) {
-		//                 this.schemaList.push(item)
-		//             }
-		//         })
-		//     }
-		//     //处理目标文件
-		//     this.targetsList = []
-		//     let targets= this.targetList.headers
-		//     if(targets.length > 0) {
-		//         targets.forEach((item,index) => {
-		//             if(item) {
-		//                 this.targetsList.push(item)
-		//             }
-		//         })
-		//     }
-		// }
 	},
 	methods: {
 		cancel() {

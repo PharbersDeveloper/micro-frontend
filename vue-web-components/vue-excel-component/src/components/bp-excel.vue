@@ -1,18 +1,19 @@
 <template>
 <div class="excel_container">
-	<div class="schemas">
-		<div class="schema-item" v-for="(item,index) in schemas" :key="index+'schema'">{{item}}</div>
-	</div>
 	<div ref="viewport" @click="focusHandler" class="viewport">
-		<canvas ref="canvas" class="canvas"></canvas>
-		<div ref="select" class="row-select"></div>
-		<select ref="hidden" @keydown="keyPressHandler" style="width: 0;height: 0"></select>
+		<div class="schemas">
+			<div class="schema-item" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
+		</div>
+		<div class="body" :style="{height: viewHeight+'px'}">
+			<canvas ref="canvas" class="canvas"></canvas>
+			<div ref="select" class="row-select"></div>
+			<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
+		</div>
 	</div>
 </div>
 </template>
 <script>
 export default {
-	name: "ph-excel-online-component",
 	data() {
 		return {
 			sheet_margin: 10,
@@ -29,9 +30,9 @@ export default {
 			cell_border_width: 1,
 			cell_inner_margin: 0,
 
-			select_border_color: "#FFFF00",
-			select_bg_color: "#FFFFF0F0",
-			select_border_width: 5,
+			select_border_color: "#23A959",
+			select_bg_color: "rgba(35,169,89,0.20)",
+			select_border_width: 1,
 
 			font_family: "PingFangSC-Light",
 			font_size: 14,
@@ -55,6 +56,10 @@ export default {
 
 	},
 	props: {
+		viewHeight: {
+			type: Number,
+			default: 100
+		},
 		cols: {
 			type: Array,
 			default: () => ["pack_id", "mole_name_en", "mole_name_ch", "prod_desc", "prod_name_ch", "corp_name_ch",
@@ -66,7 +71,7 @@ export default {
 		},
 		cell_hit_width: {
 			type: Number,
-			default: 112
+			default: 122
 		},
 		cols_hit_width: {
 			type: Array,
@@ -75,7 +80,6 @@ export default {
 		page_size: {
 			type: Number,
 			default: 50
-
 		},
 		datasource: {
 			type: Object,
@@ -108,10 +112,6 @@ export default {
 						})
 				}
 			}}
-		},
-		schemas: {
-			type: Array,
-			default: ['年', '月份', '季度', '省份', '城市', '区县', '医院库类型', '医院级别', '医院名称', '通用名', '药品名', '匹配名', '商品名', '剂型', '规格', '包装', '生产企业', '价格', '数量', '金额', '价格转换比', '最小使用单位数量', '备注']
 		}
 	},
 	beforeMount() {
@@ -184,8 +184,10 @@ export default {
 				ctx.strokeStyle = that.cell_border_color
 				ctx.lineWidth = that.cell_border_width
 				{
-					const y = index * that.cell_hit_height
+					const y = index * that.cell_hit_height + that.sheet_margin
 					const x1 = that.sheet_margin
+
+
 					const x2 = that.$refs.canvas.width - 2 * that.sheet_margin
 					ctx.moveTo(x1, y)
 					ctx.lineTo(x2, y)
@@ -222,7 +224,7 @@ export default {
 					const pos = that.getCellPosition(row_index, col_index)
 					const text = that.datasource.data[row_index + start_index][col_index]
 					ctx.fillText(text, that.cell_inner_margin + pos.x,
-						pos.y + that.font_size / 2 + that.cell_inner_margin, pos.w, pos.h)
+						pos.y + that.font_size / 2 + that.sheet_margin + that.cell_inner_margin, pos.w, pos.h)
 				})
 			})
 			
@@ -234,17 +236,17 @@ export default {
 			ctx.save()
 			ctx.beginPath()
 
-			const x = 1
-			const y = this.cur_row * this.cell_hit_height - 1
-			const w = this.$refs.canvas.width - 2
-			const h = this.cell_hit_height + 2
+			const x = this.sheet_margin - 1
+			const y = this.cur_row * this.cell_hit_height - 1 + this.sheet_margin
+			const w = this.$refs.canvas.width /*- 2 * this.select_border_width*/ - 2 * this.sheet_margin
+			const h = this.cell_hit_height + 2 * this.select_border_width
 
 			ctx.fillStyle = this.select_bg_color
 			ctx.lineWidth = this.select_border_width
 			ctx.strokeStyle = this.select_border_color
 			ctx.fillRect(x, y, w, h)
-			ctx.stroke()
-			ctx.restore()
+			ctx.strokeRect(x, y, w, h)
+			this.$refs.hidden.style.top = y + 'px'
 		},
 		getCellPosition(row, col) {
 			const x = this.sheet_margin + col * this.cell_hit_width
@@ -306,21 +308,39 @@ export default {
 <style lang="scss">
 .excel_container {
 	.viewport {
-		height: 800px;
-		overflow: auto
+		// height: 800px;
+		overflow: hidden;
+    	// overflow-x: hidden;
+		position: relative;
+		.body {
+			overflow: auto;
+		}
+	
 	}
 	.schemas {
-		height: 46px;
+		height: 24px;
 		display: flex;
+		margin-left: 10px;
 		.schema-item {
 			height: 24px;
-			min-width: 80px;
+			// min-width: 80px;
+			min-width: 118px;
 			display: flex;
 			justify-content: center;
+			background: #F0F0F0;
+    		border: 1px solid #CFCFCF;
+			// padding: 0 5px;
+			overflow: hidden;
 		}
 	}
 	.canvas {
-		margin-top: 46px;
+		// margin-top: 46px;
+	}
+	.hidden {
+		position: absolute;
+		top:50px;
+		left:0;
+		margin-left:10px
 	}
 }
 </style>

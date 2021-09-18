@@ -38,6 +38,7 @@ export default {
 			// 列表状态
 			let stateName= ''
 			let lists = this.stateList.filter(it => it.version == this.data.version)
+
 			if(lists.length > 0) {
 				lists.forEach(item => {
 					if(item.jobDesc === 'succeed') {
@@ -66,9 +67,10 @@ export default {
 		if(this.isJSON(this.data.message)) {
 			message = JSON.parse(this.data.message);
 		}
+		console.log("message.label", message.label)
 		this.fileArr = {
 			name: message.name, 
-			labels: message.label.split(',')
+			labels: message.label ? message.label.split(',') : []
 		}
 	},
 	methods: {

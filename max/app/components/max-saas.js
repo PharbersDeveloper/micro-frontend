@@ -145,7 +145,7 @@ export default class MaxSaasComponent extends Component {
 			//存进asset表的labels
 			let labelsArr = ["owner",user_name_show, "application", "max", "provider", this.provider, "date", this.uploadDate, "time", timesCurrent, "fileName", fileName, "fileVersion", fileVersion]
 			//打tag需要的参数
-			let TagSet = [{
+			let TagsArr = [{
 					Key: "owner",
 					Value: user_name_show
 				},
@@ -191,7 +191,7 @@ export default class MaxSaasComponent extends Component {
 						let res = JSON.parse(request.responseText)
 						if(res.tmpname) {
 							// 插入一条jobLog,存tag
-							this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, sheet, res.tmpname, TagSet)
+							this.pushJobLogs(fileVersion, "SUCCEEDED", "upload", uploadMessage, labelsArr, memo, timesTamp, sheet, res.tmpname, TagsArr)
 						}
 					}
 				};
@@ -241,20 +241,27 @@ export default class MaxSaasComponent extends Component {
     }
 
     @action
-    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, sheet, tmpname, TagSet) {
+    async pushJobLogs(fileVersion, status, option, uploadMessage, labelsArr, memo, timesTamp, sheet, tmpname, TagsArr) {
 		let that = this
 		let time
 		if(this.uploadDate) {
 			let ym = this.uploadDate.slice(0,4) + '/' + this.uploadDate.slice(4) +'/01'
 			time = new Date(ym).getTime()
 		}
+		let assetData = {
+			"fileName": uploadMessage.file.name.split( "." )[0],
+			"extension": uploadMessage.file.name.split( "." )[1],
+			"size": uploadMessage.file.size,
+			"labels": labelsArr,
+			"description": memo,
+			"type": "file"
+		}
 		let message = {
 			name: fileVersion,
-			size: uploadMessage.file.size,
-			label: labelsArr.toString(),
+			asset: assetData,
 			sheet: sheet,
-			tmpname: tmpname,
-			tags: TagSet
+			tempfile: tmpname,
+			tags: TagsArr
 		}
 		//push jobLogs
 		let jobLogsParam = {
