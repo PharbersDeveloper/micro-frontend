@@ -77,20 +77,7 @@ export default class MaxSaasImportComponent extends Component {
 					e.target.allData.sourceData = sourceData //源文件数据
 					e.target.allData.sourceData.readNumber = readNumber //读取开始的行数
 					// e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
-					e.target.allData.targetNames = [
-						"id",
-						"gn",
-						"pn",
-						"mn",
-						"do",
-						"sp",
-						"pk",
-						"pku",
-						"measure",
-						"provider",
-						"version",
-						"owner"
-					]
+					e.target.allData.targetNames = ["id","gn","pn","mn","do","sp","pk","pku","measure","provider","version","owner"]
 					e.target.allData.fileName = defaultMessage.name
 					this.random = Math.random()
 				} else if(optParam.name == 'import') {
@@ -248,6 +235,11 @@ export default class MaxSaasImportComponent extends Component {
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
 					let obj = {}
+					//必须填写所有映射，否则不能提交
+					if(!conParam.mappingList[index] || conParam.mappingList[index] == '') {
+						alert("请输入所有映射关系")
+						throw new Error("请输入所有映射关系")
+					}
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
