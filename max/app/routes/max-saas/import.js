@@ -15,6 +15,12 @@ export default class MaxSaasImportRoute extends Route {
         },
 		projectId: {
             refreshModel: true
+		},
+		tempfile: {
+            refreshModel: true
+		},
+		sheet: {
+            refreshModel: true
 		}
     }
 	async model( params ) {
@@ -32,8 +38,8 @@ export default class MaxSaasImportRoute extends Route {
 		// 1. 请求文件列表第一条数据的schemas
 		let schemaUrl = "https://api.pharbers.com/schemaexplorer"
 		let reqBody = {
-			"tempfile": defaultMessage.tempfile,
-			"sheet": defaultMessage.sheet,
+			"tempfile": params.tempfile ? params.tempfile : defaultMessage.tempfile,
+			"sheet": params.sheet ? params.sheet : defaultMessage.sheet,
 			"out_number": 5
 		}
 		let schemaOptions = {
@@ -64,8 +70,8 @@ export default class MaxSaasImportRoute extends Route {
 			sourceData: sourceData, //源文件数据
 			fileName: filterData[0] ? filterData[0].name : '', //当前文件名称
 			// targetNames: ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], //目标文件表头
-			targetNames: ["id", "gn", "pn", "mn", "do", "sp", "pk",
-			"pku", "measure", "provider", "version", "owner"],
+			targetNames: ["gn", "pn", "mn", "do", "sp", "pk",
+			"pku"],
 			_isVue: true
         })
     }

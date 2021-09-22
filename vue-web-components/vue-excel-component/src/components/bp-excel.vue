@@ -62,8 +62,8 @@ export default {
 		},
 		cols: {
 			type: Array,
-			default: () => ["id", "gn", "pn", "mn", "do", "sp", 
-				"pk","pku", "measure", "provider", "version", "owner"]
+			default: () => ["gn", "pn", "mn", "do", "sp", 
+				"pk","pku"]
 		},
 		cell_hit_height: {
 			type: Number,
@@ -83,7 +83,7 @@ export default {
 		},
 		paramQuery:  {
 			type: String,
-			default: "SELECT * FROM clean_source LIMIT 100"
+			default: "SELECT * FROM clean_source LIMIT 200"
 		},
 		datasource: {
 			type: Object,
@@ -95,9 +95,10 @@ export default {
 				},
 				refreshData: (ele) => {
 					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
+					console.log(ele.cols)
 					let body = {
 						"query": ele.paramQuery,
-						"schema": ele.cols
+						"schema": ["id", "gn", "pn", "mn", "do", "sp", "pk","pku", 		"measure", "provider", "version", "owner"]
 					}
 					let options = {
 						method: "POST",
@@ -114,10 +115,11 @@ export default {
 							let arr = []
 							ele.datasource.data = response.map((row) => {
 								// return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
-								ele.cols.forEach((item) => {
-									arr.push(row[item])
-								})
-								return arr
+								// ele.cols.forEach((item) => {
+								// 	arr.push(row[item])
+								// })
+								// return arr
+								return [row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku]
 							})
 							ele.needRefresh++
 						})

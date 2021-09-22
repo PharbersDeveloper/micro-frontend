@@ -77,7 +77,7 @@ export default class MaxSaasImportComponent extends Component {
 					e.target.allData.sourceData = sourceData //源文件数据
 					e.target.allData.sourceData.readNumber = readNumber //读取开始的行数
 					// e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
-					e.target.allData.targetNames = ["id","gn","pn","mn","do","sp","pk","pku","measure","provider","version","owner"]
+					e.target.allData.targetNames = ["gn","pn","mn","do","sp","pk","pku"]
 					e.target.allData.fileName = defaultMessage.name
 					this.random = Math.random()
 				} else if(optParam.name == 'import') {
@@ -96,6 +96,13 @@ export default class MaxSaasImportComponent extends Component {
 					let mapperTags = mapperData.tags
 					let tags = message.tags.concat(mapperTags)
 					let mapper = mapperData.mapper
+					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
+					let dealMapper = []
+					mapper.forEach((mapperItem) => {
+						if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
+							dealMapper.push(mapperItem)
+						}
+					})
 					// 1.流程
 					let puts3_event = {
 						"asset": message.asset,
@@ -106,17 +113,17 @@ export default class MaxSaasImportComponent extends Component {
 					let click_event = {
 						"file_path": `/mnt/tmp/${message.tempfile}`,
 						"sheet_name": message.sheet,
-						"database_name": "tempdb",
-						"table_name": "import_data_test",
+						"database_name": "default",
+						"table_name": "clean_source",
 						"batch": 10000,
 						"begin_line": optParam.readNumber,
-						"mapper_args": mapper,
+						"mapper_args": dealMapper,
 						"provider": "MAX", 
 						"version": "max", 
 						"owner": "wodelu"
 					}
 					let parameters = {
-						puts3_event: puts3_event,
+						puts3_event: puts3_event, 
 						click_event: click_event
 					}
 					// 2.调ETL
@@ -213,7 +220,7 @@ export default class MaxSaasImportComponent extends Component {
 										}
 										that.router.transitionTo( "/" )
 										let urlParam = window.location.href.split('?')[1]
-										that.router.transitionTo( `/max-saas/import?${urlParam}`)
+										that.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
 									})
 								}
 							}) 
@@ -270,7 +277,7 @@ export default class MaxSaasImportComponent extends Component {
 				//刷新页面
 				this.router.transitionTo( "/" )
 				let urlParam = window.location.href.split('?')[1]
-				this.router.transitionTo( `/max-saas/import?${urlParam}`)
+				this.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
 				break
             default: 
                 console.log("other click event!")

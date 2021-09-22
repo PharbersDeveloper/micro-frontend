@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :cols="allData.targetNames" :viewHeight="800"></bp-excel>
+                            <bp-excel name="targer" :viewHeight="800"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
                             <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
