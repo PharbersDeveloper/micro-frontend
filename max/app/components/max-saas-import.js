@@ -102,7 +102,7 @@ export default class MaxSaasImportComponent extends Component {
 						"owner": this.cookies.read('account_id'),
 						"tempfile": message.tempfile,
 						"tags": tags,
-					}	
+					}
 					let click_event = {
 						"file_path": `/mnt/tmp/${message.tempfile}`,
 						"sheet_name": message.sheet,
@@ -110,7 +110,10 @@ export default class MaxSaasImportComponent extends Component {
 						"table_name": "import_data_test",
 						"batch": 10000,
 						"begin_line": optParam.readNumber,
-						"mapper_args": mapper
+						"mapper_args": mapper,
+						"provider": "MAX", 
+						"version": "max", 
+						"owner": "wodelu"
 					}
 					let parameters = {
 						puts3_event: puts3_event,

@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :viewHeight="1000"></bp-excel>
+                <bp-excel :paramQuery="paramQuery" :cols="schemaData" :viewHeight="1000"></bp-excel>
             </div>
         </div>
 		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" />
@@ -37,7 +37,9 @@ export default {
 	data() {
 		return {
 			showDialog: false,
-			hidden:true
+			hidden:true,
+			paramQuery: "SELECT * FROM clean_master LIMIT 100",
+			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"]
 		}
 	},
 	methods: {

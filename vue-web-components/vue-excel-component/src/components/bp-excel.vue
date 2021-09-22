@@ -81,6 +81,10 @@ export default {
 			type: Number,
 			default: 50
 		},
+		paramQuery:  {
+			type: String,
+			default: "SELECT * FROM clean_source LIMIT 100"
+		},
 		datasource: {
 			type: Object,
 			default: () => { return {
@@ -88,37 +92,12 @@ export default {
 				sql: "",
 				buildQuery: () => {
 					return "https://api.pharbers.com/phchproxyquery"
-					// /?query=SELECT%20%2A%20FROM%20prod%20limit%20500
 				},
 				refreshData: (ele) => {
 					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
 					let body = {
-						"query": "SELECT * FROM clean_source LIMIT 1000",
-						"schema": [
-							// "pack_id",
-							// "mole_name_en",
-							// "mole_name_ch",
-							// "prod_desc",
-							// "prod_name_ch",
-							// "corp_name_ch",
-							// "mnf_name_ch",
-							// "dosage",
-							// "spec",
-							// "pack",
-							// "atc4_code"
-							"id",
-							"gn",
-							"pn",
-							"mn",
-							"do",
-							"sp",
-							"pk",
-							"pku",
-							"measure",
-							"provider",
-							"version",
-							"owner"
-						]
+						"query": ele.paramQuery,
+						"schema": ele.cols
 					}
 					let options = {
 						method: "POST",
@@ -126,16 +105,19 @@ export default {
 							"Authorization": accessToken,
 							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 							"accept": "application/json"
-							// , text/javascript, */*; q=0.01
 						},
 						body: JSON.stringify(body)
 					}
 					fetch(ele.datasource.buildQuery(), options)
 						.then((response) => response.json())
 						.then((response) => {
+							let arr = []
 							ele.datasource.data = response.map((row) => {
-								// return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
-								return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
+								// return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
+								ele.cols.forEach((item) => {
+									arr.push(row[item])
+								})
+								return arr
 							})
 							ele.needRefresh++
 						})
