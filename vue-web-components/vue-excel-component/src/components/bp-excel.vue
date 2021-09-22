@@ -87,7 +87,7 @@ export default {
 				data: [],
 				sql: "",
 				buildQuery: () => {
-					return "https://api.pharbers.com/phdatasource"
+					return "https://api.pharbers.com/phchproxyquery"
 					// /?query=SELECT%20%2A%20FROM%20prod%20limit%20500
 				},
 				refreshData: (ele) => {
@@ -121,7 +121,7 @@ export default {
 					fetch(ele.datasource.buildQuery(), options)
 						.then((response) => response.json())
 						.then((response) => {
-							ele.datasource.data = JSON.parse(response.body).map((row) => {
+							ele.datasource.data = response.map((row) => {
 								return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,
 									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
 							})
