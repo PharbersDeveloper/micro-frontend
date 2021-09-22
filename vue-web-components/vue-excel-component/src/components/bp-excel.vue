@@ -87,10 +87,38 @@ export default {
 				data: [],
 				sql: "",
 				buildQuery: () => {
-					return "https://api.pharbers.com/phdatasource/?query=SELECT%20%2A%20FROM%20prod%20limit%20500"
+					return "https://api.pharbers.com/phdatasource"
+					// /?query=SELECT%20%2A%20FROM%20prod%20limit%20500
 				},
 				refreshData: (ele) => {
-					fetch(ele.datasource.buildQuery())
+					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
+					let body = {
+						"query": "SELECT * FROM prod LIMIT 100",
+						"schema": [
+							"pack_id",
+							"mole_name_en",
+							"mole_name_ch",
+							"prod_desc",
+							"prod_name_ch",
+							"corp_name_ch",
+							"mnf_name_ch",
+							"dosage",
+							"spec",
+							"pack",
+							"atc4_code"
+						]
+					}
+					let options = {
+						method: "POST",
+						headers: {
+							"Authorization": accessToken,
+							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+							"accept": "application/json"
+							// , text/javascript, */*; q=0.01
+						},
+						body: JSON.stringify(body)
+					}
+					fetch(ele.datasource.buildQuery(), options)
 						.then((response) => response.json())
 						.then((response) => {
 							ele.datasource.data = JSON.parse(response.body).map((row) => {
@@ -121,6 +149,13 @@ export default {
 		this.focusHandler()
 	},
 	methods: {
+		getCookie(name) {
+			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+			if (arr = document.cookie.match(reg))
+				return (arr[2]);
+			else
+				return null;
+		},
 		sheetHitSize() {
 			let cols_hit_width = this.cols_hit_width
 			if (this.cols_hit_width.length === 0) {
@@ -310,7 +345,7 @@ export default {
 	.viewport {
 		// height: 800px;
 		overflow: hidden;
-    	// overflow-x: hidden;
+		// overflow-x: hidden;
 		position: relative;
 		.body {
 			overflow: auto;
@@ -328,7 +363,7 @@ export default {
 			display: flex;
 			justify-content: center;
 			background: #F0F0F0;
-    		border: 1px solid #CFCFCF;
+			border: 1px solid #CFCFCF;
 			// padding: 0 5px;
 			overflow: hidden;
 		}
