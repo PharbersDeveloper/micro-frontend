@@ -76,7 +76,21 @@ export default class MaxSaasImportComponent extends Component {
 					e.target.allData.schemas = schemas //源文件表头
 					e.target.allData.sourceData = sourceData //源文件数据
 					e.target.allData.sourceData.readNumber = readNumber //读取开始的行数
-					e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
+					// e.target.allData.targetNames = ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
+					e.target.allData.targetNames = [
+						"id",
+						"gn",
+						"pn",
+						"mn",
+						"do",
+						"sp",
+						"pk",
+						"pku",
+						"measure",
+						"provider",
+						"version",
+						"owner"
+					]
 					e.target.allData.fileName = defaultMessage.name
 					this.random = Math.random()
 				} else if(optParam.name == 'import') {
@@ -95,7 +109,7 @@ export default class MaxSaasImportComponent extends Component {
 					let mapperTags = mapperData.tags
 					let tags = message.tags.concat(mapperTags)
 					let mapper = mapperData.mapper
-					// 1.新流程
+					// 1.流程
 					let puts3_event = {
 						"asset": message.asset,
 						"owner": this.cookies.read('account_id'),

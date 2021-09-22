@@ -21,7 +21,7 @@
                             <bp-excel :cols="allData.schemas" :datasource="sourceData" :page_size="5" ></bp-excel>
                         </div>
 
-                         <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
+                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
                             <bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
                             <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
@@ -33,7 +33,7 @@
                         <div class="target-border">
                             <bp-excel name="targer" :cols="allData.targetNames" :viewHeight="800"></bp-excel>
                         </div>
-                        <bp-select-vue choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="">
+                        <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
                             <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
                             <bp-option-vue text="显示全部" :disabled=true></bp-option-vue> -->
@@ -101,6 +101,7 @@ export default {
 			middleList: [],
 			jobLogs: null,
 			proBar: 0,
+			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
 			sourceData: {
 				data: [],
 				sql: "",
@@ -397,7 +398,7 @@ export default {
                         display: flex;
                         margin-bottom: 20px;
                         width: 100%;
-
+						padding-right: 30px;
                         .source-border {
                             width: 100%;
                             height: 130px;
@@ -405,8 +406,11 @@ export default {
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
-							overflow: hidden;
+							// overflow: hidden;
                         }
+						.select-icon {
+							width: 24px !important;
+						}
                     }
 
                     .target-content-container {

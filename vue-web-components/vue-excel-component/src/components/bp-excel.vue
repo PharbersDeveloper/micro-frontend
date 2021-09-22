@@ -62,8 +62,8 @@ export default {
 		},
 		cols: {
 			type: Array,
-			default: () => ["pack_id", "mole_name_en", "mole_name_ch", "prod_desc", "prod_name_ch", "corp_name_ch",
-				"mnf_name_ch", "dosage", "spec", "pack", "atc4_code"]
+			default: () => ["id", "gn", "pn", "mn", "do", "sp", 
+				"pk","pku", "measure", "provider", "version", "owner"]
 		},
 		cell_hit_height: {
 			type: Number,
@@ -93,19 +93,31 @@ export default {
 				refreshData: (ele) => {
 					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
 					let body = {
-						"query": "SELECT * FROM prod LIMIT 100",
+						"query": "SELECT * FROM clean_source LIMIT 1000",
 						"schema": [
-							"pack_id",
-							"mole_name_en",
-							"mole_name_ch",
-							"prod_desc",
-							"prod_name_ch",
-							"corp_name_ch",
-							"mnf_name_ch",
-							"dosage",
-							"spec",
-							"pack",
-							"atc4_code"
+							// "pack_id",
+							// "mole_name_en",
+							// "mole_name_ch",
+							// "prod_desc",
+							// "prod_name_ch",
+							// "corp_name_ch",
+							// "mnf_name_ch",
+							// "dosage",
+							// "spec",
+							// "pack",
+							// "atc4_code"
+							"id",
+							"gn",
+							"pn",
+							"mn",
+							"do",
+							"sp",
+							"pk",
+							"pku",
+							"measure",
+							"provider",
+							"version",
+							"owner"
 						]
 					}
 					let options = {
@@ -122,8 +134,8 @@ export default {
 						.then((response) => response.json())
 						.then((response) => {
 							ele.datasource.data = response.map((row) => {
-								return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,
-									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+								// return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+								return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
 							})
 							ele.needRefresh++
 						})
@@ -133,8 +145,8 @@ export default {
 						.then((response) => response.json())
 						.then((response) => {
 							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map((row) => {
-								return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,
-									row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+								// return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
+								return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
 							}))
 							cb()
 						})
@@ -343,12 +355,10 @@ export default {
 <style lang="scss">
 .excel_container {
 	.viewport {
-		// height: 800px;
-		overflow: hidden;
-		// overflow-x: hidden;
+		overflow-x: auto;
 		position: relative;
 		.body {
-			overflow: auto;
+			// overflow: auto;
 		}
 	
 	}

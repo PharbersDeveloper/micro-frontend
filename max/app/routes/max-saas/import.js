@@ -63,7 +63,9 @@ export default class MaxSaasImportRoute extends Route {
 			schemas: schemas, //源文件表头
 			sourceData: sourceData, //源文件数据
 			fileName: filterData[0] ? filterData[0].name : '', //当前文件名称
-			targetNames: ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], //目标文件表头
+			// targetNames: ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], //目标文件表头
+			targetNames: ["id", "gn", "pn", "mn", "do", "sp", "pk",
+			"pku", "measure", "provider", "version", "owner"],
 			_isVue: true
         })
     }
