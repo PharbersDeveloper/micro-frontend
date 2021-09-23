@@ -143,7 +143,8 @@ export default {
 						.then((response) => response.json())
 						.then((response) => {
 							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-							cb()
+							ele.cur_page++
+							ele.needRefresh++
 						})
 				}
 			},

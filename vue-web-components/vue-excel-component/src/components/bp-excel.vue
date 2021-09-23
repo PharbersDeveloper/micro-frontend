@@ -70,7 +70,7 @@ export default {
 			type: Array,
 			default: () => ["pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt"]
 		},
-		schemas: {
+		schema: {
 			type: Array,
 			default: () => ["id", "pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt", "measure", "provider", "version", "owner"]
 		},
@@ -102,7 +102,7 @@ export default {
 				buildQuery: (ele, isAppend=false) => {
 					function buildQueryString() {
 						let sql_str = "SELECT "
-						sql_str = sql_str + ele.schemas.toString() + " FROM " + ele.datasource.name
+						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
 						// filter
 						let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -132,7 +132,7 @@ export default {
 					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
 					let body = {
 						"query": buildQueryString(),
-						"schema": ele.schemas
+						"schema": ele.schema
 					}
 					let options = {
 						method: "POST",
