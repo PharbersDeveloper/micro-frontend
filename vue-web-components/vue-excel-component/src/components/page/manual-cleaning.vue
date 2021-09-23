@@ -17,16 +17,16 @@
             <div class="cleaning-function">
                 <span class="heading-small">源文件：cpa_pchc_universe</span>
                 <div class="cleaning-function-buttons">
-                    <button>显示当前mappin表单</button>
-                    <button>显示当前master表单</button>
+                    <button>机器匹配</button>
+                    <button>检查匹配进度</button>
                     <button>显示全部数据</button>
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :viewHeight="1000"></bp-excel>
+                <bp-excel :viewHeight="1000" @showModel="showModel"></bp-excel>
             </div>
         </div>
-		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" />
+		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :source_data="source_data"></max-entry>
     </div>
 </template>
 
@@ -43,6 +43,10 @@ export default {
 	methods: {
 		show(val) {
 			this.showDialog = val
+		},
+		showModel(data) {
+			this.source_data = data.args.param.data
+			this.showDialog = true
 		}
 	},
 	components: {

@@ -324,6 +324,19 @@ export default {
 				} else {
 					cbAddPage()
 				}
+			}
+			case "Space": {
+				let cur_data = this.datasource.data[this.cur_row]
+				const event = new Event("event")
+				event.args = {
+					callback: "modelData",
+					element: this,
+					param: {
+						data: cur_data
+					}
+				}
+				this.$emit('showModel', event)
+				break
 			}}
 		}
 	},

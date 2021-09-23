@@ -32,7 +32,7 @@
         <div class="source-entry-container">
             <span class="heading-small">源条目</span>
             <div class="source-entry-border">
-                <bp-excel :data="sourceData" :colHeaders="sourceColHeaders"></bp-excel>
+                <bp-excel :datasource="sourceData"></bp-excel>
             </div>
         </div>
 
@@ -61,7 +61,19 @@ export default {
 		return {
 			visible: this.showDialog,
 			paramQuery: "SELECT * FROM clean_master LIMIT 100",
-			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"]
+			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+			sourceData: {
+				data: [
+					['安徽省', '蚌埠市', '2019', '1', '1', '230461', 'N01AH03', '舒芬太尼', '舒芬太尼', 'A', '50 UG 1 ML', '1', '240835', '4800', 'SOLN', 'IJ', '宜昌人福药业有限责任公司']
+				],
+				sql: "",
+				refreshData:(ele) => {
+					ele.needRefresh++
+				},
+				appendData: (ele, cb) => {
+					cb()
+				}
+			}
 		}
 	},
 	watch: {
@@ -75,44 +87,16 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		sourceData: {
-			type: Array,
-			default() {
-				return [
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-				]
-			}
-		},
-		sourceColHeaders: {
-			type: Array,
-			default() {
-				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
-			}
-		},
-		masterData: {
-			type: Array,
-			default() {
-				return [
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-				]
-			}
-		},
-		masterColHeaders: {
-			type: Array,
-			default() {
-				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
-			}
-		}
+		source_data: Array
 	},
 	methods: {
 		close() {
 			this.$emit('dialog-visible',false)
+		}
+	},
+	watch: { 
+		source_data: function(data) {
+			this.sourceData.data = data
 		}
 	}
 }
