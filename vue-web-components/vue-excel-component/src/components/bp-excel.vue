@@ -90,8 +90,7 @@ export default {
 			default: () => { return {
 				data: [],
 				sort: {},
-				filter: [],
-				sql: '',
+				filter: {},
 				name: "clean_source",
 				batch_size: 200,
 				adapter: (row) => [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt],
@@ -99,6 +98,11 @@ export default {
 					function buildQueryString() {
 						let sql_str = "SELECT "
 						sql_str = sql_str + ele.schemas.toString() + " FROM " + ele.datasource.name
+
+						// filter
+						for (const key in ele.datasource.filter) {
+							sql_str = sql_str + " WHERE " + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+						}
 
 						// sorts
 						for (const key in ele.datasource.sort) {
@@ -364,6 +368,11 @@ export default {
 				}
 				this.$emit('showModel', event)
 				this.needRefresh++
+				console.log("space")
+				//###########################//
+				this.datasource.filter["gn"] = "瑞舒"
+				this.dataRefresh++
+				//###########################//
 				break
 			}}
 		}
@@ -373,6 +382,7 @@ export default {
 			this.render()
 		},
 		dataRefresh(n, o) {
+			this.datasource.data = []
 			this.datasource.refreshData(this)
 		},
 		"datasource.sql"() {
