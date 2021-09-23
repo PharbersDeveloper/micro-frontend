@@ -103,7 +103,9 @@ export default {
 			proBar: 0,
 			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
 			sourceData: {
-				data: [],
+				data: [
+					['安徽省', '蚌埠市', '2019', '1', '1', '230461', 'N01AH03', '舒芬太尼', '舒芬太尼', 'A', '50 UG 1 ML', '1', '240835', '4800', 'SOLN', 'IJ', '宜昌人福药业有限责任公司']
+				],
 				sql: "",
 				refreshData:(ele) => {
 					ele.needRefresh++
@@ -165,7 +167,7 @@ export default {
 			default: function() {
 				return {
 					assets: [],//文件列表
-					schemas: [],//源数据表头
+					schemas: ['省', '城市', '年', '季度', '月', '医院编码', 'ATC编码', '药品名称', '商品名', '包装', '规格', '包装数量', '金额（元）', '数量(支/片)', '剂型', '给药途径', '生产企业'],//源数据表头
 					targetNames: [],//目标文件表头
 					fileName: '',
 					mapperAssets: [], //列表状态
