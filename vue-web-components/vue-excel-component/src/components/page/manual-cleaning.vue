@@ -11,22 +11,22 @@
                     <span class="heading-large">人工清洗<span class="body-secondary ml-2">de522809-937c-5</span></span>
                     <span class="body-tertiary">上次更新时间 17 Oct,2020 22:45</span>
                 </div>
-                <button @click="show(true)">确认清洗</button>
+                <button >确认清洗</button>
             </div>
 
             <div class="cleaning-function">
                 <span class="heading-small">源文件：cpa_pchc_universe</span>
                 <div class="cleaning-function-buttons">
-                    <button>显示当前mappin表单</button>
-                    <button>显示当前master表单</button>
+                    <button>机器匹配</button>
+                    <button>检查匹配进度</button>
                     <button>显示全部数据</button>
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :viewHeight="1000"></bp-excel>
+                <bp-excel :viewHeight="1250" @showModel="showModel"></bp-excel>
             </div>
         </div>
-		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" />
+		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent"></max-entry>
     </div>
 </template>
 
@@ -37,49 +37,26 @@ export default {
 	data() {
 		return {
 			showDialog: false,
-			hidden:true
+			hidden:true,
+			source_data: [],
+			excelComponent: {}
 		}
 	},
 	methods: {
 		show(val) {
 			this.showDialog = val
+		},
+		showModel(data) {
+			this.source_data = data.args.param.data
+			this.excelComponent = data.args.element
+			this.showDialog = true
 		}
 	},
 	components: {
 		bpExcel,
 		maxEntry
 	},
-	props: {
-		data: {
-			type: Array,
-			default() {
-				return [
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-				]
-			}
-		},
-		colHeaders: {
-			type: Array,
-			default: () => ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8','Name_9']
-		}
-	}
+	props: {}
 }
 </script>
 
@@ -230,15 +207,19 @@ export default {
                         &:last-of-type {
                             margin-right: 0;
                         }
-                    }
+                    } 
                 }
             }
 
             .content-container {
-                height: 100%;
+                height: calc(100vh - 220px);
+				overflow: auto;
                 border: 1px solid rgba(37,35,45,0.12);
                 border-radius: 2px;
                 padding: 4px;
+				/deep/.viewport {
+					overflow-y: hidden !important;
+				}
             }
         }
     }

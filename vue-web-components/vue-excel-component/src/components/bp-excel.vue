@@ -1,16 +1,16 @@
 <template>
-<div class="excel_container">
-	<div ref="viewport" @click="focusHandler" class="viewport">
-		<div class="schemas">
-			<div class="schema-item" @click="sortHandler" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
-		</div>
-		<div class="body" :style="{height: viewHeight+'px'}">
-			<canvas ref="canvas" class="canvas"></canvas>
-			<div ref="select" class="row-select"></div>
-			<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
+	<div class="excel_container">
+		<div ref="viewport" @click="focusHandler" class="viewport">
+			<div class="schemas">
+				<div class="schema-item" @click="sortHandler" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
+			</div>
+			<div class="body" :style="{height: viewHeight+'px'}">
+				<canvas ref="canvas" class="canvas"></canvas>
+				<div ref="select" class="row-select"></div>
+				<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
+			</div>
 		</div>
 	</div>
-</div>
 </template>
 <script>
 export default {
@@ -45,6 +45,7 @@ export default {
 			ctx: null,
 			needRefresh: 0,
 			dataRefresh: 0,
+			dataAppend: 0,
 			cur_row: 0,
 			cur_page: 0,
 
@@ -57,6 +58,10 @@ export default {
 
 	},
 	props: {
+		isNeedKeyBoardEvent: {
+			type: Boolean,
+			default: true
+		},
 		viewHeight: {
 			type: Number,
 			default: 100
@@ -65,7 +70,7 @@ export default {
 			type: Array,
 			default: () => ["pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt"]
 		},
-		schemas: {
+		schema: {
 			type: Array,
 			default: () => ["id", "pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt", "measure", "provider", "version", "owner"]
 		},
@@ -93,15 +98,20 @@ export default {
 				filter: {},
 				name: "clean_source",
 				batch_size: 200,
-				adapter: (row) => [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt],
+				adapter: (row) => [row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
 				buildQuery: (ele, isAppend=false) => {
 					function buildQueryString() {
 						let sql_str = "SELECT "
-						sql_str = sql_str + ele.schemas.toString() + " FROM " + ele.datasource.name
+						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
 						// filter
+						let firstFilter = Object.keys(ele.datasource.filter)[0]
+						let filterParam = " WHERE "
 						for (const key in ele.datasource.filter) {
-							sql_str = sql_str + " WHERE " + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+							if(key != firstFilter) {
+								filterParam = " AND "
+							}
+							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
 						}
 
 						// sorts
@@ -114,17 +124,15 @@ export default {
 
 						// pages
 						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
-						console.log(ele.datasource.sort)
-						console.log(sql_str)
+						sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
 						return sql_str
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
+					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
 					let body = {
 						"query": buildQueryString(),
-						"schema": ele.schemas
+						"schema": ele.schema
 					}
 					let options = {
 						method: "POST",
@@ -145,12 +153,13 @@ export default {
 							ele.needRefresh++
 						})
 				},
-				appendData: (ele, cb) => {
-					fetch(ele.datasource.buildQuery(ele, true))
+				appendData: (ele) => {
+					ele.datasource.buildQuery(ele, true)
 						.then((response) => response.json())
 						.then((response) => {
-							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map(ele.datasource.adapter))
-							cb()
+							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+							ele.cur_page++
+							ele.needRefresh++
 						})
 				}
 			}}
@@ -305,19 +314,23 @@ export default {
 			return { x: x, y: y, w: w, h: h }
 		},
 		focusHandler(event) {
-			this.$refs.hidden.focus()
+			if (this.isNeedKeyBoardEvent) {
+				this.$refs.hidden.focus()
+			}
 		},
 		sortHandler(event) {
-			this.$refs.hidden.focus()
-			// 暂时只能一个排序
-			const tmp = this.datasource.sort[event.target.firstChild.data]
-			if (tmp && tmp > 0) {
-				this.datasource.sort[event.target.firstChild.data] = -1
-			} else {
-				this.datasource.sort = {}
-				this.datasource.sort[event.target.firstChild.data] = 1
+			if (this.isNeedKeyBoardEvent) {
+				this.$refs.hidden.focus()
+				// 暂时只能一个排序
+				const tmp = this.datasource.sort[event.target.firstChild.data]
+				if (tmp && tmp > 0) {
+					this.datasource.sort[event.target.firstChild.data] = -1
+				} else {
+					this.datasource.sort = {}
+					this.datasource.sort[event.target.firstChild.data] = 1
+				}
+				this.dataRefresh++
 			}
-			this.dataRefresh++
 		},
 		keyPressHandler(event) {
 			switch (event.code) {
@@ -344,25 +357,32 @@ export default {
 				this.cur_page++
 				const that = this
 
-				function cbAddPage() {
+				if (this.cur_page > this.datasource.data.length / this.page_size - 1) {
+					this.dataAppend++
+				} else {
 					that.cur_page = that.cur_page > that.datasource.data.length / that.page_size - 1 ?
 						that.datasource.data.length / that.page_size - 1 : that.cur_page
 					that.needRefresh++
 				}
-
-				if (this.cur_page > this.datasource.data.length / this.page_size - 1) {
-					this.datasource.appendData(this, cbAddPage)
-				} else {
-					cbAddPage()
-				}
 				break
 			}
 			case "Space": {
-				console.log("space")
-				//###########################//
-				this.datasource.filter["gn"] = "瑞舒"
-				this.dataRefresh++
-				//###########################//
+				let cur_data = this.datasource.data[this.cur_row]
+				const event = new Event("event")
+				event.args = {
+					callback: "modelData",
+					element: this,
+					param: {
+						data: cur_data
+					}
+				}
+				this.$emit('showModel', event)
+				// this.needRefresh++
+				// console.log("space")
+				// //###########################//
+				// this.datasource.filter["gn"] = "瑞舒"
+				// this.dataRefresh++
+				// //###########################//
 				break
 			}}
 		}
@@ -374,44 +394,47 @@ export default {
 		dataRefresh(n, o) {
 			this.datasource.data = []
 			this.datasource.refreshData(this)
+		},
+		dataAppend(n, o) {
+			this.datasource.appendData(this)
 		}
 	}
 };
 </script>
 <style lang="scss">
-.excel_container {
-	.viewport {
-		overflow-x: auto;
-		position: relative;
-		.body {
-			// overflow: auto;
-		}
+	.excel_container {
+		.viewport {
+			overflow-x: auto;
+			position: relative;
+			.body {
+				// overflow: auto;
+			}
 
-	}
-	.schemas {
-		height: 24px;
-		display: flex;
-		margin-left: 10px;
-		.schema-item {
+		}
+		.schemas {
 			height: 24px;
-			// min-width: 80px;
-			min-width: 118px;
 			display: flex;
-			justify-content: center;
-			background: #F0F0F0;
-			border: 1px solid #CFCFCF;
-			// padding: 0 5px;
-			overflow: hidden;
+			margin-left: 10px;
+			.schema-item {
+				height: 24px;
+				// min-width: 80px;
+				min-width: 118px;
+				display: flex;
+				justify-content: center;
+				background: #F0F0F0;
+				border: 1px solid #CFCFCF;
+				// padding: 0 5px;
+				overflow: hidden;
+			}
+		}
+		.canvas {
+			// margin-top: 46px;
+		}
+		.hidden {
+			position: absolute;
+			top:50px;
+			left:0;
+			margin-left:10px
 		}
 	}
-	.canvas {
-		// margin-top: 46px;
-	}
-	.hidden {
-		position: absolute;
-		top:50px;
-		left:0;
-		margin-left:10px
-	}
-}
 </style>

@@ -9,13 +9,13 @@
         <div class="entry-search-container">
             <div class="entry-search-left">
                 <div class="single-search mr-3">
-                    <span class="mb-1 heading-xsmall">Name_1</span>
-                    <input type="text" placeholder="yang">
+                    <span class="mb-1 heading-xsmall">通用名</span>
+                    <input type="text" placeholder="请输入" v-model="dnValue">
                 </div>
 
                 <div class="single-search">
-                    <span class="mb-1 heading-xsmall">Name_1</span>
-                    <input type="text" placeholder="yang">
+                    <span class="mb-1 heading-xsmall">生产厂商</span>
+                    <input type="text" placeholder="请输入" v-model="fnpyValue">
                 </div>
             </div>
 
@@ -25,21 +25,21 @@
                     <span class="btn_secondary_initial">筛选条件</span>
                 </button>
 
-                <button class="search-button btn_primary-initial">搜索</button>
+                <button class="search-button btn_primary-initial" @click="search">搜索</button>
             </div>
         </div>
 
         <div class="source-entry-container">
             <span class="heading-small">源条目</span>
             <div class="source-entry-border">
-                <bp-excel :data="sourceData" :colHeaders="sourceColHeaders"></bp-excel>
+                <bp-excel :datasource="sourceData" :page_size="1" v-if="sonRefresh" :isNeedKeyBoardEvent="false"></bp-excel>
             </div>
         </div>
 
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :paramQuery="paramQuery" :cols="schemaData"  :viewHeight="300" :page_size="10"></bp-excel>
+                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster" v-if="masterRefresh"></bp-excel>
             </div>
         </div>
 
@@ -59,15 +59,96 @@ export default {
 	},
 	data() {
 		return {
-			visible: this.showDialog,
+			dnValue: '',
+			fnpyValue: '',
 			paramQuery: "SELECT * FROM clean_master LIMIT 100",
-			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"]
-		}
-	},
-	watch: {
-		immediate:true,
-		visible(val) {
-			this.showDialog = val
+			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+			cols: ["dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+			masterRefresh: true,
+			sourceData: {
+				data: [],
+				name: "clean_master",
+				refreshData:(ele) => {
+					ele.needRefresh++
+				},
+				appendData: (ele, cb) => {
+					cb()
+				}
+			},
+			sourceDataMaster: {
+				data: [],
+				sort: {},
+				filter: {},
+				name: "clean_master",
+				batch_size: 200,
+				adapter: (row) => [row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
+				buildQuery: (ele, isAppend=false) => {
+					function buildQueryString() {
+						let sql_str = "SELECT "
+						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
+
+						// filter
+						let firstFilter = Object.keys(ele.datasource.filter)[0]
+						let filterParam = " WHERE "
+						for (const key in ele.datasource.filter) {
+							if(key != firstFilter) {
+								filterParam = " AND "
+							}
+							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+						}
+
+						// sorts
+						for (const key in ele.datasource.sort) {
+							sql_str = sql_str + " ORDER BY " + key
+							if (ele.datasource.sort[key] < 0) {
+								sql_str = sql_str + " desc "
+							}
+						}
+
+						// pages
+						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
+						console.log(ele.datasource.sort)
+						console.log(sql_str)
+						return sql_str
+					}
+
+					const url = "https://api.pharbers.com/phchproxyquery"
+					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
+					let body = {
+						"query": buildQueryString(),
+						"schema": ele.schema
+					}
+					let options = {
+						method: "POST",
+						headers: {
+							"Authorization": accessToken,
+							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+							"accept": "application/json"
+						},
+						body: JSON.stringify(body)
+					}
+					return fetch(url, options)
+				},
+				refreshData:(ele) => {
+					ele.datasource.buildQuery(ele)
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = response.map(ele.datasource.adapter)
+							ele.needRefresh++
+						})
+				},
+				appendData: (ele, cb) => {
+					ele.datasource.buildQuery(ele, true)
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+							ele.cur_page++
+							ele.needRefresh++
+						})
+				}
+			},
+			sonRefresh: true
 		}
 	},
 	props: {
@@ -75,44 +156,42 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		sourceData: {
-			type: Array,
-			default() {
-				return [
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-				]
-			}
-		},
-		sourceColHeaders: {
-			type: Array,
-			default() {
-				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
-			}
-		},
-		masterData: {
-			type: Array,
-			default() {
-				return [
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder'],
-					['000,000,000', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder', 'Placeholder']
-				]
-			}
-		},
-		masterColHeaders: {
-			type: Array,
-			default() {
-				return ['','Name_1','Name_2','Name_3','Name_4','Name_5','Name_6','Name_7','Name_8']
-			}
-		}
+		sourceArr: Array,
+		excelComponent: Object
 	},
 	methods: {
 		close() {
 			this.$emit('dialog-visible',false)
+		},
+		search() {
+			if(this.dnValue && this.dnValue != '') {
+				this.sourceDataMaster.filter["csn"] = this.dnValue
+			}
+			if(this.fnpyValue && this.fnpyValue != '') {
+				this.sourceDataMaster.filter["manu"] = this.fnpyValue
+			}
+			if(this.dnValue == '' && this.fnpyValue == '') {
+				this.sourceDataMaster.filter = {}
+			}
+			// 刷新子组件数据
+			this.masterRefresh= false;
+			this.$nextTick(() => {
+				this.masterRefresh= true;
+			});
+		}
+	},
+	watch: { 
+		sourceArr: function(data) {
+			this.sourceData.data = []
+			this.sourceData.data.push(data)
+			//搜索条件
+			this.fnpyValue = this.sourceArr[5]
+			this.search()
+			// 刷新子组件数据
+			this.sonRefresh= false;
+			this.$nextTick(() => {
+				this.sonRefresh= true;
+			});
 		}
 	}
 }
