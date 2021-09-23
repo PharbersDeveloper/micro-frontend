@@ -91,6 +91,7 @@ export default {
 				data: [],
 				sort: {},
 				filter: [],
+				sql: '',
 				name: "clean_source",
 				batch_size: 200,
 				adapter: (row) => [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt],
@@ -362,6 +363,7 @@ export default {
 					}
 				}
 				this.$emit('showModel', event)
+				this.needRefresh++
 				break
 			}}
 		}
@@ -372,6 +374,9 @@ export default {
 		},
 		dataRefresh(n, o) {
 			this.datasource.refreshData(this)
+		},
+		"datasource.sql"() {
+			this.render()
 		}
 	}
 };

@@ -32,7 +32,7 @@
         <div class="source-entry-container">
             <span class="heading-small">源条目</span>
             <div class="source-entry-border">
-                <bp-excel :datasource="sourceData"></bp-excel>
+                <bp-excel :datasource="sourceData" :page_size="1"></bp-excel>
             </div>
         </div>
 
@@ -63,9 +63,7 @@ export default {
 			paramQuery: "SELECT * FROM clean_master LIMIT 100",
 			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
 			sourceData: {
-				data: [
-					['安徽省', '蚌埠市', '2019', '1', '1', '230461', 'N01AH03', '舒芬太尼', '舒芬太尼', 'A', '50 UG 1 ML', '1', '240835', '4800', 'SOLN', 'IJ', '宜昌人福药业有限责任公司']
-				],
+				data: [],
 				sql: "",
 				refreshData:(ele) => {
 					ele.needRefresh++
@@ -87,7 +85,8 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		source_data: Array
+		sourceArr: Array,
+		excelComponent: Object
 	},
 	methods: {
 		close() {
@@ -95,8 +94,10 @@ export default {
 		}
 	},
 	watch: { 
-		source_data: function(data) {
-			this.sourceData.data = data
+		sourceArr: function(data) {
+			debugger
+			this.sourceData.data.push(data)
+			this.sourceData.sql = data[1]
 		}
 	}
 }
