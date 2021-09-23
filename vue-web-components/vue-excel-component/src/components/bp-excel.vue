@@ -64,12 +64,12 @@ export default {
 		},
 		cols: {
 			type: Array,
-			default: () => ["gn", "pn", "mn", "do", "sp", 
-				"pk","pku"]
+			default: () => ["pkc", "gn", "pn", "mn", "do", "sp", 
+				"pk","pku", "dt"]
 		},
 		schemas: {
 			type: Array,
-			default: () => ["id", "gn", "pn", "mn", "do", "sp", "pk", "pku", "measure", "provider", "version", "owner"]
+			default: () => ["id", "pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt", "measure", "provider", "version", "owner"]
 		},
 		cell_hit_height: {
 			type: Number,
@@ -120,7 +120,7 @@ export default {
 						.then((response) => {
 							let arr = []
 							ele.datasource.data = response.map((row) => {
-								return [row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku]
+								return [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt]
 							})
 							ele.needRefresh++
 						})
