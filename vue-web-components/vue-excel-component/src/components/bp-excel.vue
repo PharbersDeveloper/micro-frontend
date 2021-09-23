@@ -2,7 +2,7 @@
 <div class="excel_container">
 	<div ref="viewport" @click="focusHandler" class="viewport">
 		<div class="schemas">
-			<div class="schema-item" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
+			<div class="schema-item" @click="sortHandler" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
 		</div>
 		<div class="body" :style="{height: viewHeight+'px'}">
 			<canvas ref="canvas" class="canvas"></canvas>
@@ -44,14 +44,13 @@ export default {
 
 			ctx: null,
 			needRefresh: 0,
+			dataRefresh: 0,
 			cur_row: 0,
 			cur_page: 0,
 
 			// 双缓存
 			buffer_ctx: null,
 			buffer_canvas: null
-
-			//请求数据参数
 		}
 	},
 	components: {
@@ -64,8 +63,7 @@ export default {
 		},
 		cols: {
 			type: Array,
-			default: () => ["pkc", "gn", "pn", "mn", "do", "sp", 
-				"pk","pku", "dt"]
+			default: () => ["pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt"]
 		},
 		schemas: {
 			type: Array,
@@ -87,20 +85,40 @@ export default {
 			type: Number,
 			default: 50
 		},
-		paramQuery:  {
-			type: String,
-			default: "SELECT * FROM clean_source LIMIT 200"
-		},
 		datasource: {
 			type: Object,
 			default: () => { return {
 				data: [],
-				sql: "",
-				buildQuery: (ele) => {
+				sort: {},
+				filter: [],
+				name: "clean_source",
+				batch_size: 200,
+				adapter: (row) => [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt],
+				buildQuery: (ele, isAppend=false) => {
+					function buildQueryString() {
+						let sql_str = "SELECT "
+						sql_str = sql_str + ele.schemas.toString() + " FROM " + ele.datasource.name
+
+						// sorts
+						for (const key in ele.datasource.sort) {
+							sql_str = sql_str + " ORDER BY " + key
+							if (ele.datasource.sort[key] < 0) {
+								sql_str = sql_str + " desc "
+							}
+						}
+
+						// pages
+						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
+						console.log(ele.datasource.sort)
+						console.log(sql_str)
+						return sql_str
+					}
+
 					const url = "https://api.pharbers.com/phchproxyquery"
 					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
 					let body = {
-						"query": ele.paramQuery,
+						"query": buildQueryString(),
 						"schema": ele.schemas
 					}
 					let options = {
@@ -118,21 +136,15 @@ export default {
 					ele.datasource.buildQuery(ele)
 						.then((response) => response.json())
 						.then((response) => {
-							let arr = []
-							ele.datasource.data = response.map((row) => {
-								return [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt]
-							})
+							ele.datasource.data = response.map(ele.datasource.adapter)
 							ele.needRefresh++
 						})
 				},
 				appendData: (ele, cb) => {
-					fetch(ele.datasource.buildQuery())
+					fetch(ele.datasource.buildQuery(ele, true))
 						.then((response) => response.json())
 						.then((response) => {
-							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map((row) => {
-								// return [row.pack_id, row.mole_name_en, row.mole_name_ch, row.prod_desc, row.prod_name_ch,row.corp_name_ch, row.mnf_name_ch, row.dosage, row.spec, row.pack, row.atc4_code]
-								return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
-							}))
+							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map(ele.datasource.adapter))
 							cb()
 						})
 				}
@@ -259,7 +271,7 @@ export default {
 						pos.y + that.font_size / 2 + that.sheet_margin + that.cell_inner_margin, pos.w, pos.h)
 				})
 			})
-			
+
 			ctx.stroke()
 			ctx.restore()
 		},
@@ -290,6 +302,18 @@ export default {
 		focusHandler(event) {
 			this.$refs.hidden.focus()
 		},
+		sortHandler(event) {
+			this.$refs.hidden.focus()
+			// 暂时只能一个排序
+			const tmp = this.datasource.sort[event.target.firstChild.data]
+			if (tmp && tmp > 0) {
+				this.datasource.sort[event.target.firstChild.data] = -1
+			} else {
+				this.datasource.sort = {}
+				this.datasource.sort[event.target.firstChild.data] = 1
+			}
+			this.dataRefresh++
+		},
 		keyPressHandler(event) {
 			switch (event.code) {
 			case "ArrowDown": {
@@ -314,11 +338,13 @@ export default {
 			case "ArrowRight": {
 				this.cur_page++
 				const that = this
+
 				function cbAddPage() {
 					that.cur_page = that.cur_page > that.datasource.data.length / that.page_size - 1 ?
 						that.datasource.data.length / that.page_size - 1 : that.cur_page
 					that.needRefresh++
 				}
+
 				if (this.cur_page > this.datasource.data.length / this.page_size - 1) {
 					this.datasource.appendData(this, cbAddPage)
 				} else {
@@ -344,7 +370,7 @@ export default {
 		needRefresh(n, o) {
 			this.render()
 		},
-		"datasource.sql"(n, o) {
+		dataRefresh(n, o) {
 			this.datasource.refreshData(this)
 		}
 	}
@@ -358,7 +384,7 @@ export default {
 		.body {
 			// overflow: auto;
 		}
-	
+
 	}
 	.schemas {
 		height: 24px;
