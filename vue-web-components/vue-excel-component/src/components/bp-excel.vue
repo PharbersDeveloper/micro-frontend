@@ -367,12 +367,12 @@ export default {
 					}
 				}
 				this.$emit('showModel', event)
-				this.needRefresh++
-				console.log("space")
-				//###########################//
-				this.datasource.filter["gn"] = "瑞舒"
-				this.dataRefresh++
-				//###########################//
+				// this.needRefresh++
+				// console.log("space")
+				// //###########################//
+				// this.datasource.filter["gn"] = "瑞舒"
+				// this.dataRefresh++
+				// //###########################//
 				break
 			}}
 		}
@@ -384,9 +384,6 @@ export default {
 		dataRefresh(n, o) {
 			this.datasource.data = []
 			this.datasource.refreshData(this)
-		},
-		"datasource.sql"() {
-			this.render()
 		}
 	}
 };

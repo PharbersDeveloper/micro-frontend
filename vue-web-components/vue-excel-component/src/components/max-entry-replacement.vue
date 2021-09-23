@@ -32,7 +32,7 @@
         <div class="source-entry-container">
             <span class="heading-small">源条目</span>
             <div class="source-entry-border">
-                <bp-excel :datasource="sourceData" :page_size="1"></bp-excel>
+                <bp-excel :datasource="sourceData" :page_size="1" v-if="sonRefresh"></bp-excel>
             </div>
         </div>
 
@@ -64,14 +64,14 @@ export default {
 			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
 			sourceData: {
 				data: [],
-				sql: "",
 				refreshData:(ele) => {
 					ele.needRefresh++
 				},
 				appendData: (ele, cb) => {
 					cb()
 				}
-			}
+			},
+			sonRefresh: true
 		}
 	},
 	watch: {
@@ -95,9 +95,12 @@ export default {
 	},
 	watch: { 
 		sourceArr: function(data) {
-			debugger
+			this.sonRefresh= false;
+			this.sourceData.data = []
 			this.sourceData.data.push(data)
-			this.sourceData.sql = data[1]
+			this.$nextTick(() => {
+				this.sonRefresh= true;
+			});
 		}
 	}
 }

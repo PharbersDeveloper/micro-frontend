@@ -18,7 +18,7 @@
                     <span class="heading-small">源文件：{{allData.fileName}}</span>
                     <div class="source-content-container ">
                         <div class="source-border">
-                            <bp-excel :cols="allData.schemas" :datasource="sourceData" :page_size="5" ></bp-excel>
+                            <bp-excel :cols="allData.schemas" :datasource="sourceData" :page_size="5" v-if="sonRefresh"></bp-excel>
                         </div>
 
                          <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
@@ -113,7 +113,8 @@ export default {
 				appendData: (ele, cb) => {
 					cb()
 				}
-			}
+			},
+			sonRefresh: true
 		}
 	},
 	methods: {
@@ -199,9 +200,13 @@ export default {
 			this.$forceUpdate()
 			this.middleList = []
 			if(this.allData.eventName == "clickFile") {
+				//刷新数据
+				this.sonRefresh= false;
 				//获取源文件列表数据
 				this.sourceData.data = this.allData.sourceData
-				this.sourceData.sql = this.allData.fileName
+				this.$nextTick(() => {
+					this.sonRefresh= true;
+				});
 			}
 			//点击文件列表
 			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
