@@ -139,10 +139,10 @@ export default {
 						})
 				},
 				appendData: (ele, cb) => {
-					fetch(ele.datasource.buildQuery(ele, true))
+					ele.datasource.buildQuery(ele, true)
 						.then((response) => response.json())
 						.then((response) => {
-							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map(ele.datasource.adapter))
+							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
 							cb()
 						})
 				}
