@@ -39,7 +39,7 @@
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :paramQuery="paramQuery" :cols="schemaData"  :viewHeight="300" :page_size="10"></bp-excel>
+                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster"></bp-excel>
             </div>
         </div>
 
@@ -62,13 +62,82 @@ export default {
 			visible: this.showDialog,
 			paramQuery: "SELECT * FROM clean_master LIMIT 100",
 			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+			cols: ["dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
 			sourceData: {
 				data: [],
+				name: "clean_master",
 				refreshData:(ele) => {
 					ele.needRefresh++
 				},
 				appendData: (ele, cb) => {
 					cb()
+				}
+			},
+			sourceDataMaster: {
+				data: [],
+				sort: {},
+				filter: {},
+				name: "clean_master",
+				batch_size: 200,
+				adapter: (row) => [row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
+				buildQuery: (ele, isAppend=false) => {
+					function buildQueryString() {
+						let sql_str = "SELECT "
+						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
+
+						// filter
+						for (const key in ele.datasource.filter) {
+							sql_str = sql_str + " WHERE " + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+						}
+
+						// sorts
+						for (const key in ele.datasource.sort) {
+							sql_str = sql_str + " ORDER BY " + key
+							if (ele.datasource.sort[key] < 0) {
+								sql_str = sql_str + " desc "
+							}
+						}
+
+						// pages
+						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
+						console.log(ele.datasource.sort)
+						console.log(sql_str)
+						return sql_str
+					}
+
+					const url = "https://api.pharbers.com/phchproxyquery"
+					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
+					let body = {
+						"query": buildQueryString(),
+						"schema": ele.schema
+					}
+					let options = {
+						method: "POST",
+						headers: {
+							"Authorization": accessToken,
+							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+							"accept": "application/json"
+						},
+						body: JSON.stringify(body)
+					}
+					return fetch(url, options)
+				},
+				refreshData:(ele) => {
+					ele.datasource.buildQuery(ele)
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = response.map(ele.datasource.adapter)
+							ele.needRefresh++
+						})
+				},
+				appendData: (ele, cb) => {
+					fetch(ele.datasource.buildQuery(ele, true))
+						.then((response) => response.json())
+						.then((response) => {
+							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map(ele.datasource.adapter))
+							cb()
+						})
 				}
 			},
 			sonRefresh: true
@@ -95,6 +164,7 @@ export default {
 	},
 	watch: { 
 		sourceArr: function(data) {
+			// 刷新子组件数据
 			this.sonRefresh= false;
 			this.sourceData.data = []
 			this.sourceData.data.push(data)
