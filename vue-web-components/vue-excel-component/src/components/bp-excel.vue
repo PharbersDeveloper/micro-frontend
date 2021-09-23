@@ -93,7 +93,7 @@ export default {
 				filter: {},
 				name: "clean_source",
 				batch_size: 200,
-				adapter: (row) => [row.pkc, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.dt],
+				adapter: (row) => [row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
 				buildQuery: (ele, isAppend=false) => {
 					function buildQueryString() {
 						let sql_str = "SELECT "

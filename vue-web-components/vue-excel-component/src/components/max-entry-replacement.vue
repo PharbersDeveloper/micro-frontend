@@ -9,13 +9,13 @@
         <div class="entry-search-container">
             <div class="entry-search-left">
                 <div class="single-search mr-3">
-                    <span class="mb-1 heading-xsmall">Name_1</span>
-                    <input type="text" placeholder="yang">
+                    <span class="mb-1 heading-xsmall">dn</span>
+                    <input type="text" placeholder="请输入">
                 </div>
 
                 <div class="single-search">
-                    <span class="mb-1 heading-xsmall">Name_1</span>
-                    <input type="text" placeholder="yang">
+                    <span class="mb-1 heading-xsmall">fnpy</span>
+                    <input type="text" placeholder="请输入">
                 </div>
             </div>
 
