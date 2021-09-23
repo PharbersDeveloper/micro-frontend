@@ -57,6 +57,10 @@ export default {
 
 	},
 	props: {
+		isNeedKeyBoardEvent: {
+			type: Boolean,
+			default: true
+		},
 		viewHeight: {
 			type: Number,
 			default: 100
@@ -115,8 +119,6 @@ export default {
 						// pages
 						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
 						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
-						console.log(ele.datasource.sort)
-						console.log(sql_str)
 						return sql_str
 					}
 
@@ -305,10 +307,12 @@ export default {
 			return { x: x, y: y, w: w, h: h }
 		},
 		focusHandler(event) {
-			this.$refs.hidden.focus()
+			if (this.isNeedKeyBoardEvent)
+				this.$refs.hidden.focus()
 		},
 		sortHandler(event) {
-			this.$refs.hidden.focus()
+			if (this.isNeedKeyBoardEvent)
+				this.$refs.hidden.focus()
 			// 暂时只能一个排序
 			const tmp = this.datasource.sort[event.target.firstChild.data]
 			if (tmp && tmp > 0) {
