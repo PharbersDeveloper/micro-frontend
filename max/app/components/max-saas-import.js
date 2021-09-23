@@ -95,6 +95,8 @@ export default class MaxSaasImportComponent extends Component {
 
 					let mapperTags = mapperData.tags
 					let tags = message.tags.concat(mapperTags)
+					let ym = tags.filter(it => it.Key == "date")[0]
+					let dateym = ym.Value
 					let mapper = mapperData.mapper
 					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
 					let dealMapper = []
@@ -120,7 +122,8 @@ export default class MaxSaasImportComponent extends Component {
 						"mapper_args": dealMapper,
 						"provider": "MAX", 
 						"version": "max", 
-						"owner": "wodelu"
+						"owner": "wodelu",
+						"date": dateym,
 					}
 					let parameters = {
 						puts3_event: puts3_event, 

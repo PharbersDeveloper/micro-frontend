@@ -50,6 +50,8 @@ export default {
 			// 双缓存
 			buffer_ctx: null,
 			buffer_canvas: null
+
+			//请求数据参数
 		}
 	},
 	components: {
@@ -64,6 +66,10 @@ export default {
 			type: Array,
 			default: () => ["gn", "pn", "mn", "do", "sp", 
 				"pk","pku"]
+		},
+		schemas: {
+			type: Array,
+			default: () => ["id", "gn", "pn", "mn", "do", "sp", "pk", "pku", "measure", "provider", "version", "owner"]
 		},
 		cell_hit_height: {
 			type: Number,
@@ -90,15 +96,12 @@ export default {
 			default: () => { return {
 				data: [],
 				sql: "",
-				buildQuery: () => {
-					return "https://api.pharbers.com/phchproxyquery"
-				},
-				refreshData: (ele) => {
+				buildQuery: (ele) => {
+					const url = "https://api.pharbers.com/phchproxyquery"
 					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
-					console.log(ele.cols)
 					let body = {
 						"query": ele.paramQuery,
-						"schema": ["id", "gn", "pn", "mn", "do", "sp", "pk","pku", 		"measure", "provider", "version", "owner"]
+						"schema": ele.schemas
 					}
 					let options = {
 						method: "POST",
@@ -109,16 +112,14 @@ export default {
 						},
 						body: JSON.stringify(body)
 					}
-					fetch(ele.datasource.buildQuery(), options)
+					return fetch(url, options)
+				},
+				refreshData: (ele) => {
+					ele.datasource.buildQuery(ele)
 						.then((response) => response.json())
 						.then((response) => {
 							let arr = []
 							ele.datasource.data = response.map((row) => {
-								// return [row.id, row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku, row.measure, row.provider, row.version, row.owner]
-								// ele.cols.forEach((item) => {
-								// 	arr.push(row[item])
-								// })
-								// return arr
 								return [row.gn, row.pn, row.mn, row.do, row.sp, row.pk, row.pku]
 							})
 							ele.needRefresh++
