@@ -39,7 +39,7 @@
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :viewHeight="300" :page_size="10"></bp-excel>
+                <bp-excel :paramQuery="paramQuery" :cols="schemaData"  :viewHeight="300" :page_size="10"></bp-excel>
             </div>
         </div>
 
@@ -59,7 +59,9 @@ export default {
 	},
 	data() {
 		return {
-			visible: this.showDialog
+			visible: this.showDialog,
+			paramQuery: "SELECT * FROM clean_master LIMIT 100",
+			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"]
 		}
 	},
 	watch: {
