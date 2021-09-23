@@ -9,13 +9,13 @@
         <div class="entry-search-container">
             <div class="entry-search-left">
                 <div class="single-search mr-3">
-                    <span class="mb-1 heading-xsmall">dn</span>
-                    <input type="text" placeholder="请输入">
+                    <span class="mb-1 heading-xsmall">通用名</span>
+                    <input type="text" placeholder="请输入" v-model="dnValue">
                 </div>
 
                 <div class="single-search">
-                    <span class="mb-1 heading-xsmall">fnpy</span>
-                    <input type="text" placeholder="请输入">
+                    <span class="mb-1 heading-xsmall">生产厂商</span>
+                    <input type="text" placeholder="请输入" v-model="fnpyValue">
                 </div>
             </div>
 
@@ -25,21 +25,21 @@
                     <span class="btn_secondary_initial">筛选条件</span>
                 </button>
 
-                <button class="search-button btn_primary-initial">搜索</button>
+                <button class="search-button btn_primary-initial" @click="search">搜索</button>
             </div>
         </div>
 
         <div class="source-entry-container">
             <span class="heading-small">源条目</span>
             <div class="source-entry-border">
-                <bp-excel :datasource="sourceData" :page_size="1" v-if="sonRefresh"></bp-excel>
+                <bp-excel :datasource="sourceData" :page_size="1" v-if="sonRefresh" :isNeedKeyBoardEvent="false"></bp-excel>
             </div>
         </div>
 
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster"></bp-excel>
+                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster" v-if="masterRefresh"></bp-excel>
             </div>
         </div>
 
@@ -59,10 +59,12 @@ export default {
 	},
 	data() {
 		return {
-			visible: this.showDialog,
+			dnValue: '',
+			fnpyValue: '',
 			paramQuery: "SELECT * FROM clean_master LIMIT 100",
 			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
 			cols: ["dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+			masterRefresh: true,
 			sourceData: {
 				data: [],
 				name: "clean_master",
@@ -86,8 +88,13 @@ export default {
 						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
 						// filter
+						let firstFilter = Object.keys(ele.datasource.filter)[0]
+						let filterParam = " WHERE "
 						for (const key in ele.datasource.filter) {
-							sql_str = sql_str + " WHERE " + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+							if(key != firstFilter) {
+								filterParam = " AND "
+							}
+							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
 						}
 
 						// sorts
@@ -107,7 +114,7 @@ export default {
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
+					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
 					let body = {
 						"query": buildQueryString(),
 						"schema": ele.schema
@@ -143,12 +150,6 @@ export default {
 			sonRefresh: true
 		}
 	},
-	watch: {
-		immediate:true,
-		visible(val) {
-			this.showDialog = val
-		}
-	},
 	props: {
 		showDialog: {
 			type: Boolean,
@@ -160,14 +161,33 @@ export default {
 	methods: {
 		close() {
 			this.$emit('dialog-visible',false)
+		},
+		search() {
+			if(this.dnValue && this.dnValue != '') {
+				this.sourceDataMaster.filter["csn"] = this.dnValue
+			}
+			if(this.fnpyValue && this.fnpyValue != '') {
+				this.sourceDataMaster.filter["manu"] = this.fnpyValue
+			}
+			if(this.dnValue == '' && this.fnpyValue == '') {
+				this.sourceDataMaster.filter = {}
+			}
+			// 刷新子组件数据
+			this.masterRefresh= false;
+			this.$nextTick(() => {
+				this.masterRefresh= true;
+			});
 		}
 	},
 	watch: { 
 		sourceArr: function(data) {
-			// 刷新子组件数据
-			this.sonRefresh= false;
 			this.sourceData.data = []
 			this.sourceData.data.push(data)
+			//搜索条件
+			this.fnpyValue = this.sourceArr[5]
+			this.search()
+			// 刷新子组件数据
+			this.sonRefresh= false;
 			this.$nextTick(() => {
 				this.sonRefresh= true;
 			});

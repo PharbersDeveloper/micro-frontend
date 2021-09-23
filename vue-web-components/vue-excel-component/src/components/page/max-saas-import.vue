@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :viewHeight="800"></bp-excel>
+                            <bp-excel name="targer" :viewHeight="1250"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
                             <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
@@ -422,15 +422,22 @@ export default {
 
                     .target-content-container {
                         display: flex;
-                        // flex-grow: 1;
                         width: 100%;
                         .target-border {
                             width: 100%;
+							height: calc(100vh - 400px);
                             border: 1px solid rgba(37,35,45,0.12);
                             border-radius: 2px;
                             padding: 4px;
                             margin-right: 4px;
 							overflow: hidden;
+							/deep/.excel_container {
+								height: calc(100vh - 400px);
+								overflow: auto;
+							}
+							/deep/.viewport {
+								overflow-y: hidden !important;
+							}
                         }
                     }
                 }

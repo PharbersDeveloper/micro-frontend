@@ -104,8 +104,13 @@ export default {
 						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
 						// filter
+						let firstFilter = Object.keys(ele.datasource.filter)[0]
+						let filterParam = " WHERE "
 						for (const key in ele.datasource.filter) {
-							sql_str = sql_str + " WHERE " + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+							if(key != firstFilter) {
+								filterParam = " AND "
+							}
+							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
 						}
 
 						// sorts
@@ -118,12 +123,12 @@ export default {
 
 						// pages
 						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
+						sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
 						return sql_str
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "1d8e01fa0eb856c9979c4f11b9313bae776fa5dab37498bcaef82cf7aa53f407"
+					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
 					let body = {
 						"query": buildQueryString(),
 						"schema": ele.schema
@@ -148,10 +153,12 @@ export default {
 						})
 				},
 				appendData: (ele, cb) => {
+					debugger
 					fetch(ele.datasource.buildQuery(ele, true))
 						.then((response) => response.json())
 						.then((response) => {
 							ele.datasource.data = ele.datasource.data.concat(JSON.parse(response.body).map(ele.datasource.adapter))
+							debugger
 							cb()
 						})
 				}
@@ -307,21 +314,23 @@ export default {
 			return { x: x, y: y, w: w, h: h }
 		},
 		focusHandler(event) {
-			if (this.isNeedKeyBoardEvent)
+			if (this.isNeedKeyBoardEvent) {
 				this.$refs.hidden.focus()
+			}
 		},
 		sortHandler(event) {
-			if (this.isNeedKeyBoardEvent)
+			if (this.isNeedKeyBoardEvent) {
 				this.$refs.hidden.focus()
-			// 暂时只能一个排序
-			const tmp = this.datasource.sort[event.target.firstChild.data]
-			if (tmp && tmp > 0) {
-				this.datasource.sort[event.target.firstChild.data] = -1
-			} else {
-				this.datasource.sort = {}
-				this.datasource.sort[event.target.firstChild.data] = 1
+				// 暂时只能一个排序
+				const tmp = this.datasource.sort[event.target.firstChild.data]
+				if (tmp && tmp > 0) {
+					this.datasource.sort[event.target.firstChild.data] = -1
+				} else {
+					this.datasource.sort = {}
+					this.datasource.sort[event.target.firstChild.data] = 1
+				}
+				this.dataRefresh++
 			}
-			this.dataRefresh++
 		},
 		keyPressHandler(event) {
 			switch (event.code) {
@@ -359,6 +368,7 @@ export default {
 				} else {
 					cbAddPage()
 				}
+				break
 			}
 			case "Space": {
 				let cur_data = this.datasource.data[this.cur_row]

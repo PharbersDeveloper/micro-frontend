@@ -11,7 +11,7 @@
                     <span class="heading-large">人工清洗<span class="body-secondary ml-2">de522809-937c-5</span></span>
                     <span class="body-tertiary">上次更新时间 17 Oct,2020 22:45</span>
                 </div>
-                <button @click="show(true)">确认清洗</button>
+                <button >确认清洗</button>
             </div>
 
             <div class="cleaning-function">
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :viewHeight="1000" @showModel="showModel"></bp-excel>
+                <bp-excel :viewHeight="1250" @showModel="showModel"></bp-excel>
             </div>
         </div>
 		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent"></max-entry>
@@ -207,15 +207,19 @@ export default {
                         &:last-of-type {
                             margin-right: 0;
                         }
-                    }
+                    } 
                 }
             }
 
             .content-container {
-                height: 100%;
+                height: calc(100vh - 220px);
+				overflow: auto;
                 border: 1px solid rgba(37,35,45,0.12);
                 border-radius: 2px;
                 padding: 4px;
+				/deep/.viewport {
+					overflow-y: hidden !important;
+				}
             }
         }
     }
