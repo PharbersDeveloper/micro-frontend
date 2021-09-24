@@ -98,7 +98,7 @@ export default {
 				filter: {},
 				name: "clean_source",
 				batch_size: 200,
-				adapter: (row) => [row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
+				adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
 				buildQuery: (ele, isAppend=false) => {
 					function buildQueryString() {
 						let sql_str = "SELECT "
@@ -129,7 +129,7 @@ export default {
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
+					const accessToken = ele.getCookie("access_token") || "e187a7531d61c56587ed1fc71f77f564878be39e24e2394db7ecb11bbf387253"
 					let body = {
 						"query": buildQueryString(),
 						"schema": ele.schema
@@ -279,8 +279,17 @@ export default {
 			const start_index = this.cur_page * this.page_size
 			this.datasource.data.slice(start_index, start_index + this.page_size).forEach((row, row_index) => {
 				row.forEach((col, col_index) => {
+					// 没有请求接口的数据
+					if(this.datasource.adapter && col_index === row.length - 1) {
+						return
+					}
 					const pos = that.getCellPosition(row_index, col_index)
-					const text = that.datasource.data[row_index + start_index][col_index]
+					let text
+					if(this.datasource.adapter) {
+						text = that.datasource.data[row_index + start_index][col_index+1]
+					} else {
+						text = that.datasource.data[row_index + start_index][col_index]
+					}
 					ctx.fillText(text, that.cell_inner_margin + pos.x,
 						pos.y + that.font_size / 2 + that.sheet_margin + that.cell_inner_margin, pos.w, pos.h)
 				})
@@ -367,7 +376,8 @@ export default {
 				break
 			}
 			case "Space": {
-				let cur_data = this.datasource.data[this.cur_row]
+				let cur_page_row = this.cur_page * this.page_size + this.cur_row
+				let cur_data = this.datasource.data[cur_page_row]
 				const event = new Event("event")
 				event.args = {
 					callback: "modelData",
@@ -377,12 +387,6 @@ export default {
 					}
 				}
 				this.$emit('showModel', event)
-				// this.needRefresh++
-				// console.log("space")
-				// //###########################//
-				// this.datasource.filter["gn"] = "瑞舒"
-				// this.dataRefresh++
-				// //###########################//
 				break
 			}}
 		}
