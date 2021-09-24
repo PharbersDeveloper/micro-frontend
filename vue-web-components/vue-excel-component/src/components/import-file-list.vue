@@ -58,7 +58,8 @@ export default {
         .import-file-cell-container {
             display: flex;
             flex-direction: column;
-
+			overflow: auto;
+    		height: calc(100vh - 220px);
             .import-file-cell {
                 margin-bottom: 4px;
 
