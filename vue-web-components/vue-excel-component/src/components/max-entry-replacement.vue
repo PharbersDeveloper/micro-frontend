@@ -39,13 +39,13 @@
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster" v-if="masterRefresh"></bp-excel>
+                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster" v-if="masterRefresh" ref="masterExcel"></bp-excel>
             </div>
         </div>
 
         <div class="button-container">
             <button class="btn_secondary_initial cancel-button" @click="close">取消</button>
-            <button class="btn_secondary_initial">确认替换</button>
+            <button class="btn_secondary_initial" @click="confirm">确认替换</button>
         </div>
 		</div>
     </div>
@@ -81,7 +81,7 @@ export default {
 				filter: {},
 				name: "clean_master",
 				batch_size: 200,
-				adapter: (row) => [row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
+				adapter: (row) => [row.id, row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
 				buildQuery: (ele, isAppend=false) => {
 					function buildQueryString() {
 						let sql_str = "SELECT "
@@ -114,7 +114,7 @@ export default {
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "6a41f61d4bf8e737dca0ef5a1e96fafe57f28abc4f5756f999a98e8049497e0d"
+					const accessToken = ele.getCookie("access_token") || "e187a7531d61c56587ed1fc71f77f564878be39e24e2394db7ecb11bbf387253"
 					let body = {
 						"query": buildQueryString(),
 						"schema": ele.schema
@@ -160,6 +160,13 @@ export default {
 		excelComponent: Object
 	},
 	methods: {
+		getCookie(name) {
+			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+			if (arr = document.cookie.match(reg))
+				return (arr[2]);
+			else
+				return null;
+		},
 		close() {
 			this.$emit('dialog-visible',false)
 		},
@@ -178,6 +185,37 @@ export default {
 			this.$nextTick(() => {
 				this.masterRefresh= true;
 			});
+		},
+		confirm() {
+			let id = this.sourceArr[0] // source表的id
+			let cur_page_row = this.$refs.masterExcel.cur_page * this.$refs.masterExcel.page_size + this.$refs.masterExcel.cur_row //master表当前行数
+			let cur_data = this.sourceDataMaster.data[cur_page_row] //master表当前行数据
+			let fcode = cur_data[8]
+			const url = "https://api.pharbers.com/phchproxyupdate"
+			const accessToken = this.getCookie("access_token") || "e187a7531d61c56587ed1fc71f77f564878be39e24e2394db7ecb11bbf387253"
+			let body = {
+				"query": `ALTER TABLE clean_source UPDATE pkc='${fcode}' WHERE id='${id}'`
+			}
+			let options = {
+				method: "POST",
+				headers: {
+					"Authorization": accessToken,
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+					"accept": "application/json"
+				},
+				body: JSON.stringify(body)
+			}
+			fetch(url, options).then((response) => {
+				const event = new Event("event")
+				event.args = {
+					callback: "refresh",
+					element: this,
+					param: {
+						fcode: fcode
+					}
+				}
+				this.$emit('refreshData', event)
+			})
 		}
 	},
 	watch: { 
@@ -185,9 +223,9 @@ export default {
 			this.sourceData.data = []
 			this.sourceData.data.push(data)
 			//搜索条件
-			this.fnpyValue = this.sourceArr[5]
+			this.fnpyValue = this.sourceArr[6]
 			this.search()
-			// 刷新子组件数据
+			// 刷新source表单组件数据
 			this.sonRefresh= false;
 			this.$nextTick(() => {
 				this.sonRefresh= true;

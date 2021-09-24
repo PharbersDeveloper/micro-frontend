@@ -17,16 +17,16 @@
             <div class="cleaning-function">
                 <span class="heading-small">源文件：cpa_pchc_universe</span>
                 <div class="cleaning-function-buttons">
-                    <button>机器匹配</button>
-                    <button>检查匹配进度</button>
-                    <button>显示全部数据</button>
+                    <button disabled>机器匹配</button>
+                    <button disabled>检查匹配进度</button>
+                    <button disabled>显示全部数据</button>
                 </div>
             </div>
             <div class="content-container">
                 <bp-excel :viewHeight="1250" @showModel="showModel"></bp-excel>
             </div>
         </div>
-		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent"></max-entry>
+		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent" @refreshData="refreshData"></max-entry>
     </div>
 </template>
 
@@ -50,6 +50,13 @@ export default {
 			this.source_data = data.args.param.data
 			this.excelComponent = data.args.element
 			this.showDialog = true
+		},
+		refreshData(data) {
+			this.showDialog = false
+			let fcode = data.args.param.fcode
+			let cur_page_row = this.excelComponent.cur_page * this.excelComponent.page_size + this.excelComponent.cur_row //master表当前行数
+			this.excelComponent.datasource.data[cur_page_row][1] = fcode
+			this.excelComponent.needRefresh++
 		}
 	},
 	components: {
@@ -74,6 +81,9 @@ export default {
         outline: 0;
         cursor: pointer;
     }
+	button:disabled {
+		color: #777 !important;
+	}
 
     @mixin btn_primary-initial {
         font-family: PingFangSC-Medium;
