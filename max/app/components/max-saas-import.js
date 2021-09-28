@@ -121,7 +121,7 @@ export default class MaxSaasImportComponent extends Component {
 						"begin_line": optParam.readNumber,
 						"mapper_args": dealMapper,
 						"provider": "MAX", 
-						"version": "max", 
+						"version": "max",
 						"owner": "wodelu",
 						"date": dateym,
 					}
@@ -170,7 +170,8 @@ export default class MaxSaasImportComponent extends Component {
 						that.uploadLoadedSize = 70
 						let exArn = datas.arn
 						//请求phstatus
-						let stateUrl = "https://api.pharbers.com/phstepstatus"
+						// let stateUrl = "https://api.pharbers.com/phstepstatus"
+						let stateUrl = "https://apiv2.pharbers.com/phgetsfn"
 						let options = {
 							method: "POST",
 							mode: "cors",
