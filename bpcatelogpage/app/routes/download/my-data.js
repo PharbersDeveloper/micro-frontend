@@ -26,7 +26,7 @@ export default class DownloadMyDataRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-        let files =  this.store.query( "asset", { "filter[type]": "file", "filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
+        let files =  await this.store.query( "asset", { "filter[type]": "file", "filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
 
 		let database = await this.store.query("db", {})
 		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
