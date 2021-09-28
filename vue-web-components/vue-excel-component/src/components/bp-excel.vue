@@ -95,7 +95,6 @@ export default {
 		datasource: {
 			type: Object,
 			default: function() {
-				debugger
 				let that = this
 				return {
 					data: [],

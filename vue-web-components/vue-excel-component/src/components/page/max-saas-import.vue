@@ -174,7 +174,7 @@ export default {
 					mapperAssets: [], //列表状态
 					sourceData: [],
 					readNumber: 1,
-					dt: '202108',
+					dt: '202109',
 					provider: "MAx"
 				}
 			}
@@ -252,6 +252,7 @@ export default {
 		}
 	}
 }
+
 </script>
 
 <style lang="scss" scoped>

@@ -26,7 +26,7 @@
                 <bp-excel :viewHeight="1250" @showModel="showModel"></bp-excel>
             </div>
         </div>
-		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent" @refreshData="refreshData"></max-entry>
+		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent" @refreshData="refreshData" :provider="allData.provider" :dt="allData.dt"></max-entry>
     </div>
 </template>
 
@@ -63,7 +63,24 @@ export default {
 		bpExcel,
 		maxEntry
 	},
-	props: {}
+	props: {
+		allData: {
+			type: Object,
+			default:  function() {
+				return {
+					assets: [],//文件列表
+					schemas: ['省', '城市', '年', '季度', '月', '医院编码', 'ATC编码', '药品名称', '商品名', '包装', '规格', '包装数量', '金额（元）', '数量(支/片)', '剂型', '给药途径', '生产企业'],//源数据表头
+					targetNames: [],//目标文件表头
+					fileName: '',
+					mapperAssets: [], //列表状态
+					sourceData: [],
+					readNumber: 1,
+					dt: '202109',
+					provider: "MAx"
+				}
+			}
+		}
+	}
 }
 </script>
 

@@ -46,7 +46,7 @@ export default class MaxSaasComponent extends Component {
                 }
 				//人工清洗
 				if(optParam.type == "clean") {
-					window.open(`${ENV.windowUri}/max-saas/cleaning`)
+					window.open(`${ENV.windowUri}/max-saas/cleaning?ym=${this.uploadDate}&provider=${this.provider}`)
                 }
 
                 break
