@@ -28,7 +28,7 @@
                             <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
                         </bp-select-vue>
                     </div>
-                    <span class="heading-small">目标文件</span>
+                    <span class="heading-small">目标文件{{allData.dt --- allData.provider}}</span>
                     <div class="target-content-container ">
                         <div class="target-border">
                             <bp-excel name="targer" :viewHeight="1250"></bp-excel>

@@ -72,6 +72,8 @@ export default class MaxSaasImportRoute extends Route {
 			// targetNames: ["pack_id","mole_name_en","mole_name_ch","prod_desc","prod_name_ch", "corp_name_ch", "mnf_name_ch", "dosage", "spec", "pack", "atc4_code"], //目标文件表头
 			targetNames: ["gn", "pn", "mn", "do", "sp", "pk",
 			"pku"],
+			dt: params.ym,
+			provider: params.provider,
 			_isVue: true
         })
     }

@@ -129,7 +129,7 @@ export default {
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "e187a7531d61c56587ed1fc71f77f564878be39e24e2394db7ecb11bbf387253"
+					const accessToken = ele.getCookie("access_token") || "1e6498ae2bcd0dd1e58813641158955c90b90bab9e0063c52eb1ea4ad0a4cbf1"
 					let body = {
 						"query": buildQueryString(),
 						"schema": ele.schema
@@ -170,6 +170,7 @@ export default {
 	},
 	mounted() {
 		this.focusHandler()
+		
 	},
 	methods: {
 		getCookie(name) {
