@@ -1,4 +1,4 @@
-import Service from '@ember/service';
+ import Service from '@ember/service';
 import { inject as service } from "@ember/service"
 import ENV from "max/config/environment"
 import fetch, { Headers, Request, Response, AbortController } from 'fetch';
