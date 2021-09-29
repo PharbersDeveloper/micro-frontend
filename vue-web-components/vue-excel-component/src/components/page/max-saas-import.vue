@@ -174,8 +174,8 @@ export default {
 					mapperAssets: [], //列表状态
 					sourceData: [],
 					readNumber: 1,
-					dt: '202109',
-					provider: "MAx"
+					dt: '',
+					provider: ""
 				}
 			}
 		},

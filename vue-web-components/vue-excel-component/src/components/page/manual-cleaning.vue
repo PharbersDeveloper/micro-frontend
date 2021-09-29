@@ -68,15 +68,8 @@ export default {
 			type: Object,
 			default:  function() {
 				return {
-					assets: [],//文件列表
-					schemas: ['省', '城市', '年', '季度', '月', '医院编码', 'ATC编码', '药品名称', '商品名', '包装', '规格', '包装数量', '金额（元）', '数量(支/片)', '剂型', '给药途径', '生产企业'],//源数据表头
-					targetNames: [],//目标文件表头
-					fileName: '',
-					mapperAssets: [], //列表状态
-					sourceData: [],
-					readNumber: 1,
-					dt: '202109',
-					provider: "MAx"
+					dt: '',
+					provider: ""
 				}
 			}
 		}

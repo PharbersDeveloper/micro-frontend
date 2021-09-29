@@ -185,8 +185,8 @@ export default {
 			if(this.dnValue == '' && this.fnpyValue == '') {
 				this.sourceDataMaster.filter = {}
 			}
-			this.sourceDataMaster.filter["dt"]
-			this.sourceDataMaster.filter["provider"]
+			this.sourceDataMaster.filter["dt"] = this.dt
+			this.sourceDataMaster.filter["provider"] = this.provider
 			// 刷新子组件数据
 			this.masterRefresh= false;
 			this.$nextTick(() => {
