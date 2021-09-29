@@ -63,6 +63,9 @@ export default {
 		bpExcel,
 		maxEntry
 	},
+	mounted() {
+		console.log('打印输出',this.allData.provider,this.allData.dt);
+	},
 	props: {
 		allData: {
 			type: Object,
