@@ -62,15 +62,16 @@ export default {
         },
 
         // 绑定自定义单击事件
-        async bindOnClickChart () {
-            this.mapChart.on('click', params => {
+        bindOnClickChart () {
+            this.mapChart.on('click', async params => {
                 const { seriesName, name, data: { adcode } } = params
                 if (name === '南海诸岛') return
 
                 // 点击的是否是省级
                 if (PROVINCES.includes(name)) {
                     const mapName = `${adcode}-${name}`
-                    const { partData, geoJson } = this.getPartAndGeoData('province', mapName)
+                    const { partData, geoJson } = await this.getPartAndGeoData('province', mapName)
+                    console.log(mapName, partData, geoJson)
                     this.registeRenderMap(mapName, partData, geoJson)
                     return
                 }
@@ -111,14 +112,13 @@ export default {
          */
         async getPartAndGeoData (type, mapName) {
             if (type === 'country') {
-                const res = await getChinaData()
-                const partData = res
+                const partData = await getChinaData()
                 const geoJson = getGeoJson('country', mapName)
                 return { partData, geoJson }
             }
             if (type === 'province') {
-                const res = getProvinceData()
-                const partData = res.data
+                const partData = await getProvinceData()
+                console.log(mapName)
                 const geoJson = getGeoJson('province', mapName)
                 return { partData, geoJson }
             }
@@ -182,78 +182,68 @@ export default {
                 title: {
                     text: mapName
                 },
+                //提示框组件
                 tooltip: {
                     trigger: 'item',
                     formatter: '{b}<br/>{c}',
-                    backgroundColor:'rgba(255,255,255,1)',
-                    borderColor: '#de5e60',
+                    backgroundColor:'rgba(28,36,39,0.8)',
+                    borderColor: 'rgba(28,36,39,1)',
                     textStyle: {
-                        color: 'red',
+                        color: '#fff',
                         fontSize: 12
                     }
                 },
-                // 视觉映射
+                // 视觉映射租组件
                 visualMap: {
+                    type: 'continuous',
                     min: 0,
                     max: visualMapMax,
                     text: ['高', '低'],
                     realtime: true,
-                    calculable: true,
+                    calculable: false,
+                    inverse: true,
                     inRange: {
+                        // 色阶范围
                         color: [
                             '#FBF5BA',
-                            '#FCE99D',
-                            '#F7E065',
-                            '#FBE074',
-                            '#F9D43F',
-                            '#F9D43F',
+                            '#F5C924',
                             '#B29106'
-                        ] // 色阶范围
+                        ] 
                     },
                     textStyle: {
-                        color: '#de5e60'
+                        color: '#6C6F7D'
                     }
                 },
                 series: [
                     {
                         name: mapName, // 系列名称
                         type: 'map',
-                        map: mapName, // 同 registerMap 方法的第一个参数一致
+                        map: mapName, // 使用registerMap注册的地图名称
                         zoom: 1, // 当前视角的缩放比例
-                        zlevel: 1, // 用于 Canvas 分层，不同zlevel值的图形会放置在不同的 Canvas 中
-                        scaleLimit: {
-                            min: 0.7,
+                        zlevel: 1, // 不同zlevel值的图形会放置在不同的Canvas中,zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面
+                        scaleLimit: { //滚轮缩放的极限控制
+                            min: 0.5,
                             max: 2
                         },
-                        label: {
-                            // 非高亮状态下的文本样式
-                            normal: {
-                                show: true,
-                                position: 'inside', // 文本标签显示的位置
-                                textStyle: {
-                                    color: '#de5e60', // 文本颜色
-                                    fontSize: 14
-                                }
-                                // formatter: '{b}\n{c}', // 文本上显示的值  data:[{name: "地名", value: 数据}],  {b}表示label信息,{c}代表value
-                            },
-                            // 高亮状态下的文本样式
+                        roma: 'scale', //开启缩放
+                        label: { //图形上的文本标签
+                            show: false,
+                            // 高亮状态下文本颜色
                             emphasis: {
-                                textStyle: {
-                                    color: '#fff' // 文本颜色
-                                }
+                                color: '#fff'
                             }
                         },
                         itemStyle: {
                             // 非高亮状态下的地图块样式
                             normal: {
-                                borderColor: '#EBEBE4'
+                                borderColor: '#fff',
+                                borderWidth: 1
                             },
                             // 高亮状态下的地图块样式
                             emphasis: {
                                 areaColor: 'rgb(254,153,78)'
                             }
                         },
-
                         data: seriesData
                     }
                 ],
@@ -275,7 +265,6 @@ export default {
          * @param {Object} geoJson 地图geoJson
          */
         getSeriesByPart (partData, geoJson) {
-            debugger
             let originData = geoJson.features.map(({ properties }) => ({
                 name: properties.name,
                 adcode: properties.adcode,
@@ -324,10 +313,8 @@ export default {
     width: 90vw;
     height: 98vh;
     .chart {
-        width: 70%;
-        height: 100%;
-        border-radius: 8px;
-        border: 2px solid #de5e60;
+        width: 50%;
+        height: 50%;
     }
 }
 </style>

@@ -1,5 +1,6 @@
 import china from '../../public/geoJsonColl/china.json'
 import neimenggu from '../../public/geoJsonColl/province/150000-内蒙古.json'
+import jilin from '../../public/geoJsonColl/province/220000-吉林.json'
 import chifeng from '../../public/geoJsonColl/city/150000-内蒙古-150400-赤峰市.json'
 import mockChina from '../../public/mock/china.json'
 import mockProvice from '../../public/mock/province.json'
@@ -7,27 +8,14 @@ import mockCity from '../../public/mock/city.json'
 // 获取GeoJSON数据
 export const getGeoJson = (type, name) => {
     if (type === 'country') return china
-    if (type === 'province') return neimenggu
+    if (type === 'province') return jilin
     // 判断是区，县，获取相应数据
     return chifeng
 }
 
 export const getChinaData = async () => {
-    //   return axios.get('/mock/china.json')
-    // return mockChina
-    const url = "https://api.pharbers.com/phchproxyquery"
-    const accessToken = "d29280544832665b7aebebf71e55656a7087546f3cf6d2b90a76d91b0c48a9db"
-    let body = {"query":"select `标准省份名称` as provice, sum(sales) as sales from max_result.data_wide where date='202001' and provice !='null' group by provice","schema":["provice","sales"]}
-    let options = {
-        method: "POST",
-        headers: {
-            "Authorization": accessToken,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            "accept": "application/json"
-        },
-        body: JSON.stringify(body)
-    }
-    let result =  await fetch(url, options).then(res => res.json())
+    let params = {"query":"select `标准省份名称` as provice, sum(sales) as sales from max_result.data_wide where date='202001' and provice !='null' group by provice","schema":["provice","sales"]}
+    let result = await queryData(params)
     let partData = []
     result.forEach((item) => {
         partData.push({
@@ -38,14 +26,46 @@ export const getChinaData = async () => {
     return partData
 }
 
-export const getProvinceData = () => {
-    // 判断是省，自治区，直辖市，获取相应数据
-    //   return axios.get('/mock/province.json')
-    return mockProvice
+export const getProvinceData = async () => {
+    let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from max_result.data_wide where date='202001' and `标准省份名称`='吉林省' group by city","schema":["city","sales"]}
+    let result = await queryData(params)
+    let partData = []
+    result.forEach((item) => {
+        partData.push({
+            name: item.city,
+            value: item.sales
+        })
+    })
+    return partData
 }
 
 export const getCityData = () => {
     // 判断是市，直辖市，获取相应数据
     //   return axios.get('/mock/city.json')
     return mockCity	
+}
+
+function getCookie(name) {
+    let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+        return (arr[2]);
+    else
+        return null;
+}
+
+async function queryData(data) {
+    const url = "https://api.pharbers.com/phchproxyquery"
+    const accessToken = getCookie("access_token") || "8264b81f12aa38cae3013deae697cc43eb0aa5bd42005d57a051771723126dd0"
+    let body = data
+    let options = {
+        method: "POST",
+        headers: {
+            "Authorization": accessToken,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            "accept": "application/json"
+        },
+        body: JSON.stringify(body)
+    }
+    let result = await fetch(url, options).then(res => res.json())
+    return result
 }
