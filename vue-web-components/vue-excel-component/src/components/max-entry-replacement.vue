@@ -117,7 +117,7 @@ export default {
 					}
 
 					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "40b497e35c1ed944d72b796d317610a0d42ffe22914976741a2b90c085287e15"
+					const accessToken = ele.getCookie("access_token") || "114433f1debcb36f2038d9a4c7706a61a0e58d98292a6eb316668f3bbfcaf57a"
 					let body = {
 						"query": buildQueryString(),
 						"schema": ele.schema
@@ -199,7 +199,7 @@ export default {
 			let cur_data = this.sourceDataMaster.data[cur_page_row] //master表当前行数据
 			let fcode = cur_data[8]
 			const url = "https://api.pharbers.com/phchproxyupdate"
-			const accessToken = this.getCookie("access_token") || "40b497e35c1ed944d72b796d317610a0d42ffe22914976741a2b90c085287e15"
+			const accessToken = this.getCookie("access_token") || "114433f1debcb36f2038d9a4c7706a61a0e58d98292a6eb316668f3bbfcaf57a"
 			let body = {
 				"query": `ALTER TABLE clean_source UPDATE pkc='${fcode}' WHERE id='${id}'`
 			}
