@@ -90,8 +90,6 @@ export default {
 			type: Number,
 			default: 50
 		},
-		dt: String,
-		provider: String,
 		datasource: {
 			type: Object,
 			default: function() {
@@ -99,10 +97,7 @@ export default {
 				return {
 					data: [],
 					sort: {},
-					filter: {
-						provider:that.provider,
-						dt: that.dt
-					},
+					filter: {},
 					name: "clean_source",
 					batch_size: 200,
 					adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
@@ -134,7 +129,6 @@ export default {
 							sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
 							return sql_str
 						}
-
 						const url = "https://api.pharbers.com/phchproxyquery"
 						const accessToken = ele.getCookie("access_token") || "114433f1debcb36f2038d9a4c7706a61a0e58d98292a6eb316668f3bbfcaf57a"
 						let body = {

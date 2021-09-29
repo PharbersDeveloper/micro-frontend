@@ -78,10 +78,7 @@ export default {
 			sourceDataMaster: {
 				data: [],
 				sort: {},
-				filter: {
-					provider: this.provider,
-					dt: this.dt
-				},
+				filter: {},
 				name: "clean_master",
 				batch_size: 200,
 				adapter: (row) => [row.id, row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
