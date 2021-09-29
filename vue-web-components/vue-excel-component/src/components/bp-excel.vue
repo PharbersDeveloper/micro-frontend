@@ -90,79 +90,86 @@ export default {
 			type: Number,
 			default: 50
 		},
+		dt: String,
+		provider: String,
 		datasource: {
 			type: Object,
-			default: () => { return {
-				data: [],
-				sort: {},
-				filter: {},
-				name: "clean_source",
-				batch_size: 200,
-				adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
-				buildQuery: (ele, isAppend=false) => {
-					function buildQueryString() {
-						let sql_str = "SELECT "
-						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
+			default: function() {
+				let that = this
+				return {
+					data: [],
+					sort: {},
+					filter: {
+						provider:that.provider,
+						dt: that.dt
+					},
+					name: "clean_source",
+					batch_size: 200,
+					adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
+					buildQuery: (ele, isAppend=false) => {
+						function buildQueryString() {
+							let sql_str = "SELECT "
+							sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
-						// filter
-						let firstFilter = Object.keys(ele.datasource.filter)[0]
-						let filterParam = " WHERE "
-						for (const key in ele.datasource.filter) {
-							if(key != firstFilter) {
-								filterParam = " AND "
+							// filter
+							let firstFilter = Object.keys(ele.datasource.filter)[0]
+							let filterParam = " WHERE "
+							for (const key in ele.datasource.filter) {
+								if(key != firstFilter) {
+									filterParam = " AND "
+								}
+								sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
 							}
-							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+
+							// sorts
+							for (const key in ele.datasource.sort) {
+								sql_str = sql_str + " ORDER BY " + key
+								if (ele.datasource.sort[key] < 0) {
+									sql_str = sql_str + " desc "
+								}
+							}
+
+							// pages
+							sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+							sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
+							return sql_str
 						}
 
-						// sorts
-						for (const key in ele.datasource.sort) {
-							sql_str = sql_str + " ORDER BY " + key
-							if (ele.datasource.sort[key] < 0) {
-								sql_str = sql_str + " desc "
-							}
+						const url = "https://api.pharbers.com/phchproxyquery"
+						const accessToken = ele.getCookie("access_token") || "40b497e35c1ed944d72b796d317610a0d42ffe22914976741a2b90c085287e15"
+						let body = {
+							"query": buildQueryString(),
+							"schema": ele.schema
 						}
-
-						// pages
-						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-						sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
-						return sql_str
+						let options = {
+							method: "POST",
+							headers: {
+								"Authorization": accessToken,
+								'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+								"accept": "application/json"
+							},
+							body: JSON.stringify(body)
+						}
+						return fetch(url, options)
+					},
+					refreshData: (ele) => {
+						ele.datasource.buildQuery(ele)
+							.then((response) => response.json())
+							.then((response) => {
+								ele.datasource.data = response.map(ele.datasource.adapter)
+								ele.needRefresh++
+							})
+					},
+					appendData: (ele) => {
+						ele.datasource.buildQuery(ele, true)
+							.then((response) => response.json())
+							.then((response) => {
+								ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+								ele.cur_page++
+								ele.needRefresh++
+							})
 					}
-
-					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "1e6498ae2bcd0dd1e58813641158955c90b90bab9e0063c52eb1ea4ad0a4cbf1"
-					let body = {
-						"query": buildQueryString(),
-						"schema": ele.schema
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							"Authorization": accessToken,
-							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-							"accept": "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					return fetch(url, options)
-				},
-				refreshData: (ele) => {
-					ele.datasource.buildQuery(ele)
-						.then((response) => response.json())
-						.then((response) => {
-							ele.datasource.data = response.map(ele.datasource.adapter)
-							ele.needRefresh++
-						})
-				},
-				appendData: (ele) => {
-					ele.datasource.buildQuery(ele, true)
-						.then((response) => response.json())
-						.then((response) => {
-							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-							ele.cur_page++
-							ele.needRefresh++
-						})
-				}
-			}}
+				}}
 		}
 	},
 	beforeMount() {
@@ -170,7 +177,6 @@ export default {
 	},
 	mounted() {
 		this.focusHandler()
-		
 	},
 	methods: {
 		getCookie(name) {

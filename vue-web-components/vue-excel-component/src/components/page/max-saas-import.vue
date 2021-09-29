@@ -28,10 +28,10 @@
                             <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
                         </bp-select-vue>
                     </div>
-                    <span class="heading-small">目标文件{{allData.dt}}</span>
+                    <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :viewHeight="1250"></bp-excel>
+                            <bp-excel name="targer" :viewHeight="1250" :dt="allData.dt" :provider="allData.provider"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
                             <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
@@ -173,7 +173,9 @@ export default {
 					fileName: '',
 					mapperAssets: [], //列表状态
 					sourceData: [],
-					readNumber: 1
+					readNumber: 1,
+					dt: '',
+					provider: ""
 				}
 			}
 		},
@@ -250,6 +252,7 @@ export default {
 		}
 	}
 }
+
 </script>
 
 <style lang="scss" scoped>
