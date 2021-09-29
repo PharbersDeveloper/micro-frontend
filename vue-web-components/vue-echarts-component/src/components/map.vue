@@ -185,10 +185,10 @@ export default {
                 tooltip: {
                     trigger: 'item',
                     formatter: '{b}<br/>{c}',
-                    backgroundColor:'rgba(255,255,255,0.7)',
+                    backgroundColor:'rgba(255,255,255,1)',
                     borderColor: '#de5e60',
                     textStyle: {
-                        color: '#fff',
+                        color: 'red',
                         fontSize: 12
                     }
                 },
