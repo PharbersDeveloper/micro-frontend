@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :viewHeight="1250"></bp-excel>
+                            <bp-excel name="targer" :viewHeight="1250" ref="targerExcel"></bp-excel>
                         </div>
                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon">
                             <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
@@ -47,7 +47,7 @@
             </div>
         </div>
         <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
-        <!-- 进度条 -->
+        <!-- 进度条弹框 -->
         <div v-if="closeuploadToast == '0'"
             class="upload-toast" 
             :class="[
@@ -68,9 +68,6 @@
             <div class="progress" v-if="showProgress == '1'"> 
                 <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
             </div> 
-            <!-- <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
-                {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
-            </bp-text> -->
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
                 <div class="cross"></div>
             </div>
@@ -103,15 +100,13 @@ export default {
 			proBar: 0,
 			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
 			sourceData: {
-				data: [
-					['a', 'b', '2019', '1', '1', '230461', 'N01AH03', '舒芬太尼', '舒芬太尼', 'A', '50 UG 1 ML', '1', '240835', '4800', 'SOLN', 'IJ', '宜昌人福药业有限责任公司']
-				],
-				sql: "",
+				data: [],
 				refreshData:(ele) => {
 					ele.needRefresh++
 				},
 				appendData: (ele, cb) => {
-					cb()
+					ele.cur_page++
+					ele.needRefresh++
 				}
 			},
 			sonRefresh: true
@@ -173,7 +168,9 @@ export default {
 					fileName: '',
 					mapperAssets: [], //列表状态
 					sourceData: [],
-					readNumber: 1
+					readNumber: 1,
+					dt: '',
+					provider: ""
 				}
 			}
 		},
@@ -247,9 +244,15 @@ export default {
 		},
 		"allData.sourceData": function(data) {
 			this.sourceData.data = data
+		},
+		"allData.provider": function(data) {
+			this.$refs.targerExcel.datasource.filter['provider'] = 'MAX'
+			this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
+			this.$refs.targerExcel.dataRefresh++
 		}
 	}
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -389,6 +392,7 @@ export default {
                             display: flex;
                             justify-content: center;
                             align-items: center;
+							width: 24px;
                         }
 
                         /deep/.bp-option-group {

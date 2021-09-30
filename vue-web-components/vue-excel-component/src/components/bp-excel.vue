@@ -92,77 +92,78 @@ export default {
 		},
 		datasource: {
 			type: Object,
-			default: () => { return {
-				data: [],
-				sort: {},
-				filter: {},
-				name: "clean_source",
-				batch_size: 200,
-				adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
-				buildQuery: (ele, isAppend=false) => {
-					function buildQueryString() {
-						let sql_str = "SELECT "
-						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
+			default: function() {
+				let that = this
+				return {
+					data: [],
+					sort: {},
+					filter: {},
+					name: "clean_source",
+					batch_size: 200,
+					adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
+					buildQuery: (ele, isAppend=false) => {
+						function buildQueryString() {
+							let sql_str = "SELECT "
+							sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
-						// filter
-						let firstFilter = Object.keys(ele.datasource.filter)[0]
-						let filterParam = " WHERE "
-						for (const key in ele.datasource.filter) {
-							if(key != firstFilter) {
-								filterParam = " AND "
+							// filter
+							let firstFilter = Object.keys(ele.datasource.filter)[0]
+							let filterParam = " WHERE "
+							for (const key in ele.datasource.filter) {
+								if(key != firstFilter) {
+									filterParam = " AND "
+								}
+								sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
 							}
-							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
-						}
 
-						// sorts
-						for (const key in ele.datasource.sort) {
-							sql_str = sql_str + " ORDER BY " + key
-							if (ele.datasource.sort[key] < 0) {
-								sql_str = sql_str + " desc "
+							// sorts
+							for (const key in ele.datasource.sort) {
+								sql_str = sql_str + " ORDER BY " + key
+								if (ele.datasource.sort[key] < 0) {
+									sql_str = sql_str + " desc "
+								}
 							}
+
+							// pages
+							sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+							sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
+							return sql_str
 						}
-
-						// pages
-						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-						sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
-						return sql_str
+						const url = "https://api.pharbers.com/phchproxyquery"
+						const accessToken = ele.getCookie("access_token") || "693979c7deff66f1c44472fc42b72cc2427632a15979a1e62be0fe0afa1d2a4d"
+						let body = {
+							"query": buildQueryString(),
+							"schema": ele.schema
+						}
+						let options = {
+							method: "POST",
+							headers: {
+								"Authorization": accessToken,
+								'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+								"accept": "application/json"
+							},
+							body: JSON.stringify(body)
+						}
+						return fetch(url, options)
+					},
+					refreshData: (ele) => {
+						ele.datasource.buildQuery(ele)
+							.then((response) => response.json())
+							.then((response) => {
+								ele.datasource.data = response.map(ele.datasource.adapter)
+								ele.needRefresh++
+							})
+					},
+					appendData: (ele) => {
+						ele.datasource.buildQuery(ele, true)
+							.then((response) => response.json())
+							.then((response) => {
+								ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+								ele.cur_page++
+								ele.needRefresh++
+							})
 					}
-
-					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "e187a7531d61c56587ed1fc71f77f564878be39e24e2394db7ecb11bbf387253"
-					let body = {
-						"query": buildQueryString(),
-						"schema": ele.schema
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							"Authorization": accessToken,
-							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-							"accept": "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					return fetch(url, options)
-				},
-				refreshData: (ele) => {
-					ele.datasource.buildQuery(ele)
-						.then((response) => response.json())
-						.then((response) => {
-							ele.datasource.data = response.map(ele.datasource.adapter)
-							ele.needRefresh++
-						})
-				},
-				appendData: (ele) => {
-					ele.datasource.buildQuery(ele, true)
-						.then((response) => response.json())
-						.then((response) => {
-							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-							ele.cur_page++
-							ele.needRefresh++
-						})
-				}
-			}}
+				}}
 		}
 	},
 	beforeMount() {
