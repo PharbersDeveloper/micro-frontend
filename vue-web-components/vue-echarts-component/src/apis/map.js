@@ -8,7 +8,12 @@ import mockCity from '../../public/mock/city.json'
 // 获取GeoJSON数据
 export const getGeoJson = (type, name) => {
     if (type === 'country') return china
-    if (type === 'province') return jilin
+    if (type === 'province') {
+        fetch(`./geoJsonColl/${name}.jso n`).then(res => res.json()).then(ress => {
+            console.log(ress)
+            return ress
+        })
+    }
     // 判断是区，县，获取相应数据
     return chifeng
 }
@@ -27,9 +32,6 @@ export const getChinaData = async () => {
 }
 
 export const getProvinceData = async () => {
-    // fetch('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/110000-%E5%8C%97%E4%BA%AC.json').then(res => res.json()).then(ress => {
-    //     console.log(ress)
-    // })
     let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from max_result.data_wide where date='202001' and `标准省份名称`='吉林省' group by city","schema":["city","sales"]}
     let result = await queryData(params)
     let partData = []
