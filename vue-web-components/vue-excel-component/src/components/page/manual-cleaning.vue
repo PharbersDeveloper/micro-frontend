@@ -23,10 +23,10 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :viewHeight="1250" @showModel="showModel"></bp-excel>
+                <bp-excel :viewHeight="1250" @showModel="showModel" ref="targerExcel"></bp-excel>
             </div>
         </div>
-		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent" @refreshData="refreshData"></max-entry>
+		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent" @refreshData="refreshData" :provider="allData.provider" :dt="allData.dt"></max-entry>
     </div>
 </template>
 
@@ -63,7 +63,24 @@ export default {
 		bpExcel,
 		maxEntry
 	},
-	props: {}
+	props: {
+		allData: {
+			type: Object,
+			default:  function() {
+				return {
+					dt: '',
+					provider: ""
+				}
+			}
+		}
+	},
+	watch: {
+		"allData.provider": function(data) {
+			this.$refs.targerExcel.datasource.filter['provider'] = 'MAX'
+			this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
+			this.$refs.targerExcel.dataRefresh++
+		}
+	}
 }
 </script>
 
