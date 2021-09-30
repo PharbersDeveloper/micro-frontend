@@ -313,8 +313,8 @@ export default {
     width: 90vw;
     height: 98vh;
     .chart {
-        width: 50%;
-        height: 50%;
+        width: 90%;
+        height: 90%;
     }
 }
 </style>
