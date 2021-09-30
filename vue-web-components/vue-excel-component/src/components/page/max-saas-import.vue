@@ -392,6 +392,7 @@ export default {
                             display: flex;
                             justify-content: center;
                             align-items: center;
+							width: 24px;
                         }
 
                         /deep/.bp-option-group {
