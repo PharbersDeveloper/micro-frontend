@@ -50,11 +50,11 @@ export default {
         }
     },
     mounted() {
-        // document.addEventListener("click", e => {
-        //     if(!this.$el.contains(e.target)) {
-        //         this.show = false
-        //     }
-        // })
+        document.addEventListener("click", e => {
+            if(!this.$el.contains(e.target)) {
+                this.show = false
+            }
+        })
     }
 }
 </script>
