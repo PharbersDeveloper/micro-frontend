@@ -1,23 +1,15 @@
-import china from '../../public/geoJsonColl/china.json'
-import neimenggu from '../../public/geoJsonColl/province/150000-内蒙古.json'
-import jilin from '../../public/geoJsonColl/province/220000-吉林.json'
-import chifeng from '../../public/geoJsonColl/city/150000-内蒙古-150400-赤峰市.json'
-import mockChina from '../../public/mock/china.json'
-import mockProvice from '../../public/mock/province.json'
-import mockCity from '../../public/mock/city.json'
-// 获取GeoJSON数据
-export const getGeoJson = (type, name) => {
-    if (type === 'country') return china
-    if (type === 'province') {
-        fetch(`./geoJsonColl/${name}.jso n`).then(res => res.json()).then(ress => {
-            console.log(ress)
-            return ress
-        })
+// 获取地图
+export const getGeoJson = async (type, name) => {
+    let result
+    if (type === 'country') {
+        result = await fetch('https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/etl/blueprints/map/china.json').then(res => res.json())
     }
-    // 判断是区，县，获取相应数据
-    return chifeng
+    if (type === 'province') {
+        result = fetch('https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/etl/blueprints/map/province/' + encodeURIComponent(`${name}.json`)).then(res => res.json())
+    }
+    return result
 }
-
+//全国数据
 export const getChinaData = async () => {
     let params = {"query":"select `标准省份名称` as provice, sum(sales) as sales from max_result.data_wide where date='202001' and provice !='null' group by provice","schema":["provice","sales"]}
     let result = await queryData(params)
@@ -30,9 +22,10 @@ export const getChinaData = async () => {
     })
     return partData
 }
-
-export const getProvinceData = async () => {
-    let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from max_result.data_wide where date='202001' and `标准省份名称`='吉林省' group by city","schema":["city","sales"]}
+//省份数据
+export const getProvinceData = async (name) => {
+    let provinceName = name.split('-')[1]
+    let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from max_result.data_wide where date='202001' and `标准省份名称`= '" + provinceName + "' group by city","schema":["city","sales"]}
     let result = await queryData(params)
     let partData = []
     result.forEach((item) => {
@@ -43,11 +36,10 @@ export const getProvinceData = async () => {
     })
     return partData
 }
-
+//城市数据
 export const getCityData = () => {
     // 判断是市，直辖市，获取相应数据
-    //   return axios.get('/mock/city.json')
-    return mockCity	
+    return []	
 }
 
 function getCookie(name) {
@@ -60,7 +52,7 @@ function getCookie(name) {
 
 async function queryData(data) {
     const url = "https://api.pharbers.com/phchproxyquery"
-    const accessToken = getCookie("access_token") || "540e1bc75c2d64036afc492434f53e06e6641edb9390e76b9ae5e1d0faf6a8d1"
+    const accessToken = getCookie("access_token") || "d5c8e917402c60e2d44e235ee52427b1feda4e9351f3a591b2aa910f9efbe939"
     let body = data
     let options = {
         method: "POST",
