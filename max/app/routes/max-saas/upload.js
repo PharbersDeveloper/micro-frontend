@@ -40,7 +40,7 @@ export default class MaxSaasUploadRoute extends Route {
 		let timesTamp = this.getCurrentDate()
         let times = params.selectedTime && params.selectedTime != "undefined" ? params.selectedTime : timesTamp
         let projects =  this.store.query("project",{ "filter[time]": times})
-        let jobLogs =  this.store.query("jobLog", {"page[limit]": limit, "page[offset]": page * limit,"sort": "date"})
+        let jobLogs =  this.store.query("jobLog", {"page[limit]": limit, "page[offset]": page * limit,"sort": "-date"})
 		await Promise.all([projects, jobLogs])
         return RSVP.hash({
             projectsData: projects.filter( it => it),

@@ -46,7 +46,7 @@ export default class MaxSaasComponent extends Component {
                 }
 				//人工清洗
 				if(optParam.type == "clean") {
-					window.open(`${ENV.windowUri}/max-saas/cleaning`)
+					window.open(`${ENV.windowUri}/max-saas/cleaning?ym=${this.uploadDate}&provider=${this.provider}`)
                 }
 
                 break
@@ -61,7 +61,7 @@ export default class MaxSaasComponent extends Component {
 				let url = document.URL.split('?')[0]
 				history.pushState(null, null, url)
                 //请求操作信息数据
-                let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": changePageParams.page * 10, "sort": "date"} )
+                let jobLogs = await this.store.query( "jobLog", {"page[limit]": 10, "page[offset]": changePageParams.page * 10, "sort": "-date"} )
                 e.target.allData.jobLogs = jobLogs.filter(function(item) {
                     return item.id !== ''
                 })
@@ -197,34 +197,6 @@ export default class MaxSaasComponent extends Component {
 				};
 				formData.append("file", uploadMessage.file);
 				request.send(formData);
-				
-				/**
-				 * 3 create file metadata for database
-				 */
-				// const applicationAdapter = this.store.adapterFor( "application" )
-				// const fileBodyObj = {
-				// 	name: uploadMessage.file.name.split( "." )[0],
-				// 	owner: this.cookies.read( "account_id" ),
-				// 	extension: uploadMessage.file.name.split( "." )[1],
-				// 	size: uploadMessage.file.size,
-				// 	source: fileKey,
-				// 	type: "file", // candidate: database, file, stream, application, mart, cube
-				// 	accessibility: "",
-				// 	version: "",
-				// 	isNewVersion: true,
-				// 	providers: [],
-				// 	markets: [],
-				// 	molecules: [],
-				// 	dateCover: [],
-				// 	geoCover: [],
-				// 	labels: labelsArr,
-				// 	created: new Date(),
-				// 	modified: new Date(),
-				// 	description: memo,
-				// 	partners: that.args.model.employerId
-				// }
-				// applicationAdapter.set( "reqBody", fileBodyObj )
-				// await this.store.createRecord( "asset", fileBodyObj ).save()
 			} catch ( e ) {
 				console.log(e)
 				that.showProgress = '0' //关闭上传进度条

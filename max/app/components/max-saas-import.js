@@ -20,6 +20,7 @@ export default class MaxSaasImportComponent extends Component {
     @tracked uploadFileSize
     @tracked uploadLoadedSize
     @tracked showProgress
+	@tracked ymTime
 
 	@action
 	getCurrentDate() {
@@ -39,9 +40,8 @@ export default class MaxSaasImportComponent extends Component {
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "clickFile": // 选择文件按钮
-				// 当月1号的时间戳,如2020-10-01
-				let clickFileTime = this.getCurrentDate()
                 let optParam = e.detail[0].args.param
+				this.ymTime = optParam.attr.time
 				let schemas = [], sourceData = [], readNumber = 0
 				let defaultMessage = null
 				if(optParam.attr.message) {
@@ -68,6 +68,7 @@ export default class MaxSaasImportComponent extends Component {
 					sourceData = schemasData[0] ? schemasData[0].data : []
 					readNumber = schemasData[0] ? schemasData[0].readNumber : 1
 				}
+				// 上传文件的时间戳,如2020-10-01
 				let jobLogs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
 				let jobLogsList = jobLogs.filter(it => it)
 				if(optParam.name == 'file') {
@@ -120,9 +121,9 @@ export default class MaxSaasImportComponent extends Component {
 						"batch": 10000,
 						"begin_line": optParam.readNumber,
 						"mapper_args": dealMapper,
-						"provider": "MAX", 
-						"version": "max", 
-						"owner": "wodelu",
+						"provider": optParam.attr.provider, 
+						"version": optParam.attr.version,
+						"owner": this.cookies.read('account_id'),
 						"date": dateym,
 					}
 					let parameters = {
@@ -170,7 +171,7 @@ export default class MaxSaasImportComponent extends Component {
 						that.uploadLoadedSize = 70
 						let exArn = datas.arn
 						//请求phstatus
-						let stateUrl = "https://api.pharbers.com/phstepstatus"
+						let stateUrl = "https://apiv2.pharbers.com/phgetsfn"
 						let options = {
 							method: "POST",
 							mode: "cors",
@@ -196,7 +197,7 @@ export default class MaxSaasImportComponent extends Component {
 										"provider": optParam.attr.provider,
 										"owner": optParam.attr.owner,
 										"showName": optParam.attr.showName,
-										"time": clickFileTime,
+										"time": that.ymTime,
 										"version": optParam.attr.version,
 										"code": 0,
 										"jobDesc": status,
@@ -232,16 +233,6 @@ export default class MaxSaasImportComponent extends Component {
 				}
                 break
 			case "confirmMapping":
-				//todo: getCurrentDate
-				let currentDate = new Date().getTime()
-				let date = new Date(currentDate)
-				let y = date.getFullYear()
-				let m = date.getMonth() + 1
-				m = m < 10 ? ('0' + m) : m;
-				let time = y + '-' + m + '-' + '01';
-				let currentstamp = time.replace(/-/g, '/');
-				let timesTamp = new Date(currentstamp).getTime()
-
 				let conParam = e.detail[0].args.param
 				let message = JSON.parse(conParam.fileData.message)
 				// message数据
@@ -267,7 +258,7 @@ export default class MaxSaasImportComponent extends Component {
 					"provider": conParam.fileData.provider,
 					"owner": conParam.fileData.owner,
 					"showName": conParam.fileData.showName,
-					"time": timesTamp,
+					"time": this.ymTime, //上传文件时间戳
 					"version": conParam.fileData.version,
 					"code": 0,
 					"jobDesc": "mapped",
