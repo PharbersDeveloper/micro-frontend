@@ -11,6 +11,9 @@
         <div class="import-file-cell-right" >
             <span class="state" :class="state">{{stateDisplay}}</span>
             <span class="import" v-if="state == 'mapped'" @click="selectFile('import')">导入</span>
+			<slot v-if="stateDisplay === '失败'">
+				<span class="back">回滚</span>
+			</slot>
         </div>
     </div>
 </template>
@@ -187,6 +190,16 @@ export default {
             flex-direction: column;
             height: 40px;
             justify-content: space-between;
+			.back {
+				width: 44px;
+				height: 18px;
+				text-align: center;
+				line-height: 20px;
+				font-size: 12px;
+				color: #7D17C3;
+				border: 1px solid #7D17C3; 
+				margin-top: 4px;
+			}
             .import {
                 width: 44px;
                 height: 24px;
