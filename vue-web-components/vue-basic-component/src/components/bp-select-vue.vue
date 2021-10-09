@@ -27,7 +27,8 @@ export default {
     data: function() {
         return {
             disabled: false,
-            show: false
+            show: false,
+            clickEvent: true
         }
     },
     methods: {
@@ -35,6 +36,7 @@ export default {
             if(!this.disabled) {
                 this.show = !this.show
             }
+            this.clickEvent = false
             // if(this.disabled) {
             //     const event = new Event("event")
             //     event.args = {
@@ -50,11 +52,14 @@ export default {
         }
     },
     mounted() {
-    //     document.addEventListener("click", e => {
-    //         if(!this.$el.contains(e.target)) {
-    //             this.show = false
-    //         }
-    //     })
+        let that = this
+        document.addEventListener("click", event => {
+            debugger
+            if(that.clickEvent) {
+                that.$emit('clickOtherEvent', event)
+            }
+            that.clickEvent = true
+        })
     }
 }
 </script>
