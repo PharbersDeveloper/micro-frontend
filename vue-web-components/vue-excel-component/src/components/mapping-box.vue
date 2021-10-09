@@ -29,7 +29,10 @@
                 <div class="shine-list" @dragover="allowDrop" @drop="fileDrop($event)">
                     <ul class="shine-ul">
                         <li v-for="(ls,index) in schemaList" :key="index+'source'" draggable="true" @dragstart="fileDragStart($event, ls, index)" >
-                            {{ls}}
+								{{ls}}
+							<span class="moveIcon">
+								<img :src="iconMove" alt="" class="img">
+							</span>
                         </li>
                     </ul>
                 </div>
@@ -63,7 +66,8 @@ export default {
 			fileMddleIndex: -1,
 			infoList: [],
 			schemaList: [],
-			targetsList:[]
+			targetsList:[],
+			iconMove: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_move.svg"
 		}
 	},
 	props: {
@@ -279,6 +283,14 @@ export default {
                     margin: 0;
                     li {
                         width: 160px;
+						position: relative;
+						.moveIcon {
+							width: 20px;
+							height: 20px;
+							position: absolute;
+							top: 6px;
+							right: 6px;
+						}
                     }
                 }
                 li {
