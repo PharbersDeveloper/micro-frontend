@@ -11,7 +11,12 @@ export default {
     data: () => {
         return {
             waterfullChart: null,
-            timer: null
+            timer: null,
+            providerArr: [],
+            minYear: '',
+            maxYear: '',
+            startArr: [],
+            yearnumArr: []
         }
     },
     mounted () {
@@ -26,6 +31,7 @@ export default {
 
             this.waterfullChart.showLoading()
             // 获取数据
+            await this.queryData()
             this.waterfullChart.hideLoading()
             this.renderWaterfullChart()
         },
@@ -41,15 +47,51 @@ export default {
                 }, 100)
             }
         },
-
-        renderWaterfullChart (mapName, partData, geoJson) {
-            debugger
-            // const seriesData = this.getSeriesByPart(partData, geoJson)
-            // const visualMapMax = this.getVisualMapMax(seriesData)
+        async queryData() {
+            const url = "https://api.pharbers.com/phchproxyquery"
+            const accessToken = this.getCookie("access_token") || "4f82ce38f63a02ae79a8f8e8765eccfff31af8018bbf84f66747daf8ae47f9e5"
+            let body = {"query":"select provider,min(year) as min,max(year) as max from max_result.data_wide group by provider","schema":["provider","min", "max"]}
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            let result = await fetch(url, options).then(res => res.json())
+            this.providerArr = []
+            this.startArr = []
+            this.yearnumArr = []
+            this.minYear = 3000
+            this.maxYear = 0
+            result.forEach((item, index) => {
+                this.providerArr.push(item.provider)
+                if(Number(item.min) < this.minYear) {
+                    this.minYear = Number(item.min)
+                }
+                if(Number(item.max) > this.maxYear) {
+                    this.maxYear = Number(item.max)
+                }
+                this.startArr.push(Number(item.min))
+                this.yearnumArr.push(Number(item.max) - Number(item.min))
+            })
+            return result
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
+        renderWaterfullChart () {
             let option = {
                 title: {
                     text: 'Waterfall Chart'
                 },
+                color: ['rgba(0,0,0,0)','#7163c5'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -57,7 +99,7 @@ export default {
                     },
                     formatter: function (params) {
                         let tar;
-                        if (params[1].value !== '-') {
+                        if (params[1] && params[1].value !== '-') {
                             tar = params[1];
                         } else {
                             tar = params[0];
@@ -66,7 +108,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['Expenses', 'category']
+                    data: ['Expenses']
                 },
                 grid: {
                     left: '3%',
@@ -75,9 +117,9 @@ export default {
                     containLabel: true
                 },
                 xAxis : {
-                    type : 'value',
-                    min:2015,
-                    max:2021,
+                    type: 'value',
+                    min: this.minYear,
+                    max: this.maxYear,
                     axisLabel:{
                         formatter: function (value) {
                             var texts = [];
@@ -88,7 +130,7 @@ export default {
                 },
                 yAxis: {
                     type: 'category',
-                    data: ['辉瑞', '恩华', '阿斯泰来', '倍特', 'BMS', 'Lilly', '泰德']
+                    data: this.providerArr
                 },
                 series: [
                     {
@@ -105,17 +147,18 @@ export default {
                                 color: 'transparent'
                             }
                         },
-                        data: [2016, 2015, 2017, 2018, 2020, 2019, 2015]
+                        data: this.startArr
                     },
                     {
-                        name: 'Expenses',
+                        name: 'year',
                         type: 'bar',
                         stack: 'Total',
+                        barWidth: 20,
                         label: {
                             show: true,
                             position: 'bottom'
                         },
-                        data: [4, 7, 4, 3, 1, 2, 6]
+                        data: this.yearnumArr
                     }
                 ]
             }
