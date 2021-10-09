@@ -4,13 +4,14 @@ export const getGeoJson = async (type, name) => {
     if (type === 'country') {
         result = await fetch('https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/etl/blueprints/map/china.json').then(res => res.json())
     }
-    if (type === 'province') {
+    if (type === 'provice') {
         result = fetch('https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/etl/blueprints/map/province/' + encodeURIComponent(`${name}.json`)).then(res => res.json())
     }
     return result
 }
 //全国数据
 export const getChinaData = async () => {
+    let queryParam = buildQueryString('country')
     let params = {"query":"select `标准省份名称` as provice, sum(sales) as sales from max_result.data_wide where date='202001' and provice !='null' group by provice","schema":["provice","sales"]}
     let result = await queryData(params)
     let partData = []
@@ -25,6 +26,7 @@ export const getChinaData = async () => {
 //省份数据
 export const getProvinceData = async (name) => {
     let provinceName = name.split('-')[1]
+    let queryParam = buildQueryString('provice' )
     let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from max_result.data_wide where date='202001' and `标准省份名称`= '" + provinceName + "' group by city","schema":["city","sales"]}
     let result = await queryData(params)
     let partData = []
@@ -52,7 +54,7 @@ function getCookie(name) {
 
 async function queryData(data) {
     const url = "https://api.pharbers.com/phchproxyquery"
-    const accessToken = getCookie("access_token") || "d5c8e917402c60e2d44e235ee52427b1feda4e9351f3a591b2aa910f9efbe939"
+    const accessToken = getCookie("access_token") || "4f82ce38f63a02ae79a8f8e8765eccfff31af8018bbf84f66747daf8ae47f9e5"
     let body = data
     let options = {
         method: "POST",
@@ -65,4 +67,83 @@ async function queryData(data) {
     }
     let result = await fetch(url, options).then(res => res.json())
     return result
+}
+
+function buildQueryString(selectName) {
+    let selName, asName, database, filter, sort, group, schema
+    if(selectName == 'country') {
+        selName = '标准省份名称'
+        asName = 'provice'
+        database = 'max_result.data_wide'
+        filter={
+            equal: {
+                date: "202001"
+            },
+            notEqual: {
+                provice: "null"
+            },
+            like: {}
+        }
+        sort = {}
+        group = asName
+        schema = ["provice","sales"]
+    } else if(selectName == 'provice') {
+        selName = '标准城市名称'
+        asName = 'city'
+        database = 'max_result.data_wide'
+        filter={
+            equal: {
+                date: "202001",
+                "`标准省份名称`": "吉林省"
+            }
+        }
+        group = asName
+        schema = ["city","sales"]
+    }
+    let sql_str = "select `"
+    sql_str = sql_str + selName + "` as " + asName + ", sum(sales) as sales from " + database
+
+    // filter
+    for(const objKey in filter) {
+        let firstFilterObj = Object.keys(filter)[0]
+        let filterParam = " where "
+        if(objKey != firstFilterObj) {
+            filterParam = " and "
+        }
+        let judgeParam = ""
+        if(objKey == 'equal') {
+            judgeParam = ' = '
+        } else if(objKey == 'notEqual') {
+            judgeParam = ' != '
+        }
+        //判断对象不为空
+        if(Object.keys(filter[objKey]).length != 0) {
+            let firstFilter = Object.keys(filter[objKey])[0]
+            for (const key in filter[objKey]) {
+                if(key != firstFilter) {
+                    filterParam = " and "
+                }
+                sql_str = sql_str + filterParam + key + judgeParam + "'" + filter[objKey][key] + "'"
+            }
+        }
+    }
+    
+    // sorts
+    for (const key in sort) {
+        sql_str = sql_str + " ORDER BY " + key
+        if (sort[key] < 0) {
+            sql_str = sql_str + " desc "
+        }
+    }
+
+    //group
+    if(group && group != '') {
+        sql_str = sql_str + ' group by ' + group
+    }
+    console.log(sql_str)
+
+    // pages
+    // sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+    // sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
+    // return sql_str
 }

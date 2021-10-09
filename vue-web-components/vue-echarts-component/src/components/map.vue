@@ -70,7 +70,7 @@ export default {
                 // 点击的是否是省级
                 if (PROVINCES.includes(name)) {
                     const mapName = `${adcode}-${name}`
-                    const { partData, geoJson } = await this.getPartAndGeoData('province', mapName)
+                    const { partData, geoJson } = await this.getPartAndGeoData('provice', mapName)
                     this.registeRenderMap(mapName, partData, geoJson)
                     return
                 }
@@ -115,9 +115,9 @@ export default {
                 const geoJson = await getGeoJson('country', mapName)
                 return { partData, geoJson }
             }
-            if (type === 'province') {
+            if (type === 'provice') {
                 const partData = await getProvinceData(mapName)
-                const geoJson = await getGeoJson('province', mapName)
+                const geoJson = await getGeoJson('provice', mapName)
                 return { partData, geoJson }
             }
             if (type === 'city') {
