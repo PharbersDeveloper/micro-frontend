@@ -22,7 +22,8 @@ export default {
         src: String,
         beforeSrc: String,
         alt: String,
-        beforeAlt: String
+        beforeAlt: String,
+        closeTosts: Boolean
     },
     data: function() {
         return {
@@ -53,13 +54,21 @@ export default {
     },
     mounted() {
         let that = this
-        document.addEventListener("click", event => {
-            debugger
-            if(that.clickEvent) {
-                that.$emit('clickOtherEvent', event)
-            }
-            that.clickEvent = true
-        })
+        
+        // document.addEventListener("click", event => {
+        //     debugger
+        //     if(that.clickEvent) {
+        //         that.$emit('clickOtherEvent', event)
+        //     }
+        //     that.clickEvent = true
+        //     event.stopPropagation();
+        // })
+    },
+    watch: {
+        // closeTosts: function(data) {
+        //     debugger
+        //     this.show = false
+        // }
     }
 }
 </script>

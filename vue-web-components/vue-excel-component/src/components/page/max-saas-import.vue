@@ -21,7 +21,7 @@
                             <bp-excel :cols="allData.schemas" :datasource="sourceData" :page_size="5" v-if="sonRefresh"></bp-excel>
                         </div>
 
-                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @clickOtherEvent="clickOtherEvent">
+                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @clickOtherEvent="clickOtherEvent" :closeTosts="closeTosts">
                             <bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
                             <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
@@ -33,7 +33,7 @@
                         <div class="target-border">
                             <bp-excel name="targer" :viewHeight="1250" ref="targerExcel"></bp-excel>
                         </div>
-                        <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @clickOtherEvent="clickOtherEvent">
+                        <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @clickOtherEvent="clickOtherEvent" :closeTosts="closeTosts">
                             <!-- <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
                             <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
                             <bp-option-vue text="显示全部" :disabled=true></bp-option-vue> -->
@@ -109,12 +109,13 @@ export default {
 					ele.needRefresh++
 				}
 			},
-			sonRefresh: true
+			sonRefresh: true,
+			closeTosts: false
 		}
 	},
 	methods: {
 		clickOtherEvent() {
-			debugger
+			this.closeTosts = !this.closeTosts
 		},
 		// 关闭进度条
 		closeToast() {
