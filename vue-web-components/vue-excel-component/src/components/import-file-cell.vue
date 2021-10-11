@@ -11,9 +11,7 @@
         <div class="import-file-cell-right" >
             <span class="state" :class="state">{{stateDisplay}}</span>
             <span class="import" v-if="state == 'mapped'" @click="selectFile('import')">导入</span>
-			<slot v-if="stateDisplay === '失败'">
-				<span class="back">回滚</span>
-			</slot>
+			<span v-if="stateDisplay === '失败'" class="import" @click="selectFile('rollback')">回滚</span>
         </div>
     </div>
 </template>
@@ -75,6 +73,9 @@ export default {
 			name: message.name, 
 			labels: message.label ? message.label.split(',') : []
 		}
+	},
+	mounted() {
+		console.log(this.data);
 	},
 	methods: {
 		selectFile(name) {
@@ -190,19 +191,19 @@ export default {
             flex-direction: column;
             height: 40px;
             justify-content: space-between;
-			.back {
-				width: 44px;
-				height: 24px;
-				text-align: center;
-				line-height: 24px;
-				font-size: 8px;
-				background-color: #7163c5;
-				color: #fff;
-				margin-top: 4px;
-				font-weight: 500;
-				border-radius: 2px;
-				font-family: PingFangSC-Medium;
-			}
+			// .back {
+			// 	width: 44px;
+			// 	height: 24px;
+			// 	text-align: center;
+			// 	line-height: 20px;
+			// 	font-size: 8px;
+			// 	background-color: #7163c5;
+			// 	color: #fff;
+			// 	margin-top: 4px;
+			// 	font-weight: 500;
+			// 	border-radius: 2px;
+			// 	font-family: PingFangSC-Medium;
+			// }
             .import {
                 width: 44px;
                 height: 24px;
