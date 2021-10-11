@@ -76,7 +76,7 @@ export default {
 	},
 	watch: {
 		"allData.provider": function(data) {
-			this.$refs.targerExcel.datasource.filter['provider'] = 'MAX'
+			this.$refs.targerExcel.datasource.filter['provider'] = this.allData.provider
 			this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
 			this.$refs.targerExcel.dataRefresh++
 		}

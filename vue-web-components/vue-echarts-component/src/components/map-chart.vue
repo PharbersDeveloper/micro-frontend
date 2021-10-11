@@ -7,7 +7,7 @@
 <script>
 import * as echarts from 'echarts'
 import { PROVINCES, SPECIALPROVINCES, COUNTY } from './constant'
-import { getGeoJson, getChinaData, getProvinceData, getCityData } from '@/apis/map'
+import { getGeoJson, getChinaData, getProvinceData, getCityData } from './map'
 
 export default {
     name: 'MapUpDown',
@@ -70,8 +70,7 @@ export default {
                 // 点击的是否是省级
                 if (PROVINCES.includes(name)) {
                     const mapName = `${adcode}-${name}`
-                    const { partData, geoJson } = await this.getPartAndGeoData('province', mapName)
-                    console.log(mapName, partData, geoJson)
+                    const { partData, geoJson } = await this.getPartAndGeoData('provice', mapName)
                     this.registeRenderMap(mapName, partData, geoJson)
                     return
                 }
@@ -113,19 +112,18 @@ export default {
         async getPartAndGeoData (type, mapName) {
             if (type === 'country') {
                 const partData = await getChinaData()
-                const geoJson = getGeoJson('country', mapName)
+                const geoJson = await getGeoJson('country', mapName)
                 return { partData, geoJson }
             }
-            if (type === 'province') {
-                const partData = await getProvinceData()
-                console.log(mapName)
-                const geoJson = getGeoJson('province', mapName)
+            if (type === 'provice') {
+                const partData = await getProvinceData(mapName)
+                const geoJson = await getGeoJson('provice', mapName)
                 return { partData, geoJson }
             }
             if (type === 'city') {
                 const res = getCityData()
                 const partData = res.data
-                const geoJson = getGeoJson('city', mapName)
+                const geoJson = await getGeoJson('city', mapName)
                 return { partData, geoJson }
             }
         },
@@ -310,11 +308,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 90vw;
-    height: 98vh;
+    width: 500px;
+    height: 500px;
     .chart {
-        width: 90%;
-        height: 90%;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
     }
 }
 </style>
