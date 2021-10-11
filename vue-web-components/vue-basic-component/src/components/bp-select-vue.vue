@@ -28,8 +28,7 @@ export default {
     data: function() {
         return {
             disabled: false,
-            show: false,
-            clickEvent: true
+            show: false
         }
     },
     methods: {
@@ -37,38 +36,13 @@ export default {
             if(!this.disabled) {
                 this.show = !this.show
             }
-            this.clickEvent = false
-            // if(this.disabled) {
-            //     const event = new Event("event")
-            //     event.args = {
-            //         callback: "clickSelect",
-            //         element: this,
-            //         param: {
-            //             name: "show",
-            //             value: this.show
-            //         }
-            //     }
-            //     this.$emit('clickEvent', event)
-            // }
+            this.$emit('showSelectOption', true)
         }
     },
-    mounted() {
-        let that = this
-        
-        // document.addEventListener("click", event => {
-        //     debugger
-        //     if(that.clickEvent) {
-        //         that.$emit('clickOtherEvent', event)
-        //     }
-        //     that.clickEvent = true
-        //     event.stopPropagation();
-        // })
-    },
     watch: {
-        // closeTosts: function(data) {
-        //     debugger
-        //     this.show = false
-        // }
+        closeTosts: function(data) {
+            this.show = false
+        }
     }
 }
 </script>
