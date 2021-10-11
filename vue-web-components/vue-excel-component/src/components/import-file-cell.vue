@@ -192,13 +192,16 @@ export default {
             justify-content: space-between;
 			.back {
 				width: 44px;
-				height: 18px;
+				height: 24px;
 				text-align: center;
-				line-height: 20px;
-				font-size: 12px;
-				color: #7D17C3;
-				border: 1px solid #7D17C3; 
+				line-height: 24px;
+				font-size: 8px;
+				background-color: #7163c5;
+				color: #fff;
 				margin-top: 4px;
+				font-weight: 500;
+				border-radius: 2px;
+				font-family: PingFangSC-Medium;
 			}
             .import {
                 width: 44px;
