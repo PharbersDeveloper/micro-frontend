@@ -44,7 +44,6 @@ export default class MaxSaasImportComponent extends Component {
 				this.ymTime = optParam.attr.time
 				let schemas = [], sourceData = [], readNumber = 0
 				let defaultMessage = null
-				debugger
 				if(optParam.attr.message) {
 					// 1. 请求文件的schemas，获取源数据表头
 					defaultMessage = JSON.parse(optParam.attr.message)
@@ -172,7 +171,7 @@ export default class MaxSaasImportComponent extends Component {
 						that.uploadLoadedSize = 70
 						let exArn = datas.arn
 						//请求phstatus
-						let stateUrl = "https://apiv2.pharbers.com/phgetsfn"
+						let stateUrl = "https://apiv2.pharbers.com/phstepstatus"
 						let options = {
 							method: "POST",
 							mode: "cors",
