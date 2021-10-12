@@ -68,14 +68,11 @@ export default {
 		if(this.isJSON(this.data.message)) {
 			message = JSON.parse(this.data.message);
 		}
-		console.log("message.label", message.label)
+		// console.log("message.label", message.label)
 		this.fileArr = {
 			name: message.name, 
 			labels: message.label ? message.label.split(',') : []
 		}
-	},
-	mounted() {
-		console.log(this.data);
 	},
 	methods: {
 		selectFile(name) {
@@ -102,7 +99,7 @@ export default {
 					}
 
 				} catch(e) {
-					console.log('error：'+str+'!!!'+e);
+					// console.log('error：'+str+'!!!'+e);
 					return false;
 				}
 			}

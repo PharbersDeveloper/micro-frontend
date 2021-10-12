@@ -49,7 +49,8 @@
         </div>
         <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
         <!-- 进度条弹框 -->
-        <div v-if="closeuploadToast == '0'"
+        <div v-if="closeuploadToast == '0' && showDialog == 'true'"
+			ref="dialog"
             class="upload-toast" 
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
@@ -70,7 +71,7 @@
                 <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
             </div> 
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
-                <div class="cross"></div>
+                <div class="cross" @click="closeDialog"></div>
             </div>
         </div>
     </div>
@@ -94,6 +95,7 @@ export default {
 	},
 	data() {
 		return {
+			showDialog: true,
 			mappingModelShow: false,
 			fileIndex: 0,
 			middleList: [],
@@ -128,6 +130,10 @@ export default {
 		showSelectOption() {
 			this.showSelectOptionParam = true
 		},
+		// 关闭弹框
+		closeDialog() {
+			this.showDialog = false
+		},
 		// 关闭进度条
 		closeToast() {
 			const event = new Event("event")
@@ -151,7 +157,7 @@ export default {
 				this.proBar = 0;
 				var clearInt = setInterval(function() { 
 					that.proBar++; 
-					console.log(that.proBar); 
+					// console.log(that.proBar); 
 					if (that.proBar >= 60) { 
 						clearInterval(clearInt); 
 					} 
@@ -254,7 +260,7 @@ export default {
 			}
 		},
 		uploadLoadedSize: function() {
-			console.log("uploadLoadedSize", this.uploadLoadedSize)
+			// console.log("uploadLoadedSize", this.uploadLoadedSize)
 			this.proBar = this.uploadLoadedSize
 		},
 		"allData.sourceData": function(data) {
