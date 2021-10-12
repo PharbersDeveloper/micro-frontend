@@ -171,7 +171,7 @@ export default class MaxSaasImportComponent extends Component {
 						that.uploadLoadedSize = 70
 						let exArn = datas.arn
 						//请求phstatus
-						let stateUrl = "https://apiv2.pharbers.com/phgetsfn"
+						let stateUrl = "https://apiv2.pharbers.com/phstepstatus"
 						let options = {
 							method: "POST",
 							mode: "cors",
@@ -230,6 +230,117 @@ export default class MaxSaasImportComponent extends Component {
 							}) 
 						}, 20*1000)
 					}
+				} else if (optParam.name == 'rollback') {
+					
+					let Logs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper"})
+					let mapperLog = Logs.filter(it => it)
+					let mapperData = mapperLog ? JSON.parse(mapperLog[0].message) : {}
+
+					let mapperTags = mapperData.tags
+					let tags = message.tags.concat(mapperTags)
+					let ym = tags.filter(it => it.Key == "date")[0]
+					let dateym = ym.Value
+					let mapper = mapperData.mapper
+					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
+					let dealMapper = []
+					mapper.forEach((mapperItem) => {
+						if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
+							dealMapper.push(mapperItem)
+						}
+					})
+					let puts3_event = {
+						"asset": message.asset,
+						"owner": this.cookies.read('account_id'),
+						"tempfile": message.tempfile,
+						"tags": tags,
+					}
+					let click_event = {
+						"file_path": `/mnt/tmp/${message.tempfile}`,
+						"sheet_name": message.sheet,
+						"database_name": "default",
+						"table_name": "clean_source",
+						"batch": 10000,
+						// "begin_line": optParam.readNumber,
+						// "mapper_args": dealMapper,
+						"mapper_args": [
+							{
+								"gn": "通用名称"
+							},
+							{
+								"pn": "规格"
+							},
+							{
+								"mn": "包装数量"
+							},
+							{
+								"do": "PACKCODE"
+							},
+							{
+								"sp": "生产企业"
+							},
+							{
+								"pk": "项目"
+							},
+							{
+								"pku": "包装单位"
+							}
+						],
+						"provider": "MAX", 
+						"version": "max",
+						"owner": "wodelu",
+						"date": dateym,
+						"provider_name": message.provider_name,
+            			"version_name": message.version_name,
+            			"owner_name": message.name,
+					}
+					let parameters = {
+						puts3_event: puts3_event, 
+						click_event: click_event
+					}
+					let rollBackUrl = "https://apiv2.pharbers.com/phrollback"
+					let options = {
+						method: "POST",
+						mode: "cors",
+						headers: {
+							"Authorization": that.cookies.read( "access_token" ),
+							"Content-Type": "application/vnd.api+json",
+							"Accept": "application/vnd.api+json",
+						},
+						body: JSON.stringify(parameters)
+					}
+					let dagStatusInt = setInterval(async function() { 
+						fetch(rollBackUrl, options).then(res=>res.json()).then(response => {
+							let execution_status = response.execution_status
+							if (execution_status && execution_status !== 'RUNNING') {
+								clearInterval(dagStatusInt); //循环结束
+								let status = ''
+								if(execution_status == "SUCCEEDED") {
+									status = 'succeed'
+								} else {
+									status = 'failed'
+								}
+								let jobLogsParam = {
+									"provider": optParam.attr.provider,
+									"owner": optParam.attr.owner,
+									"showName": optParam.attr.showName,
+									"time": clickFileTime,
+									"version": optParam.attr.version,
+									"code": 0,
+									"jobDesc": status,
+									"jobCat": "mapper",
+									"comments": "mapper",
+									"message": optParam.attr.message,
+									"date": new Date().getTime()
+								}
+								that.store.createRecord('jobLog', jobLogsParam).save().then((res) => {
+									that.router.transitionTo( "/" )
+									let urlParam = window.location.href.split('?')[1]
+									that.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
+								})
+							}
+						}) 
+					}, 20*1000)
+
 				}
                 break
 			case "confirmMapping":
@@ -273,7 +384,7 @@ export default class MaxSaasImportComponent extends Component {
 				let urlParam = window.location.href.split('?')[1]
 				this.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
 				break
-            default: 
+			default: 
                 console.log("other click event!")
         }
     }

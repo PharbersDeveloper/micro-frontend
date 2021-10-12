@@ -22,7 +22,8 @@ export default {
         src: String,
         beforeSrc: String,
         alt: String,
-        beforeAlt: String
+        beforeAlt: String,
+        closeTosts: Boolean
     },
     data: function() {
         return {
@@ -35,26 +36,13 @@ export default {
             if(!this.disabled) {
                 this.show = !this.show
             }
-            // if(this.disabled) {
-            //     const event = new Event("event")
-            //     event.args = {
-            //         callback: "clickSelect",
-            //         element: this,
-            //         param: {
-            //             name: "show",
-            //             value: this.show
-            //         }
-            //     }
-            //     this.$emit('clickEvent', event)
-            // }
+            this.$emit('showSelectOption', true)
         }
     },
-    mounted() {
-    //     document.addEventListener("click", e => {
-    //         if(!this.$el.contains(e.target)) {
-    //             this.show = false
-    //         }
-    //     })
+    watch: {
+        closeTosts: function(data) {
+            this.show = false
+        }
     }
 }
 </script>

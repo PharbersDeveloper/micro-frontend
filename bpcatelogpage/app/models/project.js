@@ -7,6 +7,6 @@ export default class ProjectModel extends Model {
 	@attr("string") arn;
 	@attr("string") projectName; //所属项目类别名称, 跟name不一样，如max
 	@attr executions
-    @hasMany("execution", {inverse: "projectExecution"}) executions;
+    @hasMany("execution") executions;
 	@attr meta
 }
