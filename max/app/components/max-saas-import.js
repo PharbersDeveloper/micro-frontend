@@ -296,12 +296,30 @@ export default class MaxSaasImportComponent extends Component {
 						body: JSON.stringify(queryParam)
 					}
 					// console.log(options);
-					fetch(rollBackUrl, options).then(function(res) {
-						return res.json()
+					fetch(rollBackUrl, options).then(res => res.json()).then(response => {
+						let status = 'mapped'
+						let jobLogsParam = {
+							"provider": optParam.attr.provider,
+							"owner": optParam.attr.owner,
+							"showName": optParam.attr.showName,
+							"time": that.ymTime,
+							"version": optParam.attr.version,
+							"code": 0,
+							"jobDesc": status,
+							"jobCat": "mapper",
+							"comments": "mapper",
+							"message": optParam.attr.message,
+							"date": new Date().getTime()
+						}
+						that.store.createRecord('jobLog', jobLogsParam).save().then((res) => {
+							that.router.transitionTo( "/" )
+							let urlParam = window.location.href.split('?')[1]
+							that.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
+						})
 					}).catch(function(err) {
 						console.log(err);
 					})
-
+					 
 				}
                 break
 			case "confirmMapping":
