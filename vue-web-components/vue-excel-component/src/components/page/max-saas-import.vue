@@ -175,6 +175,7 @@ export default {
 			data.args.param.fileData = this.allData.assets[this.fileIndex]
 			this.$emit('event', data)
 			// this.mappingModelShow = false
+			this.closeMappingModal()
 		}
 	},
 	props: {
