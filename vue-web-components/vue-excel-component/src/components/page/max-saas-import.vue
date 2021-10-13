@@ -166,6 +166,8 @@ export default {
 		},
 		mappingClick() {
 			this.mappingModelShow = true
+			// console.log(this.allData.schemas);
+			// console.log(this.allData.targetNames);
 		},
 		closeMappingModal() {
 			this.mappingModelShow = false
@@ -174,8 +176,15 @@ export default {
 			data.args.param.userData = this.allData.userData
 			data.args.param.fileData = this.allData.assets[this.fileIndex]
 			this.$emit('event', data)
-			// this.mappingModelShow = false
-			this.closeMappingModal()
+			let conParam = data.args.param
+			conParam.targetsList.forEach((item,index) => {
+				if(!conParam.mappingList[index] || conParam.mappingList[index] === '') {
+					alert("请输入所有映射关系")
+					throw new Error("请输入所有映射关系")
+				}
+			})
+			console.log(conParam);
+			this.mappingModelShow = false
 		}
 	},
 	props: {

@@ -324,21 +324,21 @@ export default class MaxSaasImportComponent extends Component {
                 break
 			case "confirmMapping":
 				let conParam = e.detail[0].args.param
-				let message = JSON.parse(conParam.fileData.message)
+				// let message = JSON.parse(conParam.fileData.message)
 				// message数据
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
 					let obj = {}
-					//必须填写所有映射，否则不能提交
-					if(!conParam.mappingList[index] || conParam.mappingList[index] == '') {
-						alert("请输入所有映射关系")
-						throw new Error("请输入所有映射关系")
-					}
+					// //必须填写所有映射，否则不能提交
+					// if(!conParam.mappingList[index] || conParam.mappingList[index] == '') {
+					// 	alert("请输入所有映射关系")
+					// 	throw new Error("请输入所有映射关系")
+					// }
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
 				let messageObj = {
-					tempfile: message.tempfile,
+					tempfile: JSON.parse(conParam.fileData.message).tempfile,
 					mapper: mapp,
 					tags: [
 						{Key: 'mapper', Value: ''}
