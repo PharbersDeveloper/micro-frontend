@@ -11,7 +11,9 @@ export default {
     data: () => {
         return {
             bubbleChart: null,
-            timer: null
+            timer: null,
+            dataArr: [],
+            yearArr: []
         }
     },
     mounted () {
@@ -45,7 +47,7 @@ export default {
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
             const accessToken = this.getCookie("access_token") || "d0fcdb3bf8fe8dd91cdb4ef64815013e1cce9444bb6d44dc981b554cab3c12c4"
-            let body = {"query":"select sum(sales) as sales, sum(units) as units, `标准省份名称` as province, year from phmax.data_wide where province != 'null' group by province,year having year in (2020,2019)","schema":["sales","units", "province", "year"]}
+            let body = {"query":"select sum(sales) as sales, sum(units) as units, `标准省份名称` as province, year from phmax.data_wide where province != 'null' group by province,year having year in (2020,2019) order by year","schema":["sales","units", "province", "year"]}
             let options = {
                 method: "POST",
                 headers: {
@@ -56,9 +58,28 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
+            let yearGroupArr = []
+            let dataArr = []
             result.forEach((item, index) => {
+                if(index == 0) {
+                    this.yearArr.push(item.year)
+                    yearGroupArr.push([Number(item.sales), Number(item.units), Number(item.sales), item.province, item.year])
+                } else {
+                    if(item.year == yearGroupArr[yearGroupArr.length - 1][4]) {
+                        yearGroupArr.push([Number(item.sales), Number(item.units), Number(item.sales), item.province, item.year])
+                    } else {
+                        this.yearArr.push(item.year)
+                        dataArr.push(yearGroupArr)
+                        yearGroupArr = []
+                        yearGroupArr.push([Number(item.sales), Number(item.units), Number(item.sales), item.province, item.year])
+                    }
+                }
 
             })
+            dataArr.push(yearGroupArr)
+            this.dataArr = dataArr
+            console.log(this.dataArr)
+            console.log(this.yearArr)
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -69,19 +90,37 @@ export default {
         },
         renderbubbleChart () {
             let that = this
-            const data = [
-                [
-                    [17096869, 77, 17096869, 'Australia', 1990],
-                    [27662440, 77.4, 27662440, 'Canada', 1990],
-                    [1154605773, 68, 1154605773, 'China', 1990]
-                ],
-                [
-                    [23968973, 81.8, 23968973, 'Australia', 2015],
-                    [35939927, 81.7, 35939927, 'Canada', 2015],
-                    [1376048943, 76.9, 1376048943, 'China', 2015]
-                ]
-            ];
+            let seriesArr = []
+            this.dataArr.forEach(item => {
+                let seriesConfig = {
+                    name: item[0][4],
+                    data: item,
+                    type: 'scatter',
+                    symbolSize: function (data) {
+                        return Math.sqrt(data[2]) / 50e2;
+                    },
+                    emphasis: {
+                        focus: 'series',
+                        label: {
+                            show: true,
+                            formatter: function (param) {
+                                console.log(param)
+                                return param.data[3];
+                            },
+                            position: 'bottom'
+                        }
+                    }
+                }
+                seriesArr.push(seriesConfig)
+            })
             let option = {
+                backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+                    offset: 0,
+                    color: '#f7f8fa'
+                }, {
+                    offset: 1,
+                    color: '#cdd0d5'
+                }]),
                 title: {
                     text: '省份-销量 气泡图',
                     left: '5%',
@@ -90,10 +129,10 @@ export default {
                 legend: {
                     right: '10%',
                     top: '3%',
-                    data: ['2019', '2020']
+                    data: this.yearArr
                 },
                 grid: {
-                    left: '8%',
+                    left: '15%',
                     top: '10%'
                 },
                 xAxis: {
@@ -111,74 +150,7 @@ export default {
                     },
                     scale: true
                 },
-                series: [
-                    {
-                        name: '2019',
-                        data: data[0],
-                        type: 'scatter',
-                        symbolSize: function (data) {
-                            return Math.sqrt(data[2]) / 5e2;
-                        },
-                        emphasis: {
-                            focus: 'series',
-                            label: {
-                                show: true,
-                                formatter: function (param) {
-                                    return param.data[3];
-                                },
-                                position: 'top'
-                            }
-                        },
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(120, 36, 50, 0.5)',
-                            shadowOffsetY: 5,
-                            color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-                                {
-                                    offset: 0,
-                                    color: 'rgb(251, 118, 123)'
-                                },
-                                {
-                                    offset: 1,
-                                    color: 'rgb(204, 46, 72)'
-                                }
-                            ])
-                        }
-                    },
-                    {
-                        name: '2020',
-                        data: data[1],
-                        type: 'scatter',
-                        symbolSize: function (data) {
-                            return Math.sqrt(data[2]) / 5e2;
-                        },
-                        emphasis: {
-                            focus: 'series',
-                            label: {
-                                show: true,
-                                formatter: function (param) {
-                                    return param.data[3];
-                                },
-                                position: 'top'
-                            }
-                        },
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(25, 100, 150, 0.5)',
-                            shadowOffsetY: 5,
-                            color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-                                {
-                                    offset: 0,
-                                    color: 'rgb(129, 227, 238)'
-                                },
-                                {
-                                    offset: 1,
-                                    color: 'rgb(25, 183, 207)'
-                                }
-                            ])
-                        }
-                    }
-                ]
+                series: seriesArr
             };
             // 绘制图表
             this.bubbleChart.setOption(option)
