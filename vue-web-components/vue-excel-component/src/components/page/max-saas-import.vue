@@ -174,7 +174,7 @@ export default {
 			data.args.param.userData = this.allData.userData
 			data.args.param.fileData = this.allData.assets[this.fileIndex]
 			this.$emit('event', data)
-			this.mappingModelShow = false
+			// this.mappingModelShow = false
 		}
 	},
 	props: {
