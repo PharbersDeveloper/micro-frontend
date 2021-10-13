@@ -118,14 +118,14 @@ export default {
                                 atc5Value = item.atc5
                             }
                         })
-                        return atc5Value + '<br/>' + sales
+                        return 'name: ' + atc5Value + '<br/>' + 'sales: ' + sales
                     },
                     backgroundColor:'rgba(28,36,39,0.8)',
                     borderColor: 'rgba(28,36,39,1)'
                 },
                 grid: {
-                    // height: '50%',
-                    // top: '5%'
+                    height: '90%',
+                    top: '5%'
                 },
                 xAxis: {
                     type: 'category',
