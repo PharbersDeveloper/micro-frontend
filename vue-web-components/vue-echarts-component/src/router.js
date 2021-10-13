@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import map from './components/map-chart.vue'
 import waterfull from './components/waterfull-chart.vue'
 import heatmap from './components/heatmap-chart.vue'
+import bubble from './components/bubble-chart.vue'
 
 Vue.use(Router)
 
@@ -22,6 +23,12 @@ export default new Router({
             path: '/heatmap',
             name: 'heatmap',
             component: heatmap
+        },
+
+        {
+            path: '/bubble',
+            name: 'bubble',
+            component: bubble
         }
     ]
 })
