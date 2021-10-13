@@ -113,7 +113,8 @@ export default {
 			},
 			sonRefresh: true,
 			closeTosts: false,
-			showSelectOptionParam: false
+			showSelectOptionParam: false,
+			conParam: {}
 		}
 	},
 	mounted() {
@@ -166,8 +167,8 @@ export default {
 		},
 		mappingClick() {
 			this.mappingModelShow = true
-			// console.log(this.allData.schemas);
-			// console.log(this.allData.targetNames);
+			console.log(this.allData.schemas);
+			console.log(this.allData.targetNames);
 		},
 		closeMappingModal() {
 			this.mappingModelShow = false
@@ -176,14 +177,16 @@ export default {
 			data.args.param.userData = this.allData.userData
 			data.args.param.fileData = this.allData.assets[this.fileIndex]
 			this.$emit('event', data)
-			let conParam = data.args.param
-			conParam.targetsList.forEach((item,index) => {
+			// let conParam = data.args.param
+			this.conParam = data.args.param
+			this.conParam.targetsList.forEach((item,index) => {
 				if(!conParam.mappingList[index] || conParam.mappingList[index] === '') {
 					alert("请输入所有映射关系")
 					throw new Error("请输入所有映射关系")
 				}
 			})
-			console.log(conParam);
+			
+			console.log('data',this.conParam);
 			this.mappingModelShow = false
 		}
 	},
