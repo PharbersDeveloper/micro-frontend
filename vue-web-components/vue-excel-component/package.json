@@ -6,7 +6,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "build:component": "vue-cli-service build --target wc --name ph-excel"
+        "build:component": "vue-cli-service build --target wc --name ph-excel 'src/components/**/*.vue'"
     },
     "dependencies": {
         "@handsontable/vue": "^9.0.2",
