@@ -167,8 +167,6 @@ export default {
 		},
 		mappingClick() {
 			this.mappingModelShow = true
-			console.log(this.allData.schemas);
-			console.log(this.allData.targetNames);
 		},
 		closeMappingModal() {
 			this.mappingModelShow = false
@@ -180,14 +178,11 @@ export default {
 			// let conParam = data.args.param
 			this.conParam = data.args.param
 			this.conParam.targetsList.forEach((item,index) => {
-				console.log(this.conParam.mappingList[index]);
 				if(!this.conParam.mappingList[index] || this.conParam.mappingList[index] === '') {
 					alert("请输入所有映射关系")
 					throw new Error("请输入所有映射关系")
 				}
 			})
-
-			console.log('data',this.conParam);
 			this.mappingModelShow = false
 		}
 	},
