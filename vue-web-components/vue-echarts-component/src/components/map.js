@@ -12,7 +12,7 @@ export const getGeoJson = async (type, name) => {
 //全国数据
 export const getChinaData = async () => {
     let queryParam = buildQueryString('country')
-    let params = {"query":"select `标准省份名称` as provice, sum(sales) as sales from max_result.data_wide where date='202001' and provice !='null' group by provice","schema":["provice","sales"]}
+    let params = {"query":"select `标准省份名称` as provice, sum(sales) as sales from phmax.data_wide where date='202001' and provice !='null' group by provice","schema":["provice","sales"]}
     let result = await queryData(params)
     let partData = []
     result.forEach((item) => {
@@ -27,7 +27,7 @@ export const getChinaData = async () => {
 export const getProvinceData = async (name) => {
     let provinceName = name.split('-')[1]
     let queryParam = buildQueryString('provice' )
-    let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from max_result.data_wide where date='202001' and `标准省份名称`= '" + provinceName + "' group by city","schema":["city","sales"]}
+    let params = {"query":"select `标准城市名称` as city, sum(sales) as sales from phmax.data_wide where date='202001' and `标准省份名称`= '" + provinceName + "' group by city","schema":["city","sales"]}
     let result = await queryData(params)
     let partData = []
     result.forEach((item) => {
@@ -74,7 +74,7 @@ function buildQueryString(selectName) {
     if(selectName == 'country') {
         selName = '标准省份名称'
         asName = 'provice'
-        database = 'max_result.data_wide'
+        database = 'phmax.data_wide'
         filter={
             equal: {
                 date: "202001"
@@ -90,7 +90,7 @@ function buildQueryString(selectName) {
     } else if(selectName == 'provice') {
         selName = '标准城市名称'
         asName = 'city'
-        database = 'max_result.data_wide'
+        database = 'phmax.data_wide'
         filter={
             equal: {
                 date: "202001",

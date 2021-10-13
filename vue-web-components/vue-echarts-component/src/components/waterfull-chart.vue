@@ -49,8 +49,8 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "4f82ce38f63a02ae79a8f8e8765eccfff31af8018bbf84f66747daf8ae47f9e5"
-            let body = {"query":"select provider,min(year) as min,max(year) as max from max_result.data_wide group by provider","schema":["provider","min", "max"]}
+            const accessToken = this.getCookie("access_token") || "aa724ba2d728d15dba6c7bd80da753c03ed8316857d98f07982a19b62763d78d"
+            let body = {"query":"select provider,min(year) as min,max(year) as max from phmax.data_wide group by provider","schema":["provider","min", "max"]}
             let options = {
                 method: "POST",
                 headers: {
