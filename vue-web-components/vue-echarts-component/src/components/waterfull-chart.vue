@@ -49,7 +49,7 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "aa724ba2d728d15dba6c7bd80da753c03ed8316857d98f07982a19b62763d78d"
+            const accessToken = this.getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
             let body = {"query":"select provider,min(year) as min,max(year) as max from phmax.data_wide group by provider","schema":["provider","min", "max"]}
             let options = {
                 method: "POST",
@@ -91,7 +91,6 @@ export default {
                 title: {
                     text: 'Waterfall Chart'
                 },
-                color: ['rgba(0,0,0,0)','#7163c5'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -155,7 +154,7 @@ export default {
                         stack: 'Total',
                         barWidth: 20,
                         label: {
-                            show: true,
+                            show: false,
                             position: 'bottom'
                         },
                         data: this.yearnumArr

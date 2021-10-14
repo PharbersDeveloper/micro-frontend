@@ -54,7 +54,7 @@ function getCookie(name) {
 
 async function queryData(data) {
     const url = "https://api.pharbers.com/phchproxyquery"
-    const accessToken = getCookie("access_token") || "7136f09bec1f0aa0ea6686736540946e9a22af5f6f550fc2b5aa9d7371455b4f"
+    const accessToken = getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
     let body = data
     let options = {
         method: "POST",

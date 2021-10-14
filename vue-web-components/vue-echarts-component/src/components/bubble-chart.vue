@@ -1,7 +1,7 @@
 <template>
-    <div class="bubbleWrap">
-        <div id="chart" class="chart"></div>
-    </div>
+	<div class="bubbleWrap">
+		<div id="chart" class="chart"></div>
+	</div>
 </template>
 
 <script>
@@ -46,7 +46,7 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "d0fcdb3bf8fe8dd91cdb4ef64815013e1cce9444bb6d44dc981b554cab3c12c4"
+            const accessToken = this.getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
             let body = {"query":"select sum(sales) as sales, sum(units) as units, `标准省份名称` as province, year from phmax.data_wide where province != 'null' group by province,year having year in (2020,2019) order by year","schema":["sales","units", "province", "year"]}
             let options = {
                 method: "POST",
@@ -104,11 +104,15 @@ export default {
                         label: {
                             show: true,
                             formatter: function (param) {
-                                console.log(param)
                                 return param.data[3];
                             },
                             position: 'bottom'
                         }
+                    },
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(100, 100, 100, 0.5)',
+                        shadowOffsetY: 5
                     }
                 }
                 seriesArr.push(seriesConfig)
@@ -161,15 +165,15 @@ export default {
 
 <style scoped lang="scss">
 .bubbleWrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 800px;
-    height: 90vh;
-    .chart {
-        width: 100%;
-        height: 100%;
-        padding: 10px;
-    }
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 800px;
+	height: 90vh;
+	.chart {
+		width: 100%;
+		height: 100%;
+		padding: 10px;
+	}
 }
 </style>

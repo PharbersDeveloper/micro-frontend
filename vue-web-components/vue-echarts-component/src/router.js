@@ -27,7 +27,7 @@ export default new Router({
 
         {
             path: '/bubble',
-            name: 'bubble',
+            name: 'bubble',                                                                                                                                                          
             component: bubble
         }
     ]
