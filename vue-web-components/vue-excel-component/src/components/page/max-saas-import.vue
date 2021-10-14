@@ -49,7 +49,8 @@
         </div>
         <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
         <!-- 进度条弹框 -->
-        <div v-if="closeuploadToast == '0' && showDialog"
+        <!-- <div v-if="closeuploadToast == '0' && showDialog" -->
+		<div v-if="showDialog"
             class="upload-toast" 
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
@@ -118,6 +119,9 @@ export default {
 		}
 	},
 	mounted() {
+		if(this.closeuploadToast = '0') {
+			this.showDialog = true;
+		}
 		let that = this
 		document.addEventListener("click", event => {
 			if(!that.showSelectOptionParam) {
@@ -145,7 +149,7 @@ export default {
 					value: 0
 				}
 			}
-			this.$emit('event', event)
+			this.$emit('event',event)
 		},
 		//点击文件，或确认导入
 		clickfile(data) {
@@ -162,14 +166,11 @@ export default {
 						clearInterval(clearInt); 
 					} 
 				}, 60)
-				var timer = setInterval(function() {
-					if(this.showDialog === false) {
-						this.showDialog = true;
-					}
-					if(this.showDialog === true) {
-						clearInterval(timer)
-					}
-				},0)
+				if(this.showDialog == false) {
+					this.showProgress = '1'
+				}else if(this.showDialog == true) {
+					this.showProgress = '0'
+				}
 			}
 			this.$emit('event', data)
 		},
