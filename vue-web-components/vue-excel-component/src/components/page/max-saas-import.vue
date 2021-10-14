@@ -164,11 +164,11 @@ export default {
 				}, 60)
 				var timer = setInterval(function() {
 					if(this.showDialog === false) {
-					this.showDialog = true;
-				}
-				if(this.showDialog === true) {
-					clearInterval(timer)
-				}
+						this.showDialog = true;
+					}
+					if(this.showDialog === true) {
+						clearInterval(timer)
+					}
 				},0)
 			}
 			this.$emit('event', data)

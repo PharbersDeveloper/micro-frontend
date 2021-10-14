@@ -103,78 +103,68 @@ export default {
                 { "name": "testThree", "tjz": 85, "zgz": 291}
             ]
             let option = {
-                color: ['#81C1DC', '#3488AD', '#00557C'],//设置颜色
-                tooltip: {
+                tooltip : {
                     trigger: 'axis',
-                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                    },
-                    formatter: function(params) {// 这里鼠标悬浮显示对应item的每项数值
-                        var relVal = params[0].name;
-                        relVal += '<br/>' + params[0].marker + params[0].seriesName + ' : ' + that.data[params[0].dataIndex].tjz;// 统计值
-                        relVal += '<br/>' + params[1].marker + params[1].seriesName + ' : ' + that.data[params[0].dataIndex].zgz;// 最高值
-                        return relVal;
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                     }
                 },
-                // 顶部显示
                 legend: {
-                    data: ['统计值', '最高值']
+                    bottom:'-5',
+                    data:['111','222','333','444','555','百度','谷歌','必应','其他']
                 },
-                // 设置下方图标的位置
                 grid: {
                     left: '3%',
                     right: '4%',
                     bottom: '3%',
-                    top:'7%',
                     containLabel: true
                 },
-                // 设置X轴的参数
-                xAxis: {
-                    type: 'category',
-                    data: this.initDataName()// 这里是显示名称
-                },
-                // 设置Y轴的参数
-                yAxis: [
-                    {  
-                        type: 'value',
-                        max : 100,// 设置最大值是多少
-                        splitNumber: 5,// 设置分几段显示
-                        axisLabel: {  
-                            show: true,  
-                            interval: 'auto',  
-                            formatter: '{value} %'  // 给每个数值添加%
-                        },  
-                        show: true
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : ['周一','周二','周三','周四','周五','周六','周日']
                     }
                 ],
-                // 设置每个item的参数
-                series: [{
-                    name: '统计值',
-                    type: 'bar',
-                    stack: '总量',
-                    barWidth: 20,
-                    label: {
-                        show: true,
-                        position: 'insideLeft',//在左边显示
-                        formatter: '{c}%'// 给计算后的数值添加%
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitLine:false
+                    }
+					
+                ],
+                series : [
+                    {
+                        name:'111',
+                    	barWidth: 20,
+                        type:'bar',
+                        stack: '广告',
+                        data:[120, 132, 101, 134, 90, 230, 210]
                     },
-                    //data: [13, 68.28, 85]
-                    data: this.initData('tjz')// 计算对应的百分比
-                },
-                {
-                    name: '最高值',
-                    barWidth: 20,
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        show: true,
-                        position: 'insideRight',// 在右边显示
-                        formatter: '{c}%'
+                    {
+                        name:'222',
+                        type:'bar',
+                    	barWidth: 20,
+                        stack: '广告',
+                        data:[220, 182, 191, 234, 290, 330, 310]
                     },
-                    data: this.initData('zgz')
-                }
+                    {
+                        name:'333',
+                        type:'bar',
+                    	barWidth: 20,
+                        stack: '广告',
+                        data:[150, 232, 201, 154, 190, 330, 410]
+                    },
+                    {
+                        name:'444',
+                        type:'line',
+                        stack: '广告',
+                        data:[150, 232, 201, 154, 190, 330, 410]
+                    }
+				
                 ]
             };
+
+
             
             // 绘制图表
             this.bubbleChart.setOption(option)
