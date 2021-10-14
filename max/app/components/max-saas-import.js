@@ -362,6 +362,10 @@ export default class MaxSaasImportComponent extends Component {
 				let urlParam = window.location.href.split('?')[1]
 				this.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
 				break
+				case "closeToast": 
+				let that = this
+				that.closeuploadToast = 1
+				break
 			default: 
                 console.log("other click event!")
         }
