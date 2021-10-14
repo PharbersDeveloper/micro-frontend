@@ -317,7 +317,7 @@ export default class MaxSaasImportComponent extends Component {
 							that.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
 						})
 					}).catch(function(err) {
-						console.log(err);
+						console.log;
 					})
 					 
 				}
@@ -329,11 +329,6 @@ export default class MaxSaasImportComponent extends Component {
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
 					let obj = {}
-					//必须填写所有映射，否则不能提交
-					// if(!conParam.mappingList[index] || conParam.mappingList[index] == '') {
-					// 	alert("请输入所有映射关系")
-					// 	throw new Error("请输入所有映射关系")
-					// }
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
@@ -348,7 +343,7 @@ export default class MaxSaasImportComponent extends Component {
 					"provider": conParam.fileData.provider,
 					"owner": conParam.fileData.owner,
 					"showName": conParam.fileData.showName,
-					"time": this.ymTime, //上传文件时间戳
+					"time": conParam.fileData.time, //上传文件时间戳
 					"version": conParam.fileData.version,
 					"code": 0,
 					"jobDesc": "mapped",
