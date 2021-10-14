@@ -49,7 +49,8 @@
         </div>
         <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
         <!-- 进度条弹框 -->
-        <div v-if="closeuploadToast == '0'"
+        <!-- <div v-if="closeuploadToast == '0' && showDialog" -->
+		<div v-if="showDialog"
             class="upload-toast" 
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
@@ -70,7 +71,7 @@
                 <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
             </div> 
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
-                <div class="cross"></div>
+                <div class="cross" @click="closeDialog"></div>
             </div>
         </div>
     </div>
@@ -94,6 +95,7 @@ export default {
 	},
 	data() {
 		return {
+			showDialog: true,
 			mappingModelShow: false,
 			fileIndex: 0,
 			middleList: [],
@@ -112,10 +114,14 @@ export default {
 			},
 			sonRefresh: true,
 			closeTosts: false,
-			showSelectOptionParam: false
+			showSelectOptionParam: false,
+			conParam: {}
 		}
 	},
 	mounted() {
+		if(this.closeuploadToast = '0') {
+			this.showDialog = true;
+		}
 		let that = this
 		document.addEventListener("click", event => {
 			if(!that.showSelectOptionParam) {
@@ -128,6 +134,10 @@ export default {
 		showSelectOption() {
 			this.showSelectOptionParam = true
 		},
+		// 关闭弹框
+		closeDialog() {
+			this.showDialog = false
+		},
 		// 关闭进度条
 		closeToast() {
 			const event = new Event("event")
@@ -139,7 +149,7 @@ export default {
 					value: 0
 				}
 			}
-			this.$emit('event', event)
+			this.$emit('event',event)
 		},
 		//点击文件，或确认导入
 		clickfile(data) {
@@ -151,11 +161,16 @@ export default {
 				this.proBar = 0;
 				var clearInt = setInterval(function() { 
 					that.proBar++; 
-					console.log(that.proBar); 
+					// console.log(that.proBar); 
 					if (that.proBar >= 60) { 
 						clearInterval(clearInt); 
 					} 
 				}, 60)
+				if(this.showDialog == false) {
+					this.showProgress = '1'
+				}else if(this.showDialog == true) {
+					this.showProgress = '0'
+				}
 			}
 			this.$emit('event', data)
 		},
@@ -169,6 +184,14 @@ export default {
 			data.args.param.userData = this.allData.userData
 			data.args.param.fileData = this.allData.assets[this.fileIndex]
 			this.$emit('event', data)
+			// let conParam = data.args.param
+			this.conParam = data.args.param
+			this.conParam.targetsList.forEach((item,index) => {
+				if(!this.conParam.mappingList[index] || this.conParam.mappingList[index] === '') {
+					alert("请输入所有映射关系")
+					throw new Error("请输入所有映射关系")
+				}
+			})
 			this.mappingModelShow = false
 		}
 	},
@@ -254,7 +277,7 @@ export default {
 			}
 		},
 		uploadLoadedSize: function() {
-			console.log("uploadLoadedSize", this.uploadLoadedSize)
+			// console.log("uploadLoadedSize", this.uploadLoadedSize)
 			this.proBar = this.uploadLoadedSize
 		},
 		"allData.sourceData": function(data) {
