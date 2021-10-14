@@ -162,6 +162,9 @@ export default {
 						clearInterval(clearInt); 
 					} 
 				}, 60)
+				if(this.showDialog === false) {
+					this.showDialog = true;
+				}
 			}
 			this.$emit('event', data)
 		},
@@ -180,8 +183,7 @@ export default {
 			this.conParam.targetsList.forEach((item,index) => {
 				if(!this.conParam.mappingList[index] || this.conParam.mappingList[index] === '') {
 					alert("请输入所有映射关系")
-					// throw new Error("请输入所有映射关系")
-					return false
+					throw new Error("请输入所有映射关系")
 				}
 			})
 			this.mappingModelShow = false
