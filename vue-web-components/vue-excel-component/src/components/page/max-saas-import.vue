@@ -180,7 +180,8 @@ export default {
 			this.conParam.targetsList.forEach((item,index) => {
 				if(!this.conParam.mappingList[index] || this.conParam.mappingList[index] === '') {
 					alert("请输入所有映射关系")
-					throw new Error("请输入所有映射关系")
+					// throw new Error("请输入所有映射关系")
+					return false
 				}
 			})
 			this.mappingModelShow = false
