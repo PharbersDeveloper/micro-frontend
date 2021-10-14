@@ -4,6 +4,7 @@ import map from './components/map-chart.vue'
 import waterfull from './components/waterfull-chart.vue'
 import heatmap from './components/heatmap-chart.vue'
 import bubble from './components/bubble-chart.vue'
+import perStach from './components/per-stacked-chart.vue'
 
 Vue.use(Router)
 
@@ -24,11 +25,15 @@ export default new Router({
             name: 'heatmap',
             component: heatmap
         },
-
         {
             path: '/bubble',
-            name: 'bubble',                                                                                                                                                          
+            name: 'bubble',  
             component: bubble
+        },
+        {
+            path: '/per',
+            name: 'perStach',
+            component: perStach
         }
     ]
 })
