@@ -330,7 +330,9 @@ export default class MaxSaasImportComponent extends Component {
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
 					let obj = {}
-					if(!conParam.mappingList[index] || conParam.mappingList[index] === '') return 
+					if(!conParam.mappingList[index] || conParam.mappingList[index] == '') {
+						throw new Error('请输入全部映射关系')
+					}
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
