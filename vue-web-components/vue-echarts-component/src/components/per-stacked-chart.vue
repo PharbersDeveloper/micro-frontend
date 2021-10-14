@@ -74,7 +74,7 @@ export default {
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
             const accessToken = this.getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
-            let body = {"query":"select sum(sales) as sales, sum(units) as units, `标准省份名称` as province, year from phmax.data_wide where province != 'null' group by province,year having year in (2020,2019) order by year","schema":["sales","units", "province", "year"]}
+            let body = {"query":"select max(sales) as maxsalex, avg(sales) as avgsales, avg(units) as avgunits, `标准省份名称` as province from phmax.data_wide where province != 'null' group by province","schema":["maxsalex","avgsales", "avgunits", "province"]}
             let options = {
                 method: "POST",
                 headers: {
@@ -86,6 +86,7 @@ export default {
             }
             let result = await fetch(url, options).then(res => res.json())
             result.forEach((item, index) => {
+                
             })
         },
         getCookie(name) {
