@@ -101,6 +101,7 @@ export default class MaxSaasImportComponent extends Component {
 					let mapper = mapperData.mapper
 					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
 					let dealMapper = []
+					console.log(mapperData);
 					mapper.forEach((mapperItem) => {
 						if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
 							dealMapper.push(mapperItem)
@@ -245,11 +246,11 @@ export default class MaxSaasImportComponent extends Component {
 					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
 					let dealMapper = []
 					let that = this
-					mapper.forEach((mapperItem) => {
-						if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
-							dealMapper.push(mapperItem)
-						}
-					})
+					// mapper.forEach((mapperItem) => {
+					// 	if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
+					// 		dealMapper.push(mapperItem)
+					// 	}
+					// })
 					let puts3_event = {
 						"asset": message.asset,
 						"owner": this.cookies.read('account_id'),
@@ -317,7 +318,7 @@ export default class MaxSaasImportComponent extends Component {
 							that.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
 						})
 					}).catch(function(err) {
-						console.log;
+						console.log(err);
 					})
 					 
 				}
@@ -329,6 +330,7 @@ export default class MaxSaasImportComponent extends Component {
 				let mapp = []
 				conParam.targetsList.forEach((item,index) => {
 					let obj = {}
+					if(!conParam.mappingList[index] || conParam.mappingList[index] === '') return 
 					obj[item] = conParam.mappingList[index]
 					mapp.push(obj)
 				})
