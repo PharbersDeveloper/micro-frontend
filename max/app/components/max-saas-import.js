@@ -101,7 +101,7 @@ export default class MaxSaasImportComponent extends Component {
 					let mapper = mapperData.mapper
 					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
 					let dealMapper = []
-					console.log(mapperData);
+					// console.log(mapperData);
 					mapper.forEach((mapperItem) => {
 						if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
 							dealMapper.push(mapperItem)

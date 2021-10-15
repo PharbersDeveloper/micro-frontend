@@ -50,7 +50,7 @@
         <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
         <!-- 进度条弹框 -->
 		<!-- <div v-if="showDialog" -->
-        <div v-if="closeuploadToast == '0' && showDialog"
+        <div v-if="closeuploadToast == '0'"
             class="upload-toast" 
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
