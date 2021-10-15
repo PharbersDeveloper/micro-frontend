@@ -49,7 +49,7 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
+            const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
             let body = {"query":"select atc3,splitByString('_', arr)[1] as atc5, toFloat64(splitByString('_', arr)[2]) as sales, number from (select atc3,groupArray(atc_sales) AS arr_val from (select atc3, concat(atc, '_', toString(sales)) as atc_sales from (select atc, substring(atc,1,3) as atc3, sum(sales) as sales from phmax.data_wide where atc != 'null' and length(atc)=5 GROUP BY atc ORDER BY atc3 ASC,sales DESC) table1 ) table2 GROUP BY atc3 ) table3　array join arr_val as arr, arrayEnumerate(arr_val) AS number where number <=10","schema":["atc3","atc5", "sales", "number"]}
             let options = {
                 method: "POST",
