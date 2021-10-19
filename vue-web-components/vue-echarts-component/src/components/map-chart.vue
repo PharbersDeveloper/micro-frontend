@@ -200,6 +200,8 @@ export default {
                     realtime: true,
                     calculable: false,
                     inverse: true,
+                    bottom: '30%',
+                    left: '20%',
                     inRange: {
                         // 色阶范围
                         color: [
@@ -308,8 +310,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 500px;
-    height: 500px;
+    width: 90vw;
+    height: 90vh;
     .chart {
         width: 100%;
         height: 100%;

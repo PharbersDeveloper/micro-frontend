@@ -49,8 +49,8 @@
         </div>
         <mapping-box v-if="mappingModelShow" @cancel="closeMappingModal" :fileName="allData.fileName" :sourceList="allData.schemas" :targetList="allData.targetNames" @confirmMappingEvent="confirmMappingEvent" :projectData="middleList"></mapping-box>
         <!-- 进度条弹框 -->
-        <!-- <div v-if="closeuploadToast == '0' && showDialog" -->
-		<div v-if="showDialog"
+		<!-- <div v-if="showDialog" -->
+        <div v-if="closeuploadToast == '0'"
             class="upload-toast" 
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
@@ -71,7 +71,8 @@
                 <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
             </div> 
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
-                <div class="cross" @click="closeDialog"></div>
+                <!-- <div class="cross" @click="closeDialog"></div> -->
+				<div class="cross"></div>
             </div>
         </div>
     </div>
@@ -95,7 +96,7 @@ export default {
 	},
 	data() {
 		return {
-			showDialog: true,
+			// showDialog: true,
 			mappingModelShow: false,
 			fileIndex: 0,
 			middleList: [],
@@ -119,9 +120,6 @@ export default {
 		}
 	},
 	mounted() {
-		if(this.closeuploadToast = '0') {
-			this.showDialog = true;
-		}
 		let that = this
 		document.addEventListener("click", event => {
 			if(!that.showSelectOptionParam) {
@@ -135,9 +133,9 @@ export default {
 			this.showSelectOptionParam = true
 		},
 		// 关闭弹框
-		closeDialog() {
-			this.showDialog = false
-		},
+		// closeDialog() {
+		// 	this.showDialog = false
+		// },
 		// 关闭进度条
 		closeToast() {
 			const event = new Event("event")
@@ -166,11 +164,10 @@ export default {
 						clearInterval(clearInt); 
 					} 
 				}, 60)
-				if(this.showDialog == false) {
-					this.showProgress = '1'
-				}else if(this.showDialog == true) {
-					this.showProgress = '0'
-				}
+				// if(this.showDialog == false) {
+				// 	this.showDialog = true;
+				// 	this.
+				// }
 			}
 			this.$emit('event', data)
 		},

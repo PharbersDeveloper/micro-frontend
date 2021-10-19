@@ -12,7 +12,11 @@ export default {
         return {
             bubbleChart: null,
             timer: null,
-            data: []
+            data: [],
+            provinceArr: [],
+            salesArr: [],
+            unitsArr: [],
+            lineArr: []
         }
     },
     mounted () {
@@ -73,8 +77,8 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
-            let body = {"query":"select sum(sales) as sales, sum(units) as units, `标准省份名称` as province, year from phmax.data_wide where province != 'null' group by province,year having year in (2020,2019) order by year","schema":["sales","units", "province", "year"]}
+            const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
+            let body = {"query":"select max(sales) as maxsalex, avg(sales) as avgsales, avg(units) as avgunits, `标准省份名称` as province from phmax.data_wide where province != 'null' group by province","schema":["maxsalex","avgsales", "avgunits", "province"]}
             let options = {
                 method: "POST",
                 headers: {
@@ -85,7 +89,15 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
+            this.provinceArr = []
+            this.salesArr = []
+            this.unitsArr = []
+            this.lineArr = []
             result.forEach((item, index) => {
+                this.provinceArr.push(item.province)
+                this.salesArr.push(Number(item.avgsales))
+                this.unitsArr.push(Number(item.avgunits))
+                this.lineArr.push(Number(item.maxsalex) /100)
             })
         },
         getCookie(name) {
@@ -97,21 +109,16 @@ export default {
         },
         renderbubbleChart () {
             let that = this
-            this.data = [
-                { "name": "testOne", "tjz": 13, "zgz": 271},
-                { "name": "testTwo", "tjz": 68.28, "zgz": 78.6},
-                { "name": "testThree", "tjz": 85, "zgz": 291}
-            ]
             let option = {
                 tooltip : {
                     trigger: 'axis',
-                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    axisPointer : {  // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                     }
                 },
                 legend: {
                     bottom:'-5',
-                    data:['111','222','333','444','555','百度','谷歌','必应','其他']
+                    data:['sales','units', 'max-sales']
                 },
                 grid: {
                     left: '3%',
@@ -122,49 +129,42 @@ export default {
                 xAxis : [
                     {
                         type : 'category',
-                        data : ['周一','周二','周三','周四','周五','周六','周日']
+                        data : this.provinceArr
                     }
                 ],
                 yAxis : [
                     {
                         type : 'value',
-                        splitLine:false
+                        splitLine: {
+                            show: true
+                        }
                     }
-					
+                    
                 ],
                 series : [
                     {
-                        name:'111',
-                    	barWidth: 20,
+                        name:'sales',
+                        barWidth: 20,
                         type:'bar',
-                        stack: '广告',
-                        data:[120, 132, 101, 134, 90, 230, 210]
+                        stack: 'sales',
+                        data: this.salesArr
                     },
                     {
-                        name:'222',
+                        name:'units',
                         type:'bar',
-                    	barWidth: 20,
-                        stack: '广告',
-                        data:[220, 182, 191, 234, 290, 330, 310]
+                        barWidth: 20,
+                        stack: 'sales',
+                        data: this.unitsArr
                     },
                     {
-                        name:'333',
-                        type:'bar',
-                    	barWidth: 20,
-                        stack: '广告',
-                        data:[150, 232, 201, 154, 190, 330, 410]
-                    },
-                    {
-                        name:'444',
+                        name:'max-sales',
                         type:'line',
-                        stack: '广告',
-                        data:[150, 232, 201, 154, 190, 330, 410]
+                        stack: 'sales',
+                        data: this.lineArr
                     }
-				
+                
                 ]
             };
-
-
             
             // 绘制图表
             this.bubbleChart.setOption(option)
@@ -178,7 +178,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 800px;
+    width: 100vw;
     height: 90vh;
     .chart {
         width: 100%;

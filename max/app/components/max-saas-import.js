@@ -101,7 +101,7 @@ export default class MaxSaasImportComponent extends Component {
 					let mapper = mapperData.mapper
 					let delArr = ['id', 'measure', 'provider', 'version', 'owner']
 					let dealMapper = []
-					console.log(mapperData);
+					// console.log(mapperData);
 					mapper.forEach((mapperItem) => {
 						if(delArr.indexOf(Object.keys(mapperItem)[0]) == -1) {
 							dealMapper.push(mapperItem)
@@ -361,6 +361,10 @@ export default class MaxSaasImportComponent extends Component {
 				this.router.transitionTo( "/" )
 				let urlParam = window.location.href.split('?')[1]
 				this.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
+				break
+				case "closeToast": 
+				let that = this
+				that.closeuploadToast = 1
 				break
 			default: 
                 console.log("other click event!")

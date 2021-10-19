@@ -32,12 +32,12 @@ export default {
             var serie = [];
             for (var i = 0; i < this.data.length; i++) {
                 var num = 0
-                if(val == 'tjz'){//计算统计值
-                    num = this.data[i].tjz
-                }else if (val == 'zgz') {//计算最高值
-                    num = this.data[i].zgz
+                if(val == 'avgsales'){//计算统计值
+                    num = this.data[i].avgsales
+                }else if (val == 'avgunits') {//计算最高值
+                    num = this.data[i].avgunits
                 }
-                var total = (parseFloat(this.data[i].tjz) + parseFloat(this.data[i].zgz)).toFixed(2);
+                var total = (parseFloat(this.data[i].avgsales) + parseFloat(this.data[i].avgunits)).toFixed(2);
                 var numcount = this.Percentage(num,total)
                 serie.push(numcount);
             }
@@ -73,7 +73,7 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "78ab2dc53134441a1b66c03db716c790cdc1ef180ae8eb88da8a9a7ed4d7806b"
+            const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
             let body = {"query":"select max(sales) as maxsalex, avg(sales) as avgsales, avg(units) as avgunits, `标准省份名称` as province from phmax.data_wide where province != 'null' group by province","schema":["maxsalex","avgsales", "avgunits", "province"]}
             let options = {
                 method: "POST",
@@ -85,8 +85,10 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
+            console.log(result)
+            this.data = []
             result.forEach((item, index) => {
-                
+                this.data.push({"name": item.province, "avgsales": item.avgsales, "avgunits": item.avgunits})
             })
         },
         getCookie(name) {
@@ -98,11 +100,6 @@ export default {
         },
         renderbubbleChart () {
             let that = this
-            this.data = [
-                { "name": "testOne", "tjz": 13, "zgz": 271},
-                { "name": "testTwo", "tjz": 68.28, "zgz": 78.6},
-                { "name": "testThree", "tjz": 85, "zgz": 291}
-            ]
             let option = {
                 color: ['#81C1DC', '#3488AD', '#00557C'],//设置颜色
                 tooltip: {
@@ -112,14 +109,14 @@ export default {
                     },
                     formatter: function(params) {// 这里鼠标悬浮显示对应item的每项数值
                         var relVal = params[0].name;
-                        relVal += '<br/>' + params[0].marker + params[0].seriesName + ' : ' + that.data[params[0].dataIndex].tjz;// 统计值
-                        relVal += '<br/>' + params[1].marker + params[1].seriesName + ' : ' + that.data[params[0].dataIndex].zgz;// 最高值
+                        relVal += '<br/>' + params[0].marker + params[0].seriesName + ' : ' + that.data[params[0].dataIndex].avgsales;// 统计值
+                        relVal += '<br/>' + params[1].marker + params[1].seriesName + ' : ' + that.data[params[0].dataIndex].avgunits;// 最高值
                         return relVal;
                     }
                 },
                 // 顶部显示
                 legend: {
-                    data: ['统计值', '最高值']
+                    data: ['sales', 'units']
                 },
                 // 设置下方图标的位置
                 grid: {
@@ -149,31 +146,32 @@ export default {
                     }
                 ],
                 // 设置每个item的参数
-                series: [{
-                    name: '统计值',
-                    type: 'bar',
-                    stack: '总量',
-                    barWidth: 20,
-                    label: {
-                        show: true,
-                        position: 'insideLeft',//在左边显示
-                        formatter: '{c}%'// 给计算后的数值添加%
+                series: [
+                    {
+                        name: 'sales',
+                        type: 'bar',
+                        stack: '总量',
+                        barWidth: 20,
+                        label: {
+                            show: true,
+                            position: 'insideLeft',//在左边显示
+                            formatter: '{c}%'// 给计算后的数值添加%
+                        },
+                        //data: [13, 68.28, 85]
+                        data: this.initData('avgsales')// 计算对应的百分比
                     },
-                    //data: [13, 68.28, 85]
-                    data: this.initData('tjz')// 计算对应的百分比
-                },
-                {
-                    name: '最高值',
-                    barWidth: 20,
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        show: true,
-                        position: 'insideRight',// 在右边显示
-                        formatter: '{c}%'
-                    },
-                    data: this.initData('zgz')
-                }
+                    {
+                        name: 'units',
+                        barWidth: 20,
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            show: true,
+                            position: 'insideRight',// 在右边显示
+                            formatter: '{c}%'
+                        },
+                        data: this.initData('avgunits')
+                    }
                 ]
             };
             
@@ -189,7 +187,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 800px;
+    width: 100vw;
     height: 90vh;
     .chart {
         width: 100%;

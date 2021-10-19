@@ -130,7 +130,7 @@ export default {
 							return sql_str
 						}
 						const url = "https://api.pharbers.com/phchproxyquery"
-						const accessToken = ele.getCookie("access_token") || "accb6e480720d523a824d8b95595ae214fab0d94e34155ce6271d4e41cc99e64"
+						const accessToken = ele.getCookie("access_token") || "e2d0155492062d172999bbf85e475ae298c75e73a5da399aa08ed26a51874857"
 						let body = {
 							"query": buildQueryString(),
 							"schema": ele.schema

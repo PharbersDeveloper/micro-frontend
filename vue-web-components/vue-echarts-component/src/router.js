@@ -6,6 +6,7 @@ import heatmap from './components/heatmap-chart.vue'
 import bubble from './components/bubble-chart.vue'
 import perStacked from './components/per-stacked-chart.vue'
 import mixLine from './components/mix-line-stacked-chart.vue'
+import demo from './components/page/demo.vue'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
     routes: [
         {
             path: '/',
+            name: 'demo',
+            component: demo
+        },
+        {
+            path: '/map',
             name: 'map',
             component: map
         },
