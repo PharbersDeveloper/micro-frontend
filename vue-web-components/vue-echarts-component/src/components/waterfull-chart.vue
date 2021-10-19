@@ -119,6 +119,9 @@ export default {
                     type: 'value',
                     min: this.minYear,
                     max: this.maxYear,
+                    axisLine: { //关键设置，不显示X轴线条
+                        show: true
+                    },
                     axisLabel:{
                         formatter: function (value) {
                             var texts = [];
@@ -129,7 +132,10 @@ export default {
                 },
                 yAxis: {
                     type: 'category',
-                    data: this.providerArr
+                    data: this.providerArr,
+                    splitLine: {
+                        show: true
+                    }
                 },
                 series: [
                     {
@@ -176,7 +182,7 @@ export default {
     justify-content: center;
     align-items: center;
     width: 1000px;
-    height: 800px;
+    height: 100vh;
     .chart {
         width: 100%;
         height: 100%;

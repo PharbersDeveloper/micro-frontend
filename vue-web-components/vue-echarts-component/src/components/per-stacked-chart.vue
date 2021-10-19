@@ -100,11 +100,6 @@ export default {
         },
         renderbubbleChart () {
             let that = this
-            // this.data = [
-            //     { "name": "testOne", "avgsales": 13, "avgunits": 271},
-            //     { "name": "testTwo", "avgsales": 68.28, "avgunits": 78.6},
-            //     { "name": "testThree", "avgsales": 85, "avgunits": 291}
-            // ]
             let option = {
                 color: ['#81C1DC', '#3488AD', '#00557C'],//设置颜色
                 tooltip: {
@@ -151,31 +146,32 @@ export default {
                     }
                 ],
                 // 设置每个item的参数
-                series: [{
-                    name: '统计值',
-                    type: 'bar',
-                    stack: '总量',
-                    barWidth: 20,
-                    label: {
-                        show: true,
-                        position: 'insideLeft',//在左边显示
-                        formatter: '{c}%'// 给计算后的数值添加%
+                series: [
+                    {
+                        name: 'sales',
+                        type: 'bar',
+                        stack: '总量',
+                        barWidth: 20,
+                        label: {
+                            show: true,
+                            position: 'insideLeft',//在左边显示
+                            formatter: '{c}%'// 给计算后的数值添加%
+                        },
+                        //data: [13, 68.28, 85]
+                        data: this.initData('avgsales')// 计算对应的百分比
                     },
-                    //data: [13, 68.28, 85]
-                    data: this.initData('avgsales')// 计算对应的百分比
-                },
-                {
-                    name: '最高值',
-                    barWidth: 20,
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        show: true,
-                        position: 'insideRight',// 在右边显示
-                        formatter: '{c}%'
-                    },
-                    data: this.initData('avgunits')
-                }
+                    {
+                        name: 'units',
+                        barWidth: 20,
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            show: true,
+                            position: 'insideRight',// 在右边显示
+                            formatter: '{c}%'
+                        },
+                        data: this.initData('avgunits')
+                    }
                 ]
             };
             

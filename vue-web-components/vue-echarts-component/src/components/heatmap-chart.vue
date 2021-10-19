@@ -181,7 +181,7 @@ export default {
     justify-content: center;
     align-items: center;
     width: 800px;
-    height: 90vh;
+    height: 100vh;
     .chart {
         width: 100%;
         height: 100%;
