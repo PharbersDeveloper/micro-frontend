@@ -36,7 +36,7 @@ export default DS.JSONAPIAdapter.extend( {
 		let url = this._super( ...arguments ) // url: http://general.pharbers.com:4200/v0/assets
 		let curType = url.split( "/" ).splice( 4,2 ) // ["activities" , ... ]
 		let curPath = curType.join( "/" )
-		let newUrl = `/entry/${curPath}` // newUrl: "/v0/entry/assets"
+		let newUrl = `/phplatform/${curPath}` // newUrl: "/v0/phplatform/assets"
 
 		this.set( "curMethod", requestMethod[requestType] )
 		this.set( "modelName", modelName )
@@ -56,17 +56,17 @@ export default DS.JSONAPIAdapter.extend( {
 				newUrl = `/reports/${curPath}`
 			}
 		}
-		if(modelName === "template") {
-			newUrl = `/reports/${curPath}`
-		}
+		// if(modelName === "template") {
+		// 	newUrl = `/reports/${curPath}`
+		// }
 
-		if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
-			newUrl = `/phproject/${curPath}`
-		}
+		// if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
+		// 	newUrl = `/phproject/${curPath}`
+		// }
 
-		if(modelName === "db" || modelName === "table" || modelName === "partition") {
-			newUrl = `/phcatlog/${curPath}`
-		}
+		// if(modelName === "db" || modelName === "table" || modelName === "partition") {
+		// 	newUrl = `/phcatlog/${curPath}`
+		// }
 
 		if ( query && Object.keys( query ).length ) {
 			let queryString = ""
@@ -98,7 +98,8 @@ export default DS.JSONAPIAdapter.extend( {
 			this.set( "queryParamsAWS", {} )
 		}
 		this.set( "newUrl", newUrl )
-		return "https://api.pharbers.com" + newUrl
+		// return "https://api.pharbers.com" + newUrl
+		return "https://apiv2.pharbers.com" + newUrl
 	},
 	attributesToDeal( data ){
 		// data is object
@@ -291,7 +292,7 @@ export default DS.JSONAPIAdapter.extend( {
 			"Accept": "application/vnd.api+json",
 			"Content-Type": "application/vnd.api+json"
 		}
-		let awsPath = "/entry/{type}"
+		let awsPath = "/phplatform/{type}"
 		let paramsArr = []
 
 		// 对请求body进行处理

@@ -7,7 +7,8 @@ export default class DownloadProjectRoute extends Route {
     @service cookies
 
 	async model( params ) {
-        let projects = await this.store.query( "project", { "filter[provider]": "pharbers"})
+        let projects = await this.store.query( "stateMachine")
+		debugger
         return RSVP.hash({
             projects: projects.filter( it => it),
 			_isVue: true
