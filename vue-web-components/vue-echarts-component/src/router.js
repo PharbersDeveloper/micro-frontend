@@ -6,6 +6,7 @@ import heatmap from './components/heatmap-chart.vue'
 import bubble from './components/bubble-chart.vue'
 import perStacked from './components/per-stacked-chart.vue'
 import mixLine from './components/mix-line-stacked-chart.vue'
+import graph from './components/graph-dag-chart.vue'
 import demo from './components/page/demo.vue'
 
 Vue.use(Router)
@@ -46,6 +47,11 @@ export default new Router({
             path: '/mix',
             name: 'mixLine',
             component: mixLine
+        },
+        {
+            path: '/graph',
+            name: 'graph',
+            component: graph
         }
     ]
 })
