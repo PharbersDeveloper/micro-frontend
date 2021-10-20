@@ -36,7 +36,7 @@ export default DS.JSONAPIAdapter.extend( {
 		let url = this._super( ...arguments ) // url: http://general.pharbers.com:4200/v0/assets
 		let curType = url.split( "/" ).splice( 4,2 ) // ["activities" , ... ]
 		let curPath = curType.join( "/" )
-		let newUrl = `/phplatform/${curPath}` // newUrl: "/v0/phplatform/assets"
+		let newUrl = `/entry/${curPath}` // newUrl: "/v0/entry/assets"
 
 		this.set( "curMethod", requestMethod[requestType] )
 		this.set( "modelName", modelName )
@@ -292,7 +292,7 @@ export default DS.JSONAPIAdapter.extend( {
 			"Accept": "application/vnd.api+json",
 			"Content-Type": "application/vnd.api+json"
 		}
-		let awsPath = "/phplatform/{type}"
+		let awsPath = "/entry/{type}"
 		let paramsArr = []
 
 		// 对请求body进行处理

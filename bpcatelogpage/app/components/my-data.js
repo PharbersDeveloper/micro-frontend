@@ -116,7 +116,6 @@ export default class MyDataComponent extends Component {
 			/**
 			 * 3. create file metadata for database
 			 */
-
 			const applicationAdapter = this.store.adapterFor( "application" )
 			const fileBodyObj = {
 				name: uploadMessage.file.name.split( "." )[0],
@@ -124,26 +123,15 @@ export default class MyDataComponent extends Component {
 				extension: uploadMessage.file.name.split( "." )[1],
 				size: uploadMessage.file.size,
 				source: fileKey,
-				type: "file", // candidate: database, file, stream, application, mart, cube
-				accessibility: "",
-				version: "",
-				isNewVersion: true,
-				providers: [],
-				markets: [],
-				molecules: [],
-				dateCover: [],
-				geoCover: [],
 				labels: [],
 				created: new Date(),
 				modified: new Date(),
-				description: "",
-				partners: that.args.model.employerId
+				version: "",
+				description: ""
 			}
 			applicationAdapter.set( "reqBody", fileBodyObj )
 			//数据库上传数据
-			await this.store
-				.createRecord( "asset", fileBodyObj )
-				.save()
+			await this.store.createRecord( "file", fileBodyObj ).save()
 
 			that.router.transitionTo( "/" )
 			that.router.transitionTo( title.router.currentURL )

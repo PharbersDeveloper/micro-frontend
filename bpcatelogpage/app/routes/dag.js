@@ -18,7 +18,7 @@ export default class DagRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-        let dagDetail = await this.store.findRecord( "project", params.project_id)
+        let dagDetail = await this.store.findRecord( "state-machine", params.project_id)
         let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
 
 		// let executionsIdArr = dagDetail.hasMany('executions').ids()

@@ -45,8 +45,7 @@ export default class ProjectsRoute extends Route {
 		applicationAdapter.set("userAuthorization", accessToken)
 		applicationAdapter.set('needUserData', allUserData)
 
-		let projects = await this.store.query( "stateMachine", { "filter[provider]": "pharbers"})
-
+		let projects = await this.store.query( "state-machine", {})
 		return RSVP.hash( {
 			projects: projects.filter( it => it),
 			personalData: userData,
