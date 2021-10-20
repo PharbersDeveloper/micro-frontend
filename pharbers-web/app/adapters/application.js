@@ -125,10 +125,7 @@ export default JSONAPIAdapter.extend({
                     queryParams: this.oauthRequestComponentQuery,
                     body: {}
                 }
-
-                // console.log("req", req)
                 const request = client.makeRequest(req)
-                // console.log("request", request)
                 return request.headers
             }
 
@@ -141,11 +138,7 @@ export default JSONAPIAdapter.extend({
                     queryParams: this.oauthRequestTokenQuery,
                     body: {}
                 }
-
-                // console.log("req", req)
-
                 const request = client.makeRequest(req)
-                // console.log("request", request)
                 return request.headers
             }
 
@@ -153,8 +146,6 @@ export default JSONAPIAdapter.extend({
             const requestURL = this.requestURL.split("/") // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
             // const curType = requestURL[2]
             const curType = requestURL[2]
-            // let curId = ""
-            // let curRelationship = ""
             let paramsArr = []
             let urlArr = ["type"] // type id relationship
             let awsPath = "/offweb/{type}"
@@ -199,14 +190,6 @@ export default JSONAPIAdapter.extend({
 
                 // Object.assign( params, queryParamsAWS )
             }
-
-            // { verb: 'GET',
-            // path: '/v0/offweb/proposals',
-            // headers: { Accept: 'application/vnd.api+json' },
-            // queryParams: {},
-            // body: {}
-            // }
-
             if (this.get('findRecordInclude')) {
                 paramsArr.push('include')
                 params.include = this.get('findRecordInclude')
@@ -222,9 +205,9 @@ export default JSONAPIAdapter.extend({
                 headers: utils.parseParametersToObject(params, ["Accept"]),
                 queryParams: utils.parseParametersToObject(params, paramsArr),
                 // queryParams: queryParamsAWS,
-                body: {}
+                body: {},
+				host: "apiv2.pharbers.com"
             }
-			console.log(req)
             const request = client.makeRequest(req)
             return request.headers
         }

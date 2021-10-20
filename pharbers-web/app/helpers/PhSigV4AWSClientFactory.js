@@ -194,7 +194,7 @@ PhSigV4AWSClientFactory.newClient = function (config) {
         headers[X_AMZ_DATE] = datetime;
         // const parser = document.createElement('a');
         // parser.href = awsSigV4Client.endpoint;
-        headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn"
+        headers[HOST] = request.host
 
         const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
         const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
