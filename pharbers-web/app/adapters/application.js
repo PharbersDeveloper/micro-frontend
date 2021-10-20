@@ -34,7 +34,7 @@ export default JSONAPIAdapter.extend({
         }
         const curPath = curType.join("/")
         // let newUrl = `/${ENV.namespace}/offweb/${curPath}`
-        let newUrl = `${curPath}`
+        let newUrl = `/offweb/${curPath}`
         if (query && Object.keys(query).length) {
             let queryString = ""
             const queryParamsArr = Object.keys(query)
@@ -68,7 +68,7 @@ export default JSONAPIAdapter.extend({
         }
         this.set("newUrl", newUrl)
         // return `https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn${newUrl}`
-        return `https://apiv2.pharbers.com/phplatform/${newUrl}`
+        return `https://apiv2.pharbers.com${newUrl}`
 
     },
 
@@ -98,7 +98,7 @@ export default JSONAPIAdapter.extend({
             }
             // extract endpoint and path from url
             // const invokeUrl = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0"
-            const invokeUrl = "https://apiv2.pharbers.com/phplatform/"
+            const invokeUrl = "https://apiv2.pharbers.com"
             const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]
             const pathComponent = invokeUrl.substring(endpoint.length)
             const sigV4ClientConfig = {
@@ -224,6 +224,7 @@ export default JSONAPIAdapter.extend({
                 // queryParams: queryParamsAWS,
                 body: {}
             }
+			console.log(req)
             const request = client.makeRequest(req)
             return request.headers
         }
