@@ -55,6 +55,7 @@ export default class ActivityListRoute extends Route {
                 this.loadingService.loading.style.display = 'none'
             }
         }
+		await Promise.all([activityList,galleryList,galleryIds])
         return RSVP.hash({
             galleryIds: galleryIds,
             data: activityList.then((x) => x.filter((it) => it.language === lang)),

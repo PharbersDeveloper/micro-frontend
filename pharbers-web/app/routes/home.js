@@ -30,6 +30,7 @@ export default class HomeRoute extends Route {
                 this.loadingService.loading.style.display = 'none'
             }
         }
+		await Promise.all([activityList,reportsList])
         return RSVP.hash({
             activities: activityList.then(x => x.filter(it => it.language === lang)),
             reports: reportsList.then(x => x.filter(it => it.language === lang))

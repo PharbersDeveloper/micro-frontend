@@ -204,6 +204,7 @@ export default class BoyunhuiRoute extends Route {
                 this.loadingService.loading.style.display = 'none'
             }
         }
+		await Promise.all([activityList,reportList,zoneList,eventList,hostList,participantList,activityDays,imageList,galleryList,galleryShow,cooperationList,cooperationLogoList])
 		return RSVP.hash({
 			activitys: activityList.then((x) =>
 				x.filter((it) => it.language === lang)
