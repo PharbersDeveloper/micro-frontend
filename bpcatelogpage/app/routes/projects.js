@@ -25,7 +25,7 @@ export default class ProjectsRoute extends Route {
 		applicationAdapter.set("getUserInfo", 1)
 		applicationAdapter.set("userAuthorization", accessToken)
 		let allUserData
-		let userData = this.store.findRecord( "account", this.cookies.read('account_id') )
+		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
 		//请求employer的数据
 		let employerId = userData.belongsTo('employer').id()
 		applicationAdapter.set("partner",1)
@@ -45,7 +45,8 @@ export default class ProjectsRoute extends Route {
 		applicationAdapter.set("userAuthorization", accessToken)
 		applicationAdapter.set('needUserData', allUserData)
 
-		let projects = this.store.query( "project", { "filter[provider]": "pharbers"})
+		let projects = this.store.query( "state-machine", {})
+		// let projects = await this.store.query( "project", { "filter[provider]": "pharbers"})
 		await Promise.all([userData,employerData,projects])
 		return RSVP.hash( {
 			projects: projects.filter( it => it),

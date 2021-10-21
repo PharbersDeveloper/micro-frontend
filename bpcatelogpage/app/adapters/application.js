@@ -56,17 +56,17 @@ export default DS.JSONAPIAdapter.extend( {
 				newUrl = `/reports/${curPath}`
 			}
 		}
-		if(modelName === "template") {
-			newUrl = `/reports/${curPath}`
-		}
+		// if(modelName === "template") {
+		// 	newUrl = `/reports/${curPath}`
+		// }
 
-		if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
-			newUrl = `/phproject/${curPath}`
-		}
+		// if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
+		// 	newUrl = `/phproject/${curPath}`
+		// }
 
-		if(modelName === "db" || modelName === "table" || modelName === "partition") {
-			newUrl = `/phcatlog/${curPath}`
-		}
+		// if(modelName === "db" || modelName === "table" || modelName === "partition") {
+		// 	newUrl = `/phcatlog/${curPath}`
+		// }
 
 		if ( query && Object.keys( query ).length ) {
 			let queryString = ""
@@ -98,7 +98,8 @@ export default DS.JSONAPIAdapter.extend( {
 			this.set( "queryParamsAWS", {} )
 		}
 		this.set( "newUrl", newUrl )
-		return "https://api.pharbers.com" + newUrl
+		// return "https://api.pharbers.com" + newUrl
+		return "https://apiv2.pharbers.com" + newUrl
 	},
 	attributesToDeal( data ){
 		// data is object

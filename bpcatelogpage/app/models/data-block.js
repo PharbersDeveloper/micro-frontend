@@ -7,5 +7,4 @@ export default class DataBlockModel extends Model {
     @attr("number") startRow;
     @attr("string") type;
     @attr("string") description;
-    @belongsTo("asset", {inverse: "block"}) assetBlock;
 }

@@ -34,20 +34,20 @@
                                 <img :src="fileIconDark" class="file-icon-dark" alt="">
                                 <div class="text-area" >
                                     <bp-text class="title">{{file.name}}</bp-text>
-                                    <bp-text class="subtitle">{{file.provider}}</bp-text>
+                                    <!-- <bp-text class="subtitle">{{file.provider}}</bp-text> -->
                                 </div>
                             </div>
-                            <bp-text class="subtitle right-text">{{formatDateStandard(file.meta.created,0)}}</bp-text>
+                            <!-- <bp-text class="subtitle right-text">{{formatDateStandard(file.meta.created,0)}}</bp-text> -->
                         </div>
                     </template>
                     <div v-if="!toggle" class="project-card">
                         <div class="project-card-item" v-for="(file,index) in allData.projects" :key="index+'card'" @click="linkToPage(file)">
                             <div class="text-area" >
                                 <bp-text class="title">{{file.name}}</bp-text>
-                                <bp-text class="subtitle">{{file.provider}}</bp-text>
+                                <!-- <bp-text class="subtitle">{{file.provider}}</bp-text> -->
                             </div>
                             <div class="last-date">
-                                <bp-text class="subtitle bottom-text">{{formatDateStandard(file.meta.created,0)}}</bp-text>
+                                <!-- <bp-text class="subtitle bottom-text">{{formatDateStandard(file.meta.created,0)}}</bp-text> -->
                             </div>
                         </div>
                     </div>

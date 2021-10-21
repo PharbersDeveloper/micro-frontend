@@ -33,7 +33,8 @@ export default JSONAPIAdapter.extend({
             this.set('findRecordInclude', snapshot.include)
         }
         const curPath = curType.join("/")
-        let newUrl = `/${ENV.namespace}/offweb/${curPath}`
+        // let newUrl = `/${ENV.namespace}/offweb/${curPath}`
+        let newUrl = `/offweb/${curPath}`
         if (query && Object.keys(query).length) {
             let queryString = ""
             const queryParamsArr = Object.keys(query)
@@ -66,7 +67,8 @@ export default JSONAPIAdapter.extend({
             newUrl += "?" + encodeURI(queryString)
         }
         this.set("newUrl", newUrl)
-        return `https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn${newUrl}`
+        // return `https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn${newUrl}`
+        return `https://apiv2.pharbers.com${newUrl}`
 
     },
 
@@ -95,8 +97,8 @@ export default JSONAPIAdapter.extend({
                 defaultAcceptType: "application/vnd.api+json"
             }
             // extract endpoint and path from url
-            const invokeUrl =
-                "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0"
+            // const invokeUrl = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0"
+            const invokeUrl = "https://apiv2.pharbers.com"
             const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]
             const pathComponent = invokeUrl.substring(endpoint.length)
             const sigV4ClientConfig = {
@@ -123,10 +125,7 @@ export default JSONAPIAdapter.extend({
                     queryParams: this.oauthRequestComponentQuery,
                     body: {}
                 }
-
-                // console.log("req", req)
                 const request = client.makeRequest(req)
-                // console.log("request", request)
                 return request.headers
             }
 
@@ -139,11 +138,7 @@ export default JSONAPIAdapter.extend({
                     queryParams: this.oauthRequestTokenQuery,
                     body: {}
                 }
-
-                // console.log("req", req)
-
                 const request = client.makeRequest(req)
-                // console.log("request", request)
                 return request.headers
             }
 
@@ -151,8 +146,6 @@ export default JSONAPIAdapter.extend({
             const requestURL = this.requestURL.split("/") // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
             // const curType = requestURL[2]
             const curType = requestURL[2]
-            // let curId = ""
-            // let curRelationship = ""
             let paramsArr = []
             let urlArr = ["type"] // type id relationship
             let awsPath = "/offweb/{type}"
@@ -197,14 +190,6 @@ export default JSONAPIAdapter.extend({
 
                 // Object.assign( params, queryParamsAWS )
             }
-
-            // { verb: 'GET',
-            // path: '/v0/offweb/proposals',
-            // headers: { Accept: 'application/vnd.api+json' },
-            // queryParams: {},
-            // body: {}
-            // }
-
             if (this.get('findRecordInclude')) {
                 paramsArr.push('include')
                 params.include = this.get('findRecordInclude')
@@ -220,7 +205,8 @@ export default JSONAPIAdapter.extend({
                 headers: utils.parseParametersToObject(params, ["Accept"]),
                 queryParams: utils.parseParametersToObject(params, paramsArr),
                 // queryParams: queryParamsAWS,
-                body: {}
+                body: {},
+				host: "apiv2.pharbers.com"
             }
             const request = client.makeRequest(req)
             return request.headers
