@@ -4,6 +4,7 @@ import RSVP from 'rsvp';
 
 export default class DownloadMyDataRoute extends Route {
     @service store
+    @service('loading') loadingService;
     @service cookies
     
     queryParams = {
@@ -18,6 +19,9 @@ export default class DownloadMyDataRoute extends Route {
         }
     }
 
+    beforeModel() {
+		this.loadingService.loading.style.display = 'inline-block'
+    }
     async model( params ) {
         const limit = 10
         let tab = params.tab || "mine"
@@ -26,18 +30,24 @@ export default class DownloadMyDataRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-        let files =  await this.store.query( "asset", { "filter[type]": "file", "filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
+        let files = this.store.query( "file", {"filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
 
-		let database = await this.store.query("db", {})
-		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
+		let database = this.store.query("db", {})
+		// let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
 		//请求employer的数据
-		let employerId = userData.belongsTo('employer').id()
+		await Promise.all([files,database])
+		// let employerId = userData.belongsTo('employer').id()
+		this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
         return RSVP.hash({
             files: files.filter( it => it),
             tab: tab,
             page: page,
             sort: sortType,
-			employerId: employerId,
+			// employerId: employerId,
             count: files.meta.count,
 			database: database.filter( it => it),
 			_isVue: true
