@@ -4,6 +4,7 @@ import RSVP from 'rsvp';
 
 export default class DownloadMyDataRoute extends Route {
     @service store
+    @service('loading') loadingService;
     @service cookies
     
     queryParams = {
@@ -18,6 +19,9 @@ export default class DownloadMyDataRoute extends Route {
         }
     }
 
+    beforeModel() {
+		this.loadingService.loading.style.display = 'inline-block'
+    }
     async model( params ) {
         const limit = 10
         let tab = params.tab || "mine"
@@ -33,6 +37,11 @@ export default class DownloadMyDataRoute extends Route {
 		//请求employer的数据
 		await Promise.all([files,database,userData])
 		let employerId = userData.belongsTo('employer').id()
+		this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
         return RSVP.hash({
             files: files.filter( it => it),
             tab: tab,

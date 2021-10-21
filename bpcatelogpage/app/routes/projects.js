@@ -6,6 +6,7 @@ import ENV from 'bpcatelogpage/config/environment';
 export default class ProjectsRoute extends Route {
 	@service cookies
 	@service ajax
+    @service('loading') loadingService;
 	@service store
 	namespace = ENV.namespace
 
@@ -15,6 +16,7 @@ export default class ProjectsRoute extends Route {
 		if ( !cookies.read( "access_token" ) ) {
 			this.transitionTo( "index" )
 		}
+		this.loadingService.loading.style.display = 'inline-block'
 	}
 
 	async model() {
@@ -46,8 +48,12 @@ export default class ProjectsRoute extends Route {
 		applicationAdapter.set('needUserData', allUserData)
 
 		let projects = this.store.query( "state-machine", {})
-		// let projects = await this.store.query( "project", { "filter[provider]": "pharbers"})
 		await Promise.all([userData,employerData,projects])
+		this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
 		return RSVP.hash( {
 			projects: projects.filter( it => it),
 			personalData: userData,
