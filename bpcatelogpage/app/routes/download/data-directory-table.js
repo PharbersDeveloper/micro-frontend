@@ -21,7 +21,7 @@ export default class DownloadDataDirectoryTableRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-		let tables = await this.store.query( "table", { "filter[database]": params.database, "page[limit]": limit, "page[offset]": page * limit,} )
+		let tables =await this.store.query( "table", { "filter[database]": params.database, "page[limit]": limit, "page[offset]": page * limit,} )
 		let name = params.database
         return RSVP.hash({
 			tables: tables.filter( it => it),

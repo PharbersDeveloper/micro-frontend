@@ -13,5 +13,6 @@ export default class DownloadProjectRoute extends Route {
 			_isVue: true
         })
     }
+	
 
 }
