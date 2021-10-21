@@ -49,7 +49,7 @@ export default {
         },
         async queryData() {
             const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "aa724ba2d728d15dba6c7bd80da753c03ed8316857d98f07982a19b62763d78d"
+            const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
             let body = {"query":"select provider,min(year) as min,max(year) as max from phmax.data_wide group by provider","schema":["provider","min", "max"]}
             let options = {
                 method: "POST",
@@ -91,7 +91,6 @@ export default {
                 title: {
                     text: 'Waterfall Chart'
                 },
-                color: ['rgba(0,0,0,0)','#7163c5'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -120,6 +119,9 @@ export default {
                     type: 'value',
                     min: this.minYear,
                     max: this.maxYear,
+                    axisLine: { //关键设置，不显示X轴线条
+                        show: true
+                    },
                     axisLabel:{
                         formatter: function (value) {
                             var texts = [];
@@ -130,7 +132,10 @@ export default {
                 },
                 yAxis: {
                     type: 'category',
-                    data: this.providerArr
+                    data: this.providerArr,
+                    splitLine: {
+                        show: true
+                    }
                 },
                 series: [
                     {
@@ -155,7 +160,7 @@ export default {
                         stack: 'Total',
                         barWidth: 20,
                         label: {
-                            show: true,
+                            show: false,
                             position: 'bottom'
                         },
                         data: this.yearnumArr
@@ -177,7 +182,7 @@ export default {
     justify-content: center;
     align-items: center;
     width: 1000px;
-    height: 800px;
+    height: 100vh;
     .chart {
         width: 100%;
         height: 100%;

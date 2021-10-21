@@ -4,6 +4,10 @@ import map from './components/map-chart.vue'
 import waterfull from './components/waterfull-chart.vue'
 import heatmap from './components/heatmap-chart.vue'
 import bubble from './components/bubble-chart.vue'
+import perStacked from './components/per-stacked-chart.vue'
+import mixLine from './components/mix-line-stacked-chart.vue'
+import graph from './components/graph-dag-chart.vue'
+import demo from './components/page/demo.vue'
 
 Vue.use(Router)
 
@@ -11,6 +15,11 @@ export default new Router({
     routes: [
         {
             path: '/',
+            name: 'demo',
+            component: demo
+        },
+        {
+            path: '/map',
             name: 'map',
             component: map
         },
@@ -24,11 +33,25 @@ export default new Router({
             name: 'heatmap',
             component: heatmap
         },
-
         {
             path: '/bubble',
-            name: 'bubble',
+            name: 'bubble',  
             component: bubble
+        },
+        {
+            path: '/per',
+            name: 'perStacked',
+            component: perStacked
+        },
+        {
+            path: '/mix',
+            name: 'mixLine',
+            component: mixLine
+        },
+        {
+            path: '/graph',
+            name: 'graph',
+            component: graph
         }
     ]
 })
