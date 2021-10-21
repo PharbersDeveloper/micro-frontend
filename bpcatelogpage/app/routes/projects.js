@@ -25,7 +25,7 @@ export default class ProjectsRoute extends Route {
 		applicationAdapter.set("getUserInfo", 1)
 		applicationAdapter.set("userAuthorization", accessToken)
 		let allUserData
-		let userData = this.store.findRecord( "account", this.cookies.read('account_id') )
+		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
 		//请求employer的数据
 		let employerId = userData.belongsTo('employer').id()
 		applicationAdapter.set("partner",1)
