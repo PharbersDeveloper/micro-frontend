@@ -33,6 +33,7 @@ export default class ProjectListComponent extends Component {
 
     get calAllData() {
         this.args.model._isVue = true
+		debugger
         return this.args.model
     }
 }
