@@ -20,7 +20,7 @@ export default class DagRoute extends Route {
 		}
         let dagDetail = await this.store.findRecord( "project", params.project_id)
         let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
-
+		await Promise.all([dagDetail,executions])
 		// let executionsIdArr = dagDetail.hasMany('executions').ids()
 		// let ids = [
 		// 	...new Set(executionsIdArr.reduce((acc, val) => acc.concat(val), [])),

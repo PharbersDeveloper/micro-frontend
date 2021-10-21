@@ -150,6 +150,7 @@ export default class MaxSaasImportComponent extends Component {
 										"id": "0iveStO4gzwMuyZx"
 									}
 								}
+								
 							},
 							"type": "executions"
 						}
@@ -232,6 +233,10 @@ export default class MaxSaasImportComponent extends Component {
 						}, 20*1000)
 					}
 				} else if (optParam.name == 'rollback') {
+					this.uploadToastBorder = "blue"
+					this.uploadTextStatus = "正在回滚"
+					this.uploadText = ""
+					this.closeuploadToast = "0" //显示导入弹框
 					let message = JSON.parse(optParam.attr.message)
 					let Logs = await this.store.query("jobLog", { "filter[provider]": optParam.attr.provider, "filter[version]": optParam.attr.version, "filter[jobCat]": "mapper", "filter[jobDesc]":"mapped"})
 					let mapperLog = Logs.filter(it => it)
@@ -313,6 +318,11 @@ export default class MaxSaasImportComponent extends Component {
 							"date": new Date().getTime()
 						}
 						that.store.createRecord('jobLog', jobLogsParam).save().then((res) => {
+							if(res.jobDesc == 'mapped') {
+								that.uploadTextStatus = "回滚成功"
+								// that.uploadText = "在“我的数据”中查看结果"
+								that.uploadToastBorder = "green"
+							}
 							that.router.transitionTo( "/" )
 							let urlParam = window.location.href.split('?')[1]
 							that.router.transitionTo( `/max-saas/import?${urlParam}&tempfile=${message.tempfile}&sheet=${message.sheet}`)
@@ -364,7 +374,7 @@ export default class MaxSaasImportComponent extends Component {
 				break
 				case "closeToast": 
 				let that = this
-				that.closeuploadToast = 1
+				that.closeuploadToast = "1"
 				break
 			default: 
                 console.log("other click event!")

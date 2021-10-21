@@ -30,7 +30,7 @@ export default class DownloadRoute extends Route {
 		let employerId = userData.belongsTo('employer').id()
 		applicationAdapter.set("partner",1)
 		let employerData = await this.store.findRecord( "partner", employerId )
-		
+		await Promise.all([userData,employerId])
 		const options = {
 			domain: ".pharbers.com",
 			path: "/",

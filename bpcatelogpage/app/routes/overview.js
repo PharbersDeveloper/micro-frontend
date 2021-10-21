@@ -46,7 +46,7 @@ export default class OverviewRoute extends Route {
 		applicationAdapter.set('needUserData', allUserData)
 
 		let projects = await this.store.query( "project", { "filter[provider]": "pharbers"})
-
+		await Promise.all([userData,employerData,projects])
 		return RSVP.hash( {
 			projects: projects.filter( it => it),
 			personalData: userData,

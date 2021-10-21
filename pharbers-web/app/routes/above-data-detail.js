@@ -137,6 +137,7 @@ export default class AboveDataDetailRoute extends Route {
                 this.loadingService.loading.style.display = 'none'
             }
         }
+		await Promise.all([activityList,zoneList,eventList,participantList,imageList,imageIds,galleryList,galleryShow])
         return RSVP.hash({
             cover: galleryList.then((x) => x.find((it) => it.tag === 'cover')),
             data: activityList.then((x) => x.filter((it) => it.language === lang)),

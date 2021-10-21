@@ -71,7 +71,6 @@
                 <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
             </div> 
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
-                <!-- <div class="cross" @click="closeDialog"></div> -->
 				<div class="cross"></div>
             </div>
         </div>
@@ -132,10 +131,6 @@ export default {
 		showSelectOption() {
 			this.showSelectOptionParam = true
 		},
-		// 关闭弹框
-		// closeDialog() {
-		// 	this.showDialog = false
-		// },
 		// 关闭进度条
 		closeToast() {
 			const event = new Event("event")
@@ -164,10 +159,6 @@ export default {
 						clearInterval(clearInt); 
 					} 
 				}, 60)
-				// if(this.showDialog == false) {
-				// 	this.showDialog = true;
-				// 	this.
-				// }
 			}
 			this.$emit('event', data)
 		},

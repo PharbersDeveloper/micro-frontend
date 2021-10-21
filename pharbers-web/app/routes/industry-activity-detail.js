@@ -144,6 +144,8 @@ export default class IndustryActivityDetailRoute extends Route {
                 this.loadingService.loading.style.display = 'none'
             }
         }
+		await Promise.all([activityList,zoneList,eventList,participantList,imageList,imageIds,galleryList,galleryShow
+		])
         return RSVP.hash({
             imageIds: imageIds,
             data: activityList.then((x) => x.filter((it) => it.language === lang)),
