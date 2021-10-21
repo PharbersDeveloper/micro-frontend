@@ -3,13 +3,13 @@
     <div class="user-info">
         <div class="user-name-container">
             <div class="user-name-area">
-                <bpText class="inverse-heading-medium">{{allData.personalData.firstName}} {{allData.personalData.lastName}}</bpText>
+                <bpText class="inverse-heading-medium">{{allData.name_show}}</bpText>
                 <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dropdown.svg" alt="">
             </div>
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_data.svg" alt="">
             <!-- <div id="icon_notification" class="icon_notification-initial"></div> -->
         </div>
-        <bpText class="body-tertiary-inverse">{{allData.employerData.name}}</bpText>
+        <bpText class="body-tertiary-inverse">{{allData.company_name_show}}</bpText>
     </div>
     <!-- <div class="upload-button">
         <span class="fileinput-button">

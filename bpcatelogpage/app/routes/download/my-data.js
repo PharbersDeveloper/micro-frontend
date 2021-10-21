@@ -33,10 +33,10 @@ export default class DownloadMyDataRoute extends Route {
         let files = this.store.query( "file", {"filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
 
 		let database = this.store.query("db", {})
-		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
+		// let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
 		//请求employer的数据
-		await Promise.all([files,database,userData])
-		let employerId = userData.belongsTo('employer').id()
+		await Promise.all([files,database])
+		// let employerId = userData.belongsTo('employer').id()
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){
                 this.loadingService.loading.style.display = 'none'
@@ -47,7 +47,7 @@ export default class DownloadMyDataRoute extends Route {
             tab: tab,
             page: page,
             sort: sortType,
-			employerId: employerId,
+			// employerId: employerId,
             count: files.meta.count,
 			database: database.filter( it => it),
 			_isVue: true
