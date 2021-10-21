@@ -31,7 +31,9 @@ export default class OauthServiceService extends Service {
 			const secret = this.clientSecret
 			const grantType = "authorization_code"
 			const code = queryParams.code
-			const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
+			// const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
+			const url = "https://apiv2.pharbers.com/oauth/token"
+
 			const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`
 			const data = {
 				code: code,
