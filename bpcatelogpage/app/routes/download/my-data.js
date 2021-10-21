@@ -29,7 +29,7 @@ export default class DownloadMyDataRoute extends Route {
         let files = this.store.query( "file", {"filter[owner]": this.cookies.read('account_id'), "page[limit]": limit, "page[offset]": page * limit, sort: sortType } )
 
 		let database = this.store.query("db", {})
-		let userData = this.store.findRecord( "account", this.cookies.read('account_id') )
+		let userData = await this.store.findRecord( "account", this.cookies.read('account_id') )
 		//请求employer的数据
 		await Promise.all([files,database,userData])
 		let employerId = userData.belongsTo('employer').id()
