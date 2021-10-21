@@ -15,6 +15,7 @@ export default class OauthServiceService extends Service {
 
 	oauthCallback( transition ) {
 		const cookies = this.get( "cookies" )
+		let that = this
 		// let urli = window.location.href
 		transition.queryParams = {
 			// "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
@@ -53,7 +54,7 @@ export default class OauthServiceService extends Service {
 			}
 			fetch(url, options).then(res=> {
 				return res.json()
-			}).then( response => {
+			}).then( async response => {
 				this.removeAuth()
 
 				let options = {
@@ -68,8 +69,13 @@ export default class OauthServiceService extends Service {
 				cookies.write( "expires_in", response.expiresIn, options )
 				cookies.write( "user_name", response.user.name, options)
 				cookies.write( "user_email", response.user.email, options)
+				cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
 				cookies.write( "account_id", response.user.id, options )
-				
+				let userData = await that.store.findRecord( "account", that.cookies.read('account_id') )
+				//请求employer的数据
+				let employerId = await userData.belongsTo('employer').id()
+				let employerData = await that.store.findRecord( "partner", employerId )
+				cookies.write( "company_name_show", encodeURI(employerData.name), options)
 				// this.mqttService.mqttConnect()
 				this.get( "router" ).transitionTo( '/download/my-data') 
 			})
