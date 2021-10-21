@@ -27,9 +27,9 @@ export default class DagRunRoute extends Route {
         if ( isNaN( page ) ) {
 			page = 0
 		}
-        let dagDetail = await this.store.findRecord( "project", params.project_id)
-        let executions = await this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
-		let targetExecution = await this.store.findRecord( "execution", params.execution_id)
+        let dagDetail = this.store.findRecord( "project", params.project_id)
+        let executions = this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
+		let targetExecution = this.store.findRecord( "execution", params.execution_id)
 		// arn通过route传给component
 		await Promise.all([dagDetail,executions,targetExecution])
         return RSVP.hash({
