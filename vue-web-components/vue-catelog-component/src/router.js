@@ -7,6 +7,7 @@ import subscribeTable from './components/panel/data-list-table.vue'
 import dataListDetail from './components/panel/data-list-detail.vue'
 import viewJson from './components/panel/view-json.vue'
 import project from './components/panel/project-list.vue'
+import dataListHome from './components/panel/data-list-home.vue'
 
 Vue.use(Router)
 
@@ -49,6 +50,11 @@ export default new Router({
             path: '/project',
             name: 'project',
             component: project
+        },
+        {
+            path: '/data-list-home', 
+            name: 'dataListHome',
+            component: dataListHome
         }
     ]
 })
