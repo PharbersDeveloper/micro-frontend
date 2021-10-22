@@ -61,7 +61,7 @@
 
             <div class="bottom-copyright">
                 <div class="bottom-copyright-left">
-                    <a target="_blank" href="https://beian.miit.gov.cn/">
+                    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501">
                         <div class="online-filing">
                             <bp-img src="https://www.pharbers.com/public/presented_logo.png" class="presented-logo"></bp-img>
                             <bp-text class="ph-body-xsmall-tertiary">京公网安备11010502041501号</bp-text>
