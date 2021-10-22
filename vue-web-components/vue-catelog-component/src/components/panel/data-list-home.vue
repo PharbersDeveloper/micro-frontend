@@ -62,7 +62,7 @@
                                     </div>
                                     <div>
                                         <p class="number">0</p>
-                                        <p class="dataset">NOTEBOOKS</p>
+                                        <p class="notebooks">NOTEBOOKS</p>
                                     </div>
                                 </a>
                            </div>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div>
                                         <p class="number">0</p>
-                                        <p class="recipes">ANALYSES</p>
+                                        <p class="models">ANALYSES</p>
                                     </div>
                                 </a>
                            </div>
@@ -308,6 +308,10 @@ export default {
                 }
                 .article {
                     color: #427b98;
+                    font-size: 12px;
+                }
+                .notebooks {
+                    color: #f28c38;
                     font-size: 12px;
                 }
                 
