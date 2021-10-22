@@ -243,7 +243,7 @@ export default {
             window.location.reload(true)
         },
         toMiit() {
-            window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501')
+            window.open('https://beian.miit.gov.cn/')
         },
         toMax() {
             this.$emit('linkToPage', 'max')
