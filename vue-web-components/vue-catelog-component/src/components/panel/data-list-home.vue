@@ -375,7 +375,9 @@ export default {
                         .time {
                             position: absolute;
                             right: 10px;
-                            top: 0
+                            top: 0;
+                            font-size: 12px;
+                            color: #d6cccf;
                         }
                     }
                      .you {
