@@ -346,6 +346,7 @@ export default {
             margin-left: 10px;
             color: #666666;
             font-size: 12px;
+            margin-bottom: 10px;
         }
         .info {
             .info_cell {
@@ -383,14 +384,15 @@ export default {
                     .file {
                         display: flex;
                         margin: 5px;
+                        p {
+                            margin-left: 10px;
+                        }
                     }
                    img {
                        width: 20px;
                        height: 20px;
                    }
                    };
-                   
-            
                 }
             }
         }
