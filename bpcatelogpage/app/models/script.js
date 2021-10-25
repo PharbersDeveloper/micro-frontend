@@ -6,7 +6,7 @@ export default class ScriptModel extends Model {
 	@attr("string") name;
 	@attr("string") args;
 	@attr("string") reverse;
-	@hasMany("dataset") inputDfs;
-	@hasMany("dataset") outputDfs;
+	@hasMany("dataset", {inverse: "scriptInput"}) inputDfs;
+	@hasMany("dataset",  {inverse: "scriptOutput"}) outputDfs;
 	@belongsTo("stateDisplay") stateDisplay;
 }
