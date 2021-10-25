@@ -219,6 +219,7 @@ export default {
         }
     }
     .left-area {
+		flex: 1;
         .projectInfo {
             display: flex;
             width: 1400px;
@@ -303,8 +304,8 @@ export default {
                     font-size: 12px;
                 }
                 .dashboard {
-                color: #f44336;
-                font-size: 12px;
+                    color: #f44336;
+                    font-size: 12px;
                 }
                 .article {
                     color: #427b98;
@@ -332,7 +333,7 @@ export default {
         }
     }
     .right_area {
-        flex: 1;
+        width:450px;
         // border: 1px solid #000;
         margin-top: 30px;
         margin-left: 20px;
