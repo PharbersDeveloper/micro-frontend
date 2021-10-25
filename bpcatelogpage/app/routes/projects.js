@@ -20,7 +20,7 @@ export default class ProjectsRoute extends Route {
 	}
 
 	async model() {
-		let projects = this.store.query( "state-machine", {})
+		let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
 		await Promise.all([projects])
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){
