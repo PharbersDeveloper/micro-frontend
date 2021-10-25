@@ -2,10 +2,18 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class ProjectModel extends Model {
 	@attr("string") name; //项目名称,如max提数
-	@attr("string") version;
-	@attr("string") arn;
-	@attr("string") projectName; //所属项目类别名称, 跟name不一样，如max
-	@attr executions
-    @hasMany("execution") executions;
-	@attr meta
+	@attr("string") provider;
+	@attr("string") owner;
+	@attr("string") type;
+	@attr("date") created;
+	@hasMany("model") models;
+	@hasMany("script") scripts;
+	@hasMany("dataset") datasets;
+	@belongsTo("flow") flow;
+	@belongsTo("analysis") analysis;
+	@hasMany("notebook") notebooks;
+	@hasMany("dashboard") dashBoards;
+	@hasMany("wiki") wikis;
+	@attr tasks
+	@attr actions
 }
