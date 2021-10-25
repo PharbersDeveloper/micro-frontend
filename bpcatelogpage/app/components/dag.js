@@ -134,6 +134,9 @@ export default class DagComponent extends Component {
     @action
 	registerListener(element) {
 		element.allData = this.calAllData
+		element.allData.projectName = "Project Name",
+		element.allData.projectInfo = "Description the project was created by Ken on Oct 11th 2021"
+	
 		element.addEventListener("event", this.listener)
 	}
 

@@ -1,8 +1,13 @@
-<phdag-dag-page 
+{{!-- <phdag-dag-page 
 	domid="etl-shadow"
 	id="etl-shadow"
 	allData={{@model}}
 	random={{this.random}}
 	{{did-insert this.registerListener}}
     {{will-destroy this.unregisterListener}}>
-</phdag-dag-page>
+</phdag-dag-page> --}}
+<pharbers-data-list-home
+	allData={{@model}}
+    {{did-insert this.registerListener}}
+    {{will-destroy this.unregisterListener}}>
+</pharbers-data-list-home>
