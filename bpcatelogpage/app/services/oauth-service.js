@@ -60,7 +60,6 @@ export default class OauthServiceService extends Service {
 				this.removeAuth()
 				// let employerId = response.user.belongsTo('employer').id()
 				// let employerData = this.store.findRecord( "partner", employerId )
-				debugger
 				let options = {
 					domain: ".pharbers.com",
 					path: "/",

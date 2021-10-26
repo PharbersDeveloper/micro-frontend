@@ -6,20 +6,28 @@ export default class DagRoute extends Route {
 	@service store
     @service cookies
     @service('loading') loadingService;
-
-	queryParams = {
-        page: {
-            refreshModel: true
-        }
-    }
-	
 	async model( params ) {
-		// const limit = 10
-		// let page = parseInt( params.page, 10 )
-        // if ( isNaN( page ) ) {
-		// 	page = 0
-		// }
-        // let dagDetail = this.store.findRecord( "state-machine", params.project_id)
+		let numShow = {}
+        let projectDetail = await this.store.findRecord( "project", params.project_id, {include: 'flow'}) 
+		//显示数量
+		let flow = projectDetail.belongsTo('flow').id()
+		let analysis = projectDetail.belongsTo('analysis').id()
+		let datasets = projectDetail.hasMany('datasets').ids()
+		let models = projectDetail.hasMany('models').ids()
+		let notebooks = projectDetail.hasMany('notebooks').ids()
+		let dashBoards = projectDetail.hasMany('dashBoards').ids()
+		let wiki = projectDetail.hasMany('wikis').ids()
+		if(flow && flow != '') {
+			numShow.flow = 1
+		} else {
+			numShow.flow = 0
+		}
+		numShow.dataset = datasets ? datasets.length : 0
+		numShow.analysis = analysis ? analysis.length : 0
+		numShow.model = models ? models.length : 0
+		numShow.notebook = notebooks ? notebooks.length : 0
+		numShow.dashBoard = dashBoards ? dashBoards.length : 0
+		numShow.wiki = wiki ? wiki.length : 0
         // let executions = this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
 		// await Promise.all([dagDetail,executions])
 
@@ -35,10 +43,8 @@ export default class DagRoute extends Route {
             }
         }
         return RSVP.hash({
-            // page: page,
-            // count: executions.meta.count,
-            // dagDetail: dagDetail,
-			// executions: executions.filter( it => it),
+            projectDetail: projectDetail,
+			numShow: numShow,
 			_isVue: true
         })
     }

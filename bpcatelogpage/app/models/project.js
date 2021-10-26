@@ -12,7 +12,7 @@ export default class ProjectModel extends Model {
 	@belongsTo("flow") flow;
 	@belongsTo("analysis") analysis;
 	@hasMany("notebook") notebooks;
-	@hasMany("dashboard") dashBoards;
+	@hasMany("dash-board") dashBoards;
 	@hasMany("wiki") wikis;
 	@attr tasks
 	@attr actions
