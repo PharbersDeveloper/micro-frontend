@@ -20,7 +20,7 @@ export default class ProjectsRoute extends Route {
 	}
 
 	async model() {
-		//fetch请求存到ember data
+		// fetch请求存到ember data
 		// let aaa = await fetch("https://apiv2.pharbers.com/phplatform/projects", {
 		// 	method: "GET",
 		// 	headers: {
@@ -41,6 +41,18 @@ export default class ProjectsRoute extends Route {
 		// 		created: ele.attributes.created,
 		// 	})
 		// });
+		let options = {
+			method: "POST",
+			headers: {
+				"authorization": this.cookies.read( "access_token" ),
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json, text/javascript, */*; q=0.01"
+			},
+			body: JSON.stringify({"table": "execution","conditions": {"smId": "0iveStO4gzwMuyZx"},"limit": 10,"start_key": {}})
+		}
+		fetch("https://apiv2.pharbers.com/phdydatasource/scan", options).then(res => res.json()).then(ress => {
+			console.log("resss", ress)
+		})
 		let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
 		await Promise.all([projects])
 		let name_show, company_name_show
