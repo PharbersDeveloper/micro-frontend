@@ -24,7 +24,7 @@
                                     </div>
                                     <div>
                                         <p class="number">0</p>
-                                        <p class="dataset">DATASET</p>
+                                        <p class="dataset" @click="$router.push('/upload-dataset')">DATASET</p>
                                     </div>
                                 </a>
                            </div>
