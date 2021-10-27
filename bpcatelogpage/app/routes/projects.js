@@ -20,27 +20,15 @@ export default class ProjectsRoute extends Route {
 	}
 
 	async model() {
-		// fetch请求存到ember data
-		// let aaa = await fetch("https://apiv2.pharbers.com/phplatform/projects", {
-		// 	method: "GET",
-		// 	headers: {
-		// 		"authorization": '32aefb89ab21aafee6ecbc9201b846742809b6d506f1b4dfd4e1f1e9c7507776'
-		// 	}
-		// })
-		// .then(res => { 
-		// 	return res.json()
-		// })
-		// let that = this
-		// aaa.data.forEach(ele => {
-		// 	that.store.createRecord('project', {
-		// 		id: ele.id,
-		// 		name: ele.attributes.name, //项目名称,如max提数
-		// 		provider: ele.attributes.provider,
-		// 		owner: ele.attributes.owner,
-		// 		type: ele.attributes.type,
-		// 		created: ele.attributes.created,
-		// 	})
-		// });
+		let that = this
+		let type = 'scan' //scan, query
+		let body = ''
+		if(type == 'scan') {
+			body = {"table": "execution","conditions": {"smId": "8jhCNXk5PZaO0UcZCFOz"},"limit": 10,"start_key": {}}
+		} else {
+			body = {"table": "step","conditions": {"id": "9_sk14milngeAuk"},"limit": 10,"start_key": {}}
+		}
+		let url = "https://apiv2.pharbers.com/phdydatasource/" + type
 		let options = {
 			method: "POST",
 			headers: {
@@ -48,13 +36,33 @@ export default class ProjectsRoute extends Route {
 				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 				"accept": "application/json, text/javascript, */*; q=0.01"
 			},
-			body: JSON.stringify({"table": "execution","conditions": {"smId": "0iveStO4gzwMuyZx"},"limit": 10,"start_key": {}})
+			body: JSON.stringify(body)
 		}
-		fetch("https://apiv2.pharbers.com/phdydatasource/scan", options).then(res => res.json()).then(ress => {
-			console.log("resss", ress)
-		})
 		let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
-		await Promise.all([projects])
+		let peekExecutions = this.store.peekAll("execution").filter(it => it)
+		let peekStep = this.store.peekAll("execution").filter(it => it)
+		let results = []
+		if(peekExecutions　.length < 1) {
+			let executions = fetch(url, options).then(res => res.json())
+			results = await Promise.all([projects, executions])
+			results[1].data.forEach(ele => {
+				that.store.createRecord('execution', {
+					type: ele.type,
+					id: ele.id,
+					input: ele.attributes.input, //项目名称,如max提数
+					endTime: ele.attributes.endTime,
+					owner: ele.attributes.owner,
+					smId: ele.attributes.smId,
+					startTime: ele.attributes.startTime,
+					state: ele.attributes.state,
+					steps: ele.attributes.steps
+				})
+			})
+		} else {
+			results = await Promise.all([projects])
+		}
+		
+		//菜单栏个人信息
 		let name_show, company_name_show
 		if(this.cookies.read('account_id')) {
 			name_show = decodeURI(this.cookies.read('user_name_show'))
