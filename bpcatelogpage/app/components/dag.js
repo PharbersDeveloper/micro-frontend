@@ -13,9 +13,15 @@ export default class DagComponent extends Component {
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-				//执行列表 分页
 				let params = e.detail[0].args.param
-				this.router.transitionTo( params.name )
+				let uri = ''
+				if(params.name == 'projects') {
+					uri = '/projects'
+				} else if(params.name == 'dataset') {
+					uri = '/dataset'
+				}
+				//执行列表 分页
+				this.router.transitionTo( uri )
 				break
             default: 
                 console.log("other click event!")
