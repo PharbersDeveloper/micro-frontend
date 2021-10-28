@@ -99,10 +99,19 @@ export default {
     margin: 0;
 }
 .text_dialog_container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+	height: 100vh;
+	width: 100vw;
+	background: rgba(37,35,45,0.55);
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 9999;
+	justify-content: center;
+	align-items: center;
     .dialog_area {
         position: absolute;
         width: 500px;

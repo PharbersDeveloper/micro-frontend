@@ -14,9 +14,9 @@
                         <p>File_name.xsl</p>
                         <button>删除</button>
                     </div>
-                    <button class="select">上传文件</button>
+                    <!-- <button class="select">上传文件</button> -->
                     <div class="next" @click="open">下一步</div>
-                    <input type="file" class="select_input">
+                    <!-- <input type="file" class="select_input"> -->
                 </div>
             </div>
         </div>
