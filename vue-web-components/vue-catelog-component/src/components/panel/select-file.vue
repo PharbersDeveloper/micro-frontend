@@ -1,5 +1,5 @@
 <template>
-    <div class="select_file">
+    <div class="select_file_con">
         <div class="select_file_container">
             <div class="project_name_header">
                 <p>{{allData.projectName}}</p>
@@ -62,10 +62,10 @@ export default {
     padding: 0;
     margin: 0;
 }
-.select_file {
+.select_file_con {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     .select_file_container {
         position: absolute;
         width: 1200px;

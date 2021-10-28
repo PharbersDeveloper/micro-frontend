@@ -1,7 +1,7 @@
 <template>
     <div class="data-list-home">
         <div class="data-home-container">
-            <div class="header-area" @click="linkToPage">
+            <div class="header-area" @click="linkToPage('projects')">
                 <p>{{allData.projectDetail.name}}</p>
             </div>
            <div class="content">  
@@ -22,9 +22,9 @@
                                     <div>
                                         <img :src="dataset_icon" alt="">
                                     </div>
-                                    <div>
+                                    <div @click="linkToPage('dataset')">
                                         <p class="number">{{allData.numShow.dataset}}</p>
-                                        <p class="dataset" @click="$router.push('/upload-dataset')">数据集</p>
+                                        <p class="dataset">数据集</p>
                                     </div>
                                 </a>
                            </div>
@@ -193,13 +193,13 @@ export default {
         }
     },
     methods: {
-        linkToPage() {
+        linkToPage(param) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/projects'
+                    name: param
                 }
             }
             this.$emit('event', event)
