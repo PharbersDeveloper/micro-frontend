@@ -21,10 +21,9 @@
                         <img :src="dropDownIcon">
                     </div>
                     <div class="dialog" v-if="showDialog" ref="toggle">
-                        <p class="dialog_select"><span @click="select">dataset_0001</span></p>
-                        <p class="dialog_select"><span @click="select">dataset_0002</span></p>
-                        <p class="dialog_select"><span @click="select">dataset_0003</span></p>
-                        <p class="dialog_select"><span @click="select">dataset_0004</span></p>
+                        <p class="dialog_select" v-for="(item,index) in data" :key="index">
+                            <span @click="select">{{item}}</span>
+                        </p>
                     </div>
                 </div>
                 <div class="new_dataset" >
@@ -55,7 +54,9 @@ export default {
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
             showDialog: false,
             newData: 'dataset_0001', 
-            newDataName: ''
+            newDataName: '',
+            show: false,
+            data: ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
         }
     },
     methods: {
@@ -80,11 +81,13 @@ export default {
         },
         radio(state) {
             if(state === 'dataSet') {
+                this.data = ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
                 this.$refs.newData.disabled = true
             }else if(state === 'newData'){
                 this.$refs.dataSet.disabled = true
                 this.$refs.newData.disabled = false
                 this.newData = ''
+                this.data = []
             }
         }
     },
