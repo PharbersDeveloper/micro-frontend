@@ -10,13 +10,13 @@
             <div class="upload_file_area">
                 
                 <div class="upload_area">
-                    <div class="file_content_area" v-for="(item,index) in fileName" :key="index">
-                        <p>{{item}}</p>
+                    <div class="file_content_area" v-for="(item,index) in fileList" :key="index">
+                        <p>{{item.name}}</p>
                         <button @click="deleteFile(index)">删除</button>
                     </div>
-                    <button class="select">上传文件</button>
-                    <div class="next" @click="open">下一步</div>
-                    <input type="file" class="select_input">
+                    <button class="select" v-if="fileList.length == 0" @click="upload">上传文件</button>
+                    <div class="next" @click="open" v-if="fileList.length > 0">下一步</div>
+                    <input style="display: none;" type="file" name="" ref="file" @change="uploadFiles" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.csv,.xlsx,.xls,.xlsm">
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             show: false,
-            fileName: ['File_name.xsl','File_name.xsl']
+            fileList: []
         }
     },
     components: {
@@ -52,8 +52,16 @@ export default {
             this.show = false
         },
         deleteFile(index) {
-            this.fileName.splice(index,1)
-        }
+            this.fileList.splice(index,1)
+			this.$refs.file.value = null
+        },
+		upload() {
+			this.$refs.file.click()
+		},
+		uploadFiles() {
+			console.log(this.$refs.file.files[0])
+			this.fileList.push(this.$refs.file.files[0])
+		}
     }
 }
 </script>
