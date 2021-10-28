@@ -33,14 +33,35 @@
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content">
+                    <div class="view_content" v-if="viewContent" >
                         <div class="project_name_view">
                             <span class="space"></span>
                             <p class="project_name_info">
                                 Data_0001
                             </p>
                         </div>
+                        <div class="project_info_view">
+                            <div class="operation">
+                                <span class="about">关于:</span>
+                                <p class="data_tm_nm" v-if="editShow == false">{{allData.projectInfo}}</p>
+                                 <input type="text" class="edit_input" v-if="editShow" ref="input" @keyup.enter="submit">
+                                <div class="edit_icon" @click="editInfo('edit')">
+                                    <img :src="edit_icon" alt="">
+                                </div>
+                            </div>
+                            <div class="time">
+                                <div class="create_time">
+                                    <span class="create_word">创建时间</span>
+                                    <p class="create_tm">5 mins ago by</p>
+                                </div>
+                                <div class="last_time_edit_time">
+                                    <span class="last_word">上一次编辑时间</span>
+                                    <p class="last_tm">3 mins ago by</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <p v-if="viewContent == false" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
         </div>
@@ -245,6 +266,13 @@ export default {
         }
         .project_info_right {
             width: 500px;
+            .click_look {
+                font-family: PingFangSC-Medium;
+                font-size: 14px;
+                color: #838383;
+                text-align: center;
+                line-height: 800px;
+            }
             .view_content {
                 width: 100%;
                 height: 260px;
@@ -269,6 +297,89 @@ export default {
                         font-size: 14px;
                         color: #000000;
                         font-weight: 600;
+                    }
+                }
+                .project_info_view {
+                    // display: flex;
+                    position: relative;
+                    padding: 14px;
+                    padding-left: 50px;
+                    background: #f5f5f5;
+                    width: 100%;
+                    height: 100%;
+                    border-bottom: 2px solid #979797;
+                    .edit_input {
+                            position: absolute;
+                            // margin-left: 20px;
+                            top: 6px;
+                            right: 192px;
+                            display: inline-block;
+                            width: 216px;
+                            height: 74px;
+                        }
+                   .operation {
+                       display: flex;
+                        .about {
+                        font-family: PingFangSC-Medium;
+                        font-size: 14px;
+                        color: #000000;
+                        font-weight: 600;
+                        
+                    }
+                    .data_tm_nm {
+                        margin-left: 15px;
+                        font-family: PingFangSC-Medium;
+                        font-size: 12px;
+                        color: #000000;
+                        font-weight: 600;
+                    }
+                    .edit_icon {
+                        position: absolute;
+                        right: 140px;
+                        top: 12px;
+                        width: 20px;
+                        height: 20px;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                   }
+                }
+                .time {
+                    margin-top: 100px;
+                    .create_time {
+                        display: flex;
+                        .create_word {
+                            font-family: PingFangSC-Medium;
+                            font-size: 14px;
+                            color: #000000;
+                            font-weight: 600;
+                        }
+                        .create_tm {
+                            margin-left: 60px;
+                            font-family: PingFangSC-Medium;
+                            font-size: 12px;
+                            color: #000000;
+                            font-weight: 600;
+                        }
+                    }
+                    .last_time_edit_time {
+                        display: flex;
+                        margin-top: 20px;
+                         .last_word {
+                            font-family: PingFangSC-Medium;
+                            font-size: 14px;
+                            color: #000000;
+                            font-weight: 600;
+                        }
+                        .last_tm {
+                            margin-left: 20px;
+                            font-family: PingFangSC-Medium;
+                            font-size: 12px;
+                            color: #000000;
+                            font-weight: 600;
+                        }
                     }
                 }
             }
