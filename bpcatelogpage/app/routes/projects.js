@@ -24,7 +24,8 @@ export default class ProjectsRoute extends Route {
 		let type = 'scan' //scan, query
 		let body = ''
 		if(type == 'scan') {
-			body = {"table": "execution","conditions": {"smId": "8jhCNXk5PZaO0UcZCFOz"},"limit": 10,"start_key": {}}
+			// body = {"table": "execution","conditions": {"smId": "8jhCNXk5PZaO0UcZCFOz"},"limit": 10,"start_key": {}}
+			body = {"table": "action","conditions": {"projectId": "xx1ioq"},"limit": 2,"start_key": {}}
 		} else {
 			body = {"table": "step","conditions": {"id": "9_sk14milngeAuk"},"limit": 10,"start_key": {}}
 		}
@@ -42,7 +43,7 @@ export default class ProjectsRoute extends Route {
 		let peekExecutions = this.store.peekAll("execution").filter(it => it)
 		let peekStep = this.store.peekAll("execution").filter(it => it)
 		let results = []
-		if(peekExecutions　.length < 1) {
+		if(peekExecutions.length < 1) {
 			let executions = fetch(url, options).then(res => res.json())
 			results = await Promise.all([projects, executions])
 			results[1].data.forEach(ele => {
