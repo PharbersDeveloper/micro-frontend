@@ -10,13 +10,13 @@
             <div class="upload_file_area">
                 
                 <div class="upload_area">
-                    <div class="file_content_area">
-                        <p>File_name.xsl</p>
-                        <button>删除</button>
+                    <div class="file_content_area" v-for="(item,index) in fileName" :key="index">
+                        <p>{{item}}</p>
+                        <button @click="deleteFile(index)">删除</button>
                     </div>
-                    <!-- <button class="select">上传文件</button> -->
+                    <button class="select">上传文件</button>
                     <div class="next" @click="open">下一步</div>
-                    <!-- <input type="file" class="select_input"> -->
+                    <input type="file" class="select_input">
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             show: false,
-            fileName: ['File_name.xsl']
+            fileName: ['File_name.xsl','File_name.xsl']
         }
     },
     components: {
@@ -50,6 +50,9 @@ export default {
         },
         close() {
             this.show = false
+        },
+        deleteFile(index) {
+            this.fileName.splice(index,1)
         }
     }
 }
