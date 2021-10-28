@@ -5,6 +5,6 @@ export default class TableModel extends Model {
 	@attr("string") database;
 	@attr("string") provider;
 	@attr("string") version;
-    @belongsTo("db") tables
+    @belongsTo("db") db
 	@attr meta
 }

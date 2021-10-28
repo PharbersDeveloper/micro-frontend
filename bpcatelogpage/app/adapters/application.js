@@ -60,9 +60,9 @@ export default DS.JSONAPIAdapter.extend( {
 		// 	newUrl = `/reports/${curPath}`
 		// }
 
-		// if(modelName === "trigger" || modelName === "project" || modelName === "execution") {
-		// 	newUrl = `/phproject/${curPath}`
-		// }
+		if(modelName === "project") {
+			newUrl = `/phplatform/${curPath}`
+		}
 
 		// if(modelName === "db" || modelName === "table" || modelName === "partition") {
 		// 	newUrl = `/phcatlog/${curPath}`

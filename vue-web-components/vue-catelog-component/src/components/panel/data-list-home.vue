@@ -1,21 +1,21 @@
 <template>
     <div class="data-list-home">
         <div class="data-home-container">
-            <div class="header-area">
-                <p>{{allData.projectName}}</p>
+            <div class="header-area" @click="linkToPage">
+                <p>{{allData.projectDetail.name}}</p>
             </div>
            <div class="content">  
             <div class="left-area">
                 <div class="projectInfo">
                     <div class="color"></div>
                     <div class="project_Information">
-                        <p class="project_name">{{allData.projectName}}</p>
-                        <p class="project_info">{{allData.projectInfo}}</p>
+                        <p class="project_name">{{allData.projectDetail.name}}</p>
+                        <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
                     </div>
                 </div>
                 <div class="item">
                     <div class="flow">
-                        <p class="flow_word">Flow</p>
+                        <p class="flow_word">主流程</p>
                         <div class="flow_item"> 
                            <div class="flow_item_cell">
                                 <a href="#">
@@ -23,8 +23,8 @@
                                         <img :src="dataset_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">0</p>
-                                        <p class="dataset" @click="$router.push('/upload-dataset')">DATASET</p>
+                                        <p class="number">{{allData.numShow.dataset}}</p>
+                                        <p class="dataset">数据集</p>
                                     </div>
                                 </a>
                            </div>
@@ -34,8 +34,8 @@
                                         <img :src="recipes_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">0</p>
-                                        <p class="recipes">FLOW</p>
+                                        <p class="number">{{allData.numShow.flow}}</p>
+                                        <p class="recipes">脚本</p>
                                     </div>
                                 </a>
                            </div>
@@ -45,15 +45,15 @@
                                         <img :src="models_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">0</p>
-                                        <p class="models">MODELS</p>
+                                        <p class="number">{{allData.numShow.model}}</p>
+                                        <p class="models">模型</p>
                                     </div>
                                 </a>
                            </div>
                         </div>
                     </div>
                     <div class="flow flow_two">
-                        <p class="flow_word">Lab</p>
+                        <p class="flow_word">实验室</p>
                         <div class="flow_item"> 
                            <div class="flow_item_cell" >
                                 <a href="#">
@@ -61,8 +61,8 @@
                                         <img :src="notebook_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">0</p>
-                                        <p class="notebooks">NOTEBOOKS</p>
+                                        <p class="number">{{allData.numShow.notebook}}</p>
+                                        <p class="notebooks">编译器</p>
                                     </div>
                                 </a>
                            </div>
@@ -72,15 +72,15 @@
                                         <img :src="analyses_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">0</p>
-                                        <p class="models">ANALYSES</p>
+                                        <p class="number">{{allData.numShow.analysis}}</p>
+                                        <p class="models">分析</p>
                                     </div>
                                 </a>
                            </div>
                         </div>
                     </div>
                     <div class="flow flow_three">
-                        <p class="flow_word">Dashboards</p>
+                        <p class="flow_word">指示面板</p>
                         <div class="flow_item"> 
                            <div class="flow_item_cell">
                                 <a href="#">
@@ -88,15 +88,15 @@
                                         <img :src="dashboard_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">1</p>
-                                        <p class="dashboard">DASHBOARD</p>
+                                        <p class="number">{{allData.numShow.dashBoard}}</p>
+                                        <p class="dashboard">指示面板</p>
                                     </div>
                                 </a>
                            </div>
                         </div>
                     </div>
                     <div class="flow flow_four">
-                        <p class="flow_word">WiKi</p>
+                        <p class="flow_word">维基</p>
                         <div class="flow_item"> 
                            <div class="flow_item_cell">
                                 <a href="#">
@@ -104,8 +104,8 @@
                                         <img :src="article_icon" alt="">
                                     </div>
                                     <div>
-                                        <p class="number">0</p>
-                                        <p class="article">ARTICLES</p>
+                                        <p class="number">{{allData.numShow.wiki}}</p>
+                                        <p class="article">详解</p>
                                     </div>
                                 </a>
                            </div>
@@ -182,10 +182,54 @@ export default {
     props: {
         allData: {
             type: Object,
-            default: () => ({
-                projectName: "Project Name",
-                projectInfo: "Description the project was created by Ken on Oct 11th 2021"
-            })
+            default: function() {
+                return {
+                    projectDetail: {
+                        created: new Date()
+                    },
+                    numShow: {}
+                }
+            }
+        }
+    },
+    methods: {
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: '/projects'
+                }
+            }
+            this.$emit('event', event)
+        },
+        formatDateStandard(...params) {
+            if(params.length === 2) {
+                let date = new Date( Number(params[0]) ),
+                    Y = date.getFullYear(),
+                    M =
+                        ( date.getMonth() + 1 < 10 ?
+                            `0${date.getMonth() + 1}` :
+                            date.getMonth() + 1 ),
+                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+
+                    h =
+                        ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
+                    m =
+                        ( date.getMinutes() < 10 ?
+                            `0${date.getMinutes()}` :
+                            date.getMinutes() ) ,
+                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+
+                // 输出结果：yyyy/mm/dd hh:mm
+                if(params[1] === 0){
+                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                }else if(params[1] === 1) {
+                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                }
+            }
         }
     }
 }
@@ -216,13 +260,15 @@ export default {
             font-size: 16px;
             color: #000000;
             font-weight: 600;
+            width: 200px;
+            cursor: pointer;
         }
     }
     .left-area {
-		flex: 1;
+        flex: 1;
         .projectInfo {
             display: flex;
-            width: 1400px;
+            // width: 1400px;
             height: 220px;
             background: #ffffff;
             border: 1px solid #ddd;
@@ -239,7 +285,7 @@ export default {
                 margin-top: 20px;
                 .project_name {
                     font-family: PingFangSC-Medium;
-                    font-size: 16px;
+                    font-size: 38px;
                     color: #000000;
                     font-weight: 600;
                 }
@@ -254,7 +300,7 @@ export default {
     }
     .item {
         display: flex;
-        width: 1400px;
+        // width: 1400px;
         height: 220px;
         background: #ffffff;
         border: 1px solid #ddd;

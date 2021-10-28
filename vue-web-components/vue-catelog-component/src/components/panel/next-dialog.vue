@@ -5,7 +5,8 @@
                 <div class="data_id">
                     <span>数据 ID:</span>
                     <div class="data_id_space">
-                        <p>Pfizer_2021_10_a</p>
+                        <!-- <p>Pfizer_2021_10_a</p> -->
+                        <input type="text" value="Pfizer_2021_10_a">
                     </div> 
                 </div>
                 <div class="upload_ds">
@@ -31,7 +32,8 @@
                     <span>新建数据集:</span>
                     <!-- <input type="text" class="text"> -->
                     <div class="new_dataset_space">
-                        <p>New dataset name</p>
+                        <!-- <p>New dataset name</p> -->
+                        <input type="text" value="New dataset name">
                     </div>
                 </div>
                 <div class="btn">
@@ -130,13 +132,15 @@ export default {
                 height: 24px;
                 border: 1px solid #979797;
                 margin-left: 66px;
-                p {
+                input {
+                    outline: none;
                     font-family: PingFangSC-Medium;
                     font-size: 14px;
+                    border: 0;
                     color: #000000;
                     font-weight: 600;
                     margin-left: 10px;
-                    line-height: 24px;
+                    // line-height: 24px;
                 }
             }
         }
@@ -223,13 +227,15 @@ export default {
                 height: 24px;
                 border: 1px solid #979797;
                 margin-left: 45px;
-                 p {
+                 input {
+                    outline: none;
                     font-family: PingFangSC-Medium;
                     font-size: 14px;
                     color: #000000;
                     font-weight: 600;
                     margin-left: 10px;
-                    line-height: 24px;
+                    // line-height: 24px;
+                    border: 0px;
                 }
             }
              .radio{ 
