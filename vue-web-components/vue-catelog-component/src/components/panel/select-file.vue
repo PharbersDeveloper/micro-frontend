@@ -53,15 +53,15 @@ export default {
         },
         deleteFile(index) {
             this.fileList.splice(index,1)
-			this.$refs.file.value = null
+            this.$refs.file.value = null
         },
-		upload() {
-			this.$refs.file.click()
-		},
-		uploadFiles() {
-			console.log(this.$refs.file.files[0])
-			this.fileList.push(this.$refs.file.files[0])
-		}
+        upload() {
+            this.$refs.file.click()
+        },
+        uploadFiles() {
+            console.log(this.$refs.file.files[0])
+            this.fileList.push(this.$refs.file.files[0])
+        }
     }
 }
 </script>
