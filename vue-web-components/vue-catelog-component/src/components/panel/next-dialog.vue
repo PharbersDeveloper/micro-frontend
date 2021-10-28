@@ -10,29 +10,30 @@
                     </div> 
                 </div>
                 <div class="upload_ds">
-                    <input type="radio" class="radio">
+                    <input type="radio" class="radio" name="radio" @click="radio('dataSet')" ref="radioData">
+                    <!-- <input type="radio" class="radio" > -->
                     <span class="up">上传到数据集:</span>
-                    <!-- <input type="text" class="text"> -->
+                    <!-- <input type="text" class="text" v-model="newData" ref="dataSet"> -->
                     <div class="input">
-                        <p>{{newData}}</p>
+                        <p ref="dataSet">{{newData}}</p>
                     </div>
-                    <div class="icon" @click="toggle">
+                    <div class="icon" @click="toggle" >
                         <img :src="dropDownIcon">
                     </div>
-                    <div class="dialog" v-if="showDialog">
+                    <div class="dialog" v-if="showDialog" ref="toggle">
                         <p class="dialog_select"><span @click="select">dataset_0001</span></p>
                         <p class="dialog_select"><span @click="select">dataset_0002</span></p>
                         <p class="dialog_select"><span @click="select">dataset_0003</span></p>
                         <p class="dialog_select"><span @click="select">dataset_0004</span></p>
                     </div>
                 </div>
-                <div class="new_dataset">
-                    <input type="radio" class="radio">
+                <div class="new_dataset" >
+                    <input type="radio" class="radio" name="radio" @click="radio('newData')" ref="radioNew">
                     <span>新建数据集:</span>
                     <!-- <input type="text" class="text"> -->
                     <div class="new_dataset_space">
                         <!-- <p>New dataset name</p> -->
-                        <input type="text" value="New dataset name">
+                        <input type="text" ref="newData" v-model="newDataName">
                     </div>
                 </div>
                 <div class="btn">
@@ -53,8 +54,8 @@ export default {
         return {
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
             showDialog: false,
-            newData: ''
-
+            newData: 'dataset_0001', 
+            newDataName: ''
         }
     },
     methods: {
@@ -69,12 +70,21 @@ export default {
             this.showDialog = false
         },
         confirm() {
-            if(this.newData === '') {
+            if(this.newData === '' && this.newDataName == '') {
                 alert('选项不能为空')
                 // throw new Error('选项不能为空')
                 return false
             }else {
                 this.$router.push('/excel-column-clean')
+            }
+        },
+        radio(state) {
+            if(state === 'dataSet') {
+                this.$refs.newData.disabled = true
+            }else if(state === 'newData'){
+                this.$refs.dataSet.disabled = true
+                this.$refs.newData.disabled = false
+                this.newData = ''
             }
         }
     },
@@ -86,7 +96,6 @@ export default {
         allData: {
             type: Object,
             default: () => ({
-                // data: "shujv"
             })
         }
     }	
@@ -99,19 +108,19 @@ export default {
     margin: 0;
 }
 .text_dialog_container {
-	height: 100vh;
-	width: 100vw;
-	background: rgba(37,35,45,0.55);
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	position: fixed;
-	top: 0;
-	right: 0;
-	z-index: 9999;
-	justify-content: center;
-	align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(37,35,45,0.55);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
     .dialog_area {
         position: absolute;
         width: 500px;
@@ -169,7 +178,7 @@ export default {
             .radio{ 
                 margin-top: 5px;
             }
-            .input {
+                .input {
                 width: 200px;
                 height: 24px;
                 border: 1px solid #979797;
