@@ -82,6 +82,7 @@ export default {
         radio(state) {
             if(state === 'dataSet') {
                 this.data = ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
+                this.showDialog = false
                 this.$refs.newData.disabled = true
             }else if(state === 'newData'){
                 this.$refs.dataSet.disabled = true
