@@ -10,7 +10,7 @@ import project from './components/panel/project-list.vue'
 import dataListHome from './components/panel/data-list-home.vue'
 import uploadDataset from './components/panel/upload-dataset.vue'
 import selectFile from './components/panel/select-file.vue'
-import fileContent from './components/panel/file-content.vue'
+// import fileContent from './components/panel/file-content.vue'
 import nextDialog from './components/panel/next-dialog.vue'
 import excelColumnClean from './components/panel/excel-column-clean'
 
@@ -70,11 +70,6 @@ export default new Router({
             path: '/select-file', 
             name: 'selectFile',
             component: selectFile
-        },
-        {
-            path: '/file-content', 
-            name: 'fileContent',
-            component: fileContent
         },
         {
             path: '/next-dialog', 
