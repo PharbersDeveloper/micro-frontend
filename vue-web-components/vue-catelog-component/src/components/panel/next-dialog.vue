@@ -15,7 +15,6 @@
                     <!-- <input type="text" class="text"> -->
                     <div class="input">
                         <p>{{newData}}</p>
-                        <!-- <p class="warning" v-if="newData === ''" ref="warning">选项不能为空</p> -->
                     </div>
                     <div class="icon" @click="toggle">
                         <img :src="dropDownIcon">
@@ -71,8 +70,6 @@ export default {
         },
         confirm() {
             if(this.newData === '') {
-                // this.$refs.warning.style.innerHTML = '选项不能为空'
-                // this.$refs.warning.style.color = 'red'
                 alert('选项不能为空')
                 // throw new Error('选项不能为空')
                 return false
@@ -103,7 +100,7 @@ export default {
 }
 .text_dialog_container {
     position: relative;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);
     .dialog_area {
