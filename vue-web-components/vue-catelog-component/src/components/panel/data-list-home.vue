@@ -24,7 +24,7 @@
                                     </div>
                                     <div>
                                         <p class="number">{{allData.numShow.dataset}}</p>
-                                        <p class="dataset">数据集</p>
+                                        <p class="dataset" @click="$router.push('/upload-dataset')">数据集</p>
                                     </div>
                                 </a>
                            </div>
