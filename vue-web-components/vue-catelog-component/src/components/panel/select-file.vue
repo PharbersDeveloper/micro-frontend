@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <next-dialog v-if="show" @closeDialog="close"></next-dialog>
+        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent"></next-dialog>
     </div>
 </template>
 
@@ -61,6 +61,11 @@ export default {
         uploadFiles() {
             console.log(this.$refs.file.files[0])
             this.fileList.push(this.$refs.file.files[0])
+        },
+        uploadFilesEvent(data) {
+            this.show = false
+            data.args.param.projectName = this.allData.projectName
+            this.$emit('event', data)
         }
     }
 }

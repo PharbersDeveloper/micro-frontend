@@ -199,7 +199,8 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: param
+                    name: param,
+					projectName: this.allData.projectDetail.name
                 }
             }
             this.$emit('event', event)

@@ -6,7 +6,7 @@
                     <span>数据 ID:</span>
                     <div class="data_id_space">
                         <!-- <p>Pfizer_2021_10_a</p> -->
-                        <input type="text" value="Pfizer_2021_10_a">
+                        <input type="text" v-model="dataID">
                     </div> 
                 </div>
                 <div class="upload_ds">
@@ -32,7 +32,7 @@
                     <!-- <input type="text" class="text"> -->
                     <div class="new_dataset_space">
                         <!-- <p>New dataset name</p> -->
-                        <input type="text" ref="newData" v-model="newDataName">
+                        <input type="text" ref="newData" v-model="newDataName" :disabled="true">
                     </div>
                 </div>
                 <div class="btn">
@@ -53,10 +53,11 @@ export default {
         return {
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
             showDialog: false,
-            newData: 'dataset_0001', 
+            newData: '', 
             newDataName: '',
-            show: false,
-            data: ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
+            dataID: '',
+            radioState: '',
+            data: []
         }
     },
     methods: {
@@ -76,14 +77,30 @@ export default {
                 // throw new Error('选项不能为空')
                 return false
             }else {
-                this.$router.push('/excel-column-clean')
+                const event = new Event("event")
+                event.args = {
+                    callback: "uploadFiles",
+                    element: this,
+                    param: {
+                        files: this.fileList,
+                        property: JSON.stringify({
+                            dataID: this.dataID,
+                            dataset: this.radioState === 'dataSet' ? this.newData : this.newDataName
+                        })
+                    }
+                }
+                this.$emit('uploadFilesEvent', event)
+                // this.$router.push('/excel-column-clean')
             }
         },
         radio(state) {
+            this.radioState = state
             if(state === 'dataSet') {
                 this.data = ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
                 this.showDialog = false
                 this.$refs.newData.disabled = true
+                this.$refs.dataSet.disabled = false
+                this.newDataName = ''
             }else if(state === 'newData'){
                 this.$refs.dataSet.disabled = true
                 this.$refs.newData.disabled = false
@@ -101,6 +118,12 @@ export default {
             type: Object,
             default: () => ({
             })
+        },
+        fileList: {
+            type: Array,
+            default: function() {
+                return []
+            }
         }
     }	
 }

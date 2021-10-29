@@ -3,34 +3,28 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking'
 
-
-export default class DagComponent extends Component {
-    @service router
+export default class ExcelCleanComponent extends Component {
+	@service router
     @service store
-    @tracked random
+    @service cookies
+    @service ajax
 
-    @action
+
+	@action
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-                let params = e.detail[0].args.param
-                let uri = ''
-                if(params.name == 'projects') {
-                    uri = '/projects'
-                } else if(params.name == 'dataset') {
-                    uri = '/dataset?projectName=' + params.projectName
-                }
-                //执行列表 分页
-                this.router.transitionTo( uri )
+                let param = e.detail[0].args.param
                 break
             default: 
-                console.log("other click event!")
+                console.log("submit event to parent")
         }
     }
 
     @action
     registerListener(element) {
         element.allData = this.calAllData
+        console.log(element.allData)
         element.addEventListener("event", this.listener)
     }
 
