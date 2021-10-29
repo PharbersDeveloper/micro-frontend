@@ -18,7 +18,7 @@ export default class DagComponent extends Component {
                 if(params.name == 'projects') {
                     uri = '/projects'
                 } else if(params.name == 'dataset') {
-                    uri = '/dataset?projectName=' + params.projectName
+                    uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
                 }
                 //执行列表 分页
                 this.router.transitionTo( uri )

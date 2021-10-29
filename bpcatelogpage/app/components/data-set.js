@@ -19,7 +19,7 @@ export default class DataSetComponent extends Component {
                 break
             case "uploadFiles":
                 let params = e.detail[0].args.param
-                this.confirmUploadFiles(params.files[0], params.property, params.projectName)
+                this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId)
                 break
             default: 
                 console.log("submit event to parent")
@@ -27,7 +27,7 @@ export default class DataSetComponent extends Component {
     }
 
     @action
-    async confirmUploadFiles(file, property, projectName) {
+    async confirmUploadFiles(file, property, projectName, projectId) {
             let that = this
             let uploadMessage = {}
             uploadMessage.file = file
@@ -42,7 +42,7 @@ export default class DataSetComponent extends Component {
                     //上传成功
                     let res = JSON.parse(request.responseText)
                     if(res.tmpname) {
-                        this.updateDataset(file, property, projectName, res)
+                        this.updateDataset(file, property, projectName, res,projectId)
                     }
                 }
             };
@@ -51,12 +51,29 @@ export default class DataSetComponent extends Component {
     }
 
     @action
-    async updateDataset(file, property, projectName, message) {
+    async postUrl(type, body) {
+        let url = "https://apiv2.pharbers.com/phdydatasource/"
+        let headers = {
+            "Authorization": this.cookies.read( "access_token" ),
+            "Content-Type": "application/vnd.api+json",
+            "Accept": "application/vnd.api+json",
+        }
+        let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }
+        return fetch(url+type, options).then(res => res.json())
+    }
+
+    @action
+    async updateDataset(file, property, projectName, message, projectId) {
         this.loadingService.loading.style.display = 'inline-block'
+        this.loadingService.loading.style['z-index'] = 2
         let that = this
         //push project_files
-        let url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-        let body = {
+        let push_type = "put_item"
+        let project_files_body = {
             "table": "project_files",
             "item": {
                 "smID": projectName,
@@ -67,39 +84,44 @@ export default class DataSetComponent extends Component {
                 "id": message.tmpname
             }
         }
-        let options = {
-            method: "POST",
-            headers: {
-                "authorization": this.cookies.read( "access_token" ),
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json, text/javascript, */*; q=0.01"
-            },
-            body: JSON.stringify(body)
+        let project_files = this.postUrl(push_type, project_files_body)
+        //push actions
+        let messages = {
+			file: file,
+			message: message,
+			property: property,
+			projectId: projectId,
+            projectName: projectName
+		}
+        let actions_body ={
+            "table": "action",
+            "item": {
+                "projectId": projectId,
+                "owner": this.cookies.read( "access_token" ),
+                "showName": decodeURI(this.cookies.read('user_name_show')),
+                "code": 0,
+                "jobDesc": "creating",
+                "jobCat": "upload",
+                "comments": "",
+                "message": JSON.stringify(messages)
+            }
         }
-        let project_files = await fetch(url, options).then(res => res.json())
-        let stateUrl = "https://apiv2.pharbers.com/phdydatasource/query"
+        let actions = this.postUrl(push_type, actions_body)
+        let results = await Promise.all([project_files,actions])
+
         //请求status，持续30s
+        let statusType = 'query'
         let statusBody = {
             "table": "project_files",
             "conditions": {
-                "id": project_files.data.id
+                "id": results[0].data.id
             },
             "limit": 10,
             "start_key": {}
         }
-        let statusOptions = {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Authorization": this.cookies.read( "access_token" ),
-                "Content-Type": "application/vnd.api+json",
-                "Accept": "application/vnd.api+json",
-            },
-            body: JSON.stringify(statusBody)
-        }
         var startTime = new Date().getTime();
         let dagStatusInt = setInterval(async function() { 
-            fetch(stateUrl, statusOptions).then(res=>res.json()).then(response => {
+            that.postUrl(statusType, statusBody).then(response => {
                 let project_files_status = response.data[0].attributes.status
                 if (project_files_status !== 'creating' || new Date().getTime() - startTime >= 30000) {
                     clearInterval(dagStatusInt); //循环结束
@@ -109,7 +131,7 @@ export default class DataSetComponent extends Component {
                     } else {
                         console.log("failed")
                     }
-                    // this.loadingService.loading.style.display = 'none'
+                    that.loadingService.loading.style.display = 'none'
                     that.router.transitionTo( '/excel-clean' )
                 }
             }) 

@@ -40,7 +40,8 @@ export default {
         allData: {
             type: Object,
             default: () => ({
-                projectName: "项目名称"
+                projectName: "项目名称",
+                projectId: ''
             })
         }
     },
@@ -65,6 +66,7 @@ export default {
         uploadFilesEvent(data) {
             this.show = false
             data.args.param.projectName = this.allData.projectName
+            data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
         }
     }

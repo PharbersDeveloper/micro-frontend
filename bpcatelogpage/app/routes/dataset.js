@@ -8,6 +8,9 @@ export default class DatasetRoute extends Route {
 	queryParams = {
 		projectName: {
 			refreshModel: true
+		},
+		projectId: {
+			refreshModel: true
 		}
     }
 	async model(param) {
@@ -18,6 +21,7 @@ export default class DatasetRoute extends Route {
         }
 		return RSVP.hash( {
 			projectName: param.projectName,
+			projectId: param.projectId,
 			_isVue: true
 		} )
 	}
