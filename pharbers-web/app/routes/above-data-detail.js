@@ -14,7 +14,7 @@ export default class AboveDataDetailRoute extends Route {
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0
     }
-    model(params) {
+    async model(params) {
         let lang = localStorage.getItem('lang');
         if (lang === '中文') {
             lang = 1;

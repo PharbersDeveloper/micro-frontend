@@ -15,7 +15,7 @@ export default class ActivityListRoute extends Route {
         document.body.scrollTop = 0
     }
 
-    model() {
+    async model() {
         let lang = localStorage.getItem('lang');
         if (lang === '中文') {
             lang = 1;
