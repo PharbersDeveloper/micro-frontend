@@ -7,6 +7,7 @@ export default class OverviewRoute extends Route {
 	@service cookies
 	@service ajax
 	@service store
+	@service oauthService
 	namespace = ENV.namespace
 
 	beforeModel() {

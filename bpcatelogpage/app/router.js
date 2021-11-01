@@ -18,4 +18,6 @@ Router.map(function () {
   this.route('dag', {path: "/projects/:project_id"});
   this.route('dag-run', {path: "/projects/:project_id/:execution_id"});
   this.route('overview');
+  this.route('dataset');
+  this.route('excel-clean');
 });

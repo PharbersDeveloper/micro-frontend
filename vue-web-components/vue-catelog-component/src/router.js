@@ -7,6 +7,12 @@ import subscribeTable from './components/panel/data-list-table.vue'
 import dataListDetail from './components/panel/data-list-detail.vue'
 import viewJson from './components/panel/view-json.vue'
 import project from './components/panel/project-list.vue'
+import dataListHome from './components/panel/data-list-home.vue'
+import uploadDataset from './components/panel/upload-dataset.vue'
+import selectFile from './components/panel/select-file.vue'
+// import fileContent from './components/panel/file-content.vue'
+import nextDialog from './components/panel/next-dialog.vue'
+import excelColumnClean from './components/panel/excel-column-clean'
 
 Vue.use(Router)
 
@@ -49,6 +55,31 @@ export default new Router({
             path: '/project',
             name: 'project',
             component: project
+        },
+        {
+            path: '/data-list-home', 
+            name: 'dataListHome',
+            component: dataListHome
+        },
+        {
+            path: '/upload-dataset',
+            name: 'uploadDataset',
+            component: uploadDataset
+        },
+        {
+            path: '/select-file', 
+            name: 'selectFile',
+            component: selectFile
+        },
+        {
+            path: '/next-dialog', 
+            name: 'nextDialog',
+            component: nextDialog
+        },
+        {
+            path: '/excel-column-clean',
+            name: 'excelColumnClean',
+            component: excelColumnClean
         }
     ]
 })

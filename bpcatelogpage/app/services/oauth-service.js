@@ -12,7 +12,6 @@ export default class OauthServiceService extends Service {
 	clientId = ENV.clientId;
 	clientSecret = ENV.clientSecret;
 	redirectUri = ENV.redirectUri;
-
 	oauthCallback( transition ) {
 		const cookies = this.get( "cookies" )
 		let that = this
@@ -42,7 +41,6 @@ export default class OauthServiceService extends Service {
 			}
 			const b64 = window.btoa(`${clientId}:${secret}`)
 			const authorization = `Basic ${b64}`
-
 			let options = {
 				method: "POST",
 				headers: {
@@ -52,22 +50,28 @@ export default class OauthServiceService extends Service {
 				},
 				body: body
 			}
+			// let userData = this.store.findRecord( "account", this.cookies.read('account_id') )
+			// let employerId = userData.belongsTo('employer').id()
+			// applicationAdapter.set("partner",1)
+			// let employerData = this.store.findRecord( "partner", employerId )
 			fetch(url, options).then(res=> {
 				return res.json()
 			}).then( async response => {
 				this.removeAuth()
-
+				// let employerId = response.user.belongsTo('employer').id()
+				// let employerData = this.store.findRecord( "partner", employerId )
 				let options = {
 					domain: ".pharbers.com",
 					path: "/",
 					maxAge: response.expiresIn
 				}
-
 				cookies.write( "access_token", response.access_token, options )
 				cookies.write( "refresh_token", response.refresh_token, options )
 				cookies.write( "token_type", response.token_type, options )
 				cookies.write( "expires_in", response.expiresIn, options )
 				cookies.write( "user_name", response.user.name, options)
+				cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
+				// cookies.write( "employer_name", encodeURL(employerData.name),options)
 				cookies.write( "user_email", response.user.email, options)
 				cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
 				cookies.write( "account_id", response.user.id, options )

@@ -1,10 +1,11 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class ExecutionModel extends Model {
-	@attr('string') arn
-	@attr('string') name
-    // @belongsTo("project", {inverse: "executions"}) projectExecution;
-	@attr meta
-	@attr('string') input
-	@attr('string') projectExecution
+	@attr('string') input;
+	@attr('number') endTime;
+	@attr('string') owner;
+	@attr('string') smId;
+	@attr('number') startTime;
+	@attr('string') state;
+	@attr('string') steps;
 }

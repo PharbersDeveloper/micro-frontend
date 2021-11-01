@@ -150,8 +150,8 @@ export default {
                         companyPositonBJ: "北京市 朝阳区 东直门外斜街",
                         companyRoomBJ: "东外五十六号文创园A座 111室",
                         companyPhoneSH: "上海 021-60770988",
-                        companyPositonSH: "上海市 静安区 共和路209号",
-                        companyRoomSH: "嘉里企业中心2座 17F",
+                        companyPositonSH: "上海市 虹口区 四川北路108号",
+                        companyRoomSH: "星荟中心2号办公楼 8层828单元",
                         contactUs: "联系我们",
                         privacyPolicy: "隐私与政策",
                         ZH: "中文",
@@ -206,8 +206,8 @@ export default {
                         companyPositonBJ: "#111, Building A, No. 56 Dongwai, Dongzhimenwai Xiejie",
                         companyRoomBJ: "Chaoyang District, Beijing, P.R. China",
                         companyPhoneSH: "Shanghai 021-60770988",
-                        companyPositonSH: "F17,  Tower 2, Kerry Enterprise Centre, 209 Gonghe Road,",
-                        companyRoomSH: "Jing'an District, Shanghai, P.R. China",
+                        companyPositonSH: "#828, Floor 8, Building 2, Xinghui Center, No. 108, North Sichuan Road,",
+                        companyRoomSH: "Hongkou District, Shanghai, P.R. China",
                         contactUs: "Contact Us",
                         privacyPolicy: "Privacy and Policy",
                         ZH: "中文",
@@ -243,7 +243,7 @@ export default {
             window.location.reload(true)
         },
         toMiit() {
-            window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501')
+            window.open('https://beian.miit.gov.cn/')
         },
         toMax() {
             this.$emit('linkToPage', 'max')
