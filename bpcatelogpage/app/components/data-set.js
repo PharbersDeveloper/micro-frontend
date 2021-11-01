@@ -123,17 +123,20 @@ export default class DataSetComponent extends Component {
         let dagStatusInt = setInterval(async function() { 
             that.postUrl(statusType, statusBody).then(response => {
                 let project_files_status = response.data[0].attributes.status
-                if (project_files_status !== 'creating' || new Date().getTime() - startTime >= 30000) {
+                if (project_files_status !== 'creating') {
                     clearInterval(dagStatusInt); //循环结束
                     let status = ''
                     if(project_files_status == "success") {
-                        console.log("success")
+                        console.log(project_files_status)
                     } else {
-                        console.log("failed")
+                        console.log(project_files_status)
                     }
                     that.loadingService.loading.style.display = 'none'
                     that.router.transitionTo( '/excel-clean' )
-                }
+                } else if(new Date().getTime() - startTime >= 60000) {
+                    clearInterval(dagStatusInt); //循环结束
+					alert("超时，连接终止！")
+				}
             }) 
         }, 5 * 1000)
     }
