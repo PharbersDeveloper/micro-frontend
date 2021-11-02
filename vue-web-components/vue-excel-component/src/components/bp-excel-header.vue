@@ -1,7 +1,7 @@
 <template>
 	<div class="schema-item box" :style="{width: itemWidth +'px'}" >
-		<span><strong>{{title}}</strong></span>
-		<span>{{titleType}}</span>
+		<span class="schema_title">{{title}}</span>
+		<span class="schema_type">{{titleType}}</span>
 		<span class="split">&nbsp;&nbsp;</span>
 	</div>
 </template>
@@ -38,6 +38,17 @@ export default {
 		background: #F0F0F0;
 		border: 1px solid #CFCFCF;
 		overflow: hidden;
+		box-sizing: border-box;
+		.schema_title {
+			font-weight: 500;
+			font-size: 13px;
+			color: #333333;
+		}
+		.schema_type {
+			color: #666666;
+			font-family: 'Monaco';
+			font-size: 10px;
+		}
 	}
 	.box {
 		flex-direction: column;
@@ -45,8 +56,9 @@ export default {
 	.split {
 		height: 10px;
 		width: 100%;
-		background: red;
-		border-color: green;
+		background: #81c784;
+		border-color: #81c784;
 		border-width: 5px;
+		margin: 0 2px;
 	}
 </style>

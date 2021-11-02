@@ -1,9 +1,9 @@
 <template>
 	<div class="excel-container">
 		<div class="schemas">
-			<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width"/>
+			<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
 		</div>
-		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight+'px'}">
+		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
 				<div ref="select" class="row-select"></div>
@@ -42,8 +42,8 @@ export default {
 			default: true
 		},
 		viewHeight: {
-			type: Number,
-			default: 100
+			type: String,
+			default: '100px'
 		},
 		page_size: {
 			type: Number,
@@ -183,7 +183,7 @@ export default {
 <style lang="scss">
 	.excel-container {
 		.viewport {
-			overflow-x: auto;
+			overflow: auto;
 			position: relative;
 			.body {
 				// overflow: auto;
@@ -193,6 +193,7 @@ export default {
 		.schemas {
 			display: flex;
 			margin-left: 0px;
+			margin-right: 10px;
 		}
 		.canvas {
 			// margin-top: 46px;
