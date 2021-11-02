@@ -9,6 +9,7 @@ import manualCleaning from './components/page/manual-cleaning.vue'
 import entryReplacement from './components/max-entry-replacement.vue'
 import nav from './components/bp-nav-top.vue'
 import importPage from './components/page/max-saas-import.vue'
+import bpExcelContainer from './components/bp-excel-container'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
 			path: '/bp-excel',
 			name: 'bpExcel',
 			component: bpExcel
+		},
+		{
+			path: '/bp-container',
+			name: 'bpExcelContainer',
+			component: bpExcelContainer
 		},
 		{
 			path: '/manual-cleaning',
