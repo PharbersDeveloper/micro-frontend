@@ -38,6 +38,7 @@ export default {
 		background: #F0F0F0;
 		border: 1px solid #CFCFCF;
 		overflow: hidden;
+		box-sizing: border-box;
 	}
 	.box {
 		flex-direction: column;
