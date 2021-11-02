@@ -7,26 +7,78 @@
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
-                        <input type="checkbox" class="checkbox">
-                        <input type="text" placeholder="搜索" class="search">
+                        <div class="checkbox_all" >
+                            <input type="checkbox" class="checkbox" v-model="all" ref="all">
+                            <span class="action">选项</span>
+                            <span class="drop_down_icon" @click="dropShow">
+                                <img :src="dropDownIcon"  >
+                            </span>
+                            <div class="drop_dialog" v-if="dropDialogShow">
+                                <div class="label_icon">
+                                    <span>
+                                        <img :src="label_icon" alt="">
+                                    </span>
+                                    <p>标签</p>
+                                </div>
+                                <div class="label_icon border_none none">
+                                    <span>
+                                        <img :src="clear_data_icon" alt="">
+                                    </span>
+                                    <p @click='cleardialogopen'>清空数据</p>
+                                </div>
+                                <div class="label_icon border_none">
+                                    <span>
+                                        <img :src="delete_icon" alt="">
+                                    </span>
+                                    <p @click='deletedialogopen'>删除数据集</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search_area">
+                            <img :src="search_icon" class="search_icon">
+                            <input type="text" placeholder="搜索" class="search">
+                        </div>
                         <div class="btn">
                             <button @click="toggle">上传文件</button>
                             <p >{{allData.dataName.length}} 个数据集</p>
                         </div>
-                        <div class="process_area">
-                            <button>输入数据</button>
-                            <button>过程数据</button>
-                            <button>输出数据</button>
-                        </div>
                         <div class="dialog" v-show="showDialog">
                                 <div>
-                                    <p @click="$router.push('/select-file')">本地上传</p>
+                                    <p @click="upload">本地上传</p>
+                                </div>
+                        </div>
+                        <div class="select_area">
+                                <!-- <img :src="descending_order" class="sorting"> -->
+                                <img :src="ascending_order" class="sorting">
+                                <p @click="nameShow">最近一次编辑
+                                    <img :src="dropDownIcon" alt="" class="drop_size">
+                                </p>
+                                <div class="name" v-if="nameShowDialog">
+                                    名称
+                                </div>
+                                <!-- <img :src="dropDownIcon" alt=""> -->
+                                <span class="dividing_line">|</span>
+                                <p @click="labelShow">标签
+                                    <img :src="dropDownIcon" alt="" class="drop_size">
+                                </p>
+                                <div class="label_selected" v-if="labelShowDialog">
+                                    <div class="label_name">
+                                        <span></span>
+                                        <div class="tags_name">lallaalla</div>
+                                    </div>
+                                    <div class="label_name">
+                                        <span class="green"></span>
+                                        <div class="tags_name">lallaalla</div>
+                                    </div>
+                                    <div class="management">
+                                        <div class="manage_label">管理标签</div>
+                                    </div>
                                 </div>
                         </div>
                     </div>
                       <div class="upload_bottom">
-                        <div class="data_content" v-for="(item,index) in allData.dataName" :key="item.id" :class="{bg:index == isActive}" @click="changeBg(index)">
-                            <input type="checkbox">
+                        <div class="data_content" v-for="(item,index) in allData.dataName" :key="item.id"  :class="{bg: item.checked == true}" @click="changeBg(index)">
+                            <input type="checkbox" v-model="item.checked" ref="data">
                             <p class="data_name">{{item.name}}</p>
                         </div>
                         <div class="word" v-if="allData.dataName == ''">当前项目无数据</div>
@@ -65,19 +117,35 @@
                 </div>
             </div>
         </div>
+        <clear-dataset-dialog  v-if="cleardialogshow" @closeClearDialog="closeClearDialog"></clear-dataset-dialog>
+        <clear-delete v-if="deletedialogshow" @closeDeleteDialog="closeDeleteDialog"></clear-delete>
     </div>
 </template>
 
 <script>
+import clearDatasetDialog from './clear-dataset-dialog.vue'
+import clearDelete from './delete-dialog.vue'
 export default {
     data() {
         return {
-            showDialog: false,
+            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/label.png",
+            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
+            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
             edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
+            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
+            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
+            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/descending_order.png",
+            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/ascending_order.png",
+            showDialog: false,
             state: '', 
             editShow: false,
             viewContent: false,
-            isActive: null
+            isActive: null,
+            dropDialogShow: false,
+            nameShowDialog: false,
+            labelShowDialog: false,
+            cleardialogshow: false,
+            deletedialogshow: false
         }
     },
     props: {
@@ -86,14 +154,55 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dataName: [
-                    {id:1,name:'Data_0001'},
-                    {id:2,name:'Data_0002'}
+                    {id:1,name:'Data_0001',checked:false},
+                    {id:2,name:'Data_0002',checked:false}
                 ],
                 projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
         }
     },
+    components: {
+        clearDatasetDialog,
+        clearDelete
+    },
+    computed: {
+        all: {
+            get() {
+                return this.allData.dataName.every( item => item.checked === true )
+            },
+            set(newVal) {
+                // console.log(newVal);
+                this.allData.dataName.forEach(item => {
+                    item.checked = newVal
+                })
+            }
+        }
+    },
     methods: {
+        closeDeleteDialog() {
+            this.deletedialogshow = false;
+        },
+        deletedialogopen() {
+            this.deletedialogshow = true;
+        },
+        closeClearDialog() {
+            this.cleardialogshow = false;
+        },
+        cleardialogopen(){
+            this.cleardialogshow = true
+        },
+        labelShow() { 
+            this.labelShowDialog = !this.labelShowDialog
+        },
+        nameShow() {
+            this.nameShowDialog = !this.nameShowDialog
+        },
+        dropShow() {
+            this.dropDialogShow = !this.dropDialogShow
+        },
+        upload() {
+            this.$router.push('/select-file')
+        },
         toggle() {
             this.showDialog = !this.showDialog
         },
@@ -117,7 +226,7 @@ export default {
                 })
             }
         },
-        changeBg(index) {
+        changeBg(e) {
             this.isActive = index
             this.viewContent = true
         } 
@@ -146,7 +255,7 @@ export default {
         .project_name {
             margin-left: 30px;
             line-height: 50px;
-            font-family: PingFangSC-Medium;
+            font-family: SourceSansPro;
             font-size: 16px;
             color: #000000;
             font-weight: 600;
@@ -163,20 +272,91 @@ export default {
                 display: flex;
                 position: relative;
                 height: 100px;
+                background: #f2f2f2;
                 border-bottom: 2px solid #979797;
+				p {
+					cursor: pointer;
+				}
+                .checkbox_all {
+                    position: relative;
+                    width: 80px;
+                    height: 26px;
+                    border: 1px solid #dddddd;
+                    margin-top: 20px;
+                    margin-left: 28px;
+                    .drop_down_icon {
+                        position: absolute;
+                        top: 4px;
+                        right: 4px;
+                        img {
+                            width: 15px;
+                            height: 15px;
+                        }
+                    }
+                    .drop_dialog {
+                        position: absolute;
+                        top: 25px;
+                        left: 0;
+                        width: 120px;
+                        height: 90px;
+                        background: #fff;
+                        // border: 1px solid #000;
+                        .label_icon {
+                            display: flex;
+                            border-bottom: 1px solid #dddddd;
+                            img {
+                                margin-left: 10px;
+                                margin-top: 5px;
+                                width: 15px;
+                                height: 15px;
+                            }
+                            p {
+                                margin-left: 10px;
+                                margin-top: 2px;
+                                font-size: 14px;
+                            }
+                        }
+                        .border_none {
+                            border-bottom: none;
+                        }
+                    }
+                }
                 .checkbox {
-                    margin-left: 21px;
+                    position: absolute;
+                    top: -20px;
+                    left: 5px;
                     margin-top: 25px;
                 }
-                .search {
-                    display: inline-block;
-                    width: 282px;
+                .action {
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    color: #333333;
+                    font-weight: 400;
+                    vertical-align: middle;
+                    margin-left: 25px;
+                }
+                .search_area {
+                    display: flex;
+                    border: 1px solid #dddddd;
                     height: 31px;
-                    outline:none;
-                    padding-left: 18px;
+                    width: 313px;
                     margin-left: 22px;
                     margin-top: 15px;
+                    .search {
+                        display: inline-block;
+                        width: 282px;
+                        height: 30px;
+                        outline:none;
+                        padding-left: 18px;
+                       
+                    }
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border: 1px solid #dddddd;
+                    }
                 }
+                
                 .process_area {
                     position: absolute;
                     top: 72px;
@@ -186,7 +366,7 @@ export default {
                         height: 27px;
                         background: #fff;
                         border: 1px solid #979797;
-                        font-family: PingFangSC-Medium;
+                        font-family: 'PingFangSC-Medium';
                         font-size: 10px;
                         color: #000000;
                         font-weight: 600;
@@ -232,6 +412,92 @@ export default {
                         font-size: 14px;
                         color: #000000; 
                         font-weight: 600;
+                    }
+                }
+                .select_area {
+                    display: flex;
+                    position: absolute;
+                    bottom: 10px;
+                    left: 130px;
+                    .dividing_line {
+                        margin: 0 10px;
+                        color: #c0cfe4;
+                    }
+                    img {
+                        margin-top: 3px;
+                        width: 20px;
+                        height: 20px;
+                    }
+                    p {
+                        background: #dddddd;
+                        font-size: 14px;
+                        // height: 25px;
+                        // line-height: 25px;
+                        padding: 5px 5px 5px 5px;
+                        .drop_size {
+                            line-height: 25px;
+                            width: 15px;
+                            height: 15px;
+                        }
+                    }
+                    .name {
+                        position: absolute;
+                        top: 32px;
+                        left: 41px;
+                        width: 91px;
+                        height: 28px;
+                        line-height: 28px;
+                        background: #fff;
+                        border: 1px solid #979797;
+                        padding-left: 10px;
+                        font-size: 14px;
+                    }
+                    .label_selected {
+                        // display: flex;
+                        position: absolute;
+                        top: 32px;
+                        left: 157px;
+                        width: 128px;
+                        // height: 72px;
+                        border: 1px solid #dddddd;
+                        background: #fff;
+                        padding-top: 10px;
+                        .management {
+                                margin-top: 5px;
+                                width: 128px;
+                                height: 30px;
+                                border-top: 1px solid #dddddd;
+                                .manage_label {
+                                    font-size: 14px;
+                                    // text-align: center;
+                                    font-weight: 600;
+                                    margin-left: 25px;
+                                    margin-top: 5px;
+                                }
+                        }
+                        .label_name {
+                            display: flex;
+                            margin-left: 10px;
+                            span {
+                                display: inline-block;
+                                width: 10px;
+                                height: 10px;
+                                border-radius: 5px;
+                                background: #1bc2ac;
+                                margin-top: 8px;
+                                margin-right: 8px;
+                               
+                            }
+                            .green {
+                                background: #00a65a;
+                            }
+                            .tags_name {
+                                font-size: 16px;
+                                margin-bottom: 5px;
+                            }
+                           
+                        }
+                        
                     }
                 }
             }
