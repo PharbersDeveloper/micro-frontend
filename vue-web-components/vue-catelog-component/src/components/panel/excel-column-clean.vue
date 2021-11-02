@@ -4,8 +4,9 @@
             <div class="project_name_header">
                 <p class="project_name">{{allData.projectName}}</p>
             </div>
-             <div class="project_name_header">
+             <div class="project_name_header heaber_opt">
                 <p class="project_name new_upload">New Uploaded File Dataset</p>
+                <bp-button text="运行" class="run"></bp-button>
             </div>
             <div class="excel_area">
                 <div class="area">
@@ -55,7 +56,9 @@
 </template>
 
 <script>
+import bpButton from '../../../../vue-basic-component/src/components/bp-button.vue'
 import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
+
 export default {
     data() {
         return {
@@ -68,7 +71,8 @@ export default {
         }
     },
     components: {
-        bpExcel
+        bpExcel,
+        bpButton
     },
     props: {
         allData: {
@@ -109,10 +113,25 @@ export default {
     width: 100vw;
     height: 100vh;
     border: 2px solid #979797;
+    .heaber_opt {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .run {
+        width: 80px;
+        height: 32px;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .project_name_header {
         height: 50px;
         width: 100%;
         border-bottom: 2px solid #979797;
+        padding-right: 20px;
         .project_name {
             margin-left: 30px;
             line-height: 50px;
@@ -141,12 +160,14 @@ export default {
                 font-weight: 600;
             }
             .excel {
-                padding: 50px;
+                // padding: 50px;
                 margin-top: 5px;
                 width: 1400px;
                 height: 240px;
                 border: 1px solid #979797;
-            
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
         .column_clean {

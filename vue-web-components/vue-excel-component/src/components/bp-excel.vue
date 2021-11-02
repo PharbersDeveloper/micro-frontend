@@ -1,7 +1,7 @@
 <template>
 	<div class="excel-container">
 		<div class="schemas">
-			<header-item v-for="(item, index) in datasource.cols" :title="item"/>
+			<header-item v-for="(item, index) in datasource.cols" :title="item" :key="index"/>
 		</div>
 		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight+'px'}">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
@@ -193,6 +193,7 @@ export default {
 		.schemas {
 			display: flex;
 			margin-left: 0px;
+			margin-right: 10px;
 		}
 		.canvas {
 			// margin-top: 46px;
