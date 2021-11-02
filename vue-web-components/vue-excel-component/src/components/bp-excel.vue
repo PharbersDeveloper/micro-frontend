@@ -1,7 +1,7 @@
 <template>
 	<div class="excel-container">
 		<div class="schemas">
-			<header-item v-for="(item, index) in datasource.cols" :title="item" :key="index"/>
+			<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width"/>
 		</div>
 		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight+'px'}">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
