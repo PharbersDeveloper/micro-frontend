@@ -2,7 +2,8 @@
 	<div class="excel_container">
 		<div ref="viewport" @click="focusHandler" class="viewport">
 			<div class="schemas">
-				<div class="schema-item" @click="sortHandler" v-for="(item,index) in datasource.cols" :key="index+'schema'">{{item}}</div>
+<!--				<div class="schema-item" @click="sortHandler" v-for="(item,index) in datasource.cols" :key="index+'schema'">{{item}}</div>-->
+				<header-item v-for="(item, index) in datasource.cols"/>
 			</div>
 			<div class="body" :style="{height: viewHeight+'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
@@ -34,7 +35,7 @@ export default {
 		}
 	},
 	components: {
-
+		headerItem:require('./bp-excel-header.vue').default
 	},
 	props: {
 		isNeedKeyBoardEvent: {
@@ -85,7 +86,7 @@ export default {
 				this.datasource, this.palettePolicy,
 				this.fontPolicy, this.page_size,
 				this.$refs.hidden,
-				true
+				false
 			)
 		}
 	},
@@ -192,20 +193,20 @@ export default {
 
 		}
 		.schemas {
-			height: 24px;
+		/*	height: 24px;*/
 			display: flex;
 			margin-left: 10px;
-			.schema-item {
-				height: 24px;
-				// min-width: 80px;
-				min-width: 118px;
-				display: flex;
-				justify-content: center;
-				background: #F0F0F0;
-				border: 1px solid #CFCFCF;
-				// padding: 0 5px;
-				overflow: hidden;
-			}
+		/*	.schema-item {*/
+		/*		height: 24px;*/
+		/*		// min-width: 80px;*/
+		/*		min-width: 118px;*/
+		/*		display: flex;*/
+		/*		justify-content: center;*/
+		/*		background: #F0F0F0;*/
+		/*		border: 1px solid #CFCFCF;*/
+		/*		// padding: 0 5px;*/
+		/*		overflow: hidden;*/
+		/*	}*/
 		}
 		.canvas {
 			// margin-top: 46px;
