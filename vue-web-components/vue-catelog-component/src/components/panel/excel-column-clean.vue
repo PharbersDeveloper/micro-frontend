@@ -288,7 +288,7 @@ export default {
     .project_name_header {
         height: 50px;
         width: 100%;
-        border-bottom: 2px solid #979797;
+        border-bottom: 2px solid #ccc;
         padding-right: 20px;
         .project_name {
             margin-left: 30px;
