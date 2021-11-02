@@ -2,7 +2,7 @@
 	<div class="excel_container">
 		<div ref="viewport" @click="focusHandler" class="viewport">
 			<div class="schemas">
-				<div class="schema-item" @click="sortHandler" v-for="(item,index) in cols" :key="index+'schema'">{{item}}</div>
+				<div class="schema-item" @click="sortHandler" v-for="(item,index) in datasource.cols" :key="index+'schema'">{{item}}</div>
 			</div>
 			<div class="body" :style="{height: viewHeight+'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
@@ -13,6 +13,8 @@
 	</div>
 </template>
 <script>
+import PhDataSource from './model/datasource'
+import PhDefaultSizePolicy from './model/sizepolicy'
 export default {
 	data() {
 		return {
@@ -66,104 +68,21 @@ export default {
 			type: Number,
 			default: 100
 		},
-		cols: {
-			type: Array,
-			default: () => ["pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt"]
-		},
-		schema: {
-			type: Array,
-			default: () => ["id", "pkc", "gn", "pn", "mn", "do", "sp", "pk", "pku", "dt", "measure", "provider", "version", "owner"]
-		},
-		cell_hit_height: {
-			type: Number,
-			default: 24
-		},
-		cell_hit_width: {
-			type: Number,
-			default: 122
-		},
-		cols_hit_width: {
-			type: Array,
-			default: () => []
-		},
 		page_size: {
 			type: Number,
 			default: 50
 		},
 		datasource: {
 			type: Object,
+			default: function () {
+				return new PhDataSource('1')
+			}
+		},
+		sizePolicy: {
+			type: Object,
 			default: function() {
-				let that = this
-				return {
-					data: [],
-					sort: {},
-					filter: {},
-					name: "clean_source",
-					batch_size: 200,
-					adapter: (row) => [row.id, row.pkc ? row.pkc : '', row.gn ? row.gn : '', row.pn ? row.pn : '', row.mn ? row.mn : '', row.do ? row.do : '', row.sp ? row.sp : '', row.pk ? row.pk : '', row.pku ? row.pku : '', row.dt ? row.dt : ''],
-					buildQuery: (ele, isAppend=false) => {
-						function buildQueryString() {
-							let sql_str = "SELECT "
-							sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
-
-							// filter
-							let firstFilter = Object.keys(ele.datasource.filter)[0]
-							let filterParam = " WHERE "
-							for (const key in ele.datasource.filter) {
-								if(key != firstFilter) {
-									filterParam = " AND "
-								}
-								sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
-							}
-
-							// sorts
-							for (const key in ele.datasource.sort) {
-								sql_str = sql_str + " ORDER BY " + key
-								if (ele.datasource.sort[key] < 0) {
-									sql_str = sql_str + " desc "
-								}
-							}
-
-							// pages
-							sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-							sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
-							return sql_str
-						}
-						const url = "https://api.pharbers.com/phchproxyquery"
-						const accessToken = ele.getCookie("access_token") || "aea770f88658ded832f2f88d0c68a544d7d297d4d4d722a052129edd3236087b"
-						let body = {
-							"query": buildQueryString(),
-							"schema": ele.schema
-						}
-						let options = {
-							method: "POST",
-							headers: {
-								"Authorization": accessToken,
-								'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-								"accept": "application/json"
-							},
-							body: JSON.stringify(body)
-						}
-						return fetch(url, options)
-					},
-					refreshData: (ele) => {
-						ele.datasource.buildQuery(ele)
-							.then((response) => response.json())
-							.then((response) => {
-								ele.datasource.data = response.map(ele.datasource.adapter)
-								ele.needRefresh++
-							})
-					},
-					appendData: (ele) => {
-						ele.datasource.buildQuery(ele, true)
-							.then((response) => response.json())
-							.then((response) => {
-								ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-								ele.cur_page++
-								ele.needRefresh++
-							})
-					}
-				}}
+				return new PhDefaultSizePolicy()
+			}
 		}
 	},
 	beforeMount() {
@@ -180,22 +99,8 @@ export default {
 			else
 				return null;
 		},
-		sheetHitSize() {
-			let cols_hit_width = this.cols_hit_width
-			if (this.cols_hit_width.length === 0) {
-				cols_hit_width = Array(this.cols.length).fill(this.cell_hit_width)
-			}
-
-			// const rows = this.datasource.data.length
-			const rows = this.page_size
-
-			return {
-				width: cols_hit_width.reduce((s, c) => s + c, 0) + 2 * this.sheet_margin,
-				height: rows * this.cell_hit_height + 2 * this.sheet_margin
-			}
-		},
 		beforeRender() {
-			const hit_size = this.sheetHitSize()
+			const hit_size = this.sizePolicy.sheetHitSize(this.datasource.cols.length, this.page_size)
 			const canvas = this.$refs.canvas
 			if (this.ctx === null) {
 				this.ctx = canvas.getContext('2d')
@@ -243,9 +148,8 @@ export default {
 				ctx.strokeStyle = that.cell_border_color
 				ctx.lineWidth = that.cell_border_width
 				{
-					const y = index * that.cell_hit_height + that.sheet_margin
+					const y = index * that.sizePolicy.cell_hit_height + that.sheet_margin
 					const x1 = that.sheet_margin
-
 
 					const x2 = that.$refs.canvas.width - 2 * that.sheet_margin
 					ctx.moveTo(x1, y)
@@ -253,11 +157,11 @@ export default {
 				}
 			})
 			// 纵线
-			this.cols.forEach((col, index) => {
+			this.datasource.cols.forEach((col, index) => {
 				ctx.strokeStyle = that.cell_border_color
 				ctx.lineWidth = that.cell_border_width
 				{
-					const x = index * that.cell_hit_width
+					const x = index * that.sizePolicy.cell_hit_width
 					const y1 = that.sheet_margin
 					const y2 = that.$refs.canvas.height - 2 * that.sheet_margin
 					ctx.moveTo(x, y1)
@@ -285,12 +189,9 @@ export default {
 						return
 					}
 					const pos = that.getCellPosition(row_index, col_index)
-					let text
-					if(this.datasource.adapter) {
-						text = that.datasource.data[row_index + start_index][col_index+1]
-					} else {
-						text = that.datasource.data[row_index + start_index][col_index]
-					}
+					let text = that.datasource.data[row_index + start_index][col_index]
+					if (!text)
+						text = ""
 					ctx.fillText(text, that.cell_inner_margin + pos.x,
 						pos.y + that.font_size / 2 + that.sheet_margin + that.cell_inner_margin, pos.w, pos.h)
 				})
@@ -305,9 +206,9 @@ export default {
 			ctx.beginPath()
 
 			const x = this.sheet_margin - 1
-			const y = this.cur_row * this.cell_hit_height - 1 + this.sheet_margin
+			const y = this.cur_row * this.sizePolicy.cell_hit_height - 1 + this.sheet_margin
 			const w = this.$refs.canvas.width /*- 2 * this.select_border_width*/ - 2 * this.sheet_margin
-			const h = this.cell_hit_height + 2 * this.select_border_width
+			const h = this.sizePolicy.cell_hit_height + 2 * this.select_border_width
 
 			ctx.fillStyle = this.select_bg_color
 			ctx.lineWidth = this.select_border_width
@@ -317,10 +218,10 @@ export default {
 			this.$refs.hidden.style.top = y + 'px'
 		},
 		getCellPosition(row, col) {
-			const x = this.sheet_margin + col * this.cell_hit_width
-			const y = this.sheet_margin + row * this.cell_hit_height
-			const w = this.cell_hit_width
-			const h = this.cell_hit_width
+			const x = this.sheet_margin + col * this.sizePolicy.cell_hit_width
+			const y = this.sheet_margin + row * this.sizePolicy.cell_hit_height
+			const w = this.sizePolicy.cell_hit_width
+			const h = this.sizePolicy.cell_hit_width
 			return { x: x, y: y, w: w, h: h }
 		},
 		focusHandler(event) {
