@@ -8,7 +8,7 @@
                 <p class="project_name new_upload">New Uploaded File Dataset</p>
                 <bp-button text="运行" class="run"></bp-button>
             </div>
-            <div class="content_area">
+            <div class="content_container">
                 <div class="icon_dialog">
                     <div class="dataset_img">
                         <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
@@ -133,7 +133,7 @@ export default {
         justify-content: space-between;
         align-items: center;
     }
-    .content_area {
+    .content_container {
         display: flex;
         background: #f7f7f7;
         .icon_dialog {
