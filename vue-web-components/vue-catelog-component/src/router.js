@@ -13,6 +13,8 @@ import selectFile from './components/panel/select-file.vue'
 // import fileContent from './components/panel/file-content.vue'
 import nextDialog from './components/panel/next-dialog.vue'
 import excelColumnClean from './components/panel/excel-column-clean'
+import clearDatasetDialog from './components/panel/clear-dataset-dialog.vue'
+import createTagsDialog from './components/panel/create-tags-dialog.vue'
 
 Vue.use(Router)
 
@@ -80,6 +82,16 @@ export default new Router({
             path: '/excel-column-clean',
             name: 'excelColumnClean',
             component: excelColumnClean
+        },
+        {
+            path: '/clear-dataset-dialog',
+            name: 'clearDatasetDialog',
+            component: clearDatasetDialog
+        },
+        {
+            path:'/create-tags-dialog',
+            name:'createTagsDialog',
+            component:createTagsDialog
         }
     ]
 })

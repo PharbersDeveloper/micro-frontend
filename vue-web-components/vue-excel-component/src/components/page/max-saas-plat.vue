@@ -464,6 +464,7 @@ export default {
 			margin-bottom: 20px;
 			margin-top: 28px;
 			.header {
+				
 				font-family: PingFangSC-Regular;
 				font-size: 14px;
 				color: #25232D;
