@@ -1,5 +1,5 @@
 <template>
-	<div class="schema-item box" >
+	<div class="schema-item box" :style="{width: itemWidth +'px'}" >
 		<span><strong>{{title}}</strong></span>
 		<span>{{titleType}}</span>
 		<span class="split">&nbsp;&nbsp;</span>
@@ -9,7 +9,7 @@
 export default {
 	data() {
 		return {
-
+			itemWidth: 118
 		}
 	},
 	components: {
@@ -33,14 +33,10 @@ export default {
 </script>
 <style lang="scss">
 	.schema-item {
-		/*height: 90px;*/
-		// min-width: 80px;
-		min-width: 118px;
 		display: flex;
 		justify-content: center;
 		background: #F0F0F0;
 		border: 1px solid #CFCFCF;
-		// padding: 0 5px;
 		overflow: hidden;
 	}
 	.box {
