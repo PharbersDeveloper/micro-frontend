@@ -3,7 +3,7 @@
 		<div ref="viewport" @click="focusHandler" class="viewport">
 			<div class="schemas">
 <!--				<div class="schema-item" @click="sortHandler" v-for="(item,index) in datasource.cols" :key="index+'schema'">{{item}}</div>-->
-				<header-item v-for="(item, index) in datasource.cols"/>
+				<header-item v-for="(item, index) in datasource.cols" :title="item"/>
 			</div>
 			<div class="body" :style="{height: viewHeight+'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
