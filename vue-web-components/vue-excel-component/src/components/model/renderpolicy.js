@@ -66,7 +66,8 @@ export default class PhDefaultRenderPolicy {
 				const y = index * that.sizePolicy.cell_hit_height + that.sizePolicy.sheet_margin
 				const x1 = that.sizePolicy.sheet_margin
 
-				const x2 = that.canvas.width - 2 * that.sizePolicy.sheet_margin
+				// const x2 = that.canvas.width - 2 * that.sizePolicy.sheet_margin
+				const x2 = that.canvas.width - that.sizePolicy.sheet_margin
 				ctx.moveTo(x1, y)
 				ctx.lineTo(x2, y)
 			}
@@ -76,9 +77,9 @@ export default class PhDefaultRenderPolicy {
 			ctx.strokeStyle = that.palettePolicy.cell_border_color
 			ctx.lineWidth = that.sizePolicy.cell_border_width
 			{
-				const x = index * that.sizePolicy.cell_hit_width
+				const x = index * that.sizePolicy.cell_hit_width + that.sizePolicy.sheet_margin
 				const y1 = that.sizePolicy.sheet_margin
-				const y2 = that.canvas.height - 2 * that.sizePolicy.sheet_margin
+				const y2 = that.canvas.height - that.sizePolicy.sheet_margin
 				ctx.moveTo(x, y1)
 				ctx.lineTo(x, y2)
 			}
@@ -109,7 +110,7 @@ export default class PhDefaultRenderPolicy {
 				if (!text)
 					text = ""
 				ctx.fillText(text, that.sizePolicy.cell_inner_margin + pos.x,
-					pos.y + that.fontPolicy.font_size / 2 + that.sizePolicy.sheet_margin + that.sizePolicy.cell_inner_margin, pos.w, pos.h)
+					pos.y + that.fontPolicy.font_size + that.sizePolicy.cell_inner_margin, pos.w, pos.h)
 			})
 		})
 

@@ -1,10 +1,10 @@
 <template>
-	<div class="excel_container">
-		<div ref="viewport" @click="focusHandler" class="viewport">
-			<div class="schemas">
-				<div class="schema-item" @click="sortHandler" v-for="(item,index) in datasource.cols" :key="index+'schema'">{{item}}</div>
-			</div>
-			<div class="body" :style="{height: viewHeight+'px'}">
+	<div class="excel-container">
+		<div class="schemas">
+			<header-item v-for="(item, index) in datasource.cols" :title="item"/>
+		</div>
+		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight+'px'}">
+			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
 				<div ref="select" class="row-select"></div>
 				<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
@@ -34,7 +34,7 @@ export default {
 		}
 	},
 	components: {
-
+		headerItem:require('./bp-excel-header.vue').default
 	},
 	props: {
 		isNeedKeyBoardEvent: {
@@ -85,7 +85,7 @@ export default {
 				this.datasource, this.palettePolicy,
 				this.fontPolicy, this.page_size,
 				this.$refs.hidden,
-				true
+				false
 			)
 		}
 	},
@@ -97,7 +97,6 @@ export default {
 			else
 				return null;
 		},
-
 		focusHandler(event) {
 			if (this.isNeedKeyBoardEvent) {
 				this.$refs.hidden.focus()
@@ -182,7 +181,7 @@ export default {
 };
 </script>
 <style lang="scss">
-	.excel_container {
+	.excel-container {
 		.viewport {
 			overflow-x: auto;
 			position: relative;
@@ -192,20 +191,8 @@ export default {
 
 		}
 		.schemas {
-			height: 24px;
 			display: flex;
-			margin-left: 10px;
-			.schema-item {
-				height: 24px;
-				// min-width: 80px;
-				min-width: 118px;
-				display: flex;
-				justify-content: center;
-				background: #F0F0F0;
-				border: 1px solid #CFCFCF;
-				// padding: 0 5px;
-				overflow: hidden;
-			}
+			margin-left: 0px;
 		}
 		.canvas {
 			// margin-top: 46px;
