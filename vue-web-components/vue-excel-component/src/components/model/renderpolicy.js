@@ -110,7 +110,7 @@ export default class PhDefaultRenderPolicy {
 				if (!text)
 					text = ""
 				ctx.fillText(text, that.sizePolicy.cell_inner_margin + pos.x,
-					pos.y + that.fontPolicy.font_size / 2 + that.sizePolicy.sheet_margin + that.sizePolicy.cell_inner_margin, pos.w, pos.h)
+					pos.y + that.fontPolicy.font_size + that.sizePolicy.cell_inner_margin, pos.w, pos.h)
 			})
 		})
 

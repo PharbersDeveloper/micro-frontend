@@ -98,7 +98,6 @@ export default {
 			else
 				return null;
 		},
-
 		focusHandler(event) {
 			if (this.isNeedKeyBoardEvent) {
 				this.$refs.hidden.focus()
@@ -195,7 +194,7 @@ export default {
 		.schemas {
 		/*	height: 24px;*/
 			display: flex;
-			margin-left: 10px;
+			margin-left: 0px;
 		/*	.schema-item {*/
 		/*		height: 24px;*/
 		/*		// min-width: 80px;*/
