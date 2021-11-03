@@ -21,7 +21,7 @@
                 <div class="select-area">
                     <span class="title">Upload to connection</span>
                     <bp-select-vue src="https://www.pharbers.com/public/icon_drop.svg" :choosedValue="selectParam">
-                        <bp-select-option @click="changeSelect">本集群</bp-select-option>
+                        <bp-option-vue @click="changeSelect">本集群</bp-option-vue>
                     </bp-select-vue>
                 </div>
             </div>
