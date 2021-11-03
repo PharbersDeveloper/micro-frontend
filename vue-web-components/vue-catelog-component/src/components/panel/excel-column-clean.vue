@@ -61,7 +61,7 @@ import bpButton from '../../../../vue-basic-component/src/components/bp-button.v
 import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import PhDataSource from '../model/datasource'
+import PhDataSource from '../model/data'
 
 export default {
     data() {
