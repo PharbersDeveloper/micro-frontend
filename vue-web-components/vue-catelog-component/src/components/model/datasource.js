@@ -1,7 +1,8 @@
 
 export default class PhDataSource {
-    constructor(id, adapter) {
+    constructor(id, tmpname, adapter) {
         this.id = id
+        this.tmpname = tmpname
         this.data = []
         this.sort = {}
         this.filter = {}
@@ -27,10 +28,11 @@ export default class PhDataSource {
         let that = this
         const url = "https://apiv2.pharbers.com/schemaexplorer"
         const accessToken = ele.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
+        console.log(this.tmpname)
         let body = {
             "project":"max",
             // "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
-            "tempfile": ele.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
+            "tempfile": this.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
             "sheet":"",
             "out_number": 10
         }
@@ -55,7 +57,6 @@ export default class PhDataSource {
             datas.schema.forEach((item, index) => {
                 obj[item] = element[index]
             })
-            console.log(obj)
             result.push(obj)
         })
         console.log(result)

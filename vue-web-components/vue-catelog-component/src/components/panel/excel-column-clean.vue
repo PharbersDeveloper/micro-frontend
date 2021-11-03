@@ -74,7 +74,7 @@ export default {
             yes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Yes.png",
             manual: true,
             scriptValue: "手动映射",
-            excelDatasource: new PhDataSource('1')
+            excelDatasource: null
         }
     },
     components: {
@@ -97,13 +97,9 @@ export default {
             })
         }
     },
-    async created() {
-        console.log(this.excelDatasource)
-        let result = await this.getExcelData()
-        let datas = result.length > 0 ? result[0] : []
-        this.excelDatasource.data = datas.data
-        this.excelDatasource.schema = []
-        console.log(result)
+    created() {
+        console.log(this.allData.tmpname)
+        this.excelDatasource = new PhDataSource('2', this.allData.tmpname)
     },
     methods: {
         getCookie(name) {
