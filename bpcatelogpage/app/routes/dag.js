@@ -28,15 +28,6 @@ export default class DagRoute extends Route {
 		numShow.notebook = notebooks ? notebooks.length : 0
 		numShow.dashBoard = dashBoards ? dashBoards.length : 0
 		numShow.wiki = wiki ? wiki.length : 0
-        // let executions = this.store.query( "execution", { "filter[projectExecution]": params.project_id, "page[limit]": limit, "page[offset]": page * limit} )
-		// await Promise.all([dagDetail,executions])
-
-
-		// let executionsIdArr = dagDetail.hasMany('executions').ids()
-		// let ids = [
-		// 	...new Set(executionsIdArr.reduce((acc, val) => acc.concat(val), [])),
-		// ];
-		// let executions = await this.store.query('execution', { 'ids[]': ids });
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){
                 this.loadingService.loading.style.display = 'none'

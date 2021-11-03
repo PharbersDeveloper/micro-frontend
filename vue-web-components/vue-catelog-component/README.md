@@ -15,6 +15,14 @@
 ### Project setup
 ```
 npm install
+
+cd vue-basic-component
+
+yarn link
+
+cd vue-catelog-component
+
+yarn link vue-components
 ```
 
 ### Compiles and hot-reloads for development

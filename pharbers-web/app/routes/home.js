@@ -14,7 +14,7 @@ export default class HomeRoute extends Route {
     beforeModel() {
 		this.loadingService.loading.style.display = 'inline-block'
     }
-    model() {
+    async model() {
         let lang = localStorage.getItem('lang')
         if (lang === "中文") {
             lang = 1

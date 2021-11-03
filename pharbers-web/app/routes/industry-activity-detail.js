@@ -17,7 +17,7 @@ export default class IndustryActivityDetailRoute extends Route {
     // beforeModel() {
     //     this.controllerFor('application').set('inverse', true);
     // }
-    model(params) {
+    async model(params) {
         let lang = localStorage.getItem('lang');
         if (lang === '中文') {
             lang = 1;
