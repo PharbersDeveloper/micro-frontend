@@ -42,7 +42,7 @@ export default class DataSetComponent extends Component {
                     //上传成功
                     let res = JSON.parse(request.responseText)
                     if(res.tmpname) {
-                        this.updateDataset(file, property, projectName, res,projectId)
+                        this.updateDataset(file, property, projectName, res, projectId)
                     }
                 }
             };
@@ -132,7 +132,7 @@ export default class DataSetComponent extends Component {
                         console.log(project_files_status)
                     }
                     that.loadingService.loading.style.display = 'none'
-                    that.router.transitionTo( '/excel-clean' )
+                    that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
                 } else if(new Date().getTime() - startTime >= 60000) {
                     clearInterval(dagStatusInt); //循环结束
 					alert("超时，连接终止！")

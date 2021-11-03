@@ -5,14 +5,23 @@ import { inject as service } from '@ember/service';
 
 export default class ExcelCleanRoute extends Route {
     @service('loading') loadingService;
-
-	async model() {
+	queryParams = {
+		projectName: {
+			refreshModel: true
+		},
+		tmpname: {
+			refreshModel: true
+		}
+    }
+	async model(params) {
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){
                 this.loadingService.loading.style.display = 'none'
             }
         }
 		return RSVP.hash( {
+			projectName: params.projectName,
+			tmpname: params.tmpname,
 			_isVue: true
 		} )
 	}

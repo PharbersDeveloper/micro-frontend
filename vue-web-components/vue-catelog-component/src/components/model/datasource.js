@@ -29,7 +29,8 @@ export default class PhDataSource {
         const accessToken = ele.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
         let body = {
             "project":"max",
-            "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
+            // "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
+            "tempfile": ele.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
             "sheet":"",
             "out_number": 10
         }
