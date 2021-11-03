@@ -20,4 +20,5 @@ Router.map(function () {
   this.route('overview');
   this.route('dataset');
   this.route('excel-clean');
+  this.route('excel-handler');
 });

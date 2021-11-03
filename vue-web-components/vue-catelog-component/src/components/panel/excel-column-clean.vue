@@ -4,7 +4,7 @@
             <div class="project_name_header">
                 <p class="project_name">{{allData.projectName}}</p>
             </div>
-             <div class="project_name_header heaber_opt">
+			<div class="project_name_header heaber_opt">
                 <p class="project_name new_upload">New Uploaded File Dataset</p>
                 <bp-button text="运行" class="run"></bp-button>
             </div>
@@ -61,7 +61,7 @@ import bpButton from '../../../../vue-basic-component/src/components/bp-button.v
 import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import PhDataSource from '../model/datasource'
+import PhDataSource from '../model/data'
 
 export default {
     data() {
@@ -74,7 +74,7 @@ export default {
             yes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Yes.png",
             manual: true,
             scriptValue: "手动映射",
-            excelDatasource: new PhDataSource('1')
+            excelDatasource: null
         }
     },
     components: {
@@ -92,40 +92,17 @@ export default {
                     {id:1,name:'Data_0001'},
                     {id:2,name:'Data_0002'}
                 ],
-                projectInfo: '2020.1 - 2021.12 Pfizer raw data'
+                projectInfo: '2020.1 - 2021.12 Pfizer raw data',
+                tmpname: ''
             })
         }
     },
-    async created() {
-        console.log(this.excelDatasource)
-        let result = await this.getExcelData()
-        let datas = result.length > 0 ? result[0] : []
-        this.excelDatasource.data = datas.data
-        this.excelDatasource.schema = []
-        console.log(result)
+    created() {
+        let uriParam = window.location.href
+        let tmpname = uriParam.split("tmpname=")[1]
+        this.excelDatasource = new PhDataSource('2', tmpname)
     },
     methods: {
-        async getExcelData() {
-            const accessToken = this.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
-            let body = {
-                "project":"max",
-                "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
-                "sheet":"",
-                "out_number":100
-            }
-            let options = {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-Type": "application/vnd.api+json",
-                    "Accept": "application/vnd.api+json",
-                    "Authorization": accessToken
-                },
-                body:JSON.stringify(body)
-            }
-            let url = "https://apiv2.pharbers.com/schemaexplorer"
-            return await fetch(url, options).then(res => res.json())
-        },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
