@@ -126,7 +126,7 @@ export default {
 }
 .upload_dataset_container {
     width: 100vw;
-    height: 100vh;
+    // height:100vh;
     border: 2px solid #979797;
     .heaber_opt {
         display: flex;
@@ -134,6 +134,7 @@ export default {
         align-items: center;
     }
     .content_container {
+		// width: 100vw;
         display: flex;
         background: #f7f7f7;
         .icon_dialog {
@@ -141,12 +142,10 @@ export default {
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            height: calc(100vh - 110px);
+            height: calc(100vh - 104px);
             padding: 120px 0;
-            width: 600px;
-            margin-left: 100px;
-            // margin-top: 100px;
-            // margin-left: 300px;
+            width: 500px;
+            margin-left: 20px;
             .center-area {
                 display: flex;
                 align-items: center;
@@ -284,6 +283,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+		margin-right: 10px;
     }
     .project_name_header {
         height: 50px;
@@ -303,14 +303,14 @@ export default {
         }
     }
     .excel_area {
-        width: 100%;
         height: calc(100vh - 110px);
         background: #f7f7f7;
         padding-top: 20px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        padding: 60px;
+        padding: 30px;
+		margin-left: 5px;
         .area {
             // margin: 0 auto;
             width: 1400px;
