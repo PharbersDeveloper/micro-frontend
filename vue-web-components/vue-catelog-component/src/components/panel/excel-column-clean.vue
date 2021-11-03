@@ -41,13 +41,13 @@
                     <div class="area">
                         <!-- <p class="file_name">文件名称</p> -->
                         <div class="excel">
-                            <bp-excel viewHeight="25vh"></bp-excel>
+                            <bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10"></bp-excel>
                         </div>
                     </div>
                     <div class="area column_clean">
                         <!-- <p class="file_name">列清洗</p> -->
                         <div class="excel">
-                            <bp-excel viewHeight="25vh"></bp-excel>
+                            <bp-excel viewHeight="25vh" :page_size="10"></bp-excel>
                         </div>
                     </div>
                 </div>
@@ -61,6 +61,8 @@ import bpButton from '../../../../vue-basic-component/src/components/bp-button.v
 import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import PhDataSource from '../model/datasource'
+
 export default {
     data() {
         return {
@@ -71,7 +73,8 @@ export default {
             no_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/NO.png",
             yes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Yes.png",
             manual: true,
-            scriptValue: "手动映射"
+            scriptValue: "手动映射",
+            excelDatasource: new PhDataSource('1')
         }
     },
     components: {
@@ -93,7 +96,43 @@ export default {
             })
         }
     },
+    async created() {
+        console.log(this.excelDatasource)
+        let result = await this.getExcelData()
+        let datas = result.length > 0 ? result[0] : []
+        this.excelDatasource.data = datas.data
+        this.excelDatasource.schema = []
+        console.log(result)
+    },
     methods: {
+        async getExcelData() {
+            const accessToken = this.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
+            let body = {
+                "project":"max",
+                "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
+                "sheet":"",
+                "out_number":100
+            }
+            let options = {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/vnd.api+json",
+                    "Accept": "application/vnd.api+json",
+                    "Authorization": accessToken
+                },
+                body:JSON.stringify(body)
+            }
+            let url = "https://apiv2.pharbers.com/schemaexplorer"
+            return await fetch(url, options).then(res => res.json())
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         selectScript(data) {
             if(data) {
                 this.manual = true
@@ -112,7 +151,6 @@ export default {
             this.showDialog = false;
         }
     }
-      
 }
 </script>
 
@@ -330,6 +368,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                // overflow: auto;
             }
         }
         .column_clean {
