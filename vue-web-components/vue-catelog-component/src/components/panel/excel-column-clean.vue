@@ -99,7 +99,9 @@ export default {
     },
     created() {
         console.log(this.allData.tmpname)
-        this.excelDatasource = new PhDataSource('2', this.allData.tmpname)
+        let uriParam = window.location.href
+        let tmpname = uriParam.split("tmpname=")[1]
+        this.excelDatasource = new PhDataSource('2', tmpname)
     },
     methods: {
         getCookie(name) {
