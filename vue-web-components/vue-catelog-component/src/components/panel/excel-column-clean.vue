@@ -4,7 +4,7 @@
             <div class="project_name_header">
                 <p class="project_name">{{allData.projectName}}</p>
             </div>
-             <div class="project_name_header heaber_opt">
+			<div class="project_name_header heaber_opt">
                 <p class="project_name new_upload">New Uploaded File Dataset</p>
                 <bp-button text="运行" class="run"></bp-button>
             </div>
@@ -98,7 +98,6 @@ export default {
         }
     },
     created() {
-        console.log(this.allData.tmpname)
         let uriParam = window.location.href
         let tmpname = uriParam.split("tmpname=")[1]
         this.excelDatasource = new PhDataSource('2', tmpname)

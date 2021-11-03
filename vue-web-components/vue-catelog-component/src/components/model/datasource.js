@@ -1,8 +1,12 @@
 
 export default class PhDataSource {
-    constructor(id, tmpname, adapter) {
+    constructor(id, tmpname, firstSkipValue, nextSkipValue, sheet, par, adapter) {
         this.id = id
+        this.par = par
         this.tmpname = tmpname
+        this.nextSkipValue = nextSkipValue
+        this.firstSkipValue = firstSkipValue
+        this.sheet = sheet
         this.data = []
         this.sort = {}
         this.filter = {}
@@ -33,8 +37,10 @@ export default class PhDataSource {
             "project":"max",
             // "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
             "tempfile": this.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
-            "sheet":"",
-            "out_number": 10
+            "sheet": this.sheet || '',
+            "out_number": 10,
+            "skip_first": this.firstSkipValue || 1,
+            "skip_next": this.nextSkipValue || -1
         }
         let options = {
             method: "POST",
@@ -47,7 +53,15 @@ export default class PhDataSource {
             body:JSON.stringify(body)
         }
         let sheets =  await fetch(url, options).then(res => res.json())
+        let sheetArray = []
+        sheets.forEach(item => {
+            sheetArray.push(item.sheet)
+        })
+        this.par.sheetArr = sheetArray //单选选项
+        this.par.sheet = this.par.sheetArr[0] //默认选中
+        //表格数据
         let datas = sheets.length > 0 ? sheets[0] : []
+        //表头
         that.schema = datas.schema
         that.cols = datas.schema
         let obj = {}
