@@ -5,7 +5,10 @@
         </div>
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
-            <button text="运行" class="run" @click="linkToPage">创建</button>
+            <div class="project-actions">
+                <button text="运行" class="run" @click="createDataSetIndex">直接导入数据集</button>
+                <button text="运行" class="run" @click="linkToPage">使用高级映射</button>
+            </div>
         </div>
         <div class="content">
             <div class="eh-title">
@@ -110,6 +113,24 @@ export default {
             }
             this.$emit('event', event)
         },
+        createDataSetIndex() {
+            const event = new Event("event")
+            event.args = {
+                callback: "createDataSetIndex",
+                element: this,
+                param: {
+                    "fileId": this.tmpname,
+                    "skipValue": this.firstSkipValue,
+                    "jumpValue": this.nextSkipValue,
+                    "fileType": "xlsx",
+                    "fileSheet": this.sheet,
+                    "fileName": "文件真实的名字",
+                    "isAppend": false,
+                    "destination": "DataSetName"
+                }
+            }
+            this.$emit('event', event)
+        },
         skip(data) {
             // this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
             this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
@@ -165,6 +186,11 @@ export default {
             }
             .new_upload {
                 font-size: 14px;
+            }
+
+            .project-actions {
+                display: flex;
+                flex-direction: row;
             }
         }
         .content {

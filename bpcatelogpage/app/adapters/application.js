@@ -144,7 +144,6 @@ export default DS.JSONAPIAdapter.extend( {
 		const config = {
 			accessKey: 'AKIAWPBDTVEAPOX3QT6U',
 			secretKey: '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',
-			sessionToken: '',
 			region: 'cn-northwest-1',
 			sessionToken: "",
 			apiKey: undefined,
@@ -391,7 +390,8 @@ export default DS.JSONAPIAdapter.extend( {
 		return {
 			"Accept": "application/vnd.api+json",
 			"Content-Type": "application/vnd.api+json",
-			"Authorization": this.cookies.read( "access_token" )
+			// "Authorization": this.cookies.read( "access_token" )
+			"Authorization": "5a8a4b460be6e51b2ea202f8b0022d7aaed117816f617fbd65a87c8b149222c0"
 		}
 		// return request.headers
 
