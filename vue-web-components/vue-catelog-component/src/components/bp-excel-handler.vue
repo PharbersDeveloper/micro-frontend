@@ -126,7 +126,8 @@ export default {
                     "fileSheet": this.sheet,
                     "fileName": "文件真实的名字",
                     "isAppend": false,
-                    "destination": "DataSetName"
+                    "destination": "DataSetName",
+                    "version": "version" // 需要自己加上
                 }
             }
             this.$emit('event', event)
