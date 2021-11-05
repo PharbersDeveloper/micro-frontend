@@ -71,9 +71,9 @@
                                     <img :src="dropDownIcon" alt="">
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
-                                  <div class="label_name" v-for="(item,index) in allData.dss.label" :key="index">
+                                  <div class="label_name" v-for="(item,index) in allData.dss" :key="index">
                                       <span></span>
-                                      <div class="tags_name">{{item}}</div>
+                                      <div class="tags_name" v-for="(i,inx) in item.label" :key="inx">{{i}}</div>
                                   </div>
                                   <div class="management">
                                       <div class="manage_label" @click="deleTagsShow">管理标签</div>
@@ -94,7 +94,9 @@
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{item.name}}</p>
-                                <p class="tag_bg" v-for="(item,index) in allData.dss.label" :key="index">{{item}}</p>
+                                <p v-for="(item,index) in allData.dss" :key="index">
+                                    <span class="tag_bg" v-for="(i,inx) in item.label" :key="inx">{{i}}</span>
+                                </p>
                             </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
@@ -191,7 +193,7 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    // {projectId:1,name:'Data_0001',label: 'llll'}
+                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']}
                 ]
                 // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
