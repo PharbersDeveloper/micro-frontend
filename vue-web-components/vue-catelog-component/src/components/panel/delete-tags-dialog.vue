@@ -4,28 +4,31 @@
             <div class="dialog_area">
                <div class="header">
                    <img :src="label_icon" class="label" alt="">
-                   为 2 个数据集添加标签
+                   管理标签
                </div>
                <div class="prompt">
                    <img :src="search_icon" class="search" alt="">
-                   <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter="submit">
-                   <p class="tags_name">标签名</p>
-                   <!-- <span class="useing">正在使用</span> -->
+                   <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter.prevent="submit" >
+
+                   <span class="tags_name">标签名</span>
+                   <span class="useing">正在使用</span>
                    <div class="tags" v-for="(item,index) in searchData" :key="index">
-                       <input type="checkbox" class="checkout">
                        <span class="round"></span>
-                       <p class="create_tags">{{item}}</p>
-                       <!-- <span class='num_tags'>1</span> -->
+                       <input type="text" :value="item" class="deleteTags" @keyup.enter.prevent="sub" ref="input">
+                       <span class='num_tags'>0</span>
+                       <span class='bgc_tags' @click="deleteTag(index)">
+                           <img :src="delete_icon" alt="" class="img_tags">
+                       </span>
                    </div>
-                   <div class="create" v-if="searchData.length == 0 " @click="addTags" >
+                   <div class="create" v-if="searchData.length == 0 " @click="addTags">
                         <img :src="add_icon" alt="" class="add">
                         <p>Create《{{searchValue}}》</p>
                         <img :src="enter_icon" alt="" class="enter">
-                    </div>
+                   </div>
                </div>
               <div class="btn">
                        <button class="cancel" @click="close">取消</button>
-                       <button class="save" @click="save">保存</button>
+                       <button class="save">保存</button>
               </div>
             </div>
         </div>
@@ -38,17 +41,19 @@ export default {
         return{
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
+            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
             enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
-            // tagList: [],
+            // tagList: ['lalalal','12345','nxjksdcjk','啦啦啦啦'],
             searchValue: '', 
-            color: ['#ff5252','#a2ff08','#fff99d','#b478f0','#38a691','#fca91c','#c7c7c7','#75ffe8','#ef69bf','#5354ec','#acacff','#ffa7a7']
+            ent: false
+
         }
     },
     props: {
         tags: {
             type: Array,
-            default:() => ['name','description','啦啦啦']
+            default: () => ['name','description','啦啦啦']
         }
     },
     computed: {
@@ -65,22 +70,24 @@ export default {
         }
     },
     methods: {
-        save() {
-            this.tags.push(this.searchValue)
-        },
         close() {
-            this.$emit('closeCreateDialog');
+            this.$emit('closeDeleteTags');
+        },
+        sub() {
+            this.$refs.input.disabled = true;
+            console.log(this.$refs.input);
+        },
+        deleteTag(index) {
+            this.tags.splice(index,1)
         },
         addTags() {
             this.tags.push(this.searchValue)
             this.searchValue = ''
-            console.log('huiche');
         },
         submit() {
             this.tags.push(this.searchValue)
             this.searchValue = ''
-            // sessionStorage.setItem('json',JSON.stringify(this.tagList))
-            console.log(this.tagList);
+            console.log('回车');
         }
     }
 }
@@ -180,20 +187,6 @@ export default {
         border: 0;
     }
 }
-.useing {
-    color: #111;
-    font-size: 12px;
-    font-weight: 600;
-    margin-left: 27px;
-    margin-top: 10px;
-    position: absolute;
-    right: 80px;
-    top: 105px;
-}
-.num_tags {
-    position: absolute;
-    right: 100px;
-}
 .cancel {
     margin-right: 20px;
     // background-color:#DB4D71;
@@ -247,6 +240,53 @@ export default {
 }
 .create:hover {
     background-color: #e8e8e8;
+    cursor: pointer;
+}
+.deleteTags {
+    display: inline-block;
+    width: 200px;
+    height: 25px;
+    padding-left: 10px;
+    margin-left: 5px;
+    border-style: none;
+    // outline: none;
+}
+.deleteTags:hover {
+    border: 1px solid #ddd;
+    // background-color: #000;
+}
+.useing {
+    color: #111;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 27px;
+    margin-top: 10px;
+    position: absolute;
+    right: 80px;
+}
+.num_tags {
+    position: absolute;
+    right: 100px;
+    color: #ddd;
+}
+.img_tags {
+    width: 13px;
+    height: 13px;
+    // position: absolute;
+    // right: 70px;
+    // margin-top: 5px;
+}
+.bgc_tags {
+    width: 20px;
+    height: 20px;
+    padding-left: 4px;
+    // background-color: pink;
+    position: absolute;
+    right: 50px;
+    margin-top: 3px;
+}
+.bgc_tags:hover {
+    background-color:#f9e3e5;
     cursor: pointer;
 }
 </style>
