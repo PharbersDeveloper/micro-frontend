@@ -336,6 +336,7 @@ export default {
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 .bg {
     background: #dfe7ff;
@@ -405,7 +406,8 @@ export default {
             .upload_top {
                 height: 100px;
                 border-bottom: 1px solid #dddddd;
-                padding: 20px;
+                padding-left: 20px;
+                padding-top: 20px;
                 background: #f2f2f2;
 
                 .selected_search {
