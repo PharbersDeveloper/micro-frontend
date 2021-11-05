@@ -3,7 +3,8 @@
         <div class="clear_dialog_container">
             <div class="dialog_area">
                <div class="header">
-                   删除数据集
+                   <img :src="model_err" alt="">
+                   <p class="clear_data">删除数据集</p>
                </div>
                <div class="prompt">
                    确定删除xxx数据吗?
@@ -17,6 +18,11 @@
 
 <script>
 export default {
+    data() {
+        return {
+            model_err: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/modal+header+error.svg"
+        }
+    },
     methods: {
         close() {
             this.$emit('closeDeleteDialog');
@@ -52,10 +58,23 @@ export default {
     transform: translate(-50%,-50%)
 }
 .header {
+    display: flex;
+    position: relative;
     height: 45px;
     border-bottom: 1px solid #000;
-    line-height: 45px;
-    padding-left: 30px;
+    // line-height: 45px;
+    // padding-left: 30px;
+    img {
+        position: absolute;
+        top: 17px;
+        left: 17px;
+        width: 20px;
+        height: 20px;
+    }
+    .clear_data {
+        margin-left: 50px;
+    }
+   
 }
 .prompt {
     height: 180px;
