@@ -87,7 +87,7 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div>
+                            <!-- <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div> -->
                             <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
                                 <input type="checkbox" v-model="item.checked" ref="data">
                                 <span class="dataset_icon">
