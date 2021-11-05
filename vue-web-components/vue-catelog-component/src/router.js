@@ -10,12 +10,13 @@ import project from './components/panel/project-list.vue'
 import dataListHome from './components/panel/data-list-home.vue'
 import uploadDataset from './components/panel/upload-dataset.vue'
 import selectFile from './components/panel/select-file.vue'
-// import fileContent from './components/panel/file-content.vue'
+import excelHandler from './components/bp-excel-handler'
 import nextDialog from './components/panel/next-dialog.vue'
 import excelColumnClean from './components/panel/excel-column-clean'
 import clearDatasetDialog from './components/panel/clear-dataset-dialog.vue'
 import createTagsDialog from './components/panel/create-tags-dialog.vue'
 import deleteTagsDialog from './components/panel/delete-tags-dialog.vue'
+// import fileContent from './components/panel/file-content.vue'
 
 Vue.use(Router)
 
@@ -60,7 +61,7 @@ export default new Router({
             component: project
         },
         {
-            path: '/data-list-home', 
+            path: '/data-list-home',
             name: 'dataListHome',
             component: dataListHome
         },
@@ -70,12 +71,12 @@ export default new Router({
             component: uploadDataset
         },
         {
-            path: '/select-file', 
+            path: '/select-file',
             name: 'selectFile',
             component: selectFile
         },
         {
-            path: '/next-dialog', 
+            path: '/next-dialog',
             name: 'nextDialog',
             component: nextDialog
         },
@@ -95,9 +96,14 @@ export default new Router({
             component:createTagsDialog
         },
         {
-            path:'/delete-tags-dialog',
-            name:'deleteTagsDialog',
-            component:deleteTagsDialog
+            path: '/delete-tags-dialog',
+            name: 'deleteTagsDialog',
+            component: deleteTagsDialog
+        },
+        {
+            path: '/excel-handler',
+            name: 'excelHandler',
+            component: excelHandler
         }
     ]
 })

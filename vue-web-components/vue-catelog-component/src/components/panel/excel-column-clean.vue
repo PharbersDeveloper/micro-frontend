@@ -4,7 +4,7 @@
             <div class="project_name_header">
                 <p class="project_name">{{allData.projectName}}</p>
             </div>
-             <div class="project_name_header heaber_opt">
+			<div class="project_name_header heaber_opt">
                 <p class="project_name new_upload">New Uploaded File Dataset</p>
                 <bp-button text="运行" class="run"></bp-button>
             </div>
@@ -41,13 +41,13 @@
                     <div class="area">
                         <!-- <p class="file_name">文件名称</p> -->
                         <div class="excel">
-                            <bp-excel viewHeight="25vh"></bp-excel>
+                            <bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10"></bp-excel>
                         </div>
                     </div>
                     <div class="area column_clean">
                         <!-- <p class="file_name">列清洗</p> -->
                         <div class="excel">
-                            <bp-excel viewHeight="25vh"></bp-excel>
+                            <bp-excel viewHeight="25vh" :page_size="10"></bp-excel>
                         </div>
                     </div>
                 </div>
@@ -61,6 +61,8 @@ import bpButton from '../../../../vue-basic-component/src/components/bp-button.v
 import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import PhDataSource from '../model/data'
+
 export default {
     data() {
         return {
@@ -71,7 +73,8 @@ export default {
             no_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/NO.png",
             yes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Yes.png",
             manual: true,
-            scriptValue: "手动映射"
+            scriptValue: "手动映射",
+            excelDatasource: null
         }
     },
     components: {
@@ -89,11 +92,24 @@ export default {
                     {id:1,name:'Data_0001'},
                     {id:2,name:'Data_0002'}
                 ],
-                projectInfo: '2020.1 - 2021.12 Pfizer raw data'
+                projectInfo: '2020.1 - 2021.12 Pfizer raw data',
+                tmpname: ''
             })
         }
     },
+    created() {
+        let uriParam = window.location.href
+        let tmpname = uriParam.split("tmpname=")[1]
+        this.excelDatasource = new PhDataSource('2', tmpname)
+    },
     methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         selectScript(data) {
             if(data) {
                 this.manual = true
@@ -112,7 +128,6 @@ export default {
             this.showDialog = false;
         }
     }
-      
 }
 </script>
 
@@ -330,6 +345,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                // overflow: auto;
             }
         }
         .column_clean {

@@ -1,9 +1,11 @@
 <template>
 	<div class="excel-container">
-		<div class="schemas">
-			<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
+		<div class="schemas" style="width: 1000px" ref="schemas">
+			<div class="view" style="width: 3186px">
+				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
+			</div>
 		</div>
-		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}">
+		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '1000px'}" @scroll="scrollGet($event)">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
 				<div ref="select" class="row-select"></div>
@@ -90,6 +92,9 @@ export default {
 		}
 	},
 	methods: {
+		scrollGet (e) {
+			this.$refs.schemas.scrollLeft = e.target.scrollLeft
+		},
 		getCookie(name) {
 			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 			if (arr = document.cookie.match(reg))
@@ -194,6 +199,10 @@ export default {
 			display: flex;
 			margin-left: 0px;
 			margin-right: 10px;
+			overflow: hidden;
+			.view {
+				display: flex;
+			}
 		}
 		.canvas {
 			// margin-top: 46px;

@@ -1,10 +1,8 @@
 import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
-
-
-export default class ExcelCleanRoute extends Route {
-    @service('loading') loadingService;
+export default class ExcelHandlerRoute extends Route {
+	@service('loading') loadingService;
 	queryParams = {
 		projectName: {
 			refreshModel: true

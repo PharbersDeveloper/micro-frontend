@@ -14,7 +14,7 @@
         "comma-dangle": ["error", "never"] //不允许对象中出现结尾逗号
     },
     "parserOptions": {
-        "ecmaVersion": 6, //ECMAscript版本
+        "ecmaVersion": 8, //ECMAscript版本
         "sourceType": "module"
     }
 }
