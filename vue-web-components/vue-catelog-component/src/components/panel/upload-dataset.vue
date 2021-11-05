@@ -103,7 +103,7 @@
                     <div class="view_content" v-if="viewContent" >
                         <div class="project_name_view">
                             <span class="space"></span>
-                            <div v-for="item in allData.dss" :key="item.projectId">
+                            <div v-for="(item,index) in allData.dss" :key="index">
                                 <p class="project_name_info" v-if="ary.length == 1 && item.checked == true">
                                 {{item.name}}
                                 </p>
