@@ -26,6 +26,16 @@ export default class DatasetLstRoute extends Route {
 			}
 		}
 		return RSVP.hash( {
+			dataName: [
+				{
+					"id": "123456",
+					"name": "Max Test00"
+				},
+				{
+					"id": "7890J",
+					"name": "Max Test01"
+				}
+			],
 			_isVue: true
 		} )
 	}

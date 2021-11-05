@@ -48,32 +48,40 @@
                                 </div>
                         </div>
                         <div class="select_area">
-                                <!-- <img :src="descending_order" class="sorting"> -->
-                                <img :src="ascending_order" class="sorting">
-                                <p @click="nameShow">最近一次编辑
-                                    <img :src="dropDownIcon" alt="" class="drop_size">
-                                </p>
-                                <div class="name" v-if="nameShowDialog">
-                                    名称
-                                </div>
-                                <!-- <img :src="dropDownIcon" alt=""> -->
-                                <span class="dividing_line">|</span>
-                                <p @click="labelShow">标签
-                                    <img :src="dropDownIcon" alt="" class="drop_size">
-                                </p>
-                                <div class="label_selected" v-if="labelShowDialog">
-                                    <div class="label_name">
-                                        <span></span>
-                                        <div class="tags_name">lallaalla</div>
-                                    </div>
-                                    <div class="label_name">
-                                        <span class="green"></span>
-                                        <div class="tags_name">lallaalla</div>
-                                    </div>
-                                    <div class="management">
-                                        <div class="manage_label">管理标签</div>
-                                    </div>
-                                </div>
+                            <!-- <img :src="descending_order" class="sorting"> -->
+                            <img :src="ascending_order" class="sorting">
+                            <p @click="nameShow">最近一次编辑
+                                <img :src="dropDownIcon" alt="" class="drop_size">
+                            </p>
+                            <div class="name" v-if="nameShowDialog">
+                                名称
+                            </div>
+                            <!-- <img :src="dropDownIcon" alt=""> -->
+                            <span class="dividing_line">|</span>
+
+                            <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                                <bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
+                                <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
+                                <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
+                                <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
+                            </bp-select-vue>
+
+<!--                            <p @click="labelShow">标签-->
+<!--                                <img :src="dropDownIcon" alt="" class="drop_size">-->
+<!--                            </p>-->
+<!--                            <div class="label_selected" v-if="labelShowDialog">-->
+<!--                                <div class="label_name">-->
+<!--                                    <span></span>-->
+<!--                                    <div class="tags_name">lallaalla</div>-->
+<!--                                </div>-->
+<!--                                <div class="label_name">-->
+<!--                                    <span class="green"></span>-->
+<!--                                    <div class="tags_name">lallaalla</div>-->
+<!--                                </div>-->
+<!--                                <div class="management">-->
+<!--                                    <div class="manage_label">管理标签</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                       <div class="upload_bottom">
@@ -137,7 +145,7 @@ export default {
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/descending_order.png",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/ascending_order.png",
             showDialog: false,
-            state: '', 
+            state: '',
             editShow: false,
             viewContent: false,
             isActive: null,
@@ -145,7 +153,9 @@ export default {
             nameShowDialog: false,
             labelShowDialog: false,
             cleardialogshow: false,
-            deletedialogshow: false
+            deletedialogshow: false,
+            showSelectOptionParam: false,
+            closeTosts: false
         }
     },
     props: {
@@ -178,7 +188,19 @@ export default {
             }
         }
     },
+    mounted() {
+        let that = this
+        document.addEventListener("click", event => {
+            if(!that.showSelectOptionParam) {
+                that.closeTosts = !that.closeTosts
+            }
+            that.showSelectOptionParam = false
+        })
+    },
     methods: {
+        showSelectOption() {
+            this.showSelectOptionParam = true
+        },
         closeDeleteDialog() {
             this.deletedialogshow = false;
         },
@@ -191,7 +213,7 @@ export default {
         cleardialogopen(){
             this.cleardialogshow = true
         },
-        labelShow() { 
+        labelShow() {
             this.labelShowDialog = !this.labelShowDialog
         },
         nameShow() {
@@ -212,7 +234,7 @@ export default {
                 this.$nextTick(() => {
                     this.$refs.input.focus()
                     this.$refs.input.value = this.allData.projectInfo
-                }) 
+                })
             }
         },
         submit() {
@@ -229,8 +251,8 @@ export default {
         changeBg(e) {
             this.isActive = index
             this.viewContent = true
-        } 
-        
+        }
+
 
     }
 }
@@ -348,7 +370,7 @@ export default {
                         height: 30px;
                         outline:none;
                         padding-left: 18px;
-                       
+
                     }
                     img {
                         width: 30px;
@@ -356,7 +378,7 @@ export default {
                         border: 1px solid #dddddd;
                     }
                 }
-                
+
                 .process_area {
                     position: absolute;
                     top: 72px;
@@ -410,7 +432,7 @@ export default {
                     p {
                         font-family: PingFangSC-Medium;
                         font-size: 14px;
-                        color: #000000; 
+                        color: #000000;
                         font-weight: 600;
                     }
                 }
@@ -486,7 +508,7 @@ export default {
                                 background: #1bc2ac;
                                 margin-top: 8px;
                                 margin-right: 8px;
-                               
+
                             }
                             .green {
                                 background: #00a65a;
@@ -495,9 +517,9 @@ export default {
                                 font-size: 16px;
                                 margin-bottom: 5px;
                             }
-                           
+
                         }
-                        
+
                     }
                 }
             }
@@ -518,6 +540,7 @@ export default {
                     height: 80px;
                     border-bottom: 1px solid #979797;
                     padding: 30px 0 30px 20px;
+                    box-sizing: border-box;
                     .data_name {
                         margin-left: 40px;
                         font-family: PingFangSC-Medium;
@@ -525,8 +548,8 @@ export default {
                         color: #000000;
                         font-weight: 600;
                     }
-                    
-                    
+
+
                 }
             }
         }
@@ -590,7 +613,7 @@ export default {
                         font-size: 14px;
                         color: #000000;
                         font-weight: 600;
-                        
+
                     }
                     .data_tm_nm {
                         margin-left: 15px;
