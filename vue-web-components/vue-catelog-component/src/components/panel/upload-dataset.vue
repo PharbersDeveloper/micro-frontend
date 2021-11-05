@@ -71,9 +71,9 @@
                                     <img :src="dropDownIcon" alt="">
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
-                                  <div class="label_name" v-for="(item,index) in allData.dss" :key="index">
+                                  <div class="label_name" v-for="(item,index) in allData.dss.label" :key="index">
                                       <span></span>
-                                      <div class="tags_name">{{item.label}}</div>
+                                      <div class="tags_name">{{item}}</div>
                                   </div>
                                   <div class="management">
                                       <div class="manage_label" @click="deleTagsShow">管理标签</div>
@@ -87,14 +87,14 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <div class="data_content tip" v-if="searchData == ''">没有找到您要查询的文件</div>
+                            <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div>
                             <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
                                 <input type="checkbox" v-model="item.checked" ref="data">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{item.name}}</p>
-                                <p class="tag_bg" v-for="(item,index) in allData.dss" :key="index">{{item.label}}</p>
+                                <p class="tag_bg" v-for="(item,index) in allData.dss.label" :key="index">{{item}}</p>
                             </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
@@ -191,7 +191,7 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {projectId:1,name:'Data_0001',label: 'llll'}
+                    // {projectId:1,name:'Data_0001',label: 'llll'}
                 ]
                 // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
@@ -206,18 +206,9 @@ export default {
         bpOptionVue
     },
     computed: {
-        // all: {
-        //     get() {
-        //         return this.allData.dataName.every( item => item.checked === true )
-        //     },
-        //     set(newVal) {
-        //         this.allData.dataName.forEach(item => {
-        //             item.checked = newVal
-        //         })
-        //     }
-        // },
         searchData: function() {
             let searchValue = this.searchValue
+            this.state = 'search'
             if(searchValue) {
                 return this.allData.dss.filter(function(pro) {
                     return Object.keys(pro).some(function(key) {
@@ -310,19 +301,9 @@ export default {
             this.showDialog = !this.showDialog
         },
         changeBg(index) {
-            this.allData.dataName.forEach(item => {
-                if(item.id == index+1) {
-                    item.checked = !item.checked
-                    if(item.checked == true) {
-                        this.ary.push(item)
-                    }else if(item.checked == false) {
-                        this.ary.splice(this.ary.length-1,1)
-                    }
-                }
-            })
             // console.log(this.ary.length);
-            // this.viewContent = true
-            return this.ary
+            this.viewContent = true
+            // return this.ary
         }
     }
 }
