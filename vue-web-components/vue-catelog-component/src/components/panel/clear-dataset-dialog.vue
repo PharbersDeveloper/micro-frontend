@@ -6,11 +6,21 @@
                    <img :src="model_err" alt="">
                    <p class="clear_data">清除数据</p>
                </div>
-               <div class="prompt" v-for="item in allData.dataName" :key="item.id">
+               <!-- <div class="prompt" v-for="item in allData.dataName" :key="item.id">
                    确定清除 {{item.name}} 数据集中的数据吗?
+               </div> -->
+			    <div class="prompt" v-for="item in allData.dataName" :key="item.id">
+                   <p class="tip">确定清除以下数据集中的数据吗?</p>
+				   <p class="name">lalalal</p>
+				   <p class="name">lalalal</p>
+				   <p class="name">lalalal</p>
+				   <p class="name">lalalal</p>
+				   
                </div>
-               <button class="clear">清除</button>
-               <button @click="close">取消</button>
+               <div class="btn">
+				   <button class="clear">清除</button>
+               	   <button @click="close" class="cancel">取消</button>
+			   </div>
             </div>
         </div>
     </div>
@@ -48,6 +58,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+	padding: 0;
+	margin: 0;
+}
 .clear_dialog_container {
    height: 100vh;
     width: 100vw;
@@ -64,9 +78,10 @@ export default {
     align-items: center;
 }
 .dialog_area {
+	position: relative;
     width: 500px;
-    height: 287px;
-    border: 1px solid #000;
+    // height: 400px;
+    border: 1px solid #ddd;
     background-color: #fff;
     position: absolute;
     left: 50%;
@@ -77,37 +92,71 @@ export default {
     display: flex;
     position: relative;
     height: 45px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ddd;
     // line-height: 45px;
     // padding-left: 30px;
     img {
         position: absolute;
-        top: 17px;
-        left: 17px;
+        top: 14px;
+        left: 20px;
         width: 20px;
         height: 20px;
     }
     .clear_data {
+		line-height: 45px;
         margin-left: 50px;
     }
    
 }
 .prompt {
-    height: 180px;
-    line-height: 180px;
+    // height: 278px;
+	margin-top: 20px;
+    // line-height: 180px;
     text-align: center;
+	.tip {
+		// text-align: center;
+		font-weight: 500;
+	}
+	.name {
+		margin-top: 10px;
+		color: #db4d71;
+		font-size: 14px;
+
+	}
     
 }
-button {
-    width: 80px;
-    height: 32px;
-    position: relative;
-    left: 250px;
-    border: 0;
+.btn {
+	// position: absolute;
+	// right: 0;
+	// bottom: 0;
+	margin-left: 280px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	button {
+		border: 0;
+		width: 80px;
+    	height: 32px;
+	}
+	.clear {
+   		margin-right: 30px;
+   		background-color:#DB4D71;
+   		color: #fff;
+	}
+	.cancel {
+		border: 1px solid #eeedf7;
+		color: #8377cc;
+	}
 }
-.clear {
-    margin-right: 30px;
-    background-color:#DB4D71;
-    color: #fff;
-}
+// button {
+    
+//     position: absolute;
+//     right: 0;
+// 	bottom: 0;
+//     border: 0;
+// }
+// .clear {
+//     margin-right: 30px;
+//     background-color:#DB4D71;
+//     color: #fff;
+// }
 </style>

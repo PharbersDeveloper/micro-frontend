@@ -9,6 +9,7 @@
                <div class="prompt">
                    <img :src="search_icon" class="search" alt="">
                    <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter.prevent="submit" >
+
                    <span class="tags_name">标签名</span>
                    <span class="useing">正在使用</span>
                    <div class="tags" v-for="(item,index) in searchData" :key="index">
@@ -82,12 +83,11 @@ export default {
         addTags() {
             this.tags.push(this.searchValue)
             this.searchValue = ''
-            console.log('huiche');
         },
         submit() {
             this.tags.push(this.searchValue)
             this.searchValue = ''
-            console.log('huiche');
+            console.log('回车');
         }
     }
 }

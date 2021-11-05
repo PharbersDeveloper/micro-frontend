@@ -9,7 +9,7 @@
                     <div class="upload_top">
                         <div class="selected_search">
                            <div class="selected" v-if="ary.length > 0">
-                               <input type="checkbox" class="checkbox" v-model="all" ref="all">
+                               <input type="checkbox" class="checkbox" v-model="all" ref="all" @click="changeBg">
                                <span class="action">选项</span>
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
                                 <div class="drop_dialog" v-if="dropDialogShow">
@@ -54,18 +54,14 @@
                         </div> 
                         <div class="tag_selected">
                             <div class="sort">
-                                <img :src="ascending_order" alt="" >
-                                <!-- <img :src="descending_order" alt="" v-if="ascending" @click="sort('descending')"> -->
+                                <img :src="ascending_order" alt="" v-if="ascending" @click="sort('ascending')">
+                                <img :src="descending_order" alt="" v-if="descending" @click="sort('descending')">
                             </div>
                             <div class="down_sel" >
-                                <p class="sel" @click="nameShow">{{sel}}</p>
-                                <span class="drop_icon" @click="nameShow">
-                                    <img :src="dropDownIcon" alt="">
-                                </span>
-                                <div class="name" v-if="nameShowDialog" @click="changed">
-                                    <p>名称</p>
-                                    <!-- <p>最后一次编辑</p> -->
-                                </div>
+                                <bp-select-vue src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg" :choosedValue="scriptValue">
+                                    <bp-option-vue text="最后一次编辑" @click="selectScript(0)"></bp-option-vue>
+                                    <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
+                                </bp-select-vue>
                             </div>
                             <div class="line">|</div>
                             <div class="down_sel tags_down_sel" >
@@ -83,6 +79,7 @@
                                   </div>
                                 </div>
                             </div>
+                            <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
                                 <p>{{allData.dataName.length}} 条数据集</p>
                             </div>
@@ -90,6 +87,7 @@
                         
                     </div>
                       <div class="upload_bottom">
+                          <div class="data_content tip" v-if="searchData == ''">没有找到您要查询的文件</div>
                         <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
                             <input type="checkbox" v-model="item.checked" ref="data">
                             <span class="dataset_icon">
@@ -102,7 +100,7 @@
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="viewContent" >
+                    <div class="view_content" v-if="ary.length !== 0" >
                         <div class="project_name_view">
                             <span class="space"></span>
                             <div v-for="item in allData.dataName" :key="item.id">
@@ -149,7 +147,7 @@
                             </div>
                         </div> -->
                     </div>
-                    <p v-if="viewContent == false" class="click_look">单击对象查看详细信息</p>
+                    <p v-if="ary.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
         </div>
@@ -165,6 +163,8 @@ import clearDatasetDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {
@@ -183,17 +183,19 @@ export default {
             viewContent: false,
             isActive: null,
             dropDialogShow: false,
-            nameShowDialog: false,
             labelShowDialog: false,
             cleardialogshow: false,
             deletedialogshow: false,
             createTagsDialog: false,
             deleteTagsDia: false,
             searchValue: '',
-            ascending: false,
+            ascending: true,
+            descending: false,
             tags: ['name','description','啦啦啦'],
-            sel: '名称',
-            ary: []
+            ary: [],
+            checked: false,
+            manual: true,
+            scriptValue: "最近一次编辑"
         }
     },
     props: {
@@ -216,7 +218,9 @@ export default {
         clearDatasetDialog,
         clearDelete,
         createTagsDialog,
-        deleteTagsDialog
+        deleteTagsDialog,
+        bpSelectVue,
+        bpOptionVue
     },
     computed: {
         all: {
@@ -240,17 +244,31 @@ export default {
             }
             return this.allData.dataName
         }
+       
     },
     methods: {
-        sort() {
+        clearSearch() {
+            this.searchValue = ''
         },
-        // compare(property) {
-        //     return function(obj1,obj2) {
-        //         var a = obj1[property]
-        //         var b = obj2[property]
-        //         return b - a
-        //     }
-        // },
+        sort(val) {
+            if(val == 'ascending') {
+                this.ascending = false
+                this.descending = true
+            }else if (val == 'descending') {
+                this.descending = false
+                this.ascending = true
+            }
+        },
+        selectScript(data) {
+            if(data) {
+                console.log(data);
+                this.manual = true
+                this.scriptValue = "名称"
+            } else {
+                this.manual = false
+                this.scriptValue = "最近一次编辑"
+            }
+        },
         changed(e) {
             this.sel = e.target.innerHTML
             this.nameShowDialog = false
@@ -285,11 +303,6 @@ export default {
             this.dropDialogShow = false;
             this.nameShowDialog = false;
         },
-        nameShow() {
-            this.nameShowDialog = !this.nameShowDialog
-            this.labelShowDialog = false
-            this.dropDialogShow = false;
-        },
         dropShow() {
             this.dropDialogShow = !this.dropDialogShow
             this.nameShowDialog = false
@@ -301,40 +314,40 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        editInfo(val) {
-            if(val == 'edit') {
-                this.editShow = true
-                this.$nextTick(() => {
-                    this.$refs.input.focus()
-                    this.$refs.input.value = this.allData.projectInfo
-                }) 
-            }
-        },
-        submit() {
-            if(this.$refs.input.value == '') {
-                alert('不能为空')
-                return false
-            }else {
-                this.editShow = false
-                this.$nextTick(() => {
-                    this.allData.projectInfo = this.$refs.input.value
-                })
-            }
-        },
+        // editInfo(val) {
+        //     if(val == 'edit') {
+        //         this.editShow = true
+        //         this.$nextTick(() => {
+        //             this.$refs.input.focus()
+        //             this.$refs.input.value = this.allData.projectInfo
+        //         }) 
+        //     }
+        // },
+        // submit() {
+        //     if(this.$refs.input.value == '') {
+        //         alert('不能为空')
+        //         return false
+        //     }else {
+        //         this.editShow = false
+        //         this.$nextTick(() => {
+        //             this.allData.projectInfo = this.$refs.input.value
+        //         })
+        //     }
+        // },
         changeBg(index) {
             this.allData.dataName.forEach(item => {
                 if(item.id == index+1) {
                     item.checked = !item.checked
                     if(item.checked == true) {
                         this.ary.push(item)
+                    }else if(item.checked == false) {
+                        this.ary.splice(this.ary.length-1,1)
                     }
                 } 
             })
             // console.log(this.ary.length);
-            this.viewContent = true
+            // this.viewContent = true
             return this.ary
-            // console.log(e);
-            // this.isActive = index
             
         } 
     }
@@ -520,6 +533,14 @@ export default {
                     // height: 20px;
                     // border: 2px solid #111;
                     margin-left: 125px;
+                    .clear_sea {
+                        color: #3b99fc;
+                        font-size: 12px;
+                        margin-left: 20px;
+                        margin-top: 8px;
+                        // text-decoration: none;
+                        cursor: pointer;
+                    }
                     .sort {
                         width: 25px;
                         height: 25px;
@@ -532,8 +553,17 @@ export default {
                         color: #dddddd;
                     }
                     .down_sel {
+                        height: 30px;
                         display: flex;
-                        // width: 110px;
+                        width: 120px;
+                        font-size: 14px;
+                        /deep/.bp-select {
+                            height: 30px;
+                            background: #f2f2f2;
+                        }
+                        /deep/.bp-select:hover {
+                            background: #ddd;
+                        }
                         cursor: pointer;
                         // border-right: 1px solid #c0cfe4;
                         .sel {
@@ -562,8 +592,8 @@ export default {
                         // display: flex;
                             position: absolute;
                             top: 25px;
-                            left: 97px;
-                            width: 128px;
+                            left: 168px;
+                            width: 150px;
                             // height: 72px;
                             border: 1px solid #dddddd;
                             background: #fff;
@@ -571,16 +601,19 @@ export default {
                             z-index: 3333;
                             .management {
                                 margin-top: 5px;
-                                width: 128px;
+                                width: 150px;
                                 height: 30px;
                                 border-top: 1px solid #dddddd;
                                 .manage_label {
                                     font-size: 14px;
                                     // text-align: center;
                                     font-weight: 600;
-                                    margin-left: 25px;
+                                    margin-left: 40px;
                                     margin-top: 5px;
                                 }
+                        }
+                        .management:hover {
+                            background: #e6e6e6;
                         }
                     }
                      .label_name {
@@ -632,6 +665,7 @@ export default {
                     color: #000000;
                     font-weight: 500;
                 }
+                
                 .data_content:hover {
                     background-color: #f2f2f2;
                     cursor: pointer;
@@ -675,6 +709,14 @@ export default {
                         width: 168px;
                     }
                     
+                    
+                }
+                .tip {
+                    background: #f0edc5;
+                    color: #000;
+                    font-size: 14px;
+                    font-weight: 600;
+                    // height: 80px;
                     
                 }
             }
