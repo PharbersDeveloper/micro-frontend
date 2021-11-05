@@ -390,8 +390,7 @@ export default DS.JSONAPIAdapter.extend( {
 		return {
 			"Accept": "application/vnd.api+json",
 			"Content-Type": "application/vnd.api+json",
-			// "Authorization": this.cookies.read( "access_token" )
-			"Authorization": "5a8a4b460be6e51b2ea202f8b0022d7aaed117816f617fbd65a87c8b149222c0"
+			"Authorization": this.cookies.read( "access_token" )
 		}
 		// return request.headers
 

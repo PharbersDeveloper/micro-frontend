@@ -25,7 +25,7 @@
                </div>
               <div class="btn">
                        <button class="cancel" @click="close">取消</button>
-                       <button class="save">保存</button>
+                       <button class="save" @click="save">保存</button>
               </div>
             </div>
         </div>
@@ -65,6 +65,9 @@ export default {
         }
     },
     methods: {
+        save() {
+            this.tags.push(this.searchValue)
+        },
         close() {
             this.$emit('closeCreateDialog');
         },

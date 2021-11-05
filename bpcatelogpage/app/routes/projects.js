@@ -39,7 +39,8 @@ export default class ProjectsRoute extends Route {
 			},
 			body: JSON.stringify(body)
 		}
-		let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
+		// let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
+		let projects = this.store.query( "project", {"filter[owner]":"c89b8123-a120-498f-963c-5be102ee9082"})
 		let peekExecutions = this.store.peekAll("execution").filter(it => it)
 		let peekStep = this.store.peekAll("execution").filter(it => it)
 		let results = []
@@ -62,7 +63,7 @@ export default class ProjectsRoute extends Route {
 		} else {
 			results = await Promise.all([projects])
 		}
-		
+
 		//菜单栏个人信息
 		let name_show, company_name_show
 		if(this.cookies.read('account_id')) {
