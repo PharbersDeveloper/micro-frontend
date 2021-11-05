@@ -18,12 +18,13 @@ export default class DagComponent extends Component {
                 if(params.name == 'projects') {
                     uri = '/projects'
                 } else if(params.name == 'dataset') {
-                    uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
+                    // uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
+                    uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
                 }
                 //执行列表 分页
                 this.router.transitionTo( uri )
                 break
-            default: 
+            default:
                 console.log("other click event!")
         }
     }
