@@ -409,6 +409,7 @@ export default {
                 padding-left: 20px;
                 padding-top: 20px;
                 background: #f2f2f2;
+                box-sizing: border-box;
 
                 .selected_search {
                     display: flex;
