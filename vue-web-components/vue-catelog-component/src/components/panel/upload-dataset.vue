@@ -659,7 +659,7 @@ export default {
                         position: absolute;
                         top: 0;
                         right: 45px;
-                        margin-left: 700px;
+                        // margin-left: 700px;
 
                         p {
                             font-size: 14px;
