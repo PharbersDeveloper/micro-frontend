@@ -36,7 +36,7 @@ export default class DatasetLstComponent extends Component {
 	get calAllData() {
 		this.args.model._isVue = true
 		this.args.model.dss.forEach(iter => {
-			iter.label = JSON.parse(iter.label)
+			iter.label = eval(iter.label)
 		})
 		return this.args.model
 	}
