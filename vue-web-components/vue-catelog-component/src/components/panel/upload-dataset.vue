@@ -86,16 +86,16 @@
                             </div>
                         </div>
                     </div>
-                      <div class="upload_bottom">
-                          <div class="data_content tip" v-if="searchData == ''">没有找到您要查询的文件</div>
-                        <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
-                            <input type="checkbox" v-model="item.checked" ref="data">
-                            <span class="dataset_icon">
-                                <img :src="dataset_icon" alt="">
-                            </span>
-                            <p class="data_name">{{item.name}}</p>
-                            <p class="tag_bg" v-for="(item,index) in tags" :key="index">{{item}}</p>
-                        </div>
+                        <div class="upload_bottom">
+                            <div class="data_content tip" v-if="searchData == ''">没有找到您要查询的文件</div>
+                            <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
+                                <input type="checkbox" v-model="item.checked" ref="data">
+                                <span class="dataset_icon">
+                                    <img :src="dataset_icon" alt="">
+                                </span>
+                                <p class="data_name">{{item.name}}</p>
+                                <p class="tag_bg" v-for="(item,index) in tags" :key="index">{{item}}</p>
+                            </div>
                         <div class="word" v-if="allData.dataName == ''">当前项目无数据</div>
                     </div>
                 </div>
@@ -272,6 +272,19 @@ export default {
             this.sel = e.target.innerHTML
             this.nameShowDialog = false
         },
+        closeDeleteTags() {
+            this.deleteTagsDia = false;
+        },
+        deleTagsShow() {
+            this.deleteTagsDia = true
+        },
+        createTagsOpen() {
+            this.createTagsDialog = true;
+        },
+        closeCreateDialog() {
+            this.createTagsDialog = false;
+            // this.dropDialogShow = false
+        },
         closeDeleteDialog() {
             this.deletedialogshow = false;
         },
@@ -300,29 +313,20 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        editInfo(val) {
-            if(val == 'edit') {
-                this.editShow = true
-                this.$nextTick(() => {
-                    this.$refs.input.focus()
-                    this.$refs.input.value = this.allData.projectInfo
-                })
-            }
-        },
-        submit() {
-            if(this.$refs.input.value == '') {
-                alert('不能为空')
-                return false
-            }else {
-                this.editShow = false
-                this.$nextTick(() => {
-                    this.allData.projectInfo = this.$refs.input.value
-                })
-            }
-        },
-        changeBg(e) {
-            this.isActive = index
-            this.viewContent = true
+        changeBg(index) {
+            this.allData.dataName.forEach(item => {
+                if(item.id == index+1) {
+                    item.checked = !item.checked
+                    if(item.checked == true) {
+                        this.ary.push(item)
+                    }else if(item.checked == false) {
+                        this.ary.splice(this.ary.length-1,1)
+                    }
+                }
+            })
+            // console.log(this.ary.length);
+            // this.viewContent = true
+            return this.ary
         }
     }
 }
