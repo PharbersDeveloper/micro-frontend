@@ -94,8 +94,10 @@
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{item.name}}</p>
-                                <p v-for="(item,index) in allData.dss" :key="index">
-                                    <span class="tag_bg" v-for="(i,inx) in item.label" :key="inx">{{i}}</span>
+                                <p v-for="(tag,inx) in item.label" :key="inx">
+                                    <span v-if="item.label !== ''">
+                                        <span class="tag_bg" >{{tag}}</span>
+                                    </span>
                                 </p>
                             </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
@@ -193,7 +195,8 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']}
+                    // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    // {projectId:1,name:'Data_0002',label: []}
                 ]
                 // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
