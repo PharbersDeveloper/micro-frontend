@@ -60,10 +60,10 @@
                             <span class="dividing_line">|</span>
 
                             <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                                <bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
-                                <bp-option-vue text="显示条目" :disabled=true></bp-option-vue>
-                                <bp-option-vue text="换一批" :disabled=true></bp-option-vue>
-                                <bp-option-vue text="显示全部" :disabled=true></bp-option-vue>
+                                <bp-option-vue text="自定映射" @click="mappingClick"></bp-option-vue>
+                                <bp-option-vue text="显示条目"></bp-option-vue>
+                                <bp-option-vue text="换一批"></bp-option-vue>
+                                <bp-option-vue text="显示全部"></bp-option-vue>
                             </bp-select-vue>
 
 <!--                            <p @click="labelShow">标签-->
@@ -133,6 +133,8 @@
 <script>
 import clearDatasetDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {
@@ -144,6 +146,7 @@ export default {
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/descending_order.png",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/ascending_order.png",
+            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -173,7 +176,9 @@ export default {
     },
     components: {
         clearDatasetDialog,
-        clearDelete
+        clearDelete,
+        bpSelectVue,
+        bpOptionVue
     },
     computed: {
         all: {
@@ -198,6 +203,9 @@ export default {
         })
     },
     methods: {
+        mappingClick() {
+            console.log("alfred")
+        },
         showSelectOption() {
             this.showSelectOptionParam = true
         },
