@@ -9,7 +9,7 @@
                     <div class="upload_top">
                         <div class="selected_search">
                            <div class="selected" v-if="ary.length > 0">
-                               <input type="checkbox" class="checkbox" v-model="all" ref="all" @click="changeBg">
+                               <input type="checkbox" class="checkbox" ref="all" @click="changeBg">
                                <span class="action">选项</span>
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
                                 <div class="drop_dialog" v-if="dropDialogShow">
@@ -88,7 +88,7 @@
                     </div>
                         <div class="upload_bottom">
                             <!-- <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div> -->
-                            <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
+                            <div class="data_content" v-for="(item,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="changeBg">
                                 <input type="checkbox" v-model="item.checked" ref="data">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
@@ -96,7 +96,7 @@
                                 <p class="data_name">{{item.name}}</p>
                                 <p v-for="(tag,inx) in item.label" :key="inx">
                                     <span v-if="item.label !== ''">
-                                        <span class="tag_bg" >{{tag}}</span>
+                                        <span class="tag_bg" @click="tagSearch">{{tag}}</span>
                                     </span>
                                 </p>
                             </div>
@@ -113,10 +113,10 @@
                                 </p>
                             </div>
                             <p class="project_name_info" v-if="ary.length > 1">
-                                {{ary.length}} 条数据集
+                                {{}} 条数据集
                             </p>
                         </div>
-                         <div class="view_func">
+                        <div class="view_func">
                             <span @click="createTagsOpen">
                                 <span class='tags_func'>标签</span>
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
@@ -130,10 +130,10 @@
                                  <img class='tags_imgs_delete' :src="delete_icon" alt="">
                             </span>
                         </div>
-                    <p v-if="ary.length == 0" class="click_look">单击对象查看详细信息</p>
+                    </div>
+                    <p v-if="allData.dss == ''" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        </div>
         <clear-dataset-dialog  v-if="cleardialogshow" @closeClearDialog="closeClearDialog"></clear-dataset-dialog>
         <clear-delete v-if="deletedialogshow" @closeDeleteDialog="closeDeleteDialog"></clear-delete>
         <create-tags-dialog :tags="tags" v-if="createTagsDialog" @closeCreateDialog="closeCreateDialog"></create-tags-dialog>
@@ -196,7 +196,8 @@ export default {
                 projectName: "项目名称",
                 dss: [
                     // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    // {projectId:1,name:'Data_0002',label: []}
+                    // {projectId:1,name:'Data_0002',label: []},
+                    // {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ]
                 // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
@@ -235,6 +236,10 @@ export default {
         })
     },
     methods: {
+        tagSearch(e) {
+            console.log(e);
+            this.searchValue = e.target.innerHTML
+        },
         showSelectOption() {
             this.showSelectOptionParam = true
         },
@@ -305,8 +310,9 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        changeBg(index) {
-            // console.log(this.ary.length);
+        changeBg(e) {
+            console.log(e);
+            // this.isActive = index
             this.viewContent = true
             // return this.ary
         }
