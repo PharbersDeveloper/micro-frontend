@@ -33,8 +33,8 @@
                                     </div>
                                 </div>
                            </div>
-                            <div class="selected sele" v-if="ary.length == 0">
-                               <input type="checkbox" class="checkbox" v-model="all" ref="all">
+                            <div class="selected sele">
+                               <input type="checkbox" class="checkbox" ref="all">
                                <!-- <span class="action">选项</span> -->
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
                            </div>
@@ -71,9 +71,9 @@
                                     <img :src="dropDownIcon" alt="">
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
-                                  <div class="label_name" v-for="(item,index) in tags" :key="index">
+                                  <div class="label_name" v-for="(item,index) in allData.dss" :key="index">
                                       <span></span>
-                                      <div class="tags_name">{{item}}</div>
+                                      <div class="tags_name">{{item.label}}</div>
                                   </div>
                                   <div class="management">
                                       <div class="manage_label" @click="deleTagsShow">管理标签</div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{allData.dataName.length}} 条数据集</p>
+                                <p>{{allData.dss.length}} 条数据集</p>
                             </div>
                         </div>
                     </div>
@@ -94,16 +94,16 @@
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{item.name}}</p>
-                                <p class="tag_bg" v-for="(item,index) in tags" :key="index">{{item}}</p>
+                                <p class="tag_bg" v-for="(item,index) in allData.dss" :key="index">{{item.label}}</p>
                             </div>
-                        <div class="word" v-if="allData.dataName == ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="ary.length !== 0" >
+                    <div class="view_content" v-if="viewContent" >
                         <div class="project_name_view">
                             <span class="space"></span>
-                            <div v-for="item in allData.dataName" :key="item.id">
+                            <div v-for="item in allData.dss" :key="item.projectId">
                                 <p class="project_name_info" v-if="ary.length == 1 && item.checked == true">
                                 {{item.name}}
                                 </p>
@@ -190,14 +190,10 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dataName: [
-                    {id:1,name:'Data_0001',checked:false},
-                    {id:2,name:'Data_0002',checked:false},
-                    {id:3,name:'lalall_003',checked:false},
-                    {id:4,name:'数据_004',checked:false},
-                    {id:5,name:'set',checked:false}
-                ],
-                projectInfo: '2020.1 - 2021.12 Pfizer raw data'
+                dss: [
+                    {projectId:1,name:'Data_0001',label: 'llll'}
+                ]
+                // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
         }
     },
@@ -210,26 +206,26 @@ export default {
         bpOptionVue
     },
     computed: {
-        all: {
-            get() {
-                return this.allData.dataName.every( item => item.checked === true )
-            },
-            set(newVal) {
-                this.allData.dataName.forEach(item => {
-                    item.checked = newVal
-                })
-            }
-        },
+        // all: {
+        //     get() {
+        //         return this.allData.dataName.every( item => item.checked === true )
+        //     },
+        //     set(newVal) {
+        //         this.allData.dataName.forEach(item => {
+        //             item.checked = newVal
+        //         })
+        //     }
+        // },
         searchData: function() {
             let searchValue = this.searchValue
             if(searchValue) {
-                return this.allData.dataName.filter(function(pro) {
+                return this.allData.dss.filter(function(pro) {
                     return Object.keys(pro).some(function(key) {
                         return String(pro[key]).toLowerCase().indexOf(searchValue) > -1
                     })
                 })
             }
-            return this.allData.dataName
+            return this.allData.dss
         }
 
     },
@@ -336,6 +332,7 @@ export default {
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 .bg {
     background: #dfe7ff;
@@ -405,8 +402,10 @@ export default {
             .upload_top {
                 height: 100px;
                 border-bottom: 1px solid #dddddd;
-                padding: 20px;
+                padding-left: 20px;
+                padding-top: 20px;
                 background: #f2f2f2;
+                box-sizing: border-box;
 
                 .selected_search {
                     display: flex;
@@ -659,7 +658,7 @@ export default {
                         position: absolute;
                         top: 0;
                         right: 45px;
-                        margin-left: 700px;
+                        // margin-left: 700px;
 
                         p {
                             font-size: 14px;
