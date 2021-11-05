@@ -20,6 +20,36 @@ export default class DatasetLstRoute extends Route {
 	}
 
 	async model() {
+		this.store.unloadAll("dataset");
+		const url = "https://apiv2.pharbers.com/phdydatasource/scan"
+		const accessToken = this.cookies.read( "access_token" )
+		let body = {
+			"table": "dataset",
+			"conditions": {
+				"projectId": "Max"
+			},
+			"limit": 100,
+			"start_key": {}
+		}
+
+		let options = {
+			method: "POST",
+			headers: {
+				"Authorization": accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		const ds = fetch(url, options)
+		let that = this
+		let tmp = await ds.then((response) => response.json()).then((response) => {
+			this.store.pushPayload(response)
+			return new Promise((resolve, reject) => {
+				resolve(that.store.peekAll("dataset"))
+			})
+		})
+
 		this.afterModel = function() {
 			if(this.loadingService.afterLoading){
 				this.loadingService.loading.style.display = 'none'
@@ -36,6 +66,7 @@ export default class DatasetLstRoute extends Route {
 					"name": "Max Test01"
 				}
 			],
+			dss: tmp.filter(it => it),
 			_isVue: true
 		} )
 	}
