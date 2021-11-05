@@ -15,6 +15,7 @@ import nextDialog from './components/panel/next-dialog.vue'
 import excelColumnClean from './components/panel/excel-column-clean'
 import clearDatasetDialog from './components/panel/clear-dataset-dialog.vue'
 import createTagsDialog from './components/panel/create-tags-dialog.vue'
+import deleteTagsDialog from './components/panel/delete-tags-dialog.vue'
 
 Vue.use(Router)
 
@@ -92,6 +93,11 @@ export default new Router({
             path:'/create-tags-dialog',
             name:'createTagsDialog',
             component:createTagsDialog
+        },
+        {
+            path:'/delete-tags-dialog',
+            name:'deleteTagsDialog',
+            component:deleteTagsDialog
         }
     ]
 })

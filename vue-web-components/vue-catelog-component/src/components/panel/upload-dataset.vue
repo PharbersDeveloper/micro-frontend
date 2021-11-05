@@ -7,79 +7,96 @@
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
-                        <div class="checkbox_all" >
-                            <input type="checkbox" class="checkbox" v-model="all" ref="all">
-                            <span class="action">选项</span>
-                            <span class="drop_down_icon" @click="dropShow">
-                                <img :src="dropDownIcon"  >
-                            </span>
-                            <div class="drop_dialog" v-if="dropDialogShow">
-                                <div class="label_icon">
-                                    <span>
-                                        <img :src="label_icon" alt="">
-                                    </span>
-                                    <p>标签</p>
+                        <div class="selected_search">
+                           <div class="selected" v-if="ary.length > 0">
+                               <input type="checkbox" class="checkbox" v-model="all" ref="all">
+                               <span class="action">选项</span>
+                               <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
+                                <div class="drop_dialog" v-if="dropDialogShow">
+                                    <div class="label_icon" @click="createTagsOpen">
+                                        <span class="tag_icon">
+                                            <img :src="label_icon" alt="">
+                                        </span>
+                                        <p >标签</p>
+                                    </div>
+                                    <div class="label_icon border_none none" @click="clearDialogOpen">
+                                        <span>
+                                            <img :src="clear_data_icon" alt="">
+                                        </span>
+                                        <p >清除数据</p>
+                                    </div>
+                                    <div class="label_icon border_none" @click='deletedialogopen'>
+                                        <span>
+                                            <img :src="delete_icon" alt="">
+                                        </span>
+                                        <p >删除数据集</p>
+                                    </div>
                                 </div>
-                                <div class="label_icon border_none none">
-                                    <span>
-                                        <img :src="clear_data_icon" alt="">
-                                    </span>
-                                    <p @click='cleardialogopen'>清空数据</p>
-                                </div>
-                                <div class="label_icon border_none">
-                                    <span>
-                                        <img :src="delete_icon" alt="">
-                                    </span>
-                                    <p @click='deletedialogopen'>删除数据集</p>
-                                </div>
+                           </div>
+                            <div class="selected sele" v-if="ary.length == 0">
+                               <input type="checkbox" class="checkbox" v-model="all" ref="all">
+                               <!-- <span class="action">选项</span> -->
+                               <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
+                           </div>
+                           
+                            <div class="search_area">
+                                   <div class="search_icon"> 
+                                       <img :src="search_icon">
+                                   </div>
+                                   <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                            </div>
+                            <button class="upload_btn" @click="toggle">上传文件</button>
+                            <div class="dialog" v-show="showDialog">
+                            <div>
+                                <p @click="upload">本地上传</p>
                             </div>
                         </div>
-                        <div class="search_area">
-                            <img :src="search_icon" class="search_icon">
-                            <input type="text" placeholder="搜索" class="search">
-                        </div>
-                        <div class="btn">
-                            <button @click="toggle">上传文件</button>
-                            <p >{{allData.dataName.length}} 个数据集</p>
-                        </div>
-                        <div class="dialog" v-show="showDialog">
-                                <div>
-                                    <p @click="upload">本地上传</p>
+                        </div> 
+                        <div class="tag_selected">
+                            <div class="sort">
+                                <img :src="ascending_order" alt="" >
+                                <!-- <img :src="descending_order" alt="" v-if="ascending" @click="sort('descending')"> -->
+                            </div>
+                            <div class="down_sel" >
+                                <p class="sel" @click="nameShow">{{sel}}</p>
+                                <span class="drop_icon" @click="nameShow">
+                                    <img :src="dropDownIcon" alt="">
+                                </span>
+                                <div class="name" v-if="nameShowDialog" @click="changed">
+                                    <p>名称</p>
+                                    <!-- <p>最后一次编辑</p> -->
                                 </div>
-                        </div>
-                        <div class="select_area">
-                                <!-- <img :src="descending_order" class="sorting"> -->
-                                <img :src="ascending_order" class="sorting">
-                                <p @click="nameShow">最近一次编辑
-                                    <img :src="dropDownIcon" alt="" class="drop_size">
-                                </p>
-                                <div class="name" v-if="nameShowDialog">
-                                    名称
-                                </div>
-                                <!-- <img :src="dropDownIcon" alt=""> -->
-                                <span class="dividing_line">|</span>
-                                <p @click="labelShow">标签
-                                    <img :src="dropDownIcon" alt="" class="drop_size">
-                                </p>
+                            </div>
+                            <div class="line">|</div>
+                            <div class="down_sel tags_down_sel" >
+                                <p class="sel" @click="labelShow">标签</p>
+                                <span class="drop_icon" @click="labelShow">
+                                    <img :src="dropDownIcon" alt="">
+                                </span>
                                 <div class="label_selected" v-if="labelShowDialog">
-                                    <div class="label_name">
-                                        <span></span>
-                                        <div class="tags_name">lallaalla</div>
-                                    </div>
-                                    <div class="label_name">
-                                        <span class="green"></span>
-                                        <div class="tags_name">lallaalla</div>
-                                    </div>
-                                    <div class="management">
-                                        <div class="manage_label">管理标签</div>
-                                    </div>
+                                  <div class="label_name" v-for="(item,index) in tags" :key="index">
+                                      <span></span>
+                                      <div class="tags_name">{{item}}</div>
+                                  </div>
+                                  <div class="management">
+                                      <div class="manage_label" @click="deleTagsShow">管理标签</div>
+                                  </div>
                                 </div>
+                            </div>
+                            <div class="dataset_number">
+                                <p>{{allData.dataName.length}} 条数据集</p>
+                            </div>
                         </div>
+                        
                     </div>
                       <div class="upload_bottom">
-                        <div class="data_content" v-for="(item,index) in allData.dataName" :key="item.id"  :class="{bg: item.checked == true}" @click="changeBg(index)">
+                        <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
                             <input type="checkbox" v-model="item.checked" ref="data">
+                            <span class="dataset_icon">
+                                <img :src="dataset_icon" alt="">
+                            </span>
                             <p class="data_name">{{item.name}}</p>
+                            <p class="tag_bg" v-for="(item,index) in tags" :key="index">{{item}}</p>
                         </div>
                         <div class="word" v-if="allData.dataName == ''">当前项目无数据</div>
                     </div>
@@ -88,11 +105,30 @@
                     <div class="view_content" v-if="viewContent" >
                         <div class="project_name_view">
                             <span class="space"></span>
-                            <p class="project_name_info">
-                                Data_0001
+                            <div v-for="item in allData.dataName" :key="item.id">
+                                <p class="project_name_info" v-if="ary.length == 1 && item.checked == true">
+                                {{item.name}}
+                                </p>
+                            </div>
+                            <p class="project_name_info" v-if="ary.length > 1">
+                                {{ary.length}} 条数据集
                             </p>
                         </div>
-                        <div class="project_info_view">
+                         <div class="view_func">
+                            <span @click="createTagsOpen">
+                                <span class='tags_func'>标签</span>
+                                <img class='tags_imgs_tag' :src="label_icon" alt="">
+                            </span>
+                            <span @click="clearDialogOpen">
+                                <span class='tags_func'>清除数据</span>
+                                <img class='tags_imgs_clear' :src="clear_data_icon" alt="">
+                            </span>
+                            <span  @click='deletedialogopen'>
+                                <span class='tags_func'>删除</span>
+                                 <img class='tags_imgs_delete' :src="delete_icon" alt="">
+                            </span>
+                        </div>
+                        <!-- <div class="project_info_view">
                             <div class="operation">
                                 <span class="about">关于:</span>
                                 <p class="data_tm_nm" v-if="editShow == false">{{allData.projectInfo}}</p>
@@ -111,7 +147,7 @@
                                     <p class="last_tm">3 mins ago by</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <p v-if="viewContent == false" class="click_look">单击对象查看详细信息</p>
                 </div>
@@ -119,23 +155,28 @@
         </div>
         <clear-dataset-dialog  v-if="cleardialogshow" @closeClearDialog="closeClearDialog"></clear-dataset-dialog>
         <clear-delete v-if="deletedialogshow" @closeDeleteDialog="closeDeleteDialog"></clear-delete>
+        <create-tags-dialog :tags="tags" v-if="createTagsDialog" @closeCreateDialog="closeCreateDialog"></create-tags-dialog>
+        <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
     </div>
 </template>
 
 <script>
 import clearDatasetDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
+import createTagsDialog from './create-tags-dialog.vue'
+import deleteTagsDialog from './delete-tags-dialog.vue'
 export default {
     data() {
         return {
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/label.png",
+            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
+            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/descending_order.png",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/ascending_order.png",
+            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
+            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
+            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
+            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
+            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             showDialog: false,
             state: '', 
             editShow: false,
@@ -145,7 +186,14 @@ export default {
             nameShowDialog: false,
             labelShowDialog: false,
             cleardialogshow: false,
-            deletedialogshow: false
+            deletedialogshow: false,
+            createTagsDialog: false,
+            deleteTagsDia: false,
+            searchValue: '',
+            ascending: false,
+            tags: ['name','description','啦啦啦'],
+            sel: '名称',
+            ary: []
         }
     },
     props: {
@@ -155,7 +203,10 @@ export default {
                 projectName: "项目名称",
                 dataName: [
                     {id:1,name:'Data_0001',checked:false},
-                    {id:2,name:'Data_0002',checked:false}
+                    {id:2,name:'Data_0002',checked:false},
+                    {id:3,name:'lalall_003',checked:false},
+                    {id:4,name:'数据_004',checked:false},
+                    {id:5,name:'set',checked:false}
                 ],
                 projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
@@ -163,7 +214,9 @@ export default {
     },
     components: {
         clearDatasetDialog,
-        clearDelete
+        clearDelete,
+        createTagsDialog,
+        deleteTagsDialog
     },
     computed: {
         all: {
@@ -171,14 +224,50 @@ export default {
                 return this.allData.dataName.every( item => item.checked === true )
             },
             set(newVal) {
-                // console.log(newVal);
                 this.allData.dataName.forEach(item => {
                     item.checked = newVal
                 })
             }
+        },
+        searchData: function() {
+            let searchValue = this.searchValue
+            if(searchValue) {
+                return this.allData.dataName.filter(function(pro) {
+                    return Object.keys(pro).some(function(key) {
+                        return String(pro[key]).toLowerCase().indexOf(searchValue) > -1
+                    })
+                })
+            }
+            return this.allData.dataName
         }
     },
     methods: {
+        sort() {
+        },
+        // compare(property) {
+        //     return function(obj1,obj2) {
+        //         var a = obj1[property]
+        //         var b = obj2[property]
+        //         return b - a
+        //     }
+        // },
+        changed(e) {
+            this.sel = e.target.innerHTML
+            this.nameShowDialog = false
+        },
+        closeDeleteTags() {
+            this.deleteTagsDia = false;
+        },
+        deleTagsShow() {
+            this.deleteTagsDia = true
+        },
+        createTagsOpen() {
+            this.createTagsDialog = true;
+        },
+        closeCreateDialog() {
+            this.createTagsDialog = false;
+            // this.dropDialogShow = false
+        },
         closeDeleteDialog() {
             this.deletedialogshow = false;
         },
@@ -188,17 +277,23 @@ export default {
         closeClearDialog() {
             this.cleardialogshow = false;
         },
-        cleardialogopen(){
+        clearDialogOpen(){
             this.cleardialogshow = true
         },
         labelShow() { 
             this.labelShowDialog = !this.labelShowDialog
+            this.dropDialogShow = false;
+            this.nameShowDialog = false;
         },
         nameShow() {
             this.nameShowDialog = !this.nameShowDialog
+            this.labelShowDialog = false
+            this.dropDialogShow = false;
         },
         dropShow() {
             this.dropDialogShow = !this.dropDialogShow
+            this.nameShowDialog = false
+            this.labelShowDialog = false
         },
         upload() {
             this.$router.push('/select-file')
@@ -226,16 +321,27 @@ export default {
                 })
             }
         },
-        changeBg(e) {
-            this.isActive = index
+        changeBg(index) {
+            this.allData.dataName.forEach(item => {
+                if(item.id == index+1) {
+                    item.checked = !item.checked
+                    if(item.checked == true) {
+                        this.ary.push(item)
+                    }
+                } 
+            })
+            // console.log(this.ary.length);
             this.viewContent = true
+            return this.ary
+            // console.log(e);
+            // this.isActive = index
+            
         } 
-        
-
     }
+
 }
 </script>
-
+  
 <style lang="scss" scoped>
 * {
     padding: 0;
@@ -243,16 +349,52 @@ export default {
 }
 .bg {
     background: #dfe7ff;
+}
+.name {
+    position: absolute;
+    top: 25px;
+    left: 24px;
+    width: 110px;
+    height: 60px;
+    line-height: 28px;
+    background: #fff;
+    // border: 1px solid #dddddd;
+    box-shadow: 2px 4px 6px #dddddd;
+    padding-left: 10px;
+    font-size: 14px;
+}
+ .dialog {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    width: 150px;
+    height: 81px;
+    border: 2px solid #dddddd;
+    background: #fff;
+    z-index: 9999;
+    cursor: pointer;
+    div {
+        border-bottom: 2px solid #979797;
+        p {
+            margin-left: 10px;
+            font-family: PingFangSC-Medium;
+            font-size: 14px;
+            color: #000000;
+            font-weight: 600;
+        }
     }
+}
 .upload_dataset_container {
     width: 100vw;
     height: 100vh;
-    border: 2px solid #979797;
+    // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;
         width: 100%;
-        border-bottom: 2px solid #979797;
+        // background: rgba(0,0,0,.2);
+        border-bottom: 1px solid #dddddd;
         .project_name {
+            // width: 200px;
             margin-left: 30px;
             line-height: 50px;
             font-family: SourceSansPro;
@@ -267,35 +409,39 @@ export default {
         height: calc(100vh - 60px);
         .project_info_left {
             flex: 1;
-            border-right: 2px solid #979797;
+            border-right: 1px solid #dddddd;
             .upload_top {
-                display: flex;
-                position: relative;
                 height: 100px;
+                border-bottom: 1px solid #dddddd;
+                padding: 20px;
                 background: #f2f2f2;
-                border-bottom: 2px solid #979797;
-				p {
-					cursor: pointer;
-				}
-                .checkbox_all {
+                .selected_search {
+                    display: flex;
                     position: relative;
-                    width: 80px;
-                    height: 26px;
+                
+                .selected {
+                    position: relative;
+                    width: 90px;
+                    height: 25px;
                     border: 1px solid #dddddd;
-                    margin-top: 20px;
-                    margin-left: 28px;
-                    .drop_down_icon {
+                    background: #fff;
+                    cursor: pointer;
+                    .checkbox {
+                        margin-left: 10px;
+                    }
+                    .action {
+                        margin-left: 10px;
+                    }
+                    .d_icon {
                         position: absolute;
                         top: 4px;
-                        right: 4px;
-                        img {
-                            width: 15px;
-                            height: 15px;
-                        }
+                        right: 5px;
+                        width: 15px;
+                        height: 15px;
                     }
-                    .drop_dialog {
+                   .drop_dialog {
                         position: absolute;
-                        top: 25px;
+                        top: 24px;
                         left: 0;
                         width: 120px;
                         height: 90px;
@@ -321,148 +467,109 @@ export default {
                         }
                     }
                 }
-                .checkbox {
-                    position: absolute;
-                    top: -20px;
-                    left: 5px;
-                    margin-top: 25px;
+                .sele {
+                    width: 50px;
                 }
-                .action {
-                    font-size: 12px;
-                    text-transform: uppercase;
-                    color: #333333;
-                    font-weight: 400;
-                    vertical-align: middle;
-                    margin-left: 25px;
                 }
                 .search_area {
+                    position: relative;
+                    width: 300px;
+                    height: 28px;
                     display: flex;
+                    margin-left: 20px;
                     border: 1px solid #dddddd;
-                    height: 31px;
-                    width: 313px;
-                    margin-left: 22px;
-                    margin-top: 15px;
-                    .search {
+                    .search_icon {
+                        width: 26px;
+                        height: 26px;
+                        img {
+                            width: 26px;
+                            height: 26px;
+                        }
+                    }
+                    .text_input {
+                        flex: 1;
                         display: inline-block;
-                        width: 282px;
-                        height: 30px;
-                        outline:none;
-                        padding-left: 18px;
-                       
-                    }
-                    img {
-                        width: 30px;
-                        height: 30px;
+                        height: 100%;
+                        outline: none;
                         border: 1px solid #dddddd;
+                        padding-left: 10px;
                     }
+                }
+                .upload_btn {
+                    position: absolute;
+                    top: 0px;
+                    right: 40px;
+                    display: inline-block;
+                    width: 82px;
+                    height: 32px;
+                    background: #ffffff;
+                    border: 1px solid #eeedf7;
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #7163C5;
+                    margin-bottom: 16px;
                 }
                 
-                .process_area {
-                    position: absolute;
-                    top: 72px;
-                    left: 0;
-                    button {
-                        width: 87px;
-                        height: 27px;
-                        background: #fff;
-                        border: 1px solid #979797;
-                        font-family: 'PingFangSC-Medium';
-                        font-size: 10px;
-                        color: #000000;
-                        font-weight: 600;
-                    }
                 }
-                 .dialog {
-                    position: absolute;
-                    top: 50px;
-                    right: 47px;
-                    width: 227px;
-                    height: 81px;
-                    border: 2px solid #979797;
-                    background: #fff;
-                    div {
-                        border-bottom: 2px solid #979797;
-                        p {
-                            margin-left: 10px;
-                            font-family: PingFangSC-Medium;
-                            font-size: 14px;
-                            color: #000000;
-                            font-weight: 600;
+                .tag_selected {
+                    display: flex;
+                    position: relative;
+                    margin-top: 10px;
+                    // width: 400px;
+                    // height: 20px;
+                    // border: 2px solid #111;
+                    margin-left: 125px;
+                    .sort {
+                        width: 25px;
+                        height: 25px;
+                        img {
+                            width: 100%;
                         }
                     }
-                }
-                .btn {
-                    position: absolute;
-                    top: 18px;
-                    right: 47px;
-                    button {
-                        display: inline-block;
-                        width: 82px;
-                        height: 32px;
-                        background: #ffffff;
-                        border: 2px solid #eeedf7;
-                        font-family: PingFangSC-Medium;
-                        font-size: 14px;
-                        font-weight: 600;
-                        color: #7163C5;
-                        margin-bottom: 16px;
+                    .line {
+                        margin-left: 10px;
+                        color: #dddddd;
                     }
-                    p {
-                        font-family: PingFangSC-Medium;
-                        font-size: 14px;
-                        color: #000000; 
-                        font-weight: 600;
-                    }
-                }
-                .select_area {
-                    display: flex;
-                    position: absolute;
-                    bottom: 10px;
-                    left: 130px;
-                    .dividing_line {
-                        margin: 0 10px;
-                        color: #c0cfe4;
-                    }
-                    img {
-                        margin-top: 3px;
-                        width: 20px;
-                        height: 20px;
-                    }
-                    p {
-                        background: #dddddd;
-                        font-size: 14px;
-                        // height: 25px;
-                        // line-height: 25px;
-                        padding: 5px 5px 5px 5px;
-                        .drop_size {
-                            line-height: 25px;
+                    .down_sel {
+                        display: flex;
+                        // width: 110px;
+                        cursor: pointer;
+                        // border-right: 1px solid #c0cfe4;
+                        .sel {
+                            font-size: 14px;
+                            margin-left: 5px;
+                            margin-top: 4px;
+                        }
+                        .drop_icon {
+                            margin-top: 4px;
                             width: 15px;
                             height: 15px;
+                            img {
+                                width: 100%;
+                            }
                         }
                     }
-                    .name {
-                        position: absolute;
-                        top: 32px;
-                        left: 41px;
-                        width: 91px;
-                        height: 28px;
-                        line-height: 28px;
-                        background: #fff;
-                        border: 1px solid #979797;
-                        padding-left: 10px;
-                        font-size: 14px;
+                    .down_sel:hover {
+                        background: #dddddd;
                     }
-                    .label_selected {
+                    .tags_down_sel {
+                       border: 0;
+                       margin-left: 10px;
+                       width: 50px;
+                        .label_selected {
+                            box-shadow: 2px 4px 6px #dddddd;
                         // display: flex;
-                        position: absolute;
-                        top: 32px;
-                        left: 157px;
-                        width: 128px;
-                        // height: 72px;
-                        border: 1px solid #dddddd;
-                        background: #fff;
-                        padding-top: 10px;
-                        .management {
+                            position: absolute;
+                            top: 25px;
+                            left: 97px;
+                            width: 128px;
+                            // height: 72px;
+                            border: 1px solid #dddddd;
+                            background: #fff;
+                            padding-top: 10px;
+                            z-index: 3333;
+                            .management {
                                 margin-top: 5px;
                                 width: 128px;
                                 height: 30px;
@@ -475,7 +582,8 @@ export default {
                                     margin-top: 5px;
                                 }
                         }
-                        .label_name {
+                    }
+                     .label_name {
                             display: flex;
                             margin-left: 10px;
                             span {
@@ -486,21 +594,33 @@ export default {
                                 background: #1bc2ac;
                                 margin-top: 8px;
                                 margin-right: 8px;
-                               
                             }
                             .green {
                                 background: #00a65a;
                             }
                             .tags_name {
-                                font-size: 16px;
+                                font-size: 14px;
                                 margin-bottom: 5px;
                             }
                            
                         }
-                        
+                        .label_name:hover {
+                            background: #fff99d;
+                        }
+                }
+                    .dataset_number {
+                        position: absolute;
+                        top: 0;
+                        right: 45px;
+                        margin-left: 700px;
+                        p {
+                            font-size: 14px;
+                            font-weight: 600;
+                        }
                     }
                 }
             }
+
             .upload_bottom {
                 .word {
                     width: 100%;
@@ -512,18 +632,47 @@ export default {
                     color: #000000;
                     font-weight: 500;
                 }
+                .data_content:hover {
+                    background-color: #f2f2f2;
+                    cursor: pointer;
+                }
                 .data_content {
                     display: flex;
                     width: 100%;
-                    height: 80px;
-                    border-bottom: 1px solid #979797;
-                    padding: 30px 0 30px 20px;
+                    height: 60px;
+                    border-bottom: 1px solid #dddddd;
+                    padding: 20px 0 20px 20px;
+                    .tag_bg {
+                        position: relative;
+                        top: -8px;
+                        left: 0px;
+                        font-size: 12px;
+                        color: #fff;
+                        height: 16px;
+                        // line-height: 16px;
+
+                        text-align: center;
+                        background: #00a55a;
+                        // width: 80px;
+                        padding:0 8px;
+                        border-radius: 10px;
+                        margin-left: 10px;
+                    }
+                    .dataset_icon {
+                        margin-left: 27px;
+                        width: 30px;
+                        height: 30px;
+                        img {
+                            width: 100%;
+                        }
+                    }
                     .data_name {
-                        margin-left: 40px;
+                        margin-left: 27px;
                         font-family: PingFangSC-Medium;
                         font-size: 14px;
                         color: #000000;
                         font-weight: 600;
+                        width: 168px;
                     }
                     
                     
@@ -542,12 +691,19 @@ export default {
             .view_content {
                 width: 100%;
                 height: 260px;
-                border-bottom: 2px solid #979797;
+                border-bottom: 1px solid #dddddd;
+                .view_func {
+                    margin-top: 100px;
+                }
+                .tags_func {
+                    margin-left: 100px;
+                    cursor: pointer;
+                }
                 .project_name_view {
                     display: flex;
                     width: 100%;
                     height: 60px;
-                    border-bottom: 2px solid #979797;
+                    border-bottom: 1px solid #979797;
                     .space {
                         display: inline-block;
                         width: 60px;
@@ -573,7 +729,7 @@ export default {
                     background: #f5f5f5;
                     width: 100%;
                     height: 100%;
-                    border-bottom: 2px solid #979797;
+                    border-bottom: 2px solid #dddddd;
                     .edit_input {
                             position: absolute;
                             // margin-left: 20px;
@@ -650,6 +806,32 @@ export default {
                 }
             }
         }
-    }
+}
+.tags_imgs_tag {
+    width: 30px;
+    height: 30px;
+    // position: relative;
+    position: absolute;
+    right: 370px;
+    top: 160px;
+    cursor: pointer;
+}
+.tags_imgs_clear {
+    width: 30px;
+    height: 30px;
+    // position: relative;
+    position: absolute;
+    right: 225px;
+    top: 160px;
+    cursor: pointer;
+}
+.tags_imgs_delete {
+    width: 30px;
+    height: 30px;
+    // position: relative;
+    position: absolute;
+    right: 75px;
+    top: 160px;
+    cursor: pointer;
 }
 </style>
