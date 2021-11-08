@@ -94,20 +94,21 @@ export default class ExcelHandlerComponent extends Component {
         var startTime = new Date().getTime();
         let dagStatusInt = setInterval(async function() { 
             that.postUrl(statusType, statusBody).then(response => {
-                let project_files_status = response.data[0] ? response.data[0].attributes.status : 'creating'
+                let project_files_status = response.data[0] ? response.data[0].attributes["job-desc"] : 'creating'
                 if (project_files_status !== 'creating') {
                     clearInterval(dagStatusInt); //循环结束
                     let status = ''
-                    if(project_files_status == "success") {
-                        console.log(project_files_status)
+					console.log(project_files_status)
+                    if(project_files_status == "created") {
+						that.router.transitionTo( `/dataset-lst?projectName=${param.projectName}&projectId=${param.projectId}` )
                     } else {
-                        console.log(project_files_status)
+						alert("failed！")
                     }
                     that.loadingService.loading.style.display = 'none'
-                    that.router.transitionTo( `/dataset-lst?projectName=${param.projectName}&projectId=${param.projectId}` )
                 } else if(new Date().getTime() - startTime >= 60000) {
                     clearInterval(dagStatusInt); //循环结束
 					alert("超时，连接终止！")
+                    that.loadingService.loading.style.display = 'none'
                     that.router.transitionTo( `/dataset-lst?projectName=${param.projectName}&projectId=${param.projectId}` )
 				}
             }) 
