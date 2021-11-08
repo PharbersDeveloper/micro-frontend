@@ -53,8 +53,8 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    {projectId:2,name:'Data_0002',label: ['bbbbbbb','aaaaaaaa']}
+                    // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    // {projectId:2,name:'Data_0002',label: ['bbbbbbb','aaaaaaaa']}
                 ]
             })
         }
@@ -120,7 +120,8 @@ export default {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%)
+    transform: translate(-50%,-50%);
+	box-sizing: border-box;
 }
 .header {
     height: 60px;

@@ -197,8 +197,7 @@ export default {
                 projectName: "项目名称",
                 dss: [
                     {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    {projectId:1,name:'Data_0002',label: ['我好菜啊,菜死算了']},
-                    {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
+                    {projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ]
                 // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
