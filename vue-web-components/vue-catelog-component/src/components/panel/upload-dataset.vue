@@ -8,8 +8,8 @@
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
-                           <div class="selected" v-if="ary.length > 0">
-                               <input type="checkbox" class="checkbox" ref="all" @click="changeBg">
+                           <div class="selected">
+                               <input type="checkbox" class="checkbox" ref="all">
                                <span class="action">选项</span>
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
                                 <div class="drop_dialog" v-if="dropDialogShow">
@@ -25,7 +25,7 @@
                                         </span>
                                         <p >清除数据</p>
                                     </div>
-                                    <div class="label_icon border_none" @click='deletedialogopen'>
+                                    <div class="label_icon border_none" @click="deletedialogopen">
                                         <span>
                                             <img :src="delete_icon" alt="">
                                         </span>
@@ -33,11 +33,11 @@
                                     </div>
                                 </div>
                            </div>
-                            <div class="selected sele">
+                            <!-- <div class="selected sele">
                                <input type="checkbox" class="checkbox" ref="all">
-                               <!-- <span class="action">选项</span> -->
+                               <span class="action">选项</span>
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
-                           </div>
+                           	</div> -->
 
                             <div class="search_area">
                                    <div class="search_icon">
@@ -88,8 +88,8 @@
                     </div>
                         <div class="upload_bottom">
                             <!-- <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div> -->
-                            <div class="data_content" v-for="(item,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="changeBg">
-                                <input type="checkbox" v-model="item.checked" ref="data">
+                            <div class="data_content" v-for="(item,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="changeBg(index)">
+                                <input type="checkbox" v-model="checked" ref="data">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
@@ -108,7 +108,7 @@
                         <div class="project_name_view">
                             <span class="space"></span>
                             <div v-for="(item,index) in allData.dss" :key="index">
-                                <p class="project_name_info" v-if="ary.length == 1 && item.checked == true">
+                                <p class="project_name_info" >
                                 {{item.name}}
                                 </p>
                             </div>
@@ -127,7 +127,7 @@
                             </span>
                             <span  @click='deletedialogopen'>
                                 <span class='tags_func'>删除</span>
-                                 <img class='tags_imgs_delete' :src="delete_icon" alt="">
+                                <img class='tags_imgs_delete' :src="delete_icon" alt="">
                             </span>
                         </div>
                     </div>
@@ -186,7 +186,8 @@ export default {
             ary: [],
             checked: false,
             manual: true,
-            scriptValue: "最近一次编辑"
+            scriptValue: "最近一次编辑",
+            checked: false
         }
     },
     props: {
@@ -195,9 +196,8 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    // {projectId:1,name:'Data_0002',label: []},
-                    // {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
+                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    {projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ]
             })
         }
@@ -319,9 +319,10 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        changeBg(e) {
-            console.log(e);
-            // this.isActive = index
+        changeBg(index) {
+            // console.log(e)
+            // this.checked = true
+            this.isActive = index
             this.viewContent = true
             // return this.ary
         }

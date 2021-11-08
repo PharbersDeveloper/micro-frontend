@@ -9,7 +9,7 @@
                <!-- <div class="prompt" v-for="item in allData.dataName" :key="item.id">
                    确定清除 {{item.name}} 数据集中的数据吗?
                </div> -->
-			    <div class="prompt" v-for="item in allData.dataName" :key="item.id">
+			    <div class="prompt">
                    <p class="tip">确定清除以下数据集中的数据吗?</p>
 				   <p class="name">lalalal</p>
 				   <p class="name">lalalal</p>
@@ -38,12 +38,10 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dataName: [
-                    {id:1,name:'Data_0001',checked:false}
-                    // {id:2,name:'Data_0002',checked:false},
-                    // {id:3,name:'lalall_003',checked:false},
-                    // {id:4,name:'数据_004',checked:false},
-                    // {id:5,name:'set',checked:false}
+                dss: [
+                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    {projectId:1,name:'Data_0002',label: ['我好菜啊,菜死算了']},
+                    {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ],
                 projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })

@@ -14,7 +14,9 @@
                    <span class="useing">正在使用</span>
                    <div class="tags" v-for="(item,index) in searchData" :key="index">
                        <span class="round"></span>
-                       <input type="text" :value="item" class="deleteTags" @keyup.enter.prevent="sub" ref="input">
+                       <span>
+						   <input type="text" v-for="(tag,ind) in item.label" :key="ind" :value="tag" class="deleteTags" @keyup.enter.prevent="sub" ref="input">
+					   </span>
                        <span class='num_tags'>0</span>
                        <span class='bgc_tags' @click="deleteTag(index)">
                            <img :src="delete_icon" alt="" class="img_tags">
@@ -51,22 +53,28 @@ export default {
         }
     },
     props: {
-        tags: {
-            type: Array,
-            default: () => ['name','description','啦啦啦']
+        allData: {
+            type: Object,
+            default: () => ({
+                projectName: "项目名称",
+                dss: [
+                    // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    // {projectId:2,name:'Data_0002',label: ['bbbbbbb','aaaaaaaa']}
+                ]
+            })
         }
     },
     computed: {
         searchData: function() {
             let searchValue = this.searchValue
             if(searchValue) {
-                return this.tags.filter(function(pro) {
+                return this.allData.dss.filter(function(pro) {
                     // return Object.keys(pro).some(function(key) {
                     return String(pro).toLowerCase().indexOf(searchValue) > -1
                     // })
                 })
             }
-            return this.tags
+            return this.allData.dss
         }
     },
     methods: {
@@ -121,7 +129,8 @@ export default {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%)
+    transform: translate(-50%,-50%);
+	box-sizing: border-box;
 }
 .header {
     height: 60px;
@@ -135,6 +144,7 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     border-bottom: 1px solid #ddd;
+	box-sizing: border-box;
     .tags_name {
         color: #111;
         font-size: 12px;
