@@ -14,7 +14,9 @@ export default class ExcelHandlerComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 const ltp = e.detail[0].args.param
-                console.log(ltp)
+                if(ltp.name === "advancedMapping") {
+					this.router.transitionTo('/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId)
+				}
                 break
             case "createDataSetIndex":
                 const param = e.detail[0].args.param
@@ -72,18 +74,17 @@ export default class ExcelHandlerComponent extends Component {
                 "comments": "project file to Data set",
                 "jobCat": "project_file_to_DS",
                 "jobDesc": "creating",
-                "message": param,
+                "message": JSON.stringify(param),
                 "date": Date.now(),
                 "owner": this.cookies.read('access_token'), // TODO: 用用户id替换
                 "showName": decodeURI(this.cookies.read('user_name_show'))
             }
         }
         let actions = await this.postUrl(push_type, project_files_body)
-
 		//请求status，持续30s
         let statusType = 'query'
         let statusBody = {
-            "table": "project_files",
+            "table": "action",
             "conditions": {
                 "id": actions.data.id
             },
