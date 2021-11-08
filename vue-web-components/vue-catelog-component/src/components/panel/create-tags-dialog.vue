@@ -14,7 +14,9 @@
                    <div class="tags" v-for="(item,index) in searchData" :key="index">
                        <input type="checkbox" class="checkout">
                        <span class="round"></span>
-                       <p class="create_tags">{{item}}</p>
+                       <div class="create_tags" v-for="(tag,ind) in item.label" :key="ind">
+						   {{tag}}
+					   </div>
                        <!-- <span class='num_tags'>1</span> -->
                    </div>
                    <div class="create" v-if="searchData.length == 0 " @click="addTags" >
@@ -24,8 +26,8 @@
                     </div>
                </div>
               <div class="btn">
-                       <button class="cancel" @click="close">取消</button>
-                       <button class="save" @click="save">保存</button>
+                    <button class="cancel" @click="close">取消</button>
+                    <button class="save" @click="save">保存</button>
               </div>
             </div>
         </div>
@@ -46,22 +48,28 @@ export default {
         }
     },
     props: {
-        tags: {
-            type: Array,
-            default:() => ['name','description','啦啦啦']
+        allData: {
+            type: Object,
+            default: () => ({
+                projectName: "项目名称",
+                dss: [
+                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    {projectId:2,name:'Data_0002',label: ['bbbbbbb','aaaaaaaa']}
+                ]
+            })
         }
     },
     computed: {
         searchData: function() {
             let searchValue = this.searchValue
             if(searchValue) {
-                return this.tags.filter(function(pro) {
-                    // return Object.keys(pro).some(function(key) {
-                    return String(pro).toLowerCase().indexOf(searchValue) > -1
-                    // })
+                return this.allData.dss.filter(function(pro) {
+                   	return Object.keys(pro).some(function(key) {
+                        return String(pro[key]).toLowerCase().indexOf(searchValue) > -1
+                	})
                 })
             }
-            return this.tags
+            return this.allData.dss
         }
     },
     methods: {
@@ -74,13 +82,11 @@ export default {
         addTags() {
             this.tags.push(this.searchValue)
             this.searchValue = ''
-            console.log('huiche');
         },
         submit() {
             this.tags.push(this.searchValue)
             this.searchValue = ''
-            // sessionStorage.setItem('json',JSON.stringify(this.tagList))
-            console.log(this.tagList);
+            // console.log(this.tagList);
         }
     }
 }
