@@ -14,8 +14,12 @@ export default class DatasetLstComponent extends Component {
 	listener(e) {
 		switch(e.detail[0].args.callback) {
 			case "linkToPage":
-				let param = e.detail[0].args.param;
-				this.router.transitionTo( `/projects/`+ param.pid )
+				let params = e.detail[0].args.param;
+				let uri = ''
+				if(params.name === "localUpload") {
+					uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
+				}
+                this.router.transitionTo( uri )
 				break
 			default:
 				console.log("other click event!")
@@ -25,6 +29,7 @@ export default class DatasetLstComponent extends Component {
 	@action
 	registerListener(element) {
 		element.allData = this.calAllData
+		console.log(element.allData)
 		element.addEventListener("event", this.listener)
 	}
 

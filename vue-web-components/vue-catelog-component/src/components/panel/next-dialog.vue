@@ -83,10 +83,10 @@ export default {
                     element: this,
                     param: {
                         files: this.fileList,
-                        property: JSON.stringify({
+                        property: {
                             dataID: this.dataID,
                             dataset: this.radioState === 'dataSet' ? this.newData : this.newDataName
-                        })
+                        }
                     }
                 }
                 this.$emit('uploadFilesEvent', event)

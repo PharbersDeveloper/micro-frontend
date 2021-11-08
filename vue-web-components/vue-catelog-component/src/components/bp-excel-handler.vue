@@ -78,7 +78,7 @@ export default {
             nextSkipValue: 0,
             sheet: '',
             tmpname: '',
-            sheetArr: ['111', '222', '333'],
+            sheetArr: [],
             showExcel: true
         }
     },
@@ -97,9 +97,9 @@ export default {
         bpExcel
     },
     created() {
-        let uriParam = window.location.href
-        this.tmpname = uriParam.split("tmpname=")[1]
-        this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
+        // let uriParam = window.location.href
+        // this.tmpname = uriParam.split("tmpname=")[1]
+        this.excelDatasource = new PhDataSource('2', this.allData.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
         linkToPage() {
@@ -119,15 +119,17 @@ export default {
                 callback: "createDataSetIndex",
                 element: this,
                 param: {
-                    "fileId": this.tmpname,
+                    "fileId": this.allData.tmpname,
                     "skipValue": this.firstSkipValue,
                     "jumpValue": this.nextSkipValue,
-                    "fileType": "xlsx",
+                    "fileType": this.allData.tmpname.split('.')[1],
                     "fileSheet": this.sheet,
-                    "fileName": "文件真实的名字",
+                    "fileName": this.allData.filename,
                     "isAppend": false,
-                    "destination": "DataSetName",
-                    "version": "version" // 需要自己加上
+                    "destination": this.allData.dataset,
+                    "version": this.allData.version, // 需要自己加上
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
                 }
             }
             this.$emit('event', event)
@@ -161,7 +163,7 @@ export default {
             justify-content: space-between;
             align-items: center;
             .run {
-                width: 80px;
+                // width: 80px;
                 height: 32px;
                 font-weight: 600;
                 font-size: 14px;

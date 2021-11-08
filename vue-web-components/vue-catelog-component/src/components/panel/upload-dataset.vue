@@ -199,7 +199,6 @@ export default {
                     // {projectId:1,name:'Data_0002',label: []},
                     // {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ]
-                // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
         }
     },
@@ -305,7 +304,17 @@ export default {
             this.labelShowDialog = false
         },
         upload() {
-            this.$router.push('/select-file')
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "localUpload",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
         },
         toggle() {
             this.showDialog = !this.showDialog
