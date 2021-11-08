@@ -41,13 +41,13 @@
                             <tr>
                                 <td class="left">Skip First Lines</td>
                                 <td>
-                                    <input type="number" v-model="firstSkipValue" @blur="skip('first')"/>
+                                    <input type="number" v-model="firstSkipValue" min="0" @blur="skip('first')"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="left">&nbsp;</td>
                                 <td class="skip-first-area">
-                                    <input class="skip-first" type="checkbox" /><span>Parse next line as column headers</span>
+                                    <input class="skip-first" type="checkbox" min="0" /><span>Parse next line as column headers</span>
                                 </td>
                             </tr>
                             <tr class="skip-next">
@@ -58,7 +58,10 @@
                     </div>
                     <div class="eh-sheet-panel">
                         <span class="radio-title">Select Sheet</span>
-                        <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index"><input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet"><label >{{item}}</label></div>
+                        <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
+							<input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
+							<label >{{item}}</label>
+						</div>
                     </div>
                 </div>
             </div>
@@ -78,7 +81,7 @@ export default {
             nextSkipValue: 0,
             sheet: '',
             tmpname: '',
-            sheetArr: ['111', '222', '333'],
+            sheetArr: [],
             showExcel: true
         }
     },
@@ -98,7 +101,8 @@ export default {
     },
     created() {
         let uriParam = window.location.href
-        this.tmpname = uriParam.split("tmpname=")[1]
+        this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
+
         this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
@@ -108,7 +112,9 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "created"
+                    "name": "advancedMapping",
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
                 }
             }
             this.$emit('event', event)
@@ -119,21 +125,23 @@ export default {
                 callback: "createDataSetIndex",
                 element: this,
                 param: {
-                    "fileId": this.tmpname,
+                    "fileId": this.allData.tmpname,
                     "skipValue": this.firstSkipValue,
                     "jumpValue": this.nextSkipValue,
-                    "fileType": "xlsx",
-                    "fileSheet": this.sheet,
-                    "fileName": "文件真实的名字",
+                    "fileType": this.allData.tmpname.split('.')[1],
+                    // "fileSheet": this.sheet,
+                    "fileSheet": 'Sheet1',
+                    "fileName": this.allData.filename,
                     "isAppend": false,
-                    "destination": "DataSetName",
-                    "version": "version" // 需要自己加上
+                    "destination": this.allData.dataset,
+                    "version": this.allData.version, // 需要自己加上
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
                 }
             }
             this.$emit('event', event)
         },
         skip(data) {
-            // this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
             this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
             this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
             this.excelDatasource.sheet = this.sheet
@@ -145,8 +153,6 @@ export default {
             this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
             this.excelDatasource.sheet = this.sheet
             this.excelDatasource.refreshData(this.$refs.excel)
-            // this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
-
         }
     }
 }
@@ -161,7 +167,7 @@ export default {
             justify-content: space-between;
             align-items: center;
             .run {
-                width: 80px;
+                // width: 80px;
                 height: 32px;
                 font-weight: 600;
                 font-size: 14px;

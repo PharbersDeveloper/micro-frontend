@@ -35,12 +35,11 @@ export default class PhDataSource {
         console.log(this.tmpname)
         let body = {
             "project":"max",
-            // "tempfile":"66875db6f287aaa382bd04152b092b90.xlsx",
             "tempfile": this.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
             "sheet": this.sheet || '',
             "out_number": 10,
-            "skip_first": this.firstSkipValue || 1,
-            "skip_next": this.nextSkipValue || -1
+            "skip_first": this.firstSkipValue || 0,
+            "skip_next": this.nextSkipValue || 0
         }
         let options = {
             method: "POST",

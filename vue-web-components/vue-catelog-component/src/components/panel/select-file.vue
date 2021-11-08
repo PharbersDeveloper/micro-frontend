@@ -19,7 +19,7 @@
                     <input style="display: none;" type="file" name="" ref="file" @change="uploadFiles" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.csv,.xlsx,.xls,.xlsm">
                 </div>
                 <div class="select-area">
-                    <span class="title">Upload to connection</span>
+                    <span class="title">上传至</span>
                     <bp-select-vue src="https://www.pharbers.com/public/icon_drop.svg" :choosedValue="selectParam">
                         <bp-option-vue @click="changeSelect">本集群</bp-option-vue>
                     </bp-select-vue>

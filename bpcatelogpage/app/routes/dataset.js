@@ -13,15 +13,15 @@ export default class DatasetRoute extends Route {
 			refreshModel: true
 		}
     }
-	async model(param) {
+	async model(params) {
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){
                 this.loadingService.loading.style.display = 'none'
             }
         }
 		return RSVP.hash( {
-			projectName: param.projectName,
-			projectId: param.projectId,
+			projectName: params.projectName,
+			projectId: params.projectId,
 			_isVue: true
 		} )
 	}

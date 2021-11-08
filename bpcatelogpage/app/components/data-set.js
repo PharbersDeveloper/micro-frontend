@@ -133,7 +133,7 @@ export default class DataSetComponent extends Component {
                     }
                     that.loadingService.loading.style.display = 'none'
                     // that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
-                    that.router.transitionTo( `/excel-handler?tmpname=${message.tmpname}&projectName=${projectName}` )
+                    that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
                 } else if(new Date().getTime() - startTime >= 60000) {
                     clearInterval(dagStatusInt); //循环结束
 					alert("超时，连接终止！")
