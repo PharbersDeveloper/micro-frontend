@@ -9,7 +9,7 @@
                     <div class="upload_top">
                         <div class="selected_search">
                            <div class="selected" v-if="ary.length > 0">
-                               <input type="checkbox" class="checkbox" v-model="all" ref="all" @click="changeBg">
+                               <input type="checkbox" class="checkbox" ref="all" @click="changeBg">
                                <span class="action">选项</span>
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
                                 <div class="drop_dialog" v-if="dropDialogShow">
@@ -73,7 +73,7 @@
                                 <div class="label_selected" v-if="labelShowDialog">
                                   <div class="label_name" v-for="(item,index) in allData.dss" :key="index">
                                       <span></span>
-                                      <div class="tags_name">{{item.label}}</div>
+                                      <div class="tags_name" v-for="(i,inx) in item.label" :key="inx">{{i}}</div>
                                   </div>
                                   <div class="management">
                                       <div class="manage_label" @click="deleTagsShow">管理标签</div>
@@ -87,14 +87,18 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <div class="data_content tip" v-if="searchData == ''">没有找到您要查询的文件</div>
-                            <div class="data_content" v-for="(item,index) in searchData" :key="index"  :class="{bg: item.checked == true}" @click="changeBg(index)">
+                            <!-- <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div> -->
+                            <div class="data_content" v-for="(item,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="changeBg">
                                 <input type="checkbox" v-model="item.checked" ref="data">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{item.name}}</p>
-                                <p class="tag_bg" v-for="(item,index) in allData.dss" :key="index">{{item.label}}</p>
+                                <p v-for="(tag,inx) in item.label" :key="inx">
+                                    <span v-if="item.label !== ''">
+                                        <span class="tag_bg" @click="tagSearch">{{tag}}</span>
+                                    </span>
+                                </p>
                             </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
@@ -103,16 +107,16 @@
                     <div class="view_content" v-if="viewContent" >
                         <div class="project_name_view">
                             <span class="space"></span>
-                            <div v-for="item in allData.dss" :key="item.projectId">
+                            <div v-for="(item,index) in allData.dss" :key="index">
                                 <p class="project_name_info" v-if="ary.length == 1 && item.checked == true">
                                 {{item.name}}
                                 </p>
                             </div>
                             <p class="project_name_info" v-if="ary.length > 1">
-                                {{ary.length}} 条数据集
+                                {{}} 条数据集
                             </p>
                         </div>
-                         <div class="view_func">
+                        <div class="view_func">
                             <span @click="createTagsOpen">
                                 <span class='tags_func'>标签</span>
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
@@ -126,10 +130,10 @@
                                  <img class='tags_imgs_delete' :src="delete_icon" alt="">
                             </span>
                         </div>
-                    <p v-if="ary.length == 0" class="click_look">单击对象查看详细信息</p>
+                    </div>
+                    <p v-if="allData.dss == ''" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        </div>
         <clear-dataset-dialog  v-if="cleardialogshow" @closeClearDialog="closeClearDialog"></clear-dataset-dialog>
         <clear-delete v-if="deletedialogshow" @closeDeleteDialog="closeDeleteDialog"></clear-delete>
         <create-tags-dialog :tags="tags" v-if="createTagsDialog" @closeCreateDialog="closeCreateDialog"></create-tags-dialog>
@@ -191,7 +195,9 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {projectId:1,name:'Data_0001',label: 'llll'}
+                    // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    // {projectId:1,name:'Data_0002',label: []},
+                    // {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ]
                 // projectInfo: '2020.1 - 2021.12 Pfizer raw data'
             })
@@ -206,18 +212,9 @@ export default {
         bpOptionVue
     },
     computed: {
-        // all: {
-        //     get() {
-        //         return this.allData.dataName.every( item => item.checked === true )
-        //     },
-        //     set(newVal) {
-        //         this.allData.dataName.forEach(item => {
-        //             item.checked = newVal
-        //         })
-        //     }
-        // },
         searchData: function() {
             let searchValue = this.searchValue
+            this.state = 'search'
             if(searchValue) {
                 return this.allData.dss.filter(function(pro) {
                     return Object.keys(pro).some(function(key) {
@@ -239,6 +236,10 @@ export default {
         })
     },
     methods: {
+        tagSearch(e) {
+            console.log(e);
+            this.searchValue = e.target.innerHTML
+        },
         showSelectOption() {
             this.showSelectOptionParam = true
         },
@@ -309,20 +310,11 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        changeBg(index) {
-            this.allData.dataName.forEach(item => {
-                if(item.id == index+1) {
-                    item.checked = !item.checked
-                    if(item.checked == true) {
-                        this.ary.push(item)
-                    }else if(item.checked == false) {
-                        this.ary.splice(this.ary.length-1,1)
-                    }
-                }
-            })
-            // console.log(this.ary.length);
-            // this.viewContent = true
-            return this.ary
+        changeBg(e) {
+            console.log(e);
+            // this.isActive = index
+            this.viewContent = true
+            // return this.ary
         }
     }
 }
