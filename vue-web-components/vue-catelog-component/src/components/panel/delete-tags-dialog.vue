@@ -144,6 +144,7 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     border-bottom: 1px solid #ddd;
+	box-sizing: border-box;
     .tags_name {
         color: #111;
         font-size: 12px;
