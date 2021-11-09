@@ -52,7 +52,7 @@ export default class PhDataSource {
         let datas = sheets.length > 0 ? sheets[0] : []
         that.schema = datas.schema
         that.cols = datas.schema
-		that.data = datas.data
+        that.data = datas.data
         return datas.data
     }
 
