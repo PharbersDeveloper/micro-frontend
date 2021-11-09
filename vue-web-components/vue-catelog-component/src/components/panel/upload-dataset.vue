@@ -33,12 +33,6 @@
                                     </div>
                                 </div>
                            </div>
-                            <!-- <div class="selected sele">
-                               <input type="checkbox" class="checkbox" ref="all">
-                               <span class="action">选项</span>
-                               <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
-                           	</div> -->
-
                             <div class="search_area">
                                    <div class="search_icon">
                                        <img :src="search_icon">
@@ -87,7 +81,6 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <!-- <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div> -->
                             <div class="data_content" v-for="(item,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="changeBg(index)">
                                 <input type="checkbox" v-model="checked" ref="data">
                                 <span class="dataset_icon">
@@ -320,11 +313,8 @@ export default {
             this.showDialog = !this.showDialog
         },
         changeBg(index) {
-            // console.log(e)
-            // this.checked = true
             this.isActive = index
             this.viewContent = true
-            // return this.ary
         }
     }
 }

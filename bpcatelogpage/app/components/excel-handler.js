@@ -69,7 +69,7 @@ export default class ExcelHandlerComponent extends Component {
         const project_files_body = {
             "table": "action",
             "item": {
-                "projectId": "Max", //TODO: 用projectId 替换
+                "projectId": param.projectId, //TODO: 用projectId 替换
                 "code": 0,
                 "comments": "project file to Data set",
                 "jobCat": "project_file_to_DS",
