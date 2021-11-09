@@ -44,43 +44,6 @@ export default {
                 }, 100)
             }
         },
-        async queryData() {
-            const url = "https://api.pharbers.com/phchproxyquery"
-            const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
-            let body = {"query":"select sum(sales) as sales, sum(units) as units, `标准省份名称` as province, year from phmax.data_wide where province != 'null' group by province,year having year in (2020,2019) order by year","schema":["sales","units", "province", "year"]}
-            let options = {
-                method: "POST",
-                headers: {
-                    "Authorization": accessToken,
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    "accept": "application/json"
-                },
-                body: JSON.stringify(body)
-            }
-            let result = await fetch(url, options).then(res => res.json())
-            let yearGroupArr = []
-            let dataArr = []
-            result.forEach((item, index) => {
-                if(index == 0) {
-                    this.yearArr.push(item.year)
-                    yearGroupArr.push([Number(item.sales), Number(item.units), Number(item.sales), item.province, item.year])
-                } else {
-                    if(item.year == yearGroupArr[yearGroupArr.length - 1][4]) {
-                        yearGroupArr.push([Number(item.sales), Number(item.units), Number(item.sales), item.province, item.year])
-                    } else {
-                        this.yearArr.push(item.year)
-                        dataArr.push(yearGroupArr)
-                        yearGroupArr = []
-                        yearGroupArr.push([Number(item.sales), Number(item.units), Number(item.sales), item.province, item.year])
-                    }
-                }
-
-            })
-            dataArr.push(yearGroupArr)
-            this.dataArr = dataArr
-            console.log(this.dataArr)
-            console.log(this.yearArr)
-        },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))

@@ -158,7 +158,7 @@ export default {
             padding: 15px;
             border: 1px solid #979797;
             .title {
-                width: 190px;
+                width: 70px;
             }
             /deep/.bp-select {
                 height: 26px;

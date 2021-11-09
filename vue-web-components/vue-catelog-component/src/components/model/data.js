@@ -46,7 +46,9 @@ export default class PhDataSource {
             },
             body:JSON.stringify(body)
         }
-        let sheets =  await fetch(url, options).then(res => res.json())
+        let sheetsResult =  await fetch(url, options).then(res => res.json())
+        let sheets = sheetsResult.body
+
         let datas = sheets.length > 0 ? sheets[0] : []
         that.schema = datas.schema
         that.cols = datas.schema

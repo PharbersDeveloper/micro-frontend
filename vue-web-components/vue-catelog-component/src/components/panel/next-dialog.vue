@@ -11,15 +11,15 @@
                 </div>
                 <div class="upload_ds">
                     <input type="radio" class="radio" name="radio" @click="radio('dataSet')" ref="radioData">
-                    <!-- <input type="radio" class="radio" > -->
                     <span class="up">上传到数据集:</span>
-                    <!-- <input type="text" class="text" v-model="newData" ref="dataSet"> -->
-                    <div class="input">
-                        <p ref="dataSet">{{newData}}</p>
-                    </div>
-                    <div class="icon" @click="toggle" >
-                        <img :src="dropDownIcon">
-                    </div>
+					<div @click="toggle">
+						<div class="input">
+							<p ref="dataSet">{{newData}}</p>
+						</div>
+						<div class="icon" >
+							<img :src="dropDownIcon">
+						</div>
+					</div>
                     <div class="dialog" v-if="showDialog" ref="toggle">
                         <p class="dialog_select" v-for="(item,index) in data" :key="index">
                             <span @click="select">{{item}}</span>
@@ -163,6 +163,7 @@ export default {
             display: flex;
             margin-left: 72px;
             margin-top: 41px;
+			align-items: center;
             span {
                 font-family: PingFangSC-Medium;
                 font-size: 14px;
@@ -171,7 +172,7 @@ export default {
             }
             .data_id_space {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 66px;
                 input {
@@ -191,6 +192,7 @@ export default {
             position: relative;
             margin-left: 40px;
             margin-top: 40px;
+			align-items: center;
             .warning {
                 color: red;
             }
@@ -202,12 +204,9 @@ export default {
                 font-weight: 600;
                 margin-left: 10px;
             }
-            .radio{ 
-                margin-top: 5px;
-            }
-                .input {
+			.input {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 37px;
                 p {
@@ -223,10 +222,11 @@ export default {
                 position: absolute;
                 top: 2px;
                 right: 115px;
-                width: 26px;
+                // width: 26px; 
                 height: 18px;
                 img {
-                    width: 100%;
+                    width: 12px;
+    				height: 12px;
                 }
             }
             .dialog {
@@ -256,6 +256,7 @@ export default {
         .new_dataset {
             display: flex;
             margin-top: 40px;
+			align-items: center;
             margin-left: 40px;
             span {
                 margin-left: 15px;
@@ -266,7 +267,7 @@ export default {
             }
             .new_dataset_space {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 45px;
                  input {
@@ -279,9 +280,6 @@ export default {
                     // line-height: 24px;
                     border: 0px;
                 }
-            }
-             .radio{ 
-                margin-top: 5px;
             }
 
 

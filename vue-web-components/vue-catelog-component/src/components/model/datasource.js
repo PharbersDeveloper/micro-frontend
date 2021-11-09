@@ -34,12 +34,12 @@ export default class PhDataSource {
         const accessToken = ele.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
         console.log(this.tmpname)
         let body = {
-            "project":"max",
-            "tempfile": this.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
+            "project":"max", //66875db6f287aaa382bd04152b092b90.xlsx
+            "tempfile": this.tmpname || "2f18101b999e2d2802d543baf21b92a6.xlsx",
             "sheet": this.sheet || '',
             "out_number": 10,
-            "skip_first": this.firstSkipValue || 0,
-            "skip_next": this.nextSkipValue || 0
+            "skip_first": Number(this.firstSkipValue) || 0,
+            "skip_next": Number(this.nextSkipValue) || 0
         }
         let options = {
             method: "POST",
@@ -51,13 +51,12 @@ export default class PhDataSource {
             },
             body:JSON.stringify(body)
         }
-        let sheets =  await fetch(url, options).then(res => res.json())
-        let sheetArray = []
-        sheets.forEach(item => {
-            sheetArray.push(item.sheet)
-        })
-        this.par.sheetArr = sheetArray //单选选项
-        this.par.sheet = this.par.sheetArr[0] //默认选中
+        let sheetsResult =  await fetch(url, options).then(res => res.json())
+        let sheets = sheetsResult.body
+        this.par.sheetArr = sheetsResult.sheets //单选选项
+        if(!this.par.sheet || this.par.sheet == '') {
+            this.par.sheet = this.par.sheetArr[0] //默认选中
+        }
         //表格数据
         let datas = sheets.length > 0 ? sheets[0] : []
         //表头
