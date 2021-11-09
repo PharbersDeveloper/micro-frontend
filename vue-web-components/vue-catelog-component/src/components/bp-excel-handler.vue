@@ -59,9 +59,11 @@
                     </div>
                     <div class="eh-sheet-panel">
                         <span class="radio-title">Select Sheet</span>
-                        <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
-                            <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
-                            <label >{{item}}</label>
+                        <div class="radio_arr">
+                            <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
+                                <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
+                                <label >{{item}}</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,8 +133,8 @@ export default {
                     "skipValue": Number(this.firstSkipValue),
                     "jumpValue": Number(this.nextSkipValue),
                     "fileType": this.allData.tmpname.split('.')[1],
-                    // "fileSheet": this.sheet,
-                    "fileSheet": 'Sheet1',
+                    "fileSheet": this.sheet,
+                    // "fileSheet": 'Sheet1',
                     "fileName": this.allData.filename,
                     "isAppend": false,
                     "destination": this.allData.dataset,
@@ -243,6 +245,10 @@ export default {
                 }
                 .radio-title {
                     margin-bottom: 10px;
+                }
+                .radio_arr {
+                    height: 140px;
+                    overflow: auto;
                 }
             }
         }

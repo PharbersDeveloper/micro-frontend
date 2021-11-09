@@ -31,7 +31,7 @@ export default class PhDataSource {
     async buildQuery(ele, isAppend=false) {
         let that = this
         const url = "https://apiv2.pharbers.com/schemaexplorer"
-        const accessToken = ele.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
+        const accessToken = ele.getCookie("access_token") || "4f286eb01ebc23da04ba9187e0f4d3d3e60324091fd5dadeab1734110b7ecd7a"
         console.log(this.tmpname)
         let body = {
             "project":"max", //66875db6f287aaa382bd04152b092b90.xlsx
@@ -62,24 +62,16 @@ export default class PhDataSource {
         //表头
         that.schema = datas.schema
         that.cols = datas.schema
-        let obj = {}
-        let result = []
-        datas.data.forEach(element => {
-            obj = {}
-            datas.schema.forEach((item, index) => {
-                obj[item] = element[index]
-            })
-            result.push(obj)
-        })
-        console.log(result)
-        return result
+        that.data = datas.data
+        return datas.data
     }
 
     refreshData(ele) {
         let that = this
         ele.datasource.buildQuery(ele)
             .then((response) => {
-                ele.datasource.data = response.map(ele.datasource.adapter, that.schema)
+                // ele.datasource.data = response.map(ele.datasource.adapter, that.schema)
+                ele.datasource.data = this.data
                 ele.needRefresh++
             })
     }
@@ -87,7 +79,8 @@ export default class PhDataSource {
     appendData(ele) {
         ele.datasource.buildQuery(ele, true)
             .then((response) => {
-                ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                // ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                ele.datasource.data = this.data
                 ele.cur_page++
                 ele.needRefresh++
             })
