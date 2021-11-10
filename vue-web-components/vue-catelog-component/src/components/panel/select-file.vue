@@ -56,6 +56,13 @@ export default {
                 projectId: '',
                 datasetArr: []
             })
+        },
+        random: Number
+    },
+    watch: {
+        random: function() {
+            console.log("关闭所有弹框")
+            this.show = false
         }
     },
     methods: {
@@ -80,7 +87,7 @@ export default {
             this.fileList.push(this.$refs.file.files[0])
         },
         uploadFilesEvent(data) {
-            this.show = false
+            // this.show = false
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
@@ -214,6 +221,7 @@ export default {
                 border-radius: 4px;
                 line-height: 32px;
                 text-align: center;
+                cursor: pointer;
             }
             .select_input {
                 position: absolute;
