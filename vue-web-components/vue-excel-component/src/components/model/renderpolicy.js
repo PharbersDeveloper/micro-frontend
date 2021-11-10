@@ -102,7 +102,7 @@ export default class PhDefaultRenderPolicy {
 		this.datasource.data.slice(start_index, start_index + this.page_size).forEach((row, row_index) => {
 			row.forEach((col, col_index) => {
 				// 没有请求接口的数据
-				if(this.datasource.adapter && col_index === row.length - 1) {
+				if(this.datasource.adapter && col_index === row.length) {
 					return
 				}
 				const pos = that.getCellPosition(row_index, col_index)
