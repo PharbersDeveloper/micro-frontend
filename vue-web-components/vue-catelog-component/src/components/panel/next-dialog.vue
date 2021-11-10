@@ -11,27 +11,25 @@
                 </div>
                 <div class="upload_ds">
                     <input type="radio" class="radio" name="radio" @click="radio('dataSet')" ref="radioData">
-                    <!-- <input type="radio" class="radio" > -->
                     <span class="up">上传到数据集:</span>
-                    <!-- <input type="text" class="text" v-model="newData" ref="dataSet"> -->
-                    <div class="input">
-                        <p ref="dataSet">{{newData}}</p>
-                    </div>
-                    <div class="icon" @click="toggle" >
-                        <img :src="dropDownIcon">
+                    <div @click="toggle">
+                        <div class="input">
+                            <p ref="dataSet">{{newData}}</p>
+                        </div>
+                        <div class="icon" >
+                            <img :src="dropDownIcon">
+                        </div>
                     </div>
                     <div class="dialog" v-if="showDialog" ref="toggle">
-                        <p class="dialog_select" v-for="(item,index) in data" :key="index">
-                            <span @click="select">{{item}}</span>
+                        <p class="dialog_select" v-for="(item,index) in datasetArr" :key="index">
+                            <span @click="select">{{item.name}}</span>
                         </p>
                     </div>
                 </div>
                 <div class="new_dataset" >
                     <input type="radio" class="radio" name="radio" @click="radio('newData')" ref="radioNew">
                     <span>新建数据集:</span>
-                    <!-- <input type="text" class="text"> -->
                     <div class="new_dataset_space">
-                        <!-- <p>New dataset name</p> -->
                         <input type="text" ref="newData" v-model="newDataName" :disabled="true">
                     </div>
                 </div>
@@ -56,13 +54,14 @@ export default {
             newData: '', 
             newDataName: '',
             dataID: '',
-            radioState: '',
-            data: []
+            radioState: ''
         }
     },
     methods: {
         toggle() {
-            this.showDialog = !this.showDialog
+            if(this.$refs.radioData.checked) {
+                this.showDialog = !this.showDialog
+            }
         },
         close() {
             this.$emit('closeDialog')
@@ -96,7 +95,6 @@ export default {
         radio(state) {
             this.radioState = state
             if(state === 'dataSet') {
-                this.data = ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
                 this.showDialog = false
                 this.$refs.newData.disabled = true
                 this.$refs.dataSet.disabled = false
@@ -114,10 +112,11 @@ export default {
             type: Boolean,
             default: false
         },
-        allData: {
-            type: Object,
-            default: () => ({
-            })
+        datasetArr: {
+            type: Array,
+            default: function() {
+                return ['dataset_0001','dataset_0002','dataset_0003','dataset_0004','dataset_0003','dataset_0003','dataset_0003']
+            }
         },
         fileList: {
             type: Array,
@@ -163,6 +162,7 @@ export default {
             display: flex;
             margin-left: 72px;
             margin-top: 41px;
+            align-items: center;
             span {
                 font-family: PingFangSC-Medium;
                 font-size: 14px;
@@ -171,7 +171,7 @@ export default {
             }
             .data_id_space {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 66px;
                 input {
@@ -191,6 +191,7 @@ export default {
             position: relative;
             margin-left: 40px;
             margin-top: 40px;
+            align-items: center;
             .warning {
                 color: red;
             }
@@ -202,12 +203,9 @@ export default {
                 font-weight: 600;
                 margin-left: 10px;
             }
-            .radio{ 
-                margin-top: 5px;
-            }
-                .input {
+            .input {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 37px;
                 p {
@@ -221,18 +219,25 @@ export default {
             }
             .icon {
                 position: absolute;
-                top: 2px;
+                top: 4px;
                 right: 115px;
-                width: 26px;
+                // width: 26px; 
                 height: 18px;
                 img {
-                    width: 100%;
+                    width: 12px;
+                    height: 12px;
                 }
             }
             .dialog {
                 position: absolute;
                 top: 25px;
-                right: 109px;
+                right: 104px;
+                width: 206px;
+                height: 100px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                border: 1px solid #979797;
+                background: white;
                 .dialog_select {
                     width: 200px;
                     height: 24px;
@@ -256,6 +261,7 @@ export default {
         .new_dataset {
             display: flex;
             margin-top: 40px;
+            align-items: center;
             margin-left: 40px;
             span {
                 margin-left: 15px;
@@ -266,7 +272,7 @@ export default {
             }
             .new_dataset_space {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 45px;
                  input {
@@ -276,12 +282,9 @@ export default {
                     color: #000000;
                     font-weight: 600;
                     margin-left: 10px;
-                    // line-height: 24px;
-                    border: 0px;
+                    border: 0;
+                    background: none;
                 }
-            }
-             .radio{ 
-                margin-top: 5px;
             }
 
 

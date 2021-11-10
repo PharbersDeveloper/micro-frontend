@@ -27,7 +27,7 @@
             </div>
             
         </div>
-        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent"></next-dialog>
+        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent" :datasetArr="allData.datasetArr"></next-dialog>
     </div>
 </template>
 
@@ -53,7 +53,8 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                projectId: ''
+                projectId: '',
+                datasetArr: []
             })
         }
     },
@@ -158,7 +159,7 @@ export default {
             padding: 15px;
             border: 1px solid #979797;
             .title {
-                width: 190px;
+                width: 70px;
             }
             /deep/.bp-select {
                 height: 26px;

@@ -24,14 +24,14 @@
                             <table border="0">
                                 <tr>
                                     <td class="left"><span>Type</span></td>
-                                    <td><input /></td>
+                                    <td><input disabled v-model="typeValue"/></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                     <div class="eh-refresh-btns">
-                        <button >Update</button>
-                        <button >ReDetect</button>
+                        <button @click="skip">Update</button>
+                        <button @click="skip">ReDetect</button>
                     </div>
                 </div>
 
@@ -47,7 +47,8 @@
                             <tr>
                                 <td class="left">&nbsp;</td>
                                 <td class="skip-first-area">
-                                    <input class="skip-first" type="checkbox" min="0" /><span>Parse next line as column headers</span>
+                                    <input class="skip-first" type="checkbox" min="0" checked disabled/>
+                                    <span>Parse next line as column headers</span>
                                 </td>
                             </tr>
                             <tr class="skip-next">
@@ -58,10 +59,12 @@
                     </div>
                     <div class="eh-sheet-panel">
                         <span class="radio-title">Select Sheet</span>
-                        <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
-							<input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
-							<label >{{item}}</label>
-						</div>
+                        <div class="radio_arr">
+                            <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
+                                <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
+                                <label >{{item}}</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -82,7 +85,8 @@ export default {
             sheet: '',
             tmpname: '',
             sheetArr: [],
-            showExcel: true
+            showExcel: true,
+            typeValue: ''
         }
     },
     props: {
@@ -102,7 +106,7 @@ export default {
     created() {
         let uriParam = window.location.href
         this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
-
+        this.typeValue = this.tmpname.split(".")[1]
         this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
@@ -126,11 +130,11 @@ export default {
                 element: this,
                 param: {
                     "fileId": this.allData.tmpname,
-                    "skipValue": this.firstSkipValue,
-                    "jumpValue": this.nextSkipValue,
+                    "skipValue": Number(this.firstSkipValue),
+                    "jumpValue": Number(this.nextSkipValue),
                     "fileType": this.allData.tmpname.split('.')[1],
-                    // "fileSheet": this.sheet,
-                    "fileSheet": 'Sheet1',
+                    "fileSheet": this.sheet,
+                    // "fileSheet": 'Sheet1',
                     "fileName": this.allData.filename,
                     "isAppend": false,
                     "destination": this.allData.dataset,
@@ -181,7 +185,7 @@ export default {
         }
         .project_name_header {
             height: 50px;
-            width: 100%;
+            // width: 100%;
             border-bottom: 2px solid #ccc;
             padding-right: 20px;
             .project_name {
@@ -198,6 +202,9 @@ export default {
             .project-actions {
                 display: flex;
                 flex-direction: row;
+                button {
+                    cursor: pointer;
+                }
             }
         }
         .content {
@@ -238,6 +245,10 @@ export default {
                 }
                 .radio-title {
                     margin-bottom: 10px;
+                }
+                .radio_arr {
+                    height: 140px;
+                    overflow: auto;
                 }
             }
         }
@@ -298,6 +309,7 @@ export default {
                         text-shadow: none;
                         box-sizing: border-box;
                         outline: 0;
+                        cursor: pointer;
                     }
                 }
             }

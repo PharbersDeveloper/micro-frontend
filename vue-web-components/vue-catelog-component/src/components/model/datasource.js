@@ -31,15 +31,15 @@ export default class PhDataSource {
     async buildQuery(ele, isAppend=false) {
         let that = this
         const url = "https://apiv2.pharbers.com/schemaexplorer"
-        const accessToken = ele.getCookie("access_token") || "37288a0f8436ffd4e3bb84cbf250f083cd67ef97a503927b0fbf1d093b262d41"
+        const accessToken = ele.getCookie("access_token") || "4f286eb01ebc23da04ba9187e0f4d3d3e60324091fd5dadeab1734110b7ecd7a"
         console.log(this.tmpname)
         let body = {
-            "project":"max",
-            "tempfile": this.tmpname || "66875db6f287aaa382bd04152b092b90.xlsx",
+            "project":"max", //66875db6f287aaa382bd04152b092b90.xlsx
+            "tempfile": this.tmpname || "2f18101b999e2d2802d543baf21b92a6.xlsx",
             "sheet": this.sheet || '',
             "out_number": 10,
-            "skip_first": this.firstSkipValue || 0,
-            "skip_next": this.nextSkipValue || 0
+            "skip_first": Number(this.firstSkipValue) || 0,
+            "skip_next": Number(this.nextSkipValue) || 0
         }
         let options = {
             method: "POST",
@@ -51,36 +51,27 @@ export default class PhDataSource {
             },
             body:JSON.stringify(body)
         }
-        let sheets =  await fetch(url, options).then(res => res.json())
-        let sheetArray = []
-        sheets.forEach(item => {
-            sheetArray.push(item.sheet)
-        })
-        this.par.sheetArr = sheetArray //单选选项
-        this.par.sheet = this.par.sheetArr[0] //默认选中
+        let sheetsResult =  await fetch(url, options).then(res => res.json())
+        let sheets = sheetsResult.body
+        this.par.sheetArr = sheetsResult.sheets //单选选项
+        if(!this.par.sheet || this.par.sheet == '') {
+            this.par.sheet = this.par.sheetArr[0] //默认选中
+        }
         //表格数据
         let datas = sheets.length > 0 ? sheets[0] : []
         //表头
         that.schema = datas.schema
         that.cols = datas.schema
-        let obj = {}
-        let result = []
-        datas.data.forEach(element => {
-            obj = {}
-            datas.schema.forEach((item, index) => {
-                obj[item] = element[index]
-            })
-            result.push(obj)
-        })
-        console.log(result)
-        return result
+        that.data = datas.data
+        return datas.data
     }
 
     refreshData(ele) {
         let that = this
         ele.datasource.buildQuery(ele)
             .then((response) => {
-                ele.datasource.data = response.map(ele.datasource.adapter, that.schema)
+                // ele.datasource.data = response.map(ele.datasource.adapter, that.schema)
+                ele.datasource.data = this.data
                 ele.needRefresh++
             })
     }
@@ -88,7 +79,8 @@ export default class PhDataSource {
     appendData(ele) {
         ele.datasource.buildQuery(ele, true)
             .then((response) => {
-                ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                // ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                ele.datasource.data = this.data
                 ele.cur_page++
                 ele.needRefresh++
             })

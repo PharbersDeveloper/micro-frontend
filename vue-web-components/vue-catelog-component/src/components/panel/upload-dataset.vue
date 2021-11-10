@@ -2,14 +2,14 @@
     <div class="upload-dataset">
         <div class="upload_dataset_container">
             <div class="project_name_header">
-                <p class="project_name">{{allData.projectName}}</p>
+                <p class="project_name" @click="linkToProject">{{allData.projectName}}</p>
             </div>
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
                            <div class="selected">
-                               <input type="checkbox" class="checkbox" ref="all">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dss.length">
                                <span class="action">选项</span>
                                <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
                                 <div class="drop_dialog" v-if="dropDialogShow">
@@ -33,12 +33,6 @@
                                     </div>
                                 </div>
                            </div>
-                            <!-- <div class="selected sele">
-                               <input type="checkbox" class="checkbox" ref="all">
-                               <span class="action">选项</span>
-                               <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
-                           	</div> -->
-
                             <div class="search_area">
                                    <div class="search_icon">
                                        <img :src="search_icon">
@@ -87,19 +81,29 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <!-- <div class="data_content tip" v-if="searchData == '' && state == 'search'">没有找到您要查询的文件</div> -->
-                            <div class="data_content" v-for="(item,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="changeBg(index)">
-                                <input type="checkbox" v-model="checked" ref="data">
-                                <span class="dataset_icon">
-                                    <img :src="dataset_icon" alt="">
-                                </span>
-                                <p class="data_name">{{item.name}}</p>
-                                <p v-for="(tag,inx) in item.label" :key="inx">
-                                    <span v-if="item.label !== ''">
-                                        <span class="tag_bg" @click="tagSearch">{{tag}}</span>
+                            <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset.id, index)">
+                                <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset.id)">
+                                <!-- {{datasetcheckedIds}} {{dataset.id}} -->
+                                <div class="item_list" >
+                                    <span class="dataset_icon">
+                                        <img :src="dataset_icon" alt="">
                                     </span>
-                                </p>
+                                    <p class="data_name">{{dataset.name}}</p>
+                                    <p v-for="(tag,inx) in dataset.label" :key="inx">
+                                        <span v-if="dataset.label !== ''">
+                                            <span class="tag_bg" @click="tagSearch">{{tag}}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                
                             </div>
+                            <!-- <div>
+                                <input type='checkbox' class='input-checkbox' :checked="fruitIds.length === fruits.length" @click='checkedAll()'>全选
+                                <div v-for='(fruit, index) in fruits' :key="index">
+                                    <input type='checkbox' :checked="fruitIds.indexOf(fruit.fruitId) > -1" name='checkboxinput' class='input-checkbox' @click='checkedOne(fruit.fruitId)'>
+                                </div>
+                                <button :disabled="!fruitIds.length>0" value="Delete" @click="deleteFruits()">Delete</button>
+                            </div> -->
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
                 </div>
@@ -170,7 +174,6 @@ export default {
             state: '',
             editShow: false,
             viewContent: false,
-            isActive: null,
             dropDialogShow: false,
             labelShowDialog: false,
             cleardialogshow: false,
@@ -187,7 +190,24 @@ export default {
             checked: false,
             manual: true,
             scriptValue: "最近一次编辑",
-            checked: false
+            fruits:[{
+                fruitId:'1',
+                value:'苹果'
+            },{
+                fruitId:'2',
+                value:'荔枝'
+            },{
+                fruitId:'3',
+                value:'香蕉'
+            },{
+                fruitId:'4',
+                value:'火龙果'
+            }
+            ],
+            fruitIds:['1','3','4'],
+            isCheckedAll: false,
+            isCheckedAllDataset: false,
+            datasetcheckedIds: []
         }
     },
     props: {
@@ -196,8 +216,9 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    {projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
+                    {id: '1', projectId:1,name:'Data_0001',label: ['lalalla','lll']},
+                    {id: '2', projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']},
+                    {id: '3', projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
                 ]
             })
         }
@@ -235,6 +256,55 @@ export default {
         })
     },
     methods: {
+        clickOnlyOne(id, index) {
+            this.datasetcheckedIds = []
+            this.datasetcheckedIds.push(id)
+            this.viewContent = true
+        },
+        checkedOneDataset(id) {
+            let idIndex = this.datasetcheckedIds.indexOf(id)
+            if(idIndex >= 0) {
+                this.datasetcheckedIds.splice(idIndex, 1)
+            } else {
+                this.datasetcheckedIds.push(id)
+            }
+        },
+        checkedOne (fruitId) {
+            let idIndex = this.fruitIds.indexOf(fruitId)
+            if (idIndex >= 0) {
+                // 如果已经包含了该id, 则去除(单选按钮由选中变为非选中状态)
+                this.fruitIds.splice(idIndex, 1)
+            } else {
+                // 选中该checkbox
+                this.fruitIds.push(fruitId)
+            }
+        },
+        chechedAllDataset() {
+            // this.isCheckedAllDataset = !this.isCheckedAllDataset
+            this.isCheckedAllDataset = true
+            if(this.datasetcheckedIds.length == this.allData.dss.length) {
+                this.isCheckedAllDataset = false
+            }
+            this.datasetcheckedIds = []
+            //全选状态
+            if(this.isCheckedAllDataset) {
+                this.allData.dss.forEach(item => {
+                    this.datasetcheckedIds.push(item.id)
+                })
+            }
+        },
+        checkedAll () {
+            this.isCheckedAll = !this.isCheckedAll
+            if (this.isCheckedAll) {
+                // 全选时
+                this.fruitIds = []
+                this.fruits.forEach(function (fruit) {
+                    this.fruitIds.push(fruit.fruitId)
+                }, this)
+            } else {
+                this.fruitIds = []
+            }
+        },
         tagSearch(e) {
             console.log(e);
             this.searchValue = e.target.innerHTML
@@ -316,15 +386,11 @@ export default {
             }
             this.$emit('event', event)
         },
+        linkToProject() {
+
+        },
         toggle() {
             this.showDialog = !this.showDialog
-        },
-        changeBg(index) {
-            // console.log(e)
-            // this.checked = true
-            this.isActive = index
-            this.viewContent = true
-            // return this.ary
         }
     }
 }
@@ -694,7 +760,9 @@ export default {
                     height: 60px;
                     border-bottom: 1px solid #dddddd;
                     padding: 20px 0 20px 20px;
-
+                    input{
+                        cursor: pointer;
+                    }
                     .tag_bg {
                         position: relative;
                         top: -8px;
@@ -711,7 +779,9 @@ export default {
                         border-radius: 10px;
                         margin-left: 10px;
                     }
-
+                    .item_list {
+                        display: flex;
+                    }
                     .dataset_icon {
                         margin-left: 27px;
                         width: 30px;
@@ -721,7 +791,6 @@ export default {
                             width: 100%;
                         }
                     }
-
                     .data_name {
                         margin-left: 27px;
                         font-family: PingFangSC-Medium;

@@ -33,7 +33,8 @@ export default class DatasetLstRoute extends Route {
 		let body = {
 			"table": "dataset",
 			"conditions": {
-				"projectId": "Max"
+				// "projectId": "Max"
+				"projectId": params.projectId
 			},
 			"limit": 100,
 			"start_key": {}
