@@ -2,7 +2,7 @@
     <div class="upload-dataset">
         <div class="upload_dataset_container">
             <div class="project_name_header">
-                <p class="project_name">{{allData.projectName}}</p>
+                <p class="project_name" @click="linkToProject">{{allData.projectName}}</p>
             </div>
             <div class="info">
                 <div class="project_info_left">
@@ -385,6 +385,9 @@ export default {
                 }
             }
             this.$emit('event', event)
+        },
+        linkToProject() {
+
         },
         toggle() {
             this.showDialog = !this.showDialog

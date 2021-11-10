@@ -27,7 +27,7 @@
             </div>
             
         </div>
-        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent"></next-dialog>
+        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent" :datasetArr="allData.datasetArr"></next-dialog>
     </div>
 </template>
 
@@ -53,7 +53,8 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                projectId: ''
+                projectId: '',
+                datasetArr: []
             })
         }
     },
