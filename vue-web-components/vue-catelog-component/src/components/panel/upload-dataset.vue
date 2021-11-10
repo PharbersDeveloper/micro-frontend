@@ -81,7 +81,7 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: isActive == index}" @click="clickOnlyOne(dataset.id, index)">
+                            <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset.id, index)">
                                 <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset.id)">
                                 <!-- {{datasetcheckedIds}} {{dataset.id}} -->
                                 <div class="item_list" >
@@ -174,7 +174,6 @@ export default {
             state: '',
             editShow: false,
             viewContent: false,
-            isActive: null,
             dropDialogShow: false,
             labelShowDialog: false,
             cleardialogshow: false,
@@ -260,7 +259,6 @@ export default {
         clickOnlyOne(id, index) {
             this.datasetcheckedIds = []
             this.datasetcheckedIds.push(id)
-            this.isActive = index
             this.viewContent = true
         },
         checkedOneDataset(id) {
@@ -759,7 +757,9 @@ export default {
                     height: 60px;
                     border-bottom: 1px solid #dddddd;
                     padding: 20px 0 20px 20px;
-
+                    input{
+                        cursor: pointer;
+                    }
                     .tag_bg {
                         position: relative;
                         top: -8px;
@@ -788,7 +788,6 @@ export default {
                             width: 100%;
                         }
                     }
-
                     .data_name {
                         margin-left: 27px;
                         font-family: PingFangSC-Medium;
