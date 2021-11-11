@@ -33,7 +33,6 @@ export default class DatasetLstRoute extends Route {
 		let body = {
 			"table": "dataset",
 			"conditions": {
-				// "projectId": "Max"
 				"projectId": params.projectId
 			},
 			"limit": 100,
@@ -67,6 +66,7 @@ export default class DatasetLstRoute extends Route {
 			projectName: params.projectName,
 			projectId: params.projectId,
 			dss: tmp.filter(it => it),
+			tagsArray: [],
 			_isVue: true
 		} )
 	}

@@ -10,26 +10,28 @@
                         <div class="selected_search">
                            <div class="selected">
                                 <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dss.length">
-                               <span class="action">选项</span>
-                               <img :src="dropDownIcon" alt="" @click="dropShow" class="d_icon">
-                                <div class="drop_dialog" v-if="dropDialogShow">
-                                    <div class="label_icon" @click="createTagsOpen">
-                                        <span class="tag_icon">
-                                            <img :src="label_icon" alt="">
-                                        </span>
-                                        <p >标签</p>
-                                    </div>
-                                    <div class="label_icon border_none none" @click="clearDialogOpen">
-                                        <span>
-                                            <img :src="clear_data_icon" alt="">
-                                        </span>
-                                        <p >清除数据</p>
-                                    </div>
-                                    <div class="label_icon border_none" @click="deletedialogopen">
-                                        <span>
-                                            <img :src="delete_icon" alt="">
-                                        </span>
-                                        <p >删除数据集</p>
+                                <div class="opt-area" @click="dropShow">
+                                    <span class="action" >选项</span>
+                                    <img :src="dropDownIcon" alt="" class="d_icon">
+                                    <div class="drop_dialog" v-if="dropDialogShow">
+                                        <div class="label_icon" @click="createTagsOpen">
+                                            <span class="tag_icon">
+                                                <img :src="label_icon" alt="">
+                                            </span>
+                                            <p>标签</p>
+                                        </div>
+                                        <div class="label_icon border_none none" @click="clearDialogOpen">
+                                            <span>
+                                                <img :src="clear_data_icon" alt="">
+                                            </span>
+                                            <p >清除数据</p>
+                                        </div>
+                                        <div class="label_icon border_none" @click="deletedialogopen">
+                                            <span>
+                                                <img :src="delete_icon" alt="">
+                                            </span>
+                                            <p >删除数据集</p>
+                                        </div>
                                     </div>
                                 </div>
                            </div>
@@ -54,7 +56,7 @@
                             </div>
                             <div class="down_sel" >
                                 <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                                    <bp-option-vue text="最后一次编辑" @click="selectScript(0)"></bp-option-vue>
+                                    <!-- <bp-option-vue text="最后一次编辑" @click="selectScript(0)"></bp-option-vue> -->
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
@@ -81,9 +83,8 @@
                         </div>
                     </div>
                         <div class="upload_bottom">
-                            <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset.id, index)">
-                                <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset.id)">
-                                <!-- {{datasetcheckedIds}} {{dataset.id}} -->
+                            <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
+                                <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
                                 <div class="item_list" >
                                     <span class="dataset_icon">
                                         <img :src="dataset_icon" alt="">
@@ -91,34 +92,33 @@
                                     <p class="data_name">{{dataset.name}}</p>
                                     <p v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
-                                            <span class="tag_bg" @click="tagSearch">{{tag}}</span>
+                                            <span 
+                                                class="tag_bg" 
+                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                            </span>
                                         </span>
                                     </p>
                                 </div>
-                                
                             </div>
-                            <!-- <div>
-                                <input type='checkbox' class='input-checkbox' :checked="fruitIds.length === fruits.length" @click='checkedAll()'>全选
-                                <div v-for='(fruit, index) in fruits' :key="index">
-                                    <input type='checkbox' :checked="fruitIds.indexOf(fruit.fruitId) > -1" name='checkboxinput' class='input-checkbox' @click='checkedOne(fruit.fruitId)'>
-                                </div>
-                                <button :disabled="!fruitIds.length>0" value="Delete" @click="deleteFruits()">Delete</button>
-                            </div> -->
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="viewContent" >
+                    <div class="view_content" v-if="datasetcheckedIds.length > 0" >
                         <div class="project_name_view">
-                            <span class="space"></span>
-                            <div v-for="(item,index) in allData.dss" :key="index">
+                            <span class="space">
+                                <img :src="dataset_icon" alt="">
+                            </span>
+                            <div class="show-name" v-if="datasetcheckedIds.length == 1">
                                 <p class="project_name_info" >
-                                {{item.name}}
+                                {{datasetcheckedNames[0]}}
                                 </p>
                             </div>
-                            <p class="project_name_info" v-if="ary.length > 1">
-                                {{}} 条数据集
-                            </p>
+                           <div class="show-name">
+                               <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
+                                    {{datasetcheckedIds.length}} 条数据集
+                                </p>
+                           </div>
                         </div>
                         <div class="view_func">
                             <span @click="createTagsOpen">
@@ -135,12 +135,22 @@
                             </span>
                         </div>
                     </div>
-                    <p v-if="allData.dss == ''" class="click_look">单击对象查看详细信息</p>
+                    <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
         <clear-dataset-dialog  v-if="cleardialogshow" @closeClearDialog="closeClearDialog"></clear-dataset-dialog>
         <clear-delete v-if="deletedialogshow" @closeDeleteDialog="closeDeleteDialog"></clear-delete>
-        <create-tags-dialog :tags="tags" v-if="createTagsDialog" @closeCreateDialog="closeCreateDialog"></create-tags-dialog>
+        <!-- 添加tag -->
+        <create-tags-dialog 
+            v-if="showCreateTagsDialog"
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
+            :datasets="allData.dss"
+            :tagsArray="allData.tagsArray"
+            :tagsColorArray="tagsColorArray"
+            @addTagsEvent="addTagsEvent"
+            @closeCreateDialog="closeCreateDialog">
+        </create-tags-dialog>
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
     </div>
     </div>
@@ -173,14 +183,13 @@ export default {
             showDialog: false,
             state: '',
             editShow: false,
-            viewContent: false,
             dropDialogShow: false,
             labelShowDialog: false,
             cleardialogshow: false,
             deletedialogshow: false,
             showSelectOptionParam: false,
             closeTosts: false,
-            createTagsDialog: false,
+            showCreateTagsDialog: false, //添加tag弹框
             deleteTagsDia: false,
             searchValue: '',
             ascending: true,
@@ -189,25 +198,12 @@ export default {
             ary: [],
             checked: false,
             manual: true,
-            scriptValue: "最近一次编辑",
-            fruits:[{
-                fruitId:'1',
-                value:'苹果'
-            },{
-                fruitId:'2',
-                value:'荔枝'
-            },{
-                fruitId:'3',
-                value:'香蕉'
-            },{
-                fruitId:'4',
-                value:'火龙果'
-            }
-            ],
-            fruitIds:['1','3','4'],
-            isCheckedAll: false,
+            scriptValue: "名称",
             isCheckedAllDataset: false,
-            datasetcheckedIds: []
+            datasetcheckedIds: [], //选中项id
+            datasetcheckedNames: [], //选中项name
+            color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab']
         }
     },
     props: {
@@ -216,10 +212,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    {id: '2', projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']},
-                    {id: '3', projectId:2,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
-                ]
+                    {id: '1', projectId:1,name:'Data_0001',label: ['zzz','aaa']},
+                    {id: '2', projectId:2,name:'Data_0002',label: ['qqq','sss']},
+                    {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
+                ],
+                tagsArray: ["qqq", "aaa", "zzz", "sss", "eee"]
             })
         }
     },
@@ -244,65 +241,57 @@ export default {
             }
             return this.allData.dss
         }
-
     },
     mounted() {
         let that = this
-        document.addEventListener("click", event => {
-            if(!that.showSelectOptionParam) {
-                that.closeTosts = !that.closeTosts
-            }
-            that.showSelectOptionParam = false
-        })
+    },
+    watch: {
+        "allData.tagsArray": function() {
+            this.tagsColorArray = []
+            this.allData.tagsArray.forEach((item, index) => {
+                this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
+            })
+            console.log("colorArr", this.tagsColorArray)
+        }
     },
     methods: {
-        clickOnlyOne(id, index) {
-            this.datasetcheckedIds = []
-            this.datasetcheckedIds.push(id)
-            this.viewContent = true
+        addTagsEvent(data) {
+            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.datasetArray = this.allData.dss
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            this.$emit('event', data)
+            this.showCreateTagsDialog = false;
         },
-        checkedOneDataset(id) {
-            let idIndex = this.datasetcheckedIds.indexOf(id)
+        clickOnlyOne(dataset, index) {
+            this.datasetcheckedIds = []
+            this.datasetcheckedNames = []
+            this.datasetcheckedIds.push(dataset.id)
+            this.datasetcheckedNames.push(dataset.name)
+        },
+        checkedOneDataset(dataset) {
+            let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
             if(idIndex >= 0) {
                 this.datasetcheckedIds.splice(idIndex, 1)
+                this.datasetcheckedNames.splice(idIndex, 1)
             } else {
-                this.datasetcheckedIds.push(id)
-            }
-        },
-        checkedOne (fruitId) {
-            let idIndex = this.fruitIds.indexOf(fruitId)
-            if (idIndex >= 0) {
-                // 如果已经包含了该id, 则去除(单选按钮由选中变为非选中状态)
-                this.fruitIds.splice(idIndex, 1)
-            } else {
-                // 选中该checkbox
-                this.fruitIds.push(fruitId)
+                this.datasetcheckedIds.push(dataset.id)
+                this.datasetcheckedNames.push(dataset.name)
             }
         },
         chechedAllDataset() {
-            // this.isCheckedAllDataset = !this.isCheckedAllDataset
             this.isCheckedAllDataset = true
             if(this.datasetcheckedIds.length == this.allData.dss.length) {
                 this.isCheckedAllDataset = false
             }
             this.datasetcheckedIds = []
+            this.datasetcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
                 this.allData.dss.forEach(item => {
                     this.datasetcheckedIds.push(item.id)
+                    this.datasetcheckedNames.push(item.name)
                 })
-            }
-        },
-        checkedAll () {
-            this.isCheckedAll = !this.isCheckedAll
-            if (this.isCheckedAll) {
-                // 全选时
-                this.fruitIds = []
-                this.fruits.forEach(function (fruit) {
-                    this.fruitIds.push(fruit.fruitId)
-                }, this)
-            } else {
-                this.fruitIds = []
             }
         },
         tagSearch(e) {
@@ -325,14 +314,16 @@ export default {
             }
         },
         selectScript(data) {
-            if(data) {
-                console.log(data);
-                this.manual = true
-                this.scriptValue = "名称"
-            } else {
-                this.manual = false
-                this.scriptValue = "最近一次编辑"
-            }
+            // if(data) {
+            //     console.log(data);
+            //     this.manual = true
+            //     this.scriptValue = "名称"
+            // } else {
+            //     this.manual = false
+            //     this.scriptValue = "最近一次编辑"
+            // }
+            this.manual = true
+            this.scriptValue = "名称"
         },
         changed(e) {
             this.sel = e.target.innerHTML
@@ -345,11 +336,10 @@ export default {
             this.deleteTagsDia = true
         },
         createTagsOpen() {
-            this.createTagsDialog = true;
+            this.showCreateTagsDialog = true;
         },
         closeCreateDialog() {
-            this.createTagsDialog = false;
-            // this.dropDialogShow = false
+            this.showCreateTagsDialog = false;
         },
         closeDeleteDialog() {
             this.deletedialogshow = false;
@@ -497,7 +487,11 @@ export default {
                         border: 1px solid #dddddd;
                         background: #fff;
                         cursor: pointer;
-
+                        display: flex;
+                        align-items: center;
+                        .opt-area {
+                            display: flex;
+                        }
                         .checkbox {
                             margin-left: 10px;
                         }
@@ -688,7 +682,7 @@ export default {
                                 width: 150px;
                                 height: 30px;
                                 border-top: 1px solid #dddddd;
-
+                                background: #e6e6e6;
                                 .manage_label {
                                     font-size: 14px;
                                     // text-align: center;
@@ -784,7 +778,7 @@ export default {
                         // line-height: 16px;
 
                         text-align: center;
-                        background: #00a55a;
+                        // background: #00a55a;
                         // width: 80px;
                         padding: 0 8px;
                         border-radius: 10px;
@@ -853,23 +847,32 @@ export default {
                     width: 100%;
                     height: 60px;
                     border-bottom: 1px solid #979797;
-
+                    height: 44px;
                     .space {
-                        display: inline-block;
+                        display: flex;
                         width: 60px;
                         height: 60px;
                         background: #dfe7ff;
                         border-bottom: 2px solid #979797;
                         border-right: 2px solid #979797;
+                        height: 44px;
+                        width: 44px;
+                        justify-content: center;
+                        align-items: center;
+                        img {
+                            width: 24px;
+                            height: 24px;
+                        }
                     }
-
-                    .project_name_info {
-                        margin-left: 20px;
-                        line-height: 60px;
-                        font-family: PingFangSC-Medium;
-                        font-size: 14px;
-                        color: #000000;
-                        font-weight: 600;
+                    .show-name {
+                        line-height: 44px;
+                        .project_name_info {
+                            margin-left: 20px;
+                            font-family: PingFangSC-Medium;
+                            font-size: 14px;
+                            color: #000000;
+                            font-weight: 600;
+                        }
                     }
                 }
 

@@ -3,23 +3,27 @@
         <div class="clear_dialog_container">
             <div class="dialog_area">
                <div class="header">
-                   <img :src="label_icon" class="label" alt="">
-                   为 2 个数据集添加标签
+                    <div class="left">
+                        <img :src="label_icon" class="label" alt="">
+                        <p v-show="datasetcheckedIds.length >= 2">为 {{datasetcheckedIds.length}} 个数据集添加标签</p>
+                        <p v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
+                    </div>
+                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="close_icon" @click="close">
                </div>
                <div class="prompt">
-                   <img :src="search_icon" class="search" alt="">
-                   <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter="submit">
-                   <p class="tags_name">标签名</p>
-                   <!-- <span class="useing">正在使用</span> -->
-                   <div class="tags" v-for="(item,index) in searchData" :key="index">
-                       <input type="checkbox" class="checkout">
-                       <span class="round"></span>
-                       <div class="create_tags" v-for="(tag,ind) in item.label" :key="ind">
-						   {{tag}}
-					   </div>
-                       <!-- <span class='num_tags'>1</span> -->
-                   </div>
-                   <div class="create" v-if="searchData.length == 0 " @click="addTags" >
+                    <img :src="search_icon" class="search" alt="">
+                    <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter="submit">
+                    <p class="tags_name">标签名</p>
+                    <div class="tags_list" v-if="tagsArrayShow.length != 0 ">
+                        <div class="tags" @click.stop="checkedOneTag(tag)" v-for="(tag,index) in tagsArrayShow" :key="index+'tag'">
+                            <input type="checkbox" class="checkout" :checked="selectedTags.indexOf(tag) > -1">
+                            <span class="round" :style="{background: tagsColorArray[tagsArray.indexOf(tag)]}"></span>
+                            <div class="create_tags">
+                                {{tag}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="create" v-if="tagsArrayShow.length == 0 " @click="submit" >
                         <img :src="add_icon" alt="" class="add">
                         <p>Create《{{searchValue}}》</p>
                         <img :src="enter_icon" alt="" class="enter">
@@ -42,51 +46,79 @@ export default {
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
             add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
             enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
-            // tagList: [],
-            searchValue: '', 
-            color: ['#ff5252','#a2ff08','#fff99d','#b478f0','#38a691','#fca91c','#c7c7c7','#75ffe8','#ef69bf','#5354ec','#acacff','#ffa7a7']
+            searchValue: '',
+            tagsArrayShow: [], //展示的tag数组
+            selectedTags: [], //选中的tag数组
+            newTagsArray: [] //新增的tag数组
         }
     },
     props: {
-        allData: {
-            type: Object,
-            default: () => ({
-                projectName: "项目名称",
-                dss: [
-                    // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    // {projectId:2,name:'Data_0002',label: ['bbbbbbb','aaaaaaaa']}
-                ]
-            })
-        }
+        datasetcheckedIds: Array,
+        datasetcheckedNames: Array,
+        datasets: Array,
+        tagsArray: Array, //后端返回的tag数组
+        tagsColorArray: Array
     },
-    computed: {
-        searchData: function() {
-            let searchValue = this.searchValue
-            if(searchValue) {
-                return this.allData.dss.filter(function(pro) {
-                   	return Object.keys(pro).some(function(key) {
-                        return String(pro[key]).toLowerCase().indexOf(searchValue) > -1
-                	})
+    computed: {},
+    mounted() {
+        this.tagsArrayShow = this.tagsArray.filter(it => it != '')
+    },
+    watch: {
+        searchValue: function() {
+            console.log(this.searchValue)
+            let that = this
+            if(this.searchValue == '') {
+                if(this.tagsArrayShow.length < this.tagsArray.length) {
+                    this.tagsArrayShow = this.tagsArray
+                }
+            } else {
+                this.tagsArrayShow = []
+                let allArray = this.tagsArray.concat(this.newTagsArray)
+                allArray.forEach(item => {
+                    let idx = item.indexOf(that.searchValue)
+                    if(idx == 0) {
+                        this.tagsArrayShow.push(item)
+                    }
                 })
             }
-            return this.allData.dss
         }
     },
     methods: {
         save() {
-            this.tags.push(this.searchValue)
+            // 将选中的tag添加到选中的dataset上
+            // 新增但未选中的tag不保存
+            this.tagsArrayShow = []
+
+            const event = new Event("event")
+            event.args = {
+                callback: "addTags",
+                element: this,
+                param: {
+                    name: "addTags",
+                    selectedTags: this.selectedTags
+                }
+            }
+            this.$emit('addTagsEvent', event)
         },
         close() {
+            this.tagsArrayShow = []
+            this.tagsArrayShow = this.tagsArray
             this.$emit('closeCreateDialog');
         },
-        addTags() {
-            this.tags.push(this.searchValue)
+        submit() {
+            this.tagsArrayShow = this.tagsArray.filter(it => it != '')
+            this.selectedTags.push(this.searchValue) //默认选中新增tag
+            this.newTagsArray.push(this.searchValue) //关闭弹框前新增的tag array
+            this.tagsArrayShow = this.tagsArrayShow.concat(this.newTagsArray) //将新增tag添加到tagShow数组
             this.searchValue = ''
         },
-        submit() {
-            this.tags.push(this.searchValue)
-            this.searchValue = ''
-            // console.log(this.tagList);
+        checkedOneTag(tag) {
+            let idIndex = this.selectedTags.indexOf(tag)
+            if(idIndex >= 0) {
+                this.selectedTags.splice(idIndex, 1)
+            } else {
+                this.selectedTags.push(tag)
+            }
         }
     }
 }
@@ -96,11 +128,12 @@ export default {
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 .clear_dialog_container {
    height: 100vh;
     width: 100vw;
-    background: rgba(37,35,45,0.55);
+    // background: rgba(37,35,45,0.55);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -121,21 +154,37 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 .header {
     height: 60px;
     border-bottom: 1px solid #ddd;
     line-height: 60px;
-    padding-left: 50px;
+    padding: 20px;
     font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+        display: flex;
+        align-items: center;
+        .label {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+    }
+    .close_icon {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
 }
 .prompt {
     height: 440px;
     padding-left: 40px;
     padding-top: 20px;
-    border-bottom: 1px solid #ddd;
-	box-sizing: border-box;
+    box-sizing: border-box;
     .tags_name {
         color: #111;
         font-size: 12px;
@@ -143,9 +192,15 @@ export default {
         margin-left: 27px;
         margin-top: 10px;
     }
+    .tags_list {
+        height: 350px;
+        overflow: auto;
+    }
     .tags {
         display: flex;
         margin-top: 10px;
+        width: 100%;
+        cursor: pointer;
         .checkout {
             margin-top: 5px;
         }
@@ -186,6 +241,7 @@ export default {
         width: 60px;
         height: 28px;
         border: 0;
+        cursor: pointer;
     }
 }
 .useing {
@@ -217,13 +273,6 @@ export default {
     position: absolute;
     left: 45px;
     top: 82px;
-}
-.label {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 22px;
-    left: 20px;
 }
 .create {
     display: flex;

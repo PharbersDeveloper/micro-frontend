@@ -16,4 +16,5 @@ export default class DatasetModel extends Model {
 	@attr("string") version
 	@attr("string") name
 	@attr("string") label
+	// @attr("string") test
 }

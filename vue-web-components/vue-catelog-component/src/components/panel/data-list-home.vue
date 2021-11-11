@@ -1,7 +1,7 @@
 <template>
     <div class="data-list-home">
         <div class="data-home-container">
-            <div class="header-area" @click="linkToPage('projects')">
+            <div class="header-area">
                 <p>{{allData.projectDetail.name}}</p>
             </div>
            <div class="content">  
@@ -17,38 +17,32 @@
                     <div class="flow">
                         <p class="flow_word">主流程</p>
                         <div class="flow_item"> 
-                           <div class="flow_item_cell">
-                                <a href="#">
-                                    <div>
-                                        <img :src="dataset_icon" alt="">
-                                    </div>
-                                    <div @click="linkToPage('dataset')">
-                                        <p class="number">{{allData.numShow.dataset}}</p>
-                                        <p class="dataset">数据集</p>
-                                    </div>
-                                </a>
+                           <div class="flow_item_cell" @click="linkToPage('dataset')">
+								<div>
+									<img :src="dataset_icon" alt="">
+								</div>
+								<div>
+									<p class="number">{{allData.numShow.dataset}}</p>
+									<p class="dataset">数据集</p>
+								</div>
+                           </div>
+                            <div class="flow_item_cell" @click="linkToPage('script')">
+								<div>
+									<img :src="recipes_icon" alt="">
+								</div>
+								<div>
+									<p class="number">{{allData.numShow.flow}}</p>
+									<p class="recipes">脚本</p>
+								</div>
                            </div>
                             <div class="flow_item_cell">
-                                <a href="#">
-                                    <div>
-                                        <img :src="recipes_icon" alt="">
-                                    </div>
-                                    <div>
-                                        <p class="number">{{allData.numShow.flow}}</p>
-                                        <p class="recipes">脚本</p>
-                                    </div>
-                                </a>
-                           </div>
-                            <div class="flow_item_cell">
-                                <a href="#">
-                                    <div>
-                                        <img :src="models_icon" alt="">
-                                    </div>
-                                    <div>
-                                        <p class="number">{{allData.numShow.model}}</p>
-                                        <p class="models">模型</p>
-                                    </div>
-                                </a>
+								<div>
+									<img :src="models_icon" alt="">
+								</div>
+								<div>
+									<p class="number">{{allData.numShow.model}}</p>
+									<p class="models">模型</p>
+								</div>
                            </div>
                         </div>
                     </div>
@@ -330,7 +324,7 @@ export default {
                     height: 80px;
                     margin-left: 10px;
                     margin-top: 20px;
-
+					cursor: pointer;
                 div {
                     display: inline-block;
                 }

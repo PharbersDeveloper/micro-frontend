@@ -27,7 +27,6 @@ export default class DataSetComponent extends Component {
 				if(params.property.type == 'selectDataset') {
 					// 判断数据id是否存在
 					let opt = {"query": `select count(1) from ${datasetName} where version = '${dataID}'`, "schema": ["count"]}
-					// let opt = {"query": "select count(1) from TEst where version = 'TEst07'","schema": ["count"]}
 					let url = "https://apiv2.pharbers.com/phcheckversion"
 					let headers = {
 						"Authorization": this.cookies.read( "access_token" ),

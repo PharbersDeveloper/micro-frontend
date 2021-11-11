@@ -11,7 +11,7 @@ export default class DatasetLstComponent extends Component {
 	@service ajax
 
 	@action
-	listener(e) {
+	async listener(e) {
 		switch(e.detail[0].args.callback) {
 			case "linkToPage":
 				let params = e.detail[0].args.param;
@@ -23,6 +23,43 @@ export default class DatasetLstComponent extends Component {
 					uri = `/projects/`+ params.projectId
 				}
                 this.router.transitionTo( uri )
+				break
+			case "addTags":
+				let tagParam = e.detail[0].args.param;
+				console.log(tagParam)
+				let selectedDatasets = tagParam.selectedDatasets //需要更新的dataset
+				let datasetArray = tagParam.datasetArray //发送请求的参数在这取
+				let selectedTags = tagParam.selectedTags //选中的tag数组
+				await selectedDatasets.forEach(async targetId => {
+					let targetDataset = datasetArray.filter(it => it.id == targetId)[0]
+					let targetLabels = Array.from(new Set(targetDataset.label.concat(selectedTags)))
+					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+					const accessToken = this.cookies.read( "access_token" )
+					let body = {
+						"table": "dataset",
+						"item": {
+							"id": targetDataset.id,
+							"projectId": tagParam.projectId,
+							"label": JSON.stringify(targetLabels),
+							"schema": targetDataset.schema,
+							"date": new Date().getTime(),
+							"version": targetDataset.version,
+							"name": targetDataset.name
+						}
+					}
+
+					let options = {
+						method: "POST",
+						headers: {
+							"Authorization": accessToken,
+							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+							"accept": "application/json"
+						},
+						body: JSON.stringify(body)
+					}
+					await fetch(url, options)
+					window.location.reload()
+				})
 				break
 			default:
 				console.log("other click event!")
@@ -43,9 +80,15 @@ export default class DatasetLstComponent extends Component {
 
 	get calAllData() {
 		this.args.model._isVue = true
+		let tags = new Set()
 		this.args.model.dss.forEach(iter => {
-			iter.label = eval(iter.label)
+			iter.label = JSON.parse(iter.label)
+			iter.label.map(it => {
+				tags.add(it)
+			})
+			console.log(tags)
 		})
+		this.args.model.tagsArray = Array.from(tags)
 		return this.args.model
 	}
 }
