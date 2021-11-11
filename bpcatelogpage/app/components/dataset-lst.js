@@ -19,6 +19,9 @@ export default class DatasetLstComponent extends Component {
 				if(params.name === "localUpload") {
 					uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
 				}
+				if(params.name === "linkToProject") {
+					uri = `/projects/`+ params.projectId
+				}
                 this.router.transitionTo( uri )
 				break
 			default:

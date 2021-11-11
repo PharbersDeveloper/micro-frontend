@@ -8,7 +8,7 @@ export default class DagRoute extends Route {
     @service('loading') loadingService;
 	async model( params ) {
 		let numShow = {}
-        let projectDetail = await this.store.findRecord( "project", params.project_id, {include: 'flow'}) 
+        let projectDetail = await this.store.findRecord( "project", params.project_id, {include: 'flow'})
 		//显示数量
 		let flow = projectDetail.belongsTo('flow').id()
 		let analysis = projectDetail.belongsTo('analysis').id()

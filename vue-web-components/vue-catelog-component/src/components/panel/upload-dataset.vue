@@ -2,7 +2,7 @@
     <div class="upload-dataset">
         <div class="upload_dataset_container">
             <div class="project_name_header">
-                <p class="project_name" @click="linkToProject">{{allData.projectName}}</p>
+                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
             </div>
             <div class="info">
                 <div class="project_info_left">
@@ -386,8 +386,18 @@ export default {
             }
             this.$emit('event', event)
         },
-        linkToProject() {
-
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "linkToProject",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
         },
         toggle() {
             this.showDialog = !this.showDialog
@@ -456,6 +466,7 @@ export default {
             font-size: 16px;
             color: #000000;
             font-weight: 600;
+            cursor: pointer;
         }
     }
     .info {
