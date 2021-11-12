@@ -125,25 +125,39 @@
                            </div>
                         </div>
                         <div class="view_func">
-                            <span @click="createTagsOpen">
-                                <span class='tags_func'>标签</span>
+                            <span @click="createTagsOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
+                                <span class='tags_func'>标签</span>
                             </span>
-                            <span @click="clearDialogOpen">
+                            <span @click="clearDialogOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
                                 <span class='tags_func'>清除数据</span>
-                                <img class='tags_imgs_clear' :src="clear_data_icon" alt="">
                             </span>
-                            <span  @click='deletedialogopen'>
+                            <span  @click='deletedialogopen' class="view_list">
+                                <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
-                                <img class='tags_imgs_delete' :src="delete_icon" alt="">
                             </span>
                         </div>
                     </div>
                     <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        <clear-dataset-dialog  v-if="cleardialogshow" @closeClearDialog="closeClearDialog"></clear-dataset-dialog>
-        <clear-delete v-if="deletedialogshow" @closeDeleteDialog="closeDeleteDialog"></clear-delete>
+        <!-- 清除数据集数据 -->
+        <clear-dataset-dialog  
+            v-if="cleardialogshow" 
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
+            @clearTagsEvent="clearTags"
+            @closeClearDialog="closeClearDialog">
+        </clear-dataset-dialog>
+        <!-- 删除数据集 -->
+        <clear-delete 
+            v-if="deletedialogshow" 
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
+            @deleteDatasetsEvent="deleteDataset"
+            @closeDeleteDialog="closeDeleteDialog">
+        </clear-delete>
         <!-- 添加tag -->
         <create-tags-dialog 
             v-if="showCreateTagsDialog"
@@ -155,6 +169,7 @@
             @addTagsEvent="addTagsEvent"
             @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
+        <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
     </div>
     </div>
@@ -255,6 +270,7 @@ export default {
         }
     },
     methods: {
+        //增加tag
         addTagsEvent(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
@@ -263,12 +279,32 @@ export default {
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
+        //清除数据集中数据
+        clearTags(data) {
+            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.datasetArray = this.allData.dss
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            this.$emit('event', data)
+            this.showCreateTagsDialog = false;
+        },
+        //删除数据集
+        deleteDataset(data) {
+            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.datasetArray = this.allData.dss
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            this.$emit('event', data)
+            this.showCreateTagsDialog = false;
+        },
+        //点击list主体
         clickOnlyOne(dataset, index) {
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
             this.datasetcheckedIds.push(dataset.id)
             this.datasetcheckedNames.push(dataset.name)
         },
+        //点击list多选框
         checkedOneDataset(dataset) {
             let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
             if(idIndex >= 0) {
@@ -279,6 +315,7 @@ export default {
                 this.datasetcheckedNames.push(dataset.name)
             }
         },
+        //全选list
         chechedAllDataset() {
             this.isCheckedAllDataset = true
             if(this.datasetcheckedIds.length == this.allData.dss.length) {
@@ -294,16 +331,15 @@ export default {
                 })
             }
         },
-        tagSearch(e) {
-            console.log(e);
-            this.searchValue = e.target.innerHTML
-        },
+        //排序条件下拉框
         showSelectOption() {
             this.showSelectOptionParam = true
         },
+        //清空list搜索框
         clearSearch() {
             this.searchValue = ''
         },
+        //排序
         sort(val) {
             if(val == 'ascending') {
                 this.ascending = false
@@ -315,51 +351,45 @@ export default {
                 this.allData.dss.reverse()
             }
         },
+        //排序条件下拉框
         selectScript(data) {
-            // if(data) {
-            //     console.log(data);
-            //     this.manual = true
-            //     this.scriptValue = "名称"
-            // } else {
-            //     this.manual = false
-            //     this.scriptValue = "最近一次编辑"
-            // }
-            // this.manual = true
             this.scriptValue = "名称"
         },
-        changed(e) {
-            this.sel = e.target.innerHTML
-            this.nameShowDialog = false
-        },
+        //关闭tag删除弹框
         closeDeleteTags() {
             this.deleteTagsDia = false;
         },
-        deleTagsShow() {
-            this.deleteTagsDia = true
-        },
+        //打开tag添加弹框
         createTagsOpen() {
             this.showCreateTagsDialog = true;
         },
+        //关闭tag添加弹框
         closeCreateDialog() {
             this.showCreateTagsDialog = false;
         },
+        //关闭删除数据集弹框
         closeDeleteDialog() {
             this.deletedialogshow = false;
         },
+        //打开删除数据集弹框
         deletedialogopen() {
             this.deletedialogshow = true;
         },
+        //关闭清除数据集弹框
         closeClearDialog() {
             this.cleardialogshow = false;
         },
+        //打开清除数据集弹框
         clearDialogOpen(){
             this.cleardialogshow = true
         },
+        //标签下拉框
         labelShow() {
             this.labelShowDialog = !this.labelShowDialog
             this.dropDialogShow = false;
             this.nameShowDialog = false;
         },
+        //左上角选项下拉框
         dropShow() {
             if(this.datasetcheckedIds.length < 1) {
                 this.dropDialogShow = false
@@ -369,6 +399,7 @@ export default {
                 this.labelShowDialog = false
             }
         },
+        //上传文件按钮
         upload() {
             const event = new Event("event")
             event.args = {
@@ -841,10 +872,18 @@ export default {
 
                 .view_func {
                     margin-top: 100px;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0 60px;
+                    .view_list {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                    }
                 }
 
                 .tags_func {
-                    margin-left: 100px;
                     cursor: pointer;
                 }
 
@@ -983,30 +1022,9 @@ export default {
     }
 }
 .tags_imgs_tag {
-    width: 30px;
-    height: 30px;
-    // position: relative;
-    position: absolute;
-    right: 370px;
-    top: 160px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-}
-.tags_imgs_clear {
-    width: 30px;
-    height: 30px;
-    // position: relative;
-    position: absolute;
-    right: 225px;
-    top: 160px;
-    cursor: pointer;
-}
-.tags_imgs_delete {
-    width: 30px;
-    height: 30px;
-    // position: relative;
-    position: absolute;
-    right: 75px;
-    top: 160px;
-    cursor: pointer;
+    margin-bottom: 5px;
 }
 </style>
