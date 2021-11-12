@@ -8,6 +8,7 @@ export default class DatasetLstComponent extends Component {
 	@service router
 	@service store
 	@service cookies
+    @service('loading') loadingService;
 	@service ajax
 
 	@action
@@ -23,6 +24,8 @@ export default class DatasetLstComponent extends Component {
 					uri = `/projects/`+ params.projectId
 				}
                 this.router.transitionTo( uri )
+				// this.loadingService.loading.style.display = 'flex'
+        		// this.loadingService.loading.style['z-index'] = 2
 				break
 			case "addTags":
 				let that = this
@@ -66,6 +69,7 @@ export default class DatasetLstComponent extends Component {
 				let delTagParam = e.detail[0].args.param;
 				let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = delTagParam.datasetArray //发送请求的参数在这取
+				let promiseListDel = [];
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
@@ -97,14 +101,54 @@ export default class DatasetLstComponent extends Component {
 						},
 						body: JSON.stringify(body)
 					}
-					await fetch(url, options)
+					// await fetch(url, options)
+					let result = fetch(url, options)
+					promiseListDel.push(result)
+
+					//请求status，持续30s
+					// let statusType = 'query'
+					// let statusBody = {
+					// 	"table": "project_files",
+					// 	"conditions": {
+					// 		"id": results[0].data.id
+					// 	},
+					// 	"limit": 10,
+					// 	"start_key": {}
+					// }
+					// let startTime = new Date().getTime();
+					// let dagStatusInt = setInterval(async function() { 
+					// 	that.postUrl(statusType, statusBody).then(response => {
+					// 		let project_files_status = response.data[0].attributes.status
+					// 		if (project_files_status !== 'creating') {
+					// 			clearInterval(dagStatusInt); //循环结束
+					// 			let status = ''
+					// 			if(project_files_status == "success") {
+					// 				console.log(project_files_status)
+					// 			} else {
+					// 				console.log(project_files_status)
+					// 			}
+					// 			that.loadingService.loading.style.display = 'none'
+					// 			// that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
+					// 			that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
+					// 		} else if(new Date().getTime() - startTime >= 60000) {
+					// 			clearInterval(dagStatusInt); //循环结束
+					// 			alert("超时，连接终止！")
+					// 		}
+					// 	}) 
+					// }, 5 * 1000)
+					// window.location.reload()
+				})
+				Promise.all(promiseListDel).then((rspList)=> {
 					window.location.reload()
+					alert("删除数据集成功！")
 				})
 			break
 			case "clearTags":
 				let clearTagParam = e.detail[0].args.param;
 				let selectedDatasetsClear = clearTagParam.selectedDatasets //需要更新的dataset
 				let datasetArrayClear = clearTagParam.datasetArray //发送请求的参数在这取
+
+				let promiseList = [];
 				selectedDatasetsClear.forEach(async targetId => {
 					let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
@@ -136,8 +180,15 @@ export default class DatasetLstComponent extends Component {
 						},
 						body: JSON.stringify(body)
 					}
-					await fetch(url, options)
+					// await fetch(url, options)
+					let result = fetch(url, options)
+					promiseList.push(result)
+					// window.location.reload()
+					// alert("清除数据成功！")
+				})
+				Promise.all(promiseList).then((rspList)=> {
 					window.location.reload()
+					alert("清除数据成功！")
 				})
 			break
 			default:

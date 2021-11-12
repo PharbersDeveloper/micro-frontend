@@ -89,19 +89,22 @@
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
                             <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
-                            <div class="item_list" >
+                            <div class="item_list">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{dataset.name}}</p>
-                                <p v-for="(tag,inx) in dataset.label" :key="inx">
-                                    <span v-if="dataset.label !== ''">
-                                        <span 
-                                            class="tag_bg" 
-                                            :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                <div class="tag_area">
+                                    <div v-for="(tag,inx) in dataset.label" :key="inx">
+                                        <span v-if="dataset.label !== ''">
+                                            <p 
+                                                :title="tag"
+                                                class="tag_bg" 
+                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                            </p>
                                         </span>
-                                    </span>
-                                </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
@@ -231,11 +234,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ['zzz','aaa']},
-                    {id: '2', projectId:2,name:'Data_0002',label: ['qqq','sss']},
+                    {id: '1', projectId:1,name:'Data_0001',label: ['zzz','aaaaaaaaaaaaaaaaaaaaaaaa']},
+                    {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
                     {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
                 ],
-                tagsArray: ["qqq", "aaa", "zzz", "sss", "eee"]
+                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
             })
         }
     },
@@ -286,7 +289,7 @@ export default {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
-            this.showCreateTagsDialog = false;
+            this.cleardialogshow = false;
         },
         //删除数据集
         deleteDataset(data) {
@@ -295,7 +298,7 @@ export default {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
-            this.showCreateTagsDialog = false;
+            this.deletedialogshow = false;
         },
         //点击list主体
         clickOnlyOne(dataset, index) {
@@ -805,6 +808,16 @@ export default {
                     input{
                         cursor: pointer;
                     }
+                    .tag_bg:hover::after {
+                        content: attr(data-title);    //取到data-title属性的值
+                        display: inline-block;
+                        padding: 10px 14px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        position: absolute;
+                        top: -50px;
+                        left: -30px;
+                    }
                     .tag_bg {
                         position: relative;
                         top: -8px;
@@ -812,14 +825,19 @@ export default {
                         font-size: 12px;
                         color: #fff;
                         height: 16px;
-                        // line-height: 16px;
-
                         text-align: center;
-                        // background: #00a55a;
-                        // width: 80px;
                         padding: 0 8px;
                         border-radius: 10px;
                         margin-left: 10px;
+                        margin-bottom: 5px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        max-width: 100px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        padding: 0 10px;
                     }
                     .item_list {
                         display: flex;
@@ -827,10 +845,12 @@ export default {
                     .dataset_icon {
                         margin-left: 27px;
                         width: 30px;
+                        max-width: 30px;
                         height: 30px;
 
                         img {
-                            width: 100%;
+                            width: 30px;
+                            height: 30px;
                         }
                     }
                     .data_name {
@@ -840,6 +860,11 @@ export default {
                         color: #000000;
                         font-weight: 600;
                         width: 168px;
+                        min-width: 168px;
+                    }
+                    .tag_area {
+                        display: flex;
+                        flex-wrap: wrap;
                     }
                 }
 
@@ -874,12 +899,13 @@ export default {
                     margin-top: 100px;
                     display: flex;
                     justify-content: space-between;
-                    padding: 0 60px;
+                    padding: 0 30px;
                     .view_list {
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
+                        width: 75px;
                     }
                 }
 

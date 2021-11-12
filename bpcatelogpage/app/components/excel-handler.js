@@ -61,7 +61,7 @@ export default class ExcelHandlerComponent extends Component {
     }
 
     async createDataSetIndex(param) {
-		this.loadingService.loading.style.display = 'inline-block'
+		this.loadingService.loading.style.display = 'flex'
         this.loadingService.loading.style['z-index'] = 2
         const that = this
 		//直接导入数据集

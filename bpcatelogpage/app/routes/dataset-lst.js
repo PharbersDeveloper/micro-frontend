@@ -16,7 +16,7 @@ export default class DatasetLstRoute extends Route {
 		if ( !cookies.read( "access_token" ) ) {
 			this.transitionTo( "index" )
 		}
-		this.loadingService.loading.style.display = 'inline-block'
+		this.loadingService.loading.style.display = 'flex'
 		window.onbeforeunload = undefined
 	}
 	queryParams = {
