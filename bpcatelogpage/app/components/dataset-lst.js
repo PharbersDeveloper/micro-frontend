@@ -25,6 +25,7 @@ export default class DatasetLstComponent extends Component {
                 this.router.transitionTo( uri )
 				break
 			case "addTags":
+				let that = this
 				let tagParam = e.detail[0].args.param;
 				console.log(tagParam)
 				let selectedDatasets = tagParam.selectedDatasets //需要更新的dataset

@@ -107,11 +107,11 @@ export default {
 .upload_dataset_container {
     width: 100vw;
     height: 100vh;
-    border: 2px solid #ddd;
+    // border: 2px solid #ddd;
     .project_name_header {
         height: 50px;
         width: 100%;
-        border-bottom: 2px solid #ddd;
+        border-bottom: 1px solid #ddd;
         .project_name {
             margin-left: 30px;
             line-height: 50px;

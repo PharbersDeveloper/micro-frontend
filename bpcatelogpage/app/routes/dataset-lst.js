@@ -17,6 +17,7 @@ export default class DatasetLstRoute extends Route {
 			this.transitionTo( "index" )
 		}
 		this.loadingService.loading.style.display = 'inline-block'
+		window.onbeforeunload = undefined
 	}
 	queryParams = {
 		projectName: {

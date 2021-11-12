@@ -8,7 +8,9 @@
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
-                           <div class="selected">
+                            <div class="selected"
+                                :class="[
+                                    {'bg_disabled': datasetcheckedIds.length == 0}]">
                                 <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dss.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
@@ -51,8 +53,8 @@
 
                         <div class="tag_selected">
                             <div class="sort">
-                                <img :src="ascending_order" alt="" v-if="ascending" @click="sort('ascending')">
-                                <img :src="descending_order" alt="" v-if="descending" @click="sort('descending')">
+                                <img :src="descending_order" alt="" v-if="ascending" @click="sort('ascending')">
+                                <img :src="ascending_order" alt="" v-if="descending" @click="sort('descending')">
                             </div>
                             <div class="down_sel" >
                                 <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
@@ -67,13 +69,15 @@
                                     <img :src="dropDownIcon" alt="">
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
-                                  <div class="label_name" v-for="(item,index) in allData.dss" :key="index">
-                                      <span></span>
-                                      <div class="tags_name" v-for="(i,inx) in item.label" :key="inx">{{i}}</div>
-                                  </div>
-                                  <div class="management">
-                                      <div class="manage_label" @click="deleTagsShow">管理标签</div>
-                                  </div>
+                                    <div class="tag_arr">
+                                        <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
+                                            <span  :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
+                                            <div class="tags_name">{{item}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="management">
+                                        <div class="manage_label">管理标签</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
@@ -82,24 +86,24 @@
                             </div>
                         </div>
                     </div>
-                        <div class="upload_bottom">
-                            <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
-                                <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
-                                <div class="item_list" >
-                                    <span class="dataset_icon">
-                                        <img :src="dataset_icon" alt="">
-                                    </span>
-                                    <p class="data_name">{{dataset.name}}</p>
-                                    <p v-for="(tag,inx) in dataset.label" :key="inx">
-                                        <span v-if="dataset.label !== ''">
-                                            <span 
-                                                class="tag_bg" 
-                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
-                                            </span>
+                    <div class="upload_bottom">
+                        <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
+                            <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
+                            <div class="item_list" >
+                                <span class="dataset_icon">
+                                    <img :src="dataset_icon" alt="">
+                                </span>
+                                <p class="data_name">{{dataset.name}}</p>
+                                <p v-for="(tag,inx) in dataset.label" :key="inx">
+                                    <span v-if="dataset.label !== ''">
+                                        <span 
+                                            class="tag_bg" 
+                                            :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
                                         </span>
-                                    </p>
-                                </div>
+                                    </span>
+                                </p>
                             </div>
+                        </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
                 </div>
@@ -192,8 +196,8 @@ export default {
             showCreateTagsDialog: false, //添加tag弹框
             deleteTagsDia: false,
             searchValue: '',
-            ascending: true,
-            descending: false,
+            ascending: false,
+            descending: true,
             tags: ['name','description','啦啦啦'],
             ary: [],
             checked: false,
@@ -233,11 +237,7 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dss.filter(function(pro) {
-                    return Object.keys(pro).some(function(key) {
-                        return String(pro[key]).toLowerCase().indexOf(searchValue) > -1
-                    })
-                })
+                return this.allData.dss.filter(item => item.name.indexOf(searchValue) > -1)
             }
             return this.allData.dss
         }
@@ -308,9 +308,11 @@ export default {
             if(val == 'ascending') {
                 this.ascending = false
                 this.descending = true
+                this.allData.dss.sort()
             }else if (val == 'descending') {
                 this.descending = false
                 this.ascending = true
+                this.allData.dss.reverse()
             }
         },
         selectScript(data) {
@@ -322,7 +324,7 @@ export default {
             //     this.manual = false
             //     this.scriptValue = "最近一次编辑"
             // }
-            this.manual = true
+            // this.manual = true
             this.scriptValue = "名称"
         },
         changed(e) {
@@ -359,9 +361,13 @@ export default {
             this.nameShowDialog = false;
         },
         dropShow() {
-            this.dropDialogShow = !this.dropDialogShow
-            this.nameShowDialog = false
-            this.labelShowDialog = false
+            if(this.datasetcheckedIds.length < 1) {
+                this.dropDialogShow = false
+            } else {
+                this.dropDialogShow = !this.dropDialogShow
+                this.nameShowDialog = false
+                this.labelShowDialog = false
+            }
         },
         upload() {
             const event = new Event("event")
@@ -479,7 +485,9 @@ export default {
                 .selected_search {
                     display: flex;
                     position: relative;
-
+                    .bg_disabled {
+                        background: #eee !important;
+                    }
                     .selected {
                         position: relative;
                         width: 90px;
@@ -663,7 +671,6 @@ export default {
                         border: 0;
                         margin-left: 10px;
                         width: 50px;
-
                         .label_selected {
                             box-shadow: 2px 4px 6px #dddddd;
                             // display: flex;
@@ -676,7 +683,10 @@ export default {
                             background: #fff;
                             padding-top: 10px;
                             z-index: 3333;
-
+                            .tag_arr {
+                                height: 150px;
+                                overflow: auto;
+                            }
                             .management {
                                 margin-top: 5px;
                                 width: 150px;
@@ -706,13 +716,9 @@ export default {
                                 width: 10px;
                                 height: 10px;
                                 border-radius: 5px;
-                                background: #1bc2ac;
+                                // background: #1bc2ac;
                                 margin-top: 8px;
                                 margin-right: 8px;
-                            }
-
-                            .green {
-                                background: #00a65a;
                             }
 
                             .tags_name {
