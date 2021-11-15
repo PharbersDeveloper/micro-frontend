@@ -125,7 +125,7 @@ export default class DataSetComponent extends Component {
                 "name": message.filename,
                 "status": "creating",
                 "category": message.filename.split('.')[1],
-                "property": property,
+                "property": JSON.stringify(property),
                 "id": message.tmpname
             }
         }
