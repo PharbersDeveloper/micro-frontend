@@ -48,7 +48,7 @@ export default class PhDataSource {
             return sql_str
         }
         const url = "https://api.pharbers.com/phchproxyquery"
-        const accessToken = ele.getCookie("access_token") || "57fbbb807068d037422cf06992b7772f8b8d95e20f931c69ca5923334a41630d"
+        const accessToken = ele.getCookie("access_token") || "28b677eb6147564c6a8d7c0b70c406473f92010e412ed0d37abf3b3bf74f235f"
         let body = {
             "query": buildQueryString(),
             "schema": ele.datasource.schema

@@ -21,7 +21,7 @@
 					</div>
 					<div class="input">
 						<bp-select-vue src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="scriptValue">
-							<bp-option-vue text="双源清洗" @click="selectScript(0)"></bp-option-vue>
+							<bp-option-vue text="双源映射" @click="selectScript(0)"></bp-option-vue>
 							<bp-option-vue text="手动映射" @click="selectScript(1)"></bp-option-vue>
 						</bp-select-vue>
 					</div>

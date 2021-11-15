@@ -340,10 +340,10 @@
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}} >
               </pharbers-bp-img>
-              <pharbers-bp-label text=arr 
+              <pharbers-bp-label text=arr
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}></pharbers-bp-label>
-              <pharbers-bp-link text="测试link" 
+              <pharbers-bp-link text="测试link"
                   {{did-insert this.registerListener}}
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-link>
@@ -352,7 +352,7 @@
               </pharbers-bp-text>
               <h1>vue menu</h1>
               <pharbers-bp-menu menu_data={{this.menu_data}} {{did-insert this.transferMenuData}}></pharbers-bp-menu>
-  
+
               <h1>vue select option</h1>
               <pharbers-bp-select choosed_value={{this.choosed_value}} options_data={{this.options_data}} {{did-insert this.transferData}}></pharbers-bp-select>
               <pharbers-bp-status text="这是status" type="in-progress" subtle
@@ -373,7 +373,7 @@
                   {{will-destroy this.unregisterListener}}>
               </pharbers-bp-button-group>
               <div style="width: 1300px">
-                  <pharbers-bp-carousel-unit 
+                  <pharbers-bp-carousel-unit
                       height="600px"
                       autoplay
                       itemArr={{this.itemArr}}
@@ -382,11 +382,11 @@
                   </pharbers-bp-carousel-unit>
               </div>
               <h1>vue home page</h1>
-             
+
           </div>
       </div>
   </div>
-  
+
   */
   {
     "id": "evR2f4ZW",
@@ -910,7 +910,6 @@
       if (headers["Content-Type"] === undefined) {
         headers["Content-Type"] = config.defaultContentType;
       }
-
       return {
         method: verb,
         url: url,
@@ -1785,7 +1784,7 @@
 
   /*
     This code initializes EmberData in an Ember application.
-  
+
     It ensures that the `store` service is automatically injected
     as the `store` property on all routes and controllers.
   */
@@ -2960,5 +2959,5 @@ catch(err) {
           if (!runningTests) {
             require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8eac81e0"});
           }
-        
+
 //# sourceMappingURL=web-shell.map

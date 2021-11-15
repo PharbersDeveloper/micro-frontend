@@ -73,7 +73,6 @@ export default {
         confirm() {
             if(this.newData === '' && this.newDataName == '') {
                 alert('选项不能为空')
-                // throw new Error('选项不能为空')
                 return false
             }else {
                 const event = new Event("event")
@@ -84,7 +83,8 @@ export default {
                         files: this.fileList,
                         property: {
                             dataID: this.dataID,
-                            dataset: this.radioState === 'dataSet' ? this.newData : this.newDataName
+                            dataset: this.radioState === 'dataSet' ? this.newData : this.newDataName,
+                            type: this.$refs.radioData.checked ? "selectDataset" : "createDataset"
                         }
                     }
                 }
@@ -94,8 +94,8 @@ export default {
         },
         radio(state) {
             this.radioState = state
+            this.showDialog = false
             if(state === 'dataSet') {
-                this.showDialog = false
                 this.$refs.newData.disabled = true
                 this.$refs.dataSet.disabled = false
                 this.newDataName = ''

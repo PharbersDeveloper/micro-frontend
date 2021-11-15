@@ -20,7 +20,7 @@ export default class DagRunComponent extends Component {
             case "linkToPage":
 				let linkParam = e.detail[0].args.param
 				if(linkParam.name == 'linkToPageDag'){
-					this.router.transitionTo( `/projects/`+ linkParam.project_id )
+					// this.router.transitionTo( `/projects/`+ linkParam.project_id )
 				} else {
 					this.router.transitionTo( '/projects' )
 				}

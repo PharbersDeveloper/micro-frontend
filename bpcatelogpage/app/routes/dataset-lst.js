@@ -16,7 +16,8 @@ export default class DatasetLstRoute extends Route {
 		if ( !cookies.read( "access_token" ) ) {
 			this.transitionTo( "index" )
 		}
-		this.loadingService.loading.style.display = 'inline-block'
+		this.loadingService.loading.style.display = 'flex'
+		window.onbeforeunload = undefined
 	}
 	queryParams = {
 		projectName: {
@@ -33,7 +34,6 @@ export default class DatasetLstRoute extends Route {
 		let body = {
 			"table": "dataset",
 			"conditions": {
-				// "projectId": "Max"
 				"projectId": params.projectId
 			},
 			"limit": 100,
@@ -67,6 +67,7 @@ export default class DatasetLstRoute extends Route {
 			projectName: params.projectName,
 			projectId: params.projectId,
 			dss: tmp.filter(it => it),
+			tagsArray: [],
 			_isVue: true
 		} )
 	}

@@ -19,7 +19,47 @@ export default class DataSetComponent extends Component {
                 break
             case "uploadFiles":
                 let params = e.detail[0].args.param
-                this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId)
+				let uploadParam = true
+				let datasetName = params.property.dataset
+				let dataID = params.property.dataID
+				let datasetArray = this.args.model.datasetArr
+				//如果数据集为下拉框选择，需要判断
+				if(params.property.type == 'selectDataset') {
+					// 判断数据id是否存在
+					let opt = {"query": `select count(1) from ${datasetName} where version = '${dataID}'`, "schema": ["count"]}
+					let url = "https://apiv2.pharbers.com/phcheckversion"
+					let headers = {
+						"Authorization": this.cookies.read( "access_token" ),
+						"Content-Type": "application/vnd.api+json",
+						"Accept": "application/vnd.api+json",
+					}
+					let options = {
+						method: "POST",
+						headers: headers,
+						body: JSON.stringify(opt)
+					}
+					let versionResult = await fetch(url, options).then(res => res.json())
+					let NUMResult = Number(versionResult[0].count)
+					if(NUMResult != 0) {
+						uploadParam = false
+						alert("数据ID重复，请重新输入！")
+						throw new Error("数据集已存在")
+					}
+				} else if(params.property.type == 'createDataset') {
+					// 判断数据集是否存在
+					datasetArray.forEach(item => {
+						if(item.name === datasetName) {
+							uploadParam = false
+							alert("数据集已存在，请在下拉框选择数据集！")
+							throw new Error("数据集已存在")
+						}
+					})
+				}
+				if(uploadParam) {
+					e.detail[0].args.element.show = false
+					this.random = Math.random()
+					this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId)
+				}
                 break
             default: 
                 console.log("submit event to parent")
@@ -68,7 +108,7 @@ export default class DataSetComponent extends Component {
 
     @action
     async updateDataset(file, property, projectName, message, projectId) {
-        this.loadingService.loading.style.display = 'inline-block'
+        this.loadingService.loading.style.display = 'flex'
         this.loadingService.loading.style['z-index'] = 2
         let that = this
         //push project_files
@@ -119,7 +159,7 @@ export default class DataSetComponent extends Component {
             "limit": 10,
             "start_key": {}
         }
-        var startTime = new Date().getTime();
+        let startTime = new Date().getTime();
         let dagStatusInt = setInterval(async function() { 
             that.postUrl(statusType, statusBody).then(response => {
                 let project_files_status = response.data[0].attributes.status

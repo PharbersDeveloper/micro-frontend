@@ -56,6 +56,13 @@ export default {
                 projectId: '',
                 datasetArr: []
             })
+        },
+        random: Number
+    },
+    watch: {
+        random: function() {
+            console.log("关闭所有弹框")
+            this.show = false
         }
     },
     methods: {
@@ -80,7 +87,7 @@ export default {
             this.fileList.push(this.$refs.file.files[0])
         },
         uploadFilesEvent(data) {
-            this.show = false
+            // this.show = false
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
@@ -100,11 +107,11 @@ export default {
 .upload_dataset_container {
     width: 100vw;
     height: 100vh;
-    border: 2px solid #ddd;
+    // border: 2px solid #ddd;
     .project_name_header {
         height: 50px;
         width: 100%;
-        border-bottom: 2px solid #ddd;
+        border-bottom: 1px solid #ddd;
         .project_name {
             margin-left: 30px;
             line-height: 50px;
@@ -214,6 +221,7 @@ export default {
                 border-radius: 4px;
                 line-height: 32px;
                 text-align: center;
+                cursor: pointer;
             }
             .select_input {
                 position: absolute;

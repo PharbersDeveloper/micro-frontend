@@ -6,21 +6,14 @@
                    <img :src="model_err" alt="">
                    <p class="clear_data">清除数据</p>
                </div>
-               <!-- <div class="prompt" v-for="item in allData.dataName" :key="item.id">
-                   确定清除 {{item.name}} 数据集中的数据吗?
-               </div> -->
-			    <div class="prompt">
+                <div class="prompt">
                    <p class="tip">确定清除以下数据集中的数据吗?</p>
-				   <p class="name">lalalal</p>
-				   <p class="name">lalalal</p>
-				   <p class="name">lalalal</p>
-				   <p class="name">lalalal</p>
-				   
+                   <p class="name" v-for="(item,index) in datasetcheckedNames" :key="index+'dataset'">{{item}}</p>
                </div>
                <div class="btn">
-				   <button class="clear">清除</button>
-               	   <button @click="close" class="cancel">取消</button>
-			   </div>
+                   <button class="clear" @click="clearTags">清除</button>
+                      <button @click="close" class="cancel">取消</button>
+               </div>
             </div>
         </div>
     </div>
@@ -34,22 +27,24 @@ export default {
         }
     },
     props: {
-        allData: {
-            type: Object,
-            default: () => ({
-                projectName: "项目名称",
-                dss: [
-                    {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
-                    {projectId:1,name:'Data_0002',label: ['我好菜啊,菜死算了']},
-                    {projectId:1,name:'Data_0001',label: ['lalalla','aaaaaaaa']}
-                ],
-                projectInfo: '2020.1 - 2021.12 Pfizer raw data'
-            })
-        }
+        datasetcheckedIds: Array,
+        datasetcheckedNames: Array
     },
     methods: {
         close() {
             this.$emit('closeClearDialog');
+        },
+        clearTags() {
+            const event = new Event("event")
+            event.args = {
+                callback: "clearTags",
+                element: this,
+                param: {
+                    name: "clearTags",
+                    selectedTags: this.selectedTags
+                }
+            }
+            this.$emit('clearTagsEvent', event)
         }
     }
 }
@@ -57,8 +52,8 @@ export default {
 
 <style lang="scss" scoped>
 * {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 .clear_dialog_container {
    height: 100vh;
@@ -76,7 +71,7 @@ export default {
     align-items: center;
 }
 .dialog_area {
-	position: relative;
+    position: relative;
     width: 500px;
     // height: 400px;
     border: 1px solid #ddd;
@@ -101,49 +96,50 @@ export default {
         height: 20px;
     }
     .clear_data {
-		line-height: 45px;
+        line-height: 45px;
         margin-left: 50px;
     }
    
 }
 .prompt {
     // height: 278px;
-	margin-top: 20px;
+    margin-top: 20px;
     // line-height: 180px;
     text-align: center;
-	.tip {
-		// text-align: center;
-		font-weight: 500;
-	}
-	.name {
-		margin-top: 10px;
-		color: #db4d71;
-		font-size: 14px;
+    .tip {
+        // text-align: center;
+        font-weight: 500;
+    }
+    .name {
+        margin-top: 10px;
+        color: #db4d71;
+        font-size: 14px;
 
-	}
+    }
     
 }
 .btn {
-	// position: absolute;
-	// right: 0;
-	// bottom: 0;
-	margin-left: 280px;
-	margin-bottom: 20px;
-	margin-top: 20px;
-	button {
-		border: 0;
-		width: 80px;
-    	height: 32px;
-	}
-	.clear {
-   		margin-right: 30px;
-   		background-color:#DB4D71;
-   		color: #fff;
-	}
-	.cancel {
-		border: 1px solid #eeedf7;
-		color: #8377cc;
-	}
+    // position: absolute;
+    // right: 0;
+    // bottom: 0;
+    margin-left: 280px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    button {
+        border: 0;
+        width: 80px;
+        height: 32px;
+    }
+    .clear {
+           margin-right: 30px;
+           background-color:#DB4D71;
+           color: #fff;
+           cursor: pointer;
+    }
+    .cancel {
+        border: 1px solid #eeedf7;
+        color: #8377cc;
+    }
 }
 // button {
     
