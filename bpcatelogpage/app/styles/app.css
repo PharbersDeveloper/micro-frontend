@@ -125,15 +125,13 @@ p {
   }
   
   #loadingio-spinner-double-ring-ho1zizxmctu {
-	/* width: 80px;
-	height: 80px; */
 	backdrop-filter: blur(1px);
 	background: rgba(200, 0,0, 0.05);
 	justify-content: center;
 	align-items: center;
 	width: 100vw;
 	height: 100vh;
-	display: inline-block;
+	/* display: inline-block; */
 	overflow: hidden;
 	/* background: none; */
 	position: absolute;

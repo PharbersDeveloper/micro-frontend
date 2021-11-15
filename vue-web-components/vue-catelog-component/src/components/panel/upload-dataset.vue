@@ -94,7 +94,7 @@
                                     <img :src="dataset_icon" alt="">
                                 </span>
                                 <p class="data_name">{{dataset.name}}</p>
-                                <div class="tag_area">
+                                <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
                                             <p 
@@ -104,6 +104,7 @@
                                             </p>
                                         </span>
                                     </div>
+									<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" @click="sort('ascending')" ref="moreTags">
                                 </div>
                             </div>
                         </div>
@@ -225,7 +226,7 @@ export default {
             datasetcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
         }
     },
     props: {
@@ -234,11 +235,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ['zzz','aaaaaaaaaaaaaaaaaaaaaaaa']},
+                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee","qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]},
                     {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
                     {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
+                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
             })
         }
     },
@@ -262,6 +263,13 @@ export default {
     },
     mounted() {
         let that = this
+		debugger
+		this.$refs.tagsArea.forEach((item, index) => {
+			if(item.clientHeight > 30) {
+				this.$refs.moreTags[0].style["display"] = "flex"
+			}
+			item.style["height"] = "40px"
+		})
     },
     watch: {
         "allData.tagsArray": function() {
@@ -802,9 +810,9 @@ export default {
                     display: flex;
                     width: 100%;
                     box-sizing: border-box;
-                    height: 60px;
+                    // height: 60px;
                     border-bottom: 1px solid #dddddd;
-                    padding: 20px 0 20px 20px;
+					padding: 10px 0 10px 10px;
                     input{
                         cursor: pointer;
                     }
@@ -820,7 +828,7 @@ export default {
                     }
                     .tag_bg {
                         position: relative;
-                        top: -8px;
+                        // top: -8px;
                         left: 0px;
                         font-size: 12px;
                         color: #fff;
@@ -833,7 +841,7 @@ export default {
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        max-width: 100px;
+                        max-width: 120px;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
@@ -865,6 +873,17 @@ export default {
                     .tag_area {
                         display: flex;
                         flex-wrap: wrap;
+						overflow: hidden;
+						img {
+							width: 20px;
+							height: 20px;
+						}
+						.more_tags {
+							display: none;
+    						position: relative;
+							top: -8px;
+							margin-left: 10px;
+						}
                     }
                 }
 
