@@ -20,7 +20,7 @@ export default class DownloadMyDataRoute extends Route {
     }
 
     beforeModel() {
-		this.loadingService.loading.style.display = 'inline-block'
+		this.loadingService.loading.style.display = 'flex'
     }
     async model( params ) {
         const limit = 10

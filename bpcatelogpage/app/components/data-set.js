@@ -108,7 +108,7 @@ export default class DataSetComponent extends Component {
 
     @action
     async updateDataset(file, property, projectName, message, projectId) {
-        this.loadingService.loading.style.display = 'inline-block'
+        this.loadingService.loading.style.display = 'flex'
         this.loadingService.loading.style['z-index'] = 2
         let that = this
         //push project_files
@@ -159,7 +159,7 @@ export default class DataSetComponent extends Component {
             "limit": 10,
             "start_key": {}
         }
-        var startTime = new Date().getTime();
+        let startTime = new Date().getTime();
         let dagStatusInt = setInterval(async function() { 
             that.postUrl(statusType, statusBody).then(response => {
                 let project_files_status = response.data[0].attributes.status
