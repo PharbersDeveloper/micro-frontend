@@ -2,7 +2,7 @@
     <div class="upload-dataset">
         <div class="upload_dataset_container">
             <div class="project_name_header">
-                <p class="project_name">{{allData.projectName}}</p>
+                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
             </div>
             <div class="project_name_header">
                 <p class="project_name new_upload">新上传文件</p>
@@ -91,6 +91,19 @@ export default {
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
+        },
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "linkToProject",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
@@ -119,6 +132,7 @@ export default {
             font-size: 16px;
             color: #000000;
             font-weight: 600;
+            cursor: pointer;
         }
         .new_upload {
             font-size: 14px;

@@ -14,9 +14,14 @@ export default class ExcelHandlerComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 const ltp = e.detail[0].args.param
+				let uri = ''
                 if(ltp.name === "advancedMapping") {
-					this.router.transitionTo('/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId)
+					uri = '/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId
 				}
+				if(ltp.name === "linkToProject") {
+					uri = `/projects/`+ ltp.projectId
+				}
+                this.router.transitionTo( uri )
                 break
             case "createDataSetIndex":
                 const param = e.detail[0].args.param

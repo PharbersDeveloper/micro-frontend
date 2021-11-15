@@ -1,13 +1,13 @@
 <template>
     <div class="eh-container">
         <div class="project_name_header">
-            <p class="project_name">{{allData.projectName}}</p>
+            <p class="project_name" @click="linkToPage('linkToProject')">{{allData.projectName}}</p>
         </div>
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">
                 <button text="运行" class="run" @click="createDataSetIndex">直接导入数据集</button>
-                <button text="运行" class="run" @click="linkToPage">使用高级映射</button>
+                <button text="运行" class="run" @click="linkToPage('advancedMapping')">使用高级映射</button>
             </div>
         </div>
         <div class="content">
@@ -110,13 +110,13 @@ export default {
         this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
-        linkToPage() {
+        linkToPage(name) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    "name": "advancedMapping",
+                    "name": name,
                     "projectName": this.allData.projectName,
                     "projectId": this.allData.projectId
                 }
@@ -194,6 +194,7 @@ export default {
                 font-size: 16px;
                 color: #000000;
                 font-weight: 600;
+				cursor: pointer;
             }
             .new_upload {
                 font-size: 14px;

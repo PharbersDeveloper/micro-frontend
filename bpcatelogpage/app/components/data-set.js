@@ -16,6 +16,11 @@ export default class DataSetComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 let param = e.detail[0].args.param
+				let uri = ''
+				if(param.name === "linkToProject") {
+					uri = `/projects/`+ param.projectId
+				}
+                this.router.transitionTo( uri )
                 break
             case "uploadFiles":
                 let params = e.detail[0].args.param
@@ -140,7 +145,7 @@ export default class DataSetComponent extends Component {
                 "owner": this.cookies.read( "access_token" ),
                 "showName": decodeURI(this.cookies.read('user_name_show')),
                 "code": 0,
-                "jobDesc": "creating",
+                "jobDesc": "created",
                 "jobCat": "upload",
                 "comments": "",
                 "message": JSON.stringify(messages)
