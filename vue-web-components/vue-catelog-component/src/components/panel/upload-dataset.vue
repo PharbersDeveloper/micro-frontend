@@ -235,11 +235,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee","qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]},
+                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]},
                     {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
                     {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
+                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
             })
         }
     },
@@ -256,7 +256,7 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dss.filter(item => item.name.indexOf(searchValue) > -1)
+                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             return this.allData.dss
         }

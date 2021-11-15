@@ -65,9 +65,8 @@ export default {
     },
     watch: {
         searchValue: function() {
-            console.log(this.searchValue)
             let that = this
-            if(this.searchValue == '') {
+            if(this.searchValue.trim() == '') {
                 if(this.tagsArrayShow.length < this.tagsArray.length) {
                     this.tagsArrayShow = this.tagsArray
                 }
