@@ -263,13 +263,12 @@ export default {
     },
     mounted() {
         let that = this
-		debugger
-		this.$refs.tagsArea.forEach((item, index) => {
-			if(item.clientHeight > 30) {
-				this.$refs.moreTags[0].style["display"] = "flex"
-			}
-			item.style["height"] = "40px"
-		})
+        this.$refs.tagsArea.forEach((item, index) => {
+            if(item.clientHeight > 30) {
+                this.$refs.moreTags[0].style["display"] = "flex"
+            }
+            item.style["height"] = "40px"
+        })
     },
     watch: {
         "allData.tagsArray": function() {
@@ -813,6 +812,7 @@ export default {
                     // height: 60px;
                     border-bottom: 1px solid #dddddd;
 					padding: 10px 0 10px 10px;
+					align-items: center;
                     input{
                         cursor: pointer;
                     }
