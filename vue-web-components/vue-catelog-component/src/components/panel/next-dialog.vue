@@ -6,7 +6,7 @@
                     <span>数据 ID:</span>
                     <div class="data_id_space">
                         <!-- <p>Pfizer_2021_10_a</p> -->
-                        <input type="text" v-model="dataID">
+                        <input ref="dataid" type="text" v-model="dataID" @change="inputStrChecked(dataID, 'dataid', 'dataID')">
                     </div> 
                 </div>
                 <div class="upload_ds">
@@ -30,7 +30,7 @@
                     <input type="radio" class="radio" name="radio" @click="radio('newData')" ref="radioNew">
                     <span>新建数据集:</span>
                     <div class="new_dataset_space">
-                        <input type="text" ref="newData" v-model="newDataName" :disabled="true">
+                        <input type="text" ref="newData" v-model="newDataName" :disabled="true" @change="inputStrChecked(newDataName, 'newData', 'newDataName')">
                     </div>
                 </div>
                 <div class="btn">
@@ -58,6 +58,20 @@ export default {
         }
     },
     methods: {
+        // 验证输入字符串时候的特殊字符
+        inputStrChecked(value, ref, name) {
+            // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
+            // 只允许输入数字、字母、汉字、下划线
+            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            if (r.test(value)) {
+                return value
+            } else {
+                this.$refs[ref].value = ""
+                this[name] = ""
+                alert("请勿输入特殊字符！")
+                return false;
+            }
+        },
         toggle() {
             if(this.$refs.radioData.checked) {
                 this.showDialog = !this.showDialog

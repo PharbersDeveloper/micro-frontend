@@ -104,7 +104,7 @@
                                             </p>
                                         </span>
                                     </div>
-									<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" @click="sort('ascending')" ref="moreTags">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" @click="sort('ascending')" ref="moreTags">
                                 </div>
                             </div>
                         </div>
@@ -235,11 +235,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]},
+                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas"]},
                     {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
                     {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
+                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
             })
         }
     },
@@ -811,8 +811,8 @@ export default {
                     box-sizing: border-box;
                     // height: 60px;
                     border-bottom: 1px solid #dddddd;
-					padding: 10px 0 10px 10px;
-					align-items: center;
+                    padding: 10px 0 10px 10px;
+                    align-items: center;
                     input{
                         cursor: pointer;
                     }
@@ -873,17 +873,17 @@ export default {
                     .tag_area {
                         display: flex;
                         flex-wrap: wrap;
-						overflow: hidden;
-						img {
-							width: 20px;
-							height: 20px;
-						}
-						.more_tags {
-							display: none;
-    						position: relative;
-							top: -8px;
-							margin-left: 10px;
-						}
+                        overflow: hidden;
+                        img {
+                            width: 20px;
+                            height: 20px;
+                        }
+                        .more_tags {
+                            display: none;
+                            position: relative;
+                            top: -8px;
+                            margin-left: 10px;
+                        }
                     }
                 }
 
