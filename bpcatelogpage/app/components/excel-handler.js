@@ -69,6 +69,8 @@ export default class ExcelHandlerComponent extends Component {
 		this.loadingService.loading.style.display = 'flex'
         this.loadingService.loading.style['z-index'] = 2
         const that = this
+		param.opname = this.cookies.read( "account_id" )
+		param.opgroup = this.cookies.read( "company_id" )
 		//直接导入数据集
         const push_type = "put_item"
         const project_files_body = {
@@ -81,7 +83,7 @@ export default class ExcelHandlerComponent extends Component {
                 "jobDesc": "creating",
                 "message": JSON.stringify(param),
                 "date": Date.now(),
-                "owner": this.cookies.read('access_token'), // TODO: 用用户id替换
+                "owner": this.cookies.read('account_id'), // TODO: 用用户id替换
                 "showName": decodeURI(this.cookies.read('user_name_show'))
             }
         }
@@ -89,7 +91,7 @@ export default class ExcelHandlerComponent extends Component {
 		//请求status，持续30s
         let statusType = 'query'
         let statusBody = {
-            "table": "action",
+            "table": "notification",
             "conditions": {
                 "id": actions.data.id
             },
@@ -98,7 +100,7 @@ export default class ExcelHandlerComponent extends Component {
         }
         var startTime = new Date().getTime();
         let dagStatusInt = setInterval(async function() { 
-            that.postUrl(statusType, statusBody).then(response => {
+            that.response.data[0].attributes.message(statusType, statusBody).then(response => {
                 let project_files_status = response.data[0] ? response.data[0].attributes["job-desc"] : 'creating'
                 if (project_files_status !== 'creating') {
                     clearInterval(dagStatusInt); //循环结束

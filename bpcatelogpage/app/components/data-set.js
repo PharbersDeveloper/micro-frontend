@@ -8,6 +8,7 @@ export default class DataSetComponent extends Component {
     @service store
     @service cookies
     @service('loading') loadingService;
+    @service noticeService;
     @service ajax
     @tracked random
 
@@ -50,8 +51,9 @@ export default class DataSetComponent extends Component {
 						alert("数据ID重复，请重新输入！")
 						throw new Error("数据集已存在")
 					}
-				} else if(params.property.type == 'createDataset') {
-					// 判断数据集是否存在
+				}
+				// 如果数据集是新创建，判断数据集是否存在
+				else if(params.property.type == 'createDataset') {
 					datasetArray.forEach(item => {
 						if(item.name === datasetName) {
 							uploadParam = false
@@ -63,6 +65,11 @@ export default class DataSetComponent extends Component {
 				if(uploadParam) {
 					e.detail[0].args.element.show = false
 					this.random = Math.random()
+					params.property.projectId = params.projectId
+					params.property.opname = this.cookies.read( "account_id" )
+					params.property.owner = this.cookies.read( "account_id" )
+					params.property.opgroup = this.cookies.read( "company_id" )
+					params.property.showName = decodeURI(this.cookies.read('user_name_show'))
 					this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId)
 				}
                 break
@@ -111,6 +118,12 @@ export default class DataSetComponent extends Component {
         return fetch(url+type, options).then(res => res.json())
     }
 
+	@action noticeCallback(response, ele) {
+		let status = JSON.parse(response.data[0].attributes.message).status
+		console.log(status)
+		this.loadingService.loading.style.display = 'none'
+	}
+
     @action
     async updateDataset(file, property, projectName, message, projectId) {
         this.loadingService.loading.style.display = 'flex'
@@ -153,38 +166,41 @@ export default class DataSetComponent extends Component {
         }
         let actions = this.postUrl(push_type, actions_body)
         let results = await Promise.all([project_files,actions])
-
+		
         //请求status，持续30s
-        let statusType = 'query'
-        let statusBody = {
-            "table": "project_files",
-            "conditions": {
-                "id": results[0].data.id
-            },
-            "limit": 10,
-            "start_key": {}
-        }
-        let startTime = new Date().getTime();
-        let dagStatusInt = setInterval(async function() { 
-            that.postUrl(statusType, statusBody).then(response => {
-                let project_files_status = response.data[0].attributes.status
-                if (project_files_status !== 'creating') {
-                    clearInterval(dagStatusInt); //循环结束
-                    let status = ''
-                    if(project_files_status == "success") {
-                        console.log(project_files_status)
-                    } else {
-                        console.log(project_files_status)
-                    }
-                    that.loadingService.loading.style.display = 'none'
-                    // that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
-                    that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
-                } else if(new Date().getTime() - startTime >= 60000) {
-                    clearInterval(dagStatusInt); //循环结束
-					alert("超时，连接终止！")
-				}
-            }) 
-        }, 5 * 1000)
+		this.noticeService.register("notification", results[0].data.id, this.noticeCallback, this)
+
+
+        // let statusType = 'query'
+        // let statusBody = {
+        //     "table": "notification",
+        //     "conditions": {
+        //         "id": results[0].data.id
+        //     },
+        //     "limit": 10,
+        //     "start_key": {}
+        // }
+        // let startTime = new Date().getTime();
+        // let dagStatusInt = setInterval(async function() { 
+        //     that.postUrl(statusType, statusBody).then(response => {
+        //         let project_files_status = response.data[0].attributes.status
+        //         if (project_files_status !== 'creating') {
+        //             clearInterval(dagStatusInt); //循环结束
+        //             let status = ''
+        //             if(project_files_status == "success") {
+        //                 console.log(project_files_status)
+        //             } else {
+        //                 console.log(project_files_status)
+        //             }
+        //             that.loadingService.loading.style.display = 'none'
+        //             // that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
+        //             that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
+        //         } else if(new Date().getTime() - startTime >= 60000) {
+        //             clearInterval(dagStatusInt); //循环结束
+		// 			alert("超时，连接终止！")
+		// 		}
+        //     }) 
+        // }, 5 * 1000)
     }
 
     @action

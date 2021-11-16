@@ -78,8 +78,7 @@ export default {
             this.$refs.file.value = null
         },
         upload() {
-            // this.$refs.file.click()
-            this.show = true
+            this.$refs.file.click()
         },
         uploadFiles() {
             console.log(this.$refs.file.files[0])
