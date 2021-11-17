@@ -85,10 +85,12 @@ export default {
             this.showDialog = false
         },
         confirm() {
-            if(this.newData === '' || this.newDataName == '') {
-                alert('选项不能为空')
+            if(this.newData == '' && this.newDataName == '') {
+                alert('数据集不能为空！')
                 return false
-            }else {
+            } else if(this.dataID == '') {
+                alert('数据ID不能为空！')
+            } else {
                 const event = new Event("event")
                 event.args = {
                     callback: "uploadFiles",
