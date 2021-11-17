@@ -11,6 +11,7 @@ export default class DataSetComponent extends Component {
     @service noticeService;
     @service ajax
     @tracked random
+	@tracked tranParam = {}
 
     @action
     async listener(e) {
@@ -94,6 +95,13 @@ export default class DataSetComponent extends Component {
                     //上传成功
                     let res = JSON.parse(request.responseText)
                     if(res.tmpname) {
+						this.tranParam = {
+							"file": file,
+							"property": property,
+							"projectName": projectName,
+							"message": res,
+							"projectId": projectId
+						}
                         this.updateDataset(file, property, projectName, res, projectId)
                     }
                 }
@@ -119,9 +127,14 @@ export default class DataSetComponent extends Component {
     }
 
 	@action noticeCallback(response, ele) {
-		let status = JSON.parse(response.data[0].attributes.message).status
-		console.log(status)
-		this.loadingService.loading.style.display = 'none'
+		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status 
+		if(upload_status != "upload_succeed") {
+			//跳转回dataset页面
+			alert("上传失败，请重新跳转！")
+			this.router.transitionTo('/dataset-lst?projectName=' + this.tranParam.projectName + '&projectId=' + this.tranParam.projectId)
+		} else {
+			this.noticeService.uploadStatus = true
+		}
 	}
 
     @action
@@ -169,6 +182,8 @@ export default class DataSetComponent extends Component {
 		
         //请求status，持续30s
 		this.noticeService.register("notification", results[0].data.id, this.noticeCallback, this)
+		this.router.transitionTo( `/excel-handler?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}&filename=${this.tranParam.file.name}&version=${this.tranParam.property.dataID}&dataset=${this.tranParam.property.dataset}&tmpname=${this.tranParam.message.tmpname}` )
+		this.loadingService.loading.style.display = 'none'
 
 
         // let statusType = 'query'

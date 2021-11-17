@@ -9,6 +9,7 @@ export default class DatasetLstComponent extends Component {
 	@service store
 	@service cookies
     @service('loading') loadingService;
+    @service noticeService;
 	@service ajax
 
 	@action
@@ -24,8 +25,6 @@ export default class DatasetLstComponent extends Component {
 					uri = `/projects/`+ params.projectId
 				}
                 this.router.transitionTo( uri )
-				// this.loadingService.loading.style.display = 'flex'
-        		// this.loadingService.loading.style['z-index'] = 2
 				break
 			case "addTags":
 				let that = this
@@ -62,7 +61,7 @@ export default class DatasetLstComponent extends Component {
 						body: JSON.stringify(body)
 					}
 					await fetch(url, options)
-					window.location.reload()
+					// window.location.reload()
 				})
 			break
 			case "deleteDatasets":
@@ -70,6 +69,7 @@ export default class DatasetLstComponent extends Component {
 				let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = delTagParam.datasetArray //发送请求的参数在这取
 				let promiseListDel = [];
+				let _that = this
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
@@ -82,11 +82,13 @@ export default class DatasetLstComponent extends Component {
 							"comments": "delete_dataset",
 							"jobCat": "remove_DS",
 							"jobDesc": "running",
-							"message": {
+							"message": JSON.stringify({
 								"version": "",
 								"dsid": targetDataset.id,
-								"destination": targetDataset.name
-							},
+								"destination": targetDataset.name,
+								"opname": this.cookies.read( "account_id" ),
+								"opgroup": this.cookies.read( "company_id" )
+							}),
 							"date": new Date().getTime(),
 							"owner": this.cookies.read( "account_id" ),
 							"showName": decodeURI(this.cookies.read('user_name_show'))
@@ -101,58 +103,41 @@ export default class DatasetLstComponent extends Component {
 						},
 						body: JSON.stringify(body)
 					}
-					// await fetch(url, options)
-					let result = fetch(url, options)
+					let result = fetch(url, options).then(res => res.json())
 					promiseListDel.push(result)
-
-					//请求status，持续30s
-					// let statusType = 'query'
-					// let statusBody = {
-					// 	"table": "project_files",
-					// 	"conditions": {
-					// 		"id": results[0].data.id
-					// 	},
-					// 	"limit": 10,
-					// 	"start_key": {}
-					// }
-					// let startTime = new Date().getTime();
-					// let dagStatusInt = setInterval(async function() { 
-					// 	that.postUrl(statusType, statusBody).then(response => {
-					// 		let project_files_status = response.data[0].attributes.status
-					// 		if (project_files_status !== 'creating') {
-					// 			clearInterval(dagStatusInt); //循环结束
-					// 			let status = ''
-					// 			if(project_files_status == "success") {
-					// 				console.log(project_files_status)
-					// 			} else {
-					// 				console.log(project_files_status)
-					// 			}
-					// 			that.loadingService.loading.style.display = 'none'
-					// 			// that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
-					// 			that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
-					// 		} else if(new Date().getTime() - startTime >= 60000) {
-					// 			clearInterval(dagStatusInt); //循环结束
-					// 			alert("超时，连接终止！")
-					// 		}
-					// 	}) 
-					// }, 5 * 1000)
-					// window.location.reload()
 				})
-				Promise.all(promiseListDel).then((rspList)=> {
-					window.location.reload()
-					alert("删除数据集成功！")
+				let delResults = await Promise.all(promiseListDel)
+				delResults.forEach(item => {
+					if(item.data) {
+						_that.noticeService.register("notification", item.data.id, this.noticeCallback, this)
+					}
 				})
+				alert("删除数据集成功！")
+				window.location.reload()
+				// Promise.all(promiseListDel).then((rspList)=> {
+				// 	window.location.reload()
+				// 	alert("删除数据集成功！")
+				// })
 			break
 			case "clearTags":
+				this.loadingService.loading.style.display = 'flex'
+        		this.loadingService.loading.style['z-index'] = 2
 				let clearTagParam = e.detail[0].args.param;
 				let selectedDatasetsClear = clearTagParam.selectedDatasets //需要更新的dataset
 				let datasetArrayClear = clearTagParam.datasetArray //发送请求的参数在这取
-
+				let _this = this
 				let promiseList = [];
 				selectedDatasetsClear.forEach(async targetId => {
 					let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 					const accessToken = this.cookies.read( "access_token" )
+					let msg = {
+						"version": "",
+						"dsid": targetDataset.id,
+						"destination": targetDataset.name,
+						"opname": this.cookies.read( "account_id" ),
+						"opgroup": this.cookies.read( "company_id" )
+					}
 					let body = {
 						"table": "action",
 						"item": {
@@ -161,11 +146,7 @@ export default class DatasetLstComponent extends Component {
 							"comments": "clear_dataset_tags",
 							"jobCat": "clear_DS_data",
 							"jobDesc": "running",
-							"message": {
-								"version": "",
-								"dsid": targetDataset.id,
-								"destination": targetDataset.name
-							},
+							"message": JSON.stringify(msg),
 							"date": new Date().getTime(),
 							"owner": this.cookies.read( "account_id" ),
 							"showName": decodeURI(this.cookies.read('user_name_show'))
@@ -180,20 +161,32 @@ export default class DatasetLstComponent extends Component {
 						},
 						body: JSON.stringify(body)
 					}
-					// await fetch(url, options)
-					let result = fetch(url, options)
+					let result = fetch(url, options).then(res => res.json())
 					promiseList.push(result)
-					// window.location.reload()
-					// alert("清除数据成功！")
 				})
-				Promise.all(promiseList).then((rspList)=> {
-					window.location.reload()
-					alert("清除数据成功！")
+				let results = await Promise.all(promiseList)
+				results.forEach(item => {
+					if(item.data) {
+						_this.noticeService.register("notification", item.data.id, this.noticeCallback, this)
+					}
 				})
+				alert("清除数据成功！")
+				window.location.reload()
 			break
 			default:
 				console.log("other click event!")
 		}
+	}
+
+	@action noticeCallback(response, ele) {
+		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		if(upload_status == "project_file_to_DS_succeed") {
+			//跳转下一页面
+			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
+		} else if(upload_status == "project_file_to_DS_failed") {
+			alert("清除数据失败，请重新操作！")
+		}
+		this.loadingService.loading.style.display = 'none'
 	}
 
 	@action

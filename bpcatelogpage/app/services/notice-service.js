@@ -8,6 +8,8 @@ export default class NoticeServiceService extends Service {
 	//被观察的对象，需要维持一个观察者对象的id列表（添加，删除，通知）
     @tracked subjectID = []
     @tracked subjectCallback = []
+	//管理状态的参数
+	@tracked uploadStatus = false
 
 	register(tableName, id, callback, ele, sortid) {
 		// 持续30s，调用unregister删除
@@ -31,9 +33,16 @@ export default class NoticeServiceService extends Service {
 
 	observer() {
 		// 定义timer，5秒请求一次, 无限循环，id数组大于0调用register，无返回不进行处理
-		//query notification, id数组大于0时请求数据，超过30秒删除id，用callback进行处理
+		// query notification, id数组大于0时请求数据，超过30秒删除id，用callback进行处理
 		let that = this
        	setInterval(async function() {
+			let currentTime = new Date().getTime()
+			// 设置30s超时
+			that.subjectCallback.forEach((item,index) => {
+				if(currentTime - item.date > 30*1000) {
+					that.unregister(that.subjectID[index])
+				}
+			})
 			if(that.subjectID.length > 0) {
 				let url = "https://apiv2.pharbers.com/phdydatasource/query"
 				let headers = {
@@ -57,12 +66,14 @@ export default class NoticeServiceService extends Service {
 				fetch(url, options)
 					.then(res => res.json())
 					.then(response => {
-						let index = that.subjectID.indexOf(response.data[0].id)
-						let targetCallback = that.subjectCallback[index]
-						//将消息分发给不同component处理
-						targetCallback.callback(response, targetCallback.ele)
-						// 返回结果即调用unregister
-						that.unregister(response.data[0].id)
+						if(response.data && response.data.length > 0) {
+							let index = that.subjectID.indexOf(response.data[0].id)
+							let targetCallback = that.subjectCallback[index]
+							// 将消息分发给不同component处理
+							targetCallback.callback(response, targetCallback.ele)
+							// 返回结果即调用unregister
+							that.unregister(response.data[0].id)
+						}
 					}) 
 			} else {
 				console.log("notice observer")

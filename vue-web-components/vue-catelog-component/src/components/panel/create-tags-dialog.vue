@@ -18,7 +18,7 @@
                         <div class="tags" @click.stop="checkedOneTag(tag)" v-for="(tag,index) in tagsArrayShow" :key="index+'tag'">
                             <input type="checkbox" class="checkout" :checked="selectedTags.indexOf(tag) > -1">
                             <span class="round" :style="{background: tagsColorArray[tagsArray.indexOf(tag)]}"></span>
-                            <div class="create_tags">
+                            <div class="create_tags" :title="tag">
                                 {{tag}}
                             </div>
                         </div>
@@ -110,11 +110,13 @@ export default {
             this.$emit('closeCreateDialog');
         },
         submit() {
-            this.tagsArrayShow = this.tagsArray.filter(it => it != '')
-            this.selectedTags.push(this.searchValue) //默认选中新增tag
-            this.newTagsArray.push(this.searchValue) //关闭弹框前新增的tag array
-            this.tagsArrayShow = this.tagsArrayShow.concat(this.newTagsArray) //将新增tag添加到tagShow数组
-            this.searchValue = ''
+            if(this.searchValue.trim() != '' && this.tagsArrayShow.indexOf(this.searchValue) == -1) {
+                this.tagsArrayShow = this.tagsArray.filter(it => it != '')
+                this.selectedTags.push(this.searchValue) //默认选中新增tag
+                this.newTagsArray.push(this.searchValue) //关闭弹框前新增的tag array
+                this.tagsArrayShow = this.tagsArrayShow.concat(this.newTagsArray) //将新增tag添加到tagShow数组
+                this.searchValue = ''
+            }
         },
         checkedOneTag(tag) {
             let idIndex = this.selectedTags.indexOf(tag)
@@ -223,6 +225,12 @@ export default {
             font-size: 14px;
             margin-left: 15px;
             margin-top: 2px;
+            max-width: 450px;
+            overflow: hidden;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
         .green {
             background: green;

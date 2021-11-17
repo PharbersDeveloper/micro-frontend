@@ -85,7 +85,7 @@ export default {
             this.showDialog = false
         },
         confirm() {
-            if(this.newData === '' && this.newDataName == '') {
+            if(this.newData === '' || this.newDataName == '') {
                 alert('选项不能为空')
                 return false
             }else {
