@@ -53,8 +53,10 @@
 
                         <div class="tag_selected">
                             <div class="sort">
-                                <img :src="descending_order" alt="" v-if="ascending" @click="sort('ascending')">
-                                <img :src="ascending_order" alt="" v-if="descending" @click="sort('descending')">
+                                <!-- 升序 -->
+                                <img :src="ascending_order" alt="" v-if="ascending" @click="sort('ascending')">
+                                <!-- 降序(默认) -->
+                                <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
                             <div class="down_sel" >
                                 <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
@@ -104,7 +106,8 @@
                                             </p>
                                         </span>
                                     </div>
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" @click="sort('ascending')" ref="moreTags">
+                                    <!-- tag的更多按钮，暂时隐藏 -->
+                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -195,13 +198,11 @@ export default {
             edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/descending_order.png",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/ascending_order.png",
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
+            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
+            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
             dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             showDialog: false,
             state: '',
@@ -216,7 +217,6 @@ export default {
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
-            descending: true,
             tags: ['name','description','啦啦啦'],
             ary: [],
             checked: false,
@@ -264,9 +264,10 @@ export default {
     mounted() {
         let that = this
         this.$refs.tagsArea.forEach((item, index) => {
-            if(item.clientHeight > 30) {
-                this.$refs.moreTags[0].style["display"] = "flex"
-            }
+            //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
+            // if(item.clientHeight > 30) {
+            //     this.$refs.moreTags[0].style["display"] = "flex"
+            // }
             item.style["height"] = "40px"
         })
     },
@@ -352,12 +353,17 @@ export default {
         //排序
         sort(val) {
             if(val == 'ascending') {
+                // 升序->降序
                 this.ascending = false
-                this.descending = true
-                this.allData.dss.sort()
+                // this.allData.dss.sort()
+                this.allData.dss.sort(
+                    function compareFunction(param1, param2) {
+                        return param1.localeCompare(param2, 'zh-Hans-CN', {sensitivity: 'accent'});
+                    }
+                )
             }else if (val == 'descending') {
+                // 降序->升序
                 this.descending = false
-                this.ascending = true
                 this.allData.dss.reverse()
             }
         },
