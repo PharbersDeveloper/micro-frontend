@@ -1,7 +1,7 @@
 <template>
-        <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '100%'}" @scroll="scrollGet($event)">
-	<div class="excel-container">
-		<div class="schemas" style="width: 100%" ref="schemas">
+    <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '100%'}" @scroll="scrollGet($event)">
+	    <div class="excel-container">
+		    <div class="schemas" style="width: 100%" ref="schemas">
 			<div class="view" >
 				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
 			</div>
