@@ -28,11 +28,13 @@ export default class ExcelHandlerComponent extends Component {
             case "createDataSetIndex":
                 const param = e.detail[0].args.param
 				this.tranParam = param
-				if(this.noticeService.uploadStatus) {
-					this.createDataSetIndex(param)
-				} else {
-					alert("文件上传尚未完成，请等待！")
-				}
+				this.createDataSetIndex(param)
+				// 不等了
+				// if(this.noticeService.uploadStatus) {
+				// 	this.createDataSetIndex(param)
+				// } else {
+				// 	alert("文件上传尚未完成，请等待！")
+				// }
                 break
             default:
                 console.log("submit event to parent")
@@ -62,7 +64,7 @@ export default class ExcelHandlerComponent extends Component {
 			//跳转下一页面
 			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
 		} else if(upload_status == "project_file_to_DS_failed") {
-			alert("导入失败，请冲新上传！")
+			alert("导入失败，请重新上传！")
 		}
 		this.loadingService.loading.style.display = 'none'
 	}
@@ -108,7 +110,7 @@ export default class ExcelHandlerComponent extends Component {
         }
         let actions = await this.postUrl(push_type, project_files_body)
 		//请求status，持续30s
-		this.noticeService.register("notification", actions.data.id, this.noticeCallback, this)
+		this.noticeService.register("notification", actions.data.id, this.noticeCallback, this, param.projectId,)
 
         // let statusType = 'query'
         // let statusBody = {

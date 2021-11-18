@@ -11,7 +11,7 @@ export default class NoticeServiceService extends Service {
 	//管理状态的参数
 	@tracked uploadStatus = false
 
-	register(tableName, id, callback, ele, sortid) {
+	register(tableName, id, callback, ele, projectId) {
 		// 持续30s，调用unregister删除
 		if(this.subjectID.indexOf(id) == -1) {
 			this.subjectID.push(id)
@@ -19,7 +19,8 @@ export default class NoticeServiceService extends Service {
 				ele: ele,
 				callback: callback,
 				tableName: tableName,
-				date: new Date().getTime()
+				date: new Date().getTime(),
+				projectId: projectId
 			})
 		}
 	}
@@ -45,7 +46,14 @@ export default class NoticeServiceService extends Service {
 			})
 			if(that.subjectID.length > 0) {
 				// let url = "https://apiv2.pharbers.com/phdydatasource/query"
-				let url = "https://api.pharbers.com/phdydatasource/scan"
+				let conditions = []
+				that.subjectID.forEach((item,index) => {
+					conditions.push({
+						id: item,
+						projectId: that.subjectCallback[index].projectId
+					})
+				})
+				let url = "https://api.pharbers.com/phdydatasource/batch_get_item"
 				let headers = {
 					"Authorization": that.cookies.read( "access_token" ),
 					"Content-Type": "application/vnd.api+json",
@@ -53,11 +61,7 @@ export default class NoticeServiceService extends Service {
 				}
 				let statusBody = {
 					"table": "notification",
-					"conditions": {
-						"id": that.subjectID[0]
-					},
-					"limit": 10,
-					"start_key": {}
+					"conditions": conditions
 				}
 				let options = {
 					method: "POST",

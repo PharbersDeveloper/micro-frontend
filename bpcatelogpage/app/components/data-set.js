@@ -183,7 +183,7 @@ export default class DataSetComponent extends Component {
         let results = await Promise.all([project_files,actions])
 		
         //请求status，持续30s
-		this.noticeService.register("notification", results[0].data.id, this.noticeCallback, this)
+		this.noticeService.register("notification", results[0].data.id, this.noticeCallback, this, projectId)
 		//直接跳转，改为等待
 		// this.router.transitionTo( `/excel-handler?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}&filename=${this.tranParam.file.name}&version=${this.tranParam.property.dataID}&dataset=${this.tranParam.property.dataset}&tmpname=${this.tranParam.message.tmpname}` )
 		// this.loadingService.loading.style.display = 'none'
