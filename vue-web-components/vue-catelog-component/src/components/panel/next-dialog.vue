@@ -10,8 +10,8 @@
                     </div> 
                 </div>
                 <div class="upload_ds">
-                    <input type="radio" class="radio" name="radio" @click="radio('dataSet')" ref="radioData">
-                    <span class="up">上传到数据集:</span>
+                    <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" :checked="radioState == 'dataSet'">
+                    <span class="up"  @click="radio('dataSet')">上传到数据集:</span>
                     <div @click="toggle">
                         <div class="input">
                             <p ref="dataSet">{{newData}}</p>
@@ -22,13 +22,13 @@
                     </div>
                     <div class="dialog" v-if="showDialog" ref="toggle">
                         <p class="dialog_select" v-for="(item,index) in datasetArr" :key="index">
-                            <span @click="select">{{item.name}}</span>
+                            <span @click="select" class="dialog_select_span">{{item.name}}</span>
                         </p>
                     </div>
                 </div>
-                <div class="new_dataset" >
-                    <input type="radio" class="radio" name="radio" @click="radio('newData')" ref="radioNew">
-                    <span>新建数据集:</span>
+                <div class="new_dataset">
+                    <input type="radio" class="radio" name="radio"  ref="radioNew" :checked="radioState == 'newData'" @click="radio('newData')">
+                    <span @click="radio('newData')">新建数据集:</span>
                     <div class="new_dataset_space">
                         <input type="text" ref="newData" v-model="newDataName" :disabled="true" @change="inputStrChecked(newDataName, 'newData', 'newDataName')">
                     </div>
@@ -64,6 +64,12 @@ export default {
             // 只允许输入数字、字母、汉字、下划线
             let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
             if (r.test(value)) {
+                if(value.length > 50) {
+                    this.$refs[ref].value = ""
+                    this[name] = ""
+                    alert("输入内容过长！")
+                    return false;
+                }
                 return value
             } else {
                 this.$refs[ref].value = ""
@@ -109,6 +115,7 @@ export default {
             }
         },
         radio(state) {
+            debugger
             this.radioState = state
             this.showDialog = false
             if(state === 'dataSet') {
@@ -208,6 +215,7 @@ export default {
             margin-left: 40px;
             margin-top: 40px;
             align-items: center;
+            cursor: pointer;
             .warning {
                 color: red;
             }
@@ -231,6 +239,10 @@ export default {
                     font-weight: 600;
                     margin-left: 10px;
                     line-height: 24px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    padding-right: 10px;
                 }
             }
             .icon {
@@ -270,6 +282,12 @@ export default {
                         font-weight: 600;
                         margin-left: 10px;
                     }
+                    .dialog_select_span {
+                        width: 200px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
                 }
             }
             
@@ -279,6 +297,7 @@ export default {
             margin-top: 40px;
             align-items: center;
             margin-left: 40px;
+            cursor: pointer;
             span {
                 margin-left: 15px;
                 font-family: PingFangSC-Medium;

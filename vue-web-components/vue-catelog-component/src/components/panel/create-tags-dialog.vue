@@ -6,7 +6,7 @@
                     <div class="left">
                         <img :src="label_icon" class="label" alt="">
                         <p v-show="datasetcheckedIds.length >= 2">为 {{datasetcheckedIds.length}} 个数据集添加标签</p>
-                        <p v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
+                        <p class="dataset_name" :title="datasetcheckedNames[0]" v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
                     </div>
                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="close_icon" @click="close">
                </div>
@@ -180,6 +180,15 @@ export default {
             height: 20px;
             margin-right: 5px;
         }
+		.dataset_name {
+			height: 60px;
+			white-space: nowrap;
+			overflow: hidden;
+			width: 400px;
+			text-overflow: ellipsis;
+			line-height: 60px;
+			cursor: pointer;
+		}
     }
     .close_icon {
         width: 24px;

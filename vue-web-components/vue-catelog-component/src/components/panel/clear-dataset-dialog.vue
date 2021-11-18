@@ -8,7 +8,7 @@
                </div>
                 <div class="prompt">
                    <p class="tip">确定清除以下数据集中的数据吗?</p>
-                   <p class="name" v-for="(item,index) in datasetcheckedNames" :key="index+'dataset'">{{item}}</p>
+                   <p class="name" :title="item" v-for="(item,index) in datasetcheckedNames" :key="index+'dataset'">{{item}}</p>
                </div>
                <div class="btn">
                    <button class="clear" @click="clearTags">清除</button>
@@ -115,7 +115,11 @@ export default {
         margin-top: 10px;
         color: #db4d71;
         font-size: 14px;
-
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		padding: 0 30px;
+		cursor: pointer;
     }
     
 }
