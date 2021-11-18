@@ -109,7 +109,7 @@ export default class DatasetLstComponent extends Component {
 				let delResults = await Promise.all(promiseListDel)
 				delResults.forEach(item => {
 					if(item.data) {
-						_that.noticeService.register("notification", item.data.id, this.noticeCallback, this)
+						_that.noticeService.register("notification", item.data.id, this.noticeCallback, this, delTagParam.projectId)
 					}
 				})
 				alert("删除数据集成功！")
@@ -167,7 +167,7 @@ export default class DatasetLstComponent extends Component {
 				let results = await Promise.all(promiseList)
 				results.forEach(item => {
 					if(item.data) {
-						_this.noticeService.register("notification", item.data.id, this.noticeCallback, this)
+						_this.noticeService.register("notification", item.data.id, this.noticeCallback, this, clearTagParam.projectId)
 					}
 				})
 				alert("清除数据成功！")
@@ -209,7 +209,6 @@ export default class DatasetLstComponent extends Component {
 			iter.label.map(it => {
 				tags.add(it)
 			})
-			console.log(tags)
 		})
 		this.args.model.tagsArray = Array.from(tags)
 		return this.args.model

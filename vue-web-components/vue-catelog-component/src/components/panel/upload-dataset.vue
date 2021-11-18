@@ -60,7 +60,6 @@
                             </div>
                             <div class="down_sel" >
                                 <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                                    <!-- <bp-option-vue text="最后一次编辑" @click="selectScript(0)"></bp-option-vue> -->
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
@@ -189,6 +188,7 @@ import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+
 export default {
     data() {
         return {
@@ -258,6 +258,7 @@ export default {
             if(searchValue) {
                 return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
+            this.sort("ascending")
             return this.allData.dss
         }
     },
@@ -358,12 +359,12 @@ export default {
                 // this.allData.dss.sort()
                 this.allData.dss.sort(
                     function compareFunction(param1, param2) {
-                        return param1.localeCompare(param2, 'zh-Hans-CN', {sensitivity: 'accent'});
+                        return param1.name.localeCompare(param2.name);
                     }
                 )
             }else if (val == 'descending') {
                 // 降序->升序
-                this.descending = false
+                this.ascending = true
                 this.allData.dss.reverse()
             }
         },
@@ -665,7 +666,7 @@ export default {
                     .sort {
                         width: 25px;
                         height: 25px;
-
+                        cursor: pointer;
                         img {
                             width: 100%;
                         }
@@ -875,11 +876,11 @@ export default {
                         font-weight: 600;
                         width: 168px;
                         min-width: 168px;
-						height: 40px;
-						line-height: 40px;
-						overflow: hidden;
-						white-space: nowrap;
-						text-overflow: ellipsis;
+                        height: 40px;
+                        line-height: 40px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
                     }
                     .tag_area {
                         display: flex;
@@ -958,7 +959,7 @@ export default {
                         border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
-						min-width: 44px;
+                        min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
@@ -974,12 +975,12 @@ export default {
                             font-size: 14px;
                             color: #000000;
                             font-weight: 600;
-							height: 44px;
-							white-space: nowrap;
-							overflow: hidden;
-							width: 350px;
-							text-overflow: ellipsis;
-							cursor: pointer;
+                            height: 44px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            width: 350px;
+                            text-overflow: ellipsis;
+                            cursor: pointer;
                         }
                     }
                 }
