@@ -1,18 +1,19 @@
 <template>
-    <div class="excel-container">
-        <div class="schemas" style="width: 100%" ref="schemas">
-            <div class="view" >
-                <header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
-            </div>
-        </div>
         <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '100%'}" @scroll="scrollGet($event)">
-            <div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
-                <canvas ref="canvas" class="canvas"></canvas>
-                <div ref="select" class="row-select"></div>
-                <select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
-            </div>
-        </div>
-    </div>
+	<div class="excel-container">
+		<div class="schemas" style="width: 100%" ref="schemas">
+			<div class="view" >
+				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
+			</div>
+		</div>
+		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
+			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
+				<canvas ref="canvas" class="canvas"></canvas>
+				<div ref="select" class="row-select"></div>
+				<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
+			</div>
+		</div>
+	</div>
 </template>
 <script>
 import PhDataSource from './model/datasource'
@@ -32,119 +33,119 @@ export default {
             cur_row: 0,
             cur_page: 0,
 
-            renderPolicy: null
-        }
-    },
-    components: {
-        headerItem:require('./bp-excel-header.vue').default
-    },
-    props: {
-        isNeedKeyBoardEvent: {
-            type: Boolean,
-            default: true
-        },
-        viewHeight: {
-            type: String,
-            default: '100px'
-        },
-        page_size: {
-            type: Number,
-            default: 50
-        },
-        datasource: {
-            type: Object,
-            default: function () {
-                return new PhDataSource('1')
-            }
-        },
-        sizePolicy: {
-            type: Object,
-            default: function() {
-                return new PhDefaultSizePolicy()
-            }
-        },
-        palettePolicy: {
-            type: Object,
-            default: function() {
-                return new PhDefaultPalettePolicy()
-            }
-        },
-        fontPolicy: {
-            type: Object,
-            default: function() {
-                return new PhDefaultFontPolicy()
-            }
-        }
-    },
-    beforeMount() {
-        this.datasource.refreshData(this)
-    },
-    mounted() {
-        this.focusHandler()
-        if (this.renderPolicy == null) {
-            this.renderPolicy = new PhDefaultRenderPolicy( 
-                this.$refs.canvas, this.sizePolicy,
-                this.datasource, this.palettePolicy,
-                this.fontPolicy, this.page_size,
-                this.$refs.hidden,
-                false
-            )
-        }
-    },
-    methods: {
-        scrollGet (e) {
-            this.$refs.schemas.scrollLeft = e.target.scrollLeft
-        },
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
-        },
-        focusHandler(event) {
-            if (this.isNeedKeyBoardEvent) {
-                this.$refs.hidden.focus()
-            }
-        },
-        sortHandler(event) {
-            if (this.isNeedKeyBoardEvent) {
-                this.$refs.hidden.focus()
-                // 暂时只能一个排序
-                const tmp = this.datasource.sort[event.target.firstChild.data]
-                if (tmp && tmp > 0) {
-                    this.datasource.sort[event.target.firstChild.data] = -1
-                } else {
-                    this.datasource.sort = {}
-                    this.datasource.sort[event.target.firstChild.data] = 1
-                }
-                this.dataRefresh++
-            }
-        },
-        keyPressHandler(event) {
-            switch (event.code) {
-            case "ArrowDown": {
-                this.cur_row++
-                this.cur_row = this.cur_row > this.datasource.data.length - 1 ?
-                    this.datasource.data.length - 1 : this.cur_row
-                this.needRefresh++
-                break
-            }
-            case "ArrowUp": {
-                this.cur_row--
-                this.cur_row = this.cur_row < 0 ? 0 : this.cur_row
-                this.needRefresh++
-                break
-            }
-            case "ArrowLeft": {
-                this.cur_page--
-                this.cur_page = this.cur_page < 0 ? 0 : this.cur_page
-                this.needRefresh++
-                break
-            }
-            case "ArrowRight": {
-                this.cur_page++
-                const that = this
+			renderPolicy: null
+		}
+	},
+	components: {
+		headerItem:require('./bp-excel-header.vue').default
+	},
+	props: {
+		isNeedKeyBoardEvent: {
+			type: Boolean,
+			default: true
+		},
+		viewHeight: {
+			type: String,
+			default: '600px'
+		},
+		page_size: {
+			type: Number,
+			default: 50
+		},
+		datasource: {
+			type: Object,
+			default: function () {
+				return new PhDataSource('1')
+			}
+		},
+		sizePolicy: {
+			type: Object,
+			default: function() {
+				return new PhDefaultSizePolicy()
+			}
+		},
+		palettePolicy: {
+			type: Object,
+			default: function() {
+				return new PhDefaultPalettePolicy()
+			}
+		},
+		fontPolicy: {
+			type: Object,
+			default: function() {
+				return new PhDefaultFontPolicy()
+			}
+		}
+	},
+	beforeMount() {
+		this.datasource.refreshData(this)
+	},
+	mounted() {
+		this.focusHandler()
+		if (this.renderPolicy == null) {
+			this.renderPolicy = new PhDefaultRenderPolicy(
+				this.$refs.canvas, this.sizePolicy,
+				this.datasource, this.palettePolicy,
+				this.fontPolicy, this.page_size,
+				this.$refs.hidden,
+				false
+			)
+		}
+	},
+	methods: {
+		scrollGet (e) {
+			this.$refs.schemas.scrollLeft = e.target.scrollLeft
+		},
+		getCookie(name) {
+			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+			if (arr = document.cookie.match(reg))
+				return (arr[2]);
+			else
+				return null;
+		},
+		focusHandler(event) {
+			if (this.isNeedKeyBoardEvent) {
+				this.$refs.hidden.focus()
+			}
+		},
+		sortHandler(event) {
+			if (this.isNeedKeyBoardEvent) {
+				this.$refs.hidden.focus()
+				// 暂时只能一个排序
+				const tmp = this.datasource.sort[event.target.firstChild.data]
+				if (tmp && tmp > 0) {
+					this.datasource.sort[event.target.firstChild.data] = -1
+				} else {
+					this.datasource.sort = {}
+					this.datasource.sort[event.target.firstChild.data] = 1
+				}
+				this.dataRefresh++
+			}
+		},
+		keyPressHandler(event) {
+			switch (event.code) {
+			case "ArrowDown": {
+				this.cur_row++
+				this.cur_row = this.cur_row > this.datasource.data.length - 1 ?
+					this.datasource.data.length - 1 : this.cur_row
+				this.needRefresh++
+				break
+			}
+			case "ArrowUp": {
+				this.cur_row--
+				this.cur_row = this.cur_row < 0 ? 0 : this.cur_row
+				this.needRefresh++
+				break
+			}
+			case "ArrowLeft": {
+				this.cur_page--
+				this.cur_page = this.cur_page < 0 ? 0 : this.cur_page
+				this.needRefresh++
+				break
+			}
+			case "ArrowRight": {
+				this.cur_page++
+				const that = this
 
                 if (this.cur_page > this.datasource.data.length / this.page_size - 1) {
                     this.dataAppend++
@@ -186,13 +187,14 @@ export default {
 };
 </script>
 <style lang="scss">
-    .excel-container {
-        .viewport {
-            overflow: auto;
-            position: relative;
-            .body {
-                // overflow: auto;
-            }
+	.excel-container {
+		.viewport {
+			overflow: auto;
+			position: relative;
+			display: flex;
+			.body {
+				// overflow: auto;
+			}
 
         }
         .schemas {
