@@ -95,7 +95,7 @@
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
-                                <p class="data_name">{{dataset.name}}</p>
+                                <p class="data_name" :title="dataset.name">{{dataset.name}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
@@ -121,7 +121,7 @@
                                 <img :src="dataset_icon" alt="">
                             </span>
                             <div class="show-name" v-if="datasetcheckedIds.length == 1">
-                                <p class="project_name_info" >
+                                <p class="project_name_info" :title="datasetcheckedNames[0]">
                                 {{datasetcheckedNames[0]}}
                                 </p>
                             </div>
@@ -875,6 +875,11 @@ export default {
                         font-weight: 600;
                         width: 168px;
                         min-width: 168px;
+						height: 40px;
+						line-height: 40px;
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
                     }
                     .tag_area {
                         display: flex;
@@ -953,6 +958,7 @@ export default {
                         border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
+						min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
@@ -968,6 +974,12 @@ export default {
                             font-size: 14px;
                             color: #000000;
                             font-weight: 600;
+							height: 44px;
+							white-space: nowrap;
+							overflow: hidden;
+							width: 350px;
+							text-overflow: ellipsis;
+							cursor: pointer;
                         }
                     }
                 }

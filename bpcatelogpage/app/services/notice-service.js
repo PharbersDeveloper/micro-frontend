@@ -44,7 +44,8 @@ export default class NoticeServiceService extends Service {
 				}
 			})
 			if(that.subjectID.length > 0) {
-				let url = "https://apiv2.pharbers.com/phdydatasource/query"
+				// let url = "https://apiv2.pharbers.com/phdydatasource/query"
+				let url = "https://api.pharbers.com/phdydatasource/scan"
 				let headers = {
 					"Authorization": that.cookies.read( "access_token" ),
 					"Content-Type": "application/vnd.api+json",
