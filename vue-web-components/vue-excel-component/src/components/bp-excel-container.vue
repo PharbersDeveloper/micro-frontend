@@ -9,7 +9,7 @@
 					</span>
 				</div>
 				<div class="disc-span">
-					{{desc}}
+					{{totalNum}} rows, {{totalCols}} cols
 				</div>
 			</div>
 			<div class="btn-groups">
@@ -21,22 +21,26 @@
 		</div>
 		<div class="search-container">
 			<div class="search-inner">
-				<input type="search" refs="search" name="q"
+				<input type="search" ref="search" name="q"
 					   aria-label="Search through site content">
-				<button class="search-submit">Search</button>
+				<button class="search-submit" @click="on_searchBtnClicked">Search</button>
 			</div>
 			<div class="search-result">
-				<span>xxxx matching rows</span>
+				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel></bp-excel>
+		<bp-excel viewHeight="600px" :datasource="datasource" class="excel"></bp-excel>
 	</div>
 </template>
 <script>
+import PhContainerDataSource from './model/containerDatasource'
 export default {
 	data() {
 		return {
-			desc: "xxx rows, xxx cols"
+			descRefresh: 0,
+			totalNum: 0,
+			totalCols: 0,
+			matchNum: 0
 		}
 	},
 	components: {
@@ -46,19 +50,40 @@ export default {
 		title: {
 			type: String,
 			default: "Viewing dataset sample"
+		},
+		datasource: {
+			type: Object,
+			default: function () {
+				return new PhContainerDataSource('1')
+			}
 		}
 	},
 	beforeMount() {
 
 	},
 	mounted() {
-
+		this.descRefresh++
 	},
 	methods: {
-
+		getCookie(name) {
+			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+			if (arr = document.cookie.match(reg))
+				return (arr[2]);
+			else
+				return null;
+		},
+		on_searchBtnClicked() {
+			this.matchNum = this.datasource.clientSideSearch(this, this.$refs.search.value)
+		}
 	},
 	watch: {
-
+		descRefresh(o, n) {
+			let that = this
+			this.datasource.queryTotalCount(this).then((count) => {
+				that.totalNum = Number(count)
+			})
+			that.totalCols = that.datasource.schema.length
+		}
 	}
 };
 </script>
@@ -90,6 +115,7 @@ export default {
 				.disc-span {
 					font-family: 'Noto Sans JP', sans-serif;
 					font-size: 12px;
+					margin-left: 10px;
 				}
 			}
 
@@ -119,6 +145,10 @@ export default {
 				font-size: 18px;
 				font-family: 'Advent Pro', sans-serif;
 			}
+		}
+		.excel {
+			display: inline-grid;
+			margin: 10px
 		}
 	}
 </style>

@@ -5,7 +5,7 @@
 				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
 			</div>
 		</div>
-		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '100%'}" @scroll="scrollGet($event)">
+		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
 				<div ref="select" class="row-select"></div>
@@ -45,7 +45,7 @@ export default {
 		},
 		viewHeight: {
 			type: String,
-			default: '100px'
+			default: '600px'
 		},
 		page_size: {
 			type: Number,
@@ -190,6 +190,7 @@ export default {
 		.viewport {
 			overflow: auto;
 			position: relative;
+			display: flex;
 			.body {
 				// overflow: auto;
 			}

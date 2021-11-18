@@ -1,5 +1,5 @@
 
-export default class PhDataSource {
+export default class PhContainerDataSource {
 	constructor(id, adapter) {
 		this.id = id
 		this.data = []
@@ -65,6 +65,41 @@ export default class PhDataSource {
 		return fetch(url, options)
 	}
 
+	buildCountQuery(ele) {
+		function buildQueryCountString() {
+			let sql_str = "SELECT count(*)"
+			sql_str = sql_str + " FROM " + ele.datasource.name
+
+			// filter
+			let firstFilter = Object.keys(ele.datasource.filter)[0]
+			let filterParam = " WHERE "
+			for (const key in ele.datasource.filter) {
+				if(key != firstFilter) {
+					filterParam = " AND "
+				}
+				sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+			}
+
+			return sql_str
+		}
+		const url = "https://api.pharbers.com/phchproxyquery"
+		const accessToken = ele.getCookie("access_token") || "64671f25cc5c91ceef02c9323e44a91b9f5f99f6e028932ae8aa1545918e8252"
+		let body = {
+			"query": buildQueryCountString(),
+			"schema": ["count"]
+		}
+		let options = {
+			method: "POST",
+			headers: {
+				"Authorization": accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		return fetch(url, options)
+	}
+
 	refreshData(ele) {
 		ele.datasource.buildQuery(ele)
 			.then((response) => response.json())
@@ -82,5 +117,27 @@ export default class PhDataSource {
 				ele.cur_page++
 				ele.needRefresh++
 			})
+	}
+
+	queryTotalCount(ele) {
+		return ele.datasource.buildCountQuery(ele)
+			.then((response) => response.json())
+			.then((response) => {
+				return response[0]["count"]
+			})
+	}
+
+	clientSideSearch(ele, txt) {
+		let result = 0
+		for (var idx = 0; idx < this.data.length; idx++) {
+			const line = this.data[idx]
+			for (const word in line) {
+				if ((line[word]) && (line[word].startsWith(txt))) {
+					result++
+					break
+				}
+			}
+		}
+		return result
 	}
 }
