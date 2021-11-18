@@ -125,11 +125,15 @@ p {
   }
   
   #loadingio-spinner-double-ring-ho1zizxmctu {
-	width: 80px;
-	height: 80px;
-	display: inline-block;
+	backdrop-filter: blur(1px);
+	background: rgba(200, 0,0, 0.05);
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
 	overflow: hidden;
-	background: none;
+	/* background: none; */
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -141,8 +145,8 @@ p {
   }
   
   .ldio-400lpppmiue {
-	width: 100%;
-	height: 100%;
+	/* width: 100%;
+	height: 100%; */
 	position: relative;
 	transform: translateZ(0) scale(0.8);
 	backface-visibility: hidden;

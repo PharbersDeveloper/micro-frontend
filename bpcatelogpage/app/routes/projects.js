@@ -16,7 +16,7 @@ export default class ProjectsRoute extends Route {
 		if ( !cookies.read( "access_token" ) ) {
 			this.transitionTo( "index" )
 		}
-		this.loadingService.loading.style.display = 'inline-block'
+		this.loadingService.loading.style.display = 'flex'
 	}
 
 	async model() {
@@ -39,8 +39,7 @@ export default class ProjectsRoute extends Route {
 			},
 			body: JSON.stringify(body)
 		}
-		// let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
-		let projects = this.store.query( "project", {"filter[owner]":"c89b8123-a120-498f-963c-5be102ee9082"})
+		let projects = this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
 		let peekExecutions = this.store.peekAll("execution").filter(it => it)
 		let peekStep = this.store.peekAll("execution").filter(it => it)
 		let results = []

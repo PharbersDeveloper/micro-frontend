@@ -2,7 +2,7 @@
     <div class="upload-dataset">
         <div class="upload_dataset_container">
             <div class="project_name_header">
-                <p class="project_name">{{allData.projectName}}</p>
+                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
             </div>
             <div class="project_name_header">
                 <p class="project_name new_upload">新上传文件</p>
@@ -19,7 +19,7 @@
                     <input style="display: none;" type="file" name="" ref="file" @change="uploadFiles" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.csv,.xlsx,.xls,.xlsm">
                 </div>
                 <div class="select-area">
-                    <span class="title">Upload to connection</span>
+                    <span class="title">上传至</span>
                     <bp-select-vue src="https://www.pharbers.com/public/icon_drop.svg" :choosedValue="selectParam">
                         <bp-option-vue @click="changeSelect">本集群</bp-option-vue>
                     </bp-select-vue>
@@ -27,7 +27,7 @@
             </div>
             
         </div>
-        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent"></next-dialog>
+        <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent" :datasetArr="allData.datasetArr"></next-dialog>
     </div>
 </template>
 
@@ -53,14 +53,20 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                projectId: ''
+                projectId: '',
+                datasetArr: []
             })
+        },
+        random: Number
+    },
+    watch: {
+        random: function() {
+            console.log("关闭所有弹框")
+            this.show = false
         }
     },
     methods: {
-        changeSelect() {
-            
-        },
+        changeSelect() {},
         open() {
             this.show = true
         },
@@ -79,10 +85,23 @@ export default {
             this.fileList.push(this.$refs.file.files[0])
         },
         uploadFilesEvent(data) {
-            this.show = false
+            // this.show = false
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
+        },
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "linkToProject",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
@@ -92,6 +111,7 @@ export default {
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 .bg {
     background: #dfe7ff;
@@ -99,11 +119,11 @@ export default {
 .upload_dataset_container {
     width: 100vw;
     height: 100vh;
-    border: 2px solid #ddd;
+    // border: 2px solid #ddd;
     .project_name_header {
         height: 50px;
         width: 100%;
-        border-bottom: 2px solid #ddd;
+        border-bottom: 1px solid #ddd;
         .project_name {
             margin-left: 30px;
             line-height: 50px;
@@ -111,6 +131,7 @@ export default {
             font-size: 16px;
             color: #000000;
             font-weight: 600;
+            cursor: pointer;
         }
         .new_upload {
             font-size: 14px;
@@ -158,7 +179,7 @@ export default {
             padding: 15px;
             border: 1px solid #979797;
             .title {
-                width: 190px;
+                width: 70px;
             }
             /deep/.bp-select {
                 height: 26px;
@@ -213,6 +234,7 @@ export default {
                 border-radius: 4px;
                 line-height: 32px;
                 text-align: center;
+                cursor: pointer;
             }
             .select_input {
                 position: absolute;

@@ -6,33 +6,31 @@
                     <span>数据 ID:</span>
                     <div class="data_id_space">
                         <!-- <p>Pfizer_2021_10_a</p> -->
-                        <input type="text" v-model="dataID">
+                        <input ref="dataid" type="text" v-model="dataID" @change="inputStrChecked(dataID, 'dataid', 'dataID')">
                     </div> 
                 </div>
                 <div class="upload_ds">
                     <input type="radio" class="radio" name="radio" @click="radio('dataSet')" ref="radioData">
-                    <!-- <input type="radio" class="radio" > -->
                     <span class="up">上传到数据集:</span>
-                    <!-- <input type="text" class="text" v-model="newData" ref="dataSet"> -->
-                    <div class="input">
-                        <p ref="dataSet">{{newData}}</p>
-                    </div>
-                    <div class="icon" @click="toggle" >
-                        <img :src="dropDownIcon">
+                    <div @click="toggle">
+                        <div class="input">
+                            <p ref="dataSet">{{newData}}</p>
+                        </div>
+                        <div class="icon" >
+                            <img :src="dropDownIcon">
+                        </div>
                     </div>
                     <div class="dialog" v-if="showDialog" ref="toggle">
-                        <p class="dialog_select" v-for="(item,index) in data" :key="index">
-                            <span @click="select">{{item}}</span>
+                        <p class="dialog_select" v-for="(item,index) in datasetArr" :key="index">
+                            <span @click="select">{{item.name}}</span>
                         </p>
                     </div>
                 </div>
                 <div class="new_dataset" >
                     <input type="radio" class="radio" name="radio" @click="radio('newData')" ref="radioNew">
                     <span>新建数据集:</span>
-                    <!-- <input type="text" class="text"> -->
                     <div class="new_dataset_space">
-                        <!-- <p>New dataset name</p> -->
-                        <input type="text" ref="newData" v-model="newDataName" :disabled="true">
+                        <input type="text" ref="newData" v-model="newDataName" :disabled="true" @change="inputStrChecked(newDataName, 'newData', 'newDataName')">
                     </div>
                 </div>
                 <div class="btn">
@@ -56,13 +54,28 @@ export default {
             newData: '', 
             newDataName: '',
             dataID: '',
-            radioState: '',
-            data: []
+            radioState: ''
         }
     },
     methods: {
+        // 验证输入字符串时候的特殊字符
+        inputStrChecked(value, ref, name) {
+            // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
+            // 只允许输入数字、字母、汉字、下划线
+            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            if (r.test(value)) {
+                return value
+            } else {
+                this.$refs[ref].value = ""
+                this[name] = ""
+                alert("请勿输入特殊字符！")
+                return false;
+            }
+        },
         toggle() {
-            this.showDialog = !this.showDialog
+            if(this.$refs.radioData.checked) {
+                this.showDialog = !this.showDialog
+            }
         },
         close() {
             this.$emit('closeDialog')
@@ -72,21 +85,23 @@ export default {
             this.showDialog = false
         },
         confirm() {
-            if(this.newData === '' && this.newDataName == '') {
-                alert('选项不能为空')
-                // throw new Error('选项不能为空')
+            if(this.newData == '' && this.newDataName == '') {
+                alert('数据集不能为空！')
                 return false
-            }else {
+            } else if(this.dataID == '') {
+                alert('数据ID不能为空！')
+            } else {
                 const event = new Event("event")
                 event.args = {
                     callback: "uploadFiles",
                     element: this,
                     param: {
                         files: this.fileList,
-                        property: JSON.stringify({
+                        property: {
                             dataID: this.dataID,
-                            dataset: this.radioState === 'dataSet' ? this.newData : this.newDataName
-                        })
+                            dataset: this.radioState === 'dataSet' ? this.newData : this.newDataName,
+                            type: this.$refs.radioData.checked ? "selectDataset" : "createDataset"
+                        }
                     }
                 }
                 this.$emit('uploadFilesEvent', event)
@@ -95,9 +110,8 @@ export default {
         },
         radio(state) {
             this.radioState = state
+            this.showDialog = false
             if(state === 'dataSet') {
-                this.data = ['dataset_0001','dataset_0002','dataset_0003','dataset_0004']
-                this.showDialog = false
                 this.$refs.newData.disabled = true
                 this.$refs.dataSet.disabled = false
                 this.newDataName = ''
@@ -114,10 +128,11 @@ export default {
             type: Boolean,
             default: false
         },
-        allData: {
-            type: Object,
-            default: () => ({
-            })
+        datasetArr: {
+            type: Array,
+            default: function() {
+                return ['dataset_0001','dataset_0002','dataset_0003','dataset_0004','dataset_0003','dataset_0003','dataset_0003']
+            }
         },
         fileList: {
             type: Array,
@@ -163,6 +178,7 @@ export default {
             display: flex;
             margin-left: 72px;
             margin-top: 41px;
+            align-items: center;
             span {
                 font-family: PingFangSC-Medium;
                 font-size: 14px;
@@ -171,7 +187,7 @@ export default {
             }
             .data_id_space {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 66px;
                 input {
@@ -191,6 +207,7 @@ export default {
             position: relative;
             margin-left: 40px;
             margin-top: 40px;
+            align-items: center;
             .warning {
                 color: red;
             }
@@ -202,12 +219,9 @@ export default {
                 font-weight: 600;
                 margin-left: 10px;
             }
-            .radio{ 
-                margin-top: 5px;
-            }
-                .input {
+            .input {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 37px;
                 p {
@@ -221,18 +235,25 @@ export default {
             }
             .icon {
                 position: absolute;
-                top: 2px;
+                top: 4px;
                 right: 115px;
-                width: 26px;
+                // width: 26px; 
                 height: 18px;
                 img {
-                    width: 100%;
+                    width: 12px;
+                    height: 12px;
                 }
             }
             .dialog {
                 position: absolute;
                 top: 25px;
-                right: 109px;
+                right: 104px;
+                width: 206px;
+                height: 100px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                border: 1px solid #979797;
+                background: white;
                 .dialog_select {
                     width: 200px;
                     height: 24px;
@@ -256,6 +277,7 @@ export default {
         .new_dataset {
             display: flex;
             margin-top: 40px;
+            align-items: center;
             margin-left: 40px;
             span {
                 margin-left: 15px;
@@ -266,7 +288,7 @@ export default {
             }
             .new_dataset_space {
                 width: 200px;
-                height: 24px;
+                height: 30px;
                 border: 1px solid #979797;
                 margin-left: 45px;
                  input {
@@ -276,12 +298,9 @@ export default {
                     color: #000000;
                     font-weight: 600;
                     margin-left: 10px;
-                    // line-height: 24px;
-                    border: 0px;
+                    border: 0;
+                    background: none;
                 }
-            }
-             .radio{ 
-                margin-top: 5px;
             }
 
 

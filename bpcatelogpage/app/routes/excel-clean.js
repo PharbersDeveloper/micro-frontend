@@ -9,6 +9,9 @@ export default class ExcelCleanRoute extends Route {
 		projectName: {
 			refreshModel: true
 		},
+		projectId: {
+			refreshModel: true
+		},
 		tmpname: {
 			refreshModel: true
 		}
@@ -22,6 +25,7 @@ export default class ExcelCleanRoute extends Route {
 		return RSVP.hash( {
 			projectName: params.projectName,
 			tmpname: params.tmpname,
+			projectId: params.projectId,
 			_isVue: true
 		} )
 	}

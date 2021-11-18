@@ -1,59 +1,57 @@
 <template>
-    <div class="upload-dataset">
-        <div class="upload_dataset_container">
-            <div class="project_name_header">
-                <p class="project_name">{{allData.projectName}}</p>
-            </div>
-			<div class="project_name_header heaber_opt">
-                <p class="project_name new_upload">New Uploaded File Dataset</p>
-                <bp-button text="运行" class="run"></bp-button>
-            </div>
-            <div class="content_container">
-                <div class="icon_dialog">
-                    <div class="dataset_img">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
-                    </div>
-                    <div class="center-area">
-                        <div class="round">
-                            <div class="icon">
-                                <img :src="oip_icon">
-                                <img :src="no_icon" class="no">
-                            </div>
-                        </div>
-                        <div class="input">
-                            <bp-select-vue src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="scriptValue">
-                                <bp-option-vue text="双源清洗" @click="selectScript(0)"></bp-option-vue>
-                                <bp-option-vue text="手动映射" @click="selectScript(1)"></bp-option-vue>
-                            </bp-select-vue>
-                        </div>
-                        <bp-button text="添加映射" v-show="manual"></bp-button>
-                    </div>
-                   <div class="dataset_img">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
-                    </div>
-                    <!-- <div class="log">
-                        <p>Job failed</p>
-                        <p class="job_name">Job name</p>
-                        <button>Logs</button>
-                    </div> -->
-                </div>
-                <div class="excel_area">
-                    <div class="area">
-                        <!-- <p class="file_name">文件名称</p> -->
-                        <div class="excel">
-                            <bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10"></bp-excel>
-                        </div>
-                    </div>
-                    <div class="area column_clean">
-                        <!-- <p class="file_name">列清洗</p> -->
-                        <div class="excel">
-                            <bp-excel viewHeight="25vh" :page_size="10"></bp-excel>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="upload_dataset_container">
+		<div class="project_name_header">
+			<p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
+		</div>
+		<div class="project_name_header heaber_opt">
+			<p class="project_name new_upload">New Uploaded File Dataset</p>
+			<bp-button text="运行" class="run"></bp-button>
+		</div>
+		<div class="content_container">
+			<div class="icon_dialog">
+				<div class="dataset_img">
+					<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
+				</div>
+				<div class="center-area">
+					<div class="round">
+						<div class="icon">
+							<img :src="oip_icon">
+							<img :src="no_icon" class="no">
+						</div>
+					</div>
+					<div class="input">
+						<bp-select-vue src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="scriptValue">
+							<bp-option-vue text="双源映射" @click="selectScript(0)"></bp-option-vue>
+							<bp-option-vue text="手动映射" @click="selectScript(1)"></bp-option-vue>
+						</bp-select-vue>
+					</div>
+					<bp-button text="添加映射" v-show="manual"></bp-button>
+				</div>
+				<div class="dataset_img">
+					<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
+				</div>
+				<!-- <div class="log">
+					<p>Job failed</p>
+					<p class="job_name">Job name</p>
+					<button>Logs</button>
+				</div> -->
+			</div>
+			<div class="excel_area">
+				<div class="area">
+					<!-- <p class="file_name">文件名称</p> -->
+					<div class="excel">
+						<bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10"></bp-excel>
+					</div>
+				</div>
+				<div class="area column_clean">
+					<!-- <p class="file_name">列清洗</p> -->
+					<div class="excel">
+						<bp-excel viewHeight="25vh" :page_size="10"></bp-excel>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -126,6 +124,19 @@ export default {
             // console.log("点击",e);
             this.cloumnClean = e.target.innerHTML;
             this.showDialog = false;
+        },
+        linkToPage() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "linkToProject",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
@@ -140,16 +151,15 @@ export default {
     background: #dfe7ff;
 }
 .upload_dataset_container {
-    width: 100vw;
-    // height:100vh;
-    border: 2px solid #979797;
+	display: flex;
+	flex-direction: column;
     .heaber_opt {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
     .content_container {
-		// width: 100vw;
+        height: calc(100vh - 110px);
         display: flex;
         background: #f7f7f7;
         .icon_dialog {
@@ -157,7 +167,7 @@ export default {
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            height: calc(100vh - 104px);
+            // height: calc(100vh - 104px);
             padding: 120px 0;
             width: 500px;
             margin-left: 20px;
@@ -302,7 +312,7 @@ export default {
     }
     .project_name_header {
         height: 50px;
-        width: 100%;
+        // width: 100%;
         border-bottom: 2px solid #ccc;
         padding-right: 20px;
         .project_name {
@@ -312,13 +322,13 @@ export default {
             font-size: 16px;
             color: #000000;
             font-weight: 600;
+			cursor: pointer;
         }
         .new_upload {
             font-size: 14px;
         }
     }
     .excel_area {
-        height: calc(100vh - 110px);
         background: #f7f7f7;
         padding-top: 20px;
         display: flex;

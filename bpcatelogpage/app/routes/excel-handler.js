@@ -7,7 +7,19 @@ export default class ExcelHandlerRoute extends Route {
 		projectName: {
 			refreshModel: true
 		},
+		projectId: {
+			refreshModel: true
+		},
 		tmpname: {
+			refreshModel: true
+		},
+		filename: {
+			refreshModel: true
+		},
+		version: {
+			refreshModel: true
+		},
+		dataset: {
 			refreshModel: true
 		}
     }
@@ -19,7 +31,11 @@ export default class ExcelHandlerRoute extends Route {
         }
 		return RSVP.hash( {
 			projectName: params.projectName,
+			projectId: params.projectId,
 			tmpname: params.tmpname,
+			filename: params.filename,
+			version: params.version,
+			dataset: params.dataset,
 			_isVue: true
 		} )
 	}

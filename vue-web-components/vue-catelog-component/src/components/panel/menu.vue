@@ -11,14 +11,6 @@
         </div>
         <bpText class="body-tertiary-inverse">{{allData.company_name_show}}</bpText>
     </div>
-    <!-- <div class="upload-button">
-        <span class="fileinput-button">
-            <div class="icon_upload"></div>
-            <span class="btn_secondary_initial">
-                数据上传
-            </span>
-        </span>
-    </div> -->
     <bpMenu :menu_data="menu_data" class="" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpMenu>
 	<div class="log-out" @click="logOut">
 		<span class="log-out-menu">
@@ -218,30 +210,6 @@ export default {
                 font-weight: 200;
             }
          }
-        .upload-button {
-            width: 176px;
-            height: 32px;
-            margin: 20px 12px;
-			background: #7163c5;
-			.fileinput-button {
-				height: 32px;
-				width: 100%;
-				position: relative;
-				background: #fff;
-				border-radius: 2px;
-				text-align: center;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-            .btn_secondary_initial {
-                color: #57565F!important;
-                font-family: SFProText-Medium;
-                font-size: 14px;
-                letter-spacing: 0;
-                line-height: 20px;
-            }
-        }
         .icon_upload {
             width: 20px;
             height: 20px;

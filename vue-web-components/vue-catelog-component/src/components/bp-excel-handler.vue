@@ -1,13 +1,13 @@
 <template>
     <div class="eh-container">
         <div class="project_name_header">
-            <p class="project_name">{{allData.projectName}}</p>
+            <p class="project_name" @click="linkToPage('linkToProject')">{{allData.projectName}}</p>
         </div>
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">
                 <button text="运行" class="run" @click="createDataSetIndex">直接导入数据集</button>
-                <button text="运行" class="run" @click="linkToPage">使用高级映射</button>
+                <button text="运行" class="run" @click="linkToPage('advancedMapping')">使用高级映射</button>
             </div>
         </div>
         <div class="content">
@@ -24,14 +24,14 @@
                             <table border="0">
                                 <tr>
                                     <td class="left"><span>Type</span></td>
-                                    <td><input /></td>
+                                    <td><input disabled v-model="typeValue"/></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                     <div class="eh-refresh-btns">
-                        <button >Update</button>
-                        <button >ReDetect</button>
+                        <button @click="skipFirstLine">Update</button>
+                        <button @click="skipFirstLine">ReDetect</button>
                     </div>
                 </div>
 
@@ -41,24 +41,30 @@
                             <tr>
                                 <td class="left">Skip First Lines</td>
                                 <td>
-                                    <input type="number" v-model="firstSkipValue" @blur="skip('first')"/>
+                                    <input type="number" v-model="firstSkipValue" min="0" @blur="skipFirstLine" ref="firstLine"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="left">&nbsp;</td>
                                 <td class="skip-first-area">
-                                    <input class="skip-first" type="checkbox" /><span>Parse next line as column headers</span>
+                                    <input class="skip-first" type="checkbox" min="0" checked disabled/>
+                                    <span>Parse next line as column headers</span>
                                 </td>
                             </tr>
                             <tr class="skip-next">
                                 <td class="left">Skip Next Lines</td>
-                                <td><input type="number" v-model="nextSkipValue" @blur="skip('next')"/></td>
+                                <td><input type="number" v-model="nextSkipValue" @blur="skipNextLine" ref="nextLine"/></td>
                             </tr>
                         </table>
                     </div>
                     <div class="eh-sheet-panel">
                         <span class="radio-title">Select Sheet</span>
-                        <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index"><input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet"><label >{{item}}</label></div>
+                        <div class="radio_arr">
+                            <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
+                                <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
+                                <label >{{item}}</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,8 +84,9 @@ export default {
             nextSkipValue: 0,
             sheet: '',
             tmpname: '',
-            sheetArr: ['111', '222', '333'],
-            showExcel: true
+            sheetArr: [],
+            showExcel: true,
+            typeValue: ''
         }
     },
     props: {
@@ -98,17 +105,20 @@ export default {
     },
     created() {
         let uriParam = window.location.href
-        this.tmpname = uriParam.split("tmpname=")[1]
+        this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
+        this.typeValue = this.tmpname.split(".")[1]
         this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
-        linkToPage() {
+        linkToPage(name) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "created"
+                    "name": name,
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
                 }
             }
             this.$emit('event', event)
@@ -119,25 +129,43 @@ export default {
                 callback: "createDataSetIndex",
                 element: this,
                 param: {
-                    "fileId": this.tmpname,
-                    "skipValue": this.firstSkipValue,
-                    "jumpValue": this.nextSkipValue,
-                    "fileType": "xlsx",
+                    "fileId": this.allData.tmpname,
+                    "skipValue": Number(this.firstSkipValue),
+                    "jumpValue": Number(this.nextSkipValue),
+                    "fileType": this.allData.tmpname.split('.')[1],
                     "fileSheet": this.sheet,
-                    "fileName": "文件真实的名字",
+                    // "fileSheet": 'Sheet1',
+                    "fileName": this.allData.filename,
                     "isAppend": false,
-                    "destination": "DataSetName",
-                    "version": "version" // 需要自己加上
+                    "destination": this.allData.dataset,
+                    "version": this.allData.version, // 需要自己加上
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
                 }
             }
             this.$emit('event', event)
         },
-        skip(data) {
-            // this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
-            this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
-            this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
-            this.excelDatasource.sheet = this.sheet
-            this.excelDatasource.refreshData(this.$refs.excel)
+        skipFirstLine(data) {
+            let legalInput = this.inputNumInteger(this.firstSkipValue)
+            if(legalInput) {
+                this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
+                this.excelDatasource.sheet = this.sheet
+                this.excelDatasource.refreshData(this.$refs.excel)
+            } else {
+                this.$refs.firstLine.value = 0
+                this.firstSkipValue = 0
+            }
+        },
+        skipNextLine(data) {
+            let legalInput = this.inputNumInteger(this.nextSkipValue)
+            if(legalInput) {
+                this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
+                this.excelDatasource.sheet = this.sheet
+                this.excelDatasource.refreshData(this.$refs.excel)
+            } else {
+                this.$refs.nextLine.value = 0
+                this.nextSkipValue = 0
+            }
         },
         sheetRadio(data) {
             this.sheet = data.target.defaultValue
@@ -145,8 +173,17 @@ export default {
             this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
             this.excelDatasource.sheet = this.sheet
             this.excelDatasource.refreshData(this.$refs.excel)
-            // this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
-
+        },
+        //正整数判断
+        inputNumInteger(value) {
+            let r = /^\d*$/;
+            if (r.test(value)) {
+                return value
+            } else {
+                value = 0
+                alert("请输入一个正整数")
+                return false;
+            }
         }
     }
 }
@@ -161,7 +198,7 @@ export default {
             justify-content: space-between;
             align-items: center;
             .run {
-                width: 80px;
+                // width: 80px;
                 height: 32px;
                 font-weight: 600;
                 font-size: 14px;
@@ -175,7 +212,7 @@ export default {
         }
         .project_name_header {
             height: 50px;
-            width: 100%;
+            // width: 100%;
             border-bottom: 2px solid #ccc;
             padding-right: 20px;
             .project_name {
@@ -184,6 +221,7 @@ export default {
                 font-size: 16px;
                 color: #000000;
                 font-weight: 600;
+                cursor: pointer;
             }
             .new_upload {
                 font-size: 14px;
@@ -192,6 +230,9 @@ export default {
             .project-actions {
                 display: flex;
                 flex-direction: row;
+                button {
+                    cursor: pointer;
+                }
             }
         }
         .content {
@@ -232,6 +273,10 @@ export default {
                 }
                 .radio-title {
                     margin-bottom: 10px;
+                }
+                .radio_arr {
+                    height: 140px;
+                    overflow: auto;
                 }
             }
         }
@@ -292,6 +337,7 @@ export default {
                         text-shadow: none;
                         box-sizing: border-box;
                         outline: 0;
+                        cursor: pointer;
                     }
                 }
             }

@@ -27,7 +27,7 @@ export default class PhDataSource {
     async buildQuery(ele, isAppend=false) {
         let that = this
         const url = "https://apiv2.pharbers.com/schemaexplorer"
-        const accessToken = ele.getCookie("access_token") || "e7a64592e9847cb3a166cba40ec7939759ab35e35352a9b6e9d7cd9b2ba3480f"
+        const accessToken = ele.getCookie("access_token") || "59e44af49dba257ee585a7cca18093121181e20e6fddddc76120e379bb636e2c"
         console.log(this.tmpname)
         let body = {
             "project":"max",
@@ -46,28 +46,22 @@ export default class PhDataSource {
             },
             body:JSON.stringify(body)
         }
-        let sheets =  await fetch(url, options).then(res => res.json())
+        let sheetsResult =  await fetch(url, options).then(res => res.json())
+        let sheets = sheetsResult.body
+
         let datas = sheets.length > 0 ? sheets[0] : []
         that.schema = datas.schema
         that.cols = datas.schema
-        let obj = {}
-        let result = []
-        datas.data.forEach(element => {
-            obj = {}
-            datas.schema.forEach((item, index) => {
-                obj[item] = element[index]
-            })
-            result.push(obj)
-        })
-        console.log(result)
-        return result
+        that.data = datas.data
+        return datas.data
     }
 
     refreshData(ele) {
         let that = this
         ele.datasource.buildQuery(ele)
             .then((response) => {
-                ele.datasource.data = response.map(ele.datasource.adapter, that.schema)
+                // ele.datasource.data = response.map(ele.datasource.adapter, that.schema)
+                ele.datasource.data = this.data
                 ele.needRefresh++
             })
     }
@@ -75,7 +69,8 @@ export default class PhDataSource {
     appendData(ele) {
         ele.datasource.buildQuery(ele, true)
             .then((response) => {
-                ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                // ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                ele.datasource.data = this.data
                 ele.cur_page++
                 ele.needRefresh++
             })

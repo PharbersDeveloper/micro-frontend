@@ -16,17 +16,25 @@ export default class DatasetLstRoute extends Route {
 		if ( !cookies.read( "access_token" ) ) {
 			this.transitionTo( "index" )
 		}
-		this.loadingService.loading.style.display = 'inline-block'
+		this.loadingService.loading.style.display = 'flex'
+		window.onbeforeunload = undefined
 	}
-
-	async model() {
+	queryParams = {
+		projectName: {
+			refreshModel: true
+		},
+		projectId: {
+			refreshModel: true
+		}
+    }
+	async model(params) {
 		this.store.unloadAll("dataset");
 		const url = "https://apiv2.pharbers.com/phdydatasource/scan"
 		const accessToken = this.cookies.read( "access_token" )
 		let body = {
 			"table": "dataset",
 			"conditions": {
-				"projectId": "Max"
+				"projectId": params.projectId
 			},
 			"limit": 100,
 			"start_key": {}
@@ -56,17 +64,10 @@ export default class DatasetLstRoute extends Route {
 			}
 		}
 		return RSVP.hash( {
-			dataName: [
-				{
-					"id": "123456",
-					"name": "Max Test00"
-				},
-				{
-					"id": "7890J",
-					"name": "Max Test01"
-				}
-			],
+			projectName: params.projectName,
+			projectId: params.projectId,
 			dss: tmp.filter(it => it),
+			tagsArray: [],
 			_isVue: true
 		} )
 	}
