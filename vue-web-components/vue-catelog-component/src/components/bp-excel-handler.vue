@@ -79,7 +79,7 @@ import PhDataSource from './model/datasource'
 export default {
     data() {
         return {
-            excelDatasource: null,
+            excelDatasource: new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this),
             firstSkipValue: 0,
             nextSkipValue: 0,
             sheet: '',
@@ -107,7 +107,7 @@ export default {
         let uriParam = window.location.href
         this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
         this.typeValue = this.tmpname.split(".")[1]
-        this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
+        // this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
         linkToPage(name) {

@@ -101,8 +101,6 @@ export default {
 				node.showSelectOptionParam = false
 			}
 		})
-		const hit_size = this.renderPolicy.setupLayout()
-		this.$refs.viewport.attributes["style"].value = "height: " + this.viewHeight + "; width: " + (hit_size.width + 8) + "px"
 	},
 	methods: {
 		scrollGet (e) {
@@ -186,6 +184,8 @@ export default {
 	},
 	watch: {
 		needRefresh(n, o) {
+			const hit_size = this.renderPolicy.setupLayout()
+			this.$refs.viewport.attributes["style"].value = "height: " + this.viewHeight + "; width: " + (hit_size.width + 8) + "px"
 			this.renderPolicy.render(this.cur_row, this.cur_page)
 		},
 		dataRefresh(n, o) {
