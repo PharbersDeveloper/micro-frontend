@@ -47,8 +47,7 @@ export default {
     components: {
         nextDialog,
         bpSelectVue,
-        bpOptionVue,
-        Message
+        bpOptionVue
     },
     props: {
         allData: {

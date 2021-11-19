@@ -40,7 +40,7 @@ export default class NoticeServiceService extends Service {
 			let currentTime = new Date().getTime()
 			// 设置30s超时
 			that.subjectCallback.forEach((item,index) => {
-				if(currentTime - item.date > 30*1000) {
+				if(currentTime - item.date > 120*1000) {
 					that.unregister(that.subjectID[index])
 				}
 			})
@@ -74,7 +74,7 @@ export default class NoticeServiceService extends Service {
 						if(response.data && response.data.length > 0) {
 							let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
 							//以后会做成进度条
-							if(upload_status != 'running') {
+							if(upload_status != 'project_file_to_DS_running') {
 								let index = that.subjectID.indexOf(response.data[0].id)
 								let targetCallback = that.subjectCallback[index]
 								// 将消息分发给不同component处理
