@@ -29,7 +29,7 @@
 				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel viewHeight="600px" :datasource="datasource" class="excel"></bp-excel>
+		<bp-excel viewHeight="600px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
 	</div>
 </template>
 <script>
