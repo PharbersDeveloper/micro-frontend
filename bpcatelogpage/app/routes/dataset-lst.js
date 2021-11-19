@@ -29,7 +29,7 @@ export default class DatasetLstRoute extends Route {
     }
 	async model(params) {
 		this.store.unloadAll("dataset");
-		const url = "https://api.pharbers.com/phdydatasource/scan"
+		const url = "https://apiv2.pharbers.com/phdydatasource/scan"
 		const accessToken = this.cookies.read( "access_token" )
 		let body = {
 			"table": "dataset",
