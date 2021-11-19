@@ -1,11 +1,11 @@
 <template>
 	<div class="schema-item box" :style="{width: itemWidth +'px'}" >
 		<span class="schema-title">{{title}}</span>
-		<bp-select-vue class="schema-type" src="selectIcon" :choosedValue="selectValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+		<bp-select-vue v-if="isNeedPopmenu" class="schema-type" src="selectIcon" :choosedValue="selectValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 			<bp-option-vue class="schema-select-item" text="Text" @click="selectScript(1)"></bp-option-vue>
 			<bp-option-vue class="schema-select-item" text="Number" @click="selectScript(2)"></bp-option-vue>
 		</bp-select-vue>
-<!--		<span class="schema_type">{{titleType}}</span>-->
+		<span v-else class="schema-type">&nbsp&nbsp&nbsp</span>
 		<span class="split">&nbsp;&nbsp;</span>
 	</div>
 </template>
@@ -15,7 +15,6 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 export default {
 	data() {
 		return {
-			itemWidth: 118,
 			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
 			selectValue: "Text",
 			showSelectOptionParam: false,
@@ -27,6 +26,14 @@ export default {
 		bpOptionVue
 	},
 	props: {
+		isNeedPopmenu: {
+			type: Boolean,
+			default: true
+		},
+		itemWidth: {
+			type: Number,
+			default: 118
+		},
 		title: {
 			type: String,
 			default: "title"
