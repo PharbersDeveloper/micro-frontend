@@ -1,7 +1,7 @@
 <template>
 	<div class="excel-container">
 		<div class="schemas" style="width: 100%" ref="schemas">
-			<div class="view" >
+			<div class="view" ref="headers">
 				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
 			</div>
 		</div>
@@ -90,6 +90,16 @@ export default {
 				false
 			)
 		}
+		const that = this
+		document.addEventListener("click", event => {
+			for (var idx = 0; idx < that.$children.length; idx++) {
+				const node = that.$children[idx]
+				if(!node.showSelectOptionParam) {
+					node.closeTosts = !node.closeTosts
+				}
+				node.showSelectOptionParam = false
+			}
+		})
 	},
 	methods: {
 		scrollGet (e) {
