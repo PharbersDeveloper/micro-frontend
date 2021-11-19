@@ -31,7 +31,7 @@ export default class PhDataSource {
     async buildQuery(ele, isAppend=false) {
         let that = this
         const url = "https://apiv2.pharbers.com/schemaexplorer"
-        const accessToken = ele.getCookie("access_token") || "59e44af49dba257ee585a7cca18093121181e20e6fddddc76120e379bb636e2c"
+        const accessToken = ele.getCookie("access_token") || "fb4bdfa4487a2f66a448eefda4e1527ce76cdd2574b2201e42c3994fef621120"
         console.log(this.tmpname)
         let body = {
             "project":"max", //66875db6f287aaa382bd04152b092b90.xlsx

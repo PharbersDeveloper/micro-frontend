@@ -61,7 +61,7 @@ export default class DatasetLstComponent extends Component {
 						body: JSON.stringify(body)
 					}
 					await fetch(url, options)
-					// window.location.reload()
+					window.location.reload()
 				})
 			break
 			case "deleteDatasets":

@@ -72,12 +72,17 @@ export default class NoticeServiceService extends Service {
 					.then(res => res.json())
 					.then(response => {
 						if(response.data && response.data.length > 0) {
-							let index = that.subjectID.indexOf(response.data[0].id)
-							let targetCallback = that.subjectCallback[index]
-							// 将消息分发给不同component处理
-							targetCallback.callback(response, targetCallback.ele)
-							// 返回结果即调用unregister
-							that.unregister(response.data[0].id)
+							let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+							//以后会做成进度条
+							if(upload_status != 'running') {
+								let index = that.subjectID.indexOf(response.data[0].id)
+								let targetCallback = that.subjectCallback[index]
+								// 将消息分发给不同component处理
+								targetCallback.callback(response, targetCallback.ele)
+								// 返回结果即调用unregister
+								that.unregister(response.data[0].id)
+							}
+							
 						}
 					}) 
 			} else {
