@@ -13,10 +13,12 @@
 				</div>
 			</div>
 			<div class="btn-groups">
-				<button class="btn-display">display(下拉框)</button>
-				<button class="btn-excel">列表</button>
-				<button class="btn-header">表头编辑</button>
-				<button class="btn-chart">图表</button>
+				<button class="btn-chart" @click="">下载当前筛选数据</button>
+				<bp-select-vue class="btn-chart" src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+					<bp-option-vue class="schema-select-item" text="选择显示行" @click="showVersionFilterDlg"></bp-option-vue>
+					<bp-option-vue class="schema-select-item" text="选择显示列" @click="showCollectionDlg"></bp-option-vue>
+					<bp-option-vue class="schema-select-item" text="选择排序列" @click="showSortDlg"></bp-option-vue>
+				</bp-select-vue>
 			</div>
 		</div>
 		<div class="search-container">
@@ -34,9 +36,16 @@
 </template>
 <script>
 import PhContainerDataSource from './model/containerDatasource'
+import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
 	data() {
 		return {
+			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
+			showSelectOptionParam: false,
+			showSelectOptionParam: false,
+			showSelectOptionParam: false,
+			closeTosts: false,
 			descRefresh: 0,
 			totalNum: 0,
 			totalCols: 0,
@@ -44,6 +53,8 @@ export default {
 		}
 	},
 	components: {
+		bpSelectVue,
+		bpOptionVue,
 		bpExcel: require('./bp-excel.vue').default
 	},
 	props: {
@@ -74,6 +85,18 @@ export default {
 		},
 		on_searchBtnClicked() {
 			this.matchNum = this.datasource.clientSideSearch(this, this.$refs.search.value)
+		},
+		showSelectOption() {
+			this.showSelectOptionParam = true
+		},
+		showVersionFilterDlg() {
+			console.log("show version Filter")
+		},
+		showSortDlg() {
+			console.log("show sort")
+		},
+		showCollectionDlg() {
+			console.log("show collection ")
 		}
 	},
 	watch: {

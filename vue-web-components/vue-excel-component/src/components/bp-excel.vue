@@ -3,7 +3,7 @@
 		<div class="schemas" style="width: 100%" ref="schemas">
 			<div class="view" ref="headers">
 				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
-				<header-item :isNeedPopmenu=false :itemWidth=8 :key="placeholder"/>
+				<header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
 			</div>
 		</div>
 		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
