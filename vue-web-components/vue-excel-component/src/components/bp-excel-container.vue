@@ -44,6 +44,30 @@
     			<button type="primary" @click="dialogVersionFilterVisible = false">Confirm</button>
 			</span>
 		</el-dialog>
+		<el-dialog
+				title="显示列"
+				:visible.sync="dialogCollectionVisible"
+				width="30%"
+				:before-close="handleCollectionVisible">
+
+			<span>This is a message</span>
+			<span slot="footer" class="dialog-footer">
+    			<button @click="dialogCollectionVisible = false">Cancel</button>
+    			<button type="primary" @click="dialogCollectionVisible = false">Confirm</button>
+			</span>
+		</el-dialog>
+		<el-dialog
+				title="排序列"
+				:visible.sync="dialogSortVisible"
+				width="30%"
+				:before-close="handleCollectionVisible">
+
+			<span>This is a message</span>
+			<span slot="footer" class="dialog-footer">
+    			<button @click="dialogSortVisible = false">Cancel</button>
+    			<button type="primary" @click="dialogSortVisible = false">Confirm</button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -107,11 +131,11 @@ export default {
 		handleVersionFilterVisibleClose() {
 			console.log("show version Filter")
 		},
-		showSortDlg() {
-			console.log("show sort")
+		handleCollectionVisible() {
+			console.log("show collection")
 		},
-		showCollectionDlg() {
-			console.log("show collection ")
+		handleSortVisible() {
+			console.log("show sort")
 		}
 	},
 	watch: {
