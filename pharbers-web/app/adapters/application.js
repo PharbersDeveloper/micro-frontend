@@ -207,7 +207,6 @@ export default JSONAPIAdapter.extend({
 				body: {},
 				host: 'apiv2.pharbers.com',
 			};
-			debugger
 			const request = client.makeRequest(req);
 			return request.headers;
 		}

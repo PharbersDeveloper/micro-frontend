@@ -6,7 +6,7 @@
                     <div class="left">
                         <img :src="label_icon" class="label" alt="">
                         <p v-show="datasetcheckedIds.length >= 2">为 {{datasetcheckedIds.length}} 个数据集添加标签</p>
-                        <p v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
+                        <p class="dataset_name" :title="datasetcheckedNames[0]" v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
                     </div>
                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="close_icon" @click="close">
                </div>
@@ -18,7 +18,7 @@
                         <div class="tags" @click.stop="checkedOneTag(tag)" v-for="(tag,index) in tagsArrayShow" :key="index+'tag'">
                             <input type="checkbox" class="checkout" :checked="selectedTags.indexOf(tag) > -1">
                             <span class="round" :style="{background: tagsColorArray[tagsArray.indexOf(tag)]}"></span>
-                            <div class="create_tags">
+                            <div class="create_tags" :title="tag">
                                 {{tag}}
                             </div>
                         </div>
@@ -62,12 +62,16 @@ export default {
     computed: {},
     mounted() {
         this.tagsArrayShow = this.tagsArray.filter(it => it != '')
+        if(this.datasetcheckedIds.length == 1) {
+            let selDatasetId = this.datasetcheckedIds[0]
+            let selDataset = this.datasets.filter(item => item.id == selDatasetId)[0]
+            this.selectedTags = selDataset.label
+        }
     },
     watch: {
         searchValue: function() {
-            console.log(this.searchValue)
             let that = this
-            if(this.searchValue == '') {
+            if(this.searchValue.trim() == '') {
                 if(this.tagsArrayShow.length < this.tagsArray.length) {
                     this.tagsArrayShow = this.tagsArray
                 }
@@ -106,11 +110,13 @@ export default {
             this.$emit('closeCreateDialog');
         },
         submit() {
-            this.tagsArrayShow = this.tagsArray.filter(it => it != '')
-            this.selectedTags.push(this.searchValue) //默认选中新增tag
-            this.newTagsArray.push(this.searchValue) //关闭弹框前新增的tag array
-            this.tagsArrayShow = this.tagsArrayShow.concat(this.newTagsArray) //将新增tag添加到tagShow数组
-            this.searchValue = ''
+            if(this.searchValue.trim() != '' && this.tagsArrayShow.indexOf(this.searchValue) == -1) {
+                this.tagsArrayShow = this.tagsArray.filter(it => it != '')
+                this.selectedTags.push(this.searchValue) //默认选中新增tag
+                this.newTagsArray.push(this.searchValue) //关闭弹框前新增的tag array
+                this.tagsArrayShow = this.tagsArrayShow.concat(this.newTagsArray) //将新增tag添加到tagShow数组
+                this.searchValue = ''
+            }
         },
         checkedOneTag(tag) {
             let idIndex = this.selectedTags.indexOf(tag)
@@ -131,7 +137,7 @@ export default {
     box-sizing: border-box;
 }
 .clear_dialog_container {
-   height: 100vh;
+       height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);
     display: flex;
@@ -144,6 +150,7 @@ export default {
     z-index: 9999;
     justify-content: center;
     align-items: center;
+    background: rgba(0,0,0,0.31);
 }
 .dialog_area {
     width: 600px;
@@ -173,6 +180,15 @@ export default {
             height: 20px;
             margin-right: 5px;
         }
+		.dataset_name {
+			height: 60px;
+			white-space: nowrap;
+			overflow: hidden;
+			width: 400px;
+			text-overflow: ellipsis;
+			line-height: 60px;
+			cursor: pointer;
+		}
     }
     .close_icon {
         width: 24px;
@@ -206,6 +222,7 @@ export default {
         }
         .round {
             display: inline-block;
+            min-width: 14px;
             width: 14px;
             height: 14px;
             border-radius: 7px;
@@ -217,6 +234,12 @@ export default {
             font-size: 14px;
             margin-left: 15px;
             margin-top: 2px;
+            max-width: 450px;
+            overflow: hidden;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
         .green {
             background: green;

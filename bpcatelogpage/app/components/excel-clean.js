@@ -14,7 +14,12 @@ export default class ExcelCleanComponent extends Component {
     async listener(e) {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
-                let param = e.detail[0].args.param
+				let param = e.detail[0].args.param
+				let uri = ''
+				if(param.name === "linkToProject") {
+					uri = `/projects/`+ param.projectId
+				}
+                this.router.transitionTo( uri )
                 break
             default: 
                 console.log("submit event to parent")

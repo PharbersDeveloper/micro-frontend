@@ -107,7 +107,7 @@ export default {
     padding: 0;
 }
 .clear_dialog_container {
-   height: 100vh;
+	height: 100vh;
     width: 100vw;
     background: rgba(37,35,45,0.55);
     display: flex;
@@ -120,6 +120,7 @@ export default {
     z-index: 9999;
     justify-content: center;
     align-items: center;
+	background: rgba(0,0,0,0.31);
 }
 .dialog_area {
     width: 600px;

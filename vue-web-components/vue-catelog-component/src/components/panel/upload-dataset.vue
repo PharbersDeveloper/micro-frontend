@@ -53,12 +53,13 @@
 
                         <div class="tag_selected">
                             <div class="sort">
-                                <img :src="descending_order" alt="" v-if="ascending" @click="sort('ascending')">
-                                <img :src="ascending_order" alt="" v-if="descending" @click="sort('descending')">
+                                <!-- 升序 -->
+                                <img :src="ascending_order" alt="" v-if="ascending" @click="sort('ascending')">
+                                <!-- 降序(默认) -->
+                                <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
                             <div class="down_sel" >
                                 <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                                    <!-- <bp-option-vue text="最后一次编辑" @click="selectScript(0)"></bp-option-vue> -->
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
@@ -93,8 +94,8 @@
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
-                                <p class="data_name">{{dataset.name}}</p>
-                                <div class="tag_area">
+                                <p class="data_name" :title="dataset.name">{{dataset.name}}</p>
+                                <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
                                             <p 
@@ -104,6 +105,8 @@
                                             </p>
                                         </span>
                                     </div>
+                                    <!-- tag的更多按钮，暂时隐藏 -->
+                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -117,7 +120,7 @@
                                 <img :src="dataset_icon" alt="">
                             </span>
                             <div class="show-name" v-if="datasetcheckedIds.length == 1">
-                                <p class="project_name_info" >
+                                <p class="project_name_info" :title="datasetcheckedNames[0]">
                                 {{datasetcheckedNames[0]}}
                                 </p>
                             </div>
@@ -185,6 +188,7 @@ import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+
 export default {
     data() {
         return {
@@ -194,13 +198,11 @@ export default {
             edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/descending_order.png",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/ascending_order.png",
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
+            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
+            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
             dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             showDialog: false,
             state: '',
@@ -215,7 +217,6 @@ export default {
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
-            descending: true,
             tags: ['name','description','啦啦啦'],
             ary: [],
             checked: false,
@@ -225,7 +226,7 @@ export default {
             datasetcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
         }
     },
     props: {
@@ -234,11 +235,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ['zzz','aaaaaaaaaaaaaaaaaaaaaaaa']},
+                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas"]},
                     {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
                     {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee"]
+                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
             })
         }
     },
@@ -255,13 +256,21 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dss.filter(item => item.name.indexOf(searchValue) > -1)
+                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
+            this.sort("ascending")
             return this.allData.dss
         }
     },
     mounted() {
         let that = this
+        this.$refs.tagsArea.forEach((item, index) => {
+            //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
+            // if(item.clientHeight > 30) {
+            //     this.$refs.moreTags[0].style["display"] = "flex"
+            // }
+            item.style["height"] = "40px"
+        })
     },
     watch: {
         "allData.tagsArray": function() {
@@ -345,11 +354,16 @@ export default {
         //排序
         sort(val) {
             if(val == 'ascending') {
+                // 升序->降序
                 this.ascending = false
-                this.descending = true
-                this.allData.dss.sort()
+                // this.allData.dss.sort()
+                this.allData.dss.sort(
+                    function compareFunction(param1, param2) {
+                        return param1.name.localeCompare(param2.name);
+                    }
+                )
             }else if (val == 'descending') {
-                this.descending = false
+                // 降序->升序
                 this.ascending = true
                 this.allData.dss.reverse()
             }
@@ -652,7 +666,7 @@ export default {
                     .sort {
                         width: 25px;
                         height: 25px;
-
+                        cursor: pointer;
                         img {
                             width: 100%;
                         }
@@ -802,9 +816,10 @@ export default {
                     display: flex;
                     width: 100%;
                     box-sizing: border-box;
-                    height: 60px;
+                    // height: 60px;
                     border-bottom: 1px solid #dddddd;
-                    padding: 20px 0 20px 20px;
+                    padding: 10px 0 10px 10px;
+                    align-items: center;
                     input{
                         cursor: pointer;
                     }
@@ -820,7 +835,7 @@ export default {
                     }
                     .tag_bg {
                         position: relative;
-                        top: -8px;
+                        // top: -8px;
                         left: 0px;
                         font-size: 12px;
                         color: #fff;
@@ -833,7 +848,7 @@ export default {
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        max-width: 100px;
+                        max-width: 120px;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
@@ -861,10 +876,26 @@ export default {
                         font-weight: 600;
                         width: 168px;
                         min-width: 168px;
+                        height: 40px;
+                        line-height: 40px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
                     }
                     .tag_area {
                         display: flex;
                         flex-wrap: wrap;
+                        overflow: hidden;
+                        img {
+                            width: 20px;
+                            height: 20px;
+                        }
+                        .more_tags {
+                            display: none;
+                            position: relative;
+                            top: -8px;
+                            margin-left: 10px;
+                        }
                     }
                 }
 
@@ -928,6 +959,7 @@ export default {
                         border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
+                        min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
@@ -943,6 +975,12 @@ export default {
                             font-size: 14px;
                             color: #000000;
                             font-weight: 600;
+                            height: 44px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            width: 350px;
+                            text-overflow: ellipsis;
+                            cursor: pointer;
                         }
                     }
                 }

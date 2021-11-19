@@ -352,6 +352,7 @@ export default class MaxSaasImportComponent extends Component {
 					tags: [
 						{Key: 'mapper', Value: ''}
 					]
+					
 				}
 				let jobLogsParam = {
 					"provider": conParam.fileData.provider,

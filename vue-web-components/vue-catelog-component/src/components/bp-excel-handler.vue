@@ -1,13 +1,13 @@
 <template>
     <div class="eh-container">
         <div class="project_name_header">
-            <p class="project_name">{{allData.projectName}}</p>
+            <p class="project_name" @click="linkToPage('linkToProject')">{{allData.projectName}}</p>
         </div>
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">
                 <button text="运行" class="run" @click="createDataSetIndex">直接导入数据集</button>
-                <button text="运行" class="run" @click="linkToPage">使用高级映射</button>
+                <button text="运行" class="run" @click="linkToPage('advancedMapping')">使用高级映射</button>
             </div>
         </div>
         <div class="content">
@@ -30,8 +30,8 @@
                         </div>
                     </div>
                     <div class="eh-refresh-btns">
-                        <button @click="skip">Update</button>
-                        <button @click="skip">ReDetect</button>
+                        <button @click="skipFirstLine">Update</button>
+                        <button @click="skipFirstLine">ReDetect</button>
                     </div>
                 </div>
 
@@ -41,7 +41,7 @@
                             <tr>
                                 <td class="left">Skip First Lines</td>
                                 <td>
-                                    <input type="number" v-model="firstSkipValue" min="0" @blur="skip('first')"/>
+                                    <input type="number" v-model="firstSkipValue" min="0" @blur="skipFirstLine" ref="firstLine"/>
                                 </td>
                             </tr>
                             <tr>
@@ -53,7 +53,7 @@
                             </tr>
                             <tr class="skip-next">
                                 <td class="left">Skip Next Lines</td>
-                                <td><input type="number" v-model="nextSkipValue" @blur="skip('next')"/></td>
+                                <td><input type="number" v-model="nextSkipValue" @blur="skipNextLine" ref="nextLine"/></td>
                             </tr>
                         </table>
                     </div>
@@ -110,13 +110,13 @@ export default {
         this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
-        linkToPage() {
+        linkToPage(name) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    "name": "advancedMapping",
+                    "name": name,
                     "projectName": this.allData.projectName,
                     "projectId": this.allData.projectId
                 }
@@ -145,11 +145,27 @@ export default {
             }
             this.$emit('event', event)
         },
-        skip(data) {
-            this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
-            this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
-            this.excelDatasource.sheet = this.sheet
-            this.excelDatasource.refreshData(this.$refs.excel)
+        skipFirstLine(data) {
+            let legalInput = this.inputNumInteger(this.firstSkipValue)
+            if(legalInput) {
+                this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
+                this.excelDatasource.sheet = this.sheet
+                this.excelDatasource.refreshData(this.$refs.excel)
+            } else {
+                this.$refs.firstLine.value = 0
+                this.firstSkipValue = 0
+            }
+        },
+        skipNextLine(data) {
+            let legalInput = this.inputNumInteger(this.nextSkipValue)
+            if(legalInput) {
+                this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
+                this.excelDatasource.sheet = this.sheet
+                this.excelDatasource.refreshData(this.$refs.excel)
+            } else {
+                this.$refs.nextLine.value = 0
+                this.nextSkipValue = 0
+            }
         },
         sheetRadio(data) {
             this.sheet = data.target.defaultValue
@@ -157,6 +173,17 @@ export default {
             this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
             this.excelDatasource.sheet = this.sheet
             this.excelDatasource.refreshData(this.$refs.excel)
+        },
+        //正整数判断
+        inputNumInteger(value) {
+            let r = /^\d*$/;
+            if (r.test(value)) {
+                return value
+            } else {
+                value = 0
+                alert("请输入一个正整数")
+                return false;
+            }
         }
     }
 }
@@ -194,6 +221,7 @@ export default {
                 font-size: 16px;
                 color: #000000;
                 font-weight: 600;
+                cursor: pointer;
             }
             .new_upload {
                 font-size: 14px;

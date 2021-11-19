@@ -1,11 +1,13 @@
 <template>
-	<div class="excel-container">
-		<div class="schemas" style="width: 1000px" ref="schemas">
-			<div class="view" style="width: 3186px">
-				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
-			</div>
+    <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '100%'}" @scroll="scrollGet($event)">
+	    <div class="excel-container">
+		    <div class="schemas" style="width: 100%" ref="schemas">
+                <div class="view" >
+                    <header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
+                </div>
+            </div>
 		</div>
-		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight, width: '1000px'}" @scroll="scrollGet($event)">
+		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
 				<canvas ref="canvas" class="canvas"></canvas>
 				<div ref="select" class="row-select"></div>
@@ -45,7 +47,7 @@ export default {
 		},
 		viewHeight: {
 			type: String,
-			default: '100px'
+			default: '600px'
 		},
 		page_size: {
 			type: Number,
@@ -190,28 +192,29 @@ export default {
 		.viewport {
 			overflow: auto;
 			position: relative;
+			display: flex;
 			.body {
 				// overflow: auto;
 			}
 
-		}
-		.schemas {
-			display: flex;
-			margin-left: 0px;
-			margin-right: 10px;
-			overflow: hidden;
-			.view {
-				display: flex;
-			}
-		}
-		.canvas {
-			// margin-top: 46px;
-		}
-		.hidden {
-			position: absolute;
-			top:50px;
-			left:0;
-			margin-left:10px
-		}
-	}
+        }
+        .schemas {
+            display: flex;
+            margin-left: 0px;
+            margin-right: 10px;
+            overflow: hidden;
+            .view {
+                display: flex;
+            }
+        }
+        .canvas {
+            // margin-top: 46px;
+        }
+        .hidden {
+            position: absolute;
+            top:50px;
+            left:0;
+            margin-left:10px
+        }
+    }
 </style>

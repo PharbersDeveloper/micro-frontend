@@ -5,6 +5,7 @@ import ENV from "bpcatelogpage/config/environment"
 export default class ApplicationRoute extends Route {
 	@service cookies
 	@service oauthService
+	@service noticeService
 	@service store
 
 	redirectUri = ENV.redirectUri
@@ -16,6 +17,7 @@ export default class ApplicationRoute extends Route {
 		if ( targetName === "oauth-callback" ) {
 			return
 		} else if(this.oauthService.judgeAuth()) {
+			this.noticeService.observer()
 			// this.mqttService.mqttConnect()
 			// let storage = window.localStorage
 			// for(let i = 0; i < storage.length; i++) {
