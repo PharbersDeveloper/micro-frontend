@@ -59,12 +59,15 @@ export default class ExcelHandlerComponent extends Component {
     }
 
 	@action noticeCallback(response, ele) {
-		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error
 		if(upload_status == "project_file_to_DS_succeed") {
 			//跳转下一页面
 			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
 		} else if(upload_status == "project_file_to_DS_failed") {
-			alert("导入失败，请重新上传！")
+			let msg = error !== '' ? error : '导入失败，请重新上传！'
+			alert(msg)
 		}
 		this.loadingService.loading.style.display = 'none'
 	}
