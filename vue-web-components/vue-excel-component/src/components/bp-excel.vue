@@ -223,9 +223,9 @@ export default {
 
 		/*定义两端按钮的样式*/
 		::-webkit-scrollbar-button {
-			height: 1px;
-			width: 1px;
-			background-color:cyan;
+			height: 0px;
+			width: 0px;
+			background-color: gray;
 		}
 
 		/*定义右下角汇合处的样式*/
