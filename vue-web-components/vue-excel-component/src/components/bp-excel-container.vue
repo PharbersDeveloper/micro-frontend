@@ -13,10 +13,12 @@
 				</div>
 			</div>
 			<div class="btn-groups">
-				<button class="btn-display">display(下拉框)</button>
-				<button class="btn-excel">列表</button>
-				<button class="btn-header">表头编辑</button>
-				<button class="btn-chart">图表</button>
+				<button class="btn-chart" @click="">下载当前筛选数据</button>
+				<bp-select-vue class="btn-chart" src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+					<bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
+					<bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
+					<bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
+				</bp-select-vue>
 			</div>
 		</div>
 		<div class="search-container">
@@ -30,13 +32,34 @@
 			</div>
 		</div>
 		<bp-excel viewHeight="600px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		<el-dialog
+				title="显示行"
+				:visible.sync="dialogVersionFilterVisible"
+				width="30%"
+				:before-close="handleVersionFilterVisibleClose">
+
+			<span>This is a message</span>
+			<span slot="footer" class="dialog-footer">
+    			<button @click="dialogVersionFilterVisible = false">Cancel</button>
+    			<button type="primary" @click="dialogVersionFilterVisible = false">Confirm</button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 <script>
 import PhContainerDataSource from './model/containerDatasource'
+import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import ElDialog from 'element-ui/packages/dialog/src/component'
 export default {
 	data() {
 		return {
+			dialogVersionFilterVisible: false,
+			dialogSortVisible: false,
+			dialogCollectionVisible: false,
+			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
+			showSelectOptionParam: false,
+			closeTosts: false,
 			descRefresh: 0,
 			totalNum: 0,
 			totalCols: 0,
@@ -44,6 +67,9 @@ export default {
 		}
 	},
 	components: {
+		bpSelectVue,
+		bpOptionVue,
+		ElDialog,
 		bpExcel: require('./bp-excel.vue').default
 	},
 	props: {
@@ -74,6 +100,18 @@ export default {
 		},
 		on_searchBtnClicked() {
 			this.matchNum = this.datasource.clientSideSearch(this, this.$refs.search.value)
+		},
+		showSelectOption() {
+			this.showSelectOptionParam = true
+		},
+		handleVersionFilterVisibleClose() {
+			console.log("show version Filter")
+		},
+		showSortDlg() {
+			console.log("show sort")
+		},
+		showCollectionDlg() {
+			console.log("show collection ")
 		}
 	},
 	watch: {
