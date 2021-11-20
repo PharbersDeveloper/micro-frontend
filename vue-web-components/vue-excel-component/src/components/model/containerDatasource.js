@@ -112,7 +112,7 @@ export default class PhContainerDataSource {
 			return sql_str
 		}
 		const url = "https://api.pharbers.com/phchproxyquery"
-		const accessToken = ele.getCookie("access_token") || "9202290782fb2c03a77e234cbb314cbb72ec6059acc804d1be41f57b14f308eb"
+		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildDistinctColSql(),
 			"schema": [col]
