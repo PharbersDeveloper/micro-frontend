@@ -14,6 +14,12 @@ export default class PhDlgCollectionController {
 		this.shownCollections = this.collections
 	}
 
+	resetSortCollections() {
+		if (this.sortCollections.length !== 0) {
+			this.shownCollections = this.shownCollections.filter(x => this.sortCollections.indexOf(x) === -1)
+		}
+	}
+
 	resetShowingCollections() {
 		if (this.selectCollections.length === 0) {
 			return this.collections
@@ -42,7 +48,13 @@ export default class PhDlgCollectionController {
 	}
 
 	pushSortCols(val) {
+		this.shownCollections = this.shownCollections.filter(x => x !== val)
+		this.sortCollections.push(val)
+	}
 
+	popSortCols(val) {
+		this.sortCollections = this.sortCollections.filter(x => x !== (val))
+		this.shownCollections.push(val)
 	}
 
 	clearShownCollectionFilter() {

@@ -106,11 +106,13 @@
 					<button class="search-submit" @click="">Search</button>
 				</div>
 				<div class="dlg-sort-candi-container">
-					<div class="dlg-sort-candi-items">
-						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</span>
+					<div class="dlg-sort-candi-items dlg-panel-left">
+						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.shownCollections"
+							  :label="col" :key="'candi' + col" @click="on_clickSortShownCandi(col)">{{col}}</span>
 					</div>
-					<div class="dlg-sort-candi-items">
-
+					<div class="dlg-sort-candi-items dlg-panel-right">
+						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.sortCollections"
+							  :label="col" :key="'select' + col" @click="on_clickSortSelectCandi(col)">{{col}}</span>
 					</div>
 				</div>
 			</div>
@@ -230,19 +232,25 @@ export default {
 			if (v && v.length > 0)
 				this.collectionsPolicy.filterCollectionsByChar(v)
 		},
+		on_clickSortSelectCandi(col) {
+			this.collectionsPolicy.popSortCols(col)
+		},
+		on_clickSortShownCandi(col) {
+			this.collectionsPolicy.pushSortCols(col)
+		},
 		on_clickSortConfirm() {
 			this.dialogSortVisible = false
 		}
 	},
 	watch: {
-		descRefresh(o, n) {
+		descRefresh(n, o) {
 			let that = this
 			this.datasource.queryTotalCount(this).then((count) => {
 				that.totalNum = Number(count)
 			})
 			that.totalCols = that.datasource.schema.length
 		},
-		dialogVersionFilterVisible(o, n) {
+		dialogVersionFilterVisible(n, o) {
 			let that = this
 			if (this.versionFilterPolicy.versionCandidates.length === 0) {
 				that.datasource.queryDlgDistinctCol(this, "Province").then((provinces) => {
@@ -250,22 +258,25 @@ export default {
 				})
 			}
 		},
-		dialogCollectionVisible(o, n) {
+		dialogCollectionVisible(n, o) {
 			if (this.collectionsPolicy.collections.length === 0)
 				this.collectionsPolicy.resetCollections(this.datasource.schema)
 
 			if (n) {
-				this.$refs.colSearch.value = ""
+				if (this.$refs.colSearch)
+					this.$refs.colSearch.value = ""
 				this.collectionsPolicy.clearShownCollectionFilter()
 			}
 		},
-		dialogSortVisible(o, n) {
+		dialogSortVisible(n, o) {
 			if (this.collectionsPolicy.collections.length === 0)
 				this.collectionsPolicy.resetCollections(this.datasource.schema)
 
 			if (n) {
-				this.$refs.colFilter.value = ""
+				if (this.$refs.colFilter)
+					this.$refs.colFilter.value = ""
 				this.collectionsPolicy.clearShownCollectionFilter()
+				this.collectionsPolicy.resetSortCollections()
 			}
 		}
 	}
