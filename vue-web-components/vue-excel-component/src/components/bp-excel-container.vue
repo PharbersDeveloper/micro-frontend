@@ -98,7 +98,7 @@
 				<div class="dlg-sort-nav">
 					<span>可选列</span>
 					<span>已选列</span>
-					<button>全部清除</button>
+					<button @click="on_clearSortCollections">全部清除</button>
 				</div>
 				<div class="dlg-sort-filter">
 					<input type="search" ref="colFilter" name="q"
@@ -238,8 +238,13 @@ export default {
 		on_clickSortShownCandi(col) {
 			this.collectionsPolicy.pushSortCols(col)
 		},
+		on_clearSortCollections() {
+			this.collectionsPolicy.sortCollections = []
+			this.collectionsPolicy.clearShownCollectionFilter()
+		},
 		on_clickSortConfirm() {
 			this.dialogSortVisible = false
+			this.datasource.clearSortCondition()
 			for (var idx in this.collectionsPolicy.sortCollections) {
 				this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
 			}
