@@ -48,7 +48,7 @@
 				</div>
 				<div class="dlg-version-spliter"></div>
 				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidates" :key="item">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidates" :key="item" @click="on_clickVersionCandidata(item)">
 						<span>{{item}}</span>
 					</div>
 				</div>
@@ -155,6 +155,10 @@ export default {
 		},
 		handleVersionFilterVisibleShow() {
 			console.log("show version Filter")
+		},
+		on_clickVersionCandidata(item) {
+			console.log("on click version candidate")
+			this.versionFilterPolicy.appendSelectVersionTags(item)
 		},
 		handleCollectionVisible() {
 			console.log("show collection")
