@@ -31,13 +31,12 @@
 				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel viewHeight="300px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		<bp-excel ref="excel" viewHeight="300px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
 		<el-dialog
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
 				width="30%"
-				:before-open="handleVersionFilterVisibleShow"
-				:before-close="handleVersionFilterVisibleClose">
+				:before-close="on_clickVersionFilterCancel">
 
 			<div class="dlg-version-container">
 				<div class="dlg-flex-version" >
@@ -48,14 +47,14 @@
 				</div>
 				<div class="dlg-version-spliter"></div>
 				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidates" :key="item" @click="on_clickVersionCandidata(item)">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidates" :key="item" @click="versionFilterPolicy.appendSelectVersionTags(item)">
 						<span>{{item}}</span>
 					</div>
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-    			<button @click="dialogVersionFilterVisible = false">Cancel</button>
-    			<button type="primary" @click="dialogVersionFilterVisible = false">Confirm</button>
+    			<button @click="on_clickVersionFilterCancel">Cancel</button>
+    			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button>
 			</span>
 		</el-dialog>
 		<el-dialog
@@ -150,15 +149,23 @@ export default {
 		showSelectOption() {
 			this.showSelectOptionParam = true
 		},
-		handleVersionFilterVisibleClose() {
-			console.log("close version Filter")
+		on_clickVersionFilterCancel() {
+			this.dialogVersionFilterVisible = false
 		},
-		handleVersionFilterVisibleShow() {
-			console.log("show version Filter")
-		},
-		on_clickVersionCandidata(item) {
-			console.log("on click version candidate")
-			this.versionFilterPolicy.appendSelectVersionTags(item)
+		on_clickVersionFilterConfirm() {
+			this.dialogVersionFilterVisible = false
+			// debugger
+			const condi = this.versionFilterPolicy.selectVersionTags
+			let condi_str = "Province in ["
+			for (var idx in condi) {
+				if (idx > 0)
+					condi_str = condi_str + ","
+
+				condi_str = condi_str + "'" + condi[idx] + "'"
+			}
+			condi_str = condi_str + "]"
+			this.datasource.pushFilterCondition("version", condi_str)
+			this.$refs.excel.dataRefresh++
 		},
 		handleCollectionVisible() {
 			console.log("show collection")

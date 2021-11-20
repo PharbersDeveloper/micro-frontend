@@ -32,7 +32,7 @@ export default class PhContainerDataSource {
 				if(key != firstFilter) {
 					filterParam = " AND "
 				}
-				sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+				sql_str = sql_str + filterParam + ele.datasource.filter[key]
 			}
 
 			// sorts
@@ -174,5 +174,9 @@ export default class PhContainerDataSource {
 			}
 		}
 		return result
+	}
+
+	pushFilterCondition(key, condi) {
+		this.filter[key] = condi
 	}
 }
