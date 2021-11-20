@@ -796,6 +796,8 @@ export default {
             }
 
             .upload_bottom {
+                height: calc(100vh - 280px);
+                overflow: auto;
                 .word {
                     width: 100%;
                     height: 618px;
