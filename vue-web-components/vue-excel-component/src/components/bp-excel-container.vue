@@ -36,13 +36,13 @@
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
 				width="30%"
-				:before-close="on_clickVersionFilterCancel">
+				:before-close="on_clickVersionFilterConfirm">
 
 			<div class="dlg-version-container">
 				<div class="dlg-flex-version" >
 					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item">
 						<span>{{item}}</span>
-						<button @click="">X</button>
+						<button @click="versionFilterPolicy.removeSelectVersionTags(item)">X</button>
 					</div>
 				</div>
 				<div class="dlg-version-spliter"></div>
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-    			<button @click="on_clickVersionFilterCancel">Cancel</button>
+<!--    			<button @click="on_clickVersionFilterCancel">Cancel</button>-->
     			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button>
 			</span>
 		</el-dialog>

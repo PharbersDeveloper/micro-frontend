@@ -9,6 +9,8 @@ export default class PhDlgVersionController {
 	}
 
 	removeSelectVersionTags(tag) {
-		this.selectVersionTags.remove(tag)
+		this.selectVersionTags = this.selectVersionTags.filter(function(item) {
+			return item !== tag
+		});
 	}
 }
