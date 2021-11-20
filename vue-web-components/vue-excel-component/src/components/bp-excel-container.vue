@@ -31,14 +31,28 @@
 				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel viewHeight="600px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		<bp-excel viewHeight="300px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
 		<el-dialog
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
 				width="30%"
+				:before-open="handleVersionFilterVisibleShow"
 				:before-close="handleVersionFilterVisibleClose">
 
-			<span>This is a message</span>
+			<div class="dlg-version-container">
+				<div class="dlg-flex-version" >
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item">
+						<span>{{item}}</span>
+						<button @click="">X</button>
+					</div>
+				</div>
+				<div class="dlg-version-spliter"></div>
+				<div class="dlg-all-version-container">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidates" :key="item">
+						<span>{{item}}</span>
+					</div>
+				</div>
+			</div>
 			<span slot="footer" class="dialog-footer">
     			<button @click="dialogVersionFilterVisible = false">Cancel</button>
     			<button type="primary" @click="dialogVersionFilterVisible = false">Confirm</button>
@@ -75,10 +89,12 @@ import PhContainerDataSource from './model/containerDatasource'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElDialog from 'element-ui/packages/dialog/src/component'
+import PhDlgVersionController from './dlgController/dlgVersionController'
 export default {
 	data() {
 		return {
 			dialogVersionFilterVisible: false,
+			versionCandidates: [],
 			dialogSortVisible: false,
 			dialogCollectionVisible: false,
 			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
@@ -106,6 +122,12 @@ export default {
 			default: function () {
 				return new PhContainerDataSource('1')
 			}
+		},
+		versionFilterPolicy: {
+			type: Object,
+			default: function() {
+				return new PhDlgVersionController('1')
+			}
 		}
 	},
 	beforeMount() {
@@ -129,6 +151,9 @@ export default {
 			this.showSelectOptionParam = true
 		},
 		handleVersionFilterVisibleClose() {
+			console.log("close version Filter")
+		},
+		handleVersionFilterVisibleShow() {
 			console.log("show version Filter")
 		},
 		handleCollectionVisible() {
@@ -145,6 +170,14 @@ export default {
 				that.totalNum = Number(count)
 			})
 			that.totalCols = that.datasource.schema.length
+		},
+		dialogVersionFilterVisible(o, n) {
+			let that = this
+			if (this.versionCandidates.length === 0) {
+				that.datasource.queryDlgDistinctCol(this, "Province").then((provinces) => {
+					that.versionCandidates = provinces
+				})
+			}
 		}
 	}
 };
@@ -211,6 +244,38 @@ export default {
 		.excel {
 			display: inline-grid;
 			margin: 10px
+		}
+	}
+
+	.dlg-version-container {
+		display: flex;
+		flex-direction: column;
+
+		.dlg-flex-version {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+
+			.dlg-flex-version-item {
+				font-size: 12px;
+				border: #00a3bf;
+			}
+
+		}
+
+		.dlg-all-version-container {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+
+			.dlg-flex-version-item {
+				margin: 5px;
+			}
+		}
+
+		.dlg-version-spliter {
+			height: 1px;
+			background-color: #2c3e50;
 		}
 	}
 </style>

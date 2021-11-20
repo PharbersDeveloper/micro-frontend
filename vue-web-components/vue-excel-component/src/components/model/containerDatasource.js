@@ -11,6 +11,7 @@ export default class PhContainerDataSource {
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
+		this.debugToken = "9202290782fb2c03a77e234cbb314cbb72ec6059acc804d1be41f57b14f308eb"
 	}
 
 	defaultAdapter(row) {
@@ -48,7 +49,7 @@ export default class PhContainerDataSource {
 			return sql_str
 		}
 		const url = "https://api.pharbers.com/phchproxyquery"
-		const accessToken = ele.getCookie("access_token") || "ab8bca823bd9c6da5910025b85a125d91709f21d42dbc3060ba7f91a02f2ef9e"
+		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryString(),
 			"schema": ele.datasource.schema
@@ -83,10 +84,36 @@ export default class PhContainerDataSource {
 			return sql_str
 		}
 		const url = "https://api.pharbers.com/phchproxyquery"
-		const accessToken = ele.getCookie("access_token") || "ab8bca823bd9c6da5910025b85a125d91709f21d42dbc3060ba7f91a02f2ef9e"
+		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryCountString(),
 			"schema": ["count"]
+		}
+		let options = {
+			method: "POST",
+			headers: {
+				"Authorization": accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		return fetch(url, options)
+	}
+
+	buildDistinctColQuery(ele, col) {
+		function buildDistinctColSql() {
+			let sql_str = "SELECT DISTINCT " + col
+			sql_str = sql_str + " FROM " + ele.datasource.name
+			sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+
+			return sql_str
+		}
+		const url = "https://api.pharbers.com/phchproxyquery"
+		const accessToken = ele.getCookie("access_token") || "9202290782fb2c03a77e234cbb314cbb72ec6059acc804d1be41f57b14f308eb"
+		let body = {
+			"query": buildDistinctColSql(),
+			"schema": [col]
 		}
 		let options = {
 			method: "POST",
@@ -124,6 +151,14 @@ export default class PhContainerDataSource {
 			.then((response) => response.json())
 			.then((response) => {
 				return response[0]["count"]
+			})
+	}
+
+	queryDlgDistinctCol(ele, row) {
+		return ele.datasource.buildDistinctColQuery(ele, row)
+			.then((response) => response.json())
+			.then((response) => {
+				return response.map(x => x["Province"])
 			})
 	}
 
