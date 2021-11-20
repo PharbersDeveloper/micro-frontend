@@ -12,6 +12,7 @@
         "@vue/web-component-wrapper": "^1.3.0",
         "core-js": "^3.6.5",
         "cross-env": "^7.0.3",
+        "element-ui": "^2.15.6",
         "vue": "^2.6.11",
         "vue-json-viewer": "^2.2.19",
         "vue-router": "^3.5.1"

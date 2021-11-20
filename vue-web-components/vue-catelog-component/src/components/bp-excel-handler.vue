@@ -79,7 +79,7 @@ import PhDataSource from './model/datasource'
 export default {
     data() {
         return {
-            excelDatasource: null,
+            excelDatasource: new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this),
             firstSkipValue: 0,
             nextSkipValue: 0,
             sheet: '',

@@ -15,8 +15,18 @@ export default class PhDefaultRenderPolicy {
 		this.hasSelected = hasSelected
 	}
 
+	setupLayout() {
+		const hit_size = this.sizePolicy.sheetHitSize(this.datasource.cols.length, this.page_size)
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+		this.canvas.height = hit_size.height
+		this.canvas.width = hit_size.width
+		this.buffer_canvas.height = hit_size.height
+		this.buffer_canvas.width = hit_size.width
+		return hit_size
+	}
+
 	render(cur_row, cur_page) {
-		this.beforeRender()
+		// this.beforeRender()
 		this.borderRender()
 		this.gridRender()
 		this.textRender(cur_page)
