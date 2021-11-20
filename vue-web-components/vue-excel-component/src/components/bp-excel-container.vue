@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			<div class="btn-groups">
-				<button class="btn-chart" @click="">下载当前筛选数据</button>
+				<button class="btn-chart" @click="dialogDownloadVisible = true">下载当前筛选数据</button>
 				<bp-select-vue class="btn-chart" src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 					<bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
 					<bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
@@ -121,6 +121,37 @@
     			<button type="primary" @click="on_clickSortConfirm">Confirm</button>
 			</span>
 		</el-dialog>
+
+		<el-dialog
+				title="下载"
+				:visible.sync="dialogDownloadVisible"
+				width="30%"
+				:before-close="on_clickDownloadCancel">
+
+			<div class="dlg-download-container">
+				<table border="0">
+					<tr>
+						<td>重命名</td>
+						<td>
+							<input type="text" ref="nameRef" name="q"
+								   aria-label="Search through site content">
+						</td>
+					</tr>
+					<tr>
+						<td>格式</td>
+						<td>
+							<input type="text" ref="suffRef" name="q"
+								   aria-label="Search through site content">
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<span slot="footer" class="dialog-footer">
+    			<button @click="on_clickDownloadConfirm">Cancel</button>
+    			<button type="primary" @click="on_clickDownloadConfirm">Confirm</button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -138,6 +169,7 @@ export default {
 			dialogVersionFilterVisible: false,
 			dialogSortVisible: false,
 			dialogCollectionVisible: false,
+			dialogDownloadVisible: false,
 			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
 			showSelectOptionParam: false,
 			closeTosts: false,
@@ -249,6 +281,13 @@ export default {
 				this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
 			}
 			this.$refs.excel.dataRefresh++
+		},
+		on_clickDownloadCancel() {
+			this.dialogDownloadVisible = false
+		},
+		on_clickDownloadConfirm() {
+			this.dialogDownloadVisible = false
+			// TODO:
 		}
 	},
 	watch: {
@@ -424,5 +463,10 @@ export default {
 				}
 			}
 		}
+	}
+
+	.dlg-download-container {
+		display: flex;
+		justify-content: space-around;
 	}
 </style>
