@@ -17,7 +17,7 @@ export default class PhContainerDataSource {
 	defaultAdapter(row, cols) {
 		let result = []
 		for (var idx in cols) {
-			result.push(row[this.schema[idx]])
+			result.push(row[cols[idx]])
 		}
 		return result
 	}

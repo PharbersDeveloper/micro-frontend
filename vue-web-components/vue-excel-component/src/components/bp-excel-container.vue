@@ -68,7 +68,7 @@
 					<div class="dlg-col-search-input">
 						<input type="search" ref="search" name="q"
 							   aria-label="Search through site content">
-						<button class="search-submit" @click="on_searchBtnClicked">Search</button>
+						<button class="search-submit" @click="on_collectionSearchBtnClicked">Search</button>
 					</div>
 				</div>
 				<div class="dlg-col-cols">
@@ -77,7 +77,7 @@
 					<div class="dlg-version-spliter"></div>
 					<div style="margin: 15px 0;"></div>
 					<el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
-						<el-checkbox v-for="col in collectionsPolicy.collections" :label="col" :key="col">{{col}}</el-checkbox>
+						<el-checkbox v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
 					</el-checkbox-group>
 				</div>
 			</div>
@@ -196,14 +196,19 @@ export default {
 		},
 		on_clickCollectionConfirm() {
 			this.dialogCollectionVisible = false
-			this.datasource.schema
+			this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
+			this.$refs.excel.dataRefresh++
 		},
-		on_collectionCheckAllChange() {
-			// this.checkedCities = val ? cityOptions : [];
-			// this.isIndeterminate = false;
+		on_collectionCheckAllChange(val) {
+			this.collectionsPolicy.checkAllCollections(val)
 		},
-		on_handleCheckedColsChange(value) {
-
+		on_handleCheckedColsChange(val) {
+			this.collectionsPolicy.checkCollectionsItem(val)
+		},
+		on_collectionSearchBtnClicked() {
+			const v = this.$refs.search.value
+			if (v && v.length > 0)
+				this.collectionsPolicy.filterCollectionsByChar(v)
 		},
 		handleSortVisible() {
 			console.log("show sort")
@@ -227,7 +232,7 @@ export default {
 		},
 		dialogCollectionVisible(o, n) {
 			if (this.collectionsPolicy.collections.length === 0)
-				this.collectionsPolicy.collections = this.datasource.schema
+				this.collectionsPolicy.resetCollections(this.datasource.schema)
 		}
 	}
 };
