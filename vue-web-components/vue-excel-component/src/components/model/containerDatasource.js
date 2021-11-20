@@ -14,10 +14,12 @@ export default class PhContainerDataSource {
 		this.debugToken = "9202290782fb2c03a77e234cbb314cbb72ec6059acc804d1be41f57b14f308eb"
 	}
 
-	defaultAdapter(row) {
-		return [row.Index, row.Id, row.Hospname, row.Province, row.City,
-			row.lHospnaem, row.lHospalias, row.lDistrictct, row.lLevel,
-			row.lCat, row.lOffweb]
+	defaultAdapter(row, cols) {
+		let result = []
+		for (var idx in cols) {
+			result.push(row[this.schema[idx]])
+		}
+		return result
 	}
 
 	buildQuery(ele, isAppend=false) {
@@ -131,7 +133,12 @@ export default class PhContainerDataSource {
 		ele.datasource.buildQuery(ele)
 			.then((response) => response.json())
 			.then((response) => {
-				ele.datasource.data = response.map(ele.datasource.adapter)
+				const tmp = []
+				for (var idx in response) {
+					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+				}
+				ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+				ele.cur_page = 0
 				ele.needRefresh++
 			})
 	}
@@ -140,7 +147,12 @@ export default class PhContainerDataSource {
 		ele.datasource.buildQuery(ele, true)
 			.then((response) => response.json())
 			.then((response) => {
-				ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+				const tmp = []
+				for (var idx in response) {
+					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+				}
+				// ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+				ele.datasource.data = ele.datasource.data.concat(tmp)
 				ele.cur_page++
 				ele.needRefresh++
 			})

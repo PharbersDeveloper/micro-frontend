@@ -2,6 +2,7 @@
 export default class PhDlgVersionController {
 	constructor(id) {
 		this.selectVersionTags = []
+		this.versionCandidates = []
 	}
 
 	appendSelectVersionTags(tag) {

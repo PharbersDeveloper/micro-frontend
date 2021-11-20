@@ -47,7 +47,7 @@
 				</div>
 				<div class="dlg-version-spliter"></div>
 				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidates" :key="item" @click="versionFilterPolicy.appendSelectVersionTags(item)">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.versionCandidates" :key="item" @click="versionFilterPolicy.appendSelectVersionTags(item)">
 						<span>{{item}}</span>
 					</div>
 				</div>
@@ -61,19 +61,37 @@
 				title="显示列"
 				:visible.sync="dialogCollectionVisible"
 				width="30%"
-				:before-close="handleCollectionVisible">
+				:before-close="on_clickCollectionConfirm">
 
-			<span>This is a message</span>
+			<div class="dlg-col-container">
+				<div class="dlg-col-search-bar">
+					<div class="dlg-col-search-input">
+						<input type="search" ref="search" name="q"
+							   aria-label="Search through site content">
+						<button class="search-submit" @click="on_searchBtnClicked">Search</button>
+					</div>
+				</div>
+				<div class="dlg-col-cols">
+					<el-checkbox :indeterminate="collectionsPolicy.isIndeterminate" v-model="collectionsPolicy.checkAll" @change="on_collectionCheckAllChange">Check all</el-checkbox>
+					<div style="margin: 15px 0;"></div>
+					<div class="dlg-version-spliter"></div>
+					<div style="margin: 15px 0;"></div>
+					<el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
+						<el-checkbox v-for="col in collectionsPolicy.collections" :label="col" :key="col">{{col}}</el-checkbox>
+					</el-checkbox-group>
+				</div>
+			</div>
+
 			<span slot="footer" class="dialog-footer">
-    			<button @click="dialogCollectionVisible = false">Cancel</button>
-    			<button type="primary" @click="dialogCollectionVisible = false">Confirm</button>
+<!--    			<button @click="dialogCollectionVisible = false">Cancel</button>-->
+    			<button type="primary" @click="on_clickCollectionConfirm">Confirm</button>
 			</span>
 		</el-dialog>
 		<el-dialog
 				title="排序列"
 				:visible.sync="dialogSortVisible"
 				width="30%"
-				:before-close="handleCollectionVisible">
+				:before-close="handleSortVisible">
 
 			<span>This is a message</span>
 			<span slot="footer" class="dialog-footer">
@@ -87,13 +105,15 @@
 import PhContainerDataSource from './model/containerDatasource'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import ElDialog from 'element-ui/packages/dialog/src/component'
 import PhDlgVersionController from './dlgController/dlgVersionController'
+import PhDlgCollectionController from './dlgController/dlgCollectionController'
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElCheckbox from 'element-ui/packages/checkbox/src/checkbox'
+import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 export default {
 	data() {
 		return {
 			dialogVersionFilterVisible: false,
-			versionCandidates: [],
 			dialogSortVisible: false,
 			dialogCollectionVisible: false,
 			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
@@ -109,6 +129,8 @@ export default {
 		bpSelectVue,
 		bpOptionVue,
 		ElDialog,
+		ElCheckbox,
+		ElCheckboxGroup,
 		bpExcel: require('./bp-excel.vue').default
 	},
 	props: {
@@ -126,6 +148,12 @@ export default {
 			type: Object,
 			default: function() {
 				return new PhDlgVersionController('1')
+			}
+		},
+		collectionsPolicy: {
+			type: Object,
+			default: function() {
+				return new PhDlgCollectionController('1', this.datasource.schema)
 			}
 		}
 	},
@@ -154,7 +182,6 @@ export default {
 		},
 		on_clickVersionFilterConfirm() {
 			this.dialogVersionFilterVisible = false
-			// debugger
 			const condi = this.versionFilterPolicy.selectVersionTags
 			let condi_str = "Province in ["
 			for (var idx in condi) {
@@ -167,8 +194,16 @@ export default {
 			this.datasource.pushFilterCondition("version", condi_str)
 			this.$refs.excel.dataRefresh++
 		},
-		handleCollectionVisible() {
-			console.log("show collection")
+		on_clickCollectionConfirm() {
+			this.dialogCollectionVisible = false
+			this.datasource.schema
+		},
+		on_collectionCheckAllChange() {
+			// this.checkedCities = val ? cityOptions : [];
+			// this.isIndeterminate = false;
+		},
+		on_handleCheckedColsChange(value) {
+
 		},
 		handleSortVisible() {
 			console.log("show sort")
@@ -184,11 +219,15 @@ export default {
 		},
 		dialogVersionFilterVisible(o, n) {
 			let that = this
-			if (this.versionCandidates.length === 0) {
+			if (this.versionFilterPolicy.versionCandidates.length === 0) {
 				that.datasource.queryDlgDistinctCol(this, "Province").then((provinces) => {
-					that.versionCandidates = provinces
+					that.versionFilterPolicy.versionCandidates = provinces
 				})
 			}
+		},
+		dialogCollectionVisible(o, n) {
+			if (this.collectionsPolicy.collections.length === 0)
+				this.collectionsPolicy.collections = this.datasource.schema
 		}
 	}
 };
@@ -283,10 +322,15 @@ export default {
 				margin: 5px;
 			}
 		}
+	}
 
-		.dlg-version-spliter {
-			height: 1px;
-			background-color: #2c3e50;
-		}
+	.dlg-collection-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.dlg-version-spliter {
+		height: 1px;
+		background-color: #2c3e50;
 	}
 </style>
