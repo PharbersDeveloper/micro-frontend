@@ -66,7 +66,7 @@
 			<div class="dlg-col-container">
 				<div class="dlg-col-search-bar">
 					<div class="dlg-col-search-input">
-						<input type="search" ref="search" name="q"
+						<input type="search" ref="colSearch" name="q"
 							   aria-label="Search through site content">
 						<button class="search-submit" @click="on_collectionSearchBtnClicked">Search</button>
 					</div>
@@ -91,12 +91,32 @@
 				title="排序列"
 				:visible.sync="dialogSortVisible"
 				width="30%"
-				:before-close="handleSortVisible">
+				:before-close="on_clickSortConfirm">
 
-			<span>This is a message</span>
+
+			<div class="dlg-sort-container">
+				<div class="dlg-sort-nav">
+					<span>可选列</span>
+					<span>已选列</span>
+					<button>全部清除</button>
+				</div>
+				<div class="dlg-sort-filter">
+					<input type="search" ref="colFilter" name="q"
+						   aria-label="Search through site content">
+					<button class="search-submit" @click="">Search</button>
+				</div>
+				<div class="dlg-sort-candi-container">
+					<div class="dlg-sort-candi-items">
+						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</span>
+					</div>
+					<div class="dlg-sort-candi-items">
+
+					</div>
+				</div>
+			</div>
 			<span slot="footer" class="dialog-footer">
-    			<button @click="dialogSortVisible = false">Cancel</button>
-    			<button type="primary" @click="dialogSortVisible = false">Confirm</button>
+<!--    			<button @click="dialogSortVisible = false">Cancel</button>-->
+    			<button type="primary" @click="on_clickSortConfirm">Confirm</button>
 			</span>
 		</el-dialog>
 	</div>
@@ -206,12 +226,12 @@ export default {
 			this.collectionsPolicy.checkCollectionsItem(val)
 		},
 		on_collectionSearchBtnClicked() {
-			const v = this.$refs.search.value
+			const v = this.$refs.colSearch.value
 			if (v && v.length > 0)
 				this.collectionsPolicy.filterCollectionsByChar(v)
 		},
-		handleSortVisible() {
-			console.log("show sort")
+		on_clickSortConfirm() {
+			this.dialogSortVisible = false
 		}
 	},
 	watch: {
@@ -233,6 +253,20 @@ export default {
 		dialogCollectionVisible(o, n) {
 			if (this.collectionsPolicy.collections.length === 0)
 				this.collectionsPolicy.resetCollections(this.datasource.schema)
+
+			if (n) {
+				this.$refs.colSearch.value = ""
+				this.collectionsPolicy.clearShownCollectionFilter()
+			}
+		},
+		dialogSortVisible(o, n) {
+			if (this.collectionsPolicy.collections.length === 0)
+				this.collectionsPolicy.resetCollections(this.datasource.schema)
+
+			if (n) {
+				this.$refs.colFilter.value = ""
+				this.collectionsPolicy.clearShownCollectionFilter()
+			}
 		}
 	}
 };
@@ -337,5 +371,38 @@ export default {
 	.dlg-version-spliter {
 		height: 1px;
 		background-color: #2c3e50;
+	}
+
+	.dlg-sort-container {
+		display: flex;
+		flex-direction: column;
+
+		.dlg-sort-nav {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+		}
+
+		.dlg-sort-filter {
+			display: flex;
+			flex-direction: row;
+		}
+
+		.dlg-sort-candi-container {
+			display: flex;
+			flex-direction: row;
+
+			.dlg-sort-candi-items{
+				display: flex;
+				flex-direction: column;
+				border: 2px solid gray;
+				width: 50%;
+
+				.dlg-sort-candi-item {
+					font-size: 14px;
+					margin: 5px;
+				}
+			}
+		}
 	}
 </style>

@@ -4,6 +4,7 @@ export default class PhDlgCollectionController {
 		this.collections = []
 		this.shownCollections = []
 		this.selectCollections = []
+		this.sortCollections = []
 		this.isIndeterminate = false
 		this.checkAll = false
 	}
@@ -38,5 +39,13 @@ export default class PhDlgCollectionController {
 			this.shownCollections = this.collections.filter(x => x.startsWith(val))
 		else
 			this.shownCollections = this.collections
+	}
+
+	pushSortCols(val) {
+
+	}
+
+	clearShownCollectionFilter() {
+		this.shownCollections = this.collections
 	}
 }
