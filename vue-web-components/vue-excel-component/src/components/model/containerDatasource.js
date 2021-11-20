@@ -191,4 +191,8 @@ export default class PhContainerDataSource {
 	pushFilterCondition(key, condi) {
 		this.filter[key] = condi
 	}
+
+	pushSortCondition(key, value) {
+		this.sort[key] = value
+	}
 }

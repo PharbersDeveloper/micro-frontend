@@ -240,6 +240,10 @@ export default {
 		},
 		on_clickSortConfirm() {
 			this.dialogSortVisible = false
+			for (var idx in this.collectionsPolicy.sortCollections) {
+				this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
+			}
+			this.$refs.excel.dataRefresh++
 		}
 	},
 	watch: {
