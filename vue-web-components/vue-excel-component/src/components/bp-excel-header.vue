@@ -79,7 +79,7 @@ export default {
 			color: #666666;
 			font-family: 'Monaco';
 			font-size: 10px;
-			height: 20px;
+			height: 20px !important;
 		}
 	}
 	.box {

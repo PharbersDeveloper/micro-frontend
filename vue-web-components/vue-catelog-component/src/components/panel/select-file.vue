@@ -6,10 +6,6 @@
             </div>
             <div class="project_name_header">
                 <p class="project_name new_upload">新上传文件</p>
-                <el-alert
-                    title="成功提示的文案"
-                    type="success">
-                </el-alert>
             </div>
             <div class="upload_file_area">
                 
@@ -39,8 +35,6 @@
 import nextDialog from './next-dialog'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import { Message } from 'element-ui'
-import { elAlert } from 'element-ui'
 
 export default {
     data() {
@@ -53,9 +47,7 @@ export default {
     components: {
         nextDialog,
         bpSelectVue,
-        bpOptionVue,
-        Message,
-        elAlert
+        bpOptionVue
     },
     props: {
         allData: {

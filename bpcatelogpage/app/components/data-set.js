@@ -88,7 +88,8 @@ export default class DataSetComponent extends Component {
             const API_ENDPOINT = "https://max.pharbers.com/upload";
             const request = new XMLHttpRequest();
             const formData = new FormData();
-        
+			this.loadingService.loading.style.display = 'flex'
+			this.loadingService.loading.style['z-index'] = 2
             request.open("POST", API_ENDPOINT, true);
             request.onreadystatechange = () => {
                 if (request.readyState === 4 && request.status === 200) {
