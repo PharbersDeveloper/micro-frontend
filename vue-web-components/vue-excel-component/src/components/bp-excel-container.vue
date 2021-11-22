@@ -39,7 +39,7 @@
 				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel ref="excel" viewHeight="300px" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		<bp-excel ref="excel" viewHeight="300px" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
 		<el-dialog
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
@@ -236,7 +236,8 @@ export default {
 			default: function() {
 				return {
 					projectName: 'test',
-					datasetName: 'dataset'
+					datasetName: 'dataset',
+					schemaArr: []
 				}
 			}
 		}
@@ -245,7 +246,10 @@ export default {
 
 	},
 	mounted() {
-		this.descRefresh++
+		//传入数据时渲染表格
+		if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
+			this.descRefresh++
+		}
 	},
 	methods: {
 		search() {},
@@ -327,6 +331,13 @@ export default {
 		}
 	},
 	watch: {
+		'allData.schemaArr': function(n, o) {
+			this.datasource.schema = n
+			this.datasource.cols = n
+			this.datasource.name = this.allData.datasetName
+			this.datasource.refreshData(this.$refs.excel)
+			this.descRefresh++
+		},
 		descRefresh(n, o) {
 			let that = this
 			this.datasource.queryTotalCount(this).then((count) => {

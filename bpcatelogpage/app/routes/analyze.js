@@ -25,37 +25,20 @@ export default class AnalyzeRoute extends Route {
 		},
 		projectId: {
 			refreshModel: true
+		},
+		datasetId: {
+			refreshModel: true
+		},
+		datasetName: {
+			refreshModel: true
 		}
     }
 	async model(params) {
-		this.store.unloadAll("dataset");
-		const url = "https://apiv2.pharbers.com/phdydatasource/scan"
-		const accessToken = this.cookies.read( "access_token" )
-		let body = {
-			"table": "dataset",
-			"conditions": {
-				"projectId":  ["=", params.projectId]
-			},
-			"limit": 100,
-			"start_key": {}
-		}
-
-		let options = {
-			method: "POST",
-			headers: {
-				"Authorization": accessToken,
-				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-				"accept": "application/json"
-			},
-			body: JSON.stringify(body)
-		}
-		const ds = fetch(url, options)
-		let that = this
-		let tmp = await ds.then((response) => response.json()).then((response) => {
-			this.store.pushPayload(response)
-			return new Promise((resolve, reject) => {
-				resolve(that.store.peekAll("dataset"))
-			})
+		let targetDataset = await this.store.peekRecord('dataset', params.datasetId)
+		let targetSchema = JSON.parse(targetDataset.schema)
+		let schemaArr = []
+		targetSchema.forEach(item => {
+			schemaArr.push(item.des)
 		})
 
 		this.afterModel = function() {
@@ -66,8 +49,9 @@ export default class AnalyzeRoute extends Route {
 		return RSVP.hash( {
 			projectName: params.projectName,
 			projectId: params.projectId,
-			dss: tmp.filter(it => it),
-			tagsArray: [],
+			schemaArr: schemaArr,
+			datasetName: params.datasetName,
+			database: 'default',
 			_isVue: true
 		} )
 	}

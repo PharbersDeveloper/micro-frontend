@@ -8,7 +8,8 @@
 		</div>
 		<div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
 			<div class="body" :style="{height: page_size * sizePolicy.cell_hit_height +'px'}">
-				<canvas ref="canvas" class="canvas"></canvas>
+				<!-- canvas默认宽高 -->
+				<canvas ref="canvas" class="canvas" width="1" height="1"></canvas>
 				<div ref="select" class="row-select"></div>
 				<select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
 			</div>
@@ -40,6 +41,10 @@ export default {
 		headerItem:require('./bp-excel-header.vue').default
 	},
 	props: {
+		needFirstRender: {
+			type: Boolean,
+			default: true
+		},
 		isNeedKeyBoardEvent: {
 			type: Boolean,
 			default: true
@@ -78,7 +83,9 @@ export default {
 		}
 	},
 	beforeMount() {
-		this.datasource.refreshData(this)
+		if(this.needFirstRender) {
+			this.datasource.refreshData(this)
+		}
 	},
 	mounted() {
 		this.focusHandler()

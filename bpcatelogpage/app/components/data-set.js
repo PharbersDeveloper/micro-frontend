@@ -182,44 +182,11 @@ export default class DataSetComponent extends Component {
         }
         let actions = this.postUrl(push_type, actions_body)
         let results = await Promise.all([project_files,actions])
-		
         //请求status，持续30s
 		this.noticeService.register("notification", results[0].data.id, this.noticeCallback, this, projectId)
 		//直接跳转，改为等待
 		// this.router.transitionTo( `/excel-handler?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}&filename=${this.tranParam.file.name}&version=${this.tranParam.property.dataID}&dataset=${this.tranParam.property.dataset}&tmpname=${this.tranParam.message.tmpname}` )
 		// this.loadingService.loading.style.display = 'none'
-
-
-        // let statusType = 'query'
-        // let statusBody = {
-        //     "table": "notification",
-        //     "conditions": {
-        //         "id": results[0].data.id
-        //     },
-        //     "limit": 10,
-        //     "start_key": {}
-        // }
-        // let startTime = new Date().getTime();
-        // let dagStatusInt = setInterval(async function() { 
-        //     that.postUrl(statusType, statusBody).then(response => {
-        //         let project_files_status = response.data[0].attributes.status
-        //         if (project_files_status !== 'creating') {
-        //             clearInterval(dagStatusInt); //循环结束
-        //             let status = ''
-        //             if(project_files_status == "success") {
-        //                 console.log(project_files_status)
-        //             } else {
-        //                 console.log(project_files_status)
-        //             }
-        //             that.loadingService.loading.style.display = 'none'
-        //             // that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
-        //             that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
-        //         } else if(new Date().getTime() - startTime >= 60000) {
-        //             clearInterval(dagStatusInt); //循环结束
-		// 			alert("超时，连接终止！")
-		// 		}
-        //     }) 
-        // }, 5 * 1000)
     }
 
     @action
