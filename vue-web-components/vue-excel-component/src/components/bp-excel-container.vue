@@ -51,12 +51,13 @@
 				<div class="dlg-flex-version" >
 					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
 						<span>{{item}}</span>
-						<i class="el-icon-share"></i>
-						<i class="el-icon-close" @click="versionFilterPolicy.removeSelectVersionTags(item)"></i>
-						<!-- <button >X</button> -->
+						<img :src="close_icon" class="close_icon" @click="versionFilterPolicy.removeSelectVersionTags(item)" alt="">
+						<!-- <button @click="versionFilterPolicy.removeSelectVersionTags(item)">X</button> -->
 					</div>
 				</div>
 				<div class="dlg-version-spliter"></div>
+				<el-input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row"></el-input>
+				<img :src="search_row" class="search_row_icon" alt="">
 				<div class="dlg-all-version-container">
 					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.versionCandidates" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
 						<span>{{item}}</span>
@@ -64,8 +65,11 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<!-- <button @click="on_clickVersionFilterCancel">Cancel</button> -->
-    			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button>
+				<el-button @click="on_clickVersionFilterCancel">取消</el-button>
+				<el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
+
+				<!-- <button @click="on_clickVersionFilterCancel">Cancel</button>
+    			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button> -->
 			</span>
 		</el-dialog>
 		<el-dialog
@@ -94,8 +98,8 @@
 			</div>
 
 			<span slot="footer" class="dialog-footer">
-				<!--<button @click="dialogCollectionVisible = false">Cancel</button>-->
-    			<button type="primary" @click="on_clickCollectionConfirm">Confirm</button>
+				<button @click="dialogCollectionVisible = false">取消</button>
+    			<button type="primary" @click="on_clickCollectionConfirm">确认</button>
 			</span>
 		</el-dialog>
 		<el-dialog
@@ -127,8 +131,8 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<!--<button @click="dialogSortVisible = false">Cancel</button>-->
-    			<button type="primary" @click="on_clickSortConfirm">Confirm</button>
+				<button @click="dialogSortVisible = false">取消</button>
+    			<button type="primary" @click="on_clickSortConfirm">确认</button>
 			</span>
 		</el-dialog>
 
@@ -157,8 +161,8 @@
 			<span slot="footer" class="dialog-footer">
     			<!-- <button @click="on_clickDownloadConfirm">Cancel</button>
     			<button type="primary" @click="on_clickDownloadConfirm">Confirm</button> -->
-				<el-button @click="on_clickDownloadConfirm">Cancel</el-button>
-				<el-button type="primary" @click="on_clickDownloadConfirm">Confirm</el-button>
+				<el-button @click="on_clickDownloadConfirm">取消</el-button>
+				<el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -173,6 +177,7 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElCheckbox from 'element-ui/packages/checkbox/src/checkbox'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
+import ElInput from 'element-ui/packages/input/index'
 export default {
 	data() {
 		return {
@@ -187,7 +192,10 @@ export default {
 			totalNum: 0,
 			totalCols: 0,
 			matchNum: 0,
-			dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg"
+			dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+			close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+			searchRow: '',
+			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg"
 		}
 	},
 	components: {
@@ -197,6 +205,7 @@ export default {
 		ElCheckbox,
 		ElCheckboxGroup,
 		ElButton,
+		ElInput,
 		bpExcel: require('./bp-excel.vue').default
 	},
 	props: {
@@ -311,6 +320,10 @@ export default {
 		on_clickDownloadConfirm() {
 			this.dialogDownloadVisible = false
 			// TODO
+		},
+		searchRowInput(data) {
+			console.log(data)
+			// this.versionFilterPolicy.versionCandidates
 		}
 	},
 	watch: {
@@ -354,6 +367,12 @@ export default {
 };
 </script>
 <style lang="scss">
+	@font-face {
+		font-family: element-icons;
+		src: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff') format('woff'), url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf') format('truetype');
+		font-weight: 400;
+		font-style: normal;
+	}
 	.ec-container {
 		display: flex;
 		flex-direction: column;
@@ -511,7 +530,17 @@ export default {
     		overflow: auto;
 			.dlg-flex-version-item {
 				font-size: 12px;
-				border: #00a3bf;
+				border: 1px solid #ccc;
+				display: flex;
+				align-items: center;
+				margin: 5px;
+				padding: 0 4px;
+				.close_icon {
+					width: 16px;
+					height: 16px;
+					margin-left: 5px;
+					cursor: pointer;
+				}
 			}
 
 		}
@@ -524,6 +553,7 @@ export default {
 			max-height: 300px;
 			.dlg-flex-version-item {
 				margin: 5px;
+				cursor: pointer;
 			}
 		}
 	}
@@ -538,7 +568,18 @@ export default {
 		background-color: #2c3e50;
 		margin: 20px 0;
 	}
-
+	.search_row {
+		margin-bottom: 20px;
+		input.el-input__inner {
+			padding-left: 40px;
+		}
+	}
+	.search_row_icon {
+		width: 20px;
+		position: relative;
+		top: -50px;
+		left: 10px;
+	}
 	.dlg-sort-container {
 		display: flex;
 		flex-direction: column;

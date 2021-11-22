@@ -53,7 +53,7 @@ export default class NoticeServiceService extends Service {
 						projectId: that.subjectCallback[index].projectId
 					})
 				})
-				let url = "https://api.pharbers.com/phdydatasource/batch_get_item"
+				let url = "https://apiv2.pharbers.com/phdydatasource/batch_get_item"
 				let headers = {
 					"Authorization": that.cookies.read( "access_token" ),
 					"Content-Type": "application/vnd.api+json",
