@@ -1,5 +1,6 @@
 <template>
 	<div class="ec-container">
+    	<link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
 		<div class="title-container">
 			<div class="title-left">
 				<div class="title-span">
@@ -249,6 +250,7 @@ export default {
 			this.datasource.pushFilterCondition("version", condi_str)
 			this.$refs.excel.dataRefresh++
 		},
+		//选择列
 		on_clickCollectionConfirm() {
 			this.dialogCollectionVisible = false
 			this.datasource.cols = this.collectionsPolicy.resetShowingCollections()

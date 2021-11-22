@@ -5,7 +5,7 @@ export default class PhDlgCollectionController {
 		this.shownCollections = []
 		this.selectCollections = []
 		this.sortCollections = []
-		this.isIndeterminate = false
+		this.isIndeterminate = false //check-all的不确定状态
 		this.checkAll = false
 	}
 
@@ -33,7 +33,7 @@ export default class PhDlgCollectionController {
 		this.selectCollections = val ? this.shownCollections: [];
 		this.isIndeterminate = false;
 	}
-
+	// 选中多选框
 	checkCollectionsItem(val) {
 		let checkedCount = val.length;
 		this.checkAll = checkedCount === this.shownCollections.length;

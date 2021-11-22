@@ -24,6 +24,9 @@ export default class DatasetLstComponent extends Component {
 				if(params.name === "linkToProject") {
 					uri = `/projects/`+ params.projectId
 				}
+				if(params.name === "analyze") {
+					uri = `/dataset/${params.datasetName}?projectName=${params.projectName}&projectId=${params.projectId}`
+				}
                 this.router.transitionTo( uri )
 				break
 			case "addTags":

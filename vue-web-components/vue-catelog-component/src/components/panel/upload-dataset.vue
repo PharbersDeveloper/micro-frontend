@@ -94,7 +94,7 @@
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
-                                <p class="data_name" :title="dataset.name">{{dataset.name}}</p>
+                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.name}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
@@ -326,6 +326,21 @@ export default {
                 this.datasetcheckedIds.push(dataset.id)
                 this.datasetcheckedNames.push(dataset.name)
             }
+        },
+        //点击dataset name
+        clickDatasetName(dataset) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "analyze",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    datasetName: dataset.name
+                }
+            }
+            this.$emit('event', event)
         },
         //全选list
         chechedAllDataset() {
