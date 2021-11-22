@@ -1,21 +1,28 @@
 <template>
 	<div class="ec-container">
     	<link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+		<div class="header">
+			{{allData.projectName}}
+		</div>
+		<div class="dataset_header">
+			<img :src="dataset_icon" class="dataset_icon" alt="">
+			{{allData.datasetName}}
+		</div>
 		<div class="title-container">
 			<div class="title-left">
 				<div class="title-span">
 					<span>{{title}}</span>
-					<span class="title-link">
+					<!-- <span class="title-link">
 						Configure Sample
-					</span>
+					</span> -->
 				</div>
 				<div class="disc-span">
 					{{totalNum}} rows, {{totalCols}} cols
 				</div>
 			</div>
 			<div class="btn-groups">
-				<button class="btn-chart" @click="dialogDownloadVisible = true">下载当前筛选数据</button>
-				<bp-select-vue class="btn-chart" src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+				<button class="btn_chart" @click="dialogDownloadVisible = true">下载当前筛选数据</button>
+				<bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 					<bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
 					<bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
 					<bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
@@ -36,14 +43,17 @@
 		<el-dialog
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
-				width="30%"
+				width="450px"
+				height="600px"
 				:before-close="on_clickVersionFilterConfirm">
 
 			<div class="dlg-version-container">
 				<div class="dlg-flex-version" >
 					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
 						<span>{{item}}</span>
-						<button @click="versionFilterPolicy.removeSelectVersionTags(item)">X</button>
+						<i class="el-icon-share"></i>
+						<i class="el-icon-close" @click="versionFilterPolicy.removeSelectVersionTags(item)"></i>
+						<!-- <button >X</button> -->
 					</div>
 				</div>
 				<div class="dlg-version-spliter"></div>
@@ -102,8 +112,7 @@
 					<button @click="on_clearSortCollections">全部清除</button>
 				</div>
 				<div class="dlg-sort-filter">
-					<input type="search" ref="colFilter" name="q"
-						   aria-label="Search through site content">
+					<input type="search" ref="colFilter">
 					<button class="search-submit" @click="search">Search</button>
 				</div>
 				<div class="dlg-sort-candi-container">
@@ -126,31 +135,30 @@
 		<el-dialog
 				title="下载"
 				:visible.sync="dialogDownloadVisible"
-				width="30%"
+				width="600px"
 				:before-close="on_clickDownloadCancel">
 
 			<div class="dlg-download-container">
 				<table border="0">
-					<tr>
-						<td>重命名</td>
+					<tr class="first">
+						<td class="download_title">重命名</td>
 						<td>
-							<input type="text" ref="nameRef" name="q"
-								   aria-label="Search through site content">
+							<input type="text" ref="nameRef">
 						</td>
 					</tr>
 					<tr>
-						<td>格式</td>
+						<td class="download_title">格式</td>
 						<td>
-							<input type="text" ref="suffRef" name="q"
-								   aria-label="Search through site content">
+							<input type="text" ref="suffRef">
 						</td>
 					</tr>
 				</table>
 			</div>
-
 			<span slot="footer" class="dialog-footer">
-    			<button @click="on_clickDownloadConfirm">Cancel</button>
-    			<button type="primary" @click="on_clickDownloadConfirm">Confirm</button>
+    			<!-- <button @click="on_clickDownloadConfirm">Cancel</button>
+    			<button type="primary" @click="on_clickDownloadConfirm">Confirm</button> -->
+				<el-button @click="on_clickDownloadConfirm">Cancel</el-button>
+				<el-button type="primary" @click="on_clickDownloadConfirm">Confirm</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -164,6 +172,7 @@ import PhDlgCollectionController from './dlgController/dlgCollectionController'
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElCheckbox from 'element-ui/packages/checkbox/src/checkbox'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
+import ElButton from 'element-ui/packages/button/index'
 export default {
 	data() {
 		return {
@@ -171,13 +180,14 @@ export default {
 			dialogSortVisible: false,
 			dialogCollectionVisible: false,
 			dialogDownloadVisible: false,
-			selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
+			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
 			showSelectOptionParam: false,
 			closeTosts: false,
 			descRefresh: 0,
 			totalNum: 0,
 			totalCols: 0,
-			matchNum: 0
+			matchNum: 0,
+			dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg"
 		}
 	},
 	components: {
@@ -186,12 +196,13 @@ export default {
 		ElDialog,
 		ElCheckbox,
 		ElCheckboxGroup,
+		ElButton,
 		bpExcel: require('./bp-excel.vue').default
 	},
 	props: {
 		title: {
 			type: String,
-			default: "Viewing dataset sample"
+			default: "预览数据样本"
 		},
 		datasource: {
 			type: Object,
@@ -209,6 +220,15 @@ export default {
 			type: Object,
 			default: function() {
 				return new PhDlgCollectionController('1', this.datasource.schema)
+			}
+		},
+		allData: {
+			type: Object,
+			default: function() {
+				return {
+					projectName: 'test',
+					datasetName: 'dataset'
+				}
 			}
 		}
 	},
@@ -290,7 +310,7 @@ export default {
 		},
 		on_clickDownloadConfirm() {
 			this.dialogDownloadVisible = false
-			// TODO:
+			// TODO
 		}
 	},
 	watch: {
@@ -337,12 +357,51 @@ export default {
 	.ec-container {
 		display: flex;
 		flex-direction: column;
-
+		height: 100vh;
+		.el-dialog__wrapper {
+			.el-dialog__header {
+				border-bottom: 1px solid #ccc;
+			}
+		}
+		.header {
+			width: 100vw;
+			height: 40px;
+			background: #222;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			font-size: 20px;
+			padding: 0 20px;
+		}
+		.dataset_header {
+			height: 48px;
+			background: #ffffff;
+			border-bottom: 1px solid #dddddd;
+			margin: 0 !important;
+			color: #333333;
+			display: flex;
+			padding: 0 20px;
+			align-items: center;
+			.dataset_icon {
+				width: 24px;
+				height: 24px;
+				margin-right: 10px;
+			}
+		}
 		.title-container{
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
-
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: #ffffff;
+			border-bottom: 1px solid #dddddd;
+			padding-left: 20px;
+			padding-right: 10px;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			margin-top: 0px;
 			.title-left {
 				display: flex;
 				flex-direction: column;
@@ -351,6 +410,13 @@ export default {
 					font-size: 24px;
 					display: flex;
 					flex-direction: row;
+					width: 98px;
+					height: 22px;
+					font-family: Helvetica;
+					font-size: 16px;
+					color: #000000;
+					letter-spacing: 0.17px;
+					font-weight: 400;
 					.title-link {
 						font-family: ".SF NS Mono";
 						font-size: 10px;
@@ -360,15 +426,45 @@ export default {
 				}
 				.disc-span {
 					font-family: 'Noto Sans JP', sans-serif;
-					font-size: 12px;
-					margin-left: 10px;
+					height: 14px;
+					opacity: 0.5;
+					font-family: PingFangSC-Semibold;
+					font-size: 10px;
+					color: #000000;
+					letter-spacing: 0.1px;
+					font-weight: 600;
+					margin-top: 7px;
 				}
 			}
 
 			.btn-groups {
 				display: flex;
 				flex-direction: row;
-
+				.btn_chart {
+					height: 26px;
+					border-radius: 2px;
+					background: #f6f6f7;
+					font-family: 'PingFangSC-Regular';
+					font-size: 14px;
+					color: #57565F;
+					letter-spacing: 0;
+					text-align: center;
+					line-height: 20px;
+					font-weight: 400;
+					border: none;
+				}
+				.btn_select {
+					width: 100px;
+					height: 26px;
+					border: 1px solid #57565F;
+					border-radius: 2px;
+					margin-left: 20px;
+					font-family: 'PingFangSC-Regular';
+					font-size: 12px;
+					color: #000000;
+					letter-spacing: 0.12px;
+					font-weight: 400;
+				}
 				.btn-display {
 					font-size: 14px;
 					border-width: 1px;
@@ -380,16 +476,21 @@ export default {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
-			margin: 10px;
-
+			padding: 20px;
+			align-items: center;
 			.search-inner {
 				display: flex;
 				flex-direction: row;
+				width: 179px;
+				height: 26px;
+				background: #FFFFFF;
+				border: 1px solid #f6f6f7;
 			}
 
 			.search-result {
-				font-size: 18px;
 				font-family: 'Advent Pro', sans-serif;
+				font-size: 14px;
+				color: #57565F;
 			}
 		}
 		.excel {
@@ -406,7 +507,8 @@ export default {
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-
+			max-height: 200px;
+    		overflow: auto;
 			.dlg-flex-version-item {
 				font-size: 12px;
 				border: #00a3bf;
@@ -416,9 +518,10 @@ export default {
 
 		.dlg-all-version-container {
 			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-
+			flex-direction: column;
+			flex-wrap: nowrap;
+			overflow: auto;
+			max-height: 300px;
 			.dlg-flex-version-item {
 				margin: 5px;
 			}
@@ -433,6 +536,7 @@ export default {
 	.dlg-version-spliter {
 		height: 1px;
 		background-color: #2c3e50;
+		margin: 20px 0;
 	}
 
 	.dlg-sort-container {
@@ -467,9 +571,24 @@ export default {
 			}
 		}
 	}
-
 	.dlg-download-container {
 		display: flex;
 		justify-content: space-around;
+		table {
+			height: 100px;
+			input {
+				width: 230px;
+				height: 24px;
+				border: 1px solid #979797;
+			}
+		}
+		.first {
+			margin-bottom: 20px;
+		}
+		.download_title {
+			width: 70px;
+			text-align: right;
+			padding-right: 20px;
+		}
 	}
 </style>
