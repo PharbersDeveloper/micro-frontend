@@ -40,20 +40,20 @@
 
 			<div class="dlg-version-container">
 				<div class="dlg-flex-version" >
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
 						<span>{{item}}</span>
 						<button @click="versionFilterPolicy.removeSelectVersionTags(item)">X</button>
 					</div>
 				</div>
 				<div class="dlg-version-spliter"></div>
 				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.versionCandidates" :key="item" @click="versionFilterPolicy.appendSelectVersionTags(item)">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.versionCandidates" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
 						<span>{{item}}</span>
 					</div>
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-<!--    			<button @click="on_clickVersionFilterCancel">Cancel</button>-->
+				<!-- <button @click="on_clickVersionFilterCancel">Cancel</button> -->
     			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button>
 			</span>
 		</el-dialog>
@@ -83,7 +83,7 @@
 			</div>
 
 			<span slot="footer" class="dialog-footer">
-<!--    			<button @click="dialogCollectionVisible = false">Cancel</button>-->
+				<!--<button @click="dialogCollectionVisible = false">Cancel</button>-->
     			<button type="primary" @click="on_clickCollectionConfirm">Confirm</button>
 			</span>
 		</el-dialog>
@@ -103,7 +103,7 @@
 				<div class="dlg-sort-filter">
 					<input type="search" ref="colFilter" name="q"
 						   aria-label="Search through site content">
-					<button class="search-submit" @click="">Search</button>
+					<button class="search-submit" @click="search">Search</button>
 				</div>
 				<div class="dlg-sort-candi-container">
 					<div class="dlg-sort-candi-items dlg-panel-left">
@@ -117,7 +117,7 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-<!--    			<button @click="dialogSortVisible = false">Cancel</button>-->
+				<!--<button @click="dialogSortVisible = false">Cancel</button>-->
     			<button type="primary" @click="on_clickSortConfirm">Confirm</button>
 			</span>
 		</el-dialog>
@@ -218,6 +218,7 @@ export default {
 		this.descRefresh++
 	},
 	methods: {
+		search() {},
 		getCookie(name) {
 			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 			if (arr = document.cookie.match(reg))
