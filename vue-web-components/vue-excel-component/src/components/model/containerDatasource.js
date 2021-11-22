@@ -11,12 +11,15 @@ export default class PhContainerDataSource {
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
+		this.debugToken = "ff4702f524dec9f8a47854483851dbb332d00c0892d317ad67f496401c6edada"
 	}
 
-	defaultAdapter(row) {
-		return [row.Index, row.Id, row.Hospname, row.Province, row.City,
-			row.lHospnaem, row.lHospalias, row.lDistrictct, row.lLevel,
-			row.lCat, row.lOffweb]
+	defaultAdapter(row, cols) {
+		let result = []
+		for (var idx in cols) {
+			result.push(row[cols[idx]])
+		}
+		return result
 	}
 
 	buildQuery(ele, isAppend=false) {
@@ -31,7 +34,7 @@ export default class PhContainerDataSource {
 				if(key != firstFilter) {
 					filterParam = " AND "
 				}
-				sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+				sql_str = sql_str + filterParam + ele.datasource.filter[key]
 			}
 
 			// sorts
@@ -48,7 +51,7 @@ export default class PhContainerDataSource {
 			return sql_str
 		}
 		const url = "https://api.pharbers.com/phchproxyquery"
-		const accessToken = ele.getCookie("access_token") || "ab8bca823bd9c6da5910025b85a125d91709f21d42dbc3060ba7f91a02f2ef9e"
+		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryString(),
 			"schema": ele.datasource.schema
@@ -83,10 +86,36 @@ export default class PhContainerDataSource {
 			return sql_str
 		}
 		const url = "https://api.pharbers.com/phchproxyquery"
-		const accessToken = ele.getCookie("access_token") || "ab8bca823bd9c6da5910025b85a125d91709f21d42dbc3060ba7f91a02f2ef9e"
+		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryCountString(),
 			"schema": ["count"]
+		}
+		let options = {
+			method: "POST",
+			headers: {
+				"Authorization": accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		return fetch(url, options)
+	}
+
+	buildDistinctColQuery(ele, col) {
+		function buildDistinctColSql() {
+			let sql_str = "SELECT DISTINCT " + col
+			sql_str = sql_str + " FROM " + ele.datasource.name
+			sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+
+			return sql_str
+		}
+		const url = "https://api.pharbers.com/phchproxyquery"
+		const accessToken = ele.getCookie("access_token") || this.debugToken
+		let body = {
+			"query": buildDistinctColSql(),
+			"schema": [col]
 		}
 		let options = {
 			method: "POST",
@@ -104,7 +133,12 @@ export default class PhContainerDataSource {
 		ele.datasource.buildQuery(ele)
 			.then((response) => response.json())
 			.then((response) => {
-				ele.datasource.data = response.map(ele.datasource.adapter)
+				const tmp = []
+				for (var idx in response) {
+					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+				}
+				ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+				ele.cur_page = 0
 				ele.needRefresh++
 			})
 	}
@@ -113,7 +147,12 @@ export default class PhContainerDataSource {
 		ele.datasource.buildQuery(ele, true)
 			.then((response) => response.json())
 			.then((response) => {
-				ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+				const tmp = []
+				for (var idx in response) {
+					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+				}
+				// ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+				ele.datasource.data = ele.datasource.data.concat(tmp)
 				ele.cur_page++
 				ele.needRefresh++
 			})
@@ -124,6 +163,14 @@ export default class PhContainerDataSource {
 			.then((response) => response.json())
 			.then((response) => {
 				return response[0]["count"]
+			})
+	}
+
+	queryDlgDistinctCol(ele, row) {
+		return ele.datasource.buildDistinctColQuery(ele, row)
+			.then((response) => response.json())
+			.then((response) => {
+				return response.map(x => x["Province"])
 			})
 	}
 
@@ -139,5 +186,17 @@ export default class PhContainerDataSource {
 			}
 		}
 		return result
+	}
+
+	pushFilterCondition(key, condi) {
+		this.filter[key] = condi
+	}
+
+	pushSortCondition(key, value) {
+		this.sort[key] = value
+	}
+
+	clearSortCondition() {
+		this.sort = {}
 	}
 }
