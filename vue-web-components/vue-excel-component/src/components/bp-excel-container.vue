@@ -384,6 +384,9 @@ export default {
 		font-weight: 400;
 		font-style: normal;
 	}
+	.el-dialog__wrapper {
+		background: rgba(0, 0, 0, 0.31);
+	}
 	.ec-container {
 		display: flex;
 		flex-direction: column;
