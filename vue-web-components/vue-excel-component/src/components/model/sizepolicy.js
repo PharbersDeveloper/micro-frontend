@@ -22,7 +22,7 @@ export default class PhDefaultSizePolicy {
 		// const rows = this.page_size
 
 		return {
-			width: cols_hit_width.reduce((s, c) => s + c, 0) + 2 * this.sheet_margin,
+			width: Math.max(cols_hit_width.reduce((s, c) => s + c, 0) + 2 * this.sheet_margin, 1), //1是为了给canvas一个默认宽度
 			height: rows * this.cell_hit_height + 2 * this.sheet_margin
 		}
 	}

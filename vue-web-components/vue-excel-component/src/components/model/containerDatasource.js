@@ -7,11 +7,11 @@ export default class PhContainerDataSource {
 		this.filter = {}
 		this.name = "prod_clean_v2"
 		this.batch_size = 200
-		this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
+		this.schema = []
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
-		this.debugToken = "47a9c00675f92ea3f5897e9370cfc80c8b4e426903597cf57df6feb71e191032"
+		this.debugToken = "6c92396aad2ff95bffa1a3b9227a4c7d0df75f15b2a3b9bbab8d972999be29f6"
 	}
 
 	defaultAdapter(row, cols) {
@@ -25,7 +25,9 @@ export default class PhContainerDataSource {
 	buildQuery(ele, isAppend=false) {
 		function buildQueryString() {
 			let sql_str = "SELECT "
-			sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
+			let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
+			// sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
+			sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name +'`'
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -50,7 +52,7 @@ export default class PhContainerDataSource {
 			sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
 			return sql_str
 		}
-		const url = "https://api.pharbers.com/phchproxyquery"
+		const url = "https://apiv2.pharbers.com/phdadatasource"
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryString(),
@@ -71,7 +73,8 @@ export default class PhContainerDataSource {
 	buildCountQuery(ele) {
 		function buildQueryCountString() {
 			let sql_str = "SELECT count(*)"
-			sql_str = sql_str + " FROM " + ele.datasource.name
+
+			sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -85,7 +88,7 @@ export default class PhContainerDataSource {
 
 			return sql_str
 		}
-		const url = "https://api.pharbers.com/phchproxyquery"
+		const url = "https://apiv2.pharbers.com/phdadatasource"
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryCountString(),

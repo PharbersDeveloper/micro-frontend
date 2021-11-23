@@ -62,7 +62,6 @@ export default {
     },
     watch: {
         random: function() {
-            console.log("关闭所有弹框")
             this.show = false
         }
     },

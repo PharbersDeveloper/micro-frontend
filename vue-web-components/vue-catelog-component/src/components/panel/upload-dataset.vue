@@ -337,7 +337,7 @@ export default {
                     name: "analyze",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    datasetName: dataset.name
+                    dataset: dataset
                 }
             }
             this.$emit('event', event)

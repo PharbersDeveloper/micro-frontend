@@ -25,7 +25,7 @@ export default class DatasetLstComponent extends Component {
 					uri = `/projects/`+ params.projectId
 				}
 				if(params.name === "analyze") {
-					uri = `/dataset/${params.datasetName}?projectName=${params.projectName}&projectId=${params.projectId}`
+					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
 				}
                 this.router.transitionTo( uri )
 				break
