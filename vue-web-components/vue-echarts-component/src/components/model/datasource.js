@@ -5,35 +5,44 @@ export default class PhDagDatasource {
         this.nodes= []
         this.links= []
         this.data = []
-        this.title = "prod_clean_v2"
+        this.title = "need a title"
+        this.debugToken = '2e13655c70f7931daa11b9fa800d6147cc55056b57de237b615a51a15c6e7cec'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
     }
 
     defaultAdapter(row) {
-        this.data.append(row)
-        if (row["ctype"] === "node" && row["cat"] !== "flow") {
-            const tmp = {}
-            tmp["name"] = row["name"]
-            tmp["x"] = row["cmessage"]["x"]
-            tmp["y"] = row["cmessage"]["y"]
-            tmp["category"] = row["cat"]
-            this.nodes.append(tmp)
-        } else if (row["ctype"] === "link") {
-            const tmp = {}
-            tmp["source"] = row["source"]
-            tmp["target"] = row["target"]
+        const attr = row["attributes"]
+        if (attr["ctype"] === "node" && attr["cat"] !== "flow") {
+            const node = {}
+            node["name"] = attr["name"]
+            const position = JSON.parse(attr['position'])
+            node["x"] = position["x"]
+            node["y"] = position["y"]
+            node["level"] = attr["level"]
+            node["category"] = attr["cat"]
+            return [true, node]
+        } else if (attr["ctype"] === "link") {
+            const link = {}
+            const cmessage = JSON.parse(attr['cmessage'])
+            // link["source"] = cmessage["sourceId"]
+            link["source"] = cmessage["sourceName"]
+            // link["target"] = cmessage["targetId"]
+            link["target"] = cmessage["targetName"]
+            return [false, link]
         }
     }
 
     buildQuery(ele, isAppend=false) {
-        const url = "https://apiv2.pharbers.com/phdydatasource/scan"
-        const accessToken = this.cookies.read( "access_token" )
+        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        // const accessToken = this.cookies.read( "access_token" ) | this.debugToken
+        const accessToken = this.debugToken
         let body = {
             "table": "dag",
             "conditions": {
-                "projectId": "Max"
+                "projectId": ["=", "max"],
+                "sortVersion": ["begins_with", "developer_"]
             },
             "limit": 100,
             "start_key": {}
@@ -55,8 +64,50 @@ export default class PhDagDatasource {
         ele.datasource.buildQuery(ele)
             .then((response) => response.json())
             .then((response) => {
-                response.map(ele.datasource.adapter)
+                const tmp = response.data.map(ele.datasource.adapter)
+                ele.datasource.nodes = tmp.filter(x => x[0]).map(x => x[1])
+                ele.datasource.refreshLocationByLevel(ele)
+                ele.datasource.links = tmp.filter(x => !x[0]).map(x => x[1])
                 ele.needRefresh++
             })
+    }
+
+    refreshLocationByLevel(ele) {
+        const LEVEL_VER_STEP = 100
+        const LEVEL_HOR_STEP = 100
+        const levelGroupBy = ele.datasource.nodes.reduce((acc, value) => {
+            if (!acc[value.level]) {
+                acc[value.level] = [];
+            }
+            acc[value.level].push(value)
+            return acc;
+        }, {});
+
+        ele.datasource.nodes = []
+
+        let anchor_x = 0
+        let anchor_y = 0
+        let provious_level_anchor_x = 0
+        let provious_level_anchor_y = 0
+
+        for (var idx in levelGroupBy) {
+            // anchor_x = anchor_x + parseInt(idx) * LEVEL_HOR_STEP
+            anchor_x = provious_level_anchor_x + LEVEL_VER_STEP
+            anchor_y = provious_level_anchor_y
+            provious_level_anchor_x = anchor_x
+
+            const cur_level = levelGroupBy[idx]
+            for (var iter in cur_level) {
+                anchor_y = anchor_y + parseInt(iter) * LEVEL_VER_STEP
+                cur_level[iter]['x'] = anchor_x
+                cur_level[iter]['y'] = anchor_y
+                ele.datasource.nodes.push(cur_level[iter])
+            }
+            const base_anchor_y_arr = levelGroupBy[idx].map(x => parseInt(x['y']))
+            let base_anchor_y = base_anchor_y_arr.reduce(function (accumVariable, curValue) {
+                return accumVariable + curValue
+            }, 0);
+            provious_level_anchor_y = base_anchor_y / base_anchor_y_arr.length
+        }
     }
 }
