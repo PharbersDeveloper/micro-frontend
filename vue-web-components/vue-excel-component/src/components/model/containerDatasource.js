@@ -4,6 +4,7 @@ export default class PhContainerDataSource {
 		this.id = id
 		this.data = []
 		this.sort = {}
+		this.projectId = ''
 		this.filter = {}
 		this.name = "prod_clean_v2"
 		this.batch_size = 200
@@ -27,7 +28,7 @@ export default class PhContainerDataSource {
 			let sql_str = "SELECT "
 			let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
 			// sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
-			sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name +'`'
+			sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -40,8 +41,14 @@ export default class PhContainerDataSource {
 			}
 
 			// sorts
+			sql_str = sql_str + " ORDER BY `" 
+			let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
 			for (const key in ele.datasource.sort) {
-				sql_str = sql_str + " ORDER BY " + key
+				if(lastSort == key) {
+					sql_str = sql_str + key +'`'
+				} else {
+					sql_str = sql_str + key +'`,'
+				}
 				if (ele.datasource.sort[key] < 0) {
 					sql_str = sql_str + " desc "
 				}
@@ -74,7 +81,7 @@ export default class PhContainerDataSource {
 		function buildQueryCountString() {
 			let sql_str = "SELECT count(*)"
 
-			sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+			sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -110,7 +117,7 @@ export default class PhContainerDataSource {
 	buildDistinctColQuery(ele, col) {
 		function buildDistinctColSql() {
 			let sql_str = "SELECT DISTINCT " + col
-			sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+			sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
 			sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
 
 			return sql_str
@@ -176,7 +183,7 @@ export default class PhContainerDataSource {
 		return ele.datasource.buildDistinctColQuery(ele, row)
 			.then((response) => response.json())
 			.then((response) => {
-				return response.map(x => x["`匹配名`"])
+				return response.map(x => x["`version`"])
 			})
 	}
 

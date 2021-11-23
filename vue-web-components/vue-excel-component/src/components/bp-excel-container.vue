@@ -240,6 +240,7 @@ export default {
 				return {
 					projectName: 'test',
 					datasetName: 'dataset',
+					projectId: '',
 					schemaArr: []
 				}
 			}
@@ -280,12 +281,18 @@ export default {
 		on_clickVersionFilterConfirm() {
 			this.dialogVersionFilterVisible = false
 			const condi = this.versionFilterPolicy.selectVersionTags
-			let condi_str = "`匹配名` in ["
+			let condi_str = "`version` in ["
+			console.log(condi)
 			for (var idx in condi) {
-				if (idx > 0)
+				console.log(idx)
+				if (idx > 0) {
 					condi_str = condi_str + ","
-
-				condi_str = condi_str + "'" + condi[idx] + "'"
+				}
+				console.log(condi[idx])
+				if(typeof(condi[idx]) === 'string') {
+					condi_str = condi_str + "'" + condi[idx] + "'"
+				}
+				console.log(condi_str)
 			}
 			condi_str = condi_str + "]"
 			this.datasource.pushFilterCondition("version", condi_str)
@@ -320,11 +327,14 @@ export default {
 			this.collectionsPolicy.sortCollections = []
 			this.collectionsPolicy.clearShownCollectionFilter()
 		},
+		// sort确认
 		on_clickSortConfirm() {
 			this.dialogSortVisible = false
 			this.datasource.clearSortCondition()
 			for (var idx in this.collectionsPolicy.sortCollections) {
-				this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
+				if(typeof(this.collectionsPolicy.sortCollections[idx]) === 'string') {
+					this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
+				}
 			}
 			this.$refs.excel.dataRefresh++
 		},
@@ -341,15 +351,25 @@ export default {
 	},
 	watch: {
 		// 首次加载触发，请求Excel数据
-		'allData.schemaArr': {
-			immediate: true,
-			handler:function(n, o) {
-				this.datasource.schema = n
-				this.datasource.cols = n
-				this.datasource.name = this.allData.datasetName
-				this.datasource.refreshData(this.$refs.excel)
-				this.descRefresh++
-			}
+		// 'allData.schemaArr': {
+		// 	immediate: true,
+		// 	handler:function(n, o) {
+		// 		this.datasource.schema = n
+		// 		this.datasource.cols = n
+		// 		this.datasource.name = this.allData.datasetName
+		// 		this.datasource.projectId = this.allData.projectId
+		// 		this.datasource.refreshData(this.$refs.excel)
+		// 		this.descRefresh++
+		// 	}
+		// },
+		'allData.schemaArr'(n,o) {
+			debugger
+			this.datasource.schema = n
+			this.datasource.cols = n
+			this.datasource.name = this.allData.datasetName
+			this.datasource.projectId = this.allData.projectId
+			this.datasource.refreshData(this.$refs.excel)
+			this.descRefresh++
 		},
 		descRefresh(n, o) {
 			let that = this
@@ -362,7 +382,7 @@ export default {
 		dialogVersionFilterVisible(n, o) {
 			let that = this
 			if (this.versionFilterPolicy.versionCandidates.length === 0) {
-				that.datasource.queryDlgDistinctCol(this, "`匹配名`").then((provinces) => {
+				that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
 					//完整的显示行列表数据
 					this.versionCandidatesShow = provinces
 					that.versionFilterPolicy.versionCandidates = provinces
@@ -408,6 +428,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
+		box-sizing: border-box;
 		.el-dialog__wrapper {
 			.el-dialog__header {
 				border-bottom: 1px solid #ccc;
@@ -686,6 +707,7 @@ export default {
 				.dlg-sort-candi-item {
 					font-size: 14px;
 					margin: 5px;
+					cursor: pointer;
 				}
 			}
 		}
