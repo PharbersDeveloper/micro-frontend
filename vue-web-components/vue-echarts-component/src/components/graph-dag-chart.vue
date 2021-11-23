@@ -6,140 +6,19 @@
 
 <script>
 import * as echarts from 'echarts'
+import PhDagDatasource from './model/datasource'
 export default {
-    name: 'dag',
     data: () => {
         return {
-            timer: null,
-            dataArr: [],
-            yearArr: []
+            name: 'dag',
+            needRefresh: 0
         }
     },
     props: {
     	datasource: {
     		type: Object,
             default: function() {
-                return {
-                    nodes: [
-                        {
-                            name: 'script1',
-                            x: 360,
-                            y: 170,
-                            category: 'code'
-                        },
-                        {
-                            name: 'script2',
-                            x: 360,
-                            y: 220,
-                            category: 'code'
-                        },
-                        {
-                            name: '数据目录1',
-                            x: 320,
-                            y: 200,
-                            category: 'file'
-                        },
-                        {
-                            name: 'script3',
-                            x: 380,
-                            y: 220,
-                            category: 'code'
-                        },
-                        {
-                            name: '数据目录2',
-                            x: 380,
-                            y: 150,
-                            category: 'file'
-                        },
-                        {
-                            name: 'script4',
-                            x: 420,
-                            y: 220,
-                            category: 'code'
-                        },
-                        {
-                            name: 'script5',
-                            x: 440,
-                            y: 200,
-                            category: 'code'
-                        },
-                        {
-                            name: '数据目录3',
-                            x: 400,
-                            y: 220,
-                            category: 'file'
-                        },
-                        {
-                            name: 'script6',
-                            x: 400,
-                            y: 160,
-                            category: 'code'
-                        },
-                        {
-                            name: 'script7',
-                            x: 400,
-                            y: 130,
-                            category: 'code'
-                        },
-                        {
-                            name: 'script8',
-                            x: 420,
-                            y: 130,
-                            category: 'code'
-                        }
-                    ],
-                    links: [
-                        {
-                            source: '数据目录0',
-                            target: 'script0'
-                        },
-                        {
-                            source: '数据目录0',
-                            target: 'script1'
-                        },
-                        {
-                            source: 'script1',
-                            target: 'script2'
-                        },
-                        {
-                            source: 'script2',
-                            target: '数据目录2'
-                        },
-                        {
-                            source: '数据目录2',
-                            target: 'script3'
-                        },
-                        {
-                            source: 'script3',
-                            target: 'script4'
-                        },
-                        {
-                            source: 'script0',
-                            target: '数据目录1'
-                        },
-                        {
-                            source: '数据目录1',
-                            target: 'script6'
-                        },
-                        {
-                            source: '数据目录1',
-                            target: 'script5'
-                        },
-                        {
-                            source: 'script6',
-                            target: 'script7'
-                        },
-                        {
-                            source: 'script7',
-                            target: 'script4'
-                        },
-                        {
-                            source: 'script4',
-                            target: 'script0'
-                        }
-                    ],
-                    title: "Basic Graph"
-                }
+                return new PhDagDatasource('1')
             }
         }
     },
@@ -156,6 +35,7 @@ export default {
             this.dag.showLoading()
             // 获取数据
             // await this.queryData()
+            await this.datasource.refreshData(this)
             this.dag.hideLoading()
             this.renderDag()
         },
@@ -236,19 +116,6 @@ export default {
             };
             // 绘制图表
             this.dag.setOption(option)
-            this.dag.on('click', function (params) {
-                //选中状态
-                that.dataArr.forEach(item => {
-                    item.itemStyle = {}
-                    if (params.dataType == 'node' && item.name === params.name) {
-                        item.itemStyle = {
-                            shadowColor: 'blue',
-                            shadowBlur: 3
-                        }
-                    }
-                })
-                that.bubbleChart.setOption(option)
-            })
         }
     },
     watch: {
