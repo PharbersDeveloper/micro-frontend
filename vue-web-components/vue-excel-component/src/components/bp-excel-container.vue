@@ -39,7 +39,9 @@
 				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel ref="excel" viewHeight="300px" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		<div class="main_container">
+			<bp-excel ref="excel" viewHeight="300px" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		</div>
 		<el-dialog
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
@@ -67,9 +69,6 @@
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="on_clickVersionFilterCancel">取消</el-button>
 				<el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
-
-				<!-- <button @click="on_clickVersionFilterCancel">Cancel</button>
-    			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button> -->
 			</span>
 		</el-dialog>
 		<el-dialog
@@ -331,12 +330,16 @@ export default {
 		}
 	},
 	watch: {
-		'allData.schemaArr': function(n, o) {
-			this.datasource.schema = n
-			this.datasource.cols = n
-			this.datasource.name = this.allData.datasetName
-			this.datasource.refreshData(this.$refs.excel)
-			this.descRefresh++
+		// 首次加载触发
+		'allData.schemaArr': {
+			immediate: true,
+			handler:function(n, o) {
+				this.datasource.schema = n
+				this.datasource.cols = n
+				this.datasource.name = this.allData.datasetName
+				this.datasource.refreshData(this.$refs.excel)
+				this.descRefresh++
+			}
 		},
 		descRefresh(n, o) {
 			let that = this
@@ -505,6 +508,8 @@ export default {
 			}
 		}
 
+		
+
 		.search-container {
 			display: flex;
 			flex-direction: row;
@@ -526,9 +531,15 @@ export default {
 				color: #57565F;
 			}
 		}
-		.excel {
-			display: inline-grid;
-			margin: 10px
+		.main_container {
+			display: flex;
+			justify-content: center;
+			.excel {
+				display: inline-grid;
+				margin: 10px;
+				overflow: auto;
+				width: 98%;
+			}
 		}
 	}
 
@@ -540,7 +551,7 @@ export default {
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			max-height: 200px;
+			max-height: 150px;
     		overflow: auto;
 			.dlg-flex-version-item {
 				font-size: 12px;
@@ -564,7 +575,7 @@ export default {
 			flex-direction: column;
 			flex-wrap: nowrap;
 			overflow: auto;
-			max-height: 300px;
+			max-height:250px;
 			.dlg-flex-version-item {
 				margin: 5px;
 				cursor: pointer;

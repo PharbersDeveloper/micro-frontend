@@ -11,7 +11,7 @@ export default class PhContainerDataSource {
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
-		this.debugToken = "6c92396aad2ff95bffa1a3b9227a4c7d0df75f15b2a3b9bbab8d972999be29f6"
+		this.debugToken = "2e13655c70f7931daa11b9fa800d6147cc55056b57de237b615a51a15c6e7cec"
 	}
 
 	defaultAdapter(row, cols) {
@@ -114,7 +114,7 @@ export default class PhContainerDataSource {
 
 			return sql_str
 		}
-		const url = "https://api.pharbers.com/phchproxyquery"
+		const url = "https://apiv2.pharbers.com/phdadatasource"
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildDistinctColSql(),
