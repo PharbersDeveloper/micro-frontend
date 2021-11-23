@@ -130,9 +130,8 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-
-				<button @click="dialogSortVisible = false">取消</button>
-    			<button type="primary" @click="on_clickSortConfirm">确认</button>
+				<el-button @click="dialogSortVisible = false">取消</el-button>
+				<el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
 			</span>
 		</el-dialog>
 
@@ -363,7 +362,6 @@ export default {
 		// 	}
 		// },
 		'allData.schemaArr'(n,o) {
-			debugger
 			this.datasource.schema = n
 			this.datasource.cols = n
 			this.datasource.name = this.allData.datasetName

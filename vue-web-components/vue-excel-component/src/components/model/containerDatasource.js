@@ -41,16 +41,18 @@ export default class PhContainerDataSource {
 			}
 
 			// sorts
-			sql_str = sql_str + " ORDER BY `" 
-			let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
-			for (const key in ele.datasource.sort) {
-				if(lastSort == key) {
-					sql_str = sql_str + key +'`'
-				} else {
-					sql_str = sql_str + key +'`,'
-				}
-				if (ele.datasource.sort[key] < 0) {
-					sql_str = sql_str + " desc "
+			if(ele.datasource.sort && Object.keys(ele.datasource.sort).length !== 0) {
+				sql_str = sql_str + " ORDER BY `" 
+				let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
+				for (const key in ele.datasource.sort) {
+					if(lastSort == key) {
+						sql_str = sql_str + key +'`'
+					} else {
+						sql_str = sql_str + key +'`,`'
+					}
+					if (ele.datasource.sort[key] < 0) {
+						sql_str = sql_str + " desc "
+					}
 				}
 			}
 
