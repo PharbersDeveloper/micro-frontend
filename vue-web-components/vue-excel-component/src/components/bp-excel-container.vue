@@ -70,14 +70,14 @@
 		<el-dialog
 				title="显示列"
 				:visible.sync="dialogCollectionVisible"
-				@close="dialogCollectionVisible"
+				@close="on_clickCollectionCancel"
 				width="30%">
 
 			<div class="dlg-col-container">
 				<div class="dlg-col-search-bar">
 					<div class="dlg-col-search-input">
-						<el-input placeholder="搜索" v-model="searchList" class="search_row" @input="on_collectionSearchBtnClicked(searchList)"></el-input>
-						<img :src="search_row" class="search_row_icon" alt="">
+						<el-input placeholder="搜索" ref="colSearch" v-model="searchList" class="search_list" @input="on_collectionSearchBtnClicked(searchList)"></el-input>
+						<img :src="search_row" class="search_list_icon" alt="">
 					</div>
 				</div>
 				<div class="dlg-col-cols">
@@ -86,14 +86,14 @@
 					<div class="dlg-version-spliter"></div>
 					<div style="margin: 15px 0;"></div>
 					<el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
-						<el-checkbox v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
+						<el-checkbox class="checkbox" v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
 					</el-checkbox-group>
 				</div>
 			</div>
 
 			<span slot="footer" class="dialog-footer">
-				<button @click="dialogCollectionVisible = false">取消</button>
-    			<button type="primary" @click="on_clickCollectionConfirm">确认</button>
+				<el-button @click="on_clickCollectionCancel">取消</el-button>
+				<el-button type="primary" @click="on_clickCollectionConfirm">确认</el-button>
 			</span>
 		</el-dialog>
 		<el-dialog
@@ -102,16 +102,21 @@
 				@close="dialogSortVisible"
 				width="30%">
 
-
 			<div class="dlg-sort-container">
 				<div class="dlg-sort-nav">
-					<span>可选列</span>
-					<span>已选列</span>
-					<button @click="on_clearSortCollections">全部清除</button>
-				</div>
-				<div class="dlg-sort-filter">
-					<input type="search" ref="colFilter">
-					<button class="search-submit" @click="search">Search</button>
+					<div class="dlg-sort-nav-left">
+						<span class="title">可选列</span>
+						<el-input placeholder="搜索" v-model="searchSort" class="search_list" @input="search(searchSort)"></el-input>
+						<img :src="search_row" class="search_list_icon" alt="">
+						<!-- <div class="dlg-sort-filter">
+							<input type="search" ref="colFilter">
+							<button class="search-submit" @click="search">Search</button>
+						</div> -->
+					</div>
+					<div class="dlg-sort-nav-right">
+						<span>已选列</span>
+						<button @click="on_clearSortCollections">全部清除</button>
+					</div>
 				</div>
 				<div class="dlg-sort-candi-container">
 					<div class="dlg-sort-candi-items dlg-panel-left">
@@ -125,6 +130,7 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
+
 				<button @click="dialogSortVisible = false">取消</button>
     			<button type="primary" @click="on_clickSortConfirm">确认</button>
 			</span>
@@ -175,10 +181,10 @@ import ElInput from 'element-ui/packages/input/index'
 export default {
 	data() {
 		return {
-			dialogVersionFilterVisible: false,
-			dialogSortVisible: false,
-			dialogCollectionVisible: false,
-			dialogDownloadVisible: false,
+			dialogVersionFilterVisible: false, //显示行
+			dialogSortVisible: false, //显示排序
+			dialogCollectionVisible: false, //显示列
+			dialogDownloadVisible: false, //显示下载
 			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
 			showSelectOptionParam: false,
 			closeTosts: false,
@@ -191,7 +197,8 @@ export default {
 			searchRow: '',
 			searchList: '',
 			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
-			versionCandidatesShow: []
+			versionCandidatesShow: [],
+			searchSort: ''
 		}
 	},
 	components: {
@@ -248,7 +255,9 @@ export default {
 		}
 	},
 	methods: {
-		search() {},
+		search(data) {
+			console.log(data)
+		},
 		getCookie(name) {
 			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 			if (arr = document.cookie.match(reg))
@@ -262,11 +271,12 @@ export default {
 		showSelectOption() {
 			this.showSelectOptionParam = true
 		},
+		//显示行取消
 		on_clickVersionFilterCancel() {
 			this.dialogVersionFilterVisible = false
-			this.versionFilterPolicy.selectVersionTags = []
+			// this.versionFilterPolicy.selectVersionTags = []
 		},
-		// 显示行弹框确认
+		// 显示行确认
 		on_clickVersionFilterConfirm() {
 			this.dialogVersionFilterVisible = false
 			const condi = this.versionFilterPolicy.selectVersionTags
@@ -281,11 +291,15 @@ export default {
 			this.datasource.pushFilterCondition("version", condi_str)
 			this.$refs.excel.dataRefresh++
 		},
-		//选择列
+		//选择列确认
 		on_clickCollectionConfirm() {
 			this.dialogCollectionVisible = false
 			this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
 			this.$refs.excel.dataRefresh++
+		},
+		//选择列取消
+		on_clickCollectionCancel() {
+			this.dialogCollectionVisible = false
 		},
 		on_collectionCheckAllChange(val) {
 			this.collectionsPolicy.checkAllCollections(val)
@@ -355,6 +369,7 @@ export default {
 				})
 			}
 		},
+		// 显示列请求接口
 		dialogCollectionVisible(n, o) {
 			if (this.collectionsPolicy.collections.length === 0)
 				this.collectionsPolicy.resetCollections(this.datasource.schema)
@@ -557,8 +572,8 @@ export default {
 				border: 1px solid #ccc;
 				display: flex;
 				align-items: center;
-				margin: 5px;
-				padding: 0 4px;
+				padding: 5px;
+				border-bottom: 1px solid #ccc;
 				.close_icon {
 					width: 16px;
 					height: 16px;
@@ -576,8 +591,9 @@ export default {
 			overflow: auto;
 			max-height:250px;
 			.dlg-flex-version-item {
-				margin: 5px;
 				cursor: pointer;
+				padding: 5px;
+				border-bottom: 1px solid #ccc;
 			}
 		}
 	}
@@ -585,12 +601,29 @@ export default {
 	.dlg-collection-list {
 		display: flex;
 		flex-direction: column;
+		max-height: 200px;
+		overflow: auto;
+		.checkbox {
+			border-bottom: 1px solid #ccc;
+			padding: 5px
+		}
 	}
 
 	.dlg-version-spliter {
 		height: 1px;
 		background-color: #2c3e50;
 		margin: 20px 0;
+	}
+	.search_list {
+		input.el-input__inner {
+			padding-left: 40px;
+		}
+	}
+	.search_list_icon {
+		width: 20px;
+		position: relative;
+		top: -30px;
+		left: 10px;
 	}
 	.search_row {
 		margin-bottom: 20px;
@@ -612,6 +645,25 @@ export default {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
+			.dlg-sort-nav-left {
+				width: 50%;
+				.title {
+					display: block;
+					margin-bottom: 10px;
+				}
+			}
+			.dlg-sort-nav-right {
+				width: 50%;
+				display: flex;
+				justify-content: space-between;
+				button {
+					height: 20px;
+					border: none;
+					background: none;
+					color: #409eff;
+					cursor: pointer;
+				}
+			}
 		}
 
 		.dlg-sort-filter {
@@ -622,13 +674,15 @@ export default {
 		.dlg-sort-candi-container {
 			display: flex;
 			flex-direction: row;
-
+			.dlg-panel-left {
+				max-height: 250px;
+    			overflow: auto;
+			}
 			.dlg-sort-candi-items{
 				display: flex;
 				flex-direction: column;
-				border: 2px solid gray;
+				border: 1px solid #ccc;
 				width: 50%;
-
 				.dlg-sort-candi-item {
 					font-size: 14px;
 					margin: 5px;

@@ -37,7 +37,7 @@ export default class PhDlgCollectionController {
 	checkCollectionsItem(val) {
 		let checkedCount = val.length;
 		this.checkAll = checkedCount === this.shownCollections.length;
-		this.isIndeterminate = checkedCount > 0 && checkedCount < this.shownCollections.length;
+		this.isIndeterminate = checkedCount > 0 && checkedCount < this.collections.length;
 	}
 
 	filterCollectionsByChar(val) {
