@@ -12,9 +12,6 @@
 			<div class="title-left">
 				<div class="title-span">
 					<span>{{title}}</span>
-					<!-- <span class="title-link">
-						Configure Sample
-					</span> -->
 				</div>
 				<div class="disc-span">
 					{{totalNum}} rows, {{totalCols}} cols
@@ -47,21 +44,20 @@
 				:visible.sync="dialogVersionFilterVisible"
 				width="450px"
 				height="600px"
-				:before-close="on_clickVersionFilterConfirm">
+				@close="on_clickVersionFilterCancel">
 
 			<div class="dlg-version-container">
 				<div class="dlg-flex-version" >
 					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
 						<span>{{item}}</span>
 						<img :src="close_icon" class="close_icon" @click="versionFilterPolicy.removeSelectVersionTags(item)" alt="">
-						<!-- <button @click="versionFilterPolicy.removeSelectVersionTags(item)">X</button> -->
 					</div>
 				</div>
 				<div class="dlg-version-spliter"></div>
 				<el-input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row"></el-input>
 				<img :src="search_row" class="search_row_icon" alt="">
 				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.versionCandidates" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidatesShow" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
 						<span>{{item}}</span>
 					</div>
 				</div>
@@ -74,15 +70,14 @@
 		<el-dialog
 				title="显示列"
 				:visible.sync="dialogCollectionVisible"
-				width="30%"
-				:before-close="on_clickCollectionConfirm">
+				@close="dialogCollectionVisible"
+				width="30%">
 
 			<div class="dlg-col-container">
 				<div class="dlg-col-search-bar">
 					<div class="dlg-col-search-input">
-						<input type="search" ref="colSearch" name="q"
-							   aria-label="Search through site content">
-						<button class="search-submit" @click="on_collectionSearchBtnClicked">Search</button>
+						<el-input placeholder="搜索" v-model="searchList" class="search_row" @input="on_collectionSearchBtnClicked(searchList)"></el-input>
+						<img :src="search_row" class="search_row_icon" alt="">
 					</div>
 				</div>
 				<div class="dlg-col-cols">
@@ -104,8 +99,8 @@
 		<el-dialog
 				title="排序列"
 				:visible.sync="dialogSortVisible"
-				width="30%"
-				:before-close="on_clickSortConfirm">
+				@close="dialogSortVisible"
+				width="30%">
 
 
 			<div class="dlg-sort-container">
@@ -138,8 +133,8 @@
 		<el-dialog
 				title="下载"
 				:visible.sync="dialogDownloadVisible"
-				width="600px"
-				:before-close="on_clickDownloadCancel">
+				@close="on_clickDownloadConfirm"
+				width="600px">
 
 			<div class="dlg-download-container">
 				<table border="0">
@@ -194,7 +189,9 @@ export default {
 			dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
 			close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
 			searchRow: '',
-			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg"
+			searchList: '',
+			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+			versionCandidatesShow: []
 		}
 	},
 	components: {
@@ -267,11 +264,13 @@ export default {
 		},
 		on_clickVersionFilterCancel() {
 			this.dialogVersionFilterVisible = false
+			this.versionFilterPolicy.selectVersionTags = []
 		},
+		// 显示行弹框确认
 		on_clickVersionFilterConfirm() {
 			this.dialogVersionFilterVisible = false
 			const condi = this.versionFilterPolicy.selectVersionTags
-			let condi_str = "Province in ["
+			let condi_str = "`匹配名` in ["
 			for (var idx in condi) {
 				if (idx > 0)
 					condi_str = condi_str + ","
@@ -294,10 +293,8 @@ export default {
 		on_handleCheckedColsChange(val) {
 			this.collectionsPolicy.checkCollectionsItem(val)
 		},
-		on_collectionSearchBtnClicked() {
-			const v = this.$refs.colSearch.value
-			if (v && v.length > 0)
-				this.collectionsPolicy.filterCollectionsByChar(v)
+		on_collectionSearchBtnClicked(data) {
+			this.collectionsPolicy.filterCollectionsByChar(data)
 		},
 		on_clickSortSelectCandi(col) {
 			this.collectionsPolicy.popSortCols(col)
@@ -325,12 +322,11 @@ export default {
 			// TODO
 		},
 		searchRowInput(data) {
-			console.log(data)
-			// this.versionFilterPolicy.versionCandidates
+			this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
 		}
 	},
 	watch: {
-		// 首次加载触发
+		// 首次加载触发，请求Excel数据
 		'allData.schemaArr': {
 			immediate: true,
 			handler:function(n, o) {
@@ -348,10 +344,13 @@ export default {
 			})
 			that.totalCols = that.datasource.schema.length
 		},
+		//显示行请求接口
 		dialogVersionFilterVisible(n, o) {
 			let that = this
 			if (this.versionFilterPolicy.versionCandidates.length === 0) {
-				that.datasource.queryDlgDistinctCol(this, "Province").then((provinces) => {
+				that.datasource.queryDlgDistinctCol(this, "`匹配名`").then((provinces) => {
+					//完整的显示行列表数据
+					this.versionCandidatesShow = provinces
 					that.versionFilterPolicy.versionCandidates = provinces
 				})
 			}

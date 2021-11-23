@@ -106,10 +106,11 @@ export default class PhContainerDataSource {
 		return fetch(url, options)
 	}
 
+	//显示行拼接sql
 	buildDistinctColQuery(ele, col) {
 		function buildDistinctColSql() {
 			let sql_str = "SELECT DISTINCT " + col
-			sql_str = sql_str + " FROM " + ele.datasource.name
+			sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
 			sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
 
 			return sql_str
@@ -133,17 +134,19 @@ export default class PhContainerDataSource {
 	}
 
 	refreshData(ele) {
-		ele.datasource.buildQuery(ele)
-			.then((response) => response.json())
-			.then((response) => {
-				const tmp = []
-				for (var idx in response) {
-					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
-				}
-				ele.datasource.data = tmp //response.map(ele.datasource.adapter)
-				ele.cur_page = 0
-				ele.needRefresh++
-			})
+		if(ele) {
+			ele.datasource.buildQuery(ele)
+				.then((response) => response.json())
+				.then((response) => {
+					const tmp = []
+					for (var idx in response) {
+						tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+					}
+					ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+					ele.cur_page = 0
+					ele.needRefresh++
+				})
+		}
 	}
 
 	appendData(ele) {
@@ -173,7 +176,7 @@ export default class PhContainerDataSource {
 		return ele.datasource.buildDistinctColQuery(ele, row)
 			.then((response) => response.json())
 			.then((response) => {
-				return response.map(x => x["Province"])
+				return response.map(x => x["`匹配名`"])
 			})
 	}
 

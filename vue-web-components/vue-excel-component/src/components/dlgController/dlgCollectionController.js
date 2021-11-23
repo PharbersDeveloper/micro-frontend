@@ -42,9 +42,11 @@ export default class PhDlgCollectionController {
 
 	filterCollectionsByChar(val) {
 		if (val.length > 0)
-			this.shownCollections = this.collections.filter(x => x.startsWith(val))
-		else
+			// this.shownCollections = this.collections.filter(x => x.startsWith(val))
+			this.shownCollections = this.collections.filter(x => x.indexOf(val) > -1)
+		else {
 			this.shownCollections = this.collections
+		}
 	}
 
 	pushSortCols(val) {
