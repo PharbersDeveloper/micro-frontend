@@ -19,10 +19,10 @@ export default class ExcelHandlerComponent extends Component {
 				let uri = ''
                 if(ltp.name === "advancedMapping") {
 					uri = '/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId
-				} else if(param.name === "linkToProject" || param.name == "project") {
-					uri = `/projects/`+ param.projectId
-				} else if (param.name === "datasets") {
-					uri = '/dataset-lst?projectName=' + param.projectName + '&projectId=' + param.projectId
+				} else if(ltp.name === "linkToProject" || ltp.name == "project") {
+					uri = `/projects/`+ ltp.projectId
+				} else if (ltp.name === "datasets") {
+					uri = '/dataset-lst?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
 				}
                 this.router.transitionTo( uri )
                 break
