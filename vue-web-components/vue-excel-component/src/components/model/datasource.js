@@ -5,6 +5,7 @@ export default class PhDataSource {
 		this.data = []
 		this.sort = {}
 		this.filter = {}
+		this.projectId = ''
 		this.name = "prod_clean_v2"
 		this.batch_size = 200
 		this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]

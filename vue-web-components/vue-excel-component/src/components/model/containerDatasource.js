@@ -4,6 +4,7 @@ export default class PhContainerDataSource {
 		this.id = id
 		this.data = []
 		this.sort = {}
+		this.projectId = ''
 		this.filter = {}
 		this.name = "prod_clean_v2"
 		this.batch_size = 200
@@ -11,7 +12,7 @@ export default class PhContainerDataSource {
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
-		this.debugToken = "6c92396aad2ff95bffa1a3b9227a4c7d0df75f15b2a3b9bbab8d972999be29f6"
+		this.debugToken = "9d37f9c717440d831d29be4e96bd721e34d0204797538f78285e4964ecfcf01d"
 	}
 
 	defaultAdapter(row, cols) {
@@ -27,7 +28,7 @@ export default class PhContainerDataSource {
 			let sql_str = "SELECT "
 			let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
 			// sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
-			sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name +'`'
+			sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -40,10 +41,18 @@ export default class PhContainerDataSource {
 			}
 
 			// sorts
-			for (const key in ele.datasource.sort) {
-				sql_str = sql_str + " ORDER BY " + key
-				if (ele.datasource.sort[key] < 0) {
-					sql_str = sql_str + " desc "
+			if(ele.datasource.sort && Object.keys(ele.datasource.sort).length !== 0) {
+				sql_str = sql_str + " ORDER BY `" 
+				let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
+				for (const key in ele.datasource.sort) {
+					if(lastSort == key) {
+						sql_str = sql_str + key +'`'
+					} else {
+						sql_str = sql_str + key +'`,`'
+					}
+					if (ele.datasource.sort[key] < 0) {
+						sql_str = sql_str + " desc "
+					}
 				}
 			}
 
@@ -74,7 +83,7 @@ export default class PhContainerDataSource {
 		function buildQueryCountString() {
 			let sql_str = "SELECT count(*)"
 
-			sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+			sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -106,15 +115,16 @@ export default class PhContainerDataSource {
 		return fetch(url, options)
 	}
 
+	//显示行拼接sql
 	buildDistinctColQuery(ele, col) {
 		function buildDistinctColSql() {
 			let sql_str = "SELECT DISTINCT " + col
-			sql_str = sql_str + " FROM " + ele.datasource.name
+			sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
 			sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
 
 			return sql_str
 		}
-		const url = "https://api.pharbers.com/phchproxyquery"
+		const url = "https://apiv2.pharbers.com/phdadatasource"
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildDistinctColSql(),
@@ -133,17 +143,19 @@ export default class PhContainerDataSource {
 	}
 
 	refreshData(ele) {
-		ele.datasource.buildQuery(ele)
-			.then((response) => response.json())
-			.then((response) => {
-				const tmp = []
-				for (var idx in response) {
-					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
-				}
-				ele.datasource.data = tmp //response.map(ele.datasource.adapter)
-				ele.cur_page = 0
-				ele.needRefresh++
-			})
+		if(ele) {
+			ele.datasource.buildQuery(ele)
+				.then((response) => response.json())
+				.then((response) => {
+					const tmp = []
+					for (var idx in response) {
+						tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+					}
+					ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+					ele.cur_page = 0
+					ele.needRefresh++
+				})
+		}
 	}
 
 	appendData(ele) {
@@ -173,7 +185,7 @@ export default class PhContainerDataSource {
 		return ele.datasource.buildDistinctColQuery(ele, row)
 			.then((response) => response.json())
 			.then((response) => {
-				return response.map(x => x["Province"])
+				return response.map(x => x["`version`"])
 			})
 	}
 

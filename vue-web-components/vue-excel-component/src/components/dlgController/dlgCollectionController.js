@@ -6,12 +6,13 @@ export default class PhDlgCollectionController {
 		this.selectCollections = []
 		this.sortCollections = []
 		this.isIndeterminate = false //check-all的不确定状态
-		this.checkAll = false
+		this.checkAll = true
 	}
 
 	resetCollections(cols) {
 		this.collections = cols
 		this.shownCollections = this.collections
+		this.selectCollections = this.collections
 	}
 
 	resetSortCollections() {
@@ -37,14 +38,16 @@ export default class PhDlgCollectionController {
 	checkCollectionsItem(val) {
 		let checkedCount = val.length;
 		this.checkAll = checkedCount === this.shownCollections.length;
-		this.isIndeterminate = checkedCount > 0 && checkedCount < this.shownCollections.length;
+		this.isIndeterminate = checkedCount > 0 && checkedCount < this.collections.length;
 	}
 
 	filterCollectionsByChar(val) {
 		if (val.length > 0)
-			this.shownCollections = this.collections.filter(x => x.startsWith(val))
-		else
+			// this.shownCollections = this.collections.filter(x => x.startsWith(val))
+			this.shownCollections = this.collections.filter(x => x.indexOf(val) > -1)
+		else {
 			this.shownCollections = this.collections
+		}
 	}
 
 	pushSortCols(val) {

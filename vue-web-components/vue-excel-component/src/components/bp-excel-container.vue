@@ -12,9 +12,6 @@
 			<div class="title-left">
 				<div class="title-span">
 					<span>{{title}}</span>
-					<!-- <span class="title-link">
-						Configure Sample
-					</span> -->
 				</div>
 				<div class="disc-span">
 					{{totalNum}} rows, {{totalCols}} cols
@@ -39,27 +36,28 @@
 				<span>{{matchNum}} matching rows</span>
 			</div>
 		</div>
-		<bp-excel ref="excel" viewHeight="300px" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		<div class="main_container">
+			<bp-excel ref="excel" viewHeight="300px" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+		</div>
 		<el-dialog
 				title="显示行"
 				:visible.sync="dialogVersionFilterVisible"
 				width="450px"
 				height="600px"
-				:before-close="on_clickVersionFilterConfirm">
+				@close="on_clickVersionFilterCancel">
 
 			<div class="dlg-version-container">
 				<div class="dlg-flex-version" >
 					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
 						<span>{{item}}</span>
 						<img :src="close_icon" class="close_icon" @click="versionFilterPolicy.removeSelectVersionTags(item)" alt="">
-						<!-- <button @click="versionFilterPolicy.removeSelectVersionTags(item)">X</button> -->
 					</div>
 				</div>
 				<div class="dlg-version-spliter"></div>
 				<el-input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row"></el-input>
 				<img :src="search_row" class="search_row_icon" alt="">
 				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.versionCandidates" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
+					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidatesShow" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
 						<span>{{item}}</span>
 					</div>
 				</div>
@@ -67,23 +65,19 @@
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="on_clickVersionFilterCancel">取消</el-button>
 				<el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
-
-				<!-- <button @click="on_clickVersionFilterCancel">Cancel</button>
-    			<button type="primary" @click="on_clickVersionFilterConfirm">Confirm</button> -->
 			</span>
 		</el-dialog>
 		<el-dialog
 				title="显示列"
 				:visible.sync="dialogCollectionVisible"
-				width="30%"
-				:before-close="on_clickCollectionConfirm">
+				@close="on_clickCollectionCancel"
+				width="30%">
 
 			<div class="dlg-col-container">
 				<div class="dlg-col-search-bar">
 					<div class="dlg-col-search-input">
-						<input type="search" ref="colSearch" name="q"
-							   aria-label="Search through site content">
-						<button class="search-submit" @click="on_collectionSearchBtnClicked">Search</button>
+						<el-input placeholder="搜索" ref="colSearch" v-model="searchList" class="search_list" @input="on_collectionSearchBtnClicked(searchList)"></el-input>
+						<img :src="search_row" class="search_list_icon" alt="">
 					</div>
 				</div>
 				<div class="dlg-col-cols">
@@ -92,32 +86,37 @@
 					<div class="dlg-version-spliter"></div>
 					<div style="margin: 15px 0;"></div>
 					<el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
-						<el-checkbox v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
+						<el-checkbox class="checkbox" v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
 					</el-checkbox-group>
 				</div>
 			</div>
 
 			<span slot="footer" class="dialog-footer">
-				<button @click="dialogCollectionVisible = false">取消</button>
-    			<button type="primary" @click="on_clickCollectionConfirm">确认</button>
+				<el-button @click="on_clickCollectionCancel">取消</el-button>
+				<el-button type="primary" @click="on_clickCollectionConfirm">确认</el-button>
 			</span>
 		</el-dialog>
 		<el-dialog
 				title="排序列"
 				:visible.sync="dialogSortVisible"
-				width="30%"
-				:before-close="on_clickSortConfirm">
-
+				@close="dialogSortVisible"
+				width="30%">
 
 			<div class="dlg-sort-container">
 				<div class="dlg-sort-nav">
-					<span>可选列</span>
-					<span>已选列</span>
-					<button @click="on_clearSortCollections">全部清除</button>
-				</div>
-				<div class="dlg-sort-filter">
-					<input type="search" ref="colFilter">
-					<button class="search-submit" @click="search">Search</button>
+					<div class="dlg-sort-nav-left">
+						<span class="title">可选列</span>
+						<el-input placeholder="搜索" v-model="searchSort" class="search_list" @input="search(searchSort)"></el-input>
+						<img :src="search_row" class="search_list_icon" alt="">
+						<!-- <div class="dlg-sort-filter">
+							<input type="search" ref="colFilter">
+							<button class="search-submit" @click="search">Search</button>
+						</div> -->
+					</div>
+					<div class="dlg-sort-nav-right">
+						<span>已选列</span>
+						<button @click="on_clearSortCollections">全部清除</button>
+					</div>
 				</div>
 				<div class="dlg-sort-candi-container">
 					<div class="dlg-sort-candi-items dlg-panel-left">
@@ -131,16 +130,16 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<button @click="dialogSortVisible = false">取消</button>
-    			<button type="primary" @click="on_clickSortConfirm">确认</button>
+				<el-button @click="on_clickSortCancel">取消</el-button>
+				<el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
 			</span>
 		</el-dialog>
 
 		<el-dialog
 				title="下载"
 				:visible.sync="dialogDownloadVisible"
-				width="600px"
-				:before-close="on_clickDownloadCancel">
+				@close="on_clickDownloadConfirm"
+				width="600px">
 
 			<div class="dlg-download-container">
 				<table border="0">
@@ -181,10 +180,10 @@ import ElInput from 'element-ui/packages/input/index'
 export default {
 	data() {
 		return {
-			dialogVersionFilterVisible: false,
-			dialogSortVisible: false,
-			dialogCollectionVisible: false,
-			dialogDownloadVisible: false,
+			dialogVersionFilterVisible: false, //显示行
+			dialogSortVisible: false, //显示排序
+			dialogCollectionVisible: false, //显示列
+			dialogDownloadVisible: false, //显示下载
 			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
 			showSelectOptionParam: false,
 			closeTosts: false,
@@ -195,7 +194,10 @@ export default {
 			dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
 			close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
 			searchRow: '',
-			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg"
+			searchList: '',
+			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+			versionCandidatesShow: [],
+			searchSort: ''
 		}
 	},
 	components: {
@@ -237,6 +239,7 @@ export default {
 				return {
 					projectName: 'test',
 					datasetName: 'dataset',
+					projectId: '',
 					schemaArr: []
 				}
 			}
@@ -252,7 +255,9 @@ export default {
 		}
 	},
 	methods: {
-		search() {},
+		search(data) {
+			console.log(data)
+		},
 		getCookie(name) {
 			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 			if (arr = document.cookie.match(reg))
@@ -266,28 +271,46 @@ export default {
 		showSelectOption() {
 			this.showSelectOptionParam = true
 		},
+		//显示行取消
 		on_clickVersionFilterCancel() {
 			this.dialogVersionFilterVisible = false
+			this.searchRow = ""
+			// this.versionFilterPolicy.selectVersionTags = []
 		},
+		// 显示行确认
 		on_clickVersionFilterConfirm() {
+			this.searchRow = ""
 			this.dialogVersionFilterVisible = false
 			const condi = this.versionFilterPolicy.selectVersionTags
-			let condi_str = "Province in ["
-			for (var idx in condi) {
-				if (idx > 0)
-					condi_str = condi_str + ","
-
-				condi_str = condi_str + "'" + condi[idx] + "'"
+			if(condi.length > 0) {
+				let condi_str = "`version` in ["
+				for (var idx in condi) {
+					console.log(idx)
+					if (idx > 0) {
+						condi_str = condi_str + ","
+					}
+					console.log(condi[idx])
+					if(typeof(condi[idx]) === 'string') {
+						condi_str = condi_str + "'" + condi[idx] + "'"
+					}
+					console.log(condi_str)
+				}
+				condi_str = condi_str + "]"
+				this.datasource.pushFilterCondition("version", condi_str)
+				this.$refs.excel.dataRefresh++
 			}
-			condi_str = condi_str + "]"
-			this.datasource.pushFilterCondition("version", condi_str)
-			this.$refs.excel.dataRefresh++
 		},
-		//选择列
+		//选择列确认
 		on_clickCollectionConfirm() {
 			this.dialogCollectionVisible = false
 			this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
 			this.$refs.excel.dataRefresh++
+			this.searchList = ""
+		},
+		//选择列取消
+		on_clickCollectionCancel() {
+			this.dialogCollectionVisible = false
+			this.searchList = ""
 		},
 		on_collectionCheckAllChange(val) {
 			this.collectionsPolicy.checkAllCollections(val)
@@ -295,10 +318,8 @@ export default {
 		on_handleCheckedColsChange(val) {
 			this.collectionsPolicy.checkCollectionsItem(val)
 		},
-		on_collectionSearchBtnClicked() {
-			const v = this.$refs.colSearch.value
-			if (v && v.length > 0)
-				this.collectionsPolicy.filterCollectionsByChar(v)
+		on_collectionSearchBtnClicked(data) {
+			this.collectionsPolicy.filterCollectionsByChar(data)
 		},
 		on_clickSortSelectCandi(col) {
 			this.collectionsPolicy.popSortCols(col)
@@ -310,11 +331,20 @@ export default {
 			this.collectionsPolicy.sortCollections = []
 			this.collectionsPolicy.clearShownCollectionFilter()
 		},
+		//sort取消
+		on_clickSortCancel() {
+			this.dialogSortVisible = false
+			this.searchSort = ""
+		},
+		// sort确认
 		on_clickSortConfirm() {
+			this.searchSort = ""
 			this.dialogSortVisible = false
 			this.datasource.clearSortCondition()
 			for (var idx in this.collectionsPolicy.sortCollections) {
-				this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
+				if(typeof(this.collectionsPolicy.sortCollections[idx]) === 'string') {
+					this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
+				}
 			}
 			this.$refs.excel.dataRefresh++
 		},
@@ -326,18 +356,30 @@ export default {
 			// TODO
 		},
 		searchRowInput(data) {
-			console.log(data)
-			// this.versionFilterPolicy.versionCandidates
+			this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
 		}
 	},
 	watch: {
-		'allData.schemaArr': function(n, o) {
-			this.datasource.schema = n
-			this.datasource.cols = n
-			this.datasource.name = this.allData.datasetName
-			this.datasource.refreshData(this.$refs.excel)
-			this.descRefresh++
+		// 首次加载触发，请求Excel数据
+		'allData.schemaArr': {
+			immediate: true,
+			handler:function(n, o) {
+				this.datasource.schema = n
+				this.datasource.cols = n
+				this.datasource.name = this.allData.datasetName
+				this.datasource.projectId = this.allData.projectId
+				this.datasource.refreshData(this.$refs.excel)
+				this.descRefresh++
+			}
 		},
+		// 'allData.schemaArr'(n,o) {
+		// 	this.datasource.schema = n
+		// 	this.datasource.cols = n
+		// 	this.datasource.name = this.allData.datasetName
+		// 	this.datasource.projectId = this.allData.projectId
+		// 	this.datasource.refreshData(this.$refs.excel)
+		// 	this.descRefresh++
+		// },
 		descRefresh(n, o) {
 			let that = this
 			this.datasource.queryTotalCount(this).then((count) => {
@@ -345,14 +387,18 @@ export default {
 			})
 			that.totalCols = that.datasource.schema.length
 		},
+		//显示行请求接口
 		dialogVersionFilterVisible(n, o) {
 			let that = this
-			if (this.versionFilterPolicy.versionCandidates.length === 0) {
-				that.datasource.queryDlgDistinctCol(this, "Province").then((provinces) => {
+			if (this.versionCandidatesShow.length === 0) {
+				that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
+					//完整的显示行列表数据
+					this.versionCandidatesShow = provinces
 					that.versionFilterPolicy.versionCandidates = provinces
 				})
 			}
 		},
+		// 显示列请求接口
 		dialogCollectionVisible(n, o) {
 			if (this.collectionsPolicy.collections.length === 0)
 				this.collectionsPolicy.resetCollections(this.datasource.schema)
@@ -384,17 +430,21 @@ export default {
 		font-weight: 400;
 		font-style: normal;
 	}
+	.el-dialog__wrapper {
+		background: rgba(0, 0, 0, 0.31);
+	}
 	.ec-container {
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
+		box-sizing: border-box;
 		.el-dialog__wrapper {
 			.el-dialog__header {
 				border-bottom: 1px solid #ccc;
 			}
 		}
 		.header {
-			width: 100vw;
+			// width: 100vw;
 			height: 40px;
 			background: #222;
 			color: #fff;
@@ -502,6 +552,8 @@ export default {
 			}
 		}
 
+		
+
 		.search-container {
 			display: flex;
 			flex-direction: row;
@@ -523,9 +575,15 @@ export default {
 				color: #57565F;
 			}
 		}
-		.excel {
-			display: inline-grid;
-			margin: 10px
+		.main_container {
+			display: flex;
+			justify-content: center;
+			.excel {
+				display: inline-grid;
+				margin: 10px;
+				overflow: auto;
+				width: 98%;
+			}
 		}
 	}
 
@@ -537,15 +595,15 @@ export default {
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			max-height: 200px;
+			max-height: 150px;
     		overflow: auto;
 			.dlg-flex-version-item {
 				font-size: 12px;
 				border: 1px solid #ccc;
 				display: flex;
 				align-items: center;
-				margin: 5px;
-				padding: 0 4px;
+				padding: 5px;
+				border-bottom: 1px solid #ccc;
 				.close_icon {
 					width: 16px;
 					height: 16px;
@@ -561,10 +619,11 @@ export default {
 			flex-direction: column;
 			flex-wrap: nowrap;
 			overflow: auto;
-			max-height: 300px;
+			max-height:250px;
 			.dlg-flex-version-item {
-				margin: 5px;
 				cursor: pointer;
+				padding: 5px;
+				border-bottom: 1px solid #ccc;
 			}
 		}
 	}
@@ -572,12 +631,29 @@ export default {
 	.dlg-collection-list {
 		display: flex;
 		flex-direction: column;
+		max-height: 200px;
+		overflow: auto;
+		.checkbox {
+			border-bottom: 1px solid #ccc;
+			padding: 5px
+		}
 	}
 
 	.dlg-version-spliter {
 		height: 1px;
 		background-color: #2c3e50;
 		margin: 20px 0;
+	}
+	.search_list {
+		input.el-input__inner {
+			padding-left: 40px;
+		}
+	}
+	.search_list_icon {
+		width: 20px;
+		position: relative;
+		top: -30px;
+		left: 10px;
 	}
 	.search_row {
 		margin-bottom: 20px;
@@ -599,6 +675,25 @@ export default {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
+			.dlg-sort-nav-left {
+				width: 50%;
+				.title {
+					display: block;
+					margin-bottom: 10px;
+				}
+			}
+			.dlg-sort-nav-right {
+				width: 50%;
+				display: flex;
+				justify-content: space-between;
+				button {
+					height: 20px;
+					border: none;
+					background: none;
+					color: #409eff;
+					cursor: pointer;
+				}
+			}
 		}
 
 		.dlg-sort-filter {
@@ -609,16 +704,19 @@ export default {
 		.dlg-sort-candi-container {
 			display: flex;
 			flex-direction: row;
-
+			.dlg-panel-left {
+				max-height: 250px;
+    			overflow: auto;
+			}
 			.dlg-sort-candi-items{
 				display: flex;
 				flex-direction: column;
-				border: 2px solid gray;
+				border: 1px solid #ccc;
 				width: 50%;
-
 				.dlg-sort-candi-item {
 					font-size: 14px;
 					margin: 5px;
+					cursor: pointer;
 				}
 			}
 		}

@@ -6,7 +6,9 @@ export default class PhDlgVersionController {
 	}
 
 	appendSelectVersionTags(tag) {
-		this.selectVersionTags.push(tag)
+		//选择行去重
+		let setArr = new Set(this.selectVersionTags).add(tag)
+		this.selectVersionTags = Array.from(setArr)
 	}
 
 	removeSelectVersionTags(tag) {
