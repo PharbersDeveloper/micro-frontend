@@ -130,7 +130,7 @@
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogSortVisible = false">取消</el-button>
+				<el-button @click="on_clickSortCancel">取消</el-button>
 				<el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
 			</span>
 		</el-dialog>
@@ -326,6 +326,10 @@ export default {
 			this.collectionsPolicy.sortCollections = []
 			this.collectionsPolicy.clearShownCollectionFilter()
 		},
+		//sort取消
+		on_clickSortCancel() {
+			this.dialogSortVisible = false
+		},
 		// sort确认
 		on_clickSortConfirm() {
 			this.dialogSortVisible = false
@@ -433,7 +437,7 @@ export default {
 			}
 		}
 		.header {
-			width: 100vw;
+			// width: 100vw;
 			height: 40px;
 			background: #222;
 			color: #fff;
