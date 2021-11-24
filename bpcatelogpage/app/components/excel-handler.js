@@ -19,9 +19,10 @@ export default class ExcelHandlerComponent extends Component {
 				let uri = ''
                 if(ltp.name === "advancedMapping") {
 					uri = '/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId
-				}
-				if(ltp.name === "linkToProject") {
-					uri = `/projects/`+ ltp.projectId
+				} else if(param.name === "linkToProject" || param.name == "project") {
+					uri = `/projects/`+ param.projectId
+				} else if (param.name === "datasets") {
+					uri = '/dataset-lst?projectName=' + param.projectName + '&projectId=' + param.projectId
 				}
                 this.router.transitionTo( uri )
                 break
@@ -44,7 +45,7 @@ export default class ExcelHandlerComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
-        console.log(element.allData)
+		element.allData.popupBack = true
         element.addEventListener("event", this.listener)
     }
 

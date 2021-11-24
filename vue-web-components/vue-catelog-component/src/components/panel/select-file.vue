@@ -1,9 +1,9 @@
 <template>
     <div class="upload-dataset">
         <div class="upload_dataset_container">
-            <div class="project_name_header">
+            <!-- <div class="project_name_header">
                 <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
-            </div>
+            </div> -->
             <div class="project_name_header">
                 <p class="project_name new_upload">新上传文件</p>
             </div>
@@ -118,7 +118,7 @@ export default {
     }
 .upload_dataset_container {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 40px);
     // border: 2px solid #ddd;
     .project_name_header {
         height: 50px;

@@ -20,12 +20,12 @@ export default class DatasetLstComponent extends Component {
 				let uri = ''
 				if(params.name === "localUpload") {
 					uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
-				}
-				if(params.name === "linkToProject") {
+				}else if(params.name === "linkToProject" || params.name === "project") {
 					uri = `/projects/`+ params.projectId
-				}
-				if(params.name === "analyze") {
+				} else if(params.name === "analyze") {
 					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
+				} else if(params.name === "datasets") {
+					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
 				break
@@ -195,7 +195,6 @@ export default class DatasetLstComponent extends Component {
 	@action
 	registerListener(element) {
 		element.allData = this.calAllData
-		console.log(element.allData)
 		element.addEventListener("event", this.listener)
 	}
 
@@ -207,11 +206,13 @@ export default class DatasetLstComponent extends Component {
 	get calAllData() {
 		this.args.model._isVue = true
 		let tags = new Set()
-		this.args.model.dss.forEach(iter => {
-			iter.label = JSON.parse(iter.label)
-			iter.label.map(it => {
-				tags.add(it)
-			})
+		this.args.model.dss.forEach((iter,index) => {
+			if(typeof(iter.label) == 'string') {
+				iter.label = JSON.parse(iter.label)
+				iter.label.map(it => {
+					tags.add(it)
+				})
+			}
 		})
 		this.args.model.tagsArray = Array.from(tags)
 		return this.args.model

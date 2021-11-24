@@ -1,9 +1,9 @@
 <template>
     <div class="upload-dataset">
         <div class="upload_dataset_container">
-            <div class="project_name_header">
+            <!-- <div class="project_name_header">
                 <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
-            </div>
+            </div> -->
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
@@ -510,7 +510,7 @@ export default {
 }
 .upload_dataset_container {
     width: 100vw;
-    height: 100vh;
+	height: calc(100vh - 40px);
     // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;

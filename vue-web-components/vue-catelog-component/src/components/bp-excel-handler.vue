@@ -1,8 +1,8 @@
 <template>
     <div class="eh-container">
-        <div class="project_name_header">
+        <!-- <div class="project_name_header">
             <p class="project_name" @click="linkToPage('linkToProject')">{{allData.projectName}}</p>
-        </div>
+        </div> -->
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">

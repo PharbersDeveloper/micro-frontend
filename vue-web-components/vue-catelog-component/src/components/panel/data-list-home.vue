@@ -17,7 +17,7 @@
                     <div class="flow">
                         <p class="flow_word">主流程</p>
                         <div class="flow_item"> 
-                           <div class="flow_item_cell" @click="linkToPage('dataset')">
+                           <div class="flow_item_cell" @click="linkToPage('datasets')">
 								<div>
 									<img :src="dataset_icon" alt="">
 								</div>

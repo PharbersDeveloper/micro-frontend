@@ -1,8 +1,8 @@
 <template>
 	<div class="upload_dataset_container">
-		<div class="project_name_header">
+		<!-- <div class="project_name_header">
 			<p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
-		</div>
+		</div> -->
 		<div class="project_name_header heaber_opt">
 			<p class="project_name new_upload">New Uploaded File Dataset</p>
 			<bp-button text="运行" class="run"></bp-button>
@@ -159,7 +159,7 @@ export default {
         align-items: center;
     }
     .content_container {
-        height: calc(100vh - 110px);
+        height: calc(100vh - 150px);
         display: flex;
         background: #f7f7f7;
         .icon_dialog {
