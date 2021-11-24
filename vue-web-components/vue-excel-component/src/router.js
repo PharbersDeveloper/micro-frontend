@@ -10,6 +10,7 @@ import entryReplacement from './components/max-entry-replacement.vue'
 import nav from './components/bp-nav-top.vue'
 import importPage from './components/page/max-saas-import.vue'
 import bpExcelContainer from './components/bp-excel-container'
+import bpNavMax from './components/bp-nav-top-max'
 
 Vue.use(Router)
 
@@ -66,6 +67,11 @@ export default new Router({
 			path: '/max-saas-import',
 			name: 'max-saas-import',
 			component: importPage
+		},
+		{
+			path: '/bp-nav-max',
+			name: 'bp-nav-max',
+			component: bpNavMax
 		}
 	]
 })

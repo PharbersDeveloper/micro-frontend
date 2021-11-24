@@ -15,9 +15,12 @@ export default class DagComponent extends Component {
             case "linkToPage":
                 let params = e.detail[0].args.param
                 let uri = ''
-				if(params.name == 'dataset') {
+				console.log(params.name)
+				if(params.name == 'datasets') {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
-                }
+                } else if(params.name == 'project') {
+					uri = '/projects/' + params.projectId
+				}
                 //执行列表 分页
                 this.router.transitionTo( uri )
                 break
@@ -29,6 +32,8 @@ export default class DagComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
+		element.allData.projectName = element.allData.projectDetail.name
+		element.allData.projectId = element.allData.projectDetail.id
         element.addEventListener("event", this.listener)
     }
 

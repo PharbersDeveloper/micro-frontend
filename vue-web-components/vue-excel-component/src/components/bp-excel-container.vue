@@ -269,17 +269,20 @@ export default {
 	},
 	methods: {
 		linkToPage(name) {
-			const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    "name": name,
-                    "projectName": this.allData.projectName,
-                    "projectId": this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
+			let sel = confirm("您还没有保存更改，确认返回吗?")
+			if(sel) {
+				const event = new Event("event")
+				event.args = {
+					callback: "linkToPage",
+					element: this,
+					param: {
+						"name": name,
+						"projectName": this.allData.projectName,
+						"projectId": this.allData.projectId
+					}
+				}
+				this.$emit('event', event)
+			}
 		},
 		focusOutExpand() {
 			this.expangPopup = false
@@ -525,6 +528,9 @@ export default {
 				padding: 10px;
 				border-bottom: 1px solid #444;
 				cursor: pointer;
+			}
+			li:hover {
+				background: #444;
 			}
 		}
 		.dataset_header {

@@ -1,0 +1,148 @@
+<template>
+	<div class="container_nav">
+		<div class="header">
+			<span class="project_name" @click="linkToPage('project')" :title="allData.projectName">
+				{{allData.projectName}}
+			</span>
+			<div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
+				<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
+				<nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+					<ul>
+						<li @click="linkToPage('flow')">数据流程</li>
+						<li @click="linkToPage('datasets')">数据集</li>
+						<li @click="linkToPage('scripts')">脚本</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</template>
+<script>
+export default {
+	data() {
+		return {
+			expangPopup: false
+		}
+	},
+	components: {},
+	props: {
+		allData: {
+			type: Object,
+			default: function() {
+				return {
+					projectName: "test",
+					popupBack: false
+				}
+			}		
+		}
+	},
+	beforeMount() {},
+	mounted() {},
+	methods: {
+		linkToPage(name) {
+			// 弹框询问跳转
+			if(this.allData.popupBack) {
+				let sel = confirm("您还没有保存更改，确认返回吗?")
+				if(sel) {
+					const event = new Event("event")
+					event.args = {
+						callback: "linkToPage",
+						element: this,
+						param: {
+							"name": name,
+							"projectName": this.allData.projectName,
+							"projectId": this.allData.projectId
+						}
+					}
+					this.$emit('event', event)
+				}
+			} else {
+				// 直接跳转
+				const event = new Event("event")
+				event.args = {
+					callback: "linkToPage",
+					element: this,
+					param: {
+						"name": name,
+						"projectName": this.allData.projectName,
+						"projectId": this.allData.projectId
+					}
+				}
+				this.$emit('event', event)
+			}
+		},
+		focusOutExpand() {
+			this.expangPopup = false
+		},
+		focusExpand() {
+			this.expangPopup = true
+		}
+	}
+};
+</script>
+<style lang="scss">
+	.container_nav {
+		box-sizing: border-box;
+	}
+	.header {
+		// width: 100vw;
+		height: 40px;
+		background: #222;
+		color: #fff;
+		display: flex;
+		align-items: center;
+		font-size: 20px;
+		padding: 0 20px;
+		.project_name {
+			cursor: pointer;
+			width: 100px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.expand_bg {
+			width: 40px;
+			height: 40px;
+			background: #28a9dd;
+			margin-left: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.expand {
+				width: 20px;
+				height: 20px;
+				position: relative;
+				left: 0;
+			}
+		}
+	}
+	.expang_popup {
+		background-color: #333333;
+		box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
+		width: 200px;
+		height: auto;
+		position: absolute;
+		left: 120px;
+		top: 40px;
+		// transition: height 150ms ease-out;
+		// display: none;
+		z-index: 3001;
+		font-size: 14px;
+		font-weight: 400px;
+		ul, li {
+			list-style: none;
+			padding-left: 0;
+			margin: 0 auto;
+		}
+		li {
+			color: #ffffff;
+			width: 180px;
+			padding: 10px;
+			border-bottom: 1px solid #444;
+			cursor: pointer;
+		}
+		li:hover {
+			background: #444;
+		}
+	}
+	
+</style>

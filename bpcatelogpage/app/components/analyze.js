@@ -16,8 +16,13 @@ export default class AnalyzeComponent extends Component {
 			case "linkToPage":
 				let params = e.detail[0].args.param;
 				let uri = ''
-				if(params.name === "localUpload") {
-					uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
+				if(params.name === "project") {
+					//返回project
+					uri = `/projects/`+ params.projectId
+				} else if (params.name == "datasets") {
+					uri = '/dataset-lst?projectName=' + params.projectName +'&projectId=' + params.projectId
+				} else if (params.name == "flow") {
+
 				}
                 this.router.transitionTo( uri )
 				break

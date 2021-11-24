@@ -1,9 +1,9 @@
 <template>
     <div class="data-list-home">
         <div class="data-home-container">
-            <div class="header-area">
+            <!-- <div class="header-area">
                 <p>{{allData.projectDetail.name}}</p>
-            </div>
+            </div> -->
            <div class="content">  
             <div class="left-area">
                 <div class="projectInfo">
@@ -238,7 +238,7 @@ export default {
 }
 .data-home-container {
     
-    height: 100vh;
+    height: calc(100vh - 40px);
     width: 100vw;
     background: #f2f2f2;
     .content {
