@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="main_container">
-			<bp-excel ref="excel" viewHeight="300px" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
+			<bp-excel ref="excel" viewHeight="calc(100vh - 300px)" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
 		</div>
 		<el-dialog
 				title="显示行"
