@@ -1,7 +1,7 @@
 <template>
 <div class="ace-container" :style="{ height: viewHeight }">
     <!-- 官方文档中使用 id，这里禁止使用，在后期打包后容易出现问题，使用 ref 或者 DOM 就行 -->
-    <div class="ace-editor" ref="ace" ></div>
+    <div class="ace-editor" ref="ace" :style="{height:viewHeight}"></div>
 </div>
 
 </template>
@@ -157,7 +157,9 @@ export default {
     position: relative;
 
     .ace-editor {
-        position: unset !important;
+        position: absolute;
+        inset: 7px 0px 0px;
+        height: 100% !important;
     }
 
 }
