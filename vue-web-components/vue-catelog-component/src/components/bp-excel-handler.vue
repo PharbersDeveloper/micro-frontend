@@ -15,7 +15,7 @@
                 <span>{{allData.fileName}}</span>
             </div>
             <div class="eh-preview">
-                <bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10" v-if="showExcel" ref="excel"></bp-excel>
+                <bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10" v-if="showExcel" ref="excel" class="excel"></bp-excel>
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -290,7 +290,16 @@ export default {
             text-align: right;
             line-height: 14px;
         }
-
+		.eh-preview {
+			width: 100%;
+			overflow: auto;
+			.excel {
+				display: inline-grid;
+				margin: 10px;
+				overflow: auto;
+				width: 98%;
+			}
+		}
         .eh-control-panel {
             display: flex;
             flex-direction: column;
