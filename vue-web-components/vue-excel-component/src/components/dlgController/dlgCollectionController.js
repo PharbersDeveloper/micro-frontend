@@ -6,12 +6,13 @@ export default class PhDlgCollectionController {
 		this.selectCollections = []
 		this.sortCollections = []
 		this.isIndeterminate = false //check-all的不确定状态
-		this.checkAll = false
+		this.checkAll = true
 	}
 
 	resetCollections(cols) {
 		this.collections = cols
 		this.shownCollections = this.collections
+		this.selectCollections = this.collections
 	}
 
 	resetSortCollections() {

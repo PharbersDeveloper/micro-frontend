@@ -2,7 +2,7 @@
 	<div class="excel-container">
 		<div class="schemas" style="width: 100%" ref="schemas">
 			<div class="view" ref="headers">
-				<header-item v-for="(item, index) in datasource.cols" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
+				<header-item v-for="(item, index) in datasource.cols" :isNeedPopmenu="isNeedPopmenu" :title="item" :itemWidth="sizePolicy.cell_hit_width" :key="index"/>
 				<header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
 			</div>
 		</div>
@@ -41,6 +41,10 @@ export default {
 		headerItem:require('./bp-excel-header.vue').default
 	},
 	props: {
+		isNeedPopmenu: {
+			type: Boolean,
+			default: true
+		},
 		needFirstRender: {
 			type: Boolean,
 			default: true

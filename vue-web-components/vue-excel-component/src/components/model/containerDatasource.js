@@ -12,7 +12,7 @@ export default class PhContainerDataSource {
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
-		this.debugToken = "2e13655c70f7931daa11b9fa800d6147cc55056b57de237b615a51a15c6e7cec"
+		this.debugToken = "9d37f9c717440d831d29be4e96bd721e34d0204797538f78285e4964ecfcf01d"
 	}
 
 	defaultAdapter(row, cols) {

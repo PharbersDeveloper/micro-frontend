@@ -274,38 +274,43 @@ export default {
 		//显示行取消
 		on_clickVersionFilterCancel() {
 			this.dialogVersionFilterVisible = false
+			this.searchRow = ""
 			// this.versionFilterPolicy.selectVersionTags = []
 		},
 		// 显示行确认
 		on_clickVersionFilterConfirm() {
+			this.searchRow = ""
 			this.dialogVersionFilterVisible = false
 			const condi = this.versionFilterPolicy.selectVersionTags
-			let condi_str = "`version` in ["
-			console.log(condi)
-			for (var idx in condi) {
-				console.log(idx)
-				if (idx > 0) {
-					condi_str = condi_str + ","
+			if(condi.length > 0) {
+				let condi_str = "`version` in ["
+				for (var idx in condi) {
+					console.log(idx)
+					if (idx > 0) {
+						condi_str = condi_str + ","
+					}
+					console.log(condi[idx])
+					if(typeof(condi[idx]) === 'string') {
+						condi_str = condi_str + "'" + condi[idx] + "'"
+					}
+					console.log(condi_str)
 				}
-				console.log(condi[idx])
-				if(typeof(condi[idx]) === 'string') {
-					condi_str = condi_str + "'" + condi[idx] + "'"
-				}
-				console.log(condi_str)
+				condi_str = condi_str + "]"
+				this.datasource.pushFilterCondition("version", condi_str)
+				this.$refs.excel.dataRefresh++
 			}
-			condi_str = condi_str + "]"
-			this.datasource.pushFilterCondition("version", condi_str)
-			this.$refs.excel.dataRefresh++
 		},
 		//选择列确认
 		on_clickCollectionConfirm() {
 			this.dialogCollectionVisible = false
 			this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
 			this.$refs.excel.dataRefresh++
+			this.searchList = ""
 		},
 		//选择列取消
 		on_clickCollectionCancel() {
 			this.dialogCollectionVisible = false
+			this.searchList = ""
 		},
 		on_collectionCheckAllChange(val) {
 			this.collectionsPolicy.checkAllCollections(val)
@@ -329,9 +334,11 @@ export default {
 		//sort取消
 		on_clickSortCancel() {
 			this.dialogSortVisible = false
+			this.searchSort = ""
 		},
 		// sort确认
 		on_clickSortConfirm() {
+			this.searchSort = ""
 			this.dialogSortVisible = false
 			this.datasource.clearSortCondition()
 			for (var idx in this.collectionsPolicy.sortCollections) {
@@ -354,25 +361,25 @@ export default {
 	},
 	watch: {
 		// 首次加载触发，请求Excel数据
-		// 'allData.schemaArr': {
-		// 	immediate: true,
-		// 	handler:function(n, o) {
-		// 		this.datasource.schema = n
-		// 		this.datasource.cols = n
-		// 		this.datasource.name = this.allData.datasetName
-		// 		this.datasource.projectId = this.allData.projectId
-		// 		this.datasource.refreshData(this.$refs.excel)
-		// 		this.descRefresh++
-		// 	}
-		// },
-		'allData.schemaArr'(n,o) {
-			this.datasource.schema = n
-			this.datasource.cols = n
-			this.datasource.name = this.allData.datasetName
-			this.datasource.projectId = this.allData.projectId
-			this.datasource.refreshData(this.$refs.excel)
-			this.descRefresh++
+		'allData.schemaArr': {
+			immediate: true,
+			handler:function(n, o) {
+				this.datasource.schema = n
+				this.datasource.cols = n
+				this.datasource.name = this.allData.datasetName
+				this.datasource.projectId = this.allData.projectId
+				this.datasource.refreshData(this.$refs.excel)
+				this.descRefresh++
+			}
 		},
+		// 'allData.schemaArr'(n,o) {
+		// 	this.datasource.schema = n
+		// 	this.datasource.cols = n
+		// 	this.datasource.name = this.allData.datasetName
+		// 	this.datasource.projectId = this.allData.projectId
+		// 	this.datasource.refreshData(this.$refs.excel)
+		// 	this.descRefresh++
+		// },
 		descRefresh(n, o) {
 			let that = this
 			this.datasource.queryTotalCount(this).then((count) => {
@@ -383,7 +390,7 @@ export default {
 		//显示行请求接口
 		dialogVersionFilterVisible(n, o) {
 			let that = this
-			if (this.versionFilterPolicy.versionCandidates.length === 0) {
+			if (this.versionCandidatesShow.length === 0) {
 				that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
 					//完整的显示行列表数据
 					this.versionCandidatesShow = provinces
