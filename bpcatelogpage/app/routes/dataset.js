@@ -16,19 +16,24 @@ export default class DatasetRoute extends Route {
 
 	beforeModel( params ) {
 		this._super( ...arguments )
+		let that = this
+		var popstateFun = null
 		$(function(){
-			//后退按钮点击监听实现
-			window.addEventListener("popstate",function(e){
-				// console.log("popstate")
-				// let sel = confirm("You have unsaved changes, are you sure you want to leave ?")
-				// if(sel) {
-				// 	let uriParam = this.location.href.split("?")[1]
-				// 	this.location.href=this.location.origin + '/dataset-lst?' + uriParam
-				// }
-				// return false
-				let uriParam = this.location.href.split("?")[1]
-				this.location.href=this.location.origin + '/dataset-lst?' + uriParam
-			},false);
+			//后退按钮
+			if (window.history && window.history.pushState) {
+				popstateFun = function(e){
+					let sel = confirm("您还没有保存更改，确认返回吗?")
+					if(sel) {
+						window.removeEventListener("popstate",popstateFun);
+						let uriParam = this.location.href.split("?")[1]
+						that.transitionTo('/dataset-lst?' + uriParam);
+					} else {
+						history.pushState(null, null, document.URL);
+					}
+				}
+				history.pushState(null, null, document.URL);
+				window.addEventListener("popstate",popstateFun,false);
+			}
 			//关闭
 			window.onbeforeunload=function(e){
 				return false
@@ -37,7 +42,7 @@ export default class DatasetRoute extends Route {
 			window.onload = function(){
 				console.log("onload")
 				let uriParam = this.location.href.split("?")[1]
-				this.location.href=this.location.origin + '/dataset-lst?' + uriParam
+				that.transitionTo('/dataset-lst?' + uriParam);
 			}			
 		});
 		

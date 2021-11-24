@@ -2,8 +2,20 @@
 	<div class="ec-container">
     	<link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
 		<div class="header">
-			{{allData.projectName}}
+			<span class="project_name" @click="linkToPage('project')">
+				{{allData.projectName}}
+			</span>
+			<div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
+				<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
+			</div>
 		</div>
+		<nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+			<ul>
+				<li @click="linkToPage('flow')">数据流程</li>
+				<li @click="linkToPage('datasets')">数据集</li>
+				<li @click="linkToPage('scripts')">脚本</li>
+			</ul>
+		</nav>
 		<div class="dataset_header">
 			<img :src="dataset_icon" class="dataset_icon" alt="">
 			{{allData.datasetName}}
@@ -197,7 +209,8 @@ export default {
 			searchList: '',
 			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
 			versionCandidatesShow: [],
-			searchSort: ''
+			searchSort: '',
+			expangPopup: false
 		}
 	},
 	components: {
@@ -255,6 +268,25 @@ export default {
 		}
 	},
 	methods: {
+		linkToPage(name) {
+			const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    "name": name,
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
+		},
+		focusOutExpand() {
+			this.expangPopup = false
+		},
+		focusExpand() {
+			this.expangPopup = true
+		},
 		search(data) {
 			console.log(data)
 		},
@@ -438,6 +470,9 @@ export default {
 		flex-direction: column;
 		height: 100vh;
 		box-sizing: border-box;
+		.project_name {
+			cursor: pointer;
+		}
 		.el-dialog__wrapper {
 			.el-dialog__header {
 				border-bottom: 1px solid #ccc;
@@ -452,6 +487,45 @@ export default {
 			align-items: center;
 			font-size: 20px;
 			padding: 0 20px;
+			.expand_bg {
+				width: 40px;
+				height: 40px;
+				background: #28a9dd;
+				margin-left: 10px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				.expand {
+					width: 20px;
+					height: 20px;
+				}
+			}
+		}
+		.expang_popup {
+			background-color: #333333;
+			box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
+			width: 200px;
+			height: auto;
+			position: absolute;
+			left: 62px;
+			top: 40px;
+			// transition: height 150ms ease-out;
+			// display: none;
+			z-index: 3001;
+			font-size: 14px;
+			font-weight: 400px;
+			ul, li {
+				list-style: none;
+				padding-left: 0;
+				margin: 0 auto;
+			}
+			li {
+				color: #ffffff;
+				width: 200px;
+				padding: 10px;
+				border-bottom: 1px solid #444;
+				cursor: pointer;
+			}
 		}
 		.dataset_header {
 			height: 48px;
