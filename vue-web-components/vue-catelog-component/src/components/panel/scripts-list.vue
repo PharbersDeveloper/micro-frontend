@@ -47,7 +47,13 @@
                                     <p @click="upload">新建脚本</p>
                                 </div>
                             </div> -->
-                            <el-select class="upload_btn" value="新建脚本" placeholder="新建脚本">
+							<button class="upload_btn" @click="toggle">新建脚本</button>
+                            <div class="dialog" v-show="showDialog">
+                                <div>
+                                    <p @click="upload">本地上传</p>
+                                </div>
+							</div>
+                            <!-- <el-select class="upload_btn" value="新建脚本" placeholder="新建脚本">
                                 <el-option 
                                     @click.native="selectScripts('python')"
                                     label="Python" 
@@ -80,7 +86,7 @@
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
                                     SparkSQL
                                 </el-option>
-                            </el-select>
+                            </el-select> -->
                         </div>
 
                         <div class="tag_selected">
@@ -720,6 +726,22 @@ export default {
                 }
 
                 .upload_btn {
+                    position: absolute;
+                    top: 0px;
+                    right: 40px;
+                    display: inline-block;
+                    width: 82px;
+                    height: 32px;
+                    background: #ffffff;
+                    border: 1px solid #eeedf7;
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #7163C5;
+                    margin-bottom: 16px;
+                }
+
+                .upload_btn_new {
                     position: absolute;
                     top: 0px;
                     right: 40px;

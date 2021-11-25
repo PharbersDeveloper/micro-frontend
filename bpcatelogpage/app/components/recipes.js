@@ -9,7 +9,7 @@ export default class RecipesComponent extends Component {
 	@service cookies
     @service('loading') loadingService;
     @service noticeService;
-	@service ajax 
+	@service ajax
 	@tracked firstRegister = true
 
 	@action
