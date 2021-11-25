@@ -31,10 +31,8 @@
 import ElInput from 'element-ui/packages/input/index'
 import ElTabs from 'element-ui/packages/tabs/index'
 import ElTabPane from 'element-ui/packages/tab-pane/index'
-// import ElSelect from 'element-ui/packages/select/index'
-// import ElOption from 'element-ui/packages/option/index'
-import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import ElSelect from 'element-ui/packages/select/index'
+import ElOption from 'element-ui/packages/option/index'
 import ElButton from 'element-ui/packages/button/index'
 
 export default {
@@ -67,11 +65,9 @@ export default {
         ElInput,
         ElTabs,
         ElTabPane,
-        // ElSelect,
-        // ElOption,
-        ElButton,
-        bpSelectVue,
-        bpOptionVue
+        ElSelect,
+        ElOption,
+        ElButton
     },
     methods: {
         handleClick(tab, event) {

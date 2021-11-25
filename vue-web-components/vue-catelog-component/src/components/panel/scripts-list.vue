@@ -1,5 +1,6 @@
 <template>
     <div class="upload-dataset">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <div class="info">
                 <div class="project_info_left">
@@ -33,19 +34,37 @@
                                         </div>
                                     </div>
                                 </div>
-                           </div>
+                            </div>
                             <div class="search_area">
                                    <div class="search_icon">
                                        <img :src="search_icon">
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="toggle">新建脚本</button>
+                            <!-- <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                            <div>
-                                <p @click="upload">新建脚本</p>
-                            </div>
-                        </div>
+                                <div>
+                                    <p @click="upload">新建脚本</p>
+                                </div>
+                            </div> -->
+                            <el-select class="upload_btn" value="新建脚本" placeholder="新建脚本">
+                                <el-option label="Python" value="Python" class="script-opt">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    Python
+                                </el-option>
+                                <el-option label="PySpark" value="PySpark" class="script-opt">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    PySpark
+                                </el-option>
+                                <el-option label="SQL" value="SQL"  class="script-opt">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    SQL
+                                </el-option>
+                                <el-option label="SparkSQL" value="SparkSQL"  class="script-opt script-opt-last">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    SparkSQL
+                                </el-option>
+                            </el-select>
                         </div>
 
                         <div class="tag_selected">
@@ -185,6 +204,8 @@ import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import ElSelect from 'element-ui/packages/select/index'
+import ElOption from 'element-ui/packages/option/index'
 
 export default {
     data() {
@@ -223,7 +244,15 @@ export default {
             datasetcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            options: [{
+                value: '选项1',
+                label: '黄金糕'
+            }, {
+                value: '选项2',
+                label: '双皮奶'
+            }],
+            value: ''
         }
     },
     props: {
@@ -246,6 +275,8 @@ export default {
         createTagsDialog,
         deleteTagsDialog,
         bpSelectVue,
+        ElSelect,
+        ElOption,
         bpOptionVue
     },
     computed: {
@@ -490,7 +521,7 @@ export default {
     right: 40px;
     width: 150px;
     height: 81px;
-    border: 2px solid #dddddd;
+    border: 1px solid #333;
     background: #fff;
     z-index: 9999;
     cursor: pointer;
@@ -505,9 +536,16 @@ export default {
         }
     }
 }
+.script-opt {
+    padding: 0 10px;
+    border-bottom: 1px solid #ccc;
+}
+.script-opt-last {
+    border-bottom: none;
+}
 .upload_dataset_container {
     width: 100vw;
-	height: calc(100vh - 40px);
+    height: calc(100vh - 40px);
     // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;
@@ -645,16 +683,30 @@ export default {
                     position: absolute;
                     top: 0px;
                     right: 40px;
-                    display: inline-block;
-                    width: 82px;
-                    height: 32px;
-                    background: #ffffff;
-                    border: 1px solid #eeedf7;
-                    font-family: PingFangSC-Medium;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #7163C5;
-                    margin-bottom: 16px;
+                    width: 100px;
+                    height: 26px;
+                    /deep/.el-input {
+                        height: 26px !important;
+                    }
+                    /deep/.el-input__inner {
+                        height: 26px !important;
+                        box-sizing: border-box;
+                        display: inline-block;
+                        width: 100px;
+                        background: #ffffff;
+                        border: 1px solid #eeedf7;
+                        font-family: PingFangSC-Medium;
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #7163C5;
+                        margin-bottom: 16px;
+                        color: #333333;
+                        border: 1px solid #cccccc;
+                        padding-right: 10px;
+                    }
+                    /deep/input::placeholder {
+                        color: #333;
+                    }
                 }
 
                 .tag_selected {
