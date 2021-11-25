@@ -7,9 +7,15 @@
                 <header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
         </div>
+        <div v-if="countIsReady === 0" :style="{height: '100%', width: '100%'}">&nbsp;</div>
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
-            <div class="body" :style="{height: page_size * 24 +'px'}">
-                <ph-excel-page></ph-excel-page>
+            <div class="body" :style="{height: totalHeight +'px'}">
+                <ph-excel-page v-for="(item, index) in pageRange"
+                               :page="index" :curPage="curPage"
+                               :datasource="datasource"
+                               :schema="schema"
+                               :rowHeight="rowHeight"
+                               :key="item"/>
             </div>
         </div>
     </div>
@@ -21,22 +27,24 @@ import PhExcelPage from './bp-excel-page'
 export default {
     data() {
         return {
-            anchor: {x: 0, y: 0},
-
-            // all states
-            needRefresh: 0,
-            dataRefresh: 0,
-            cur_page: 0,
-            margin_right: 8,
-
-            renderPolicy: null
+            schemaIsReady: 0,
+            countIsReady: 0,
+            curPage: [],
+            pageRange: [],
+            dataCount: 0,
+            scrollBarWidth: 8,
+            rowHeight: 24,
+            style: ""
         }
     },
     computed: {
-        style: function() {
-            let viewHeight = this.viewHeight
-            let schema = this.schema
-            return "height: " + viewHeight + ";" + "width: " + (parseInt(schema.totalWidth()) + parseInt(this.margin_right)) + "px;"
+        totalHeight: function() {
+            let dataCount = this.dataCount
+            return dataCount * this.rowHeight
+        },
+        pageHeight: function() {
+            let batchSize = this.datasource.batch_size
+            return batchSize * this.rowHeight
         }
     },
     components: {
@@ -48,57 +56,79 @@ export default {
             type: Boolean,
             default: true
         },
-        needFirstRender: {
-            type: Boolean,
-            default: true
-        },
-        isNeedKeyBoardEvent: {
-            type: Boolean,
-            default: true
-        },
         viewHeight: {
             type: String,
             default: '600px'
-        },
-        page_size: {
-            type: Number,
-            default: 50
         },
         schema: {
             type: Object,
             default: function() {
                 return new PhExcelDataSchema()
             }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource('1')
+            }
         }
     },
-    beforeMount() {
-
-    },
     mounted() {
-
+        // TODO:  这里请求搞定schema
+        this.schema.resetSchema(
+            ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+            ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+            [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
+        )
+        this.schemaIsReady++
     },
     methods: {
         scrollGet (e) {
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
+            if (e.target.scrollTop > this.pageHeight * this.curPage[2]) {
+                let tmp = []
+                for (var idx in this.curPage) {
+                    tmp.push(this.curPage[idx] + 1)
+                }
+                this.curPage = tmp
+            } else if (e.target.scrollTop < this.pageHeight * this.curPage[1]) {
+                let tmp = []
+                for (idx in this.curPage) {
+                    tmp.push(this.curPage[idx] - 1)
+                }
+                this.curPage = tmp
+            }
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         }
     },
     watch: {
-        needRefresh(n, o) {
-            const hit_size = this.renderPolicy.setupLayout()
-            this.$refs.viewport.attributes["style"].value = "height: " + this.viewHeight + "; width: " + (hit_size.width + 8) + "px"
-            this.renderPolicy.render(this.cur_row, this.cur_page)
+        schemaIsReady(n, o) {
+            let that = this
+            this.datasource.queryTotalCount(this).then(count => {
+                that.dataCount = parseInt(count)
+                that.countIsReady++
+            })
+            let viewHeight = this.viewHeight
+            let schema = this.schema
+            this.style = "height: " + viewHeight + ";" + "width: " + (schema.totalWidth() + this.scrollBarWidth) + "px;"
         },
-        dataRefresh(n, o) {
-            this.datasource.data = []
-            this.datasource.refreshData(this)
-        },
-        dataAppend(n, o) {
-            this.datasource.appendData(this)
+        countIsReady(n, o) {
+            this.curPage = [-1, 0, 1]
+            this.pageRange = []
+            for (var idx = 0; idx < this.dataCount/this.datasource.batch_size + 1; ++idx) {
+                this.pageRange.push(idx)
+            }
         }
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .excel-container {
         // TODO: 我只做了chrome 浏览器
         /* 滚动槽（轨道）宽高 */
@@ -145,9 +175,6 @@ export default {
             .body {
                 // overflow: auto;
             }
-
-
-
         }
         .schemas {
             display: flex;

@@ -2,12 +2,12 @@
 export default class PhDataSource {
     constructor(id, adapter, schema, cur_page) {
         this.id = id
-        this.data = []
+        // this.data = []
         this.sort = {}
         this.filter = {}
         this.projectId = ''
         this.name = "prod_clean_v2"
-        this.batch_size = 50
+        this.batch_size = 100
         this.cur_page = 0
         this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
         // this.schema = schema
@@ -92,9 +92,67 @@ export default class PhDataSource {
                     for (var idx in response) {
                         tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
                     }
-                    ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+                    ele.data = tmp //response.map(ele.datasource.adapter)
+                    // ele.datasource.data = tmp //response.map(ele.datasource.adapter)
                     ele.dataIsReady++
                 })
         }
+    }
+
+    buildCountQuery(ele) {
+        function buildQueryCountString() {
+            let sql_str = "SELECT count(*)"
+
+            // sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
+            sql_str = sql_str + " FROM `"  +  ele.datasource.name + "`"
+
+            // filter
+            let firstFilter = Object.keys(ele.datasource.filter)[0]
+            let filterParam = " WHERE "
+            for (const key in ele.datasource.filter) {
+                if(key != firstFilter) {
+                    filterParam = " AND "
+                }
+                sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+            }
+
+            return sql_str
+        }
+        const url = "https://api.pharbers.com/phchproxyquery"
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            "query": buildQueryCountString(),
+            "schema": ["count"]
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    queryTotalCount(ele) {
+        return ele.datasource.buildCountQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                return response[0]["count"]
+            })
+    }
+
+    pushFilterCondition(key, condi) {
+        this.filter[key] = condi
+    }
+
+    pushSortCondition(key, value) {
+        this.sort[key] = value
+    }
+
+    clearSortCondition() {
+        this.sort = {}
     }
 }
