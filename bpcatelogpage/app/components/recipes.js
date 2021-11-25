@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking'
 
-export default class DatasetLstComponent extends Component {
+export default class RecipesComponent extends Component {
 	@service router
 	@service store
 	@service cookies
@@ -26,8 +26,6 @@ export default class DatasetLstComponent extends Component {
 					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
 				} else if(params.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
-				} else if(params.name === "scripts") {
-					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
 				break

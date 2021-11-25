@@ -126,7 +126,7 @@
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.name}}</p>
+                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.jobName}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
@@ -328,13 +328,11 @@ export default {
     },
     mounted() {
         let that = this
-        this.$refs.tagsArea.forEach((item, index) => {
-            //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
-            // if(item.clientHeight > 30) {
-            //     this.$refs.moreTags[0].style["display"] = "flex"
-            // }
-            item.style["height"] = "40px"
-        })
+        if(this.$refs.tagsArea) {
+            this.$refs.tagsArea.forEach((item, index) => {
+                item.style["height"] = "40px"
+            })
+        }
     },
     watch: {
         "allData.tagsArray": function() {
@@ -401,7 +399,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "analyze",
+                    name: "codeditor",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
                     dataset: dataset
@@ -441,7 +439,10 @@ export default {
                 // this.allData.dss.sort()
                 this.allData.dss.sort(
                     function compareFunction(param1, param2) {
-                        return param1.name.localeCompare(param2.name);
+                        if(param1.jobName) {
+                            return param1.jobName.localeCompare(param2.name);
+                        }
+                        return
                     }
                 )
             }else if (val == 'descending') {

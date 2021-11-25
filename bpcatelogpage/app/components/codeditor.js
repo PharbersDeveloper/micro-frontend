@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking'
 
-export default class DatasetLstComponent extends Component {
+export default class CodeditorComponent extends Component {
 	@service router
 	@service store
 	@service cookies
@@ -26,8 +26,6 @@ export default class DatasetLstComponent extends Component {
 					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
 				} else if(params.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
-				} else if(params.name === "scripts") {
-					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
 				break
@@ -183,17 +181,6 @@ export default class DatasetLstComponent extends Component {
 		}
 	}
 
-	@action noticeCallback(response, ele) {
-		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
-		if(upload_status == "project_file_to_DS_succeed") {
-			//跳转下一页面
-			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
-		} else if(upload_status == "project_file_to_DS_failed") {
-			alert("清除数据失败，请重新操作！")
-		}
-		this.loadingService.loading.style.display = 'none'
-	}
-
 	@action
 	registerListener(element) {
 		element.allData = this.calAllData
@@ -207,21 +194,7 @@ export default class DatasetLstComponent extends Component {
 
 	get calAllData() {
 		this.args.model._isVue = true
-		if(this.firstRegister) {
-			this.firstRegister = false
-			//tags
-			let tags = new Set()
-			this.args.model.dss.forEach((iter,index) => {
-				if(typeof(iter.label) == 'string') {
-					iter.label = JSON.parse(iter.label)
-					iter.label.map(it => {
-						tags.add(it)
-					})
-				}
-			})
-			this.args.model.tagsArray = Array.from(tags)
-		}
-		
 		return this.args.model
 	}
+
 }
