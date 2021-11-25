@@ -7,10 +7,8 @@
             </div>
         </div>
         <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
-            <div class="body" :style="{height: page_size * 118 +'px'}">
+            <div class="body" :style="{height: page_size * 24 +'px'}">
                 <ph-excel-page></ph-excel-page>
-                <div ref="select" class="row-select"></div>
-                <select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
             </div>
         </div>
     </div>
