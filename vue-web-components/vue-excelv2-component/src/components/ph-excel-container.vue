@@ -9,7 +9,7 @@
         </div>
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
             <div class="body" :style="{height: page_size * 24 +'px'}">
-                <ph-excel-page></ph-excel-page>
+                <ph-excel-page :page="0" :curPage="curPage"></ph-excel-page>
             </div>
         </div>
     </div>
@@ -21,23 +21,16 @@ import PhExcelPage from './bp-excel-page'
 export default {
     data() {
         return {
-            anchor: {x: 0, y: 0},
-
-            // all states
-            needRefresh: 0,
-            dataRefresh: 0,
-            cur_page: 0,
-            margin_right: 8,
-
-            renderPolicy: null
+            schemaIsReady: 0,
+            countIsReady: 0,
+            curPage: [],
+            dataCount: 0,
+            scrollBarWidth: 8,
+            style: ""
         }
     },
     computed: {
-        style: function() {
-            let viewHeight = this.viewHeight
-            let schema = this.schema
-            return "height: " + viewHeight + ";" + "width: " + (parseInt(schema.totalWidth()) + parseInt(this.margin_right)) + "px;"
-        }
+
     },
     components: {
         headerItem:require('./bp-excel-header.vue').default,
@@ -48,26 +41,24 @@ export default {
             type: Boolean,
             default: true
         },
-        needFirstRender: {
-            type: Boolean,
-            default: true
-        },
-        isNeedKeyBoardEvent: {
-            type: Boolean,
-            default: true
-        },
         viewHeight: {
             type: String,
             default: '600px'
         },
         page_size: {
             type: Number,
-            default: 50
+            default: 100
         },
         schema: {
             type: Object,
             default: function() {
                 return new PhExcelDataSchema()
+            }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource('1')
             }
         }
     },
@@ -75,25 +66,39 @@ export default {
 
     },
     mounted() {
-
+        // TODO:  这里请求搞定schema
+        this.schema.resetSchema(
+            ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+            ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+            [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
+        )
+        this.schemaIsReady++
     },
     methods: {
         scrollGet (e) {
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         }
     },
     watch: {
-        needRefresh(n, o) {
-            const hit_size = this.renderPolicy.setupLayout()
-            this.$refs.viewport.attributes["style"].value = "height: " + this.viewHeight + "; width: " + (hit_size.width + 8) + "px"
-            this.renderPolicy.render(this.cur_row, this.cur_page)
+        schemaIsReady(n, o) {
+            let that = this
+            this.datasource.queryTotalCount(this).then(count => {
+                that.dataCount = parseInt(count)
+                that.countIsReady++
+            })
+            let viewHeight = this.viewHeight
+            let schema = this.schema
+            this.style = "height: " + viewHeight + ";" + "width: " + (schema.totalWidth() + this.scrollBarWidth) + "px;"
         },
-        dataRefresh(n, o) {
-            this.datasource.data = []
-            this.datasource.refreshData(this)
-        },
-        dataAppend(n, o) {
-            this.datasource.appendData(this)
+        countIsReady(n, o) {
+            this.curPage = [0, 1]
         }
     }
 };
@@ -145,9 +150,6 @@ export default {
             .body {
                 // overflow: auto;
             }
-
-
-
         }
         .schemas {
             display: flex;

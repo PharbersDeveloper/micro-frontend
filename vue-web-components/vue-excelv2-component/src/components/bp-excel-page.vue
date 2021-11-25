@@ -1,6 +1,10 @@
 <template>
     <div class="ph-excel-page">
-        <ph-row v-for="(item, index) in datasource.data" :value="item" :state="state" :schema="schema" :key="index"></ph-row>
+        <div v-if="showing" :style="style">
+            <ph-row v-for="(item, index) in data" :value="item" :state="state"
+                    :schema="schema" :key="index"></ph-row>
+        </div>
+        <div class="ph-placeholder" v-else :style="style">&nbsp;</div>
     </div>
 </template>
 <script>
@@ -11,18 +15,31 @@ export default {
     data() {
         return {
             state: "loading",
-            dataIsReady: 0
+            dataIsReady: 0,
+            data: []
+        }
+    },
+    computed: {
+        showing: function() {
+            return this.curPage.indexOf(this.page) !== -1
+        },
+        style: function() {
+            return "height: 1200px; width: 1298px;"
         }
     },
     components: {
         PhRow
     },
     props: {
-        cur_page: {
+        page: {
             type: Number,
             default: 0
         },
-        page_size: {
+        curPage: {
+            type: Array,
+            default: []
+        },
+        pageSize: {
             type: Number,
             default: 50
         },
@@ -40,7 +57,7 @@ export default {
         }
     },
     beforeMount() {
-        this.datasource.refreshData(this)
+        // this.datasource.refreshData(this)
     },
     mounted() {
 
@@ -57,13 +74,22 @@ export default {
     watch: {
         dataIsReady(n, o) {
             this.state = "Ready"
+        },
+        showing(n, o) {
+            if (n) {
+                this.datasource.refreshData(this)
+            }
         }
     }
 };
 </script>
 <style lang="scss">
-    .excel-page {
+    .ph-excel-page {
         display: flex;
         flex-direction: column;
+
+        .ph-placeholder {
+            background: red;
+        }
     }
 </style>
