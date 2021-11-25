@@ -15,11 +15,12 @@ export default class DagComponent extends Component {
             case "linkToPage":
                 let params = e.detail[0].args.param
                 let uri = ''
-				console.log(params.name)
 				if(params.name == 'datasets') {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
                 } else if(params.name == 'project') {
 					uri = '/projects/' + params.projectId
+				} else if(params.name === "scripts") {
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 //执行列表 分页
                 this.router.transitionTo( uri )
