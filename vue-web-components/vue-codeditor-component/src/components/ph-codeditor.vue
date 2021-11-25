@@ -1,5 +1,7 @@
 <template>
 <div class="ace-container" :style="{ height: viewHeight }">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 官方文档中使用 id，这里禁止使用，在后期打包后容易出现问题，使用 ref 或者 DOM 就行 -->
     <div class="ace-editor" ref="ace" :style="{height:viewHeight}"></div>
 </div>
@@ -7,6 +9,8 @@
 </template>
 
 <script>
+import ElSelect from 'element-ui/packages/select/index'
+
 // 引入全局实例
 import ace from 'ace-builds'
 // 主题风格，引入主题后还需要在 options 中指定主题才会生效
@@ -35,6 +39,9 @@ export default {
     name: 'ph-codeditor',
     model: {
         event: 'change'
+    },
+    components: {
+        ElSelect
     },
     props: {
         viewHeight: {
