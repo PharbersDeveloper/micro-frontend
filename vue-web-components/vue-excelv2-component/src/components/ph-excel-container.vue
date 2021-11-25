@@ -7,9 +7,12 @@
                 <header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
         </div>
+        <div v-if="countIsReady > 0" :style="{height: '100%', width: '100%'}"></div>
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
             <div class="body" :style="{height: page_size * 24 +'px'}">
-                <ph-excel-page :page="0" :curPage="curPage"></ph-excel-page>
+                <ph-excel-page :page="0" :curPage="curPage"
+                               :datasource="datasource"
+                               :schema="schema" />
             </div>
         </div>
     </div>
@@ -44,10 +47,6 @@ export default {
         viewHeight: {
             type: String,
             default: '600px'
-        },
-        page_size: {
-            type: Number,
-            default: 100
         },
         schema: {
             type: Object,
