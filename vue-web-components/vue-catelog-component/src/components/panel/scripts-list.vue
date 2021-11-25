@@ -48,19 +48,35 @@
                                 </div>
                             </div> -->
                             <el-select class="upload_btn" value="新建脚本" placeholder="新建脚本">
-                                <el-option label="Python" value="Python" class="script-opt">
+                                <el-option 
+                                    @click.native="selectScripts('python')"
+                                    label="Python" 
+                                    value="Python" 
+                                    class="script-opt">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
                                     Python
                                 </el-option>
-                                <el-option label="PySpark" value="PySpark" class="script-opt">
+                                <el-option 
+                                    @click.native="selectScripts('pyspark')"
+                                    label="PySpark" 
+                                    value="PySpark" 
+                                    class="script-opt">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
                                     PySpark
                                 </el-option>
-                                <el-option label="SQL" value="SQL"  class="script-opt">
+                                <el-option 
+                                    @click.native="selectScripts('sql')"
+                                    label="SQL" 
+                                    value="R"  
+                                    class="script-opt">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
                                     SQL
                                 </el-option>
-                                <el-option label="SparkSQL" value="SparkSQL"  class="script-opt script-opt-last">
+                                <el-option 
+                                    @click.native="selectScripts('sparksql')"
+                                    label="SparkSQL" 
+                                    value="SparkR"  
+                                    class="script-opt script-opt-last">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
                                     SparkSQL
                                 </el-option>
@@ -148,12 +164,28 @@
                         </div>
                         <div class="view_func">
                             <span @click="createTagsOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="edit_icon" alt="">
+                                <span class='tags_func'>编辑</span>
+                            </span>
+                             <span @click="createTagsOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
                             <span @click="clearDialogOpen" class="view_list">
-                                <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
-                                <span class='tags_func'>清除数据</span>
+                                <img class='tags_imgs_tag' :src="run_icon" alt="">
+                                <span class='tags_func'>开始</span>
+                            </span>
+                            <span @click="clearDialogOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="star_icon" alt="">
+                                <span class='tags_func'>收藏</span>
+                            </span>
+                            <span  @click='deletedialogopen' class="view_list">
+                                <img class='tags_imgs_tag' :src="copy_icon" alt="">
+                                <span class='tags_func'>复制</span>
+                            </span>
+                             <span @click="createTagsOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="hide_icon" alt="">
+                                <span class='tags_func'>隐藏</span>
                             </span>
                             <span  @click='deletedialogopen' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
@@ -210,10 +242,14 @@ import ElOption from 'element-ui/packages/option/index'
 export default {
     data() {
         return {
+            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
+            copy_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/copy.svg",
+            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
+            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
+            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit.svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
@@ -310,6 +346,9 @@ export default {
         }
     },
     methods: {
+        selectScripts() {
+            debugger
+        },
         //增加tag
         addTagsEvent(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
@@ -526,7 +565,7 @@ export default {
     z-index: 9999;
     cursor: pointer;
     div {
-        border-bottom: 2px solid #979797;
+        border-bottom: 1px solid #979797;
         p {
             margin-left: 10px;
             font-family: PingFangSC-Medium;
@@ -993,16 +1032,18 @@ export default {
                 border-bottom: 1px solid #dddddd;
 
                 .view_func {
-                    margin-top: 100px;
+                    margin-top: 20px;
                     display: flex;
+                    flex-wrap: wrap;
                     justify-content: space-between;
-                    padding: 0 30px;
+                    // padding: 0 30px;
                     .view_list {
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
                         width: 75px;
+                        margin-bottom: 20px;
                     }
                 }
 
@@ -1021,8 +1062,8 @@ export default {
                         width: 60px;
                         height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 2px solid #979797;
-                        border-right: 2px solid #979797;
+                        border-bottom: 1px solid #979797;
+                        border-right: 1px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
@@ -1059,7 +1100,7 @@ export default {
                     background: #f5f5f5;
                     width: 100%;
                     height: 100%;
-                    border-bottom: 2px solid #dddddd;
+                    border-bottom: 1px solid #dddddd;
 
                     .edit_input {
                         position: absolute;
@@ -1152,8 +1193,8 @@ export default {
     }
 }
 .tags_imgs_tag {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     margin-bottom: 5px;
 }

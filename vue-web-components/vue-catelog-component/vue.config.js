@@ -11,11 +11,11 @@ module.exports = {
 			.use("babel-loader")
 			.loader("babel-loader")
 			.end();
-		config.module.rule('vue')
-			.uses.clear()
-			.use('vue-svg-inline-loader')
-			.loader('vue-svg-inline-loader')
-			.options({ /* ... */ })
+		// config.module.rule('vue')
+		// 	.uses.clear()
+		// 	.use('vue-svg-inline-loader')
+		// 	.loader('vue-svg-inline-loader')
+		// 	.options({ /* ... */ })
     },
     devServer: {
         disableHostCheck: true
