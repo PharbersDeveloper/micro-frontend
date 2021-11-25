@@ -1,19 +1,5 @@
 <template>
-    <div class="excel-container">
-        <div class="schemas" style="width: 100%" ref="schemas">
-            <div class="view" ref="headers">
-                <header-item v-for="(item, index) in schema.cols" :isNeedPopmenu="isNeedPopmenu" :title="item" :itemWidth="118" :key="index"/>
-                <header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
-            </div>
-        </div>
-        <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
-            <div class="body" :style="{height: page_size * 118 +'px'}">
-                <ph-excel-page></ph-excel-page>
-                <div ref="select" class="row-select"></div>
-                <select class="hidden" ref="hidden" @keydown="keyPressHandler" style="width: 0px;height: 0px"></select>
-            </div>
-        </div>
-    </div>
+    <canvas ref="canvas" class="canvas" width="1" height="1"></canvas>
 </template>
 <script>
 import PhDataSource from './model/datasource'
@@ -22,27 +8,29 @@ import PhDefaultPalettePolicy from './model/palettepolicy'
 import PhDefaultFontPolicy from './model/fontpolicy'
 import PhDefaultRenderPolicy from './model/renderpolicy'
 import PhExcelDataSchema from './model/schema'
-import PhExcelPage from './bp-excel-page'
 export default {
     data() {
         return {
-            anchor: {x: 0, y: 0},
+            // anchor: {x: 0, y: 0},
 
             // all states
             needRefresh: 0,
             dataRefresh: 0,
-            dataAppend: 0,
-            cur_row: 0,
-            cur_page: 0,
+            // dataAppend: 0,
+            // cur_row: 0,
+            // cur_page: 0,
 
             renderPolicy: null
         }
     },
     components: {
-        headerItem:require('./bp-excel-header.vue').default,
-        PhExcelPage
+
     },
     props: {
+        cur_page: {
+            type: Number,
+            default: 0
+        },
         isNeedPopmenu: {
             type: Boolean,
             default: true
@@ -51,17 +39,33 @@ export default {
             type: Boolean,
             default: true
         },
-        isNeedKeyBoardEvent: {
-            type: Boolean,
-            default: true
-        },
-        viewHeight: {
-            type: String,
-            default: '600px'
-        },
         page_size: {
             type: Number,
             default: 50
+        },
+        datasource: {
+            type: Object,
+            default: function () {
+                return new PhDataSource('1')
+            }
+        },
+        sizePolicy: {
+            type: Object,
+            default: function() {
+                return new PhDefaultSizePolicy()
+            }
+        },
+        palettePolicy: {
+            type: Object,
+            default: function() {
+                return new PhDefaultPalettePolicy()
+            }
+        },
+        fontPolicy: {
+            type: Object,
+            default: function() {
+                return new PhDefaultFontPolicy()
+            }
         },
         schema: {
             type: Object,
@@ -71,20 +75,35 @@ export default {
         }
     },
     beforeMount() {
-
+        if(this.needFirstRender) {
+            this.datasource.refreshData(this)
+        }
     },
     mounted() {
-
+        // this.focusHandler()
+        if (this.renderPolicy == null) {
+            this.renderPolicy = new PhDefaultRenderPolicy(
+                this.$refs.canvas, this.sizePolicy,
+                this.datasource, this.palettePolicy,
+                this.fontPolicy, this.page_size,
+                this.$refs.hidden,
+                false
+            )
+        }
     },
     methods: {
-        scrollGet (e) {
-            this.$refs.schemas.scrollLeft = e.target.scrollLeft
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         }
     },
     watch: {
         needRefresh(n, o) {
             const hit_size = this.renderPolicy.setupLayout()
-            this.$refs.viewport.attributes["style"].value = "height: " + this.viewHeight + "; width: " + (hit_size.width + 8) + "px"
+            // this.$refs.viewport.attributes["style"].value = "height: " + this.viewHeight + "; width: " + (hit_size.width + 8) + "px"
             this.renderPolicy.render(this.cur_row, this.cur_page)
         },
         dataRefresh(n, o) {
