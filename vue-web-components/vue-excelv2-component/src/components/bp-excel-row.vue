@@ -1,6 +1,7 @@
 <template>
     <div class="ph-row">
-        <ph-cell v-for="(item, index) in value" :value="item" :cellWidth="cellWidth(index)" :state="state" :dtype="dtype(index)" :key="index"/>
+        <ph-cell v-for="(item, index) in value" :value="item" :cellWidth="cellWidth(index)"
+                 :cellHeight="rowHeight" :state="state" :dtype="dtype(index)" :key="index"/>
     </div>
 </template>
 <script>
@@ -29,6 +30,10 @@ export default {
         state: {
             type: String,
             default: "loading"
+        },
+        rowHeight: {
+            type: Number,
+            default: 24
         },
         value: {
             type: Array,

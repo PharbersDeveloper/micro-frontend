@@ -21,10 +21,14 @@ export default {
     },
     computed: {
         showing: function() {
-            return this.curPage.indexOf(this.page) !== -1
+            const tmp = this.curPage.indexOf(this.page) !== -1
+            if (tmp) {
+                this.datasource.refreshData(this)
+            } else this.data = []
+            return tmp
         },
         style: function() {
-            return "height: 1200px; width: 1298px;"
+            return "height: 2400px; width: 1298px;"
         }
     },
     components: {
@@ -41,7 +45,7 @@ export default {
         },
         pageSize: {
             type: Number,
-            default: 50
+            default: 100
         },
         datasource: {
             type: Object,
@@ -55,9 +59,6 @@ export default {
                 return new PhExcelDataSchema()
             }
         }
-    },
-    beforeMount() {
-        // this.datasource.refreshData(this)
     },
     mounted() {
 
@@ -74,11 +75,6 @@ export default {
     watch: {
         dataIsReady(n, o) {
             this.state = "Ready"
-        },
-        showing(n, o) {
-            if (n) {
-                this.datasource.refreshData(this)
-            }
         }
     }
 };

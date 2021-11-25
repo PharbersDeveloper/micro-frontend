@@ -16,8 +16,10 @@ export default {
         style: function() {
             let tmp = ""
             let itemWidth = this.cellWidth
+            let itemHeight = this.cellHeight
             let dtype = this.dtype
             tmp = "width: " + itemWidth + 'px;'
+            tmp += "height: " + itemHeight + 'px;'
             if (dtype === "Text") {
                 tmp += "text-align: left;"
             }
@@ -39,6 +41,10 @@ export default {
         cellWidth: {
             type: Number,
             default: 118
+        },
+        cellHeight: {
+            type: Number,
+            default: 24
         },
         dtype: {
             type: String,

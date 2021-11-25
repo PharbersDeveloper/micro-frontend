@@ -7,12 +7,15 @@
                 <header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
         </div>
-        <div v-if="countIsReady > 0" :style="{height: '100%', width: '100%'}"></div>
+        <div v-if="countIsReady === 0" :style="{height: '100%', width: '100%'}">&nbsp;</div>
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
-            <div class="body" :style="{height: page_size * 24 +'px'}">
-                <ph-excel-page :page="0" :curPage="curPage"
+            <div class="body" :style="{height: totalHeight +'px'}">
+                <ph-excel-page v-for="(item, index) in pageRange"
+                               :page="index" :curPage="curPage"
                                :datasource="datasource"
-                               :schema="schema" />
+                               :schema="schema"
+                               :rowHeight="rowHeight"
+                               :key="item"/>
             </div>
         </div>
     </div>
@@ -27,13 +30,22 @@ export default {
             schemaIsReady: 0,
             countIsReady: 0,
             curPage: [],
+            pageRange: [],
             dataCount: 0,
             scrollBarWidth: 8,
+            rowHeight: 24,
             style: ""
         }
     },
     computed: {
-
+        totalHeight: function() {
+            let dataCount = this.dataCount
+            return dataCount * this.rowHeight
+        },
+        pageHeight: function() {
+            let batchSize = this.datasource.batch_size
+            return batchSize * this.rowHeight
+        }
     },
     components: {
         headerItem:require('./bp-excel-header.vue').default,
@@ -61,9 +73,6 @@ export default {
             }
         }
     },
-    beforeMount() {
-
-    },
     mounted() {
         // TODO:  这里请求搞定schema
         this.schema.resetSchema(
@@ -76,6 +85,19 @@ export default {
     methods: {
         scrollGet (e) {
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
+            if (e.target.scrollTop > this.pageHeight * this.curPage[2]) {
+                let tmp = []
+                for (var idx in this.curPage) {
+                    tmp.push(this.curPage[idx] + 1)
+                }
+                this.curPage = tmp
+            } else if (e.target.scrollTop < this.pageHeight * this.curPage[1]) {
+                let tmp = []
+                for (idx in this.curPage) {
+                    tmp.push(this.curPage[idx] - 1)
+                }
+                this.curPage = tmp
+            }
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -97,12 +119,16 @@ export default {
             this.style = "height: " + viewHeight + ";" + "width: " + (schema.totalWidth() + this.scrollBarWidth) + "px;"
         },
         countIsReady(n, o) {
-            this.curPage = [0, 1]
+            this.curPage = [-1, 0, 1]
+            this.pageRange = []
+            for (var idx = 0; idx < this.dataCount/this.datasource.batch_size + 1; ++idx) {
+                this.pageRange.push(idx)
+            }
         }
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .excel-container {
         // TODO: 我只做了chrome 浏览器
         /* 滚动槽（轨道）宽高 */
