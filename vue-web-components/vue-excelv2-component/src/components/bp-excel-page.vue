@@ -23,12 +23,17 @@ export default {
         showing: function() {
             const tmp = this.curPage.indexOf(this.page) !== -1
             if (tmp) {
-                this.datasource.refreshData(this)
-            } else this.data = []
+                if (this.dataIsReady === 0)
+                    this.datasource.refreshData(this, this.page, this.schema)
+            } else {
+                this.data = []
+                this.dataIsReady = 0
+            }
             return tmp
         },
         style: function() {
-            return "height: 2400px; width: 1298px;"
+            // return "height: 2400px; width: 1298px;"
+            return "height: " + this.pageHeight + "px; width: " + this.pageWidth + "px;"
         }
     },
     components: {
@@ -46,6 +51,14 @@ export default {
         pageSize: {
             type: Number,
             default: 100
+        },
+        pageHeight: {
+            type: Number,
+            default: 2400
+        },
+        pageWidth: {
+            type: Number,
+            default: 1298
         },
         datasource: {
             type: Object,
