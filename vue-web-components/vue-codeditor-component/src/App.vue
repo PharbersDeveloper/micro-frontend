@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import phCodeditor from './components/ph-codeditor.vue'
+import phCodeditor from './components/ph-codeditor-page.vue'
 
 export default {
     name: 'App',

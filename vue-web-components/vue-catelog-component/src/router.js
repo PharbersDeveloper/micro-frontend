@@ -9,6 +9,7 @@ import viewJson from './components/panel/view-json.vue'
 import project from './components/panel/project-list.vue'
 import dataListHome from './components/panel/data-list-home.vue'
 import uploadDataset from './components/panel/upload-dataset.vue'
+import scriptsList from './components/panel/scripts-list.vue'
 import selectFile from './components/panel/select-file.vue'
 import excelHandler from './components/bp-excel-handler'
 import nextDialog from './components/panel/next-dialog.vue'
@@ -16,6 +17,7 @@ import excelColumnClean from './components/panel/excel-column-clean'
 import clearDatasetDialog from './components/panel/clear-dataset-dialog.vue'
 import createTagsDialog from './components/panel/create-tags-dialog.vue'
 import deleteTagsDialog from './components/panel/delete-tags-dialog.vue'
+import codeditor from './components/bp-codeditor-page'
 // import fileContent from './components/panel/file-content.vue'
 
 Vue.use(Router)
@@ -104,6 +106,17 @@ export default new Router({
             path: '/excel-handler',
             name: 'excelHandler',
             component: excelHandler
+        },
+        {
+            path: '/codeditor',
+            name: 'codeditor',
+            component: codeditor
+        },
+        {
+            path: '/scripts-list',
+            name: 'scriptsList',
+            component: scriptsList
         }
+		
     ]
 })
