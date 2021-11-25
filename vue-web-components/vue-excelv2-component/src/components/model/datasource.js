@@ -1,17 +1,15 @@
 
 export default class PhDataSource {
-    constructor(id, adapter, schema, cur_page) {
+    constructor(id, adapter) {
         this.id = id
-        // this.data = []
         this.sort = {}
         this.filter = {}
         this.projectId = ''
         this.name = "prod_clean_v2"
         this.batch_size = 100
-        // this.cur_page = 0
-        this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
+        // this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
         // this.schema = schema
-        this.cols = this.schema
+        // this.cols = this.schema
         if (!adapter)
             this.adapter = this.defaultAdapter
         this.debugToken = "eb82959519b7fb7af713f6056dfc9fb0ff0a428f88b841cd1344d46ea6113bbc"
@@ -25,12 +23,10 @@ export default class PhDataSource {
         return result
     }
 
-    buildQuery(ele, page) {
+    buildQuery(ele, page, schema) {
         function buildQueryString() {
             let sql_str = "SELECT "
-            let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
-            // sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
-            // sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+            let selectParam = schema.map(item => '`' + item + '`').join(',')
             sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name + '`'
 
             // filter
@@ -69,7 +65,7 @@ export default class PhDataSource {
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildQueryString(),
-            "schema": ele.datasource.schema
+            "schema": schema
         }
         let options = {
             method: "POST",
@@ -83,14 +79,14 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(ele, page) {
-        if (ele.datasource.schema.length > 0) {
-            ele.datasource.buildQuery(ele, page)
+    refreshData(ele, page, schema) {
+        if (schema.schema.length > 0) {
+            ele.datasource.buildQuery(ele, page, schema.schema)
                 .then((response) => response.json())
                 .then((response) => {
                     const tmp = []
                     for (var idx in response) {
-                        tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+                        tmp.push(ele.datasource.adapter(response[idx], schema.cols))
                     }
                     ele.data = tmp //response.map(ele.datasource.adapter)
                     // ele.datasource.data = tmp //response.map(ele.datasource.adapter)
