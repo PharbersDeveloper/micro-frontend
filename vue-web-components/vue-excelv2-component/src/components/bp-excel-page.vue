@@ -24,7 +24,7 @@ export default {
             const tmp = this.curPage.indexOf(this.page) !== -1
             if (tmp) {
                 if (this.dataIsReady === 0)
-                    this.datasource.refreshData(this)
+                    this.datasource.refreshData(this, this.page)
             } else {
                 this.data = []
                 this.dataIsReady = 0

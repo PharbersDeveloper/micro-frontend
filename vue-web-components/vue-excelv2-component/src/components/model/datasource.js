@@ -8,7 +8,7 @@ export default class PhDataSource {
         this.projectId = ''
         this.name = "prod_clean_v2"
         this.batch_size = 100
-        this.cur_page = 0
+        // this.cur_page = 0
         this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
         // this.schema = schema
         this.cols = this.schema
@@ -25,7 +25,7 @@ export default class PhDataSource {
         return result
     }
 
-    buildQuery(ele) {
+    buildQuery(ele, page) {
         function buildQueryString() {
             let sql_str = "SELECT "
             let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
@@ -61,7 +61,7 @@ export default class PhDataSource {
 
             // pages
             sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-            sql_str = sql_str + " OFFSET " + (ele.datasource.cur_page * ele.datasource.batch_size).toString()
+            sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
 
             return sql_str
         }
@@ -83,9 +83,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(ele) {
+    refreshData(ele, page) {
         if (ele.datasource.schema.length > 0) {
-            ele.datasource.buildQuery(ele)
+            ele.datasource.buildQuery(ele, page)
                 .then((response) => response.json())
                 .then((response) => {
                     const tmp = []
