@@ -2,11 +2,12 @@
     <div class="excel-container">
         <div class="schemas" style="width: 100%" ref="schemas">
             <div class="view" ref="headers">
-                <header-item v-for="(item, index) in schema.cols" :isNeedPopmenu="isNeedPopmenu" :title="item" :itemWidth="118" :key="index"/>
+                <header-item v-for="(item, index) in schema.cols" :isNeedPopmenu="isNeedPopmenu" :title="item"
+                             :itemWidth="schema.colWidth(index)" :key="index"/>
                 <header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
         </div>
-        <div ref="viewport" @click="focusHandler" class="viewport" :style="{height: viewHeight}" @scroll="scrollGet($event)">
+        <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
             <div class="body" :style="{height: page_size * 24 +'px'}">
                 <ph-excel-page></ph-excel-page>
             </div>
@@ -15,10 +16,6 @@
 </template>
 <script>
 import PhDataSource from './model/datasource'
-import PhDefaultSizePolicy from './model/sizepolicy'
-import PhDefaultPalettePolicy from './model/palettepolicy'
-import PhDefaultFontPolicy from './model/fontpolicy'
-import PhDefaultRenderPolicy from './model/renderpolicy'
 import PhExcelDataSchema from './model/schema'
 import PhExcelPage from './bp-excel-page'
 export default {
@@ -29,11 +26,17 @@ export default {
             // all states
             needRefresh: 0,
             dataRefresh: 0,
-            dataAppend: 0,
-            cur_row: 0,
             cur_page: 0,
+            margin_right: 8,
 
             renderPolicy: null
+        }
+    },
+    computed: {
+        style: function() {
+            let viewHeight = this.viewHeight
+            let schema = this.schema
+            return "height: " + viewHeight + ";" + "width: " + (parseInt(schema.totalWidth()) + parseInt(this.margin_right)) + "px;"
         }
     },
     components: {

@@ -1,30 +1,37 @@
 
 export default class PhDataSource {
-    constructor(id, adapter) {
+    constructor(id, adapter, schema, cur_page) {
         this.id = id
         this.data = []
         this.sort = {}
         this.filter = {}
         this.projectId = ''
         this.name = "prod_clean_v2"
-        this.batch_size = 200
+        this.batch_size = 50
+        this.cur_page = 0
         this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
+        // this.schema = schema
         this.cols = this.schema
         if (!adapter)
             this.adapter = this.defaultAdapter
         this.debugToken = "eb82959519b7fb7af713f6056dfc9fb0ff0a428f88b841cd1344d46ea6113bbc"
     }
 
-    defaultAdapter(row) {
-        return [row.Index, row.Id, row.Hospname, row.Province, row.City,
-            row.lHospnaem, row.lHospalias, row.lDistrictct, row.lLevel,
-            row.lCat, row.lOffweb]
+    defaultAdapter(row, cols) {
+        let result = []
+        for (var idx in cols) {
+            result.push(row[cols[idx]])
+        }
+        return result
     }
 
-    buildQuery(ele, isAppend=false) {
+    buildQuery(ele) {
         function buildQueryString() {
             let sql_str = "SELECT "
-            sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
+            let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
+            // sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
+            // sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+            sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name + '`'
 
             // filter
             let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -33,20 +40,29 @@ export default class PhDataSource {
                 if(key != firstFilter) {
                     filterParam = " AND "
                 }
-                sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+                sql_str = sql_str + filterParam + ele.datasource.filter[key]
             }
 
             // sorts
-            for (const key in ele.datasource.sort) {
-                sql_str = sql_str + " ORDER BY " + key
-                if (ele.datasource.sort[key] < 0) {
-                    sql_str = sql_str + " desc "
+            if(ele.datasource.sort && Object.keys(ele.datasource.sort).length !== 0) {
+                sql_str = sql_str + " ORDER BY `"
+                let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
+                for (const key in ele.datasource.sort) {
+                    if(lastSort == key) {
+                        sql_str = sql_str + key +'`'
+                    } else {
+                        sql_str = sql_str + key +'`,`'
+                    }
+                    if (ele.datasource.sort[key] < 0) {
+                        sql_str = sql_str + " desc "
+                    }
                 }
             }
 
             // pages
             sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-            sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
+            sql_str = sql_str + " OFFSET " + (ele.datasource.cur_page * ele.datasource.batch_size).toString()
+
             return sql_str
         }
         const url = "https://api.pharbers.com/phchproxyquery"
@@ -68,21 +84,17 @@ export default class PhDataSource {
     }
 
     refreshData(ele) {
-        ele.datasource.buildQuery(ele)
-            .then((response) => response.json())
-            .then((response) => {
-                ele.datasource.data = response.map(ele.datasource.adapter)
-                ele.needRefresh++
-            })
-    }
-
-    appendData(ele) {
-        ele.datasource.buildQuery(ele, true)
-            .then((response) => response.json())
-            .then((response) => {
-                ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-                ele.cur_page++
-                ele.needRefresh++
-            })
+        if (ele.datasource.schema.length > 0) {
+            ele.datasource.buildQuery(ele)
+                .then((response) => response.json())
+                .then((response) => {
+                    const tmp = []
+                    for (var idx in response) {
+                        tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+                    }
+                    ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+                    ele.dataIsReady++
+                })
+        }
     }
 }
