@@ -15,6 +15,8 @@
                                :datasource="datasource"
                                :schema="schema"
                                :rowHeight="rowHeight"
+                               :page-height="pageHeight"
+                               :page-width="schema.totalWidth()"
                                :key="item"/>
             </div>
         </div>

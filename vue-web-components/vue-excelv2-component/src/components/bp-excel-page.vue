@@ -47,6 +47,14 @@ export default {
             type: Number,
             default: 100
         },
+        pageHeight: {
+            type: Number,
+            default: 2400
+        },
+        pageWidth: {
+            type: Number,
+            default: 1298
+        },
         datasource: {
             type: Object,
             default: function () {
