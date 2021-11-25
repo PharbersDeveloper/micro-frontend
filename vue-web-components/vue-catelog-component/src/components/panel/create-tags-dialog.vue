@@ -180,15 +180,15 @@ export default {
             height: 20px;
             margin-right: 5px;
         }
-		.dataset_name {
-			height: 60px;
-			white-space: nowrap;
-			overflow: hidden;
-			width: 400px;
-			text-overflow: ellipsis;
-			line-height: 60px;
-			cursor: pointer;
-		}
+        .dataset_name {
+            height: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 400px;
+            text-overflow: ellipsis;
+            line-height: 60px;
+            cursor: pointer;
+        }
     }
     .close_icon {
         width: 24px;

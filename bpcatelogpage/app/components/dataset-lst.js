@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-
-
+import { tracked } from '@glimmer/tracking'
 
 export default class DatasetLstComponent extends Component {
 	@service router
@@ -10,7 +9,8 @@ export default class DatasetLstComponent extends Component {
 	@service cookies
     @service('loading') loadingService;
     @service noticeService;
-	@service ajax
+	@service ajax 
+	@tracked firstRegister = true
 
 	@action
 	async listener(e) {
@@ -205,16 +205,21 @@ export default class DatasetLstComponent extends Component {
 
 	get calAllData() {
 		this.args.model._isVue = true
-		let tags = new Set()
-		this.args.model.dss.forEach((iter,index) => {
-			if(typeof(iter.label) == 'string') {
-				iter.label = JSON.parse(iter.label)
-				iter.label.map(it => {
-					tags.add(it)
-				})
-			}
-		})
-		this.args.model.tagsArray = Array.from(tags)
+		if(this.firstRegister) {
+			this.firstRegister = false
+			//tags
+			let tags = new Set()
+			this.args.model.dss.forEach((iter,index) => {
+				if(typeof(iter.label) == 'string') {
+					iter.label = JSON.parse(iter.label)
+					iter.label.map(it => {
+						tags.add(it)
+					})
+				}
+			})
+			this.args.model.tagsArray = Array.from(tags)
+		}
+		
 		return this.args.model
 	}
 }
