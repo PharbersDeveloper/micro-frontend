@@ -193,280 +193,277 @@ import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 export default {
-	data() {
-		return {
-			dialogVersionFilterVisible: false, //显示行
-			dialogSortVisible: false, //显示排序
-			dialogCollectionVisible: false, //显示列
-			dialogDownloadVisible: false, //显示下载
-			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-			showSelectOptionParam: false,
-			closeTosts: false,
-			descRefresh: 0,
-			totalNum: 0,
-			totalCols: 0,
-			matchNum: 0,
-			dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
-			close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
-			searchRow: '',
-			searchList: '',
-			search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
-			versionCandidatesShow: [],
-			searchSort: '',
-			expangPopup: false
-		}
-	},
-	components: {
-		bpSelectVue,
-		bpOptionVue,
-		ElDialog,
-		ElCheckbox,
-		ElCheckboxGroup,
-		ElButton,
-		ElInput,
-		bpExcel
-	},
-	props: {
-		title: {
-			type: String,
-			default: "预览数据样本"
-		},
-		datasource: {
-			type: Object,
-			default: function () {
-				return new PhContainerDataSource('1')
-			}
-		},
-		schema: {
-			type: Object,
-			default: function () {
-				return new PhContainerSchema('1')
-			}
-		},
-		versionFilterPolicy: {
-			type: Object,
-			default: function() {
-				return new PhDlgVersionController('1')
-			}
-		},
-		collectionsPolicy: {
-			type: Object,
-			default: function() {
-				return new PhDlgCollectionController('1', this.schema.schema)
-			}
-		},
-		allData: {
-			type: Object,
-			default: function() {
-				return {
-					projectName: '',
-					datasetName: 'prod_clean_v2',
-					projectId: '',
-					schemaArr: []
-				}
-			}
-		}
-	},
-	beforeMount() {
+    data() {
+        return {
+            dialogVersionFilterVisible: false, //显示行
+            dialogSortVisible: false, //显示排序
+            dialogCollectionVisible: false, //显示列
+            dialogDownloadVisible: false, //显示下载
+            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
+            showSelectOptionParam: false,
+            closeTosts: false,
+            matchNum: 0,
+            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+            searchRow: '',
+            searchList: '',
+            search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+            versionCandidatesShow: [],
+            searchSort: '',
+            expangPopup: false
+        }
+    },
+    computed: {
+        totalNum: function() {
+            if (this.$refs.excel)
+                return this.$refs.excel.dataCount
+            else return 0
+        },
+        totalCols: function() {
+            return this.schema.cols.length
+        }
+    },
+    components: {
+        bpSelectVue,
+        bpOptionVue,
+        ElDialog,
+        ElCheckbox,
+        ElCheckboxGroup,
+        ElButton,
+        ElInput,
+        bpExcel
+    },
+    props: {
+        title: {
+            type: String,
+            default: "预览数据样本"
+        },
+        datasource: {
+            type: Object,
+            default: function () {
+                return new PhContainerDataSource('1')
+            }
+        },
+        schema: {
+            type: Object,
+            default: function () {
+                return new PhContainerSchema('1')
+            }
+        },
+        versionFilterPolicy: {
+            type: Object,
+            default: function() {
+                return new PhDlgVersionController('1')
+            }
+        },
+        collectionsPolicy: {
+            type: Object,
+            default: function() {
+                return new PhDlgCollectionController('1', this.schema.schema)
+            }
+        },
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    projectName: '',
+                    datasetName: 'prod_clean_v2',
+                    projectId: '',
+                    schemaArr: []
+                }
+            }
+        }
+    },
+    beforeMount() {
 
-	},
-	mounted() {
-		//传入数据时渲染表格
-		if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
-			this.descRefresh++
-		} else {
-			this.schema.resetSchema(
-				["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
-				["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
-				[118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
-			)
-		}
-	},
-	methods: {
-		linkToPage(name) {
-			let sel = confirm("您还没有保存更改，确认返回吗?")
-			if(sel) {
-				const event = new Event("event")
-				event.args = {
-					callback: "linkToPage",
-					element: this,
-					param: {
-						"name": name,
-						"projectName": this.allData.projectName,
-						"projectId": this.allData.projectId
-					}
-				}
-				this.$emit('event', event)
-			}
-		},
-		focusOutExpand() {
-			this.expangPopup = false
-		},
-		focusExpand() {
-			this.expangPopup = true
-		},
-		search(data) {
-			console.log(data)
-		},
-		getCookie(name) {
-			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-			if (arr = document.cookie.match(reg))
-				return (arr[2]);
-			else
-				return null;
-		},
-		on_searchBtnClicked() {
-			this.matchNum = this.datasource.clientSideSearch(this, this.$refs.search.value)
-		},
-		showSelectOption() {
-			this.showSelectOptionParam = true
-		},
-		//显示行取消
-		on_clickVersionFilterCancel() {
-			this.dialogVersionFilterVisible = false
-			this.searchRow = ""
-			// this.versionFilterPolicy.selectVersionTags = []
-		},
-		// 显示行确认
-		on_clickVersionFilterConfirm() {
-			this.searchRow = ""
-			this.dialogVersionFilterVisible = false
-			const condi = this.versionFilterPolicy.selectVersionTags
-			if(condi.length > 0) {
-				let condi_str = "`version` in ["
-				for (var idx in condi) {
-					console.log(idx)
-					if (idx > 0) {
-						condi_str = condi_str + ","
-					}
-					console.log(condi[idx])
-					if(typeof(condi[idx]) === 'string') {
-						condi_str = condi_str + "'" + condi[idx] + "'"
-					}
-					console.log(condi_str)
-				}
-				condi_str = condi_str + "]"
-				this.datasource.pushFilterCondition("version", condi_str)
-				this.$refs.excel.dataRefresh++
-			}
-		},
-		//选择列确认
-		on_clickCollectionConfirm() {
-			this.dialogCollectionVisible = false
-			this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
-			this.$refs.excel.dataRefresh++
-			this.searchList = ""
-		},
-		//选择列取消
-		on_clickCollectionCancel() {
-			this.dialogCollectionVisible = false
-			this.searchList = ""
-		},
-		on_collectionCheckAllChange(val) {
-			this.collectionsPolicy.checkAllCollections(val)
-		},
-		on_handleCheckedColsChange(val) {
-			this.collectionsPolicy.checkCollectionsItem(val)
-		},
-		on_collectionSearchBtnClicked(data) {
-			this.collectionsPolicy.filterCollectionsByChar(data)
-		},
-		on_clickSortSelectCandi(col) {
-			this.collectionsPolicy.popSortCols(col)
-		},
-		on_clickSortShownCandi(col) {
-			this.collectionsPolicy.pushSortCols(col)
-		},
-		on_clearSortCollections() {
-			this.collectionsPolicy.sortCollections = []
-			this.collectionsPolicy.clearShownCollectionFilter()
-		},
-		//sort取消
-		on_clickSortCancel() {
-			this.dialogSortVisible = false
-			this.searchSort = ""
-		},
-		// sort确认
-		on_clickSortConfirm() {
-			this.searchSort = ""
-			this.dialogSortVisible = false
-			this.datasource.clearSortCondition()
-			for (var idx in this.collectionsPolicy.sortCollections) {
-				if(typeof(this.collectionsPolicy.sortCollections[idx]) === 'string') {
-					this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
-				}
-			}
-			this.$refs.excel.dataRefresh++
-		},
-		on_clickDownloadCancel() {
-			this.dialogDownloadVisible = false
-		},
-		on_clickDownloadConfirm() {
-			this.dialogDownloadVisible = false
-			// TODO
-		},
-		searchRowInput(data) {
-			this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
-		}
-	},
-	watch: {
-		// 首次加载触发，请求Excel数据
-		'allData.schemaArr': {
-			immediate: true,
-			handler:function(n, o) {
-				const length = this.allData.schemaArr.length
-				this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
-				// this.datasource.schema = n
-				// this.datasource.cols = n
-				this.datasource.name = this.allData.datasetName
-				this.datasource.projectId = this.allData.projectId
-				if (this.datasource.projectId.length > 0)
+    },
+    mounted() {
+        //传入数据时渲染表格
+        if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
+            // this.descRefresh++
+            console.log("refresh excel")
+        } else {
+            this.schema.resetSchema(
+                ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+                ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+                [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
+            )
+        }
+    },
+    methods: {
+        linkToPage(name) {
+            let sel = confirm("您还没有保存更改，确认返回吗?")
+            if(sel) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "linkToPage",
+                    element: this,
+                    param: {
+                        "name": name,
+                        "projectName": this.allData.projectName,
+                        "projectId": this.allData.projectId
+                    }
+                }
+                this.$emit('event', event)
+            }
+        },
+        focusOutExpand() {
+            this.expangPopup = false
+        },
+        focusExpand() {
+            this.expangPopup = true
+        },
+        search(data) {
+            console.log(data)
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
+        on_searchBtnClicked() {
+            this.matchNum = this.datasource.clientSideSearch(this, this.$refs.search.value)
+        },
+        showSelectOption() {
+            this.showSelectOptionParam = true
+        },
+        //显示行取消
+        on_clickVersionFilterCancel() {
+            this.dialogVersionFilterVisible = false
+            this.searchRow = ""
+            // this.versionFilterPolicy.selectVersionTags = []
+        },
+        // 显示行确认
+        on_clickVersionFilterConfirm() {
+            this.searchRow = ""
+            this.dialogVersionFilterVisible = false
+            const condi = this.versionFilterPolicy.selectVersionTags
+            if(condi.length > 0) {
+                let condi_str = "`version` in ["
+                for (var idx in condi) {
+                    console.log(idx)
+                    if (idx > 0) {
+                        condi_str = condi_str + ","
+                    }
+                    console.log(condi[idx])
+                    if(typeof(condi[idx]) === 'string') {
+                        condi_str = condi_str + "'" + condi[idx] + "'"
+                    }
+                    console.log(condi_str)
+                }
+                condi_str = condi_str + "]"
+                this.datasource.pushFilterCondition("version", condi_str)
+                this.$refs.excel.dataRefresh++
+            }
+        },
+        //选择列确认
+        on_clickCollectionConfirm() {
+            this.dialogCollectionVisible = false
+            this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
+            this.$refs.excel.dataRefresh++
+            this.searchList = ""
+        },
+        //选择列取消
+        on_clickCollectionCancel() {
+            this.dialogCollectionVisible = false
+            this.searchList = ""
+        },
+        on_collectionCheckAllChange(val) {
+            this.collectionsPolicy.checkAllCollections(val)
+        },
+        on_handleCheckedColsChange(val) {
+            this.collectionsPolicy.checkCollectionsItem(val)
+        },
+        on_collectionSearchBtnClicked(data) {
+            this.collectionsPolicy.filterCollectionsByChar(data)
+        },
+        on_clickSortSelectCandi(col) {
+            this.collectionsPolicy.popSortCols(col)
+        },
+        on_clickSortShownCandi(col) {
+            this.collectionsPolicy.pushSortCols(col)
+        },
+        on_clearSortCollections() {
+            this.collectionsPolicy.sortCollections = []
+            this.collectionsPolicy.clearShownCollectionFilter()
+        },
+        //sort取消
+        on_clickSortCancel() {
+            this.dialogSortVisible = false
+            this.searchSort = ""
+        },
+        // sort确认
+        on_clickSortConfirm() {
+            this.searchSort = ""
+            this.dialogSortVisible = false
+            this.datasource.clearSortCondition()
+            for (var idx in this.collectionsPolicy.sortCollections) {
+                if(typeof(this.collectionsPolicy.sortCollections[idx]) === 'string') {
+                    this.datasource.pushSortCondition(this.collectionsPolicy.sortCollections[idx], 1)
+                }
+            }
+            this.$refs.excel.dataRefresh++
+        },
+        on_clickDownloadCancel() {
+            this.dialogDownloadVisible = false
+        },
+        on_clickDownloadConfirm() {
+            this.dialogDownloadVisible = false
+            // TODO
+        },
+        searchRowInput(data) {
+            this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
+        }
+    },
+    watch: {
+        // 首次加载触发，请求Excel数据
+        'allData.schemaArr': {
+            immediate: true,
+            handler:function(n, o) {
+                const length = this.allData.schemaArr.length
+                this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
+                this.datasource.name = this.allData.datasetName
+                this.datasource.projectId = this.allData.projectId
+                if (this.datasource.projectId.length > 0)
 				    this.datasource.resetUrl("https://apiv2.pharbers.com/phdadatasource")
-				// this.datasource.refreshData(this.$refs.excel)
-				// this.descRefresh++
-			}
-		},
-		descRefresh(n, o) {
-			let that = this
-			this.datasource.queryTotalCount(this).then((count) => {
-				that.totalNum = Number(count)
-			})
-			that.totalCols = that.datasource.schema.length
-		},
-		//显示行请求接口
-		dialogVersionFilterVisible(n, o) {
-			let that = this
-			if (this.versionCandidatesShow.length === 0) {
-				that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
-					//完整的显示行列表数据
-					this.versionCandidatesShow = provinces
-					that.versionFilterPolicy.versionCandidates = provinces
-				})
-			}
-		},
-		// 显示列请求接口
-		dialogCollectionVisible(n, o) {
-			if (this.collectionsPolicy.collections.length === 0)
-				this.collectionsPolicy.resetCollections(this.datasource.schema)
+            }
+        },
+        //显示行请求接口
+        dialogVersionFilterVisible(n, o) {
+            let that = this
+            if (this.versionCandidatesShow.length === 0) {
+                that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
+                    //完整的显示行列表数据
+                    this.versionCandidatesShow = provinces
+                    that.versionFilterPolicy.versionCandidates = provinces
+                })
+            }
+        },
+        // 显示列请求接口
+        dialogCollectionVisible(n, o) {
+            if (this.collectionsPolicy.collections.length === 0)
+                this.collectionsPolicy.resetCollections(this.datasource.schema)
 
-			if (n) {
-				if (this.$refs.colSearch)
-					this.$refs.colSearch.value = ""
-				this.collectionsPolicy.clearShownCollectionFilter()
-			}
-		},
-		dialogSortVisible(n, o) {
-			if (this.collectionsPolicy.collections.length === 0)
-				this.collectionsPolicy.resetCollections(this.datasource.schema)
+            if (n) {
+                if (this.$refs.colSearch)
+                    this.$refs.colSearch.value = ""
+                this.collectionsPolicy.clearShownCollectionFilter()
+            }
+        },
+        dialogSortVisible(n, o) {
+            if (this.collectionsPolicy.collections.length === 0)
+                this.collectionsPolicy.resetCollections(this.datasource.schema)
 
-			if (n) {
-				if (this.$refs.colFilter)
-					this.$refs.colFilter.value = ""
-				this.collectionsPolicy.clearShownCollectionFilter()
-				this.collectionsPolicy.resetSortCollections()
-			}
-		}
-	}
+            if (n) {
+                if (this.$refs.colFilter)
+                    this.$refs.colFilter.value = ""
+                this.collectionsPolicy.clearShownCollectionFilter()
+                this.collectionsPolicy.resetSortCollections()
+            }
+        }
+    }
 };
 </script>
 <style lang="scss">

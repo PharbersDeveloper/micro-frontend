@@ -54,188 +54,188 @@
 <script>
 // import bpExcel from './bp-excel.vue'
 export default {
-	components: {
-		// bpExcel
-	},
-	data() {
-		return {
-			dnValue: '',
-			fnpyValue: '',
-			paramQuery: "SELECT * FROM clean_master LIMIT 100",
-			schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
-			cols: ["dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
-			masterRefresh: true,
-			sourceData: {
-				data: [],
-				name: "clean_master",
-				refreshData:(ele) => {
-					ele.needRefresh++
-				},
-				appendData: (ele, cb) => {
-					cb()
-				}
-			},
-			sourceDataMaster: {
-				data: [],
-				sort: {},
-				filter: {},
-				name: "clean_master",
-				batch_size: 200,
-				adapter: (row) => [row.id, row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
-				buildQuery: (ele, isAppend=false) => {
-					function buildQueryString() {
-						let sql_str = "SELECT "
-						sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
+    components: {
+        // bpExcel
+    },
+    data() {
+        return {
+            dnValue: '',
+            fnpyValue: '',
+            paramQuery: "SELECT * FROM clean_master LIMIT 100",
+            schemaData: ["id", "dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+            cols: ["dn", "fnpy", "notes", "csn", "esn", "name", "ename", "fcode", "manu", "specifi", "lpd", "packcode", "inprice", "launchdate", "pzwh", "otcflag", "otherflag", "chccode", "who_atc", "local_chc", "pre_fix", "sur_fix", "manu_id"],
+            masterRefresh: true,
+            sourceData: {
+                data: [],
+                name: "clean_master",
+                refreshData:(ele) => {
+                    ele.needRefresh++
+                },
+                appendData: (ele, cb) => {
+                    cb()
+                }
+            },
+            sourceDataMaster: {
+                data: [],
+                sort: {},
+                filter: {},
+                name: "clean_master",
+                batch_size: 200,
+                adapter: (row) => [row.id, row.dn ? row.dn : '', row.fnpy ? row.fnpy : '', row.notes ? row.notes : '', row.csn ? row.csn: '', row.esn ? row.esn: '', row.name ? row.name : '', row.ename ? row.ename : '', row.fcode ? row.fcode : '', row.manu ? row.manu : '', row.specifi ? row.specifi : '', row.lpd ? row.lpd : '', row.packcode ? row.packcode : '', row.inprice ? row.inprice : '', row.launchdate ? row.launchdate : '', row.pzwh ? row.pzwh : '', row.otcflag ? row.otcflag : '', row.otherflag ? row.otherflag : '', row.chccode ? row.chccode : '', row.who_atc ? row.who_atc : '', row.local_chc ? row.local_chc : '', row.pre_fix ? row.pre_fix : '', row.sur_fix ? row.sur_fix : '', row.manu_id ? row.manu_id : ''],
+                buildQuery: (ele, isAppend=false) => {
+                    function buildQueryString() {
+                        let sql_str = "SELECT "
+                        sql_str = sql_str + ele.schema.toString() + " FROM " + ele.datasource.name
 
-						// filter
-						let firstFilter = Object.keys(ele.datasource.filter)[0]
-						let filterParam = " WHERE "
-						for (const key in ele.datasource.filter) {
-							if(key != firstFilter) {
-								filterParam = " AND "
-							}
-							sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
-						}
+                        // filter
+                        let firstFilter = Object.keys(ele.datasource.filter)[0]
+                        let filterParam = " WHERE "
+                        for (const key in ele.datasource.filter) {
+                            if(key != firstFilter) {
+                                filterParam = " AND "
+                            }
+                            sql_str = sql_str + filterParam + key + " LIKE '%" + ele.datasource.filter[key]+ "%'"
+                        }
 
-						// sorts
-						for (const key in ele.datasource.sort) {
-							sql_str = sql_str + " ORDER BY " + key
-							if (ele.datasource.sort[key] < 0) {
-								sql_str = sql_str + " desc "
-							}
-						}
+                        // sorts
+                        for (const key in ele.datasource.sort) {
+                            sql_str = sql_str + " ORDER BY " + key
+                            if (ele.datasource.sort[key] < 0) {
+                                sql_str = sql_str + " desc "
+                            }
+                        }
 
-						// pages
-						sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-						sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
-						console.log(ele.datasource.sort)
-						console.log(sql_str)
-						return sql_str
-					}
+                        // pages
+                        sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+                        sql_str = sql_str + " OFFSET " + (isAppend ? 0 : ele.datasource.data.length).toString()
+                        console.log(ele.datasource.sort)
+                        console.log(sql_str)
+                        return sql_str
+                    }
 
-					const url = "https://api.pharbers.com/phchproxyquery"
-					const accessToken = ele.getCookie("access_token") || "d5c8e917402c60e2d44e235ee52427b1feda4e9351f3a591b2aa910f9efbe939"
-					let body = {
-						"query": buildQueryString(),
-						"schema": ele.schema
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							"Authorization": accessToken,
-							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-							"accept": "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					return fetch(url, options)
-				},
-				refreshData:(ele) => {
-					ele.datasource.buildQuery(ele)
-						.then((response) => response.json())
-						.then((response) => {
-							ele.datasource.data = response.map(ele.datasource.adapter)
-							ele.needRefresh++
-						})
-				},
-				appendData: (ele, cb) => {
-					ele.datasource.buildQuery(ele, true)
-						.then((response) => response.json())
-						.then((response) => {
-							ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-							ele.cur_page++
-							ele.needRefresh++
-						})
-				}
-			},
-			sonRefresh: true
-		}
-	},
-	props: {
-		showDialog: {
-			type: Boolean,
-			default: false
-		},
-		sourceArr: Array,
-		excelComponent: Object,
-		provider: String,
-		dt: String
-	},
-	methods: {
-		getCookie(name) {
-			let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-			if (arr = document.cookie.match(reg))
-				return (arr[2]);
-			else
-				return null;
-		},
-		close() {
-			this.$emit('dialog-visible',false)
-		},
-		search() {
-			if(this.dnValue && this.dnValue != '') {
-				this.sourceDataMaster.filter["csn"] = this.dnValue
-			}
-			if(this.fnpyValue && this.fnpyValue != '') {
-				this.sourceDataMaster.filter["manu"] = this.fnpyValue
-			}
-			if(this.dnValue == '' && this.fnpyValue == '') {
-				this.sourceDataMaster.filter = {}
-			}
-			this.sourceDataMaster.filter["dt"] = this.dt
-			this.sourceDataMaster.filter["provider"] = this.provider
-			// 刷新子组件数据
-			this.masterRefresh= false;
-			this.$nextTick(() => {
-				this.masterRefresh= true;
-			});
-		},
-		confirm() {
-			let id = this.sourceArr[0] // source表的id
-			let cur_page_row = this.$refs.masterExcel.cur_page * this.$refs.masterExcel.page_size + this.$refs.masterExcel.cur_row //master表当前行数
-			let cur_data = this.sourceDataMaster.data[cur_page_row] //master表当前行数据
-			let fcode = cur_data[8]
-			const url = "https://api.pharbers.com/phchproxyupdate"
-			const accessToken = this.getCookie("access_token") || "d5c8e917402c60e2d44e235ee52427b1feda4e9351f3a591b2aa910f9efbe939"
-			let body = {
-				"query": `ALTER TABLE clean_source UPDATE pkc='${fcode}' WHERE id='${id}'`
-			}
-			let options = {
-				method: "POST",
-				headers: {
-					"Authorization": accessToken,
-					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-					"accept": "application/json"
-				},
-				body: JSON.stringify(body)
-			}
-			fetch(url, options).then((response) => {
-				const event = new Event("event")
-				event.args = {
-					callback: "refresh",
-					element: this,
-					param: {
-						fcode: fcode
-					}
-				}
-				this.$emit('refreshData', event)
-			})
-		}
-	},
-	watch: {
-		sourceArr: function(data) {
-			this.sourceData.data = []
-			this.sourceData.data.push(data)
-			//搜索条件
-			this.fnpyValue = this.sourceArr[6]
-			this.search()
-			// 刷新source表单组件数据
-			this.sonRefresh= false;
-			this.$nextTick(() => {
-				this.sonRefresh= true;
-			});
-		}
-	}
+                    const url = "https://api.pharbers.com/phchproxyquery"
+                    const accessToken = ele.getCookie("access_token") || "d5c8e917402c60e2d44e235ee52427b1feda4e9351f3a591b2aa910f9efbe939"
+                    let body = {
+                        "query": buildQueryString(),
+                        "schema": ele.schema
+                    }
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Authorization": accessToken,
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            "accept": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    }
+                    return fetch(url, options)
+                },
+                refreshData:(ele) => {
+                    ele.datasource.buildQuery(ele)
+                        .then((response) => response.json())
+                        .then((response) => {
+                            ele.datasource.data = response.map(ele.datasource.adapter)
+                            ele.needRefresh++
+                        })
+                },
+                appendData: (ele, cb) => {
+                    ele.datasource.buildQuery(ele, true)
+                        .then((response) => response.json())
+                        .then((response) => {
+                            ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
+                            ele.cur_page++
+                            ele.needRefresh++
+                        })
+                }
+            },
+            sonRefresh: true
+        }
+    },
+    props: {
+        showDialog: {
+            type: Boolean,
+            default: false
+        },
+        sourceArr: Array,
+        excelComponent: Object,
+        provider: String,
+        dt: String
+    },
+    methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
+        close() {
+            this.$emit('dialog-visible',false)
+        },
+        search() {
+            if(this.dnValue && this.dnValue != '') {
+                this.sourceDataMaster.filter["csn"] = this.dnValue
+            }
+            if(this.fnpyValue && this.fnpyValue != '') {
+                this.sourceDataMaster.filter["manu"] = this.fnpyValue
+            }
+            if(this.dnValue == '' && this.fnpyValue == '') {
+                this.sourceDataMaster.filter = {}
+            }
+            this.sourceDataMaster.filter["dt"] = this.dt
+            this.sourceDataMaster.filter["provider"] = this.provider
+            // 刷新子组件数据
+            this.masterRefresh= false;
+            this.$nextTick(() => {
+                this.masterRefresh= true;
+            });
+        },
+        confirm() {
+            let id = this.sourceArr[0] // source表的id
+            let cur_page_row = this.$refs.masterExcel.cur_page * this.$refs.masterExcel.page_size + this.$refs.masterExcel.cur_row //master表当前行数
+            let cur_data = this.sourceDataMaster.data[cur_page_row] //master表当前行数据
+            let fcode = cur_data[8]
+            const url = "https://api.pharbers.com/phchproxyupdate"
+            const accessToken = this.getCookie("access_token") || "d5c8e917402c60e2d44e235ee52427b1feda4e9351f3a591b2aa910f9efbe939"
+            let body = {
+                "query": `ALTER TABLE clean_source UPDATE pkc='${fcode}' WHERE id='${id}'`
+            }
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            fetch(url, options).then((response) => {
+                const event = new Event("event")
+                event.args = {
+                    callback: "refresh",
+                    element: this,
+                    param: {
+                        fcode: fcode
+                    }
+                }
+                this.$emit('refreshData', event)
+            })
+        }
+    },
+    watch: {
+        sourceArr: function(data) {
+            this.sourceData.data = []
+            this.sourceData.data.push(data)
+            //搜索条件
+            this.fnpyValue = this.sourceArr[6]
+            this.search()
+            // 刷新source表单组件数据
+            this.sonRefresh= false;
+            this.$nextTick(() => {
+                this.sonRefresh= true;
+            });
+        }
+    }
 }
 </script>
 
