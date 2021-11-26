@@ -21,6 +21,8 @@ export default class AnalyzeComponent extends Component {
 					uri = `/projects/`+ params.projectId
 				} else if (params.name == "datasets") {
 					uri = '/dataset-lst?projectName=' + params.projectName +'&projectId=' + params.projectId
+				} else if(params.name === "scripts") {
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name == "flow") {
 
 				}

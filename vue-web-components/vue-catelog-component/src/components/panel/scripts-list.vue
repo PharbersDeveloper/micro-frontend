@@ -51,19 +51,19 @@
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" @click="selectScripts('python')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    <p @click="upload">python</p>
+                                    <p>python</p>
                                 </div>
                                  <div class="list" @click="selectScripts('pyspark')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    <p @click="upload">PySpark</p>
+                                    <p>PySpark</p>
                                 </div>
                                  <div class="list" @click="selectScripts('sql')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    <p @click="upload">sql</p>
+                                    <p>sql</p>
                                 </div>
                                  <div class="list last" @click="selectScripts('sparksql')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    <p @click="upload">sparksql</p>
+                                    <p>sparksql</p>
                                 </div>
 							</div>
                             <!-- <el-select class="upload_btn_new" value="新建脚本" placeholder="新建脚本">

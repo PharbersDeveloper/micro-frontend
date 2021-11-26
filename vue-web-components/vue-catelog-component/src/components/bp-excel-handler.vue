@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import bpExcel from '../../../vue-excel-component/src/components/bp-excel'
+import bpExcel from '../../../vue-analyze-component/src/components/bp-excel'
 import PhDataSource from './model/datasource'
 
 export default {

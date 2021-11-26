@@ -56,7 +56,7 @@
 
 <script>
 import bpButton from '../../../../vue-basic-component/src/components/bp-button.vue'
-import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
+import bpExcel from '../../../../vue-analyze-component/src/components/bp-excel'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import PhDataSource from '../model/data'
