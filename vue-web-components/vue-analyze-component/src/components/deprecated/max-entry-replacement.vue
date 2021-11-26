@@ -39,7 +39,7 @@
         <div class="master-container">
             <span class="heading-small">Master文件检索结果</span>
             <div class="master-border">
-                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster" v-if="masterRefresh" ref="masterExcel"></bp-excel>
+<!--                <bp-excel :cols="cols" :schema="schemaData"  :viewHeight="300" :page_size="10" :datasource="sourceDataMaster" v-if="masterRefresh" ref="masterExcel"></bp-excel>-->
             </div>
         </div>
 
@@ -52,10 +52,10 @@
 </template>
 
 <script>
-import bpExcel from './bp-excel.vue'
+// import bpExcel from './bp-excel.vue'
 export default {
 	components: {
-		bpExcel
+		// bpExcel
 	},
 	data() {
 		return {
@@ -222,7 +222,7 @@ export default {
 			})
 		}
 	},
-	watch: { 
+	watch: {
 		sourceArr: function(data) {
 			this.sourceData.data = []
 			this.sourceData.data.push(data)
@@ -288,7 +288,7 @@ export default {
     .icon_cross {
         width: 20px;
         height: 20px;
-        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.784 5.089l.07.057L10.5 9.793l4.646-4.647a.5.5 0 0 1 .765.638l-.057.07-4.647 4.646 4.647 4.646a.5.5 0 0 1-.638.765l-.07-.057-4.646-4.647-4.646 4.647a.5.5 0 0 1-.765-.638l.057-.07L9.793 10.5 5.146 5.854a.5.5 0 0 1 .638-.765z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important; 
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.784 5.089l.07.057L10.5 9.793l4.646-4.647a.5.5 0 0 1 .765.638l-.057.07-4.647 4.646 4.647 4.646a.5.5 0 0 1-.638.765l-.07-.057-4.646-4.647-4.646 4.647a.5.5 0 0 1-.765-.638l.057-.07L9.793 10.5 5.146 5.854a.5.5 0 0 1 .638-.765z' fill='%2357565F' fill-rule='evenodd'/%3E%3C/svg%3E") no-repeat center/100% !important;
     }
 
     .mb-1 {

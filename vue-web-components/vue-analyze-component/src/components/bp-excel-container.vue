@@ -180,6 +180,7 @@
 </template>
 <script>
 import PhContainerDataSource from './model/containerDatasource'
+import PhContainerSchema from './model/containerSchema'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import PhDlgVersionController from './dlgController/dlgVersionController'
@@ -233,6 +234,12 @@ export default {
 			type: Object,
 			default: function () {
 				return new PhContainerDataSource('1')
+			}
+		},
+		schema: {
+			type: Object,
+			default: function () {
+				return new PhContainerSchema('1')
 			}
 		},
 		versionFilterPolicy: {

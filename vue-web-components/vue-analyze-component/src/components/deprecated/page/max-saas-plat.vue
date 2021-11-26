@@ -76,7 +76,7 @@
 		<uploadBox :JsonData="JsonData" v-if="showUpload" @cancel="closeUploadModal" @confirm="confirmUpload" @selectFile="selectFile" :fileName="fileName"></uploadBox>
 		<!-- 进度条 -->
 		<div v-if="closeuploadToast == '0'"
-			class="upload-toast" 
+			class="upload-toast"
 			:class="[
 				{'upload-toast-border-green': uploadToastBorder == 'green'},
 				{'upload-toast-border-blue': uploadToastBorder == 'blue'},
@@ -92,9 +92,9 @@
 			<bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
 			<bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
 			<!-- 进度条 -->
-			<div class="progress" v-if="showProgress == '1'"> 
-				<span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
-			</div> 
+			<div class="progress" v-if="showProgress == '1'">
+				<span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span>
+			</div>
 			<!-- <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
 				{{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
 			</bp-text> -->
@@ -106,13 +106,13 @@
 </template>
 
 <script>
-import bpPagination from '../bp-pagination.vue'
-import phTableCell from '../ph-table-cell.vue'
-import uploadBox from '../upload-box.vue'
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
-import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
+import bpPagination from '../../bp-pagination.vue'
+import phTableCell from '../../ph-table-cell.vue'
+import uploadBox from '../../upload-box.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
+import bpButton from 'vue-components/src/components/bp-button.vue'
+import bpText from 'vue-components/src/components/bp-text.vue'
 export default {
 	components: {
 		phTableCell,
@@ -314,12 +314,12 @@ export default {
 			//进度条
 			let that = this;
 			this.proBar = 0;
-			var clearInt = setInterval(function() { 
-				that.proBar++; 
-				console.log(that.proBar); 
-				if (that.proBar >= 99) { 
-					clearInterval(clearInt); 
-				} 
+			var clearInt = setInterval(function() {
+				that.proBar++;
+				console.log(that.proBar);
+				if (that.proBar >= 99) {
+					clearInterval(clearInt);
+				}
 			}, 60)
 			//event
 			let confirmEvent = this.clickProjectEvent;
@@ -464,7 +464,7 @@ export default {
 			margin-bottom: 20px;
 			margin-top: 28px;
 			.header {
-				
+
 				font-family: PingFangSC-Regular;
 				font-size: 14px;
 				color: #25232D;
@@ -570,7 +570,7 @@ export default {
 				}
 			}
 		}
-		
+
 		.otp-table {
 			display: flex;
 			flex-direction: column;
@@ -662,7 +662,7 @@ export default {
 			height: 36px;
 			background: #FFF;
 			box-shadow: 0 0 1px 0 rgba(7, 10, 14, 0.12), 0 8px 16px -4px rgba(9, 30, 66, 0.25);
-			border-radius: 2px; 
+			border-radius: 2px;
 			span {
 				display: flex;
 				align-items: center;

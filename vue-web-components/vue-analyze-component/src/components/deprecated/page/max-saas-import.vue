@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :viewHeight="1250" ref="targerExcel"></bp-excel>
+<!--                            <bp-excel name="targer" :viewHeight="1250" ref="targerExcel"></bp-excel>-->
                         </div>
                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 							<bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
@@ -51,7 +51,7 @@
         <!-- 进度条弹框 -->
 		<!-- <div v-if="showDialog" -->
         <div v-if="closeuploadToast == '0'"
-            class="upload-toast" 
+            class="upload-toast"
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
                 {'upload-toast-border-blue': uploadToastBorder == 'blue'},
@@ -67,9 +67,9 @@
             <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
             <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
             <!-- 进度条 -->
-            <div class="progress" v-if="showProgress == '1'"> 
-                <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
-            </div> 
+            <div class="progress" v-if="showProgress == '1'">
+                <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span>
+            </div>
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
 				<div class="cross"></div>
             </div>
@@ -78,19 +78,19 @@
 </template>
 
 <script>
-import mappingBox from '../mapping-box.vue'
-import importFileList from '../import-file-list.vue'
-import bpExcel from '../bp-excel.vue'
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import mappingBox from '../../mapping-box.vue'
+import importFileList from '../../import-file-list.vue'
+// import bpExcel from '../bp-excel.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpText from 'vue-components/src/components/bp-text.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 export default {
 	components: {
 		importFileList,
 		bpSelectVue,
 		bpOptionVue,
 		mappingBox,
-		bpExcel,
+		// bpExcel,
 		bpText
 	},
 	data() {
@@ -152,12 +152,12 @@ export default {
 			if(data.args.param.name == "import") {
 				//进度条
 				this.proBar = 0;
-				var clearInt = setInterval(function() { 
-					that.proBar++; 
-					// console.log(that.proBar); 
-					if (that.proBar >= 60) { 
-						clearInterval(clearInt); 
-					} 
+				var clearInt = setInterval(function() {
+					that.proBar++;
+					// console.log(that.proBar);
+					if (that.proBar >= 60) {
+						clearInterval(clearInt);
+					}
 				}, 60)
 			}
 			this.$emit('event', data)
@@ -496,7 +496,7 @@ export default {
             height: 36px;
             background: #FFF;
             box-shadow: 0 0 1px 0 rgba(7, 10, 14, 0.12), 0 8px 16px -4px rgba(9, 30, 66, 0.25);
-            border-radius: 2px; 
+            border-radius: 2px;
             span {
                 display: flex;
                 align-items: center;

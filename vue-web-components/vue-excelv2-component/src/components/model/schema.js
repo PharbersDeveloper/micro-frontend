@@ -29,7 +29,7 @@ export default class PhExcelDataSchema {
         else return 0
     }
 
-    requestSchema(url) {
+    requestSchema(url, arr) {
         return new Promise((resolve, reject) => {
             this.resetSchema(
                 ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
