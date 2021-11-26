@@ -12,7 +12,7 @@ export default class PhContainerDataSource {
 		this.cols = this.schema
 		if (!adapter)
 			this.adapter = this.defaultAdapter
-		this.debugToken = "1c47d49bb144adae69cb4facd18410305ec822a98eaaa24a3f97970e18147e66"
+		this.debugToken = "4bd0338b48f624b0e00fd62b5ec4250358eead0d487dde4e5d2d54cece598e32"
 	}
 
 	defaultAdapter(row, cols) {
@@ -42,7 +42,7 @@ export default class PhContainerDataSource {
 
 			// sorts
 			if(ele.datasource.sort && Object.keys(ele.datasource.sort).length !== 0) {
-				sql_str = sql_str + " ORDER BY `" 
+				sql_str = sql_str + " ORDER BY `"
 				let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
 				for (const key in ele.datasource.sort) {
 					if(lastSort == key) {

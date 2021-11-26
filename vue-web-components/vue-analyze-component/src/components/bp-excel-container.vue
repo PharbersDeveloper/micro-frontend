@@ -272,7 +272,9 @@ export default {
 	mounted() {
 		//传入数据时渲染表格
 		if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
-			this.descRefresh++
+			const length = this.allData.schemaArr.length
+			this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
+			// this.descRefresh++
 		}
 	},
 	methods: {

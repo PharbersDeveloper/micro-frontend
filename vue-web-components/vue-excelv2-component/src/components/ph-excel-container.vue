@@ -76,11 +76,13 @@ export default {
         }
     },
     mounted() {
-        this.schema.requestSchema('').then((result) => {
-            if (result) {
-                this.schemaIsReady++
-            }
-        })
+        if (this.schema.schema.length == 0) {
+            this.schema.requestSchema('').then((result) => {
+                if (result) {
+                    this.schemaIsReady++
+                }
+            })
+        } else this.schemaIsReady++
     },
     methods: {
         scrollGet (e) {

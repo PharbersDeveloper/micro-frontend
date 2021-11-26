@@ -29,7 +29,7 @@ export default class PhContainerSchema {
 	requestSchema(url, arr) {
 		return new Promise((resolve, reject) => {
 			this.resetSchema(
-				["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+				arr,
 				["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
 				[118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
 			)
