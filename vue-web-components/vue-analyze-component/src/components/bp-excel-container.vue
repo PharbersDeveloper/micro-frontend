@@ -189,6 +189,7 @@ import ElCheckbox from 'element-ui/packages/checkbox/src/checkbox'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
+import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 export default {
 	data() {
 		return {
@@ -221,7 +222,7 @@ export default {
 		ElCheckboxGroup,
 		ElButton,
 		ElInput,
-		bpExcel: require('./bp-excel.vue').default
+		bpExcel
 	},
 	props: {
 		title: {
@@ -632,7 +633,7 @@ export default {
 			}
 		}
 
-		
+
 
 		.search-container {
 			display: flex;

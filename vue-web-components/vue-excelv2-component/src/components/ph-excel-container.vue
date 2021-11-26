@@ -76,13 +76,11 @@ export default {
         }
     },
     mounted() {
-        // TODO:  这里请求搞定schema
-        this.schema.resetSchema(
-            ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
-            ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
-            [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
-        )
-        this.schemaIsReady++
+        this.schema.requestSchema('').then((result) => {
+            if (result) {
+                this.schemaIsReady++
+            }
+        })
     },
     methods: {
         scrollGet (e) {

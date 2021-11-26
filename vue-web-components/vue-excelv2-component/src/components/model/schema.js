@@ -28,4 +28,15 @@ export default class PhExcelDataSchema {
             return this.cellWidth.reduce((a, v) => a + v)
         else return 0
     }
+
+    requestSchema(url) {
+        return new Promise((resolve, reject) => {
+            this.resetSchema(
+                ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+                ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+                [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
+            )
+            resolve(true)
+        })
+    }
 }
