@@ -29,12 +29,13 @@ export default class RecipesRoute extends Route {
     }
 	async model(params) {
 		this.store.unloadAll("dataset");
-		const url = "https://apiv2.pharbers.com/phdydatasource/scan"
+		const url = "https://apiv2.pharbers.com/phdydatasource/query"
 		const accessToken = this.cookies.read( "access_token" )
 		let body = {
 			"table": "dagconf",
 			"conditions": {
-				"projectId":  ["=", params.projectId]
+				"projectId":  ["=", params.projectId],
+				"sortVersion": ["begins_with", "developer_"]
 			},
 			"limit": 100,
 			"start_key": {}

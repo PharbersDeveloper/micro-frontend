@@ -49,11 +49,24 @@
                             </div> -->
 							<button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                                <div>
-                                    <p @click="upload">本地上传</p>
+                                <div class="list" @click="selectScripts('python')">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    <p @click="upload">python</p>
+                                </div>
+                                 <div class="list" @click="selectScripts('pyspark')">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    <p @click="upload">PySpark</p>
+                                </div>
+                                 <div class="list" @click="selectScripts('sql')">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    <p @click="upload">sql</p>
+                                </div>
+                                 <div class="list last" @click="selectScripts('sparksql')">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    <p @click="upload">sparksql</p>
                                 </div>
 							</div>
-                            <!-- <el-select class="upload_btn" value="新建脚本" placeholder="新建脚本">
+                            <!-- <el-select class="upload_btn_new" value="新建脚本" placeholder="新建脚本">
                                 <el-option 
                                     @click.native="selectScripts('python')"
                                     label="Python" 
@@ -350,7 +363,7 @@ export default {
         }
     },
     methods: {
-        selectScripts() {
+        selectScripts(data) {
             debugger
         },
         //增加tag
@@ -566,7 +579,7 @@ export default {
     top: 30px;
     right: 40px;
     width: 150px;
-    height: 81px;
+    height: 130px;
     border: 1px solid #333;
     background: #fff;
     z-index: 9999;
@@ -581,6 +594,14 @@ export default {
             font-weight: 600;
         }
     }
+    .list {
+        display: flex;
+        padding: 5px;
+    }
+    .last {
+        border-bottom: none;
+    }
+
 }
 .script-opt {
     padding: 0 10px;
@@ -625,7 +646,7 @@ export default {
                 padding-top: 20px;
                 background: #f2f2f2;
                 box-sizing: border-box;
-
+                
                 .selected_search {
                     display: flex;
                     position: relative;
