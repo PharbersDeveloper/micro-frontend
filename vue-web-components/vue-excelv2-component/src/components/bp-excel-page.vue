@@ -24,13 +24,6 @@ export default {
         showing: function() {
             const tmp = this.curPage.indexOf(this.page) !== -1
             this.needRefresh++
-            // if (tmp) {
-            //     if (this.dataIsReady === 0)
-            //         this.datasource.refreshData(this, this.page, this.schema)
-            // } else {
-            //     this.data = []
-            //     this.dataIsReady = 0
-            // }
             return tmp
         },
         style: function() {

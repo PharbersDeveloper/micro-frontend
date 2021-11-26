@@ -44,14 +44,7 @@ export default {
         }
     },
     computed: {
-        // totalHeight: function() {
-        //     let dataCount = this.dataCount
-        //     return dataCount * this.rowHeight
-        // },
-        // pageHeight: function() {
-        //     let batchSize = this.datasource.batch_size
-        //     return batchSize * this.rowHeight
-        // }
+
     },
     components: {
         headerItem:require('./bp-excel-header.vue').default,

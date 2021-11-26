@@ -113,7 +113,7 @@
         <el-dialog
                 title="排序列"
                 :visible.sync="dialogSortVisible"
-                @close="dialogSortVisible"
+                @close="on_clickSortCancel"
                 width="30%">
 
             <div class="dlg-sort-container">
