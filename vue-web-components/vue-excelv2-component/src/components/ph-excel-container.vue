@@ -114,6 +114,7 @@ export default {
             let that = this
             this.datasource.queryTotalCount(this).then(count => {
                 that.dataCount = parseInt(count)
+                that.$emit("countIsReady", that.dataCount);
                 that.countIsReady++
             })
             let viewHeight = this.viewHeight

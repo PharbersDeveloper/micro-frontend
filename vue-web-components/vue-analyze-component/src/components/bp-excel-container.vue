@@ -50,6 +50,7 @@
         </div>
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
+                      v-on:countIsReady="totalCountIsReady"
                       :datasource="datasource" :schema="schema" class="excel" />
         </div>
         <el-dialog
@@ -202,6 +203,7 @@ export default {
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             showSelectOptionParam: false,
             closeTosts: false,
+            totalNum: 0,
             matchNum: 0,
             dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
@@ -214,11 +216,6 @@ export default {
         }
     },
     computed: {
-        totalNum: function() {
-            if (this.$refs.excel)
-                return this.$refs.excel.dataCount
-            else return 0
-        },
         totalCols: function() {
             return this.schema.cols.length
         }
@@ -415,6 +412,9 @@ export default {
         },
         searchRowInput(data) {
             this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
+        },
+        totalCountIsReady(val) {
+            this.totalNum = val
         }
     },
     watch: {
