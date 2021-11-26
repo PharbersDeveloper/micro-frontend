@@ -16,19 +16,21 @@ export default {
         return {
             state: "loading",
             dataIsReady: 0,
-            data: []
+            data: [],
+            needRefresh: 0
         }
     },
     computed: {
         showing: function() {
             const tmp = this.curPage.indexOf(this.page) !== -1
-            if (tmp) {
-                if (this.dataIsReady === 0)
-                    this.datasource.refreshData(this, this.page, this.schema)
-            } else {
-                this.data = []
-                this.dataIsReady = 0
-            }
+            this.needRefresh++
+            // if (tmp) {
+            //     if (this.dataIsReady === 0)
+            //         this.datasource.refreshData(this, this.page, this.schema)
+            // } else {
+            //     this.data = []
+            //     this.dataIsReady = 0
+            // }
             return tmp
         },
         style: function() {
@@ -87,7 +89,18 @@ export default {
     },
     watch: {
         dataIsReady(n, o) {
-            this.state = "Ready"
+            if (n !== 0) {
+                this.state = "Ready"
+            } else this.state = "Loading"
+        },
+        needRefresh(n, o) {
+            if (this.showing) {
+                this.dataIsReady = 0
+                this.datasource.refreshData(this, this.page, this.schema)
+            } else {
+                this.data = []
+                this.dataIsReady = 0
+            }
         }
     }
 };

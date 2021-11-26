@@ -9,7 +9,7 @@
                 <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
             </div>
         </div>
-        <nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+        <nav class="expang_popup" v-show="expandPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
             <ul>
                 <li @click="linkToPage('flow')">数据流程</li>
                 <li @click="linkToPage('datasets')">数据集</li>
@@ -207,12 +207,13 @@ export default {
             matchNum: 0,
             dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
-            searchRow: '',
-            searchList: '',
+            searchRow: "",
+            searchList: "",
             search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
             versionCandidatesShow: [],
-            searchSort: '',
-            expangPopup: false
+            searchSort: "",
+            expandPopup: false,
+            tmpFilterRow: "Province"
         }
     },
     computed: {
@@ -305,10 +306,10 @@ export default {
             }
         },
         focusOutExpand() {
-            this.expangPopup = false
+            this.expandPopup = false
         },
         focusExpand() {
-            this.expangPopup = true
+            this.expandPopup = true
         },
         search(data) {
             console.log(data)
@@ -338,21 +339,21 @@ export default {
             this.dialogVersionFilterVisible = false
             const condi = this.versionFilterPolicy.selectVersionTags
             if(condi.length > 0) {
-                let condi_str = "`version` in ["
+                // let condi_str = "`version` in ["
+                let condi_str = "`" + this.tmpFilterRow +"` in ["
                 for (var idx in condi) {
-                    console.log(idx)
                     if (idx > 0) {
                         condi_str = condi_str + ","
                     }
-                    console.log(condi[idx])
                     if(typeof(condi[idx]) === 'string') {
                         condi_str = condi_str + "'" + condi[idx] + "'"
                     }
-                    console.log(condi_str)
                 }
                 condi_str = condi_str + "]"
-                this.datasource.pushFilterCondition("version", condi_str)
+                // this.datasource.pushFilterCondition("version", condi_str)
+                this.datasource.pushFilterCondition(this.tmpFilterRow, condi_str)
                 this.$refs.excel.dataRefresh++
+                // this.$refs.excel.$forceUpdate()
             }
         },
         //选择列确认
@@ -434,7 +435,8 @@ export default {
         dialogVersionFilterVisible(n, o) {
             let that = this
             if (this.versionCandidatesShow.length === 0) {
-                that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
+                // that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
+                that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((provinces) => {
                     //完整的显示行列表数据
                     this.versionCandidatesShow = provinces
                     that.versionFilterPolicy.versionCandidates = provinces
@@ -444,7 +446,7 @@ export default {
         // 显示列请求接口
         dialogCollectionVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
-                this.collectionsPolicy.resetCollections(this.datasource.schema)
+                this.collectionsPolicy.resetCollections(this.schema)
 
             if (n) {
                 if (this.$refs.colSearch)
@@ -454,7 +456,7 @@ export default {
         },
         dialogSortVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
-                this.collectionsPolicy.resetCollections(this.datasource.schema)
+                this.collectionsPolicy.resetCollections(this.schema)
 
             if (n) {
                 if (this.$refs.colFilter)
