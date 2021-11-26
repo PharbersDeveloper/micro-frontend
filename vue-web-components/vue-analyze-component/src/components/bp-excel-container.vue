@@ -353,13 +353,12 @@ export default {
                 // this.datasource.pushFilterCondition("version", condi_str)
                 this.datasource.pushFilterCondition(this.tmpFilterRow, condi_str)
                 this.$refs.excel.dataRefresh++
-                // this.$refs.excel.$forceUpdate()
             }
         },
         //选择列确认
         on_clickCollectionConfirm() {
             this.dialogCollectionVisible = false
-            this.datasource.cols = this.collectionsPolicy.resetShowingCollections()
+            this.schema.cols = this.collectionsPolicy.resetShowingCollections()
             this.$refs.excel.dataRefresh++
             this.searchList = ""
         },
@@ -446,7 +445,7 @@ export default {
         // 显示列请求接口
         dialogCollectionVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
-                this.collectionsPolicy.resetCollections(this.schema)
+                this.collectionsPolicy.resetCollections(this.schema.schema)
 
             if (n) {
                 if (this.$refs.colSearch)
@@ -456,7 +455,7 @@ export default {
         },
         dialogSortVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
-                this.collectionsPolicy.resetCollections(this.schema)
+                this.collectionsPolicy.resetCollections(this.schema.schema)
 
             if (n) {
                 if (this.$refs.colFilter)
