@@ -37,7 +37,7 @@
                     </div>
                     <div class="right">
                         <div class="title">输出数据</div>
-                        <div class="right_content">
+                        <div class="right_content" v-show="!datasetOutputListShow  && showOldDataset">
                             <div class="add_ds">
                                 <span class="ds_title">添加数据集</span>
                             </div>
@@ -59,9 +59,36 @@
                                 <el-button class="add_input" :disabled="dsName.length  == 0" type="primary" @click="on_clickAddOutput">增加</el-button>
                             </div>
                             <div class="tab">
-                                <div class="new_data">新数据集</div>
+                                <div class="new_data" @click="satasetTab('new')">新数据集</div>
                                  ｜ 
-                                <div class="old_data">现有数据集</div>
+                                <div class="old_data" @click="satasetTab('old')">现有数据集</div>
+                            </div>
+                        </div>
+                        <div class="change" v-show="datasetOutputListShow && showOldDataset">
+                            <div class="select_dataset">
+                                <div class="sel_name">
+                                    <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
+                                    <span class="title">{{dsName}}</span>
+                                </div>
+                                <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
+                            </div>
+                            <div class="btn_area">
+                                <el-button class="add_input" :disabled="dsName.length  == 0" type="primary" @click="on_clickChangeOutput">更改</el-button>
+                            </div>
+                        </div>
+                        <div class="oldDatasetList" v-show="!showOldDataset">
+                             <el-input placeholder="搜索" v-model="searchDataset"  class="search_row"></el-input>
+                            <img :src="search_row" class="search_row_icon" alt="">
+                            <div class="dataset_list">
+                                <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index">
+                                    <img :src="add_icon" alt="" class="add_icon">
+                                    <span class="name">{{item}}</span>
+                                </div>
+                            </div>
+                            <div class="tab">
+                                <div class="new_data" @click="satasetTab('new')">新数据集</div>
+                                 ｜ 
+                                <div class="old_data" @click="satasetTab('old')">现有数据集</div>
                             </div>
                         </div>
                     </div>
@@ -92,13 +119,15 @@ export default {
             selectedTags: [], //选中的tag数组
             newTagsArray: [], //新增的tag数组
             datasetListShow: false,
+            datasetOutputListShow: false, //显示选中的output
             searchDataset: '',
             addDatasetList: [], //已经选中的dataset list
             remainDatasetList: [], //剩余味选中的dataset list
             sel_dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E7%BB%93%E6%9E%9CDS.svg",
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1).svg",
             dsName: '',
-            oldDatasetList: [] //现有数据集
+            oldDatasetList: [], //现有数据集
+            showOldDataset: true
         }
     },
     components: {
@@ -201,7 +230,11 @@ export default {
         },
         on_clickAddOutput() {
             //增加output
-            
+            this.datasetOutputListShow = true
+        },
+        on_clickChangeOutput() {
+            this.datasetOutputListShow = false
+            this.dsName = ''
         },
         addDataset(data) {
             this.datasetListShow = false
@@ -213,6 +246,19 @@ export default {
             //删除dataset
             this.remainDatasetList.unshift(data)
             this.addDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
+        },
+        satasetTab(data) {
+            //切换tab
+            if(data == 'old') {
+                this.showOldDataset = false
+            } else {
+                this.showOldDataset = true
+            }
+        },
+        addOldDataset(data) {
+            this.dsName = data
+            this.showOldDataset = true
+            this.datasetOutputListShow = true
         }
     }
 }
@@ -304,26 +350,26 @@ export default {
         .select_dataset_list {
             display: flex;
             flex-direction: column;
-            .select_dataset {
+        }
+        .select_dataset {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 40px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            .sel_name {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                border: 1px solid #ccc;
-                padding: 10px;
-                height: 40px;
-                margin-bottom: 10px;
-                border-radius: 5px;
-                .sel_name {
-                    display: flex;
-                    align-items: center;
-                }
-                .del_icon {
-                    cursor: pointer;
-                }
-                img {
-                    width: 12px;
-                    height: 12px;
-                }
+            }
+            .del_icon {
+                cursor: pointer;
+            }
+            img {
+                width: 14px;
+                height: 14px;
             }
         }
         /deep/input.el-input__inner {
@@ -361,6 +407,82 @@ export default {
     }
     .right {
         width: 280px;
+        .select_dataset {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 40px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            margin: 20px;
+            .sel_name {
+                display: flex;
+                align-items: center;
+            }
+            .del_icon {
+                cursor: pointer;
+            }
+            img {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        .btn_area {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            .add_input {
+                margin: 0 20px;
+                width: 100%;
+                text-align: center;
+            }
+        }
+        .oldDatasetList {
+            padding: 20px;
+            /deep/input.el-input__inner {
+                padding-left: 40px;
+            }
+            .tab {
+                display: flex;
+                margin-top: 55px;
+                justify-content: center;
+                font-size: 12px;
+                cursor: pointer;
+            }
+            .search_row_icon {
+                width: 20px;
+                position: relative;
+                top: -30px;
+                left: 10px;
+            }
+            .dataset_list {
+                display: flex;
+                flex-direction: column;
+                font-size: 14px;
+                height: 230px;
+                .dataset {
+                    display: flex;
+                    align-items: center;
+                    padding: 10px 0;
+                    border-top: 1px solid #ccc;
+                    cursor: pointer;
+                    .add_icon {
+                        width: 12px;
+                        height: 12px;
+                        margin-right: 10px;
+                    }
+                }
+                .dataset:hover {
+                    color: #0088cc
+                }
+                .dataset:last-of-type {
+                    border-bottom: 1px solid #ccc;
+                }
+            }
+        }
     }
     .right_content {
         .add_ds {
