@@ -1,18 +1,24 @@
 
 export default class PhContainerDataSource {
-	constructor(id, adapter) {
+	constructor(id, adapter, url) {
 		this.id = id
 		this.data = []
 		this.sort = {}
 		this.projectId = ''
 		this.filter = {}
 		this.name = "prod_clean_v2"
-		this.batch_size = 200
-		this.schema = []
-		this.cols = this.schema
+		this.batch_size = 100
+		// this.schema = []
+		// this.cols = this.schema
+		if (!url)
+			this.url= "https://api.pharbers.com/phchproxyquery"
 		if (!adapter)
 			this.adapter = this.defaultAdapter
 		this.debugToken = "4bd0338b48f624b0e00fd62b5ec4250358eead0d487dde4e5d2d54cece598e32"
+	}
+
+	resetUrl(url) {
+		this.url = url
 	}
 
 	defaultAdapter(row, cols) {
@@ -23,12 +29,14 @@ export default class PhContainerDataSource {
 		return result
 	}
 
-	buildQuery(ele, isAppend=false) {
+	buildQuery(ele, page, schema) {
 		function buildQueryString() {
 			let sql_str = "SELECT "
-			let selectParam = ele.datasource.schema.map(item => '`' + item + '`').join(',')
-			// sql_str = sql_str + ele.datasource.schema.toString() + " FROM " + ele.datasource.name
-			sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+			let selectParam = schema.map(item => '`' + item + '`').join(',')
+			if (ele.datasource.projectId.length === 0)
+				sql_str = sql_str + schema.toString() + " FROM " + ele.datasource.name
+			else
+				sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -58,14 +66,14 @@ export default class PhContainerDataSource {
 
 			// pages
 			sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
-			sql_str = sql_str + " OFFSET " + (isAppend ? ele.datasource.data.length : 0).toString()
+			sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
 			return sql_str
 		}
-		const url = "https://apiv2.pharbers.com/phdadatasource"
+		const url = this.url
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryString(),
-			"schema": ele.datasource.schema
+			"schema": schema
 		}
 		let options = {
 			method: "POST",
@@ -83,7 +91,10 @@ export default class PhContainerDataSource {
 		function buildQueryCountString() {
 			let sql_str = "SELECT count(*)"
 
-			sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
+			if (ele.datasource.projectId.length === 0)
+				sql_str = sql_str + " FROM `"  + ele.datasource.name + "`"
+			else
+				sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
 
 			// filter
 			let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -97,7 +108,7 @@ export default class PhContainerDataSource {
 
 			return sql_str
 		}
-		const url = "https://apiv2.pharbers.com/phdadatasource"
+		const url = this.url
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildQueryCountString(),
@@ -119,12 +130,17 @@ export default class PhContainerDataSource {
 	buildDistinctColQuery(ele, col) {
 		function buildDistinctColSql() {
 			let sql_str = "SELECT DISTINCT " + col
-			sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+
+			if (ele.datasource.projectId.length === 0)
+				sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+			else
+				sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+
 			sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
 
 			return sql_str
 		}
-		const url = "https://apiv2.pharbers.com/phdadatasource"
+		const url = this.url
 		const accessToken = ele.getCookie("access_token") || this.debugToken
 		let body = {
 			"query": buildDistinctColSql(),
@@ -142,35 +158,20 @@ export default class PhContainerDataSource {
 		return fetch(url, options)
 	}
 
-	refreshData(ele) {
-		if(ele) {
-			ele.datasource.buildQuery(ele)
+	refreshData(ele, page, schema) {
+		if (schema.schema.length > 0) {
+			ele.datasource.buildQuery(ele, page, schema.schema)
 				.then((response) => response.json())
 				.then((response) => {
 					const tmp = []
 					for (var idx in response) {
-						tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
+						tmp.push(ele.datasource.adapter(response[idx], schema.cols))
 					}
-					ele.datasource.data = tmp //response.map(ele.datasource.adapter)
-					ele.cur_page = 0
-					ele.needRefresh++
+					ele.data = tmp //response.map(ele.datasource.adapter)
+					// ele.datasource.data = tmp //response.map(ele.datasource.adapter)
+					ele.dataIsReady++
 				})
 		}
-	}
-
-	appendData(ele) {
-		ele.datasource.buildQuery(ele, true)
-			.then((response) => response.json())
-			.then((response) => {
-				const tmp = []
-				for (var idx in response) {
-					tmp.push(ele.datasource.adapter(response[idx], ele.datasource.cols))
-				}
-				// ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-				ele.datasource.data = ele.datasource.data.concat(tmp)
-				ele.cur_page++
-				ele.needRefresh++
-			})
 	}
 
 	queryTotalCount(ele) {

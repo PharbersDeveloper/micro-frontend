@@ -1,182 +1,183 @@
 <template>
-	<div class="ec-container">
-    	<link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
-		<div class="header">
+    <div class="ec-container">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <div class="header">
 			<span class="project_name" @click="linkToPage('project')">
 				{{allData.projectName}}
 			</span>
-			<div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
-				<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
-			</div>
-		</div>
-		<nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
-			<ul>
-				<li @click="linkToPage('flow')">数据流程</li>
-				<li @click="linkToPage('datasets')">数据集</li>
-				<li @click="linkToPage('scripts')">脚本</li>
-			</ul>
-		</nav>
-		<div class="dataset_header">
-			<img :src="dataset_icon" class="dataset_icon" alt="">
-			{{allData.datasetName}}
-		</div>
-		<div class="title-container">
-			<div class="title-left">
-				<div class="title-span">
-					<span>{{title}}</span>
-				</div>
-				<div class="disc-span">
-					{{totalNum}} rows, {{totalCols}} cols
-				</div>
-			</div>
-			<div class="btn-groups">
-				<button class="btn_chart" @click="dialogDownloadVisible = true">下载当前筛选数据</button>
-				<bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-					<bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
-					<bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
-					<bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
-				</bp-select-vue>
-			</div>
-		</div>
-		<div class="search-container">
-			<div class="search-inner">
-				<input type="search" ref="search" name="q"
-					   aria-label="Search through site content">
-				<button class="search-submit" @click="on_searchBtnClicked">Search</button>
-			</div>
-			<div class="search-result">
-				<span>{{matchNum}} matching rows</span>
-			</div>
-		</div>
-		<div class="main_container">
-			<bp-excel ref="excel" viewHeight="calc(100vh - 300px)" :needFirstRender="this.allData.schemaArr && this.allData.schemaArr.length > 0" :datasource="datasource" class="excel" :isNeedKeyBoardEvent=false></bp-excel>
-		</div>
-		<el-dialog
-				title="显示行"
-				:visible.sync="dialogVersionFilterVisible"
-				width="450px"
-				height="600px"
-				@close="on_clickVersionFilterCancel">
+            <div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
+                <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
+            </div>
+        </div>
+        <nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+            <ul>
+                <li @click="linkToPage('flow')">数据流程</li>
+                <li @click="linkToPage('datasets')">数据集</li>
+                <li @click="linkToPage('scripts')">脚本</li>
+            </ul>
+        </nav>
+        <div class="dataset_header">
+            <img :src="dataset_icon" class="dataset_icon" alt="">
+            {{allData.datasetName}}
+        </div>
+        <div class="title-container">
+            <div class="title-left">
+                <div class="title-span">
+                    <span>{{title}}</span>
+                </div>
+                <div class="disc-span">
+                    {{totalNum}} rows, {{totalCols}} cols
+                </div>
+            </div>
+            <div class="btn-groups">
+                <button class="btn_chart" @click="dialogDownloadVisible = true">下载当前筛选数据</button>
+                <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                    <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
+                    <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
+                    <bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
+                </bp-select-vue>
+            </div>
+        </div>
+        <div class="search-container">
+            <div class="search-inner">
+                <input type="search" ref="search" name="q"
+                       aria-label="Search through site content">
+                <button class="search-submit" @click="on_searchBtnClicked">Search</button>
+            </div>
+            <div class="search-result">
+                <span>{{matchNum}} matching rows</span>
+            </div>
+        </div>
+        <div class="main_container">
+            <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
+                      :datasource="datasource" :schema="schema" class="excel" />
+        </div>
+        <el-dialog
+                title="显示行"
+                :visible.sync="dialogVersionFilterVisible"
+                width="450px"
+                height="600px"
+                @close="on_clickVersionFilterCancel">
 
-			<div class="dlg-version-container">
-				<div class="dlg-flex-version" >
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
-						<span>{{item}}</span>
-						<img :src="close_icon" class="close_icon" @click="versionFilterPolicy.removeSelectVersionTags(item)" alt="">
-					</div>
-				</div>
-				<div class="dlg-version-spliter"></div>
-				<el-input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row"></el-input>
-				<img :src="search_row" class="search_row_icon" alt="">
-				<div class="dlg-all-version-container">
-					<div class="dlg-flex-version-item" v-for="(item, index) in versionCandidatesShow" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
-						<span>{{item}}</span>
-					</div>
-				</div>
-			</div>
-			<span slot="footer" class="dialog-footer">
+            <div class="dlg-version-container">
+                <div class="dlg-flex-version" >
+                    <div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
+                        <span>{{item}}</span>
+                        <img :src="close_icon" class="close_icon" @click="versionFilterPolicy.removeSelectVersionTags(item)" alt="">
+                    </div>
+                </div>
+                <div class="dlg-version-spliter"></div>
+                <el-input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row"></el-input>
+                <img :src="search_row" class="search_row_icon" alt="">
+                <div class="dlg-all-version-container">
+                    <div class="dlg-flex-version-item" v-for="(item, index) in versionCandidatesShow" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
+                        <span>{{item}}</span>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
 				<el-button @click="on_clickVersionFilterCancel">取消</el-button>
 				<el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
 			</span>
-		</el-dialog>
-		<el-dialog
-				title="显示列"
-				:visible.sync="dialogCollectionVisible"
-				@close="on_clickCollectionCancel"
-				width="30%">
+        </el-dialog>
+        <el-dialog
+                title="显示列"
+                :visible.sync="dialogCollectionVisible"
+                @close="on_clickCollectionCancel"
+                width="30%">
 
-			<div class="dlg-col-container">
-				<div class="dlg-col-search-bar">
-					<div class="dlg-col-search-input">
-						<el-input placeholder="搜索" ref="colSearch" v-model="searchList" class="search_list" @input="on_collectionSearchBtnClicked(searchList)"></el-input>
-						<img :src="search_row" class="search_list_icon" alt="">
-					</div>
-				</div>
-				<div class="dlg-col-cols">
-					<el-checkbox :indeterminate="collectionsPolicy.isIndeterminate" v-model="collectionsPolicy.checkAll" @change="on_collectionCheckAllChange">Check all</el-checkbox>
-					<div style="margin: 15px 0;"></div>
-					<div class="dlg-version-spliter"></div>
-					<div style="margin: 15px 0;"></div>
-					<el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
-						<el-checkbox class="checkbox" v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
-					</el-checkbox-group>
-				</div>
-			</div>
+            <div class="dlg-col-container">
+                <div class="dlg-col-search-bar">
+                    <div class="dlg-col-search-input">
+                        <el-input placeholder="搜索" ref="colSearch" v-model="searchList" class="search_list" @input="on_collectionSearchBtnClicked(searchList)"></el-input>
+                        <img :src="search_row" class="search_list_icon" alt="">
+                    </div>
+                </div>
+                <div class="dlg-col-cols">
+                    <el-checkbox :indeterminate="collectionsPolicy.isIndeterminate" v-model="collectionsPolicy.checkAll" @change="on_collectionCheckAllChange">Check all</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <div class="dlg-version-spliter"></div>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
+                        <el-checkbox class="checkbox" v-for="col in collectionsPolicy.shownCollections" :label="col" :key="col">{{col}}</el-checkbox>
+                    </el-checkbox-group>
+                </div>
+            </div>
 
-			<span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer">
 				<el-button @click="on_clickCollectionCancel">取消</el-button>
 				<el-button type="primary" @click="on_clickCollectionConfirm">确认</el-button>
 			</span>
-		</el-dialog>
-		<el-dialog
-				title="排序列"
-				:visible.sync="dialogSortVisible"
-				@close="dialogSortVisible"
-				width="30%">
+        </el-dialog>
+        <el-dialog
+                title="排序列"
+                :visible.sync="dialogSortVisible"
+                @close="dialogSortVisible"
+                width="30%">
 
-			<div class="dlg-sort-container">
-				<div class="dlg-sort-nav">
-					<div class="dlg-sort-nav-left">
-						<span class="title">可选列</span>
-						<el-input placeholder="搜索" v-model="searchSort" class="search_list" @input="search(searchSort)"></el-input>
-						<img :src="search_row" class="search_list_icon" alt="">
-						<!-- <div class="dlg-sort-filter">
-							<input type="search" ref="colFilter">
-							<button class="search-submit" @click="search">Search</button>
-						</div> -->
-					</div>
-					<div class="dlg-sort-nav-right">
-						<span>已选列</span>
-						<button @click="on_clearSortCollections">全部清除</button>
-					</div>
-				</div>
-				<div class="dlg-sort-candi-container">
-					<div class="dlg-sort-candi-items dlg-panel-left">
+            <div class="dlg-sort-container">
+                <div class="dlg-sort-nav">
+                    <div class="dlg-sort-nav-left">
+                        <span class="title">可选列</span>
+                        <el-input placeholder="搜索" v-model="searchSort" class="search_list" @input="search(searchSort)"></el-input>
+                        <img :src="search_row" class="search_list_icon" alt="">
+                        <!-- <div class="dlg-sort-filter">
+                            <input type="search" ref="colFilter">
+                            <button class="search-submit" @click="search">Search</button>
+                        </div> -->
+                    </div>
+                    <div class="dlg-sort-nav-right">
+                        <span>已选列</span>
+                        <button @click="on_clearSortCollections">全部清除</button>
+                    </div>
+                </div>
+                <div class="dlg-sort-candi-container">
+                    <div class="dlg-sort-candi-items dlg-panel-left">
 						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.shownCollections"
-							  :label="col" :key="'candi' + col" @click="on_clickSortShownCandi(col)">{{col}}</span>
-					</div>
-					<div class="dlg-sort-candi-items dlg-panel-right">
+                              :label="col" :key="'candi' + col" @click="on_clickSortShownCandi(col)">{{col}}</span>
+                    </div>
+                    <div class="dlg-sort-candi-items dlg-panel-right">
 						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.sortCollections"
-							  :label="col" :key="'select' + col" @click="on_clickSortSelectCandi(col)">{{col}}</span>
-					</div>
-				</div>
-			</div>
-			<span slot="footer" class="dialog-footer">
+                              :label="col" :key="'select' + col" @click="on_clickSortSelectCandi(col)">{{col}}</span>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
 				<el-button @click="on_clickSortCancel">取消</el-button>
 				<el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
 			</span>
-		</el-dialog>
+        </el-dialog>
 
-		<el-dialog
-				title="下载"
-				:visible.sync="dialogDownloadVisible"
-				@close="on_clickDownloadConfirm"
-				width="600px">
+        <el-dialog
+                title="下载"
+                :visible.sync="dialogDownloadVisible"
+                @close="on_clickDownloadConfirm"
+                width="600px">
 
-			<div class="dlg-download-container">
-				<table border="0">
-					<tr class="first">
-						<td class="download_title">重命名</td>
-						<td>
-							<input type="text" ref="nameRef">
-						</td>
-					</tr>
-					<tr>
-						<td class="download_title">格式</td>
-						<td>
-							<input type="text" ref="suffRef">
-						</td>
-					</tr>
-				</table>
-			</div>
-			<span slot="footer" class="dialog-footer">
+            <div class="dlg-download-container">
+                <table border="0">
+                    <tr class="first">
+                        <td class="download_title">重命名</td>
+                        <td>
+                            <input type="text" ref="nameRef">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="download_title">格式</td>
+                        <td>
+                            <input type="text" ref="suffRef">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <span slot="footer" class="dialog-footer">
     			<!-- <button @click="on_clickDownloadConfirm">Cancel</button>
     			<button type="primary" @click="on_clickDownloadConfirm">Confirm</button> -->
 				<el-button @click="on_clickDownloadConfirm">取消</el-button>
 				<el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
 			</span>
-		</el-dialog>
-	</div>
+        </el-dialog>
+    </div>
 </template>
 <script>
 import PhContainerDataSource from './model/containerDatasource'
@@ -251,15 +252,15 @@ export default {
 		collectionsPolicy: {
 			type: Object,
 			default: function() {
-				return new PhDlgCollectionController('1', this.datasource.schema)
+				return new PhDlgCollectionController('1', this.schema.schema)
 			}
 		},
 		allData: {
 			type: Object,
 			default: function() {
 				return {
-					projectName: 'test',
-					datasetName: 'dataset',
+					projectName: '',
+					datasetName: 'prod_clean_v2',
 					projectId: '',
 					schemaArr: []
 				}
@@ -272,9 +273,13 @@ export default {
 	mounted() {
 		//传入数据时渲染表格
 		if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
-			const length = this.allData.schemaArr.length
-			this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
-			// this.descRefresh++
+			this.descRefresh++
+		} else {
+			this.schema.resetSchema(
+				["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+				["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+				[118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
+			)
 		}
 	},
 	methods: {
@@ -409,22 +414,18 @@ export default {
 		'allData.schemaArr': {
 			immediate: true,
 			handler:function(n, o) {
-				this.datasource.schema = n
-				this.datasource.cols = n
+				const length = this.allData.schemaArr.length
+				this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
+				// this.datasource.schema = n
+				// this.datasource.cols = n
 				this.datasource.name = this.allData.datasetName
 				this.datasource.projectId = this.allData.projectId
-				this.datasource.refreshData(this.$refs.excel)
-				this.descRefresh++
+				if (this.datasource.projectId.length > 0)
+				    this.datasource.resetUrl("https://apiv2.pharbers.com/phdadatasource")
+				// this.datasource.refreshData(this.$refs.excel)
+				// this.descRefresh++
 			}
 		},
-		// 'allData.schemaArr'(n,o) {
-		// 	this.datasource.schema = n
-		// 	this.datasource.cols = n
-		// 	this.datasource.name = this.allData.datasetName
-		// 	this.datasource.projectId = this.allData.projectId
-		// 	this.datasource.refreshData(this.$refs.excel)
-		// 	this.descRefresh++
-		// },
 		descRefresh(n, o) {
 			let that = this
 			this.datasource.queryTotalCount(this).then((count) => {
@@ -469,366 +470,366 @@ export default {
 };
 </script>
 <style lang="scss">
-	@font-face {
-		font-family: element-icons;
-		src: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff') format('woff'), url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf') format('truetype');
-		font-weight: 400;
-		font-style: normal;
-	}
-	.el-dialog__wrapper {
-		background: rgba(0, 0, 0, 0.31);
-	}
-	.ec-container {
-		display: flex;
-		flex-direction: column;
-		height: 100vh;
-		box-sizing: border-box;
-		.project_name {
-			cursor: pointer;
-		}
-		.el-dialog__wrapper {
-			.el-dialog__header {
-				border-bottom: 1px solid #ccc;
-			}
-		}
-		.header {
-			// width: 100vw;
-			height: 40px;
-			background: #222;
-			color: #fff;
-			display: flex;
-			align-items: center;
-			font-size: 20px;
-			padding: 0 20px;
-			.expand_bg {
-				width: 40px;
-				height: 40px;
-				background: #28a9dd;
-				margin-left: 10px;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				.expand {
-					width: 20px;
-					height: 20px;
-				}
-			}
-		}
-		.expang_popup {
-			background-color: #333333;
-			box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
-			width: 200px;
-			height: auto;
-			position: absolute;
-			left: 62px;
-			top: 40px;
-			// transition: height 150ms ease-out;
-			// display: none;
-			z-index: 3001;
-			font-size: 14px;
-			font-weight: 400px;
-			ul, li {
-				list-style: none;
-				padding-left: 0;
-				margin: 0 auto;
-			}
-			li {
-				color: #ffffff;
-				width: 200px;
-				padding: 10px;
-				border-bottom: 1px solid #444;
-				cursor: pointer;
-			}
-			li:hover {
-				background: #444;
-			}
-		}
-		.dataset_header {
-			height: 48px;
-			background: #ffffff;
-			border-bottom: 1px solid #dddddd;
-			margin: 0 !important;
-			color: #333333;
-			display: flex;
-			padding: 0 20px;
-			align-items: center;
-			.dataset_icon {
-				width: 24px;
-				height: 24px;
-				margin-right: 10px;
-			}
-		}
-		.title-container{
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background-color: #ffffff;
-			border-bottom: 1px solid #dddddd;
-			padding-left: 20px;
-			padding-right: 10px;
-			padding-top: 5px;
-			padding-bottom: 5px;
-			margin-top: 0px;
-			.title-left {
-				display: flex;
-				flex-direction: column;
-				.title-span {
-					font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
-					font-size: 24px;
-					display: flex;
-					flex-direction: row;
-					width: 98px;
-					height: 22px;
-					font-family: Helvetica;
-					font-size: 16px;
-					color: #000000;
-					letter-spacing: 0.17px;
-					font-weight: 400;
-					.title-link {
-						font-family: ".SF NS Mono";
-						font-size: 10px;
-						display: flex;
-						flex-direction: column-reverse;
-					}
-				}
-				.disc-span {
-					font-family: 'Noto Sans JP', sans-serif;
-					height: 14px;
-					opacity: 0.5;
-					font-family: PingFangSC-Semibold;
-					font-size: 10px;
-					color: #000000;
-					letter-spacing: 0.1px;
-					font-weight: 600;
-					margin-top: 7px;
-				}
-			}
+    @font-face {
+        font-family: element-icons;
+        src: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff') format('woff'), url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+    }
+    .el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
+    }
+    .ec-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        box-sizing: border-box;
+        .project_name {
+            cursor: pointer;
+        }
+        .el-dialog__wrapper {
+            .el-dialog__header {
+                border-bottom: 1px solid #ccc;
+            }
+        }
+        .header {
+            // width: 100vw;
+            height: 40px;
+            background: #222;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            padding: 0 20px;
+            .expand_bg {
+                width: 40px;
+                height: 40px;
+                background: #28a9dd;
+                margin-left: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .expand {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+        .expang_popup {
+            background-color: #333333;
+            box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
+            width: 200px;
+            height: auto;
+            position: absolute;
+            left: 62px;
+            top: 40px;
+            // transition: height 150ms ease-out;
+            // display: none;
+            z-index: 3001;
+            font-size: 14px;
+            font-weight: 400px;
+            ul, li {
+                list-style: none;
+                padding-left: 0;
+                margin: 0 auto;
+            }
+            li {
+                color: #ffffff;
+                width: 200px;
+                padding: 10px;
+                border-bottom: 1px solid #444;
+                cursor: pointer;
+            }
+            li:hover {
+                background: #444;
+            }
+        }
+        .dataset_header {
+            height: 48px;
+            background: #ffffff;
+            border-bottom: 1px solid #dddddd;
+            margin: 0 !important;
+            color: #333333;
+            display: flex;
+            padding: 0 20px;
+            align-items: center;
+            .dataset_icon {
+                width: 24px;
+                height: 24px;
+                margin-right: 10px;
+            }
+        }
+        .title-container{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 1px solid #dddddd;
+            padding-left: 20px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-top: 0px;
+            .title-left {
+                display: flex;
+                flex-direction: column;
+                .title-span {
+                    font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+                    font-size: 24px;
+                    display: flex;
+                    flex-direction: row;
+                    width: 98px;
+                    height: 22px;
+                    font-family: Helvetica;
+                    font-size: 16px;
+                    color: #000000;
+                    letter-spacing: 0.17px;
+                    font-weight: 400;
+                    .title-link {
+                        font-family: ".SF NS Mono";
+                        font-size: 10px;
+                        display: flex;
+                        flex-direction: column-reverse;
+                    }
+                }
+                .disc-span {
+                    font-family: 'Noto Sans JP', sans-serif;
+                    height: 14px;
+                    opacity: 0.5;
+                    font-family: PingFangSC-Semibold;
+                    font-size: 10px;
+                    color: #000000;
+                    letter-spacing: 0.1px;
+                    font-weight: 600;
+                    margin-top: 7px;
+                }
+            }
 
-			.btn-groups {
-				display: flex;
-				flex-direction: row;
-				.btn_chart {
-					height: 26px;
-					border-radius: 2px;
-					background: #f6f6f7;
-					font-family: 'PingFangSC-Regular';
-					font-size: 14px;
-					color: #57565F;
-					letter-spacing: 0;
-					text-align: center;
-					line-height: 20px;
-					font-weight: 400;
-					border: none;
-				}
-				.btn_select {
-					width: 100px;
-					height: 26px;
-					border: 1px solid #57565F;
-					border-radius: 2px;
-					margin-left: 20px;
-					font-family: 'PingFangSC-Regular';
-					font-size: 12px;
-					color: #000000;
-					letter-spacing: 0.12px;
-					font-weight: 400;
-				}
-				.btn-display {
-					font-size: 14px;
-					border-width: 1px;
-				}
-			}
-		}
+            .btn-groups {
+                display: flex;
+                flex-direction: row;
+                .btn_chart {
+                    height: 26px;
+                    border-radius: 2px;
+                    background: #f6f6f7;
+                    font-family: 'PingFangSC-Regular';
+                    font-size: 14px;
+                    color: #57565F;
+                    letter-spacing: 0;
+                    text-align: center;
+                    line-height: 20px;
+                    font-weight: 400;
+                    border: none;
+                }
+                .btn_select {
+                    width: 100px;
+                    height: 26px;
+                    border: 1px solid #57565F;
+                    border-radius: 2px;
+                    margin-left: 20px;
+                    font-family: 'PingFangSC-Regular';
+                    font-size: 12px;
+                    color: #000000;
+                    letter-spacing: 0.12px;
+                    font-weight: 400;
+                }
+                .btn-display {
+                    font-size: 14px;
+                    border-width: 1px;
+                }
+            }
+        }
 
 
 
-		.search-container {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			padding: 20px;
-			align-items: center;
-			.search-inner {
-				display: flex;
-				flex-direction: row;
-				width: 179px;
-				height: 26px;
-				background: #FFFFFF;
-				border: 1px solid #f6f6f7;
-			}
+        .search-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 20px;
+            align-items: center;
+            .search-inner {
+                display: flex;
+                flex-direction: row;
+                width: 179px;
+                height: 26px;
+                background: #FFFFFF;
+                border: 1px solid #f6f6f7;
+            }
 
-			.search-result {
-				font-family: 'Advent Pro', sans-serif;
-				font-size: 14px;
-				color: #57565F;
-			}
-		}
-		.main_container {
-			display: flex;
-			justify-content: center;
-			.excel {
-				display: inline-grid;
-				margin: 10px;
-				overflow: auto;
-				width: 98%;
-			}
-		}
-	}
+            .search-result {
+                font-family: 'Advent Pro', sans-serif;
+                font-size: 14px;
+                color: #57565F;
+            }
+        }
+        .main_container {
+            display: flex;
+            justify-content: center;
+            .excel {
+                display: inline-grid;
+                margin: 10px;
+                overflow: auto;
+                width: 98%;
+            }
+        }
+    }
 
-	.dlg-version-container {
-		display: flex;
-		flex-direction: column;
+    .dlg-version-container {
+        display: flex;
+        flex-direction: column;
 
-		.dlg-flex-version {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			max-height: 150px;
-    		overflow: auto;
-			.dlg-flex-version-item {
-				font-size: 12px;
-				border: 1px solid #ccc;
-				display: flex;
-				align-items: center;
-				padding: 5px;
-				border-bottom: 1px solid #ccc;
-				.close_icon {
-					width: 16px;
-					height: 16px;
-					margin-left: 5px;
-					cursor: pointer;
-				}
-			}
+        .dlg-flex-version {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            max-height: 150px;
+            overflow: auto;
+            .dlg-flex-version-item {
+                font-size: 12px;
+                border: 1px solid #ccc;
+                display: flex;
+                align-items: center;
+                padding: 5px;
+                border-bottom: 1px solid #ccc;
+                .close_icon {
+                    width: 16px;
+                    height: 16px;
+                    margin-left: 5px;
+                    cursor: pointer;
+                }
+            }
 
-		}
+        }
 
-		.dlg-all-version-container {
-			display: flex;
-			flex-direction: column;
-			flex-wrap: nowrap;
-			overflow: auto;
-			max-height:250px;
-			.dlg-flex-version-item {
-				cursor: pointer;
-				padding: 5px;
-				border-bottom: 1px solid #ccc;
-			}
-		}
-	}
+        .dlg-all-version-container {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            overflow: auto;
+            max-height:250px;
+            .dlg-flex-version-item {
+                cursor: pointer;
+                padding: 5px;
+                border-bottom: 1px solid #ccc;
+            }
+        }
+    }
 
-	.dlg-collection-list {
-		display: flex;
-		flex-direction: column;
-		max-height: 200px;
-		overflow: auto;
-		.checkbox {
-			border-bottom: 1px solid #ccc;
-			padding: 5px
-		}
-	}
+    .dlg-collection-list {
+        display: flex;
+        flex-direction: column;
+        max-height: 200px;
+        overflow: auto;
+        .checkbox {
+            border-bottom: 1px solid #ccc;
+            padding: 5px
+        }
+    }
 
-	.dlg-version-spliter {
-		height: 1px;
-		background-color: #2c3e50;
-		margin: 20px 0;
-	}
-	.search_list {
-		input.el-input__inner {
-			padding-left: 40px;
-		}
-	}
-	.search_list_icon {
-		width: 20px;
-		position: relative;
-		top: -30px;
-		left: 10px;
-	}
-	.search_row {
-		margin-bottom: 20px;
-		input.el-input__inner {
-			padding-left: 40px;
-		}
-	}
-	.search_row_icon {
-		width: 20px;
-		position: relative;
-		top: -50px;
-		left: 10px;
-	}
-	.dlg-sort-container {
-		display: flex;
-		flex-direction: column;
+    .dlg-version-spliter {
+        height: 1px;
+        background-color: #2c3e50;
+        margin: 20px 0;
+    }
+    .search_list {
+        input.el-input__inner {
+            padding-left: 40px;
+        }
+    }
+    .search_list_icon {
+        width: 20px;
+        position: relative;
+        top: -30px;
+        left: 10px;
+    }
+    .search_row {
+        margin-bottom: 20px;
+        input.el-input__inner {
+            padding-left: 40px;
+        }
+    }
+    .search_row_icon {
+        width: 20px;
+        position: relative;
+        top: -50px;
+        left: 10px;
+    }
+    .dlg-sort-container {
+        display: flex;
+        flex-direction: column;
 
-		.dlg-sort-nav {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			.dlg-sort-nav-left {
-				width: 50%;
-				.title {
-					display: block;
-					margin-bottom: 10px;
-				}
-			}
-			.dlg-sort-nav-right {
-				width: 50%;
-				display: flex;
-				justify-content: space-between;
-				button {
-					height: 20px;
-					border: none;
-					background: none;
-					color: #409eff;
-					cursor: pointer;
-				}
-			}
-		}
+        .dlg-sort-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .dlg-sort-nav-left {
+                width: 50%;
+                .title {
+                    display: block;
+                    margin-bottom: 10px;
+                }
+            }
+            .dlg-sort-nav-right {
+                width: 50%;
+                display: flex;
+                justify-content: space-between;
+                button {
+                    height: 20px;
+                    border: none;
+                    background: none;
+                    color: #409eff;
+                    cursor: pointer;
+                }
+            }
+        }
 
-		.dlg-sort-filter {
-			display: flex;
-			flex-direction: row;
-		}
+        .dlg-sort-filter {
+            display: flex;
+            flex-direction: row;
+        }
 
-		.dlg-sort-candi-container {
-			display: flex;
-			flex-direction: row;
-			.dlg-panel-left {
-				max-height: 250px;
-    			overflow: auto;
-			}
-			.dlg-sort-candi-items{
-				display: flex;
-				flex-direction: column;
-				border: 1px solid #ccc;
-				width: 50%;
-				.dlg-sort-candi-item {
-					font-size: 14px;
-					margin: 5px;
-					cursor: pointer;
-				}
-			}
-		}
-	}
-	.dlg-download-container {
-		display: flex;
-		justify-content: space-around;
-		table {
-			height: 100px;
-			input {
-				width: 230px;
-				height: 24px;
-				border: 1px solid #979797;
-			}
-		}
-		.first {
-			margin-bottom: 20px;
-		}
-		.download_title {
-			width: 70px;
-			text-align: right;
-			padding-right: 20px;
-		}
-	}
+        .dlg-sort-candi-container {
+            display: flex;
+            flex-direction: row;
+            .dlg-panel-left {
+                max-height: 250px;
+                overflow: auto;
+            }
+            .dlg-sort-candi-items{
+                display: flex;
+                flex-direction: column;
+                border: 1px solid #ccc;
+                width: 50%;
+                .dlg-sort-candi-item {
+                    font-size: 14px;
+                    margin: 5px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .dlg-download-container {
+        display: flex;
+        justify-content: space-around;
+        table {
+            height: 100px;
+            input {
+                width: 230px;
+                height: 24px;
+                border: 1px solid #979797;
+            }
+        }
+        .first {
+            margin-bottom: 20px;
+        }
+        .download_title {
+            width: 70px;
+            text-align: right;
+            padding-right: 20px;
+        }
+    }
 </style>
