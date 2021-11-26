@@ -41,65 +41,25 @@
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <!-- <button class="upload_btn" @click="toggle">新建脚本</button>
-                            <div class="dialog" v-show="showDialog">
-                                <div>
-                                    <p @click="upload">新建脚本</p>
-                                </div>
-                            </div> -->
-							<button class="upload_btn" @click="toggle">新建脚本</button>
+                            <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" @click="selectScripts('python')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg" alt="">
                                     <p>python</p>
                                 </div>
                                  <div class="list" @click="selectScripts('pyspark')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/PySpark.svg" alt="">
                                     <p>PySpark</p>
                                 </div>
                                  <div class="list" @click="selectScripts('sql')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    <p>sql</p>
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R.svg" alt="">
+                                    <p>R</p>
                                 </div>
                                  <div class="list last" @click="selectScripts('sparksql')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    <p>sparksql</p>
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg" alt="">
+                                    <p>sparkR</p>
                                 </div>
-							</div>
-                            <!-- <el-select class="upload_btn_new" value="新建脚本" placeholder="新建脚本">
-                                <el-option 
-                                    @click.native="selectScripts('python')"
-                                    label="Python" 
-                                    value="Python" 
-                                    class="script-opt">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    Python
-                                </el-option>
-                                <el-option 
-                                    @click.native="selectScripts('pyspark')"
-                                    label="PySpark" 
-                                    value="PySpark" 
-                                    class="script-opt">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    PySpark
-                                </el-option>
-                                <el-option 
-                                    @click.native="selectScripts('sql')"
-                                    label="SQL" 
-                                    value="R"  
-                                    class="script-opt">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    SQL
-                                </el-option>
-                                <el-option 
-                                    @click.native="selectScripts('sparksql')"
-                                    label="SparkSQL" 
-                                    value="SparkR"  
-                                    class="script-opt script-opt-last">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/111111.svg" alt="">
-                                    SparkSQL
-                                </el-option>
-                            </el-select> -->
+                            </div>
                         </div>
 
                         <div class="tag_selected">
@@ -244,6 +204,17 @@
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
+        <!-- 新建脚本 -->
+        <create-scripts-dialog 
+            v-if="showCreateScriptsDialog"
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
+            :datasets="allData.dss"
+            :tagsArray="allData.tagsArray"
+            :tagsColorArray="tagsColorArray"
+            @addTagsEvent="addTagsEvent"
+            @closeCreateDialog="closeCreateDialog">
+        </create-scripts-dialog>
     </div>
     </div>
 </template>
@@ -253,10 +224,10 @@ import clearDatasetDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
+import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import ElSelect from 'element-ui/packages/select/index'
-import ElOption from 'element-ui/packages/option/index'
+import ElButton from 'element-ui/packages/option/index'
 
 export default {
     data() {
@@ -287,6 +258,7 @@ export default {
             showSelectOptionParam: false,
             closeTosts: false,
             showCreateTagsDialog: false, //添加tag弹框
+            showCreateScriptsDialog: true,
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
@@ -307,7 +279,8 @@ export default {
                 value: '选项2',
                 label: '双皮奶'
             }],
-            value: ''
+            value: '',
+            dialogVisible: false
         }
     },
     props: {
@@ -316,11 +289,11 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas"]},
-                    {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
+                    {id: '1', projectId:1,name:'Data_0001',label: ["2", "2", "zzz", "sss", "eee", "2"]},
+                    {id: '2', projectId:2,name:'Data_0002',label: ['2','sss']},
                     {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
+                tagsArray: ["2", "2", "zzz", "sss", "eee", '1']
             })
         }
     },
@@ -329,10 +302,10 @@ export default {
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
+        createScriptsDialog,
         bpSelectVue,
-        ElSelect,
-        ElOption,
-        bpOptionVue
+        bpOptionVue,
+        ElButton
     },
     computed: {
         searchData: function() {
@@ -363,8 +336,13 @@ export default {
         }
     },
     methods: {
+        handleClose(done) {
+            this.$confirm('确认关闭？').then(_ => {
+                done();
+            }).catch(_ => {});
+        },
         selectScripts(data) {
-            debugger
+            this.showCreateScriptsDialog = true
         },
         //增加tag
         addTagsEvent(data) {
@@ -597,6 +575,10 @@ export default {
     .list {
         display: flex;
         padding: 5px;
+        img {
+            width: 20px;
+            height: 20px;
+        }
     }
     .last {
         border-bottom: none;
