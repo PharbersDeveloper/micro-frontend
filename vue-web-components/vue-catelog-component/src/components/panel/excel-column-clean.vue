@@ -53,10 +53,10 @@
                     <div class="area column_clean">
                         <!-- <p class="file_name">列清洗</p> -->
                         <div class="excel">
-                            <bp-excel ref="excel" viewHeight="25vh"
+                            <bp-excel ref="excel2" viewHeight="25vh"
                                       v-on:countIsReady="totalCountIsReady"
-                                      :datasource="excelDatasource"
-                                      :schema="excelSchema"
+                                      :datasource="excelDatasource2"
+                                      :schema="excelSchema2"
                                       class="excel" />
                         </div>
                     </div>
@@ -126,10 +126,30 @@ export default {
             default: function() {
                 return new PhExcelProxy('3', this.excelDatasource, this.excelSchema)
             }
+        },
+        excelDatasource2: {
+            type: Object,
+            default: function() {
+                return new PhExcelPreviewSource('2', "",
+                    3, 0, "", this)
+            }
+        },
+        excelSchema2: {
+            type: Object,
+            default: function() {
+                return new PhExcelPreviewSchema('1')
+            }
+        },
+        dataProxy2: {
+            type: Object,
+            default: function() {
+                return new PhExcelProxy('3', this.excelDatasource2, this.excelSchema2)
+            }
         }
     },
     mounted() {
         this.dataProxy.refreshData(this.$refs.excel)
+        this.dataProxy2.refreshData(this.$refs.excel2)
     },
     created() {
         // let uriParam = window.location.href
