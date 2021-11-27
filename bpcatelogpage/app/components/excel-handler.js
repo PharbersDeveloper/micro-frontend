@@ -23,6 +23,8 @@ export default class ExcelHandlerComponent extends Component {
 					uri = `/projects/`+ ltp.projectId
 				} else if (ltp.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
+				} else if(params.name === "scripts") {
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
                 break

@@ -20,6 +20,8 @@ export default class ExcelCleanComponent extends Component {
 					uri = `/projects/`+ param.projectId
 				} else if (param.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + param.projectName + '&projectId=' + param.projectId
+				} else if(params.name === "scripts") {
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
                 break

@@ -26,6 +26,8 @@ export default class CodeditorComponent extends Component {
 					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
 				} else if(params.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
+				} else if(params.name === "scripts") {
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
 				break
