@@ -21,7 +21,7 @@
                 <button class="button" @click="saveCode">保存</button>
             </div>
             <div class="coding">
-                <ph-codeditor :value="codeBuffer" viewHeight="600px" language="python"/>
+                <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="python"/>
             </div>
             <div class="coding-footer">
                 <button class="button">Validate</button>
@@ -90,6 +90,7 @@ export default {
                 Bucket: this.datasource.bucket,
                 Key: this.datasource.codeKey + "phjob.py"
             };
+            console.log(this.datasource.codeKey)
             let that = this
             this.s3.getObject(params, function(err, data) {
                 if (err) console.log(err, err.stack); // an error occurred
@@ -102,16 +103,17 @@ export default {
     methods: {
         saveCode() {
             var params = {
-                Body: this.codeBuffer,
+                Body: this.$refs.codeditor.editor.getValue(),
                 Bucket: this.datasource.bucket,
-                Key: this.datasource.codeKey + "pyjob.py"
+                Key: this.datasource.codeKey + "phjob.py"
             }
 
+            console.log(this.datasource.codeKey)
+            console.log(this.$refs.codeditor.editor.getValue())
             let that = this
             this.s3.putObject(params, function(err, data) {
                 if (err) console.log(err, err.stack); // an error occurred
                 else {
-                    debugger
                     console.log(data);
                     that.downloadCode++
                 }
