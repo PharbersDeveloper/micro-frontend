@@ -151,6 +151,9 @@ export default {
 </script>
 <style lang="scss" scoped>
     .excel-container {
+        display: flex;
+        flex-direction: column;
+
         // TODO: 我只做了chrome 浏览器
         /* 滚动槽（轨道）宽高 */
         ::-webkit-scrollbar {
@@ -200,7 +203,7 @@ export default {
         .schemas {
             display: flex;
             margin-left: 0px;
-            margin-right: 10px;
+            /*margin-right: 10px;*/
             overflow: hidden;
             .view {
                 display: flex;

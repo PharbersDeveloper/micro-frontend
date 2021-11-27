@@ -20,13 +20,6 @@
                           :datasource="excelDatasource"
                           :schema="excelSchema"
                           class="excel" />
-<!--                <bp-excel viewHeight="25vh"-->
-<!--                          :datasource="excelDatasource"-->
-<!--                          :page_size="10"-->
-<!--                          :isNeedPopmenu="false"-->
-<!--                          v-if="showExcel"-->
-<!--                          ref="excel"-->
-<!--                          class="excel"/>-->
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -84,7 +77,6 @@
 </template>
 
 <script>
-// import bpExcel from '../../../vue-excel-component/src/components/bp-excel'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 import PhExcelPreviewSource from "./model/previewDatasource"
 import PhExcelPreviewSchema from "./model/previewSchema"
