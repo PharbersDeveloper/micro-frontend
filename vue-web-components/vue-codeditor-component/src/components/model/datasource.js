@@ -13,13 +13,19 @@ export default class PhCodeditorDatasource {
         this.data = []
         this.inputs = []
         this.outputs = []
+        this.codePath = []
     }
 
     defaultAdapter(row) {
         const attr = row["attributes"]
 
+        console.log(attr)
+        // TODO: 让赵加一个写job的S3地址的列
         this.inputs = JSON.parse(attr["inputs"])
         this.outputs = JSON.parse(attr["outputs"])
+        this.bucket = "ph-platform"
+        this.codeKey =
+            "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
     }
 
     buildQuery(ele, isAppend=false) {
@@ -54,6 +60,7 @@ export default class PhCodeditorDatasource {
             .then((response) => response.json())
             .then((response) => {
                 ele.datasource.adapter(response.data[0])
+                ele.downloadCode++
             })
     }
 }

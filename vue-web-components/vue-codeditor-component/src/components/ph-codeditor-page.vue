@@ -21,7 +21,7 @@
                 <button class="button">保存</button>
             </div>
             <div class="coding">
-                <ph-codeditor viewHeight="600px" />
+                <ph-codeditor :value="codeBuffer" viewHeight="600px" language="python"/>
             </div>
             <div class="coding-footer">
                 <button class="button">Validate</button>
@@ -34,6 +34,7 @@
 <script>
 import PhCodeditorDatasource from "./model/datasource"
 import phCodeditor from "./ph-codeditor"
+import AWS from "aws-sdk"
 export default {
     name: 'codeditor-page',
     components: {
@@ -66,14 +67,32 @@ export default {
     },
     data() {
         return {
-
+            codeBuffer: "",
+            downloadCode: 0
         }
     },
     mounted() {
         this.datasource.refreshData(this)
     },
     watch: {
-
+        downloadCode(n, o) {
+            var s3 = new AWS.S3({
+                accessKeyId: "AKIAWPBDTVEAMBDRQWIQ",
+                secretAccessKey: "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",
+                region: "cn-northwest-1"
+            })
+            var params = {
+                Bucket: this.datasource.bucket,
+                Key: this.datasource.codeKey + "phjob.py"
+            };
+            let that = this
+            s3.getObject(params, function(err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                else {
+                    that.codeBuffer = String.fromCharCode(...data.Body)
+                }
+            });
+        }
     },
     methods: {
 
