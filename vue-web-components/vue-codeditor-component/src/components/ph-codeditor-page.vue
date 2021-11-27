@@ -18,7 +18,7 @@
         <div class="coding-pane">
             <div class="coding-title">
                 <button class="button">按钮2</button>
-                <button class="button">保存</button>
+                <button class="button" @click="saveCode">保存</button>
             </div>
             <div class="coding">
                 <ph-codeditor :value="codeBuffer" viewHeight="600px" language="python"/>
@@ -63,6 +63,16 @@ export default {
                 return new PhCodeditorDatasource('1',
                     this.projectId, this.jobId, this.flowVersion, this.jobName)
             }
+        },
+        s3: {
+            type: Object,
+            default: function() {
+                return new AWS.S3({
+                    accessKeyId: "AKIAWPBDTVEAMBDRQWIQ",
+                    secretAccessKey: "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",
+                    region: "cn-northwest-1"
+                })
+            }
         }
     },
     data() {
@@ -76,17 +86,12 @@ export default {
     },
     watch: {
         downloadCode(n, o) {
-            var s3 = new AWS.S3({
-                accessKeyId: "AKIAWPBDTVEAMBDRQWIQ",
-                secretAccessKey: "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",
-                region: "cn-northwest-1"
-            })
             var params = {
                 Bucket: this.datasource.bucket,
                 Key: this.datasource.codeKey + "phjob.py"
             };
             let that = this
-            s3.getObject(params, function(err, data) {
+            this.s3.getObject(params, function(err, data) {
                 if (err) console.log(err, err.stack); // an error occurred
                 else {
                     that.codeBuffer = String.fromCharCode(...data.Body)
@@ -95,7 +100,23 @@ export default {
         }
     },
     methods: {
+        saveCode() {
+            var params = {
+                Body: this.codeBuffer,
+                Bucket: this.datasource.bucket,
+                Key: this.datasource.codeKey + "pyjob.py"
+            }
 
+            let that = this
+            this.s3.putObject(params, function(err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                else {
+                    debugger
+                    console.log(data);
+                    that.downloadCode++
+                }
+            });
+        }
     }
 }
 </script>
