@@ -40,7 +40,7 @@
 				<div class="area">
 					<!-- <p class="file_name">文件名称</p> -->
 					<div class="excel">
-						<bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10"></bp-excel>
+<!--						<bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10"></bp-excel>-->
 					</div>
 				</div>
 				<div class="area column_clean">
@@ -56,7 +56,7 @@
 
 <script>
 import bpButton from '../../../../vue-basic-component/src/components/bp-button.vue'
-import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
+// import bpExcel from '../../../../vue-excel-component/src/components/bp-excel'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import PhDataSource from '../model/data'
@@ -76,7 +76,7 @@ export default {
         }
     },
     components: {
-        bpExcel,
+        // bpExcel,
         bpButton,
         bpSelectVue,
         bpOptionVue
@@ -183,7 +183,7 @@ export default {
                     height: 82px;
                 }
             }
-            
+
             .round {
                 position: relative;
                 width: 82px;
@@ -361,7 +361,7 @@ export default {
         .column_clean {
             margin-top: 5px;
         }
-        
+
     }
 }
 </style>
