@@ -183,7 +183,8 @@ export default {
             if(legalInput) {
                 this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
                 this.excelDatasource.sheet = this.sheet
-                this.excelDatasource.refreshData(this.$refs.excel)
+                this.dataProxy.refreshData(this.$refs.excel)
+                // this.excelDatasource.refreshData(this.$refs.excel)
             } else {
                 this.$refs.firstLine.value = 0
                 this.firstSkipValue = 0
@@ -194,7 +195,8 @@ export default {
             if(legalInput) {
                 this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
                 this.excelDatasource.sheet = this.sheet
-                this.excelDatasource.refreshData(this.$refs.excel)
+                // this.excelDatasource.refreshData(this.$refs.excel)
+                this.dataProxy.refreshData(this.$refs.excel)
             } else {
                 this.$refs.nextLine.value = 0
                 this.nextSkipValue = 0
@@ -205,7 +207,8 @@ export default {
             this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
             this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
             this.excelDatasource.sheet = this.sheet
-            this.excelDatasource.refreshData(this.$refs.excel)
+            // this.excelDatasource.refreshData(this.$refs.excel)
+            this.dataProxy.refreshData(this.$refs.excel)
         },
         //正整数判断
         inputNumInteger(value) {
