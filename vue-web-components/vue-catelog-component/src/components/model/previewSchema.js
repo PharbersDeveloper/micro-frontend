@@ -1,14 +1,11 @@
 
-export default class PhExcelDataSchema {
+export default class PhExcelPreviewSchema {
     constructor(id) {
         this.id = id
         this.schema = []
         this.cols = []
         this.dtype = []
         this.cellWidth = []
-        // this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
-        // this.dtype= ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"]
-        // this.cellWidth= [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
         this.cols = this.schema
     }
 
@@ -24,15 +21,27 @@ export default class PhExcelDataSchema {
     }
 
     totalWidth() {
-        if (this.cellWidth.length > 0)
-            return this.cellWidth.reduce((a, v) => a + v)
+        let idx_arr = []
+        for (var idx in this.cols) {
+            const tmp = this.cols[idx]
+            idx_arr.push(this.schema.indexOf(tmp))
+        }
+
+        let width_arr = []
+        for (var iter in idx_arr) {
+            const tmp = idx_arr[iter]
+            width_arr.push(this.cellWidth[tmp])
+        }
+
+        if (width_arr.length > 0)
+            return width_arr.reduce((a, v) => a + v)
         else return 0
     }
 
     requestSchema(url, arr) {
         return new Promise((resolve, reject) => {
             this.resetSchema(
-                ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
+                arr,
                 ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
                 [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
             )

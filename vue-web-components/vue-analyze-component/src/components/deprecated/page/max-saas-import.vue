@@ -31,7 +31,7 @@
                     <span class="heading-small">目标文件</span>
                     <div class="target-content-container ">
                         <div class="target-border">
-                            <bp-excel name="targer" :viewHeight="1250" ref="targerExcel"></bp-excel>
+<!--                            <bp-excel name="targer" :viewHeight="1250" ref="targerExcel"></bp-excel>-->
                         </div>
                         <bp-select-vue choosedValue="" :src="selectIcon" iconClass="select-icon" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 							<bp-option-vue text="自定映射" :disabled=true @click="mappingClick"></bp-option-vue>
@@ -51,7 +51,7 @@
         <!-- 进度条弹框 -->
 		<!-- <div v-if="showDialog" -->
         <div v-if="closeuploadToast == '0'"
-            class="upload-toast" 
+            class="upload-toast"
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
                 {'upload-toast-border-blue': uploadToastBorder == 'blue'},
@@ -67,9 +67,9 @@
             <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
             <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
             <!-- 进度条 -->
-            <div class="progress" v-if="showProgress == '1'"> 
-                <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span> 
-            </div> 
+            <div class="progress" v-if="showProgress == '1'">
+                <span class="meter" :style="{width:proBar+'%',}" >{{proBar}}%</span>
+            </div>
             <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
 				<div class="cross"></div>
             </div>
@@ -78,205 +78,205 @@
 </template>
 
 <script>
-import mappingBox from '../mapping-box.vue'
-import importFileList from '../import-file-list.vue'
-import bpExcel from '../bp-excel.vue'
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import mappingBox from '../../mapping-box.vue'
+import importFileList from '../../import-file-list.vue'
+// import bpExcel from '../bp-excel.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpText from 'vue-components/src/components/bp-text.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 export default {
-	components: {
-		importFileList,
-		bpSelectVue,
-		bpOptionVue,
-		mappingBox,
-		bpExcel,
-		bpText
-	},
-	data() {
-		return {
-			// showDialog: true,
-			mappingModelShow: false,
-			fileIndex: 0,
-			middleList: [],
-			jobLogs: null,
-			proBar: 0,
-			selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
-			sourceData: {
-				data: [],
-				refreshData:(ele) => {
-					ele.needRefresh++
-				},
-				appendData: (ele, cb) => {
-					ele.cur_page++
-					ele.needRefresh++
-				}
-			},
-			sonRefresh: true,
-			closeTosts: false,
-			showSelectOptionParam: false,
-			conParam: {}
-		}
-	},
-	mounted() {
-		let that = this
-		document.addEventListener("click", event => {
-			if(!that.showSelectOptionParam) {
-				that.closeTosts = !that.closeTosts
-			}
-			that.showSelectOptionParam = false
-		})
-	},
-	methods: {
-		showSelectOption() {
-			this.showSelectOptionParam = true
-		},
-		// 关闭进度条
-		closeToast() {
-			const event = new Event("event")
-			event.args = {
-				callback: "closeToast",
-				element: this,
-				param: {
-					name: 'closeToast',
-					value: 0
-				}
-			}
-			this.$emit('event',event)
-		},
-		//点击文件，或确认导入
-		clickfile(data) {
-			let that = this;
-			this.fileIndex = data.args.param.select
-			data.args.param.readNumber = this.allData.readNumber
-			if(data.args.param.name == "import") {
-				//进度条
-				this.proBar = 0;
-				var clearInt = setInterval(function() { 
-					that.proBar++; 
-					// console.log(that.proBar); 
-					if (that.proBar >= 60) { 
-						clearInterval(clearInt); 
-					} 
-				}, 60)
-			}
-			this.$emit('event', data)
-		},
-		mappingClick() {
-			this.mappingModelShow = true
-		},
-		closeMappingModal() {
-			this.mappingModelShow = false
-		},
-		confirmMappingEvent(data) {
-			data.args.param.userData = this.allData.userData
-			data.args.param.fileData = this.allData.assets[this.fileIndex]
-			this.$emit('event', data)
-			// let conParam = data.args.param
-			this.conParam = data.args.param
-			this.conParam.targetsList.forEach((item,index) => {
-				if(!this.conParam.mappingList[index] || this.conParam.mappingList[index] === '') {
-					alert("请输入所有映射关系")
-					throw new Error("请输入所有映射关系")
-				}
-			})
-			this.mappingModelShow = false
-		}
-	},
-	props: {
-		allData: {
-			type: Object,
-			default: function() {
-				return {
-					assets: [],//文件列表
-					schemas: ['省', '城市', '年', '季度', '月', '医院编码', 'ATC编码', '药品名称', '商品名', '包装', '规格', '包装数量', '金额（元）', '数量(支/片)', '剂型', '给药途径', '生产企业'],//源数据表头
-					targetNames: [],//目标文件表头
-					fileName: '',
-					mapperAssets: [], //列表状态
-					sourceData: [],
-					readNumber: 1,
-					dt: '',
-					provider: ""
-				}
-			}
-		},
-		random: Number,
-		uploadToastBorder: String,
-		uploadTextStatus: {
-			type: String,
-			default: "正在上传"
-		},
-		uploadText: String,
-		closeuploadToast: {
-			type: String,
-			default: '1'
-		},
-		showProgress: {
-			type: String,
-			default: '0'
-		},
-		uploadLoadedSize: Number,
-		uploadFileSize: Number
-	},
-	watch: {
-		random: function() {
-			this.$forceUpdate()
-			this.middleList = []
-			if(this.allData.eventName == "clickFile") {
-				//刷新数据
-				this.sonRefresh= false;
-				//获取源文件列表数据
-				this.sourceData.data = this.allData.sourceData
-				this.$nextTick(() => {
-					this.sonRefresh= true;
-				});
-			}
-			//点击文件列表
-			if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
-				//需要更新mapping数据
-				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
-				//已创建映射
-				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-				this.middleList = message.mapper
-			} else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
-				//未创建映射
-				this.allData.targetNames.forEach(item => {
-					let it = {}
-					it[item] = ''
-					this.middleList.push(it)
-				})
-			}
-		},
-		"allData.jobLogs": function(data) {
-			//第一次进入页面 渲染mapping弹框数据
-			this.middleList = []
-			if(this.allData.jobLogs.length > 0) {
-				let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
-				//已创建映射
-				let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
-				this.middleList = message.mapper
-			} else {
-				//未创建映射
-				this.allData.targetNames.forEach(item => {
-					let it = {}
-					it[item] = ''
-					this.middleList.push(it)
-				})
-			}
-		},
-		uploadLoadedSize: function() {
-			// console.log("uploadLoadedSize", this.uploadLoadedSize)
-			this.proBar = this.uploadLoadedSize
-		},
-		"allData.sourceData": function(data) {
-			this.sourceData.data = data
-		},
-		"allData.provider": function(data) {
-			this.$refs.targerExcel.datasource.filter['provider'] = 'MAX'
-			this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
-			this.$refs.targerExcel.dataRefresh++
-		}
-	}
+    components: {
+        importFileList,
+        bpSelectVue,
+        bpOptionVue,
+        mappingBox,
+        // bpExcel,
+        bpText
+    },
+    data() {
+        return {
+            // showDialog: true,
+            mappingModelShow: false,
+            fileIndex: 0,
+            middleList: [],
+            jobLogs: null,
+            proBar: 0,
+            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
+            sourceData: {
+                data: [],
+                refreshData:(ele) => {
+                    ele.needRefresh++
+                },
+                appendData: (ele, cb) => {
+                    ele.cur_page++
+                    ele.needRefresh++
+                }
+            },
+            sonRefresh: true,
+            closeTosts: false,
+            showSelectOptionParam: false,
+            conParam: {}
+        }
+    },
+    mounted() {
+        let that = this
+        document.addEventListener("click", event => {
+            if(!that.showSelectOptionParam) {
+                that.closeTosts = !that.closeTosts
+            }
+            that.showSelectOptionParam = false
+        })
+    },
+    methods: {
+        showSelectOption() {
+            this.showSelectOptionParam = true
+        },
+        // 关闭进度条
+        closeToast() {
+            const event = new Event("event")
+            event.args = {
+                callback: "closeToast",
+                element: this,
+                param: {
+                    name: 'closeToast',
+                    value: 0
+                }
+            }
+            this.$emit('event',event)
+        },
+        //点击文件，或确认导入
+        clickfile(data) {
+            let that = this;
+            this.fileIndex = data.args.param.select
+            data.args.param.readNumber = this.allData.readNumber
+            if(data.args.param.name == "import") {
+                //进度条
+                this.proBar = 0;
+                var clearInt = setInterval(function() {
+                    that.proBar++;
+                    // console.log(that.proBar);
+                    if (that.proBar >= 60) {
+                        clearInterval(clearInt);
+                    }
+                }, 60)
+            }
+            this.$emit('event', data)
+        },
+        mappingClick() {
+            this.mappingModelShow = true
+        },
+        closeMappingModal() {
+            this.mappingModelShow = false
+        },
+        confirmMappingEvent(data) {
+            data.args.param.userData = this.allData.userData
+            data.args.param.fileData = this.allData.assets[this.fileIndex]
+            this.$emit('event', data)
+            // let conParam = data.args.param
+            this.conParam = data.args.param
+            this.conParam.targetsList.forEach((item,index) => {
+                if(!this.conParam.mappingList[index] || this.conParam.mappingList[index] === '') {
+                    alert("请输入所有映射关系")
+                    throw new Error("请输入所有映射关系")
+                }
+            })
+            this.mappingModelShow = false
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    assets: [],//文件列表
+                    schemas: ['省', '城市', '年', '季度', '月', '医院编码', 'ATC编码', '药品名称', '商品名', '包装', '规格', '包装数量', '金额（元）', '数量(支/片)', '剂型', '给药途径', '生产企业'],//源数据表头
+                    targetNames: [],//目标文件表头
+                    fileName: '',
+                    mapperAssets: [], //列表状态
+                    sourceData: [],
+                    readNumber: 1,
+                    dt: '',
+                    provider: ""
+                }
+            }
+        },
+        random: Number,
+        uploadToastBorder: String,
+        uploadTextStatus: {
+            type: String,
+            default: "正在上传"
+        },
+        uploadText: String,
+        closeuploadToast: {
+            type: String,
+            default: '1'
+        },
+        showProgress: {
+            type: String,
+            default: '0'
+        },
+        uploadLoadedSize: Number,
+        uploadFileSize: Number
+    },
+    watch: {
+        random: function() {
+            this.$forceUpdate()
+            this.middleList = []
+            if(this.allData.eventName == "clickFile") {
+                //刷新数据
+                this.sonRefresh= false;
+                //获取源文件列表数据
+                this.sourceData.data = this.allData.sourceData
+                this.$nextTick(() => {
+                    this.sonRefresh= true;
+                });
+            }
+            //点击文件列表
+            if(this.allData.eventName == "clickFile" && this.allData.jobLogs.length > 0) {
+                //需要更新mapping数据
+                let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
+                //已创建映射
+                let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
+                this.middleList = message.mapper
+            } else if(this.allData.eventName == "clickFile" && this.allData.jobLogs < 1) {
+                //未创建映射
+                this.allData.targetNames.forEach(item => {
+                    let it = {}
+                    it[item] = ''
+                    this.middleList.push(it)
+                })
+            }
+        },
+        "allData.jobLogs": function(data) {
+            //第一次进入页面 渲染mapping弹框数据
+            this.middleList = []
+            if(this.allData.jobLogs.length > 0) {
+                let jobdatas = this.allData.jobLogs.filter(it => it.jobDesc == "mapped")
+                //已创建映射
+                let message = JSON.parse(jobdatas[jobdatas.length - 1].message)
+                this.middleList = message.mapper
+            } else {
+                //未创建映射
+                this.allData.targetNames.forEach(item => {
+                    let it = {}
+                    it[item] = ''
+                    this.middleList.push(it)
+                })
+            }
+        },
+        uploadLoadedSize: function() {
+            // console.log("uploadLoadedSize", this.uploadLoadedSize)
+            this.proBar = this.uploadLoadedSize
+        },
+        "allData.sourceData": function(data) {
+            this.sourceData.data = data
+        },
+        "allData.provider": function(data) {
+            this.$refs.targerExcel.datasource.filter['provider'] = 'MAX'
+            this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
+            this.$refs.targerExcel.dataRefresh++
+        }
+    }
 }
 
 </script>
@@ -496,7 +496,7 @@ export default {
             height: 36px;
             background: #FFF;
             box-shadow: 0 0 1px 0 rgba(7, 10, 14, 0.12), 0 8px 16px -4px rgba(9, 30, 66, 0.25);
-            border-radius: 2px; 
+            border-radius: 2px;
             span {
                 display: flex;
                 align-items: center;

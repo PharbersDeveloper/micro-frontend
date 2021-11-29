@@ -17,7 +17,8 @@
                                :rowHeight="rowHeight"
                                :page-height="pageHeight"
                                :page-width="schema.totalWidth()"
-                               :key="item"/>
+                               :needRefresh="item"
+                               :key="index"/>
             </div>
         </div>
     </div>
@@ -31,23 +32,19 @@ export default {
         return {
             schemaIsReady: 0,
             countIsReady: 0,
+            dataRefresh: 0,
             curPage: [],
             pageRange: [],
             dataCount: 0,
             scrollBarWidth: 8,
             rowHeight: 24,
-            style: ""
+            style: "",
+            totalHeight: 0,
+            pageHeight: 0
         }
     },
     computed: {
-        totalHeight: function() {
-            let dataCount = this.dataCount
-            return dataCount * this.rowHeight
-        },
-        pageHeight: function() {
-            let batchSize = this.datasource.batch_size
-            return batchSize * this.rowHeight
-        }
+
     },
     components: {
         headerItem:require('./bp-excel-header.vue').default,
@@ -76,11 +73,13 @@ export default {
         }
     },
     mounted() {
-        this.schema.requestSchema('').then((result) => {
-            if (result) {
-                this.schemaIsReady++
-            }
-        })
+        if (this.schema.schema.length == 0) {
+            this.schema.requestSchema().then((result) => {
+                if (result) {
+                    this.schemaIsReady++
+                }
+            })
+        } else this.schemaIsReady++
     },
     methods: {
         scrollGet (e) {
@@ -112,6 +111,7 @@ export default {
             let that = this
             this.datasource.queryTotalCount(this).then(count => {
                 that.dataCount = parseInt(count)
+                that.$emit("countIsReady", that.dataCount);
                 that.countIsReady++
             })
             let viewHeight = this.viewHeight
@@ -122,14 +122,38 @@ export default {
             this.curPage = [-1, 0, 1]
             this.pageRange = []
             for (var idx = 0; idx < this.dataCount/this.datasource.batch_size + 1; ++idx) {
-                this.pageRange.push(idx)
+                // this.pageRange.push(idx)
+                this.pageRange.push(0)
             }
+            let dataCount = this.dataCount
+            this.totalHeight = dataCount * this.rowHeight
+            let batchSize = this.datasource.batch_size
+            this.pageHeight = batchSize * this.rowHeight
+
+            for (var iter = 0; iter < this.curPage.length; ++iter) {
+                const tmp = parseInt(this.curPage[iter])
+                if (tmp >= 0 && tmp < this.pageRange.length) {
+                    this.pageRange[tmp]++
+                }
+            }
+        },
+        dataRefresh(n, o) {
+            for (var idx in this.$children) {
+                const tmp = parseInt(idx)
+                if (this.$children[tmp].$el._prevClass === "ph-excel-page") {
+                    this.$children[tmp].$data.data = []
+                }
+            }
+            this.schemaIsReady++
         }
     }
 };
 </script>
 <style lang="scss" scoped>
     .excel-container {
+        display: flex;
+        flex-direction: column;
+
         // TODO: 我只做了chrome 浏览器
         /* 滚动槽（轨道）宽高 */
         ::-webkit-scrollbar {
@@ -179,7 +203,7 @@ export default {
         .schemas {
             display: flex;
             margin-left: 0px;
-            margin-right: 10px;
+            /*margin-right: 10px;*/
             overflow: hidden;
             .view {
                 display: flex;

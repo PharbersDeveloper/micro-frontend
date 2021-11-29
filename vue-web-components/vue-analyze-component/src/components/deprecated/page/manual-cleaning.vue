@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <bp-excel :viewHeight="1250" @showModel="showModel" ref="targerExcel"></bp-excel>
+<!--                <bp-excel :viewHeight="1250" @showModel="showModel" ref="targerExcel"></bp-excel>-->
             </div>
         </div>
 		<max-entry v-show="showDialog" :showDialog="showDialog" @dialog-visible="show" :sourceArr="source_data" :excelComponent="excelComponent" @refreshData="refreshData" :provider="allData.provider" :dt="allData.dt"></max-entry>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import bpExcel from '../bp-excel.vue'
+// import bpExcel from '../bp-excel.vue'
 import maxEntry from '../max-entry-replacement.vue'
 export default {
 	data() {
@@ -60,7 +60,7 @@ export default {
 		}
 	},
 	components: {
-		bpExcel,
+		// bpExcel,
 		maxEntry
 	},
 	props: {
@@ -234,7 +234,7 @@ export default {
                         &:last-of-type {
                             margin-right: 0;
                         }
-                    } 
+                    }
                 }
             }
 

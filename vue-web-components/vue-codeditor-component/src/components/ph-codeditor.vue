@@ -1,9 +1,9 @@
 <template>
-<div class="ace-container" :style="{ height: viewHeight }">
+<div class="ace-container" :style="style">
     <!-- import CSS -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 官方文档中使用 id，这里禁止使用，在后期打包后容易出现问题，使用 ref 或者 DOM 就行 -->
-    <div class="ace-editor" ref="ace" :style="{height:viewHeight}"></div>
+    <div class="ace-editor" ref="ace" ></div>
 </div>
 
 </template>
@@ -43,10 +43,16 @@ export default {
     components: {
         ElSelect
     },
+    computed: {
+        style: function() {
+            let viewHeight = this.viewHeight
+            return "height: " + viewHeight
+        }
+    },
     props: {
         viewHeight: {
             type: String,
-            default: '600px'
+            default: "600px"
         },
         // 编辑器内容
         value: {
