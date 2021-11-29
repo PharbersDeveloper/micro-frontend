@@ -213,7 +213,7 @@ export default {
             versionCandidatesShow: [],
             searchSort: "",
             expandPopup: false,
-            tmpFilterRow: "Province",
+            tmpFilterRow: "version",
             needRefresh: 0
         }
     },
@@ -413,7 +413,6 @@ export default {
         },
         on_clickDownloadConfirm() {
             this.dialogDownloadVisible = false
-            // TODO
         },
         searchRowInput(data) {
             this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)

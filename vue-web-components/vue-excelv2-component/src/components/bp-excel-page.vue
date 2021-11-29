@@ -56,7 +56,7 @@ export default {
             default: 2400
         },
         pageWidth: {
-            type: String,
+            type: Number,
             default: 1298
         },
         datasource: {
