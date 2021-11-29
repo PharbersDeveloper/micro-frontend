@@ -18,93 +18,93 @@
 
 <script>
 export default {
-	data() {
-		return {
-			fileArr: [],
-			userIcon: "https://www.pharbers.com/public/icon_home_user.svg",
-			state: ''
-		}
-	},
-	props: {
-		data: Object,
-		selected: {
-			type: Boolean,
-			default: false
-		},
-		index: Number,
-		stateList: Array
-	},
-	computed: {
-		stateDisplay() {
-			// 列表状态
-			let stateName= ''
-			let lists = this.stateList.filter(it => it.version == this.data.version)
+    data() {
+        return {
+            fileArr: [],
+            userIcon: "https://www.pharbers.com/public/icon_home_user.svg",
+            state: ''
+        }
+    },
+    props: {
+        data: Object,
+        selected: {
+            type: Boolean,
+            default: false
+        },
+        index: Number,
+        stateList: Array
+    },
+    computed: {
+        stateDisplay() {
+            // 列表状态
+            let stateName= ''
+            let lists = this.stateList.filter(it => it.version == this.data.version)
 
-			if(lists.length > 0) {
-				lists.forEach(item => {
-					if(item.jobDesc === 'succeed') {
-						this.state = item.jobDesc
-						stateName = '成功'
-					} else if(item.jobDesc === 'mapped') {
-						this.state = item.jobDesc
-						stateName = '已映射'
-					} else if(item.jobDesc === 'failed') {
-						this.state = item.jobDesc
-						stateName = '失败'
-					} else {
-						this.state = "unmapped"
-						stateName = '未映射'
-					}
-				})
-			} else {
-				this.state = "unmapped"
-				stateName = '未映射'
-			}
-			return stateName
-		}
-	},
-	created() {
-		let message = null
-		if(this.isJSON(this.data.message)) {
-			message = JSON.parse(this.data.message);
-		}
-		// console.log("message.label", message.label)
-		this.fileArr = {
-			name: message.name, 
-			labels: message.label ? message.label.split(',') : []
-		}
-	},
-	methods: {
-		selectFile(name) {
-			const event = new Event("event")
-			event.args = {
-				callback: "clickFile",
-				element: this,
-				param: {
-					attr: this.data,
-					select: this.index,
-					name: name
-				}
-			}
-			this.$emit('clickfile', event)
-		},
-		isJSON(str) {
-			if (typeof str == 'string') {
-				try {
-					var obj=JSON.parse(str);
-					if(typeof obj == 'object' && obj ){
-						return true;
-					}else{
-						return false;
-					}
+            if(lists.length > 0) {
+                lists.forEach(item => {
+                    if(item.jobDesc === 'succeed') {
+                        this.state = item.jobDesc
+                        stateName = '成功'
+                    } else if(item.jobDesc === 'mapped') {
+                        this.state = item.jobDesc
+                        stateName = '已映射'
+                    } else if(item.jobDesc === 'failed') {
+                        this.state = item.jobDesc
+                        stateName = '失败'
+                    } else {
+                        this.state = "unmapped"
+                        stateName = '未映射'
+                    }
+                })
+            } else {
+                this.state = "unmapped"
+                stateName = '未映射'
+            }
+            return stateName
+        }
+    },
+    created() {
+        let message = null
+        if(this.isJSON(this.data.message)) {
+            message = JSON.parse(this.data.message);
+        }
+        // console.log("message.label", message.label)
+        this.fileArr = {
+            name: message.name, 
+            labels: message.label ? message.label.split(',') : []
+        }
+    },
+    methods: {
+        selectFile(name) {
+            const event = new Event("event")
+            event.args = {
+                callback: "clickFile",
+                element: this,
+                param: {
+                    attr: this.data,
+                    select: this.index,
+                    name: name
+                }
+            }
+            this.$emit('clickfile', event)
+        },
+        isJSON(str) {
+            if (typeof str == 'string') {
+                try {
+                    var obj=JSON.parse(str);
+                    if(typeof obj == 'object' && obj ){
+                        return true;
+                    }else{
+                        return false;
+                    }
 
-				} catch(e) {
-					// console.log('error：'+str+'!!!'+e);
-					return false;
-				}
-			}
-		}
-	}
+                } catch(e) {
+                    // console.log('error：'+str+'!!!'+e);
+                    return false;
+                }
+            }
+        }
+    }
 }
 </script>
 

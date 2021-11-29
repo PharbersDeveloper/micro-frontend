@@ -15,7 +15,7 @@ export default class PhExcelPreviewSource {
         // this.schema = []
         // this.cols = this.schema
         this.url = "https://apiv2.pharbers.com/schemaexplorer"
-        this.debugToken = "abb3eb98d39e024e2889e47ecee691de75f0bcfcd597d95ae54a215d0577973b"
+        this.debugToken = "07c0c42a90d628b4ddbc74c8c72531aeb6813d32402b446e2a22a360dcf88023"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -87,6 +87,10 @@ export default class PhExcelPreviewSource {
                 ele.datasource.data = datas.data
                 ele.schemaIsReady++
             })
+    }
+
+    set(key, value) {
+        this[key] = value
     }
 
     queryTotalCount(ele) {

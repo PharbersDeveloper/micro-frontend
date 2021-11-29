@@ -34,53 +34,53 @@
 // import bpExcel from '../bp-excel.vue'
 import maxEntry from '../max-entry-replacement.vue'
 export default {
-	data() {
-		return {
-			showDialog: false,
-			hidden:true,
-			source_data: [],
-			excelComponent: {}
-		}
-	},
-	methods: {
-		show(val) {
-			this.showDialog = val
-		},
-		showModel(data) {
-			this.source_data = data.args.param.data
-			this.excelComponent = data.args.element
-			this.showDialog = true
-		},
-		refreshData(data) {
-			this.showDialog = false
-			let fcode = data.args.param.fcode
-			let cur_page_row = this.excelComponent.cur_page * this.excelComponent.page_size + this.excelComponent.cur_row //master表当前行数
-			this.excelComponent.datasource.data[cur_page_row][1] = fcode
-			this.excelComponent.needRefresh++
-		}
-	},
-	components: {
-		// bpExcel,
-		maxEntry
-	},
-	props: {
-		allData: {
-			type: Object,
-			default:  function() {
-				return {
-					dt: '',
-					provider: ""
-				}
-			}
-		}
-	},
-	watch: {
-		"allData.provider": function(data) {
-			this.$refs.targerExcel.datasource.filter['provider'] = this.allData.provider
-			this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
-			this.$refs.targerExcel.dataRefresh++
-		}
-	}
+    data() {
+        return {
+            showDialog: false,
+            hidden:true,
+            source_data: [],
+            excelComponent: {}
+        }
+    },
+    methods: {
+        show(val) {
+            this.showDialog = val
+        },
+        showModel(data) {
+            this.source_data = data.args.param.data
+            this.excelComponent = data.args.element
+            this.showDialog = true
+        },
+        refreshData(data) {
+            this.showDialog = false
+            let fcode = data.args.param.fcode
+            let cur_page_row = this.excelComponent.cur_page * this.excelComponent.page_size + this.excelComponent.cur_row //master表当前行数
+            this.excelComponent.datasource.data[cur_page_row][1] = fcode
+            this.excelComponent.needRefresh++
+        }
+    },
+    components: {
+        // bpExcel,
+        maxEntry
+    },
+    props: {
+        allData: {
+            type: Object,
+            default:  function() {
+                return {
+                    dt: '',
+                    provider: ""
+                }
+            }
+        }
+    },
+    watch: {
+        "allData.provider": function(data) {
+            this.$refs.targerExcel.datasource.filter['provider'] = this.allData.provider
+            this.$refs.targerExcel.datasource.filter['dt'] = this.allData.dt
+            this.$refs.targerExcel.dataRefresh++
+        }
+    }
 }
 </script>
 

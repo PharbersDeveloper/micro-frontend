@@ -19,65 +19,65 @@
 </template>
 <script>
 export default {
-	data() {
-		return {
-			expangPopup: false
-		}
-	},
-	components: {},
-	props: {
-		allData: {
-			type: Object,
-			default: function() {
-				return {
-					projectName: "test",
-					popupBack: false
-				}
-			}		
-		}
-	},
-	beforeMount() {},
-	mounted() {},
-	methods: {
-		linkToPage(name) {
-			// 弹框询问跳转
-			if(this.allData.popupBack) {
-				let sel = confirm("您还没有保存更改，确认返回吗?")
-				if(sel) {
-					const event = new Event("event")
-					event.args = {
-						callback: "linkToPage",
-						element: this,
-						param: {
-							"name": name,
-							"projectName": this.allData.projectName,
-							"projectId": this.allData.projectId
-						}
-					}
-					this.$emit('event', event)
-				}
-			} else {
-				// 直接跳转
-				const event = new Event("event")
-				event.args = {
-					callback: "linkToPage",
-					element: this,
-					param: {
-						"name": name,
-						"projectName": this.allData.projectName,
-						"projectId": this.allData.projectId
-					}
-				}
-				this.$emit('event', event)
-			}
-		},
-		focusOutExpand() {
-			this.expangPopup = false
-		},
-		focusExpand() {
-			this.expangPopup = true
-		}
-	}
+    data() {
+        return {
+            expangPopup: false
+        }
+    },
+    components: {},
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    projectName: "test",
+                    popupBack: false
+                }
+            }		
+        }
+    },
+    beforeMount() {},
+    mounted() {},
+    methods: {
+        linkToPage(name) {
+            // 弹框询问跳转
+            if(this.allData.popupBack) {
+                let sel = confirm("您还没有保存更改，确认返回吗?")
+                if(sel) {
+                    const event = new Event("event")
+                    event.args = {
+                        callback: "linkToPage",
+                        element: this,
+                        param: {
+                            "name": name,
+                            "projectName": this.allData.projectName,
+                            "projectId": this.allData.projectId
+                        }
+                    }
+                    this.$emit('event', event)
+                }
+            } else {
+                // 直接跳转
+                const event = new Event("event")
+                event.args = {
+                    callback: "linkToPage",
+                    element: this,
+                    param: {
+                        "name": name,
+                        "projectName": this.allData.projectName,
+                        "projectId": this.allData.projectId
+                    }
+                }
+                this.$emit('event', event)
+            }
+        },
+        focusOutExpand() {
+            this.expangPopup = false
+        },
+        focusExpand() {
+            this.expangPopup = true
+        }
+    }
 };
 </script>
 <style lang="scss">

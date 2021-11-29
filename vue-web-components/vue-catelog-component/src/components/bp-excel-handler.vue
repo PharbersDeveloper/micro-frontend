@@ -130,9 +130,11 @@ export default {
         this.dataProxy.refreshData(this.$refs.excel)
     },
     created() {
-        // let uriParam = window.location.href
-        // this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
-        // this.typeValue = this.tmpname.split(".")[1]
+        let uriParam = window.location.href
+        this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
+        debugger
+        this.excelDatasource.set('tmpname', this.tmpname)
+        this.typeValue = this.tmpname.split(".")[1]
     },
     methods: {
         linkToPage(name) {

@@ -10,24 +10,24 @@
 <script>
 import importFileCell from './import-file-cell.vue'
 export default {
-	components: {
-		importFileCell
-	},
-	props: {
-		lists: Array,
-		stateList: Array
-	},
-	data () {
-		return {
-			select: 0
-		}
-	},
-	methods: {
-		clickfile(data) {
-			this.select = data.args.param.select
-			this.$emit('clickfile', data)
-		}
-	}
+    components: {
+        importFileCell
+    },
+    props: {
+        lists: Array,
+        stateList: Array
+    },
+    data () {
+        return {
+            select: 0
+        }
+    },
+    methods: {
+        clickfile(data) {
+            this.select = data.args.param.select
+            this.$emit('clickfile', data)
+        }
+    }
 }
 </script>
 

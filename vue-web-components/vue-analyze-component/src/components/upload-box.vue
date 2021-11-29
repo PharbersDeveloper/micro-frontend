@@ -34,53 +34,53 @@ import bpInput from '../../node_modules/vue-components/src/components/bp-input.v
 import bpTextarea from '../../node_modules/vue-components/src/components/bp-textarea.vue'
 
 export default {
-	components: {
-		bpButton,
-		bpInput,
-		bpTextarea
-	},
-	data() {
-		return {
-			closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
-			memo: "",
-			classNames: false,
-			sheet: ""
-		}
-	},
-	props: {
-		uploadData: {
-			type: Object,
-			default: function () {
-				return {}
-			}
-		},
-		fileName: String
-	},
-	computed: {},
-	methods: {
-		cancel() {
-			this.$emit("cancel")
-		},
-		selectFile() {
-			this.$emit("selectFile")
-		},
+    components: {
+        bpButton,
+        bpInput,
+        bpTextarea
+    },
+    data() {
+        return {
+            closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+            memo: "",
+            classNames: false,
+            sheet: ""
+        }
+    },
+    props: {
+        uploadData: {
+            type: Object,
+            default: function () {
+                return {}
+            }
+        },
+        fileName: String
+    },
+    computed: {},
+    methods: {
+        cancel() {
+            this.$emit("cancel")
+        },
+        selectFile() {
+            this.$emit("selectFile")
+        },
 
-		inputTextarea(value) {
-			this.memo = value
-		},
-		inputSheet(value) {
-			this.sheet = value
-		},
-		confirm() {
-			if(!this.memo || this.momo == '') {
-				alert("请输入备注信息")
-			}else if(!this.sheet || this.sheet == '') {
-				alert("请输入sheet名称")
-			} else {
-				this.$emit("confirm", this.memo, this.sheet)
-			}
-		}
-	}
+        inputTextarea(value) {
+            this.memo = value
+        },
+        inputSheet(value) {
+            this.sheet = value
+        },
+        confirm() {
+            if(!this.memo || this.momo == '') {
+                alert("请输入备注信息")
+            }else if(!this.sheet || this.sheet == '') {
+                alert("请输入sheet名称")
+            } else {
+                this.$emit("confirm", this.memo, this.sheet)
+            }
+        }
+    }
 }
 </script>
 
