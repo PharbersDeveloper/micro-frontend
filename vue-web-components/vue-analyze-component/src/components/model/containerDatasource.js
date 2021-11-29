@@ -34,7 +34,7 @@ export default class PhContainerDataSource {
             let sql_str = "SELECT "
             let selectParam = schema.map(item => '`' + item + '`').join(',')
             if (ele.datasource.projectId.length === 0)
-                sql_str = sql_str + schema.toString() + " FROM " + ele.datasource.name
+                sql_str = sql_str + selectParam + " FROM " + ele.datasource.name
             else
                 sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
 
