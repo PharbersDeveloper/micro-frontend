@@ -34,8 +34,9 @@ export default {
             return tmp
         },
         style: function() {
-            // const tmp = Math.min(this.data.length * 24, this.pageHeight)
-            const tmp = Math.min(this.data.length * 24, this.pageHeight)
+            if (this.page ===  this.totalPageCount)
+                return "height: " + this.lastPageHeight + "px; width: " + this.pageWidth + "px;"
+
             return "height: " + this.pageHeight + "px; width: " + this.pageWidth + "px;"
         }
     },
@@ -59,6 +60,10 @@ export default {
             type: Number,
             default: 2400
         },
+        lastPageHeight: {
+            type: Number,
+            default: 2400
+        },
         pageWidth: {
             type: Number,
             default: 1298
@@ -75,7 +80,7 @@ export default {
                 return new PhExcelDataSchema()
             }
         },
-        needRefresh: {
+        totalPageCount: {
             type: Number,
             default: 0
         }
@@ -94,21 +99,6 @@ export default {
             if (n !== 0) {
                 this.state = "Ready"
             } else this.state = "Loading"
-        },
-        needRefresh(n, o) {
-            if (this.showing) {
-                console.log("refreshing")
-                console.log("request")
-                console.log(this.page)
-                this.dataIsReady = 0
-                this.datasource.refreshData(this, this.page, this.schema)
-            } else {
-                console.log("refreshing")
-                console.log("no request")
-                console.log(this.page)
-                this.data = []
-                this.dataIsReady = 0
-            }
         },
         forceRefresh(n, o) {
             if (this.showing) {

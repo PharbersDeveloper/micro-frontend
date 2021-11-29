@@ -16,8 +16,10 @@
                                :schema="schema"
                                :rowHeight="rowHeight"
                                :page-height="pageHeight"
+                               :last-page-height="lastPageHeight"
                                :page-width="schema.totalWidth()"
                                :needRefresh="item"
+                               :totalPageCount="pageRange.length - 1"
                                :key="index"/>
             </div>
         </div>
@@ -42,6 +44,7 @@ export default {
             style: "",
             totalHeight: 0,
             pageHeight: 0,
+            lastPageHeight: 0,
             isShowScrollBar: true
         }
     },
@@ -86,34 +89,12 @@ export default {
     methods: {
         scrollGet (e) {
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
-            // if (e.target.scrollTop > this.pageHeight * this.curPage[2]) {
-            //     let tmp = []
-            //     for (var idx in this.curPage) {
-            //         tmp.push(this.curPage[idx] + 1)
-            //     }
-            //     this.curPage = tmp
-            //     console.log("need refresh plus")
-            // } else if (e.target.scrollTop < this.pageHeight * this.curPage[1]) {
-            //     let tmp = []
-            //     for (idx in this.curPage) {
-            //         tmp.push(this.curPage[idx] - 1)
-            //     }
-            //     this.curPage = tmp
-            //     console.log("need refresh minus")
-            // }
-            console.log(this.curPage)
-            console.log(e.target.scrollTop)
-            console.log(e.target.scrollTop/this.pageHeight)
             let scroll_to_line = Math.floor(e.target.scrollTop / this.pageHeight)
             const tmp = [scroll_to_line - 1, scroll_to_line, scroll_to_line + 1]
             const different = tmp.concat(this.curPage).filter(item => !this.curPage.includes(item))
             if (different.length > 0) {
-                console.log(tmp)
-                console.log(different)
                 this.curPage = tmp
             }
-
-
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -145,6 +126,7 @@ export default {
             this.totalHeight = dataCount * this.rowHeight
             let batchSize = this.datasource.batch_size
             this.pageHeight = batchSize * this.rowHeight
+            this.lastPageHeight = this.totalHeight - this.pageHeight * this.pageRange.length
 
             const domHeight = this.$refs.viewport.offsetHeight
             this.isShowScrollBar = domHeight < this.totalHeight
