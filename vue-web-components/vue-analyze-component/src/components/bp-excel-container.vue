@@ -213,7 +213,8 @@ export default {
             versionCandidatesShow: [],
             searchSort: "",
             expandPopup: false,
-            tmpFilterRow: "Province"
+            tmpFilterRow: "Province",
+            needRefresh: 0
         }
     },
     computed: {
@@ -280,7 +281,7 @@ export default {
         if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
             const tmpLength = this.allData.schemaArr.length
             this.schema.resetSchema(
-                this.allData.schemaArr,
+                this.allData.schemaArr, 
                 Array(tmpLength).fill("Text"),
                 Array(tmpLength).fill(118)
             )
@@ -422,17 +423,18 @@ export default {
         }
     },
     watch: {
+        needRefresh(n, o) {
+            const length = this.allData.schemaArr.length
+            this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
+            // this.$refs.excel.schemaIsReady++
+            this.datasource.name = this.allData.datasetName
+            this.datasource.projectId = this.allData.projectId
+            if (this.datasource.projectId.length > 0)
+                this.datasource.resetUrl("https://apiv2.pharbers.com/phdadatasource")
+        },
         // 首次加载触发，请求Excel数据
-        'allData.schemaArr': {
-            immediate: true,
-            handler:function(n, o) {
-                const length = this.allData.schemaArr.length
-                this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
-                this.datasource.name = this.allData.datasetName
-                this.datasource.projectId = this.allData.projectId
-                if (this.datasource.projectId.length > 0)
-				    this.datasource.resetUrl("https://apiv2.pharbers.com/phdadatasource")
-            }
+        'allData.schemaArr'(n, o) {
+            this.needRefresh++
         },
         //显示行请求接口
         dialogVersionFilterVisible(n, o) {

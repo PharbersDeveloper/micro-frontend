@@ -4,7 +4,7 @@
             <div class="view" ref="headers">
                 <header-item v-for="(item, index) in schema.cols" :isNeedPopmenu="isNeedPopmenu" :title="item"
                              :itemWidth="schema.colWidth(index)" :key="index"/>
-                <header-item :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
+                <header-item v-if="isShowScrollBar" :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
         </div>
         <div v-if="countIsReady === 0" :style="{height: '100%', width: '100%'}">&nbsp;</div>
@@ -40,7 +40,8 @@ export default {
             rowHeight: 24,
             style: "",
             totalHeight: 0,
-            pageHeight: 0
+            pageHeight: 0,
+			isShowScrollBar: true
         }
     },
     computed: {
@@ -79,10 +80,7 @@ export default {
                     this.schemaIsReady++
                 }
             })
-        } else {
-            debugger
-            this.schemaIsReady++
-        }
+        } else this.schemaIsReady++
     },
     methods: {
         scrollGet (e) {
@@ -124,7 +122,8 @@ export default {
         countIsReady(n, o) {
             this.curPage = [-1, 0, 1]
             this.pageRange = []
-            for (var idx = 0; idx < this.dataCount/this.datasource.batch_size + 1; ++idx) {
+            // for (var idx = 0; idx < this.dataCount/this.datasource.batch_size + 1; ++idx) {
+			for (var idx = 0; idx < this.dataCount/this.datasource.batch_size; ++idx) {
                 // this.pageRange.push(idx)
                 this.pageRange.push(0)
             }
@@ -139,6 +138,8 @@ export default {
                     this.pageRange[tmp]++
                 }
             }
+			const domHeight = this.$refs.viewport.offsetHeight
+			this.isShowScrollBar = domHeight < this.totalHeight
         },
         dataRefresh(n, o) {
             for (var idx in this.$children) {
@@ -163,6 +164,9 @@ export default {
             width: 8px; /*对垂直流动条有效*/
             height: 8px; /*对水平流动条有效*/
             // background-color:red
+			:vertical {
+				width: 8px
+			}
         }
         /* 滚动槽（轨道）样式 */
         ::-webkit-scrollbar-track{

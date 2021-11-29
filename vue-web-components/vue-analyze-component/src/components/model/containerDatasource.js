@@ -23,7 +23,7 @@ export default class PhContainerDataSource {
 
     defaultAdapter(row, cols) {
         let result = []
-        for (var idx in cols) {
+        for (var idx = 0; idx < cols.length; ++idx) {
             result.push(row[cols[idx]])
         }
         return result
@@ -164,7 +164,7 @@ export default class PhContainerDataSource {
                 .then((response) => response.json())
                 .then((response) => {
                     const tmp = []
-                    for (var idx in response) {
+                    for (var idx = 0; idx < response.length; ++idx) {
                         tmp.push(ele.datasource.adapter(response[idx], schema.cols))
                     }
                     ele.data = tmp //response.map(ele.datasource.adapter)

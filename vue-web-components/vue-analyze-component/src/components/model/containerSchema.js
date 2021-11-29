@@ -22,13 +22,13 @@ export default class PhContainerSchema {
 
     totalWidth() {
         let idx_arr = []
-        for (var idx in this.cols) {
+        for (var idx = 0; idx < this.cols.length; ++idx) {
             const tmp = this.cols[idx]
             idx_arr.push(this.schema.indexOf(tmp))
         }
 
         let width_arr = []
-        for (var iter in idx_arr) {
+        for (var iter = 0; iter < idx_arr.length; ++iter) {
             const tmp = idx_arr[iter]
             width_arr.push(this.cellWidth[tmp])
         }

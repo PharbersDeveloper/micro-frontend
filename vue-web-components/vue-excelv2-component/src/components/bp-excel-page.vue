@@ -27,9 +27,13 @@ export default {
             return tmp
         },
         style: function() {
-            // return "height: 2400px; width: 1298px;"
-            return "height: " + this.pageHeight + "px; width: " + this.pageWidth + "px;"
-        }
+			const tmp = Math.min(this.data.length * 24, this.pageHeight)
+            return "height: " + tmp + "px; width: " + this.pageWidth + "px;"
+        },
+		scorllBarStyle: function() {
+			const tmp = Math.min(this.data.length * 24, this.pageHeight)
+            return "height: " + tmp + "px; width: " + 8 + "px;"
+		}
     },
     components: {
         PhRow
@@ -101,7 +105,7 @@ export default {
 <style lang="scss">
     .ph-excel-page {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
 
         .ph-placeholder {
             background: red;
