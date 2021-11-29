@@ -28,6 +28,8 @@ export default class RecipesRoute extends Route {
 		}
     }
 	async model(params) {
+		let that = this
+		this.store.unloadAll("dagConf");
 		this.store.unloadAll("dataset");
 		const url = "https://apiv2.pharbers.com/phdydatasource/scan"
 		const accessToken = this.cookies.read( "access_token" )
@@ -50,16 +52,36 @@ export default class RecipesRoute extends Route {
 			},
 			body: JSON.stringify(body)
 		}
-		const ds = fetch(url, options)
-		let that = this
-		let tmp = await ds.then((response) => response.json()).then((response) => {
-			response.data.map((item,index) => {
-				item.id = index
-			})
-			
+		const dc = await fetch(url, options).then((response) => response.json()).then((response) => {
 			this.store.pushPayload(response)
 			return new Promise((resolve, reject) => {
 				resolve(that.store.peekAll("dagConf"))
+			})
+		})
+
+		let body1 = {
+			"table": "dataset",
+			"conditions": {
+				"projectId":  ["=", params.projectId]
+				// "sortVersion": ["begins_with", "developer_"]
+			},
+			"limit": 100,
+			"start_key": {}
+		}
+
+		let options1 = {
+			method: "POST",
+			headers: {
+				"Authorization": accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json"
+			},
+			body: JSON.stringify(body1)
+		}
+		const ds = await fetch(url, options1).then((response) => response.json()).then((response) => {
+			this.store.pushPayload(response)
+			return new Promise((resolve, reject) => {
+				resolve(that.store.peekAll("dataset"))
 			})
 		})
 
@@ -68,10 +90,12 @@ export default class RecipesRoute extends Route {
 				this.loadingService.loading.style.display = 'none'
 			}
 		}
+
 		return RSVP.hash( {
 			projectName: params.projectName,
 			projectId: params.projectId,
-			dss: tmp.filter(it => it),
+			dcs: dc.filter(it => it),
+			dss: ds.filter(it => it),
 			tagsArray: [],
 			_isVue: true
 		} )

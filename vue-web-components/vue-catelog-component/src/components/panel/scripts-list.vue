@@ -9,7 +9,7 @@
                             <div class="selected"
                                 :class="[
                                     {'bg_disabled': datasetcheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dss.length">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dcs.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -94,7 +94,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{allData.dss.length}} 条数据集</p>
+                                <p>{{allData.dcs.length}} 条数据集</p>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.dcs == ''">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -196,7 +196,7 @@
             v-if="showCreateTagsDialog"
             :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
-            :datasets="allData.dss"
+            :datasets="allData.dcs"
             :tagsArray="allData.tagsArray"
             :tagsColorArray="tagsColorArray"
             @addTagsEvent="addTagsEvent"
@@ -207,13 +207,8 @@
         <!-- 新建脚本 -->
         <create-scripts-dialog 
             v-if="showCreateScriptsDialog"
-            :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
             :datasets="allData.dss"
-            :tagsArray="allData.tagsArray"
-            :tagsColorArray="tagsColorArray"
-            @addTagsEvent="addTagsEvent"
-            @closeCreateDialog="closeCreateDialog">
+            @closeCreateDialog="closeScriptDialog">
         </create-scripts-dialog>
     </div>
     </div>
@@ -258,7 +253,7 @@ export default {
             showSelectOptionParam: false,
             closeTosts: false,
             showCreateTagsDialog: false, //添加tag弹框
-            showCreateScriptsDialog: true,
+            showCreateScriptsDialog: false,
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
@@ -288,12 +283,9 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ["2", "2", "zzz", "sss", "eee", "2"]},
-                    {id: '2', projectId:2,name:'Data_0002',label: ['2','sss']},
-                    {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
-                ],
-                tagsArray: ["2", "2", "zzz", "sss", "eee", '1']
+                dcs: [],
+                tagsArray: ["2", "2", "zzz", "sss", "eee", '1'],
+                dss: []
             })
         }
     },
@@ -312,10 +304,10 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                return this.allData.dcs.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
-            return this.allData.dss
+            return this.allData.dcs
         }
     },
     mounted() {
@@ -341,13 +333,14 @@ export default {
                 done();
             }).catch(_ => {});
         },
+        //打开script弹框
         selectScripts(data) {
             this.showCreateScriptsDialog = true
         },
         //增加tag
         addTagsEvent(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.datasetArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
@@ -356,7 +349,7 @@ export default {
         //清除数据集中数据
         clearTags(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.datasetArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
@@ -365,7 +358,7 @@ export default {
         //删除数据集
         deleteDataset(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.datasetArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
@@ -407,14 +400,14 @@ export default {
         //全选list
         chechedAllDataset() {
             this.isCheckedAllDataset = true
-            if(this.datasetcheckedIds.length == this.allData.dss.length) {
+            if(this.datasetcheckedIds.length == this.allData.dcs.length) {
                 this.isCheckedAllDataset = false
             }
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
-                this.allData.dss.forEach(item => {
+                this.allData.dcs.forEach(item => {
                     this.datasetcheckedIds.push(item.id)
                     this.datasetcheckedNames.push(item.name)
                 })
@@ -433,8 +426,8 @@ export default {
             if(val == 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                // this.allData.dss.sort()
-                this.allData.dss.sort(
+                // this.allData.dcs.sort()
+                this.allData.dcs.sort(
                     function compareFunction(param1, param2) {
                         if(param1.jobName) {
                             return param1.jobName.localeCompare(param2.name);
@@ -445,7 +438,7 @@ export default {
             }else if (val == 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.allData.dss.reverse()
+                this.allData.dcs.reverse()
             }
         },
         //排序条件下拉框
@@ -463,6 +456,10 @@ export default {
         //关闭tag添加弹框
         closeCreateDialog() {
             this.showCreateTagsDialog = false;
+        },
+        //关闭scripts弹框
+        closeScriptDialog() {
+            this.showCreateScriptsDialog = false
         },
         //关闭删除数据集弹框
         closeDeleteDialog() {

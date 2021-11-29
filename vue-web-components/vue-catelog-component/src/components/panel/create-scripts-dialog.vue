@@ -17,7 +17,7 @@
                                 <div class="select_dataset" v-for="(item,index) in addDatasetList" :key="item+index">
                                     <div class="sel_name">
                                         <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-                                        <span class="title">{{item}}</span>
+                                        <span class="title">{{item.name}}</span>
                                     </div>
                                     <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
                                 </div>
@@ -29,7 +29,7 @@
                                 <div class="dataset_list">
                                     <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index">
                                         <img :src="add_icon" alt="" class="add_icon">
-                                        <span class="name">{{item}}</span>
+                                        <span class="name">{{item.name}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                             <div class="input_area">
                                 <div class="input_list">
                                     <span class="label">名称</span>
-                                    <el-input v-model="dsName" placeholder=""></el-input>
+                                    <el-input v-model="dsName.name" placeholder=""></el-input>
                                 </div>
                                 <div class="input_list">
                                     <span class="label">存储到</span>
@@ -68,9 +68,9 @@
                             <div class="select_dataset">
                                 <div class="sel_name">
                                     <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-                                    <span class="title">{{dsName}}</span>
+                                    <span class="title">{{dsName.name}}</span>
                                 </div>
-                                <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
+                                <img :src="del_icon" class="del_icon" @click="on_clickChangeOutput(item)" alt="">
                             </div>
                             <div class="btn_area">
                                 <el-button class="add_input" :disabled="dsName.length  == 0" type="primary" @click="on_clickChangeOutput">更改</el-button>
@@ -80,9 +80,9 @@
                              <el-input placeholder="搜索" v-model="searchDataset"  class="search_row"></el-input>
                             <img :src="search_row" class="search_row_icon" alt="">
                             <div class="dataset_list">
-                                <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index">
+                                <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputs" :key="item+index">
                                     <img :src="add_icon" alt="" class="add_icon">
-                                    <span class="name">{{item}}</span>
+                                    <span class="name">{{item.name}}</span>
                                 </div>
                             </div>
                             <div class="tab">
@@ -122,10 +122,12 @@ export default {
             datasetOutputListShow: false, //显示选中的output
             searchDataset: '',
             addDatasetList: [], //已经选中的dataset list
-            remainDatasetList: [], //剩余味选中的dataset list
+            remainDatasetList: [], //剩余未选中的dataset list
             sel_dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E7%BB%93%E6%9E%9CDS.svg",
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1).svg",
-            dsName: '',
+            dsName: {
+                name: ''
+            },
             oldDatasetList: [], //现有数据集
             showOldDataset: true
         }
@@ -135,33 +137,12 @@ export default {
         ElInput
     },
     props: {
-        datasetcheckedIds: Array,
-        datasetcheckedNames: Array,
-        datasets: Array,
-        tagsArray: Array, //后端返回的tag数组
-        tagsColorArray: Array,
-        name: {
-            type: String,
-            default: "Python"
-        },
-        //传入的备选dataset list
-        datasetList: {
-            type: Array,
-            default: function() {
-                return ['test1', 'test2', 'test3', 'test4']
-            }
-        }
+        datasets: Array
     },
     computed: {},
     mounted() {
-        this.remainDatasetList = JSON.parse(JSON.stringify(this.datasetList))
-        this.oldDatasetList = JSON.parse(JSON.stringify(this.datasetList))
-        // this.tagsArrayShow = this.tagsArray.filter(it => it != '')
-        // if(this.datasetcheckedIds.length == 1) {
-        //     let selDatasetId = this.datasetcheckedIds[0]
-        //     let selDataset = this.datasets.filter(item => item.id == selDatasetId)[0]
-        //     this.selectedTags = selDataset.label
-        // }
+        this.remainDatasetList = JSON.parse(JSON.stringify(this.datasets))
+        this.remainDatasetListOutputs = JSON.parse(JSON.stringify(this.datasets))
     },
     watch: {
         searchValue: function() {
@@ -234,7 +215,7 @@ export default {
         },
         on_clickChangeOutput() {
             this.datasetOutputListShow = false
-            this.dsName = ''
+            this.dsName.name = ''
         },
         addDataset(data) {
             this.datasetListShow = false
@@ -346,6 +327,7 @@ export default {
         padding: 20px;
         button {
             width: 100%;
+            height: 40px;
         }
         .select_dataset_list {
             display: flex;
@@ -438,6 +420,7 @@ export default {
                 margin: 0 20px;
                 width: 100%;
                 text-align: center;
+                height: 40px;
             }
         }
         .oldDatasetList {
