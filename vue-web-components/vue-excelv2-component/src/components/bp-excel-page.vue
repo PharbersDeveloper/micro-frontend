@@ -2,7 +2,7 @@
     <div class="ph-excel-page">
         <div v-if="showing" :style="style">
             <ph-row v-for="(item, index) in data" :value="item" :state="state"
-                    :schema="schema" :key="index"></ph-row>
+                :schema="schema" :key="index"></ph-row>
         </div>
         <div class="ph-placeholder" v-else :style="style">&nbsp;</div>
     </div>
@@ -27,13 +27,13 @@ export default {
             return tmp
         },
         style: function() {
-			const tmp = Math.min(this.data.length * 24, this.pageHeight)
+            const tmp = Math.min(this.data.length * 24, this.pageHeight)
             return "height: " + tmp + "px; width: " + this.pageWidth + "px;"
         },
-		scorllBarStyle: function() {
-			const tmp = Math.min(this.data.length * 24, this.pageHeight)
+        scorllBarStyle: function() {
+            const tmp = Math.min(this.data.length * 24, this.pageHeight)
             return "height: " + tmp + "px; width: " + 8 + "px;"
-		}
+        }
     },
     components: {
         PhRow
