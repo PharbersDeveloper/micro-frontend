@@ -278,8 +278,12 @@ export default {
     mounted() {
         //传入数据时渲染表格
         if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
-            // this.descRefresh++
-            console.log("refresh excel")
+            const tmpLength = this.allData.schemaArr.length
+            this.schema.resetSchema(
+                this.allData.schemaArr,
+                Array(tmpLength).fill("Text"),
+                Array(tmpLength).fill(118)
+            )
         } else {
             this.schema.resetSchema(
                 ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
