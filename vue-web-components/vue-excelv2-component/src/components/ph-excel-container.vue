@@ -41,7 +41,7 @@ export default {
             style: "",
             totalHeight: 0,
             pageHeight: 0,
-			isShowScrollBar: true
+            isShowScrollBar: true
         }
     },
     computed: {
@@ -122,9 +122,7 @@ export default {
         countIsReady(n, o) {
             this.curPage = [-1, 0, 1]
             this.pageRange = []
-            // for (var idx = 0; idx < this.dataCount/this.datasource.batch_size + 1; ++idx) {
-			for (var idx = 0; idx < this.dataCount/this.datasource.batch_size; ++idx) {
-                // this.pageRange.push(idx)
+            for (var idx = 0; idx < this.dataCount/this.datasource.batch_size; ++idx) {
                 this.pageRange.push(0)
             }
             let dataCount = this.dataCount
@@ -138,8 +136,8 @@ export default {
                     this.pageRange[tmp]++
                 }
             }
-			const domHeight = this.$refs.viewport.offsetHeight
-			this.isShowScrollBar = domHeight < this.totalHeight
+            const domHeight = this.$refs.viewport.offsetHeight
+            this.isShowScrollBar = domHeight < this.totalHeight
         },
         dataRefresh(n, o) {
             for (var idx in this.$children) {
@@ -164,9 +162,9 @@ export default {
             width: 8px; /*对垂直流动条有效*/
             height: 8px; /*对水平流动条有效*/
             // background-color:red
-			:vertical {
-				width: 8px
-			}
+            :vertical {
+                width: 8px
+            }
         }
         /* 滚动槽（轨道）样式 */
         ::-webkit-scrollbar-track{
@@ -212,6 +210,7 @@ export default {
             margin-left: 0px;
             /*margin-right: 10px;*/
             overflow: hidden;
+            min-height: 50px;
             .view {
                 display: flex;
             }

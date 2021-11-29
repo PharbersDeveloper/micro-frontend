@@ -50,8 +50,8 @@
         </div>
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
-                      v-on:countIsReady="totalCountIsReady"
-                      :datasource="datasource" :schema="schema" class="excel" />
+				v-on:countIsReady="totalCountIsReady"
+				:datasource="datasource" :schema="schema" class="excel" />
         </div>
         <el-dialog
                 title="显示行"

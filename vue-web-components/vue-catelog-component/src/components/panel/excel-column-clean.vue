@@ -42,10 +42,11 @@
                         <!-- <p class="file_name">文件名称</p> -->
                         <div class="excel">
                             <bp-excel ref="excel" viewHeight="25vh"
-                                      v-on:countIsReady="totalCountIsReady"
-                                      :datasource="excelDatasource"
-                                      :schema="excelSchema"
-                                      class="excel" />
+								:isNeedPopmenu="false"
+								v-on:countIsReady="totalCountIsReady"
+								:datasource="excelDatasource"
+								:schema="excelSchema"
+								class="excel" />
                         </div>
                     </div>
                 </div>
@@ -54,10 +55,11 @@
                         <!-- <p class="file_name">列清洗</p> -->
                         <div class="excel">
                             <bp-excel ref="excel2" viewHeight="25vh"
-                                      v-on:countIsReady="totalCountIsReady"
-                                      :datasource="excelDatasource2"
-                                      :schema="excelSchema2"
-                                      class="excel" />
+								:isNeedPopmenu="false"
+								v-on:countIsReady="totalCountIsReady"
+								:datasource="excelDatasource2"
+								:schema="excelSchema2"
+								class="excel" />
                         </div>
                     </div>
                 </div>
@@ -221,6 +223,11 @@ export default {
             height: calc(100vh - 150px);
             display: flex;
             background: #f7f7f7;
+			.excel-area-container {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
             .icon_dialog {
                 display: flex;
                 flex-direction: column;

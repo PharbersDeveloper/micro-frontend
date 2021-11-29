@@ -16,10 +16,11 @@
             </div>
             <div class="eh-preview">
                 <bp-excel ref="excel" viewHeight="25vh"
-                          v-on:countIsReady="totalCountIsReady"
-                          :datasource="excelDatasource"
-                          :schema="excelSchema"
-                          class="excel" />
+					:isNeedPopmenu="false"
+					v-on:countIsReady="totalCountIsReady"
+					:datasource="excelDatasource"
+					:schema="excelSchema"
+					class="excel" />
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -132,7 +133,6 @@ export default {
     created() {
         let uriParam = window.location.href
         this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
-        debugger
         this.excelDatasource.set('tmpname', this.tmpname)
         this.typeValue = this.tmpname.split(".")[1]
     },
