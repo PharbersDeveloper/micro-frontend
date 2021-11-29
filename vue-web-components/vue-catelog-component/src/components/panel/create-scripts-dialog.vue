@@ -17,7 +17,7 @@
                                 <div class="select_dataset" v-for="(item,index) in addDatasetList" :key="item+index">
                                     <div class="sel_name">
                                         <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-                                        <span class="title">{{item.name}}</span>
+                                        <span class="title title_name">{{item.name}}</span>
                                     </div>
                                     <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
                                 </div>
@@ -168,10 +168,6 @@ export default {
     },
     methods: {
         save() {
-            // 将选中的tag添加到选中的dataset上
-            // 新增但未选中的tag不保存
-            this.tagsArrayShow = []
-
             const event = new Event("event")
             event.args = {
                 callback: "addTags",
@@ -211,7 +207,9 @@ export default {
         },
         on_clickAddOutput() {
             //增加output
-            this.datasetOutputListShow = true
+            if(dsName.name && dsName.name !== "") {
+                this.datasetOutputListShow = true
+            }
         },
         on_clickChangeOutput() {
             this.datasetOutputListShow = false
@@ -252,7 +250,7 @@ export default {
     box-sizing: border-box;
 }
 .clear_dialog_container {
-       height: 100vh;
+    height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);
     display: flex;
@@ -322,6 +320,10 @@ export default {
         justify-content: center;
         padding: 10px;
         border-bottom: 1px solid #ccc;
+    }
+    .title_name {
+        border-bottom: none;
+        font-size: 14px;
     }
     .content_area {
         padding: 20px;
