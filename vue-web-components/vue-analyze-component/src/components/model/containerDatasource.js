@@ -14,7 +14,7 @@ export default class PhContainerDataSource {
             this.url= "https://api.pharbers.com/phchproxyquery"
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "abb3eb98d39e024e2889e47ecee691de75f0bcfcd597d95ae54a215d0577973b"
+        this.debugToken = "6ad6902543c99e965ac84e84e619369748f56655acd4f55ebe9ea2699aa1eb15"
     }
 
     resetUrl(url) {

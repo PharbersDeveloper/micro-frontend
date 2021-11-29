@@ -12,7 +12,7 @@ export default class PhDataSource {
         // this.cols = this.schema
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "4bd0338b48f624b0e00fd62b5ec4250358eead0d487dde4e5d2d54cece598e32"
+        this.debugToken = "6ad6902543c99e965ac84e84e619369748f56655acd4f55ebe9ea2699aa1eb15"
     }
 
     defaultAdapter(row, cols) {
