@@ -17,7 +17,7 @@ export default class PhDataSource {
 
     defaultAdapter(row, cols) {
         let result = []
-        for (var idx in cols) {
+        for (var idx = 0; idx < cols.length; ++idx) {
             result.push(row[cols[idx]])
         }
         return result
