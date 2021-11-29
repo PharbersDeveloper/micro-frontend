@@ -79,7 +79,10 @@ export default {
                     this.schemaIsReady++
                 }
             })
-        } else this.schemaIsReady++
+        } else {
+            debugger
+            this.schemaIsReady++
+        }
     },
     methods: {
         scrollGet (e) {
