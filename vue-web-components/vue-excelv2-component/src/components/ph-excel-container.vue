@@ -142,7 +142,7 @@ export default {
         dataRefresh(n, o) {
             for (var idx in this.$children) {
                 const tmp = parseInt(idx)
-                if (this.$children[tmp].$el._prevClass === "ph-excel-page") {
+                if (this.$children[tmp] && this.$children[tmp].$el._prevClass === "ph-excel-page") {
                     this.$children[tmp].$data.data = []
                 }
             }
