@@ -17,22 +17,26 @@ export default {
             state: "loading",
             dataIsReady: 0,
             data: [],
-            needRefresh: 0
+            forceRefresh: 0,
+            refreshTimer: null
         }
     },
     computed: {
         showing: function() {
             const tmp = this.curPage.indexOf(this.page) !== -1
-            this.needRefresh++
+            if (this.refreshTimer !== null) {
+                clearTimeout(this.refreshTimer)
+                this.refreshTimer = null
+            }
+            this.refreshTimer = setTimeout(() => {
+                this.forceRefresh++
+            }, 500)
             return tmp
         },
         style: function() {
+            // const tmp = Math.min(this.data.length * 24, this.pageHeight)
             const tmp = Math.min(this.data.length * 24, this.pageHeight)
-            return "height: " + tmp + "px; width: " + this.pageWidth + "px;"
-        },
-        scorllBarStyle: function() {
-            const tmp = Math.min(this.data.length * 24, this.pageHeight)
-            return "height: " + tmp + "px; width: " + 8 + "px;"
+            return "height: " + this.pageHeight + "px; width: " + this.pageWidth + "px;"
         }
     },
     components: {
@@ -70,10 +74,11 @@ export default {
             default: function() {
                 return new PhExcelDataSchema()
             }
+        },
+        needRefresh: {
+            type: Number,
+            default: 0
         }
-    },
-    mounted() {
-
     },
     methods: {
         getCookie(name) {
@@ -92,8 +97,25 @@ export default {
         },
         needRefresh(n, o) {
             if (this.showing) {
+                console.log("refreshing")
+                console.log("request")
+                console.log(this.page)
                 this.dataIsReady = 0
                 this.datasource.refreshData(this, this.page, this.schema)
+            } else {
+                console.log("refreshing")
+                console.log("no request")
+                console.log(this.page)
+                this.data = []
+                this.dataIsReady = 0
+            }
+        },
+        forceRefresh(n, o) {
+            if (this.showing) {
+                if (this.data.length === 0) {
+                    this.dataIsReady = 0
+                    this.datasource.refreshData(this, this.page, this.schema)
+                }
             } else {
                 this.data = []
                 this.dataIsReady = 0

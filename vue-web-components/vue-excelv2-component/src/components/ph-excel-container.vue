@@ -1,5 +1,5 @@
 <template>
-    <div class="excel-container">
+    <div class="excel-container" >
         <div class="schemas" style="width: 100%" ref="schemas">
             <div class="view" ref="headers">
                 <header-item v-for="(item, index) in schema.cols" :isNeedPopmenu="isNeedPopmenu" :title="item"
@@ -33,6 +33,7 @@ export default {
             schemaIsReady: 0,
             countIsReady: 0,
             dataRefresh: 0,
+            lastPage: [],
             curPage: [],
             pageRange: [],
             dataCount: 0,
@@ -85,19 +86,34 @@ export default {
     methods: {
         scrollGet (e) {
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
-            if (e.target.scrollTop > this.pageHeight * this.curPage[2]) {
-                let tmp = []
-                for (var idx in this.curPage) {
-                    tmp.push(this.curPage[idx] + 1)
-                }
-                this.curPage = tmp
-            } else if (e.target.scrollTop < this.pageHeight * this.curPage[1]) {
-                let tmp = []
-                for (idx in this.curPage) {
-                    tmp.push(this.curPage[idx] - 1)
-                }
+            // if (e.target.scrollTop > this.pageHeight * this.curPage[2]) {
+            //     let tmp = []
+            //     for (var idx in this.curPage) {
+            //         tmp.push(this.curPage[idx] + 1)
+            //     }
+            //     this.curPage = tmp
+            //     console.log("need refresh plus")
+            // } else if (e.target.scrollTop < this.pageHeight * this.curPage[1]) {
+            //     let tmp = []
+            //     for (idx in this.curPage) {
+            //         tmp.push(this.curPage[idx] - 1)
+            //     }
+            //     this.curPage = tmp
+            //     console.log("need refresh minus")
+            // }
+            console.log(this.curPage)
+            console.log(e.target.scrollTop)
+            console.log(e.target.scrollTop/this.pageHeight)
+            let scroll_to_line = Math.floor(e.target.scrollTop / this.pageHeight)
+            const tmp = [scroll_to_line - 1, scroll_to_line, scroll_to_line + 1]
+            const different = tmp.concat(this.curPage).filter(item => !this.curPage.includes(item))
+            if (different.length > 0) {
+                console.log(tmp)
+                console.log(different)
                 this.curPage = tmp
             }
+
+
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -130,14 +146,9 @@ export default {
             let batchSize = this.datasource.batch_size
             this.pageHeight = batchSize * this.rowHeight
 
-            for (var iter = 0; iter < this.curPage.length; ++iter) {
-                const tmp = parseInt(this.curPage[iter])
-                if (tmp >= 0 && tmp < this.pageRange.length) {
-                    this.pageRange[tmp]++
-                }
-            }
             const domHeight = this.$refs.viewport.offsetHeight
             this.isShowScrollBar = domHeight < this.totalHeight
+            this.lastPage = this.curPage
         },
         dataRefresh(n, o) {
             for (var idx in this.$children) {

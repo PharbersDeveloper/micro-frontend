@@ -172,8 +172,6 @@
                 </table>
             </div>
             <span slot="footer" class="dialog-footer">
-    			<!-- <button @click="on_clickDownloadConfirm">Cancel</button>
-    			<button type="primary" @click="on_clickDownloadConfirm">Confirm</button> -->
 				<el-button @click="on_clickDownloadConfirm">取消</el-button>
 				<el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
 			</span>
@@ -281,7 +279,7 @@ export default {
         if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
             const tmpLength = this.allData.schemaArr.length
             this.schema.resetSchema(
-                this.allData.schemaArr, 
+                this.allData.schemaArr,
                 Array(tmpLength).fill("Text"),
                 Array(tmpLength).fill(118)
             )
@@ -413,6 +411,10 @@ export default {
         },
         on_clickDownloadConfirm() {
             this.dialogDownloadVisible = false
+            const downloadName = this.$refs.nameRef.getValue()
+            console.log(downloadName)
+            const downloadSuffix = this.$refs.suffRef.getValue()
+            console.log(downloadSuffix)
         },
         searchRowInput(data) {
             this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
