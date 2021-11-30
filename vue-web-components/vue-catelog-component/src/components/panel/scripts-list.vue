@@ -1,5 +1,5 @@
 <template>
-    <div class="upload-dataset">
+    <div class="upload-recipt">
         <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <div class="info">
@@ -99,17 +99,17 @@
                         </div>
                     </div>
                     <div class="upload_bottom">
-                        <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
-                            <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
+                        <div class="data_content" v-for="(recipt,index) in searchData" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
+                            <input type="checkbox" ref="data" name="datasetList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
                             <div class="item_list">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.jobName}}</p>
+                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.name">{{recipt.jobName}}</p>
                                 <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in dataset.label" :key="inx">
-                                        <span v-if="dataset.label !== ''">
-                                            <p 
+                                    <div v-for="(tag,inx) in recipt.label" :key="inx">
+                                        <span v-if="recipt.label !== ''">
+                                            <p
                                                 :title="tag"
                                                 class="tag_bg" 
                                                 :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
@@ -176,13 +176,13 @@
                 </div>
             </div>
         <!-- 清除数据集数据 -->
-        <clear-dataset-dialog  
-            v-if="cleardialogshow" 
-            :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
+        <clear-recipt-dialog
+            v-if="cleardialogshow"
+            :reciptcheckedIds="reciptcheckedIds"
+            :reciptcheckedNames="reciptcheckedNames"
             @clearTagsEvent="clearTags"
             @closeClearDialog="closeClearDialog">
-        </clear-dataset-dialog>
+        </clear-recipt-dialog>
         <!-- 删除数据集 -->
         <clear-delete 
             v-if="deletedialogshow" 
@@ -216,7 +216,7 @@
 </template>
 
 <script>
-import clearDatasetDialog from './clear-dataset-dialog.vue'
+import clearReciptDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
@@ -291,7 +291,7 @@ export default {
         }
     },
     components: {
-        clearDatasetDialog,
+        clearReciptDialog,
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
@@ -366,25 +366,25 @@ export default {
             this.deletedialogshow = false;
         },
         //点击list主体
-        clickOnlyOne(dataset, index) {
-            this.datasetcheckedIds = []
-            this.datasetcheckedNames = []
-            this.datasetcheckedIds.push(dataset.id)
-            this.datasetcheckedNames.push(dataset.name)
+        clickOnlyOne(recipt, index) {
+            this.reciptcheckedIds = []
+            this.reciptcheckedNames = []
+            this.reciptcheckedIds.push(recipt.id)
+            this.reciptcheckedNames.push(recipt.name)
         },
         //点击list多选框
-        checkedOneDataset(dataset) {
-            let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
+        checkedOneDataset(recipt) {
+            let idIndex = this.reciptcheckedIds.indexOf(recipt.id)
             if(idIndex >= 0) {
                 this.datasetcheckedIds.splice(idIndex, 1)
                 this.datasetcheckedNames.splice(idIndex, 1)
             } else {
-                this.datasetcheckedIds.push(dataset.id)
-                this.datasetcheckedNames.push(dataset.name)
+                this.reciptcheckedIds.push(recipt.id)
+                this.reciptcheckedNames.push(recipt.name)
             }
         },
         //点击dataset name
-        clickDatasetName(dataset) {
+        clickReciptName(recipt) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -393,7 +393,7 @@ export default {
                     name: "codeditor",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    dataset: dataset
+                    recipt: recipt
                 }
             }
             this.$emit('event', event)
