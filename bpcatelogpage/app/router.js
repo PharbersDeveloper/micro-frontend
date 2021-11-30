@@ -25,4 +25,5 @@ Router.map(function () {
   this.route('analyze', {path: "/dataset/:dataset_name"});
   this.route('recipes');
   this.route('codeditor');
+  this.route('flow');
 });
