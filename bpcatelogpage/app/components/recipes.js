@@ -260,9 +260,8 @@ export default class RecipesComponent extends Component {
 	@action createScriptNoticeCallback(response, ele) {
 		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
 		this.loadingService.loading.style.display = 'none'
-		if(create_scripts_status == "dag_conf insert success") {
-			alert("新建脚本成功，请重新操作！")
-
+		if(create_scripts_status == "dag insert success") {
+			alert("新建脚本成功！")
 		} else {
 			alert("新建脚本失败，请重新操作！")
 		}
