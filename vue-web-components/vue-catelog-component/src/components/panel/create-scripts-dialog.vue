@@ -207,7 +207,7 @@ export default {
         },
         on_clickAddOutput() {
             //增加output
-            if(dsName.name && dsName.name !== "") {
+            if(this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
             }
         },
