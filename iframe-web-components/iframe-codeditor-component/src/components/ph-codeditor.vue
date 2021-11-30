@@ -16,6 +16,7 @@ import 'ace-builds/src-min-noconflict/theme-monokai'
 import 'ace-builds/src-min-noconflict/theme-dracula'
 // 支持代码格式， 需要引入具体的语法高亮库才会有对应的语法高亮效果
 import 'ace-builds/src-min-noconflict/mode-javascript'
+import 'ace-builds/src-min-noconflict/mode-python'
 import 'ace-builds/src-min-noconflict/mode-json'
 import 'ace-builds/src-min-noconflict/mode-css'
 import 'ace-builds/src-min-noconflict/ext-language_tools'
