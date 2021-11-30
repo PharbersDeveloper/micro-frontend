@@ -185,6 +185,7 @@ export default {
         },
         on_clickAddInput() {
             //增加input
+            debugger
             this.datasetListShow = true
         },
         on_clickAddOutput() {
@@ -351,6 +352,8 @@ export default {
             display: flex;
             flex-direction: column;
             font-size: 14px;
+            height: 230px;
+            overflow: auto;
             .dataset {
                 display: flex;
                 align-items: center;
@@ -430,6 +433,8 @@ export default {
                 flex-direction: column;
                 font-size: 14px;
                 height: 230px;
+                height: 230px;
+                overflow: auto;
                 .dataset {
                     display: flex;
                     align-items: center;
