@@ -28,7 +28,9 @@ export default class RecipesComponent extends Component {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
-				} 
+				} else if (params.name === "codeditor") {
+					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}
                 this.router.transitionTo( uri )
 				break
 			case "createScripts":
@@ -224,7 +226,7 @@ export default class RecipesComponent extends Component {
 			})
 			this.args.model.tagsArray = Array.from(tags)
 		}
-		
+
 		return this.args.model
 	}
 }

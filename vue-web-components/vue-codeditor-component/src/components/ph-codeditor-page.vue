@@ -21,7 +21,7 @@
                 <button class="button" @click="saveCode">保存</button>
             </div>
             <div class="coding">
-                <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="python"/>
+                <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="javascript"/>
             </div>
             <div class="coding-footer">
                 <button class="button">Validate</button>
@@ -43,7 +43,7 @@ export default {
     props: {
         projectId: {
             type: String,
-            default: "max"
+            default: "JfSmQBYUpyb4jsei"
         },
         jobId: {
             type: String,
@@ -55,7 +55,7 @@ export default {
         },
         jobName: {
             type: String,
-            default: "1qaz4rfv_max_test_dag_developer_test_job_a"
+            default: "developer_1qaz8ikm_max_test_dag_test_job_b1"
         },
         datasource: {
             type: Object,
@@ -101,6 +101,13 @@ export default {
         }
     },
     methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         saveCode() {
             var params = {
                 Body: this.$refs.codeditor.editor.getValue(),

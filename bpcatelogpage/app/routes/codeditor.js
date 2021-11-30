@@ -55,7 +55,7 @@ export default class CodeditorRoute extends Route {
 			response.data.map((item,index) => {
 				item.id = index
 			})
-			
+
 			this.store.pushPayload(response)
 			return new Promise((resolve, reject) => {
 				resolve(that.store.peekAll("dagConf"))

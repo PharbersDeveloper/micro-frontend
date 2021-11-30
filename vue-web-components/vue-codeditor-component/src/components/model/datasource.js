@@ -2,7 +2,7 @@
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, flowVersion, jobName) {
         this.id = id
-        this.debugToken = '05d1c2fa213181d83f14ed6e6536d76a1690798b4b1ae2ba03aa8c7c93ebaa5d'
+        this.debugToken = '8fb7d838a99eab88814e045b8598772f0975461c46e6cb1bedbf09f7572fac1c'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -30,12 +30,11 @@ export default class PhCodeditorDatasource {
 
     buildQuery(ele, isAppend=false) {
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.debugToken
-        // const accessToken = this.cookies.read( "access_token" ) || this.debugToken
+        const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "table": "dagconf",
             "conditions": {
-                "flowVersion": ["=", this.flowVersion],
+                "projectId": ["=", this.projectId],
                 "jobName": ["=", this.jobName]
             },
             "limit": 100,
@@ -46,7 +45,7 @@ export default class PhCodeditorDatasource {
             method: "POST",
             headers: {
                 "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Content-Type': 'application/json; charset=UTF-8',
                 "accept": "application/json"
             },
             body: JSON.stringify(body)
