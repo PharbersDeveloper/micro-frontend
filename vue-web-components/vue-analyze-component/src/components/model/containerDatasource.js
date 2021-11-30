@@ -14,7 +14,7 @@ export default class PhContainerDataSource {
             this.url= "https://api.pharbers.com/phchproxyquery"
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "6ad6902543c99e965ac84e84e619369748f56655acd4f55ebe9ea2699aa1eb15"
+        this.debugToken = "8fb7d838a99eab88814e045b8598772f0975461c46e6cb1bedbf09f7572fac1c"
     }
 
     resetUrl(url) {
@@ -214,5 +214,75 @@ export default class PhContainerDataSource {
 
     clearSortCondition() {
         this.sort = {}
+    }
+
+    download2File(ele, schema, cat, fileName) {
+        ele.datasource.buildDownloadQuery(ele, schema, cat, fileName)
+            .then((response) => response.json())
+            .then((response) => {
+                debugger
+                console.log(response)
+            })
+    }
+
+    buildDownloadQuery(ele, schema, cat, fileName) {
+        function buildDownloadQueryString() {
+            let sql_str = "SELECT "
+            let selectParam = schema.map(item => '`' + item + '`').join(',')
+            if (ele.datasource.projectId.length === 0)
+                sql_str = sql_str + selectParam + " FROM " + ele.datasource.name
+            else
+                sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+
+            // filter
+            let firstFilter = Object.keys(ele.datasource.filter)[0]
+            let filterParam = " WHERE "
+            for (const key in ele.datasource.filter) {
+                if(key != firstFilter) {
+                    filterParam = " AND "
+                }
+                sql_str = sql_str + filterParam + ele.datasource.filter[key]
+            }
+
+            // sorts
+            if(ele.datasource.sort && Object.keys(ele.datasource.sort).length !== 0) {
+                sql_str = sql_str + " ORDER BY `"
+                let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
+                for (const key in ele.datasource.sort) {
+                    if(lastSort == key) {
+                        sql_str = sql_str + key +'`'
+                    } else {
+                        sql_str = sql_str + key +'`,`'
+                    }
+                    if (ele.datasource.sort[key] < 0) {
+                        sql_str = sql_str + " desc "
+                    }
+                }
+            }
+
+            // pages
+            // Download with no pages
+            // sql_str = sql_str + " LIMIT " + ele.datasource.batch_size
+            // sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
+            return sql_str
+        }
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            "query": buildDownloadQueryString(),
+            "schema": schema,
+            "category": cat,
+            "file_name": fileName
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
     }
 }
