@@ -100,7 +100,7 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(recipt,index) in searchData" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
-                            <input type="checkbox" ref="data" name="datasetList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
+                            <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
                             <div class="item_list">
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
