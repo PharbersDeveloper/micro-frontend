@@ -28,8 +28,11 @@ export default class RecipesComponent extends Component {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
-				}
+				} 
                 this.router.transitionTo( uri )
+				break
+			case "createScripts":
+				debugger
 				break
 			case "addTags":
 				let that = this

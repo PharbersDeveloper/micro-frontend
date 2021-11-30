@@ -120,7 +120,8 @@ export default {
             sel_dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E7%BB%93%E6%9E%9CDS.svg",
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1).svg",
             dsName: {
-                name: ""
+                name: "",
+                id: ""
             },
             oldDatasetList: [], //现有数据集
             showOldDataset: true
@@ -172,7 +173,10 @@ export default {
                     jobId: "",
                     targetJobId: "",
                     inputs: this.addDatasetList,
-                    outputs: [],
+                    outputs: [{
+                        "name": this.dsName.name,
+                        "id": this.dsName.id
+                    }],
                     jobVersion: this.dsName.name + "_version1",
                     runTime: "python3",
                     labels: []
@@ -185,11 +189,10 @@ export default {
         },
         on_clickAddInput() {
             //增加input
-            debugger
             this.datasetListShow = true
         },
         on_clickAddOutput() {
-            //增加output
+            //新增output
             if(this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
             }
