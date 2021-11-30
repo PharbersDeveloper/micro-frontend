@@ -208,6 +208,7 @@
         <create-scripts-dialog
             v-if="showCreateScriptsDialog"
             :datasets="allData.dss"
+            @createScripts="createScripts"
             @closeCreateDialog="closeScriptDialog">
         </create-scripts-dialog>
     </div>
@@ -460,6 +461,13 @@ export default {
         //关闭scripts弹框
         closeScriptDialog() {
             this.showCreateScriptsDialog = false
+        },
+        //增加scripts
+        createScripts(data) {
+            debugger
+            data.args.param.projectName = this.allData.projectName
+            data.args.param.projectId = this.allData.projectId
+            this.$emit('createScripts', data)
         },
         //关闭删除数据集弹框
         closeDeleteDialog() {
