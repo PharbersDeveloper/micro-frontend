@@ -152,7 +152,7 @@
         <el-dialog
                 title="下载"
                 :visible.sync="dialogDownloadVisible"
-                @close="on_clickDownloadConfirm"
+                @close="on_clickDownloadCancel"
                 width="600px">
 
             <div class="dlg-download-container">
@@ -411,10 +411,9 @@ export default {
         },
         on_clickDownloadConfirm() {
             this.dialogDownloadVisible = false
-            const downloadName = this.$refs.nameRef.getValue()
-            console.log(downloadName)
-            const downloadSuffix = this.$refs.suffRef.getValue()
-            console.log(downloadSuffix)
+            const downloadName = this.$refs.nameRef.value
+            const downloadSuffix = this.$refs.suffRef.value
+            this.datasource.download2File(this, this.schema.schema, downloadSuffix, downloadName)
         },
         searchRowInput(data) {
             this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
