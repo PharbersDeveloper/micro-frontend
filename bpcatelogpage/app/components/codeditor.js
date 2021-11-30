@@ -53,4 +53,8 @@ export default class CodeditorComponent extends Component {
 		return this.args.model
 	}
 
+	@action
+	loaded() {
+		console.log("iframe page loaded")
+	}
 }

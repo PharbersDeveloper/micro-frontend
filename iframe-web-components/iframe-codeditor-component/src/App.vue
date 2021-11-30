@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<ph-codeditor msg="Welcome to Your Vue.js App"/>
+		<ph-codeditor />
 	</div>
 </template>
 

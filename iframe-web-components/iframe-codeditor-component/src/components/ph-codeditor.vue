@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import ElSelect from 'element-ui/packages/select/index'
-
 // 引入全局实例
 import ace from 'ace-builds'
 // 主题风格，引入主题后还需要在 options 中指定主题才会生效
@@ -41,7 +39,7 @@ export default {
         event: 'change'
     },
     components: {
-        ElSelect
+
     },
     computed: {
         style: function() {
