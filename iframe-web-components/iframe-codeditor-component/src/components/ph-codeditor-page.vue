@@ -1,31 +1,39 @@
 <template>
-    <div class="codeditor-container">
-        <div class="code-io-list">
-            <div class="code-block-list">
-                <span class="title">inputs</span>
-                <div class="ds-lst">
-                    <span class="ds-item" v-for="(item, index) in datasource.inputs" :key="index">{{item.name}}</span>
-                </div>
+    <div class="page_container">
+        <div class="header">
+             <div class="title">
+                <img :src="python_icon" class="title_icon" alt="">
+                <span class="name">{{scriptName}}</span>
             </div>
-            <div class="code-block-list">
-                <span class="title">outputs</span>
-                <div class="ds-lst">
-                    <span class="ds-item" v-for="(item, index) in datasource.outputs" :key="index">{{item.name}}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="coding-pane">
             <div class="coding-title">
-                <button class="button">按钮2</button>
+                <button class="button btn-fir">按钮2</button>
                 <button class="button" @click="saveCode">保存</button>
             </div>
-            <div class="coding">
-                <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="python"/>
+        </div>
+        <div class="codeditor-container">
+            <div class="code-io-list">
+                <div class="code-block-list">
+                    <span class="title">inputs</span>
+                    <div class="ds-lst">
+                        <span class="ds-item" v-for="(item, index) in datasource.inputs" :key="index">{{item.name}}</span>
+                    </div>
+                </div>
+                <div class="code-block-list">
+                    <span class="title">outputs</span>
+                    <div class="ds-lst">
+                        <span class="ds-item" v-for="(item, index) in datasource.outputs" :key="index">{{item.name}}</span>
+                    </div>
+                </div>
             </div>
-            <div class="coding-footer">
-                <button class="button">Validate</button>
-                <button class="button">Run</button>
+
+            <div class="coding-pane">
+                <div class="coding">
+                    <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="python"/>
+                </div>
+                <div class="coding-footer">
+                    <button class="button">Validate</button>
+                    <button class="button">Run</button>
+                </div>
             </div>
         </div>
     </div>
@@ -41,6 +49,10 @@ export default {
         phCodeditor
     },
     props: {
+        scriptName: {
+            type: String,
+            default: "脚本名称"
+        },
         projectId: {
             type: String,
             default: "JfSmQBYUpyb4jsei"
@@ -78,7 +90,8 @@ export default {
     data() {
         return {
             codeBuffer: "",
-            downloadCode: 0
+            downloadCode: 0,
+            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg"
         }
     },
     mounted() {
@@ -131,55 +144,88 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.codeditor-container {
+.page_container {
     display: flex;
-    flex-direction: row;
-
-    .code-io-list {
+    flex-direction: column;
+    box-sizing: border-box;
+    .header {
         display: flex;
-        flex-direction: column;
-        min-width: 180px;
-        border: red 1px solid;
-        text-align: left;
-
-        .code-block-list {
-            display: flex;
-            flex-direction: column;
-
-            .title {
-                font-size: 14px;
-                border-top: red 1px solid;
-            }
-
-            .ds-lst {
-                display: flex;
-                flex-direction: column;
-
-                .ds-item {
-                    border-top: green 1px solid;
-                }
-            }
-
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        padding: 0 20px;
+        border-bottom: 1px solid #979797;
+        .title_icon {
+            height: 30px;
+            width: 30px;
         }
-    }
-
-    .coding-pane {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-
+        .title {
+            display: flex;
+            align-items: center;
+            .title_icon {
+                margin-right: 10px;
+            }
+        }
         .coding-title {
             display: flex;
             flex-direction: row-reverse;
+            .button {
+                width: 87px;
+                height: 26px;
+                border: 1px solid #57565F;
+                border-radius: 2px;
+                background: #fff;
+            }
+            .btn-fir {
+                margin-right: 10px;
+            }
         }
+    }
+    .codeditor-container {
+        display: flex;
+        flex-direction: row;
 
-        .coding {
-            padding-bottom: 7px;
-        }
-
-        .coding-footer {
+        .code-io-list {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            min-width: 180px;
+            border: red 1px solid;
+            text-align: left;
+
+            .code-block-list {
+                display: flex;
+                flex-direction: column;
+
+                .title {
+                    font-size: 14px;
+                    border-top: red 1px solid;
+                }
+
+                .ds-lst {
+                    display: flex;
+                    flex-direction: column;
+
+                    .ds-item {
+                        border-top: green 1px solid;
+                    }
+                }
+
+            }
+        }
+
+        .coding-pane {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .coding {
+                padding-bottom: 7px;
+            }
+
+            .coding-footer {
+                display: flex;
+                flex-direction: row;
+            }
         }
     }
 }

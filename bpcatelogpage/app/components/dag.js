@@ -19,7 +19,10 @@ export default class DagComponent extends Component {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
                 } else if(params.name == 'project') {
 					uri = '/projects/' + params.projectId
-				} else if(params.name === "script") {
+				} else if(params.name === "scripts") {
+					//recipe页面
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}  else if(params.name === "script") {
 					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 //执行列表 分页
