@@ -6,7 +6,7 @@ export default class PhDagDatasource {
         this.links= []
         this.data = []
         this.title = "need a title"
-        this.debugToken = '2e13655c70f7931daa11b9fa800d6147cc55056b57de237b615a51a15c6e7cec'
+        this.debugToken = '3d8367b908d792b51345a0ec5ebd1312055f4a75660a9ec4e52412a733830ada'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -41,7 +41,7 @@ export default class PhDagDatasource {
         let body = {
             "table": "dag",
             "conditions": {
-                "projectId": ["=", "max"],
+                "projectId": ["=", "JfSmQBYUpyb4jsei"],
                 "sortVersion": ["begins_with", "developer_"]
             },
             "limit": 100,
@@ -90,14 +90,14 @@ export default class PhDagDatasource {
         let provious_level_anchor_x = 0
         let provious_level_anchor_y = 0
 
-        for (var idx in levelGroupBy) {
+        for (var idx = 0; idx < levelGroupBy.length; ++idx) {
             // anchor_x = anchor_x + parseInt(idx) * LEVEL_HOR_STEP
             anchor_x = provious_level_anchor_x + LEVEL_VER_STEP
             anchor_y = provious_level_anchor_y
             provious_level_anchor_x = anchor_x
 
             const cur_level = levelGroupBy[idx]
-            for (var iter in cur_level) {
+            for (var iter = 0; iter < cur_level.length; ++iter) {
                 anchor_y = anchor_y + parseInt(iter) * LEVEL_VER_STEP
                 cur_level[iter]['x'] = anchor_x
                 cur_level[iter]['y'] = anchor_y
