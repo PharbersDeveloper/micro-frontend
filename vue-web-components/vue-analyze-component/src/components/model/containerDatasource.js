@@ -220,7 +220,6 @@ export default class PhContainerDataSource {
         ele.datasource.buildDownloadQuery(ele, schema, cat, fileName)
             .then((response) => response.json())
             .then((response) => {
-                debugger
                 console.log(response)
             })
     }

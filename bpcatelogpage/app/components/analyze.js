@@ -7,7 +7,6 @@ export default class AnalyzeComponent extends Component {
 	@service store
 	@service cookies
     @service('loading') loadingService;
-    @service noticeService;
 	@service ajax
 
 	@action

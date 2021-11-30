@@ -43,7 +43,7 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                                <div class="list" @click="selectScripts('python')">
+                                <div class="list" @click="selectScripts('python3')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg" alt="">
                                     <p>python</p>
                                 </div>
@@ -277,7 +277,8 @@ export default {
             }],
             value: '',
             dialogVisible: false,
-            reciptcheckedIds: []
+            reciptcheckedIds: [],
+            runtime: ""
         }
     },
     props: {
@@ -337,6 +338,7 @@ export default {
         },
         //打开script弹框
         selectScripts(data) {
+            this.runtime = data
             this.showCreateScriptsDialog = true
         },
         //增加tag
@@ -465,10 +467,11 @@ export default {
         },
         //增加scripts
         createScripts(data) {
-            debugger
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
+            data.args.param.runtime = this.runtime
             this.$emit('event', data)
+            this.showCreateScriptsDialog = false
         },
         //关闭删除数据集弹框
         closeDeleteDialog() {
