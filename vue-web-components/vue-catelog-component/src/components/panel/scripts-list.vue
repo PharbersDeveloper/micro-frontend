@@ -276,7 +276,8 @@ export default {
                 label: '双皮奶'
             }],
             value: '',
-            dialogVisible: false
+            dialogVisible: false,
+            reciptcheckedIds: []
         }
     },
     props: {
