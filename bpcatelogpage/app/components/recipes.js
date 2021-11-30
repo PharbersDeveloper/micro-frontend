@@ -32,7 +32,76 @@ export default class RecipesComponent extends Component {
                 this.router.transitionTo( uri )
 				break
 			case "createScripts":
-				debugger
+				let scriptsParams = e.detail[0].args.param;
+				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const accessToken = this.cookies.read( "access_token" )
+				const uuid = this.guid() + '.xlsx'
+				this.loadingService.loading.style.display = 'flex'
+        		this.loadingService.loading.style['z-index'] = 2
+				//需要新建dataset
+				if(scriptsParams.outputs[0].id == "") {
+					let body = {
+						"table": "dataset",
+						"item": {
+							"projectId": scriptsParams.projectId,
+							"id": uuid,
+							"label": JSON.stringify([]),
+							"name": scriptsParams.outputs[0].name,
+							"schema": JSON.stringify([])
+						}
+					}
+					let options = {
+						method: "POST",
+						headers: {
+							"Authorization": accessToken,
+							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+							"accept": "application/json"
+						},
+						body: JSON.stringify(body)
+					}
+					await fetch(url, options)
+				}
+				scriptsParams.outputs[0].id = uuid
+				let message = {
+					"dagName": scriptsParams.projectName,
+					"flowVersion": "developer",
+					"jobName": scriptsParams.jobName,
+					"jobId": "",
+					"inputs": scriptsParams.inputs,
+					"outputs": scriptsParams.outputs,
+					"jobVersion": scriptsParams.jobVersion,
+					"projectId": scriptsParams.projectId,
+					"timeout": "1000",
+					"runtime": scriptsParams.runtime,
+					"owner": decodeURI(this.cookies.read('user_name_show')),
+					"targetJobId": "",
+					"projectName": scriptsParams.projectName,
+					"labels": []
+				}
+				let scriptBody = {
+					"table": "action",
+					"item": {
+						"projectId": scriptsParams.projectId,
+						"owner": this.cookies.read( "account_id" ),
+						"showName": decodeURI(this.cookies.read('user_name_show')),
+						"code": 0,
+						"jobDesc": "created",
+						"jobCat": "upload",
+						"comments": "",
+						"message": JSON.stringify(message)
+					}
+				}
+				let scriptOptions = {
+					method: "POST",
+					headers: {
+						"Authorization": accessToken,
+						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+						"accept": "application/json"
+					},
+					body: JSON.stringify(scriptBody)
+				}
+				let creatScriptsQuery = await fetch(url, scriptOptions).then(res => res.json())
+				this.noticeService.register("notification", creatScriptsQuery.data.id, this.createScriptNoticeCallback, this, scriptsParams.projectId)
 				break
 			case "addTags":
 				let that = this
@@ -186,6 +255,17 @@ export default class RecipesComponent extends Component {
 		}
 	}
 
+	@action createScriptNoticeCallback(response, ele) {
+		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		this.loadingService.loading.style.display = 'none'
+		if(create_scripts_status == "dag_conf insert success") {
+			alert("新建脚本成功，请重新操作！")
+
+		} else {
+			alert("新建脚本失败，请重新操作！")
+		}
+	}
+
 	@action noticeCallback(response, ele) {
 		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
 		if(upload_status == "project_file_to_DS_succeed") {
@@ -195,6 +275,14 @@ export default class RecipesComponent extends Component {
 			alert("清除数据失败，请重新操作！")
 		}
 		this.loadingService.loading.style.display = 'none'
+	}
+
+	@action
+	guid() {
+		return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+			return v.toString(16);
+		});
 	}
 
 	@action
