@@ -12,6 +12,11 @@ body {
 p {
 	margin: 0;
 }
+
+.mainIframe {
+    width: 100vw;
+    height: 100vh;
+}
 .download-container {
 	display: flex;
 	background-color: #fff;

@@ -60,7 +60,7 @@ export default {
         // 默认语言
         language: {
             type: String,
-            default: 'javascript'
+            default: 'python'
         },
         // 主题，对应主题库 JS 需要提前引入
         theme: {

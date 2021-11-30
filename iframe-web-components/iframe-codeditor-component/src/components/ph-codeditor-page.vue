@@ -21,7 +21,7 @@
                 <button class="button" @click="saveCode">保存</button>
             </div>
             <div class="coding">
-                <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="javascript"/>
+                <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="python"/>
             </div>
             <div class="coding-footer">
                 <button class="button">Validate</button>
