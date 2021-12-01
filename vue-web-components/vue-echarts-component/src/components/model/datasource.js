@@ -36,8 +36,8 @@ export default class PhDagDatasource {
 
     buildQuery(ele, isAppend=false) {
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        // const accessToken = this.cookies.read( "access_token" ) | this.debugToken
-        const accessToken = this.debugToken
+        const accessToken = this.cookies.read( "access_token" ) | this.debugToken
+        // const accessToken = this.debugToken
         let body = {
             "table": "dag",
             "conditions": {
