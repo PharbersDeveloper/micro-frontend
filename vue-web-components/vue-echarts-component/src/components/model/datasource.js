@@ -6,7 +6,7 @@ export default class PhDagDatasource {
         this.links= []
         this.data = []
         this.title = "need a title"
-        this.debugToken = '3d8367b908d792b51345a0ec5ebd1312055f4a75660a9ec4e52412a733830ada'
+        this.debugToken = '13d77ce3b3644268685c3581de95754789338c00a923b82725c8fc5e8ed90173'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -90,7 +90,7 @@ export default class PhDagDatasource {
         let provious_level_anchor_x = 0
         let provious_level_anchor_y = 0
 
-        for (var idx = 0; idx < levelGroupBy.length; ++idx) {
+        for (var idx in levelGroupBy) {
             // anchor_x = anchor_x + parseInt(idx) * LEVEL_HOR_STEP
             anchor_x = provious_level_anchor_x + LEVEL_VER_STEP
             anchor_y = provious_level_anchor_y

@@ -120,6 +120,8 @@ export default {
     },
     watch: {
         needRefresh(n, o) {
+            console.log(this.datasource.node)
+            console.log(this.datasource.link)
             this.renderDag()
         }
     }
