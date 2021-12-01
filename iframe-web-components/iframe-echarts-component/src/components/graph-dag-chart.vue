@@ -12,7 +12,7 @@ export default {
         return {
             name: 'dag',
             needRefresh: 0,
-			projectId: ""
+            projectId: ""
         }
     },
     props: {
@@ -24,9 +24,9 @@ export default {
         }
     },
     mounted () {
-		let href = window.location.href
+        let href = window.location.href
         this.projectId = href.split('projectId=')[1]
-		this.datasource.projectId = this.projectId
+        this.datasource.projectId = this.projectId
         this.initChart()
     },
     methods: {
@@ -83,7 +83,7 @@ export default {
                         type: 'graph',
                         layout: 'none',
                         symbolSize: 50,
-                        roam: true,
+                        roam: false, // 缩放
                         symbol: 'rect',
                         edgeSymbol: ['circle', 'arrow'],
                         edgeSymbolSize: [5, 10],

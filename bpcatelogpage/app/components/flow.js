@@ -6,10 +6,11 @@ import { tracked } from '@glimmer/tracking'
 export default class FlowComponent extends Component {
     @service router
     @service store
-    @service cookies
+    @service cookies 
     @service('loading') loadingService;
     @service ajax
-	@tracked iframeURL = "https://dag.pharbers.com/index.html#/graph"
+	// @tracked iframeURL = "https://dag.pharbers.com/index.html#/graph"
+	@tracked iframeURL = "http://dag.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/#/graph"
 
 
     @action

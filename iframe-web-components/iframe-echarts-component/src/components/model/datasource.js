@@ -5,7 +5,7 @@ export default class PhDagDatasource {
         this.nodes= []
         this.links= []
         this.data = []
-		this.projectId = "JfSmQBYUpyb4jsei"
+        this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
         this.debugToken = '8eaa30f7952f959a21846dded74387a37e208315ac47bd697e9666e6f9012092'
 
@@ -88,13 +88,13 @@ export default class PhDagDatasource {
         return fetch(url, options)
     }
 
-	getCookie(name) {
-		let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-		if (arr = document.cookie.match(reg))
-			return (arr[2]);
-		else
-			return null;
-	}
+    getCookie(name) {
+        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg))
+            return (arr[2]);
+        else
+            return null;
+    }
 
     refreshData(ele) {
         ele.datasource.buildQuery(ele)
