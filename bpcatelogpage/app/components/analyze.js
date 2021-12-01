@@ -23,7 +23,7 @@ export default class AnalyzeComponent extends Component {
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name == "flow") {
-
+					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
 				break
