@@ -43,6 +43,7 @@ export default {
             this.dag.hideLoading()
             this.renderDag()
             const that = this
+            document.domain = "pharbers.com"
             this.dag.on('click', function(params) {
                 console.log('alfredyang test')
                 that.$emit('itemClicked', params)

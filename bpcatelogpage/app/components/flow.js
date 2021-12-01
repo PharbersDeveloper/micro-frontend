@@ -55,6 +55,7 @@ export default class FlowComponent extends Component {
 		element.allData = this.calAllData
 		this.iframeURL = this.iframeURL + "?projectId=" + element.allData.projectId
         element.addEventListener("event", this.listener)
+        document.domain = "pharbers.com"
 	}
 
     get calAllData() {
