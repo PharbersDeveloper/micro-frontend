@@ -21,79 +21,46 @@ export default class DagChartsComponent extends Component {
             }]),
                 tooltip: {},
             animationDurationUpdate: 1500,
-            animationEasingUpdate: 'quinticInOut',
+                animationEasingUpdate: 'quinticInOut',
             series: [
-                {
-                    type: 'graph',
-                    layout: 'none',
-                    symbolSize: 50,
-                    roam: true,
-                    symbol: 'rect',
-                    edgeSymbol: ['circle', 'arrow'],
-                    edgeSymbolSize: [4, 10],
-                    zoom: 1,
-                    itemStyle: {
-                        color: '#24a861'
+            {
+                type: 'graph',
+                layout: 'none',
+                symbolSize: 50,
+                roam: false,
+                symbol: 'rect',
+                edgeSymbol: ['circle', 'arrow'],
+                edgeSymbolSize: [5, 10],
+                itemStyle: {
+                    color: '#24a861'
+                },
+                label: {
+                    show: true,
+                    fontSize: 16,
+                    position: 'bottom'
+                },
+                edgeLabel: {
+                    fontSize: 20
+                },
+                categories: [
+                    {
+                        name: 'code',
+                        symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
                     },
-                    label: {
-                        show: true,
-                        fontSize: 16,
-                        position: 'bottom'
-                    },
-                    edgeLabel: {
-                        fontSize: 20
-                    },
-                    categories: [
-                        {
-                            name: 'job',
-                            symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
-                        },
-                        {
-                            name: 'dataset',
-                            symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
-                        }
-                    ],
-                    // data: this.datasource.nodes,
-                    // links: this.datasource.links,
-                    data: [
-                        {
-                            name: 'anchor',
-                            x: 0,
-                            y: 0,
-                            category: 'dataset'
-                        },
-                        {
-                            name: 'Node 1',
-                            x: 2000,
-                            y: 500,
-                            category: 'dataset'
-                        },
-                        {
-                            name: 'Node 2',
-                            x: 1000,
-                            y: 1500,
-                            category: 'dataset'
-                        }
-                    ],
-                    links: [
-                        {
-                        source: 'Node 2',
-                        target: 'Node 1',
-                        label: {
-                            show: true
-                        },
-                        lineStyle: {
-                            curveness: 0.2
-                        }
+                    {
+                        name: 'file',
+                        symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
                     }
-                    ],
-                    lineStyle: {
-                        opacity: 0.9,
-                        width: 2,
-                        curveness: 0
-                    }
+                ],
+                data: this.datasource.nodes,
+                links: this.datasource.links,
+                lineStyle: {
+                    opacity: 0.9,
+                    width: 2,
+                    curveness: 0
                 }
-            ]
+            }
+        ]
         }
     }
 
@@ -112,9 +79,8 @@ export default class DagChartsComponent extends Component {
 
     @action
     beforeSetup() {
-        if (this.datasource.nodes.length === 0) {
+        if (this.datasource.nodes.length === 0)
             this.datasource.refreshData(this)
-        }
     }
 
     @action
