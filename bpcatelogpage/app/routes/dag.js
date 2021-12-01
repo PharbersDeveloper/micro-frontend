@@ -25,7 +25,7 @@ export default class DagRoute extends Route {
 			},
 			body: JSON.stringify(body)
 		}
-		const dsNum = await fetch(url, options).then(res=>res.json())
+		const nums = await fetch(url, options).then(res=>res.json())
 		//显示数量
 		let flow = projectDetail.belongsTo('flow').id()
 		let analysis = projectDetail.belongsTo('analysis').id()
@@ -33,12 +33,8 @@ export default class DagRoute extends Route {
 		let notebooks = projectDetail.hasMany('notebooks').ids()
 		let dashBoards = projectDetail.hasMany('dashBoards').ids()
 		let wiki = projectDetail.hasMany('wikis').ids()
-		if(flow && flow != '') {
-			numShow.flow = 1
-		} else {
-			numShow.flow = 0
-		}
-		numShow.dataset = dsNum ? dsNum.message : 0
+		numShow.dataset = nums.dataset ? nums.dataset : 0
+		numShow.flow = nums.dagconf ? nums.dagconf : 0
 		numShow.analysis = analysis ? analysis.length : 0
 		numShow.model = models ? models.length : 0
 		numShow.notebook = notebooks ? notebooks.length : 0

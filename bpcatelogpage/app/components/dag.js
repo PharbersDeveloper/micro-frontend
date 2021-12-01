@@ -23,7 +23,8 @@ export default class DagComponent extends Component {
 					//recipe页面
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}  else if(params.name === "script") {
-					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId
+					//script list页面
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name === "flow") {
                     uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
                 }
