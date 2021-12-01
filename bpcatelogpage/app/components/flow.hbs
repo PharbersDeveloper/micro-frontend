@@ -1,7 +1,9 @@
-<!--<ph-echarts-graph-dag-chart-->
-<!--        allData={{@model}}-->
-<!--    {{did-insert this.registerListener}}-->
-<!--    {{will-destroy this.unregisterListener}}>-->
-<!--</ph-echarts-graph-dag-chart>-->
+<ph-analyze-bp-nav-top-max
+        allData={{@model}}
+    {{did-insert this.registerListener}}
+    {{will-destroy this.unregisterListener}}>
+</ph-analyze-bp-nav-top-max>
 
-<DagCharts></DagCharts>
+<iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
+        src="http://dag.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/#/graph"
+        frameborder="0" scrolling="auto" />

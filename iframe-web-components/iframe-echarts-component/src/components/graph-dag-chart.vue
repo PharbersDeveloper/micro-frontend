@@ -96,6 +96,30 @@ export default {
                         },
                         categories: [
                             {
+                                name: 'DSuploaded',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSuploaded.svg'
+                            },
+                            {
+                                name: 'DSIntermediate',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSIntermediate.svg'
+                            },
+                            {
+                                name: 'Python3',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python3.svg'
+                            },
+                            {
+                                name: 'PySpark',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/PySpark.svg'
+                            },
+                            {
+                                name: 'SparkR',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg'
+                            },
+                            {
+                                name: 'R',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R.svg'
+                            },
+                            {
                                 name: 'job',
                                 symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
                             },
