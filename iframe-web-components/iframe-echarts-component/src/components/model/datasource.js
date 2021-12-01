@@ -15,7 +15,7 @@ export default class PhDagDatasource {
     defaultAdapter(row) {
 
         function resetCategory(cat, runtime) {
-            let result = "Python3"
+            let result = ""
             if (cat === "dataset" && runtime === "uploaded") {
                 result = "DSuploaded"
             } else if (cat === "dataset" && runtime === "intermediate") {
@@ -28,6 +28,12 @@ export default class PhDagDatasource {
                 result = "SparkR"
             } else if (cat === "job" && runtime === "r") {
                 result = "R"
+            } else if (cat === "dataset") {
+                result = "dataset"
+            } else if (cat === "job") {
+                result = "job"
+            } else {
+
             }
             return result
         }
