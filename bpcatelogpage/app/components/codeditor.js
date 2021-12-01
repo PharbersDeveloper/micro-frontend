@@ -11,7 +11,7 @@ export default class CodeditorComponent extends Component {
     @service noticeService;
 	@service ajax
 	@tracked firstRegister = true
-	@tracked iframeURL = "http://codeditor.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/"
+	@tracked iframeURL = "https://codeditor.pharbers.com/index.html"
 
 	@action
 	async listener(e) {
