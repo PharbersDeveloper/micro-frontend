@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking'
 
 export default class FlowComponent extends Component {
     @service router
@@ -8,6 +9,8 @@ export default class FlowComponent extends Component {
     @service cookies
     @service('loading') loadingService;
     @service ajax
+	@tracked iframeURL = "https://dag.pharbers.com/index.html#/graph"
+
 
     @action
     async listener(e) {
@@ -42,6 +45,15 @@ export default class FlowComponent extends Component {
     unregisterListener(element) {
         element.removeEventListener("event", this.listener)
     }
+
+	@action
+	registerListenerIframe(element) {
+		element.allData = this.calAllData
+		this.iframeURL = this.iframeURL + "?projectId=" + element.allData.projectId
+		console.log(this.iframeURL)
+		// let iframe = document.getElementById('mainIframe')
+		// iframe.contentWindow.postMessage(element.allData.jobName, '*')
+	}
 
     get calAllData() {
         this.args.model._isVue = true

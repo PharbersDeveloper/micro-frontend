@@ -5,5 +5,6 @@
 </ph-analyze-bp-nav-top-max>
 
 <iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
-        src="https://dag.pharbers.com/index.html#/graph"
-        frameborder="0" scrolling="auto" />
+	{{did-insert this.registerListenerIframe}}
+	src={{iframeURL}}
+	frameborder="0" scrolling="auto" />

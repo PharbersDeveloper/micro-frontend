@@ -11,7 +11,8 @@ export default {
     data: () => {
         return {
             name: 'dag',
-            needRefresh: 0
+            needRefresh: 0,
+			projectId: ""
         }
     },
     props: {
@@ -23,6 +24,9 @@ export default {
         }
     },
     mounted () {
+		let href = window.location.href
+        this.projectId = href.split('projectId=')[1]
+		this.datasource.projectId = this.projectId
         this.initChart()
     },
     methods: {
