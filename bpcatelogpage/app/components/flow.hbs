@@ -5,6 +5,8 @@
 </ph-analyze-bp-nav-top-max>
 
 <iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
-	{{did-insert this.registerListenerIframe}}
 	src={{iframeURL}}
-	frameborder="0" scrolling="auto" />
+	frameborder="0" scrolling="auto"
+    {{did-insert this.registerListenerIframe}}
+    {{will-destroy this.unregisterListener}}>
+</iframe>

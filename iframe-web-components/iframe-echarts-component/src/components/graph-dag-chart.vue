@@ -42,7 +42,13 @@ export default {
             await this.datasource.refreshData(this)
             this.dag.hideLoading()
             this.renderDag()
+            const that = this
+            this.dag.on('click', function(params) {
+                console.log('alfredyang test')
+                that.$emit('itemClicked', params)
+            })
         },
+
 
         // 监听屏幕大小改变
         bindChangeWindow () {
@@ -144,12 +150,11 @@ export default {
             };
             // 绘制图表
             this.dag.setOption(option)
+
         }
     },
     watch: {
         needRefresh(n, o) {
-            console.log(this.datasource.node)
-            console.log(this.datasource.link)
             this.renderDag()
         }
     }

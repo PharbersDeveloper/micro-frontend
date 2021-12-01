@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking'
 export default class FlowComponent extends Component {
     @service router
     @service store
-    @service cookies 
+    @service cookies
     @service('loading') loadingService;
     @service ajax
 	// @tracked iframeURL = "https://dag.pharbers.com/index.html#/graph"
@@ -27,9 +27,12 @@ export default class FlowComponent extends Component {
                 } else if(params.name === "scripts") {
                     uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
                 } else if (params.name == "flow") {
-
+                    uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
                 }
                 this.router.transitionTo( uri )
+                break
+            case "itemClicked":
+                console.log("alfred test item clicked")
                 break
             default:
                 console.log("other click event!")
@@ -51,9 +54,7 @@ export default class FlowComponent extends Component {
 	registerListenerIframe(element) {
 		element.allData = this.calAllData
 		this.iframeURL = this.iframeURL + "?projectId=" + element.allData.projectId
-		console.log(this.iframeURL)
-		// let iframe = document.getElementById('mainIframe')
-		// iframe.contentWindow.postMessage(element.allData.jobName, '*')
+        element.addEventListener("event", this.listener)
 	}
 
     get calAllData() {
