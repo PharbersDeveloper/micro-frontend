@@ -6,7 +6,7 @@ export default class PhDagDatasource {
         this.links= []
         this.data = []
         this.title = "need a title"
-        this.debugToken = '3d8367b908d792b51345a0ec5ebd1312055f4a75660a9ec4e52412a733830ada'
+        this.debugToken = '66d7e5ba655320cac82321c500910e7375752dbac0af1a3be7d4822734b0502b'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -36,8 +36,8 @@ export default class PhDagDatasource {
 
     buildQuery(ele, isAppend=false) {
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        // const accessToken = this.cookies.read( "access_token" ) | this.debugToken
-        const accessToken = this.debugToken
+        const accessToken = this.cookies.read( "access_token" ) | this.debugToken
+        // const accessToken = this.debugToken
         let body = {
             "table": "dag",
             "conditions": {

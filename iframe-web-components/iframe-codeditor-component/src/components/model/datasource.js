@@ -2,7 +2,7 @@
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, flowVersion, jobName) {
         this.id = id
-        this.debugToken = '8fb7d838a99eab88814e045b8598772f0975461c46e6cb1bedbf09f7572fac1c'
+        this.debugToken = 'b14ecdeb010a9f5617cd8bf6a6c97cb30ab53a40038ba720e0c9828b9c63a2dd'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
