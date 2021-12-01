@@ -96,11 +96,11 @@ export default {
                         },
                         categories: [
                             {
-                                name: 'code',
+                                name: 'job',
                                 symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
                             },
                             {
-                                name: 'file',
+                                name: 'dataset',
                                 symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
                             }
                         ],

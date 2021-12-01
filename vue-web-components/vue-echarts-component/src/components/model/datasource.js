@@ -6,7 +6,7 @@ export default class PhDagDatasource {
         this.links= []
         this.data = []
         this.title = "need a title"
-        this.debugToken = '13d77ce3b3644268685c3581de95754789338c00a923b82725c8fc5e8ed90173'
+        this.debugToken = '8eaa30f7952f959a21846dded74387a37e208315ac47bd697e9666e6f9012092'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -36,8 +36,8 @@ export default class PhDagDatasource {
 
     buildQuery(ele, isAppend=false) {
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        // const accessToken = this.debugToken
+        // const accessToken = this.cookies.read( "access_token" ) | this.debugToken
+        const accessToken = this.debugToken
         let body = {
             "table": "dag",
             "conditions": {
@@ -70,14 +70,6 @@ export default class PhDagDatasource {
                 ele.datasource.links = tmp.filter(x => !x[0]).map(x => x[1])
                 ele.needRefresh++
             })
-    }
-
-    getCookie(name) {
-        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return (arr[2]);
-        else
-            return null;
     }
 
     refreshLocationByLevel(ele) {

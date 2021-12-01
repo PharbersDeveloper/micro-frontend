@@ -73,8 +73,8 @@ export default class PhDagDatasource {
     }
 
     refreshLocationByLevel(ele) {
-        const LEVEL_VER_STEP = 100
-        const LEVEL_HOR_STEP = 100
+        const LEVEL_VER_STEP = 1000
+        const LEVEL_HOR_STEP = 1000
         const levelGroupBy = ele.datasource.nodes.reduce((acc, value) => {
             if (!acc[value.level]) {
                 acc[value.level] = [];
@@ -101,6 +101,7 @@ export default class PhDagDatasource {
                 anchor_y = anchor_y + parseInt(iter) * LEVEL_VER_STEP
                 cur_level[iter]['x'] = anchor_x
                 cur_level[iter]['y'] = anchor_y
+                // delete cur_level[iter].level
                 ele.datasource.nodes.push(cur_level[iter])
             }
             const base_anchor_y_arr = levelGroupBy[idx].map(x => parseInt(x['y']))
