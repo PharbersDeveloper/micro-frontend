@@ -29,7 +29,7 @@ export default class RecipesComponent extends Component {
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name === "codeditor") {
-					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId
+					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName
 				}
                 this.router.transitionTo( uri )
 				break

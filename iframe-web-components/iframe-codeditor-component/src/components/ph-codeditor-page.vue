@@ -30,7 +30,7 @@
                 </div>
                 <div class="code-block-list code-block-list-last">
                     <div class="ints">
-                        <span class="title">Output</span>
+                        <span class="title">Output1</span>
                         <span class="line"></span>
                     </div>
                     <div class="ds-lst">
@@ -84,10 +84,10 @@ export default {
             type: String,
             default: "developer"
         },
-        jobName: {
-            type: String,
-            default: "developer_1qaz8ikm_max_test_dag_test_job_b1"
-        },
+        // jobName: {
+        //     type: String,
+        //     default: ""
+        // },
         datasource: {
             type: Object,
             default: function() {
@@ -112,10 +112,26 @@ export default {
             downloadCode: 0,
             python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg",
             icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
-            icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg"
+            icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
+            jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1"
         }
     },
     mounted() {
+        let href = window.location.href
+        this.jobName = href.split('jobName=')[1]
+        // this.$nextTick(() => {
+        //     window.addEventListener('message', function(event) {
+        //         //event.data获取传过来的数据
+        //         console.log(event.data)
+        //     })
+        //     // 通知父组件准备好接收消息
+        //     window.parent.postMessage({
+        //         cmd: 'ready-for-receiving'
+        //     }, '*')
+        // })
+
+        //父组件传进来的值
+        this.datasource.jobName = this.jobName
         this.datasource.refreshData(this)
     },
     watch: {

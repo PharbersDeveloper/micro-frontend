@@ -4,6 +4,7 @@
 	{{will-destroy this.unregisterListener}}>
 </ph-analyze-bp-nav-top-max>
 
-<iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
-        src="http://codeditor.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/"
-        frameborder="0" scrolling="auto" />
+<iframe id="mainIframe" name="mainIframe" class="mainIframe"
+	{{did-insert this.registerListenerIframe}}
+	src={{iframeURL}}
+	frameborder="0" scrolling="auto" />

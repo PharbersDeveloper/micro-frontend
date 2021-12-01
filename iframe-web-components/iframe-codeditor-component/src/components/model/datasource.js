@@ -2,7 +2,7 @@
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, flowVersion, jobName) {
         this.id = id
-        this.debugToken = 'b14ecdeb010a9f5617cd8bf6a6c97cb30ab53a40038ba720e0c9828b9c63a2dd'
+        this.debugToken = '8eaa30f7952f959a21846dded74387a37e208315ac47bd697e9666e6f9012092'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -54,6 +54,7 @@ export default class PhCodeditorDatasource {
     }
 
     refreshData(ele) {
+        console.log(ele.datasource)
         let that = this
         ele.datasource.buildQuery(ele)
             .then((response) => response.json())
