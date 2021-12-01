@@ -13,6 +13,25 @@ export default class PhDagDatasource {
     }
 
     defaultAdapter(row) {
+
+        function resetCategory(cat, runtime) {
+            let result = "Python3"
+            if (cat === "dataset" && runtime === "uploaded") {
+                result = "DSuploaded"
+            } else if (cat === "dataset" && runtime === "intermediate") {
+                result = "DSIntermediate"
+            } else if (cat === "job" && runtime === "python3") {
+                result = "Python3"
+            } else if (cat === "job" && runtime === "pyspark") {
+                result = "PySpark"
+            } else if (cat === "job" && runtime === "sparkr") {
+                result = "SparkR"
+            } else if (cat === "job" && runtime === "r") {
+                result = "R"
+            }
+            return result
+        }
+
         const attr = row["attributes"]
         if (attr["ctype"] === "node" && attr["cat"] !== "flow") {
             const node = {}
@@ -21,7 +40,7 @@ export default class PhDagDatasource {
             node["x"] = position["x"]
             node["y"] = position["y"]
             node["level"] = attr["level"]
-            node["category"] = attr["cat"]
+            node["category"] = resetCategory(attr["cat"], attr["runtime"])
             return [true, node]
         } else if (attr["ctype"] === "link") {
             const link = {}
@@ -33,6 +52,8 @@ export default class PhDagDatasource {
             return [false, link]
         }
     }
+
+
 
     buildQuery(ele, isAppend=false) {
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
