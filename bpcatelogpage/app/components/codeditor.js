@@ -11,6 +11,7 @@ export default class CodeditorComponent extends Component {
     @service noticeService;
 	@service ajax
 	@tracked firstRegister = true
+	@tracked iframeURL = "http://codeditor.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/"
 
 	@action
 	async listener(e) {
@@ -46,6 +47,14 @@ export default class CodeditorComponent extends Component {
 	@action
 	unregisterListener(element) {
 		element.removeEventListener("event", this.listener)
+	}
+
+	@action
+	registerListenerIframe(element) {
+		element.allData = this.calAllData
+		this.iframeURL = this.iframeURL + "?jobName=" + element.allData.jobName
+		// let iframe = document.getElementById('mainIframe')
+		// iframe.contentWindow.postMessage(element.allData.jobName, '*')
 	}
 
 	get calAllData() {
