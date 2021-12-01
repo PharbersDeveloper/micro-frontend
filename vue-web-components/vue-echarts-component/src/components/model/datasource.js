@@ -36,7 +36,7 @@ export default class PhDagDatasource {
 
     buildQuery(ele, isAppend=false) {
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.cookies.read( "access_token" ) | this.debugToken
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
         // const accessToken = this.debugToken
         let body = {
             "table": "dag",
@@ -70,6 +70,14 @@ export default class PhDagDatasource {
                 ele.datasource.links = tmp.filter(x => !x[0]).map(x => x[1])
                 ele.needRefresh++
             })
+    }
+
+    getCookie(name) {
+        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg))
+            return (arr[2]);
+        else
+            return null;
     }
 
     refreshLocationByLevel(ele) {
