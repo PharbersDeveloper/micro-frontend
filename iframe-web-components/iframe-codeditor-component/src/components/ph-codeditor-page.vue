@@ -6,32 +6,51 @@
                 <span class="name">{{scriptName}}</span>
             </div>
             <div class="coding-title">
-                <button class="button btn-fir">按钮2</button>
+                <button class="button btn-fir">操作</button>
                 <button class="button" @click="saveCode">保存</button>
             </div>
         </div>
         <div class="codeditor-container">
             <div class="code-io-list">
+                <div class="dataset">数据集</div>
                 <div class="code-block-list">
-                    <span class="title">inputs</span>
+                    <div class="ints">
+                        <span class="title">Inputs</span>
+                        <span class="line"></span>
+                    </div>
                     <div class="ds-lst">
-                        <span class="ds-item" v-for="(item, index) in datasource.inputs" :key="index">{{item.name}}</span>
+                        <div class="ds-item" v-for="(item, index) in datasource.inputs" :key="index">
+                            <span >{{item.name}}</span>
+                            <div>
+                                <img :src="icon1" alt="">
+                                <img :src="icon2" alt="">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="code-block-list">
-                    <span class="title">outputs</span>
+                <div class="code-block-list code-block-list-last">
+                    <div class="ints">
+                        <span class="title">Output</span>
+                        <span class="line"></span>
+                    </div>
                     <div class="ds-lst">
-                        <span class="ds-item" v-for="(item, index) in datasource.outputs" :key="index">{{item.name}}</span>
+                        <div class="ds-item"  v-for="(item, index) in datasource.outputs" :key="index">
+                            <span >{{item.name}}</span>
+                            <div>
+                                <img :src="icon1" alt="">
+                                <img :src="icon2" alt="">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="coding-pane">
                 <div class="coding">
-                    <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="600px" language="python"/>
+                    <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="calc(100vh - 180px)" language="python"/>
                 </div>
                 <div class="coding-footer">
-                    <button class="button">Validate</button>
+                    <!-- <button class="button">Validate</button> -->
                     <button class="button">Run</button>
                 </div>
             </div>
@@ -91,7 +110,9 @@ export default {
         return {
             codeBuffer: "",
             downloadCode: 0,
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg"
+            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg",
+            icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
+            icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg"
         }
     },
     mounted() {
@@ -177,28 +198,47 @@ export default {
                 background: #fff;
             }
             .btn-fir {
-                margin-right: 10px;
+                margin-left: 10px;
             }
         }
     }
     .codeditor-container {
         display: flex;
         flex-direction: row;
-
+        height: calc(100vh - 70px);
         .code-io-list {
             display: flex;
             flex-direction: column;
             min-width: 180px;
-            border: red 1px solid;
+            border-right: 1px solid #ccc;
             text-align: left;
-
+            .dataset {
+                height: 40px;
+                margin-left: 20px;
+                margin-top: 10px;
+            }
+            .code-block-list-last {
+                margin-top: 20px;
+            }
             .code-block-list {
                 display: flex;
                 flex-direction: column;
-
+                .ints {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 5px;
+                    font-size: 14px;
+                }
                 .title {
                     font-size: 14px;
-                    border-top: red 1px solid;
+                    margin-right: 3px;
+                }
+                .line {
+                    width: 30px;
+                    border-bottom: 1px solid #ddd;
+                    height: 0;
+                    display: block;
+                    width: 140px;
                 }
 
                 .ds-lst {
@@ -206,7 +246,18 @@ export default {
                     flex-direction: column;
 
                     .ds-item {
-                        border-top: green 1px solid;
+                        font-size: 12px;
+                        margin-left: 20px;
+                        height: 40px;
+                        line-height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        img {
+                            width: 10px;
+                            height: 10px;
+                            padding-right: 10px;
+                        }
                     }
                 }
 
@@ -217,7 +268,7 @@ export default {
             width: 100%;
             display: flex;
             flex-direction: column;
-
+            padding: 30px;
             .coding {
                 padding-bottom: 7px;
             }
@@ -225,6 +276,16 @@ export default {
             .coding-footer {
                 display: flex;
                 flex-direction: row;
+                .button {
+                    width: 57px;
+                    height: 23px;
+                    border: 1px solid #f2f0f9;
+                    background: #f2f0f9;
+                    border-radius: 2px;
+                    color: #7163C5;
+                    position: absolute;
+                    bottom: 30px;
+                }
             }
         }
     }
