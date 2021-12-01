@@ -27,7 +27,7 @@ export default class DagChartsComponent extends Component {
                 type: 'graph',
                 layout: 'none',
                 symbolSize: 50,
-                roam: true,
+                roam: false,
                 symbol: 'rect',
                 edgeSymbol: ['circle', 'arrow'],
                 edgeSymbolSize: [5, 10],
