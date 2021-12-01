@@ -8,8 +8,8 @@
                         <div class="selected_search">
                             <div class="selected"
                                 :class="[
-                                    {'bg_disabled': datasetcheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dcs.length">
+                                    {'bg_disabled': reciptcheckedIds.length == 0}]">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === allData.dcs.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -30,7 +30,7 @@
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除数据集</p>
+                                            <p >删除脚本</p>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{allData.dcs.length}} 条数据集</p>
+                                <p>{{allData.dcs.length}} 条脚本</p>
                             </div>
                         </div>
                     </div>
@@ -125,19 +125,19 @@
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="datasetcheckedIds.length > 0" >
+                    <div class="view_content" v-if="reciptcheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
                                 <img :src="dataset_icon" alt="">
                             </span>
-                            <div class="show-name" v-if="datasetcheckedIds.length == 1">
+                            <div class="show-name" v-if="reciptcheckedIds.length == 1">
                                 <p class="project_name_info" :title="datasetcheckedNames[0]">
                                 {{datasetcheckedNames[0]}}
                                 </p>
                             </div>
                            <div class="show-name">
-                               <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
-                                    {{datasetcheckedIds.length}} 条数据集
+                               <p class="project_name_info" v-if="reciptcheckedIds.length > 1">
+                                    {{reciptcheckedIds.length}} 条脚本
                                 </p>
                            </div>
                         </div>
@@ -172,10 +172,10 @@
                             </span>
                         </div>
                     </div>
-                    <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
+                    <p v-if="reciptcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        <!-- 清除数据集数据 -->
+        <!-- 清除脚本数据 -->
         <clear-recipt-dialog
             v-if="cleardialogshow"
             :reciptcheckedIds="reciptcheckedIds"
@@ -183,10 +183,10 @@
             @clearTagsEvent="clearTags"
             @closeClearDialog="closeClearDialog">
         </clear-recipt-dialog>
-        <!-- 删除数据集 -->
+        <!-- 删除脚本 -->
         <clear-delete 
             v-if="deletedialogshow" 
-            :datasetcheckedIds="datasetcheckedIds"
+            :reciptcheckedIds="reciptcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
             @deleteDatasetsEvent="deleteDataset"
             @closeDeleteDialog="closeDeleteDialog">
@@ -194,7 +194,7 @@
         <!-- 添加tag -->
         <create-tags-dialog 
             v-if="showCreateTagsDialog"
-            :datasetcheckedIds="datasetcheckedIds"
+            :reciptcheckedIds="reciptcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
             :datasets="allData.dcs"
             :tagsArray="allData.tagsArray"
@@ -264,7 +264,7 @@ export default {
             manual: true,
             scriptValue: "名称",
             isCheckedAllDataset: false,
-            datasetcheckedIds: [], //选中项id
+            reciptcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
@@ -343,25 +343,25 @@ export default {
         },
         //增加tag
         addTagsEvent(data) {
-            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.selectedDatasets = this.reciptcheckedIds
             data.args.param.datasetArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
-        //清除数据集中数据
+        //清除脚本中数据
         clearTags(data) {
-            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.selectedDatasets = this.reciptcheckedIds
             data.args.param.datasetArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
-        //删除数据集
+        //删除脚本
         deleteDataset(data) {
-            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.selectedDatasets = this.reciptcheckedIds
             data.args.param.datasetArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
@@ -379,7 +379,7 @@ export default {
         checkedOneDataset(recipt) {
             let idIndex = this.reciptcheckedIds.indexOf(recipt.id)
             if(idIndex >= 0) {
-                this.datasetcheckedIds.splice(idIndex, 1)
+                this.reciptcheckedIds.splice(idIndex, 1)
                 this.datasetcheckedNames.splice(idIndex, 1)
             } else {
                 this.reciptcheckedIds.push(recipt.id)
@@ -404,15 +404,15 @@ export default {
         //全选list
         chechedAllDataset() {
             this.isCheckedAllDataset = true
-            if(this.datasetcheckedIds.length == this.allData.dcs.length) {
+            if(this.reciptcheckedIds.length == this.allData.dcs.length) {
                 this.isCheckedAllDataset = false
             }
-            this.datasetcheckedIds = []
+            this.reciptcheckedIds = []
             this.datasetcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
                 this.allData.dcs.forEach(item => {
-                    this.datasetcheckedIds.push(item.id)
+                    this.reciptcheckedIds.push(item.id)
                     this.datasetcheckedNames.push(item.name)
                 })
             }
@@ -473,19 +473,19 @@ export default {
             this.$emit('event', data)
             this.showCreateScriptsDialog = false
         },
-        //关闭删除数据集弹框
+        //关闭删除脚本弹框
         closeDeleteDialog() {
             this.deletedialogshow = false;
         },
-        //打开删除数据集弹框
+        //打开删除脚本弹框
         deletedialogopen() {
             this.deletedialogshow = true;
         },
-        //关闭清除数据集弹框
+        //关闭清除脚本弹框
         closeClearDialog() {
             this.cleardialogshow = false;
         },
-        //打开清除数据集弹框
+        //打开清除脚本弹框
         clearDialogOpen(){
             this.cleardialogshow = true
         },
@@ -497,7 +497,7 @@ export default {
         },
         //左上角选项下拉框
         dropShow() {
-            if(this.datasetcheckedIds.length < 1) {
+            if(this.reciptcheckedIds.length < 1) {
                 this.dropDialogShow = false
             } else {
                 this.dropDialogShow = !this.dropDialogShow

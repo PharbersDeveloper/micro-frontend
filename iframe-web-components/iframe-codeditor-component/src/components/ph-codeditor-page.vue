@@ -221,7 +221,7 @@ export default {
     .codeditor-container {
         display: flex;
         flex-direction: row;
-        height: calc(100vh - 70px);
+        height: calc(100vh - 80px);
         .code-io-list {
             display: flex;
             flex-direction: column;
