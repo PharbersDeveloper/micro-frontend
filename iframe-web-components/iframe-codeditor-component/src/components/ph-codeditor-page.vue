@@ -72,10 +72,10 @@ export default {
             type: String,
             default: "脚本名称"
         },
-        projectId: {
-            type: String,
-            default: "JfSmQBYUpyb4jsei"
-        },
+        // projectId: {
+        //     type: String,
+        //     default: "JfSmQBYUpyb4jsei"
+        // },
         jobId: {
             type: String,
             default: "1qaz4rfv"
@@ -113,12 +113,16 @@ export default {
             python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg",
             icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
             icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
-            jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1"
+            jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",
+            projectId: "JfSmQBYUpyb4jsei"
         }
     },
     mounted() {
         let href = window.location.href
-        this.jobName = href.split('jobName=')[1]
+        console.log(href)
+        let param = href.split("?projectId=")[1]
+        this.projectId = param.split("&jobName=")[0]
+        this.jobName = param.split('&jobName=')[1]
         // this.$nextTick(() => {
         //     window.addEventListener('message', function(event) {
         //         //event.data获取传过来的数据
@@ -131,7 +135,9 @@ export default {
         // })
 
         //父组件传进来的值
-        this.datasource.jobName = this.jobName
+        console.log(this.projectId, this.jobName)
+        this.datasource.jobName = decodeURI(this.jobName)
+        this.datasource.projectId = this.projectId
         this.datasource.refreshData(this)
     },
     watch: {

@@ -54,7 +54,7 @@ export default class CodeditorComponent extends Component {
 	@action
 	registerListenerIframe(element) {
 		element.allData = this.calAllData
-		this.iframeURL = this.iframeURL + "?jobName=" + element.allData.jobName
+		this.iframeURL = this.iframeURL + "?projectId=" + element.allData.projectId + "&jobName=" + element.allData.jobName
 		// let iframe = document.getElementById('mainIframe')
 		// iframe.contentWindow.postMessage(element.allData.jobName, '*')
 	}

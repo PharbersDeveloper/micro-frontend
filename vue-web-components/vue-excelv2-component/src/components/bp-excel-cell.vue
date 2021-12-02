@@ -51,18 +51,10 @@ export default {
             default: "Number"
         }
     },
-    beforeMount() {
-
-    },
-    mounted() {
-
-    },
-    methods: {
-
-    },
-    watch: {
-
-    }
+    beforeMount() {},
+    mounted() {},
+    methods: {},
+    watch: {}
 };
 </script>
 <style lang="scss" scoped>
