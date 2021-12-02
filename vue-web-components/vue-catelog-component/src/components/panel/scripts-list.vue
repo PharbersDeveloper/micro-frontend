@@ -131,8 +131,8 @@
                                 <img :src="dataset_icon" alt="">
                             </span>
                             <div class="show-name" v-if="reciptcheckedIds.length == 1">
-                                <p class="project_name_info" :title="datasetcheckedNames[0]">
-                                {{datasetcheckedNames[0]}}
+                                <p class="project_name_info" :title="reciptcheckedNames[0]">
+                                {{reciptcheckedNames[0]}}
                                 </p>
                             </div>
                            <div class="show-name">
@@ -142,7 +142,7 @@
                            </div>
                         </div>
                         <div class="view_func">
-                            <span @click="createTagsOpen" class="view_list">
+                            <span @click="edit" class="view_list" v-if="this.reciptcheckedIds.length == 1">
                                 <img class='tags_imgs_tag' :src="edit_icon" alt="">
                                 <span class='tags_func'>编辑</span>
                             </span>
@@ -187,7 +187,7 @@
         <clear-delete 
             v-if="deletedialogshow" 
             :reciptcheckedIds="reciptcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
+            :datasetcheckedNames="reciptcheckedNames"
             @deleteDatasetsEvent="deleteDataset"
             @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
@@ -195,7 +195,7 @@
         <create-tags-dialog 
             v-if="showCreateTagsDialog"
             :reciptcheckedIds="reciptcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
+            :datasetcheckedNames="reciptcheckedNames"
             :datasets="allData.dcs"
             :tagsArray="allData.tagsArray"
             :tagsColorArray="tagsColorArray"
@@ -265,7 +265,7 @@ export default {
             scriptValue: "名称",
             isCheckedAllDataset: false,
             reciptcheckedIds: [], //选中项id
-            datasetcheckedNames: [], //选中项name
+            reciptcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             options: [{
@@ -277,7 +277,6 @@ export default {
             }],
             value: '',
             dialogVisible: false,
-            reciptcheckedIds: [],
             runtime: ""
         }
     },
@@ -380,7 +379,7 @@ export default {
             let idIndex = this.reciptcheckedIds.indexOf(recipt.id)
             if(idIndex >= 0) {
                 this.reciptcheckedIds.splice(idIndex, 1)
-                this.datasetcheckedNames.splice(idIndex, 1)
+                this.reciptcheckedNames.splice(idIndex, 1)
             } else {
                 this.reciptcheckedIds.push(recipt.id)
                 this.reciptcheckedNames.push(recipt.name)
@@ -408,12 +407,12 @@ export default {
                 this.isCheckedAllDataset = false
             }
             this.reciptcheckedIds = []
-            this.datasetcheckedNames = []
+            this.reciptcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
                 this.allData.dcs.forEach(item => {
                     this.reciptcheckedIds.push(item.id)
-                    this.datasetcheckedNames.push(item.name)
+                    this.reciptcheckedNames.push(item.name)
                 })
             }
         },
@@ -452,6 +451,23 @@ export default {
         //关闭tag删除弹框
         closeDeleteTags() {
             this.deleteTagsDia = false;
+        },
+        //编辑脚本
+        edit() {
+            let tid = this.reciptcheckedIds[0]
+            let recipt = this.allData.dcs.filter(it => it.id == tid)
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "codeditor",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    recipt: recipt[0]
+                }
+            }
+            this.$emit('event', event)
         },
         //打开tag添加弹框
         createTagsOpen() {

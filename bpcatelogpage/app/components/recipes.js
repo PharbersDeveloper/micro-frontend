@@ -145,6 +145,7 @@ export default class RecipesComponent extends Component {
 					window.location.reload()
 				})
 			break
+			//删除脚本
 			case "deleteDatasets":
 				let delTagParam = e.detail[0].args.param;
 				let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
@@ -166,7 +167,8 @@ export default class RecipesComponent extends Component {
 							"message": JSON.stringify({
 								"version": "",
 								"dsid": targetDataset.id,
-								"destination": targetDataset.name,
+								// "destination": targetDataset.name,
+								"table": "dagconf",
 								"opname": this.cookies.read( "account_id" ),
 								"opgroup": this.cookies.read( "company_id" )
 							}),
