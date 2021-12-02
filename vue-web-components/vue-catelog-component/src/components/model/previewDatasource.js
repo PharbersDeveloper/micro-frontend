@@ -85,7 +85,7 @@ export default class PhExcelPreviewSource {
                     Array(length).fill(118)
                 )
                 ele.datasource.data = datas.data
-                ele.schemaIsReady++
+                ele.dataRefresh++
             })
     }
 

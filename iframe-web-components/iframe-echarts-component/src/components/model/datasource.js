@@ -135,8 +135,8 @@ export default class PhDagDatasource {
             const cur_level = levelGroupBy[idx]
             for (var iter = 0; iter < cur_level.length; ++iter) {
                 anchor_y = anchor_y + parseInt(iter) * LEVEL_VER_STEP
-                cur_level[iter]['x'] = anchor_x
-                cur_level[iter]['y'] = anchor_y
+                cur_level[iter]['x'] = Math.floor(anchor_x)
+                cur_level[iter]['y'] = Math.floor(anchor_y)
                 ele.datasource.nodes.push(cur_level[iter])
             }
             const base_anchor_y_arr = levelGroupBy[idx].map(x => parseInt(x['y']))

@@ -150,19 +150,19 @@
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span @click="clearDialogOpen" class="view_list">
+                            <span class="view_list">
                                 <img class='tags_imgs_tag' :src="run_icon" alt="">
                                 <span class='tags_func'>开始</span>
                             </span>
-                            <span @click="clearDialogOpen" class="view_list">
+                            <span class="view_list">
                                 <img class='tags_imgs_tag' :src="star_icon" alt="">
                                 <span class='tags_func'>收藏</span>
                             </span>
-                            <span  @click='deletedialogopen' class="view_list">
+                            <span class="view_list">
                                 <img class='tags_imgs_tag' :src="copy_icon" alt="">
                                 <span class='tags_func'>复制</span>
                             </span>
-                             <span @click="createTagsOpen" class="view_list">
+                             <span class="view_list">
                                 <img class='tags_imgs_tag' :src="hide_icon" alt="">
                                 <span class='tags_func'>隐藏</span>
                             </span>
@@ -217,7 +217,7 @@
 
 <script>
 import clearReciptDialog from './clear-dataset-dialog.vue'
-import clearDelete from './delete-dialog.vue'
+import clearDelete from './delete-dialog-script.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import createScriptsDialog from './create-scripts-dialog.vue'

@@ -264,6 +264,7 @@ export default class RecipesComponent extends Component {
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
+			window.location.reload()
 		} else {
 			alert("新建脚本失败，请重新操作！")
 		}
