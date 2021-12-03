@@ -2,6 +2,7 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class DagConfModel extends Model {
 	@attr("string") flowVersion
+	@attr("string") jobPath
 	@attr("string") jobName
 	@attr("string") version
 	@attr("string") dagName

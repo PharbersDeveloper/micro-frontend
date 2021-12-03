@@ -28,6 +28,9 @@ export default class CodeditorRoute extends Route {
 		},
 		jobName: {
 			refreshModel: true
+		},
+		jobPath: {
+			refreshModel: true
 		}
     }
 	async model(params) {
@@ -76,6 +79,7 @@ export default class CodeditorRoute extends Route {
 			dss: tmp.filter(it => it),
 			tagsArray: [],
 			jobName: params.jobName,
+			jobPath: params.jobPath,
 			_isVue: true
 		} )
 	}

@@ -114,15 +114,19 @@ export default {
             icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
             icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
             jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",
-            projectId: "JfSmQBYUpyb4jsei"
+            projectId: "JfSmQBYUpyb4jsei",
+            jobPath: "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
         }
     },
     mounted() {
         let href = window.location.href
         console.log(href)
-        let param = href.split("?projectId=")[1]
-        this.projectId = param.split("&jobName=")[0]
-        this.jobName = param.split('&jobName=')[1]
+        let paramArr = href.split("?")[1].split("&")
+        this.projectId = paramArr[0].split("=")[1]
+        this.jobName = paramArr[1].split("=")[1]
+        let jobPathParam = paramArr[2].split("=")[1]
+        this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
+        this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
         // this.$nextTick(() => {
         //     window.addEventListener('message', function(event) {
         //         //event.data获取传过来的数据
@@ -135,28 +139,57 @@ export default {
         // })
 
         //父组件传进来的值
-        console.log(this.projectId, this.jobName)
+        console.log(this.projectId, this.jobName, this.jobPath, this.file_name)
+        console.log(this.datasource.adapter, this.datasource.defaultAdapter)
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
+        this.datasource.adapter.codeKey = this.jobPath
+        this.datasource.adapter.file_name = this.file_name
         this.datasource.refreshData(this)
     },
     watch: {
-        downloadCode(n, o) {
-            var params = {
-                Bucket: this.datasource.bucket,
-                Key: this.datasource.codeKey + "phjob.py"
-            };
-            console.log(this.datasource.codeKey)
-            let that = this
-            this.s3.getObject(params, function(err, data) {
-                if (err) console.log(err, err.stack); // an error occurred
-                else {
-                    that.codeBuffer = String.fromCharCode(...data.Body)
-                }
-            });
+        async downloadCode(n, o) {
+            let data = await this.queryData()
+            console.log(data, decodeURI(data.message.data))
+            this.codeBuffer = decodeURI(data.message.data)
+            // var params = {
+            //     Bucket: this.datasource.bucket,
+            //     Key: this.datasource.codeKey + "phjob.py"
+            // };
+            // console.log(this.datasource.codeKey)
+            // let that = this
+            // this.s3.getObject(params, function(err, data) {
+            //     if (err) console.log(err, err.stack); // an error occurred
+            //     else {
+            //         that.codeBuffer = String.fromCharCode(...data.Body)
+            //         console.log("String.fromCharCode(...data.Body)", String.fromCharCode(...data.Body))
+            //     }
+            // });
         }
     },
     methods: {
+        async queryData() {
+            let url = "https://api.pharbers.com/phdadataquery"
+            const accessToken = this.getCookie("access_token") || this.debugToken
+            let body = {
+                "bucket": "ph-platform",
+                "key": this.datasource.codeKey,
+                "file_name": this.datasource.file_name
+            }
+
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            let result = await fetch(url, options).then(res => res.json())
+            console.log(result)
+            return result
+        },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
@@ -164,23 +197,45 @@ export default {
             else
                 return null;
         },
-        saveCode() {
-            var params = {
-                Body: this.$refs.codeditor.editor.getValue(),
-                Bucket: this.datasource.bucket,
-                Key: this.datasource.codeKey + "phjob.py"
+        async saveCode() {
+            // var params = {
+            //     Body: this.$refs.codeditor.editor.getValue(),
+            //     Bucket: this.datasource.bucket,
+            //     Key: this.datasource.codeKey + "phjob.py"
+            // }
+            // console.log(this.datasource.codeKey)
+            // console.log(this.$refs.codeditor.editor.getValue())
+            // let that = this
+            // this.s3.putObject(params, function(err, data) {
+            //     if (err) console.log(err, err.stack); // an error occurred
+            //     else {
+            //         console.log(data);
+            //         that.downloadCode++
+            //     }
+            // });
+            let url = "https://api.pharbers.com/phdadataupdata"
+            const accessToken = this.getCookie("access_token") || this.debugToken
+            let body = {
+                "bucket": "ph-platform",
+                "key": this.datasource.codeKey,
+                "file_name": this.datasource.file_name,
+                "bucket": "ph-platform",
+                "data": encodeURI(this.$refs.codeditor.editor.getValue()),
+                "timespan": new Date().getTime()
             }
-
-            console.log(this.datasource.codeKey)
-            console.log(this.$refs.codeditor.editor.getValue())
-            let that = this
-            this.s3.putObject(params, function(err, data) {
-                if (err) console.log(err, err.stack); // an error occurred
-                else {
-                    console.log(data);
-                    that.downloadCode++
-                }
-            });
+            console.log("body", body)
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            let result = await fetch(url, options).then(res => res.json())
+            console.log(result)
+            this.downloadCode++
         }
     }
 }

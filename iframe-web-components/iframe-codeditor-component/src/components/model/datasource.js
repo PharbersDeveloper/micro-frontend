@@ -26,6 +26,7 @@ export default class PhCodeditorDatasource {
         this.bucket = "ph-platform"
         this.codeKey =
             "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
+        this.file_name = "phjob.py"
     }
 
     buildQuery(ele, isAppend=false) {
@@ -59,6 +60,7 @@ export default class PhCodeditorDatasource {
         ele.datasource.buildQuery(ele)
             .then((response) => response.json())
             .then((response) => {
+                console.log("ele.datasource.adapter()", response.data[0])
                 ele.datasource.adapter(response.data[0])
                 ele.downloadCode++
             })

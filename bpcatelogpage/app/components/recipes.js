@@ -32,7 +32,8 @@ export default class RecipesComponent extends Component {
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name === "codeditor") {
-					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName
+					debugger
+					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
 				} else if (params.name == "flow") {
 					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
@@ -271,8 +272,10 @@ export default class RecipesComponent extends Component {
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
-			let jobName = JSON.parse(this.creatScriptsQuery.data.attributes.message).jobName
-			this.router.transitionTo(`/codeditor?projectName=${this.projectName}&projectId=${this.projectId}&jobName=${jobName}`)
+			let message = JSON.parse(response.data[0].attributes.message)
+			let jobName = message.cnotification.jobName
+			let jobPath = message.cnotification.jobPath
+			this.router.transitionTo(`/codeditor?projectName=${this.projectName}&projectId=${this.projectId}&jobName=${jobName}&jobPath=${jobPath}`)
 		} else {
 			alert("新建脚本失败，请重新操作！")
 		}

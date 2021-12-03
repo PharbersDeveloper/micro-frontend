@@ -278,7 +278,6 @@ export default {
             this.allData.tagsArray.forEach((item, index) => {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
-            console.log("colorArr", this.tagsColorArray)
         }
     },
     methods: {
