@@ -11,6 +11,9 @@ export default class RecipesComponent extends Component {
     @service noticeService;
 	@service ajax
 	@tracked firstRegister = true
+	@tracked creatScriptsQuery = null
+	@tracked projectId
+	@tracked projectName
 
 	@action
 	async listener(e) {
@@ -43,6 +46,8 @@ export default class RecipesComponent extends Component {
 				this.loadingService.loading.style.display = 'flex'
         		this.loadingService.loading.style['z-index'] = 2
 				//需要新建dataset
+				this.projectId = scriptsParams.projectId
+				this.projectName = scriptsParams.projectName
 				if(scriptsParams.outputs[0].id == "") {
 					let body = {
 						"table": "dataset",
@@ -104,8 +109,8 @@ export default class RecipesComponent extends Component {
 					},
 					body: JSON.stringify(scriptBody)
 				}
-				let creatScriptsQuery = await fetch(url, scriptOptions).then(res => res.json())
-				this.noticeService.register("notification", creatScriptsQuery.data.id, this.createScriptNoticeCallback, this, scriptsParams.projectId)
+				this.creatScriptsQuery = await fetch(url, scriptOptions).then(res => res.json())
+				this.noticeService.register("notification", this.creatScriptsQuery.data.id, this.createScriptNoticeCallback, this, scriptsParams.projectId)
 				break
 			case "addTags":
 				let that = this
@@ -266,7 +271,8 @@ export default class RecipesComponent extends Component {
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
-			window.location.reload()
+			let jobName = JSON.parse(this.creatScriptsQuery.data.attributes.message).jobName
+			this.router.transitionTo(`/codeditor?projectName=${this.projectName}&projectId=${this.projectId}&jobName=${jobName}`)
 		} else {
 			alert("新建脚本失败，请重新操作！")
 		}
