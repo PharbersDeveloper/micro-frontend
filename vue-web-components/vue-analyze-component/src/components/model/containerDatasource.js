@@ -221,6 +221,7 @@ export default class PhContainerDataSource {
             .then((response) => response.json())
             .then((response) => {
                 console.log(response)
+                window.open(response.message)
             })
     }
 
@@ -265,13 +266,14 @@ export default class PhContainerDataSource {
             // sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
             return sql_str
         }
-        const url = this.url
+        const url = "https://api.pharbers.com/phdadownload"
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
-            "query": buildDownloadQueryString(),
+            "sql": buildDownloadQueryString(),
             "schema": schema,
             "category": cat,
-            "file_name": fileName
+            "file_name": fileName,
+            "project": "max"
         }
         let options = {
             method: "POST",

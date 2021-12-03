@@ -2,9 +2,9 @@
     <div class="ec-container">
         <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="header">
-			<span class="project_name" @click="linkToPage('project')">
-				{{allData.projectName}}
-			</span>
+            <span class="project_name" @click="linkToPage('project')">
+                {{allData.projectName}}
+            </span>
             <div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
                 <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
             </div>
@@ -50,8 +50,8 @@
         </div>
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
-				v-on:countIsReady="totalCountIsReady"
-				:datasource="datasource" :schema="schema" class="excel" />
+                v-on:countIsReady="totalCountIsReady"
+                :datasource="datasource" :schema="schema" class="excel" />
         </div>
         <el-dialog
                 title="显示行"
@@ -77,9 +77,9 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-				<el-button @click="on_clickVersionFilterCancel">取消</el-button>
-				<el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
-			</span>
+                <el-button @click="on_clickVersionFilterCancel">取消</el-button>
+                <el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
+            </span>
         </el-dialog>
         <el-dialog
                 title="显示列"
@@ -106,9 +106,9 @@
             </div>
 
             <span slot="footer" class="dialog-footer">
-				<el-button @click="on_clickCollectionCancel">取消</el-button>
-				<el-button type="primary" @click="on_clickCollectionConfirm">确认</el-button>
-			</span>
+                <el-button @click="on_clickCollectionCancel">取消</el-button>
+                <el-button type="primary" @click="on_clickCollectionConfirm">确认</el-button>
+            </span>
         </el-dialog>
         <el-dialog
                 title="排序列"
@@ -134,19 +134,19 @@
                 </div>
                 <div class="dlg-sort-candi-container">
                     <div class="dlg-sort-candi-items dlg-panel-left">
-						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.shownCollections"
+                        <span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.shownCollections"
                               :label="col" :key="'candi' + col" @click="on_clickSortShownCandi(col)">{{col}}</span>
                     </div>
                     <div class="dlg-sort-candi-items dlg-panel-right">
-						<span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.sortCollections"
+                        <span class="dlg-sort-candi-item" v-for="col in collectionsPolicy.sortCollections"
                               :label="col" :key="'select' + col" @click="on_clickSortSelectCandi(col)">{{col}}</span>
                     </div>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-				<el-button @click="on_clickSortCancel">取消</el-button>
-				<el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
-			</span>
+                <el-button @click="on_clickSortCancel">取消</el-button>
+                <el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
+            </span>
         </el-dialog>
 
         <el-dialog
@@ -172,9 +172,9 @@
                 </table>
             </div>
             <span slot="footer" class="dialog-footer">
-				<el-button @click="on_clickDownloadConfirm">取消</el-button>
-				<el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
-			</span>
+                <el-button @click="on_clickDownloadConfirm">取消</el-button>
+                <el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -409,6 +409,7 @@ export default {
         on_clickDownloadCancel() {
             this.dialogDownloadVisible = false
         },
+        //下载
         on_clickDownloadConfirm() {
             this.dialogDownloadVisible = false
             const downloadName = this.$refs.nameRef.value
