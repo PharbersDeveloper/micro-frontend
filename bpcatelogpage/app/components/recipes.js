@@ -32,7 +32,6 @@ export default class RecipesComponent extends Component {
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name === "codeditor") {
-					debugger
 					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
 				} else if (params.name == "flow") {
 					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId

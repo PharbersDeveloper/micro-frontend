@@ -129,6 +129,7 @@ export default {
                 wrap: true,
                 setShowPrintMargin: false
             })
+            document.domain = "pharbers.com"
             // 设置值改变监听
             this.editor.on('change', () => {
                 this.$emit('change', this.editor.getValue())
