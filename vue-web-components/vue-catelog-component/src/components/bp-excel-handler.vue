@@ -16,11 +16,11 @@
             </div>
             <div class="eh-preview">
                 <bp-excel ref="excel" viewHeight="25vh"
-					:isNeedPopmenu="false"
-					v-on:countIsReady="totalCountIsReady"
-					:datasource="excelDatasource"
-					:schema="excelSchema"
-					class="excel" />
+                    :isNeedPopmenu="false"
+                    v-on:countIsReady="totalCountIsReady"
+                    :datasource="excelDatasource"
+                    :schema="excelSchema"
+                    class="excel" />
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -173,8 +173,11 @@ export default {
             this.$emit('event', event)
         },
         skipFirstLine(data) {
+            if(this.firstSkipValue == '') {
+                this.firstSkipValue = 0
+            }
             let legalInput = this.inputNumInteger(this.firstSkipValue)
-            if(legalInput) {
+            if(legalInput || this.firstSkipValue === 0) {
                 this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
                 this.excelDatasource.sheet = this.sheet
                 this.dataProxy.refreshData(this.$refs.excel)
@@ -185,8 +188,11 @@ export default {
             }
         },
         skipNextLine(data) {
+            if(this.nextSkipValue == '') {
+                this.nextSkipValue = 0
+            }
             let legalInput = this.inputNumInteger(this.nextSkipValue)
-            if(legalInput) {
+            if(legalInput || this.nextSkipValue === 0) {
                 this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
                 this.excelDatasource.sheet = this.sheet
                 // this.excelDatasource.refreshData(this.$refs.excel)
@@ -210,7 +216,7 @@ export default {
             if (r.test(value)) {
                 return value
             } else {
-                value = 0
+                value = ''
                 alert("请输入一个正整数")
                 return false;
             }
@@ -323,16 +329,16 @@ export default {
             text-align: right;
             line-height: 14px;
         }
-		.eh-preview {
-			width: 100%;
-			overflow: auto;
-			.excel {
-				display: inline-grid;
-				margin: 10px;
-				overflow: auto;
-				width: 98%;
-			}
-		}
+        .eh-preview {
+            width: 100%;
+            overflow: auto;
+            .excel {
+                display: inline-grid;
+                margin: 10px;
+                overflow: auto;
+                width: 98%;
+            }
+        }
         .eh-control-panel {
             display: flex;
             flex-direction: column;
