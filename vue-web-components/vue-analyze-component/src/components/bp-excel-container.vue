@@ -339,6 +339,7 @@ export default {
         // 显示行确认
         on_clickVersionFilterConfirm() {
             this.searchRow = ""
+            this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates
             this.dialogVersionFilterVisible = false
             const condi = this.versionFilterPolicy.selectVersionTags
             if(condi.length > 0) {
@@ -444,7 +445,7 @@ export default {
                 // that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
                 that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((provinces) => {
                     //完整的显示行列表数据
-                    this.versionCandidatesShow = provinces
+                    that.versionCandidatesShow = provinces
                     that.versionFilterPolicy.versionCandidates = provinces
                 })
             }
