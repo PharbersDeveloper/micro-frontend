@@ -146,19 +146,19 @@
                                 <img class='tags_imgs_tag' :src="edit_icon" alt="">
                                 <span class='tags_func'>编辑</span>
                             </span>
-                             <span @click="createTagsOpen" class="view_list">
+							<span @click="createTagsOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span class="view_list">
+                            <span class="view_list" v-if="this.reciptcheckedIds.length == 1">
                                 <img class='tags_imgs_tag' :src="run_icon" alt="">
-                                <span class='tags_func'>开始</span>
+                                <span class='tags_func'>运行</span>
                             </span>
                             <span class="view_list">
                                 <img class='tags_imgs_tag' :src="star_icon" alt="">
                                 <span class='tags_func'>收藏</span>
                             </span>
-                            <span class="view_list">
+                            <span class="view_list" v-if="this.reciptcheckedIds.length == 1">
                                 <img class='tags_imgs_tag' :src="copy_icon" alt="">
                                 <span class='tags_func'>复制</span>
                             </span>

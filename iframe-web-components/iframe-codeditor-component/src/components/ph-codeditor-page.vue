@@ -127,44 +127,17 @@ export default {
         let jobPathParam = paramArr[2].split("=")[1]
         this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
         this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
-        // this.$nextTick(() => {
-        //     window.addEventListener('message', function(event) {
-        //         //event.data获取传过来的数据
-        //         console.log(event.data)
-        //     })
-        //     // 通知父组件准备好接收消息
-        //     window.parent.postMessage({
-        //         cmd: 'ready-for-receiving'
-        //     }, '*')
-        // })
-
         //父组件传进来的值
-        console.log(this.projectId, this.jobName, this.jobPath, this.file_name)
-        console.log(this.datasource.adapter, this.datasource.defaultAdapter)
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
-        this.datasource.adapter.codeKey = this.jobPath
-        this.datasource.adapter.file_name = this.file_name
+        this.datasource.codeKey = this.jobPath
+        this.datasource.file_name = this.file_name
         this.datasource.refreshData(this)
     },
     watch: {
         async downloadCode(n, o) {
             let data = await this.queryData()
-            console.log(data, decodeURI(data.message.data))
             this.codeBuffer = decodeURI(data.message.data)
-            // var params = {
-            //     Bucket: this.datasource.bucket,
-            //     Key: this.datasource.codeKey + "phjob.py"
-            // };
-            // console.log(this.datasource.codeKey)
-            // let that = this
-            // this.s3.getObject(params, function(err, data) {
-            //     if (err) console.log(err, err.stack); // an error occurred
-            //     else {
-            //         that.codeBuffer = String.fromCharCode(...data.Body)
-            //         console.log("String.fromCharCode(...data.Body)", String.fromCharCode(...data.Body))
-            //     }
-            // });
         }
     },
     methods: {
@@ -176,7 +149,6 @@ export default {
                 "key": this.datasource.codeKey,
                 "file_name": this.datasource.file_name
             }
-
             let options = {
                 method: "POST",
                 headers: {
@@ -187,7 +159,6 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
-            console.log(result)
             return result
         },
         getCookie(name) {
@@ -198,21 +169,6 @@ export default {
                 return null;
         },
         async saveCode() {
-            // var params = {
-            //     Body: this.$refs.codeditor.editor.getValue(),
-            //     Bucket: this.datasource.bucket,
-            //     Key: this.datasource.codeKey + "phjob.py"
-            // }
-            // console.log(this.datasource.codeKey)
-            // console.log(this.$refs.codeditor.editor.getValue())
-            // let that = this
-            // this.s3.putObject(params, function(err, data) {
-            //     if (err) console.log(err, err.stack); // an error occurred
-            //     else {
-            //         console.log(data);
-            //         that.downloadCode++
-            //     }
-            // });
             let url = "https://api.pharbers.com/phdadataupdata"
             const accessToken = this.getCookie("access_token") || this.debugToken
             let body = {
@@ -223,7 +179,6 @@ export default {
                 "data": encodeURI(this.$refs.codeditor.editor.getValue()),
                 "timespan": new Date().getTime()
             }
-            console.log("body", body)
             let options = {
                 method: "POST",
                 headers: {
@@ -234,7 +189,6 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
-            console.log(result)
             this.downloadCode++
         }
     }
