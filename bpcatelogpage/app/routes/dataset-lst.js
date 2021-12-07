@@ -25,6 +25,9 @@ export default class DatasetLstRoute extends Route {
 		},
 		projectId: {
 			refreshModel: true
+		},
+		uploadType: {
+			refreshModel: true
 		}
     }
 	async model(params) {
@@ -66,6 +69,7 @@ export default class DatasetLstRoute extends Route {
 		return RSVP.hash( {
 			projectName: params.projectName,
 			projectId: params.projectId,
+			uploadType: params.uploadType,
 			dss: tmp.filter(it => it),
 			tagsArray: [],
 			_isVue: true

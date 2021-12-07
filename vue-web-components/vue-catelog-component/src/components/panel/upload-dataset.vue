@@ -48,6 +48,9 @@
                             <div>
                                 <p @click="upload">本地上传</p>
                             </div>
+                            <div>
+                                <p @click="s3Upload">s3上传</p>
+                            </div>
                         </div>
                         </div>
 
@@ -508,14 +511,30 @@ export default {
                 this.labelShowDialog = false
             }
         },
-        //上传文件按钮
+        //本地上传文件
         upload() {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "localUpload",
+                    name: "upload",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    type: "localUpload"
+                }
+            }
+            this.$emit('event', event)
+        },
+        //s3上传文件
+        s3Upload() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "upload",
+                    type: "s3Upload",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId
                 }

@@ -1,11 +1,8 @@
 <template>
     <div class="upload-dataset">
-        <div class="upload_dataset_container">
-            <!-- <div class="project_name_header">
-                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
-            </div> -->
+        <div class="upload_dataset_container" v-if="allData.uploadType == 'localUpload'">
             <div class="project_name_header">
-                <p class="project_name new_upload">新上传文件</p>
+                <p class="project_name new_upload">本地上传文件</p>
             </div>
             <div class="upload_file_area">
                 
@@ -27,6 +24,36 @@
             </div>
             
         </div>
+        <div class="upload_dataset_container" v-if="allData.uploadType == 's3Upload'">
+            <div class="project_name_header">
+                <p class="project_name new_upload">S3上传文件</p>
+            </div>
+            <div class="upload_file_area s3_upload_file_area">
+                <div class="upload_area s3_upload_area">
+                    <div>
+                        <div class="item">
+                            <span>上传至:</span>
+                            <input type="text" placeholder="本集群" disabled>
+                        </div>
+                        <div class="item">
+                            <span>文件路径:</span>
+                            <input type="text" placeholder="" v-model="filePath" class="filepath">
+                        </div>
+                        <div class="item">
+                            <span class="title">格式:</span>
+                            <select name="format" id="" v-model="formatValue">
+                                <option value="xlsx">xlsx</option>
+                                <option value="parquet">parquet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="s3next_area">
+                        <button class="s3next" @click="on_click_s3_upload">下一步</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
         <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent" :datasetArr="allData.datasetArr"></next-dialog>
     </div>
 </template>
@@ -41,7 +68,9 @@ export default {
         return {
             show: false,
             fileList: [],
-            selectParam: "本集群"
+            selectParam: "本集群",
+            filePath: '',
+            formatValue: 'xlsx'
         }
     },
     components: {
@@ -55,6 +84,7 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 projectId: '',
+                uploadType: 's3Upload',
                 datasetArr: []
             })
         },
@@ -79,6 +109,12 @@ export default {
         },
         upload() {
             this.$refs.file.click()
+        },
+        on_click_s3_upload() {
+            debugger
+            
+            this.show = true
+
         },
         uploadFiles() {
             console.log(this.$refs.file.files[0])
@@ -143,6 +179,49 @@ export default {
         height: calc(100vh - 110px);
         background: #f7f7f7;
         padding-top: 50px;
+        .s3_upload_area {
+            padding: 30px;
+            height: 270px !important;
+            display: flex;
+            flex-direction: column;
+            .s3next_area {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                .s3next {
+                    width: 82px;
+                    height: 32px;
+                    background: #7163C5;
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    color: #FFFFFF;
+                    font-weight: 600;
+                    border-radius: 4px;
+                    line-height: 32px;
+                    text-align: center;
+                    cursor: pointer;
+                    border: none;
+                }
+            }
+            .item {
+                display: flex;
+                height: 60px;
+                span {
+                    display: block;
+                    min-width: 100px;
+                    text-align: right;
+                    padding-right: 20px;
+                }
+                .filepath {
+                    width: 800px
+                }
+            }
+            input, select {
+                padding-left: 20px;
+                width: 160px;
+                height: 24px;
+            }
+        }
         .file_content_area {
             display: flex;
             position: relative;
