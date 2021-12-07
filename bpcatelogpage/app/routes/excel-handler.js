@@ -3,6 +3,8 @@ import RSVP from 'rsvp';
 import { inject as service } from '@ember/service';
 export default class ExcelHandlerRoute extends Route {
 	@service('loading') loadingService;
+    @service browserEventsService;
+
 	queryParams = {
 		projectName: {
 			refreshModel: true
@@ -23,6 +25,11 @@ export default class ExcelHandlerRoute extends Route {
 			refreshModel: true
 		}
     }
+	beforeModel( params ) {
+		this._super( ...arguments )
+		this.browserEventsService.clearListener()
+		this.browserEventsService.registerListener('dataset-lst')
+	}
 	async model(params) {
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){

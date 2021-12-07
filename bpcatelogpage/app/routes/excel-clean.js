@@ -5,6 +5,8 @@ import { inject as service } from '@ember/service';
 
 export default class ExcelCleanRoute extends Route {
     @service('loading') loadingService;
+    @service browserEventsService;
+
 	queryParams = {
 		projectName: {
 			refreshModel: true
@@ -16,6 +18,13 @@ export default class ExcelCleanRoute extends Route {
 			refreshModel: true
 		}
     }
+
+	beforeModel( params ) {
+		this._super( ...arguments )
+		this.browserEventsService.clearListener()
+		this.browserEventsService.registerListener('dataset-lst')
+	}
+	
 	async model(params) {
 		this.afterModel = function() {
             if(this.loadingService.afterLoading){

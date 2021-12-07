@@ -111,11 +111,10 @@
             </span>
         </el-dialog>
         <el-dialog
-                title="排序列"
-                :visible.sync="dialogSortVisible"
-                @close="on_clickSortCancel"
-                width="30%">
-
+            title="排序列"
+            :visible.sync="dialogSortVisible"
+            @close="on_clickSortCancel"
+            width="30%">
             <div class="dlg-sort-container">
                 <div class="dlg-sort-nav">
                     <div class="dlg-sort-nav-left">
@@ -150,11 +149,10 @@
         </el-dialog>
 
         <el-dialog
-                title="下载"
-                :visible.sync="dialogDownloadVisible"
-                @close="on_clickDownloadCancel"
-                width="600px">
-
+            title="下载"
+            :visible.sync="dialogDownloadVisible"
+            @close="on_clickDownloadCancel"
+            width="600px">
             <div class="dlg-download-container">
                 <table border="0">
                     <tr class="first">
@@ -330,7 +328,7 @@ export default {
         showSelectOption() {
             this.showSelectOptionParam = true
         },
-        //显示行取消
+        // 显示行取消
         on_clickVersionFilterCancel() {
             this.dialogVersionFilterVisible = false
             this.searchRow = ""
