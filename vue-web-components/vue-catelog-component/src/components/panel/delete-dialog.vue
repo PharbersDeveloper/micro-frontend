@@ -7,8 +7,12 @@
                    <p class="clear_data">删除数据集</p>
                </div>
                 <div class="prompt">
-                   <p class="tip">确定删除以下数据集吗?</p>
-                   <p class="name" v-for="(item,index) in datasetcheckedNames" :key="index+'dataset'">{{item}}</p>
+                   	<p class="tip">删除这些项将会有以下影响:</p>
+				   	<div class="item" v-for="(item,index) in datasetRelaResult" :key="index+'dataset'">
+						<span>删除脚本 </span>
+						<span class="jobname"> {{item.jobName}}</span>
+						<span class="jobtype"> ({{item.type}})</span>
+				   	</div>
                </div>
                <div class="btn">
                    <button class="clear" @click="deleteDatasets">删除</button>
@@ -28,7 +32,8 @@ export default {
     },
     props: {
         datasetcheckedIds: Array,
-        datasetcheckedNames: Array
+        datasetcheckedNames: Array,
+        datasetRelaResult: Array
     },
     methods: {
         close() {
@@ -41,7 +46,8 @@ export default {
                 element: this,
                 param: {
                     name: "deleteDatasets",
-                    selectedTags: this.selectedTags
+                    selectedTags: this.selectedTags,
+                    datasetRelaResult: this.datasetRelaResult
                 }
             }
             this.$emit('deleteDatasetsEvent', event)
@@ -103,26 +109,33 @@ export default {
    
 }
 .prompt {
-    // height: 278px;
     margin-top: 20px;
-    // line-height: 180px;
-    text-align: center;
+	text-align: left;
+    padding-left: 20px;
     .tip {
         // text-align: center;
         font-weight: 500;
     }
+	.item {
+		display: flex;
+		flex-wrap: nowrap;
+		margin-top: 10px;
+        color: #db4d71;
+        font-size: 14px;
+		.jobname {
+			width: 230px;
+			overflow: hidden;
+			display: block;
+			text-overflow: ellipsis;
+			height: 24px;
+		}
+	}
     .round {
         display: inline-block;
         width: 5px;
         height: 5px;
         border-radius: 50%;
         background: #db4d71;
-    }
-    .name {
-        margin-top: 10px;
-        color: #db4d71;
-        font-size: 14px;
-
     }
     
 }

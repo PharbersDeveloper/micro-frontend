@@ -167,15 +167,11 @@ export default class RecipesComponent extends Component {
 							"projectId": delTagParam.projectId,
 							"code": 0,
 							"comments": "delete_dataset",
-							"jobCat": "remove_DS",
+							"jobCat": "remove_Job",
 							"jobDesc": "running",
 							"message": JSON.stringify({
-								"version": "",
-								"dsid": targetDataset.id,
-								// "destination": targetDataset.name,
-								"table": "dagconf",
-								"opname": this.cookies.read( "account_id" ),
-								"opgroup": this.cookies.read( "company_id" )
+								"targetId": targetDataset.jobId, 
+								"jobName":targetDataset.jobName
 							}),
 							"date": new Date().getTime(),
 							"owner": this.cookies.read( "account_id" ),

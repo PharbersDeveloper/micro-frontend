@@ -158,9 +158,10 @@
         </clear-dataset-dialog>
         <!-- 删除数据集 -->
         <clear-delete 
-            v-if="deletedialogshow" 
+            v-if="deletedialogshow"
             :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
+            :datasetRelaResult="datasetRelaResult"
             @deleteDatasetsEvent="deleteDataset"
             @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
@@ -300,7 +301,46 @@ export default {
             this.cleardialogshow = false;
         },
         //删除数据集
-        deleteDataset(data) {
+        async deleteDataset(data) {
+            let that = this
+            let promiseListDel = [];
+            let delRelaResults = []
+            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
+            // 是否需要删除关联关系
+            if(data.args.param.datasetRelaResult.length > 0) {
+                data.args.param.datasetRelaResult.forEach(async item => {
+                    const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+                    let body = {
+                        "table": "action",
+                        "item": {
+                            "projectId": that.allData.projectId,
+                            "code": 0,
+                            "comments": "delete_dataset",
+                            "jobCat": "remove_Job",
+                            "jobDesc": "running",
+                            "message": JSON.stringify({
+                                "targetId": item.targetId, 
+                                "jobName": item.jobName
+                            }),
+                            "date": new Date().getTime(),
+                            "owner": this.getCookie("account_id"),
+                            "showName": decodeURI(this.getCookie('user_name_show'))
+                        }
+                    }
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Authorization": accessToken,
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            "accept": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    }
+                    let result = fetch(url, options).then(res => res.json())
+                    promiseListDel.push(result)
+                })
+                await Promise.all(promiseListDel)
+            }
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
@@ -403,8 +443,46 @@ export default {
             this.deletedialogshow = false;
         },
         //打开删除数据集弹框
-        deletedialogopen() {
+        async deletedialogopen() {
+            /**
+             * 1. 先请求phcomputedeletionimpact，找到关联关系
+             * 2. 返回空数组 原来流程；不是空数组，原来流程 + 新流程
+             */
+            let that = this
+            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
+            const checkUrl = "https://apiv2.pharbers.com/phcomputedeletionimpact"
+            let query = []
+            this.datasetcheckedIds.forEach((item,index) => {
+                query.push({
+                    "id": item,
+                    "name": that.datasetcheckedNames[index],
+                    "sortVersion": "developer_"
+                })
+            })
+            let checkBody = {
+                "projectId": this.allData.projectId,
+                "type": "ds",
+                "query": query
+            }
+            let checkOptions = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(checkBody)
+            }
+            this.datasetRelaResult = await fetch(checkUrl, checkOptions).then(res => res.json())
+            //打开弹框
             this.deletedialogshow = true;
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         },
         //关闭清除数据集弹框
         closeClearDialog() {
@@ -509,7 +587,7 @@ export default {
 }
 .upload_dataset_container {
     width: 100vw;
-	height: calc(100vh - 40px);
+    height: calc(100vh - 40px);
     // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;

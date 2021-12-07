@@ -74,13 +74,13 @@ export default class DatasetLstComponent extends Component {
 			case "deleteDatasets":
 				let delTagParam = e.detail[0].args.param;
 				let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
-				let datasetArrayDel = delTagParam.datasetArray //发送请求的参数在这取
+				let datasetArrayDel = delTagParam.datasetArray //发送请求的参数
+				const accessToken = this.cookies.read( "access_token" )
 				let promiseListDel = [];
 				let _that = this
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-					const accessToken = this.cookies.read( "access_token" )
 					let body = {
 						"table": "action",
 						"item": {
@@ -116,7 +116,7 @@ export default class DatasetLstComponent extends Component {
 				let delResults = await Promise.all(promiseListDel)
 				delResults.forEach(item => {
 					if(item.data) {
-						_that.noticeService.register("notification", item.data.id, this.noticeCallback, this, delTagParam.projectId)
+						_that.noticeService.register("notification", item.data.id, this.delNoticeCallback, this, delTagParam.projectId)
 					}
 				})
 				alert("删除数据集成功！")
@@ -192,6 +192,17 @@ export default class DatasetLstComponent extends Component {
 			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
 		} else if(upload_status == "project_file_to_DS_failed") {
 			alert("清除数据失败，请重新操作！")
+		}
+		this.loadingService.loading.style.display = 'none'
+	}
+
+	@action delNoticeCallback(response, ele) {
+		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		if(upload_status == "remove_DS_succeed") {
+			//跳转下一页面
+			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
+		} else if(upload_status == "remove_DS_failed") {
+			alert("删除数据集失败，请重新操作！")
 		}
 		this.loadingService.loading.style.display = 'none'
 	}
