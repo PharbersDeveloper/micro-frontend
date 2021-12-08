@@ -164,13 +164,17 @@
                     <tr>
                         <td class="download_title">格式</td>
                         <td>
-                            <input type="text" ref="suffRef">
+                            <select name="format" id="" ref="suffRef">
+                                <option value="xlsx">xlsx</option>
+                                <option value="csv">csv</option>
+                                <option value="parquet">parquet</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="on_clickDownloadConfirm">取消</el-button>
+                <el-button @click="on_clickDownloadCancel">取消</el-button>
                 <el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
             </span>
         </el-dialog>
@@ -405,15 +409,25 @@ export default {
             }
             this.$refs.excel.dataRefresh++
         },
+        // 取消下载
         on_clickDownloadCancel() {
             this.dialogDownloadVisible = false
+            this.$refs.suffRef.value = ""
+            this.$refs.nameRef.value = ""
         },
         //下载
         on_clickDownloadConfirm() {
-            this.dialogDownloadVisible = false
             const downloadName = this.$refs.nameRef.value
             const downloadSuffix = this.$refs.suffRef.value
-            this.datasource.download2File(this, this.schema.schema, downloadSuffix, downloadName)
+            if(downloadName != "" && downloadSuffix != "") {
+                this.datasource.download2File(this, this.schema.schema, downloadSuffix, downloadName)
+                this.dialogDownloadVisible = false
+            } else {
+                alert("文件名不能为空！")
+                this.dialogDownloadVisible = true
+            }
+            this.$refs.suffRef.value = ""
+            this.$refs.nameRef.value = ""
         },
         searchRowInput(data) {
             this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates.filter(it => it.indexOf(data) > -1)
@@ -821,7 +835,7 @@ export default {
         justify-content: space-around;
         table {
             height: 100px;
-            input {
+            input,select {
                 width: 230px;
                 height: 24px;
                 border: 1px solid #979797;
