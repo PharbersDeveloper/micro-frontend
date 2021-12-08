@@ -12,6 +12,9 @@ export default class DatasetRoute extends Route {
 		},
 		projectId: {
 			refreshModel: true
+		},
+		uploadType: {
+			refreshModel: true
 		}
     }
 
@@ -30,6 +33,7 @@ export default class DatasetRoute extends Route {
 		return RSVP.hash( {
 			projectName: params.projectName,
 			projectId: params.projectId,
+			uploadType: params.uploadType,
 			datasetArr: datasets.filter(it => it.id != ''),
 			_isVue: true
 		} )

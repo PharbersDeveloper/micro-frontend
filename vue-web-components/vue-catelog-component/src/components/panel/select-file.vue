@@ -70,7 +70,8 @@ export default {
             fileList: [],
             selectParam: "本集群",
             filePath: '',
-            formatValue: 'xlsx'
+            formatValue: 'xlsx',
+            s3UploadMessage: null
         }
     },
     components: {
@@ -110,21 +111,67 @@ export default {
         upload() {
             this.$refs.file.click()
         },
-        on_click_s3_upload() {
-            debugger
-            
+        async on_click_s3_upload() {
+            /**
+             * 1.前端判断文件后缀名是否符合
+             * 2.接口判断文件是否可以上传
+             * 3.上传文件emit到ember处理
+             */
+            let that = this
+            let key = this.filePath.substring(0,this.filePath.lastIndexOf("/")+1)
+            let file_name = this.filePath.substring(this.filePath.lastIndexOf("/")+1)
+            if(this.formatValue != file_name.split('.')[1]) {
+                alert("错误：文件格式不符！")
+                return false
+            }
+            const accessToken = this.getCookie("access_token") || "eec9e7b5a49cff20a893307d8de8bd7ed29b761b82b8ecc0db0fe63aaad7efbc"
+            const url = "https://api.pharbers.com/phdatoefs"
+            let body = {
+                "bucket": "ph-platform",
+                "key": key,
+                "file_name": file_name
+            }
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            let result = await fetch(url, options).then(res => res.json())
+            this.s3UploadMessage = result
+            if(typeof(result.message) == "string") {
+                alert(result.message)
+                return false
+            }
+            //打开选择dataset弹框
             this.show = true
-
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         },
         uploadFiles() {
             console.log(this.$refs.file.files[0])
             this.fileList.push(this.$refs.file.files[0])
         },
         uploadFilesEvent(data) {
-            // this.show = false
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
-            this.$emit('event', data)
+            if(this.allData.uploadType === "localUpload") {
+                data.args.param.projectName = this.allData.projectName
+                data.args.param.projectId = this.allData.projectId
+                this.$emit('event', data)
+            } else if(this.allData.uploadType === "s3Upload") {
+                data.args.param.projectName = this.allData.projectName
+                data.args.param.projectId = this.allData.projectId
+                data.args.callback = "s3UploadFiles"
+                data.args.param.s3UploadMessage = this.s3UploadMessage
+                this.$emit('event', data)
+            }
         },
         linkToPage() {
             const event = new Event("event")
@@ -209,7 +256,7 @@ export default {
                 span {
                     display: block;
                     min-width: 100px;
-                    text-align: right;
+                    text-align: left;
                     padding-right: 20px;
                 }
                 .filepath {
