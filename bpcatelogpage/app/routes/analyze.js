@@ -39,8 +39,10 @@ export default class AnalyzeRoute extends Route {
 		let targetDataset = await this.store.peekRecord('dataset', params.datasetId)
 		let targetSchema = JSON.parse(targetDataset.schema)
 		let schemaArr = []
+		let schemaArrType = []
 		targetSchema.forEach(item => {
-			schemaArr.push(item.des)
+			schemaArr.push(item.src)
+			schemaArrType.push(item.type)
 		})
 
 		this.afterModel = function() {
@@ -51,7 +53,9 @@ export default class AnalyzeRoute extends Route {
 		return RSVP.hash( {
 			projectName: params.projectName,
 			projectId: params.projectId,
+			datasetId: params.datasetId,
 			schemaArr: schemaArr,
+			schemaArrType: schemaArrType,
 			datasetName: params.datasetName,
 			database: 'default',
 			_isVue: true

@@ -51,6 +51,7 @@
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
                 v-on:countIsReady="totalCountIsReady"
+                @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>
         <el-dialog
@@ -282,18 +283,26 @@ export default {
             const tmpLength = this.allData.schemaArr.length
             this.schema.resetSchema(
                 this.allData.schemaArr,
-                Array(tmpLength).fill("Text"),
+                this.allData.schemaArrType,
+                // Array(tmpLength).fill("Text"),
                 Array(tmpLength).fill(118)
             )
         } else {
             this.schema.resetSchema(
                 ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
-                ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+                ["Double", "Double", "Double", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
                 [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
             )
         }
     },
     methods: {
+        changeSchemaTypeEvent(data) {
+            data.args.param.projectId = this.allData.projectId
+            data.args.param.projectName = this.allData.projectName
+            data.args.param.datasetName = this.allData.datasetName
+            data.args.param.datasetId = this.allData.datasetId
+            this.$emit('event',  data)
+        },
         linkToPage(name) {
             let sel = confirm("您还没有保存更改，确认返回吗?")
             if(sel) {
@@ -439,7 +448,7 @@ export default {
     watch: {
         needRefresh(n, o) {
             const length = this.allData.schemaArr.length
-            this.schema.resetSchema(this.allData.schemaArr, Array(length).fill("Text"), Array(length).fill(118))
+            this.schema.resetSchema(this.allData.schemaArr, this.allData.schemaArrType, Array(length).fill(118))
             // this.$refs.excel.schemaIsReady++
             this.datasource.name = this.allData.datasetName
             this.datasource.projectId = this.allData.projectId

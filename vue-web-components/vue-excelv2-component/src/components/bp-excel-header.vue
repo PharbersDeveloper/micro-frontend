@@ -1,7 +1,7 @@
 <template>
     <div class="schema-item box" :style="{width: itemWidth +'px'}" >
         <span class="schema-title">{{title}}</span>
-        <bp-select-vue v-if="isNeedPopmenu" class="schema-type" src="selectIcon" :choosedValue="selectValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+        <bp-select-vue v-if="isNeedPopmenu" class="schema-type" src="selectIcon" :choosedValue="itemValueType" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
             <bp-option-vue class="schema-select-item" text="Text" @click="selectScript(1)"></bp-option-vue>
             <bp-option-vue class="schema-select-item" text="Number" @click="selectScript(2)"></bp-option-vue>
         </bp-select-vue>
@@ -18,7 +18,8 @@ export default {
             selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
             selectValue: "Text",
             showSelectOptionParam: false,
-            closeTosts: false
+            closeTosts: false,
+            itemValueType: "Text"
         }
     },
     components: {
@@ -26,6 +27,10 @@ export default {
         bpOptionVue
     },
     props: {
+        valueType: {
+            type: String,
+            default: "Text"
+        },
         isNeedPopmenu: {
             type: Boolean,
             default: true
@@ -47,13 +52,30 @@ export default {
             default: "Text"
         }
     },
+    mounted() {
+        if(this.valueType === "Double") {
+            this.itemValueType = "Number"
+        } else if(this.valueType === "String"){
+            this.itemValueType = "Text"
+        }
+    },
     methods: {
         selectScript(idx) {
             if (idx == 1) {
-                this.selectValue = "Text"
+                this.itemValueType = "Text"
             } else {
-                this.selectValue = "Number"
+                this.itemValueType = "Number"
             }
+            const event = new Event("event")
+            event.args = {
+                callback: "changeSchemaType",
+                element: this,
+                param: {
+                    title: this.title,
+                    itemValueType: this.itemValueType
+                }
+            }
+            this.$emit('changeSchemaTypeEvent', event)
         },
         showSelectOption() {
             this.showSelectOptionParam = true

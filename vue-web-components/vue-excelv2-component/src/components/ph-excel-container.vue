@@ -1,9 +1,9 @@
 <template>
     <div class="excel-container" >
         <div class="schemas" style="width: 100%" ref="schemas">
-            <div class="view" ref="headers">
-                <header-item v-for="(item, index) in schema.cols" :isNeedPopmenu="isNeedPopmenu" :title="item"
-                             :itemWidth="schema.colWidth(index)" :key="index"/>
+            <div class="view" ref="heasders">
+                <header-item v-for="(item, index) in schema.cols" 	:isNeedPopmenu="isNeedPopmenu" :title="item" :valueType="schema.dtype[index]" @changeSchemaTypeEvent="changeSchemaTypeEvent"
+                :itemWidth="schema.colWidth(index)" :key="index"/>
                 <header-item v-if="isShowScrollBar" :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
         </div>
@@ -11,16 +11,16 @@
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
             <div class="body" :style="{height: totalHeight +'px'}">
                 <ph-excel-page v-for="(item, index) in pageRange"
-                               :page="index" :curPage="curPage"
-                               :datasource="datasource"
-                               :schema="schema"
-                               :rowHeight="rowHeight"
-                               :page-height="pageHeight"
-                               :last-page-height="lastPageHeight"
-                               :page-width="schema.totalWidth()"
-                               :needRefresh="item"
-                               :totalPageCount="pageRange.length - 1"
-                               :key="index"/>
+                    :page="index" :curPage="curPage"
+                    :datasource="datasource"
+                    :schema="schema"
+                    :rowHeight="rowHeight"
+                    :page-height="pageHeight"
+                    :last-page-height="lastPageHeight"
+                    :page-width="schema.totalWidth()"
+                    :needRefresh="item"
+                    :totalPageCount="pageRange.length - 1"
+                    :key="index"/>
             </div>
         </div>
     </div>
@@ -87,6 +87,9 @@ export default {
         } else this.schemaIsReady++
     },
     methods: {
+        changeSchemaTypeEvent(data) {
+            this.$emit('changeSchemaTypeEvent', data)
+        },
         scrollGet (e) {
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
             let scroll_to_line = Math.floor(e.target.scrollTop / this.pageHeight)

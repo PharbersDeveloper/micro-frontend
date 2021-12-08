@@ -24,7 +24,9 @@ export default class DataSetComponent extends Component {
 				} else if (param.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + param.projectName + '&projectId=' + param.projectId
 				} else if(param.name === "scripts") {
-					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + param.projectId
+					uri = '/recipes?projectName=' + param.projectName + '&projectId=' + param.projectId
+				} else if (param.name == "flow") {
+					uri = '/flow?projectName=' + param.projectName + '&projectId=' + param.projectId
 				}
                 this.router.transitionTo( uri )
                 break
