@@ -8,6 +8,7 @@ import perStacked from './components/per-stacked-chart.vue'
 import mixLine from './components/mix-line-stacked-chart.vue'
 import graph from './components/graph-dag-chart.vue'
 import demo from './components/page/demo.vue'
+import dagLogs from './components/dag-logs.vue'
 
 Vue.use(Router)
 
@@ -52,6 +53,10 @@ export default new Router({
             path: '/graph',
             name: 'graph',
             component: graph
+        },{
+            path: '/dag-logs',
+            name: 'dagLogs',
+            component: dagLogs
         }
     ]
 })

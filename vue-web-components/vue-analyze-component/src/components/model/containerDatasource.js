@@ -14,7 +14,7 @@ export default class PhContainerDataSource {
             this.url= "https://api.pharbers.com/phchproxyquery"
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "eec9e7b5a49cff20a893307d8de8bd7ed29b761b82b8ecc0db0fe63aaad7efbc"
+        this.debugToken = "34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3"
     }
 
     resetUrl(url) {
@@ -220,8 +220,11 @@ export default class PhContainerDataSource {
         ele.datasource.buildDownloadQuery(ele, schema, cat, fileName)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
-                window.open(response.message)
+                if(response.status) {
+                    window.open(response.message)
+                } else {
+                    alert(response.message)
+                }
             })
     }
 

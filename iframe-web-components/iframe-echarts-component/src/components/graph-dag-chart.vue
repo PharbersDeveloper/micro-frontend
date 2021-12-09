@@ -27,13 +27,14 @@
                     <img :src="doc_icon" alt="">
                     <img :src="share_icon" alt="">
                     <img :src="hide_icon" alt="">
+                    <img :src="run_icon" alt="" @click="on_click_runDag">
                 </div>
                 <div class="sec_icon_row">
                     <img :src="delete_icon" alt="">
                     <img :src="del_icon_black" alt="">
                 </div>
             </div>
-            <div class="data_id_area">
+            <!-- <div class="data_id_area">
                 <div class="data_id_opt">
                     <div>数据 ID：</div>
                     <select name="data_id_sel" id="" class="data_id_sel"></select>
@@ -41,20 +42,37 @@
                 <div class="run_btn">
                     <button>Run</button>
                 </div>
+            </div> -->
+            <div class="scripts_area">
+                <div class="script_title">脚本</div>
+                <div class="scripts">
+                    <img :src="py_icon" alt="">
+                    <img :src="pySpark_icon" alt="">
+                    <img :src="R_icon" alt="">
+                    <img :src="sparkR_icon" alt="">
+                </div>
             </div>
-            <div class="scripts">
-                <img :src="py_icon" alt="">
-                <img :src="pySpark_icon" alt="">
-                <img :src="R_icon" alt="">
-                <img :src="sparkR_icon" alt="">
+        </div>
+        <run-dag-dialog 
+            v-if="showRunJson"
+            @confirmeRunDag="confirmeRunDag"
+            @closeRunDagDialog="closeRunDagDialog"
+        ></run-dag-dialog>
+        <div class="job_status">
+            <div class="job_notice">
+                <div class="item title">Job failed</div>
+                <div class="item">Job name</div>
             </div>
+            <button @click="showLogs">Logs</button>
         </div>
     </div>
 </template>
-
 <script>
 import * as echarts from 'echarts'
 import PhDagDatasource from './model/datasource'
+import noticeService from './model/notice-service'
+import runDagDialog from './run-dag-dialog.vue'
+
 export default {
     data: () => {
         return {
@@ -74,14 +92,25 @@ export default {
             pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/PySpark.svg",
             R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R.svg",
             sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg",
-            daName: "datasetName"
+            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
+            daName: "datasetName",
+            showRunJson: false
         }
+    },
+    components: {
+        runDagDialog
     },
     props: {
         datasource: {
             type: Object,
             default: function() {
                 return new PhDagDatasource('1')
+            }
+        },
+        noticeService: {
+            type: Object,
+            default: function() {
+                return new noticeService('1')
             }
         }
     },
@@ -90,8 +119,42 @@ export default {
         this.projectId = href.split('projectId=')[1]
         this.datasource.projectId = this.projectId || 'JfSmQBYUpyb4jsei'
         this.initChart()
+        this.noticeService.observer()
     },
     methods: {
+        showLogs() {
+            this.$router.push("/dag-logs")
+        },
+        async confirmeRunDag(data) {
+            /**
+             * 1. 调接口触发dag
+             */
+            const url = "http://52.83.7.99:8000/api/dag_run/dag/run/Test_Test_developer"
+            const accessToken = this.getCookie("access_token") || "34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3"
+            let options = {
+                method: "GET",
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json",
+                    "mode":'cors',
+                    "access-control-allow-origin": "*"
+                }
+            }
+            let result = await fetch(url).then(res => res.json())
+            let queryId = result.dag_id
+            debugger
+            this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId)
+        },
+        runDagCallback() {
+            debugger
+        },
+        on_click_runDag() {
+            this.showRunJson = true
+        },
+        closeRunDagDialog() {
+            this.showRunJson = false
+        },
         // 初始化数据
         async initChart () {
             // 初始化echarts实例
@@ -224,9 +287,40 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: calc(100vh - 40px);
+    // height: calc(100vh - 40px);
     background: #f7f7f7;
     box-sizing: border-box;
+    .job_status {
+        box-sizing: border-box;
+        width: 400px;
+        height: 120px;
+        background: #FFFFFF;
+        border: 1px solid #979797;
+        position: absolute;
+        bottom: 60px;
+        right: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        font-size: 20px;
+        .title {
+            color: red;
+        }
+        button {
+            width: 59px;
+            height: 32px;
+            border: 1px solid #EEEDF7;
+            border-radius: 2px;
+            font-size: 14px;
+            color: #7163C5;
+            letter-spacing: 0;
+            text-align: center;
+            line-height: 20px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    }
     .show_area {
         width: 100%;
         height: 100%;
@@ -242,7 +336,8 @@ export default {
     }
     .chart {
         width: calc(100vw - 320px);
-        height: 100%;
+        height: calc(100vh - 90px);
+        // height: 100%;
         // padding: 10px;
     }
     .opt_area {
@@ -274,6 +369,7 @@ export default {
                 width: 25px;
                 height: 25px;
                 margin: 10px;
+                cursor: pointer;
             }
         }
         .data_id_area {
@@ -304,13 +400,23 @@ export default {
                 }
             }
         }
-        .scripts {
-            display: flex;
-            justify-content: space-between;
+        .scripts_area {
             padding: 20px;
-            img {
-                widows: 30px;
-                height: 30px;
+            .scripts_title {
+                font-family: PingFangSC-Medium;
+                font-size: 12px;
+                color: #000000;
+                text-align: center;
+                font-weight: bold;
+            }
+            .scripts {
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-between;
+                img {
+                    widows: 30px;
+                    height: 30px;
+                }
             }
         }
     }
