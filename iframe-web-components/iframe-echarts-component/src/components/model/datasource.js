@@ -53,9 +53,9 @@ export default class PhDagDatasource {
             const link = {}
             const cmessage = JSON.parse(attr['cmessage'])
             // link["source"] = cmessage["sourceId"]
-            link["source"] = cmessage["sourceId"]
+            link["source"] = cmessage["sourceName"]
             // link["target"] = cmessage["targetId"]
-            link["target"] = cmessage["targetId"]
+            link["target"] = cmessage["targetName"]
             return [false, link]
         }
     }

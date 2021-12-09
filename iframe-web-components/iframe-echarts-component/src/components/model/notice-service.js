@@ -6,9 +6,11 @@ export default class NoticeServiceService {
         this.subjectCallback= []
         //管理状态的参数
         this.uploadStatus = false
+        this.timeout = 2
     }
 
-    register(tableName, id, callback, ele, projectId) {
+    register(tableName, id, callback, ele, projectId, timeout) {
+        this.timeout = timeout
         // 持续30s，调用unregister删除
         if(this.subjectID.indexOf(id) == -1) {
             this.subjectID.push(id)
@@ -45,12 +47,11 @@ export default class NoticeServiceService {
             let currentTime = new Date().getTime()
             // 设置30s超时
             that.subjectCallback.forEach((item,index) => {
-                if(currentTime - item.date > 120*1000) {
+                if(currentTime - item.date > that.timeout*60000) {
                     that.unregister(that.subjectID[index])
                 }
             })
             if(that.subjectID.length > 0) {
-            // let url = "https://apiv2.pharbers.com/phdydatasource/query"
                 let conditions = []
                 that.subjectID.forEach((item,index) => {
                     conditions.push({

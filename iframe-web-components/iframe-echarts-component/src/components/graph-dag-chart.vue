@@ -78,7 +78,7 @@ export default {
         return {
             name: 'dag',
             needRefresh: 0,
-            projectId: "",
+            projectId: "JfSmQBYUpyb4jsei",
             header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
@@ -128,8 +128,9 @@ export default {
         async confirmeRunDag(data) {
             /**
              * 1. 调接口触发dag
+             * 2. query notification接收正确或错误消息
              */
-            const url = "http://52.83.7.99:8000/api/dag_run/dag/run/Test_Test_developer"
+            const url = "http://161.189.18.50:8000/api/dag_run/dag/run/ETL_Iterator_ETL_Iterator_developer"
             const accessToken = this.getCookie("access_token") || "34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3"
             let options = {
                 method: "GET",
@@ -143,11 +144,26 @@ export default {
             }
             let result = await fetch(url).then(res => res.json())
             let queryId = result.dag_id
-            debugger
-            this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId)
+            let id = "ETL_Iterator" + "_ETL_Iterator" + "_developer"
+            let timeout = data.args.param.timeout
+            this.noticeService.register("notification", id, this.runDagCallback, this, this.projectId, timeout)
         },
-        runDagCallback() {
-            debugger
+        runDagCallback(response, ele) {
+            let status = JSON.parse(response.data[0].attributes.message).cnotification.status
+            let error = JSON.parse(response.data[0].attributes.message).cnotification.error
+            if(status == "transform_schema_succeed") {
+                //跳转下一页面
+                alert("修改成功")
+            } else if(status == "transform_schema_failed") {
+                alert(error)
+                //刷新页面数据
+                if(this.vueComponentEnvType === "Number") {
+                    this.vueComponentEnv.itemValueType = "Text"
+                } else {
+                    this.vueComponentEnv.itemValueType = "Number"
+                }
+            }
+            this.loadingService.loading.style.display = 'none'
         },
         on_click_runDag() {
             this.showRunJson = true

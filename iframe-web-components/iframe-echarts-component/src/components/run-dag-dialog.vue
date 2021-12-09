@@ -9,8 +9,16 @@
                     <textarea name="runJson" id="" cols="30" rows="10" class="run_json"></textarea>
                </div>
               <div class="btn">
-                    <button class="cancel" @click="close">取消</button>
-                    <button class="save" @click="save">保存</button>
+                  <div class="timeout">
+                      <div class="title">超时时间: </div>
+                      <select name="time" id="" v-model="selectTimeout">
+                          <option value="60mins">60mins</option>
+                      </select>
+                  </div>
+                  <div class="">
+                        <button class="cancel" @click="close">取消</button>
+                        <button class="save" @click="save">确认</button>
+                  </div>
               </div>
             </div>
         </div>
@@ -21,6 +29,7 @@
 export default {
     data() {
         return{
+            selectTimeout: "60mins"
         }
     },
     props: {
@@ -51,11 +60,11 @@ export default {
         save() {
             const event = new Event("event")
             event.args = {
-                callback: "addTags",
+                callback: "runDag",
                 element: this,
                 param: {
-                    name: "addTags",
-                    selectedTags: this.selectedTags
+                    name: "runDag",
+                    timeout: parseFloat(this.selectTimeout)
                 }
             }
             this.$emit('confirmeRunDag', event)
@@ -74,7 +83,7 @@ export default {
     box-sizing: border-box;
 }
 .clear_dialog_container {
-	height: 100vh;
+    height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);
     display: flex;
@@ -120,31 +129,45 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     box-sizing: border-box;
-	.run_json {
-		width: 520px;
-		height: 350px;
-		background: #FFFFFF;
-		border: 1px solid #ccc;
-	}
+    .run_json {
+        width: 520px;
+        height: 350px;
+        background: #FFFFFF;
+        border: 1px solid #ccc;
+    }
 }
 .btn {
     position: absolute;
     right: 23px;
     bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    width: 530px;
+    box-sizing: border-box;
+    .timeout {
+        display: flex;
+        select {
+            width: 72px;
+            height: 24px;
+            background: #FFFFFF;
+            border: 0.5px solid #979797;
+            margin-left: 10px;
+        }
+    }
     button {
         width: 60px;
         height: 28px;
         border: 0;
         cursor: pointer;
     }
-	.cancel {
-		margin-right: 20px;
-		// background-color:#DB4D71;
-		color: #7163C5;
-	}
-	.save {
-		background-color: #7163C5;
-		color: #fff;
-	}
+    .cancel {
+        margin-right: 20px;
+        // background-color:#DB4D71;
+        color: #7163C5;
+    }
+    .save {
+        background-color: #7163C5;
+        color: #fff;
+    }
 }
 </style>
