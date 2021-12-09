@@ -7,7 +7,7 @@ export default class PhDagDatasource {
         this.data = []
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '335c72c6afa0c49eb82352778f461a785d01734b9e161646cca743fa423150c9'
+        this.debugToken = '34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -53,9 +53,9 @@ export default class PhDagDatasource {
             const link = {}
             const cmessage = JSON.parse(attr['cmessage'])
             // link["source"] = cmessage["sourceId"]
-            link["source"] = cmessage["sourceName"]
+            link["source"] = cmessage["sourceId"]
             // link["target"] = cmessage["targetId"]
-            link["target"] = cmessage["targetName"]
+            link["target"] = cmessage["targetId"]
             return [false, link]
         }
     }
