@@ -1,6 +1,7 @@
 export default class NoticeServiceService {
     constructor(id, adapter) {
         this.id = id
+        this.jobId = ""
         //被观察的对象，需要维持一个观察者对象的id列表（添加，删除，通知）
         this.subjectID= []
         this.subjectCallback= []
@@ -45,29 +46,32 @@ export default class NoticeServiceService {
         let that = this
         setInterval(async function() {
             let currentTime = new Date().getTime()
-            // 设置30s超时
+            // 设置超时时间
             that.subjectCallback.forEach((item,index) => {
                 if(currentTime - item.date > that.timeout*60000) {
                     that.unregister(that.subjectID[index])
                 }
             })
             if(that.subjectID.length > 0) {
-                let conditions = []
+                console.log(that.subjectID)
+                let conditions = {}
                 that.subjectID.forEach((item,index) => {
-                    conditions.push({
-                        id: item,
-                        projectId: that.subjectCallback[index].projectId
-                    })
+                    conditions = {
+                        "id": ["=", item],
+                        "projectId": ["begins_with", that.jobId]
+                    }
                 })
-                let url = "https://apiv2.pharbers.com/phdydatasource/batch_get_item"
+                let url = "https://apiv2.pharbers.com/phdydatasource/query"
                 let headers = {
-                    "Authorization": that.getCookie( "access_token" ) ||"34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3",
+                    "Authorization": that.getCookie( "access_token" ) ||"a116e7890eedd4b3b4555ab8568c364a1a8db1d82d49d9173c1b02aa0b088721",
                     "Content-Type": "application/vnd.api+json",
                     "Accept": "application/vnd.api+json"
                 }
                 let statusBody = {
                     "table": "notification",
-                    "conditions": conditions
+                    "conditions": conditions,
+                    "limit": 1000,
+                    "start_key": {}
                 }
                 let options = {
                     method: "POST",
@@ -78,9 +82,10 @@ export default class NoticeServiceService {
                     .then(res => res.json())
                     .then(response => {
                         if(response.data && response.data.length > 0) {
-                            let status = JSON.parse(response.data[0].attributes.message).cnotification.status
+                            let jobCat = response.data[0].attributes["job-cat"]
+                            console.log(jobCat)
                             //以后会做成进度条
-                            if(status != "project_file_to_DS_running" || status != "dag_conf insert success") {
+                            if(jobCat != "running") {
                                 let index = that.subjectID.indexOf(response.data[0].id)
                                 let targetCallback = that.subjectCallback[index]
                                 // 将消息分发给不同component处理
@@ -94,6 +99,6 @@ export default class NoticeServiceService {
             } else {
                 console.log("notice observer")
             }
-        }, 5 * 1000)
+        }, 10 * 1000)
     }
 }

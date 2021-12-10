@@ -53,7 +53,7 @@ export default class FlowComponent extends Component {
 	@action
 	registerListenerIframe(element) {
 		element.allData = this.calAllData
-		this.iframeURL = this.iframeURL + "?projectId=" + element.allData.projectId
+		this.iframeURL = `this.iframeURL?projectId${element.allData.projectId}&projectName=${element.allData.projectName}&flowVersion=developer`
         element.addEventListener("event", this.listener)
         document.domain = "pharbers.com"
 	}

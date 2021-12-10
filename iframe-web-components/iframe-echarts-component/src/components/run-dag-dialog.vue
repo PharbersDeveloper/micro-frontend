@@ -35,26 +35,9 @@ export default {
     props: {
     },
     computed: {},
-    mounted() {
+    async mounted() {
     },
     watch: {
-        searchValue: function() {
-            let that = this
-            if(this.searchValue.trim() == '') {
-                if(this.tagsArrayShow.length < this.tagsArray.length) {
-                    this.tagsArrayShow = this.tagsArray
-                }
-            } else {
-                this.tagsArrayShow = []
-                let allArray = this.tagsArray.concat(this.newTagsArray)
-                allArray.forEach(item => {
-                    let idx = item.indexOf(that.searchValue)
-                    if(idx == 0) {
-                        this.tagsArrayShow.push(item)
-                    }
-                })
-            }
-        }
     },
     methods: {
         save() {

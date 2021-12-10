@@ -58,13 +58,22 @@
             @confirmeRunDag="confirmeRunDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
-        <div class="job_status">
+        <div class="job_status" v-if="jobStatus">
             <div class="job_notice">
                 <div class="item title">Job failed</div>
                 <div class="item">Job name</div>
             </div>
             <button @click="showLogs">Logs</button>
         </div>
+        <div v-if="loading">
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu">
+            <div class="ldio-400lpppmiue">
+                <div></div><div></div>
+                <div><div></div></div>
+                <div><div></div></div>
+            </div>
+        </div>
+    </div>
     </div>
 </template>
 <script>
@@ -78,7 +87,10 @@ export default {
         return {
             name: 'dag',
             needRefresh: 0,
-            projectId: "JfSmQBYUpyb4jsei",
+            projectId: "",
+            projectName: "",
+            flowVersion: "",
+            jobId: "ETL_Iterator_ETL_Iterator_developer",
             header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
@@ -94,7 +106,11 @@ export default {
             sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg",
             run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
             daName: "datasetName",
-            showRunJson: false
+            showRunJson: false,
+            jobStatus: true,
+            jobName: "ETL_Iterator_ETL_Iterator_developer_compute_111out_0Jj6bBGAh6vIqs5",
+            runId: "ETL_Iterator_ETL_Iterator_developer_2021-12-10T07_27_48+00_00",
+            loading: false
         }
     },
     components: {
@@ -116,21 +132,30 @@ export default {
     },
     mounted () {
         let href = window.location.href
-        this.projectId = href.split('projectId=')[1]
+        let paramArr = href.split("?")[1].split("&")
+        this.projectId = paramArr[0].split('=')[1]
+        this.projectName = paramArr[1].split("=")[1]
+        this.flowVersion = paramArr[2].split("=")[1]
         this.datasource.projectId = this.projectId || 'JfSmQBYUpyb4jsei'
         this.initChart()
         this.noticeService.observer()
     },
     methods: {
         showLogs() {
-            this.$router.push("/dag-logs")
+            // this.$router.push("/dag-logs")
+            this.$router.push({path: "/dag-logs", query:{jobId: this.jobId, runId: this.runId, jobName: this.jobName}});
         },
         async confirmeRunDag(data) {
             /**
-             * 1. 调接口触发dag
+             * 1. 调接口触发dag(jobId = projectName + dagName + flowVersion)
              * 2. query notification接收正确或错误消息
              */
-            const url = "http://161.189.18.50:8000/api/dag_run/dag/run/ETL_Iterator_ETL_Iterator_developer"
+            this.loading = true
+            this.showRunJson = false
+            this.jobId = `${this.projectName}_${this.projectName}_${this.flowVersion}`
+            this.noticeService.jobId = this.jobId
+            console.log(this.noticeService)
+            const url = `http://52.83.9.2:8000/api/dag_run/dag/run/${this.jobId}`
             const accessToken = this.getCookie("access_token") || "34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3"
             let options = {
                 method: "GET",
@@ -143,27 +168,19 @@ export default {
                 }
             }
             let result = await fetch(url).then(res => res.json())
-            let queryId = result.dag_id
-            let id = "ETL_Iterator" + "_ETL_Iterator" + "_developer"
+            let queryId = result.run_id
             let timeout = data.args.param.timeout
-            this.noticeService.register("notification", id, this.runDagCallback, this, this.projectId, timeout)
+            this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         runDagCallback(response, ele) {
-            let status = JSON.parse(response.data[0].attributes.message).cnotification.status
-            let error = JSON.parse(response.data[0].attributes.message).cnotification.error
-            if(status == "transform_schema_succeed") {
+            let jobCat = response.data[0].attributes["job-cat"]
+            this.jobName = JSON.parse(response.data[0].attributes.message).cnotification.jobName //更新状态用
+            this.runId = JSON.parse(response.data[0].attributes.message).cnotification.runId
+            if(jobCat == "failed") {
                 //跳转下一页面
-                alert("修改成功")
-            } else if(status == "transform_schema_failed") {
-                alert(error)
-                //刷新页面数据
-                if(this.vueComponentEnvType === "Number") {
-                    this.vueComponentEnv.itemValueType = "Text"
-                } else {
-                    this.vueComponentEnv.itemValueType = "Number"
-                }
+                this.jobStatus = true
             }
-            this.loadingService.loading.style.display = 'none'
+            this.loading = false
         },
         on_click_runDag() {
             this.showRunJson = true
@@ -436,5 +453,140 @@ export default {
             }
         }
     }
+}
+/* //界面未加载loading */
+@keyframes ldio-400lpppmiue {
+    0% {
+    transform: rotate(0)
+    }
+
+    100% {
+    transform: rotate(360deg)
+    }
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: border-box !important
+}
+
+.ldio-400lpppmiue>div {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    top: 16px;
+    left: 16px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    border-color: #f5c924 transparent #f5c924 transparent;
+    animation: ldio-400lpppmiue 1s linear infinite;
+}
+
+.ldio-400lpppmiue>div:nth-child(2),
+.ldio-400lpppmiue>div:nth-child(4) {
+    width: 58px;
+    height: 58px;
+    top: 21px;
+    left: 21px;
+    animation: ldio-400lpppmiue 1s linear infinite reverse;
+}
+
+.ldio-400lpppmiue>div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789
+}
+
+.ldio-400lpppmiue>div:nth-child(3) {
+    border-color: transparent
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:before,
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 28px;
+    background: #f5c924;
+    border-radius: 0%;
+    box-shadow: 0 64px 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    left: -4px;
+    top: 28px;
+    box-shadow: 64px 0 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:before,
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 23px;
+    background: #747789;
+    border-radius: 0%;
+    box-shadow: 0 54px 0 0 #747789;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    left: -4px;
+    top: 23px;
+    box-shadow: 54px 0 0 0 #747789;
+}
+
+#loadingio-spinner-double-ring-ho1zizxmctu {
+    backdrop-filter: blur(1px);
+    background: rgba(200, 0,0, 0.05);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    /* background: none; */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.ldio-400lpppmiue {
+    /* width: 100%;
+    height: 100%; */
+    position: relative;
+    transform: translateZ(0) scale(0.8);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+    /* see note above */
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: content-box;
 }
 </style>
