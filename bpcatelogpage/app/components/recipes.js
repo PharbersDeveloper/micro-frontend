@@ -42,13 +42,15 @@ export default class RecipesComponent extends Component {
 				let scriptsParams = e.detail[0].args.param;
 				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 				const accessToken = this.cookies.read( "access_token" )
-				const uuid = this.guid() + '.xlsx'
+				// const uuid = this.guid() + '.xlsx'
+				const uuid = this.guid()
 				this.loadingService.loading.style.display = 'flex'
         		this.loadingService.loading.style['z-index'] = 2
 				//需要新建dataset
 				this.projectId = scriptsParams.projectId
 				this.projectName = scriptsParams.projectName
 				if(scriptsParams.outputs[0].id == "") {
+					scriptsParams.outputs[0].id = uuid
 					let body = {
 						"table": "dataset",
 						"item": {
@@ -70,7 +72,6 @@ export default class RecipesComponent extends Component {
 					}
 					await fetch(url, options)
 				}
-				scriptsParams.outputs[0].id = uuid
 				let message = {
 					"dagName": scriptsParams.projectName,
 					"flowVersion": "developer",
