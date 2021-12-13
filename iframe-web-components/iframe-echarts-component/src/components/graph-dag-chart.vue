@@ -107,7 +107,7 @@ export default {
             run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
             daName: "datasetName",
             showRunJson: false,
-            jobStatus: true,
+            jobStatus: false,
             jobName: "ETL_Iterator_ETL_Iterator_developer_compute_111out_0Jj6bBGAh6vIqs5",
             runId: "ETL_Iterator_ETL_Iterator_developer_2021-12-10T07_27_48+00_00",
             loading: false
@@ -136,7 +136,8 @@ export default {
         this.projectId = paramArr[0].split('=')[1]
         this.projectName = paramArr[1].split("=")[1]
         this.flowVersion = paramArr[2].split("=")[1]
-        this.datasource.projectId = this.projectId || 'JfSmQBYUpyb4jsei'
+        console.log(href)
+        this.datasource.projectId = this.projectId
         this.initChart()
         this.noticeService.observer()
     },
@@ -457,11 +458,11 @@ export default {
 /* //界面未加载loading */
 @keyframes ldio-400lpppmiue {
     0% {
-    transform: rotate(0)
+        transform: rotate(0)
     }
 
     100% {
-    transform: rotate(360deg)
+        transform: rotate(360deg)
     }
 }
 
