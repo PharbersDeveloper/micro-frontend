@@ -73,13 +73,14 @@ export default class NoticeServiceService extends Service {
 					.then(response => {
 						if(response.data && response.data.length > 0) {
 							let status = JSON.parse(response.data[0].attributes.message).cnotification.status
+							console.log(status)
 							//以后会做成进度条
-							if(status != "project_file_to_DS_running" || status != "dag_conf insert success") {
+							if(status != "project_file_to_DS_running" && status != "dag_conf insert success") {
 								let index = that.subjectID.indexOf(response.data[0].id)
 								let targetCallback = that.subjectCallback[index]
 								// 将消息分发给不同component处理
 								targetCallback.callback(response, targetCallback.ele)
-								// 返回结果即调用unregister
+								// 调用unregister
 								that.unregister(response.data[0].id)
 							}
 							
