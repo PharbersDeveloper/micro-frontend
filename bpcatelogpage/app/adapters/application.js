@@ -114,10 +114,11 @@ export default DS.JSONAPIAdapter.extend( {
 		return obj
 	},
 	handleResponse: function(status, headers, payload, requestData) {
-		//处理project list数据
+		//处理project list(resource)数据
 		if(payload && payload.data && payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
 			payload.data.forEach((item,index)=> {
 				item.attributes.meta = item.meta
+				item.attributes.includes = payload.included
 			})
 		}
 		//处理executions数据

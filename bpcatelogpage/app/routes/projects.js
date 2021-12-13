@@ -20,7 +20,9 @@ export default class ProjectsRoute extends Route {
 	}
 
 	async model() {
-		let projects = await this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
+		// let projects = await this.store.query( "project", {"filter[owner]":this.cookies.read('account_id')})
+		let resources = await this.store.query( "resource", {"filter[tenant]":this.cookies.read('company_id'), "filter[resourceType]":"project", include: 'accounts'})
+
 		//菜单栏个人信息
 		let name_show, company_name_show
 		if(this.cookies.read('account_id')) {
@@ -34,7 +36,7 @@ export default class ProjectsRoute extends Route {
             }
         }
 		return RSVP.hash( {
-			projects: projects.filter( it => it),
+			resources: resources.filter( it => it),
 			name_show: name_show,
 			company_name_show: company_name_show,
 			_isVue: true

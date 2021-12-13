@@ -23,6 +23,7 @@ export default class ProjectListComponent extends Component {
     @action
 	registerListener(element) {
         element.allData = this.calAllData
+		element.allData.projects = element.allData.resources[0].includes
 		element.addEventListener("event", this.listener)
 	}
 

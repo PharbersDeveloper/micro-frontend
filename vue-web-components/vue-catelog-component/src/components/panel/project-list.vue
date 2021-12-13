@@ -33,21 +33,23 @@
                             <div class="left-text">
                                 <img :src="fileIconDark" class="file-icon-dark" alt="">
                                 <div class="text-area" >
-                                    <bp-text class="title">{{file.name}}</bp-text>
-                                    <!-- <bp-text class="subtitle">{{file.provider}}</bp-text> -->
+                                    <bp-text class="title">{{file.attributes.name}}</bp-text>
+                                    <bp-text class="subtitle">{{file.provider}}</bp-text>
                                 </div>
                             </div>
-                            <!-- <bp-text class="subtitle right-text">{{formatDateStandard(file.meta.created,0)}}</bp-text> -->
+                            <!-- <bp-text class="subtitle right-text">{{formatDateStandard(file.attributes.created,0)}}</bp-text> -->
+                            <bp-text class="subtitle right-text">{{file.attributes.created}}</bp-text>
                         </div>
                     </template>
                     <div v-if="!toggle" class="project-card">
                         <div class="project-card-item" v-for="(file,index) in allData.projects" :key="index+'card'" @click="linkToPage(file)">
                             <div class="text-area" >
-                                <bp-text class="title">{{file.name}}</bp-text>
-                                <!-- <bp-text class="subtitle">{{file.provider}}</bp-text> -->
+                                <bp-text class="title">{{file.attributes.name}}</bp-text>
+                                <bp-text class="subtitle">{{file.attributes.provider}}</bp-text>
                             </div>
                             <div class="last-date">
-                                <!-- <bp-text class="subtitle bottom-text">{{formatDateStandard(file.meta.created,0)}}</bp-text> -->
+                                <!-- <bp-text class="subtitle bottom-text">{{formatDateStandard(file.attributes.created,0)}}</bp-text> -->
+                                <bp-text class="subtitle right-text">{{file.attributes.created}}</bp-text>
                             </div>
                         </div>
                     </div>
@@ -82,11 +84,13 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projects: [{
-                        name: "name",
-                        provider: "provider",
-                        meta: {}
-                    }]
+                    projects: [ 
+                        {attributes:{
+                            name: "name",
+                            provider: "provider",
+                            meta: {}
+                        }}
+                    ]
                 }
             }
         }

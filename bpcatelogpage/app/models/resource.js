@@ -7,4 +7,5 @@ export default class ResourceModel extends Model {
 	@attr("string") tenant;
 	@attr accounts;
 	@attr concrets;
+	@attr includes;
 }

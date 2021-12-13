@@ -268,6 +268,7 @@ export default class RecipesComponent extends Component {
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
+			
 			let message = JSON.parse(response.data[0].attributes.message)
 			let jobName = message.cnotification.jobName
 			let jobPath = message.cnotification.jobPath
