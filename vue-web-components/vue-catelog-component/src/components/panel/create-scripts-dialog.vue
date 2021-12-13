@@ -220,7 +220,7 @@ export default {
             }
         },
         addOldDataset(data) {
-            this.dsName = data
+            this.dsName = JSON.parse(JSON.stringify(data))
             this.showOldDataset = true
             this.datasetOutputListShow = true
         }
