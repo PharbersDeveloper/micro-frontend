@@ -44,7 +44,7 @@
                             <div class="input_area">
                                 <div class="input_list">
                                     <span class="label">名称</span>
-                                    <el-input v-model="dsName.name" placeholder=""></el-input>
+                                    <el-input v-model="dsName.name" placeholder="" ref="newDs" @change="inputStrChecked(dsName.name, 'newDs', 'dsName')"></el-input>
                                 </div>
                                 <div class="input_list">
                                     <span class="label">存储到</span>
@@ -156,32 +156,56 @@ export default {
     watch: {},
     methods: {
         save() {
-            /**
-             * 1. 先判断output是新增还是选择原有数据
-             * 2. 若新增，生成一个id（类似f9fab7a26dc2e5ff48bd6e13914bbe79.xlsx），
-             *    创建一个dataset，否则直接3
-             * 3. 调用赵的接口，往action里面插数据
-            */
-            const event = new Event("event")
-            event.args = {
-                callback: "createScripts",
-                element: this,
-                param: {
-                    name: "createScripts",
-                    jobName: "compute_" + this.dsName.name,
-                    jobId: "",
-                    targetJobId: "",
-                    inputs: this.addDatasetList,
-                    outputs: [{
-                        "name": this.dsName.name,
-                        "id": this.dsName.id
-                    }],
-                    jobVersion: this.dsName.name + "_version1",
-                    runTime: "python3",
-                    labels: []
+            if(this.addDatasetList.length > 0 && this.datasetOutputListShow && this.showOldDataset && this.dsName.name) {
+                /**
+                 * 1. 先判断output是新增还是选择原有数据
+                 * 2. 若新增，生成一个id（类似f9fab7a26dc2e5ff48bd6e13914bbe79.xlsx），
+                 *    创建一个dataset，否则直接3
+                 * 3. 调用赵的接口，往action里面插数据
+                */
+                const event = new Event("event")
+                event.args = {
+                    callback: "createScripts",
+                    element: this,
+                    param: {
+                        name: "createScripts",
+                        jobName: "compute_" + this.dsName.name,
+                        jobId: "",
+                        targetJobId: "",
+                        inputs: this.addDatasetList,
+                        outputs: [{
+                            "name": this.dsName.name,
+                            "id": this.dsName.id
+                        }],
+                        jobVersion: this.dsName.name + "_version1",
+                        runTime: "python3",
+                        labels: []
+                    }
                 }
+                this.$emit("createScripts", event)
+            } else {
+                alert("请填写输入数据和输出数据！")
             }
-            this.$emit("createScripts", event)
+        },
+        // 验证输入字符串时候的特殊字符
+        inputStrChecked(value, ref, dsname) {
+            // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
+            // 只允许输入数字、字母、汉字、下划线
+            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            if (r.test(value)) {
+                if(value.length > 30) {
+                    this.$refs[ref].value = ""
+                    this[dsname].name = ""
+                    alert("输入内容过长！")
+                    return false;
+                }
+                return value
+            } else {
+                this.$refs[ref].value = ""
+                this[dsname].name = ""
+                alert("请勿输入特殊字符！")
+                return false;
+            }
         },
         close() {
             this.$emit("closeCreateDialog")
@@ -191,6 +215,11 @@ export default {
             this.datasetListShow = true
         },
         on_clickAddOutput() {
+            let tds = this.remainDatasetListOutputs.filter(item => item.name == this.dsName.name)
+            if(tds.length > 0) {
+                alert("数据集重复!")
+                return false
+            }
             //新增output
             if(this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
