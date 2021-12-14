@@ -19,7 +19,7 @@ export default class AnalyzeComponent extends Component {
 		switch(e.detail[0].args.callback) {
 			case "linkToPage":
 				let params = e.detail[0].args.param;
-				let uri = ''
+				let uri = '/projects'
 				if(params.name === "project") {
 					//返回project
 					uri = `/projects/`+ params.projectId

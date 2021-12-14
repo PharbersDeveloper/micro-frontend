@@ -14,7 +14,7 @@ export default class DagComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 let params = e.detail[0].args.param
-                let uri = ''
+                let uri = '/projects'
 				if(params.name == 'datasets') {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
                 } else if(params.name == 'project') {
@@ -27,7 +27,9 @@ export default class DagComponent extends Component {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name === "flow") {
                     uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
-                }
+                } else if(params.name == 'projects') {
+					uri = '/projects'
+				}
                 //执行列表 分页
                 this.router.transitionTo( uri )
                 break

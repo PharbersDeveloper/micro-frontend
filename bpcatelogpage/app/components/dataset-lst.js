@@ -17,7 +17,7 @@ export default class DatasetLstComponent extends Component {
 		switch(e.detail[0].args.callback) {
 			case "linkToPage":
 				let params = e.detail[0].args.param;
-				let uri = ''
+				let uri = '/projects'
 				if(params.name === "upload") {
 					uri = `/dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
 				}else if(params.name === "linkToProject" || params.name === "project") {

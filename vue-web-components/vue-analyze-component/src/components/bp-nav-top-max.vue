@@ -1,18 +1,23 @@
 <template>
 	<div class="container_nav">
 		<div class="header">
-			<span class="project_name" @click="linkToPage('project')" :title="allData.projectName">
+			<div class="left">
+				<span class="project_name" @click="linkToPage('project')" :title="allData.projectName">
 				{{allData.projectName}}
-			</span>
-			<div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
-				<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
-				<nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
-					<ul>
-						<li @click="linkToPage('flow')">数据流程</li>
-						<li @click="linkToPage('datasets')">数据集</li>
-						<li @click="linkToPage('scripts')">脚本</li>
-					</ul>
-				</nav>
+				</span>
+				<div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
+					<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
+					<nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+						<ul>
+							<li @click="linkToPage('flow')">数据流程</li>
+							<li @click="linkToPage('datasets')">数据集</li>
+							<li @click="linkToPage('scripts')">脚本</li>
+						</ul>
+					</nav>
+				</div>
+				<img @click="linkToPage('projects')" class="home" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%BB%E9%A1%B5.svg" alt="">
+			</div>
+			<div class="right">
 			</div>
 		</div>
 	</div>
@@ -89,10 +94,18 @@ export default {
 		height: 40px;
 		background: #222;
 		color: #fff;
-		display: flex;
-		align-items: center;
 		font-size: 20px;
 		padding: 0 20px;
+		.left {
+			display: flex;
+			align-items: center;
+			.home {
+				width: 28px;
+				height: 28px;
+				margin-left: 20px;
+				cursor: pointer;
+			}
+		}
 		.project_name {
 			cursor: pointer;
 			width: 100px;

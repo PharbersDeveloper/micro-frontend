@@ -18,7 +18,7 @@ export default class DataSetComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 let param = e.detail[0].args.param
-				let uri = ''
+				let uri = '/projects'
 				if(param.name === "linkToProject" || param.name == "project") {
 					uri = `/projects/`+ param.projectId
 				} else if (param.name === "datasets") {

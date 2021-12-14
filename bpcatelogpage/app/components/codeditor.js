@@ -18,7 +18,7 @@ export default class CodeditorComponent extends Component {
 		switch(e.detail[0].args.callback) {
 			case "linkToPage": {
 				let params = e.detail[0].args.param;
-				let uri = ''
+				let uri = '/projects'
 				if(params.name === "localUpload") {
 					uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
 				}else if(params.name === "linkToProject" || params.name === "project") {

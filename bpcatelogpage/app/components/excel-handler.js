@@ -16,17 +16,17 @@ export default class ExcelHandlerComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 const ltp = e.detail[0].args.param
-				let uri = ''
+				let uri = '/projects'
                 if(ltp.name === "advancedMapping") {
 					uri = '/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId
 				} else if(ltp.name === "linkToProject" || ltp.name == "project") {
 					uri = `/projects/`+ ltp.projectId
 				} else if (ltp.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
-				} else if(params.name === "scripts") {
-					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
-				} else if (params.name == "flow") {
-					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
+				} else if(ltp.name === "scripts") {
+					uri = '/recipes?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
+				} else if (ltp.name == "flow") {
+					uri = '/flow?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
 				}
                 this.router.transitionTo( uri )
                 break
