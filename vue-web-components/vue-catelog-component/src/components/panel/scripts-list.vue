@@ -44,19 +44,19 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" @click="selectScripts('python3')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg" alt="">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
                                     <p>python</p>
                                 </div>
                                  <div class="list" @click="selectScripts('pyspark')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/PySpark.svg" alt="">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
                                     <p>PySpark</p>
                                 </div>
                                  <div class="list" @click="selectScripts('sql')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R.svg" alt="">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
                                     <p>R</p>
                                 </div>
                                  <div class="list last" @click="selectScripts('sparksql')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg" alt="">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
                                     <p>sparkR</p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                                 <span class="dataset_icon">
                                     <img :src="dataset_icon" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.name">{{recipt.jobName}}</p>
+                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.jobShowName">{{recipt.jobShowName}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in recipt.label" :key="inx">
                                         <span v-if="recipt.label !== ''">

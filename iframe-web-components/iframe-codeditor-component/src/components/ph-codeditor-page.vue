@@ -110,7 +110,7 @@ export default {
         return {
             codeBuffer: "",
             downloadCode: 0,
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg",
+            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg",
             icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
             icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
             jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",

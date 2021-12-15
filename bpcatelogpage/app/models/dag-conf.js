@@ -6,6 +6,7 @@ export default class DagConfModel extends Model {
 	@attr("string") jobName
 	@attr("string") version
 	@attr("string") dagName
+	@attr("string") jobShowName
 	@attr("string") inputs
 	@attr("string") jobDisplayName
 	@attr("string") jobId

@@ -6,12 +6,12 @@
                 <button>Retry This Job</button>
             </div>
             <div class="jobs_area">
-                <div class="log-area" v-if="emrLog != ''">
-                    <div class="log-content">{{emrLog}}</div>
+                <div class="log-area" v-if="logsValue != ''">
+                    <!-- <div class="log-content">{{emrLog}}</div> -->
                     <div class="log-content">{{logsValue}}</div>
                 </div>
                 
-                <div class="no-logs" v-if="emrLog === ''">
+                <div class="no-logs" v-if="logsValue === ''">
                     <div class="no-log-img">
                         <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/list.png" alt="">
                         <span>暂无Log数据</span>
@@ -19,12 +19,13 @@
                 </div>
             </div>
         </div>
-        <div v-if="loading">
-            <div id="loadingio-spinner-double-ring-ho1zizxmctu"></div>
-            <div class="ldio-400lpppmiue">
-                <div></div><div></div>
-                <div><div></div></div>
-                <div><div></div></div>
+         <div v-if="loading">
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu">
+                <div class="ldio-400lpppmiue">
+                    <div></div><div></div>
+                    <div><div></div></div>
+                    <div><div></div></div>
+                </div>
             </div>
         </div>
     </div>
@@ -34,7 +35,7 @@
 export default {
     data() {
         return{
-            emrLog: "1",
+            emrLog: "",
             jobName: "",
             loading: false,
             logsValue: ""
@@ -54,8 +55,6 @@ export default {
     },
     computed: {},
     async mounted() {
-        // this.jobName = JSON.parse(this.response.data[0].attributes.message).cnotification.jobName //更新状态用
-        // let runId = JSON.parse(this.response.data[0].attributes.message).cnotification.runId
         /**
          * 1. 查到log路径
          * 2. 读log文件并展示,循环发送请求，直到读取到logs信息
@@ -65,7 +64,7 @@ export default {
         let jobId = this.$route.query.jobId
         this.jobName = this.$route.query.jobName
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "a116e7890eedd4b3b4555ab8568c364a1a8db1d82d49d9173c1b02aa0b088721"
+        const accessToken = this.getCookie( "access_token" ) || "a084652f8933a0adce8f2cec3fe0cab7012be251aa5c5ff851bdcf105f09c884"
         let body = {
             "table": "logs",
             "conditions": {
@@ -114,10 +113,10 @@ export default {
             if (result.status === 1) {
                 clearInterval(clearInt);
                 that.logsValue = result.message
+                that.loading = false
                 console.log(that.logsValue)
             }
         }, 5 * 1000)
-        this.loading = false
     },
     watch: {
     },
@@ -207,14 +206,14 @@ export default {
         }
     }
 }
-/* //界面未加载loading */
+//界面未加载loading
 @keyframes ldio-400lpppmiue {
     0% {
-    transform: rotate(0)
+        transform: rotate(0)
     }
 
     100% {
-    transform: rotate(360deg)
+        transform: rotate(360deg)
     }
 }
 

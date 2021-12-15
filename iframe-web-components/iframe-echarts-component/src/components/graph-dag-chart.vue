@@ -14,6 +14,7 @@
             </div>
             <div ref="chart" class="chart"></div>
         </div>
+
         <div class="opt_area">
             <div class="opt_header">
                 <img :src="header_icon" alt="">
@@ -34,15 +35,6 @@
                     <img :src="del_icon_black" alt="">
                 </div>
             </div>
-            <!-- <div class="data_id_area">
-                <div class="data_id_opt">
-                    <div>数据 ID：</div>
-                    <select name="data_id_sel" id="" class="data_id_sel"></select>
-                </div>
-                <div class="run_btn">
-                    <button>Run</button>
-                </div>
-            </div> -->
             <div class="scripts_area">
                 <div class="script_title">脚本</div>
                 <div class="scripts">
@@ -53,27 +45,33 @@
                 </div>
             </div>
         </div>
+
         <run-dag-dialog 
             v-if="showRunJson"
             @confirmeRunDag="confirmeRunDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
-        <div class="job_status" v-if="jobStatus">
-            <div class="job_notice">
-                <div class="item title">Job failed</div>
-                <div class="item">Job name</div>
+
+        <div class="job_status_area">
+            <div class="job_status" v-for="(item, index) in failedLogs" :key="index">
+                <div class="job_notice">
+                    <div class="item title">Job failed</div>
+                    <div class="item" :title="jobShowName">{{item.jobShowName}}</div>
+                </div>
+                <button @click="showLogs(item.data)">Logs</button>
             </div>
-            <button @click="showLogs">Logs</button>
         </div>
+
         <div v-if="loading">
             <div id="loadingio-spinner-double-ring-ho1zizxmctu">
-            <div class="ldio-400lpppmiue">
-                <div></div><div></div>
-                <div><div></div></div>
-                <div><div></div></div>
+                <div class="ldio-400lpppmiue">
+                    <div></div><div></div>
+                    <div><div></div></div>
+                    <div><div></div></div>
+                </div>
             </div>
         </div>
-    </div>
+
     </div>
 </template>
 <script>
@@ -90,7 +88,7 @@ export default {
             projectId: "",
             projectName: "",
             flowVersion: "",
-            jobId: "ETL_Iterator_ETL_Iterator_developer",
+            jobId: "",
             header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
@@ -100,17 +98,18 @@ export default {
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             del_icon_black: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1)(1).svg",
             hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            py_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python.svg",
-            pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/PySpark.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg",
+            py_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg",
+            pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg",
+            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg",
+            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
             run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
             daName: "datasetName",
             showRunJson: false,
-            jobStatus: false,
-            jobName: "ETL_Iterator_ETL_Iterator_developer_compute_111out_0Jj6bBGAh6vIqs5",
-            runId: "ETL_Iterator_ETL_Iterator_developer_2021-12-10T07_27_48+00_00",
-            loading: false
+            jobName: "",
+            runId: "",
+            failedLogs: [],
+            loading: false,
+            jobShowName: ""
         }
     },
     components: {
@@ -132,6 +131,7 @@ export default {
     },
     mounted () {
         let href = window.location.href
+        console.log(href)
         let paramArr = href.split("?")[1].split("&")
         this.projectId = paramArr[0].split('=')[1]
         this.projectName = paramArr[1].split("=")[1]
@@ -142,46 +142,72 @@ export default {
         this.noticeService.observer()
     },
     methods: {
-        showLogs() {
-            // this.$router.push("/dag-logs")
-            this.$router.push({path: "/dag-logs", query:{jobId: this.jobId, runId: this.runId, jobName: this.jobName}});
+        showLogs(data) {
+            let runId = JSON.parse(data.attributes.message).cnotification.runId
+            let jobName = JSON.parse(data.attributes.message).cnotification.jobName
+            this.$router.push({path: "/dag-logs", query:{jobId: this.jobId, runId: runId, jobName: jobName}});
         },
         async confirmeRunDag(data) {
             /**
-             * 1. 调接口触发dag(jobId = projectName + dagName + flowVersion)
+             * 1. 调接口触发dag
              * 2. query notification接收正确或错误消息
              */
-            this.loading = true
+            // this.loading = true
             this.showRunJson = false
-            this.jobId = `${this.projectName}_${this.projectName}_${this.flowVersion}`
-            this.noticeService.jobId = this.jobId
-            console.log(this.noticeService)
-            const url = `http://52.83.9.2:8000/api/dag_run/dag/run/${this.jobId}`
-            const accessToken = this.getCookie("access_token") || "34e15f53cf007d615a2cbed55a21041e4da8e7a3b9883eac12ef40e84915afb3"
+            const url = `https://api.pharbers.com/phdagtrigger`
+            const accessToken = this.getCookie("access_token") || "a084652f8933a0adce8f2cec3fe0cab7012be251aa5c5ff851bdcf105f09c884"
+            let body = {
+                "project_name": this.projectName,
+                "flow_version": "developer", 
+                "conf": {}
+            }
             let options = {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Authorization": accessToken,
                     "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
-                    "accept": "application/json",
-                    "mode":'cors',
-                    "access-control-allow-origin": "*"
-                }
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
             }
-            let result = await fetch(url).then(res => res.json())
-            let queryId = result.run_id
+            let result = await fetch(url, options).then(res => res.json())
+            let queryId = result.data.dag_run_id
+            this.jobId = result.data.dag_id
+            this.noticeService.jobId = this.jobId
             let timeout = data.args.param.timeout
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         runDagCallback(response, ele) {
-            let jobCat = response.data[0].attributes["job-cat"]
-            this.jobName = JSON.parse(response.data[0].attributes.message).cnotification.jobName //更新状态用
-            this.runId = JSON.parse(response.data[0].attributes.message).cnotification.runId
-            if(jobCat == "failed") {
-                //跳转下一页面
-                this.jobStatus = true
-            }
-            this.loading = false
+            let that = this
+            that.failedLogs = []
+            response.forEach(item => {
+                let jobCat = item.attributes["job-cat"]
+                let jobName = JSON.parse(item.attributes.message).cnotification.jobName
+                let nodes = ele.datasource.nodes
+                // 1.找到对应job节点并更新状态
+                nodes.map((it,index) => {
+                    if(jobName.indexOf(it.jobName) != -1) {
+                        let category = ele.datasource.nodes[index].category
+                        if(category.indexOf("_") != -1) {
+                            category = category.split("_")[0]
+                        }
+                        if(jobCat === "success") {
+                            ele.datasource.nodes[index].category = category + "_succeed"
+                        } else if(jobCat === "failed") {
+                            ele.datasource.nodes[index].category = category + "_failed"
+                        }
+                    }
+                })
+                // 2.失败时增加弹框
+                if(jobCat === "failed") {
+                    that.failedLogs.push({
+                        data: item,
+                        jobShowName: JSON.parse(item.attributes.message).cnotification.jobShowName
+                    })
+                }
+                console.log("failedLogs", that.failedLogs)
+                this.needRefresh++
+            })
         },
         on_click_runDag() {
             this.showRunJson = true
@@ -269,19 +295,51 @@ export default {
                             },
                             {
                                 name: 'Python3',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Python3.svg'
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg'
+                            },
+                            {
+                                name: 'Python3_failed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E5%A4%B1%E8%B4%A5.svg'
+                            },
+                            {
+                                name: 'Python3_succeed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E6%88%90%E5%8A%9F.svg'
                             },
                             {
                                 name: 'PySpark',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/PySpark.svg'
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg'
+                            },
+                            {
+                                name: 'PySpark_succeed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
+                            },
+                            {
+                                name: 'PySpark_failed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'SparkR',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/SparkR.svg'
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
+                            },
+                            {
+                                name: 'SparkR_succeed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E6%88%90%E5%8A%9F.svg'
+                            },
+                            {
+                                name: 'SparkR_failed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'R',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R.svg'
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg'
+                            },
+                            {
+                                name: 'R_succeed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%88%90%E5%8A%9F.svg'
+                            },
+                            {
+                                name: 'R_failed',
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'job',
@@ -324,37 +382,46 @@ export default {
     // height: calc(100vh - 40px);
     background: #f7f7f7;
     box-sizing: border-box;
-    .job_status {
-        box-sizing: border-box;
-        width: 400px;
-        height: 120px;
-        background: #FFFFFF;
-        border: 1px solid #979797;
+    .job_status_area {
         position: absolute;
         bottom: 60px;
-        right: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px;
-        font-size: 20px;
-        .title {
-            color: red;
-        }
-        button {
-            width: 59px;
-            height: 32px;
-            border: 1px solid #EEEDF7;
-            border-radius: 2px;
-            font-size: 14px;
-            color: #7163C5;
-            letter-spacing: 0;
-            text-align: center;
-            line-height: 20px;
-            font-weight: 500;
-            cursor: pointer;
+        right: 15px;
+        .job_status {
+            box-sizing: border-box;
+            width: 240px;
+            height: 70px;
+            background: #FFFFFF;
+            border: 1px solid #979797;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            font-size: 20px;
+            margin-bottom: 10px;
+            .item {
+                width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .title {
+                color: red;
+            }
+            button {
+                width: 59px;
+                height: 32px;
+                border: 1px solid #EEEDF7;
+                border-radius: 2px;
+                font-size: 14px;
+                color: #7163C5;
+                letter-spacing: 0;
+                text-align: center;
+                line-height: 20px;
+                font-weight: 500;
+                cursor: pointer;
+            }
         }
     }
+    
     .show_area {
         width: 100%;
         height: 100%;
@@ -455,7 +522,7 @@ export default {
         }
     }
 }
-/* //界面未加载loading */
+//界面未加载loading
 @keyframes ldio-400lpppmiue {
     0% {
         transform: rotate(0)

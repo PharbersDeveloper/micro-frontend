@@ -5,16 +5,16 @@ export default class PhDagDatasource {
         this.nodes= []
         this.links= []
         this.data = []
+        this.jobArr = []
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = 'cb77236ae19ce88a61bb0e944f836b59b2895c1d8a91aba451c9fbdcc8cb94fd'
+        this.debugToken = 'a084652f8933a0adce8f2cec3fe0cab7012be251aa5c5ff851bdcf105f09c884'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
     }
 
     defaultAdapter(row) {
-
         function resetCategory(cat, runtime) {
             let result = ""
             if (cat === "dataset" && runtime === "uploaded") {
@@ -48,8 +48,10 @@ export default class PhDagDatasource {
             node["y"] = position["y"]
             node["level"] = attr["level"]
             node["category"] = resetCategory(attr["cat"], attr["runtime"])
+            node["jobName"] = attr["name"] + "_" +attr["sort-version"].split("developer_")[1]
             return [true, node]
-        } else if (attr["ctype"] === "link") {
+        } 
+        else if (attr["ctype"] === "link") {
             const link = {}
             const cmessage = JSON.parse(attr['cmessage'])
             // link["source"] = cmessage["sourceId"]
@@ -97,10 +99,15 @@ export default class PhDagDatasource {
     }
 
     refreshData(ele) {
+        let that = this
         ele.datasource.buildQuery(ele)
             .then((response) => response.json())
             .then((response) => {
+                console.log(response)
+                that.jobArr = response.data.filter(it => it.attributes.cat === "job" && it.attributes.ctype === "node")
+                console.log("jobArr", this.jobArr)
                 const tmp = response.data.map(ele.datasource.adapter)
+                console.log("tmp", tmp)
                 ele.datasource.nodes = tmp.filter(x => x[0]).map(x => x[1])
                 ele.datasource.refreshLocationByLevel(ele)
                 ele.datasource.links = tmp.filter(x => !x[0]).map(x => x[1])

@@ -12,7 +12,6 @@ export default class NoticeServiceService {
 
     register(tableName, id, callback, ele, projectId, timeout) {
         this.timeout = timeout
-        // 持续30s，调用unregister删除
         if(this.subjectID.indexOf(id) == -1) {
             this.subjectID.push(id)
             this.subjectCallback.push({
@@ -48,12 +47,11 @@ export default class NoticeServiceService {
             let currentTime = new Date().getTime()
             // 设置超时时间
             that.subjectCallback.forEach((item,index) => {
-                if(currentTime - item.date > that.timeout*60000) {
+                if(currentTime - item.date > that.timeout * 60000) {
                     that.unregister(that.subjectID[index])
                 }
             })
             if(that.subjectID.length > 0) {
-                console.log(that.subjectID)
                 let conditions = {}
                 that.subjectID.forEach((item,index) => {
                     conditions = {
@@ -63,7 +61,7 @@ export default class NoticeServiceService {
                 })
                 let url = "https://apiv2.pharbers.com/phdydatasource/query"
                 let headers = {
-                    "Authorization": that.getCookie( "access_token" ) ||"a116e7890eedd4b3b4555ab8568c364a1a8db1d82d49d9173c1b02aa0b088721",
+                    "Authorization": that.getCookie( "access_token" ) ||"a084652f8933a0adce8f2cec3fe0cab7012be251aa5c5ff851bdcf105f09c884",
                     "Content-Type": "application/vnd.api+json",
                     "Accept": "application/vnd.api+json"
                 }
@@ -82,16 +80,19 @@ export default class NoticeServiceService {
                     .then(res => res.json())
                     .then(response => {
                         if(response.data && response.data.length > 0) {
-                            let jobCat = response.data[0].attributes["job-cat"]
-                            console.log(jobCat)
-                            //以后会做成进度条
-                            if(jobCat != "running") {
+                            let doneArr = response.data.filter(it => it.attributes["job-cat"] != "running")
+                            console.log(doneArr)
+                            if(doneArr.length > 0) {
+                                // 有running和以外状态出现
+                                console.log(doneArr)
                                 let index = that.subjectID.indexOf(response.data[0].id)
                                 let targetCallback = that.subjectCallback[index]
-                                // 将消息分发给不同component处理
-                                targetCallback.callback(response, targetCallback.ele)
-                                // 返回结果即调用unregister
-                                that.unregister(response.data[0].id)
+                                targetCallback.callback(doneArr, targetCallback.ele)
+                                // 没有running状态了,调用unregister,断掉请求	
+                                if(doneArr.length == targetCallback.ele.datasource.jobArr.length) {
+                                    //TODO: 有一种情况，一条job中间失败了，后面还有未执行的script时会继续不停发请求
+                                    that.unregister(response.data[0].id)
+                                }
                             }
                         
                         }
@@ -99,6 +100,6 @@ export default class NoticeServiceService {
             } else {
                 console.log("notice observer")
             }
-        }, 10 * 1000)
+        }, 15 * 1000)
     }
 }
