@@ -1,13 +1,15 @@
 export default class NoticeServiceService {
     constructor(id, adapter) {
         this.id = id
-        this.jobId = ""
+        this.projectName = ""
         //被观察的对象，需要维持一个观察者对象的id列表（添加，删除，通知）
         this.subjectID= []
         this.subjectCallback= []
         //管理状态的参数
         this.uploadStatus = false
         this.timeout = 2
+		this.statusNoticeCache = []
+		this.retryButtomShow = false
     }
 
     register(tableName, id, callback, ele, projectId, timeout) {
@@ -56,12 +58,12 @@ export default class NoticeServiceService {
                 that.subjectID.forEach((item,index) => {
                     conditions = {
                         "id": ["=", item],
-                        "projectId": ["begins_with", that.jobId]
+                        "projectId": ["begins_with", that.projectName]
                     }
                 })
                 let url = "https://apiv2.pharbers.com/phdydatasource/query"
                 let headers = {
-                    "Authorization": that.getCookie( "access_token" ) ||"a084652f8933a0adce8f2cec3fe0cab7012be251aa5c5ff851bdcf105f09c884",
+                    "Authorization": that.getCookie( "access_token" ) ||"98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b",
                     "Content-Type": "application/vnd.api+json",
                     "Accept": "application/vnd.api+json"
                 }
@@ -80,18 +82,24 @@ export default class NoticeServiceService {
                     .then(res => res.json())
                     .then(response => {
                         if(response.data && response.data.length > 0) {
-                            let doneArr = response.data.filter(it => it.attributes["job-cat"] != "running")
+                            let doneArr = response.data.filter(it => it.attributes["job-cat"] != "running") 
+							let runningArr = response.data.filter(it => it.attributes["job-cat"] == "running")
                             console.log(doneArr)
                             if(doneArr.length > 0) {
                                 // 有running和以外状态出现
-                                console.log(doneArr)
                                 let index = that.subjectID.indexOf(response.data[0].id)
                                 let targetCallback = that.subjectCallback[index]
                                 targetCallback.callback(doneArr, targetCallback.ele)
-                                // 没有running状态了,调用unregister,断掉请求	
-                                if(doneArr.length == targetCallback.ele.datasource.jobArr.length) {
-                                    //TODO: 有一种情况，一条job中间失败了，后面还有未执行的script时会继续不停发请求
+                                /**
+								 *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
+								 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
+								 * */ 
+                                if(runningArr.length === 0) {
+									that.statusNoticeCache = response.data
+								}
+								if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
                                     that.unregister(response.data[0].id)
+									that.retryButtomShow = true
                                 }
                             }
                         

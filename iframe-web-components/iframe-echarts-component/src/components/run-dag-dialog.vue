@@ -6,7 +6,7 @@
                     <span>运行</span>
                </div>
                <div class="prompt">
-                    <textarea name="runJson" id="" cols="30" rows="10" class="run_json"></textarea>
+                    <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="jsonValue"></textarea>
                </div>
               <div class="btn">
                   <div class="timeout">
@@ -29,7 +29,8 @@
 export default {
     data() {
         return{
-            selectTimeout: "60mins"
+            selectTimeout: "60mins",
+			jsonValue: ""
         }
     },
     props: {
