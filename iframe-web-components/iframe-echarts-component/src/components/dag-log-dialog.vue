@@ -46,10 +46,9 @@ export default {
     },
     props: {
         jobShowName: String,
-		runId: String,
-		dagId: String,
-		representId: String,
-		projectName: String,
+        runId: String,
+        representId: String,
+        projectName: String,
         response: {
             type: Object,
             default: function() {
@@ -65,7 +64,7 @@ export default {
          */
         this.loading = true
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
+        const accessToken = this.getCookie( "access_token" ) || "9d97b1edb1d968f57568d59a52a17a2d9023de1217639ecd12b78d3442a2afe7"
         let body = {
             "table": "logs",
             "conditions": {
@@ -122,16 +121,16 @@ export default {
     watch: {
     },
     methods: {
-		close() {
-			this.$emit("closeLogDialog")
-		},
+        close() {
+            this.$emit("closeLogDialog")
+        },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
                 return (arr[2]);
             else
                 return null;
-        },
+        }
         // save() {
         //     const event = new Event("event")
         //     event.args = {

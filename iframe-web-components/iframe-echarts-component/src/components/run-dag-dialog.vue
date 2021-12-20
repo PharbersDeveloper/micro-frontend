@@ -10,10 +10,10 @@
                </div>
               <div class="btn">
                   <div class="timeout">
-                      <div class="title">超时时间: </div>
-                      <select name="time" id="" v-model="selectTimeout">
-                          <option value="60mins">60mins</option>
-                      </select>
+                        <div class="title">超时时间: </div>
+                        <select name="time" id="" v-model="selectTimeout">
+                            <option value="60mins">60mins</option>
+                        </select>
                   </div>
                   <div class="">
                         <button class="cancel" @click="close">取消</button>
@@ -30,7 +30,7 @@ export default {
     data() {
         return{
             selectTimeout: "60mins",
-			jsonValue: ""
+            jsonValue: ""
         }
     },
     props: {
