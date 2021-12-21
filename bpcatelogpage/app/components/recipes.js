@@ -156,53 +156,47 @@ export default class RecipesComponent extends Component {
 				let delTagParam = e.detail[0].args.param;
 				let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = delTagParam.datasetArray //发送请求的参数在这取
-				let promiseListDel = [];
 				let _that = this
+				let msgArr = []
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
-					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-					const accessToken = this.cookies.read( "access_token" )
-					let body = {
-						"table": "action",
-						"item": {
-							"projectId": delTagParam.projectId,
-							"code": 0,
-							"comments": "delete_dataset",
-							"jobCat": "remove_Job",
-							"jobDesc": "running",
-							"message": JSON.stringify({
-								"targetId": targetDataset.jobId, 
-								"jobName":targetDataset.jobName
-							}),
-							"date": new Date().getTime(),
-							"owner": this.cookies.read( "account_id" ),
-							"showName": decodeURI(this.cookies.read('user_name_show'))
-						}
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							"Authorization": accessToken,
-							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-							"accept": "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					let result = fetch(url, options).then(res => res.json())
-					promiseListDel.push(result)
+					msgArr.push({
+						"targetId": targetDataset.jobId, 
+						"jobName":targetDataset.jobName,
+						"flowVersion": "developer"
+					})
 				})
-				let delResults = await Promise.all(promiseListDel)
-				delResults.forEach(item => {
-					if(item.data) {
-						_that.noticeService.register("notification", item.data.id, this.noticeCallback, this, delTagParam.projectId)
+				let body = {
+					"table": "action",
+					"item": {
+						"projectId": delTagParam.projectId,
+						"code": 0,
+						"comments": "delete_dataset",
+						"jobCat": "remove_Job",
+						"jobDesc": "running",
+						"message": JSON.stringify(msgArr),
+						"date": new Date().getTime(),
+						"owner": this.cookies.read( "account_id" ),
+						"showName": decodeURI(this.cookies.read('user_name_show'))
 					}
-				})
-				alert("删除数据集成功！")
+				}
+				const urldel = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const accessTokendel = this.cookies.read( "access_token" )
+				let options = {
+					method: "POST",
+					headers: {
+						"Authorization": accessTokendel,
+						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+						"accept": "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				let result = await fetch(urldel, options).then(res => res.json())
+				if(result.data) {
+					_that.noticeService.register("notification", result.data.id, this.noticeCallback, this, delTagParam.projectId)
+				}
+				alert("删除脚本成功！")
 				window.location.reload()
-				// Promise.all(promiseListDel).then((rspList)=> {
-				// 	window.location.reload()
-				// 	alert("删除数据集成功！")
-				// })
 			break
 			case "clearTags":
 				this.loadingService.loading.style.display = 'flex'

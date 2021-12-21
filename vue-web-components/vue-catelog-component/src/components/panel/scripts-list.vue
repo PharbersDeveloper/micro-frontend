@@ -146,7 +146,7 @@
                                 <img class='tags_imgs_tag' :src="edit_icon" alt="">
                                 <span class='tags_func'>编辑</span>
                             </span>
-							<span @click="createTagsOpen" class="view_list">
+                            <span @click="createTagsOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
@@ -336,6 +336,7 @@ export default {
         },
         //打开script弹框
         selectScripts(data) {
+            this.showDialog = false
             this.runtime = data
             this.showCreateScriptsDialog = true
         },

@@ -76,55 +76,48 @@ export default class DatasetLstComponent extends Component {
 				let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = delTagParam.datasetArray //发送请求的参数
 				const accessToken = this.cookies.read( "access_token" )
-				let promiseListDel = [];
 				let _that = this
+				let msgArr = []
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
-					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-					let body = {
-						"table": "action",
-						"item": {
-							"projectId": delTagParam.projectId,
-							"code": 0,
-							"comments": "delete_dataset",
-							"jobCat": "remove_DS",
-							"jobDesc": "running",
-							"message": JSON.stringify({
-								"version": "",
-								"dsid": targetDataset.id,
-								"destination": targetDataset.name,
-								"opname": this.cookies.read( "account_id" ),
-								"opgroup": this.cookies.read( "company_id" )
-							}),
-							"date": new Date().getTime(),
-							"owner": this.cookies.read( "account_id" ),
-							"showName": decodeURI(this.cookies.read('user_name_show'))
-						}
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							"Authorization": accessToken,
-							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-							"accept": "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					let result = fetch(url, options).then(res => res.json())
-					promiseListDel.push(result)
+					msgArr.push({
+						"version": "",
+						"dsid": targetDataset.id,
+						"destination": targetDataset.name,
+						"opname": this.cookies.read( "account_id" ),
+						"opgroup": this.cookies.read( "company_id" )
+					})
 				})
-				let delResults = await Promise.all(promiseListDel)
-				delResults.forEach(item => {
-					if(item.data) {
-						_that.noticeService.register("notification", item.data.id, this.delNoticeCallback, this, delTagParam.projectId)
+				const urldel = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				let body = {
+					"table": "action",
+					"item": {
+						"projectId": delTagParam.projectId,
+						"code": 0,
+						"comments": "delete_dataset",
+						"jobCat": "remove_DS",
+						"jobDesc": "running",
+						"message": JSON.stringify(msgArr),
+						"date": new Date().getTime(),
+						"owner": this.cookies.read( "account_id" ),
+						"showName": decodeURI(this.cookies.read('user_name_show'))
 					}
-				})
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						"Authorization": accessToken,
+						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+						"accept": "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				let result = await fetch(urldel, options).then(res => res.json())
+				if(result.data) {
+					_that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
+				}
 				alert("删除数据集成功！")
 				window.location.reload()
-				// Promise.all(promiseListDel).then((rspList)=> {
-				// 	window.location.reload()
-				// 	alert("删除数据集成功！")
-				// })
 			break
 			case "clearTags":
 				this.loadingService.loading.style.display = 'flex'

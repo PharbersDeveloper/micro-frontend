@@ -204,7 +204,7 @@ export default {
         async confirmeRunDag(data) {
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
-            const accessToken = this.getCookie("access_token") || "9d97b1edb1d968f57568d59a52a17a2d9023de1217639ecd12b78d3442a2afe7"
+            const accessToken = this.getCookie("access_token") || "5ff8a83e7526c8b7cf7fea55104b9b1f689d83daa3104aec799fde3175abe923"
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer", 
@@ -274,7 +274,7 @@ export default {
             console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
             const url = `https://api.pharbers.com/phdagtasktrigger`
-            const accessToken = this.getCookie("access_token") || "9d97b1edb1d968f57568d59a52a17a2d9023de1217639ecd12b78d3442a2afe7"
+            const accessToken = this.getCookie("access_token") || "5ff8a83e7526c8b7cf7fea55104b9b1f689d83daa3104aec799fde3175abe923"
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
@@ -316,7 +316,7 @@ export default {
             this.renderDag()
             const that = this
             // 发布前要解注
-            // document.domain = "pharbers.com"
+            document.domain = "pharbers.com"
             this.dag.on('click', function(params) {
                 that.selectItemName = params.name
                 // 获取选中job的基本信息
@@ -363,7 +363,7 @@ export default {
                         type: 'graph',
                         layout: 'none',
                         symbolSize: 50,
-                        roam: false, // 缩放
+                        roam: true, // 缩放
                         symbol: 'rect',
                         edgeSymbol: ['circle', 'arrow'],
                         edgeSymbolSize: [5, 10],

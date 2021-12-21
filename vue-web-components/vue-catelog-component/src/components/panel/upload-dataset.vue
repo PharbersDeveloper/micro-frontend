@@ -306,43 +306,42 @@ export default {
         //删除数据集
         async deleteDataset(data) {
             let that = this
-            let promiseListDel = [];
-            let delRelaResults = []
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
             // 是否需要删除关联关系
+            let msgArr = []
             if(data.args.param.datasetRelaResult.length > 0) {
                 data.args.param.datasetRelaResult.forEach(async item => {
-                    const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-                    let body = {
-                        "table": "action",
-                        "item": {
-                            "projectId": that.allData.projectId,
-                            "code": 0,
-                            "comments": "delete_dataset",
-                            "jobCat": "remove_Job",
-                            "jobDesc": "running",
-                            "message": JSON.stringify({
-                                "targetId": item.targetId, 
-                                "jobName": item.jobName
-                            }),
-                            "date": new Date().getTime(),
-                            "owner": this.getCookie("account_id"),
-                            "showName": decodeURI(this.getCookie('user_name_show'))
-                        }
-                    }
-                    let options = {
-                        method: "POST",
-                        headers: {
-                            "Authorization": accessToken,
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                            "accept": "application/json"
-                        },
-                        body: JSON.stringify(body)
-                    }
-                    let result = fetch(url, options).then(res => res.json())
-                    promiseListDel.push(result)
+                    msgArr.push({
+                        "targetId": item.targetId, 
+                        "jobName": item.jobName,
+                        "flowVersion": "developer"
+                    })
                 })
-                await Promise.all(promiseListDel)
+                const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+                let body = {
+                    "table": "action",
+                    "item": {
+                        "projectId": that.allData.projectId,
+                        "code": 0,
+                        "comments": "delete_dataset",
+                        "jobCat": "remove_Job",
+                        "jobDesc": "running",
+                        "message": JSON.stringify(msgArr),
+                        "date": new Date().getTime(),
+                        "owner": this.getCookie("account_id"),
+                        "showName": decodeURI(this.getCookie('user_name_show'))
+                    }
+                }
+                let options = {
+                    method: "POST",
+                    headers: {
+                        "Authorization": accessToken,
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        "accept": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                }
+                let result = await fetch(url, options).then(res => res.json())
             }
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss

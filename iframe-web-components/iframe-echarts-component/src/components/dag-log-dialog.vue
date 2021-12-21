@@ -2,13 +2,13 @@
     <div>
         <div class="show_logs">
             <div class="jobs_area">
-				<div class="header_area">
-					<div class="script_name">{{jobShowName}}</div>
-					<div class="btn_area">
-						<!-- <button class="retry" @click="retry">Retry This Job</button> -->
-						<button class="retry close" @click="close">关闭</button>
-					</div>
-				</div>
+                <div class="header_area">
+                    <div class="script_name">{{jobShowName}}</div>
+                    <div class="btn_area">
+                        <!-- <button class="retry" @click="retry">Retry This Job</button> -->
+                        <button class="retry close" @click="close">关闭</button>
+                    </div>
+                </div>
 
                 <div class="log-area" v-if="logsValue != ''">
                     <!-- <div class="log-content">{{emrLog}}</div> -->
@@ -64,7 +64,7 @@ export default {
          */
         this.loading = true
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "9d97b1edb1d968f57568d59a52a17a2d9023de1217639ecd12b78d3442a2afe7"
+        const accessToken = this.getCookie( "access_token" ) || "5ff8a83e7526c8b7cf7fea55104b9b1f689d83daa3104aec799fde3175abe923"
         let body = {
             "table": "logs",
             "conditions": {
@@ -112,6 +112,7 @@ export default {
             result = await fetch(logsUrl, logsOptions).then(res => res.json())
             if (result.status === 1) {
                 clearInterval(clearInt);
+                let base64 = require('js-base64').Base64
                 that.logsValue = result.message
                 that.loading = false
                 console.log(that.logsValue)
@@ -157,14 +158,14 @@ export default {
     box-sizing: border-box;
 }
 .show_logs {
-	height: 100vh;
+    height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);
     // display: flex;
     // flex-direction: row;
     // justify-content: center;
     // align-items: center;
-	position: fixed;
+    position: fixed;
     top: 0;
     right: 0;
     z-index: 2;
@@ -172,15 +173,15 @@ export default {
     align-items: center;
     background: rgba(0,0,0,0.31);
     .jobs_area {
-		width: 80vw;
-		height: 80vh;
-		border: 1px solid #ddd;
-		background-color: #fff;
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%,-50%);
-		box-sizing: border-box;
+        width: 80vw;
+        height: 80vh;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        box-sizing: border-box;
         padding: 20px;
         .log-area {
             display: flex;
@@ -229,11 +230,11 @@ export default {
             line-height: 20px;
             font-weight: 500;
             border: none;
-			cursor: pointer;
+            cursor: pointer;
         }
-		button.close {
-			margin-left: 20px;
-		}
+        button.close {
+            margin-left: 20px;
+        }
     }
 }
 //界面未加载loading
@@ -356,7 +357,7 @@ export default {
     -moz-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-	z-index: 3;
+    z-index: 3;
 }
 
 .ldio-400lpppmiue {
