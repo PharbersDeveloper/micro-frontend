@@ -102,7 +102,7 @@
 <script>
 import * as d3_base from "d3";
 import * as d3_dag from "d3-dag";
-import PhDagDatasource from './model/datasource'
+import PhDagDatasource from './model/datasourcev2'
 import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
@@ -299,16 +299,9 @@ export default {
         // 初始化数据
         async initChart () {
             // 初始化echarts实例
-            // this.dag = echarts.init(this.$refs.chart)
-            // this.bindChangeWindow()
-
-            // this.dag.showLoading()
-            // 获取数据
-            // await this.queryData()
-            // await this.datasource.refreshData(this)
-            // this.dag.hideLoading()
-            this.renderDag()
-            const that = this
+            await this.datasource.refreshData(this)
+            // this.renderDag(data)
+            // const that = this
             // 发布前要解注
             // document.domain = "pharbers.com"
             // this.dag.on('click', function(params) {
@@ -342,17 +335,15 @@ export default {
             else
                 return null;
         },
-        async renderDag () {
+        renderDag (data) {
+            if (data === null || data === undefined) {
+                data = this.datasource.data
+            }
             const d3 = Object.assign({}, d3_base, d3_dag);
-
-            const resp = await fetch(
-                "https://raw.githubusercontent.com/erikbrinkman/d3-dag/main/examples/grafo.json"
-            );
-            const data = await resp.json();
             const dag = d3.dagStratify()(data);
 
-            const width = 400;
-            const height = 400;
+            const width = 1000;
+            const height = 800;
 
             const layout = d3.sugiyama()
                 .size([width, height])
@@ -373,9 +364,6 @@ export default {
                     .attr("height", height)
                     .attr("viewBox", `${-nodeRadius} ${-nodeRadius} ${width + 2 * nodeRadius} ${height + 2 * nodeRadius}`);
                 const defs = svgSelection.append('defs'); // For gradients
-
-                // Use computed layout
-                // layout(dag);
 
                 const steps = dag.size();
                 const interp = d3.interpolateRainbow;
@@ -420,21 +408,30 @@ export default {
                     .data(dag.descendants())
                     .enter()
                     .append('g')
-                    .attr('transform', ({x, y}) => `translate(${x}, ${y})`);
+                    .attr('transform', ({x, y}) => `translate(${x}, ${y})`)
 
                 // Plot node circles
-                nodes.append('circle')
-                    .attr('r', 20)
-                    .attr('fill', n => colorMap[n.data.id]);
+                // nodes.append('circle')
+                //     .attr('r', 20)
+                //     .attr('fill', n => colorMap[n.data.id])
+                nodes.append('image')
+                    .attr("xlink:href", "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg")
+                    .attr("width", "50")
+                    .attr("height", "50")
+                    .attr('transform', 'translate(25, -25)rotate(90)')
+
+                svgSelection.attr('transform', 'rotate(-90)')
 
                 // Add text to nodes
                 nodes.append('text')
-                    .text(d => d.data.id)
+                    .text(d => d.data.attributes.name)
                     .attr('font-weight', 'bold')
                     .attr('font-family', 'sans-serif')
                     .attr('text-anchor', 'middle')
                     .attr('alignment-baseline', 'middle')
-                    .attr('fill', 'white');
+                    .attr('fill', 'black')
+                    .attr('transform', (data) => 'translate(-30, 0)rotate(90)')
+
             }
         }
     },
@@ -511,6 +508,7 @@ export default {
     .chart {
         width: calc(100vw - 320px);
         height: calc(100vh - 90px);
+        /*background-color: black;*/
         // height: 100%;
         // padding: 10px;
     }
