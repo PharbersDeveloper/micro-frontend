@@ -119,6 +119,9 @@ export default class DatasetLstComponent extends Component {
 				alert("删除数据集成功！")
 				window.location.reload()
 			break
+			case "fitMax":
+				debugger
+				break
 			case "clearTags":
 				this.loadingService.loading.style.display = 'flex'
         		this.loadingService.loading.style['z-index'] = 2

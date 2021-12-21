@@ -75,7 +75,7 @@ export default class PhDagDatasource {
                 "projectId": ["=", this.projectId],
                 "sortVersion": ["begins_with", "developer_"]
             },
-            "limit": 100,
+            "limit": 1000,
             "start_key": {}
         }
 

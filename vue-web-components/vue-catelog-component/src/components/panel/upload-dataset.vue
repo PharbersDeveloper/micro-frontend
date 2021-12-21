@@ -51,6 +51,9 @@
                             <div>
                                 <p @click="s3Upload">s3上传</p>
                             </div>
+                            <div>
+                                <p @click="on_click_max">Max1.0入口</p>
+                            </div>
                         </div>
                         </div>
 
@@ -181,6 +184,12 @@
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
+        <!-- max1.0入口 -->
+         <fit-max-dialog  
+            v-if="clickMax"
+            @fitMaxEvent="fitMaxEvent"
+            @closeDialog="closeDialog">
+        </fit-max-dialog>
     </div>
     </div>
 </template>
@@ -192,7 +201,7 @@ import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-
+import fitMaxDialog from './fit-max-dialog.vue'
 export default {
     data() {
         return {
@@ -225,6 +234,7 @@ export default {
             ary: [],
             checked: false,
             manual: true,
+            clickMax: false,
             scriptValue: "名称",
             isCheckedAllDataset: false,
             datasetcheckedIds: [], //选中项id
@@ -253,7 +263,8 @@ export default {
         createTagsDialog,
         deleteTagsDialog,
         bpSelectVue,
-        bpOptionVue
+        bpOptionVue,
+        fitMaxDialog
     },
     computed: {
         searchData: function() {
@@ -285,6 +296,15 @@ export default {
         }
     },
     methods: {
+        fitMaxEvent(data) {
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            console.log(data)
+            this.$emit('event', data)
+        },
+        closeDialog() {
+            this.clickMax = false
+        },
         //增加tag
         addTagsEvent(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
@@ -510,6 +530,22 @@ export default {
                 this.labelShowDialog = false
             }
         },
+        // Max1.0入口
+        on_click_max() {
+            this.clickMax = true
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "linkToPage",
+            //     element: this,
+            //     param: {
+            //         name: "upload",
+            //         type: "s3Upload",
+            //         projectName: this.allData.projectName,
+            //         projectId: this.allData.projectId
+            //     }
+            // }
+            // this.$emit('event', event)
+        },
         //本地上传文件
         upload() {
             const event = new Event("event")
@@ -587,13 +623,13 @@ export default {
     top: 30px;
     right: 40px;
     width: 150px;
-    height: 81px;
-    border: 2px solid #dddddd;
+    height: 65px;
+    border: 1px solid #dddddd;
     background: #fff;
     z-index: 9999;
     cursor: pointer;
     div {
-        border-bottom: 2px solid #979797;
+        border-bottom: 1px solid #979797;
         p {
             margin-left: 10px;
             font-family: PingFangSC-Medium;
