@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.jobArr = []
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '5ff8a83e7526c8b7cf7fea55104b9b1f689d83daa3104aec799fde3175abe923'
+        this.debugToken = '23082b0adc463b4ccbb67ad91ee86359cff504c2562a02b30590b551c78dfbf2'
 
         if (!adapter)
             this.adapter = this.defaultAdapter

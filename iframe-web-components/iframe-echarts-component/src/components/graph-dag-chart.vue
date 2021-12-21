@@ -204,7 +204,7 @@ export default {
         async confirmeRunDag(data) {
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
-            const accessToken = this.getCookie("access_token") || "5ff8a83e7526c8b7cf7fea55104b9b1f689d83daa3104aec799fde3175abe923"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer", 
@@ -274,7 +274,7 @@ export default {
             console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
             const url = `https://api.pharbers.com/phdagtasktrigger`
-            const accessToken = this.getCookie("access_token") || "5ff8a83e7526c8b7cf7fea55104b9b1f689d83daa3104aec799fde3175abe923"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",

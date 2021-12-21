@@ -10,6 +10,7 @@ export default class NoticeServiceService {
         this.timeout = 2
         this.statusNoticeCache = []
         this.retryButtomShow = false
+        this.debugToken = "23082b0adc463b4ccbb67ad91ee86359cff504c2562a02b30590b551c78dfbf2"
     }
 
     register(tableName, id, callback, ele, projectId, timeout) {
@@ -63,7 +64,7 @@ export default class NoticeServiceService {
                 })
                 let url = "https://apiv2.pharbers.com/phdydatasource/query"
                 let headers = {
-                    "Authorization": that.getCookie( "access_token" ) ||"9d97b1edb1d968f57568d59a52a17a2d9023de1217639ecd12b78d3442a2afe7",
+                    "Authorization": that.getCookie( "access_token" ) || that.debugToken,
                     "Content-Type": "application/vnd.api+json",
                     "Accept": "application/vnd.api+json"
                 }
@@ -91,9 +92,9 @@ export default class NoticeServiceService {
                                 let targetCallback = that.subjectCallback[index]
                                 targetCallback.callback(doneArr, targetCallback.ele)
                                 /**
-								 *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
-								 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
-								 * */ 
+                                 *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
+                                 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
+                                 * */ 
                                 if(runningArr.length === 0) {
                                     that.statusNoticeCache = response.data
                                 }
