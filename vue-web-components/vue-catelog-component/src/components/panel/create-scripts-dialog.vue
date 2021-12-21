@@ -14,13 +14,15 @@
                         <div class="title">输入数据</div>
                         <div class="left_content content_area">
                             <div class="select_dataset_list" v-show="!datasetListShow">
-                                <div class="select_dataset" v-for="(item,index) in addDatasetList" :key="item+index">
-                                    <div class="sel_name">
-                                        <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-                                        <span class="title title_name">{{item.name}}</span>
-                                    </div>
-                                    <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
-                                </div>
+								<div class="select_dataset_list_area">
+									<div class="select_dataset" v-for="(item,index) in addDatasetList" :key="item+index">
+										<div class="sel_name">
+											<img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
+											<span :title="item.name" class="title title_name">{{item.name}}</span>
+										</div>
+										<img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
+									</div>
+								</div>
                                 <el-button class="add" type="primary" @click="on_clickAddInput">增加</el-button>
                             </div>
                             <div class="addInput" v-show="datasetListShow">
@@ -29,7 +31,7 @@
                                 <div class="dataset_list">
                                     <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index">
                                         <img :src="add_icon" alt="" class="add_icon">
-                                        <span class="name">{{item.name}}</span>
+                                        <span class="name" :title="item.name">{{item.name}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +70,7 @@
                             <div class="select_dataset">
                                 <div class="sel_name">
                                     <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-                                    <span class="title">{{dsName.name}}</span>
+                                    <span class="title" :title="dsName.name">{{dsName.name}}</span>
                                 </div>
                                 <img :src="del_icon" class="del_icon" @click="on_clickChangeOutput(item)" alt="">
                             </div>
@@ -82,7 +84,7 @@
                             <div class="dataset_list">
                                 <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputs" :key="item+index">
                                     <img :src="add_icon" alt="" class="add_icon">
-                                    <span class="name">{{item.name}}</span>
+                                    <span class="name" :title="item.name">{{item.name}}</span>
                                 </div>
                             </div>
                             <div class="tab">
@@ -336,18 +338,30 @@ export default {
         border-bottom: 1px solid #ccc;
     }
     .title_name {
+		display: block;
         border-bottom: none;
         font-size: 14px;
+		width: 150px;
+		overflow: hidden;
+		text-overflow: ellipsis;
     }
     .content_area {
         padding: 20px;
         button {
             width: 100%;
             height: 40px;
+			min-height: 40px;
+			margin-top: 20px;
         }
         .select_dataset_list {
             display: flex;
             flex-direction: column;
+			.select_dataset_list_area {
+				max-height: 300px;
+				overflow: auto;
+				width: 240px;
+    			overflow-x: hidden;
+			}
         }
         .select_dataset {
             display: flex;
@@ -356,6 +370,7 @@ export default {
             border: 1px solid #ccc;
             padding: 10px;
             height: 40px;
+			width: 225px;
             margin-bottom: 10px;
             border-radius: 5px;
             .sel_name {
@@ -396,6 +411,12 @@ export default {
                     height: 12px;
                     margin-right: 10px;
                 }
+				.name {
+					width: 180px;
+					display: block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
             }
             .dataset:hover {
                 color: #0088cc

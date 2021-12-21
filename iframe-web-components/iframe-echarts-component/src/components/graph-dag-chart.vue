@@ -29,22 +29,22 @@
                     <img :src="share_icon" alt="">
                     <img :src="hide_icon" alt="">
                     <img :src="run_icon" alt="" 
-						@click="on_click_runDag">
+                        @click="on_click_runDag">
                     <img v-if="noticeService.retryButtomShow && selectItem"
-						:src="run_script" alt="" 
-						@click="on_click_run_script('self_only')">
+                        :src="run_script" alt="" 
+                        @click="on_click_run_script('self_only')">
                     <img v-if="noticeService.retryButtomShow && selectItem"
-						:src="run_to_script" alt="" 
-						@click="on_click_run_script('downstream')">
+                        :src="run_to_script" alt="" 
+                        @click="on_click_run_script('downstream')">
                     <img v-if="noticeService.retryButtomShow  && selectItem" 
-						:src="run_from_script" alt="" 
-						@click="on_click_run_script('upstream')">
-					<img v-if="!noticeService.retryButtomShow || !selectItem" 
-						:src="run_script_gray" alt="">
+                        :src="run_from_script" alt="" 
+                        @click="on_click_run_script('upstream')">
                     <img v-if="!noticeService.retryButtomShow || !selectItem" 
-						:src="run_from_script_gray" alt="">
+                        :src="run_script_gray" alt="">
                     <img v-if="!noticeService.retryButtomShow || !selectItem" 
-						:src="run_to_script_gray" alt="">
+                        :src="run_from_script_gray" alt="">
+                    <img v-if="!noticeService.retryButtomShow || !selectItem" 
+                        :src="run_to_script_gray" alt="">
                 </div>
                 <div class="sec_icon_row">
                     <img :src="delete_icon" alt="">
@@ -70,11 +70,11 @@
 
         <dag-logs-dialog
             v-if="showDagLogs"
-			:runId="runId"
-			:jobShowName="jobShowName"
-			:projectName="projectName"
-			:representId="representId"
-			@closeLogDialog="closeLogDialog"
+            :runId="runId"
+            :jobShowName="jobShowName"
+            :projectName="projectName"
+            :representId="representId"
+            @closeLogDialog="closeLogDialog"
         ></dag-logs-dialog>
 
         <div class="job_status_area">
@@ -198,9 +198,9 @@ export default {
             this.showDagLogs = true
         },
         /**
-		 * 1. 调接口触发dag
-		 * 2. query notification接收正确或错误消息
-		 */
+         * 1. 调接口触发dag
+         * 2. query notification接收正确或错误消息
+         */
         async confirmeRunDag(data) {
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
@@ -208,7 +208,7 @@ export default {
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer", 
-                "conf": {}
+                "conf": data.args.param.jsonValue
             }
             let options = {
                 method: "POST",
@@ -226,8 +226,8 @@ export default {
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         /**
-		 * 更新状态的回调函数
-		 */
+         * 更新状态的回调函数
+         */
         runDagCallback(response, ele) {
             let that = this
             that.failedLogs = []
@@ -266,9 +266,9 @@ export default {
             })
         },
         /**
-		 * 1. 有第一次运行状态才可以点retry三个按钮
-		 * 2. 选择job之后修改名字，点运行时候出现弹窗提示
-		 */
+         * 1. 有第一次运行状态才可以点retry三个按钮
+         * 2. 选择job之后修改名字，点运行时候出现弹窗提示
+         */
         async on_click_run_script(data) {
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
