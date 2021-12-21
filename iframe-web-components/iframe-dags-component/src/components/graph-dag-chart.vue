@@ -100,7 +100,8 @@
     </div>
 </template>
 <script>
-// import * as echarts from 'echarts'
+import * as d3_base from "d3";
+import * as d3_dag from "d3-dag";
 import PhDagDatasource from './model/datasource'
 import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
@@ -128,25 +129,25 @@ export default {
             R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg",
             sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
             run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-			run_to_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-			run_from_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
-			run_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-			run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
-			run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-			run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_from_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
+            run_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
+            run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
             selectItemName: "",
-			selectItem: null,
+            selectItem: null,
             showRunJson: false,
             jobShowName: "",
             runId: "",
-			representId: "",
-			failedLogs: [],
+            representId: "",
+            failedLogs: [],
             projectName: "ETL_Iterator",
             loading: false,
             showDagLogs:false,
             jobShowName: "",
-			selectItemName: "", //单击的dag的名字
-			responseArr: []
+            selectItemName: "", //单击的dag的名字
+            responseArr: []
         }
     },
     components: {
@@ -169,26 +170,26 @@ export default {
     },
     mounted () {
         let href = window.location.href
-        let paramArr = href.split("?")[1].split("&")
-        this.projectId = paramArr[0].split('=')[1]
-        this.projectName = paramArr[1].split("=")[1]
-        this.flowVersion = paramArr[2].split("=")[1]
-        this.datasource.projectId = this.projectId
+        // let paramArr = href.split("?")[1].split("&")
+        // this.projectId = paramArr[0].split('=')[1]
+        // this.projectName = paramArr[1].split("=")[1]
+        // this.flowVersion = paramArr[2].split("=")[1]
+        // this.datasource.projectId = this.projectId
         this.initChart()
-        this.noticeService.observer()
+        // this.noticeService.observer()
     },
     methods: {
-		closeLogDialog() {
-			this.showDagLogs = false
-		},
+        closeLogDialog() {
+            this.showDagLogs = false
+        },
         showLogs(data, representId) {
-			console.log(data)
+            console.log(data)
             this.runId = JSON.parse(data.attributes.message).cnotification.runId
             this.jobShowName = JSON.parse(data.attributes.message).cnotification.jobShowName
-			this.representId = representId
+            this.representId = representId
             this.showDagLogs = true
         },
-		/**
+        /**
 		 * 1. 调接口触发dag
 		 * 2. query notification接收正确或错误消息
 		 */
@@ -217,19 +218,19 @@ export default {
             let timeout = data.args.param.timeout
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
-		/**
+        /**
 		 * 更新状态的回调函数
 		 */
         runDagCallback(response, ele) {
             let that = this
             that.failedLogs = []
-			let represent_id = ""
-			this.responseArr = response
+            let represent_id = ""
+            this.responseArr = response
             response.forEach(item => {
                 let jobCat = item.attributes["job-cat"]
                 let jobName = JSON.parse(item.attributes.message).cnotification.jobName
                 let nodes = ele.datasource.nodes
-				console.log("nodes", nodes)
+                console.log("nodes", nodes)
                 // 1.找到对应job节点并更新状态
                 nodes.map((it,index) => {
                     if(jobName.indexOf(it.jobName) != -1) {
@@ -241,7 +242,7 @@ export default {
                             ele.datasource.nodes[index].category = category + "_succeed"
                         } else if(jobCat === "failed") {
                             ele.datasource.nodes[index].category = category + "_failed"
-							represent_id = it.representId
+                            represent_id = it.representId
                         }
                     }
                 })
@@ -250,30 +251,30 @@ export default {
                     that.failedLogs.push({
                         data: item,
                         jobShowName: JSON.parse(item.attributes.message).cnotification.jobShowName,
-						representId: represent_id
+                        representId: represent_id
                     })
                 }
                 console.log("failedLogs", that.failedLogs)
                 this.needRefresh++
             })
         },
-		/**
+        /**
 		 * 1. 有第一次运行状态才可以点retry三个按钮
 		 * 2. 选择job之后修改名字，点运行时候出现弹窗提示
 		 */
-		async on_click_run_script(data) {
-			console.log("responseArr", this.responseArr)
-			console.log("selectItem", this.selectItem)
-			this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
-			//task_id: dagId(trigger) + jobShowName + represent-id(queryDag)
-			const url = `https://api.pharbers.com/phdagtasktrigger`
+        async on_click_run_script(data) {
+            console.log("responseArr", this.responseArr)
+            console.log("selectItem", this.selectItem)
+            this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
+            //task_id: dagId(trigger) + jobShowName + represent-id(queryDag)
+            const url = `https://api.pharbers.com/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
             let body = {
                 "project_name": this.projectName,
-				"flow_version": "developer",
-				"run_id": this.runId,
-				"task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
-				"clean_cat": data //向上还是向下
+                "flow_version": "developer",
+                "run_id": this.runId,
+                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
+                "clean_cat": data //向上还是向下
             }
             let options = {
                 method: "POST",
@@ -288,7 +289,7 @@ export default {
             this.noticeService.projectName = this.projectName
             let timeout = 60
             this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
-		},
+        },
         on_click_runDag() {
             this.showRunJson = true
         },
@@ -308,18 +309,18 @@ export default {
             // this.dag.hideLoading()
             this.renderDag()
             const that = this
-			// 发布前要解注
+            // 发布前要解注
             // document.domain = "pharbers.com"
-            this.dag.on('click', function(params) {
-				that.selectItemName = params.name
-				// 获取选中job的基本信息
-				let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
-				if(scriptArr.length > 0) {
-					that.selectItem = scriptArr[0].attributes
-				}
-				console.log("selectItem", that.selectItem)
-                that.$emit('itemClicked', params)
-            })
+            // this.dag.on('click', function(params) {
+            //     that.selectItemName = params.name
+            //     // 获取选中job的基本信息
+            //     let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
+            //     if(scriptArr.length > 0) {
+            //         that.selectItem = scriptArr[0].attributes
+            //     }
+            //     console.log("selectItem", that.selectItem)
+            //     that.$emit('itemClicked', params)
+            // })
         },
 
 
@@ -341,115 +342,100 @@ export default {
             else
                 return null;
         },
-        renderDag () {
-            let that = this
-            let option = {
-                title: {
-                    text: this.title
-                },
-                backgroundColor: '#f7f7f7',
-                tooltip: {},
-                animationDurationUpdate: 1500,
-                animationEasingUpdate: 'quinticInOut',
-                series: [
-                    {
-                        type: 'graph',
-                        layout: 'none',
-                        symbolSize: 50,
-                        roam: false, // 缩放
-                        symbol: 'rect',
-                        edgeSymbol: ['circle', 'arrow'],
-                        edgeSymbolSize: [5, 10],
-                        itemStyle: {
-                            color: '#24a861'
-                        },
-                        label: {
-                            show: true,
-                            fontSize: 16,
-                            position: 'bottom'
-                        },
-                        edgeLabel: {
-                            fontSize: 20
-                        },
-                        categories: [
-                            {
-                                name: 'DSuploaded',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSuploaded.svg'
-                            },
-                            {
-                                name: 'DSIntermediate',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSIntermediate.svg'
-                            },
-                            {
-                                name: 'Python3',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg'
-                            },
-                            {
-                                name: 'Python3_failed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E5%A4%B1%E8%B4%A5.svg'
-                            },
-                            {
-                                name: 'Python3_succeed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E6%88%90%E5%8A%9F.svg'
-                            },
-                            {
-                                name: 'PySpark',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg'
-                            },
-                            {
-                                name: 'PySpark_succeed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
-                            },
-                            {
-                                name: 'PySpark_failed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
-                            },
-                            {
-                                name: 'SparkR',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
-                            },
-                            {
-                                name: 'SparkR_succeed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E6%88%90%E5%8A%9F.svg'
-                            },
-                            {
-                                name: 'SparkR_failed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E5%A4%B1%E8%B4%A5.svg'
-                            },
-                            {
-                                name: 'R',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg'
-                            },
-                            {
-                                name: 'R_succeed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%88%90%E5%8A%9F.svg'
-                            },
-                            {
-                                name: 'R_failed',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%A4%B1%E8%B4%A5.svg'
-                            },
-                            {
-                                name: 'job',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
-                            },
-                            {
-                                name: 'dataset',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
-                            }
-                        ],
-                        data: this.datasource.nodes,
-                        links: this.datasource.links,
-                        lineStyle: {
-                            opacity: 0.9,
-                            width: 2,
-                            curveness: 0
-                        }
-                    }
-                ]
-            };
-            // 绘制图表
-            this.dag.setOption(option)
+        async renderDag () {
+            const d3 = Object.assign({}, d3_base, d3_dag);
 
+            const resp = await fetch(
+                "https://raw.githubusercontent.com/erikbrinkman/d3-dag/main/examples/grafo.json"
+            );
+            const data = await resp.json();
+            const dag = d3.dagStratify()(data);
+
+            const width = 400;
+            const height = 400;
+
+            const layout = d3.sugiyama()
+                .size([width, height])
+                .layering(d3.layeringCoffmanGraham())
+                .decross(d3.decrossTwoLayer())
+                .coord(d3.coordGreedy())
+
+            layout(dag);
+            draw(dag, data, this.$refs.chart);
+
+            function draw(dag, data, ele) {
+                // This code only handles rendering
+                const nodeRadius = 20;
+
+                const svgSelection = d3.select(ele)
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("viewBox", `${-nodeRadius} ${-nodeRadius} ${width + 2 * nodeRadius} ${height + 2 * nodeRadius}`);
+                const defs = svgSelection.append('defs'); // For gradients
+
+                // Use computed layout
+                // layout(dag);
+
+                const steps = dag.size();
+                const interp = d3.interpolateRainbow;
+                const colorMap = {};
+                // dag.each((node, i) => {
+                data.forEach((node, i) => {
+                    colorMap[node.id] = interp(i / steps);
+                });
+
+                // How to draw edges
+                const line = d3.line()
+                    .curve(d3.curveCatmullRom)
+                    .x(d => d.x)
+                    .y(d => d.y);
+
+                // Plot edges
+                svgSelection.append('g')
+                    .selectAll('path')
+                    .data(dag.links())
+                    .enter()
+                    .append('path')
+                    .attr('d', (data) => line(data.points))
+                    .attr('fill', 'none')
+                    .attr('stroke-width', 3)
+                    .attr('stroke', ({source, target}) => {
+                        const gradId = `${source.data.id}-${target.data.id}`;
+                        const grad = defs.append('linearGradient')
+                            .attr('id', gradId)
+                            .attr('gradientUnits', 'userSpaceOnUse')
+                            .attr('x1', source.x)
+                            .attr('x2', target.x)
+                            .attr('y1', source.y)
+                            .attr('y2', target.y);
+                        grad.append('stop').attr('offset', '0%').attr('stop-color', colorMap[source.data.id]);
+                        grad.append('stop').attr('offset', '100%').attr('stop-color', colorMap[target.data.id]);
+                        return `url(#${gradId})`;
+                    });
+
+                // Select nodes
+                const nodes = svgSelection.append('g')
+                    .selectAll('g')
+                    .data(dag.descendants())
+                    .enter()
+                    .append('g')
+                    .attr('transform', ({x, y}) => `translate(${x}, ${y})`);
+
+                // Plot node circles
+                nodes.append('circle')
+                    .attr('r', 20)
+                    .attr('fill', n => colorMap[n.data.id]);
+
+                // Add text to nodes
+                nodes.append('text')
+                    .text(d => d.data.id)
+                    .attr('font-weight', 'bold')
+                    .attr('font-family', 'sans-serif')
+                    .attr('text-anchor', 'middle')
+                    .attr('alignment-baseline', 'middle')
+                    .attr('fill', 'white');
+            }
         }
     },
     watch: {

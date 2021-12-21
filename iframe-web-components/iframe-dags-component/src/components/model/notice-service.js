@@ -8,8 +8,8 @@ export default class NoticeServiceService {
         //管理状态的参数
         this.uploadStatus = false
         this.timeout = 2
-		this.statusNoticeCache = []
-		this.retryButtomShow = false
+        this.statusNoticeCache = []
+        this.retryButtomShow = false
     }
 
     register(tableName, id, callback, ele, projectId, timeout) {
@@ -83,7 +83,7 @@ export default class NoticeServiceService {
                     .then(response => {
                         if(response.data && response.data.length > 0) {
                             let doneArr = response.data.filter(it => it.attributes["job-cat"] != "running") 
-							let runningArr = response.data.filter(it => it.attributes["job-cat"] == "running")
+                            let runningArr = response.data.filter(it => it.attributes["job-cat"] == "running")
                             console.log(doneArr)
                             if(doneArr.length > 0) {
                                 // 有running和以外状态出现
@@ -95,11 +95,11 @@ export default class NoticeServiceService {
 								 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
 								 * */ 
                                 if(runningArr.length === 0) {
-									that.statusNoticeCache = response.data
-								}
-								if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
+                                    that.statusNoticeCache = response.data
+                                }
+                                if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
                                     that.unregister(response.data[0].id)
-									that.retryButtomShow = true
+                                    that.retryButtomShow = true
                                 }
                             }
                         
