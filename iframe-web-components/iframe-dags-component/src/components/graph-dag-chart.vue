@@ -116,7 +116,6 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            dagId: "",
             header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
@@ -243,13 +242,13 @@ export default {
     },
     mounted () {
         let href = window.location.href
-        // let paramArr = href.split("?")[1].split("&")
-        // this.projectId = paramArr[0].split('=')[1]
-        // this.projectName = paramArr[1].split("=")[1]
-        // this.flowVersion = paramArr[2].split("=")[1]
-        // this.datasource.projectId = this.projectId
+        let paramArr = href.split("?")[1].split("&")
+        this.projectId = paramArr[0].split('=')[1]
+        this.projectName = paramArr[1].split("=")[1]
+        this.flowVersion = paramArr[2].split("=")[1]
+        this.datasource.projectId = this.projectId
         this.initChart()
-        // this.noticeService.observer()
+        this.noticeService.observer()
     },
     methods: {
         closeLogDialog() {
@@ -269,11 +268,11 @@ export default {
         async confirmeRunDag(data) {
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
-            const accessToken = this.getCookie("access_token") || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
-                "conf": {}
+                "conf": data.args.param.jsonValue
             }
             let options = {
                 method: "POST",
@@ -286,7 +285,6 @@ export default {
             }
             let result = await fetch(url, options).then(res => res.json())
             let queryId = result.data.dag_run_id
-            // this.dagId = result.data.dag_id
             this.noticeService.projectName = this.projectName
             let timeout = data.args.param.timeout
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
@@ -339,9 +337,8 @@ export default {
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
-            //task_id: dagId(trigger) + jobShowName + represent-id(queryDag)
             const url = `https://api.pharbers.com/phdagtasktrigger`
-            const accessToken = this.getCookie("access_token") || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
@@ -374,7 +371,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
             // this.renderDag(data)
-            // const that = this
+            const that = this
             // 发布前要解注
             // document.domain = "pharbers.com"
             // this.dag.on('click', function(params) {
@@ -543,19 +540,19 @@ export default {
                         .attr('opacity', '.85')
 
                     // TODO: tooltips
-                    d3.select(this).append("circle")
-                        .attr("r", 20)
-                        .attr("fill", "black")
-                        .attr('transform', `translate(30, 30)`)
+                    // d3.select(this).append("circle")
+                    //     .attr("r", 20)
+                    //     .attr("fill", "black")
+                    //     .attr('transform', `translate(30, 30)`)
                 }).on('mouseout', function (d, i) {
                     d3.select(this).transition()
                         .duration('50')
                         .attr('opacity', '1');
 
                     // TODO: remove tooltips
-                    d3.select(this).selectAll("circle").remove()
+                    // d3.select(this).selectAll("circle").remove()
                 }).on('click', function (d, i) {
-                    alert('abcde')
+                    alert(i.data.attributes.name)
                 })
 
                 that.$refs.viewport.scroll({
