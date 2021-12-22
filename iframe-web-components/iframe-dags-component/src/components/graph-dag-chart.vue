@@ -524,6 +524,7 @@ export default {
                     .attr("height", "50")
                     .attr('transform', 'translate(-25, -25)')
 
+
                 // Add text to nodes
                 nodes.append('text')
                     .text(d => d.data.attributes.name)
@@ -533,6 +534,29 @@ export default {
                     .attr('alignment-baseline', 'middle')
                     .attr('fill', 'black')
                     .attr('transform', 'translate(0, 30)')
+
+
+                //Our new hover effects
+                nodes.on('mouseover', function (d, i) {
+                    d3.select(this).transition()
+                        .duration('50')
+                        .attr('opacity', '.85')
+
+                    // TODO: tooltips
+                    d3.select(this).append("circle")
+                        .attr("r", 20)
+                        .attr("fill", "black")
+                        .attr('transform', `translate(30, 30)`)
+                }).on('mouseout', function (d, i) {
+                    d3.select(this).transition()
+                        .duration('50')
+                        .attr('opacity', '1');
+
+                    // TODO: remove tooltips
+                    d3.select(this).selectAll("circle").remove()
+                }).on('click', function (d, i) {
+                    alert('abcde')
+                })
 
                 that.$refs.viewport.scroll({
                     top: windowHeight / 2,
