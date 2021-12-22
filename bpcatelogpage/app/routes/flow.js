@@ -7,16 +7,18 @@ export default class FlowRoute extends Route {
     @service cookies
     @service ajax
     @service('loading') loadingService;
+    @service browserEventsService;
     @service store
     namespace = ENV.namespace
 
     beforeModel() {
         let cookies = this.get( "cookies" )
-
         if ( !cookies.read( "access_token" ) ) {
             this.transitionTo( "index" )
         }
         this.loadingService.loading.style.display = 'flex'
+		this.browserEventsService.clearListener()
+		this.browserEventsService.registerListener('flow')
     }
     queryParams = {
         projectName: {
