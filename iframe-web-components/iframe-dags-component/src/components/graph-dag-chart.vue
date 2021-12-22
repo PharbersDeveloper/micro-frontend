@@ -166,6 +166,77 @@ export default {
             default: function() {
                 return new noticeService('1')
             }
+        },
+        statusFlags: {
+            type: Object,
+            default: function() {
+                return [
+                    {
+                        name: 'DSuploaded',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSuploaded.svg'
+                    },
+                    {
+                        name: 'DSIntermediate',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSIntermediate.svg'
+                    },
+                    {
+                        name: 'Python3',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg'
+                    },
+                    {
+                        name: 'Python3_failed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'Python3_succeed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E6%88%90%E5%8A%9F.svg'
+                    },
+                    {
+                        name: 'PySpark',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg'
+                    },
+                    {
+                        name: 'PySpark_succeed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
+                    },
+                    {
+                        name: 'PySpark_failed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'SparkR',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
+                    },
+                    {
+                        name: 'SparkR_succeed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E6%88%90%E5%8A%9F.svg'
+                    },
+                    {
+                        name: 'SparkR_failed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'R',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg'
+                    },
+                    {
+                        name: 'R_succeed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%88%90%E5%8A%9F.svg'
+                    },
+                    {
+                        name: 'R_failed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'job',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
+                    },
+                    {
+                        name: 'dataset',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
+                    }
+                ]
+            }
         }
     },
     mounted () {
@@ -335,6 +406,8 @@ export default {
                 return null;
         },
         renderDag (data) {
+            const that = this
+
             if (data === null || data === undefined) {
                 data = this.datasource.data
             }
@@ -413,16 +486,38 @@ export default {
                     .attr('transform', ({x, y}) => `translate(${y}, ${x})`)
 
                 // Plot node circles
-                // nodes.append('circle')
-                //     .attr('r', 20)
-                //     .attr('fill', n => colorMap[n.data.id])
                 nodes.append('image')
-                    .attr("xlink:href", "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg")
+                    .attr("xlink:href", ({data}) => {
+                        // TODO: 添加状态的绘制
+                        const cat = data.attributes.cat
+                        const runtime = data.attributes.runtime
+                        let result = "dataset"
+                        if (cat === "dataset" && runtime === "uploaded") {
+                            result = "DSuploaded"
+                        } else if (cat === "dataset" && runtime === "intermediate") {
+                            result = "DSIntermediate"
+                        } else if (cat === "job" && runtime === "python3") {
+                            result = "Python3"
+                        } else if (cat === "job" && runtime === "pyspark") {
+                            result = "PySpark"
+                        } else if (cat === "job" && runtime === "sparkr") {
+                            result = "SparkR"
+                        } else if (cat === "job" && runtime === "r") {
+                            result = "R"
+                        } else if (cat === "dataset") {
+                            result = "dataset"
+                        } else if (cat === "job") {
+                            result = "job"
+                        } else {
+
+                        }
+
+                        const reVal = that.statusFlags.find(x => x.name === result)
+                        return reVal.symbol
+                    })
                     .attr("width", "50")
                     .attr("height", "50")
                     .attr('transform', 'translate(-25, -25)')
-
-                // svgSelection.attr('transform', 'rotate(-90)')
 
                 // Add text to nodes
                 nodes.append('text')
@@ -432,7 +527,7 @@ export default {
                     .attr('text-anchor', 'middle')
                     .attr('alignment-baseline', 'middle')
                     .attr('fill', 'black')
-                    .attr('transform', (data) => 'translate(0, 30)')
+                    .attr('transform', 'translate(0, 30)')
 
             }
         }
