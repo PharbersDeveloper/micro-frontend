@@ -7,7 +7,7 @@ export default class PhDagDatasource {
         this.projectId = "JfSmQBYUpyb4jsei"
         // this.projectId = "HfSZTr74gRcQOYoA"
         this.title = "need a title"
-        this.debugToken = '23082b0adc463b4ccbb67ad91ee86359cff504c2562a02b30590b551c78dfbf2'
+        this.debugToken = 'a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7'
     }
 
     buildQuery(ele, isAppend=false) {
@@ -66,6 +66,7 @@ export default class PhDagDatasource {
                         tmp["parentIds"].push(sourceId)
                     }
                 }
+                console.log(ele.datasource.data)
                 ele.needRefresh++
             })
     }

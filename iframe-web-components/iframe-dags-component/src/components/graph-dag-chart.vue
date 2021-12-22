@@ -316,7 +316,6 @@ export default {
             // })
         },
 
-
         // 监听屏幕大小改变
         bindChangeWindow () {
             window.onresize = () => {
@@ -342,11 +341,14 @@ export default {
             const d3 = Object.assign({}, d3_base, d3_dag);
             const dag = d3.dagStratify()(data);
 
-            const width = 1000;
-            const height = 800;
+            const viewportWidth = this.$refs.chart.offsetWidth
+            const viewportHeight = this.$refs.chart.offsetHeight
+
+            const width = viewportWidth
+            const height = viewportHeight
 
             const layout = d3.sugiyama()
-                .size([width, height])
+                .size([height, width])
                 .layering(d3.layeringCoffmanGraham())
                 .decross(d3.decrossTwoLayer())
                 .coord(d3.coordGreedy())
@@ -356,13 +358,13 @@ export default {
 
             function draw(dag, data, ele) {
                 // This code only handles rendering
-                const nodeRadius = 20;
+                const nodeRadius = 25;
 
                 const svgSelection = d3.select(ele)
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height)
-                    .attr("viewBox", `${-nodeRadius} ${-nodeRadius} ${width + 2 * nodeRadius} ${height + 2 * nodeRadius}`);
+                    .attr("viewBox", `${-nodeRadius} ${-nodeRadius} ${viewportWidth + 2 * nodeRadius} ${viewportHeight + 2 * nodeRadius}`);
                 const defs = svgSelection.append('defs'); // For gradients
 
                 const steps = dag.size();
@@ -376,8 +378,8 @@ export default {
                 // How to draw edges
                 const line = d3.line()
                     .curve(d3.curveCatmullRom)
-                    .x(d => d.x)
-                    .y(d => d.y);
+                    .x(d => d.y)
+                    .y(d => d.x);
 
                 // Plot edges
                 svgSelection.append('g')
@@ -408,7 +410,7 @@ export default {
                     .data(dag.descendants())
                     .enter()
                     .append('g')
-                    .attr('transform', ({x, y}) => `translate(${x}, ${y})`)
+                    .attr('transform', ({x, y}) => `translate(${y}, ${x})`)
 
                 // Plot node circles
                 // nodes.append('circle')
@@ -418,9 +420,9 @@ export default {
                     .attr("xlink:href", "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg")
                     .attr("width", "50")
                     .attr("height", "50")
-                    .attr('transform', 'translate(25, -25)rotate(90)')
+                    .attr('transform', 'translate(-25, -25)')
 
-                svgSelection.attr('transform', 'rotate(-90)')
+                // svgSelection.attr('transform', 'rotate(-90)')
 
                 // Add text to nodes
                 nodes.append('text')
@@ -430,7 +432,7 @@ export default {
                     .attr('text-anchor', 'middle')
                     .attr('alignment-baseline', 'middle')
                     .attr('fill', 'black')
-                    .attr('transform', (data) => 'translate(-30, 0)rotate(90)')
+                    .attr('transform', (data) => 'translate(0, 30)')
 
             }
         }
