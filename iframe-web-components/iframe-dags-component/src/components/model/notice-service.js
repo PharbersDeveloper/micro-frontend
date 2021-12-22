@@ -10,6 +10,7 @@ export default class NoticeServiceService {
         this.timeout = 2
         this.statusNoticeCache = []
         this.retryButtomShow = false
+        this.debugToken = "a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7"
     }
 
     register(tableName, id, callback, ele, projectId, timeout) {
@@ -63,7 +64,7 @@ export default class NoticeServiceService {
                 })
                 let url = "https://apiv2.pharbers.com/phdydatasource/query"
                 let headers = {
-                    "Authorization": that.getCookie( "access_token" ) ||"98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b",
+                    "Authorization": that.getCookie( "access_token" ) || that.debugToken,
                     "Content-Type": "application/vnd.api+json",
                     "Accept": "application/vnd.api+json"
                 }
@@ -86,20 +87,21 @@ export default class NoticeServiceService {
                             let runningArr = response.data.filter(it => it.attributes["job-cat"] == "running")
                             console.log(doneArr)
                             if(doneArr.length > 0) {
-                                // 有running和以外状态出现
+                                // 有running和以外状态出现快修bug
                                 let index = that.subjectID.indexOf(response.data[0].id)
                                 let targetCallback = that.subjectCallback[index]
                                 targetCallback.callback(doneArr, targetCallback.ele)
                                 /**
-								 *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
-								 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
-								 * */ 
-                                if(runningArr.length === 0) {
-                                    that.statusNoticeCache = response.data
-                                }
+                                 *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
+                                 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
+                                 * */ 
                                 if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
+                                    console.log("query结束")
                                     that.unregister(response.data[0].id)
                                     that.retryButtomShow = true
+                                }
+                                if(runningArr.length === 0) {
+                                    that.statusNoticeCache = response.data
                                 }
                             }
                         

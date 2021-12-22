@@ -31,22 +31,22 @@
                     <img :src="share_icon" alt="">
                     <img :src="hide_icon" alt="">
                     <img :src="run_icon" alt=""
-						@click="on_click_runDag">
+                        @click="on_click_runDag">
                     <img v-if="noticeService.retryButtomShow && selectItem"
-						:src="run_script" alt=""
-						@click="on_click_run_script('self_only')">
+                        :src="run_script" alt=""
+                        @click="on_click_run_script('self_only')">
                     <img v-if="noticeService.retryButtomShow && selectItem"
-						:src="run_to_script" alt=""
-						@click="on_click_run_script('downstream')">
+                        :src="run_to_script" alt=""
+                        @click="on_click_run_script('downstream')">
                     <img v-if="noticeService.retryButtomShow  && selectItem"
-						:src="run_from_script" alt=""
-						@click="on_click_run_script('upstream')">
-					<img v-if="!noticeService.retryButtomShow || !selectItem"
-						:src="run_script_gray" alt="">
+                        :src="run_from_script" alt=""
+                        @click="on_click_run_script('upstream')">
                     <img v-if="!noticeService.retryButtomShow || !selectItem"
-						:src="run_from_script_gray" alt="">
+                        :src="run_script_gray" alt="">
                     <img v-if="!noticeService.retryButtomShow || !selectItem"
-						:src="run_to_script_gray" alt="">
+                        :src="run_from_script_gray" alt="">
+                    <img v-if="!noticeService.retryButtomShow || !selectItem"
+                        :src="run_to_script_gray" alt="">
                 </div>
                 <div class="sec_icon_row">
                     <img :src="delete_icon" alt="">
@@ -72,11 +72,11 @@
 
         <dag-logs-dialog
             v-if="showDagLogs"
-			:runId="runId"
-			:jobShowName="jobShowName"
-			:projectName="projectName"
-			:representId="representId"
-			@closeLogDialog="closeLogDialog"
+            :runId="runId"
+            :jobShowName="jobShowName"
+            :projectName="projectName"
+            :representId="representId"
+            @closeLogDialog="closeLogDialog"
         ></dag-logs-dialog>
 
         <div class="job_status_area">
@@ -262,9 +262,9 @@ export default {
             this.showDagLogs = true
         },
         /**
-		 * 1. 调接口触发dag
-		 * 2. query notification接收正确或错误消息
-		 */
+         * 1. 调接口触发dag
+         * 2. query notification接收正确或错误消息
+         */
         async confirmeRunDag(data) {
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
@@ -290,8 +290,8 @@ export default {
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         /**
-		 * 更新状态的回调函数
-		 */
+         * 更新状态的回调函数
+         */
         runDagCallback(response, ele) {
             let that = this
             that.failedLogs = []
@@ -300,22 +300,24 @@ export default {
             response.forEach(item => {
                 let jobCat = item.attributes["job-cat"]
                 let jobName = JSON.parse(item.attributes.message).cnotification.jobName
-                let nodes = ele.datasource.nodes
-                console.log("nodes", nodes)
+                let data = ele.datasource.data
                 // 1.找到对应job节点并更新状态
-                nodes.map((it,index) => {
-                    if(jobName.indexOf(it.jobName) != -1) {
-                        let category = ele.datasource.nodes[index].category
-                        if(category.indexOf("_") != -1) {
-                            category = category.split("_")[0]
-                        }
+                data.map((it,index) => {
+                    if(jobName.indexOf(it.attributes.name) != -1) {
+                        // let category = ele.datasource.data[index].category
+                        // if(category.indexOf("_") != -1) {
+                        // category = category.split("_")[0]
+                        // }
                         if(jobCat === "success") {
-                            ele.datasource.nodes[index].category = category + "_succeed"
+                            it.status = "succeed"
+                            // ele.datasource.data[index].category = category + "_succeed"
                         } else if(jobCat === "failed") {
-                            ele.datasource.nodes[index].category = category + "_failed"
-                            represent_id = it.representId
+                            // ele.datasource.data[index].category = category + "_failed"
+                            // represent_id = it.representId
+                            it.status = "failed"
                         }
                     }
+                    that.refreshNodeStatus(it)
                 })
                 // 2.失败时出现弹框
                 if(jobCat === "failed") {
@@ -326,13 +328,33 @@ export default {
                     })
                 }
                 console.log("failedLogs", that.failedLogs)
-                this.needRefresh++
+                // this.needRefresh++
             })
         },
+        refreshNodeStatus(node) {
+            const that = this
+            const d3 = Object.assign({}, d3_base, d3_dag)
+            if (node["attributes"]["cat"] === "job") {
+                d3.select("#" + node["attributes"]["name"]).selectAll("image")
+                    .attr("xlink:href", ({data}) => {
+                        const cat = data.category
+                        let result = ""
+                        if (data.status === "succeed") {
+                            result = cat + "_succeed"
+                        } else if (data.status === "failed") {
+                            result = cat + "_failed"
+                        } else {
+                            result = cat
+                        }
+                        const reVal = that.statusFlags.find(x => x.name === result)
+                        return reVal.symbol
+                    })
+            }
+        },
         /**
-		 * 1. 有第一次运行状态才可以点retry三个按钮
-		 * 2. 选择job之后修改名字，点运行时候出现弹窗提示
-		 */
+         * 1. 有第一次运行状态才可以点retry三个按钮
+         * 2. 选择job之后修改名字，点运行时候出现弹窗提示
+         */
         async on_click_run_script(data) {
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
@@ -370,20 +392,8 @@ export default {
         async initChart () {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
-            // this.renderDag(data)
-            const that = this
             // 发布前要解注
             // document.domain = "pharbers.com"
-            // this.dag.on('click', function(params) {
-            //     that.selectItemName = params.name
-            //     // 获取选中job的基本信息
-            //     let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
-            //     if(scriptArr.length > 0) {
-            //         that.selectItem = scriptArr[0].attributes
-            //     }
-            //     console.log("selectItem", that.selectItem)
-            //     that.$emit('itemClicked', params)
-            // })
         },
 
         // 监听屏幕大小改变
@@ -485,36 +495,19 @@ export default {
                     .data(dag.descendants())
                     .enter()
                     .append('g')
+                    .attr('id', ({data}) => data.attributes.name)
                     .attr('transform', ({x, y}) => `translate(${y}, ${x})`)
 
                 // Plot node circles
                 nodes.append('image')
                     .attr("xlink:href", ({data}) => {
-                        // TODO: 添加状态的绘制
-                        const cat = data.attributes.cat
-                        const runtime = data.attributes.runtime
-                        let result = "dataset"
-                        if (cat === "dataset" && runtime === "uploaded") {
-                            result = "DSuploaded"
-                        } else if (cat === "dataset" && runtime === "intermediate") {
-                            result = "DSIntermediate"
-                        } else if (cat === "job" && runtime === "python3") {
-                            result = "Python3"
-                        } else if (cat === "job" && runtime === "pyspark") {
-                            result = "PySpark"
-                        } else if (cat === "job" && runtime === "sparkr") {
-                            result = "SparkR"
-                        } else if (cat === "job" && runtime === "r") {
-                            result = "R"
-                        } else if (cat === "dataset") {
-                            result = "dataset"
-                        } else if (cat === "job") {
-                            result = "job"
-                        } else {
-
+                        const cat = data.category
+                        if (data.status === "succeed") {
+                            cat = cat + "_succeed"
+                        } else if (data.status === "failed") {
+                            cat = cat + "_failed"
                         }
-
-                        const reVal = that.statusFlags.find(x => x.name === result)
+                        const reVal = that.statusFlags.find(x => x.name === cat)
                         return reVal.symbol
                     })
                     .attr("width", "50")
@@ -552,7 +545,14 @@ export default {
                     // TODO: remove tooltips
                     // d3.select(this).selectAll("circle").remove()
                 }).on('click', function (d, i) {
-                    alert(i.data.attributes.name)
+                    that.selectItemName = i.data.attributes.name
+                    // 获取选中job的基本信息
+                    let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
+                    if(scriptArr.length > 0) {
+                        that.selectItem = scriptArr[0].attributes
+                    }
+                    console.log("selectItem", that.selectItem)
+                    // that.$emit('itemClicked', params)
                 })
 
                 that.$refs.viewport.scroll({

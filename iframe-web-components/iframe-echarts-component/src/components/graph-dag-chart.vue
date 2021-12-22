@@ -262,7 +262,7 @@ export default {
                     })
                 }
                 console.log("failedLogs", that.failedLogs)
-                this.needRefresh++
+                // this.needRefresh++
             })
         },
         /**

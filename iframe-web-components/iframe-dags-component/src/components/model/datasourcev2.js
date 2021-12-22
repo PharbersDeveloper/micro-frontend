@@ -58,6 +58,30 @@ export default class PhDagDatasource {
                 ele.datasource.data = ele.datasource.data.map(x => {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
+                    x["status"] = "normal"
+                    const cat = x["attributes"]["cat"]
+                    const runtime = x["attributes"]["runtime"]
+                    let result = "dataset"
+                    if (cat === "dataset" && runtime === "uploaded") {
+                        result = "DSuploaded"
+                    } else if (cat === "dataset" && runtime === "intermediate") {
+                        result = "DSIntermediate"
+                    } else if (cat === "job" && runtime === "python3") {
+                        result = "Python3"
+                    } else if (cat === "job" && runtime === "pyspark") {
+                        result = "PySpark"
+                    } else if (cat === "job" && runtime === "sparkr") {
+                        result = "SparkR"
+                    } else if (cat === "job" && runtime === "r") {
+                        result = "R"
+                    } else if (cat === "dataset") {
+                        result = "dataset"
+                    } else if (cat === "job") {
+                        result = "job"
+                    } else {
+
+                    }
+                    x["category"] = result
                     const tmp = parseInt(x["attributes"]["level"])
                     if (tmp > maxLevel) {
                         maxLevel = tmp
