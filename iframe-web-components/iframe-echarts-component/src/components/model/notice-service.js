@@ -10,7 +10,7 @@ export default class NoticeServiceService {
         this.timeout = 2
         this.statusNoticeCache = []
         this.retryButtomShow = false
-        this.debugToken = "23082b0adc463b4ccbb67ad91ee86359cff504c2562a02b30590b551c78dfbf2"
+        this.debugToken = "a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7"
     }
 
     register(tableName, id, callback, ele, projectId, timeout) {
@@ -96,6 +96,7 @@ export default class NoticeServiceService {
                                  * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
                                  * */ 
                                 if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
+                                    console.log("query结束")
                                     that.unregister(response.data[0].id)
                                     that.retryButtomShow = true
                                 }

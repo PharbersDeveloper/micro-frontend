@@ -13,23 +13,26 @@
                     <div class="left">
                         <div class="title">输入数据</div>
                         <div class="left_content content_area">
+                            <!-- 选中的input -->
                             <div class="select_dataset_list" v-show="!datasetListShow">
-								<div class="select_dataset_list_area">
-									<div class="select_dataset" v-for="(item,index) in addDatasetList" :key="item+index">
-										<div class="sel_name">
-											<img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-											<span :title="item.name" class="title title_name">{{item.name}}</span>
-										</div>
-										<img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
-									</div>
-								</div>
+                                <div class="select_dataset_list_area">
+                                    <div class="select_dataset" v-for="(item,index) in addDatasetList" :key="item+index">
+                                        <div class="sel_name">
+                                            <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
+                                            <span :title="item.name" class="title title_name">{{item.name}}</span>
+                                        </div>
+                                        <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
+                                    </div>
+                                </div>
                                 <el-button class="add" type="primary" @click="on_clickAddInput">增加</el-button>
                             </div>
+                            <!-- 未选的input -->
                             <div class="addInput" v-show="datasetListShow">
-                                <el-input placeholder="搜索" v-model="searchDataset"  class="search_row"></el-input>
+                                <el-input placeholder="搜索" v-model="searchInput"  class="search_row"></el-input>
                                 <img :src="search_row" class="search_row_icon" alt="">
                                 <div class="dataset_list">
-                                    <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index">
+                                    <!-- <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index"> -->
+                                    <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListSearch" :key="item+index">
                                         <img :src="add_icon" alt="" class="add_icon">
                                         <span class="name" :title="item.name">{{item.name}}</span>
                                     </div>
@@ -39,6 +42,7 @@
                     </div>
                     <div class="right">
                         <div class="title">输出数据</div>
+                        <!-- 新建output -->
                         <div class="right_content" v-show="!datasetOutputListShow  && showOldDataset">
                             <div class="add_ds">
                                 <span class="ds_title">添加数据集</span>
@@ -66,6 +70,7 @@
                                 <div class="old_data" @click="satasetTab('old')">现有数据集</div>
                             </div>
                         </div>
+                        <!-- 已选中output -->
                         <div class="change" v-show="datasetOutputListShow && showOldDataset">
                             <div class="select_dataset">
                                 <div class="sel_name">
@@ -78,11 +83,13 @@
                                 <el-button class="add_input" :disabled="dsName.length  == 0" type="primary" @click="on_clickChangeOutput">更改</el-button>
                             </div>
                         </div>
+                        <!-- 选择现有output -->
                         <div class="oldDatasetList" v-show="!showOldDataset">
-                             <el-input placeholder="搜索" v-model="searchDataset"  class="search_row"></el-input>
+                             <el-input placeholder="搜索" v-model="searchOutput"  class="search_row"></el-input>
                             <img :src="search_row" class="search_row_icon" alt="">
                             <div class="dataset_list">
-                                <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputs" :key="item+index">
+                                <!-- <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputs" :key="item+index"> -->
+                                <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputsSearch" :key="item+index">
                                     <img :src="add_icon" alt="" class="add_icon">
                                     <span class="name" :title="item.name">{{item.name}}</span>
                                 </div>
@@ -115,7 +122,8 @@ export default {
             search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
             datasetListShow: false,
             datasetOutputListShow: false, //显示选中的output
-            searchDataset: "",
+            searchInput: "",
+            searchOutput: "",
             addDatasetList: [], //已经选中的输入数据
             remainDatasetList: [], //剩余未选中的输入数据
             remainDatasetListOutputs: [],  //剩余未选中的输出数据
@@ -136,7 +144,22 @@ export default {
     props: {
         datasets: Array
     },
-    computed: {},
+    computed: {
+        remainDatasetListSearch: function() {
+            let searchValue = this.searchInput
+            if(searchValue) {
+                return this.remainDatasetList.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+            }
+            return this.remainDatasetList
+        },
+        remainDatasetListOutputsSearch: function() {
+            let searchValueOutput = this.searchOutput
+            if(searchValueOutput) {
+                return this.remainDatasetListOutputs.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
+            }
+            return this.remainDatasetListOutputs
+        }
+    },
     mounted() {
         //输入输出数据的dataset列表
         let that = this
@@ -338,30 +361,30 @@ export default {
         border-bottom: 1px solid #ccc;
     }
     .title_name {
-		display: block;
+        display: block;
         border-bottom: none;
         font-size: 14px;
-		width: 150px;
-		overflow: hidden;
-		text-overflow: ellipsis;
+        width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .content_area {
         padding: 20px;
         button {
             width: 100%;
             height: 40px;
-			min-height: 40px;
-			margin-top: 20px;
+            min-height: 40px;
+            margin-top: 20px;
         }
         .select_dataset_list {
             display: flex;
             flex-direction: column;
-			.select_dataset_list_area {
-				max-height: 300px;
-				overflow: auto;
-				width: 240px;
-    			overflow-x: hidden;
-			}
+            .select_dataset_list_area {
+                max-height: 300px;
+                overflow: auto;
+                width: 240px;
+                overflow-x: hidden;
+            }
         }
         .select_dataset {
             display: flex;
@@ -370,7 +393,7 @@ export default {
             border: 1px solid #ccc;
             padding: 10px;
             height: 40px;
-			width: 225px;
+            width: 225px;
             margin-bottom: 10px;
             border-radius: 5px;
             .sel_name {
@@ -411,12 +434,12 @@ export default {
                     height: 12px;
                     margin-right: 10px;
                 }
-				.name {
-					width: 180px;
-					display: block;
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
+                .name {
+                    width: 180px;
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
             }
             .dataset:hover {
                 color: #0088cc
