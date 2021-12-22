@@ -29,22 +29,22 @@
                     <img :src="share_icon" alt="">
                     <img :src="hide_icon" alt="">
                     <img :src="run_icon" alt="" 
-						@click="on_click_runDag">
+                        @click="on_click_runDag">
                     <img v-if="noticeService.retryButtomShow && selectItem"
-						:src="run_script" alt="" 
-						@click="on_click_run_script('self_only')">
+                        :src="run_script" alt="" 
+                        @click="on_click_run_script('self_only')">
                     <img v-if="noticeService.retryButtomShow && selectItem"
-						:src="run_to_script" alt="" 
-						@click="on_click_run_script('downstream')">
+                        :src="run_to_script" alt="" 
+                        @click="on_click_run_script('downstream')">
                     <img v-if="noticeService.retryButtomShow  && selectItem" 
-						:src="run_from_script" alt="" 
-						@click="on_click_run_script('upstream')">
-					<img v-if="!noticeService.retryButtomShow || !selectItem" 
-						:src="run_script_gray" alt="">
+                        :src="run_from_script" alt="" 
+                        @click="on_click_run_script('upstream')">
                     <img v-if="!noticeService.retryButtomShow || !selectItem" 
-						:src="run_from_script_gray" alt="">
+                        :src="run_script_gray" alt="">
                     <img v-if="!noticeService.retryButtomShow || !selectItem" 
-						:src="run_to_script_gray" alt="">
+                        :src="run_from_script_gray" alt="">
+                    <img v-if="!noticeService.retryButtomShow || !selectItem" 
+                        :src="run_to_script_gray" alt="">
                 </div>
                 <div class="sec_icon_row">
                     <img :src="delete_icon" alt="">
@@ -70,11 +70,11 @@
 
         <dag-logs-dialog
             v-if="showDagLogs"
-			:runId="runId"
-			:jobShowName="jobShowName"
-			:projectName="projectName"
-			:representId="representId"
-			@closeLogDialog="closeLogDialog"
+            :runId="runId"
+            :jobShowName="jobShowName"
+            :projectName="projectName"
+            :representId="representId"
+            @closeLogDialog="closeLogDialog"
         ></dag-logs-dialog>
 
         <div class="job_status_area">
@@ -113,7 +113,6 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            dagId: "",
             header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
@@ -128,34 +127,34 @@ export default {
             R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg",
             sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
             run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-			run_to_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-			run_from_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
-			run_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-			run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
-			run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-			run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_from_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
+            run_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
+            run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
             selectItemName: "",
-			selectItem: null,
+            selectItem: null,
             showRunJson: false,
             jobShowName: "",
             runId: "",
-			representId: "",
-			// projectName: "",
-			failedLogs: [],
+            representId: "",
+            // projectName: "",
+            failedLogs: [],
             projectName: "ETL_Iterator",
             // failedLogs: [{
             //     jobShowName: "compute_aw",
-			// 	data: {
-			// 		attributes: {
-			// 			message: JSON.stringify({"type": "notification", "opname": "张璐", "cnotification": {"jobName": "ETL_Iterator_ETL_Iterator_developer_compute_aw_EYPYvgIWyXw66Lg", "runId": "ETL_Iterator_ETL_Iterator_developer_2021-12-16T07:27:44+00:00", "jobShowName": "compute_aw", "error": ""}})
-			// 		}
-			// 	}
+            // 	data: {
+            // 		attributes: {
+            // 			message: JSON.stringify({"type": "notification", "opname": "张璐", "cnotification": {"jobName": "ETL_Iterator_ETL_Iterator_developer_compute_aw_EYPYvgIWyXw66Lg", "runId": "ETL_Iterator_ETL_Iterator_developer_2021-12-16T07:27:44+00:00", "jobShowName": "compute_aw", "error": ""}})
+            // 		}
+            // 	}
             // }],
             loading: false,
             showDagLogs:false,
             jobShowName: "",
-			selectItemName: "", //单击的dag的名字
-			responseArr: []
+            selectItemName: "", //单击的dag的名字
+            responseArr: []
         }
     },
     components: {
@@ -188,28 +187,28 @@ export default {
         this.noticeService.observer()
     },
     methods: {
-		closeLogDialog() {
-			this.showDagLogs = false
-		},
+        closeLogDialog() {
+            this.showDagLogs = false
+        },
         showLogs(data, representId) {
-			console.log(data)
+            console.log(data)
             this.runId = JSON.parse(data.attributes.message).cnotification.runId
             this.jobShowName = JSON.parse(data.attributes.message).cnotification.jobShowName
-			this.representId = representId
+            this.representId = representId
             this.showDagLogs = true
         },
-		/**
-		 * 1. 调接口触发dag
-		 * 2. query notification接收正确或错误消息
-		 */
+        /**
+         * 1. 调接口触发dag
+         * 2. query notification接收正确或错误消息
+         */
         async confirmeRunDag(data) {
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
-            const accessToken = this.getCookie("access_token") || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer", 
-                "conf": {}
+                "conf": data.args.param.jsonValue
             }
             let options = {
                 method: "POST",
@@ -222,24 +221,23 @@ export default {
             }
             let result = await fetch(url, options).then(res => res.json())
             let queryId = result.data.dag_run_id
-            // this.dagId = result.data.dag_id
             this.noticeService.projectName = this.projectName
             let timeout = data.args.param.timeout
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
-		/**
-		 * 更新状态的回调函数
-		 */
+        /**
+         * 更新状态的回调函数
+         */
         runDagCallback(response, ele) {
             let that = this
             that.failedLogs = []
-			let represent_id = ""
-			this.responseArr = response
+            let represent_id = ""
+            this.responseArr = response
             response.forEach(item => {
                 let jobCat = item.attributes["job-cat"]
                 let jobName = JSON.parse(item.attributes.message).cnotification.jobName
                 let nodes = ele.datasource.nodes
-				console.log("nodes", nodes)
+                console.log("nodes", nodes)
                 // 1.找到对应job节点并更新状态
                 nodes.map((it,index) => {
                     if(jobName.indexOf(it.jobName) != -1) {
@@ -251,7 +249,7 @@ export default {
                             ele.datasource.nodes[index].category = category + "_succeed"
                         } else if(jobCat === "failed") {
                             ele.datasource.nodes[index].category = category + "_failed"
-							represent_id = it.representId
+                            represent_id = it.representId
                         }
                     }
                 })
@@ -260,30 +258,29 @@ export default {
                     that.failedLogs.push({
                         data: item,
                         jobShowName: JSON.parse(item.attributes.message).cnotification.jobShowName,
-						representId: represent_id
+                        representId: represent_id
                     })
                 }
                 console.log("failedLogs", that.failedLogs)
                 this.needRefresh++
             })
         },
-		/**
-		 * 1. 有第一次运行状态才可以点retry三个按钮
-		 * 2. 选择job之后修改名字，点运行时候出现弹窗提示
-		 */
-		async on_click_run_script(data) {
-			console.log("responseArr", this.responseArr)
-			console.log("selectItem", this.selectItem)
-			this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
-			//task_id: dagId(trigger) + jobShowName + represent-id(queryDag)
-			const url = `https://api.pharbers.com/phdagtasktrigger`
-            const accessToken = this.getCookie("access_token") || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
+        /**
+         * 1. 有第一次运行状态才可以点retry三个按钮
+         * 2. 选择job之后修改名字，点运行时候出现弹窗提示
+         */
+        async on_click_run_script(data) {
+            console.log("responseArr", this.responseArr)
+            console.log("selectItem", this.selectItem)
+            this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
+            const url = `https://api.pharbers.com/phdagtasktrigger`
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
-				"flow_version": "developer",
-				"run_id": this.runId,
-				"task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
-				"clean_cat": data //向上还是向下
+                "flow_version": "developer",
+                "run_id": this.runId,
+                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
+                "clean_cat": data //向上还是向下
             }
             let options = {
                 method: "POST",
@@ -298,7 +295,7 @@ export default {
             this.noticeService.projectName = this.projectName
             let timeout = 60
             this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
-		},
+        },
         on_click_runDag() {
             this.showRunJson = true
         },
@@ -318,16 +315,16 @@ export default {
             this.dag.hideLoading()
             this.renderDag()
             const that = this
-			// 发布前要解注
-            // document.domain = "pharbers.com"
+            // 发布前要解注
+            document.domain = "pharbers.com"
             this.dag.on('click', function(params) {
-				that.selectItemName = params.name
-				// 获取选中job的基本信息
-				let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
-				if(scriptArr.length > 0) {
-					that.selectItem = scriptArr[0].attributes
-				}
-				console.log("selectItem", that.selectItem)
+                that.selectItemName = params.name
+                // 获取选中job的基本信息
+                let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
+                if(scriptArr.length > 0) {
+                    that.selectItem = scriptArr[0].attributes
+                }
+                console.log("selectItem", that.selectItem)
                 that.$emit('itemClicked', params)
             })
         },
@@ -366,7 +363,7 @@ export default {
                         type: 'graph',
                         layout: 'none',
                         symbolSize: 50,
-                        roam: false, // 缩放
+                        roam: true, // 缩放
                         symbol: 'rect',
                         edgeSymbol: ['circle', 'arrow'],
                         edgeSymbolSize: [5, 10],

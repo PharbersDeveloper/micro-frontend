@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.jobArr = []
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b'
+        this.debugToken = 'a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -49,7 +49,7 @@ export default class PhDagDatasource {
             node["level"] = attr["level"]
             node["category"] = resetCategory(attr["cat"], attr["runtime"])
             node["jobName"] = attr["name"] + "_" +attr["sort-version"].split("developer_")[1]
-			node["representId"] = attr["represent-id"]
+            node["representId"] = attr["represent-id"]
             return [true, node]
         } 
         else if (attr["ctype"] === "link") {
@@ -75,7 +75,7 @@ export default class PhDagDatasource {
                 "projectId": ["=", this.projectId],
                 "sortVersion": ["begins_with", "developer_"]
             },
-            "limit": 100,
+            "limit": 1000,
             "start_key": {}
         }
 

@@ -137,13 +137,14 @@ export default {
     watch: {
         async downloadCode(n, o) {
             let data = await this.queryData()
-            this.codeBuffer = decodeURI(data.message.data)
+            // this.codeBuffer = decodeURI(data.message.data)
+            this.codeBuffer = data.message.data
         }
     },
     methods: {
         async queryData() {
             let url = "https://api.pharbers.com/phdadataquery"
-            const accessToken = this.getCookie("access_token") || this.debugToken
+            const accessToken = this.getCookie("access_token") || "23082b0adc463b4ccbb67ad91ee86359cff504c2562a02b30590b551c78dfbf2"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -170,13 +171,14 @@ export default {
         },
         async saveCode() {
             let url = "https://api.pharbers.com/phdadataupdata"
-            const accessToken = this.getCookie("access_token") || this.debugToken
+            const accessToken = this.getCookie("access_token") || "93a26d55060b6f783b55333cd5f1f3c9b87eb7634128a076ed975e63561b27b3"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
                 "file_name": this.datasource.file_name,
                 "bucket": "ph-platform",
                 "data": encodeURI(this.$refs.codeditor.editor.getValue()),
+                // "data": this.$refs.codeditor.editor.getValue(),
                 "timespan": new Date().getTime()
             }
             let options = {

@@ -10,10 +10,10 @@
                </div>
               <div class="btn">
                   <div class="timeout">
-                      <div class="title">超时时间: </div>
-                      <select name="time" id="" v-model="selectTimeout">
-                          <option value="60mins">60mins</option>
-                      </select>
+                        <div class="title">超时时间: </div>
+                        <select name="time" id="" v-model="selectTimeout">
+                            <option value="60mins">60mins</option>
+                        </select>
                   </div>
                   <div class="">
                         <button class="cancel" @click="close">取消</button>
@@ -30,7 +30,7 @@ export default {
     data() {
         return{
             selectTimeout: "60mins",
-			jsonValue: ""
+            jsonValue: ""
         }
     },
     props: {
@@ -41,14 +41,32 @@ export default {
     watch: {
     },
     methods: {
+        isJSON_test(str) {
+            if (typeof str == 'string') {
+                try {
+                    this.jsonValue = JSON.parse(str);
+                    return true;
+                } catch(e) {
+                    if(str != "") {
+                        alert("请输入JSON字符串！")
+                        return false;
+                    } else {
+                        return true
+                    }
+                }
+            }
+        },
         save() {
+            let isJSON = this.isJSON_test(this.jsonValue)
+            if(!isJSON) return false
             const event = new Event("event")
             event.args = {
                 callback: "runDag",
                 element: this,
                 param: {
                     name: "runDag",
-                    timeout: parseFloat(this.selectTimeout)
+                    timeout: parseFloat(this.selectTimeout),
+                    jsonValue: this.jsonValue == "" ? {} : this.jsonValue
                 }
             }
             this.$emit('confirmeRunDag', event)

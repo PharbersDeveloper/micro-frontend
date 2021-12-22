@@ -2,13 +2,13 @@
     <div>
         <div class="show_logs">
             <div class="jobs_area">
-				<div class="header_area">
-					<div class="script_name">{{jobShowName}}</div>
-					<div class="btn_area">
-						<!-- <button class="retry" @click="retry">Retry This Job</button> -->
-						<button class="retry close" @click="close">关闭</button>
-					</div>
-				</div>
+                <div class="header_area">
+                    <div class="script_name">{{jobShowName}}</div>
+                    <div class="btn_area">
+                        <!-- <button class="retry" @click="retry">Retry This Job</button> -->
+                        <button class="retry close" @click="close">关闭</button>
+                    </div>
+                </div>
 
                 <div class="log-area" v-if="logsValue != ''">
                     <!-- <div class="log-content">{{emrLog}}</div> -->
@@ -46,10 +46,9 @@ export default {
     },
     props: {
         jobShowName: String,
-		runId: String,
-		dagId: String,
-		representId: String,
-		projectName: String,
+        runId: String,
+        representId: String,
+        projectName: String,
         response: {
             type: Object,
             default: function() {
@@ -65,7 +64,7 @@ export default {
          */
         this.loading = true
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "98f82bce22bc60475e464ef8dbc10b52d1391ef63705633cb165e8cc370a9e4b"
+        const accessToken = this.getCookie( "access_token" ) || "a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7"
         let body = {
             "table": "logs",
             "conditions": {
@@ -113,6 +112,7 @@ export default {
             result = await fetch(logsUrl, logsOptions).then(res => res.json())
             if (result.status === 1) {
                 clearInterval(clearInt);
+                let base64 = require('js-base64').Base64
                 that.logsValue = result.message
                 that.loading = false
                 console.log(that.logsValue)
@@ -122,16 +122,16 @@ export default {
     watch: {
     },
     methods: {
-		close() {
-			this.$emit("closeLogDialog")
-		},
+        close() {
+            this.$emit("closeLogDialog")
+        },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
                 return (arr[2]);
             else
                 return null;
-        },
+        }
         // save() {
         //     const event = new Event("event")
         //     event.args = {
@@ -158,14 +158,14 @@ export default {
     box-sizing: border-box;
 }
 .show_logs {
-	height: 100vh;
+    height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);
     // display: flex;
     // flex-direction: row;
     // justify-content: center;
     // align-items: center;
-	position: fixed;
+    position: fixed;
     top: 0;
     right: 0;
     z-index: 2;
@@ -173,15 +173,15 @@ export default {
     align-items: center;
     background: rgba(0,0,0,0.31);
     .jobs_area {
-		width: 80vw;
-		height: 80vh;
-		border: 1px solid #ddd;
-		background-color: #fff;
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%,-50%);
-		box-sizing: border-box;
+        width: 80vw;
+        height: 80vh;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        box-sizing: border-box;
         padding: 20px;
         .log-area {
             display: flex;
@@ -230,11 +230,11 @@ export default {
             line-height: 20px;
             font-weight: 500;
             border: none;
-			cursor: pointer;
+            cursor: pointer;
         }
-		button.close {
-			margin-left: 20px;
-		}
+        button.close {
+            margin-left: 20px;
+        }
     }
 }
 //界面未加载loading
@@ -357,7 +357,7 @@ export default {
     -moz-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-	z-index: 3;
+    z-index: 3;
 }
 
 .ldio-400lpppmiue {
