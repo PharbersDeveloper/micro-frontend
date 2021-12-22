@@ -87,7 +87,7 @@ export default class NoticeServiceService {
                             let runningArr = response.data.filter(it => it.attributes["job-cat"] == "running")
                             console.log(doneArr)
                             if(doneArr.length > 0) {
-                                // 有running和以外状态出现
+                                // 有running和以外状态出现快修bug
                                 let index = that.subjectID.indexOf(response.data[0].id)
                                 let targetCallback = that.subjectCallback[index]
                                 targetCallback.callback(doneArr, targetCallback.ele)
@@ -95,12 +95,12 @@ export default class NoticeServiceService {
                                  *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
                                  * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
                                  * */ 
-                                if(runningArr.length === 0) {
-                                    that.statusNoticeCache = response.data
-                                }
                                 if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
                                     that.unregister(response.data[0].id)
                                     that.retryButtomShow = true
+                                }
+                                if(runningArr.length === 0) {
+                                    that.statusNoticeCache = response.data
                                 }
                             }
                         
