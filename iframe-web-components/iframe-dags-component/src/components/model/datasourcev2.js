@@ -4,8 +4,8 @@ export default class PhDagDatasource {
         this.id = id
         this.data = []
         this.jobArr = []
-        this.projectId = "JfSmQBYUpyb4jsei"
-        // this.projectId = "HfSZTr74gRcQOYoA"
+        // this.projectId = "JfSmQBYUpyb4jsei"
+        this.projectId = "HfSZTr74gRcQOYoA"
         this.title = "need a title"
         this.debugToken = 'a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7'
     }
@@ -20,7 +20,7 @@ export default class PhDagDatasource {
                 "projectId": ["=", this.projectId],
                 "sortVersion": ["begins_with", "developer_"]
             },
-            "limit": 100,
+            "limit": 200,
             "start_key": {}
         }
 
@@ -66,7 +66,6 @@ export default class PhDagDatasource {
                         tmp["parentIds"].push(sourceId)
                     }
                 }
-                console.log(ele.datasource.data)
                 ele.needRefresh++
             })
     }

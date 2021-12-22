@@ -168,7 +168,7 @@ export default {
             }
         },
         statusFlags: {
-            type: Object,
+            type: Array,
             default: function() {
                 return [
                     {
@@ -422,9 +422,9 @@ export default {
 
             const layout = d3.sugiyama()
                 .size([height, width])
-                .layering(d3.layeringCoffmanGraham())
+                .layering(d3.layeringSimplex())
                 .decross(d3.decrossTwoLayer())
-                .coord(d3.coordGreedy())
+                .coord(d3.coordCenter())
 
             layout(dag);
             draw(dag, data, this.$refs.chart);
