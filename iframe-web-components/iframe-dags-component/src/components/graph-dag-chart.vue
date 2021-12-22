@@ -12,7 +12,9 @@
                     <button>数据集</button>
                 </div>
             </div>
-            <div ref="chart" class="chart"></div>
+            <div class="viewport">
+                <div ref="chart" class="chart"></div>
+            </div>
         </div>
 
         <div class="opt_area">
@@ -414,11 +416,14 @@ export default {
             const d3 = Object.assign({}, d3_base, d3_dag);
             const dag = d3.dagStratify()(data);
 
-            const viewportWidth = this.$refs.chart.offsetWidth
-            const viewportHeight = this.$refs.chart.offsetHeight
+            const windowWidth = this.$refs.chart.offsetWidth
+            const windowHeight = this.$refs.chart.offsetHeight
 
-            const width = viewportWidth
-            const height = viewportHeight
+            const width = Math.max(this.datasource.sizeHit[1], windowWidth)
+            const height = Math.max(this.datasource.sizeHit[0], windowHeight)
+
+            const viewportWidth = width
+            const viewportHeight = height
 
             const layout = d3.sugiyama()
                 .size([height, width])
@@ -437,7 +442,7 @@ export default {
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height)
-                    .attr("viewBox", `${-nodeRadius} ${-nodeRadius} ${viewportWidth + 2 * nodeRadius} ${viewportHeight + 2 * nodeRadius}`);
+                    .attr("viewBox", `${-nodeRadius} ${nodeRadius} ${viewportWidth + 2 * nodeRadius} ${viewportHeight + 2 * nodeRadius}`);
                 const defs = svgSelection.append('defs'); // For gradients
 
                 const steps = dag.size();
@@ -541,6 +546,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.viewport {
+    overflow: auto;
+}
+
 .graphWrap {
     display: flex;
     justify-content: center;

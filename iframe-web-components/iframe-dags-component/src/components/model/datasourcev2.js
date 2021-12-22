@@ -8,6 +8,9 @@ export default class PhDagDatasource {
         this.projectId = "HfSZTr74gRcQOYoA"
         this.title = "need a title"
         this.debugToken = 'a71723eba8d673e68a9a87aee65c36a83c9e14abde59c60c556a3eba23818ea7'
+        this.sizeHit = [0, 0]
+        this.hitWidthStep = 100
+        this.hitHeightStep = 500
     }
 
     buildQuery(ele, isAppend=false) {
@@ -51,12 +54,18 @@ export default class PhDagDatasource {
             .then((response) => {
                 that.jobArr = response.data.filter(it => it.attributes.cat === "job" && it.attributes.ctype === "node")
                 ele.datasource.data = response.data.filter(x => x["attributes"]["ctype"] === "node")
+                let maxLevel = -999
                 ele.datasource.data = ele.datasource.data.map(x => {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
+                    const tmp = parseInt(x["attributes"]["level"])
+                    if (tmp > maxLevel) {
+                        maxLevel = tmp
+                    }
                     return x
                 })
                 const links = response.data.filter(x => x["attributes"]["ctype"] === "link")
+                let maxHeight = -999
                 for (let idx = 0; idx < links.length; ++idx) {
                     const cmessage = JSON.parse(links[idx]["attributes"]["cmessage"])
                     const targetId = cmessage["targetId"]
@@ -64,8 +73,12 @@ export default class PhDagDatasource {
                     if (sourceId && sourceId.length > 0) {
                         const tmp = ele.datasource.data.find(x => x["id"] === targetId)
                         tmp["parentIds"].push(sourceId)
+                        if (maxHeight < tmp["parentIds"].length) {
+                            maxHeight = tmp["parentIds"].length
+                        }
                     }
                 }
+                that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]
                 ele.needRefresh++
             })
     }
