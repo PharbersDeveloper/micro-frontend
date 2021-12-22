@@ -12,7 +12,7 @@
                     <button>数据集</button>
                 </div>
             </div>
-            <div class="viewport">
+            <div class="viewport" ref="viewport">
                 <div ref="chart" class="chart"></div>
             </div>
         </div>
@@ -534,6 +534,11 @@ export default {
                     .attr('fill', 'black')
                     .attr('transform', 'translate(0, 30)')
 
+                that.$refs.viewport.scroll({
+                    top: windowHeight / 2,
+                    left: 0,
+                    behavior: 'smooth'
+                });
             }
         }
     },
