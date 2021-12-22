@@ -58,6 +58,7 @@ export default class PhDagDatasource {
                 ele.datasource.data = ele.datasource.data.map(x => {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
+                    x["representId"] = x["attributes"]["represent-id"]
                     x["status"] = "normal"
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]

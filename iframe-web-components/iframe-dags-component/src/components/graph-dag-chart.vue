@@ -255,7 +255,6 @@ export default {
             this.showDagLogs = false
         },
         showLogs(data, representId) {
-            console.log(data)
             this.runId = JSON.parse(data.attributes.message).cnotification.runId
             this.jobShowName = JSON.parse(data.attributes.message).cnotification.jobShowName
             this.representId = representId
@@ -304,17 +303,11 @@ export default {
                 // 1.找到对应job节点并更新状态
                 data.map((it,index) => {
                     if(jobName.indexOf(it.attributes.name) != -1) {
-                        // let category = ele.datasource.data[index].category
-                        // if(category.indexOf("_") != -1) {
-                        // category = category.split("_")[0]
-                        // }
                         if(jobCat === "success") {
                             it.status = "succeed"
-                            // ele.datasource.data[index].category = category + "_succeed"
                         } else if(jobCat === "failed") {
-                            // ele.datasource.data[index].category = category + "_failed"
-                            // represent_id = it.representId
                             it.status = "failed"
+                            represent_id = it.representId
                         }
                     }
                     that.refreshNodeStatus(it)
