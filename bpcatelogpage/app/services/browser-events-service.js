@@ -22,12 +22,13 @@ export default class BrowserEventsServiceService extends Service {
 				
 				window.addEventListener("popstate", that.popstateFun, false);
 			}
-			//关闭
+			//关闭&刷新（页面有变动或距上次刷新间隔超过5s时生效）
 			window.onbeforeunload=function(e){
 				return false
 			}
-			//刷新
+			//文档加载完成后立即触发
 			window.onload = function(){
+				// 刷新回到指定页面
                 that.router.transitionTo( `${that.routeName}${that.param}` )
 			}	
 		});
