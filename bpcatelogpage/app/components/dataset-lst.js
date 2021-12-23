@@ -120,13 +120,14 @@ export default class DatasetLstComponent extends Component {
 				window.location.reload()
 			break
 			case "fitMax":
-				debugger
+				let uuid = this.guid()
 				let suit_max_Param = e.detail[0].args.param;
 				const suit_max_url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 				let message = {
 					"keys": suit_max_Param.path,
 					"name": suit_max_Param.dsName,
-					"version": suit_max_Param.version
+					"version": suit_max_Param.version,
+					"id": uuid
 				}
 				let suit_max_body = {
 					"table": "action",
@@ -152,7 +153,6 @@ export default class DatasetLstComponent extends Component {
 					body: JSON.stringify(suit_max_body)
 				}
 				let suit_max_result = await fetch(suit_max_url, suit_max_options).then(res => res.json())
-				debugger
 				if(suit_max_result.data) {
 					// _that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
 				}
@@ -216,6 +216,14 @@ export default class DatasetLstComponent extends Component {
 			default:
 				console.log("other click event!")
 		}
+	}
+
+	@action
+	guid() {
+		return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+			return v.toString(16);
+		});
 	}
 
 	@action noticeCallback(response, ele) {
