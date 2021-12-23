@@ -8,7 +8,7 @@
                 <div class="prompt">
                     <div class="item">
                         <p>输入路径:</p>
-                        <input type="text" v-model="path" ref="path" @change="inputStrChecked(path, 'path', 'path')">
+                        <input type="text" v-model="path" ref="path">
                     </div>
                     <div class="item">
                         <p>数据ID:</p>

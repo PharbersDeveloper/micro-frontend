@@ -22,8 +22,10 @@ export default class DatasetLstComponent extends Component {
 					uri = `/dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
 				}else if(params.name === "linkToProject" || params.name === "project") {
 					uri = `/projects/`+ params.projectId
-				} else if(params.name === "analyze") {
+				} else if(params.name === "analyze" && params.dataset.cat === "normal") {
 					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
+				}else if(params.name === "analyze" && params.dataset.cat === "max1.0") {
+					uri = `/dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}`
 				} else if(params.name === "datasets") {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if(params.name === "scripts") {
@@ -157,7 +159,7 @@ export default class DatasetLstComponent extends Component {
 					// _that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
 				}
 				alert("新建数据集成功！")
-				// window.location.reload()
+				window.location.reload()
 				break
 			case "clearTags":
 				this.loadingService.loading.style.display = 'flex'

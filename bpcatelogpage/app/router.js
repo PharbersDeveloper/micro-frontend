@@ -26,4 +26,5 @@ Router.map(function () {
   this.route('recipes');
   this.route('codeditor');
   this.route('flow');
+  this.route('dataset-max');
 });

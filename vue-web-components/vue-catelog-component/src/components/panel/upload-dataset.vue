@@ -301,6 +301,7 @@ export default {
             data.args.param.projectId = this.allData.projectId
             console.log(data)
             this.$emit('event', data)
+            this.clickMax = false
         },
         closeDialog() {
             this.clickMax = false
