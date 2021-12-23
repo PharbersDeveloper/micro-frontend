@@ -121,6 +121,43 @@ export default class DatasetLstComponent extends Component {
 			break
 			case "fitMax":
 				debugger
+				let suit_max_Param = e.detail[0].args.param;
+				const suit_max_url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				let message = {
+					"keys": suit_max_Param.path,
+					"name": suit_max_Param.dsName,
+					"version": suit_max_Param.version
+				}
+				let suit_max_body = {
+					"table": "action",
+					"item": {
+						"projectId": suit_max_Param.projectId,
+						"code": 0,
+						"comments": "",
+						"jobCat": "max1.0",
+						"jobDesc": "max1.0",
+						"message": JSON.stringify(message),
+						"date": new Date().getTime(),
+						"owner": this.cookies.read( "account_id" ),
+						"showName": decodeURI(this.cookies.read('user_name_show'))
+					}
+				}
+				let suit_max_options = {
+					method: "POST",
+					headers: {
+						"Authorization": this.cookies.read( "access_token" ),
+						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+						"accept": "application/json"
+					},
+					body: JSON.stringify(suit_max_body)
+				}
+				let suit_max_result = await fetch(suit_max_url, suit_max_options).then(res => res.json())
+				debugger
+				if(suit_max_result.data) {
+					// _that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
+				}
+				alert("新建数据集成功！")
+				// window.location.reload()
 				break
 			case "clearTags":
 				this.loadingService.loading.style.display = 'flex'
