@@ -32,20 +32,20 @@
                     <img :src="hide_icon" alt="">
                     <img :src="run_icon" alt=""
                         @click="on_click_runDag">
-                    <img v-if="noticeService.retryButtomShow && selectItem"
+                    <img v-if="noticeService.retryButtonShow && selectItem"
                         :src="run_script" alt=""
                         @click="on_click_run_script('self_only')">
-                    <img v-if="noticeService.retryButtomShow && selectItem"
+                    <img v-if="noticeService.retryButtonShow && selectItem"
                         :src="run_to_script" alt=""
                         @click="on_click_run_script('downstream')">
-                    <img v-if="noticeService.retryButtomShow  && selectItem"
+                    <img v-if="noticeService.retryButtonShow  && selectItem"
                         :src="run_from_script" alt=""
                         @click="on_click_run_script('upstream')">
-                    <img v-if="!noticeService.retryButtomShow || !selectItem"
+                    <img v-if="!noticeService.retryButtonShow || !selectItem"
                         :src="run_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtomShow || !selectItem"
+                    <img v-if="!noticeService.retryButtonShow || !selectItem"
                         :src="run_from_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtomShow || !selectItem"
+                    <img v-if="!noticeService.retryButtonShow || !selectItem"
                         :src="run_to_script_gray" alt="">
                 </div>
                 <div class="sec_icon_row">
@@ -99,6 +99,12 @@
             </div>
         </div>
 
+        <progress-bar 
+            v-if="showProgress"
+            @closeProgress="closeProgress"
+            :progressOver="noticeService.progress">
+        </progress-bar>
+
     </div>
 </template>
 <script>
@@ -108,6 +114,7 @@ import PhDagDatasource from './model/datasourcev2'
 import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
+import progressBar from './progress-bar-type.vue'
 
 export default {
     data: () => {
@@ -148,12 +155,14 @@ export default {
             showDagLogs:false,
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
-            responseArr: []
+            responseArr: [],
+            showProgress: false
         }
     },
     components: {
         runDagDialog,
-        dagLogsDialog
+        dagLogsDialog,
+        progressBar
     },
     props: {
         datasource: {
@@ -260,11 +269,17 @@ export default {
             this.representId = representId
             this.showDagLogs = true
         },
+        //关闭进度条
+        closeProgress() {
+            this.showProgress = false
+        },
         /**
          * 1. 调接口触发dag
          * 2. query notification接收正确或错误消息
          */
         async confirmeRunDag(data) {
+            this.noticeService.progress = false //重置进度条
+            this.showProgress = true
             this.showRunJson = false
             const url = `https://api.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
@@ -349,6 +364,8 @@ export default {
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
         async on_click_run_script(data) {
+            this.noticeService.progress = false
+            this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
@@ -374,6 +391,7 @@ export default {
             this.noticeService.projectName = this.projectName
             let timeout = 60
             this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
+            this.showProgress = true
         },
         on_click_runDag() {
             this.showRunJson = true
@@ -381,7 +399,6 @@ export default {
         closeRunDagDialog() {
             this.showRunJson = false
         },
-        // 初始化数据
         async initChart () {
             // 初始化echarts实例
             await this.datasource.refreshData(this)

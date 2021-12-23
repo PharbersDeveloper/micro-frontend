@@ -9,7 +9,8 @@ export default class NoticeServiceService {
         this.uploadStatus = false
         this.timeout = 2
         this.statusNoticeCache = []
-        this.retryButtomShow = false
+        this.retryButtonShow = false
+        this.progress = false
         this.debugToken = "9e0e6d0a78a57812bc753058c2d819279635f37591af90047e0b7e2126579d31"
     }
 
@@ -98,7 +99,8 @@ export default class NoticeServiceService {
                                 if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
                                     console.log("query结束")
                                     that.unregister(response.data[0].id)
-                                    that.retryButtomShow = true
+                                    that.retryButtonShow = true
+                                    that.progress = true
                                 }
                                 if(runningArr.length === 0) {
                                     that.statusNoticeCache = response.data

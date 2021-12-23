@@ -30,20 +30,20 @@
                     <img :src="hide_icon" alt="">
                     <img :src="run_icon" alt="" 
                         @click="on_click_runDag">
-                    <img v-if="noticeService.retryButtomShow && selectItem"
+                    <img v-if="noticeService.retryButtonShow && selectItem"
                         :src="run_script" alt="" 
                         @click="on_click_run_script('self_only')">
-                    <img v-if="noticeService.retryButtomShow && selectItem"
+                    <img v-if="noticeService.retryButtonShow && selectItem"
                         :src="run_to_script" alt="" 
                         @click="on_click_run_script('downstream')">
-                    <img v-if="noticeService.retryButtomShow  && selectItem" 
+                    <img v-if="noticeService.retryButtonShow  && selectItem" 
                         :src="run_from_script" alt="" 
                         @click="on_click_run_script('upstream')">
-                    <img v-if="!noticeService.retryButtomShow || !selectItem" 
+                    <img v-if="!noticeService.retryButtonShow || !selectItem" 
                         :src="run_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtomShow || !selectItem" 
+                    <img v-if="!noticeService.retryButtonShow || !selectItem" 
                         :src="run_from_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtomShow || !selectItem" 
+                    <img v-if="!noticeService.retryButtonShow || !selectItem" 
                         :src="run_to_script_gray" alt="">
                 </div>
                 <div class="sec_icon_row">
