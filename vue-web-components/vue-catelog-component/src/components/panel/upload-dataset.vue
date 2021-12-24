@@ -43,7 +43,7 @@
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="toggle">上传文件</button>
+                            <button class="upload_btn" @click="toggle">新建数据集</button>
                             <div class="dialog" v-show="showDialog">
                             <div>
                                 <p @click="upload">本地上传</p>
@@ -52,7 +52,10 @@
                                 <p @click="s3Upload">s3上传</p>
                             </div>
                             <div>
-                                <p @click="on_click_max">Max1.0入口</p>
+                                <p @click="on_click_max_input">Max1.0入口</p>
+                            </div>
+							<div>
+                                <p @click="on_click_max_output">Max1.0出口</p>
                             </div>
                         </div>
                         </div>
@@ -299,6 +302,7 @@ export default {
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
+            data.args.param.maxcat = this.maxcat
             console.log(data)
             this.$emit('event', data)
             this.clickMax = false
@@ -532,8 +536,9 @@ export default {
             }
         },
         // Max1.0入口
-        on_click_max() {
+        on_click_max_input() {
             this.clickMax = true
+			this.maxcat = "input_index"
             // const event = new Event("event")
             // event.args = {
             //     callback: "linkToPage",
@@ -547,6 +552,10 @@ export default {
             // }
             // this.$emit('event', event)
         },
+		on_click_max_output() {
+			this.clickMax = true
+			this.maxcat = "output_index"
+		},
         //本地上传文件
         upload() {
             const event = new Event("event")
@@ -624,7 +633,7 @@ export default {
     top: 30px;
     right: 40px;
     width: 150px;
-    height: 65px;
+    // height: 65px;
     border: 1px solid #dddddd;
     background: #fff;
     z-index: 9999;
