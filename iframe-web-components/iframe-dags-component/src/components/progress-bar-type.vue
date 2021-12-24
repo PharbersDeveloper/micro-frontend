@@ -50,7 +50,7 @@ export default {
                 }
                 that.barWidth = that.barWidth + 1
                 that.percent = Math.floor(that.barWidth / 3)
-            },200) 
+            },2000) 
         },
         closeProgress() {
             this.$emit("closeProgress")
