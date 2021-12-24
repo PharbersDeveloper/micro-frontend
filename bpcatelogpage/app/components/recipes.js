@@ -58,7 +58,9 @@ export default class RecipesComponent extends Component {
 							"id": uuid,
 							"label": JSON.stringify([]),
 							"name": scriptsParams.outputs[0].name,
-							"schema": JSON.stringify([])
+							"schema": JSON.stringify([]),
+							"path": scriptsParams.path,
+							"format": scriptsParams.format
 						}
 					}
 					let options = {
@@ -86,7 +88,9 @@ export default class RecipesComponent extends Component {
 					"owner": decodeURI(this.cookies.read('user_name_show')),
 					"targetJobId": "",
 					"projectName": scriptsParams.projectName,
-					"labels": []
+					"labels": [],
+					"path": scriptsParams.path,
+					"format": scriptsParams.format
 				}
 				let scriptBody = {
 					"table": "action",

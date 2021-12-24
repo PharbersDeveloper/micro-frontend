@@ -54,7 +54,7 @@
                             <div>
                                 <p @click="on_click_max_input">Max1.0入口</p>
                             </div>
-							<div>
+                            <div>
                                 <p @click="on_click_max_output">Max1.0出口</p>
                             </div>
                         </div>
@@ -188,11 +188,17 @@
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <!-- max1.0入口 -->
-         <fit-max-dialog  
+         <fit-max-input-dialog  
             v-if="clickMax"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
-        </fit-max-dialog>
+        </fit-max-input-dialog>
+        <!-- max1.0出口 -->
+         <fit-max-output-dialog  
+            v-if="clickMaxOutput"
+            @fitMaxEvent="fitMaxEvent"
+            @closeDialog="closeDialog">
+        </fit-max-output-dialog>
     </div>
     </div>
 </template>
@@ -204,7 +210,8 @@ import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import fitMaxDialog from './fit-max-dialog.vue'
+import fitMaxInputDialog from './fit-max-dialog.vue'
+import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 export default {
     data() {
         return {
@@ -238,6 +245,7 @@ export default {
             checked: false,
             manual: true,
             clickMax: false,
+            clickMaxOutput: false,
             scriptValue: "名称",
             isCheckedAllDataset: false,
             datasetcheckedIds: [], //选中项id
@@ -267,7 +275,8 @@ export default {
         deleteTagsDialog,
         bpSelectVue,
         bpOptionVue,
-        fitMaxDialog
+        fitMaxInputDialog,
+        fitMaxOutputDialog
     },
     computed: {
         searchData: function() {
@@ -306,8 +315,10 @@ export default {
             console.log(data)
             this.$emit('event', data)
             this.clickMax = false
+            this.clickMaxOutput = false
         },
         closeDialog() {
+            this.clickMaxOutput = false
             this.clickMax = false
         },
         //增加tag
@@ -538,7 +549,7 @@ export default {
         // Max1.0入口
         on_click_max_input() {
             this.clickMax = true
-			this.maxcat = "input_index"
+            this.maxcat = "input_index"
             // const event = new Event("event")
             // event.args = {
             //     callback: "linkToPage",
@@ -552,10 +563,10 @@ export default {
             // }
             // this.$emit('event', event)
         },
-		on_click_max_output() {
-			this.clickMax = true
-			this.maxcat = "output_index"
-		},
+        on_click_max_output() {
+            this.clickMaxOutput = true
+            this.maxcat = "output_index"
+        },
         //本地上传文件
         upload() {
             const event = new Event("event")

@@ -3,11 +3,11 @@
         <div class="fit-max-dialog">
             <div class="dialog_area">
                <div class="header">
-                   <p class="clear_data">Max1.0入口</p>
+                   <p class="clear_data">Max1.0出口</p>
                </div>
                 <div class="prompt">
                     <div class="item">
-                        <p>输入路径:</p>
+                        <p>输出路径:</p>
                         <input type="text" v-model="path" ref="path">
                     </div>
                     <div class="item">
@@ -17,6 +17,13 @@
                     <div class="item">
                         <p>新建数据集:</p>
                         <input type="text" v-model="dsName" ref="dsName" @change="inputStrChecked(dsName, 'dsName', 'dsName')">
+                    </div>
+                     <div class="item">
+                        <p>格式:</p>
+                        <bp-select-vue :choosedValue="format" :src='select_icon'>
+                            <bp-option-vue text="Parquet" @click="changeFormat('Parquet')" :choosedValue="format"></bp-option-vue>
+                            <bp-option-vue text="CSV" @click="changeFormat('CSV')" :choosedValue="format"></bp-option-vue>
+                        </bp-select-vue>
                     </div>
                </div>
                <div class="btn">
@@ -29,17 +36,28 @@
 </template>
 
 <script>
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {
             path: "",
             version: "max1.0",
-            dsName: ""
+            dsName: "",
+            format: "",
+            select_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
         }
+    },
+    components: {
+        bpSelectVue,
+        bpOptionVue
     },
     props: {
     },
     methods: {
+        changeFormat(data) {
+            this.format = data
+        },
         close() {
             this.$emit('closeDialog');
         },
@@ -76,7 +94,8 @@ export default {
                     name: "fitMax",
                     path: this.path,
                     version: this.version,
-                    dsName: this.dsName
+                    dsName: this.dsName,
+                    format: this.format
                 }
             }
             this.$emit('fitMaxEvent', event)
@@ -156,6 +175,12 @@ export default {
             border: 1px solid #979797;
             width: 600px;
             padding-left: 10px;
+        }
+        .bp-select {
+            height: 30px;
+            border: 1px solid #979797;
+            width: 600px;
+            background: #fff;
         }
     }
 }

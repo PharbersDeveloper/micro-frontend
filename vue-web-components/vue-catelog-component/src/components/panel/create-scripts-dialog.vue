@@ -5,7 +5,7 @@
             <div class="dialog_area">
                <div class="header">
                     <div class="left">
-                        <p class="dataset_name">新建 {{name}} 脚本</p>
+                        <p class="dataset_name">新建 {{runtime}} 脚本</p>
                     </div>
                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="close_icon" @click="close">
                </div>
@@ -52,13 +52,26 @@
                                     <span class="label">名称</span>
                                     <el-input v-model="dsName.name" placeholder="" ref="newDs" @change="inputStrChecked(dsName.name, 'newDs', 'dsName')"></el-input>
                                 </div>
-                                <div class="input_list">
+                                <!-- 正常新建脚本 -->
+                                <div class="input_list" v-if="runtime!=='download'">
                                     <span class="label">存储到</span>
                                     <el-input placeholder="" value="本集群" :disabled="true">></el-input>
                                 </div>
-                                <div class="input_list">
+                                <div class="input_list" v-if="runtime!=='download'">
                                     <span class="label">格式</span>
                                     <el-input placeholder="" value="SQL" :disabled="true">></el-input>
+                                </div>
+                                <!-- 下载 -->
+                                 <div class="input_list" v-if="runtime==='download'">
+                                    <span class="label">存储到</span>
+                                    <el-input placeholder="请输入路径" v-model="path"></el-input>
+                                </div>
+                                <div class="input_list" v-if="runtime==='download'">
+                                    <span class="label">格式</span>
+                                    <bpSelectVue :choosedValue="format" :src='select_icon'>
+                                        <bpOptionVue text="Parquet" @click="changeFormat('Parquet')" :choosedValue="format"></bpOptionVue>
+                                        <bpOptionVue text="CSV" @click="changeFormat('CSV')" :choosedValue="format"></bpOptionVue>
+                                    </bpSelectVue>
                                 </div>
                             </div>
                             <div class="btn_area">
@@ -114,7 +127,8 @@
 <script>
 import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
-
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return{
@@ -129,35 +143,64 @@ export default {
             remainDatasetListOutputs: [],  //剩余未选中的输出数据
             sel_dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E7%BB%93%E6%9E%9CDS.svg",
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1).svg",
+            select_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             dsName: {
                 name: "",
                 id: ""
             },
             oldDatasetList: [], //现有数据集
-            showOldDataset: true
+            showOldDataset: true,
+            path: "",
+            format: "请选择"
         }
     },
     components: {
         ElButton,
-        ElInput
+        ElInput,
+        bpSelectVue,
+        bpOptionVue
     },
     props: {
-        datasets: Array
+        datasets: Array,
+        runtime: String
     },
     computed: {
         remainDatasetListSearch: function() {
             let searchValue = this.searchInput
-            if(searchValue) {
-                return this.remainDatasetList.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+            if(this.runtime != "download") {
+                // 正常创建脚本逻辑
+                if(searchValue) {
+                    return this.remainDatasetList.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                }
+                return this.remainDatasetList
+            } else {
+                // 下载逻辑
+                let remainDatasetListInputData = this.remainDatasetList.filter(item => item.cat === "normal")
+                console.log(remainDatasetListInputData)
+                if(searchValue) {
+                    return remainDatasetListInputData.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                }
+                return remainDatasetListInputData
             }
-            return this.remainDatasetList
         },
         remainDatasetListOutputsSearch: function() {
             let searchValueOutput = this.searchOutput
-            if(searchValueOutput) {
-                return this.remainDatasetListOutputs.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
+            if(this.runtime != "download") {
+                // 正常创建脚本逻辑
+                if(searchValueOutput) {
+                    return this.remainDatasetListOutputs.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
+                }
+                return this.remainDatasetListOutputs
+            } else {
+                // 下载逻辑
+                let remainDatasetListOutputsData = this.remainDatasetListOutputs.filter(item => item.cat === "output_index")
+                console.log(remainDatasetListOutputsData)
+                if(searchValueOutput) {
+                    return remainDatasetListOutputsData.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
+                }
+                return remainDatasetListOutputsData
             }
-            return this.remainDatasetListOutputs
+            
         }
     },
     mounted() {
@@ -168,11 +211,13 @@ export default {
         this.datasets.forEach((item, index) => {
             that.remainDatasetList.push({
                 name: item.name,
-                id: item.id
+                id: item.id,
+                cat: item.cat
             })
             that.remainDatasetListOutputs.push({
                 name: item.name,
-                id: item.id
+                id: item.id,
+                cat: item.cat
                 // schema: item.schema,
                 // version: item.version
             })
@@ -180,6 +225,9 @@ export default {
     },
     watch: {},
     methods: {
+        changeFormat(data) {
+            this.format = data
+        },
         save() {
             if(this.addDatasetList.length > 0 && this.datasetOutputListShow && this.showOldDataset && this.dsName.name) {
                 /**
@@ -204,7 +252,9 @@ export default {
                         }],
                         jobVersion: this.dsName.name + "_version1",
                         runTime: "python3",
-                        labels: []
+                        labels: [],
+                        path: this.path,
+                        format: this.format
                     }
                 }
                 this.$emit("createScripts", event)
@@ -246,8 +296,10 @@ export default {
                 return false
             }
             //新增output
-            if(this.dsName.name && this.dsName.name !== "") {
+            if(this.dsName.name && this.dsName.name !== "" && this.path !== "" && this.format !== "请选择") {
                 this.datasetOutputListShow = true
+            } else {
+                alert("请输入完整数据！")
             }
         },
         on_clickChangeOutput() {
@@ -563,6 +615,10 @@ export default {
                 font-size: 14px;
                 display: block;
                 margin: 5px 0;
+            }
+            .bp-select {
+                border: 1px solid #DCDFE6;
+                background: #fff;
             }
         }
     }

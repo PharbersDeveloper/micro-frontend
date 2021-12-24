@@ -47,17 +47,21 @@
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
                                     <p>python</p>
                                 </div>
-                                 <div class="list" @click="selectScripts('pyspark')">
+                                <div class="list" @click="selectScripts('pyspark')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
                                     <p>PySpark</p>
                                 </div>
-                                 <div class="list" @click="selectScripts('sql')">
+                                <div class="list" @click="selectScripts('sql')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
                                     <p>R</p>
                                 </div>
-                                 <div class="list last" @click="selectScripts('sparksql')">
+                                <div class="list" @click="selectScripts('sparksql')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
                                     <p>sparkR</p>
+                                </div>
+                                <div class="list last" @click="selectScripts('download')">
+                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
+                                    <p>下载</p>
                                 </div>
                             </div>
                         </div>
@@ -208,6 +212,7 @@
         <create-scripts-dialog 
             v-if="showCreateScriptsDialog"
             :datasets="allData.dss"
+            :runtime="runtime"
             @createScripts="createScripts"
             @closeCreateDialog="closeScriptDialog">
         </create-scripts-dialog>
@@ -582,7 +587,7 @@ export default {
     top: 30px;
     right: 40px;
     width: 150px;
-    height: 130px;
+    // height: 130px;
     border: 1px solid #333;
     background: #fff;
     z-index: 9999;
