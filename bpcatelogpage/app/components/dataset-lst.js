@@ -24,7 +24,7 @@ export default class DatasetLstComponent extends Component {
                     uri = `/projects/`+ params.projectId
                 } else if(params.name === "analyze" && params.dataset.cat === "normal") {
                     uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
-                }else if(params.name === "analyze" && params.dataset.cat === "max1.0") {
+                }else if(params.name === "analyze" && params.dataset.cat !== "normal") {
                     uri = `/dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}`
                 } else if(params.name === "datasets") {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
