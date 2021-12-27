@@ -88,7 +88,7 @@
                             <div class="select_dataset">
                                 <div class="sel_name">
                                     <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
-                                    <span class="title" :title="dsName.name">{{dsName.name}}</span>
+                                    <span class="title selectedName" :title="dsName.name">{{dsName.name}}</span>
                                 </div>
                                 <img :src="del_icon" class="del_icon" @click="on_clickChangeOutput(item)" alt="">
                             </div>
@@ -296,7 +296,9 @@ export default {
                 return false
             }
             //新增output
-            if(this.dsName.name && this.dsName.name !== "" && this.path !== "" && this.format !== "请选择") {
+            if(this.runtime != "download" && this.dsName.name && this.dsName.name !== "") {
+                this.datasetOutputListShow = true
+            } else if(this.runtime === "download" && this.path !== "" && this.format !== "请选择" && this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
             } else {
                 alert("请输入完整数据！")
@@ -516,6 +518,14 @@ export default {
             .sel_name {
                 display: flex;
                 align-items: center;
+
+                .selectedName {
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 180px;
+                    white-space: nowrap;
+                }
             }
             .del_icon {
                 cursor: pointer;

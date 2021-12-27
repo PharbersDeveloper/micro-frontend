@@ -286,6 +286,13 @@ export default {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
+						span {
+							display: block;
+							white-space: nowrap;
+							width: 100px;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
                         img {
                             width: 10px;
                             height: 10px;
