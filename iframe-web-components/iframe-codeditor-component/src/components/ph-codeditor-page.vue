@@ -144,7 +144,7 @@ export default {
     methods: {
         async queryData() {
             let url = "https://api.pharbers.com/phdadataquery"
-            const accessToken = this.getCookie("access_token") || "23082b0adc463b4ccbb67ad91ee86359cff504c2562a02b30590b551c78dfbf2"
+            const accessToken = this.getCookie("access_token") || "4623e7829ff4275b94f277dc8638d53eb1f67d396a3551dd6a74cc65aa0ca2d9"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -171,7 +171,7 @@ export default {
         },
         async saveCode() {
             let url = "https://api.pharbers.com/phdadataupdata"
-            const accessToken = this.getCookie("access_token") || "93a26d55060b6f783b55333cd5f1f3c9b87eb7634128a076ed975e63561b27b3"
+            const accessToken = this.getCookie("access_token") || "4623e7829ff4275b94f277dc8638d53eb1f67d396a3551dd6a74cc65aa0ca2d9"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -191,6 +191,11 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
+            if(result.status === 1) {
+                alert("保存成功!")
+            } else {
+                alert("保存失败!")
+            }
             this.downloadCode++
         }
     }
@@ -286,13 +291,13 @@ export default {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-						span {
-							display: block;
-							white-space: nowrap;
-							width: 100px;
-							overflow: hidden;
-							text-overflow: ellipsis;
-						}
+                        span {
+                            display: block;
+                            white-space: nowrap;
+                            width: 100px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
                         img {
                             width: 10px;
                             height: 10px;
