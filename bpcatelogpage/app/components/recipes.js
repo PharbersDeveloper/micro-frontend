@@ -88,9 +88,13 @@ export default class RecipesComponent extends Component {
 					"owner": decodeURI(this.cookies.read('user_name_show')),
 					"targetJobId": "",
 					"projectName": scriptsParams.projectName,
-					"labels": [],
-					"path": scriptsParams.path,
-					"format": scriptsParams.format
+					"labels": []
+					// "path": scriptsParams.path,
+					// "format": scriptsParams.format
+				}
+				if(scriptsParams.runtime === "download") {
+					message["path"] = scriptsParams.path
+					message["format"] = scriptsParams.format
 				}
 				let scriptBody = {
 					"table": "action",

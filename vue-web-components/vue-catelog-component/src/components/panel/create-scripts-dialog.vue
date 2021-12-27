@@ -236,6 +236,14 @@ export default {
                  *    创建一个dataset，否则直接3
                  * 3. 调用赵的接口，往action里面插数据
                 */
+			   let inputsArr = []
+			   this.addDatasetList.forEach(item => {
+				   inputsArr.push({
+					   	"name": item.name,
+     					 "id": item.id
+				   })
+			   })
+			   console.log(inputsArr)
                 const event = new Event("event")
                 event.args = {
                     callback: "createScripts",
@@ -245,13 +253,13 @@ export default {
                         jobName: "compute_" + this.dsName.name,
                         jobId: "",
                         targetJobId: "",
-                        inputs: this.addDatasetList,
+                        inputs: inputsArr,
                         outputs: [{
                             "name": this.dsName.name,
                             "id": this.dsName.id
                         }],
                         jobVersion: this.dsName.name + "_version1",
-                        runTime: "python3",
+                        runtime: this.runtime,
                         labels: [],
                         path: this.path,
                         format: this.format

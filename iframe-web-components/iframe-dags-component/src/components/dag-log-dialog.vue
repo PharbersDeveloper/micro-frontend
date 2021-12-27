@@ -65,7 +65,7 @@ export default {
          */
         this.loading = true
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "9e0e6d0a78a57812bc753058c2d819279635f37591af90047e0b7e2126579d31"
+        const accessToken = this.getCookie( "access_token" ) || "4623e7829ff4275b94f277dc8638d53eb1f67d396a3551dd6a74cc65aa0ca2d9"
         let body = {
             "table": "logs",
             "conditions": {
