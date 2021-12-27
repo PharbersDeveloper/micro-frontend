@@ -66,6 +66,7 @@
 
         <run-dag-dialog
             v-if="showRunJson"
+            :textConf="textConf"
             @confirmeRunDag="confirmeRunDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
@@ -156,7 +157,8 @@ export default {
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
             responseArr: [],
-            showProgress: false
+            showProgress: false,
+            textConf: {} //运行弹框textarea的默认值
         }
     },
     components: {
@@ -251,6 +253,7 @@ export default {
     },
     mounted () {
         let href = window.location.href
+        console.log(href)
         let paramArr = href.split("?")[1].split("&")
         this.projectId = paramArr[0].split('=')[1]
         this.projectName = paramArr[1].split("=")[1]
@@ -274,7 +277,7 @@ export default {
             this.showProgress = false
         },
         /**
-         * 1. 调接口触发dag
+         * 1. 触发dag运行
          * 2. query notification接收正确或错误消息
          */
         async confirmeRunDag(data) {
@@ -393,7 +396,23 @@ export default {
             this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
             this.showProgress = true
         },
+        // 点击运行整体
         on_click_runDag() {
+            let roots = this.datasource.data.filter(item => item.attributes.ctype === "node" && item.parentIds.length === 0)
+            let datasetsArr = []
+            roots.forEach(item => {
+                datasetsArr.push({
+                    "name": item.attributes.name,
+                    "version": [],
+                    "cat": item.status
+                })
+            })
+            this.textConf = {
+                "datasets": datasetsArr,
+                "scripts": [],
+                "userConf": {}
+            }
+            console.log(this.textConf)
             this.showRunJson = true
         },
         closeRunDagDialog() {
@@ -403,7 +422,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
             // 发布前要解注
-            document.domain = "pharbers.com"
+            // document.domain = "pharbers.com"
         },
 
         // 监听屏幕大小改变

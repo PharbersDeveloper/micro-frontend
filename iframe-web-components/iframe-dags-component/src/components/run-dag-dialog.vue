@@ -2,23 +2,34 @@
     <div>
         <div class="clear_dialog_container">
             <div class="dialog_area">
-               <div class="header">
-                    <span>运行</span>
-               </div>
-               <div class="prompt">
-                    <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="jsonValue"></textarea>
-               </div>
-              <div class="btn">
-                  <div class="timeout">
+                <div class="header">
+                        <span>运行</span>
+                </div>
+                <div class="prompt" v-show="steps === 0">
+                    <span>数据集参数</span>
+                    <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea>
+                </div>
+                <div class="prompt" v-show="steps === 1">
+                    <span>低代码脚本参数</span>
+                    <textarea name="runJson" disabled id="" cols="30" rows="10" class="run_json" v-model="scriptsConf"></textarea>
+                </div>
+                <div class="prompt" v-show="steps === 2">
+                    <span>用户配置参数</span>
+                    <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="userConf"></textarea>
+                </div>
+                <div class="btn">
+                    <div class="timeout">
                         <div class="title">超时时间: </div>
                         <select name="time" id="" v-model="selectTimeout">
                             <option value="60mins">60mins</option>
                         </select>
-                  </div>
-                  <div class="">
+                    </div>
+                    <div class="">
                         <button class="cancel" @click="close">取消</button>
-                        <button class="save" @click="save">确认</button>
-                  </div>
+                        <button class="save btn-margin" v-show="steps !== 0" @click="back">上一步</button>
+                        <button class="save btn-margin" @click="next" v-show="steps !== 2">下一步</button>
+                        <button class="save btn-margin" @click="save"  v-show="steps === 2">确定</button>
+                    </div>
               </div>
             </div>
         </div>
@@ -30,13 +41,22 @@ export default {
     data() {
         return{
             selectTimeout: "60mins",
-            jsonValue: ""
+            jsonValue: "",
+            steps: 0,
+            datasetsConf: "",
+            scriptsConf: "",
+            userConf: ""
         }
     },
     props: {
+        textConf: Object
     },
     computed: {},
-    async mounted() {
+    mounted() {
+        this.jsonValue = JSON.stringify(this.textConf)
+        this.datasetsConf = JSON.stringify(this.textConf.datasets)
+        this.scriptsConf = JSON.stringify(this.textConf.scripts)
+        this.userConf = JSON.stringify(this.textConf.userConf)
     },
     watch: {
     },
@@ -56,7 +76,20 @@ export default {
                 }
             }
         },
+        back() {
+            this.steps--
+        },
+        next() {
+            this.steps++
+        },
         save() {
+            this.jsonValue = {}
+            if(this.steps === 2) {
+                this.jsonValue["datasets"] = this.datasetsConf
+                this.jsonValue["scripts"] = this.scriptsConf
+                this.jsonValue["userConf"] = this.userConf
+            }
+            debugger
             let isJSON = this.isJSON_test(this.jsonValue)
             if(!isJSON) return false
             const event = new Event("event")
@@ -131,6 +164,13 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     box-sizing: border-box;
+    span {
+        font-size: 14px;
+        color: #000000;
+    }
+    textarea {
+        font-size: 14px;
+    }
     .run_json {
         width: 520px;
         height: 350px;
@@ -163,13 +203,16 @@ export default {
         cursor: pointer;
     }
     .cancel {
-        margin-right: 20px;
+        margin-right: 5px;
         // background-color:#DB4D71;
         color: #7163C5;
     }
     .save {
         background-color: #7163C5;
         color: #fff;
+    }
+    .btn-margin {
+        margin: 5px;
     }
 }
 </style>
