@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import maxSaas from './components/deprecated/page/max-saas-plat.vue'
 import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
-import test from './views/test.vue'
 import manualCleaning from './components/deprecated/page/manual-cleaning.vue'
 import entryReplacement from './components/deprecated/max-entry-replacement.vue'
 import nav from './components/bp-nav-top.vue'
@@ -19,8 +18,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'test',
-            component: test
+            name: 'bpExcelContainer',
+            component: bpExcelContainer
         },
         {
             path: '/max-saas',

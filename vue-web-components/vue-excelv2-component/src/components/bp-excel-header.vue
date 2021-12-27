@@ -1,10 +1,19 @@
 <template>
     <div class="schema-item box" :style="{width: itemWidth +'px'}" >
         <span class="schema-title">{{title}}</span>
-        <bp-select-vue v-if="isNeedPopmenu" class="schema-type" src="selectIcon" :choosedValue="itemValueType" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+        <!-- <bp-select-vue v-if="isNeedPopmenu" 
+            class="schema-type" 
+            :src="selectIcon" 
+            :choosedValue="itemValueType" 
+            @showSelectOption="showSelectOption" 
+            :closeTosts="closeTosts">
             <bp-option-vue class="schema-select-item" text="Text" @click="selectScript(1)"></bp-option-vue>
             <bp-option-vue class="schema-select-item" text="Number" @click="selectScript(2)"></bp-option-vue>
-        </bp-select-vue>
+        </bp-select-vue> -->
+        <select name="" id="" v-model="itemValueType" class="schema-type" ref="schemaType" @change="selectScript" v-if="isNeedPopmenu">
+            <option class="schema-select-item" value="Text"  @click="selectScript(1)">Text</option>
+            <option class="schema-select-item" value="Number" @click="selectScript(2)">Number</option>
+        </select>
         <span v-else class="schema-type">&nbsp&nbsp&nbsp</span>
         <span class="split">&nbsp;&nbsp;</span>
     </div>
@@ -60,12 +69,8 @@ export default {
         }
     },
     methods: {
-        selectScript(idx) {
-            if (idx == 1) {
-                this.itemValueType = "Text"
-            } else {
-                this.itemValueType = "Number"
-            }
+        selectScript() {
+            this.itemValueType = this.$refs.schemaType.value
             const event = new Event("event")
             event.args = {
                 callback: "changeSchemaType",
@@ -102,6 +107,8 @@ export default {
             font-family: 'Monaco';
             font-size: 10px;
             height: 20px !important;
+            border: none;
+            background: rgba(9,30,66,.04);
         }
     }
     .box {

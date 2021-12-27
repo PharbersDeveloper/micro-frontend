@@ -1,8 +1,9 @@
 <template>
-    <div class="excel-container" >
+    <div class="excel-container" ref="excelContainer" @scroll="scrollGetExcel($event)">
         <div class="schemas" style="width: 100%" ref="schemas">
             <div class="view" ref="heasders">
-                <header-item v-for="(item, index) in schema.cols" 	:isNeedPopmenu="isNeedPopmenu" :title="item" :valueType="schema.dtype[index]" @changeSchemaTypeEvent="changeSchemaTypeEvent"
+                <header-item v-for="(item, index) in schema.cols" 	:isNeedPopmenu="isNeedPopmenu" :title="item" :valueType="schema.dtype[index]"
+                @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :itemWidth="schema.colWidth(index)" :key="index"/>
                 <header-item v-if="isShowScrollBar" :isNeedPopmenu=false :itemWidth=8 key="placeholder"/>
             </div>
@@ -87,6 +88,10 @@ export default {
         } else this.schemaIsReady++
     },
     methods: {
+        scrollGetExcel(e) {
+            console.log(e.target.scrollLeft)
+            // this.$refs.headerCell.refs.cellType.scrollLeft = e.target.scrollLeft
+        },
         changeSchemaTypeEvent(data) {
             this.$emit('changeSchemaTypeEvent', data)
         },
