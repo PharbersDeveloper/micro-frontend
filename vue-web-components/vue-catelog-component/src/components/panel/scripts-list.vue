@@ -106,8 +106,8 @@
                         <div class="data_content" v-for="(recipt,index) in searchData" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
                             <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
                             <div class="item_list">
-                                <span class="dataset_icon">
-                                    <img :src="dataset_icon" alt="">
+                                <span class="script_icon">
+                                    <img :src="selectScriptIcon(recipt.runtime)" alt="">
                                 </span>
                                 <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.jobShowName">{{recipt.jobShowName}}</p>
                                 <div class="tag_area" ref="tagsArea">
@@ -115,7 +115,7 @@
                                         <span v-if="recipt.label !== ''">
                                             <p
                                                 :title="tag"
-                                                class="tag_bg" 
+                                                class="tag_bg"
                                                 :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
                                             </p>
                                         </span>
@@ -132,7 +132,7 @@
                     <div class="view_content" v-if="reciptcheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="dataset_icon" alt="">
+                                <img :src="script_icon" alt="">
                             </span>
                             <div class="show-name" v-if="reciptcheckedIds.length == 1">
                                 <p class="project_name_info" :title="reciptcheckedNames[0]">
@@ -188,15 +188,15 @@
             @closeClearDialog="closeClearDialog">
         </clear-recipt-dialog>
         <!-- 删除脚本 -->
-        <clear-delete 
-            v-if="deletedialogshow" 
+        <clear-delete
+            v-if="deletedialogshow"
             :reciptcheckedIds="reciptcheckedIds"
             :datasetcheckedNames="reciptcheckedNames"
             @deleteDatasetsEvent="deleteDataset"
             @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
         <!-- 添加tag -->
-        <create-tags-dialog 
+        <create-tags-dialog
             v-if="showCreateTagsDialog"
             :reciptcheckedIds="reciptcheckedIds"
             :datasetcheckedNames="reciptcheckedNames"
@@ -209,7 +209,7 @@
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <!-- 新建脚本 -->
-        <create-scripts-dialog 
+        <create-scripts-dialog
             v-if="showCreateScriptsDialog"
             :datasets="allData.dss"
             :runtime="runtime"
@@ -248,7 +248,13 @@ export default {
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
+            download_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
+            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg",
+            pyspark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg",
+            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg",
+            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg",
+            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -289,10 +295,104 @@ export default {
         allData: {
             type: Object,
             default: () => ({
-                projectName: "项目名称",
-                dcs: [],
-                tagsArray: ["2", "2", "zzz", "sss", "eee", '1'],
-                dss: []
+                "projectName": "ETL_Iterator",
+                "projectId": "JfSmQBYUpyb4jsei",
+                "dcs": [
+                    {
+                        "flowVersion": "developer",
+                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns/phjob.py",
+                        "jobName": "developer_FYMh8QYDX7FcUns_ETL_Iterator_ETL_Iterator_compute_weqw",
+                        "version": null,
+                        "dagName": "ETL_Iterator",
+                        "jobShowName": "compute_weqw",
+                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
+                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns",
+                        "jobId": "FYMh8QYDX7FcUns",
+                        "jobVersion": "weqw_version1",
+                        "outputs": "[{\"name\":\"weqw\", \"id\":\"6277ab179aaa405aa9dc408d5ce42a44\"}]",
+                        "owner": "张璐",
+                        "projectId": "JfSmQBYUpyb4jsei",
+                        "runtime": "python3",
+                        "targetJobId": "[]",
+                        "timeout": "1000"
+                    },
+                    {
+                        "flowVersion": "developer",
+                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE/phjob.py",
+                        "jobName": "developer_NBdN5esAxvuhFnE_ETL_Iterator_ETL_Iterator_compute_ss",
+                        "version": null,
+                        "dagName": "ETL_Iterator",
+                        "jobShowName": "compute_ss",
+                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\", \"cat\":\"input_index\"}]",
+                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE",
+                        "jobId": "NBdN5esAxvuhFnE",
+                        "jobVersion": "ss_version1",
+                        "outputs": "[{\"name\":\"ss\", \"id\":\"cb36ad3c0f3444c3a699b546a4e077a8\"}]",
+                        "owner": "张璐",
+                        "projectId": "JfSmQBYUpyb4jsei",
+                        "runtime": "python3",
+                        "targetJobId": "[]",
+                        "timeout": "1000"
+                    },
+                    {
+                        "flowVersion": "developer",
+                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ/phjob.py",
+                        "jobName": "developer_na4WCUxbdERSeWZ_ETL_Iterator_ETL_Iterator_compute_3333",
+                        "version": null,
+                        "dagName": "ETL_Iterator",
+                        "jobShowName": "compute_3333",
+                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
+                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ",
+                        "jobId": "na4WCUxbdERSeWZ",
+                        "jobVersion": "3333_version1",
+                        "outputs": "[{\"name\":\"3333\", \"id\":\"ce8b455328604e61bd0a86d34c075e35\"}]",
+                        "owner": "张璐",
+                        "projectId": "JfSmQBYUpyb4jsei",
+                        "runtime": "python3",
+                        "targetJobId": "[]",
+                        "timeout": "1000"
+                    }
+                ],
+                "dss": [
+                    {
+                        "projectId": null,
+                        "schema": "[]",
+                        "version": "max1.0",
+                        "name": "test01",
+                        "label": "",
+                        "cat": "input_index",
+                        "path": "/wer/wer"
+                    },
+                    {
+                        "projectId": null,
+                        "schema": "[]",
+                        "version": null,
+                        "name": "3333",
+                        "label": "",
+                        "cat": "normal",
+                        "path": ""
+                    },
+                    {
+                        "projectId": null,
+                        "schema": "[]",
+                        "version": null,
+                        "name": "weqw",
+                        "label": "",
+                        "cat": "normal",
+                        "path": ""
+                    },
+                    {
+                        "projectId": null,
+                        "schema": "[]",
+                        "version": null,
+                        "name": "ss",
+                        "label": "",
+                        "cat": "normal",
+                        "path": ""
+                    }
+                ],
+                "tagsArray": [],
+                "_isVue": true
             })
         }
     },
@@ -555,6 +655,22 @@ export default {
         },
         toggle() {
             this.showDialog = !this.showDialog
+        },
+        selectScriptIcon(runtime) {
+            switch (runtime) {
+            case "python3":
+                return this.python_icon
+            case "pyspark":
+                return this.pyspark_icon
+            case "r":
+                return this.R_icon
+            case "sparkr" | "sparksql":
+                return this.sparkR_icon
+            case "prepare":
+                return this.prepare_icon
+            default:
+                return this.script_icon
+            }
         }
     }
 }
@@ -658,7 +774,7 @@ export default {
                 padding-top: 20px;
                 background: #f2f2f2;
                 box-sizing: border-box;
-                
+
                 .selected_search {
                     display: flex;
                     position: relative;
@@ -1018,7 +1134,7 @@ export default {
                     .item_list {
                         display: flex;
                     }
-                    .dataset_icon {
+                    .script_icon {
                         margin-left: 27px;
                         width: 30px;
                         max-width: 30px;
