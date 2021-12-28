@@ -106,7 +106,7 @@ export default class RecipesComponent extends Component {
 						"showName": decodeURI(this.cookies.read('user_name_show')),
 						"code": 0,
 						"jobDesc": "created",
-						"jobCat": "upload",
+						"jobCat": "intermediate",
 						"comments": "",
 						"message": JSON.stringify(message)
 					}

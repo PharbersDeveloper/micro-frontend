@@ -134,7 +134,7 @@ export default {
             del_icon_black: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1)(1).svg",
             hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
             py_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg",
-            pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg",
+            pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg",
             R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg",
             sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
             run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
@@ -197,11 +197,11 @@ export default {
                     },
                     {
                         name: 'Python3_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'Python3_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python%E6%88%90%E5%8A%9F.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'PySpark',
@@ -221,11 +221,11 @@ export default {
                     },
                     {
                         name: 'SparkR_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E6%88%90%E5%8A%9F.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'SparkR_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'R',
@@ -246,7 +246,16 @@ export default {
                     {
                         name: 'dataset',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
-                    }
+                    },
+					{
+						name: 'DSInputIndex',
+						symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
+					},
+					,
+					{
+						name: 'DSOutputIndex',
+						symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
+					}
                 ]
             }
         }
@@ -747,8 +756,8 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 img {
-                    widows: 30px;
-                    height: 30px;
+                    width: 40px;
+                    height: 40px;
                 }
             }
         }

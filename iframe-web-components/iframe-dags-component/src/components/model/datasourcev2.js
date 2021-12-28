@@ -53,11 +53,19 @@ export default class PhDagDatasource {
                     x["status"] = "normal"
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
+					const name = x["attributes"]["name"]
+					// if(name === "published") {
+					// 	debugger
+					// }
                     let result = "dataset"
                     if (cat === "dataset" && runtime === "uploaded") {
                         result = "DSuploaded"
                     } else if (cat === "dataset" && runtime === "intermediate") {
                         result = "DSIntermediate"
+                    } else if (cat === "dataset" && runtime === "input_index") {
+                        result = "DSInputIndex"
+                    } else if (cat === "dataset" && runtime === "output_index") {
+                        result = "DSOutputIndex"
                     } else if (cat === "job" && runtime === "python3") {
                         result = "Python3"
                     } else if (cat === "job" && runtime === "pyspark") {
@@ -70,8 +78,6 @@ export default class PhDagDatasource {
                         result = "dataset"
                     } else if (cat === "job") {
                         result = "job"
-                    } else {
-
                     }
                     x["category"] = result
                     const tmp = parseInt(x["attributes"]["level"])

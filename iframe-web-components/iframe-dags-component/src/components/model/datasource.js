@@ -15,8 +15,11 @@ export default class PhDagDatasource {
     }
 
     defaultAdapter(row) {
-        function resetCategory(cat, runtime) {
+        function resetCategory(cat, runtime, name) {
             let result = ""
+			if(name == "universe_outlier") {
+				debugger
+			}
             if (cat === "dataset" && runtime === "uploaded") {
                 result = "DSuploaded"
             } else if (cat === "dataset" && runtime === "intermediate") {
@@ -47,7 +50,7 @@ export default class PhDagDatasource {
             node["x"] = position["x"]
             node["y"] = position["y"]
             node["level"] = attr["level"]
-            node["category"] = resetCategory(attr["cat"], attr["runtime"])
+            node["category"] = resetCategory(attr["cat"], attr["runtime"], attr["name"])
             node["jobName"] = attr["name"] + "_" +attr["sort-version"].split("developer_")[1]
             node["representId"] = attr["represent-id"]
             return [true, node]
