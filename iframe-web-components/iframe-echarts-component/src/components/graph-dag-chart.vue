@@ -17,7 +17,7 @@
 
         <div class="opt_area">
             <div class="opt_header">
-                <img :src="header_icon" alt="">
+                <img :src="py_icon_header" alt="">
                 <div class="dataset_name">{{selectItemName}}</div>
             </div>
             <div class="opt_icon_area">
@@ -113,7 +113,6 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
             star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
@@ -133,6 +132,7 @@ export default {
             run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
             run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
             run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+			py_icon_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%8F%8D%E8%89%B2.svg",
             selectItemName: "",
             selectItem: null,
             showRunJson: false,
@@ -381,11 +381,11 @@ export default {
                         categories: [
                             {
                                 name: 'DSuploaded',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSuploaded.svg'
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg'
                             },
                             {
                                 name: 'DSIntermediate',
-                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSIntermediate.svg'
+                                symbol: 'image://https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate.svg'
                             },
                             {
                                 name: 'Python3',

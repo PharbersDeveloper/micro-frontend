@@ -17,9 +17,6 @@ export default class PhDagDatasource {
     defaultAdapter(row) {
         function resetCategory(cat, runtime, name) {
             let result = ""
-			if(name == "universe_outlier") {
-				debugger
-			}
             if (cat === "dataset" && runtime === "uploaded") {
                 result = "DSuploaded"
             } else if (cat === "dataset" && runtime === "intermediate") {

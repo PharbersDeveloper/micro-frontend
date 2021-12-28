@@ -19,7 +19,7 @@
 
         <div class="opt_area">
             <div class="opt_header">
-                <img :src="header_icon" alt="">
+                <img :src="icon_header" alt="">
                 <div class="dataset_name">{{selectItemName}}</div>
             </div>
             <div class="opt_icon_area">
@@ -124,7 +124,7 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            header_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DS%E4%B8%8A%E4%BC%A0(1).svg",
+            icon_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
             star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
@@ -144,7 +144,6 @@ export default {
             run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
             run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
             run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            selectItemName: "",
             selectItem: null,
             showRunJson: false,
             jobShowName: "",
@@ -179,17 +178,34 @@ export default {
                 return new noticeService('1')
             }
         },
+        statusFlagsHeader: {
+            type: Object,
+            default: function() {
+                return {
+                    DSuploaded_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded%E5%8F%8D%E8%89%B2.svg",
+                    DSIntermediate_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate%E5%8F%8D%E8%89%B2.svg",
+                    input_index_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in%E5%8F%8D%E8%89%B2.svg",
+                    output_index_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out%E5%8F%8D%E8%89%B2.svg",
+                    python3_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%8F%8D%E8%89%B2.svg",
+                    pyspark_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%8F%8D%E8%89%B2.svg",
+                    sparkr_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
+                    r_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%8F%8D%E8%89%B2.svg",
+                    dataset_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png",
+                    job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png"
+                }
+            }
+        },
         statusFlags: {
             type: Array,
             default: function() {
                 return [
                     {
                         name: 'DSuploaded',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSuploaded.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg'
                     },
                     {
                         name: 'DSIntermediate',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/DSIntermediate.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate.svg'
                     },
                     {
                         name: 'Python3',
@@ -247,15 +263,15 @@ export default {
                         name: 'dataset',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
                     },
-					{
-						name: 'DSInputIndex',
-						symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
-					},
-					,
-					{
-						name: 'DSOutputIndex',
-						symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
-					}
+                    {
+                        name: 'DSInputIndex',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
+                    },
+                    ,
+                    {
+                        name: 'DSOutputIndex',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
+                    }
                 ]
             }
         }
@@ -452,6 +468,29 @@ export default {
             else
                 return null;
         },
+        changeHeaderIcon(cat, runtime, ele) {
+            if (cat === "dataset" && runtime === "uploaded") {
+                ele.icon_header = ele["statusFlagsHeader"]["DSuploaded_header"]
+            } else if (cat === "dataset" && runtime === "intermediate") {
+                ele.icon_header = ele["statusFlagsHeader"]["DSIntermediate_header"]
+            } else if (cat === "dataset" && runtime === "input_index") {
+                ele.icon_header = ele["statusFlagsHeader"]["input_index_header"]
+            } else if (cat === "dataset" && runtime === "output_index") {
+                ele.icon_header = ele["statusFlagsHeader"]["output_index_header"]
+            } else if (cat === "job" && runtime === "python3") {
+                ele.icon_header = ele["statusFlagsHeader"]["python3_header"]
+            } else if (cat === "job" && runtime === "pyspark") {
+                ele.icon_header = ele["statusFlagsHeader"]["pyspark_header"]
+            } else if (cat === "job" && runtime === "sparkr") {
+                ele.icon_header = ele["statusFlagsHeader"]["sparkr_header"]
+            } else if (cat === "job" && runtime === "r") {
+                ele.icon_header = ele["statusFlagsHeader"]["r_header"]
+            } else if (cat === "dataset") {
+                ele.icon_header = ele["statusFlagsHeader"]["dataset_header"]
+            } else if (cat === "job") {
+                ele.icon_header = ele["statusFlagsHeader"]["job_header"]
+            }
+        },
         renderDag (data) {
             const that = this
 
@@ -584,11 +623,12 @@ export default {
                     // d3.select(this).selectAll("circle").remove()
                 }).on('click', function (d, i) {
                     that.selectItemName = i.data.attributes.name
-                    // 获取选中job的基本信息
+                    // 获取选中节点的基本信息
                     let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
                     if(scriptArr.length > 0) {
                         that.selectItem = scriptArr[0].attributes
                     }
+                    that.changeHeaderIcon(i.data.attributes.cat, i.data.attributes.runtime, that)
                     console.log("selectItem", that.selectItem)
                     // that.$emit('itemClicked', params)
                 })
@@ -695,6 +735,11 @@ export default {
             align-items: center;
             background: #fff;
             border-bottom: 1px solid #ccc;
+            .dataset_name {
+                width: 180px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
             img {
                 width: 40px;
                 height: 40px;
