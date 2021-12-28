@@ -221,7 +221,7 @@ export default {
                     },
                     {
                         name: 'PySpark',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/pyspark%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'PySpark_succeed',
@@ -446,8 +446,8 @@ export default {
         async initChart () {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
-            // 发布前要解注
-            // document.domain = "pharbers.com"
+            // 发布前解注
+            document.domain = "pharbers.com"
         },
 
         // 监听屏幕大小改变
