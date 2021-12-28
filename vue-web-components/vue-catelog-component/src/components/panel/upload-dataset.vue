@@ -101,15 +101,15 @@
                             <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
                             <div class="item_list">
                                 <span class="dataset_icon">
-                                    <img :src="dataset_icon" alt="">
+                                    <img :src="selectDatasetIcon(dataset.cat)" alt="">
                                 </span>
                                 <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.name}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
-                                            <p 
+                                            <p
                                                 :title="tag"
-                                                class="tag_bg" 
+                                                class="tag_bg"
                                                 :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
                                             </p>
                                         </span>
@@ -158,15 +158,15 @@
                 </div>
             </div>
         <!-- 清除数据集数据 -->
-        <clear-dataset-dialog  
-            v-if="cleardialogshow" 
+        <clear-dataset-dialog
+            v-if="cleardialogshow"
             :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
             @clearTagsEvent="clearTags"
             @closeClearDialog="closeClearDialog">
         </clear-dataset-dialog>
         <!-- 删除数据集 -->
-        <clear-delete 
+        <clear-delete
             v-if="deletedialogshow"
             :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
@@ -175,7 +175,7 @@
             @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
         <!-- 添加tag -->
-        <create-tags-dialog 
+        <create-tags-dialog
             v-if="showCreateTagsDialog"
             :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames"
@@ -188,13 +188,13 @@
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <!-- max1.0入口 -->
-         <fit-max-input-dialog  
+         <fit-max-input-dialog
             v-if="clickMax"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-input-dialog>
         <!-- max1.0出口 -->
-         <fit-max-output-dialog  
+         <fit-max-output-dialog
             v-if="clickMaxOutput"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
@@ -226,7 +226,10 @@ export default {
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
+            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
+            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
+            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -259,10 +262,44 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss: [
-                    {id: '1', projectId:1,name:'Data_0001',label: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", "sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas"]},
-                    {id: '2', projectId:2,name:'Data_0002',label: ['qqqqqqqqqqqqqqqqqqqqqqqq','sss']},
-                    {id: '3', projectId:3,name:'Data_0003',label: ['eee','sss']}
+                dss:
+                [
+                    {
+                        "projectId": null,
+                        "schema": "[{\"src\":\"id\", \"des\":\"id\", \"type\":\"String\"}, {\"src\":\"province\", \"des\":\"province\", \"type\":\"String\"}, {\"src\":\"city\", \"des\":\"city\", \"type\":\"String\"}, {\"src\":\"标准省份名称\", \"des\":\"标准省份名称\", \"type\":\"String\"}, {\"src\":\"标准城市名称\", \"des\":\"标准城市名称\", \"type\":\"String\"}, {\"src\":\"version\", \"des\":\"version\", \"type\":\"String\"}]",
+                        "version": "20210623",
+                        "name": "province_city_mapping_common",
+                        "label": "",
+                        "cat": "normal",
+                        "path": ""
+                    },
+                    {
+                        "projectId": null,
+                        "schema": "[]",
+                        "version": "max1.0",
+                        "name": "cpa_pha_mapping",
+                        "label": "",
+                        "cat": "input_index",
+                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
+                    },
+                    {
+                        "projectId": null,
+                        "schema": "[{\"src\":\"min2\", \"des\":\"min2\", \"type\":\"String\"}, {\"src\":\"date\", \"des\":\"date\", \"type\":\"Double\"}, {\"src\":\"city\", \"des\":\"city\", \"type\":\"String\"}, {\"src\":\"province\", \"des\":\"province\", \"type\":\"String\"}, {\"src\":\"price\", \"des\":\"price\", \"type\":\"Double\"}, {\"src\":\"version\", \"des\":\"version\", \"type\":\"String\"}]",
+                        "version": "\"赵浩博_Test_Test_developer_2021-12-28T03:48:26+00:00\"",
+                        "name": "price_city",
+                        "label": "",
+                        "cat": "intermediate",
+                        "path": ""
+                    },
+                    {
+                        "projectId": null,
+                        "schema": "[{\"src\":\"province\", \"des\":\"province\", \"type\":\"String\"}, {\"src\":\"city\", \"des\":\"city\", \"type\":\"String\"}, {\"src\":\"date\", \"des\":\"date\", \"type\":\"Double\"}, {\"src\":\"prod_name\", \"des\":\"prod_name\", \"type\":\"String\"}, {\"src\":\"molecule\", \"des\":\"molecule\", \"type\":\"String\"}, {\"src\":\"panel\", \"des\":\"panel\", \"type\":\"Double\"}, {\"src\":\"doi\", \"des\":\"doi\", \"type\":\"String\"}, {\"src\":\"predict_sales\", \"des\":\"predict_sales\", \"type\":\"Double\"}, {\"src\":\"predict_unit\", \"des\":\"predict_unit\", \"type\":\"Double\"}, {\"src\":\"标准通用名\", \"des\":\"标准通用名\", \"type\":\"String\"}, {\"src\":\"标准商品名\", \"des\":\"标准商品名\", \"type\":\"String\"}, {\"src\":\"标准剂型\", \"des\":\"标准剂型\", \"type\":\"String\"}, {\"src\":\"标准规格\", \"des\":\"标准规格\", \"type\":\"String\"}, {\"src\":\"标准包装数量\", \"des\":\"标准包装数量\", \"type\":\"String\"}, {\"src\":\"标准生产企业\", \"des\":\"标准生产企业\", \"type\":\"String\"}, {\"src\":\"标准省份名称\", \"des\":\"标准省份名称\", \"type\":\"String\"}, {\"src\":\"标准城市名称\", \"des\":\"标准城市名称\", \"type\":\"String\"}, {\"src\":\"pack_id\", \"des\":\"pack_id\", \"type\":\"Double\"}, {\"src\":\"atc\", \"des\":\"atc\", \"type\":\"String\"}, {\"src\":\"version\", \"des\":\"version\", \"type\":\"String\"}]",
+                        "version": "\"赵浩博_Test_Test_developer_2021-12-28T01:44:18.538039+00:00\"",
+                        "name": "max_result_standard",
+                        "label": "",
+                        "cat": "output_index",
+                        "path": ""
+                    }
                 ],
                 tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
             })
@@ -334,7 +371,7 @@ export default {
         clearTags(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
-            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
@@ -348,7 +385,7 @@ export default {
             if(data.args.param.datasetRelaResult.length > 0) {
                 data.args.param.datasetRelaResult.forEach(async item => {
                     msgArr.push({
-                        "targetId": item.targetId, 
+                        "targetId": item.targetId,
                         "jobName": item.jobName,
                         "flowVersion": "developer"
                     })
@@ -612,6 +649,18 @@ export default {
         },
         toggle() {
             this.showDialog = !this.showDialog
+        },
+        selectDatasetIcon(cat) {
+            switch (cat) {
+            case "input_index":
+                return this.input_index_icon
+            case "output_index":
+                return this.output_index_icon
+            case "intermediate":
+                return this.intermediate_icon
+            default:
+                return this.dataset_icon
+            }
         }
     }
 }
