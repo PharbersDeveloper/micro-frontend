@@ -17,7 +17,7 @@
             </ul>
         </nav>
         <div class="dataset_header">
-            <img :src="dataset_icon" class="dataset_icon" alt="">
+            <img :src="dataset_icon" class="script_icon" alt="">
             {{allData.datasetName}}
         </div>
         <div class="title-container">
@@ -580,7 +580,7 @@ export default {
             display: flex;
             padding: 0 20px;
             align-items: center;
-            .dataset_icon {
+            .script_icon {
                 width: 24px;
                 height: 24px;
                 margin-right: 10px;

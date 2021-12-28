@@ -100,7 +100,7 @@
                         <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
                             <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
                             <div class="item_list">
-                                <span class="dataset_icon">
+                                <span class="script_icon">
                                     <img :src="selectDatasetIcon(dataset.cat)" alt="">
                                 </span>
                                 <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.name}}</p>
@@ -126,7 +126,7 @@
                     <div class="view_content" v-if="datasetcheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="dataset_icon" alt="">
+                                <img :src="database_icon" alt="">
                             </span>
                             <div class="show-name" v-if="datasetcheckedIds.length == 1">
                                 <p class="project_name_info" :title="datasetcheckedNames[0]">
@@ -230,6 +230,7 @@ export default {
             input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
             output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
             intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
+            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -1075,7 +1076,7 @@ export default {
                     .item_list {
                         display: flex;
                     }
-                    .dataset_icon {
+                    .script_icon {
                         margin-left: 27px;
                         width: 30px;
                         max-width: 30px;
