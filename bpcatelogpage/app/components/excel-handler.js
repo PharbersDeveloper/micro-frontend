@@ -36,12 +36,6 @@ export default class ExcelHandlerComponent extends Component {
                 const param = e.detail[0].args.param
 				this.tranParam = param
 				this.createDataSetIndex(param)
-				// 不等了
-				// if(this.noticeService.uploadStatus) {
-				// 	this.createDataSetIndex(param)
-				// } else {
-				// 	alert("文件上传尚未完成，请等待！")
-				// }
                 break
             default:
                 console.log("submit event to parent")
@@ -102,6 +96,7 @@ export default class ExcelHandlerComponent extends Component {
         const that = this
 		param.opname = this.cookies.read( "account_id" )
 		param.opgroup = this.cookies.read( "company_id" )
+		param.cat = "uploaded"
 		//直接导入数据集
         const push_type = "put_item"
         const project_files_body = {
