@@ -57,7 +57,7 @@ export default class DataSetComponent extends Component {
 						"projectId": s3_upload_param.projectId
 					}
 					//请求接口
-					this.updateDataset(file, s3_upload_param.property, s3_upload_param.projectName, resMessage, s3_upload_param.projectId)
+					this.updateDataset(file, s3_upload_param.property, s3_upload_param.projectName, resMessage, s3_upload_param.projectId, "uploaded")
 				}
                 break
             case "uploadFiles":
@@ -107,7 +107,7 @@ export default class DataSetComponent extends Component {
 					params.property.owner = this.cookies.read( "account_id" )
 					params.property.opgroup = this.cookies.read( "company_id" )
 					params.property.showName = decodeURI(this.cookies.read('user_name_show'))
-					this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId)
+					this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId, "uploaded")
 				}
                 break
             default: 
@@ -116,7 +116,7 @@ export default class DataSetComponent extends Component {
     }
 
     @action
-    async confirmUploadFiles(file, property, projectName, projectId) {
+    async confirmUploadFiles(file, property, projectName, projectId, cat) {
             let that = this
             let uploadMessage = {}
             uploadMessage.file = file
@@ -139,7 +139,7 @@ export default class DataSetComponent extends Component {
 							"message": res,
 							"projectId": projectId
 						}
-                        this.updateDataset(file, property, projectName, res, projectId)
+                        this.updateDataset(file, property, projectName, res, projectId, cat)
                     }
                 }
             };
@@ -177,7 +177,7 @@ export default class DataSetComponent extends Component {
 	}
 
     @action
-    async updateDataset(file, property, projectName, message, projectId) {
+    async updateDataset(file, property, projectName, message, projectId, cat) {
         this.loadingService.loading.style.display = 'flex'
         this.loadingService.loading.style['z-index'] = 2
         let that = this
@@ -201,7 +201,8 @@ export default class DataSetComponent extends Component {
 			message: message,
 			property: property,
 			projectId: projectId,
-            projectName: projectName
+            projectName: projectName,
+			cat: cat
 		}
         let actions_body ={
             "table": "action",

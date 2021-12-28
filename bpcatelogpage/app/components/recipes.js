@@ -62,7 +62,8 @@ export default class RecipesComponent extends Component {
 							"name": scriptsParams.outputs[0].name,
 							"schema": JSON.stringify([]),
 							"path": scriptsParams.path,
-							"format": scriptsParams.format
+							"format": scriptsParams.format,
+							"cat": "intermediate"
 						}
 					}
 					let options = {
@@ -304,6 +305,7 @@ export default class RecipesComponent extends Component {
 	@action
 	registerListener(element) {
 		element.allData = this.calAllData
+		console.log(JSON.stringify(element.allData))
 		element.addEventListener("event", this.listener)
 	}
 
