@@ -51,11 +51,11 @@
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
                                     <p>PySpark</p>
                                 </div>
-                                <div class="list" @click="selectScripts('sql')">
+                                <div class="list" @click="selectScripts('r')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
                                     <p>R</p>
                                 </div>
-                                <div class="list" @click="selectScripts('sparksql')">
+                                <div class="list" @click="selectScripts('sparkr')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
                                     <p>sparkR</p>
                                 </div>
