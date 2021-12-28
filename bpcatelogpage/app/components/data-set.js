@@ -27,6 +27,8 @@ export default class DataSetComponent extends Component {
 					uri = '/recipes?projectName=' + param.projectName + '&projectId=' + param.projectId
 				} else if (param.name == "flow") {
 					uri = '/flow?projectName=' + param.projectName + '&projectId=' + param.projectId
+				}  else if(param.name == "airflow") {
+					uri = '/airflow?projectName=' + param.projectName + '&projectId=' + param.projectId
 				}
                 this.router.transitionTo( uri )
                 break

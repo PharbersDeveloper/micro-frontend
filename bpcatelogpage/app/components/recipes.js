@@ -35,6 +35,8 @@ export default class RecipesComponent extends Component {
 					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
 				} else if (params.name == "flow") {
 					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}  else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
 				break

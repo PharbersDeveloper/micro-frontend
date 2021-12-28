@@ -27,4 +27,5 @@ Router.map(function () {
   this.route('codeditor');
   this.route('flow');
   this.route('dataset-max');
+  this.route('airflow');
 });

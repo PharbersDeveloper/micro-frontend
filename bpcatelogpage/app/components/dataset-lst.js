@@ -32,7 +32,9 @@ export default class DatasetLstComponent extends Component {
                     uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
                 } else if (params.name == "flow") {
                     uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
-                }
+                }  else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}
                 this.router.transitionTo( uri )
                 break
             case "addTags":

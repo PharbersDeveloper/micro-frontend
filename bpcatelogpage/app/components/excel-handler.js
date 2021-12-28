@@ -27,6 +27,8 @@ export default class ExcelHandlerComponent extends Component {
 					uri = '/recipes?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
 				} else if (ltp.name == "flow") {
 					uri = '/flow?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
+				} else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
                 break

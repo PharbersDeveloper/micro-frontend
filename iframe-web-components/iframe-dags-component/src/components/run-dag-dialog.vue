@@ -89,7 +89,6 @@ export default {
                 this.jsonValue["scripts"] = JSON.parse(this.scriptsConf)
                 this.jsonValue["userConf"] = JSON.parse(this.userConf)
             }
-            debugger
             let isJSON = this.isJSON_test(JSON.stringify(this.jsonValue))
             if(!isJSON) return false
             const event = new Event("event")

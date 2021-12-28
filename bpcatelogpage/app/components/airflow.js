@@ -3,14 +3,13 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking'
 
-export default class FlowComponent extends Component {
+export default class AirflowComponent extends Component {
     @service router
     @service store
     @service cookies
     @service('loading') loadingService;
     @service ajax
-	@tracked iframeURL = "https://dag.pharbers.com/index.html#/graph"
-	// @tracked iframeURL = "http://dag.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/#/graph"
+	@tracked iframeURL = "https://max.pharbers.com/airflow/graph"
 
 
     @action
@@ -55,7 +54,8 @@ export default class FlowComponent extends Component {
 	@action
 	registerListenerIframe(element) {
 		element.allData = this.calAllData
-		this.iframeURL = `${this.iframeURL}?projectId=${element.allData.projectId}&projectName=${element.allData.projectName}&flowVersion=developer`
+		this.iframeURL = `${this.iframeURL}?dag_id=${element.allData.projectName}_${element.allData.projectName}_developer`
+		console.log(this.iframeURL)
         element.addEventListener("event", this.listener)
         document.domain = "pharbers.com"
 	}

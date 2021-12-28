@@ -27,8 +27,10 @@ export default class DagComponent extends Component {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if (params.name === "flow") {
                     uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
-                } else if(params.name == 'projects') {
+                } else if(params.name == "projects") {
 					uri = '/projects'
+				} else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 //执行列表 分页
                 this.router.transitionTo( uri )
