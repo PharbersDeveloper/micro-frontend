@@ -85,12 +85,12 @@ export default {
         save() {
             this.jsonValue = {}
             if(this.steps === 2) {
-                this.jsonValue["datasets"] = this.datasetsConf
-                this.jsonValue["scripts"] = this.scriptsConf
-                this.jsonValue["userConf"] = this.userConf
+                this.jsonValue["datasets"] = JSON.parse(this.datasetsConf)
+                this.jsonValue["scripts"] = JSON.parse(this.scriptsConf)
+                this.jsonValue["userConf"] = JSON.parse(this.userConf)
             }
             debugger
-            let isJSON = this.isJSON_test(this.jsonValue)
+            let isJSON = this.isJSON_test(JSON.stringify(this.jsonValue))
             if(!isJSON) return false
             const event = new Event("event")
             event.args = {
