@@ -584,7 +584,11 @@ export default {
                         } else if (data.status === "failed") {
                             cat = cat + "_failed"
                         }
-                        const reVal = that.statusFlags.find(x => x.name === cat)
+                        const reVal = that.statusFlags.find(x => {
+                            if(x) {
+                                return x.name === cat
+                            }
+                        })
                         return reVal.symbol
                     })
                     .attr("width", "50")
