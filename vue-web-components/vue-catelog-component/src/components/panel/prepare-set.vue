@@ -48,9 +48,9 @@ export default {
         return {
             prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
             error_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/error.svg",
-            rowParams: JSON.stringify([{"aaa": ["=", "123"]}]),
-            colParams: JSON.stringify(["bbb", "ccc"]),
-            changeParams: "bug"
+            rowParams: "",
+            colParams: "",
+            changeParams: ""
         }
     },
     props: {
@@ -62,23 +62,44 @@ export default {
         }
     },
     methods: {
-        save() {
-            const event = new Event("event")
-            event.args = {
-                callback: "prepare",
-                element: this,
-                param: {
-                    name: "prepare",
-                    rowParams: JSON.parse(this.rowParams),
-                    colParams: JSON.parse(this.colParams),
-                    changeParams: this.changeParams,
-                    projectId: this.allData.projectId,
-                    projectName: this.allData.projectName,
-                    message: this.allData.message
+        isJSON_test(str) {
+            if (typeof str == 'string') {
+                try {
+                    this.jsonValue = JSON.parse(str);
+                    return true;
+                } catch(e) {
+                    if(str != "") {
+                        alert("筛选行和筛选列需要输入JSON字符串！")
+                        return false;
+                    } else {
+                        return true
+                    }
                 }
             }
-            console.log(event)
-            this.$emit('event', event)
+        },
+        save() {
+            const event = new Event("event")
+            this.rowParams = this.rowParams === "" ? "[]" : this.rowParams
+            this.colParams = this.colParams === "" ? "[]" : this.colParams
+            let rowParams = this.isJSON_test(this.rowParams)
+            let colParams = this.isJSON_test(this.colParams)
+            if(rowParams === true && colParams === true) {
+                event.args = {
+                    callback: "prepare",
+                    element: this,
+                    param: {
+                        name: "prepare",
+                        rowParams: JSON.parse(this.rowParams),
+                        colParams: JSON.parse(this.colParams),
+                        changeParams: this.changeParams,
+                        projectId: this.allData.projectId,
+                        projectName: this.allData.projectName,
+                        message: this.allData.message
+                    }
+                }
+                console.log(event)
+                this.$emit('event', event)
+            }
         }
     }
 }
