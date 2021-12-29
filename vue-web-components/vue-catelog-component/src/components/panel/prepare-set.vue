@@ -6,7 +6,7 @@
                 <span>Prepare</span>
             </div>
             <div class="header_right">
-                <button class="save">保存</button>
+                <button class="save" @click="save">保存</button>
             </div>
         </div>
         <div class="prepare_tab">
@@ -48,9 +48,37 @@ export default {
         return {
             prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
             error_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/error.svg",
-            rowParams: "",
-            colParams: "",
-            changeParams: ""
+            rowParams: JSON.stringify([{"aaa": ["=", "123"]}]),
+            colParams: JSON.stringify(["bbb", "ccc"]),
+            changeParams: "bug"
+        }
+    },
+    props: {
+        allData: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        }
+    },
+    methods: {
+        save() {
+            const event = new Event("event")
+            event.args = {
+                callback: "prepare",
+                element: this,
+                param: {
+                    name: "prepare",
+                    rowParams: JSON.parse(this.rowParams),
+                    colParams: JSON.parse(this.colParams),
+                    changeParams: this.changeParams,
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    message: this.allData.message
+                }
+            }
+            console.log(event)
+            this.$emit('event', event)
         }
     }
 }

@@ -51,78 +51,82 @@ export default class RecipesComponent extends Component {
 				//需要新建dataset
 				this.projectId = scriptsParams.projectId
 				this.projectName = scriptsParams.projectName
-				if(scriptsParams.outputs[0].id == "") {
-					scriptsParams.outputs[0].id = uuid
-					let body = {
-						"table": "dataset",
+				if(scriptsParams.runtime === "prepare") {
+					// message["path"] = scriptsParams.path
+					// message["format"] = scriptsParams.format
+					let preUrl = `/prepare-set?projectName=${scriptsParams.projectName}&projectId=${scriptsParams.projectId}&message=${encodeURI(JSON.stringify(scriptsParams))}`
+					this.router.transitionTo(preUrl)
+				} else {
+					if(scriptsParams.outputs[0].id == "") {
+						scriptsParams.outputs[0].id = uuid
+						let body = {
+							"table": "dataset",
+							"item": {
+								"projectId": scriptsParams.projectId,
+								"id": uuid,
+								"label": JSON.stringify([]),
+								"name": scriptsParams.outputs[0].name,
+								"schema": JSON.stringify([]),
+								"path": scriptsParams.path,
+								"format": scriptsParams.format,
+								"cat": "intermediate"
+							}
+						}
+						let options = {
+							method: "POST",
+							headers: {
+								"Authorization": accessToken,
+								'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+								"accept": "application/json"
+							},
+							body: JSON.stringify(body)
+						}
+						await fetch(url, options)
+					}
+					let message = {
+						"dagName": scriptsParams.projectName,
+						"flowVersion": "developer",
+						"jobName": scriptsParams.jobName,
+						"jobId": "",
+						"inputs": scriptsParams.inputs,
+						"outputs": scriptsParams.outputs,
+						"jobVersion": scriptsParams.jobVersion,
+						"projectId": scriptsParams.projectId,
+						"timeout": "1000",
+						"runtime": scriptsParams.runtime,
+						"owner": decodeURI(this.cookies.read('user_name_show')),
+						"targetJobId": "",
+						"projectName": scriptsParams.projectName,
+						"labels": [],
+						"operatorParameters": ["script", ""]
+						// "path": scriptsParams.path,
+						// "format": scriptsParams.format
+					}
+					let scriptBody = {
+						"table": "action",
 						"item": {
 							"projectId": scriptsParams.projectId,
-							"id": uuid,
-							"label": JSON.stringify([]),
-							"name": scriptsParams.outputs[0].name,
-							"schema": JSON.stringify([]),
-							"path": scriptsParams.path,
-							"format": scriptsParams.format,
-							"cat": "intermediate"
+							"owner": this.cookies.read( "account_id" ),
+							"showName": decodeURI(this.cookies.read('user_name_show')),
+							"code": 0,
+							"jobDesc": "created",
+							"jobCat": "intermediate",
+							"comments": "",
+							"message": JSON.stringify(message)
 						}
 					}
-					let options = {
+					let scriptOptions = {
 						method: "POST",
 						headers: {
 							"Authorization": accessToken,
 							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 							"accept": "application/json"
 						},
-						body: JSON.stringify(body)
+						body: JSON.stringify(scriptBody)
 					}
-					await fetch(url, options)
+					this.creatScriptsQuery = await fetch(url, scriptOptions).then(res => res.json())
+					this.noticeService.register("notification", this.creatScriptsQuery.data.id, this.createScriptNoticeCallback, this, scriptsParams.projectId)
 				}
-				let message = {
-					"dagName": scriptsParams.projectName,
-					"flowVersion": "developer",
-					"jobName": scriptsParams.jobName,
-					"jobId": "",
-					"inputs": scriptsParams.inputs,
-					"outputs": scriptsParams.outputs,
-					"jobVersion": scriptsParams.jobVersion,
-					"projectId": scriptsParams.projectId,
-					"timeout": "1000",
-					"runtime": scriptsParams.runtime,
-					"owner": decodeURI(this.cookies.read('user_name_show')),
-					"targetJobId": "",
-					"projectName": scriptsParams.projectName,
-					"labels": []
-					// "path": scriptsParams.path,
-					// "format": scriptsParams.format
-				}
-				if(scriptsParams.runtime === "prepare") {
-					message["path"] = scriptsParams.path
-					message["format"] = scriptsParams.format
-				}
-				let scriptBody = {
-					"table": "action",
-					"item": {
-						"projectId": scriptsParams.projectId,
-						"owner": this.cookies.read( "account_id" ),
-						"showName": decodeURI(this.cookies.read('user_name_show')),
-						"code": 0,
-						"jobDesc": "created",
-						"jobCat": "intermediate",
-						"comments": "",
-						"message": JSON.stringify(message)
-					}
-				}
-				let scriptOptions = {
-					method: "POST",
-					headers: {
-						"Authorization": accessToken,
-						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-						"accept": "application/json"
-					},
-					body: JSON.stringify(scriptBody)
-				}
-				this.creatScriptsQuery = await fetch(url, scriptOptions).then(res => res.json())
-				this.noticeService.register("notification", this.creatScriptsQuery.data.id, this.createScriptNoticeCallback, this, scriptsParams.projectId)
 				break
 			case "addTags":
 				let that = this

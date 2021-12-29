@@ -28,4 +28,5 @@ Router.map(function () {
   this.route('flow');
   this.route('dataset-max');
   this.route('airflow');
+  this.route('prepare-set');
 });
