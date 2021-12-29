@@ -191,7 +191,8 @@ export default {
                     sparkr_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
                     r_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%8F%8D%E8%89%B2.svg",
                     dataset_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png",
-                    job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png"
+                    job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png",
+                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg"
                 }
             }
         },
@@ -254,6 +255,18 @@ export default {
                     {
                         name: 'R_failed',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'prepare',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg'
+                    },
+                    {
+                        name: 'prepare_succeed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%88%90%E5%8A%9F.svg'
+                    },
+                    {
+                        name: 'prepare_failed',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'job',
@@ -483,6 +496,8 @@ export default {
                 ele.icon_header = ele["statusFlagsHeader"]["pyspark_header"]
             } else if (cat === "job" && runtime === "sparkr") {
                 ele.icon_header = ele["statusFlagsHeader"]["sparkr_header"]
+            } else if (cat === "job" && runtime === "prepare") {
+                ele.icon_header = ele["statusFlagsHeader"]["prepare_header"]
             } else if (cat === "job" && runtime === "r") {
                 ele.icon_header = ele["statusFlagsHeader"]["r_header"]
             } else if (cat === "dataset") {

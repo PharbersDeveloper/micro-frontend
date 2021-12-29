@@ -54,9 +54,6 @@ export default class PhDagDatasource {
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
                     const name = x["attributes"]["name"]
-                    // if(name === "published") {
-                    // 	debugger
-                    // }
                     let result = "dataset"
                     if (cat === "dataset" && runtime === "uploaded") {
                         result = "DSuploaded"
@@ -74,6 +71,8 @@ export default class PhDagDatasource {
                         result = "SparkR"
                     } else if (cat === "job" && runtime === "r") {
                         result = "R"
+                    } else if (cat === "job" && runtime === "prepare") {
+                        result = "prepare"
                     } else if (cat === "dataset") {
                         result = "dataset"
                     } else if (cat === "job") {
