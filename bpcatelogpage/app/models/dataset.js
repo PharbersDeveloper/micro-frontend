@@ -18,4 +18,5 @@ export default class DatasetModel extends Model {
 	@attr("string") label
 	@attr("string") cat
 	@attr("string") path
+	@attr("string") format
 }

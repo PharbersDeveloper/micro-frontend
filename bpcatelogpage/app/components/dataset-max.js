@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking'
 
 export default class ExcelCleanComponent extends Component {
 	@tracked dataset
+	@tracked display = "none"
 	@service router
 	@action
     async listener(e) {
@@ -31,6 +32,9 @@ export default class ExcelCleanComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
+		if(element.allData.cat === "output_index") {
+			this.display = "block"
+		}
 		element.allData.popupBack = true
 		this.dataset = this.calAllData
         element.addEventListener("event", this.listener)

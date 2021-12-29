@@ -19,6 +19,12 @@ export default class ExcelCleanRoute extends Route {
 		},
 		datasetName: {
 			refreshModel: true
+		},
+		format: {
+			refreshModel: true
+		},
+		cat: {
+			refreshModel: true
 		}
     }
 
@@ -37,6 +43,8 @@ export default class ExcelCleanRoute extends Route {
 			path: params.path,
 			projectId: params.projectId,
 			datasetName: params.datasetName,
+			format: params.format,
+			cat: params.cat,
 			_isVue: true
 		} )
 	}

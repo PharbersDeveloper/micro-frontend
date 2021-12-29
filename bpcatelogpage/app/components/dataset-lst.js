@@ -22,10 +22,11 @@ export default class DatasetLstComponent extends Component {
                     uri = `/dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
                 }else if(params.name === "linkToProject" || params.name === "project") {
                     uri = `/projects/`+ params.projectId
-                } else if(params.name === "analyze" && params.dataset.cat === "normal") {
+                } else if(params.name === "analyze" && params.dataset.cat !== "input_index" && params.dataset.cat !== "output_index") {
                     uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
-                }else if(params.name === "analyze" && params.dataset.cat !== "normal") {
-                    uri = `/dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}`
+                }else if(params.name === "analyze" && params.dataset.cat !== "uploaded" && params.dataset.cat !== "intermediate") {
+					console.log(params.dataset)
+                    uri = `/dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}&format=${params.dataset.format}&cat=${params.dataset.cat}`
                 } else if(params.name === "datasets") {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
                 } else if(params.name === "scripts") {
