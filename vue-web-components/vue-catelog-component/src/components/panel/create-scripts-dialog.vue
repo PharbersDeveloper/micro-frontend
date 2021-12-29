@@ -24,7 +24,8 @@
                                         <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
                                     </div>
                                 </div>
-                                <el-button class="add" type="primary" @click="on_clickAddInput">增加</el-button>
+                                <el-button class="add" type="primary" v-if="runtime !== 'prepare'" @click="on_clickAddInput">增加</el-button>
+                                <el-button class="add" type="primary" v-if="runtime === 'prepare'" @click="on_clickAddInput">更改</el-button>
                             </div>
                             <!-- 未选的input -->
                             <div class="addInput" v-show="datasetListShow">
@@ -62,11 +63,11 @@
                                     <el-input placeholder="" value="SQL" :disabled="true">></el-input>
                                 </div>
                                 <!-- 下载 -->
-                                 <div class="input_list" v-if="runtime==='download'">
+                                 <div class="input_list" v-if="runtime === 'download'">
                                     <span class="label">存储到</span>
                                     <el-input placeholder="请输入路径" v-model="path"></el-input>
                                 </div>
-                                <div class="input_list" v-if="runtime==='download'">
+                                <div class="input_list" v-if="runtime === 'download'">
                                     <span class="label">格式</span>
                                     <bpSelectVue :choosedValue="format" :src='select_icon'>
                                         <bpOptionVue text="Parquet" @click="changeFormat('Parquet')" :choosedValue="format"></bpOptionVue>
@@ -174,9 +175,9 @@ export default {
                 }
                 return this.remainDatasetList
             } else {
-                // 下载逻辑
-                let remainDatasetListInputData = this.remainDatasetList.filter(item => item.cat === "normal")
-                console.log(remainDatasetListInputData)
+                // download逻辑
+                // let remainDatasetListInputData = this.remainDatasetList.filter(item => item.cat === "normal")
+                let remainDatasetListInputData = this.remainDatasetList
                 if(searchValue) {
                     return remainDatasetListInputData.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
                 }
@@ -189,12 +190,12 @@ export default {
                 // 正常创建脚本逻辑
                 if(searchValueOutput) {
                     return this.remainDatasetListOutputs.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
-                }
+                } 
                 return this.remainDatasetListOutputs
             } else {
                 // 下载逻辑
-                let remainDatasetListOutputsData = this.remainDatasetListOutputs.filter(item => item.cat === "output_index")
-                console.log(remainDatasetListOutputsData)
+                // let remainDatasetListOutputsData = this.remainDatasetListOutputs.filter(item => item.cat === "output_index")
+                let remainDatasetListOutputsData = this.remainDatasetListOutputs
                 if(searchValueOutput) {
                     return remainDatasetListOutputsData.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
                 }
@@ -236,14 +237,14 @@ export default {
                  *    创建一个dataset，否则直接3
                  * 3. 调用赵的接口，往action里面插数据
                 */
-			   let inputsArr = []
-			   this.addDatasetList.forEach(item => {
-				   inputsArr.push({
-					   	"name": item.name,
-     					 "id": item.id
-				   })
-			   })
-			   console.log(inputsArr)
+                let inputsArr = []
+                this.addDatasetList.forEach(item => {
+                    inputsArr.push({
+                        "name": item.name,
+                        "id": item.id
+                    })
+                })
+                console.log(inputsArr)
                 const event = new Event("event")
                 event.args = {
                     callback: "createScripts",
@@ -309,7 +310,7 @@ export default {
             } else if(this.runtime === "download" && this.path !== "" && this.format !== "请选择" && this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
             } else {
-                alert("请输入完整数据！")
+                alert("请输入完整数据!")
             }
         },
         on_clickChangeOutput() {
@@ -319,8 +320,20 @@ export default {
         addDataset(data) {
             this.datasetListShow = false
             //增加dataset list
-            this.addDatasetList.unshift(data)
-            this.remainDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
+            //正常流程
+            if(this.runtime !== "prepare") {
+                this.addDatasetList.unshift(data)
+                this.remainDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
+            } else {
+                //prepare流程
+                if(this.addDatasetList.length > 0) {
+                    let selData = this.addDatasetList[0]
+                    this.remainDatasetList.unshift(selData)
+                    this.addDatasetList = []
+                }
+                this.addDatasetList.unshift(data)
+                this.remainDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
+            }
         },
         on_clickdeldataset(data) {
             //删除dataset

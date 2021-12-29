@@ -7,7 +7,7 @@
                 </div>
                 <div class="prompt" v-show="steps === 0">
                     <span>数据集参数</span>
-                    <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea>
+                    <textarea name="runJson" id=""  cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea>
                 </div>
                 <div class="prompt" v-show="steps === 1">
                     <span>低代码脚本参数</span>
@@ -175,6 +175,7 @@ export default {
         height: 350px;
         background: #FFFFFF;
         border: 1px solid #ccc;
+		resize: none;
     }
 }
 .btn {

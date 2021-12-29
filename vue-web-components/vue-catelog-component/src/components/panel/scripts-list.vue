@@ -59,9 +59,9 @@
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
                                     <p>sparkR</p>
                                 </div>
-                                <div class="list last" @click="selectScripts('download')">
+                                <div class="list last" @click="selectScripts('prepare')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
-                                    <p>下载</p>
+                                    <p>prepare</p>
                                 </div>
                             </div>
                         </div>
@@ -249,7 +249,7 @@ export default {
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
             script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            download_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
+            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
             prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg",
             pyspark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg",
             python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg",
@@ -664,7 +664,7 @@ export default {
                 return this.pyspark_icon
             case "r":
                 return this.R_icon
-            case "sparkr" | "sparksql":
+            case "sparkr":
                 return this.sparkR_icon
             case "prepare":
                 return this.prepare_icon

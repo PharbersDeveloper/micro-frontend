@@ -95,7 +95,7 @@ export default class RecipesComponent extends Component {
 					// "path": scriptsParams.path,
 					// "format": scriptsParams.format
 				}
-				if(scriptsParams.runtime === "download") {
+				if(scriptsParams.runtime === "prepare") {
 					message["path"] = scriptsParams.path
 					message["format"] = scriptsParams.format
 				}
