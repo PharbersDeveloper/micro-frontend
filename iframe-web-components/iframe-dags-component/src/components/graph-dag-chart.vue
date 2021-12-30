@@ -440,13 +440,22 @@ export default {
         },
         // 点击运行整体
         on_click_runDag() {
-            let roots = this.datasource.data.filter(item => item.attributes.ctype === "node" && item.parentIds.length === 0)
+            let roots = []
+			console.log(this.datasource.data)
+			this.datasource.data.forEach(item => {
+				if(item.attributes.runtime === "output_index") {
+					roots.push(item)
+				} else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
+					roots.push(item)
+				}
+			})
             let datasetsArr = []
             roots.forEach(item => {
                 datasetsArr.push({
                     "name": item.attributes.name,
                     "version": [],
-                    "cat": item.status
+                    "cat": item.status,
+					"prop": item.attributes.prop !== "" ? JSON.parse(item.attributes.prop) : ""
                 })
             })
             this.textConf = {

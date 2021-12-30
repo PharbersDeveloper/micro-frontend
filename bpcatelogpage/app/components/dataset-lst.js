@@ -137,7 +137,8 @@ export default class DatasetLstComponent extends Component {
 					"format": suit_max_Param.format,
 					"prop": {
 						path: suit_max_Param.path,
-						partitions: 1
+						partitions: 1,
+						format: suit_max_Param.format
 					}
                 }
                 let suit_max_body = {

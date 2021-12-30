@@ -50,7 +50,7 @@ export default class PhDagDatasource {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
                     x["representId"] = x["attributes"]["represent-id"]
-                    x["status"] = "normal"
+                    x["status"] = x["attributes"]["runtime"]
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
                     const name = x["attributes"]["name"]
