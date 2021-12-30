@@ -1,7 +1,6 @@
 import Service from "@ember/service"
 import { inject as service } from "@ember/service"
-import ENV from "bpcatelogpage/config/environment"
-// import fetch, { Headers, Request, Response, AbortController } from 'fetch'
+import config from "web-shell/config/environment"
 import fetch from "fetch"
 
 export default class OauthServiceService extends Service {
@@ -10,9 +9,9 @@ export default class OauthServiceService extends Service {
 	@service router
 	@service store
 
-	clientId = ENV.clientId
-	clientSecret = ENV.clientSecret
-	redirectUri = ENV.redirectUri
+	clientId = config.clientId
+	clientSecret = config.clientSecret
+	redirectUri = config.redirectUri
 
 	oauthCallback(transition) {
 		const cookies = this.cookies

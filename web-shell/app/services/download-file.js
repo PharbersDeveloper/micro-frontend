@@ -1,6 +1,6 @@
-import Service from '@ember/service'
+import Service from "@ember/service"
 import { inject as service } from "@ember/service"
-import fetch from 'fetch'
+import fetch from "fetch"
 
 export default class DownloadFileService extends Service {
 	@service cookies

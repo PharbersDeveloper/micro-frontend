@@ -1799,12 +1799,12 @@
 
       _initializerDefineProperty(this, "store", _descriptor, this);
 
-      _initializerDefineProperty(this, "oauth", _descriptor2, this);
+      _initializerDefineProperty(this, "oauthService", _descriptor2, this);
     }
 
     // 判断token
     beforeModel() {
-      const judge = oauth.judgeAuth();
+      const judge = this.oauthService.judgeAuth();
       console.log(judge);
     }
 
@@ -1817,7 +1817,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "oauth", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -1991,7 +1991,7 @@
 
   _exports.default = AwsServiceService;
 });
-;define("web-shell/services/browser-events-service", ["exports", "fetch"], function (_exports, _fetch) {
+;define("web-shell/services/browser-events-service", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2022,9 +2022,10 @@
 
     // 注册浏览器监听事件
     registerListener(route) {
-      let that = this;
+      let that = this; // eslint-disable-next-line no-undef
+
       $(function () {
-        that.param = this.location.href.split('?')[1];
+        that.param = this.location.href.split("?")[1];
         that.routeName = `/${route}?`; //回退
 
         if (window.history && window.history.pushState) {
@@ -2122,7 +2123,7 @@
       let key = "";
       const url = "https://api.pharbers.com/entry/download";
 
-      if (source.indexOf('s3a://') != -1) {
+      if (source.indexOf("s3a://") != -1) {
         let str = source.slice(6, source.length);
         let num = str.indexOf("/");
         bucket = str.substring(0, num);
@@ -2140,8 +2141,8 @@
         method: "POST",
         headers: {
           authorization: this.cookies.read("access_token"),
-          'Content-Type': 'application/json',
-          "accept": "application/json"
+          "Content-Type": "application/json",
+          accept: "application/json"
         },
         body: JSON.stringify(body)
       };
@@ -2189,11 +2190,11 @@
 
   // eslint-disable-next-line ember/no-classic-classes
   var _default = Ember.Service.extend({
-    loading: document.getElementById('loadingio-spinner-double-ring-ho1zizxmctu'),
+    loading: document.getElementById("loadingio-spinner-double-ring-ho1zizxmctu"),
     afterLoading: Ember.computed(function () {
       let loadingNum = 0;
 
-      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      if (document.readyState === "complete" || document.readyState === "interactive") {
         loadingNum = 1;
       }
 
@@ -2279,13 +2280,13 @@
           });
           let url = "https://apiv2.pharbers.com/phdydatasource/batch_get_item";
           let headers = {
-            "Authorization": that.cookies.read("access_token"),
+            Authorization: that.cookies.read("access_token"),
             "Content-Type": "application/vnd.api+json",
-            "Accept": "application/vnd.api+json"
+            Accept: "application/vnd.api+json"
           };
           let statusBody = {
-            "table": "notification",
-            "conditions": conditions
+            table: "notification",
+            conditions: conditions
           };
           let options = {
             method: "POST",
@@ -2342,7 +2343,7 @@
   })), _class));
   _exports.default = NoticeServiceService;
 });
-;define("web-shell/services/oauth-service", ["exports", "bpcatelogpage/config/environment", "fetch"], function (_exports, _environment, _fetch) {
+;define("web-shell/services/oauth-service", ["exports", "web-shell/config/environment", "fetch"], function (_exports, _environment, _fetch) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2681,7 +2682,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+0d9639ea"});
+            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+f8c9394f"});
           }
         
 //# sourceMappingURL=web-shell.map

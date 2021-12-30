@@ -3,11 +3,11 @@ import { inject as service } from "@ember/service"
 
 export default class ShellRoute extends Route {
 	@service store
-	@service oauth
+	@service oauthService
 
 	// 判断token
 	beforeModel() {
-		const judge = oauth.judgeAuth()
+		const judge = this.oauthService.judgeAuth()
 		console.log(judge)
 	}
 
