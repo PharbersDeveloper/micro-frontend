@@ -134,7 +134,11 @@ export default class DatasetLstComponent extends Component {
                     "version": suit_max_Param.version,
                     "id": uuid,
                     "cat": suit_max_Param.maxcat,
-					"format": suit_max_Param.format
+					"format": suit_max_Param.format,
+					"prop": {
+						path: suit_max_Param.path,
+						partitions: 1
+					}
                 }
                 let suit_max_body = {
                     "table": "action",

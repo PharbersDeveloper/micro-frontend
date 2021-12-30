@@ -94,7 +94,7 @@ export default class NoticeServiceService {
                                 targetCallback.callback(doneArr, targetCallback.ele)
                                 /**
                                  *  1. 没有running状态时，将本次结果缓存进statusNoticeCache
-                                 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用	*	unregister,断掉请求
+                                 * 	2. 如果本次和上次相比所有结果都不为running且长度相同,调用unregister,断掉请求
                                  * */ 
                                 if(that.statusNoticeCache.length === doneArr.length && runningArr.length === 0){
                                     console.log("query结束")

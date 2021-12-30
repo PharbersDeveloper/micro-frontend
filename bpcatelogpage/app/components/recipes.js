@@ -100,7 +100,11 @@ export default class RecipesComponent extends Component {
 						"targetJobId": "",
 						"projectName": scriptsParams.projectName,
 						"labels": [],
-						"operatorParameters": ["script", ""]
+						"operatorParameters": ["script", ""],
+						"prop": {
+							path: scriptsParams.path,
+							partitions: 1
+						}
 						// "path": scriptsParams.path,
 						// "format": scriptsParams.format
 					}

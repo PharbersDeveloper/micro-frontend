@@ -85,9 +85,11 @@ export default class PrepareSetComponent extends Component {
 					"targetJobId": "",
 					"projectName": scriptsParams.projectName,
 					"labels": [],
-					"operatorParameters": operatorParameters
-					// "path": scriptsParams.path,
-					// "format": scriptsParams.format
+					"operatorParameters": operatorParameters,
+					"prop": {
+						path: scriptsParams.path,
+						partitions: 1
+					}
 				}
 				let scriptBody = {
 					"table": "action",

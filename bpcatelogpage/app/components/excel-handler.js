@@ -97,6 +97,10 @@ export default class ExcelHandlerComponent extends Component {
 		param.opname = this.cookies.read( "account_id" )
 		param.opgroup = this.cookies.read( "company_id" )
 		param.cat = "uploaded"
+		param.prop = {
+			path: "",
+			partitions: 1
+		}
 		//直接导入数据集
         const push_type = "put_item"
         const project_files_body = {
