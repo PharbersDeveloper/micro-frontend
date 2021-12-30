@@ -10,4 +10,9 @@
 <div class="area" style="margin: 20px;">
 	<div class="item">路径：{{dataset.path}}</div>
 	<div class="item" style="display: {{display}};">格式：{{dataset.format}}</div>
+	<div class="item" style="display: {{display}};">
+		<button 
+			style="width: 82px;height: 32px;background: #7163c5;font-family: PingFangSC-Medium;font-size: 14px;color: #fff;font-weight: 600;border:none;border-radius: 4px;margin-top:10px;cursor:pointer" 
+			{{on "click" this.on_btn_click}} >下载</button>
+	</div>
 </div>
