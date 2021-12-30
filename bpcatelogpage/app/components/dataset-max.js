@@ -53,6 +53,8 @@ export default class ExcelCleanComponent extends Component {
 		if(result.status === 1) {
 			let downloadUrl = result.message
 			window.open(downloadUrl)
+		} else {
+			alert(result.message)
 		}
 	}
 
