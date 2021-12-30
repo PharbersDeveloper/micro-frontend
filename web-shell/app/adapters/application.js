@@ -8,11 +8,6 @@ import JSONAPIAdapter from "@ember-data/adapter/json-api"
 export default class ApplicationAdapter extends JSONAPIAdapter {
 	@service cookies
 
-	namespace = ENV.namespace
-	host = "http://general.pharbers.com"
-	serviceHost = ENV.host
-	scope = "APP/CHC"
-	oauthRequest = false
 	curMethod = "GET"
 
 	pathForType(type) {
@@ -70,7 +65,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 			this.queryParamsAWS = {}
 		}
 		this.newUrl = newUrl
-		return "https://apiv2.pharbers.com" + newUrl
+		return ENV.APP.apiUri + newUrl
 	}
 
 	attributesToDeal(data) {

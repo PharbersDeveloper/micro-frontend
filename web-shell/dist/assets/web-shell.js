@@ -39,16 +39,6 @@
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
-      _defineProperty(this, "namespace", _environment.default.namespace);
-
-      _defineProperty(this, "host", "http://general.pharbers.com");
-
-      _defineProperty(this, "serviceHost", _environment.default.host);
-
-      _defineProperty(this, "scope", "APP/CHC");
-
-      _defineProperty(this, "oauthRequest", false);
-
       _defineProperty(this, "curMethod", "GET");
     }
 
@@ -109,7 +99,7 @@
       }
 
       this.newUrl = newUrl;
-      return "https://apiv2.pharbers.com" + newUrl;
+      return _environment.default.APP.apiUri + newUrl;
     }
 
     attributesToDeal(data) {
@@ -2724,19 +2714,18 @@
   });
   _exports.default = void 0;
 
-  // eslint-disable-next-line ember/no-classic-classes
-  var _default = _jsonApi.default.extend({
+  class ApplicationSerializer extends _jsonApi.default {
     modelNameFromPayloadKey(key) {
       return (0, _emberInflector.singularize)(Ember.String.dasherize(key));
-    },
+    }
 
     payloadKeyFromModelName(modelName) {
       return (0, _emberInflector.pluralize)(Ember.String.camelize(modelName));
-    },
+    }
 
     keyForAttribute(key) {
       return Ember.String.dasherize(key).toLowerCase();
-    },
+    }
 
     keyForRelationship(key) {
       return key;
@@ -2754,9 +2743,9 @@
     // }
 
 
-  });
+  }
 
-  _exports.default = _default;
+  _exports.default = ApplicationSerializer;
 });
 ;define("web-shell/services/ajax", ["exports"], function (_exports) {
   "use strict";
@@ -3517,7 +3506,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"http://general.pharbers.com/oauth-callback","pharbersUri":"http://www.pharbers.com","accountsUri":"http://accounts.pharbers.com","host":"http://oauth.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"","name":"web-shell","version":"0.0.0+a5acab07"});
+            require("web-shell/app")["default"].create({"redirectUri":"http://general.pharbers.com/oauth-callback","pharbersUri":"http://www.pharbers.com","accountsUri":"http://accounts.pharbers.com","host":"http://oauth.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"","name":"web-shell","version":"0.0.0+c73bd180"});
           }
         
 //# sourceMappingURL=web-shell.map

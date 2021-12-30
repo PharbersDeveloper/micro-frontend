@@ -24,6 +24,7 @@ module.exports = function (environment) {
 			pharbersUri: "http://www.pharbers.com",
 			accountsUri: "http://accounts.pharbers.com",
 			host: "http://oauth.pharbers.com",
+			apiUri: "http://apiv2.pharbers.com",
 			clientId: "V5I67BHIRVR2Z59kq-a-",
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
