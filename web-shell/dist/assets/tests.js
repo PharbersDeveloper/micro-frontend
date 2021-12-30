@@ -70,6 +70,19 @@ define("web-shell/tests/unit/models/page-test", ["qunit", "ember-qunit"], functi
     });
   });
 });
+define("web-shell/tests/unit/models/project-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Model | project', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let store = this.owner.lookup('service:store');
+      let model = store.createRecord('project', {});
+      assert.ok(model);
+    });
+  });
+});
 define("web-shell/tests/unit/routes/home-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 

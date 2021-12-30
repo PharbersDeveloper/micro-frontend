@@ -5,6 +5,6 @@ export default class ShellRoute extends Route {
 	@service store
 
 	model() {
-		return ["小逼崽子"]
+		return this.store.findAll("project")
 	}
 }

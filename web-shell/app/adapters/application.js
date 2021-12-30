@@ -27,7 +27,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 			push: "POST"
 		}
 		let url = super.buildURL(...arguments)
-		let curType = url.split("/").splice(4, 2) // ["activities" , ... ]
+		let curType = url.split("/").splice(1, 1) // ["activities" , ... ]
 		let curPath = curType.join("/")
 		let newUrl = `/phplatform/${curPath}` // newUrl: "/v0/entry/assets"
 

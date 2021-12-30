@@ -60,7 +60,7 @@
         push: "POST"
       };
       let url = super.buildURL(...arguments);
-      let curType = url.split("/").splice(4, 2); // ["activities" , ... ]
+      let curType = url.split("/").splice(1, 1); // ["activities" , ... ]
 
       let curPath = curType.join("/");
       let newUrl = `/phplatform/${curPath}`; // newUrl: "/v0/entry/assets"
@@ -353,890 +353,6 @@
     }
   };
   _exports.default = _default;
-});
-;define("web-shell/helpers/PhSigV4AWSClientFactory", ["exports", "web-shell/helpers/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.PhSigV4AWSClientFactory = void 0;
-
-  /*
-   * Copyright 2010-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-   *
-   * Licensed under the Apache License, Version 2.0 (the "License").
-   * You may not use this file except in compliance with the License.
-   * A copy of the License is located at
-   *
-   *  http://aws.amazon.com/apache2.0
-   *
-   * or in the "license" file accompanying this file. This file is distributed
-   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-   * express or implied. See the License for the specific language governing
-   * permissions and limitations under the License.
-   */
-  // eslint-disable-next-line no-undef
-  const CryptoJS = require("crypto-js"); // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
-
-
-  let PhSigV4AWSClientFactory = {};
-  _exports.PhSigV4AWSClientFactory = PhSigV4AWSClientFactory;
-
-  PhSigV4AWSClientFactory.newClient = function (config) {
-    const AWS_SHA_256 = "AWS4-HMAC-SHA256";
-    const AWS4_REQUEST = "aws4_request";
-    const AWS4 = "AWS4";
-    const X_AMZ_DATE = "x-amz-date";
-    const X_AMZ_SECURITY_TOKEN = "x-amz-security-token";
-    const HOST = "host";
-    const AUTHORIZATION = "Authorization";
-
-    function hash(value) {
-      return CryptoJS.SHA256(value);
-    }
-
-    function hexEncode(value) {
-      return value.toString(CryptoJS.enc.Hex);
-    }
-
-    function hmac(secret, value) {
-      return CryptoJS.HmacSHA256(value, secret, {
-        asBytes: true
-      });
-    }
-
-    function buildCanonicalRequest(method, path, queryParams, headers, payload) {
-      return method + "\n" + buildCanonicalUri(path) + "\n" + buildCanonicalQueryString(queryParams) + "\n" + buildCanonicalHeaders(headers) + "\n" + buildCanonicalSignedHeaders(headers) + "\n" + hexEncode(hash(payload));
-    }
-
-    function hashCanonicalRequest(request) {
-      return hexEncode(hash(request));
-    }
-
-    function buildCanonicalUri(uri) {
-      return encodeURI(uri);
-    }
-
-    function buildCanonicalQueryString(queryParams) {
-      if (Object.keys(queryParams).length < 1) {
-        return "";
-      }
-
-      let sortedQueryParams = [];
-
-      for (const property in queryParams) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (queryParams.hasOwnProperty(property)) {
-          sortedQueryParams.push(property);
-        }
-      }
-
-      sortedQueryParams.sort();
-      let canonicalQueryString = "";
-
-      for (let i = 0; i < sortedQueryParams.length; i++) {
-        canonicalQueryString += sortedQueryParams[i] + "=" + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + "&";
-      }
-
-      return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
-    }
-
-    function fixedEncodeURIComponent(str) {
-      let newStr = encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-        return "%" + c.charCodeAt(0).toString(16).toUpperCase();
-      });
-      newStr = newStr.replace(/%26/g, "&");
-      newStr = newStr.replace(/%3D/g, "=");
-      return newStr; //   return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-      //     return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-      //   });
-    }
-
-    function buildCanonicalHeaders(headers) {
-      let canonicalHeaders = "";
-      let sortedKeys = [];
-
-      for (const property in headers) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (headers.hasOwnProperty(property)) {
-          sortedKeys.push(property);
-        }
-      }
-
-      sortedKeys.sort();
-
-      for (let i = 0; i < sortedKeys.length; i++) {
-        canonicalHeaders += sortedKeys[i].toLowerCase() + ":" + headers[sortedKeys[i]] + "\n";
-      }
-
-      return canonicalHeaders;
-    }
-
-    function buildCanonicalSignedHeaders(headers) {
-      let sortedKeys = [];
-
-      for (const property in headers) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (headers.hasOwnProperty(property)) {
-          sortedKeys.push(property.toLowerCase());
-        }
-      }
-
-      sortedKeys.sort();
-      return sortedKeys.join(";");
-    }
-
-    function buildStringToSign(datetime, credentialScope, hashedCanonicalRequest) {
-      return AWS_SHA_256 + "\n" + datetime + "\n" + credentialScope + "\n" + hashedCanonicalRequest;
-    }
-
-    function buildCredentialScope(datetime, region, service) {
-      return datetime.substr(0, 8) + "/" + region + "/" + service + "/" + AWS4_REQUEST;
-    }
-
-    function calculateSigningKey(secretKey, datetime, region, service) {
-      return hmac(hmac(hmac(hmac(AWS4 + secretKey, datetime.substr(0, 8)), region), service), AWS4_REQUEST);
-    }
-
-    function calculateSignature(key, stringToSign) {
-      return hexEncode(hmac(key, stringToSign));
-    }
-
-    function buildAuthorizationHeader(accessKey, credentialScope, headers, signature) {
-      return AWS_SHA_256 + " Credential=" + accessKey + "/" + credentialScope + ", SignedHeaders=" + buildCanonicalSignedHeaders(headers) + ", Signature=" + signature;
-    }
-
-    let awsSigV4Client = {};
-
-    if (config.accessKey === undefined || config.secretKey === undefined) {
-      return awsSigV4Client;
-    }
-
-    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, "accessKey");
-    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, "secretKey");
-    awsSigV4Client.sessionToken = config.sessionToken;
-    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, "serviceName");
-    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, "region");
-    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, "endpoint");
-
-    awsSigV4Client.makeRequest = function (request) {
-      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, "verb");
-
-      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, "path");
-
-      let queryParams = _PhSigV4ClientUtils.default.copy(request.queryParams);
-
-      if (queryParams === undefined) {
-        queryParams = {};
-      } // console.log(4, queryParams)
-
-
-      let headers = _PhSigV4ClientUtils.default.copy(request.headers);
-
-      if (headers === undefined) {
-        headers = {};
-      } //If the user has not specified an override for Content type the use default
-
-
-      if (headers["Content-Type"] === undefined) {
-        headers["Content-Type"] = config.defaultContentType;
-      } //If the user has not specified an override for Accept type the use default
-
-
-      if (headers["Accept"] === undefined) {
-        headers["Accept"] = config.defaultAcceptType;
-      }
-
-      let body = _PhSigV4ClientUtils.default.copy(request.body);
-
-      if (body === undefined || verb === "GET") {
-        // override request body and set to empty when signing GET requests
-        body = "";
-      } else {
-        body = JSON.stringify(body);
-      } //If there is no body remove the content-type header so it is not included in SigV4 calculation
-
-
-      if (body === "" || body === undefined || body === null) {
-        delete headers["Content-Type"];
-      }
-
-      const datetime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z").replace(/[:\-]|\.\d{3}/g, "");
-      headers[X_AMZ_DATE] = datetime; // const parser = document.createElement('a');
-      // parser.href = awsSigV4Client.endpoint;
-
-      headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn";
-      const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
-      const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
-      const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
-      const stringToSign = buildStringToSign(datetime, credentialScope, hashedCanonicalRequest);
-      const signingKey = calculateSigningKey(awsSigV4Client.secretKey, datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
-      const signature = calculateSignature(signingKey, stringToSign);
-      headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
-
-      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== "") {
-        headers[X_AMZ_SECURITY_TOKEN] = awsSigV4Client.sessionToken;
-      }
-
-      delete headers[HOST];
-      let url = config.endpoint + path;
-      const queryString = buildCanonicalQueryString(queryParams);
-
-      if (queryString !== "") {
-        url += "?" + queryString;
-      } //Need to re-attach Content-Type if it is not specified at this point
-
-
-      if (headers["Content-Type"] === undefined) {
-        headers["Content-Type"] = config.defaultContentType;
-      }
-
-      return {
-        method: verb,
-        url: url,
-        headers: headers,
-        data: body,
-        timeout: 30000
-      }; // return axios(signedRequest);
-    };
-
-    return awsSigV4Client;
-  }; // module.exports = { PhSigV4AWSClientFactory }
-
-});
-;define("web-shell/helpers/PhSigV4ClientUtils", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  /*
-   * Copyright 2010-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-   *
-   * Licensed under the Apache License, Version 2.0 (the "License").
-   * You may not use this file except in compliance with the License.
-   * A copy of the License is located at
-   *
-   *  http://aws.amazon.com/apache2.0
-   *
-   * or in the "license" file accompanying this file. This file is distributed
-   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-   * express or implied. See the License for the specific language governing
-   * permissions and limitations under the License.
-   */
-  let PhSigV4ClientUtils = {
-    assertDefined: function (object, name) {
-      if (object === undefined) {
-        throw name + " must be defined";
-      } else {
-        return object;
-      }
-    },
-    assertParametersDefined: function (params, keys, ignore) {
-      if (keys === undefined) {
-        return;
-      }
-
-      if (keys.length > 0 && params === undefined) {
-        params = {};
-      }
-
-      for (let i = 0; i < keys.length; i++) {
-        if (!this.contains(ignore, keys[i])) {
-          this.assertDefined(params[keys[i]], keys[i]);
-        }
-      }
-    },
-    parseParametersToObject: function (params, keys) {
-      if (params === undefined) {
-        return {};
-      }
-
-      let object = {};
-
-      for (let i = 0; i < keys.length; i++) {
-        object[keys[i]] = params[keys[i]];
-      }
-
-      return object;
-    },
-    contains: function (a, obj) {
-      if (a === undefined) {
-        return false;
-      }
-
-      let i = a.length;
-
-      while (i--) {
-        if (a[i] === obj) {
-          return true;
-        }
-      }
-
-      return false;
-    },
-    copy: function (obj) {
-      if (null == obj || "object" != typeof obj) return obj;
-      const copy = obj.constructor();
-
-      for (const attr in obj) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-      }
-
-      return copy;
-    },
-    mergeInto: function (baseObj, additionalProps) {
-      if (null == baseObj || "object" != typeof baseObj) return baseObj;
-      const merged = baseObj.constructor();
-
-      for (const attr in baseObj) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr];
-      }
-
-      if (null == additionalProps || "object" != typeof additionalProps) return baseObj; // eslint-disable-next-line no-undef
-
-      for (attr in additionalProps) {
-        // eslint-disable-next-line no-prototype-builtins,no-undef
-        if (additionalProps.hasOwnProperty(attr)) // eslint-disable-next-line no-undef
-          merged[attr] = additionalProps[attr];
-      }
-
-      return merged;
-    }
-  }; // module.exports = { PhSigV4ClientUtils }
-
-  _exports.default = PhSigV4ClientUtils;
-});
-;define("web-shell/helpers/PhUrlTemplate", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.PhUriTemplate = void 0;
-
-  /*
-   UriTemplates Template Processor - Version: @VERSION - Dated: @DATE
-   (c) marc.portier@gmail.com - 2011-2012
-   Licensed under APLv2 (http://opensource.org/licenses/Apache-2.0)
-   */
-  var PhUriTemplate = function () {
-    // Below are the functions we originally used from jQuery.
-    // The implementations below are often more naive then what is inside jquery, but they suffice for our needs.
-    function isFunction(fn) {
-      return typeof fn == "function";
-    }
-
-    function isEmptyObject(obj) {
-      for (var name in obj) {
-        return false;
-      }
-
-      return true;
-    }
-
-    function extend(base, newprops) {
-      for (var name in newprops) {
-        base[name] = newprops[name];
-      }
-
-      return base;
-    }
-    /**
-     * Create a runtime cache around retrieved values from the context.
-     * This allows for dynamic (function) results to be kept the same for multiple
-     * occuring expansions within one template.
-     * Note: Uses key-value tupples to be able to cache null values as well.
-     */
-    //TODO move this into prep-processing
-
-
-    function CachingContext(context) {
-      this.raw = context;
-      this.cache = {};
-    }
-
-    CachingContext.prototype.get = function (key) {
-      var val = this.lookupRaw(key);
-      var result = val;
-
-      if (isFunction(val)) {
-        // check function-result-cache
-        var tupple = this.cache[key];
-
-        if (tupple !== null && tupple !== undefined) {
-          result = tupple.val;
-        } else {
-          result = val(this.raw);
-          this.cache[key] = {
-            key: key,
-            val: result
-          }; // NOTE: by storing tupples we make sure a null return is validly consistent too in expansions
-        }
-      }
-
-      return result;
-    };
-
-    CachingContext.prototype.lookupRaw = function (key) {
-      return CachingContext.lookup(this, this.raw, key);
-    };
-
-    CachingContext.lookup = function (me, context, key) {
-      var result = context[key];
-
-      if (result !== undefined) {
-        return result;
-      } else {
-        var keyparts = key.split(".");
-        var i = 0,
-            keysplits = keyparts.length - 1;
-
-        for (i = 0; i < keysplits; i++) {
-          var leadKey = keyparts.slice(0, keysplits - i).join(".");
-          var trailKey = keyparts.slice(-i - 1).join(".");
-          var leadContext = context[leadKey];
-
-          if (leadContext !== undefined) {
-            return CachingContext.lookup(me, leadContext, trailKey);
-          }
-        }
-
-        return undefined;
-      }
-    };
-
-    function UriTemplate(set) {
-      this.set = set;
-    }
-
-    UriTemplate.prototype.expand = function (context) {
-      var cache = new CachingContext(context);
-      var res = "";
-      var i = 0,
-          cnt = this.set.length;
-
-      for (i = 0; i < cnt; i++) {
-        res += this.set[i].expand(cache);
-      }
-
-      return res;
-    }; //TODO: change since draft-0.6 about characters in literals
-
-    /* extract:
-        The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
-        */
-
-
-    function Literal(txt) {
-      this.txt = txt;
-    }
-
-    Literal.prototype.expand = function () {
-      return this.txt;
-    };
-
-    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,;=']", "g");
-
-    function encodeNormal(val) {
-      return encodeURIComponent(val).replace(RESERVEDCHARS_RE, function (s) {
-        return escape(s);
-      });
-    } //var SELECTEDCHARS_RE = new RegExp("[]","g");
-
-
-    function encodeReserved(val) {
-      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} );
-      return encodeURI(val); // no need for additional replace if selected-chars is empty
-    }
-
-    function addUnNamed(name, key, val) {
-      return key + (key.length > 0 ? "=" : "") + val;
-    }
-
-    function addNamed(name, key, val, noName) {
-      noName = noName || false;
-
-      if (noName) {
-        name = "";
-      }
-
-      if (!key || key.length === 0) {
-        key = name;
-      }
-
-      return key + (key.length > 0 ? "=" : "") + val;
-    }
-
-    function addLabeled(name, key, val, noName) {
-      noName = noName || false;
-
-      if (noName) {
-        name = "";
-      }
-
-      if (!key || key.length === 0) {
-        key = name;
-      }
-
-      return key + (key.length > 0 && val ? "=" : "") + val;
-    }
-
-    var simpleConf = {
-      prefix: "",
-      joiner: ",",
-      encode: encodeNormal,
-      builder: addUnNamed
-    };
-    var reservedConf = {
-      prefix: "",
-      joiner: ",",
-      encode: encodeReserved,
-      builder: addUnNamed
-    };
-    var fragmentConf = {
-      prefix: "#",
-      joiner: ",",
-      encode: encodeReserved,
-      builder: addUnNamed
-    };
-    var pathParamConf = {
-      prefix: ";",
-      joiner: ";",
-      encode: encodeNormal,
-      builder: addLabeled
-    };
-    var formParamConf = {
-      prefix: "?",
-      joiner: "&",
-      encode: encodeNormal,
-      builder: addNamed
-    };
-    var formContinueConf = {
-      prefix: "&",
-      joiner: "&",
-      encode: encodeNormal,
-      builder: addNamed
-    };
-    var pathHierarchyConf = {
-      prefix: "/",
-      joiner: "/",
-      encode: encodeNormal,
-      builder: addUnNamed
-    };
-    var labelConf = {
-      prefix: ".",
-      joiner: ".",
-      encode: encodeNormal,
-      builder: addUnNamed
-    };
-
-    function Expression(conf, vars) {
-      extend(this, conf);
-      this.vars = vars;
-    }
-
-    Expression.build = function (ops, vars) {
-      var conf;
-
-      switch (ops) {
-        case "":
-          conf = simpleConf;
-          break;
-
-        case "+":
-          conf = reservedConf;
-          break;
-
-        case "#":
-          conf = fragmentConf;
-          break;
-
-        case ";":
-          conf = pathParamConf;
-          break;
-
-        case "?":
-          conf = formParamConf;
-          break;
-
-        case "&":
-          conf = formContinueConf;
-          break;
-
-        case "/":
-          conf = pathHierarchyConf;
-          break;
-
-        case ".":
-          conf = labelConf;
-          break;
-
-        default:
-          throw "Unexpected operator: '" + ops + "'";
-      }
-
-      return new Expression(conf, vars);
-    };
-
-    Expression.prototype.expand = function (context) {
-      var joiner = this.prefix;
-      var nextjoiner = this.joiner;
-      var buildSegment = this.builder;
-      var res = "";
-      var i = 0,
-          cnt = this.vars.length;
-
-      for (i = 0; i < cnt; i++) {
-        var varspec = this.vars[i];
-        varspec.addValues(context, this.encode, function (key, val, noName) {
-          var segm = buildSegment(varspec.name, key, val, noName);
-
-          if (segm !== null && segm !== undefined) {
-            res += joiner + segm;
-            joiner = nextjoiner;
-          }
-        });
-      }
-
-      return res;
-    };
-
-    var UNBOUND = {};
-    /**
-     * Helper class to help grow a string of (possibly encoded) parts until limit is reached
-     */
-
-    function Buffer(limit) {
-      this.str = "";
-
-      if (limit === UNBOUND) {
-        this.appender = Buffer.UnboundAppend;
-      } else {
-        this.len = 0;
-        this.limit = limit;
-        this.appender = Buffer.BoundAppend;
-      }
-    }
-
-    Buffer.prototype.append = function (part, encoder) {
-      return this.appender(this, part, encoder);
-    };
-
-    Buffer.UnboundAppend = function (me, part, encoder) {
-      part = encoder ? encoder(part) : part;
-      me.str += part;
-      return me;
-    };
-
-    Buffer.BoundAppend = function (me, part, encoder) {
-      part = part.substring(0, me.limit - me.len);
-      me.len += part.length;
-      part = encoder ? encoder(part) : part;
-      me.str += part;
-      return me;
-    };
-
-    function arrayToString(arr, encoder, maxLength) {
-      var buffer = new Buffer(maxLength);
-      var joiner = "";
-      var i = 0,
-          cnt = arr.length;
-
-      for (i = 0; i < cnt; i++) {
-        if (arr[i] !== null && arr[i] !== undefined) {
-          buffer.append(joiner).append(arr[i], encoder);
-          joiner = ",";
-        }
-      }
-
-      return buffer.str;
-    }
-
-    function objectToString(obj, encoder, maxLength) {
-      var buffer = new Buffer(maxLength);
-      var joiner = "";
-      var k;
-
-      for (k in obj) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (obj.hasOwnProperty(k)) {
-          if (obj[k] !== null && obj[k] !== undefined) {
-            buffer.append(joiner + k + ",").append(obj[k], encoder);
-            joiner = ",";
-          }
-        }
-      }
-
-      return buffer.str;
-    }
-
-    function simpleValueHandler(me, val, valprops, encoder, adder) {
-      var result;
-
-      if (valprops.isArr) {
-        result = arrayToString(val, encoder, me.maxLength);
-      } else if (valprops.isObj) {
-        result = objectToString(val, encoder, me.maxLength);
-      } else {
-        var buffer = new Buffer(me.maxLength);
-        result = buffer.append(val, encoder).str;
-      }
-
-      adder("", result);
-    }
-
-    function explodeValueHandler(me, val, valprops, encoder, adder) {
-      if (valprops.isArr) {
-        var i = 0,
-            cnt = val.length;
-
-        for (i = 0; i < cnt; i++) {
-          adder("", encoder(val[i]));
-        }
-      } else if (valprops.isObj) {
-        var k;
-
-        for (k in val) {
-          // eslint-disable-next-line no-prototype-builtins
-          if (val.hasOwnProperty(k)) {
-            adder(k, encoder(val[k]));
-          }
-        }
-      } else {
-        // explode-requested, but single value
-        adder("", encoder(val));
-      }
-    }
-
-    function valueProperties(val) {
-      var isArr = false;
-      var isObj = false;
-      var isUndef = true; //note: "" is empty but not undef
-
-      if (val !== null && val !== undefined) {
-        isArr = val.constructor === Array;
-        isObj = val.constructor === Object;
-        isUndef = isArr && val.length === 0 || isObj && isEmptyObject(val);
-      }
-
-      return {
-        isArr: isArr,
-        isObj: isObj,
-        isUndef: isUndef
-      };
-    }
-
-    function VarSpec(name, vhfn, nums) {
-      this.name = unescape(name);
-      this.valueHandler = vhfn;
-      this.maxLength = nums;
-    }
-
-    VarSpec.build = function (name, expl, part, nums) {
-      var valueHandler; //, valueModifier;
-
-      if (expl) {
-        //interprete as boolean
-        valueHandler = explodeValueHandler;
-      } else {
-        valueHandler = simpleValueHandler;
-      }
-
-      if (!part) {
-        nums = UNBOUND;
-      }
-
-      return new VarSpec(name, valueHandler, nums);
-    };
-
-    VarSpec.prototype.addValues = function (context, encoder, adder) {
-      var val = context.get(this.name);
-      var valprops = valueProperties(val);
-
-      if (valprops.isUndef) {
-        return;
-      } // ignore empty values
-
-
-      this.valueHandler(this, val, valprops, encoder, adder);
-    }; //----------------------------------------------parsing logic
-    // How each varspec should look like
-
-
-    var VARSPEC_RE = /([^*:]*)((\*)|(:)([0-9]+))?/;
-
-    var match2varspec = function (m) {
-      var name = m[1];
-      var expl = m[3];
-      var part = m[4];
-      var nums = parseInt(m[5], 10);
-      return VarSpec.build(name, expl, part, nums);
-    }; // Splitting varspecs in list with:
-
-
-    var LISTSEP = ","; // How each template should look like
-
-    var TEMPL_RE = /(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
-    // (as expected by the spec - see tests.html "reserved operators")
-
-    var match2expression = function (m) {
-      // var expr = m[0];
-      var ops = m[2] || "";
-      var vars = m[3].split(LISTSEP);
-      var i = 0,
-          len = vars.length;
-
-      for (i = 0; i < len; i++) {
-        var match;
-
-        if ((match = vars[i].match(VARSPEC_RE)) === null) {
-          throw "unexpected parse error in varspec: " + vars[i];
-        }
-
-        vars[i] = match2varspec(match);
-      }
-
-      return Expression.build(ops, vars);
-    };
-
-    var pushLiteralSubstr = function (set, src, from, to) {
-      if (from < to) {
-        var literal = src.substr(from, to - from);
-        set.push(new Literal(literal));
-      }
-    };
-
-    var parse = function (str) {
-      var lastpos = 0;
-      var comp = [];
-      var match;
-      var pattern = TEMPL_RE;
-      pattern.lastIndex = 0; // just to be sure
-
-      while ((match = pattern.exec(str)) !== null) {
-        var newpos = match.index;
-        pushLiteralSubstr(comp, str, lastpos, newpos);
-        comp.push(match2expression(match));
-        lastpos = pattern.lastIndex;
-      }
-
-      pushLiteralSubstr(comp, str, lastpos, str.length);
-      return new UriTemplate(comp);
-    }; //-------------------------------------------comments and ideas
-    //TODO: consider building cache of previously parsed uris or even parsed expressions?
-
-
-    return parse;
-  }(); // module.exports = { PhUriTemplate }
-
-
-  _exports.PhUriTemplate = PhUriTemplate;
 });
 ;define("web-shell/helpers/app-version", ["exports", "web-shell/config/environment", "ember-cli-app-version/utils/regexp"], function (_exports, _environment, _regexp) {
   "use strict";
@@ -2514,6 +1630,77 @@
   })), _class));
   _exports.default = PageModel;
 });
+;define("web-shell/models/project", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ProjectModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("date"), (_class = class ProjectModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "provider", _descriptor2, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor3, this);
+
+      _initializerDefineProperty(this, "type", _descriptor4, this);
+
+      _initializerDefineProperty(this, "created", _descriptor5, this);
+    } // @hasMany("model") models
+    // @hasMany("script") scripts
+    // @hasMany("dataset") datasets
+    // @belongsTo("flow") flow
+    // @belongsTo("analysis") analysis
+    // @hasMany("notebook") notebooks
+    // @hasMany("dash-board") dashBoards
+    // @hasMany("wiki") wikis
+    // @attr tasks
+    // @attr actions
+
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "provider", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ProjectModel;
+});
 ;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
   "use strict";
 
@@ -2661,7 +1848,7 @@
     }
 
     model() {
-      return ["小逼崽子"];
+      return this.store.findAll("project");
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
@@ -3415,8 +2602,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "yoUrhFm/",
-    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,[30,1]],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
+    "id": "9Lg1le8/",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
@@ -3511,7 +2698,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"http://general.pharbers.com/oauth-callback","pharbersUri":"http://www.pharbers.com","accountsUri":"http://accounts.pharbers.com","host":"http://oauth.pharbers.com","apiUri":"http://apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"","name":"web-shell","version":"0.0.0+58179ad6"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a","name":"web-shell","version":"0.0.0+c9448cf4"});
           }
         
 //# sourceMappingURL=web-shell.map

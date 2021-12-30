@@ -20,11 +20,11 @@ module.exports = function (environment) {
 		APP: {
 			// Here you can pass flags/options to your application instance
 			// when it is created
-			redirectUri: "http://general.pharbers.com/oauth-callback",
-			pharbersUri: "http://www.pharbers.com",
-			accountsUri: "http://accounts.pharbers.com",
-			host: "http://oauth.pharbers.com",
-			apiUri: "http://apiv2.pharbers.com",
+			redirectUri: "https://general.pharbers.com/oauth-callback",
+			pharbersUri: "https://www.pharbers.com",
+			accountsUri: "https://accounts.pharbers.com",
+			host: "https://oauth.pharbers.com",
+			apiUri: "https://apiv2.pharbers.com",
 			clientId: "V5I67BHIRVR2Z59kq-a-",
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
@@ -41,7 +41,8 @@ module.exports = function (environment) {
 		// ENV.APP.LOG_TRANSITIONS = true;
 		// ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		// ENV.APP.LOG_VIEW_LOOKUPS = true;
-		ENV.APP.debugToken = ""
+		ENV.APP.debugToken =
+			"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a"
 	}
 
 	if (environment === "test") {
