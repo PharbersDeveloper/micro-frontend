@@ -259,37 +259,6 @@
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
 });
-;define("web-shell/components/returned-page", ["exports", "@glimmer/component", "web-shell/templates/components/returned-page"], function (_exports, _component, _returnedPage) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = _component.default.extend({
-    layout: _returnedPage.default,
-    elementId: "oauth",
-    accountDescribe: "账号",
-    passwordDescribe: "密码",
-    btnDescribe: "登录",
-
-    didInsertElement() {
-      this._super(...arguments);
-
-      const a = Handlebars.compile(this.content)({
-        accountDescribe: "账号",
-        passwordDescribe: "密码",
-        btnDescribe: "登录"
-      });
-      Ember.$("#oauth").append(a);
-      Ember.$("#oauth").width("100%");
-    }
-
-  });
-
-  _exports.default = _default;
-});
 ;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
   "use strict";
 
@@ -1762,8 +1731,18 @@
   }
 
   _exports.default = Router;
-  Router.map(function () {
-    this.route('shell', {
+  Router.map(async function () {
+    let scriptOptions = {
+      method: "GET",
+      headers: {
+        Authorization: _environment.default.APP.debugToken,
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json"
+      }
+    };
+    const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json());
+    console.log(result);
+    this.route("shell", {
       path: "/"
     });
   });
