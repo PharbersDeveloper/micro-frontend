@@ -26,10 +26,10 @@
                 <div class="fir_icon_row">
                     <img :src="label_icon" alt="">
                     <img :src="table_icon" alt="">
-                    <img :src="star_icon" alt="">
+                    <!-- <img :src="star_icon" alt="">
                     <img :src="doc_icon" alt="">
                     <img :src="share_icon" alt="">
-                    <img :src="hide_icon" alt="">
+                    <img :src="hide_icon" alt=""> -->
                     <img :src="run_icon" alt=""
                         @click="on_click_runDag">
                     <img v-if="noticeService.retryButtonShow && selectItem"
@@ -320,8 +320,7 @@ export default {
          */
         async confirmeRunDag(data) {
             this.noticeService.progress = false //重置进度条
-            this.showProgress = true
-            this.showRunJson = false
+			this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
@@ -341,6 +340,8 @@ export default {
             let result = await fetch(url, options).then(res => res.json())
             let queryId = result.data.dag_run_id
             this.noticeService.projectName = this.projectName
+            this.showProgress = true
+            this.showRunJson = false
             let timeout = data.args.param.timeout
             this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
