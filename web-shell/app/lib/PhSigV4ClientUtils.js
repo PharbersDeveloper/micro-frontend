@@ -77,9 +77,10 @@ let PhSigV4ClientUtils = {
 		// eslint-disable-next-line no-undef
 		for (attr in additionalProps) {
 			// eslint-disable-next-line no-prototype-builtins,no-undef
-			if (additionalProps.hasOwnProperty(attr))
+			if (additionalProps.hasOwnProperty(attr)) {
 				// eslint-disable-next-line no-undef
 				merged[attr] = additionalProps[attr]
+			}
 		}
 		return merged
 	}

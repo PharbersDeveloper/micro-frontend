@@ -96,8 +96,8 @@ var PhUriTemplate = (function () {
 
 	//TODO: change since draft-0.6 about characters in literals
 	/* extract:
-     The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
-     */
+	 The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
+	 */
 	function Literal(txt) {
 		this.txt = txt
 	}
@@ -106,16 +106,16 @@ var PhUriTemplate = (function () {
 		return this.txt
 	}
 
-	var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,;=']", "g")
+	var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,=']", "g")
 	function encodeNormal(val) {
 		return encodeURIComponent(val).replace(RESERVEDCHARS_RE, function (s) {
 			return escape(s)
 		})
 	}
 
-	//var SELECTEDCHARS_RE = new RegExp("[]","g");
+	//var SELECTEDCHARS_RE = new RegExp("[]","g")
 	function encodeReserved(val) {
-		//return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} );
+		//return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} )
 		return encodeURI(val) // no need for additional replace if selected-chars is empty
 	}
 
@@ -166,8 +166,8 @@ var PhUriTemplate = (function () {
 		builder: addUnNamed
 	}
 	var pathParamConf = {
-		prefix: ";",
-		joiner: ";",
+		prefix: "",
+		joiner: "",
 		encode: encodeNormal,
 		builder: addLabeled
 	}
@@ -384,7 +384,8 @@ var PhUriTemplate = (function () {
 	}
 
 	VarSpec.build = function (name, expl, part, nums) {
-		var valueHandler //, valueModifier;
+		// eslint-disable-next-line no-unused-vars
+		var valueHandler, valueModifier
 
 		if (expl) {
 			//interprete as boolean
@@ -426,12 +427,14 @@ var PhUriTemplate = (function () {
 	var LISTSEP = ","
 
 	// How each template should look like
-	var TEMPL_RE = /(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g
+	var TEMPL_RE =
+		/(\{([+#.?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g
 	// Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
 	// (as expected by the spec - see tests.html "reserved operators")
 
 	var match2expression = function (m) {
-		// var expr = m[0];
+		// eslint-disable-next-line no-unused-vars
+		var expr = m[0]
 		var ops = m[2] || ""
 		var vars = m[3].split(LISTSEP)
 		var i = 0,

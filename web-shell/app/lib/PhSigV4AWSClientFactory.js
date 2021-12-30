@@ -14,8 +14,7 @@
  */
 
 import PhSigV4ClientUtils from "./PhSigV4ClientUtils"
-// eslint-disable-next-line no-undef
-const CryptoJS = require("crypto-js")
+import * as CryptoJS from "crypto-js"
 // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
 
 let PhSigV4AWSClientFactory = {}
@@ -238,7 +237,6 @@ PhSigV4AWSClientFactory.newClient = function (config) {
 		if (queryParams === undefined) {
 			queryParams = {}
 		}
-		// console.log(4, queryParams)
 		let headers = PhSigV4ClientUtils.copy(request.headers)
 		if (headers === undefined) {
 			headers = {}
@@ -267,10 +265,11 @@ PhSigV4AWSClientFactory.newClient = function (config) {
 			delete headers["Content-Type"]
 		}
 
-		const datetime = new Date()
+		let datetime = new Date()
 			.toISOString()
 			.replace(/\.\d{3}Z$/, "Z")
 			.replace(/[:\-]|\.\d{3}/g, "")
+
 		headers[X_AMZ_DATE] = datetime
 		// const parser = document.createElement('a');
 		// parser.href = awsSigV4Client.endpoint;
@@ -301,6 +300,7 @@ PhSigV4AWSClientFactory.newClient = function (config) {
 			awsSigV4Client.serviceName
 		)
 		const signature = calculateSignature(signingKey, stringToSign)
+
 		headers[AUTHORIZATION] = buildAuthorizationHeader(
 			awsSigV4Client.accessKey,
 			credentialScope,

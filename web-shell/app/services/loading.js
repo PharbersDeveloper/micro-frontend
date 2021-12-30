@@ -8,7 +8,10 @@ export default Service.extend({
 	),
 	afterLoading: computed(function () {
 		let loadingNum = 0
-		if (document.readyState === "complete") {
+		if (
+			document.readyState === "complete" ||
+			document.readyState === "interactive"
+		) {
 			loadingNum = 1
 		}
 		return loadingNum
