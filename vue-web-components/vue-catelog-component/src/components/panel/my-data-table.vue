@@ -123,7 +123,7 @@
                             <img :src="fileIconDark" class="file-icon-dark" alt="">
                             <div class="text-area" >
                                 <bp-text class="title">{{file.name}}</bp-text>
-                                <bp-text v-if="file.meta.description" class="subtitle">{{file.meta.description}}</bp-text>
+                                <bp-text v-if="file.description" class="subtitle">{{file.description}}</bp-text>
                                 <bp-text v-else class="subtitle">暂无描述</bp-text>
                             </div>
                         </div>

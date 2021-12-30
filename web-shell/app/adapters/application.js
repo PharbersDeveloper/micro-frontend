@@ -1,257 +1,136 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { computed } from "@ember/object"
+import { dasherize } from "@ember/string"
+import { pluralize } from "ember-inflector"
 import { inject as service } from "@ember/service"
-import ENV from "../config/environment"
-import PhSigV4AWSClientFactory from "../helpers/PhSigV4AWSClientFactory"
-import PhSigV4ClientUtils from "../helpers/PhSigV4ClientUtils"
-import PhUrlTemplate from "../helpers/PhUrlTemplate"
+import ENV from "web-shell/config/environment"
 import JSONAPIAdapter from "@ember-data/adapter/json-api"
 
-// eslint-disable-next-line ember/no-classic-classes
-export default JSONAPIAdapter.extend({
-	cookies: service(),
-	oauthRequest: false,
-	// host: 'http://www.pharbers.com',
-	namespace: ENV.namespace, // 根据后端发布版本修改命名空间, 生产环境用这个，nginx 做了转发
+export default class ApplicationAdapter extends JSONAPIAdapter {
+	@service cookies
+
+	curMethod = "GET"
+
+	pathForType(type) {
+		return pluralize(dasherize(type))
+	}
+
 	sortQueryParams(params) {
-		this.set("queryParamsAWS", params)
-	},
-	buildURL: function (modelName, id, snapshot, requestType, query) {
-		this.set("modelName", modelName)
-		let url = this._super(...arguments)
-		const curType = url.split("/").splice(2, 2) // ["activities" , ... ]
-		this.set("modelName", modelName)
-		if (modelName === "account" || modelName === "applyuser") {
-			this.toggleProperty("oauthRequest")
-			return "http://oauth.pharbers.com/" + url
+		this.queryParamsAWS = params
+	}
+
+	buildURL(modelName, id, snapshot, requestType, query) {
+		const requestMethod = {
+			query: "GET",
+			findRecord: "GET",
+			createRecord: "POST",
+			updateRecord: "PATCH",
+			deleteRecord: "DELETE",
+			push: "POST"
 		}
-		if (modelName === "cooperation") {
-			curType[0] = "cooperation"
-			url = url.split("/")
-			url[2] = "cooperation"
-			url = url.join("/")
-		}
-		this.set("requestURL", url)
-		const curPath = curType.join("/")
-		let newUrl = `/${ENV.namespace}/offweb/${curPath}`
+		let url = super.buildURL(...arguments)
+		let curType = url.split("/").splice(1, 1) // ["activities" , ... ]
+		let curPath = curType.join("/")
+		let newUrl = `/phplatform/${curPath}` // newUrl: "/v0/entry/assets"
+
+		this.curMethod = requestMethod[requestType]
+		this.modelName = modelName
+		this.requestURL = curType.join("/")
+
 		if (query && Object.keys(query).length) {
 			let queryString = ""
 			const queryParamsArr = Object.keys(query)
 
-			this.set("queryParamsArr", queryParamsArr) // 放进来是因为object没有顺序，参数位置不同，可能导致token错误
-			if (queryParamsArr == "ids[]") {
-				for (
-					let index = 0;
-					index < query[queryParamsArr[0]].length;
-					index++
-				) {
-					const element = queryParamsArr[0]
-					// console.log('element',element)
-					if (index === 0) {
-						// console.log('query[element][0]',query[element][index])
-						queryString += `${element}=${query[element][index]}`
-						// console.log(queryString)
-					} else {
-						queryString += `&${element}=${query[element][index]}`
-					}
-				}
-				// queryString = `ids[]=AFxTm_-JK5HX9_Gzu-BS&ids[]=AFxTm_-JK5HX9_Gzu-BS`
-			} else {
-				for (let index = 0; index < queryParamsArr.length; index++) {
-					const element = queryParamsArr[index]
-					if (index === 0) {
-						queryString += `${element}=${query[element]}`
-					} else {
-						queryString += `&${element}=${query[element]}`
-					}
-				}
-			}
+			this.queryParamsArr = queryParamsArr // 处理是因为object没有顺序，参数位置不同，可能导致token错误
+			for (let index = 0; index < queryParamsArr.length; index++) {
+				const element = queryParamsArr[index]
+				let queryValue = query[element]
 
-			newUrl += "?" + encodeURI(queryString)
-		}
-		this.set("newUrl", newUrl)
-		// if(modelName === "zone")
-		// 	return "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/zones?ids%5B%5D=AFxTm_-JK5HX9_Gzu-BS&ids%5B%5D=yhwPulzG0J_2qMnN8PKo&ids%5B%5D=mgFzuAWjaZZcgEdmFD8C&ids%5B%5D=Jbg2caAVuJt6iIjqIQL6"
-		return (
-			"https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn" +
-			newUrl
-		)
-	},
+				// 处理ids的数组转换为字符串
+				if (element === "ids[]" && query[element] instanceof Array) {
+					const ids = query[element]
+					const idsArr = ids.sort()
+					let idsStr = ""
 
-	headers: computed(
-		"auth",
-		"cookies",
-		"newUrl",
-		"oauthRequest",
-		"oauthRequestComponentQuery",
-		"oauthRequestTokenQuery",
-		"queryParamsAWS",
-		"queryParamsArr",
-		"requestURL",
-		"token",
-		function () {
-			const factory = PhSigV4AWSClientFactory
-			const utils = PhSigV4ClientUtils
-			const uriTemp = PhUrlTemplate
-			const config = {
-				accessKey: ENV.APP.AWS_ACCESS_KEY,
-				secretKey: ENV.APP.AWS_SECRET_KEY,
-				sessionToken: "",
-				region: "cn-northwest-1",
-				apiKey: undefined,
-				defaultContentType: "application/vnd.api+json",
-				defaultAcceptType: "application/vnd.api+json"
-			}
-			// extract endpoint and path from url
-			const invokeUrl =
-				"https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0"
-			const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]
-			const pathComponent = invokeUrl.substring(endpoint.length)
-
-			const sigV4ClientConfig = {
-				accessKey: config.accessKey,
-				secretKey: config.secretKey,
-				sessionToken: config.sessionToken,
-				serviceName: "execute-api",
-				region: config.region,
-				endpoint: endpoint,
-				defaultContentType: config.defaultContentType,
-				defaultAcceptType: config.defaultAcceptType
-			}
-			const client = factory.PhSigV4AWSClientFactory.newClient(
-				sigV4ClientConfig
-			)
-
-			// 请求login hbs的时候使用
-			if (this.auth && this.oauthRequestComponentQuery) {
-				// eslint-disable-next-line ember/no-side-effects
-				this.set("auth", 0)
-				let req = {
-					verb: "get".toUpperCase(),
-					path: "/v0/common/components/OXE67oMY7RuFJ_rmBUzL",
-					headers: { Accept: "text/html" },
-					queryParams: this.oauthRequestComponentQuery,
-					body: {}
-				}
-
-				// console.log("req", req)
-				const request = client.makeRequest(req)
-				// console.log("request", request)
-				return request.headers
-			}
-
-			if (this.token && this.oauthRequestTokenQuery) {
-				// eslint-disable-next-line ember/no-side-effects
-				this.set("token", 0)
-				let req = {
-					verb: "get".toUpperCase(),
-					path: "/v0/oauth/token",
-					queryParams: this.oauthRequestTokenQuery,
-					body: {}
-				}
-
-				// console.log("req", req)
-
-				const request = client.makeRequest(req)
-				// console.log("request", request)
-				return request.headers
-			}
-
-			// apiGateway.core.utils.assertParametersDefined(params, ['type', 'Accept'], ['body']);
-			const requestURL = this.requestURL.split("/") // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
-			// const curType = requestURL[2]
-			const curType = requestURL[2]
-			// let curId = ""
-			// let curRelationship = ""
-			let paramsArr = []
-			let urlArr = ["type"] // type id relationship
-			let awsPath = "/offweb/{type}"
-			// 如果有id 和relationship 加上
-			const params = {
-				type: curType,
-				Accept: "application/vnd.api+json"
-			}
-
-			let queryParamsAWS = this.queryParamsAWS
-
-			if (requestURL.length >= 4) {
-				urlArr.push("id")
-				params.id = requestURL[3]
-				awsPath += "/{id}"
-				queryParamsAWS = {}
-				// 需要修改
-			}
-
-			if (Object.keys(queryParamsAWS).length) {
-				let queryParamsArr = this.queryParamsArr
-				// console.log('queryParamsAWS',queryParamsAWS[queryParamsArr[0]])
-				if (queryParamsArr == "ids[]") {
-					let encodeURIEle = encodeURI(queryParamsArr[0])
-					paramsArr.push(encodeURIEle)
-					let paramsString = ``
-					let sortArr = queryParamsAWS[queryParamsArr[0]].sort()
-
-					for (let i = 0; i < sortArr.length - 1; i++) {
-						paramsString += `${sortArr[i]}&ids[]=`
-					}
-					params[encodeURIEle] =
-						paramsString + sortArr[sortArr.length - 1]
-				} else {
-					queryParamsArr.forEach((element) => {
-						let encodeURIEle = encodeURI(element)
-
-						paramsArr.push(encodeURIEle)
-						params[encodeURIEle] = queryParamsAWS[element]
+					idsArr.forEach((ele) => {
+						this.idsStr += ele + "&ids[]="
 					})
+					idsStr = idsStr.substr(0, idsStr.length - 7)
+					queryValue = idsStr
 				}
-
-				// Object.assign( params, queryParamsAWS )
+				queryString += `${element}=${queryValue}&`
 			}
-
-			// { verb: 'GET',
-			// path: '/v0/offweb/proposals',
-			// headers: { Accept: 'application/vnd.api+json' },
-			// queryParams: {},
-			// body: {}
-			// }
-			let req = {
-				verb: "get".toUpperCase(),
-				path:
-					pathComponent +
-					uriTemp
-						.PhUriTemplate(awsPath)
-						.expand(utils.parseParametersToObject(params, urlArr)),
-				headers: utils.parseParametersToObject(params, ["Accept"]),
-				queryParams: utils.parseParametersToObject(params, paramsArr),
-				// queryParams: queryParamsAWS,
-				body: {}
-			}
-			// console.log('req.queryParams',req.queryParams)
-			// console.log("req", req)
-
-			// if (this.get('modelName') === "zone"){
-			// 	let SortArr = ['AFxTm_-JK5HX9_Gzu-BS','yhwPulzG0J_2qMnN8PKo','mgFzuAWjaZZcgEdmFD8C','Jbg2caAVuJt6iIjqIQL6'].sort()
-			// 	console.log('SortArr',SortArr)
-			// 	req.queryParams = {'ids%5B%5D': `${SortArr[0]}&ids[]=${SortArr[1]}&ids[]=${SortArr[2]}&ids[]=${SortArr[3]}`}
-			// }
-
-			const request = client.makeRequest(req)
-			// console.log("request", request)
-			// {   method: 'GET',
-			// 	url:
-			// 	'https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/proposals',
-			// 	headers:
-			// 	{ Accept: 'application/vnd.api+json',
-			// 		'x-amz-date': '20200605T073304Z',
-			// 		Authorization:
-			// 		'AWS4-HMAC-SHA256 Credential=AKIAWPBDTVEAJ6CCFVCP/20200605/cn-northwest-1/execute-api/aws4_request, SignedHeaders=accept;host;x-amz-date, Signature=1295d2ea428819bc40d6cd35a7dc0dca20d0ef335ccfda5e7e346b17223ae0d9',
-			// 		'Content-Type': 'application/vnd.api+json' },
-			// 	data: '',
-			// 	timeout: 30000
-			// }
-
-			// console.log("request", request)
-			return request.headers
+			queryString = queryString.substr(0, queryString.length - 1)
+			newUrl += "?" + encodeURI(queryString)
+		} else {
+			this.queryParamsAWS = {}
 		}
-	)
-})
+		this.newUrl = newUrl
+		return ENV.APP.apiUri + newUrl
+	}
+
+	attributesToDeal(data) {
+		// data is object
+		const keys = Object.keys(data).sort()
+		const obj = {}
+
+		keys.forEach((k) => {
+			const key = dasherize(k)
+
+			obj[key] = data[k]
+		})
+		return obj
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	handleResponse(status, headers, payload, _) {
+		//处理project list(resource)数据
+		if (
+			payload &&
+			payload.data &&
+			payload.data.length > 0 &&
+			payload.meta &&
+			payload.meta.count > 0
+		) {
+			// eslint-disable-next-line no-unused-vars
+			payload.data.forEach((item, _) => {
+				item.attributes.meta = item.meta
+				item.attributes.includes = payload.included
+			})
+		}
+		//处理executions数据
+		if (
+			payload &&
+			payload.data &&
+			payload.data.length > 0 &&
+			payload.data[0].meta
+		) {
+			// eslint-disable-next-line no-unused-vars
+			payload.data.forEach((item, _) => {
+				item.attributes.meta = item.meta
+			})
+		}
+		//处理dag数据
+		else if (payload && payload.data && payload.data.meta) {
+			payload.data.attributes.meta = payload.data.meta
+		}
+		return payload
+	}
+	// urlForFindHasMany(id, modelName, snapshot) {
+	// 	let baseUrl = this.buildURL(modelName, id);
+	// 	return `${baseUrl}/relationships`;
+	// },
+	get headers() {
+		if (ENV.environment === "development") {
+			return {
+				Accept: "application/vnd.api+json",
+				"Content-Type": "application/vnd.api+json",
+				Authorization: ENV.APP.debugToken
+			}
+		} else {
+			return {
+				Accept: "application/vnd.api+json",
+				"Content-Type": "application/vnd.api+json",
+				Authorization: this.cookies.read("access_token")
+			}
+		}
+	}
+}

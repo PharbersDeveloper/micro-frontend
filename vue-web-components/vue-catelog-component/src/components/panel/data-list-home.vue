@@ -1,9 +1,9 @@
 <template>
     <div class="data-list-home">
         <div class="data-home-container">
-            <div class="header-area">
+            <!-- <div class="header-area">
                 <p>{{allData.projectDetail.name}}</p>
-            </div>
+            </div> -->
            <div class="content">  
             <div class="left-area">
                 <div class="projectInfo">
@@ -13,99 +13,105 @@
                         <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
                     </div>
                 </div>
-                <div class="item">
-                    <div class="flow">
-                        <p class="flow_word">主流程</p>
-                        <div class="flow_item"> 
-                           <div class="flow_item_cell" @click="linkToPage('dataset')">
-								<div>
-									<img :src="dataset_icon" alt="">
-								</div>
-								<div>
-									<p class="number">{{allData.numShow.dataset}}</p>
-									<p class="dataset">数据集</p>
-								</div>
-                           </div>
-                            <div class="flow_item_cell" @click="linkToPage('script')">
-								<div>
-									<img :src="recipes_icon" alt="">
-								</div>
-								<div>
-									<p class="number">{{allData.numShow.flow}}</p>
-									<p class="recipes">脚本</p>
-								</div>
-                           </div>
-                            <div class="flow_item_cell">
-								<div>
-									<img :src="models_icon" alt="">
-								</div>
-								<div>
-									<p class="number">{{allData.numShow.model}}</p>
-									<p class="models">模型</p>
-								</div>
-                           </div>
-                        </div>
-                    </div>
-                    <div class="flow flow_two">
-                        <p class="flow_word">实验室</p>
-                        <div class="flow_item"> 
-                           <div class="flow_item_cell" >
-                                <a href="#">
-                                    <div>
-                                        <img :src="notebook_icon" alt="">
-                                    </div>
-                                    <div>
-                                        <p class="number">{{allData.numShow.notebook}}</p>
-                                        <p class="notebooks">编译器</p>
-                                    </div>
-                                </a>
-                           </div>
-                            <div class="flow_item_cell">
-                                <a href="#">
-                                    <div>
-                                        <img :src="analyses_icon" alt="">
-                                    </div>
-                                    <div>
-                                        <p class="number">{{allData.numShow.analysis}}</p>
-                                        <p class="models">分析</p>
-                                    </div>
-                                </a>
-                           </div>
-                        </div>
-                    </div>
-                    <div class="flow flow_three">
-                        <p class="flow_word">指示面板</p>
-                        <div class="flow_item"> 
-                           <div class="flow_item_cell">
-                                <a href="#">
-                                    <div>
-                                        <img :src="dashboard_icon" alt="">
-                                    </div>
-                                    <div>
-                                        <p class="number">{{allData.numShow.dashBoard}}</p>
-                                        <p class="dashboard">指示面板</p>
-                                    </div>
-                                </a>
-                           </div>
-                        </div>
-                    </div>
-                    <div class="flow flow_four">
-                        <p class="flow_word">维基</p>
-                        <div class="flow_item"> 
-                           <div class="flow_item_cell">
-                                <a href="#">
-                                    <div>
-                                        <img :src="article_icon" alt="">
-                                    </div>
-                                    <div>
-                                        <p class="number">{{allData.numShow.wiki}}</p>
-                                        <p class="article">详解</p>
-                                    </div>
-                                </a>
-                           </div>
-                        </div>
-                    </div>
-                </div>
+				<div class="items">
+					<div class="item">
+						<div class="flow">
+							<p class="flow_word">主流程</p>
+							<div class="flow_item"> 
+							<div class="flow_item_cell" @click="linkToPage('datasets')">
+									<div>
+										<img :src="dataset_icon" alt="">
+									</div>
+									<div>
+										<p class="number">{{allData.numShow.dataset}}</p>
+										<p class="dataset">数据集</p>
+									</div>
+							</div>
+								<div class="flow_item_cell" @click="linkToPage('script')">
+									<div>
+										<img :src="recipes_icon" alt="">
+									</div>
+									<div>
+										<p class="number">{{allData.numShow.flow}}</p>
+										<p class="recipes">脚本</p>
+									</div>
+							</div>
+								<div class="flow_item_cell">
+									<div>
+										<img :src="models_icon" alt="">
+									</div>
+									<div>
+										<p class="number">{{allData.numShow.model}}</p>
+										<p class="models">模型</p>
+									</div>
+							</div>
+							</div>
+						</div>
+						<div class="flow flow_two">
+							<p class="flow_word">实验室</p>
+							<div class="flow_item"> 
+							<div class="flow_item_cell" >
+									<a href="#">
+										<div>
+											<img :src="notebook_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.notebook}}</p>
+											<p class="notebooks">编译器</p>
+										</div>
+									</a>
+							</div>
+								<div class="flow_item_cell">
+									<a href="#">
+										<div>
+											<img :src="analyses_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.analysis}}</p>
+											<p class="models">分析</p>
+										</div>
+									</a>
+							</div>
+							</div>
+						</div>
+						<div class="flow flow_three">
+							<p class="flow_word">指示面板</p>
+							<div class="flow_item"> 
+							<div class="flow_item_cell">
+									<a href="#">
+										<div>
+											<img :src="dashboard_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.dashBoard}}</p>
+											<p class="dashboard">指示面板</p>
+										</div>
+									</a>
+							</div>
+							</div>
+						</div>
+						<div class="flow flow_four">
+							<p class="flow_word">维基</p>
+							<div class="flow_item"> 
+							<div class="flow_item_cell">
+									<a href="#">
+										<div>
+											<img :src="article_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.wiki}}</p>
+											<p class="article">详解</p>
+										</div>
+									</a>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="go_flow">
+						<button @click="linkToPage('flow')">数据流程</button>
+					</div>
+				</div>
+                
             </div>
             <div class="right_area">
                 <div class="hearder">
@@ -238,7 +244,7 @@ export default {
 }
 .data-home-container {
     
-    height: 100vh;
+    height: calc(100vh - 40px);
     width: 100vw;
     background: #f2f2f2;
     .content {
@@ -294,14 +300,32 @@ export default {
             }
         }
     }
-    .item {
-        display: flex;
-        // width: 1400px;
+    .items {
         height: 220px;
         background: #ffffff;
         border: 1px solid #ddd;
         margin-left: 20px;
         margin-top: 25px;
+		.go_flow {
+			display: flex;
+			justify-content: center;
+			button {
+				margin: 10px 0;
+				width: 300px;
+				height: 40px;
+				box-sizing: border-box;
+				background: #f9bd38;
+				color: #333333;
+				border: 1px solid transparent;
+				font-weight: bold;
+				letter-spacing: 2px;
+				font-size: 14px;
+				cursor: pointer;
+			}
+		}
+		.item {
+        	display: flex;
+		}
         .flow {
             width: 450px;
             height: 100%;

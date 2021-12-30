@@ -1,8 +1,8 @@
 <template>
     <div class="eh-container">
-        <div class="project_name_header">
+        <!-- <div class="project_name_header">
             <p class="project_name" @click="linkToPage('linkToProject')">{{allData.projectName}}</p>
-        </div>
+        </div> -->
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">
@@ -15,7 +15,12 @@
                 <span>{{allData.fileName}}</span>
             </div>
             <div class="eh-preview">
-                <bp-excel viewHeight="25vh" :datasource="excelDatasource" :page_size="10" v-if="showExcel" ref="excel"></bp-excel>
+                <bp-excel ref="excel" viewHeight="25vh"
+                    :isNeedPopmenu="false"
+                    v-on:countIsReady="totalCountIsReady"
+                    :datasource="excelDatasource"
+                    :schema="excelSchema"
+                    class="excel" />
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -73,13 +78,14 @@
 </template>
 
 <script>
-import bpExcel from '../../../vue-excel-component/src/components/bp-excel'
-import PhDataSource from './model/datasource'
+import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
+import PhExcelPreviewSource from "./model/previewDatasource"
+import PhExcelPreviewSchema from "./model/previewSchema"
+import PhExcelProxy from "./model/dataproxy"
 
 export default {
     data() {
         return {
-            excelDatasource: new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this),
             firstSkipValue: 0,
             nextSkipValue: 0,
             sheet: '',
@@ -98,16 +104,37 @@ export default {
                     projectName: "projectName"
                 }
             }
+        },
+        excelDatasource: {
+            type: Object,
+            default: function() {
+                return new PhExcelPreviewSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
+            }
+        },
+        excelSchema: {
+            type: Object,
+            default: function() {
+                return new PhExcelPreviewSchema('1')
+            }
+        },
+        dataProxy: {
+            type: Object,
+            default: function() {
+                return new PhExcelProxy('3', this.excelDatasource, this.excelSchema)
+            }
         }
     },
     components: {
         bpExcel
     },
+    mounted() {
+        this.dataProxy.refreshData(this.$refs.excel)
+    },
     created() {
         let uriParam = window.location.href
         this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
+        this.excelDatasource.set('tmpname', this.tmpname)
         this.typeValue = this.tmpname.split(".")[1]
-        this.excelDatasource = new PhDataSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
     },
     methods: {
         linkToPage(name) {
@@ -146,22 +173,30 @@ export default {
             this.$emit('event', event)
         },
         skipFirstLine(data) {
+            if(this.firstSkipValue == '') {
+                this.firstSkipValue = 0
+            }
             let legalInput = this.inputNumInteger(this.firstSkipValue)
-            if(legalInput) {
+            if(legalInput || this.firstSkipValue === 0) {
                 this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
                 this.excelDatasource.sheet = this.sheet
-                this.excelDatasource.refreshData(this.$refs.excel)
+                this.dataProxy.refreshData(this.$refs.excel)
+                // this.excelDatasource.refreshData(this.$refs.excel)
             } else {
                 this.$refs.firstLine.value = 0
                 this.firstSkipValue = 0
             }
         },
         skipNextLine(data) {
+            if(this.nextSkipValue == '') {
+                this.nextSkipValue = 0
+            }
             let legalInput = this.inputNumInteger(this.nextSkipValue)
-            if(legalInput) {
+            if(legalInput || this.nextSkipValue === 0) {
                 this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
                 this.excelDatasource.sheet = this.sheet
-                this.excelDatasource.refreshData(this.$refs.excel)
+                // this.excelDatasource.refreshData(this.$refs.excel)
+                this.dataProxy.refreshData(this.$refs.excel)
             } else {
                 this.$refs.nextLine.value = 0
                 this.nextSkipValue = 0
@@ -172,7 +207,8 @@ export default {
             this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
             this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
             this.excelDatasource.sheet = this.sheet
-            this.excelDatasource.refreshData(this.$refs.excel)
+            // this.excelDatasource.refreshData(this.$refs.excel)
+            this.dataProxy.refreshData(this.$refs.excel)
         },
         //正整数判断
         inputNumInteger(value) {
@@ -180,10 +216,13 @@ export default {
             if (r.test(value)) {
                 return value
             } else {
-                value = 0
+                value = ''
                 alert("请输入一个正整数")
                 return false;
             }
+        },
+        totalCountIsReady(val) {
+            console.log(val)
         }
     }
 }
@@ -290,7 +329,16 @@ export default {
             text-align: right;
             line-height: 14px;
         }
-
+        .eh-preview {
+            width: 100%;
+            overflow: auto;
+            .excel {
+                display: inline-grid;
+                margin: 10px;
+                overflow: auto;
+                width: 98%;
+            }
+        }
         .eh-control-panel {
             display: flex;
             flex-direction: column;

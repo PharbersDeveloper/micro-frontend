@@ -15,9 +15,17 @@ export default class ExcelCleanComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
 				let param = e.detail[0].args.param
-				let uri = ''
-				if(param.name === "linkToProject") {
+				let uri = '/projects'
+				if(param.name === "linkToProject" || param.name == "project") {
 					uri = `/projects/`+ param.projectId
+				} else if (param.name === "datasets") {
+					uri = '/dataset-lst?projectName=' + param.projectName + '&projectId=' + param.projectId
+				} else if(params.name === "scripts") {
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
+				} else if (params.name == "flow") {
+					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}  else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
                 break
@@ -29,7 +37,7 @@ export default class ExcelCleanComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
-        console.log(element.allData)
+		element.allData.popupBack = true
         element.addEventListener("event", this.listener)
     }
 

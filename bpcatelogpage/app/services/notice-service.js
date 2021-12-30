@@ -53,7 +53,7 @@ export default class NoticeServiceService extends Service {
 						projectId: that.subjectCallback[index].projectId
 					})
 				})
-				let url = "https://api.pharbers.com/phdydatasource/batch_get_item"
+				let url = "https://apiv2.pharbers.com/phdydatasource/batch_get_item"
 				let headers = {
 					"Authorization": that.cookies.read( "access_token" ),
 					"Content-Type": "application/vnd.api+json",
@@ -72,14 +72,15 @@ export default class NoticeServiceService extends Service {
 					.then(res => res.json())
 					.then(response => {
 						if(response.data && response.data.length > 0) {
-							let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+							let status = JSON.parse(response.data[0].attributes.message).cnotification.status
+							console.log(status)
 							//以后会做成进度条
-							if(upload_status != 'project_file_to_DS_running') {
+							if(status != "project_file_to_DS_running" && status != "dag_conf insert success") {
 								let index = that.subjectID.indexOf(response.data[0].id)
 								let targetCallback = that.subjectCallback[index]
 								// 将消息分发给不同component处理
 								targetCallback.callback(response, targetCallback.ele)
-								// 返回结果即调用unregister
+								// 调用unregister
 								that.unregister(response.data[0].id)
 							}
 							

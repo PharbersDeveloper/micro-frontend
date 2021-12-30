@@ -18,11 +18,47 @@ export default class DataSetComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 let param = e.detail[0].args.param
-				let uri = ''
-				if(param.name === "linkToProject") {
+				let uri = '/projects'
+				if(param.name === "linkToProject" || param.name == "project") {
 					uri = `/projects/`+ param.projectId
+				} else if (param.name === "datasets") {
+					uri = '/dataset-lst?projectName=' + param.projectName + '&projectId=' + param.projectId
+				} else if(param.name === "scripts") {
+					uri = '/recipes?projectName=' + param.projectName + '&projectId=' + param.projectId
+				} else if (param.name == "flow") {
+					uri = '/flow?projectName=' + param.projectName + '&projectId=' + param.projectId
+				}  else if(param.name == "airflow") {
+					uri = '/airflow?projectName=' + param.projectName + '&projectId=' + param.projectId
 				}
                 this.router.transitionTo( uri )
+                break
+			case "s3UploadFiles":
+				let s3_upload_param = e.detail[0].args.param
+				if(s3_upload_param.s3UploadMessage.message) {
+					let resMessage = {
+						tmpname: s3_upload_param.s3UploadMessage.message.refer_name,
+						filename: s3_upload_param.s3UploadMessage.message.file_name
+					}
+					let file = s3_upload_param.s3UploadMessage.message
+					s3_upload_param.property.projectId = s3_upload_param.projectId
+					s3_upload_param.property.opname = this.cookies.read( "account_id" )
+					s3_upload_param.property.owner = this.cookies.read( "account_id" )
+					s3_upload_param.property.opgroup = this.cookies.read( "company_id" )
+					s3_upload_param.property.showName = decodeURI(this.cookies.read('user_name_show'))
+					//关闭弹框
+					e.detail[0].args.element.show = false
+					this.random = Math.random()
+					//notice回调函数参数
+					this.tranParam = {
+						"file": file,
+						"property": s3_upload_param.property,
+						"projectName": s3_upload_param.projectName,
+						"message": resMessage,
+						"projectId": s3_upload_param.projectId
+					}
+					//请求接口
+					this.updateDataset(file, s3_upload_param.property, s3_upload_param.projectName, resMessage, s3_upload_param.projectId, "uploaded")
+				}
                 break
             case "uploadFiles":
                 let params = e.detail[0].args.param
@@ -33,7 +69,7 @@ export default class DataSetComponent extends Component {
 				//如果数据集为下拉框选择，需要判断
 				if(params.property.type == 'selectDataset') {
 					// 判断数据id是否存在
-					let opt = {"query": `select count(1) from \`${datasetName}\` where version = '${dataID}'`, "schema": ["count"]}
+					let opt = {"query": `select count(1) from \`${params.projectId}_${datasetName}\` where version = '${dataID}'`, "schema": ["count"]}
 					let url = "https://apiv2.pharbers.com/phcheckversion"
 					let headers = {
 						"Authorization": this.cookies.read( "access_token" ),
@@ -71,7 +107,7 @@ export default class DataSetComponent extends Component {
 					params.property.owner = this.cookies.read( "account_id" )
 					params.property.opgroup = this.cookies.read( "company_id" )
 					params.property.showName = decodeURI(this.cookies.read('user_name_show'))
-					this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId)
+					this.confirmUploadFiles(params.files[0], params.property, params.projectName, params.projectId, "uploaded")
 				}
                 break
             default: 
@@ -80,7 +116,7 @@ export default class DataSetComponent extends Component {
     }
 
     @action
-    async confirmUploadFiles(file, property, projectName, projectId) {
+    async confirmUploadFiles(file, property, projectName, projectId, cat) {
             let that = this
             let uploadMessage = {}
             uploadMessage.file = file
@@ -103,7 +139,7 @@ export default class DataSetComponent extends Component {
 							"message": res,
 							"projectId": projectId
 						}
-                        this.updateDataset(file, property, projectName, res, projectId)
+                        this.updateDataset(file, property, projectName, res, projectId, cat)
                     }
                 }
             };
@@ -136,12 +172,12 @@ export default class DataSetComponent extends Component {
 		} else {
 			this.noticeService.uploadStatus = true
 			this.router.transitionTo( `/excel-handler?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}&filename=${this.tranParam.file.name}&version=${this.tranParam.property.dataID}&dataset=${this.tranParam.property.dataset}&tmpname=${this.tranParam.message.tmpname}` )
-			this.loadingService.loading.style.display = 'none'
 		}
+		this.loadingService.loading.style.display = 'none'
 	}
 
     @action
-    async updateDataset(file, property, projectName, message, projectId) {
+    async updateDataset(file, property, projectName, message, projectId, cat) {
         this.loadingService.loading.style.display = 'flex'
         this.loadingService.loading.style['z-index'] = 2
         let that = this
@@ -165,7 +201,12 @@ export default class DataSetComponent extends Component {
 			message: message,
 			property: property,
 			projectId: projectId,
-            projectName: projectName
+            projectName: projectName,
+			cat: cat,
+			"prop": {
+				path: "",
+				partitions: 1
+			}
 		}
         let actions_body ={
             "table": "action",
@@ -182,50 +223,14 @@ export default class DataSetComponent extends Component {
         }
         let actions = this.postUrl(push_type, actions_body)
         let results = await Promise.all([project_files,actions])
-		
         //请求status，持续30s
 		this.noticeService.register("notification", results[0].data.id, this.noticeCallback, this, projectId)
-		//直接跳转，改为等待
-		// this.router.transitionTo( `/excel-handler?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}&filename=${this.tranParam.file.name}&version=${this.tranParam.property.dataID}&dataset=${this.tranParam.property.dataset}&tmpname=${this.tranParam.message.tmpname}` )
-		// this.loadingService.loading.style.display = 'none'
-
-
-        // let statusType = 'query'
-        // let statusBody = {
-        //     "table": "notification",
-        //     "conditions": {
-        //         "id": results[0].data.id
-        //     },
-        //     "limit": 10,
-        //     "start_key": {}
-        // }
-        // let startTime = new Date().getTime();
-        // let dagStatusInt = setInterval(async function() { 
-        //     that.postUrl(statusType, statusBody).then(response => {
-        //         let project_files_status = response.data[0].attributes.status
-        //         if (project_files_status !== 'creating') {
-        //             clearInterval(dagStatusInt); //循环结束
-        //             let status = ''
-        //             if(project_files_status == "success") {
-        //                 console.log(project_files_status)
-        //             } else {
-        //                 console.log(project_files_status)
-        //             }
-        //             that.loadingService.loading.style.display = 'none'
-        //             // that.router.transitionTo( `/excel-clean?tmpname=${message.tmpname}&projectName=${projectName}` )
-        //             that.router.transitionTo( `/excel-handler?projectName=${projectName}&projectId=${projectId}&filename=${file.name}&version=${property.dataID}&dataset=${property.dataset}&tmpname=${message.tmpname}` )
-        //         } else if(new Date().getTime() - startTime >= 60000) {
-        //             clearInterval(dagStatusInt); //循环结束
-		// 			alert("超时，连接终止！")
-		// 		}
-        //     }) 
-        // }, 5 * 1000)
     }
 
     @action
     registerListener(element) {
         element.allData = this.calAllData
-        console.log(element.allData)
+        element.allData.popupBack = true
         element.addEventListener("event", this.listener)
     }
 

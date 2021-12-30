@@ -1,13 +1,18 @@
 <template>
     <div>
-        <bp-pagination></bp-pagination>
+        <bp-excel-handler :allData="allData"></bp-excel-handler>
     </div>
 </template>
 <script>
-import bpPagination from '../components/bp-pagination.vue'
+import BpExcelHandler from '../components/bp-excel-handler.vue'
 export default {
     components: {
-        bpPagination
+        BpExcelHandler
+    },
+    data: {
+        allData: {
+            
+        }
     }
 }
 </script>

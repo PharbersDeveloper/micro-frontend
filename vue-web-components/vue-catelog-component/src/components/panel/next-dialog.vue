@@ -5,7 +5,6 @@
                 <div class="data_id">
                     <span>数据 ID:</span>
                     <div class="data_id_space">
-                        <!-- <p>Pfizer_2021_10_a</p> -->
                         <input ref="dataid" type="text" v-model="dataID" @change="inputStrChecked(dataID, 'dataid', 'dataID')">
                     </div> 
                 </div>

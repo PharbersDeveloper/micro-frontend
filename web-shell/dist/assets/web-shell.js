@@ -15,7 +15,7 @@
     }
   });
 });
-;define("web-shell/adapters/application", ["exports", "web-shell/config/environment", "web-shell/helpers/PhSigV4AWSClientFactory", "web-shell/helpers/PhSigV4ClientUtils", "web-shell/helpers/PhUrlTemplate", "@ember-data/adapter/json-api"], function (_exports, _environment, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate, _jsonApi) {
+;define("web-shell/adapters/application", ["exports", "ember-inflector", "web-shell/config/environment", "@ember-data/adapter/json-api"], function (_exports, _emberInflector, _environment, _jsonApi) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -23,232 +23,148 @@
   });
   _exports.default = void 0;
 
-  // eslint-disable-next-line ember/no-classic-classes
-  var _default = _jsonApi.default.extend({
-    cookies: Ember.inject.service(),
-    oauthRequest: false,
-    // host: 'http://www.pharbers.com',
-    namespace: _environment.default.namespace,
+  var _dec, _class, _descriptor;
 
-    // 根据后端发布版本修改命名空间, 生产环境用这个，nginx 做了转发
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ApplicationAdapter = (_dec = Ember.inject.service, (_class = class ApplicationAdapter extends _jsonApi.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _defineProperty(this, "curMethod", "GET");
+    }
+
+    pathForType(type) {
+      return (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+    }
+
     sortQueryParams(params) {
-      this.set("queryParamsAWS", params);
-    },
+      this.queryParamsAWS = params;
+    }
 
-    buildURL: function (modelName, id, snapshot, requestType, query) {
-      this.set("modelName", modelName);
+    buildURL(modelName, id, snapshot, requestType, query) {
+      const requestMethod = {
+        query: "GET",
+        findRecord: "GET",
+        createRecord: "POST",
+        updateRecord: "PATCH",
+        deleteRecord: "DELETE",
+        push: "POST"
+      };
+      let url = super.buildURL(...arguments);
+      let curType = url.split("/").splice(1, 1); // ["activities" , ... ]
 
-      let url = this._super(...arguments);
+      let curPath = curType.join("/");
+      let newUrl = `/phplatform/${curPath}`; // newUrl: "/v0/entry/assets"
 
-      const curType = url.split("/").splice(2, 2); // ["activities" , ... ]
-
-      this.set("modelName", modelName);
-
-      if (modelName === "account" || modelName === "applyuser") {
-        this.toggleProperty("oauthRequest");
-        return "http://oauth.pharbers.com/" + url;
-      }
-
-      if (modelName === "cooperation") {
-        curType[0] = "cooperation";
-        url = url.split("/");
-        url[2] = "cooperation";
-        url = url.join("/");
-      }
-
-      this.set("requestURL", url);
-      const curPath = curType.join("/");
-      let newUrl = `/${_environment.default.namespace}/offweb/${curPath}`;
+      this.curMethod = requestMethod[requestType];
+      this.modelName = modelName;
+      this.requestURL = curType.join("/");
 
       if (query && Object.keys(query).length) {
         let queryString = "";
         const queryParamsArr = Object.keys(query);
-        this.set("queryParamsArr", queryParamsArr); // 放进来是因为object没有顺序，参数位置不同，可能导致token错误
+        this.queryParamsArr = queryParamsArr; // 处理是因为object没有顺序，参数位置不同，可能导致token错误
 
-        if (queryParamsArr == "ids[]") {
-          for (let index = 0; index < query[queryParamsArr[0]].length; index++) {
-            const element = queryParamsArr[0]; // console.log('element',element)
+        for (let index = 0; index < queryParamsArr.length; index++) {
+          const element = queryParamsArr[index];
+          let queryValue = query[element]; // 处理ids的数组转换为字符串
 
-            if (index === 0) {
-              // console.log('query[element][0]',query[element][index])
-              queryString += `${element}=${query[element][index]}`; // console.log(queryString)
-            } else {
-              queryString += `&${element}=${query[element][index]}`;
-            }
-          } // queryString = `ids[]=AFxTm_-JK5HX9_Gzu-BS&ids[]=AFxTm_-JK5HX9_Gzu-BS`
-
-        } else {
-          for (let index = 0; index < queryParamsArr.length; index++) {
-            const element = queryParamsArr[index];
-
-            if (index === 0) {
-              queryString += `${element}=${query[element]}`;
-            } else {
-              queryString += `&${element}=${query[element]}`;
-            }
+          if (element === "ids[]" && query[element] instanceof Array) {
+            const ids = query[element];
+            const idsArr = ids.sort();
+            let idsStr = "";
+            idsArr.forEach(ele => {
+              this.idsStr += ele + "&ids[]=";
+            });
+            idsStr = idsStr.substr(0, idsStr.length - 7);
+            queryValue = idsStr;
           }
+
+          queryString += `${element}=${queryValue}&`;
         }
 
+        queryString = queryString.substr(0, queryString.length - 1);
         newUrl += "?" + encodeURI(queryString);
+      } else {
+        this.queryParamsAWS = {};
       }
 
-      this.set("newUrl", newUrl); // if(modelName === "zone")
-      // 	return "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/zones?ids%5B%5D=AFxTm_-JK5HX9_Gzu-BS&ids%5B%5D=yhwPulzG0J_2qMnN8PKo&ids%5B%5D=mgFzuAWjaZZcgEdmFD8C&ids%5B%5D=Jbg2caAVuJt6iIjqIQL6"
+      this.newUrl = newUrl;
+      return _environment.default.APP.apiUri + newUrl;
+    }
 
-      return "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn" + newUrl;
-    },
-    headers: Ember.computed("auth", "cookies", "newUrl", "oauthRequest", "oauthRequestComponentQuery", "oauthRequestTokenQuery", "queryParamsAWS", "queryParamsArr", "requestURL", "token", function () {
-      const factory = _PhSigV4AWSClientFactory.default;
-      const utils = _PhSigV4ClientUtils.default;
-      const uriTemp = _PhUrlTemplate.default;
-      const config = {
-        accessKey: _environment.default.APP.AWS_ACCESS_KEY,
-        secretKey: _environment.default.APP.AWS_SECRET_KEY,
-        sessionToken: "",
-        region: "cn-northwest-1",
-        apiKey: undefined,
-        defaultContentType: "application/vnd.api+json",
-        defaultAcceptType: "application/vnd.api+json"
-      }; // extract endpoint and path from url
+    attributesToDeal(data) {
+      // data is object
+      const keys = Object.keys(data).sort();
+      const obj = {};
+      keys.forEach(k => {
+        const key = Ember.String.dasherize(k);
+        obj[key] = data[k];
+      });
+      return obj;
+    } // eslint-disable-next-line no-unused-vars
 
-      const invokeUrl = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0";
-      const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
-      const pathComponent = invokeUrl.substring(endpoint.length);
-      const sigV4ClientConfig = {
-        accessKey: config.accessKey,
-        secretKey: config.secretKey,
-        sessionToken: config.sessionToken,
-        serviceName: "execute-api",
-        region: config.region,
-        endpoint: endpoint,
-        defaultContentType: config.defaultContentType,
-        defaultAcceptType: config.defaultAcceptType
-      };
-      const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig); // 请求login hbs的时候使用
 
-      if (this.auth && this.oauthRequestComponentQuery) {
-        // eslint-disable-next-line ember/no-side-effects
-        this.set("auth", 0);
-        let req = {
-          verb: "get".toUpperCase(),
-          path: "/v0/common/components/OXE67oMY7RuFJ_rmBUzL",
-          headers: {
-            Accept: "text/html"
-          },
-          queryParams: this.oauthRequestComponentQuery,
-          body: {}
-        }; // console.log("req", req)
+    handleResponse(status, headers, payload, _) {
+      //处理project list(resource)数据
+      if (payload && payload.data && payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
+        // eslint-disable-next-line no-unused-vars
+        payload.data.forEach((item, _) => {
+          item.attributes.meta = item.meta;
+          item.attributes.includes = payload.included;
+        });
+      } //处理executions数据
 
-        const request = client.makeRequest(req); // console.log("request", request)
 
-        return request.headers;
+      if (payload && payload.data && payload.data.length > 0 && payload.data[0].meta) {
+        // eslint-disable-next-line no-unused-vars
+        payload.data.forEach((item, _) => {
+          item.attributes.meta = item.meta;
+        });
+      } //处理dag数据
+      else if (payload && payload.data && payload.data.meta) {
+          payload.data.attributes.meta = payload.data.meta;
+        }
+
+      return payload;
+    } // urlForFindHasMany(id, modelName, snapshot) {
+    // 	let baseUrl = this.buildURL(modelName, id);
+    // 	return `${baseUrl}/relationships`;
+    // },
+
+
+    get headers() {
+      if (_environment.default.environment === "development") {
+        return {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: _environment.default.APP.debugToken
+        };
+      } else {
+        return {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: this.cookies.read("access_token")
+        };
       }
+    }
 
-      if (this.token && this.oauthRequestTokenQuery) {
-        // eslint-disable-next-line ember/no-side-effects
-        this.set("token", 0);
-        let req = {
-          verb: "get".toUpperCase(),
-          path: "/v0/oauth/token",
-          queryParams: this.oauthRequestTokenQuery,
-          body: {}
-        }; // console.log("req", req)
-
-        const request = client.makeRequest(req); // console.log("request", request)
-
-        return request.headers;
-      } // apiGateway.core.utils.assertParametersDefined(params, ['type', 'Accept'], ['body']);
-
-
-      const requestURL = this.requestURL.split("/"); // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
-      // const curType = requestURL[2]
-
-      const curType = requestURL[2]; // let curId = ""
-      // let curRelationship = ""
-
-      let paramsArr = [];
-      let urlArr = ["type"]; // type id relationship
-
-      let awsPath = "/offweb/{type}"; // 如果有id 和relationship 加上
-
-      const params = {
-        type: curType,
-        Accept: "application/vnd.api+json"
-      };
-      let queryParamsAWS = this.queryParamsAWS;
-
-      if (requestURL.length >= 4) {
-        urlArr.push("id");
-        params.id = requestURL[3];
-        awsPath += "/{id}";
-        queryParamsAWS = {}; // 需要修改
-      }
-
-      if (Object.keys(queryParamsAWS).length) {
-        let queryParamsArr = this.queryParamsArr; // console.log('queryParamsAWS',queryParamsAWS[queryParamsArr[0]])
-
-        if (queryParamsArr == "ids[]") {
-          let encodeURIEle = encodeURI(queryParamsArr[0]);
-          paramsArr.push(encodeURIEle);
-          let paramsString = ``;
-          let sortArr = queryParamsAWS[queryParamsArr[0]].sort();
-
-          for (let i = 0; i < sortArr.length - 1; i++) {
-            paramsString += `${sortArr[i]}&ids[]=`;
-          }
-
-          params[encodeURIEle] = paramsString + sortArr[sortArr.length - 1];
-        } else {
-          queryParamsArr.forEach(element => {
-            let encodeURIEle = encodeURI(element);
-            paramsArr.push(encodeURIEle);
-            params[encodeURIEle] = queryParamsAWS[element];
-          });
-        } // Object.assign( params, queryParamsAWS )
-
-      } // { verb: 'GET',
-      // path: '/v0/offweb/proposals',
-      // headers: { Accept: 'application/vnd.api+json' },
-      // queryParams: {},
-      // body: {}
-      // }
-
-
-      let req = {
-        verb: "get".toUpperCase(),
-        path: pathComponent + uriTemp.PhUriTemplate(awsPath).expand(utils.parseParametersToObject(params, urlArr)),
-        headers: utils.parseParametersToObject(params, ["Accept"]),
-        queryParams: utils.parseParametersToObject(params, paramsArr),
-        // queryParams: queryParamsAWS,
-        body: {}
-      }; // console.log('req.queryParams',req.queryParams)
-      // console.log("req", req)
-      // if (this.get('modelName') === "zone"){
-      // 	let SortArr = ['AFxTm_-JK5HX9_Gzu-BS','yhwPulzG0J_2qMnN8PKo','mgFzuAWjaZZcgEdmFD8C','Jbg2caAVuJt6iIjqIQL6'].sort()
-      // 	console.log('SortArr',SortArr)
-      // 	req.queryParams = {'ids%5B%5D': `${SortArr[0]}&ids[]=${SortArr[1]}&ids[]=${SortArr[2]}&ids[]=${SortArr[3]}`}
-      // }
-
-      const request = client.makeRequest(req); // console.log("request", request)
-      // {   method: 'GET',
-      // 	url:
-      // 	'https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/offweb/proposals',
-      // 	headers:
-      // 	{ Accept: 'application/vnd.api+json',
-      // 		'x-amz-date': '20200605T073304Z',
-      // 		Authorization:
-      // 		'AWS4-HMAC-SHA256 Credential=AKIAWPBDTVEAJ6CCFVCP/20200605/cn-northwest-1/execute-api/aws4_request, SignedHeaders=accept;host;x-amz-date, Signature=1295d2ea428819bc40d6cd35a7dc0dca20d0ef335ccfda5e7e346b17223ae0d9',
-      // 		'Content-Type': 'application/vnd.api+json' },
-      // 	data: '',
-      // 	timeout: 30000
-      // }
-      // console.log("request", request)
-
-      return request.headers;
-    })
-  });
-
-  _exports.default = _default;
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ApplicationAdapter;
 });
 ;define("web-shell/app", ["exports", "ember-resolver", "ember-load-initializers", "web-shell/config/environment"], function (_exports, _emberResolver, _emberLoadInitializers, _environment) {
   "use strict";
@@ -297,15 +213,9 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+  var _dec, _dec2, _dec3, _class;
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
@@ -313,301 +223,41 @@
       {{!-- <h1>Web components inside Ember</h1> --}}
       <div class="ember">
           {{!-- <h2>Ember shell context</h2> --}}
-          {{!-- <div class="react">
-              <h2>React context</h2>
-              <react-example-components
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}} >
-              </react-example-components>
-          </div>
-          <div class="react">
-              <h2>Ember context</h2>
-              <example-web-component componenttitle="alfred"
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}} >
-              </example-web-component>
-          </div> --}}
-          <div class="react">
-              <h2>Vue context</h2>
-              <h1>{{t "nav.productAndService"}}</h1>
-              <pharbers-bp-input states="info" placeholder="测试">
-              </pharbers-bp-input>
-              <pharbers-bp-button text="{{buttonText}}" src="assets/abord.svg"
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}} >
-              </pharbers-bp-button>
-              <pharbers-bp-img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" text="alfred test"
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}} >
-              </pharbers-bp-img>
-              <pharbers-bp-label text=arr
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}></pharbers-bp-label>
-              <pharbers-bp-link text="测试link"
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}>
-              </pharbers-bp-link>
-              <pharbers-bp-text title="bp-text test">
-                  这里是bp-text
-              </pharbers-bp-text>
-              <h1>vue menu</h1>
-              <pharbers-bp-menu menu_data={{this.menu_data}} {{did-insert this.transferMenuData}}></pharbers-bp-menu>
-
-              <h1>vue select option</h1>
-              <pharbers-bp-select choosed_value={{this.choosed_value}} options_data={{this.options_data}} {{did-insert this.transferData}}></pharbers-bp-select>
-              <pharbers-bp-status text="这是status" type="in-progress" subtle
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}>
-              </pharbers-bp-status>
-              <pharbers-bp-tag text={{this.tag}} type="teals" subtle
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}>
-              </pharbers-bp-tag>
-              <pharbers-bp-badge result="100" primary
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}>
-              </pharbers-bp-badge>
-              <pharbers-bp-button-group
-                  buttonArr={{this.bpButtonGroupdata}}
-                  {{did-insert this.registerListener}}
-                  {{will-destroy this.unregisterListener}}>
-              </pharbers-bp-button-group>
-              <div style="width: 1300px">
-                  <pharbers-bp-carousel-unit
-                      height="600px"
-                      autoplay
-                      itemArr={{this.itemArr}}
-                      {{did-insert this.registerListener}}
-                      {{will-destroy this.unregisterListener}}>
-                  </pharbers-bp-carousel-unit>
-              </div>
-              <h1>vue home page</h1>
-
-          </div>
       </div>
   </div>
-
+  
   */
   {
-    "id": "evR2f4ZW",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"        \"],[10,0],[14,0,\"react\"],[12],[1,\"\\n            \"],[10,\"h2\"],[12],[1,\"Vue context\"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,[28,[35,0],[\"nav.productAndService\"],null]],[13],[1,\"\\n            \"],[10,\"pharbers-bp-input\"],[14,\"states\",\"info\"],[14,\"placeholder\",\"测试\"],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button\"],[16,\"text\",[29,[[36,1]]]],[24,\"src\",\"assets/abord.svg\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-img\"],[24,\"src\",\"https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png\"],[24,\"text\",\"alfred test\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-label\"],[24,\"text\",\"arr\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-link\"],[24,\"text\",\"测试link\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,\"pharbers-bp-text\"],[14,\"title\",\"bp-text test\"],[12],[1,\"\\n                这里是bp-text\\n            \"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,\"vue menu\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-menu\"],[16,\"menu_data\",[30,0,[\"menu_data\"]]],[4,[38,2],[[30,0,[\"transferMenuData\"]]],null],[12],[13],[1,\"\\n\\n            \"],[10,\"h1\"],[12],[1,\"vue select option\"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-select\"],[16,\"choosed_value\",[30,0,[\"choosed_value\"]]],[16,\"options_data\",[30,0,[\"options_data\"]]],[4,[38,2],[[30,0,[\"transferData\"]]],null],[12],[13],[1,\"\\n            \"],[11,\"pharbers-bp-status\"],[24,\"text\",\"这是status\"],[24,\"subtle\",\"\"],[24,4,\"in-progress\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-tag\"],[16,\"text\",[30,0,[\"tag\"]]],[24,\"subtle\",\"\"],[24,4,\"teals\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-badge\"],[24,\"result\",\"100\"],[24,\"primary\",\"\"],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[11,\"pharbers-bp-button-group\"],[16,\"buttonArr\",[30,0,[\"bpButtonGroupdata\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,5,\"width: 1300px\"],[12],[1,\"\\n                \"],[11,\"pharbers-bp-carousel-unit\"],[24,\"height\",\"600px\"],[24,\"autoplay\",\"\"],[16,\"itemArr\",[30,0,[\"itemArr\"]]],[4,[38,2],[[30,0,[\"registerListener\"]]],null],[4,[38,3],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,\"h1\"],[12],[1,\"vue home page\"],[13],[1,\"\\n           \\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[\"t\",\"buttonText\",\"did-insert\",\"will-destroy\"]]",
+    "id": "qa4ygpAC",
+    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[]]",
     "moduleName": "web-shell/components/component-context.hbs",
     "isStrictMode": false
   });
 
-  let ComponentContextComponent = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember.inject.service, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, _dec12 = Ember._action, _dec13 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "choosed_value", _descriptor, this);
-
-      _initializerDefineProperty(this, "options_data", _descriptor2, this);
-
-      _initializerDefineProperty(this, "menu_data", _descriptor3, this);
-
-      _initializerDefineProperty(this, "bpButtonGroupdata", _descriptor4, this);
-
-      _initializerDefineProperty(this, "tag", _descriptor5, this);
-
-      _initializerDefineProperty(this, "itemArr", _descriptor6, this);
-
-      _initializerDefineProperty(this, "buttonText", _descriptor7, this);
-
-      _initializerDefineProperty(this, "intl", _descriptor8, this);
-    }
-
+  // import { tracked } from "@glimmer/tracking"
+  // import { inject as service } from '@ember/service'
+  let ComponentContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
     listener(e) {
       // coloring ember body
-      const newColor = getRandomColor();
-      document.body.style.backgroundColor = newColor; // passing color value to react context via props
-
-      const webcomponent = e.target;
-      webcomponent.color = newColor;
-      webcomponent.msg_title = {
-        test: "alfred"
-      };
+      // passing color value to react context via props
+      // const webcomponent = e.target
+      // webcomponent.color = newColor
+      // webcomponent.msg_title = { test: "alfred" }
       console.log("alfred listener action");
     }
 
     registerListener(element) {
-      element.addEventListener("click", this.listener);
-      element.addEventListener("dbclick", this.listener);
-      this.bpButtonGroupdata = [{
-        text: "222"
-      }, {
-        text: "aaa",
-        active: true
-      }, {
-        text: "wode222"
-      }];
-      this.buttonText = this.intl.t("nav.login");
-      this.itemArr = ["https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png", "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/head1200_B.png"];
-      this.tag = "aaa";
-      element.testobject = {
-        a: 1,
-        b: 2
-      };
+      element.addEventListener("event", this.listener);
     }
 
     unregisterListener(element) {
-      element.removeEventListener("example-event", this.listener);
-      element.removeEventListener("example-nest-event", this.listener);
+      element.removeEventListener("event", this.listener);
     }
 
-    transferData(element) {
-      this.choosed_value = "中文";
-      this.options_data = [{
-        text: "中文",
-        second_text: "",
-        src: "assets/case.svg",
-        click_event: function () {
-          console.log("http://www.baidu.com");
-        }
-      }, {
-        text: "英文",
-        second_text: "",
-        click_event: function () {
-          console.log("http://www.google.com");
-        }
-      }, {
-        text: "韩文",
-        second_text: "",
-        click_event: function () {
-          console.log("http://www.jd.com");
-        }
-      }];
-    }
-
-    transferMenuData() {
-      this.menu_data = [{
-        type: "sub",
-        text: "sub1",
-        src: "assets/case.svg",
-        click_event: function () {},
-        item_data: [{
-          text: "sub_item1",
-          click_event: function () {
-            console.log("sub_item1");
-          }
-        }, {
-          text: "sub_item2",
-          src: "assets/case.svg",
-          click_event: function () {
-            console.log("sub_item2");
-          }
-        }]
-      }, {
-        type: "item",
-        text: "item1",
-        src: "assets/case.svg",
-        click_event: function () {
-          console.log("item1");
-        }
-      }, {
-        type: "item",
-        text: "item2",
-        click_event: function () {
-          console.log("item2");
-        }
-      }, {
-        type: "sub",
-        text: "sub2",
-        click_event: function () {},
-        item_data: [{
-          text: "sub_item3",
-          click_event: function () {
-            console.log("sub_item3");
-          }
-        }]
-      }];
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "choosed_value", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "options_data", [_dec2], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "menu_data", [_dec3], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "bpButtonGroupdata", [_dec4], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec5], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "itemArr", [_dec6], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "buttonText", [_dec7], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec8], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transferData", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "transferData"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transferMenuData", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "transferMenuData"), _class.prototype)), _class));
+  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = ComponentContextComponent;
 
-  function getRandomColor() {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-
-    return color;
-  }
-
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
-});
-;define("web-shell/components/returned-page", ["exports", "@glimmer/component", "web-shell/templates/components/returned-page"], function (_exports, _component, _returnedPage) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = _component.default.extend({
-    layout: _returnedPage.default,
-    elementId: "oauth",
-    accountDescribe: "账号",
-    passwordDescribe: "密码",
-    btnDescribe: "登录",
-
-    didInsertElement() {
-      this._super(...arguments);
-
-      const a = Handlebars.compile(this.content)({
-        accountDescribe: "账号",
-        passwordDescribe: "密码",
-        btnDescribe: "登录"
-      });
-      Ember.$("#oauth").append(a);
-      Ember.$("#oauth").width("100%");
-    }
-
-  });
-
-  _exports.default = _default;
 });
 ;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
   "use strict";
@@ -673,7 +323,316 @@
   };
   _exports.default = _default;
 });
-;define("web-shell/helpers/PhSigV4AWSClientFactory", ["exports", "web-shell/helpers/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
+;define("web-shell/helpers/app-version", ["exports", "web-shell/config/environment", "ember-cli-app-version/utils/regexp"], function (_exports, _environment, _regexp) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.appVersion = appVersion;
+  _exports.default = void 0;
+
+  function appVersion(_, hash = {}) {
+    const version = _environment.default.APP.version; // e.g. 1.0.0-alpha.1+4jds75hf
+    // Allow use of 'hideSha' and 'hideVersion' For backwards compatibility
+
+    let versionOnly = hash.versionOnly || hash.hideSha;
+    let shaOnly = hash.shaOnly || hash.hideVersion;
+    let match = null;
+
+    if (versionOnly) {
+      if (hash.showExtended) {
+        match = version.match(_regexp.versionExtendedRegExp); // 1.0.0-alpha.1
+      } // Fallback to just version
+
+
+      if (!match) {
+        match = version.match(_regexp.versionRegExp); // 1.0.0
+      }
+    }
+
+    if (shaOnly) {
+      match = version.match(_regexp.shaRegExp); // 4jds75hf
+    }
+
+    return match ? match[0] : version;
+  }
+
+  var _default = Ember.Helper.helper(appVersion);
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/format-date", ["exports", "ember-intl/helpers/format-date"], function (_exports, _formatDate) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatDate.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-message", ["exports", "ember-intl/helpers/format-message"], function (_exports, _formatMessage) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatMessage.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-number", ["exports", "ember-intl/helpers/format-number"], function (_exports, _formatNumber) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatNumber.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-relative", ["exports", "ember-intl/helpers/format-relative"], function (_exports, _formatRelative) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatRelative.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-time", ["exports", "ember-intl/helpers/format-time"], function (_exports, _formatTime) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatTime.default;
+    }
+  });
+});
+;define("web-shell/helpers/loc", ["exports", "@ember/string/helpers/loc"], function (_exports, _loc) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _loc.default;
+    }
+  });
+  Object.defineProperty(_exports, "loc", {
+    enumerable: true,
+    get: function () {
+      return _loc.loc;
+    }
+  });
+});
+;define("web-shell/helpers/page-title", ["exports", "ember-page-title/helpers/page-title"], function (_exports, _pageTitle) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _pageTitle.default;
+  _exports.default = _default;
+});
+;define("web-shell/helpers/pluralize", ["exports", "ember-inflector/lib/helpers/pluralize"], function (_exports, _pluralize) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _pluralize.default;
+  _exports.default = _default;
+});
+;define("web-shell/helpers/singularize", ["exports", "ember-inflector/lib/helpers/singularize"], function (_exports, _singularize) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _singularize.default;
+  _exports.default = _default;
+});
+;define("web-shell/helpers/t", ["exports", "ember-intl/helpers/t"], function (_exports, _t) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _t.default;
+    }
+  });
+});
+;define("web-shell/initializers/app-version", ["exports", "ember-cli-app-version/initializer-factory", "web-shell/config/environment"], function (_exports, _initializerFactory, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  let name, version;
+
+  if (_environment.default.APP) {
+    name = _environment.default.APP.name;
+    version = _environment.default.APP.version;
+  }
+
+  var _default = {
+    name: 'App Version',
+    initialize: (0, _initializerFactory.default)(name, version)
+  };
+  _exports.default = _default;
+});
+;define("web-shell/initializers/container-debug-adapter", ["exports", "ember-resolver/resolvers/classic/container-debug-adapter"], function (_exports, _containerDebugAdapter) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = {
+    name: 'container-debug-adapter',
+
+    initialize() {
+      let app = arguments[1] || arguments[0];
+      app.register('container-debug-adapter:main', _containerDebugAdapter.default);
+      app.inject('container-debug-adapter:main', 'namespace', 'application:main');
+    }
+
+  };
+  _exports.default = _default;
+});
+;define("web-shell/initializers/ember-data-data-adapter", ["exports", "@ember-data/debug/setup"], function (_exports, _setup) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _setup.default;
+    }
+  });
+});
+;define("web-shell/initializers/ember-data", ["exports", "ember-data", "ember-data/setup-container"], function (_exports, _emberData, _setupContainer) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  /*
+    This code initializes EmberData in an Ember application.
+  
+    It ensures that the `store` service is automatically injected
+    as the `store` property on all routes and controllers.
+  */
+  var _default = {
+    name: 'ember-data',
+    initialize: _setupContainer.default
+  };
+  _exports.default = _default;
+});
+;define("web-shell/initializers/export-application-global", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.initialize = initialize;
+  _exports.default = void 0;
+
+  function initialize() {
+    var application = arguments[1] || arguments[0];
+
+    if (_environment.default.exportApplicationGlobal !== false) {
+      var theGlobal;
+
+      if (typeof window !== 'undefined') {
+        theGlobal = window;
+      } else if (typeof global !== 'undefined') {
+        theGlobal = global;
+      } else if (typeof self !== 'undefined') {
+        theGlobal = self;
+      } else {
+        // no reasonable global, just bail
+        return;
+      }
+
+      var value = _environment.default.exportApplicationGlobal;
+      var globalName;
+
+      if (typeof value === 'string') {
+        globalName = value;
+      } else {
+        globalName = Ember.String.classify(_environment.default.modulePrefix);
+      }
+
+      if (!theGlobal[globalName]) {
+        theGlobal[globalName] = application;
+        application.reopen({
+          willDestroy: function () {
+            this._super.apply(this, arguments);
+
+            delete theGlobal[globalName];
+          }
+        });
+      }
+    }
+  }
+
+  var _default = {
+    name: 'export-application-global',
+    initialize: initialize
+  };
+  _exports.default = _default;
+});
+;define("web-shell/instance-initializers/ember-data", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  /* exists only for things that historically used "after" or "before" */
+  var _default = {
+    name: 'ember-data',
+
+    initialize() {}
+
+  };
+  _exports.default = _default;
+});
+;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils", "crypto-js"], function (_exports, _PhSigV4ClientUtils, CryptoJS) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -695,10 +654,7 @@
    * express or implied. See the License for the specific language governing
    * permissions and limitations under the License.
    */
-  // eslint-disable-next-line no-undef
-  const CryptoJS = require("crypto-js"); // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
-
-
+  // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
   let PhSigV4AWSClientFactory = {};
   _exports.PhSigV4AWSClientFactory = PhSigV4AWSClientFactory;
 
@@ -848,8 +804,7 @@
 
       if (queryParams === undefined) {
         queryParams = {};
-      } // console.log(4, queryParams)
-
+      }
 
       let headers = _PhSigV4ClientUtils.default.copy(request.headers);
 
@@ -881,7 +836,7 @@
         delete headers["Content-Type"];
       }
 
-      const datetime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z").replace(/[:\-]|\.\d{3}/g, "");
+      let datetime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z").replace(/[:\-]|\.\d{3}/g, "");
       headers[X_AMZ_DATE] = datetime; // const parser = document.createElement('a');
       // parser.href = awsSigV4Client.endpoint;
 
@@ -910,6 +865,7 @@
       if (headers["Content-Type"] === undefined) {
         headers["Content-Type"] = config.defaultContentType;
       }
+
       return {
         method: verb,
         url: url,
@@ -923,7 +879,7 @@
   }; // module.exports = { PhSigV4AWSClientFactory }
 
 });
-;define("web-shell/helpers/PhSigV4ClientUtils", ["exports"], function (_exports) {
+;define("web-shell/lib/PhSigV4ClientUtils", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1020,8 +976,10 @@
 
       for (attr in additionalProps) {
         // eslint-disable-next-line no-prototype-builtins,no-undef
-        if (additionalProps.hasOwnProperty(attr)) // eslint-disable-next-line no-undef
+        if (additionalProps.hasOwnProperty(attr)) {
+          // eslint-disable-next-line no-undef
           merged[attr] = additionalProps[attr];
+        }
       }
 
       return merged;
@@ -1030,7 +988,7 @@
 
   _exports.default = PhSigV4ClientUtils;
 });
-;define("web-shell/helpers/PhUrlTemplate", ["exports"], function (_exports) {
+;define("web-shell/lib/PhUrlTemplate", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1147,8 +1105,8 @@
     }; //TODO: change since draft-0.6 about characters in literals
 
     /* extract:
-        The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
-        */
+     The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
+     */
 
 
     function Literal(txt) {
@@ -1159,17 +1117,17 @@
       return this.txt;
     };
 
-    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,;=']", "g");
+    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,=']", "g");
 
     function encodeNormal(val) {
       return encodeURIComponent(val).replace(RESERVEDCHARS_RE, function (s) {
         return escape(s);
       });
-    } //var SELECTEDCHARS_RE = new RegExp("[]","g");
+    } //var SELECTEDCHARS_RE = new RegExp("[]","g")
 
 
     function encodeReserved(val) {
-      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} );
+      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} )
       return encodeURI(val); // no need for additional replace if selected-chars is empty
     }
 
@@ -1224,8 +1182,8 @@
       builder: addUnNamed
     };
     var pathParamConf = {
-      prefix: ";",
-      joiner: ";",
+      prefix: "",
+      joiner: "",
       encode: encodeNormal,
       builder: addLabeled
     };
@@ -1457,7 +1415,8 @@
     }
 
     VarSpec.build = function (name, expl, part, nums) {
-      var valueHandler; //, valueModifier;
+      // eslint-disable-next-line no-unused-vars
+      var valueHandler, valueModifier;
 
       if (expl) {
         //interprete as boolean
@@ -1500,11 +1459,12 @@
 
     var LISTSEP = ","; // How each template should look like
 
-    var TEMPL_RE = /(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
+    var TEMPL_RE = /(\{([+#.?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
     // (as expected by the spec - see tests.html "reserved operators")
 
     var match2expression = function (m) {
-      // var expr = m[0];
+      // eslint-disable-next-line no-unused-vars
+      var expr = m[0];
       var ops = m[2] || "";
       var vars = m[3].split(LISTSEP);
       var i = 0,
@@ -1556,343 +1516,159 @@
 
   _exports.PhUriTemplate = PhUriTemplate;
 });
-;define("web-shell/helpers/app-version", ["exports", "web-shell/config/environment", "ember-cli-app-version/utils/regexp"], function (_exports, _environment, _regexp) {
+;define("web-shell/models/page", ["exports", "@ember-data/model"], function (_exports, _model) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.appVersion = appVersion;
   _exports.default = void 0;
 
-  function appVersion(_, hash = {}) {
-    const version = _environment.default.APP.version; // e.g. 1.0.0-alpha.1+4jds75hf
-    // Allow use of 'hideSha' and 'hideVersion' For backwards compatibility
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
 
-    let versionOnly = hash.versionOnly || hash.hideSha;
-    let shaOnly = hash.shaOnly || hash.hideVersion;
-    let match = null;
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
-    if (versionOnly) {
-      if (hash.showExtended) {
-        match = version.match(_regexp.versionExtendedRegExp); // 1.0.0-alpha.1
-      } // Fallback to just version
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("number"), _dec8 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "projectName", _descriptor, this);
+
+      _initializerDefineProperty(this, "name", _descriptor2, this);
+
+      _initializerDefineProperty(this, "route", _descriptor3, this);
+
+      _initializerDefineProperty(this, "uri", _descriptor4, this);
+
+      _initializerDefineProperty(this, "menu", _descriptor5, this);
+
+      _initializerDefineProperty(this, "cat", _descriptor6, this);
+
+      _initializerDefineProperty(this, "level", _descriptor7, this);
+
+      _initializerDefineProperty(this, "engine", _descriptor8, this);
+    } // ember, vue, react
 
 
-      if (!match) {
-        match = version.match(_regexp.versionRegExp); // 1.0.0
-      }
-    }
-
-    if (shaOnly) {
-      match = version.match(_regexp.shaRegExp); // 4jds75hf
-    }
-
-    return match ? match[0] : version;
-  }
-
-  var _default = Ember.Helper.helper(appVersion);
-
-  _exports.default = _default;
-});
-;define("web-shell/helpers/format-date", ["exports", "ember-intl/helpers/format-date"], function (_exports, _formatDate) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "projectName", [_dec], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _formatDate.default;
-    }
-  });
-});
-;define("web-shell/helpers/format-message", ["exports", "ember-intl/helpers/format-message"], function (_exports, _formatMessage) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _formatMessage.default;
-    }
-  });
-});
-;define("web-shell/helpers/format-number", ["exports", "ember-intl/helpers/format-number"], function (_exports, _formatNumber) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec3], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _formatNumber.default;
-    }
-  });
-});
-;define("web-shell/helpers/format-relative", ["exports", "ember-intl/helpers/format-relative"], function (_exports, _formatRelative) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec4], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _formatRelative.default;
-    }
-  });
-});
-;define("web-shell/helpers/format-time", ["exports", "ember-intl/helpers/format-time"], function (_exports, _formatTime) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "menu", [_dec5], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _formatTime.default;
-    }
-  });
-});
-;define("web-shell/helpers/loc", ["exports", "@ember/string/helpers/loc"], function (_exports, _loc) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec6], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _loc.default;
-    }
-  });
-  Object.defineProperty(_exports, "loc", {
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec7], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _loc.loc;
-    }
-  });
-});
-;define("web-shell/helpers/page-title", ["exports", "ember-page-title/helpers/page-title"], function (_exports, _pageTitle) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  var _default = _pageTitle.default;
-  _exports.default = _default;
-});
-;define("web-shell/helpers/pluralize", ["exports", "ember-inflector/lib/helpers/pluralize"], function (_exports, _pluralize) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  var _default = _pluralize.default;
-  _exports.default = _default;
-});
-;define("web-shell/helpers/singularize", ["exports", "ember-inflector/lib/helpers/singularize"], function (_exports, _singularize) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  var _default = _singularize.default;
-  _exports.default = _default;
-});
-;define("web-shell/helpers/t", ["exports", "ember-intl/helpers/t"], function (_exports, _t) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec8], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _t.default;
-    }
-  });
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PageModel;
 });
-;define("web-shell/initializers/app-version", ["exports", "ember-cli-app-version/initializer-factory", "web-shell/config/environment"], function (_exports, _initializerFactory, _environment) {
+;define("web-shell/models/project", ["exports", "@ember-data/model"], function (_exports, _model) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
   _exports.default = void 0;
-  let name, version;
 
-  if (_environment.default.APP) {
-    name = _environment.default.APP.name;
-    version = _environment.default.APP.version;
-  }
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
-  var _default = {
-    name: 'App Version',
-    initialize: (0, _initializerFactory.default)(name, version)
-  };
-  _exports.default = _default;
-});
-;define("web-shell/initializers/container-debug-adapter", ["exports", "ember-resolver/resolvers/classic/container-debug-adapter"], function (_exports, _containerDebugAdapter) {
-  "use strict";
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  var _default = {
-    name: 'container-debug-adapter',
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-    initialize() {
-      let app = arguments[1] || arguments[0];
-      app.register('container-debug-adapter:main', _containerDebugAdapter.default);
-      app.inject('container-debug-adapter:main', 'namespace', 'application:main');
-    }
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
-  };
-  _exports.default = _default;
-});
-;define("web-shell/initializers/ember-data-data-adapter", ["exports", "@ember-data/debug/setup"], function (_exports, _setup) {
-  "use strict";
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "default", {
+  let ProjectModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("date"), (_class = class ProjectModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "provider", _descriptor2, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor3, this);
+
+      _initializerDefineProperty(this, "type", _descriptor4, this);
+
+      _initializerDefineProperty(this, "created", _descriptor5, this);
+    } // @hasMany("model") models
+    // @hasMany("script") scripts
+    // @hasMany("dataset") datasets
+    // @belongsTo("flow") flow
+    // @belongsTo("analysis") analysis
+    // @hasMany("notebook") notebooks
+    // @hasMany("dash-board") dashBoards
+    // @hasMany("wiki") wikis
+    // @attr tasks
+    // @attr actions
+
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
     enumerable: true,
-    get: function () {
-      return _setup.default;
-    }
-  });
-});
-;define("web-shell/initializers/ember-data", ["exports", "ember-data", "ember-data/setup-container"], function (_exports, _emberData, _setupContainer) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  /*
-    This code initializes EmberData in an Ember application.
-
-    It ensures that the `store` service is automatically injected
-    as the `store` property on all routes and controllers.
-  */
-  var _default = {
-    name: 'ember-data',
-    initialize: _setupContainer.default
-  };
-  _exports.default = _default;
-});
-;define("web-shell/initializers/export-application-global", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.initialize = initialize;
-  _exports.default = void 0;
-
-  function initialize() {
-    var application = arguments[1] || arguments[0];
-
-    if (_environment.default.exportApplicationGlobal !== false) {
-      var theGlobal;
-
-      if (typeof window !== 'undefined') {
-        theGlobal = window;
-      } else if (typeof global !== 'undefined') {
-        theGlobal = global;
-      } else if (typeof self !== 'undefined') {
-        theGlobal = self;
-      } else {
-        // no reasonable global, just bail
-        return;
-      }
-
-      var value = _environment.default.exportApplicationGlobal;
-      var globalName;
-
-      if (typeof value === 'string') {
-        globalName = value;
-      } else {
-        globalName = Ember.String.classify(_environment.default.modulePrefix);
-      }
-
-      if (!theGlobal[globalName]) {
-        theGlobal[globalName] = application;
-        application.reopen({
-          willDestroy: function () {
-            this._super.apply(this, arguments);
-
-            delete theGlobal[globalName];
-          }
-        });
-      }
-    }
-  }
-
-  var _default = {
-    name: 'export-application-global',
-    initialize: initialize
-  };
-  _exports.default = _default;
-});
-;define("web-shell/instance-initializers/ember-data", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  /* exists only for things that historically used "after" or "before" */
-  var _default = {
-    name: 'ember-data',
-
-    initialize() {}
-
-  };
-  _exports.default = _default;
-});
-;define("web-shell/models/activity", ["exports", "ember-data"], function (_exports, _emberData) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = _emberData.default.Model.extend({
-    title: _emberData.default.attr('string'),
-    subTitle: _emberData.default.attr('string'),
-    startDate: _emberData.default.attr('date'),
-    endDate: _emberData.default.attr('date'),
-    location: _emberData.default.attr('string'),
-    city: _emberData.default.attr('string'),
-    activityType: _emberData.default.attr('string'),
-    contentTitle: _emberData.default.attr('string'),
-    contentDesc: _emberData.default.attr('string'),
-    gallery: _emberData.default.hasMany('image'),
-    attachments: _emberData.default.hasMany("report"),
-    agendas: _emberData.default.hasMany("zone"),
-    logo: _emberData.default.belongsTo('image'),
-    logoOnTime: _emberData.default.belongsTo('image'),
-    partners: _emberData.default.hasMany('cooperation'),
-    language: _emberData.default.attr('number')
-  });
-
-  _exports.default = _default;
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "provider", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ProjectModel;
 });
 ;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
   "use strict";
@@ -1955,8 +1731,18 @@
   }
 
   _exports.default = Router;
-  Router.map(function () {
-    this.route('home', {
+  Router.map(async function () {
+    let scriptOptions = {
+      method: "GET",
+      headers: {
+        Authorization: _environment.default.APP.debugToken,
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json"
+      }
+    };
+    const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json());
+    console.log(result);
+    this.route("shell", {
       path: "/"
     });
   });
@@ -1986,6 +1772,7 @@
       _initializerDefineProperty(this, "intl", _descriptor, this);
     }
 
+    // @service oauthService
     beforeModel() {
       let curLang = window.localStorage.getItem("lang");
 
@@ -1998,7 +1785,12 @@
       } else {
         this.intl.setLocale(["zh-cn"]);
         window.localStorage.setItem("lang", "中文");
-      }
+      } // TODO: 判断token
+      // const judge = this.oauthService.judgeAuth()
+      // if (!judge) {
+      // 	window.href = ""
+      // }
+
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
@@ -2009,7 +1801,7 @@
   })), _class));
   _exports.default = ApplicationRoute;
 });
-;define("web-shell/routes/home", ["exports"], function (_exports) {
+;define("web-shell/routes/shell", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2027,8 +1819,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  // import { action } from '@ember/object';
-  let HomeRoute = (_dec = Ember.inject.service, (_class = class HomeRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, (_class = class ShellRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -2036,10 +1827,7 @@
     }
 
     model() {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0; // 请求数据
-      // const activityList = this.store.findAll("activity")
-      // debugger
+      return this.store.findAll("project");
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
@@ -2048,7 +1836,7 @@
     writable: true,
     initializer: null
   })), _class));
-  _exports.default = HomeRoute;
+  _exports.default = ShellRoute;
 });
 ;define("web-shell/serializers/-default", ["exports", "@ember-data/serializer/json"], function (_exports, _json) {
   "use strict";
@@ -2097,19 +1885,18 @@
   });
   _exports.default = void 0;
 
-  // eslint-disable-next-line ember/no-classic-classes
-  var _default = _jsonApi.default.extend({
+  class ApplicationSerializer extends _jsonApi.default {
     modelNameFromPayloadKey(key) {
       return (0, _emberInflector.singularize)(Ember.String.dasherize(key));
-    },
+    }
 
     payloadKeyFromModelName(modelName) {
       return (0, _emberInflector.pluralize)(Ember.String.camelize(modelName));
-    },
+    }
 
     keyForAttribute(key) {
       return Ember.String.dasherize(key).toLowerCase();
-    },
+    }
 
     keyForRelationship(key) {
       return key;
@@ -2127,9 +1914,185 @@
     // }
 
 
-  });
+  }
 
-  _exports.default = _default;
+  _exports.default = ApplicationSerializer;
+});
+;define("web-shell/services/ajax", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  // import { computed } from "@ember/object"
+  let AjaxService = (_dec = Ember.inject.service("cookies"), (_class = class AjaxService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+    }
+
+    get headers() {
+      let cookies = this.cookies;
+      return {
+        "Content-Type": "application/json",
+        // 默认值
+        Accept: "application/json",
+        Authorization: `Bearer ${cookies.read("access_token")}`
+      };
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AjaxService;
+});
+;define("web-shell/services/aws-service", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  // import { computed } from "@ember/object"
+  const credentials = {
+    accessKeyId: "AKIAWPBDTVEAPOX3QT6U",
+    secretAccessKey: "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"
+  };
+
+  class AwsServiceService extends Ember.Service {
+    get s3Client() {
+      AWS.config.update(credentials);
+      AWS.config.update({
+        region: "cn-northwest-1"
+      });
+      return new AWS.S3({
+        apiVersion: "2006-03-01"
+      });
+    }
+
+    get s3Avatar() {
+      AWS.config.update(credentials);
+      AWS.config.update({
+        region: "cn-northwest-1"
+      });
+      return new AWS.S3({
+        apiVersion: "2006-03-01",
+        params: {
+          Bucket: "general.pharbers.com"
+        }
+      });
+    }
+
+  }
+
+  _exports.default = AwsServiceService;
+});
+;define("web-shell/services/browser-events-service", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let BrowserEventsServiceService = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember.inject.service, _dec4 = Ember._action, (_class = class BrowserEventsServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "param", _descriptor, this);
+
+      _initializerDefineProperty(this, "routeName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "router", _descriptor3, this);
+    }
+
+    // 注册浏览器监听事件
+    registerListener(route) {
+      let that = this; // eslint-disable-next-line no-undef
+
+      $(function () {
+        that.param = this.location.href.split("?")[1];
+        that.routeName = `/${route}?`; //回退
+
+        if (window.history && window.history.pushState) {
+          history.pushState(null, null, document.URL);
+          window.addEventListener("popstate", that.popstateFun, false);
+        } //关闭&刷新（页面有变动或距上次刷新间隔超过5s时生效）
+
+
+        window.onbeforeunload = function (e) {
+          return false;
+        }; //文档加载完成后立即触发
+
+
+        window.onload = function () {
+          // 刷新回到指定页面
+          that.router.transitionTo(`${that.routeName}${that.param}`);
+        };
+      });
+    }
+
+    popstateFun() {
+      let that = this;
+      let sel = confirm("您还没有保存更改，确认返回吗?");
+
+      if (sel) {
+        window.removeEventListener("popstate", that.popstateFun);
+        that.router.transitionTo(`${that.routeName}${that.param}`);
+      } else {
+        history.pushState(null, null, document.URL);
+      }
+    } //清除浏览器监听事件
+
+
+    clearListener() {
+      window.onbeforeunload = undefined;
+      window.removeEventListener("popstate", this.popstateFun);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "param", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "routeName", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "popstateFun", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "popstateFun"), _class.prototype)), _class));
+  _exports.default = BrowserEventsServiceService;
 });
 ;define("web-shell/services/cookies", ["exports", "ember-cookies/services/cookies"], function (_exports, _cookies) {
   "use strict";
@@ -2140,6 +2103,81 @@
   _exports.default = void 0;
   var _default = _cookies.default;
   _exports.default = _default;
+});
+;define("web-shell/services/download-file", ["exports", "fetch"], function (_exports, _fetch) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DownloadFileService = (_dec = Ember.inject.service, (_class = class DownloadFileService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+    }
+
+    downloadFile(param) {
+      let source = param;
+      let bucket = "";
+      let key = "";
+      const url = "https://api.pharbers.com/entry/download";
+
+      if (source.indexOf("s3a://") != -1) {
+        let str = source.slice(6, source.length);
+        let num = str.indexOf("/");
+        bucket = str.substring(0, num);
+        key = str.substring(num + 1, str.length);
+      } else {
+        bucket = "ph-origin-files";
+        key = source;
+      }
+
+      const body = {
+        bucket: bucket,
+        key: key
+      };
+      let options = {
+        method: "POST",
+        headers: {
+          authorization: this.cookies.read("access_token"),
+          "Content-Type": "application/json",
+          accept: "application/json"
+        },
+        body: JSON.stringify(body)
+      };
+      (0, _fetch.default)(url, options).then(res => {
+        return res.json();
+      }).then(response => {
+        let url = response.url;
+        window.open(url); // let link = document.createElement( "a" )
+        // link.download = "filename"
+        // link.href = url
+        // document.body.appendChild( link )
+        // link.click()
+        // document.body.removeChild( link )
+      });
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DownloadFileService;
 });
 ;define("web-shell/services/intl", ["exports", "ember-intl/services/intl"], function (_exports, _intl) {
   "use strict";
@@ -2168,7 +2206,7 @@
     afterLoading: Ember.computed(function () {
       let loadingNum = 0;
 
-      if (document.readyState === "complete") {
+      if (document.readyState === "complete" || document.readyState === "interactive") {
         loadingNum = 1;
       }
 
@@ -2178,7 +2216,7 @@
 
   _exports.default = _default;
 });
-;define("web-shell/services/login", ["exports", "config/environment"], function (_exports, _environment) {
+;define("web-shell/services/notice-service", ["exports", "fetch"], function (_exports, _fetch) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2186,446 +2224,138 @@
   });
   _exports.default = void 0;
 
-  /*
-  md5.js
-  */
-  String.prototype.MD5 = function (bit) {
-    var sMessage = this;
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
 
-    function RotateLeft(lValue, iShiftBits) {
-      return lValue << iShiftBits | lValue >>> 32 - iShiftBits;
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let NoticeServiceService = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, (_class = class NoticeServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _initializerDefineProperty(this, "subjectID", _descriptor2, this);
+
+      _initializerDefineProperty(this, "subjectCallback", _descriptor3, this);
+
+      _initializerDefineProperty(this, "uploadStatus", _descriptor4, this);
     }
 
-    function AddUnsigned(lX, lY) {
-      var lX4, lY4, lX8, lY8, lResult;
-      lX8 = lX & 0x80000000;
-      lY8 = lY & 0x80000000;
-      lX4 = lX & 0x40000000;
-      lY4 = lY & 0x40000000;
-      lResult = (lX & 0x3fffffff) + (lY & 0x3fffffff);
-      if (lX4 & lY4) return lResult ^ 0x80000000 ^ lX8 ^ lY8;
-
-      if (lX4 | lY4) {
-        if (lResult & 0x40000000) return lResult ^ 0xc0000000 ^ lX8 ^ lY8;else return lResult ^ 0x40000000 ^ lX8 ^ lY8;
-      } else return lResult ^ lX8 ^ lY8;
-    }
-
-    function F(x, y, z) {
-      return x & y | ~x & z;
-    }
-
-    function G(x, y, z) {
-      return x & z | y & ~z;
-    }
-
-    function H(x, y, z) {
-      return x ^ y ^ z;
-    }
-
-    function I(x, y, z) {
-      return y ^ (x | ~z);
-    }
-
-    function FF(a, b, c, d, x, s, ac) {
-      a = AddUnsigned(a, AddUnsigned(AddUnsigned(F(b, c, d), x), ac));
-      return AddUnsigned(RotateLeft(a, s), b);
-    }
-
-    function GG(a, b, c, d, x, s, ac) {
-      a = AddUnsigned(a, AddUnsigned(AddUnsigned(G(b, c, d), x), ac));
-      return AddUnsigned(RotateLeft(a, s), b);
-    }
-
-    function HH(a, b, c, d, x, s, ac) {
-      a = AddUnsigned(a, AddUnsigned(AddUnsigned(H(b, c, d), x), ac));
-      return AddUnsigned(RotateLeft(a, s), b);
-    }
-
-    function II(a, b, c, d, x, s, ac) {
-      a = AddUnsigned(a, AddUnsigned(AddUnsigned(I(b, c, d), x), ac));
-      return AddUnsigned(RotateLeft(a, s), b);
-    }
-
-    function ConvertToWordArray(sMessage) {
-      var lWordCount;
-      var lMessageLength = sMessage.length;
-      var lNumberOfWords_temp1 = lMessageLength + 8;
-      var lNumberOfWords_temp2 = (lNumberOfWords_temp1 - lNumberOfWords_temp1 % 64) / 64;
-      var lNumberOfWords = (lNumberOfWords_temp2 + 1) * 16;
-      var lWordArray = Array(lNumberOfWords - 1);
-      var lBytePosition = 0;
-      var lByteCount = 0;
-
-      while (lByteCount < lMessageLength) {
-        lWordCount = (lByteCount - lByteCount % 4) / 4;
-        lBytePosition = lByteCount % 4 * 8;
-        lWordArray[lWordCount] = lWordArray[lWordCount] | sMessage.charCodeAt(lByteCount) << lBytePosition;
-        lByteCount++;
-      }
-
-      lWordCount = (lByteCount - lByteCount % 4) / 4;
-      lBytePosition = lByteCount % 4 * 8;
-      lWordArray[lWordCount] = lWordArray[lWordCount] | 0x80 << lBytePosition;
-      lWordArray[lNumberOfWords - 2] = lMessageLength << 3;
-      lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
-      return lWordArray;
-    }
-
-    function WordToHex(lValue) {
-      var WordToHexValue = "",
-          WordToHexValue_temp = "",
-          lByte,
-          lCount;
-
-      for (lCount = 0; lCount <= 3; lCount++) {
-        lByte = lValue >>> lCount * 8 & 255;
-        WordToHexValue_temp = "0" + lByte.toString(16);
-        WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length - 2, 2);
-      }
-
-      return WordToHexValue;
-    }
-
-    var x = Array();
-    var k, AA, BB, CC, DD, a, b, c, d;
-    var S11 = 7,
-        S12 = 12,
-        S13 = 17,
-        S14 = 22;
-    var S21 = 5,
-        S22 = 9,
-        S23 = 14,
-        S24 = 20;
-    var S31 = 4,
-        S32 = 11,
-        S33 = 16,
-        S34 = 23;
-    var S41 = 6,
-        S42 = 10,
-        S43 = 15,
-        S44 = 21; // Steps 1 and 2. Append padding bits and length and convert to words
-
-    x = ConvertToWordArray(sMessage); // Step 3. Initialise
-
-    a = 0x67452301;
-    b = 0xefcdab89;
-    c = 0x98badcfe;
-    d = 0x10325476; // Step 4. Process the message in 16-word blocks
-
-    for (k = 0; k < x.length; k += 16) {
-      AA = a;
-      BB = b;
-      CC = c;
-      DD = d;
-      a = FF(a, b, c, d, x[k + 0], S11, 0xd76aa478);
-      d = FF(d, a, b, c, x[k + 1], S12, 0xe8c7b756);
-      c = FF(c, d, a, b, x[k + 2], S13, 0x242070db);
-      b = FF(b, c, d, a, x[k + 3], S14, 0xc1bdceee);
-      a = FF(a, b, c, d, x[k + 4], S11, 0xf57c0faf);
-      d = FF(d, a, b, c, x[k + 5], S12, 0x4787c62a);
-      c = FF(c, d, a, b, x[k + 6], S13, 0xa8304613);
-      b = FF(b, c, d, a, x[k + 7], S14, 0xfd469501);
-      a = FF(a, b, c, d, x[k + 8], S11, 0x698098d8);
-      d = FF(d, a, b, c, x[k + 9], S12, 0x8b44f7af);
-      c = FF(c, d, a, b, x[k + 10], S13, 0xffff5bb1);
-      b = FF(b, c, d, a, x[k + 11], S14, 0x895cd7be);
-      a = FF(a, b, c, d, x[k + 12], S11, 0x6b901122);
-      d = FF(d, a, b, c, x[k + 13], S12, 0xfd987193);
-      c = FF(c, d, a, b, x[k + 14], S13, 0xa679438e);
-      b = FF(b, c, d, a, x[k + 15], S14, 0x49b40821);
-      a = GG(a, b, c, d, x[k + 1], S21, 0xf61e2562);
-      d = GG(d, a, b, c, x[k + 6], S22, 0xc040b340);
-      c = GG(c, d, a, b, x[k + 11], S23, 0x265e5a51);
-      b = GG(b, c, d, a, x[k + 0], S24, 0xe9b6c7aa);
-      a = GG(a, b, c, d, x[k + 5], S21, 0xd62f105d);
-      d = GG(d, a, b, c, x[k + 10], S22, 0x2441453);
-      c = GG(c, d, a, b, x[k + 15], S23, 0xd8a1e681);
-      b = GG(b, c, d, a, x[k + 4], S24, 0xe7d3fbc8);
-      a = GG(a, b, c, d, x[k + 9], S21, 0x21e1cde6);
-      d = GG(d, a, b, c, x[k + 14], S22, 0xc33707d6);
-      c = GG(c, d, a, b, x[k + 3], S23, 0xf4d50d87);
-      b = GG(b, c, d, a, x[k + 8], S24, 0x455a14ed);
-      a = GG(a, b, c, d, x[k + 13], S21, 0xa9e3e905);
-      d = GG(d, a, b, c, x[k + 2], S22, 0xfcefa3f8);
-      c = GG(c, d, a, b, x[k + 7], S23, 0x676f02d9);
-      b = GG(b, c, d, a, x[k + 12], S24, 0x8d2a4c8a);
-      a = HH(a, b, c, d, x[k + 5], S31, 0xfffa3942);
-      d = HH(d, a, b, c, x[k + 8], S32, 0x8771f681);
-      c = HH(c, d, a, b, x[k + 11], S33, 0x6d9d6122);
-      b = HH(b, c, d, a, x[k + 14], S34, 0xfde5380c);
-      a = HH(a, b, c, d, x[k + 1], S31, 0xa4beea44);
-      d = HH(d, a, b, c, x[k + 4], S32, 0x4bdecfa9);
-      c = HH(c, d, a, b, x[k + 7], S33, 0xf6bb4b60);
-      b = HH(b, c, d, a, x[k + 10], S34, 0xbebfbc70);
-      a = HH(a, b, c, d, x[k + 13], S31, 0x289b7ec6);
-      d = HH(d, a, b, c, x[k + 0], S32, 0xeaa127fa);
-      c = HH(c, d, a, b, x[k + 3], S33, 0xd4ef3085);
-      b = HH(b, c, d, a, x[k + 6], S34, 0x4881d05);
-      a = HH(a, b, c, d, x[k + 9], S31, 0xd9d4d039);
-      d = HH(d, a, b, c, x[k + 12], S32, 0xe6db99e5);
-      c = HH(c, d, a, b, x[k + 15], S33, 0x1fa27cf8);
-      b = HH(b, c, d, a, x[k + 2], S34, 0xc4ac5665);
-      a = II(a, b, c, d, x[k + 0], S41, 0xf4292244);
-      d = II(d, a, b, c, x[k + 7], S42, 0x432aff97);
-      c = II(c, d, a, b, x[k + 14], S43, 0xab9423a7);
-      b = II(b, c, d, a, x[k + 5], S44, 0xfc93a039);
-      a = II(a, b, c, d, x[k + 12], S41, 0x655b59c3);
-      d = II(d, a, b, c, x[k + 3], S42, 0x8f0ccc92);
-      c = II(c, d, a, b, x[k + 10], S43, 0xffeff47d);
-      b = II(b, c, d, a, x[k + 1], S44, 0x85845dd1);
-      a = II(a, b, c, d, x[k + 8], S41, 0x6fa87e4f);
-      d = II(d, a, b, c, x[k + 15], S42, 0xfe2ce6e0);
-      c = II(c, d, a, b, x[k + 6], S43, 0xa3014314);
-      b = II(b, c, d, a, x[k + 13], S44, 0x4e0811a1);
-      a = II(a, b, c, d, x[k + 4], S41, 0xf7537e82);
-      d = II(d, a, b, c, x[k + 11], S42, 0xbd3af235);
-      c = II(c, d, a, b, x[k + 2], S43, 0x2ad7d2bb);
-      b = II(b, c, d, a, x[k + 9], S44, 0xeb86d391);
-      a = AddUnsigned(a, AA);
-      b = AddUnsigned(b, BB);
-      c = AddUnsigned(c, CC);
-      d = AddUnsigned(d, DD);
-    }
-
-    if (bit == 32) {
-      return WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d);
-    } else {
-      return WordToHex(b) + WordToHex(c);
-    }
-  }; // eslint-disable-next-line ember/no-classic-classes
-
-
-  var _default = Ember.Service.extend({
-    // environment: equal(ENV.environment, 'production'),
-    environment: Ember.computed.equal(_environment.default.environment, "production"),
-    ajax: Ember.inject.service(),
-    cookies: Ember.inject.service(),
-    router: Ember.inject.service(),
-    toast: Ember.inject.service(),
-    store: Ember.inject.service(),
-    toastOptions: Ember.Object.create({
-      closeButton: false,
-      positionClass: "toast-top-center",
-      progressBar: false,
-      timeOut: "2000"
-    }),
-    loginSuccess: "登录成功",
-    loginFail: "登录失败",
-    logoutSuceees: "注销成功",
-    // host: ENV.host,
-    host: "http://oauth.pharbers.com",
-    version: "v0",
-    // clientId: "5cc54e32ceb3c45854b80e9d", 旧官网
-    // clientId: "5e4e14205bb3bc61bcbfc90a", // 新官网
-    clientId: "5ed86c5ac4e1f0330eec3d2e",
-    // eks-oauth-server暂时使用阿里云数据（mongo&redis）直接外部IP访问
-    clientSecret: "5c90db71eeefcc082c0823b2",
-    scope: "APP/Pharbers",
-    isLogin: false,
-    isRegister: false,
-    account: null,
-
-    accountLogin(a, p, adapter) {
-      // const cookies = this.cookies;
-      let loginSuccess = this.loginSuccess;
-      let loginFail = this.loginFail; // let logoutSuceees = this.logoutSuceees;
-
-      let host = `${this.host}`,
-          version = `${this.version}`,
-          resource = "PasswordLogin",
-          url = "";
-      url = `?client_id=${this.clientId}
-                    &client_secret=${this.clientSecret}
-                    &scope=${this.scope}`.replace(/\n/gm, "").replace(/ /gm, "").replace(/\t/gm, "");
-      this.ajax.request([host, version, resource].join("/") + url, {
-        type: "POST",
-        contentType: "application/json",
-        data: {
-          username: a,
-          password: p
-        }
-      }).then(response => {
-        if (!this.environment) {
-          window.console.log(response);
-        }
-
-        if (response.error != undefined) {
-          this.toast.error("", loginFail, this.toastOptions);
-          this.router.transitionTo("login");
-          return Ember.RSVP.reject(response);
-        }
-
-        return response;
-      }).then(data => {
-        this.cookiesOperation(data); // adapter.set('headers', {
-        // 	'Authorization': cookies.read('token_type') + ' ' + cookies.read('token')
-        // });
-
-        adapter.set("oauthRequest", 1);
-        return this.store.findRecord("account", data.account_id);
-      }).then(data => {
-        if (!this.environment) {
-          window.console.log(data);
-        }
-
-        this.setProperties({
-          account: data,
-          isLogin: true
+    register(tableName, id, callback, ele, projectId) {
+      // 持续30s，调用unregister删除
+      if (this.subjectID.indexOf(id) == -1) {
+        this.subjectID.push(id);
+        this.subjectCallback.push({
+          ele: ele,
+          callback: callback,
+          tableName: tableName,
+          date: new Date().getTime(),
+          projectId: projectId
         });
-        this.toast.success("", loginSuccess, this.toastOptions);
-        this.router.transitionTo("product-list"); // window.location.href = "product-list"
-      }, err => {
-        if (!this.environment) {
-          window.console.log(err);
-        }
-
-        this.clearAllCookie(1);
-        this.toast.error("", loginFail, this.toastOptions);
-        this.router.transitionTo("login");
-      }).catch(err => {
-        if (!this.environment) {
-          window.console.log(err);
-        }
-
-        this.toast.error("", loginFail, this.toastOptions);
-        this.router.transitionTo("login");
-      });
-    },
-
-    cookiesOperation(response) {
-      // response.scope = "APP/MAXBI,CHC:Nhwa"
-      let cookies = this.cookies;
-      let expiry = new Date(response.expiry);
-      let options = {
-        domain: "ph-offweb.s3-website.cn-northwest-1.amazonaws.com.cn",
-        path: "/",
-        expires: expiry
-      };
-      cookies.write("token", response.access_token, options);
-      cookies.write("account_id", response.account_id, options);
-      cookies.write("access_token", response.access_token, options);
-      cookies.write("refresh_token", response.refresh_token, options);
-      cookies.write("token_type", response.token_type, options);
-      cookies.write("scope", response.scope, options);
-      cookies.write("expiry", response.expiry, options); // let appScopesList = '';
-      // // let result = response.scope.match(/\[(.+)\]/);
-      // let result = response.scope.split("/");
-      // let scopes = result[1].split(",");
-      // scopes.forEach(elem => {
-      // 	let appScope = elem.split(":")
-      // 	appScopesList += appScope[0] + ';'
-      // 	let appOptions = {
-      // 		domain: 'pharbers.com',
-      // 		path: '/',
-      // 		expires: expiry
-      // 	};
-      // 	// appOptions.path = "/" + this.appScopeToDomain(appScope[0])
-      // 	appOptions.path = "/login"
-      // 	if(appOptions.path !== ''){
-      // 		cookies.write('token', response.access_token, appOptions);
-      // 		cookies.write('scope', 'APP/' + elem, appOptions);
-      // 	}
-      // })
-      // options = {
-      // 	domain: '.pharbers.com',
-      // 	path: '/',
-      // 	expires: expiry
-      // }
-      // cookies.write('scopes', appScopesList, options);
-    },
-
-    // appScopeToDomain(appScope) {
-    // 	// if(appScope == 'MAX') {
-    // 	// 	return 'max.pharbers.com'
-    // 	// } else if (appScope == 'MAXBI') {
-    // 	// 	return 'maxview.pharbers.com'
-    // 	// } else if (appScope == 'CHC') {
-    // 	// 	return 'chc.pharbers.com'
-    // 	// } else if (appScope == 'FileUpAndDownLoad') {
-    // 	// 	return 'report.pharbers.com'
-    // 	// } else if (appScope == 'NTM') {
-    // 	// 	return 'ntm.pharbers.com'
-    // 	// } else if (appScope == 'UCB') {
-    // 	// 	return 'ucb.pharbers.com'
-    // 	// } else {
-    // 	// 	return '';
-    // 	// }
-    // 	if(appScope == 'MAX') {
-    // 		return 'max'
-    // 	} else if (appScope == 'MAXBI') {
-    // 		return 'maxview'
-    // 	} else if (appScope == 'CHC') {
-    // 		return 'chc'
-    // 	} else if (appScope == 'FileUpAndDownLoad') {
-    // 		return 'report'
-    // 	} else if (appScope == 'NTM') {
-    // 		return 'ntm'
-    // 	} else if (appScope == 'UCB') {
-    // 		return 'ucb'
-    // 	} else {
-    // 		return '';
-    // 	}
-    // },
-    judgeAuth() {
-      let tokenFlag = false,
-          token = this.cookies.read("token"); // let scope = this.get('cookies').read('scope');
-      // let account = this.get('cookies').read('account');
-
-      if (token != undefined && token != null && token != "") {
-        this.set("isLogin", true);
-        tokenFlag = true;
-      } // if(account != undefined && account != null && account != '') {
-      // 	this.set('account', account)
-      // }
-      // if(scope != undefined && scope != null && scope != '') {
-      //     let scopeString = scope.split("/")[1];
-      //     let scopeGroup = scopeString.split(":")[1];
-      //     if(scopeGroup != "" && scopeGroup != undefined) {
-      //         scopeFlag = true;
-      //     }
-      // }
-      // if(tokenFlag && scopeFlag) {
-
-
-      if (tokenFlag) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-
-    clearAllCookie(param) {
-      // let domains = [];
-      // let scopes = this.get('cookies').read('scopes').split(';');
-      // scopes.forEach(elem => {
-      // 	domains.push(this.appScopeToDomain(elem));
-      // })
-      let keys = document.cookie.match(/[^ =;]+(?=\=)/g);
-      let logoutSuceees = this.logoutSuceees;
-
-      if (keys) {
-        for (var i = keys.length; i--;) // domains.forEach(elem => {
-        // 	document.cookie = keys[i] + '=0;domain=' + elem + ';expires=' + new Date(0).toUTCString()+";path=/";
-        // })
-        document.cookie = keys[i] + "=0;domain=" + ".pharbers.com" + ";expires=" + new Date(0).toUTCString() + ";path=/";
-
-        document.cookie = keys[i] + "=0;domain=" + "www.pharbers.com" + ";expires=" + new Date(0).toUTCString() + ";path=/";
-      }
-
-      this.set("isLogin", false);
-      this.store.unloadAll();
-
-      if (param == undefined) {
-        this.toast.success("", logoutSuceees, this.toastOptions);
-        this.router.transitionTo("login"); // window.location.href = "/login"
       }
     }
 
-  });
+    unregister(id) {
+      //删除id和callback函数
+      let index = this.subjectID.indexOf(id);
+      this.subjectID.splice(index, 1);
+      this.subjectCallback.splice(index, 1);
+    }
 
-  _exports.default = _default;
+    observer() {
+      // 定义timer，5秒请求一次, 无限循环，id数组大于0调用register，无返回不进行处理
+      // query notification, id数组大于0时请求数据，超过30秒删除id，用callback进行处理
+      let that = this;
+      setInterval(async function () {
+        let currentTime = new Date().getTime(); // 设置30s超时
+
+        that.subjectCallback.forEach((item, index) => {
+          if (currentTime - item.date > 120 * 1000) {
+            that.unregister(that.subjectID[index]);
+          }
+        });
+
+        if (that.subjectID.length > 0) {
+          // let url = "https://apiv2.pharbers.com/phdydatasource/query"
+          let conditions = [];
+          that.subjectID.forEach((item, index) => {
+            conditions.push({
+              id: item,
+              projectId: that.subjectCallback[index].projectId
+            });
+          });
+          let url = "https://apiv2.pharbers.com/phdydatasource/batch_get_item";
+          let headers = {
+            Authorization: that.cookies.read("access_token"),
+            "Content-Type": "application/vnd.api+json",
+            Accept: "application/vnd.api+json"
+          };
+          let statusBody = {
+            table: "notification",
+            conditions: conditions
+          };
+          let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(statusBody)
+          };
+          (0, _fetch.default)(url, options).then(res => res.json()).then(response => {
+            if (response.data && response.data.length > 0) {
+              let status = JSON.parse(response.data[0].attributes.message).cnotification.status;
+              console.log(status); //以后会做成进度条
+
+              if (status != "project_file_to_DS_running" && status != "dag_conf insert success") {
+                let index = that.subjectID.indexOf(response.data[0].id);
+                let targetCallback = that.subjectCallback[index]; // 将消息分发给不同component处理
+
+                targetCallback.callback(response, targetCallback.ele); // 调用unregister
+
+                that.unregister(response.data[0].id);
+              }
+            }
+          });
+        } else {
+          console.log("notice observer");
+        }
+      }, 5 * 1000);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subjectID", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return [];
+    }
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "subjectCallback", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return [];
+    }
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "uploadStatus", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return false;
+    }
+  })), _class));
+  _exports.default = NoticeServiceService;
 });
-;define("web-shell/services/oauth", ["exports"], function (_exports) {
+;define("web-shell/services/oauth-service", ["exports", "web-shell/config/environment", "fetch"], function (_exports, _environment, _fetch) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2633,62 +2363,108 @@
   });
   _exports.default = void 0;
 
-  // eslint-disable-next-line ember/no-classic-classes
-  var _default = Ember.Service.extend({
-    cookies: Ember.inject.service(),
-    ajax: Ember.inject.service(),
-    router: Ember.inject.service(),
-    store: Ember.inject.service(),
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, (_class = class OauthServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _initializerDefineProperty(this, "ajax", _descriptor2, this);
+
+      _initializerDefineProperty(this, "router", _descriptor3, this);
+
+      _initializerDefineProperty(this, "store", _descriptor4, this);
+
+      _defineProperty(this, "clientId", _environment.default.APP.clientId);
+
+      _defineProperty(this, "clientSecret", _environment.default.APP.clientSecret);
+
+      _defineProperty(this, "redirectUri", _environment.default.APP.redirectUri);
+    }
 
     oauthCallback(transition) {
       const cookies = this.cookies;
-      const ajax = this.ajax;
+      let that = this; // let urli = window.location.href
+
+      transition.queryParams = {
+        // "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
+        // "state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
+        code: transition.intent.router._lastQueryParams.code,
+        state: transition.intent.router._lastQueryParams.state
+      };
       const {
         queryParams
-      } = transition.to;
-      const applicationAdapter = this.store.adapterFor("application"); // console.log("?", transition, queryParams)
+      } = transition;
 
       if (queryParams.code && queryParams.state) {
         // 获取oauth-callback 中的query
-        const redirectUri = queryParams.redirect_uri;
-        const clientId = queryParams.client_id;
-        const code = queryParams.code;
-        const grantType = queryParams.grant_type;
-        const state = queryParams.state;
-        const url = `https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token?` + `client_id=${clientId}` + `&code=${code}` + `&grant_type=${grantType}` + `&redirect_uri=${redirectUri}` + `&state=${state}`; // adapter 获取对应的header
+        const redirectUri = this.redirectUri;
+        const clientId = this.clientId;
+        const secret = this.clientSecret;
+        const grantType = "authorization_code";
+        const code = queryParams.code; // const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
 
-        applicationAdapter.set("token", 1);
-        applicationAdapter.toggleProperty("oauthRequest");
-        applicationAdapter.set("oauthRequestTokenQuery", {
-          redirect_uri: redirectUri,
-          client_id: clientId,
-          code: code,
-          grant_type: grantType,
-          state: state
-        });
-        const a = applicationAdapter.get("headers");
-        ajax.request(url, {
-          headers: a
-        }).then(response => {
+        const url = "https://apiv2.pharbers.com/oauth/token";
+        const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`; // const data = {
+        // 	code: code,
+        // 	grant_type: grantType,
+        // 	redirect_uri: redirectUri
+        // }
+
+        const b64 = window.btoa(`${clientId}:${secret}`);
+        const authorization = `Basic ${b64}`;
+        let options = {
+          method: "POST",
+          headers: {
+            authorization,
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            accept: "application/json, text/javascript, */*; q=0.01"
+          },
+          body: body
+        };
+        (0, _fetch.default)(url, options).then(res => {
+          return res.json();
+        }).then(async response => {
           this.removeAuth();
           let options = {
             domain: ".pharbers.com",
             path: "/",
-            maxAge: response.expires_in
-          }; // console.log(response)
-
+            maxAge: response.expiresIn
+          };
           cookies.write("access_token", response.access_token, options);
           cookies.write("refresh_token", response.refresh_token, options);
           cookies.write("token_type", response.token_type, options);
-          cookies.write("expires_in", response.expires_in, options);
-          this.router.transitionTo("product-list");
-        }).catch(() => {
-          this.router.transitionTo("product-list");
+          cookies.write("expires_in", response.expiresIn, options);
+          cookies.write("user_name", response.user.name, options);
+          cookies.write("user_name_show", encodeURI(response.user.lastName + response.user.firstName), options);
+          cookies.write("user_email", response.user.email, options);
+          cookies.write("company_id", response.user.employerId, options);
+          cookies.write("user_name_show", encodeURI(response.user.lastName + response.user.firstName), options);
+          cookies.write("account_id", response.user.id, options);
+          let userData = await that.store.findRecord("account", that.cookies.read("account_id")); //请求employer的数据
+
+          let employerId = await userData.belongsTo("employer").id();
+          let employerData = await that.store.findRecord("partner", employerId);
+          cookies.write("company_name_show", encodeURI(employerData.name), options); // this.mqttService.mqttConnect()
+
+          this.router.transitionTo("/download/my-data");
+        }).catch(_ => {
+          this.router.transitionTo("/download/my-data");
         });
       } else {
-        this.router.transitionTo("product-list");
+        this.router.transitionTo("/download/my-data");
       }
-    },
+    }
 
     judgeAuth() {
       let tokenFlag = false;
@@ -2699,7 +2475,7 @@
       }
 
       return tokenFlag; // 前端没有scope，能否访问进行对应的query
-    },
+    }
 
     removeAuth() {
       let options = {
@@ -2712,20 +2488,33 @@
         keys.forEach(x => {
           this.cookies.clear(x, options);
         });
-      } // 如果在product list页面，应该跳回到登录页面
-      // 其他页面随意了
-      // if ( this.get( "router.currentRouteName" ) === "product-list" ) {
-      // }
-      // this.get( "router" ).transitionTo("home")
+      }
 
-
-      window.location.reload(true);
       window.console.log("clear cookies!");
     }
 
-  });
-
-  _exports.default = _default;
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "ajax", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = OauthServiceService;
 });
 ;define("web-shell/services/page-title-list", ["exports", "ember-page-title/services/page-title-list"], function (_exports, _pageTitleList) {
   "use strict";
@@ -2753,75 +2542,6 @@
     }
   });
 });
-;define("web-shell/services/report", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  // eslint-disable-next-line ember/no-classic-classes
-  var _default = Ember.Service.extend({
-    ossService: Ember.inject.service("services/oss"),
-    ajax: Ember.inject.service(),
-    cookies: Ember.inject.service(),
-
-    downloadURI(urlName) {
-      window.console.log(urlName);
-      fetch(urlName.url).then(response => {
-        if (response.status === 200) {
-          return response.blob();
-        }
-
-        throw new Error(`status: ${response.status}`);
-      }).then(blob => {
-        var link = document.createElement("a");
-        link.download = urlName.name; // var blob = new Blob([response]);
-
-        link.href = URL.createObjectURL(blob); // link.href = url;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link); // delete link;
-
-        window.console.log("success");
-      }).catch(error => {
-        window.console.log("failed. cause:", error);
-      });
-    },
-
-    genDownloadUrl(index) {
-      let curLanguage = window.localStorage.getItem("lang");
-      let bookName;
-      let uuid;
-
-      if (index == 0) {
-        bookName = curLanguage === "中文" ? "广阔市场用药分析及展望" : "Analysis and Prospects for Broad Medication Market";
-        uuid = "Blue Book.pdf";
-      } else if (index == 1) {
-        bookName = curLanguage === "中文" ? "带量采购对中国医药市场格局的影响" : "VBP's impact on the Chinese Pharmaceutical Market";
-        uuid = "Blue Book2020.pdf";
-      } // let uuid = 'Blue Book.pdf';
-
-
-      let accept = "pdf";
-      let client = this.ossService.get("ossClient");
-      let url = client.signatureUrl(accept + "/" + uuid, {
-        expires: 43200
-      });
-      window.console.log(url);
-      this.downloadURI({
-        url: url,
-        name: bookName
-      });
-      return url;
-    }
-
-  });
-
-  _exports.default = _default;
-});
 ;define("web-shell/services/store", ["exports", "ember-data/store"], function (_exports, _store) {
   "use strict";
 
@@ -2844,15 +2564,15 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "Ml0C3Q90",
-    "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\"],[10,\"pharbers-bp-nav-top\"],[12],[13],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"  \\n\\n\"],[10,\"pharbers-bp-page-bottom\"],[12],[13],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "id": "xn46rKZ4",
+    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"\\n\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
 
   _exports.default = _default;
 });
-;define("web-shell/templates/home", ["exports"], function (_exports) {
+;define("web-shell/templates/shell", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2861,9 +2581,9 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "tdBXVuyW",
-    "block": "[[[1,[28,[35,0],[\"Home\"],null]],[1,\"\\n\"],[10,\"pharbers-home\"],[12],[13],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
-    "moduleName": "web-shell/templates/home.hbs",
+    "id": "9Lg1le8/",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
 
@@ -2957,7 +2677,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+8eac81e0"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a","name":"web-shell","version":"0.0.0+c9448cf4"});
           }
-
+        
 //# sourceMappingURL=web-shell.map

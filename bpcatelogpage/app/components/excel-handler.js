@@ -16,12 +16,19 @@ export default class ExcelHandlerComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 const ltp = e.detail[0].args.param
-				let uri = ''
+				let uri = '/projects'
                 if(ltp.name === "advancedMapping") {
 					uri = '/excel-clean?projectName='+ltp.projectName+ '&projectId=' + ltp.projectId
-				}
-				if(ltp.name === "linkToProject") {
+				} else if(ltp.name === "linkToProject" || ltp.name == "project") {
 					uri = `/projects/`+ ltp.projectId
+				} else if (ltp.name === "datasets") {
+					uri = '/dataset-lst?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
+				} else if(ltp.name === "scripts") {
+					uri = '/recipes?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
+				} else if (ltp.name == "flow") {
+					uri = '/flow?projectName=' + ltp.projectName + '&projectId=' + ltp.projectId
+				} else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
                 this.router.transitionTo( uri )
                 break
@@ -29,12 +36,6 @@ export default class ExcelHandlerComponent extends Component {
                 const param = e.detail[0].args.param
 				this.tranParam = param
 				this.createDataSetIndex(param)
-				// 不等了
-				// if(this.noticeService.uploadStatus) {
-				// 	this.createDataSetIndex(param)
-				// } else {
-				// 	alert("文件上传尚未完成，请等待！")
-				// }
                 break
             default:
                 console.log("submit event to parent")
@@ -44,7 +45,7 @@ export default class ExcelHandlerComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
-        console.log(element.allData)
+		element.allData.popupBack = true
         element.addEventListener("event", this.listener)
     }
 
@@ -95,6 +96,11 @@ export default class ExcelHandlerComponent extends Component {
         const that = this
 		param.opname = this.cookies.read( "account_id" )
 		param.opgroup = this.cookies.read( "company_id" )
+		param.cat = "uploaded"
+		param.prop = {
+			path: "",
+			partitions: 1
+		}
 		//直接导入数据集
         const push_type = "put_item"
         const project_files_body = {

@@ -14,10 +14,24 @@ export default class DagComponent extends Component {
         switch(e.detail[0].args.callback) {
             case "linkToPage":
                 let params = e.detail[0].args.param
-                let uri = ''
-				if(params.name == 'dataset') {
+                let uri = '/projects'
+				if(params.name == 'datasets') {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
-                }
+                } else if(params.name == 'project') {
+					uri = '/projects/' + params.projectId
+				} else if(params.name === "scripts") {
+					//recipe页面
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}  else if(params.name === "script") {
+					//script list页面
+					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
+				} else if (params.name === "flow") {
+                    uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
+                } else if(params.name == "projects") {
+					uri = '/projects'
+				} else if(params.name == "airflow") {
+					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
+				}
                 //执行列表 分页
                 this.router.transitionTo( uri )
                 break
@@ -29,6 +43,8 @@ export default class DagComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
+		element.allData.projectName = element.allData.projectDetail.name
+		element.allData.projectId = element.allData.projectDetail.id
         element.addEventListener("event", this.listener)
     }
 

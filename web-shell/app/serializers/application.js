@@ -2,17 +2,19 @@ import { dasherize, camelize } from "@ember/string"
 import { singularize, pluralize } from "ember-inflector"
 import JSONAPISerializer from "@ember-data/serializer/json-api"
 
-// eslint-disable-next-line ember/no-classic-classes
-export default JSONAPISerializer.extend({
+export default class ApplicationSerializer extends JSONAPISerializer {
 	modelNameFromPayloadKey(key) {
 		return singularize(dasherize(key))
-	},
+	}
+
 	payloadKeyFromModelName(modelName) {
 		return pluralize(camelize(modelName))
-	},
+	}
+
 	keyForAttribute(key) {
 		return dasherize(key).toLowerCase()
-	},
+	}
+
 	keyForRelationship(key) {
 		return key
 	}
@@ -29,4 +31,4 @@ export default JSONAPISerializer.extend({
 	// 	})
 	// 	return obj
 	// }
-})
+}
