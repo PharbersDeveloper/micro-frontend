@@ -293,9 +293,9 @@ export default {
         let href = window.location.href
         console.log(href)
         let paramArr = href.split("?")[1].split("&")
-        this.projectId = paramArr[0].split('=')[1]
-        this.projectName = paramArr[1].split("=")[1]
-        this.flowVersion = paramArr[2].split("=")[1]
+        this.projectId = decodeURI(paramArr[0].split('=')[1])
+        this.projectName = decodeURI(paramArr[1].split("=")[1])
+        this.flowVersion = decodeURI(paramArr[2].split("=")[1])
         this.datasource.projectId = this.projectId
         this.initChart()
         this.noticeService.observer()
@@ -701,6 +701,8 @@ export default {
                 width: 120px;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: pointer;
             }
             .title {
                 color: red;
