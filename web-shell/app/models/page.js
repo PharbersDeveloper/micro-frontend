@@ -9,4 +9,5 @@ export default class PageModel extends Model {
 	@attr("string") menu
 	@attr("string") cat // list, command
 	@attr("number") level
+	@attr("string") engine // ember, vue, react
 }
