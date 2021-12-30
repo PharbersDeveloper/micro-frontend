@@ -7,6 +7,9 @@ export default class ExcelCleanComponent extends Component {
 	@tracked dataset
 	@tracked display = "none"
 	@service router
+    @service cookies
+    @service ajax
+
 	@action
     async listener(e) {
 		switch(e.detail[0].args.callback) {
@@ -26,6 +29,29 @@ export default class ExcelCleanComponent extends Component {
 				}
                 this.router.transitionTo( uri )
 				break
+		}
+	}
+
+	@action
+	async on_btn_click(data) {
+		let body = {
+			"bucket": "ph-platform",
+			"key": this.dataset.path.split("ph-platform/")[1]
+		}
+		let url = "https://api.pharbers.com/phoutputdown"
+		let scriptOptions = {
+			method: "POST",
+			headers: {
+				"Authorization": this.cookies.read("access_token"),
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				"accept": "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		let result = await fetch(url, scriptOptions).then(res => res.json())
+		if(result.status === 1) {
+			let downloadUrl = result.message
+			window.open(downloadUrl)
 		}
 	}
 

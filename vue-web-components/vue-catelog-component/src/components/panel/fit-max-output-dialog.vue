@@ -7,7 +7,7 @@
                </div>
                 <div class="prompt">
                     <div class="item">
-                        <p>输出路径:</p>
+                        <p>路径:</p>
                         <input type="text" v-model="path" ref="path">
                     </div>
                     <div class="item">

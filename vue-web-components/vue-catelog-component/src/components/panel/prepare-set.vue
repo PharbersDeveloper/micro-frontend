@@ -29,12 +29,12 @@
                     <textarea class="col_text" cols="100" rows="10" v-model="colParams"> </textarea>
                 </div>
                 <div class="form_item">
-                    <span class="item_title">将 “nan”,“null”与空值替换为:</span>
+                    <span class="item_title">将 “nan”与“null”替换为:</span>
                     <div class="input_area">
                         <textarea class="param_text" cols="100" rows="3" v-model="changeParams"> </textarea>
                         <div class="note">
                             <img :src="error_icon" alt=""> 
-                            若无替换内容，含有“nan”,“null”和空值的行将被删除。
+                            若无替换内容，含有“nan”与“null”的行将被删除。
                         </div>
                     </div>
                 </div>
