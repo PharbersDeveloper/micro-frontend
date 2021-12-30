@@ -17,6 +17,6 @@ export default class ShellRoute extends Route {
 	}
 
 	model() {
-		return ""
+		return ["小逼崽子"]
 	}
 }

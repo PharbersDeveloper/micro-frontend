@@ -1631,6 +1631,81 @@
   };
   _exports.default = _default;
 });
+;define("web-shell/models/page", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("number"), (_class = class PageModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "projectName", _descriptor, this);
+
+      _initializerDefineProperty(this, "name", _descriptor2, this);
+
+      _initializerDefineProperty(this, "route", _descriptor3, this);
+
+      _initializerDefineProperty(this, "uri", _descriptor4, this);
+
+      _initializerDefineProperty(this, "menu", _descriptor5, this);
+
+      _initializerDefineProperty(this, "cat", _descriptor6, this);
+
+      _initializerDefineProperty(this, "level", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "projectName", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "menu", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PageModel;
+});
 ;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
   "use strict";
 
@@ -1746,7 +1821,7 @@
   })), _class));
   _exports.default = ApplicationRoute;
 });
-;define("web-shell/routes/shell", ["exports"], function (_exports) {
+;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1771,16 +1846,19 @@
       _initializerDefineProperty(this, "store", _descriptor, this);
 
       _initializerDefineProperty(this, "oauthService", _descriptor2, this);
+
+      _defineProperty(this, "debugToken", _environment.default.APP.debugToken);
     }
 
-    // 判断token
-    beforeModel() {
-      const judge = this.oauthService.judgeAuth();
-      console.log(judge);
+    beforeModel() {// TODO: 判断token
+      // const judge = this.oauthService.judgeAuth()
+      // if (!judge) {
+      // 	window.href = ""
+      // }
     }
 
     model() {
-      return "";
+      return ["小逼崽子"];
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
@@ -2344,11 +2422,11 @@
 
       _initializerDefineProperty(this, "store", _descriptor4, this);
 
-      _defineProperty(this, "clientId", _environment.default.clientId);
+      _defineProperty(this, "clientId", _environment.default.APP.clientId);
 
-      _defineProperty(this, "clientSecret", _environment.default.clientSecret);
+      _defineProperty(this, "clientSecret", _environment.default.APP.clientSecret);
 
-      _defineProperty(this, "redirectUri", _environment.default.redirectUri);
+      _defineProperty(this, "redirectUri", _environment.default.APP.redirectUri);
     }
 
     oauthCallback(transition) {
@@ -2523,26 +2601,9 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "Ml0C3Q90",
-    "block": "[[[1,[28,[35,0],[\"WebShell\"],null]],[1,\"\\n\"],[10,\"pharbers-bp-nav-top\"],[12],[13],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"  \\n\\n\"],[10,\"pharbers-bp-page-bottom\"],[12],[13],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "id": "xn46rKZ4",
+    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"\\n\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
-    "isStrictMode": false
-  });
-
-  _exports.default = _default;
-});
-;define("web-shell/templates/home", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = Ember.HTMLBars.template({
-    "id": "tdBXVuyW",
-    "block": "[[[1,[28,[35,0],[\"Home\"],null]],[1,\"\\n\"],[10,\"pharbers-home\"],[12],[13],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
-    "moduleName": "web-shell/templates/home.hbs",
     "isStrictMode": false
   });
 
@@ -2557,8 +2618,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "luX1Tsyn",
-    "block": "[[[1,[28,[35,0],[\"Shell\"],null]],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "id": "I2M199Ko",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,\"iter\"],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
@@ -2653,7 +2714,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"name":"web-shell","version":"0.0.0+f8c9394f"});
+            require("web-shell/app")["default"].create({"redirectUri":"http://general.pharbers.com/oauth-callback","pharbersUri":"http://www.pharbers.com","accountsUri":"http://accounts.pharbers.com","host":"http://oauth.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"","name":"web-shell","version":"0.0.0+a5acab07"});
           }
         
 //# sourceMappingURL=web-shell.map
