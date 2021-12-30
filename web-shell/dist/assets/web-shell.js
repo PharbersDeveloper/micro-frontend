@@ -1631,35 +1631,6 @@
   };
   _exports.default = _default;
 });
-;define("web-shell/models/activity", ["exports", "ember-data"], function (_exports, _emberData) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _default = _emberData.default.Model.extend({
-    title: _emberData.default.attr('string'),
-    subTitle: _emberData.default.attr('string'),
-    startDate: _emberData.default.attr('date'),
-    endDate: _emberData.default.attr('date'),
-    location: _emberData.default.attr('string'),
-    city: _emberData.default.attr('string'),
-    activityType: _emberData.default.attr('string'),
-    contentTitle: _emberData.default.attr('string'),
-    contentDesc: _emberData.default.attr('string'),
-    gallery: _emberData.default.hasMany('image'),
-    attachments: _emberData.default.hasMany("report"),
-    agendas: _emberData.default.hasMany("zone"),
-    logo: _emberData.default.belongsTo('image'),
-    logoOnTime: _emberData.default.belongsTo('image'),
-    partners: _emberData.default.hasMany('cooperation'),
-    language: _emberData.default.attr('number')
-  });
-
-  _exports.default = _default;
-});
 ;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
   "use strict";
 

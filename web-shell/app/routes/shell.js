@@ -1,14 +1,19 @@
 import Route from "@ember/routing/route"
 import { inject as service } from "@ember/service"
+import config from "web-shell/config/environment"
 
 export default class ShellRoute extends Route {
 	@service store
 	@service oauthService
 
-	// 判断token
+	debugToken = config.APP.debugToken
+
 	beforeModel() {
-		const judge = this.oauthService.judgeAuth()
-		console.log(judge)
+		// TODO: 判断token
+		// const judge = this.oauthService.judgeAuth()
+		// if (!judge) {
+		// 	window.href = ""
+		// }
 	}
 
 	model() {

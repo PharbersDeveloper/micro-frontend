@@ -9,9 +9,9 @@ export default class OauthServiceService extends Service {
 	@service router
 	@service store
 
-	clientId = config.clientId
-	clientSecret = config.clientSecret
-	redirectUri = config.redirectUri
+	clientId = config.APP.clientId
+	clientSecret = config.APP.clientSecret
+	redirectUri = config.APP.redirectUri
 
 	oauthCallback(transition) {
 		const cookies = this.cookies
