@@ -3,7 +3,6 @@ import { singularize, pluralize } from "ember-inflector"
 import JSONAPISerializer from "@ember-data/serializer/json-api"
 
 export default class ApplicationSerializer extends JSONAPISerializer {
-
 	modelNameFromPayloadKey(key) {
 		return singularize(dasherize(key))
 	}

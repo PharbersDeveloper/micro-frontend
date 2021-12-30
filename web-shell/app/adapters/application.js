@@ -1,4 +1,3 @@
-// import { computed } from "@ember/object"
 import { dasherize } from "@ember/string"
 import { pluralize } from "ember-inflector"
 import { inject as service } from "@ember/service"
@@ -120,11 +119,18 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 	// 	return `${baseUrl}/relationships`;
 	// },
 	get headers() {
-		// 登录后的token 读取access token
-		return {
-			Accept: "application/vnd.api+json",
-			"Content-Type": "application/vnd.api+json",
-			Authorization: this.cookies.read("access_token")
+		if (ENV.environment === "development") {
+			return {
+				Accept: "application/vnd.api+json",
+				"Content-Type": "application/vnd.api+json",
+				Authorization: ENV.APP.debugToken
+			}
+		} else {
+			return {
+				Accept: "application/vnd.api+json",
+				"Content-Type": "application/vnd.api+json",
+				Authorization: this.cookies.read("access_token")
+			}
 		}
 	}
 }

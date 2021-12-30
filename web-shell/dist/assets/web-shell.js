@@ -143,12 +143,19 @@
 
 
     get headers() {
-      // 登录后的token 读取access token
-      return {
-        Accept: "application/vnd.api+json",
-        "Content-Type": "application/vnd.api+json",
-        Authorization: this.cookies.read("access_token")
-      };
+      if (_environment.default.environment === "development") {
+        return {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: _environment.default.APP.debugToken
+        };
+      } else {
+        return {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: this.cookies.read("access_token")
+        };
+      }
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
@@ -2628,7 +2635,7 @@
   })), _class));
   _exports.default = ApplicationRoute;
 });
-;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+;define("web-shell/routes/shell", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2651,8 +2658,6 @@
       super(...args);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
-
-      _defineProperty(this, "debugToken", _environment.default.APP.debugToken);
     }
 
     model() {
@@ -3506,7 +3511,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"http://general.pharbers.com/oauth-callback","pharbersUri":"http://www.pharbers.com","accountsUri":"http://accounts.pharbers.com","host":"http://oauth.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"","name":"web-shell","version":"0.0.0+c73bd180"});
+            require("web-shell/app")["default"].create({"redirectUri":"http://general.pharbers.com/oauth-callback","pharbersUri":"http://www.pharbers.com","accountsUri":"http://accounts.pharbers.com","host":"http://oauth.pharbers.com","apiUri":"http://apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"","name":"web-shell","version":"0.0.0+58179ad6"});
           }
         
 //# sourceMappingURL=web-shell.map
