@@ -34,8 +34,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ApplicationAdapter = (_dec = Ember.inject.service, (_class = class ApplicationAdapter extends _jsonApi.default {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
@@ -158,8 +158,8 @@
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   class App extends Ember.Application {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _defineProperty(this, "modulePrefix", _environment.default.modulePrefix);
 
@@ -313,7 +313,8 @@
   _exports.appVersion = appVersion;
   _exports.default = void 0;
 
-  function appVersion(_, hash = {}) {
+  function appVersion(_) {
+    let hash = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const version = _environment.default.APP.version; // e.g. 1.0.0-alpha.1+4jds75hf
     // Allow use of 'hideSha' and 'hideVersion' For backwards compatibility
 
@@ -548,8 +549,8 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.initialize = initialize;
   _exports.default = void 0;
+  _exports.initialize = initialize;
 
   function initialize() {
     var application = arguments[1] || arguments[0];
@@ -613,7 +614,7 @@
   };
   _exports.default = _default;
 });
-;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory", "web-shell/lib/PhSigV4ClientUtils"], function (_exports, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils) {
+;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory", "web-shell/lib/PhSigV4ClientUtils", "web-shell/lib/PhUrlTemplate"], function (_exports, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -624,13 +625,17 @@
   /**
    *  alfredyang@pharbers.com 2021.12.31
    */
-  // import PhUrlTemplate from "./PhUrlTemplate"
-  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk, ct = "application/vnd.api+json", at = "application/vnd.api+json", method = "GET") {
+  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk) {
+    let ct = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "application/vnd.api+json";
+    let at = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : "application/vnd.api+json";
+    let method = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : "GET";
     const factory = _PhSigV4AWSClientFactory.default;
-    const utils = _PhSigV4ClientUtils.default; // const uriTemp = PhUrlTemplate
+    const utils = _PhSigV4ClientUtils.default;
+    const uriTemp = _PhUrlTemplate.default;
+    const invokeUrl = 'https://apiv2.pharbers.com';
+    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]; // const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1]
 
-    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1]; // const pathComponent = path.substring(endpoint.length)
-
+    const pathComponent = "";
     let queryURL = path;
     const queryParamIndex = queryURL.lastIndexOf("?");
 
@@ -649,23 +654,26 @@
       defaultAcceptType: at
     };
     const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig);
-    const headers = {
-      Accept: at,
-      "Content-type": ct
-    };
     let req = {
-      verb: method.toUpperCase(),
-      path: queryURL,
-      headers: utils.parseParametersToObject(headers, ["Accept"]),
-      queryParams: query,
-      body: body,
-      host: apiHost
+      verb: 'get'.toUpperCase(),
+      path: "/phtemplate/projects",
+      queryParams: {},
+      body: {}
     };
     const request = client.makeRequest(req);
-    return request.headers;
+    return request.headers; // let req = {
+    // 	verb: method.toUpperCase(),
+    // 	path: queryURL,
+    // 	headers: utils.parseParametersToObject(headers, ["Accept"]),
+    // 	queryParams: query,
+    // 	body: body,
+    // 	host: apiHost
+    // }
+    // const request = client.makeRequest(req)
+    // return request.headers
   }
 });
-;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils", "crypto-js"], function (_exports, _PhSigV4ClientUtils, CryptoJS) {
+;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -687,18 +695,20 @@
    * express or implied. See the License for the specific language governing
    * permissions and limitations under the License.
    */
-  // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
+  const CryptoJS = require("crypto-js"); // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
+
+
   let PhSigV4AWSClientFactory = {};
   _exports.PhSigV4AWSClientFactory = PhSigV4AWSClientFactory;
 
   PhSigV4AWSClientFactory.newClient = function (config) {
-    const AWS_SHA_256 = "AWS4-HMAC-SHA256";
-    const AWS4_REQUEST = "aws4_request";
-    const AWS4 = "AWS4";
-    const X_AMZ_DATE = "x-amz-date";
-    const X_AMZ_SECURITY_TOKEN = "x-amz-security-token";
-    const HOST = "host";
-    const AUTHORIZATION = "Authorization";
+    const AWS_SHA_256 = 'AWS4-HMAC-SHA256';
+    const AWS4_REQUEST = 'aws4_request';
+    const AWS4 = 'AWS4';
+    const X_AMZ_DATE = 'x-amz-date';
+    const X_AMZ_SECURITY_TOKEN = 'x-amz-security-token';
+    const HOST = 'host';
+    const AUTHORIZATION = 'Authorization';
 
     function hash(value) {
       return CryptoJS.SHA256(value);
@@ -715,7 +725,7 @@
     }
 
     function buildCanonicalRequest(method, path, queryParams, headers, payload) {
-      return method + "\n" + buildCanonicalUri(path) + "\n" + buildCanonicalQueryString(queryParams) + "\n" + buildCanonicalHeaders(headers) + "\n" + buildCanonicalSignedHeaders(headers) + "\n" + hexEncode(hash(payload));
+      return method + '\n' + buildCanonicalUri(path) + '\n' + buildCanonicalQueryString(queryParams) + '\n' + buildCanonicalHeaders(headers) + '\n' + buildCanonicalSignedHeaders(headers) + '\n' + hexEncode(hash(payload));
     }
 
     function hashCanonicalRequest(request) {
@@ -728,23 +738,22 @@
 
     function buildCanonicalQueryString(queryParams) {
       if (Object.keys(queryParams).length < 1) {
-        return "";
+        return '';
       }
 
       let sortedQueryParams = [];
 
       for (const property in queryParams) {
-        // eslint-disable-next-line no-prototype-builtins
         if (queryParams.hasOwnProperty(property)) {
           sortedQueryParams.push(property);
         }
       }
 
       sortedQueryParams.sort();
-      let canonicalQueryString = "";
+      let canonicalQueryString = '';
 
       for (let i = 0; i < sortedQueryParams.length; i++) {
-        canonicalQueryString += sortedQueryParams[i] + "=" + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + "&";
+        canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
       }
 
       return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
@@ -752,7 +761,7 @@
 
     function fixedEncodeURIComponent(str) {
       let newStr = encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-        return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
       });
       newStr = newStr.replace(/%26/g, "&");
       newStr = newStr.replace(/%3D/g, "=");
@@ -762,11 +771,10 @@
     }
 
     function buildCanonicalHeaders(headers) {
-      let canonicalHeaders = "";
+      let canonicalHeaders = '';
       let sortedKeys = [];
 
       for (const property in headers) {
-        // eslint-disable-next-line no-prototype-builtins
         if (headers.hasOwnProperty(property)) {
           sortedKeys.push(property);
         }
@@ -775,7 +783,7 @@
       sortedKeys.sort();
 
       for (let i = 0; i < sortedKeys.length; i++) {
-        canonicalHeaders += sortedKeys[i].toLowerCase() + ":" + headers[sortedKeys[i]] + "\n";
+        canonicalHeaders += sortedKeys[i].toLowerCase() + ':' + headers[sortedKeys[i]] + '\n';
       }
 
       return canonicalHeaders;
@@ -785,22 +793,21 @@
       let sortedKeys = [];
 
       for (const property in headers) {
-        // eslint-disable-next-line no-prototype-builtins
         if (headers.hasOwnProperty(property)) {
           sortedKeys.push(property.toLowerCase());
         }
       }
 
       sortedKeys.sort();
-      return sortedKeys.join(";");
+      return sortedKeys.join(';');
     }
 
     function buildStringToSign(datetime, credentialScope, hashedCanonicalRequest) {
-      return AWS_SHA_256 + "\n" + datetime + "\n" + credentialScope + "\n" + hashedCanonicalRequest;
+      return AWS_SHA_256 + '\n' + datetime + '\n' + credentialScope + '\n' + hashedCanonicalRequest;
     }
 
     function buildCredentialScope(datetime, region, service) {
-      return datetime.substr(0, 8) + "/" + region + "/" + service + "/" + AWS4_REQUEST;
+      return datetime.substr(0, 8) + '/' + region + '/' + service + '/' + AWS4_REQUEST;
     }
 
     function calculateSigningKey(secretKey, datetime, region, service) {
@@ -812,7 +819,7 @@
     }
 
     function buildAuthorizationHeader(accessKey, credentialScope, headers, signature) {
-      return AWS_SHA_256 + " Credential=" + accessKey + "/" + credentialScope + ", SignedHeaders=" + buildCanonicalSignedHeaders(headers) + ", Signature=" + signature;
+      return AWS_SHA_256 + ' Credential=' + accessKey + '/' + credentialScope + ', SignedHeaders=' + buildCanonicalSignedHeaders(headers) + ', Signature=' + signature;
     }
 
     let awsSigV4Client = {};
@@ -821,17 +828,17 @@
       return awsSigV4Client;
     }
 
-    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, "accessKey");
-    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, "secretKey");
+    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, 'accessKey');
+    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, 'secretKey');
     awsSigV4Client.sessionToken = config.sessionToken;
-    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, "serviceName");
-    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, "region");
-    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, "endpoint");
+    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, 'serviceName');
+    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, 'region');
+    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, 'endpoint');
 
     awsSigV4Client.makeRequest = function (request) {
-      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, "verb");
+      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, 'verb');
 
-      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, "path");
+      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, 'path');
 
       let queryParams = _PhSigV4ClientUtils.default.copy(request.queryParams);
 
@@ -846,34 +853,35 @@
       } //If the user has not specified an override for Content type the use default
 
 
-      if (headers["Content-Type"] === undefined) {
-        headers["Content-Type"] = config.defaultContentType;
+      if (headers['Content-Type'] === undefined) {
+        headers['Content-Type'] = config.defaultContentType;
       } //If the user has not specified an override for Accept type the use default
 
 
-      if (headers["Accept"] === undefined) {
-        headers["Accept"] = config.defaultAcceptType;
+      if (headers['Accept'] === undefined) {
+        headers['Accept'] = config.defaultAcceptType;
       }
 
       let body = _PhSigV4ClientUtils.default.copy(request.body);
 
-      if (body === undefined || verb === "GET") {
+      if (body === undefined || verb === 'GET') {
         // override request body and set to empty when signing GET requests
-        body = "";
+        body = '';
       } else {
         body = JSON.stringify(body);
       } //If there is no body remove the content-type header so it is not included in SigV4 calculation
 
 
-      if (body === "" || body === undefined || body === null) {
-        delete headers["Content-Type"];
+      if (body === '' || body === undefined || body === null) {
+        delete headers['Content-Type'];
       }
 
-      let datetime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z").replace(/[:\-]|\.\d{3}/g, "");
+      let datetime = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/[:\-]|\.\d{3}/g, '');
       headers[X_AMZ_DATE] = datetime; // const parser = document.createElement('a');
       // parser.href = awsSigV4Client.endpoint;
+      // headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn"
 
-      headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn";
+      headers[HOST] = "apiv2.pharbers.com";
       const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
       const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
       const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
@@ -882,7 +890,7 @@
       const signature = calculateSignature(signingKey, stringToSign);
       headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
 
-      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== "") {
+      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== '') {
         headers[X_AMZ_SECURITY_TOKEN] = awsSigV4Client.sessionToken;
       }
 
@@ -890,13 +898,13 @@
       let url = config.endpoint + path;
       const queryString = buildCanonicalQueryString(queryParams);
 
-      if (queryString !== "") {
-        url += "?" + queryString;
+      if (queryString !== '') {
+        url += '?' + queryString;
       } //Need to re-attach Content-Type if it is not specified at this point
 
 
-      if (headers["Content-Type"] === undefined) {
-        headers["Content-Type"] = config.defaultContentType;
+      if (headers['Content-Type'] === undefined) {
+        headers['Content-Type'] = config.defaultContentType;
       }
 
       return {
@@ -937,7 +945,7 @@
   let PhSigV4ClientUtils = {
     assertDefined: function (object, name) {
       if (object === undefined) {
-        throw name + " must be defined";
+        throw name + ' must be defined';
       } else {
         return object;
       }
@@ -990,7 +998,6 @@
       const copy = obj.constructor();
 
       for (const attr in obj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
       }
 
@@ -1001,18 +1008,13 @@
       const merged = baseObj.constructor();
 
       for (const attr in baseObj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr];
       }
 
-      if (null == additionalProps || "object" != typeof additionalProps) return baseObj; // eslint-disable-next-line no-undef
+      if (null == additionalProps || "object" != typeof additionalProps) return baseObj;
 
       for (attr in additionalProps) {
-        // eslint-disable-next-line no-prototype-builtins,no-undef
-        if (additionalProps.hasOwnProperty(attr)) {
-          // eslint-disable-next-line no-undef
-          merged[attr] = additionalProps[attr];
-        }
+        if (additionalProps.hasOwnProperty(attr)) merged[attr] = additionalProps[attr];
       }
 
       return merged;
@@ -1034,11 +1036,13 @@
    (c) marc.portier@gmail.com - 2011-2012
    Licensed under APLv2 (http://opensource.org/licenses/Apache-2.0)
    */
+  ;
+
   var PhUriTemplate = function () {
     // Below are the functions we originally used from jQuery.
     // The implementations below are often more naive then what is inside jquery, but they suffice for our needs.
     function isFunction(fn) {
-      return typeof fn == "function";
+      return typeof fn == 'function';
     }
 
     function isEmptyObject(obj) {
@@ -1102,13 +1106,13 @@
       if (result !== undefined) {
         return result;
       } else {
-        var keyparts = key.split(".");
+        var keyparts = key.split('.');
         var i = 0,
             keysplits = keyparts.length - 1;
 
         for (i = 0; i < keysplits; i++) {
-          var leadKey = keyparts.slice(0, keysplits - i).join(".");
-          var trailKey = keyparts.slice(-i - 1).join(".");
+          var leadKey = keyparts.slice(0, keysplits - i).join('.');
+          var trailKey = keyparts.slice(-i - 1).join('.');
           var leadContext = context[leadKey];
 
           if (leadContext !== undefined) {
@@ -1150,17 +1154,17 @@
       return this.txt;
     };
 
-    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,=']", "g");
+    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,;=']", "g");
 
     function encodeNormal(val) {
       return encodeURIComponent(val).replace(RESERVEDCHARS_RE, function (s) {
         return escape(s);
       });
-    } //var SELECTEDCHARS_RE = new RegExp("[]","g")
+    } //var SELECTEDCHARS_RE = new RegExp("[]","g");
 
 
     function encodeReserved(val) {
-      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} )
+      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} );
       return encodeURI(val); // no need for additional replace if selected-chars is empty
     }
 
@@ -1215,8 +1219,8 @@
       builder: addUnNamed
     };
     var pathParamConf = {
-      prefix: "",
-      joiner: "",
+      prefix: ";",
+      joiner: ";",
       encode: encodeNormal,
       builder: addLabeled
     };
@@ -1254,35 +1258,35 @@
       var conf;
 
       switch (ops) {
-        case "":
+        case '':
           conf = simpleConf;
           break;
 
-        case "+":
+        case '+':
           conf = reservedConf;
           break;
 
-        case "#":
+        case '#':
           conf = fragmentConf;
           break;
 
-        case ";":
+        case ';':
           conf = pathParamConf;
           break;
 
-        case "?":
+        case '?':
           conf = formParamConf;
           break;
 
-        case "&":
+        case '&':
           conf = formContinueConf;
           break;
 
-        case "/":
+        case '/':
           conf = pathHierarchyConf;
           break;
 
-        case ".":
+        case '.':
           conf = labelConf;
           break;
 
@@ -1373,10 +1377,9 @@
       var k;
 
       for (k in obj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty(k)) {
           if (obj[k] !== null && obj[k] !== undefined) {
-            buffer.append(joiner + k + ",").append(obj[k], encoder);
+            buffer.append(joiner + k + ',').append(obj[k], encoder);
             joiner = ",";
           }
         }
@@ -1412,7 +1415,6 @@
         var k;
 
         for (k in val) {
-          // eslint-disable-next-line no-prototype-builtins
           if (val.hasOwnProperty(k)) {
             adder(k, encoder(val[k]));
           }
@@ -1448,10 +1450,9 @@
     }
 
     VarSpec.build = function (name, expl, part, nums) {
-      // eslint-disable-next-line no-unused-vars
       var valueHandler, valueModifier;
 
-      if (expl) {
+      if (!!expl) {
         //interprete as boolean
         valueHandler = explodeValueHandler;
       } else {
@@ -1492,13 +1493,12 @@
 
     var LISTSEP = ","; // How each template should look like
 
-    var TEMPL_RE = /(\{([+#.?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
+    var TEMPL_RE = /(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
     // (as expected by the spec - see tests.html "reserved operators")
 
     var match2expression = function (m) {
-      // eslint-disable-next-line no-unused-vars
       var expr = m[0];
-      var ops = m[2] || "";
+      var ops = m[2] || '';
       var vars = m[3].split(LISTSEP);
       var i = 0,
           len = vars.length;
@@ -1568,8 +1568,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("number"), _dec8 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "projectName", _descriptor, this);
 
@@ -1651,8 +1651,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ProjectModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("date"), (_class = class ProjectModel extends _model.default {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "name", _descriptor, this);
 
@@ -1753,8 +1753,8 @@
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   class Router extends Ember.Router {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _defineProperty(this, "location", _environment.default.locationType);
 
@@ -1767,7 +1767,9 @@
   Router.map(async function () {
     let scriptOptions = {
       method: "GET",
-      headers: (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, "https://apiv2.pharbers.com/phtemplate/projects", {}, {}, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY)
+      headers: (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, "https://apiv2.pharbers.com/phtemplate/projects", {}, {}, "AKIAWPBDTVEAPOX3QT6U", //ENV.APP.AWS_ACCESS_KEY,
+      "Vy7bMX1KCVK9Vow00ovt7r4VmMzhVlpKiE1Cbsor" //ENV.APP.AWS_SECRET_KEY
+      )
     };
     const result = await fetch("https://apiv2.pharbers.com/phtemplate/projects", scriptOptions).then(res => res.json());
     console.log(result);
@@ -1795,8 +1797,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ApplicationRoute = (_dec = Ember.inject.service, (_class = class ApplicationRoute extends Ember.Route {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "intl", _descriptor, this);
     }
@@ -1849,8 +1851,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ShellRoute = (_dec = Ember.inject.service, (_class = class ShellRoute extends Ember.Route {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
     }
@@ -1970,8 +1972,8 @@
 
   // import { computed } from "@ember/object"
   let AjaxService = (_dec = Ember.inject.service("cookies"), (_class = class AjaxService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
     }
@@ -2054,8 +2056,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let BrowserEventsServiceService = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember.inject.service, _dec4 = Ember._action, (_class = class BrowserEventsServiceService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "param", _descriptor, this);
 
@@ -2155,8 +2157,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let DownloadFileService = (_dec = Ember.inject.service, (_class = class DownloadFileService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
     }
@@ -2267,8 +2269,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let NoticeServiceService = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, (_class = class NoticeServiceService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
@@ -2406,8 +2408,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, (_class = class OauthServiceService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
@@ -2709,7 +2711,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744","name":"web-shell","version":"0.0.0+aa15c24a"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744","name":"web-shell","version":"0.0.0+346295d5"});
           }
         
 //# sourceMappingURL=web-shell.map

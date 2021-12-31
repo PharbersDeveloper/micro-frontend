@@ -14,77 +14,67 @@
  */
 
 let PhSigV4ClientUtils = {
-	assertDefined: function (object, name) {
-		if (object === undefined) {
-			throw name + " must be defined"
-		} else {
-			return object
-		}
-	},
-	assertParametersDefined: function (params, keys, ignore) {
-		if (keys === undefined) {
-			return
-		}
-		if (keys.length > 0 && params === undefined) {
-			params = {}
-		}
-		for (let i = 0; i < keys.length; i++) {
-			if (!this.contains(ignore, keys[i])) {
-				this.assertDefined(params[keys[i]], keys[i])
-			}
-		}
-	},
-	parseParametersToObject: function (params, keys) {
-		if (params === undefined) {
-			return {}
-		}
-		let object = {}
-		for (let i = 0; i < keys.length; i++) {
-			object[keys[i]] = params[keys[i]]
-		}
-		return object
-	},
-	contains: function (a, obj) {
-		if (a === undefined) {
-			return false
-		}
-		let i = a.length
-		while (i--) {
-			if (a[i] === obj) {
-				return true
-			}
-		}
-		return false
-	},
-	copy: function (obj) {
-		if (null == obj || "object" != typeof obj) return obj
-		const copy = obj.constructor()
-		for (const attr in obj) {
-			// eslint-disable-next-line no-prototype-builtins
-			if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr]
-		}
-		return copy
-	},
-	mergeInto: function (baseObj, additionalProps) {
-		if (null == baseObj || "object" != typeof baseObj) return baseObj
-		const merged = baseObj.constructor()
-		for (const attr in baseObj) {
-			// eslint-disable-next-line no-prototype-builtins
-			if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr]
-		}
-		if (null == additionalProps || "object" != typeof additionalProps)
-			return baseObj
-		// eslint-disable-next-line no-undef
-		for (attr in additionalProps) {
-			// eslint-disable-next-line no-prototype-builtins,no-undef
-			if (additionalProps.hasOwnProperty(attr)) {
-				// eslint-disable-next-line no-undef
-				merged[attr] = additionalProps[attr]
-			}
-		}
-		return merged
-	}
-}
+    assertDefined: function (object, name) {
+        if (object === undefined) {
+            throw name + ' must be defined';
+        } else {
+            return object;
+        }
+    },
+    assertParametersDefined: function (params, keys, ignore) {
+        if (keys === undefined) {
+            return;
+        }
+        if (keys.length > 0 && params === undefined) {
+            params = {};
+        }
+        for (let i = 0; i < keys.length; i++) {
+            if(!this.contains(ignore, keys[i])) {
+                this.assertDefined(params[keys[i]], keys[i]);
+            }
+        }
+    },
+    parseParametersToObject: function (params, keys) {
+        if (params === undefined) {
+            return {};
+        }
+        let object = { };
+        for (let i = 0; i < keys.length; i++) {
+            object[keys[i]] = params[keys[i]];
+        }
+        return object;
+    },
+    contains: function(a, obj) {
+        if(a === undefined) { return false;}
+        let i = a.length;
+        while (i--) {
+            if (a[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    },
+    copy: function (obj) {
+        if (null == obj || "object" != typeof obj) return obj;
+        const copy = obj.constructor();
+        for (const attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+        }
+        return copy;
+    },
+    mergeInto: function (baseObj, additionalProps) {
+        if (null == baseObj || "object" != typeof baseObj) return baseObj;
+        const merged = baseObj.constructor();
+        for (const attr in baseObj) {
+            if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr];
+        }
+        if (null == additionalProps || "object" != typeof additionalProps) return baseObj;
+        for (attr in additionalProps) {
+            if (additionalProps.hasOwnProperty(attr)) merged[attr] = additionalProps[attr];
+        }
+        return merged;
+    }
+};
 
 // module.exports = { PhSigV4ClientUtils }
-export { PhSigV4ClientUtils as default }
+export { PhSigV4ClientUtils  as default}
