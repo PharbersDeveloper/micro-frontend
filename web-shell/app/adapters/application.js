@@ -3,19 +3,20 @@ import { pluralize } from "ember-inflector"
 import { inject as service } from "@ember/service"
 import ENV from "web-shell/config/environment"
 import JSONAPIAdapter from "@ember-data/adapter/json-api"
-import { ComputeIamHeader } from "../lib/PhIamClicent"
+import { ComputeJSONAPIIamHeader } from "../lib/PhIamClicent"
 
 export default class ApplicationAdapter extends JSONAPIAdapter {
 	@service cookies
 
 	host = ENV.APP.apiUri
-	queryParamsAWS = {}
 	authType = "oauth"
 
 	pathForType(type) {
 		if (type === "page") {
+			this.authType = "iam"
 			return "phtemplate/" + pluralize(dasherize(type))
 		} else {
+			this.authType = "oauth"
 			return "phplatform/" + pluralize(dasherize(type))
 		}
 	}
@@ -32,6 +33,22 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 			result[key] = cur
 		}
 		return result
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	buildURL(modelName, id, snapshot, requestType, query) {
+		const url = super.buildURL(...arguments)
+		if (this.authType === "iam") {
+			this.iamHeaders = ComputeJSONAPIIamHeader(
+				ENV.APP.apiHost,
+				url,
+				{},
+				query,
+				ENV.APP.AWS_ACCESS_KEY,
+				ENV.APP.AWS_SECRET_KEY
+			)
+		}
+		return url
 	}
 
 	attributesToDeal(data) {
@@ -81,10 +98,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 		}
 		return payload
 	}
-	// urlForFindHasMany(id, modelName, snapshot) {
-	// 	let baseUrl = this.buildURL(modelName, id);
-	// 	return `${baseUrl}/relationships`;
-	// },
+
 	get headers() {
 		if (this.authType === "oauth") {
 			if (ENV.environment === "development") {
@@ -100,9 +114,8 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 					Authorization: this.cookies.read("access_token")
 				}
 			}
+		} else if (this.authType === "iam") {
+			return this.iamHeaders
 		}
-		// else if (this.authType === "iam") {
-			// ComputeIamHeader(ENV.APP.apiHost, )
-		// }
 	}
 }

@@ -41,15 +41,15 @@
 
       _defineProperty(this, "host", _environment.default.APP.apiUri);
 
-      _defineProperty(this, "queryParamsAWS", {});
-
       _defineProperty(this, "authType", "oauth");
     }
 
     pathForType(type) {
       if (type === "page") {
+        this.authType = "iam";
         return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
       } else {
+        this.authType = "oauth";
         return "phplatform/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
       }
     }
@@ -70,6 +70,17 @@
       }
 
       return result;
+    } // eslint-disable-next-line no-unused-vars
+
+
+    buildURL(modelName, id, snapshot, requestType, query) {
+      const url = super.buildURL(...arguments);
+
+      if (this.authType === "iam") {
+        this.iamHeaders = (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, url, {}, query, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY);
+      }
+
+      return url;
     }
 
     attributesToDeal(data) {
@@ -106,11 +117,7 @@
         }
 
       return payload;
-    } // urlForFindHasMany(id, modelName, snapshot) {
-    // 	let baseUrl = this.buildURL(modelName, id);
-    // 	return `${baseUrl}/relationships`;
-    // },
-
+    }
 
     get headers() {
       if (this.authType === "oauth") {
@@ -127,10 +134,9 @@
             Authorization: this.cookies.read("access_token")
           };
         }
-      } // else if (this.authType === "iam") {
-      // ComputeIamHeader(ENV.APP.apiHost, )
-      // }
-
+      } else if (this.authType === "iam") {
+        return this.iamHeaders;
+      }
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
@@ -607,23 +613,31 @@
   };
   _exports.default = _default;
 });
-;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory", "web-shell/lib/PhSigV4ClientUtils", "web-shell/lib/PhUrlTemplate"], function (_exports, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate) {
+;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory", "web-shell/lib/PhSigV4ClientUtils"], function (_exports, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.ComputeIamHeader = ComputeIamHeader;
+  _exports.ComputeJSONAPIIamHeader = ComputeJSONAPIIamHeader;
 
   /**
    *  alfredyang@pharbers.com 2021.12.31
    */
-  function ComputeIamHeader(apiHost, invokeUrl, method, resource, body, queryParams, ak, sk, ct = "application/json", at = "application/json") {
+  // import PhUrlTemplate from "./PhUrlTemplate"
+  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk, ct = "application/vnd.api+json", at = "application/vnd.api+json", method = "GET") {
     const factory = _PhSigV4AWSClientFactory.default;
-    const utils = _PhSigV4ClientUtils.default;
-    const uriTemp = _PhUrlTemplate.default;
-    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
-    const pathComponent = invokeUrl.substring(endpoint.length);
+    const utils = _PhSigV4ClientUtils.default; // const uriTemp = PhUrlTemplate
+
+    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1]; // const pathComponent = path.substring(endpoint.length)
+
+    let queryURL = path;
+    const queryParamIndex = queryURL.lastIndexOf("?");
+
+    if (queryParamIndex > -1) {
+      queryURL = queryURL.substring(0, queryParamIndex);
+    }
+
     const sigV4ClientConfig = {
       accessKey: ak,
       secretKey: sk,
@@ -634,47 +648,17 @@
       defaultContentType: ct,
       defaultAcceptType: at
     };
-    const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig); // apiGateway.core.utils.assertParametersDefined(params, ['type', 'Accept'], ['body']);
-
-    const requestURL = this.requestURL.split("/"); // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
-    // const curType = requestURL[2]
-
-    const curType = requestURL[2];
-    let urlArr = ["type"]; // type id relationship
-
-    let awsPath = "/" + resource + "/{type}"; // 如果有id 和relationship 加上
-
-    let paramsArr = [];
-    const params = {
-      type: curType,
-      Accept: at
+    const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig);
+    const headers = {
+      Accept: at,
+      "Content-type": ct
     };
-    let queryParamsAWS = queryParams;
-
-    if (requestURL.length >= 4) {
-      urlArr.push("id");
-      params.id = requestURL[3];
-      awsPath += "/{id}";
-      queryParamsAWS = {}; // 需要修改
-    }
-
-    if (Object.keys(queryParamsAWS).length) {
-      let queryParamsArr = Object.keys(queryParamsAWS); // console.log('queryParamsAWS',queryParamsAWS[queryParamsArr[0]])
-
-      queryParamsArr.forEach(element => {
-        let encodeURIEle = encodeURI(element);
-        paramsArr.push(encodeURIEle);
-        params[encodeURIEle] = queryParamsAWS[element];
-      }); // Object.assign( params, queryParamsAWS )
-    }
-
     let req = {
       verb: method.toUpperCase(),
-      path: pathComponent + uriTemp.PhUriTemplate(awsPath).expand(utils.parseParametersToObject(params, urlArr)),
-      headers: utils.parseParametersToObject(params, ["Accept"]),
-      queryParams: utils.parseParametersToObject(params, paramsArr),
-      // queryParams: queryParamsAWS,
-      body: {},
+      path: queryURL,
+      headers: utils.parseParametersToObject(headers, ["Accept"]),
+      queryParams: query,
+      body: body,
       host: apiHost
     };
     const request = client.makeRequest(req);
@@ -1758,7 +1742,7 @@
     }
   });
 });
-;define("web-shell/router", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+;define("web-shell/router", ["exports", "web-shell/config/environment", "web-shell/lib/PhIamClicent"], function (_exports, _environment, _PhIamClicent) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1781,16 +1765,12 @@
 
   _exports.default = Router;
   Router.map(async function () {
-    // let scriptOptions = {
-    // 	method: "GET",
-    // 	headers: {
-    // 		Authorization: config.APP.debugToken,
-    // 		Accept: "application/vnd.api+json",
-    // 		"Content-Type": "application/vnd.api+json",
-    // 	}
-    // }
-    // const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json())
-    // console.log(result)
+    let scriptOptions = {
+      method: "GET",
+      headers: (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, "https://apiv2.pharbers.com/phtemplate/projects", {}, {}, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY)
+    };
+    const result = await fetch("https://apiv2.pharbers.com/phtemplate/projects", scriptOptions).then(res => res.json());
+    console.log(result);
     this.route("shell", {
       path: "/"
     });
@@ -2729,7 +2709,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a","name":"web-shell","version":"0.0.0+1a1b016b"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744","name":"web-shell","version":"0.0.0+aa15c24a"});
           }
         
 //# sourceMappingURL=web-shell.map
