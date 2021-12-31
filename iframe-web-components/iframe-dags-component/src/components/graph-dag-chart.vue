@@ -47,7 +47,7 @@
                         :src="run_from_script_gray" alt="">
                     <img v-if="!noticeService.retryButtonShow || !selectItem"
                         :src="run_to_script_gray" alt="">
-					<img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!noticeService.retryButtonShow || !selectItem"
                         :src="stop_icon" alt="">
                 </div>
                 <div class="sec_icon_row">
@@ -69,6 +69,7 @@
         <run-dag-dialog
             v-if="showRunJson"
             :textConf="textConf"
+            :projectId="projectId"
             @confirmeRunDag="confirmeRunDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
@@ -148,7 +149,7 @@ export default {
             run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
             stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
             selectItem: null,
-            showRunJson: true,
+            showRunJson: false,
             jobShowName: "",
             runId: "",
             representId: "",

@@ -6,7 +6,22 @@
                         <span>数据版本</span>
                 </div>
                 <div class="prompt">
-                    
+                    <div class="dlg-version-container">
+                        <div class="dlg-flex-version" >
+                            <div class="dlg-flex-version-item" v-for="(item, index) in selectVersionTags" :key="item+index">
+                                <span>{{item}}</span>
+                                <img :src="close_icon" class="close_icon" @click="removeSelectVersionTags(item)" alt="">
+                            </div>
+                        </div>
+                        <div class="dlg-version-spliter"></div>
+                        <input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row_input" />
+                        <img :src="search_row" class="search_row_icon" alt="">
+                        <div class="dlg-all-version-container">
+                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item)">
+                                <span>{{item}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="btn">
                     <button class="cancel" @click="close">取消</button>
@@ -17,31 +32,78 @@
     </div>
 </template>
 <script>
+import PhDagDatasource from './model/datasourcev2'
 export default {
     data() {
         return{
+            selColName: "version",
+            versionArr: [],
+            versionArrShow: [],
+            selectVersionTags: [],
+            searchRow: [],
+            search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+            close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg"
         }
     },
-    props: {},
+    props: {
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDagDatasource('1')
+            }
+        },
+        datasetName: String,
+        projectId: String
+    },
     computed: {},
-    mounted() {},
+    mounted() {
+        let that = this
+        this.datasource.name = this.datasetName
+        this.datasource.projectId = this.projectId
+        this.datasource.queryDlgDistinctCol(this, this.selColName).then((data) => {
+            //完整的显示行列表数据
+            that.versionArr = data
+            that.versionArrShow = data
+        })
+    },
     watch: {},
     methods: {
+        appendSelectVersionTags(data) {
+            //去重
+            let setArr = new Set(this.selectVersionTags).add(data)
+            this.selectVersionTags = Array.from(setArr)
+        },
+        // 搜索框
+        searchRowInput(data) {
+            this.versionArrShow = this.versionArr.filter(it => it.indexOf(data) > -1)
+        },
+        //取消选中version
+        removeSelectVersionTags(data) {
+            this.selectVersionTags = this.selectVersionTags.filter(function(item) {
+                return item !== data
+            });
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         save() {
             const event = new Event("event")
             event.args = {
-                callback: "runDag",
+                callback: "selectVersion",
                 element: this,
                 param: {
-                    name: "runDag",
-                    timeout: parseFloat(this.selectTimeout),
-                    jsonValue: this.jsonValue == "" ? {} : this.jsonValue
+                    datasetName: this.datasetName,
+                    versionArr: this.selectVersionTags
                 }
             }
-            this.$emit('confirmeRunDag', event)
+            this.$emit('selectVersionConfirm', event)
         },
         close() {
-            this.$emit('closeRunDagDialog');
+            this.$emit('closeSelVersionDialog');
         }
     }
 }
@@ -71,7 +133,7 @@ export default {
 }
 .dialog_area {
     width: 400px;
-    height: 360px;
+    height: 500px;
     border: 1px solid #ddd;
     background-color: #fff;
     position: absolute;
@@ -96,7 +158,69 @@ export default {
     }
 }
 .prompt {
-    
+    .dlg-version-container {
+        display: flex;
+        flex-direction: column;
+        margin: 24px;
+        .dlg-version-spliter {
+            height: 1px;
+            background-color: #2c3e50;
+            margin: 20px 0;
+        }
+        .search_row_input {
+            margin: 20px 0;
+            height: 40px;
+            line-height: 40px;
+            outline: 0;
+            padding-left: 30px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search_row_icon {
+            width: 20px;
+            position: relative;
+            top: -50px;
+            left: 10px;
+        }
+        .dlg-flex-version {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            max-height: 150px;
+            overflow: auto;
+            .dlg-flex-version-item {
+                font-size: 12px;
+                border: 1px solid #ccc;
+                display: flex;
+                align-items: center;
+                padding: 5px;
+                border-bottom: 1px solid #ccc;
+                margin-right: 5px;
+                .close_icon {
+                    width: 16px;
+                    height: 16px;
+                    margin-left: 5px;
+                    cursor: pointer;
+                }
+            }
+
+        }
+
+        .dlg-all-version-container {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            overflow: auto;
+            max-height:200px;
+            height: 200px;
+                .dlg-flex-version-item {
+                    cursor: pointer;
+                    padding: 5px;
+                    border-bottom: 1px solid #ccc;
+                }
+        }
+    }
+
 }
 .btn {
     position: absolute;
