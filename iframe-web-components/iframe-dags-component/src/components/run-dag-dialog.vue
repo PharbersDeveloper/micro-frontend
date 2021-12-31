@@ -17,17 +17,11 @@
                             </tr>
                             <tr v-for="(item, index) in datasetsConf" :key="index">
                                 <td class="input">{{item.name}}</td>
-                                <td class="version">
-                                    <span>111,222,333</span>
-                                    <img class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion"/>
+                                <td class="version" >
+                                    <span>{{item.version.toString()}}</span>
+                                    <img v-if="item.cat === 'uploaded'" class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion(item.name)"/>
                                 </td>
-                                <td class="cat">item.cat</td>
-                            </tr>
-
-                            <tr>
-                                <td class="input">{{datasetsConf}}</td>
-                                <td class="version">inpur_index</td>
-                                <td class="cat">inpur_index</td>
+                                <td class="cat">{{item.cat}}</td>
                             </tr>
                         </table>
                     </div>
@@ -56,7 +50,13 @@
               </div>
             </div>
         </div>
-        <select-version v-if="selectDataVersion"></select-version>
+        <select-version 
+            v-if="selectDataVersion"
+            @closeSelVersionDialog="closeSelVersionDialog"
+            @selectVersionConfirm="selectVersionConfirm"
+            :projectId="projectId"
+            :datasetName="dsName"
+        ></select-version>
     </div>
 </template>
 
@@ -72,11 +72,13 @@ export default {
             datasetsConf: "",
             scriptsConf: "",
             userConf: "",
-            selectDataVersion: false
+            selectDataVersion: false,
+            dsName: ""
         }
     },
     props: {
-        textConf: Object
+        textConf: Object,
+        projectId: String
     },
     components: {
         selectVersion
@@ -91,17 +93,22 @@ export default {
     watch: {
     },
     methods: {
-        addVersion() {
+        selectVersionConfirm(data) {
+            let version = data.args.param.versionArr
+            let name = data.args.param.datasetName
+            this.datasetsConf.forEach(item => {
+                if(item.name === name) {
+                    item.version = version
+                }
+            })
+            this.selectDataVersion = false
+        }, 
+        closeSelVersionDialog() {
+            this.selectDataVersion = false
+        },
+        addVersion(dsName) {
+            this.dsName = dsName
             this.selectDataVersion = true
-            let that = this
-            // if (this.versionCandidatesShow.length === 0) {
-            //     // that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
-            //     that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((provinces) => {
-            //         //完整的显示行列表数据
-            //         that.versionCandidatesShow = provinces
-            //         that.versionFilterPolicy.versionCandidates = provinces
-            //     })
-            // }
         },
         isJSON_test(str) {
             if (typeof str == 'string') {
@@ -127,7 +134,7 @@ export default {
         save() {
             this.jsonValue = {}
             if(this.steps === 2) {
-                this.jsonValue["datasets"] = JSON.parse(this.datasetsConf)
+                this.jsonValue["datasets"] = this.datasetsConf
                 this.jsonValue["scripts"] = JSON.parse(this.scriptsConf)
                 this.jsonValue["userConf"] = JSON.parse(this.userConf)
             }
@@ -218,9 +225,16 @@ export default {
         .version {
             max-width: 180px;
             width: 180px;
+            span {
+                max-width: 150px;
+                display: inline-block;
+                width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
             .add_version {
                 position: relative;
-                left: 70px;
+                cursor: pointer;
             }
         }
         .cat {

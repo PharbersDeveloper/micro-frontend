@@ -1,13 +1,13 @@
 
 export default class PhDagDatasource {
-    constructor(id, adapter) {
+    constructor(id, adapter, url) {
         this.id = id
         this.data = []
         this.jobArr = []
-        // this.projectId = "JfSmQBYUpyb4jsei"
-        this.projectId = "HfSZTr74gRcQOYoA"
+        this.name = "prod_clean_v2"
+        this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '44ce0026d07fbd8da8be60dc1f626d884eb73aed386edfa6fc6f3ce9cd831f37'
+        this.debugToken = '30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
@@ -40,6 +40,7 @@ export default class PhDagDatasource {
 
     //查询version
     buildDistinctColQuery(ele, col) {
+        const url = "https://apiv2.pharbers.com/phdadatasource"
         function buildDistinctColSql() {
             let sql_str = "SELECT DISTINCT " + col
 
@@ -52,7 +53,6 @@ export default class PhDagDatasource {
 
             return sql_str
         }
-        const url = this.url
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildDistinctColSql(),
@@ -68,6 +68,14 @@ export default class PhDagDatasource {
             body: JSON.stringify(body)
         }
         return fetch(url, options)
+    }
+
+    queryDlgDistinctCol(ele, row) {
+        return ele.datasource.buildDistinctColQuery(ele, row)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.map(x => x[row])
+            })
     }
 
     refreshData(ele) {

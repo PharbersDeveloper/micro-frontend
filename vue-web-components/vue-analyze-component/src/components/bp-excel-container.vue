@@ -722,6 +722,7 @@ export default {
                 align-items: center;
                 padding: 5px;
                 border-bottom: 1px solid #ccc;
+				margin-right: 5px;
                 .close_icon {
                     width: 16px;
                     height: 16px;
