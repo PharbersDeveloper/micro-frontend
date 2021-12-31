@@ -411,7 +411,7 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dcs.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                return this.allData.dcs.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
             return this.allData.dcs

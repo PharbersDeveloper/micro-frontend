@@ -146,7 +146,7 @@ export default {
             run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
             run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
             run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-			stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
+            stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
             selectItem: null,
             showRunJson: false,
             jobShowName: "",
@@ -323,7 +323,7 @@ export default {
          */
         async confirmeRunDag(data) {
             this.noticeService.progress = false //重置进度条
-			this.showProgress = false
+            this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
@@ -441,21 +441,21 @@ export default {
         // 点击运行整体
         on_click_runDag() {
             let roots = []
-			console.log(this.datasource.data)
-			this.datasource.data.forEach(item => {
-				if(item.attributes.runtime === "output_index") {
-					roots.push(item)
-				} else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
-					roots.push(item)
-				}
-			})
+            console.log(this.datasource.data)
+            this.datasource.data.forEach(item => {
+                if(item.attributes.runtime === "output_index") {
+                    roots.push(item)
+                } else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
+                    roots.push(item)
+                }
+            })
             let datasetsArr = []
             roots.forEach(item => {
                 datasetsArr.push({
                     "name": item.attributes.name,
                     "version": [],
                     "cat": item.status,
-					"prop": item.attributes.prop !== "" ? JSON.parse(item.attributes.prop) : ""
+                    "prop": item.attributes.prop !== "" ? JSON.parse(item.attributes.prop) : ""
                 })
             })
             this.textConf = {
