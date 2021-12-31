@@ -82,7 +82,7 @@ export default {
             }
         },
         fitMax() {
-            if(this.path == "" || this.version == "" || this.dsName == "") {
+            if(this.path == "" || this.version == "" || this.dsName == "" || this.format == "") {
                 alert("以上信息不能为空！")
                 return false
             }
@@ -181,6 +181,7 @@ export default {
             border: 1px solid #979797;
             width: 600px;
             background: #fff;
+			font-size: 14px;
         }
     }
 }

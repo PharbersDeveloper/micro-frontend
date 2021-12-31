@@ -33,10 +33,11 @@ export default class ExcelCleanComponent extends Component {
 	}
 
 	@action
-	async on_btn_click(data) {
+	async on_btn_click() {
 		let body = {
 			"bucket": "ph-platform",
-			"key": this.dataset.path.split("ph-platform/")[1]
+			"path": this.dataset.path.split("ph-platform/")[1],
+			"dataset_name": this.dataset.datasetName
 		}
 		let url = "https://api.pharbers.com/phoutputdown"
 		let scriptOptions = {
@@ -52,6 +53,8 @@ export default class ExcelCleanComponent extends Component {
 		if(result.status === 1) {
 			let downloadUrl = result.message
 			window.open(downloadUrl)
+		} else {
+			alert(result.message)
 		}
 	}
 

@@ -25,7 +25,7 @@ export default class DatasetLstComponent extends Component {
                 } else if(params.name === "analyze" && params.dataset.cat !== "input_index" && params.dataset.cat !== "output_index") {
                     uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
                 }else if(params.name === "analyze" && params.dataset.cat !== "uploaded" && params.dataset.cat !== "intermediate") {
-					console.log(params.dataset)
+                    console.log(params.dataset)
                     uri = `/dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}&format=${params.dataset.format}&cat=${params.dataset.cat}`
                 } else if(params.name === "datasets") {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
@@ -34,8 +34,8 @@ export default class DatasetLstComponent extends Component {
                 } else if (params.name == "flow") {
                     uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
                 }  else if(params.name == "airflow") {
-					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
-				}
+                    uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
+                }
                 this.router.transitionTo( uri )
                 break
             case "addTags":
@@ -134,11 +134,12 @@ export default class DatasetLstComponent extends Component {
                     "version": suit_max_Param.version,
                     "id": uuid,
                     "cat": suit_max_Param.maxcat,
-					"format": suit_max_Param.format,
-					"prop": {
-						path: suit_max_Param.path,
-						partitions: 1
-					}
+                    "format": suit_max_Param.format,
+                    "prop": {
+                        path: suit_max_Param.path,
+                        partitions: 1,
+                        format: suit_max_Param.format
+                    }
                 }
                 let suit_max_body = {
                     "table": "action",

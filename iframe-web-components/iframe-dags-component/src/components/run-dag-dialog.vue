@@ -6,8 +6,31 @@
                         <span>运行</span>
                 </div>
                 <div class="prompt" v-show="steps === 0">
-                    <span>数据集参数</span>
-                    <textarea name="runJson" id=""  cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea>
+                    <span>数据版本参数</span>
+                    <!-- <textarea name="runJson" id=""  cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea> -->
+                    <div class="data_version">
+                        <table>
+                            <tr>
+                                <th class="input">input数据集</th>
+                                <th class="version">数据版本</th>
+                                <th class="cat">Category</th>
+                            </tr>
+                            <tr v-for="(item, index) in datasetsConf" :key="index">
+                                <td class="input">{{item.name}}</td>
+                                <td class="version">
+                                    <span>111,222,333</span>
+                                    <img class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion"/>
+                                </td>
+                                <td class="cat">item.cat</td>
+                            </tr>
+
+                            <tr>
+                                <td class="input">{{datasetsConf}}</td>
+                                <td class="version">inpur_index</td>
+                                <td class="cat">inpur_index</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div class="prompt" v-show="steps === 1">
                     <span>低代码脚本参数</span>
@@ -54,13 +77,16 @@ export default {
     computed: {},
     mounted() {
         this.jsonValue = JSON.stringify(this.textConf)
-        this.datasetsConf = JSON.stringify(this.textConf.datasets)
+        this.datasetsConf = this.textConf.datasets
         this.scriptsConf = JSON.stringify(this.textConf.scripts)
         this.userConf = JSON.stringify(this.textConf.userConf)
     },
     watch: {
     },
     methods: {
+        addVersion() {
+            debugger
+        },
         isJSON_test(str) {
             if (typeof str == 'string') {
                 try {
@@ -163,6 +189,47 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     box-sizing: border-box;
+    .data_version {
+        width: 520px;
+        height: 350px;
+        border: 1px solid #ccc;
+        overflow: auto;
+        padding: 24px 30px;
+        .input {
+            max-width: 160px;
+            width: 160px;
+        }
+        .version {
+            max-width: 180px;
+            width: 180px;
+            .add_version {
+                position: relative;
+                left: 70px;
+            }
+        }
+        .cat {
+            max-width: 120px;
+            width: 120px;
+        }
+        table {
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+            color: #000000;
+        }
+        th {
+            height: 24px;
+            font-weight: normal;
+        }
+        td {
+            border: 1px solid #ccc;
+            height: 24px;
+            padding: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
     span {
         font-size: 14px;
         color: #000000;
@@ -175,7 +242,7 @@ export default {
         height: 350px;
         background: #FFFFFF;
         border: 1px solid #ccc;
-		resize: none;
+        resize: none;
     }
 }
 .btn {
