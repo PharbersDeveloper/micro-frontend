@@ -3,68 +3,35 @@ import { pluralize } from "ember-inflector"
 import { inject as service } from "@ember/service"
 import ENV from "web-shell/config/environment"
 import JSONAPIAdapter from "@ember-data/adapter/json-api"
+import { ComputeIamHeader } from "../lib/PhIamClicent"
 
 export default class ApplicationAdapter extends JSONAPIAdapter {
 	@service cookies
 
-	curMethod = "GET"
+	host = ENV.APP.apiUri
+	queryParamsAWS = {}
+	authType = "oauth"
 
 	pathForType(type) {
-		return pluralize(dasherize(type))
+		if (type === "page") {
+			return "phtemplate/" + pluralize(dasherize(type))
+		} else {
+			return "phplatform/" + pluralize(dasherize(type))
+		}
 	}
 
 	sortQueryParams(params) {
-		this.queryParamsAWS = params
-	}
-
-	buildURL(modelName, id, snapshot, requestType, query) {
-		const requestMethod = {
-			query: "GET",
-			findRecord: "GET",
-			createRecord: "POST",
-			updateRecord: "PATCH",
-			deleteRecord: "DELETE",
-			push: "POST"
-		}
-		let url = super.buildURL(...arguments)
-		let curType = url.split("/").splice(1, 1) // ["activities" , ... ]
-		let curPath = curType.join("/")
-		let newUrl = `/phplatform/${curPath}` // newUrl: "/v0/entry/assets"
-
-		this.curMethod = requestMethod[requestType]
-		this.modelName = modelName
-		this.requestURL = curType.join("/")
-
-		if (query && Object.keys(query).length) {
-			let queryString = ""
-			const queryParamsArr = Object.keys(query)
-
-			this.queryParamsArr = queryParamsArr // 处理是因为object没有顺序，参数位置不同，可能导致token错误
-			for (let index = 0; index < queryParamsArr.length; index++) {
-				const element = queryParamsArr[index]
-				let queryValue = query[element]
-
-				// 处理ids的数组转换为字符串
-				if (element === "ids[]" && query[element] instanceof Array) {
-					const ids = query[element]
-					const idsArr = ids.sort()
-					let idsStr = ""
-
-					idsArr.forEach((ele) => {
-						this.idsStr += ele + "&ids[]="
-					})
-					idsStr = idsStr.substr(0, idsStr.length - 7)
-					queryValue = idsStr
-				}
-				queryString += `${element}=${queryValue}&`
+		let result = {}
+		const keys = Object.keys(params).sort()
+		for (let index = 0; index < keys.length; ++index) {
+			const key = keys[index]
+			let cur = params[key]
+			if (cur instanceof Array) {
+				cur = cur.sort()
 			}
-			queryString = queryString.substr(0, queryString.length - 1)
-			newUrl += "?" + encodeURI(queryString)
-		} else {
-			this.queryParamsAWS = {}
+			result[key] = cur
 		}
-		this.newUrl = newUrl
-		return ENV.APP.apiUri + newUrl
+		return result
 	}
 
 	attributesToDeal(data) {
@@ -119,18 +86,23 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 	// 	return `${baseUrl}/relationships`;
 	// },
 	get headers() {
-		if (ENV.environment === "development") {
-			return {
-				Accept: "application/vnd.api+json",
-				"Content-Type": "application/vnd.api+json",
-				Authorization: ENV.APP.debugToken
-			}
-		} else {
-			return {
-				Accept: "application/vnd.api+json",
-				"Content-Type": "application/vnd.api+json",
-				Authorization: this.cookies.read("access_token")
+		if (this.authType === "oauth") {
+			if (ENV.environment === "development") {
+				return {
+					Accept: "application/vnd.api+json",
+					"Content-Type": "application/vnd.api+json",
+					Authorization: ENV.APP.debugToken
+				}
+			} else {
+				return {
+					Accept: "application/vnd.api+json",
+					"Content-Type": "application/vnd.api+json",
+					Authorization: this.cookies.read("access_token")
+				}
 			}
 		}
+		// else if (this.authType === "iam") {
+			// ComputeIamHeader(ENV.APP.apiHost, )
+		// }
 	}
 }

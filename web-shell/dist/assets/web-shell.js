@@ -15,7 +15,7 @@
     }
   });
 });
-;define("web-shell/adapters/application", ["exports", "ember-inflector", "web-shell/config/environment", "@ember-data/adapter/json-api"], function (_exports, _emberInflector, _environment, _jsonApi) {
+;define("web-shell/adapters/application", ["exports", "ember-inflector", "web-shell/config/environment", "@ember-data/adapter/json-api", "web-shell/lib/PhIamClicent"], function (_exports, _emberInflector, _environment, _jsonApi, _PhIamClicent) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -39,67 +39,37 @@
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
-      _defineProperty(this, "curMethod", "GET");
+      _defineProperty(this, "host", _environment.default.APP.apiUri);
+
+      _defineProperty(this, "queryParamsAWS", {});
+
+      _defineProperty(this, "authType", "oauth");
     }
 
     pathForType(type) {
-      return (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      if (type === "page") {
+        return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      } else {
+        return "phplatform/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      }
     }
 
     sortQueryParams(params) {
-      this.queryParamsAWS = params;
-    }
+      let result = {};
+      const keys = Object.keys(params).sort();
 
-    buildURL(modelName, id, snapshot, requestType, query) {
-      const requestMethod = {
-        query: "GET",
-        findRecord: "GET",
-        createRecord: "POST",
-        updateRecord: "PATCH",
-        deleteRecord: "DELETE",
-        push: "POST"
-      };
-      let url = super.buildURL(...arguments);
-      let curType = url.split("/").splice(1, 1); // ["activities" , ... ]
+      for (let index = 0; index < keys.length; ++index) {
+        const key = keys[index];
+        let cur = params[key];
 
-      let curPath = curType.join("/");
-      let newUrl = `/phplatform/${curPath}`; // newUrl: "/v0/entry/assets"
-
-      this.curMethod = requestMethod[requestType];
-      this.modelName = modelName;
-      this.requestURL = curType.join("/");
-
-      if (query && Object.keys(query).length) {
-        let queryString = "";
-        const queryParamsArr = Object.keys(query);
-        this.queryParamsArr = queryParamsArr; // 处理是因为object没有顺序，参数位置不同，可能导致token错误
-
-        for (let index = 0; index < queryParamsArr.length; index++) {
-          const element = queryParamsArr[index];
-          let queryValue = query[element]; // 处理ids的数组转换为字符串
-
-          if (element === "ids[]" && query[element] instanceof Array) {
-            const ids = query[element];
-            const idsArr = ids.sort();
-            let idsStr = "";
-            idsArr.forEach(ele => {
-              this.idsStr += ele + "&ids[]=";
-            });
-            idsStr = idsStr.substr(0, idsStr.length - 7);
-            queryValue = idsStr;
-          }
-
-          queryString += `${element}=${queryValue}&`;
+        if (cur instanceof Array) {
+          cur = cur.sort();
         }
 
-        queryString = queryString.substr(0, queryString.length - 1);
-        newUrl += "?" + encodeURI(queryString);
-      } else {
-        this.queryParamsAWS = {};
+        result[key] = cur;
       }
 
-      this.newUrl = newUrl;
-      return _environment.default.APP.apiUri + newUrl;
+      return result;
     }
 
     attributesToDeal(data) {
@@ -143,19 +113,24 @@
 
 
     get headers() {
-      if (_environment.default.environment === "development") {
-        return {
-          Accept: "application/vnd.api+json",
-          "Content-Type": "application/vnd.api+json",
-          Authorization: _environment.default.APP.debugToken
-        };
-      } else {
-        return {
-          Accept: "application/vnd.api+json",
-          "Content-Type": "application/vnd.api+json",
-          Authorization: this.cookies.read("access_token")
-        };
-      }
+      if (this.authType === "oauth") {
+        if (_environment.default.environment === "development") {
+          return {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: _environment.default.APP.debugToken
+          };
+        } else {
+          return {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: this.cookies.read("access_token")
+          };
+        }
+      } // else if (this.authType === "iam") {
+      // ComputeIamHeader(ENV.APP.apiHost, )
+      // }
+
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
@@ -631,6 +606,80 @@
 
   };
   _exports.default = _default;
+});
+;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory", "web-shell/lib/PhSigV4ClientUtils", "web-shell/lib/PhUrlTemplate"], function (_exports, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.ComputeIamHeader = ComputeIamHeader;
+
+  /**
+   *  alfredyang@pharbers.com 2021.12.31
+   */
+  function ComputeIamHeader(apiHost, invokeUrl, method, resource, body, queryParams, ak, sk, ct = "application/json", at = "application/json") {
+    const factory = _PhSigV4AWSClientFactory.default;
+    const utils = _PhSigV4ClientUtils.default;
+    const uriTemp = _PhUrlTemplate.default;
+    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
+    const pathComponent = invokeUrl.substring(endpoint.length);
+    const sigV4ClientConfig = {
+      accessKey: ak,
+      secretKey: sk,
+      sessionToken: "",
+      serviceName: "execute-api",
+      region: "cn-northwest-1",
+      endpoint: endpoint,
+      defaultContentType: ct,
+      defaultAcceptType: at
+    };
+    const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig); // apiGateway.core.utils.assertParametersDefined(params, ['type', 'Accept'], ['body']);
+
+    const requestURL = this.requestURL.split("/"); // ["", "v0", "accounts", "5d725825bd33a54c8213a5ae"]
+    // const curType = requestURL[2]
+
+    const curType = requestURL[2];
+    let urlArr = ["type"]; // type id relationship
+
+    let awsPath = "/" + resource + "/{type}"; // 如果有id 和relationship 加上
+
+    let paramsArr = [];
+    const params = {
+      type: curType,
+      Accept: at
+    };
+    let queryParamsAWS = queryParams;
+
+    if (requestURL.length >= 4) {
+      urlArr.push("id");
+      params.id = requestURL[3];
+      awsPath += "/{id}";
+      queryParamsAWS = {}; // 需要修改
+    }
+
+    if (Object.keys(queryParamsAWS).length) {
+      let queryParamsArr = Object.keys(queryParamsAWS); // console.log('queryParamsAWS',queryParamsAWS[queryParamsArr[0]])
+
+      queryParamsArr.forEach(element => {
+        let encodeURIEle = encodeURI(element);
+        paramsArr.push(encodeURIEle);
+        params[encodeURIEle] = queryParamsAWS[element];
+      }); // Object.assign( params, queryParamsAWS )
+    }
+
+    let req = {
+      verb: method.toUpperCase(),
+      path: pathComponent + uriTemp.PhUriTemplate(awsPath).expand(utils.parseParametersToObject(params, urlArr)),
+      headers: utils.parseParametersToObject(params, ["Accept"]),
+      queryParams: utils.parseParametersToObject(params, paramsArr),
+      // queryParams: queryParamsAWS,
+      body: {},
+      host: apiHost
+    };
+    const request = client.makeRequest(req);
+    return request.headers;
+  }
 });
 ;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils", "crypto-js"], function (_exports, _PhSigV4ClientUtils, CryptoJS) {
   "use strict";
@@ -1540,13 +1589,13 @@
 
       _initializerDefineProperty(this, "projectName", _descriptor, this);
 
-      _initializerDefineProperty(this, "name", _descriptor2, this);
+      _initializerDefineProperty(this, "version", _descriptor2, this);
 
-      _initializerDefineProperty(this, "route", _descriptor3, this);
+      _initializerDefineProperty(this, "name", _descriptor3, this);
 
-      _initializerDefineProperty(this, "uri", _descriptor4, this);
+      _initializerDefineProperty(this, "route", _descriptor4, this);
 
-      _initializerDefineProperty(this, "menu", _descriptor5, this);
+      _initializerDefineProperty(this, "uri", _descriptor5, this);
 
       _initializerDefineProperty(this, "cat", _descriptor6, this);
 
@@ -1561,22 +1610,22 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "menu", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -1732,16 +1781,16 @@
 
   _exports.default = Router;
   Router.map(async function () {
-    let scriptOptions = {
-      method: "GET",
-      headers: {
-        Authorization: _environment.default.APP.debugToken,
-        Accept: "application/vnd.api+json",
-        "Content-Type": "application/vnd.api+json"
-      }
-    };
-    const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json());
-    console.log(result);
+    // let scriptOptions = {
+    // 	method: "GET",
+    // 	headers: {
+    // 		Authorization: config.APP.debugToken,
+    // 		Accept: "application/vnd.api+json",
+    // 		"Content-Type": "application/vnd.api+json",
+    // 	}
+    // }
+    // const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json())
+    // console.log(result)
     this.route("shell", {
       path: "/"
     });
@@ -1827,7 +1876,10 @@
     }
 
     model() {
-      return this.store.findAll("project");
+      // return this.store.findAll("project")
+      return this.store.query("project", {
+        "ids[]": ["jFlL0WS1Qwy5buKh"]
+      });
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
@@ -2677,7 +2729,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a","name":"web-shell","version":"0.0.0+c9448cf4"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a","name":"web-shell","version":"0.0.0+1a1b016b"});
           }
         
 //# sourceMappingURL=web-shell.map
