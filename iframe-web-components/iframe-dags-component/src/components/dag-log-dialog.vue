@@ -113,7 +113,7 @@ export default {
             result = await fetch(logsUrl, logsOptions).then(res => res.json())
             if (result.status === 1) {
                 clearInterval(clearInt);
-                that.logsValue = result.message
+                that.logsValue = result.message.map((item, idx, array) => window.atob(item)).join("<br/>")
                 that.loading = false
                 console.log(that.logsValue)
             }
