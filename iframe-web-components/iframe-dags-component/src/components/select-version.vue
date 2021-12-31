@@ -9,7 +9,7 @@
                     <div class="dlg-version-container">
                         <div class="dlg-flex-version" >
                             <div class="dlg-flex-version-item" v-for="(item, index) in selectVersionTags" :key="item+index">
-                                <span>{{item}}</span>
+                                <span :title="item">{{item}}</span>
                                 <img :src="close_icon" class="close_icon" @click="removeSelectVersionTags(item)" alt="">
                             </div>
                         </div>
@@ -53,11 +53,13 @@ export default {
             }
         },
         datasetName: String,
-        projectId: String
+        projectId: String,
+        dsVersion: Array
     },
     computed: {},
     mounted() {
         let that = this
+        this.selectVersionTags = this.dsVersion
         this.datasource.name = this.datasetName
         this.datasource.projectId = this.projectId
         this.datasource.queryDlgDistinctCol(this, this.selColName).then((data) => {

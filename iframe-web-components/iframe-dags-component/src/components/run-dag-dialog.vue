@@ -16,10 +16,10 @@
                                 <th class="cat">Category</th>
                             </tr>
                             <tr v-for="(item, index) in datasetsConf" :key="index">
-                                <td class="input">{{item.name}}</td>
+                                <td class="input" :title="item.name">{{item.name}}</td>
                                 <td class="version" >
-                                    <span>{{item.version.toString()}}</span>
-                                    <img v-if="item.cat === 'uploaded'" class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion(item.name)"/>
+                                    <span :title="item.version.toString()">{{item.version.toString()}}</span>
+                                    <img v-if="item.cat === 'uploaded'" class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion(item.name, item.version)"/>
                                 </td>
                                 <td class="cat">{{item.cat}}</td>
                             </tr>
@@ -55,6 +55,7 @@
             @closeSelVersionDialog="closeSelVersionDialog"
             @selectVersionConfirm="selectVersionConfirm"
             :projectId="projectId"
+            :dsVersion="dsVersion"
             :datasetName="dsName"
         ></select-version>
     </div>
@@ -73,7 +74,8 @@ export default {
             scriptsConf: "",
             userConf: "",
             selectDataVersion: false,
-            dsName: ""
+            dsName: "",
+            dsVersion: []
         }
     },
     props: {
@@ -106,8 +108,9 @@ export default {
         closeSelVersionDialog() {
             this.selectDataVersion = false
         },
-        addVersion(dsName) {
+        addVersion(dsName, dsVersion) {
             this.dsName = dsName
+            this.dsVersion = dsVersion
             this.selectDataVersion = true
         },
         isJSON_test(str) {
