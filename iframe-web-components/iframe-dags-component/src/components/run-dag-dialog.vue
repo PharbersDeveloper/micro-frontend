@@ -56,10 +56,13 @@
               </div>
             </div>
         </div>
+        <select-version v-if="selectDataVersion"></select-version>
     </div>
 </template>
 
 <script>
+import selectVersion from "./select-version.vue"
+
 export default {
     data() {
         return{
@@ -68,11 +71,15 @@ export default {
             steps: 0,
             datasetsConf: "",
             scriptsConf: "",
-            userConf: ""
+            userConf: "",
+            selectDataVersion: false
         }
     },
     props: {
         textConf: Object
+    },
+    components: {
+        selectVersion
     },
     computed: {},
     mounted() {
@@ -85,7 +92,16 @@ export default {
     },
     methods: {
         addVersion() {
-            debugger
+            this.selectDataVersion = true
+            let that = this
+            // if (this.versionCandidatesShow.length === 0) {
+            //     // that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
+            //     that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((provinces) => {
+            //         //完整的显示行列表数据
+            //         that.versionCandidatesShow = provinces
+            //         that.versionFilterPolicy.versionCandidates = provinces
+            //     })
+            // }
         },
         isJSON_test(str) {
             if (typeof str == 'string') {

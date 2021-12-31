@@ -38,6 +38,38 @@ export default class PhDagDatasource {
         return fetch(url, options)
     }
 
+    //查询version
+    buildDistinctColQuery(ele, col) {
+        function buildDistinctColSql() {
+            let sql_str = "SELECT DISTINCT " + col
+
+            if (ele.datasource.projectId.length === 0)
+                sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+            else
+                sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+
+            sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+
+            return sql_str
+        }
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            "query": buildDistinctColSql(),
+            "schema": [col]
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
     refreshData(ele) {
         let that = this
         ele.datasource.buildQuery(ele)
