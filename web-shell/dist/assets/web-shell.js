@@ -614,7 +614,7 @@
   };
   _exports.default = _default;
 });
-;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory", "web-shell/lib/PhSigV4ClientUtils", "web-shell/lib/PhUrlTemplate"], function (_exports, _PhSigV4AWSClientFactory, _PhSigV4ClientUtils, _PhUrlTemplate) {
+;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory"], function (_exports, _PhSigV4AWSClientFactory) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -630,13 +630,9 @@
     let at = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : "application/vnd.api+json";
     let method = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : "GET";
     const factory = _PhSigV4AWSClientFactory.default;
-    const utils = _PhSigV4ClientUtils.default;
-    const uriTemp = _PhUrlTemplate.default;
-    const invokeUrl = 'https://apiv2.pharbers.com';
-    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]; // const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1]
-
-    const pathComponent = "";
-    let queryURL = path;
+    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1];
+    const pathComponent = path.substring(endpoint.length);
+    let queryURL = pathComponent;
     const queryParamIndex = queryURL.lastIndexOf("?");
 
     if (queryParamIndex > -1) {
@@ -649,28 +645,19 @@
       sessionToken: "",
       serviceName: "execute-api",
       region: "cn-northwest-1",
-      endpoint: endpoint,
+      endpoint: apiHost,
       defaultContentType: ct,
       defaultAcceptType: at
     };
     const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig);
     let req = {
-      verb: 'get'.toUpperCase(),
-      path: "/phtemplate/projects",
+      verb: method.toUpperCase(),
+      path: queryURL,
       queryParams: {},
       body: {}
     };
     const request = client.makeRequest(req);
-    return request.headers; // let req = {
-    // 	verb: method.toUpperCase(),
-    // 	path: queryURL,
-    // 	headers: utils.parseParametersToObject(headers, ["Accept"]),
-    // 	queryParams: query,
-    // 	body: body,
-    // 	host: apiHost
-    // }
-    // const request = client.makeRequest(req)
-    // return request.headers
+    return request.headers;
   }
 });
 ;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
@@ -1767,11 +1754,9 @@
   Router.map(async function () {
     let scriptOptions = {
       method: "GET",
-      headers: (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, "https://apiv2.pharbers.com/phtemplate/projects", {}, {}, "AKIAWPBDTVEAPOX3QT6U", //ENV.APP.AWS_ACCESS_KEY,
-      "Vy7bMX1KCVK9Vow00ovt7r4VmMzhVlpKiE1Cbsor" //ENV.APP.AWS_SECRET_KEY
-      )
+      headers: (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, "https://apiv2.pharbers.com/phtemplate/pages", {}, {}, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY)
     };
-    const result = await fetch("https://apiv2.pharbers.com/phtemplate/projects", scriptOptions).then(res => res.json());
+    const result = await fetch("https://apiv2.pharbers.com/phtemplate/pages", scriptOptions).then(res => res.json());
     console.log(result);
     this.route("shell", {
       path: "/"
@@ -2711,7 +2696,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744","name":"web-shell","version":"0.0.0+346295d5"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744","name":"web-shell","version":"0.0.0+771f91c0"});
           }
         
 //# sourceMappingURL=web-shell.map

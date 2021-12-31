@@ -13,14 +13,17 @@ Router.map(async function () {
 		method: "GET",
 		headers: ComputeJSONAPIIamHeader(
 			ENV.APP.apiHost,
-			"https://apiv2.pharbers.com/phtemplate/projects",
+			"https://apiv2.pharbers.com/phtemplate/pages",
 			{},
 			{},
-			"AKIAWPBDTVEAPOX3QT6U", //ENV.APP.AWS_ACCESS_KEY,
-			"Vy7bMX1KCVK9Vow00ovt7r4VmMzhVlpKiE1Cbsor" //ENV.APP.AWS_SECRET_KEY
+			ENV.APP.AWS_ACCESS_KEY,
+			ENV.APP.AWS_SECRET_KEY
 		)
 	}
-	const result = await fetch("https://apiv2.pharbers.com/phtemplate/projects", scriptOptions).then(res => res.json())
+	const result = await fetch(
+		"https://apiv2.pharbers.com/phtemplate/pages",
+		scriptOptions
+	).then((res) => res.json())
 	console.log(result)
 	this.route("shell", { path: "/" })
 })
