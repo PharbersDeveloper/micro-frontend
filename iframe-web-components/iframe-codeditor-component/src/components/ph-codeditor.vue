@@ -172,6 +172,7 @@ export default {
     .ace-editor {
         position: absolute;
         inset: 7px 0px 0px;
+		min-height: 100%;
         // height: 100% !important;
     }
 
