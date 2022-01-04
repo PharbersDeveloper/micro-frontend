@@ -22,9 +22,11 @@ export default class PhExcelPreviewSchema {
 
     totalWidth() {
         let idx_arr = []
-        for (var idx = 0; idx < this.cols.length; ++idx) {
-            const tmp = this.cols[idx]
-            idx_arr.push(this.schema.indexOf(tmp))
+        if(this.cols) {
+            for (var idx = 0; idx < this.cols.length; ++idx) {
+                const tmp = this.cols[idx]
+                idx_arr.push(this.schema.indexOf(tmp))
+            }
         }
 
         let width_arr = []
