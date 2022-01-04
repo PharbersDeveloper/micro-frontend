@@ -1,21 +1,6 @@
 <template>
     <div class="ec-container">
         <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
-        <!-- <div class="header">
-            <span class="project_name" @click="linkToPage('project')">
-                {{allData.projectName}}
-            </span>
-            <div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
-                <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
-            </div>
-        </div>
-        <nav class="expang_popup" v-show="expandPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
-            <ul>
-                <li @click="linkToPage('flow')">数据流程</li>
-                <li @click="linkToPage('datasets')">数据集</li>
-                <li @click="linkToPage('scripts')">脚本</li>
-            </ul> -->
-        <!-- </nav> -->
         <div class="dataset_header">
             <img :src="dataset_icon" class="script_icon" alt="">
             {{allData.datasetName}}
@@ -354,7 +339,6 @@ export default {
             this.dialogVersionFilterVisible = false
             const condi = this.versionFilterPolicy.selectVersionTags
             if(condi.length > 0) {
-                // let condi_str = "`version` in ["
                 let condi_str = "`" + this.tmpFilterRow +"` in ["
                 for (var idx in condi) {
                     if (idx > 0) {
@@ -365,10 +349,11 @@ export default {
                     }
                 }
                 condi_str = condi_str + "]"
-                // this.datasource.pushFilterCondition("version", condi_str)
                 this.datasource.pushFilterCondition(this.tmpFilterRow, condi_str)
-                this.$refs.excel.dataRefresh++
+            } else {
+                this.datasource.filter = {}
             }
+            this.$refs.excel.dataRefresh++
         },
         //选择列确认
         on_clickCollectionConfirm() {
@@ -519,58 +504,6 @@ export default {
                 border-bottom: 1px solid #ccc;
             }
         }
-        // .header {
-        //     // width: 100vw;
-        //     height: 40px;
-        //     background: #222;
-        //     color: #fff;
-        //     display: flex;
-        //     align-items: center;
-        //     font-size: 20px;
-        //     padding: 0 20px;
-        //     .expand_bg {
-        //         width: 40px;
-        //         height: 40px;
-        //         background: #28a9dd;
-        //         margin-left: 10px;
-        //         display: flex;
-        //         justify-content: center;
-        //         align-items: center;
-        //         .expand {
-        //             width: 20px;
-        //             height: 20px;
-        //         }
-        //     }
-        // }
-        // .expang_popup {
-        //     background-color: #333333;
-        //     box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
-        //     width: 200px;
-        //     height: auto;
-        //     position: absolute;
-        //     left: 62px;
-        //     top: 40px;
-        //     // transition: height 150ms ease-out;
-        //     // display: none;
-        //     z-index: 3001;
-        //     font-size: 14px;
-        //     font-weight: 400px;
-        //     ul, li {
-        //         list-style: none;
-        //         padding-left: 0;
-        //         margin: 0 auto;
-        //     }
-        //     li {
-        //         color: #ffffff;
-        //         width: 200px;
-        //         padding: 10px;
-        //         border-bottom: 1px solid #444;
-        //         cursor: pointer;
-        //     }
-        //     li:hover {
-        //         background: #444;
-        //     }
-        // }
         .dataset_header {
             height: 48px;
             background: #ffffff;
@@ -634,7 +567,6 @@ export default {
                     margin-top: 7px;
                 }
             }
-
             .btn-groups {
                 display: flex;
                 flex-direction: row;
@@ -669,9 +601,6 @@ export default {
                 }
             }
         }
-
-
-
         .search-container {
             display: flex;
             flex-direction: row;
@@ -704,7 +633,6 @@ export default {
             }
         }
     }
-
     .dlg-version-container {
         display: flex;
         flex-direction: column;
@@ -732,7 +660,6 @@ export default {
             }
 
         }
-
         .dlg-all-version-container {
             display: flex;
             flex-direction: column;
@@ -746,7 +673,6 @@ export default {
             }
         }
     }
-
     .dlg-collection-list {
         display: flex;
         flex-direction: column;
@@ -757,7 +683,6 @@ export default {
             padding: 5px
         }
     }
-
     .dlg-version-spliter {
         height: 1px;
         background-color: #2c3e50;
