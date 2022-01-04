@@ -2,12 +2,13 @@
     <div class="container_nav">
         <div class="header">
             <div class="left">
+				<img @click="linkToPage('projects')" class="home" :src="home" alt="">
                 <span class="project_name" @click="linkToPage('project')" :title="allData.projectName">
                 {{allData.projectName}}
                 </span>
                 <div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
-                    <nav class="expang_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+                    <nav class="expand_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
                         <ul>
                             <li @click="linkToPage('flow')">数据流程</li>
                             <li @click="linkToPage('datasets')">数据集</li>
@@ -15,7 +16,6 @@
                         </ul>
                     </nav>
                 </div>
-                <img @click="linkToPage('projects')" class="home icon" :src="home" alt="">
                 <img @click="linkToPage('airflow')" class="airflow icon" :src="airflow" alt="">
             </div>
             <div class="right">
@@ -89,6 +89,9 @@ export default {
 };
 </script>
 <style lang="scss">
+	* {
+		box-sizing: border-box;
+	}
     .container_nav {
         box-sizing: border-box;
     }
@@ -108,6 +111,12 @@ export default {
                 margin-left: 20px;
                 cursor: pointer;
             }
+			.home {
+				width: 28px;
+                height: 28px;
+                cursor: pointer;
+				margin-right: 10px;
+			}
         }
         .project_name {
             cursor: pointer;
@@ -131,13 +140,13 @@ export default {
             }
         }
     }
-    .expang_popup {
+    .expand_popup {
         background-color: #333333;
         box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
         width: 200px;
         height: auto;
         position: absolute;
-        left: 120px;
+        left: 166px;
         top: 40px;
         // transition: height 150ms ease-out;
         // display: none;
