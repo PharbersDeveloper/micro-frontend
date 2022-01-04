@@ -157,6 +157,7 @@
                     <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
+        </div>
         <!-- 清除数据集数据 -->
         <clear-dataset-dialog
             v-if="cleardialogshow"
@@ -188,18 +189,17 @@
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <!-- max1.0入口 -->
-         <fit-max-input-dialog
+        <fit-max-input-dialog
             v-if="clickMax"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-input-dialog>
         <!-- max1.0出口 -->
-         <fit-max-output-dialog
+        <fit-max-output-dialog
             v-if="clickMaxOutput"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-output-dialog>
-    </div>
     </div>
 </template>
 
@@ -326,10 +326,19 @@ export default {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
-            console.log(data)
-            this.$emit('event', data)
-            this.clickMax = false
-            this.clickMaxOutput = false
+            data.args.param.datasetArray = this.allData.dss
+            let creatDS = true
+            this.allData.dss.forEach(item => {
+                if(item.name === data.args.param.dsName) {
+                    creatDS = false
+                    alert("数据集已存在！")
+                }
+            })
+            if(creatDS) {
+                this.$emit('event', data)
+                this.clickMax = false
+                this.clickMaxOutput = false
+            }
         },
         // 关闭max1.0弹框
         closeDialog() {

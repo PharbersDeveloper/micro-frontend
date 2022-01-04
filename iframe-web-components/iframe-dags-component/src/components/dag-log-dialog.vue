@@ -189,7 +189,7 @@ export default {
             height: calc(100vh - 100px);
             overflow: auto;
             .log-content {
-                // height: 400px;
+                height: 70%;
                 overflow: auto;
                 font-family: SFProText-Thin;
                 font-size: 14px;

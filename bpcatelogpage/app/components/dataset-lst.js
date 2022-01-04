@@ -77,6 +77,8 @@ export default class DatasetLstComponent extends Component {
                 })
             break
             case "deleteDatasets":
+				this.loadingService.loading.style.display = 'flex'
+                this.loadingService.loading.style['z-index'] = 2
                 let delTagParam = e.detail[0].args.param;
                 let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
                 let datasetArrayDel = delTagParam.datasetArray //发送请求的参数
@@ -121,8 +123,6 @@ export default class DatasetLstComponent extends Component {
                 if(result.data) {
                     _that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
                 }
-                alert("删除数据集成功！")
-                window.location.reload()
             break
             case "fitMax":
                 let uuid = this.guid()
@@ -249,11 +249,12 @@ export default class DatasetLstComponent extends Component {
         this.loadingService.loading.style.display = 'none'
     }
 
+	// 删除数据集回调
     @action delNoticeCallback(response, ele) {
         let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
         if(upload_status == "remove_DS_succeed") {
-            //跳转下一页面
-            this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
+			alert("删除数据集成功！")
+			window.location.reload()
         } else if(upload_status == "remove_DS_failed") {
             alert("删除数据集失败，请重新操作！")
         }
