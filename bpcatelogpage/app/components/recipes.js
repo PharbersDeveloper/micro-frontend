@@ -31,16 +31,31 @@ export default class RecipesComponent extends Component {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
-				} else if (params.name === "codeditor" && params.recipt !== "prepare") {
+				} else if (params.name === "codeditor" && params.recipt.runtime !== "prepare") {
 					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
-				} else if (params.name === "codeditor" && params.recipt === "prepare") {
-					uri = '/prepare-set?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
+				} else if (params.name === "codeditor" && params.recipt.runtime === "prepare") {
+					let recipt = params.recipt
+					let scripts = {
+						"name": "createScripts",
+						"jobName": recipt.jobName,
+						"jobId": recipt.jobId,
+						"targetJobId": recipt.targetJobId,
+						"inputs": JSON.parse(recipt.inputs),
+						"outputs": JSON.parse(recipt.outputs),
+						"jobVersion": recipt.jobVersion,
+						"runtime": "prepare",
+						"path": "",
+						"format": "请选择",
+						"projectName": params.projectName,
+						"projectId": params.projectId
+					}
+					uri = '/prepare-set?projectName=' + params.projectName + '&projectId=' + params.projectId + '&operatorParameters=' + escape(recipt.operatorParameters) + '&message=' + encodeURI(JSON.stringify(scripts))
 				} else if (params.name == "flow") {
 					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}  else if(params.name == "airflow") {
 					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
-                this.router.transitionTo( uri )
+                this.router.transitionTo( encodeURI(uri) )
 				break
 			case "createScripts":
 				let scriptsParams = e.detail[0].args.param;
@@ -54,8 +69,6 @@ export default class RecipesComponent extends Component {
 				this.projectId = scriptsParams.projectId
 				this.projectName = scriptsParams.projectName
 				if(scriptsParams.runtime === "prepare") {
-					// message["path"] = scriptsParams.path
-					// message["format"] = scriptsParams.format
 					let preUrl = `/prepare-set?projectName=${scriptsParams.projectName}&projectId=${scriptsParams.projectId}&message=${encodeURI(JSON.stringify(scriptsParams))}`
 					this.router.transitionTo(preUrl)
 				} else {

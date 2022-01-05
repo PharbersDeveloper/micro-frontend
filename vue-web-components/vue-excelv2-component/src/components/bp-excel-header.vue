@@ -101,6 +101,9 @@ export default {
             font-size: 13px;
             color: #333333;
             margin-left: 8px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
         }
         .schema-type {
             color: #666666;

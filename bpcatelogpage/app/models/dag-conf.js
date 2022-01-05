@@ -17,4 +17,5 @@ export default class DagConfModel extends Model {
 	@attr("string") runtime
 	@attr("string") targetJobId
 	@attr("string") timeout
+	@attr("string") operatorParameters
 }

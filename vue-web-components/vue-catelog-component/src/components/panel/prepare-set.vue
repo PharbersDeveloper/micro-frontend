@@ -61,6 +61,16 @@ export default {
             }
         }
     },
+    watch: {
+        "allData.operatorParameters": function() {
+            console.log(this.allData.operatorParameters)
+            if(this.allData.operatorParameters && this.allData.operatorParameters.length > 0) {
+                this.rowParams = JSON.stringify(this.allData.operatorParameters[1])
+                this.colParams = JSON.stringify(this.allData.operatorParameters[3])
+                this.changeParams = this.allData.operatorParameters[5]
+            }
+        }
+    },
     methods: {
         isJSON_test(str) {
             if (typeof str == 'string') {

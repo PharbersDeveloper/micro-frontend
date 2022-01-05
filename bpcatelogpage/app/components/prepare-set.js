@@ -39,11 +39,11 @@ export default class PrepareSetComponent extends Component {
 				const uuid = this.guid()
 				this.loadingService.loading.style.display = 'flex'
         		this.loadingService.loading.style['z-index'] = 2
-				//需要新建dataset
 				this.projectId = scriptsParams.projectId
 				this.projectName = scriptsParams.projectName
 				let operatorParameters = []
 				operatorParameters.push("filter", preParam.rowParams, "select", preParam.colParams, "operation_null", preParam.changeParams)
+				//需要新建dataset
 				if(scriptsParams.outputs[0].id == "") {
 					scriptsParams.outputs[0].id = uuid
 					let body = {
@@ -89,7 +89,8 @@ export default class PrepareSetComponent extends Component {
 					"prop": {
 						path: scriptsParams.path,
 						partitions: 1
-					}
+					},
+					//用于配置页面数据回显
 				}
 				let scriptBody = {
 					"table": "action",
