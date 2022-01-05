@@ -131,6 +131,7 @@ export default class RecipesComponent extends Component {
 							"jobDesc": "created",
 							"jobCat": "intermediate",
 							"comments": "",
+							"date": new Date().getTime(),
 							"message": JSON.stringify(message)
 						}
 					}

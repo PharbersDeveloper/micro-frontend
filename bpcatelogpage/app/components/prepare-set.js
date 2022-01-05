@@ -102,6 +102,7 @@ export default class PrepareSetComponent extends Component {
 						"jobDesc": "created",
 						"jobCat": "intermediate",
 						"comments": "",
+						"date": new Date().getTime(),
 						"message": JSON.stringify(message)
 					}
 				}

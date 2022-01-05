@@ -218,6 +218,7 @@ export default class DataSetComponent extends Component {
                 "jobDesc": "created",
                 "jobCat": "upload",
                 "comments": "",
+				"date": new Date().getTime(),
                 "message": JSON.stringify(messages)
             }
         }

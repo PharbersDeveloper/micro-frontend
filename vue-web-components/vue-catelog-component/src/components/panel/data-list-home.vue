@@ -138,24 +138,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="info">
-                    <div class="info_cell">
-                        <div class="icon">
-                            <img :src="num_icon" alt="">
-                        </div>
-                        <div class="cell_info">
-                            <p class="top_info">
-                                <span class="you">You</span>
-                                 created project
-                                 <span class="time">17:04</span>
-                            </p>
-                            <span class="file">
-                                <img :src="script_icon" alt="">
-                                <p> nnn</p>
-                            </span>
-                        </div>
-                    </div>
-                </div>
             </div>
             </div>
            
@@ -428,6 +410,7 @@ export default {
                 border: 1px solid #dddddd;
                 padding-left: 10px;
                 padding-top: 10px;
+				margin-bottom: 10px;
                 .icon {
                     width: 20px;
                     height: 20px;

@@ -112,7 +112,7 @@ export default class ExcelHandlerComponent extends Component {
                 "jobCat": "project_file_to_DS",
                 "jobDesc": "creating",
                 "message": JSON.stringify(param),
-                "date": Date.now(),
+                "date": new Date().getTime(),
                 "owner": this.cookies.read('account_id'),
                 "showName": decodeURI(this.cookies.read('user_name_show'))
             }

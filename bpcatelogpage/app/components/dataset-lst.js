@@ -105,7 +105,7 @@ export default class DatasetLstComponent extends Component {
                         "jobCat": "remove_DS",
                         "jobDesc": "running",
                         "message": JSON.stringify(msgArr),
-                        "date": new Date().getTime(),
+						"date": new Date().getTime(),
                         "owner": this.cookies.read( "account_id" ),
                         "showName": decodeURI(this.cookies.read('user_name_show'))
                     }
