@@ -3,9 +3,10 @@
         <div class="header">
              <div class="title">
                 <img :src="python_icon" class="title_icon" alt="">
-                <span class="name">{{datasource.outputs[0] ? datasource.outputs[0].name : "test"}}</span>
+                <span class="name">computed_{{datasource.outputs[0] ? datasource.outputs[0].name : "test"}}</span>
             </div>
             <div class="coding-title">
+				<button class="button btn-fir">运行</button>
                 <button class="button btn-fir">操作</button>
                 <button class="button" @click="saveCode">保存</button>
             </div>
@@ -49,10 +50,9 @@
                 <div class="coding">
                     <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="calc(100vh - 180px)" language="python"/>
                 </div>
-                <div class="coding-footer">
-                    <!-- <button class="button">Validate</button> -->
+                <!-- <div class="coding-footer">
                     <button class="button">Run</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
