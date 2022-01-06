@@ -197,12 +197,13 @@ export default class DataSetComponent extends Component {
         let project_files = this.postUrl(push_type, project_files_body)
         //push actions
         let messages = {
-			file: file,
-			message: message,
-			property: property,
-			projectId: projectId,
-            projectName: projectName,
-			cat: cat,
+			"actionName": property.dataset,
+			"file": file,
+			"message": message,
+			"property": property,
+			"projectId": projectId,
+            "projectName": projectName,
+			"cat": cat,
 			"prop": {
 				path: "",
 				partitions: 1

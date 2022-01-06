@@ -88,6 +88,7 @@ export default class DatasetLstComponent extends Component {
                 selectedDatasetsDel.forEach(async targetId => {
                     let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
                     msgArr.push({
+						"actionName": targetDataset.name,
                         "version": "",
                         "dsid": targetDataset.id,
                         "destination": targetDataset.name,
@@ -129,6 +130,7 @@ export default class DatasetLstComponent extends Component {
                 let suit_max_Param = e.detail[0].args.param;
                 const suit_max_url = "https://apiv2.pharbers.com/phdydatasource/put_item"
                 let message = {
+					"actionName": suit_max_Param.dsName,
                     "keys": suit_max_Param.path,
                     "name": suit_max_Param.dsName,
                     "version": suit_max_Param.version,
@@ -184,6 +186,7 @@ export default class DatasetLstComponent extends Component {
                     const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
                     const accessToken = this.cookies.read( "access_token" )
                     let msg = {
+						"actionName": targetDataset.name,
                         "version": "",
                         "dsid": targetDataset.id,
                         "destination": targetDataset.name,

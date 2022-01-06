@@ -372,6 +372,7 @@ export default {
             if(data.args.param.datasetRelaResult.length > 0) {
                 data.args.param.datasetRelaResult.forEach(async item => {
                     msgArr.push({
+                        "actionName": item.jobShowName,
                         "targetId": item.targetId,
                         "jobName": item.jobName,
                         "flowVersion": "developer"

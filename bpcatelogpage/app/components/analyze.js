@@ -50,6 +50,7 @@ export default class AnalyzeComponent extends Component {
 						"jobCat": "transform_schema",
 						"jobDesc": "running",
 						"message": JSON.stringify({
+							"actionName": cstParam.datasetName,
 							"dsid": cstParam.datasetId,
 							"destination": cstParam.datasetName,
 							"schema": [{

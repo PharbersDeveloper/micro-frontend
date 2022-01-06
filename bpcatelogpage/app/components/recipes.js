@@ -99,6 +99,7 @@ export default class RecipesComponent extends Component {
 						await fetch(url, options)
 					}
 					let message = {
+						"actionName": scriptsParams.jobName,
 						"dagName": scriptsParams.projectName,
 						"flowVersion": "developer",
 						"jobName": scriptsParams.jobName,
@@ -196,6 +197,7 @@ export default class RecipesComponent extends Component {
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
 					msgArr.push({
+						"actionName": targetDataset.jobShowName,
 						"targetId": targetDataset.jobId, 
 						"jobName":targetDataset.jobName,
 						"flowVersion": "developer"
@@ -246,6 +248,7 @@ export default class RecipesComponent extends Component {
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 					const accessToken = this.cookies.read( "access_token" )
 					let msg = {
+						"actionName": targetDataset.name,
 						"version": "",
 						"dsid": targetDataset.id,
 						"destination": targetDataset.name,

@@ -78,11 +78,14 @@ export default class PrepareSetComponent extends Component {
 						"flowVersion": "developer",
 						"jobCat": "prepare_edit",
 						"jobDisplayName": scriptsParams.jobDisplayName,
-						"projectName": scriptsParams.projectName
+						"projectName": scriptsParams.projectName,
+						"jobName": scriptsParams.jobName,
+						"operatorParameters": operatorParameters,
 					}
 				} else {
 					// 创建
 					message = {
+						"actionName": scriptsParams.jobName,
 						"dagName": scriptsParams.projectName,
 						"flowVersion": "developer",
 						"jobName": scriptsParams.jobName,

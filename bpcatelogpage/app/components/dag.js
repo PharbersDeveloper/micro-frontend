@@ -43,6 +43,7 @@ export default class DagComponent extends Component {
     @action
     registerListener(element) {
         element.allData = this.calAllData
+		console.log(element.allData)
 		element.allData.projectName = element.allData.projectDetail.name
 		element.allData.projectId = element.allData.projectDetail.id
         element.addEventListener("event", this.listener)

@@ -48,9 +48,9 @@ export default {
         return {
             prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
             error_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/error.svg",
-            rowParams: "",
-            colParams: "",
-            changeParams: ""
+            rowParams: '[{"key": ["=", "value"]}]',
+            colParams: '["col1", "col2"]',
+            changeParams: "value"
         }
     },
     props: {

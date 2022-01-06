@@ -97,6 +97,7 @@ export default class ExcelHandlerComponent extends Component {
 		param.opname = this.cookies.read( "account_id" )
 		param.opgroup = this.cookies.read( "company_id" )
 		param.cat = "uploaded"
+		param.actionName = param.destination // actions列表展示的名称
 		param.prop = {
 			path: "",
 			partitions: 1
