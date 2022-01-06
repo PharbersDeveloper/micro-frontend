@@ -36,18 +36,18 @@ export default class RecipesComponent extends Component {
 				} else if (params.name === "codeditor" && params.recipt.runtime === "prepare") {
 					let recipt = params.recipt
 					let scripts = {
-						"name": "createScripts",
+						"name": "editScripts",
 						"jobName": recipt.jobName,
 						"jobId": recipt.jobId,
 						"targetJobId": recipt.targetJobId,
 						"inputs": JSON.parse(recipt.inputs),
 						"outputs": JSON.parse(recipt.outputs),
 						"jobVersion": recipt.jobVersion,
-						"runtime": "prepare",
-						"path": "",
-						"format": "请选择",
 						"projectName": params.projectName,
-						"projectId": params.projectId
+						"jobDisplayName": recipt.jobDisplayName,
+						"projectName": params.projectName,
+						"projectId": params.projectId,
+						"jobCat": "prepare_edit"
 					}
 					uri = '/prepare-set?projectName=' + params.projectName + '&projectId=' + params.projectId + '&operatorParameters=' + escape(recipt.operatorParameters) + '&message=' + encodeURI(JSON.stringify(scripts))
 				} else if (params.name == "flow") {
@@ -131,7 +131,7 @@ export default class RecipesComponent extends Component {
 							"jobDesc": "created",
 							"jobCat": "intermediate",
 							"comments": "",
-							"date": new Date().getTime(),
+							"date": String(new Date().getTime()),
 							"message": JSON.stringify(message)
 						}
 					}
@@ -210,7 +210,7 @@ export default class RecipesComponent extends Component {
 						"jobCat": "remove_Job",
 						"jobDesc": "running",
 						"message": JSON.stringify(msgArr),
-						"date": new Date().getTime(),
+						"date": String(new Date().getTime()),
 						"owner": this.cookies.read( "account_id" ),
 						"showName": decodeURI(this.cookies.read('user_name_show'))
 					}
@@ -261,7 +261,7 @@ export default class RecipesComponent extends Component {
 							"jobCat": "clear_DS_data",
 							"jobDesc": "running",
 							"message": JSON.stringify(msg),
-							"date": new Date().getTime(),
+							"date": String(new Date().getTime()),
 							"owner": this.cookies.read( "account_id" ),
 							"showName": decodeURI(this.cookies.read('user_name_show'))
 						}

@@ -363,7 +363,7 @@ export default {
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
-        //删除数据集
+        //删除脚本
         async deleteDataset(data) {
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
@@ -387,7 +387,7 @@ export default {
                         "jobCat": "remove_Job",
                         "jobDesc": "running",
                         "message": JSON.stringify(msgArr),
-                        "date": new Date().getTime(),
+                        "date": String(new Date().getTime()),
                         "owner": this.getCookie("account_id"),
                         "showName": decodeURI(this.getCookie('user_name_show'))
                     }

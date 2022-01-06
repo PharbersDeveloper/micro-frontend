@@ -70,27 +70,40 @@ export default class PrepareSetComponent extends Component {
 					}
 					await fetch(url, options)
 				}
-				let message = {
-					"dagName": scriptsParams.projectName,
-					"flowVersion": "developer",
-					"jobName": scriptsParams.jobName,
-					"jobId": "",
-					"inputs": scriptsParams.inputs,
-					"outputs": scriptsParams.outputs,
-					"jobVersion": scriptsParams.jobVersion,
-					"projectId": scriptsParams.projectId,
-					"timeout": "1000",
-					"runtime": "prepare",
-					"owner": decodeURI(this.cookies.read('user_name_show')),
-					"targetJobId": "",
-					"projectName": scriptsParams.projectName,
-					"labels": [],
-					"operatorParameters": operatorParameters,
-					"prop": {
-						path: scriptsParams.path,
-						partitions: 1
-					},
+				let message = {}
+				if(scriptsParams.jobCat && scriptsParams.jobCat === "prepare_edit") {
 					//用于配置页面数据回显
+					message = {
+						"projectId": scriptsParams.projectId,
+						"flowVersion": "developer",
+						"jobCat": "prepare_edit",
+						"jobDisplayName": scriptsParams.jobDisplayName,
+						"projectName": scriptsParams.projectName
+					}
+				} else {
+					// 创建
+					message = {
+						"dagName": scriptsParams.projectName,
+						"flowVersion": "developer",
+						"jobName": scriptsParams.jobName,
+						"jobId": "",
+						"inputs": scriptsParams.inputs,
+						"outputs": scriptsParams.outputs,
+						"jobVersion": scriptsParams.jobVersion,
+						"projectId": scriptsParams.projectId,
+						"timeout": "1000",
+						"runtime": "prepare",
+						"owner": decodeURI(this.cookies.read('user_name_show')),
+						"targetJobId": "",
+						"projectName": scriptsParams.projectName,
+						"labels": [],
+						"operatorParameters": operatorParameters,
+						"prop": {
+							path: scriptsParams.path,
+							partitions: 1
+						}
+					}
+
 				}
 				let scriptBody = {
 					"table": "action",
@@ -102,7 +115,7 @@ export default class PrepareSetComponent extends Component {
 						"jobDesc": "created",
 						"jobCat": "intermediate",
 						"comments": "",
-						"date": new Date().getTime(),
+						"date": String(new Date().getTime()),
 						"message": JSON.stringify(message)
 					}
 				}

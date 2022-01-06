@@ -13,123 +13,123 @@
                         <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
                     </div>
                 </div>
-				<div class="items">
-					<div class="item">
-						<div class="flow">
-							<p class="flow_word">主流程</p>
-							<div class="flow_item"> 
-							<div class="flow_item_cell" @click="linkToPage('datasets')">
-									<div>
-										<img :src="dataset_icon" alt="">
-									</div>
-									<div>
-										<p class="number">{{allData.numShow.dataset}}</p>
-										<p class="dataset">数据集</p>
-									</div>
-							</div>
-								<div class="flow_item_cell" @click="linkToPage('script')">
-									<div>
-										<img :src="recipes_icon" alt="">
-									</div>
-									<div>
-										<p class="number">{{allData.numShow.flow}}</p>
-										<p class="recipes">脚本</p>
-									</div>
-							</div>
-								<div class="flow_item_cell">
-									<div>
-										<img :src="models_icon" alt="">
-									</div>
-									<div>
-										<p class="number">{{allData.numShow.model}}</p>
-										<p class="models">模型</p>
-									</div>
-							</div>
-							</div>
-						</div>
-						<div class="flow flow_two">
-							<p class="flow_word">实验室</p>
-							<div class="flow_item"> 
-							<div class="flow_item_cell" >
-									<a href="#">
-										<div>
-											<img :src="notebook_icon" alt="">
-										</div>
-										<div>
-											<p class="number">{{allData.numShow.notebook}}</p>
-											<p class="notebooks">编译器</p>
-										</div>
-									</a>
-							</div>
-								<div class="flow_item_cell">
-									<a href="#">
-										<div>
-											<img :src="analyses_icon" alt="">
-										</div>
-										<div>
-											<p class="number">{{allData.numShow.analysis}}</p>
-											<p class="models">分析</p>
-										</div>
-									</a>
-							</div>
-							</div>
-						</div>
-						<div class="flow flow_three">
-							<p class="flow_word">指示面板</p>
-							<div class="flow_item"> 
-							<div class="flow_item_cell">
-									<a href="#">
-										<div>
-											<img :src="dashboard_icon" alt="">
-										</div>
-										<div>
-											<p class="number">{{allData.numShow.dashBoard}}</p>
-											<p class="dashboard">指示面板</p>
-										</div>
-									</a>
-							</div>
-							</div>
-						</div>
-						<div class="flow flow_four">
-							<p class="flow_word">维基</p>
-							<div class="flow_item"> 
-							<div class="flow_item_cell">
-									<a href="#">
-										<div>
-											<img :src="article_icon" alt="">
-										</div>
-										<div>
-											<p class="number">{{allData.numShow.wiki}}</p>
-											<p class="article">详解</p>
-										</div>
-									</a>
-							</div>
-							</div>
-						</div>
-					</div>
-					<div class="go_flow">
-						<button @click="linkToPage('flow')">数据流程</button>
-					</div>
-				</div>
+                <div class="items">
+                    <div class="item">
+                        <div class="flow">
+                            <p class="flow_word">主流程</p>
+                            <div class="flow_item"> 
+                            <div class="flow_item_cell" @click="linkToPage('datasets')">
+                                    <div>
+                                        <img :src="dataset_icon" alt="">
+                                    </div>
+                                    <div>
+                                        <p class="number">{{allData.numShow.dataset}}</p>
+                                        <p class="dataset">数据集</p>
+                                    </div>
+                            </div>
+                                <div class="flow_item_cell" @click="linkToPage('script')">
+                                    <div>
+                                        <img :src="recipes_icon" alt="">
+                                    </div>
+                                    <div>
+                                        <p class="number">{{allData.numShow.flow}}</p>
+                                        <p class="recipes">脚本</p>
+                                    </div>
+                            </div>
+                                <div class="flow_item_cell">
+                                    <div>
+                                        <img :src="models_icon" alt="">
+                                    </div>
+                                    <div>
+                                        <p class="number">{{allData.numShow.model}}</p>
+                                        <p class="models">模型</p>
+                                    </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="flow flow_two">
+                            <p class="flow_word">实验室</p>
+                            <div class="flow_item"> 
+                            <div class="flow_item_cell" >
+                                    <a href="#">
+                                        <div>
+                                            <img :src="notebook_icon" alt="">
+                                        </div>
+                                        <div>
+                                            <p class="number">{{allData.numShow.notebook}}</p>
+                                            <p class="notebooks">编译器</p>
+                                        </div>
+                                    </a>
+                            </div>
+                                <div class="flow_item_cell">
+                                    <a href="#">
+                                        <div>
+                                            <img :src="analyses_icon" alt="">
+                                        </div>
+                                        <div>
+                                            <p class="number">{{allData.numShow.analysis}}</p>
+                                            <p class="models">分析</p>
+                                        </div>
+                                    </a>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="flow flow_three">
+                            <p class="flow_word">指示面板</p>
+                            <div class="flow_item"> 
+                            <div class="flow_item_cell">
+                                    <a href="#">
+                                        <div>
+                                            <img :src="dashboard_icon" alt="">
+                                        </div>
+                                        <div>
+                                            <p class="number">{{allData.numShow.dashBoard}}</p>
+                                            <p class="dashboard">指示面板</p>
+                                        </div>
+                                    </a>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="flow flow_four">
+                            <p class="flow_word">维基</p>
+                            <div class="flow_item"> 
+                            <div class="flow_item_cell">
+                                    <a href="#">
+                                        <div>
+                                            <img :src="article_icon" alt="">
+                                        </div>
+                                        <div>
+                                            <p class="number">{{allData.numShow.wiki}}</p>
+                                            <p class="article">详解</p>
+                                        </div>
+                                    </a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="go_flow">
+                        <button @click="linkToPage('flow')">数据流程</button>
+                    </div>
+                </div>
                 
             </div>
             <div class="right_area">
                 <div class="hearder">
-                    <p>TIMELINE</p>
+                    <p>时间线</p>
                 </div>
                 <div class="center">
-                    <p>TODAY</p>
+                    <p>今天</p>
                 </div>
-                <div class="info">
+                <div class="info" v-for="(item, index) in allData.actions" :key="index+'actions'">
                     <div class="info_cell">
                         <div class="icon">
                             <img :src="num_icon" alt="">
                         </div>
                         <div class="cell_info">
                             <p class="top_info">
-                                <span class="you">You</span>
-                                 created dashboard
-                                 <span class="time">17:04</span>
+                                <span class="you">{{item.attributes.showName}}</span>
+                                    {{optionsMap[item.attributes.jobCat]}}
+                                <span class="time">17:04</span>
                             </p>
                             <span class="file">
                                 <img :src="file_icon" alt="">
@@ -158,7 +158,17 @@ export default {
             article_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/articles.png",
             num_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/num_icon.png",
             file_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/file.png",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png"
+            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png",
+            optionsMap: {
+                "intermediate": "创建了数据集",
+                "transform_schema": "编辑了数据集",
+                "clear_DS_data": "编辑了数据集",
+                "remove_Job": "删除了脚本",
+                "project_file_to_DS": "导入了数据",
+                "max1.0": "创建了数据集",
+                "remove_DS": "删除了数据集",
+                "upload": "创建了数据集"
+            }
         }
     },
     props: {
@@ -169,7 +179,104 @@ export default {
                     projectDetail: {
                         created: new Date()
                     },
-                    numShow: {}
+                    numShow: {},
+                    actions: [
+                        {
+                            "type": "actions",
+                            "id": "1FBag8CZ7I42yr5",
+                            "attributes": {
+                                "project-id": "JfSmQBYUpyb4jsei",
+                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
+                                "showName": "张璐",
+                                "time": -1,
+                                "code": "0",
+                                "job-desc": "created",
+                                "jobCat": "intermediate",
+                                "comments": "",
+                                "message": "{\"dagName\":\"ETL_Iterator\",\"flowVersion\":\"developer\",\"jobName\":\"developer_BdREbH5gLHpj68N_ETL_Iterator_ETL_Iterator_compute_AAA\",\"jobId\":\"\",\"inputs\":[{\"name\":\"A\",\"id\":\"337e7eb30d9f69d71748b63818d57140.xlsx\"}],\"outputs\":[{\"name\":\"AAA\",\"id\":\"ab60e4b5d5bf467bb2177e6cc9567bb4\"}],\"jobVersion\":\"AAA_version1\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"timeout\":\"1000\",\"runtime\":\"prepare\",\"owner\":\"张璐\",\"targetJobId\":\"\",\"projectName\":\"ETL_Iterator\",\"labels\":[],\"operatorParameters\":[\"filter\",[{\"剂型\":[\"=\",\"TAB\"]}],\"select\",[\"剂型\",\"包装数量\"],\"operation_null\",\"111\"],\"prop\":{\"partitions\":1}}",
+                                "date": -1
+                            }
+                        },
+                        {
+                            "type": "actions",
+                            "id": "0_k5tL9HE5MjK8O",
+                            "attributes": {
+                                "project-id": "JfSmQBYUpyb4jsei",
+                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
+                                "showName": "张璐",
+                                "time": -1,
+                                "code": "0",
+                                "job-desc": "created",
+                                "jobCat": "intermediate",
+                                "comments": "",
+                                "message": "{\"dagName\":\"ETL_Iterator\",\"flowVersion\":\"developer\",\"jobName\":\"compute_A_out\",\"jobId\":\"\",\"inputs\":[{\"name\":\"A\",\"id\":\"337e7eb30d9f69d71748b63818d57140.xlsx\"}],\"outputs\":[{\"name\":\"A_out\",\"id\":\"073e98047b554af89731f2af444f37ef\"}],\"jobVersion\":\"A_out_version1\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"timeout\":\"1000\",\"runtime\":\"prepare\",\"owner\":\"张璐\",\"targetJobId\":\"\",\"projectName\":\"ETL_Iterator\",\"labels\":[],\"operatorParameters\":[\"filter\",[{\"剂型\":[\"=\",\"TAB\"]}],\"select\",[\"剂型\",\"包装数量\"],\"operation_null\",\"test\"],\"prop\":{\"path\":\"\",\"partitions\":1}}",
+                                "date": -1
+                            }
+                        },
+                        {
+                            "type": "actions",
+                            "id": "uWZVzaX8newBRDu",
+                            "attributes": {
+                                "project-id": "JfSmQBYUpyb4jsei",
+                                "owner": "30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744",
+                                "showName": "张璐",
+                                "time": -1,
+                                "code": "0",
+                                "job-desc": "created",
+                                "jobCat": "upload",
+                                "comments": "",
+                                "message": "{\"file\":{},\"message\":{\"message\":\"File uploaded successfully\",\"tmpname\":\"1350a5bbb447c03ae56092a2e5aaa510.xlsx\",\"filename\":\"MAPPING_to_QLX.xlsx\",\"statusCode\":200},\"property\":{\"dataID\":\"asdf\",\"dataset\":\"A\",\"type\":\"selectDataset\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"owner\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\",\"showName\":\"张璐\"},\"projectId\":\"JfSmQBYUpyb4jsei\",\"projectName\":\"ETL_Iterator\",\"cat\":\"uploaded\",\"prop\":{\"path\":\"\",\"partitions\":1}}",
+                                "date": -1
+                            }
+                        },
+                        {
+                            "type": "actions",
+                            "id": "6D7IfOspFkI_PxH",
+                            "attributes": {
+                                "project-id": "JfSmQBYUpyb4jsei",
+                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
+                                "showName": "张璐",
+                                "time": -1,
+                                "code": "0",
+                                "job-desc": "max1.0",
+                                "jobCat": "max1.0",
+                                "comments": "",
+                                "message": "{\"keys\":\"s3://ph-platform/2020-11-11/emr/yarnLogs/hadoop/logs-tfile/application_1640826150940_0067/\",\"name\":\"A_out\",\"version\":\"max1.0\",\"id\":\"073e98047b554af89731f2af444f37ef\",\"cat\":\"output_index\",\"format\":\"Parquet\",\"prop\":{\"path\":\"s3://ph-platform/2020-11-11/emr/yarnLogs/hadoop/logs-tfile/application_1640826150940_0067/\",\"partitions\":1,\"format\":\"Parquet\"}}",
+                                "date": 1640921255625
+                            }
+                        },
+                        {
+                            "type": "actions",
+                            "id": "ieodZtSGwB6Lrqy",
+                            "attributes": {
+                                "project-id": "JfSmQBYUpyb4jsei",
+                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
+                                "showName": "张璐",
+                                "time": -1,
+                                "code": "0",
+                                "job-desc": "created",
+                                "jobCat": "intermediate",
+                                "comments": "",
+                                "message": "{\"dagName\":\"ETL_Iterator\",\"flowVersion\":\"developer\",\"jobName\":\"compute_AAA\",\"jobId\":\"\",\"inputs\":[{\"name\":\"A\",\"id\":\"337e7eb30d9f69d71748b63818d57140.xlsx\"}],\"outputs\":[{\"name\":\"AAA\",\"id\":\"ab60e4b5d5bf467bb2177e6cc9567bb4\"}],\"jobVersion\":\"AAA_version1\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"timeout\":\"1000\",\"runtime\":\"prepare\",\"owner\":\"张璐\",\"targetJobId\":\"\",\"projectName\":\"ETL_Iterator\",\"labels\":[],\"operatorParameters\":[\"filter\",[{\"剂型\":[\"=\",\"TAB\"]}],\"select\",[\"剂型\",\"包装数量\"],\"operation_null\",\"111\"],\"prop\":{\"path\":\"\",\"partitions\":1}}",
+                                "date": -1
+                            }
+                        },
+                        {
+                            "type": "actions",
+                            "id": "2SGnhMhaCAF1v40",
+                            "attributes": {
+                                "project-id": "JfSmQBYUpyb4jsei",
+                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
+                                "showName": "张璐",
+                                "time": -1,
+                                "code": "0",
+                                "job-desc": "max1.0",
+                                "jobCat": "max1.0",
+                                "comments": "",
+                                "message": "{\"keys\":\"s3://ph-platform/2020-11-11/emr/yarnLogs/hadoop/logs-tfile/application_1640826150940_0067/\",\"name\":\"B\",\"version\":\"max1.0\",\"id\":\"a96b62fd140f4b3dbfa1f9ee5c846bb1\",\"cat\":\"input_index\",\"prop\":{\"path\":\"s3://ph-platform/2020-11-11/emr/yarnLogs/hadoop/logs-tfile/application_1640826150940_0067/\",\"partitions\":1}}",
+                                "date": 1640921238475
+                            }
+                        }]
                 }
             }
         }
@@ -288,26 +395,26 @@ export default {
         border: 1px solid #ddd;
         margin-left: 20px;
         margin-top: 25px;
-		.go_flow {
-			display: flex;
-			justify-content: center;
-			button {
-				margin: 10px 0;
-				width: 300px;
-				height: 40px;
-				box-sizing: border-box;
-				background: #f9bd38;
-				color: #333333;
-				border: 1px solid transparent;
-				font-weight: bold;
-				letter-spacing: 2px;
-				font-size: 14px;
-				cursor: pointer;
-			}
-		}
-		.item {
-        	display: flex;
-		}
+        .go_flow {
+            display: flex;
+            justify-content: center;
+            button {
+                margin: 10px 0;
+                width: 300px;
+                height: 40px;
+                box-sizing: border-box;
+                background: #f9bd38;
+                color: #333333;
+                border: 1px solid transparent;
+                font-weight: bold;
+                letter-spacing: 2px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+        }
+        .item {
+            display: flex;
+        }
         .flow {
             width: 450px;
             height: 100%;
@@ -330,7 +437,7 @@ export default {
                     height: 80px;
                     margin-left: 10px;
                     margin-top: 20px;
-					cursor: pointer;
+                    cursor: pointer;
                 div {
                     display: inline-block;
                 }
@@ -410,7 +517,7 @@ export default {
                 border: 1px solid #dddddd;
                 padding-left: 10px;
                 padding-top: 10px;
-				margin-bottom: 10px;
+                margin-bottom: 10px;
                 .icon {
                     width: 20px;
                     height: 20px;

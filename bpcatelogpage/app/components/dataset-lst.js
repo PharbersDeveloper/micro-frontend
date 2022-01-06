@@ -105,7 +105,7 @@ export default class DatasetLstComponent extends Component {
                         "jobCat": "remove_DS",
                         "jobDesc": "running",
                         "message": JSON.stringify(msgArr),
-						"date": new Date().getTime(),
+						"date": String(new Date().getTime()),
                         "owner": this.cookies.read( "account_id" ),
                         "showName": decodeURI(this.cookies.read('user_name_show'))
                     }
@@ -150,7 +150,7 @@ export default class DatasetLstComponent extends Component {
                         "jobCat": "max1.0",
                         "jobDesc": "max1.0",
                         "message": JSON.stringify(message),
-                        "date": new Date().getTime(),
+                        "date": String(new Date().getTime()),
                         "owner": this.cookies.read( "account_id" ),
                         "showName": decodeURI(this.cookies.read('user_name_show'))
                     }
@@ -199,7 +199,7 @@ export default class DatasetLstComponent extends Component {
                             "jobCat": "clear_DS_data",
                             "jobDesc": "running",
                             "message": JSON.stringify(msg),
-                            "date": new Date().getTime(),
+                            "date": String(new Date().getTime()),
                             "owner": this.cookies.read( "account_id" ),
                             "showName": decodeURI(this.cookies.read('user_name_show'))
                         }
