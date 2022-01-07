@@ -83,7 +83,6 @@
             </div>
         </div>
     </div>
-    <bp-page-bottom></bp-page-bottom>
 </div>
 </template>
 <script>
