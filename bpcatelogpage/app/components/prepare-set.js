@@ -10,7 +10,7 @@ export default class PrepareSetComponent extends Component {
     @service('loading') loadingService;
     @service noticeService;
     @service ajax
-	@tracked messageParam = {}
+	@tracked msg = "新建"
 
     @action
     async listener(e) {
@@ -74,6 +74,7 @@ export default class PrepareSetComponent extends Component {
 				if(scriptsParams.jobCat && scriptsParams.jobCat === "prepare_edit") {
 					//用于配置页面数据回显
 					message = {
+						"actionName": scriptsParams.jobShowName,
 						"projectId": scriptsParams.projectId,
 						"flowVersion": "developer",
 						"jobCat": "prepare_edit",
@@ -81,7 +82,9 @@ export default class PrepareSetComponent extends Component {
 						"projectName": scriptsParams.projectName,
 						"jobName": scriptsParams.jobName,
 						"operatorParameters": operatorParameters,
+						"runtime": "prepare"
 					}
+					this.msg = "编辑"
 				} else {
 					// 创建
 					message = {
@@ -151,14 +154,10 @@ export default class PrepareSetComponent extends Component {
 		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
-			alert("新建脚本成功！")
-			
-			// let message = JSON.parse(response.data[0].attributes.message)
-			// let jobName = message.cnotification.jobName
-			// let jobPath = message.cnotification.jobPath
+			alert(`${this.msg}脚本成功！`)
 			this.router.transitionTo(`/flow?projectId=${this.projectId}&projectName=${this.projectName}&flowVersion=developer`)
 		} else {
-			alert("新建脚本失败，请重新操作！")
+			alert(`${this.msg}脚本失败，请重新操作！`)
 		}
 	}
 

@@ -127,7 +127,7 @@
                                     <div class="cell_info">
                                         <p class="top_info">
                                             <span class="you">{{decodeURI(list.attributes["show-name"])}}</span>
-                                                {{optionsMap[list.attributes["job-cat"]]}}
+                                            {{showActionDesc(list.attributes)}}
                                             <span class="time">{{formatDateStandard(list.attributes.date, 3)}}</span>
                                         </p>
                                         <span class="file">
@@ -160,15 +160,14 @@ export default {
             file_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/file.png",
             script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png",
             optionsMap: {
-                "intermediate": "创建了数据集",
+                "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
                 "clear_DS_data": "编辑了数据集",
                 "remove_Job": "删除了脚本",
                 "project_file_to_DS": "导入了数据",
                 "max1.0": "创建了数据集",
                 "remove_DS": "删除了数据集",
-                "upload": "创建了数据集",
-                "dag_refresh": "运行了dag"
+                "upload": "创建了数据集"
             },
             actions: []
         }
@@ -206,200 +205,43 @@ export default {
         }
     },
     mounted() {
-        this.allData.actionsArr.map(mapItem => {
-            if(mapItem.attributes["job-cat"] === "dag_refresh") {
-                return false
-            }
-            // 第一条数据直接存入actions数组
-            if(this.actions.length === 0) {
-                this.actions.push({
-                    date: Number(mapItem.attributes.date),
-                    list: [mapItem]
-                })
-            } else {
-                // 判断当前数据的date在actions数组中是否已经存在
-                let res = this.actions.some(item => {
-                    let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
-                    if(checkDate) {
-                        item.list.push(mapItem)
-                        return true
-                    }
-                })
-                // 若不存在则在actions中存入新的按时间分类的数组
-                if(!res) {
-                    this.actions.push({
-                        date: Number(mapItem.attributes.date),
-                        list: [mapItem]
-                    })
-                }
-            }
-        })
+        // this.allData.actionsArr.map(mapItem => {
+        //     if(mapItem.attributes["job-cat"] === "dag_refresh") {
+        //         return false
+        //     }
+        //     // 第一条数据直接存入actions数组
+        //     if(this.actions.length === 0) {
+        //         this.actions.push({
+        //             date: Number(mapItem.attributes.date),
+        //             list: [mapItem]
+        //         })
+        //     } else {
+        //         // 判断当前数据的date在actions数组中是否已经存在
+        //         let res = this.actions.some(item => {
+        //             let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
+        //             if(checkDate) {
+        //                 item.list.push(mapItem)
+        //                 return true
+        //             }
+        //         })
+        //         // 若不存在则在actions中存入新的按时间分类的数组
+        //         if(!res) {
+        //             this.actions.push({
+        //                 date: Number(mapItem.attributes.date),
+        //                 list: [mapItem]
+        //             })
+        //         }
+        //     }
+        // })
     },
     props: {
         allData: {
             type: Object,
             default: function() {
                 return {
-                    "projectDetail": {
-                        "name": "ETL_Iterator",
-                        "provider": "pharbers",
-                        "owner": null,
-                        "type": "paas",
-                        "created": "2021-10-25T12:16:19.000Z",
-                        "tasks": [],
-                        "actions": "{}",
-                        "datasets": [],
-                        "flow": "bMn5iL04CBxyYN7W",
-                        "analysis": null
-                    },
-                    "numShow": {
-                        "dataset": 5,
-                        "flow": 1,
-                        "analysis": 0,
-                        "model": 0,
-                        "notebook": 0,
-                        "dashBoard": 0,
-                        "wiki": 0
-                    },
-                    "actionsArr": [
-                        {
-                            "type": "actions",
-                            "id": "CcixNo90_LZKP7D",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "max1.0",
-                                "job-cat": "max1.0",
-                                "comments": "",
-                                "message": "{\"actionName\":\"wer\",\"keys\":\"ewr\",\"name\":\"wer\",\"version\":\"max1.0\",\"id\":\"cefbf57f88724af1880a9999903b9ec2\",\"cat\":\"output_index\",\"format\":\"Parquet\",\"prop\":{\"path\":\"ewr\",\"partitions\":1,\"format\":\"Parquet\"}}",
-                                "date": 1641465364162
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "2CkuZK1Qae-rER-",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "max1.0",
-                                "job-cat": "max1.0",
-                                "comments": "",
-                                "message": "{\"actionName\":\"ewr\",\"keys\":\"wer\",\"name\":\"ewr\",\"version\":\"max1.0\",\"id\":\"25cbf4a02774457dac551334f73de42b\",\"cat\":\"input_index\",\"prop\":{\"path\":\"wer\",\"partitions\":1}}",
-                                "date": 1641465309506
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "1-N-PIzp7IYuhy_",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "created",
-                                "job-cat": "project_file_to_DS",
-                                "comments": "project file to Data set",
-                                "message": "{\"fileId\":\"b4862d6781c74b4350a7039141fad391.xlsx\",\"skipValue\":3,\"jumpValue\":0,\"fileType\":\"xlsx\",\"fileSheet\":\"Sheet1\",\"fileName\":\"MAPPING_to_QLX.xlsx\",\"isAppend\":false,\"destination\":\"qqq\",\"version\":\"qqq\",\"projectName\":\"ETL_Iterator\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\",\"cat\":\"uploaded\",\"actionName\":\"qqq\",\"prop\":{\"path\":\"\",\"partitions\":1}}",
-                                "date": 1641463754968
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "r6W9TsqojaEo9SM",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "b231fffcbb67aa6fe587ee42593364f5b184f86ccab6d6d7327104d319a1a988",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "created",
-                                "job-cat": "upload",
-                                "comments": "",
-                                "message": "{\"actionName\":\"qqq\",\"file\":{},\"message\":{\"message\":\"File uploaded successfully\",\"tmpname\":\"b4862d6781c74b4350a7039141fad391.xlsx\",\"filename\":\"MAPPING_to_QLX.xlsx\",\"statusCode\":200},\"property\":{\"dataID\":\"qqq\",\"dataset\":\"qqq\",\"type\":\"createDataset\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"owner\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\",\"showName\":\"张璐\"},\"projectId\":\"JfSmQBYUpyb4jsei\",\"projectName\":\"ETL_Iterator\",\"cat\":\"uploaded\",\"prop\":{\"path\":\"\",\"partitions\":1}}",
-                                "date": 1641463746100
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "v7e-l_yWda-kB2G",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "created",
-                                "job-cat": "intermediate",
-                                "comments": "",
-                                "message": "{\"actionName\":\"compute_qwe\",\"dagName\":\"ETL_Iterator\",\"flowVersion\":\"developer\",\"jobName\":\"compute_qwe\",\"jobId\":\"\",\"inputs\":[{\"name\":\"wqe\",\"id\":\"b05503a9494b10695224ad5a8de0fd0a.xlsx\"}],\"outputs\":[{\"name\":\"qwe\",\"id\":\"34669027230c4847a156cbb26552fd1e\"}],\"jobVersion\":\"qwe_version1\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"timeout\":\"1000\",\"runtime\":\"python3\",\"owner\":\"张璐\",\"targetJobId\":\"\",\"projectName\":\"ETL_Iterator\",\"labels\":[],\"operatorParameters\":[\"script\",\"\"],\"prop\":{\"path\":\"\",\"partitions\":1}}",
-                                "date": 1641463570847
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "IVQtWjQ3FSWWG7g",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "b231fffcbb67aa6fe587ee42593364f5b184f86ccab6d6d7327104d319a1a988",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "created",
-                                "job-cat": "upload",
-                                "comments": "",
-                                "message": "{\"actionName\":\"wqe\",\"file\":{},\"message\":{\"message\":\"File uploaded successfully\",\"tmpname\":\"b05503a9494b10695224ad5a8de0fd0a.xlsx\",\"filename\":\"MAPPING_to_QLX.xlsx\",\"statusCode\":200},\"property\":{\"dataID\":\"qwe\",\"dataset\":\"wqe\",\"type\":\"createDataset\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"owner\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\",\"showName\":\"张璐\"},\"projectId\":\"JfSmQBYUpyb4jsei\",\"projectName\":\"ETL_Iterator\",\"cat\":\"uploaded\",\"prop\":{\"path\":\"\",\"partitions\":1}}",
-                                "date": 1641463528945
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "aR2vLrW5bhOLYyz",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "succeed",
-                                "job-cat": "remove_DS",
-                                "comments": "delete_dataset",
-                                "message": "[{\"actionName\":\"ewr\",\"version\":\"\",\"dsid\":\"b31d2725eb6349ccb82a7d1adfd6d144\",\"destination\":\"ewr\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\"},{\"actionName\":\"ewrsdf\",\"version\":\"\",\"dsid\":\"272a0d1502c746a3860ff3176994fef9\",\"destination\":\"ewrsdf\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\"}]",
-                                "date": 1641463347137
-                            }
-                        },
-                        {
-                            "type": "actions",
-                            "id": "KqISz7Cs7h2nhbm",
-                            "attributes": {
-                                "sort-version": "unknown",
-                                "project-id": "JfSmQBYUpyb4jsei",
-                                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                                "show-name": "张璐",
-                                "time": -1,
-                                "code": "0",
-                                "job-desc": "failed",
-                                "job-cat": "project_file_to_DS",
-                                "comments": "project file to Data set",
-                                "message": "{\"fileId\":\"b05503a9494b10695224ad5a8de0fd0a.xlsx\",\"skipValue\":3,\"jumpValue\":0,\"fileType\":\"xlsx\",\"fileSheet\":\"Sheet1\",\"fileName\":\"MAPPING_to_QLX.xlsx\",\"isAppend\":false,\"destination\":\"wqe\",\"version\":\"qwe\",\"projectName\":\"ETL_Iterator\",\"projectId\":\"JfSmQBYUpyb4jsei\",\"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\",\"opgroup\":\"zudIcG_17yj8CEUoCTHg\",\"cat\":\"uploaded\",\"actionName\":\"wqe\",\"prop\":{\"path\":\"\",\"partitions\":1}}",
-                                "date": 1641362139458
-                            }
-                        }
-                    ],
-                    "_isVue": true,
+                    "projectDetail": {},
+                    "numShow": {},
+                    "actionsArr": [],
                     "projectName": "ETL_Iterator",
                     "projectId": "JfSmQBYUpyb4jsei"
                 }
@@ -407,6 +249,17 @@ export default {
         }
     },
     methods: {
+        //操作叙述
+        showActionDesc(data) {
+            let cat = data["job-cat"]
+            let msg = JSON.parse(data["message"])
+            if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
+                return "编辑了脚本"
+            } else {
+                return this.optionsMap[cat]
+            }
+        },
+        //操作对象的名称
         showActionName(data) {
             let msg = JSON.parse(data)
             if(Array.isArray(msg)) {
@@ -417,23 +270,31 @@ export default {
                 return "undefined"
             }
         },
+        //操作对象的icon
         showActionIcon(data) {
-            // "clear_DS_data": "编辑了数据集",
-            // "remove_Job": "删除了脚本",
-            // "project_file_to_DS": "导入了数据",
-            // "remove_DS": "删除了数据集",
             let cat = data["job-cat"]
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                if(msg.runtime === "prepare") {
+                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg"
+                } else if(msg.runtime === "python3") {
+                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg"
+                } else if(msg.runtime === "pyspark") {
+                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg"
+                } else if(msg.runtime === "r") {
+                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg"
+                } else if(msg.runtime === "sparkr") {
+                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg"
+                } else {
+                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                }
             } else if(cat === "upload" || cat === "transform_schema") {
                 return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
                 return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
                 return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg"
-            } 
-            else  {
+            } else  {
                 return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
             }
         },
@@ -718,6 +579,9 @@ export default {
                         margin: 5px;
                         p {
                             margin-left: 10px;
+                            width: 300px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                     }
                    img {

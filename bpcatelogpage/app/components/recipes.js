@@ -45,6 +45,7 @@ export default class RecipesComponent extends Component {
 						"jobVersion": recipt.jobVersion,
 						"projectName": params.projectName,
 						"jobDisplayName": recipt.jobDisplayName,
+						"jobShowName": recipt.jobShowName,
 						"projectName": params.projectName,
 						"projectId": params.projectId,
 						"jobCat": "prepare_edit"
