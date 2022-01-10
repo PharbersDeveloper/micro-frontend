@@ -40,7 +40,7 @@ export default class RecipesRoute extends Route {
 				// "sortVersion": ["begins_with", "developer_"]
 			},
 			"limit": 100,
-			"start_key": {}
+			"start_key": ""
 		}
 
 		let options = {

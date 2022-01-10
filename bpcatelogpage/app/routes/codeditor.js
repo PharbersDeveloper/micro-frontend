@@ -43,7 +43,7 @@ export default class CodeditorRoute extends Route {
 				"projectId":  ["=", params.projectId]
 			},
 			"limit": 100,
-			"start_key": {}
+			"start_key": ""
 		}
 
 		let options = {
