@@ -74,6 +74,7 @@ export default class RecipesComponent extends Component {
 					this.router.transitionTo(preUrl)
 				} else {
 					if(scriptsParams.outputs[0].id == "") {
+						//没有id要先创建dataset
 						scriptsParams.outputs[0].id = uuid
 						let body = {
 							"table": "dataset",
@@ -120,8 +121,6 @@ export default class RecipesComponent extends Component {
 							path: scriptsParams.path,
 							partitions: 1
 						}
-						// "path": scriptsParams.path,
-						// "format": scriptsParams.format
 					}
 					let scriptBody = {
 						"table": "action",
@@ -131,7 +130,7 @@ export default class RecipesComponent extends Component {
 							"showName": decodeURI(this.cookies.read('user_name_show')),
 							"code": 0,
 							"jobDesc": "created",
-							"jobCat": "intermediate",
+							"jobCat": "dag_create",
 							"comments": "",
 							"date": String(new Date().getTime()),
 							"message": JSON.stringify(message)
