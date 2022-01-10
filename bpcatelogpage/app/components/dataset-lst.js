@@ -181,52 +181,52 @@ export default class DatasetLstComponent extends Component {
                 let datasetArrayClear = clearTagParam.datasetArray //发送请求的参数在这取
                 let _this = this
                 let promiseList = [];
+				let msg = []
                 selectedDatasetsClear.forEach(async targetId => {
-                    let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
-                    const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-                    const accessToken = this.cookies.read( "access_token" )
-                    let msg = {
+					let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
+					msg.push({
 						"actionName": targetDataset.name,
-                        "version": "",
-                        "dsid": targetDataset.id,
-                        "destination": targetDataset.name,
-                        "opname": this.cookies.read( "account_id" ),
-                        "opgroup": this.cookies.read( "company_id" )
-                    }
-                    let body = {
-                        "table": "action",
-                        "item": {
-                            "projectId": clearTagParam.projectId,
-                            "code": 0,
-                            "comments": "clear_dataset_tags",
-                            "jobCat": "clear_DS_data",
-                            "jobDesc": "running",
-                            "message": JSON.stringify(msg),
-                            "date": String(new Date().getTime()),
-                            "owner": this.cookies.read( "account_id" ),
-                            "showName": decodeURI(this.cookies.read('user_name_show'))
-                        }
-                    }
-                    let options = {
-                        method: "POST",
-                        headers: {
-                            "Authorization": accessToken,
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                            "accept": "application/json"
-                        },
-                        body: JSON.stringify(body)
-                    }
-                    let result = fetch(url, options).then(res => res.json())
-                    promiseList.push(result)
-                })
-                let results = await Promise.all(promiseList)
-                results.forEach(item => {
+						"version": "",
+						"dsid": targetDataset.id,
+						"destination": targetDataset.name,
+						"opname": this.cookies.read( "account_id" ),
+						"opgroup": this.cookies.read( "company_id" )
+					})
+				})
+				
+				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const token = this.cookies.read( "access_token" )
+				let clearBody = {
+					"table": "action",
+					"item": {
+						"projectId": clearTagParam.projectId,
+						"code": 0,
+						"comments": "clear_dataset_tags",
+						"jobCat": "clear_DS_data",
+						"jobDesc": "running",
+						"message": JSON.stringify(msg),
+						"date": String(new Date().getTime()),
+						"owner": this.cookies.read( "account_id" ),
+						"showName": decodeURI(this.cookies.read('user_name_show'))
+					}
+				}
+				let clearOptions = {
+					method: "POST",
+					headers: {
+						"Authorization": token,
+						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+						"accept": "application/json"
+					},
+					body: JSON.stringify(clearBody)
+				}
+				let clearResult = fetch(url, clearOptions).then(res => res.json())
+				promiseList.push(clearResult)
+                let clearResults = await Promise.all(promiseList)
+                clearResults.forEach(item => {
                     if(item.data) {
-                        _this.noticeService.register("notification", item.data.id, this.noticeCallback, this, clearTagParam.projectId)
+                        _this.noticeService.register("notification", item.data.id, this.clearTagsNoticeCallback, this, clearTagParam.projectId)
                     }
                 })
-                alert("清除数据成功！")
-                window.location.reload()
             break
             default:
                 console.log("other click event!")
@@ -240,20 +240,22 @@ export default class DatasetLstComponent extends Component {
             return v.toString(16);
         });
     }
-
-    @action noticeCallback(response, ele) {
+	
+	//清空数据集回调
+	@action
+	clearTagsNoticeCallback(response, ele) {
 		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
 		let upload_status = cnotification.status
 		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-        if(upload_status == "project_file_to_DS_succeed") {
-            //跳转下一页面
-            this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
-        } else if(upload_status == "project_file_to_DS_failed") {
+        if(upload_status == "clear_DS_succeed") {
+			alert("清楚数据成功！")
+            window.location.reload()
+        } else if(upload_status == "clear_DS_failed") {
 			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '清除数据失败，请重新操作！'
 			alert(msg)
         }
         this.loadingService.loading.style.display = 'none'
-    }
+	}
 
 	// 删除数据集回调
     @action delNoticeCallback(response, ele) {
