@@ -151,13 +151,16 @@ export default class PrepareSetComponent extends Component {
 	}
 
 	@action createScriptNoticeCallback(response, ele) {
-		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let create_scripts_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
 			alert(`${this.msg}脚本成功！`)
 			this.router.transitionTo(`/flow?projectId=${this.projectId}&projectName=${this.projectName}&flowVersion=developer`)
 		} else {
-			alert(`${this.msg}脚本失败，请重新操作！`)
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : `${this.msg}脚本失败，请重新操作！`
+			alert(msg)
 		}
 	}
 

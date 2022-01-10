@@ -242,24 +242,30 @@ export default class DatasetLstComponent extends Component {
     }
 
     @action noticeCallback(response, ele) {
-        let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
         if(upload_status == "project_file_to_DS_succeed") {
             //跳转下一页面
             this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
         } else if(upload_status == "project_file_to_DS_failed") {
-            alert("清除数据失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '清除数据失败，请重新操作！'
+			alert(msg)
         }
         this.loadingService.loading.style.display = 'none'
     }
 
 	// 删除数据集回调
     @action delNoticeCallback(response, ele) {
-        let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+        let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
         if(upload_status == "remove_DS_succeed") {
 			alert("删除数据集成功！")
 			window.location.reload()
         } else if(upload_status == "remove_DS_failed") {
-            alert("删除数据集失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '删除数据集失败，请重新操作！'
+			alert(msg)
         }
         this.loadingService.loading.style.display = 'none'
     }

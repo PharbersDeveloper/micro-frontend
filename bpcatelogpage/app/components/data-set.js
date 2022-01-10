@@ -164,10 +164,13 @@ export default class DataSetComponent extends Component {
     }
 
 	@action noticeCallback(response, ele) {
-		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status 
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(upload_status != "upload_succeed") {
 			//跳转回dataset页面
-			alert("上传失败，请重新跳转！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '上传失败，请重新上传！'
+			alert(msg)
 			this.router.transitionTo('/dataset-lst?projectName=' + this.tranParam.projectName + '&projectId=' + this.tranParam.projectId)
 		} else {
 			this.noticeService.uploadStatus = true

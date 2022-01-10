@@ -297,27 +297,32 @@ export default class RecipesComponent extends Component {
 	}
 
 	@action createScriptNoticeCallback(response, ele) {
-		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
 		this.loadingService.loading.style.display = 'none'
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let create_scripts_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
-			
 			let message = JSON.parse(response.data[0].attributes.message)
 			let jobName = message.cnotification.jobName
 			let jobPath = message.cnotification.jobPath
 			this.router.transitionTo(`/codeditor?projectName=${this.projectName}&projectId=${this.projectId}&jobName=${jobName}&jobPath=${jobPath}`)
 		} else {
-			alert("新建脚本失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '新建脚本失败，请重新操作！'
+			alert(msg)
 		}
 	}
 
 	@action noticeCallback(response, ele) {
-		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(upload_status == "project_file_to_DS_succeed") {
 			//跳转下一页面
 			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
 		} else if(upload_status == "project_file_to_DS_failed") {
-			alert("清除数据失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '清除数据失败，请重新操作！'
+			alert(msg)
 		}
 		this.loadingService.loading.style.display = 'none'
 	}
