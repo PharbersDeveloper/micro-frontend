@@ -1835,7 +1835,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor;
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -1845,30 +1845,45 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, (_class = class ShellRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("remote-loading"), (_class = class ShellRoute extends Ember.Route {
     constructor() {
       super(...arguments);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor2, this);
     }
 
     async model(params) {
-      console.log(params);
       /**
-       * 1. 第一步，需要从读取模版
+       * 1. 第一步，需要从读取JS模版
+       */
+      let pages = this.store.peekAll("page");
+
+      if (pages.length === 0) {
+        console.log("need query page configures");
+        pages = await this.store.query("page", {
+          "client-id": "fjjnl2uSalHTdrppHG9u"
+        });
+      }
+
+      const curPage = pages.find(x => x.route === "/" + params.path);
+      /**
+       * 2. 动态的把需要的JS加载到dom中
        */
 
-      const pages = await this.store.query("page", {
-        "filter[route]": "/" + params.path
-      });
-      console.log(pages);
-      debugger;
+      this.jsl.loadRemoteJs(curPage.uri);
       return this.store.query("project", {
         "ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
       });
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -1955,50 +1970,6 @@
   }
 
   _exports.default = ApplicationSerializer;
-});
-;define("web-shell/services/ajax", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _dec, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
-  // import { computed } from "@ember/object"
-  let AjaxService = (_dec = Ember.inject.service("cookies"), (_class = class AjaxService extends Ember.Service {
-    constructor() {
-      super(...arguments);
-
-      _initializerDefineProperty(this, "cookies", _descriptor, this);
-    }
-
-    get headers() {
-      let cookies = this.cookies;
-      return {
-        "Content-Type": "application/json",
-        // 默认值
-        Accept: "application/json",
-        Authorization: `Bearer ${cookies.read("access_token")}`
-      };
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  })), _class));
-  _exports.default = AjaxService;
 });
 ;define("web-shell/services/aws-service", ["exports"], function (_exports) {
   "use strict";
@@ -2580,6 +2551,43 @@
     }
   });
 });
+;define("web-shell/services/remote-loading", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class RemoteLoadingService extends Ember.Service {
+    constructor() {
+      super(...arguments);
+
+      _defineProperty(this, "loadedJs", []);
+    }
+
+    loadRemoteJs(source, callback) {
+      let that = this;
+      const script = document.createElement("script");
+
+      script.onload = function () {
+        that.loadedJs.push(source);
+
+        if (callback) {
+          callback();
+        }
+      };
+
+      script.src = source;
+      document.head.appendChild(script);
+    }
+
+  }
+
+  _exports.default = RemoteLoadingService;
+});
 ;define("web-shell/services/store", ["exports", "ember-data/store"], function (_exports, _store) {
   "use strict";
 
@@ -2715,7 +2723,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+b9a9d493"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+f7f04105"});
           }
         
 //# sourceMappingURL=web-shell.map
