@@ -650,10 +650,19 @@
       defaultAcceptType: at
     };
     const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig);
+    const queryKeys = Object.keys(query);
+    let queryParams = {};
+
+    for (let idx = 0; idx < queryKeys.length; ++idx) {
+      const k = encodeURI(queryKeys[idx]);
+      const v = encodeURI(query[queryKeys[idx]]);
+      queryParams[k] = v;
+    }
+
     let req = {
       verb: method.toUpperCase(),
       path: queryURL,
-      queryParams: {},
+      queryParams: queryParams,
       body: {}
     };
     const request = client.makeRequest(req);
@@ -1544,7 +1553,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -1554,64 +1563,71 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("number"), _dec8 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
+  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("number"), _dec9 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
     constructor() {
       super(...arguments);
 
-      _initializerDefineProperty(this, "projectName", _descriptor, this);
+      _initializerDefineProperty(this, "client-id", _descriptor, this);
 
-      _initializerDefineProperty(this, "version", _descriptor2, this);
+      _initializerDefineProperty(this, "clientName", _descriptor2, this);
 
-      _initializerDefineProperty(this, "name", _descriptor3, this);
+      _initializerDefineProperty(this, "version", _descriptor3, this);
 
-      _initializerDefineProperty(this, "route", _descriptor4, this);
+      _initializerDefineProperty(this, "name", _descriptor4, this);
 
-      _initializerDefineProperty(this, "uri", _descriptor5, this);
+      _initializerDefineProperty(this, "route", _descriptor5, this);
 
-      _initializerDefineProperty(this, "cat", _descriptor6, this);
+      _initializerDefineProperty(this, "uri", _descriptor6, this);
 
-      _initializerDefineProperty(this, "level", _descriptor7, this);
+      _initializerDefineProperty(this, "cat", _descriptor7, this);
 
-      _initializerDefineProperty(this, "engine", _descriptor8, this);
+      _initializerDefineProperty(this, "level", _descriptor8, this);
+
+      _initializerDefineProperty(this, "engine", _descriptor9, this);
     } // ember, vue, react
 
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "projectName", [_dec], {
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "client-id", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "clientName", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec6], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec7], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec8], {
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec9], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -1729,7 +1745,7 @@
     }
   });
 });
-;define("web-shell/router", ["exports", "web-shell/config/environment", "web-shell/lib/PhIamClicent"], function (_exports, _environment, _PhIamClicent) {
+;define("web-shell/router", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1752,14 +1768,8 @@
 
   _exports.default = Router;
   Router.map(async function () {
-    let scriptOptions = {
-      method: "GET",
-      headers: (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, "https://apiv2.pharbers.com/phtemplate/pages", {}, {}, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY)
-    };
-    const result = await fetch("https://apiv2.pharbers.com/phtemplate/pages", scriptOptions).then(res => res.json());
-    console.log(result);
     this.route("shell", {
-      path: "/"
+      path: "/*path"
     });
   });
 });
@@ -1842,10 +1852,19 @@
       _initializerDefineProperty(this, "store", _descriptor, this);
     }
 
-    model() {
-      // return this.store.findAll("project")
+    async model(params) {
+      console.log(params);
+      /**
+       * 1. 第一步，需要从读取模版
+       */
+
+      const pages = await this.store.query("page", {
+        "filter[route]": "/" + params.path
+      });
+      console.log(pages);
+      debugger;
       return this.store.query("project", {
-        "ids[]": ["jFlL0WS1Qwy5buKh"]
+        "ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
       });
     }
 
@@ -2696,7 +2715,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"30d8c05eaf6800be8f6ac3951a395ce089cbdf7f6162ad3ad3cd97541da31744","name":"web-shell","version":"0.0.0+771f91c0"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+b9a9d493"});
           }
         
 //# sourceMappingURL=web-shell.map

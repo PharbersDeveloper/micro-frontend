@@ -35,10 +35,17 @@ function ComputeJSONAPIIamHeader(
 	}
 	const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig)
 
+	const queryKeys = Object.keys(query)
+	let queryParams = {}
+	for (let idx = 0; idx < queryKeys.length; ++idx) {
+		const k = encodeURI(queryKeys[idx])
+		const v = encodeURI(query[queryKeys[idx]])
+		queryParams[k] = v
+	}
 	let req = {
 		verb: method.toUpperCase(),
 		path: queryURL,
-		queryParams: {},
+		queryParams: queryParams,
 		body: {}
 	}
 	const request = client.makeRequest(req)
