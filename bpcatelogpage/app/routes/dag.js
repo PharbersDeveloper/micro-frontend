@@ -36,7 +36,7 @@ export default class DagRoute extends Route {
             "conditions": {
                 "projectId": ["=", params.project_id]
             },
-            "limit": 1000,
+            "limit": 100,
             "start_key": {}
         }
         let acoptions = {

@@ -252,7 +252,7 @@ export default {
     methods: {
         //滚动
         scrollGet(e) {
-            debugger
+            console.log(e)
         },
         //操作叙述
         showActionDesc(data) {
