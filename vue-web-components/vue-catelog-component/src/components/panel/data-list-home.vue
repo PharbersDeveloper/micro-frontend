@@ -114,7 +114,7 @@
                     <div class="hearder">
                         <p>时间线</p>
                     </div>
-                    <div class="actions">
+                    <div class="actions" @scroll="scrollGet($event)">
                         <div class="actions_list" v-for="(item, index) in actions" :key="index+'actions'">
                             <div class="center">
                                 <p>{{formatDateStandard(item.date, 2)}}</p>
@@ -167,7 +167,8 @@ export default {
                 "project_file_to_DS": "导入了数据",
                 "max1.0": "创建了数据集",
                 "remove_DS": "删除了数据集",
-                "upload": "创建了数据集"
+                "upload": "创建了数据集",
+                "dag_create": "创建了脚本"
             },
             actions: []
         }
@@ -249,6 +250,10 @@ export default {
         }
     },
     methods: {
+        //滚动
+        scrollGet(e) {
+            console.log(e)
+        },
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]

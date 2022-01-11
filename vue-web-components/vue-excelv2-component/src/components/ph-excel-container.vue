@@ -96,6 +96,7 @@ export default {
             this.$emit('changeSchemaTypeEvent', data)
         },
         scrollGet (e) {
+            
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
             let scroll_to_line = Math.floor(e.target.scrollTop / this.pageHeight)
             const tmp = [scroll_to_line - 1, scroll_to_line, scroll_to_line + 1]

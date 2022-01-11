@@ -10,7 +10,7 @@
                    	<p class="tip">删除这些项将会有以下影响:</p>
 				   	<div class="item" v-for="(item,index) in datasetRelaResult" :key="index+'dataset'">
 						<span>删除脚本 </span>
-						<span class="jobname"> {{item.jobName}}</span>
+						<span class="jobname"> {{item.jobShowName}}</span>
 						<span class="jobtype"> ({{item.type}})</span>
 				   	</div>
                </div>
