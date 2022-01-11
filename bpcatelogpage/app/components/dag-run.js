@@ -77,7 +77,6 @@ export default class DagRunComponent extends Component {
 										for (var i = 0; i < fileData.length; i++) {
 										dataString += String.fromCharCode(fileData[i]);
 										}
-									
 										return dataString
 									}
 									let logResult = Uint8ArrayToString(logsData)
