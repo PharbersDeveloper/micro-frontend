@@ -240,6 +240,59 @@
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
 });
+;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <h2>{{this.engine}}</h2>
+  {{#if (eq this.engine "web-component")}}
+      <h2>web component</h2>
+  {{/if}}
+  {{yield}}
+  
+  */
+  {
+    "id": "GVVJiqSD",
+    "block": "[[[10,\"h2\"],[12],[1,[30,0,[\"engine\"]]],[13],[1,\"\\n\"],[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"web component\"],[13],[1,\"\\n\"]],[]],null],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"yield\"]]",
+    "moduleName": "web-shell/components/shell-component.hbs",
+    "isStrictMode": false
+  });
+
+  let ShellComponentComponent = (_dec = Ember._tracked, (_class = class ShellComponentComponent extends _component.default {
+    constructor() {
+      super(...arguments);
+
+      _initializerDefineProperty(this, "engine", _descriptor, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return "web-component";
+    }
+  })), _class));
+  _exports.default = ShellComponentComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ShellComponentComponent);
+});
 ;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
   "use strict";
 
@@ -341,6 +394,21 @@
   }
 
   var _default = Ember.Helper.helper(appVersion);
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/eq", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.Helper.helper(function eq(_ref) {
+    let [left, right] = _ref;
+    return left === right;
+  });
 
   _exports.default = _default;
 });
@@ -1861,9 +1929,10 @@
       let pages = this.store.peekAll("page");
 
       if (pages.length === 0) {
-        console.log("need query page configures");
+        console.log("need query page configures"); // pages = await this.store.query("page", {})
+
         pages = await this.store.query("page", {
-          "client-id": "fjjnl2uSalHTdrppHG9u"
+          "filter[clientId]": "fjjnl2uSalHTdrppHG9u"
         });
       }
 
@@ -2627,8 +2696,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "9Lg1le8/",
-    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
+    "id": "GXi8S0j+",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[8,[39,1],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"shell-component\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
@@ -2723,7 +2792,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+f7f04105"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+48f464ea"});
           }
         
 //# sourceMappingURL=web-shell.map
