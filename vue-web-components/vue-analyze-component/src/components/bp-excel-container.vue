@@ -595,6 +595,9 @@ export default {
                     letter-spacing: 0.12px;
                     font-weight: 400;
                 }
+                .bp-option-group {
+                    right: 10px !important;
+                }
                 .btn-display {
                     font-size: 14px;
                     border-width: 1px;
@@ -650,7 +653,7 @@ export default {
                 align-items: center;
                 padding: 5px;
                 border-bottom: 1px solid #ccc;
-				margin-right: 5px;
+                margin-right: 5px;
                 .close_icon {
                     width: 16px;
                     height: 16px;
