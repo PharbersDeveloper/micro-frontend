@@ -74,7 +74,6 @@ export default class OauthServiceService extends Service {
 				let employerId = await userData.belongsTo('employer').id()
 				let employerData = await that.store.findRecord( "partner", employerId )
 				cookies.write( "company_name_show", encodeURI(employerData.name), options)
-				// this.mqttService.mqttConnect()
 				this.get( "router" ).transitionTo( '/download/my-data') 
 			})
 			.catch(err => {

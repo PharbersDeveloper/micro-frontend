@@ -115,7 +115,7 @@
                         <p>时间线</p>
                     </div>
                     <div class="actions" @scroll="scrollGet($event)">
-                        <div class="actions_list" v-for="(item, index) in actions" :key="index+'actions'">
+                        <div class="actions_list" v-for="(item, index) in actionsShow" :key="index+'actionsShow'">
                             <div class="center">
                                 <p>{{formatDateStandard(item.date, 2)}}</p>
                             </div>
@@ -170,70 +170,36 @@ export default {
                 "upload": "创建了数据集",
                 "dag_create": "创建了脚本"
             },
-            actions: []
+            actions: [],
+            actionsShow: [],
+            actionsKey: ""
         }
     },
     watch: {
-        "allData.actionsArr": function() {
-            this.allData.actionsArr.map(mapItem => {
-                if(mapItem.attributes["job-cat"] === "dag_refresh") {
-                    return false
-                }
-                // 第一条数据直接存入actions数组
-                if(this.actions.length === 0) {
-                    this.actions.push({
-                        date: Number(mapItem.attributes.date),
-                        list: [mapItem]
-                    })
-                } else {
-                    // 判断当前数据的date在actions数组中是否已经存在
-                    let res = this.actions.some(item => {
-                        let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
-                        if(checkDate) {
-                            item.list.push(mapItem)
-                            return true
-                        }
-                    })
-                    // 若不存在则在actions中存入新的按时间分类的数组
-                    if(!res) {
-                        this.actions.push({
-                            date: Number(mapItem.attributes.date),
-                            list: [mapItem]
-                        })
-                    }
-                }
-            })
-        }
     },
-    mounted() {
-        // this.allData.actionsArr.map(mapItem => {
-        //     if(mapItem.attributes["job-cat"] === "dag_refresh") {
-        //         return false
-        //     }
-        //     // 第一条数据直接存入actions数组
-        //     if(this.actions.length === 0) {
-        //         this.actions.push({
-        //             date: Number(mapItem.attributes.date),
-        //             list: [mapItem]
-        //         })
-        //     } else {
-        //         // 判断当前数据的date在actions数组中是否已经存在
-        //         let res = this.actions.some(item => {
-        //             let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
-        //             if(checkDate) {
-        //                 item.list.push(mapItem)
-        //                 return true
-        //             }
-        //         })
-        //         // 若不存在则在actions中存入新的按时间分类的数组
-        //         if(!res) {
-        //             this.actions.push({
-        //                 date: Number(mapItem.attributes.date),
-        //                 list: [mapItem]
-        //             })
-        //         }
-        //     }
-        // })
+    async mounted() {
+        const accessToken = this.getCookie("access_token") || "ce9acc796c509e9f9053ea428f3ca5d800dace2092ba1b6c42b6c961534eb5de"
+        const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+        let acbody = {
+            "table": "action",
+            "conditions": {
+                "projectId": ["=", this.allData.projectId]
+            },
+            "limit": 10,
+            "start_key": ""
+        }
+        let acoptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/json; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(acbody)
+        }
+        this.actions = await fetch(acurl, acoptions).then(res=>res.json())
+        this.actionsKey = this.actions.meta.start_key
+        this.dealActions() //处理actions数据
     },
     props: {
         allData: {
@@ -242,7 +208,6 @@ export default {
                 return {
                     "projectDetail": {},
                     "numShow": {},
-                    "actionsArr": [],
                     "projectName": "ETL_Iterator",
                     "projectId": "JfSmQBYUpyb4jsei"
                 }
@@ -250,9 +215,78 @@ export default {
         }
     },
     methods: {
+        dealActions() {
+            this.actions.data.map(mapItem => {
+                //过滤掉dag_refresh
+                if(mapItem.attributes["job-cat"] === "dag_refresh") {
+                    return false
+                }
+                // 第一条数据直接存入actionsShow数组
+                if(this.actionsShow.length === 0) {
+                    this.actionsShow.push({
+                        date: Number(mapItem.attributes.date),
+                        list: [mapItem]
+                    })
+                } else {
+                    // 判断当前数据的date在actionsShow数组中是否已经存在
+                    let res = this.actionsShow.some(item => {
+                        let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
+                        if(checkDate) {
+                            item.list.push(mapItem)
+                            return true
+                        }
+                    })
+                    // 若不存在则在actionsShow中存入新的按时间分类的数组
+                    if(!res) {
+                        this.actionsShow.push({
+                            date: Number(mapItem.attributes.date),
+                            list: [mapItem]
+                        })
+                    }
+                }
+            })
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         //滚动
         scrollGet(e) {
             console.log(e)
+            let scrollTop = e.target.scrollTop || document.body.scrollTop;
+            let clientHeight = e.target.clientHeight;
+            let scrollHeight = e.target.scrollHeight;
+            if (scrollTop + clientHeight >= scrollHeight) { 
+                //滚动到底部
+                this.getActions(this.actionsKey)
+            }
+        },
+        async getActions(value) {
+            const accessToken = this.getCookie("access_token") || "ce9acc796c509e9f9053ea428f3ca5d800dace2092ba1b6c42b6c961534eb5de"
+            const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+            let acbody = {
+                "table": "action",
+                "conditions": {
+                    "projectId": ["=", this.allData.projectId]
+                },
+                "limit": 10,
+                "start_key": value
+            }
+            let acoptions = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(acbody)
+            }
+            this.actions = await fetch(acurl, acoptions).then(res=>res.json())
+            this.actionsKey = this.actions.meta.start_key
+            this.dealActions() //处理actions数据
         },
         //操作叙述
         showActionDesc(data) {

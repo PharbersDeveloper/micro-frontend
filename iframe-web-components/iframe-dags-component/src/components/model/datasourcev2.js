@@ -133,10 +133,13 @@ export default class PhDagDatasource {
                     const sourceId = cmessage["sourceId"]
                     if (sourceId && sourceId.length > 0) {
                         const tmp = ele.datasource.data.find(x => x["id"] === targetId)
-                        tmp["parentIds"].push(sourceId)
-                        if (maxHeight < tmp["parentIds"].length) {
-                            maxHeight = tmp["parentIds"].length
+                        if(tmp) {
+                            tmp["parentIds"].push(sourceId)
+                            if (maxHeight < tmp["parentIds"].length) {
+                                maxHeight = tmp["parentIds"].length
+                            }
                         }
+                        
                     }
                 }
                 that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]

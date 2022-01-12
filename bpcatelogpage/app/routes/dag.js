@@ -29,30 +29,9 @@ export default class DagRoute extends Route {
             body: JSON.stringify(body)
         }
         const nums = fetch(url, options).then(res=>res.json())
-        // actions列表
-        const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
-        let acbody = {
-            "table": "action",
-            "conditions": {
-                "projectId": ["=", params.project_id]
-            },
-            "limit": 100,
-            "start_key": {}
-        }
-        let acoptions = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/json; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(acbody)
-        }
-        const actions = fetch(acurl, acoptions).then(res=>res.json())
-        promiseList.push(projectDetail, nums, actions)
+        promiseList.push(projectDetail, nums)
         let results = await Promise.all(promiseList)
         let numsArr = results[1]
-        console.log(results)
         numShow.dataset = numsArr.dataset ? numsArr.dataset : 0
         numShow.flow = numsArr.dagconf ? numsArr.dagconf : 0
         numShow.analysis = numsArr.analysis ? numsArr.length : 0
@@ -68,7 +47,6 @@ export default class DagRoute extends Route {
         return RSVP.hash({
             projectDetail: results[0],
             numShow: numShow,
-            actionsArr: results[2].data.filter(it => it["attributes"]["job-cat"] !== "dag_refresh"),
             _isVue: true
         })
     }

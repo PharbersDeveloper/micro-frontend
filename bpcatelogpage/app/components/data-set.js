@@ -207,10 +207,10 @@ export default class DataSetComponent extends Component {
 			"projectId": projectId,
             "projectName": projectName,
 			"cat": cat,
-			"prop": {
+			"prop": JSON.stringify({
 				path: "",
 				partitions: 1
-			}
+			})
 		}
         let actions_body ={
             "table": "action",

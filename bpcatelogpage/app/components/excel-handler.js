@@ -98,10 +98,10 @@ export default class ExcelHandlerComponent extends Component {
 		param.opgroup = this.cookies.read( "company_id" )
 		param.cat = "uploaded"
 		param.actionName = param.destination // actions列表展示的名称
-		param.prop = {
+		param.prop = JSON.stringify({
 			path: "",
 			partitions: 1
-		}
+		})
 		//直接导入数据集
         const push_type = "put_item"
         const project_files_body = {
