@@ -1,40 +1,40 @@
 'use strict';
 
-define("web-shell/tests/integration/components/component-context-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+define("web-shell/tests/integration/components/iframe-context-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
-  (0, _qunit.module)("Integration | Component | component-context", function (hooks) {
+  (0, _qunit.module)('Integration | Component | iframe-context', function (hooks) {
     (0, _emberQunit.setupRenderingTest)(hooks);
-    (0, _qunit.test)("it renders", async function (assert) {
+    (0, _qunit.test)('it renders', async function (assert) {
       // Set any properties with this.set('myProperty', 'value');
       // Handle any actions with this.set('myAction', function(val) { ... });
       await (0, _testHelpers.render)(Ember.HTMLBars.template(
       /*
-        <ComponentContext />
+        <IframeContext />
       */
       {
-        "id": "YwLjnCFg",
-        "block": "[[[8,[39,0],null,null,null]],[],false,[\"component-context\"]]",
+        "id": "Ux1hU20K",
+        "block": "[[[8,[39,0],null,null,null]],[],false,[\"iframe-context\"]]",
         "moduleName": "(unknown template module)",
         "isStrictMode": false
       }));
-      assert.equal(this.element.textContent.trim(), ""); // Template block usage:
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
 
       await (0, _testHelpers.render)(Ember.HTMLBars.template(
       /*
         
-            <ComponentContext>
+            <IframeContext>
               template block text
-            </ComponentContext>
+            </IframeContext>
           
       */
       {
-        "id": "ytMkuUJS",
-        "block": "[[[1,\"\\n      \"],[8,[39,0],null,null,[[\"default\"],[[[[1,\"\\n        template block text\\n      \"]],[]]]]],[1,\"\\n    \"]],[],false,[\"component-context\"]]",
+        "id": "dlDjWqnG",
+        "block": "[[[1,\"\\n      \"],[8,[39,0],null,null,[[\"default\"],[[[[1,\"\\n        template block text\\n      \"]],[]]]]],[1,\"\\n    \"]],[],false,[\"iframe-context\"]]",
         "moduleName": "(unknown template module)",
         "isStrictMode": false
       }));
-      assert.equal(this.element.textContent.trim(), "template block text");
+      assert.equal(this.element.textContent.trim(), 'template block text');
     });
   });
 });
@@ -69,6 +69,44 @@ define("web-shell/tests/integration/components/shell-component-test", ["qunit", 
       {
         "id": "NCn/3C2H",
         "block": "[[[1,\"\\n      \"],[8,[39,0],null,null,[[\"default\"],[[[[1,\"\\n        template block text\\n      \"]],[]]]]],[1,\"\\n    \"]],[],false,[\"shell-component\"]]",
+        "moduleName": "(unknown template module)",
+        "isStrictMode": false
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("web-shell/tests/integration/components/wc-context-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | wc-context', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <WcContext />
+      */
+      {
+        "id": "qQuHEzRx",
+        "block": "[[[8,[39,0],null,null,null]],[],false,[\"wc-context\"]]",
+        "moduleName": "(unknown template module)",
+        "isStrictMode": false
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <WcContext>
+              template block text
+            </WcContext>
+          
+      */
+      {
+        "id": "VoMsUHJp",
+        "block": "[[[1,\"\\n      \"],[8,[39,0],null,null,[[\"default\"],[[[[1,\"\\n        template block text\\n      \"]],[]]]]],[1,\"\\n    \"]],[],false,[\"wc-context\"]]",
         "moduleName": "(unknown template module)",
         "isStrictMode": false
       }));

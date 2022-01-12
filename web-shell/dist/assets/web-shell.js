@@ -186,7 +186,7 @@
     }
   });
 });
-;define("web-shell/components/component-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+;define("web-shell/components/iframe-context", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -194,51 +194,24 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class;
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <div class="content">
-      {{!-- <h1>Web components inside Ember</h1> --}}
-      <div class="ember">
-          {{!-- <h2>Ember shell context</h2> --}}
-      </div>
-  </div>
+    <h2>iframe component</h2>
+  {{yield}}
   
   */
   {
-    "id": "qa4ygpAC",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[]]",
-    "moduleName": "web-shell/components/component-context.hbs",
+    "id": "qBmSBU+/",
+    "block": "[[[10,\"h2\"],[12],[1,\"iframe component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "moduleName": "web-shell/components/iframe-context.hbs",
     "isStrictMode": false
   });
 
-  // import { tracked } from "@glimmer/tracking"
-  // import { inject as service } from '@ember/service'
-  let ComponentContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
-    listener(e) {
-      // coloring ember body
-      // passing color value to react context via props
-      // const webcomponent = e.target
-      // webcomponent.color = newColor
-      // webcomponent.msg_title = { test: "alfred" }
-      console.log("alfred listener action");
-    }
+  class IframeContextComponent extends _component.default {}
 
-    registerListener(element) {
-      element.addEventListener("event", this.listener);
-    }
+  _exports.default = IframeContextComponent;
 
-    unregisterListener(element) {
-      element.removeEventListener("event", this.listener);
-    }
-
-  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
-  _exports.default = ComponentContextComponent;
-
-  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
 });
 ;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
@@ -260,16 +233,17 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <h2>{{this.engine}}</h2>
-  {{#if (eq this.engine "web-component")}}
-      <h2>web component</h2>
+    {{#if (eq this.engine "web-component")}}
+      <Wc-context></Wc-context>
+  {{else if (eq this.engine "iframe-component")}}
+      <Iframe-context></Iframe-context>
   {{/if}}
   {{yield}}
   
   */
   {
-    "id": "GVVJiqSD",
-    "block": "[[[10,\"h2\"],[12],[1,[30,0,[\"engine\"]]],[13],[1,\"\\n\"],[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"web component\"],[13],[1,\"\\n\"]],[]],null],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"yield\"]]",
+    "id": "HZYhNbUN",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],null]],[]]],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
     "moduleName": "web-shell/components/shell-component.hbs",
     "isStrictMode": false
   });
@@ -292,6 +266,49 @@
   _exports.default = ShellComponentComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ShellComponentComponent);
+});
+;define("web-shell/components/wc-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class;
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <h2>web component</h2>
+  {{yield}}
+  
+  */
+  {
+    "id": "4rOHrrYl",
+    "block": "[[[10,\"h2\"],[12],[1,\"web component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "moduleName": "web-shell/components/wc-context.hbs",
+    "isStrictMode": false
+  });
+
+  let WcContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class WcContextComponent extends _component.default {
+    listener(e) {
+      console.log("alfred listener action");
+    }
+
+    registerListener(element) {
+      element.addEventListener("event", this.listener);
+    }
+
+    unregisterListener(element) {
+      element.removeEventListener("event", this.listener);
+    }
+
+  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  _exports.default = WcContextComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
 });
 ;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
   "use strict";
@@ -2792,7 +2809,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+48f464ea"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c","name":"web-shell","version":"0.0.0+92052e1f"});
           }
         
 //# sourceMappingURL=web-shell.map
