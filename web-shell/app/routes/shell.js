@@ -1,6 +1,6 @@
 import Route from "@ember/routing/route"
-import { tracked } from "@glimmer/tracking"
 import { inject as service } from "@ember/service"
+import RSVP from 'rsvp'
 
 export default class ShellRoute extends Route {
 	@service store
@@ -26,9 +26,11 @@ export default class ShellRoute extends Route {
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
 
-
-		return this.store.query("project", {
-			"ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
-		})
+		return RSVP.hash({
+			page: curPage,
+			projects: this.store.query("project", {
+					"ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
+				}).then(_ => _.filter(_ => true))
+		});
 	}
 }

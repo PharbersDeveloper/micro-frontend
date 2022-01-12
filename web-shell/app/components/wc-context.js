@@ -3,8 +3,7 @@ import { action } from "@ember/object"
 import { tracked } from "@glimmer/tracking"
 
 export default class WcContextComponent extends Component {
-	@tracked name = "pharbers-home"
-	// @tracked name = "iframe-context"
+	// @tracked name = "alfred"
 
 	@action
 	listener(e) {

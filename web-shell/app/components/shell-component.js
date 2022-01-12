@@ -5,5 +5,11 @@ export default class ShellComponentComponent extends Component {
 	/**
 	 * 3. 动态加载Component, 这里的作用是将事件利用Event隔离
 	 */
-	@tracked engine = "web-component"
+	get engine() {
+		return this.args.model.page.engine
+	}
+
+	get name() {
+		return this.args.model.page.name
+	}
 }
