@@ -300,6 +300,7 @@ export default class RecipesComponent extends Component {
 		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
 		let create_scripts_status = cnotification.status
 		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
+		debugger
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
 			let message = JSON.parse(response.data[0].attributes.message)

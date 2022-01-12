@@ -59,6 +59,7 @@ export default class OauthServiceService extends Service {
 					path: "/",
 					maxAge: response.expiresIn
 				}
+				debugger
 				cookies.write( "access_token", response.access_token, options )
 				cookies.write( "refresh_token", response.refresh_token, options )
 				cookies.write( "token_type", response.token_type, options )
@@ -71,11 +72,12 @@ export default class OauthServiceService extends Service {
 				cookies.write( "account_id", response.user.id, options )
 				let userData = await that.store.findRecord( "account", that.cookies.read('account_id') )
 				//请求employer的数据
+				debugger
 				let employerId = await userData.belongsTo('employer').id()
 				let employerData = await that.store.findRecord( "partner", employerId )
-				cookies.write( "company_name_show", encodeURI(employerData.name), options)
+				// cookies.write( "company_name_show", encodeURI(employerData.name), options)
 				// this.mqttService.mqttConnect()
-				this.get( "router" ).transitionTo( '/download/my-data') 
+				// this.get( "router" ).transitionTo( '/download/my-data') 
 			})
 			.catch(err => {
 				this.get( "router" ).transitionTo( '/download/my-data') 

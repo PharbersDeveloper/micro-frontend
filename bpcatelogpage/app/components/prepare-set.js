@@ -71,6 +71,7 @@ export default class PrepareSetComponent extends Component {
 					await fetch(url, options)
 				}
 				let message = {}
+				let job_cat_name = ""
 				if(scriptsParams.jobCat && scriptsParams.jobCat === "prepare_edit") {
 					//用于配置页面数据回显
 					message = {
@@ -84,6 +85,7 @@ export default class PrepareSetComponent extends Component {
 						"operatorParameters": operatorParameters,
 						"runtime": "prepare"
 					}
+					job_cat_name = "prepare_edit"
 					this.msg = "编辑"
 				} else {
 					// 创建
@@ -109,7 +111,7 @@ export default class PrepareSetComponent extends Component {
 							partitions: 1
 						}
 					}
-
+					job_cat_name = "dag_create"
 				}
 				let scriptBody = {
 					"table": "action",
@@ -119,7 +121,7 @@ export default class PrepareSetComponent extends Component {
 						"showName": decodeURI(this.cookies.read('user_name_show')),
 						"code": 0,
 						"jobDesc": "created",
-						"jobCat": "intermediate",
+						"jobCat": job_cat_name,
 						"comments": "",
 						"date": String(new Date().getTime()),
 						"message": JSON.stringify(message)
