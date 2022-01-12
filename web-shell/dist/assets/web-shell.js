@@ -320,7 +320,6 @@
   });
 
   let WcContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class WcContextComponent extends _component.default {
-    // @tracked name = "alfred"
     listener(e) {
       console.log("alfred listener action");
     }

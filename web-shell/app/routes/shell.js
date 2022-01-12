@@ -1,6 +1,6 @@
 import Route from "@ember/routing/route"
 import { inject as service } from "@ember/service"
-import RSVP from 'rsvp'
+import RSVP from "rsvp"
 
 export default class ShellRoute extends Route {
 	@service store
@@ -28,9 +28,11 @@ export default class ShellRoute extends Route {
 
 		return RSVP.hash({
 			page: curPage,
-			projects: this.store.query("project", {
+			projects: this.store
+				.query("project", {
 					"ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
-				}).then(_ => _.filter(_ => true))
-		});
+				})
+				.then((_) => _.filter((_) => true))
+		})
 	}
 }
