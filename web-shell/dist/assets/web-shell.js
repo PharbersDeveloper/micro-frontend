@@ -34,8 +34,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ApplicationAdapter = (_dec = Ember.inject.service, (_class = class ApplicationAdapter extends _jsonApi.default {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
@@ -158,8 +158,8 @@
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   class App extends Ember.Application {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _defineProperty(this, "modulePrefix", _environment.default.modulePrefix);
 
@@ -185,6 +185,36 @@
       return _emberComponentManager.default;
     }
   });
+});
+;define("web-shell/components/-dynamic-element-alt", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  // This component is not needed anymore. However we can only safely remove it once we have an Embroider release that
+  // has the special dependency rule for this addon removed:
+  // https://github.com/embroider-build/embroider/blob/4fad67f16f811e7f93199a1ee92dba8254c42978/packages/compat/src/addon-dependency-rules/ember-element-helper.ts
+  var _default = Ember.Component.extend();
+
+  _exports.default = _default;
+});
+;define("web-shell/components/-dynamic-element", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  // This component is not needed anymore. However we can only safely remove it once we have an Embroider release that
+  // has the special dependency rule for this addon removed:
+  // https://github.com/embroider-build/embroider/blob/4fad67f16f811e7f93199a1ee92dba8254c42978/packages/compat/src/addon-dependency-rules/ember-element-helper.ts
+  var _default = Ember.Component.extend();
+
+  _exports.default = _default;
 });
 ;define("web-shell/components/iframe-context", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
@@ -249,8 +279,8 @@
   });
 
   let ShellComponentComponent = (_dec = Ember._tracked, (_class = class ShellComponentComponent extends _component.default {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "engine", _descriptor, this);
     }
@@ -275,24 +305,43 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class;
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <h2>web component</h2>
+    <h2>{{this.name}}</h2>
+  {{#let (element this.name) as |E|}}
+      <E
+          {{did-insert this.registerListener}}
+          {{will-destroy this.unregisterListener}}>
+      ></E>
+  {{/let}}
   {{yield}}
   
   */
   {
-    "id": "4rOHrrYl",
-    "block": "[[[10,\"h2\"],[12],[1,\"web component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "id": "Cz/hfMTT",
+    "block": "[[[10,\"h2\"],[12],[1,[30,0,[\"name\"]]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"name\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"name\"]]]]]],[[[1,\"    \"],[8,[30,1],[[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[1]]],[18,2,null],[1,\"\\n\"]],[\"E\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/wc-context.hbs",
     "isStrictMode": false
   });
 
-  let WcContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class WcContextComponent extends _component.default {
+  let WcContextComponent = (_dec = Ember._tracked, _dec2 = Ember._action, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class WcContextComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+    }
+
+    // @tracked name = "iframe-context"
     listener(e) {
       console.log("alfred listener action");
     }
@@ -305,7 +354,14 @@
       element.removeEventListener("event", this.listener);
     }
 
-  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return "pharbers-home";
+    }
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = WcContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
@@ -374,6 +430,19 @@
   };
   _exports.default = _default;
 });
+;define("web-shell/helpers/-element", ["exports", "ember-element-helper/helpers/-element"], function (_exports, _element) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _element.default;
+    }
+  });
+});
 ;define("web-shell/helpers/app-version", ["exports", "web-shell/config/environment", "ember-cli-app-version/utils/regexp"], function (_exports, _environment, _regexp) {
   "use strict";
 
@@ -383,8 +452,7 @@
   _exports.appVersion = appVersion;
   _exports.default = void 0;
 
-  function appVersion(_) {
-    let hash = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  function appVersion(_, hash = {}) {
     const version = _environment.default.APP.version; // e.g. 1.0.0-alpha.1+4jds75hf
     // Allow use of 'hideSha' and 'hideVersion' For backwards compatibility
 
@@ -414,6 +482,32 @@
 
   _exports.default = _default;
 });
+;define("web-shell/helpers/element", ["exports", "ember-element-helper/helpers/element"], function (_exports, _element) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _element.default;
+    }
+  });
+});
+;define("web-shell/helpers/ensure-safe-component", ["exports", "@embroider/util"], function (_exports, _util) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _util.EnsureSafeComponentHelper;
+    }
+  });
+});
 ;define("web-shell/helpers/eq", ["exports"], function (_exports) {
   "use strict";
 
@@ -422,8 +516,7 @@
   });
   _exports.default = void 0;
 
-  var _default = Ember.Helper.helper(function eq(_ref) {
-    let [left, right] = _ref;
+  var _default = Ember.Helper.helper(function eq([left, right]) {
     return left === right;
   });
 
@@ -634,8 +727,8 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.default = void 0;
   _exports.initialize = initialize;
+  _exports.default = void 0;
 
   function initialize() {
     var application = arguments[1] || arguments[0];
@@ -710,10 +803,7 @@
   /**
    *  alfredyang@pharbers.com 2021.12.31
    */
-  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk) {
-    let ct = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "application/vnd.api+json";
-    let at = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : "application/vnd.api+json";
-    let method = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : "GET";
+  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk, ct = "application/vnd.api+json", at = "application/vnd.api+json", method = "GET") {
     const factory = _PhSigV4AWSClientFactory.default;
     const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1];
     const pathComponent = path.substring(endpoint.length);
@@ -1649,8 +1739,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("number"), _dec9 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "client-id", _descriptor, this);
 
@@ -1739,8 +1829,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ProjectModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("date"), (_class = class ProjectModel extends _model.default {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "name", _descriptor, this);
 
@@ -1841,8 +1931,8 @@
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   class Router extends Ember.Router {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _defineProperty(this, "location", _environment.default.locationType);
 
@@ -1877,8 +1967,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ApplicationRoute = (_dec = Ember.inject.service, (_class = class ApplicationRoute extends Ember.Route {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "intl", _descriptor, this);
     }
@@ -1931,8 +2021,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("remote-loading"), (_class = class ShellRoute extends Ember.Route {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
 
@@ -2057,6 +2147,19 @@
 
   _exports.default = ApplicationSerializer;
 });
+;define("web-shell/services/-ensure-registered", ["exports", "@embroider/util/services/ensure-registered"], function (_exports, _ensureRegistered) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _ensureRegistered.default;
+    }
+  });
+});
 ;define("web-shell/services/aws-service", ["exports"], function (_exports) {
   "use strict";
 
@@ -2117,8 +2220,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let BrowserEventsServiceService = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember.inject.service, _dec4 = Ember._action, (_class = class BrowserEventsServiceService extends Ember.Service {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "param", _descriptor, this);
 
@@ -2218,8 +2321,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let DownloadFileService = (_dec = Ember.inject.service, (_class = class DownloadFileService extends Ember.Service {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
     }
@@ -2330,8 +2433,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let NoticeServiceService = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, (_class = class NoticeServiceService extends Ember.Service {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
@@ -2469,8 +2572,8 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, (_class = class OauthServiceService extends Ember.Service {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
@@ -2648,8 +2751,8 @@
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
   class RemoteLoadingService extends Ember.Service {
-    constructor() {
-      super(...arguments);
+    constructor(...args) {
+      super(...args);
 
       _defineProperty(this, "loadedJs", []);
     }
@@ -2809,7 +2912,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c","name":"web-shell","version":"0.0.0+92052e1f"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c","name":"web-shell","version":"0.0.0+9937ec1e"});
           }
         
 //# sourceMappingURL=web-shell.map
