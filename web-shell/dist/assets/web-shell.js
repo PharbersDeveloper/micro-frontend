@@ -186,7 +186,88 @@
     }
   });
 });
-;define("web-shell/components/component-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+;define("web-shell/components/iframe-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <h2>iframe component</h2>
+  {{yield}}
+  
+  */
+  {
+    "id": "qBmSBU+/",
+    "block": "[[[10,\"h2\"],[12],[1,\"iframe component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "moduleName": "web-shell/components/iframe-context.hbs",
+    "isStrictMode": false
+  });
+
+  class IframeContextComponent extends _component.default {}
+
+  _exports.default = IframeContextComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
+});
+;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#if (eq this.engine "web-component")}}
+      <Wc-context></Wc-context>
+  {{else if (eq this.engine "iframe-component")}}
+      <Iframe-context></Iframe-context>
+  {{/if}}
+  {{yield}}
+  
+  */
+  {
+    "id": "HZYhNbUN",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],null]],[]]],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
+    "moduleName": "web-shell/components/shell-component.hbs",
+    "isStrictMode": false
+  });
+
+  let ShellComponentComponent = (_dec = Ember._tracked, (_class = class ShellComponentComponent extends _component.default {
+    constructor() {
+      super(...arguments);
+
+      _initializerDefineProperty(this, "engine", _descriptor, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return "web-component";
+    }
+  })), _class));
+  _exports.default = ShellComponentComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ShellComponentComponent);
+});
+;define("web-shell/components/wc-context", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -200,30 +281,19 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <div class="content">
-      {{!-- <h1>Web components inside Ember</h1> --}}
-      <div class="ember">
-          {{!-- <h2>Ember shell context</h2> --}}
-      </div>
-  </div>
+    <h2>web component</h2>
+  {{yield}}
   
   */
   {
-    "id": "qa4ygpAC",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[]]",
-    "moduleName": "web-shell/components/component-context.hbs",
+    "id": "4rOHrrYl",
+    "block": "[[[10,\"h2\"],[12],[1,\"web component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "moduleName": "web-shell/components/wc-context.hbs",
     "isStrictMode": false
   });
 
-  // import { tracked } from "@glimmer/tracking"
-  // import { inject as service } from '@ember/service'
-  let ComponentContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
+  let WcContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class WcContextComponent extends _component.default {
     listener(e) {
-      // coloring ember body
-      // passing color value to react context via props
-      // const webcomponent = e.target
-      // webcomponent.color = newColor
-      // webcomponent.msg_title = { test: "alfred" }
       console.log("alfred listener action");
     }
 
@@ -236,9 +306,9 @@
     }
 
   }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
-  _exports.default = ComponentContextComponent;
+  _exports.default = WcContextComponent;
 
-  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
 });
 ;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
   "use strict";
@@ -341,6 +411,21 @@
   }
 
   var _default = Ember.Helper.helper(appVersion);
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/eq", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.Helper.helper(function eq(_ref) {
+    let [left, right] = _ref;
+    return left === right;
+  });
 
   _exports.default = _default;
 });
@@ -1835,7 +1920,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor;
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -1845,30 +1930,46 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, (_class = class ShellRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("remote-loading"), (_class = class ShellRoute extends Ember.Route {
     constructor() {
       super(...arguments);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor2, this);
     }
 
     async model(params) {
-      console.log(params);
       /**
-       * 1. 第一步，需要从读取模版
+       * 1. 第一步，需要从读取JS模版
+       */
+      let pages = this.store.peekAll("page");
+
+      if (pages.length === 0) {
+        console.log("need query page configures"); // pages = await this.store.query("page", {})
+
+        pages = await this.store.query("page", {
+          "filter[clientId]": "fjjnl2uSalHTdrppHG9u"
+        });
+      }
+
+      const curPage = pages.find(x => x.route === "/" + params.path);
+      /**
+       * 2. 动态的把需要的JS加载到dom中
        */
 
-      const pages = await this.store.query("page", {
-        "filter[route]": "/" + params.path
-      });
-      console.log(pages);
-      debugger;
+      this.jsl.loadRemoteJs(curPage.uri);
       return this.store.query("project", {
         "ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
       });
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -1955,50 +2056,6 @@
   }
 
   _exports.default = ApplicationSerializer;
-});
-;define("web-shell/services/ajax", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _dec, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
-  // import { computed } from "@ember/object"
-  let AjaxService = (_dec = Ember.inject.service("cookies"), (_class = class AjaxService extends Ember.Service {
-    constructor() {
-      super(...arguments);
-
-      _initializerDefineProperty(this, "cookies", _descriptor, this);
-    }
-
-    get headers() {
-      let cookies = this.cookies;
-      return {
-        "Content-Type": "application/json",
-        // 默认值
-        Accept: "application/json",
-        Authorization: `Bearer ${cookies.read("access_token")}`
-      };
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  })), _class));
-  _exports.default = AjaxService;
 });
 ;define("web-shell/services/aws-service", ["exports"], function (_exports) {
   "use strict";
@@ -2580,6 +2637,43 @@
     }
   });
 });
+;define("web-shell/services/remote-loading", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class RemoteLoadingService extends Ember.Service {
+    constructor() {
+      super(...arguments);
+
+      _defineProperty(this, "loadedJs", []);
+    }
+
+    loadRemoteJs(source, callback) {
+      let that = this;
+      const script = document.createElement("script");
+
+      script.onload = function () {
+        that.loadedJs.push(source);
+
+        if (callback) {
+          callback();
+        }
+      };
+
+      script.src = source;
+      document.head.appendChild(script);
+    }
+
+  }
+
+  _exports.default = RemoteLoadingService;
+});
 ;define("web-shell/services/store", ["exports", "ember-data/store"], function (_exports, _store) {
   "use strict";
 
@@ -2619,8 +2713,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "9Lg1le8/",
-    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
+    "id": "GXi8S0j+",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[8,[39,1],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"shell-component\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
@@ -2715,7 +2809,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"0103ff8a73924cd951273a01e027c9f93e0da830041f98ed6029cf106d0c965b","name":"web-shell","version":"0.0.0+b9a9d493"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c","name":"web-shell","version":"0.0.0+92052e1f"});
           }
         
 //# sourceMappingURL=web-shell.map

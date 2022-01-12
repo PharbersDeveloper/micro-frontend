@@ -1,0 +1,6 @@
+{{#if (eq this.engine "web-component")}}
+    <Wc-context></Wc-context>
+{{else if (eq this.engine "iframe-component")}}
+    <Iframe-context></Iframe-context>
+{{/if}}
+{{yield}}
