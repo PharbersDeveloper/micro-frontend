@@ -1,9 +1,9 @@
 function component() {
-	var element = document.createElement('div');
+	var element = document.createElement("div")
 
 	element.innerHTML = "<span>Hello World</span>"
 
-	return element;
+	return element
 }
 
-document.body.appendChild(component());
+document.body.appendChild(component())

@@ -37,3 +37,9 @@ npx webpack --config webpack.config.js
 npm install clean-webpack-plugin --save-dev
 npm install --save-dev html-webpack-plugin
 ```
+
+# 设置lint
+
+```shell script
+npm install eslint eslint-webpack-plugin --save-dev
+```
