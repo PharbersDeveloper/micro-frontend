@@ -45,7 +45,7 @@ module.exports = function (environment) {
 		// ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		// ENV.APP.LOG_VIEW_LOOKUPS = true;
 		ENV.APP.debugToken =
-			"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c"
+			"91317b78cc0c301c672360375b374ca2c9c6668b5d918cf9ab0e4baf9d1d60d5"
 	}
 
 	if (environment === "test") {

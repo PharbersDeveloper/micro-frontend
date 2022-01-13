@@ -13,7 +13,6 @@ export default class ShellRoute extends Route {
 		let pages = this.store.peekAll("page")
 		if (pages.length === 0) {
 			console.log("need query page configures")
-			// pages = await this.store.query("page", {})
 			pages = await this.store.query("page", {
 				"filter[clientId]": "fjjnl2uSalHTdrppHG9u"
 			})
@@ -26,13 +25,11 @@ export default class ShellRoute extends Route {
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
 
+		const projects = await alfredTest(this)
+		debugger
 		return RSVP.hash({
 			page: curPage,
-			projects: this.store
-				.query("project", {
-					"ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
-				})
-				.then((_) => _.filter((_) => true))
+			projects: projects
 		})
 	}
 }

@@ -2007,8 +2007,7 @@
       let pages = this.store.peekAll("page");
 
       if (pages.length === 0) {
-        console.log("need query page configures"); // pages = await this.store.query("page", {})
-
+        console.log("need query page configures");
         pages = await this.store.query("page", {
           "filter[clientId]": "fjjnl2uSalHTdrppHG9u"
         });
@@ -2020,11 +2019,11 @@
        */
 
       this.jsl.loadRemoteJs(curPage.uri);
+      const projects = await alfredTest(this);
+      debugger;
       return Ember.RSVP.hash({
         page: curPage,
-        projects: this.store.query("project", {
-          "ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
-        }).then(_ => _.filter(_ => true))
+        projects: projects
       });
     }
 
@@ -2886,7 +2885,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c","name":"web-shell","version":"0.0.0+9937ec1e"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"91317b78cc0c301c672360375b374ca2c9c6668b5d918cf9ab0e4baf9d1d60d5","name":"web-shell","version":"0.0.0+d6573472"});
           }
         
 //# sourceMappingURL=web-shell.map
