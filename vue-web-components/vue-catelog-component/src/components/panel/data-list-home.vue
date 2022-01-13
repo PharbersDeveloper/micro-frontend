@@ -180,10 +180,12 @@ export default {
     async mounted() {
         const accessToken = this.getCookie("access_token") || "ce9acc796c509e9f9053ea428f3ca5d800dace2092ba1b6c42b6c961534eb5de"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+        let uriArr = window.location.href.split("/")
+        let projectId = uriArr[uriArr.length - 1]
         let acbody = {
             "table": "action",
             "conditions": {
-                "projectId": ["=", this.allData.projectId]
+                "projectId": ["=", projectId]
             },
             "limit": 10,
             "start_key": ""
@@ -208,8 +210,8 @@ export default {
                 return {
                     "projectDetail": {},
                     "numShow": {},
-                    "projectName": "ETL_Iterator",
-                    "projectId": "JfSmQBYUpyb4jsei"
+                    "projectName": "",
+                    "projectId": ""
                 }
             }
         }
