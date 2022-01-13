@@ -30,3 +30,10 @@ npm install webpack webpack-cli --save-dev
 ```shell script
 npx webpack --config webpack.config.js
 ```
+
+# 设置清理项
+
+```shell script
+npm install clean-webpack-plugin --save-dev
+npm install --save-dev html-webpack-plugin
+```
