@@ -1,6 +1,6 @@
 import Route from "@ember/routing/route"
-import { tracked } from "@glimmer/tracking"
 import { inject as service } from "@ember/service"
+import RSVP from "rsvp"
 
 export default class ShellRoute extends Route {
 	@service store
@@ -13,7 +13,6 @@ export default class ShellRoute extends Route {
 		let pages = this.store.peekAll("page")
 		if (pages.length === 0) {
 			console.log("need query page configures")
-			// pages = await this.store.query("page", {})
 			pages = await this.store.query("page", {
 				"filter[clientId]": "fjjnl2uSalHTdrppHG9u"
 			})
@@ -26,9 +25,11 @@ export default class ShellRoute extends Route {
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
 
-
-		return this.store.query("project", {
-			"ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
+		const projects = await alfredTest(this)
+		debugger
+		return RSVP.hash({
+			page: curPage,
+			projects: projects
 		})
 	}
 }

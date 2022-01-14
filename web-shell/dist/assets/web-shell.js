@@ -251,48 +251,39 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
     {{#if (eq this.engine "web-component")}}
-      <Wc-context></Wc-context>
+      <Wc-context @name={{this.name}} />
   {{else if (eq this.engine "iframe-component")}}
       <Iframe-context></Iframe-context>
+  {{else}}
+      <h2>not implement shell component</h2>
   {{/if}}
   {{yield}}
   
   */
   {
-    "id": "HZYhNbUN",
-    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],null]],[]]],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
+    "id": "bDnA+0Is",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\"],[[30,0,[\"name\"]]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
     "moduleName": "web-shell/components/shell-component.hbs",
     "isStrictMode": false
   });
 
-  let ShellComponentComponent = (_dec = Ember._tracked, (_class = class ShellComponentComponent extends _component.default {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "engine", _descriptor, this);
+  class ShellComponentComponent extends _component.default {
+    /**
+     * 3. 动态加载Component, 这里的作用是将事件利用Event隔离
+     */
+    get engine() {
+      return this.args.model.page.engine;
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: function () {
-      return "web-component";
+    get name() {
+      return this.args.model.page.name;
     }
-  })), _class));
+
+  }
+
   _exports.default = ShellComponentComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ShellComponentComponent);
@@ -305,20 +296,14 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+  var _dec, _dec2, _dec3, _class;
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <h2>{{this.name}}</h2>
-  {{#let (element this.name) as |E|}}
+    <h2>{{@name}}</h2>
+  {{#let (element @name) as |E|}}
       <E
           {{did-insert this.registerListener}}
           {{will-destroy this.unregisterListener}}>
@@ -328,20 +313,13 @@
   
   */
   {
-    "id": "Cz/hfMTT",
-    "block": "[[[10,\"h2\"],[12],[1,[30,0,[\"name\"]]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"name\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"name\"]]]]]],[[[1,\"    \"],[8,[30,1],[[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[1]]],[18,2,null],[1,\"\\n\"]],[\"E\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "id": "iNY9zUK1",
+    "block": "[[[10,\"h2\"],[12],[1,[30,1]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,3,null],[1,\"\\n\"]],[\"@name\",\"E\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/wc-context.hbs",
     "isStrictMode": false
   });
 
-  let WcContextComponent = (_dec = Ember._tracked, _dec2 = Ember._action, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class WcContextComponent extends _component.default {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "name", _descriptor, this);
-    }
-
-    // @tracked name = "iframe-context"
+  let WcContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class WcContextComponent extends _component.default {
     listener(e) {
       console.log("alfred listener action");
     }
@@ -354,14 +332,7 @@
       element.removeEventListener("event", this.listener);
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: function () {
-      return "pharbers-home";
-    }
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = WcContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
@@ -2036,8 +2007,7 @@
       let pages = this.store.peekAll("page");
 
       if (pages.length === 0) {
-        console.log("need query page configures"); // pages = await this.store.query("page", {})
-
+        console.log("need query page configures");
         pages = await this.store.query("page", {
           "filter[clientId]": "fjjnl2uSalHTdrppHG9u"
         });
@@ -2049,8 +2019,11 @@
        */
 
       this.jsl.loadRemoteJs(curPage.uri);
-      return this.store.query("project", {
-        "ids[]": ["jFlL0WS1Qwy5buKh", "JfSmQBYUpyb4jsei"]
+      const projects = await alfredTest(this);
+      debugger;
+      return Ember.RSVP.hash({
+        page: curPage,
+        projects: projects
       });
     }
 
@@ -2816,8 +2789,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "GXi8S0j+",
-    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[8,[39,1],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[],false,[\"page-title\",\"shell-component\",\"component\",\"-outlet\"]]",
+    "id": "n5K90ut1",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@model\"],[[30,1]]],null],[1,\"\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"shell-component\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
@@ -2912,7 +2885,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2da49bf8c5ab1d68430720d8cb66e1e6fdf5acc35dc12e20561f6fb20f25097c","name":"web-shell","version":"0.0.0+9937ec1e"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"91317b78cc0c301c672360375b374ca2c9c6668b5d918cf9ab0e4baf9d1d60d5","name":"web-shell","version":"0.0.0+d6573472"});
           }
         
 //# sourceMappingURL=web-shell.map
