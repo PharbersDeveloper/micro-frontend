@@ -17,7 +17,6 @@ export default class ShellRoute extends Route {
 				"filter[clientId]": "fjjnl2uSalHTdrppHG9u"
 			})
 		}
-
 		const curPage = pages.find((x) => x.route === "/" + params.path)
 
 		/**
