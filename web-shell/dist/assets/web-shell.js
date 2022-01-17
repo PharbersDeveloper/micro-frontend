@@ -2594,12 +2594,10 @@
        */
 
       this.jsl.loadRemoteJs(curPage.uri);
-      const data = await pharbersHomeRouteModel(this);
-      debugger;
+      const data = await offweb.pharbersHomeRouteModel(this);
       return Ember.RSVP.hash({
         page: curPage,
-        data: data,
-        _isVue: true
+        data: data
       });
     }
 

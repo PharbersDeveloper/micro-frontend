@@ -4,10 +4,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
+	mode: "production",
 	entry: './src/',
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist')
+		path: path.resolve(__dirname, 'dist'),
+		libraryTarget: "umd",
+		globalObject: "this",
+		library: "offweb"
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
