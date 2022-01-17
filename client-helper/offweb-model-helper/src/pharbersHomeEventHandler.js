@@ -5,8 +5,8 @@ export async function pharbersHomeEventHandler(e, route) {
 		case "linkToPage":
 			if (e.detail[0].args.param.index != undefined) {
 				route.router.transitionTo(
-					e.detail[0].args.param.name,
-					e.detail[0].args.param.index
+					"shell",
+					`${e.detail[0].args.param.name}/${e.detail[0].args.param.index}`
 				)
 			} else {
 				route.router.transitionTo(e.detail[0].args.param.name)
