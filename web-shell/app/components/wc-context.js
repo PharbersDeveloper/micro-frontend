@@ -9,8 +9,8 @@ export default class WcContextComponent extends Component {
 
 	@action
 	async registerListener(element) {
-		element.allData = await this.calAllData
-		debugger
+		this.args.allData.data.isVue = true
+		element.allData = this.args.allData.data
 		element.addEventListener("event", this.listener)
 	}
 
@@ -18,8 +18,4 @@ export default class WcContextComponent extends Component {
 	unregisterListener(element) {
 		element.removeEventListener("event", this.listener)
 	}
-	get calAllData() {
-		this.args.model._isVue = true
-		return this.args.model
-    }
 }

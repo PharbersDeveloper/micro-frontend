@@ -1,5 +1,5 @@
 {{#if (eq this.engine "web-component")}}
-    <Wc-context @name={{this.name}} />
+    <Wc-context @name={{this.name}} @allData={{@model}}/>
 {{else if (eq this.engine "iframe-component")}}
     <Iframe-context></Iframe-context>
 {{else}}

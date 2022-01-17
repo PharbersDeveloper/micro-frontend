@@ -27,7 +27,8 @@ export default class ShellRoute extends Route {
 		const data = await offweb.pharbersHomeRouteModel(this)
 		return RSVP.hash({
 			page: curPage,
-			data: data
+			data: data,
+			isVue: true
 		})
 	}
 }

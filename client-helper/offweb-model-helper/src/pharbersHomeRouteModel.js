@@ -27,11 +27,9 @@ export async function pharbersHomeRouteModel(route) {
 		}
 	}
 	// eslint-disable-next-line no-undef
-	await Promise.all([activityList, reportsList])
+	let results = await Promise.all([activityList, reportsList])
 	return {
-		activities: activityList.then((_) =>
-			_.filter((it) => it.language === lang)
-		),
-		reports: reportsList.then((_) => _.filter((it) => it.language === lang))
+		activities: results[0].filter((it) => it.language === lang),
+		reports: results[1].filter((it) => it.language === lang)
 	}
 }

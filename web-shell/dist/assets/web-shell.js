@@ -254,7 +254,7 @@
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
     {{#if (eq this.engine "web-component")}}
-      <Wc-context @name={{this.name}} />
+      <Wc-context @name={{this.name}} @allData={{@model}}/>
   {{else if (eq this.engine "iframe-component")}}
       <Iframe-context></Iframe-context>
   {{else}}
@@ -264,8 +264,8 @@
   
   */
   {
-    "id": "bDnA+0Is",
-    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\"],[[30,0,[\"name\"]]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
+    "id": "6SHiJWWM",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\",\"@allData\"],[[30,0,[\"name\"]],[30,1]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,2,null],[1,\"\\n\"]],[\"@model\",\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
     "moduleName": "web-shell/components/shell-component.hbs",
     "isStrictMode": false
   });
@@ -305,7 +305,7 @@
     <h2>{{@name}}</h2>
   {{#let (element @name) as |E|}}
       <E
-  		allData={{@model}}
+  		allData={{@allData}}
           {{did-insert this.registerListener}}
           {{will-destroy this.unregisterListener}}>
       ></E>
@@ -314,8 +314,8 @@
   
   */
   {
-    "id": "9CMCQJ0d",
-    "block": "[[[10,\"h2\"],[12],[1,[30,1]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@model\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "id": "Sgp2Tvts",
+    "block": "[[[10,\"h2\"],[12],[1,[30,1]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/wc-context.hbs",
     "isStrictMode": false
   });
@@ -326,18 +326,13 @@
     }
 
     async registerListener(element) {
-      element.allData = await this.calAllData;
-      debugger;
+      this.args.allData.data.isVue = true;
+      element.allData = this.args.allData.data;
       element.addEventListener("event", this.listener);
     }
 
     unregisterListener(element) {
       element.removeEventListener("event", this.listener);
-    }
-
-    get calAllData() {
-      this.args.model._isVue = true;
-      return this.args.model;
     }
 
   }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
@@ -2597,7 +2592,8 @@
       const data = await offweb.pharbersHomeRouteModel(this);
       return Ember.RSVP.hash({
         page: curPage,
-        data: data
+        data: data,
+        isVue: true
       });
     }
 
