@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = function ( environment ) {
-	let ENV = {
+	let ENV = { 
 		modulePrefix: "bpcatelogpage",
 		environment,
 		rootURL: "/",
@@ -28,6 +28,7 @@ module.exports = function ( environment ) {
 		APP: {
 			// Here you can pass flags/options to your application instance
 			// when it is created
+			namespace: "v0"
 		}
 	}
 

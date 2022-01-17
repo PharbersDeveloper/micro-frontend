@@ -7,8 +7,7 @@
                     <div class="upload_top">
                         <div class="selected_search">
                             <div class="selected"
-                                :class="[
-                                    {'bg_disabled': reciptcheckedIds.length == 0}]">
+                                :class="[{'bg_disabled': reciptcheckedIds.length == 0}]">
                                 <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === allData.dcs.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
@@ -43,25 +42,28 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                                <div class="list" @click="selectScripts('python3')">
+								<!-- @click="selectScripts('python3')" -->
+                                <div class="list">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
-                                    <p>python</p>
+                                    <p class="dis">Python</p>
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
                                     <p>PySpark</p>
                                 </div>
-                                <div class="list" @click="selectScripts('r')">
+								<!-- @click="selectScripts('r')" -->
+                                <div class="list" >
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
-                                    <p>R</p>
+                                    <p  class="dis">R</p>
                                 </div>
-                                <div class="list" @click="selectScripts('sparkr')">
+								<!-- @click="selectScripts('sparkr')" -->
+                                <div class="list" >
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
-                                    <p>sparkR</p>
+                                    <p  class="dis">SparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
-                                    <p>prepare</p>
+                                    <p  class="">Prepare</p>
                                 </div>
                             </div>
                         </div>
@@ -411,7 +413,7 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dcs.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                return this.allData.dcs.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
             return this.allData.dcs
@@ -725,6 +727,9 @@ export default {
             width: 20px;
             height: 20px;
         }
+		.dis {
+			color: #ccc;
+		}
     }
     .last {
         border-bottom: none;
@@ -1151,8 +1156,8 @@ export default {
                         font-size: 14px;
                         color: #000000;
                         font-weight: 600;
-                        width: 168px;
-                        min-width: 168px;
+                        width: 400px;
+                        min-width: 400px;
                         height: 40px;
                         line-height: 40px;
                         overflow: hidden;

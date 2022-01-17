@@ -40,6 +40,7 @@
 		"ember-cli-sri": "^2.1.1",
 		"ember-cli-terser": "^4.0.1",
 		"ember-data": "~3.25.0",
+		"ember-element-helper": "^0.5.5",
 		"ember-export-application-global": "^2.0.1",
 		"ember-fetch": "^8.0.4",
 		"ember-intl": "^5.6.2",
@@ -69,9 +70,8 @@
 		"edition": "octane"
 	},
 	"dependencies": {
-		"@types/crypto-js": "^3.1.47",
 		"@ember/render-modifiers": "^1.0.2",
-		"crypto-js": "^4.0.0",
+		"crypto-js": "^4.1.1",
 		"ember-cookies": "^0.5.2"
 	}
 }

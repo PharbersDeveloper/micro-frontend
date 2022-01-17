@@ -15,6 +15,9 @@ export default class PrepareSetRoute extends Route {
 		},
 		message: {
 			refreshModel: true
+		},
+		operatorParameters: {
+			refreshModel: true
 		}
     }
 
@@ -33,6 +36,7 @@ export default class PrepareSetRoute extends Route {
 			projectName: params.projectName,
 			projectId: params.projectId,
 			message: params.message,
+			operatorParameters: params.operatorParameters ? JSON.parse(unescape(params.operatorParameters)) : [],
 			_isVue: true
 		} )
 	}

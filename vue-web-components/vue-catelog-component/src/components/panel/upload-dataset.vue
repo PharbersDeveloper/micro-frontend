@@ -157,6 +157,7 @@
                     <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
+        </div>
         <!-- 清除数据集数据 -->
         <clear-dataset-dialog
             v-if="cleardialogshow"
@@ -188,18 +189,17 @@
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <!-- max1.0入口 -->
-         <fit-max-input-dialog
+        <fit-max-input-dialog
             v-if="clickMax"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-input-dialog>
         <!-- max1.0出口 -->
-         <fit-max-output-dialog
+        <fit-max-output-dialog
             v-if="clickMaxOutput"
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-output-dialog>
-    </div>
     </div>
 </template>
 
@@ -267,39 +267,12 @@ export default {
                 [
                     {
                         "projectId": null,
-                        "schema": "[{\"src\":\"id\", \"des\":\"id\", \"type\":\"String\"}, {\"src\":\"province\", \"des\":\"province\", \"type\":\"String\"}, {\"src\":\"city\", \"des\":\"city\", \"type\":\"String\"}, {\"src\":\"标准省份名称\", \"des\":\"标准省份名称\", \"type\":\"String\"}, {\"src\":\"标准城市名称\", \"des\":\"标准城市名称\", \"type\":\"String\"}, {\"src\":\"version\", \"des\":\"version\", \"type\":\"String\"}]",
-                        "version": "20210623",
-                        "name": "province_city_mapping_common",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
                         "schema": "[]",
                         "version": "max1.0",
                         "name": "cpa_pha_mapping",
                         "label": "",
                         "cat": "input_index",
                         "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[{\"src\":\"min2\", \"des\":\"min2\", \"type\":\"String\"}, {\"src\":\"date\", \"des\":\"date\", \"type\":\"Double\"}, {\"src\":\"city\", \"des\":\"city\", \"type\":\"String\"}, {\"src\":\"province\", \"des\":\"province\", \"type\":\"String\"}, {\"src\":\"price\", \"des\":\"price\", \"type\":\"Double\"}, {\"src\":\"version\", \"des\":\"version\", \"type\":\"String\"}]",
-                        "version": "\"赵浩博_Test_Test_developer_2021-12-28T03:48:26+00:00\"",
-                        "name": "price_city",
-                        "label": "",
-                        "cat": "intermediate",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[{\"src\":\"province\", \"des\":\"province\", \"type\":\"String\"}, {\"src\":\"city\", \"des\":\"city\", \"type\":\"String\"}, {\"src\":\"date\", \"des\":\"date\", \"type\":\"Double\"}, {\"src\":\"prod_name\", \"des\":\"prod_name\", \"type\":\"String\"}, {\"src\":\"molecule\", \"des\":\"molecule\", \"type\":\"String\"}, {\"src\":\"panel\", \"des\":\"panel\", \"type\":\"Double\"}, {\"src\":\"doi\", \"des\":\"doi\", \"type\":\"String\"}, {\"src\":\"predict_sales\", \"des\":\"predict_sales\", \"type\":\"Double\"}, {\"src\":\"predict_unit\", \"des\":\"predict_unit\", \"type\":\"Double\"}, {\"src\":\"标准通用名\", \"des\":\"标准通用名\", \"type\":\"String\"}, {\"src\":\"标准商品名\", \"des\":\"标准商品名\", \"type\":\"String\"}, {\"src\":\"标准剂型\", \"des\":\"标准剂型\", \"type\":\"String\"}, {\"src\":\"标准规格\", \"des\":\"标准规格\", \"type\":\"String\"}, {\"src\":\"标准包装数量\", \"des\":\"标准包装数量\", \"type\":\"String\"}, {\"src\":\"标准生产企业\", \"des\":\"标准生产企业\", \"type\":\"String\"}, {\"src\":\"标准省份名称\", \"des\":\"标准省份名称\", \"type\":\"String\"}, {\"src\":\"标准城市名称\", \"des\":\"标准城市名称\", \"type\":\"String\"}, {\"src\":\"pack_id\", \"des\":\"pack_id\", \"type\":\"Double\"}, {\"src\":\"atc\", \"des\":\"atc\", \"type\":\"String\"}, {\"src\":\"version\", \"des\":\"version\", \"type\":\"String\"}]",
-                        "version": "\"赵浩博_Test_Test_developer_2021-12-28T01:44:18.538039+00:00\"",
-                        "name": "max_result_standard",
-                        "label": "",
-                        "cat": "output_index",
-                        "path": ""
                     }
                 ],
                 tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
@@ -316,26 +289,15 @@ export default {
         fitMaxInputDialog,
         fitMaxOutputDialog
     },
-    computed: {
-        searchData: function() {
-            let searchValue = this.searchValue
-            this.state = 'search'
-            if(searchValue) {
-                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            }
-            this.sort("ascending")
-            return this.allData.dss
-        }
-    },
+    computed: { },
     mounted() {
-        let that = this
-        this.$refs.tagsArea.forEach((item, index) => {
-            //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
-            // if(item.clientHeight > 30) {
-            //     this.$refs.moreTags[0].style["display"] = "flex"
-            // }
-            item.style["height"] = "40px"
-        })
+        // this.$refs.tagsArea.forEach((item, index) => {
+        //     //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
+        //     // if(item.clientHeight > 30) {
+        //     //     this.$refs.moreTags[0].style["display"] = "flex"
+        //     // }
+        //     item.style["height"] = "40px"
+        // })
     },
     watch: {
         "allData.tagsArray": function() {
@@ -343,18 +305,42 @@ export default {
             this.allData.tagsArray.forEach((item, index) => {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
+        },
+        "allData.dss": function() {
+            this.searchData = this.allData.dss
+        },
+        searchValue: function() {
+            let searchValue = this.searchValue
+            this.state = 'search'
+            if(searchValue) {
+                this.searchData = this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+            } else {
+                this.searchData = this.allData.dss
+            }
+            this.sort("ascending")
         }
     },
     methods: {
+        // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
-            console.log(data)
-            this.$emit('event', data)
-            this.clickMax = false
-            this.clickMaxOutput = false
+            data.args.param.datasetArray = this.allData.dss
+            let creatDS = true
+            this.allData.dss.forEach(item => {
+                if(item.name === data.args.param.dsName) {
+                    creatDS = false
+                    alert("数据集已存在！")
+                }
+            })
+            if(creatDS) {
+                this.$emit('event', data)
+                this.clickMax = false
+                this.clickMaxOutput = false
+            }
         },
+        // 关闭max1.0弹框
         closeDialog() {
             this.clickMaxOutput = false
             this.clickMax = false
@@ -377,7 +363,7 @@ export default {
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
-        //删除数据集
+        //删除脚本
         async deleteDataset(data) {
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
@@ -386,6 +372,7 @@ export default {
             if(data.args.param.datasetRelaResult.length > 0) {
                 data.args.param.datasetRelaResult.forEach(async item => {
                     msgArr.push({
+                        "actionName": item.jobShowName,
                         "targetId": item.targetId,
                         "jobName": item.jobName,
                         "flowVersion": "developer"
@@ -401,7 +388,7 @@ export default {
                         "jobCat": "remove_Job",
                         "jobDesc": "running",
                         "message": JSON.stringify(msgArr),
-                        "date": new Date().getTime(),
+                        "date": String(new Date().getTime()),
                         "owner": this.getCookie("account_id"),
                         "showName": decodeURI(this.getCookie('user_name_show'))
                     }
@@ -486,8 +473,7 @@ export default {
             if(val == 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                // this.allData.dss.sort()
-                this.allData.dss.sort(
+                this.searchData.sort(
                     function compareFunction(param1, param2) {
                         return param1.name.localeCompare(param2.name);
                     }
@@ -495,7 +481,7 @@ export default {
             }else if (val == 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.allData.dss.reverse()
+                this.searchData.reverse()
             }
         },
         //排序条件下拉框
@@ -588,18 +574,6 @@ export default {
         on_click_max_input() {
             this.clickMax = true
             this.maxcat = "input_index"
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "linkToPage",
-            //     element: this,
-            //     param: {
-            //         name: "upload",
-            //         type: "s3Upload",
-            //         projectName: this.allData.projectName,
-            //         projectId: this.allData.projectId
-            //     }
-            // }
-            // this.$emit('event', event)
         },
         on_click_max_output() {
             this.clickMaxOutput = true
@@ -1093,8 +1067,8 @@ export default {
                         font-size: 14px;
                         color: #000000;
                         font-weight: 600;
-                        width: 168px;
-                        min-width: 168px;
+                        width: 400px;
+                        min-width: 400px;
                         height: 40px;
                         line-height: 40px;
                         overflow: hidden;

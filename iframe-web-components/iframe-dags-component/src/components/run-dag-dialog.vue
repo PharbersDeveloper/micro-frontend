@@ -6,8 +6,25 @@
                         <span>运行</span>
                 </div>
                 <div class="prompt" v-show="steps === 0">
-                    <span>数据集参数</span>
-                    <textarea name="runJson" id=""  cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea>
+                    <span>数据版本参数</span>
+                    <!-- <textarea name="runJson" id=""  cols="30" rows="10" class="run_json" v-model="datasetsConf"></textarea> -->
+                    <div class="data_version">
+                        <table>
+                            <tr>
+                                <th class="input">input数据集</th>
+                                <th class="version">数据版本</th>
+                                <th class="cat">Category</th>
+                            </tr>
+                            <tr v-for="(item, index) in datasetsConf" :key="index">
+                                <td class="input" :title="item.name">{{item.name}}</td>
+                                <td class="version" >
+                                    <span :title="item.version.toString()">{{item.version.toString()}}</span>
+                                    <img v-if="item.cat === 'uploaded'" class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion(item.name, item.version)"/>
+                                </td>
+                                <td class="cat">{{item.cat}}</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div class="prompt" v-show="steps === 1">
                     <span>低代码脚本参数</span>
@@ -33,10 +50,20 @@
               </div>
             </div>
         </div>
+        <select-version 
+            v-if="selectDataVersion"
+            @closeSelVersionDialog="closeSelVersionDialog"
+            @selectVersionConfirm="selectVersionConfirm"
+            :projectId="projectId"
+            :dsVersion="dsVersion"
+            :datasetName="dsName"
+        ></select-version>
     </div>
 </template>
 
 <script>
+import selectVersion from "./select-version.vue"
+
 export default {
     data() {
         return{
@@ -45,22 +72,47 @@ export default {
             steps: 0,
             datasetsConf: "",
             scriptsConf: "",
-            userConf: ""
+            userConf: "",
+            selectDataVersion: false,
+            dsName: "",
+            dsVersion: []
         }
     },
     props: {
-        textConf: Object
+        textConf: Object,
+        projectId: String
+    },
+    components: {
+        selectVersion
     },
     computed: {},
     mounted() {
         this.jsonValue = JSON.stringify(this.textConf)
-        this.datasetsConf = JSON.stringify(this.textConf.datasets)
+        this.datasetsConf = this.textConf.datasets
         this.scriptsConf = JSON.stringify(this.textConf.scripts)
         this.userConf = JSON.stringify(this.textConf.userConf)
     },
     watch: {
     },
     methods: {
+        selectVersionConfirm(data) {
+            let version = data.args.param.versionArr
+            let name = data.args.param.datasetName
+            this.datasetsConf.forEach(item => {
+                if(item.name === name) {
+                    item.version = version
+                }
+            })
+            this.selectDataVersion = false
+        }, 
+        closeSelVersionDialog() {
+            this.selectDataVersion = false
+        },
+        addVersion(dsName, dsVersion) {
+            this.dsName = dsName
+            this.dsVersion = dsVersion
+            this.selectDataVersion = true
+        },
         isJSON_test(str) {
             if (typeof str == 'string') {
                 try {
@@ -85,7 +137,7 @@ export default {
         save() {
             this.jsonValue = {}
             if(this.steps === 2) {
-                this.jsonValue["datasets"] = JSON.parse(this.datasetsConf)
+                this.jsonValue["datasets"] = this.datasetsConf
                 this.jsonValue["scripts"] = JSON.parse(this.scriptsConf)
                 this.jsonValue["userConf"] = JSON.parse(this.userConf)
             }
@@ -163,6 +215,54 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     box-sizing: border-box;
+    .data_version {
+        width: 520px;
+        height: 350px;
+        border: 1px solid #ccc;
+        overflow: auto;
+        padding: 24px 30px;
+        .input {
+            max-width: 160px;
+            width: 160px;
+        }
+        .version {
+            max-width: 180px;
+            width: 180px;
+            span {
+                max-width: 150px;
+                display: inline-block;
+                width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .add_version {
+                position: relative;
+                cursor: pointer;
+            }
+        }
+        .cat {
+            max-width: 120px;
+            width: 120px;
+        }
+        table {
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+            color: #000000;
+        }
+        th {
+            height: 24px;
+            font-weight: normal;
+        }
+        td {
+            border: 1px solid #ccc;
+            height: 24px;
+            padding: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
     span {
         font-size: 14px;
         color: #000000;
@@ -175,7 +275,7 @@ export default {
         height: 350px;
         background: #FFFFFF;
         border: 1px solid #ccc;
-		resize: none;
+        resize: none;
     }
 }
 .btn {

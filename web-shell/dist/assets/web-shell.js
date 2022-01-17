@@ -15,7 +15,7 @@
     }
   });
 });
-;define("web-shell/adapters/application", ["exports", "ember-inflector", "web-shell/config/environment", "@ember-data/adapter/json-api"], function (_exports, _emberInflector, _environment, _jsonApi) {
+;define("web-shell/adapters/application", ["exports", "ember-inflector", "web-shell/config/environment", "@ember-data/adapter/json-api", "web-shell/lib/PhIamClicent"], function (_exports, _emberInflector, _environment, _jsonApi, _PhIamClicent) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -39,67 +39,48 @@
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
-      _defineProperty(this, "curMethod", "GET");
+      _defineProperty(this, "host", _environment.default.APP.apiUri);
+
+      _defineProperty(this, "authType", "oauth");
     }
 
     pathForType(type) {
-      return (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      if (type === "page") {
+        this.authType = "iam";
+        return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      } else {
+        this.authType = "oauth";
+        return "phplatform/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      }
     }
 
     sortQueryParams(params) {
-      this.queryParamsAWS = params;
-    }
+      let result = {};
+      const keys = Object.keys(params).sort();
 
-    buildURL(modelName, id, snapshot, requestType, query) {
-      const requestMethod = {
-        query: "GET",
-        findRecord: "GET",
-        createRecord: "POST",
-        updateRecord: "PATCH",
-        deleteRecord: "DELETE",
-        push: "POST"
-      };
-      let url = super.buildURL(...arguments);
-      let curType = url.split("/").splice(1, 1); // ["activities" , ... ]
+      for (let index = 0; index < keys.length; ++index) {
+        const key = keys[index];
+        let cur = params[key];
 
-      let curPath = curType.join("/");
-      let newUrl = `/phplatform/${curPath}`; // newUrl: "/v0/entry/assets"
-
-      this.curMethod = requestMethod[requestType];
-      this.modelName = modelName;
-      this.requestURL = curType.join("/");
-
-      if (query && Object.keys(query).length) {
-        let queryString = "";
-        const queryParamsArr = Object.keys(query);
-        this.queryParamsArr = queryParamsArr; // 处理是因为object没有顺序，参数位置不同，可能导致token错误
-
-        for (let index = 0; index < queryParamsArr.length; index++) {
-          const element = queryParamsArr[index];
-          let queryValue = query[element]; // 处理ids的数组转换为字符串
-
-          if (element === "ids[]" && query[element] instanceof Array) {
-            const ids = query[element];
-            const idsArr = ids.sort();
-            let idsStr = "";
-            idsArr.forEach(ele => {
-              this.idsStr += ele + "&ids[]=";
-            });
-            idsStr = idsStr.substr(0, idsStr.length - 7);
-            queryValue = idsStr;
-          }
-
-          queryString += `${element}=${queryValue}&`;
+        if (cur instanceof Array) {
+          cur = cur.sort();
         }
 
-        queryString = queryString.substr(0, queryString.length - 1);
-        newUrl += "?" + encodeURI(queryString);
-      } else {
-        this.queryParamsAWS = {};
+        result[key] = cur;
       }
 
-      this.newUrl = newUrl;
-      return _environment.default.APP.apiUri + newUrl;
+      return result;
+    } // eslint-disable-next-line no-unused-vars
+
+
+    buildURL(modelName, id, snapshot, requestType, query) {
+      const url = super.buildURL(...arguments);
+
+      if (this.authType === "iam") {
+        this.iamHeaders = (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, url, {}, query, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY);
+      }
+
+      return url;
     }
 
     attributesToDeal(data) {
@@ -136,25 +117,25 @@
         }
 
       return payload;
-    } // urlForFindHasMany(id, modelName, snapshot) {
-    // 	let baseUrl = this.buildURL(modelName, id);
-    // 	return `${baseUrl}/relationships`;
-    // },
-
+    }
 
     get headers() {
-      if (_environment.default.environment === "development") {
-        return {
-          Accept: "application/vnd.api+json",
-          "Content-Type": "application/vnd.api+json",
-          Authorization: _environment.default.APP.debugToken
-        };
-      } else {
-        return {
-          Accept: "application/vnd.api+json",
-          "Content-Type": "application/vnd.api+json",
-          Authorization: this.cookies.read("access_token")
-        };
+      if (this.authType === "oauth") {
+        if (_environment.default.environment === "development") {
+          return {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: _environment.default.APP.debugToken
+          };
+        } else {
+          return {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: this.cookies.read("access_token")
+          };
+        }
+      } else if (this.authType === "iam") {
+        return this.iamHeaders;
       }
     }
 
@@ -205,7 +186,7 @@
     }
   });
 });
-;define("web-shell/components/component-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+;define("web-shell/components/-dynamic-element-alt", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -213,40 +194,154 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class;
+  // This component is not needed anymore. However we can only safely remove it once we have an Embroider release that
+  // has the special dependency rule for this addon removed:
+  // https://github.com/embroider-build/embroider/blob/4fad67f16f811e7f93199a1ee92dba8254c42978/packages/compat/src/addon-dependency-rules/ember-element-helper.ts
+  var _default = Ember.Component.extend();
 
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+  _exports.default = _default;
+});
+;define("web-shell/components/-dynamic-element", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  // This component is not needed anymore. However we can only safely remove it once we have an Embroider release that
+  // has the special dependency rule for this addon removed:
+  // https://github.com/embroider-build/embroider/blob/4fad67f16f811e7f93199a1ee92dba8254c42978/packages/compat/src/addon-dependency-rules/ember-element-helper.ts
+  var _default = Ember.Component.extend();
+
+  _exports.default = _default;
+});
+;define("web-shell/components/iframe-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <div class="content">
-      {{!-- <h1>Web components inside Ember</h1> --}}
-      <div class="ember">
-          {{!-- <h2>Ember shell context</h2> --}}
-      </div>
-  </div>
+    <h2>iframe component</h2>
+  {{yield}}
   
   */
   {
-    "id": "qa4ygpAC",
-    "block": "[[[10,0],[14,0,\"content\"],[12],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"ember\"],[12],[1,\"\\n\"],[1,\"    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\"]],[],false,[]]",
-    "moduleName": "web-shell/components/component-context.hbs",
+    "id": "qBmSBU+/",
+    "block": "[[[10,\"h2\"],[12],[1,\"iframe component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "moduleName": "web-shell/components/iframe-context.hbs",
     "isStrictMode": false
   });
 
-  // import { tracked } from "@glimmer/tracking"
-  // import { inject as service } from '@ember/service'
-  let ComponentContextComponent = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class ComponentContextComponent extends _component.default {
-    listener(e) {
-      // coloring ember body
-      // passing color value to react context via props
-      // const webcomponent = e.target
-      // webcomponent.color = newColor
-      // webcomponent.msg_title = { test: "alfred" }
-      console.log("alfred listener action");
+  class IframeContextComponent extends _component.default {}
+
+  _exports.default = IframeContextComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
+});
+;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#if (eq this.engine "web-component")}}
+      <Wc-context @name={{this.name}} @allData={{@model}}/>
+  {{else if (eq this.engine "iframe-component")}}
+      <Iframe-context></Iframe-context>
+  {{else}}
+      <h2>not implement shell component</h2>
+  {{/if}}
+  {{yield}}
+  
+  */
+  {
+    "id": "6SHiJWWM",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\",\"@allData\"],[[30,0,[\"name\"]],[30,1]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,2,null],[1,\"\\n\"]],[\"@model\",\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
+    "moduleName": "web-shell/components/shell-component.hbs",
+    "isStrictMode": false
+  });
+
+  class ShellComponentComponent extends _component.default {
+    /**
+     * 3. 动态加载Component, 这里的作用是将事件利用Event隔离
+     */
+    get engine() {
+      return this.args.model.page.engine;
     }
 
-    registerListener(element) {
+    get name() {
+      return this.args.model.page.name;
+    }
+
+  }
+
+  _exports.default = ShellComponentComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ShellComponentComponent);
+});
+;define("web-shell/components/wc-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <h2>{{@name}}</h2>
+  {{#let (element @name) as |E|}}
+      <E
+  		allData={{@allData}}
+          {{did-insert this.registerListener}}
+          {{will-destroy this.unregisterListener}}>
+      ></E>
+  {{/let}}
+  {{yield}}
+  
+  */
+  {
+    "id": "Sgp2Tvts",
+    "block": "[[[10,\"h2\"],[12],[1,[30,1]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "moduleName": "web-shell/components/wc-context.hbs",
+    "isStrictMode": false
+  });
+
+  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class WcContextComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+    }
+
+    async listener(e) {
+      console.log("alfred listener action");
+      let modelName = Ember.String.camelize(this.args.allData.page.name) + "EventHandler";
+      await window[this.args.allData.page.clientName][modelName](e, this);
+    }
+
+    async registerListener(element) {
+      this.args.allData.data.isVue = true;
+      element.allData = this.args.allData.data;
       element.addEventListener("event", this.listener);
     }
 
@@ -254,10 +349,15 @@
       element.removeEventListener("event", this.listener);
     }
 
-  }, (_applyDecoratedDescriptor(_class.prototype, "listener", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
-  _exports.default = ComponentContextComponent;
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  _exports.default = WcContextComponent;
 
-  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ComponentContextComponent);
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
 });
 ;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
   "use strict";
@@ -323,6 +423,19 @@
   };
   _exports.default = _default;
 });
+;define("web-shell/helpers/-element", ["exports", "ember-element-helper/helpers/-element"], function (_exports, _element) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _element.default;
+    }
+  });
+});
 ;define("web-shell/helpers/app-version", ["exports", "web-shell/config/environment", "ember-cli-app-version/utils/regexp"], function (_exports, _environment, _regexp) {
   "use strict";
 
@@ -359,6 +472,46 @@
   }
 
   var _default = Ember.Helper.helper(appVersion);
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/element", ["exports", "ember-element-helper/helpers/element"], function (_exports, _element) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _element.default;
+    }
+  });
+});
+;define("web-shell/helpers/ensure-safe-component", ["exports", "@embroider/util"], function (_exports, _util) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _util.EnsureSafeComponentHelper;
+    }
+  });
+});
+;define("web-shell/helpers/eq", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.Helper.helper(function eq([left, right]) {
+    return left === right;
+  });
 
   _exports.default = _default;
 });
@@ -632,7 +785,59 @@
   };
   _exports.default = _default;
 });
-;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils", "crypto-js"], function (_exports, _PhSigV4ClientUtils, CryptoJS) {
+;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory"], function (_exports, _PhSigV4AWSClientFactory) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.ComputeJSONAPIIamHeader = ComputeJSONAPIIamHeader;
+
+  /**
+   *  alfredyang@pharbers.com 2021.12.31
+   */
+  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk, ct = "application/vnd.api+json", at = "application/vnd.api+json", method = "GET") {
+    const factory = _PhSigV4AWSClientFactory.default;
+    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1];
+    const pathComponent = path.substring(endpoint.length);
+    let queryURL = pathComponent;
+    const queryParamIndex = queryURL.lastIndexOf("?");
+
+    if (queryParamIndex > -1) {
+      queryURL = queryURL.substring(0, queryParamIndex);
+    }
+
+    const sigV4ClientConfig = {
+      accessKey: ak,
+      secretKey: sk,
+      sessionToken: "",
+      serviceName: "execute-api",
+      region: "cn-northwest-1",
+      endpoint: apiHost,
+      defaultContentType: ct,
+      defaultAcceptType: at
+    };
+    const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig);
+    const queryKeys = Object.keys(query);
+    let queryParams = {};
+
+    for (let idx = 0; idx < queryKeys.length; ++idx) {
+      const k = encodeURI(queryKeys[idx]);
+      const v = encodeURI(query[queryKeys[idx]]);
+      queryParams[k] = v;
+    }
+
+    let req = {
+      verb: method.toUpperCase(),
+      path: queryURL,
+      queryParams: queryParams,
+      body: {}
+    };
+    const request = client.makeRequest(req);
+    return request.headers;
+  }
+});
+;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -654,18 +859,20 @@
    * express or implied. See the License for the specific language governing
    * permissions and limitations under the License.
    */
-  // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
+  const CryptoJS = require("crypto-js"); // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
+
+
   let PhSigV4AWSClientFactory = {};
   _exports.PhSigV4AWSClientFactory = PhSigV4AWSClientFactory;
 
   PhSigV4AWSClientFactory.newClient = function (config) {
-    const AWS_SHA_256 = "AWS4-HMAC-SHA256";
-    const AWS4_REQUEST = "aws4_request";
-    const AWS4 = "AWS4";
-    const X_AMZ_DATE = "x-amz-date";
-    const X_AMZ_SECURITY_TOKEN = "x-amz-security-token";
-    const HOST = "host";
-    const AUTHORIZATION = "Authorization";
+    const AWS_SHA_256 = 'AWS4-HMAC-SHA256';
+    const AWS4_REQUEST = 'aws4_request';
+    const AWS4 = 'AWS4';
+    const X_AMZ_DATE = 'x-amz-date';
+    const X_AMZ_SECURITY_TOKEN = 'x-amz-security-token';
+    const HOST = 'host';
+    const AUTHORIZATION = 'Authorization';
 
     function hash(value) {
       return CryptoJS.SHA256(value);
@@ -682,7 +889,7 @@
     }
 
     function buildCanonicalRequest(method, path, queryParams, headers, payload) {
-      return method + "\n" + buildCanonicalUri(path) + "\n" + buildCanonicalQueryString(queryParams) + "\n" + buildCanonicalHeaders(headers) + "\n" + buildCanonicalSignedHeaders(headers) + "\n" + hexEncode(hash(payload));
+      return method + '\n' + buildCanonicalUri(path) + '\n' + buildCanonicalQueryString(queryParams) + '\n' + buildCanonicalHeaders(headers) + '\n' + buildCanonicalSignedHeaders(headers) + '\n' + hexEncode(hash(payload));
     }
 
     function hashCanonicalRequest(request) {
@@ -695,23 +902,22 @@
 
     function buildCanonicalQueryString(queryParams) {
       if (Object.keys(queryParams).length < 1) {
-        return "";
+        return '';
       }
 
       let sortedQueryParams = [];
 
       for (const property in queryParams) {
-        // eslint-disable-next-line no-prototype-builtins
         if (queryParams.hasOwnProperty(property)) {
           sortedQueryParams.push(property);
         }
       }
 
       sortedQueryParams.sort();
-      let canonicalQueryString = "";
+      let canonicalQueryString = '';
 
       for (let i = 0; i < sortedQueryParams.length; i++) {
-        canonicalQueryString += sortedQueryParams[i] + "=" + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + "&";
+        canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
       }
 
       return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
@@ -719,7 +925,7 @@
 
     function fixedEncodeURIComponent(str) {
       let newStr = encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-        return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
       });
       newStr = newStr.replace(/%26/g, "&");
       newStr = newStr.replace(/%3D/g, "=");
@@ -729,11 +935,10 @@
     }
 
     function buildCanonicalHeaders(headers) {
-      let canonicalHeaders = "";
+      let canonicalHeaders = '';
       let sortedKeys = [];
 
       for (const property in headers) {
-        // eslint-disable-next-line no-prototype-builtins
         if (headers.hasOwnProperty(property)) {
           sortedKeys.push(property);
         }
@@ -742,7 +947,7 @@
       sortedKeys.sort();
 
       for (let i = 0; i < sortedKeys.length; i++) {
-        canonicalHeaders += sortedKeys[i].toLowerCase() + ":" + headers[sortedKeys[i]] + "\n";
+        canonicalHeaders += sortedKeys[i].toLowerCase() + ':' + headers[sortedKeys[i]] + '\n';
       }
 
       return canonicalHeaders;
@@ -752,22 +957,21 @@
       let sortedKeys = [];
 
       for (const property in headers) {
-        // eslint-disable-next-line no-prototype-builtins
         if (headers.hasOwnProperty(property)) {
           sortedKeys.push(property.toLowerCase());
         }
       }
 
       sortedKeys.sort();
-      return sortedKeys.join(";");
+      return sortedKeys.join(';');
     }
 
     function buildStringToSign(datetime, credentialScope, hashedCanonicalRequest) {
-      return AWS_SHA_256 + "\n" + datetime + "\n" + credentialScope + "\n" + hashedCanonicalRequest;
+      return AWS_SHA_256 + '\n' + datetime + '\n' + credentialScope + '\n' + hashedCanonicalRequest;
     }
 
     function buildCredentialScope(datetime, region, service) {
-      return datetime.substr(0, 8) + "/" + region + "/" + service + "/" + AWS4_REQUEST;
+      return datetime.substr(0, 8) + '/' + region + '/' + service + '/' + AWS4_REQUEST;
     }
 
     function calculateSigningKey(secretKey, datetime, region, service) {
@@ -779,7 +983,7 @@
     }
 
     function buildAuthorizationHeader(accessKey, credentialScope, headers, signature) {
-      return AWS_SHA_256 + " Credential=" + accessKey + "/" + credentialScope + ", SignedHeaders=" + buildCanonicalSignedHeaders(headers) + ", Signature=" + signature;
+      return AWS_SHA_256 + ' Credential=' + accessKey + '/' + credentialScope + ', SignedHeaders=' + buildCanonicalSignedHeaders(headers) + ', Signature=' + signature;
     }
 
     let awsSigV4Client = {};
@@ -788,17 +992,17 @@
       return awsSigV4Client;
     }
 
-    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, "accessKey");
-    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, "secretKey");
+    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, 'accessKey');
+    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, 'secretKey');
     awsSigV4Client.sessionToken = config.sessionToken;
-    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, "serviceName");
-    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, "region");
-    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, "endpoint");
+    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, 'serviceName');
+    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, 'region');
+    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, 'endpoint');
 
     awsSigV4Client.makeRequest = function (request) {
-      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, "verb");
+      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, 'verb');
 
-      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, "path");
+      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, 'path');
 
       let queryParams = _PhSigV4ClientUtils.default.copy(request.queryParams);
 
@@ -813,34 +1017,35 @@
       } //If the user has not specified an override for Content type the use default
 
 
-      if (headers["Content-Type"] === undefined) {
-        headers["Content-Type"] = config.defaultContentType;
+      if (headers['Content-Type'] === undefined) {
+        headers['Content-Type'] = config.defaultContentType;
       } //If the user has not specified an override for Accept type the use default
 
 
-      if (headers["Accept"] === undefined) {
-        headers["Accept"] = config.defaultAcceptType;
+      if (headers['Accept'] === undefined) {
+        headers['Accept'] = config.defaultAcceptType;
       }
 
       let body = _PhSigV4ClientUtils.default.copy(request.body);
 
-      if (body === undefined || verb === "GET") {
+      if (body === undefined || verb === 'GET') {
         // override request body and set to empty when signing GET requests
-        body = "";
+        body = '';
       } else {
         body = JSON.stringify(body);
       } //If there is no body remove the content-type header so it is not included in SigV4 calculation
 
 
-      if (body === "" || body === undefined || body === null) {
-        delete headers["Content-Type"];
+      if (body === '' || body === undefined || body === null) {
+        delete headers['Content-Type'];
       }
 
-      let datetime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z").replace(/[:\-]|\.\d{3}/g, "");
+      let datetime = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/[:\-]|\.\d{3}/g, '');
       headers[X_AMZ_DATE] = datetime; // const parser = document.createElement('a');
       // parser.href = awsSigV4Client.endpoint;
+      // headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn"
 
-      headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn";
+      headers[HOST] = "apiv2.pharbers.com";
       const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
       const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
       const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
@@ -849,7 +1054,7 @@
       const signature = calculateSignature(signingKey, stringToSign);
       headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
 
-      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== "") {
+      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== '') {
         headers[X_AMZ_SECURITY_TOKEN] = awsSigV4Client.sessionToken;
       }
 
@@ -857,13 +1062,13 @@
       let url = config.endpoint + path;
       const queryString = buildCanonicalQueryString(queryParams);
 
-      if (queryString !== "") {
-        url += "?" + queryString;
+      if (queryString !== '') {
+        url += '?' + queryString;
       } //Need to re-attach Content-Type if it is not specified at this point
 
 
-      if (headers["Content-Type"] === undefined) {
-        headers["Content-Type"] = config.defaultContentType;
+      if (headers['Content-Type'] === undefined) {
+        headers['Content-Type'] = config.defaultContentType;
       }
 
       return {
@@ -904,7 +1109,7 @@
   let PhSigV4ClientUtils = {
     assertDefined: function (object, name) {
       if (object === undefined) {
-        throw name + " must be defined";
+        throw name + ' must be defined';
       } else {
         return object;
       }
@@ -957,7 +1162,6 @@
       const copy = obj.constructor();
 
       for (const attr in obj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
       }
 
@@ -968,18 +1172,13 @@
       const merged = baseObj.constructor();
 
       for (const attr in baseObj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr];
       }
 
-      if (null == additionalProps || "object" != typeof additionalProps) return baseObj; // eslint-disable-next-line no-undef
+      if (null == additionalProps || "object" != typeof additionalProps) return baseObj;
 
       for (attr in additionalProps) {
-        // eslint-disable-next-line no-prototype-builtins,no-undef
-        if (additionalProps.hasOwnProperty(attr)) {
-          // eslint-disable-next-line no-undef
-          merged[attr] = additionalProps[attr];
-        }
+        if (additionalProps.hasOwnProperty(attr)) merged[attr] = additionalProps[attr];
       }
 
       return merged;
@@ -1001,11 +1200,13 @@
    (c) marc.portier@gmail.com - 2011-2012
    Licensed under APLv2 (http://opensource.org/licenses/Apache-2.0)
    */
+  ;
+
   var PhUriTemplate = function () {
     // Below are the functions we originally used from jQuery.
     // The implementations below are often more naive then what is inside jquery, but they suffice for our needs.
     function isFunction(fn) {
-      return typeof fn == "function";
+      return typeof fn == 'function';
     }
 
     function isEmptyObject(obj) {
@@ -1069,13 +1270,13 @@
       if (result !== undefined) {
         return result;
       } else {
-        var keyparts = key.split(".");
+        var keyparts = key.split('.');
         var i = 0,
             keysplits = keyparts.length - 1;
 
         for (i = 0; i < keysplits; i++) {
-          var leadKey = keyparts.slice(0, keysplits - i).join(".");
-          var trailKey = keyparts.slice(-i - 1).join(".");
+          var leadKey = keyparts.slice(0, keysplits - i).join('.');
+          var trailKey = keyparts.slice(-i - 1).join('.');
           var leadContext = context[leadKey];
 
           if (leadContext !== undefined) {
@@ -1117,17 +1318,17 @@
       return this.txt;
     };
 
-    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,=']", "g");
+    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,;=']", "g");
 
     function encodeNormal(val) {
       return encodeURIComponent(val).replace(RESERVEDCHARS_RE, function (s) {
         return escape(s);
       });
-    } //var SELECTEDCHARS_RE = new RegExp("[]","g")
+    } //var SELECTEDCHARS_RE = new RegExp("[]","g");
 
 
     function encodeReserved(val) {
-      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} )
+      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} );
       return encodeURI(val); // no need for additional replace if selected-chars is empty
     }
 
@@ -1182,8 +1383,8 @@
       builder: addUnNamed
     };
     var pathParamConf = {
-      prefix: "",
-      joiner: "",
+      prefix: ";",
+      joiner: ";",
       encode: encodeNormal,
       builder: addLabeled
     };
@@ -1221,35 +1422,35 @@
       var conf;
 
       switch (ops) {
-        case "":
+        case '':
           conf = simpleConf;
           break;
 
-        case "+":
+        case '+':
           conf = reservedConf;
           break;
 
-        case "#":
+        case '#':
           conf = fragmentConf;
           break;
 
-        case ";":
+        case ';':
           conf = pathParamConf;
           break;
 
-        case "?":
+        case '?':
           conf = formParamConf;
           break;
 
-        case "&":
+        case '&':
           conf = formContinueConf;
           break;
 
-        case "/":
+        case '/':
           conf = pathHierarchyConf;
           break;
 
-        case ".":
+        case '.':
           conf = labelConf;
           break;
 
@@ -1340,10 +1541,9 @@
       var k;
 
       for (k in obj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty(k)) {
           if (obj[k] !== null && obj[k] !== undefined) {
-            buffer.append(joiner + k + ",").append(obj[k], encoder);
+            buffer.append(joiner + k + ',').append(obj[k], encoder);
             joiner = ",";
           }
         }
@@ -1379,7 +1579,6 @@
         var k;
 
         for (k in val) {
-          // eslint-disable-next-line no-prototype-builtins
           if (val.hasOwnProperty(k)) {
             adder(k, encoder(val[k]));
           }
@@ -1415,10 +1614,9 @@
     }
 
     VarSpec.build = function (name, expl, part, nums) {
-      // eslint-disable-next-line no-unused-vars
       var valueHandler, valueModifier;
 
-      if (expl) {
+      if (!!expl) {
         //interprete as boolean
         valueHandler = explodeValueHandler;
       } else {
@@ -1459,13 +1657,12 @@
 
     var LISTSEP = ","; // How each template should look like
 
-    var TEMPL_RE = /(\{([+#.?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
+    var TEMPL_RE = /(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
     // (as expected by the spec - see tests.html "reserved operators")
 
     var match2expression = function (m) {
-      // eslint-disable-next-line no-unused-vars
       var expr = m[0];
-      var ops = m[2] || "";
+      var ops = m[2] || '';
       var vars = m[3].split(LISTSEP);
       var i = 0,
           len = vars.length;
@@ -1516,7 +1713,7 @@
 
   _exports.PhUriTemplate = PhUriTemplate;
 });
-;define("web-shell/models/page", ["exports", "@ember-data/model"], function (_exports, _model) {
+;define("web-shell/models/activity", ["exports", "@ember-data/model"], function (_exports, _model) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1524,7 +1721,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -1534,70 +1731,473 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("number"), _dec8 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
+  let ActivityModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('date'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('string'), _dec6 = (0, _model.attr)('string'), _dec7 = (0, _model.attr)('string'), _dec8 = (0, _model.attr)('string'), _dec9 = (0, _model.attr)('string'), _dec10 = (0, _model.hasMany)('image'), _dec11 = (0, _model.hasMany)("report"), _dec12 = (0, _model.hasMany)("zone"), _dec13 = (0, _model.belongsTo)('image'), _dec14 = (0, _model.belongsTo)('image'), _dec15 = (0, _model.hasMany)("cooperation"), _dec16 = (0, _model.attr)('number'), (_class = class ActivityModel extends _model.default {
     constructor(...args) {
       super(...args);
 
-      _initializerDefineProperty(this, "projectName", _descriptor, this);
+      _initializerDefineProperty(this, "title", _descriptor, this);
 
-      _initializerDefineProperty(this, "name", _descriptor2, this);
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
 
-      _initializerDefineProperty(this, "route", _descriptor3, this);
+      _initializerDefineProperty(this, "startDate", _descriptor3, this);
 
-      _initializerDefineProperty(this, "uri", _descriptor4, this);
+      _initializerDefineProperty(this, "endDate", _descriptor4, this);
 
-      _initializerDefineProperty(this, "menu", _descriptor5, this);
+      _initializerDefineProperty(this, "location", _descriptor5, this);
 
-      _initializerDefineProperty(this, "cat", _descriptor6, this);
+      _initializerDefineProperty(this, "city", _descriptor6, this);
 
-      _initializerDefineProperty(this, "level", _descriptor7, this);
+      _initializerDefineProperty(this, "activityType", _descriptor7, this);
 
-      _initializerDefineProperty(this, "engine", _descriptor8, this);
+      _initializerDefineProperty(this, "contentTitle", _descriptor8, this);
+
+      _initializerDefineProperty(this, "contentDesc", _descriptor9, this);
+
+      _initializerDefineProperty(this, "gallery", _descriptor10, this);
+
+      _initializerDefineProperty(this, "attachments", _descriptor11, this);
+
+      _initializerDefineProperty(this, "agendas", _descriptor12, this);
+
+      _initializerDefineProperty(this, "logo", _descriptor13, this);
+
+      _initializerDefineProperty(this, "logoOnTime", _descriptor14, this);
+
+      _initializerDefineProperty(this, "partners", _descriptor15, this);
+
+      _initializerDefineProperty(this, "language", _descriptor16, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "endDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "location", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "city", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "activityType", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "contentTitle", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "contentDesc", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "gallery", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "attachments", [_dec11], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "agendas", [_dec12], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "logo", [_dec13], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, "logoOnTime", [_dec14], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, "partners", [_dec15], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec16], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ActivityModel;
+});
+;define("web-shell/models/cooperation", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let CooperationModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.belongsTo)('image'), (_class = class CooperationModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "companyType", _descriptor2, this);
+
+      _initializerDefineProperty(this, "logo", _descriptor3, this);
+
+      _initializerDefineProperty(this, "language", _descriptor4, this);
+
+      _initializerDefineProperty(this, "logo", _descriptor5, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "companyType", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "logo", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "logo", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = CooperationModel;
+});
+;define("web-shell/models/event", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let EventModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('date'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.hasMany)("participant"), (_class = class EventModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "description", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "endDate", _descriptor5, this);
+
+      _initializerDefineProperty(this, "language", _descriptor6, this);
+
+      _initializerDefineProperty(this, "speakers", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "endDate", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "speakers", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = EventModel;
+});
+;define("web-shell/models/image", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ImageModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.belongsTo)('image'), (_class = class ImageModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "path", _descriptor, this);
+
+      _initializerDefineProperty(this, "tag", _descriptor2, this);
+
+      _initializerDefineProperty(this, "report", _descriptor3, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "path", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "report", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ImageModel;
+});
+;define("web-shell/models/page", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("number"), _dec9 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "client-id", _descriptor, this);
+
+      _initializerDefineProperty(this, "clientName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "version", _descriptor3, this);
+
+      _initializerDefineProperty(this, "name", _descriptor4, this);
+
+      _initializerDefineProperty(this, "route", _descriptor5, this);
+
+      _initializerDefineProperty(this, "uri", _descriptor6, this);
+
+      _initializerDefineProperty(this, "cat", _descriptor7, this);
+
+      _initializerDefineProperty(this, "level", _descriptor8, this);
+
+      _initializerDefineProperty(this, "engine", _descriptor9, this);
     } // ember, vue, react
 
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "projectName", [_dec], {
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "client-id", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "clientName", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "menu", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec6], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec7], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec8], {
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec9], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
   })), _class));
   _exports.default = PageModel;
+});
+;define("web-shell/models/participant", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ReportModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.belongsTo)('image'), _dec6 = (0, _model.belongsTo)('event'), _dec7 = (0, _model.belongsTo)('zone'), (_class = class ReportModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "title", _descriptor2, this);
+
+      _initializerDefineProperty(this, "occupation", _descriptor3, this);
+
+      _initializerDefineProperty(this, "language", _descriptor4, this);
+
+      _initializerDefineProperty(this, "avatar", _descriptor5, this);
+
+      _initializerDefineProperty(this, "event", _descriptor6, this);
+
+      _initializerDefineProperty(this, "zone", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "title", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "occupation", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "avatar", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "event", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "zone", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ReportModel;
 });
 ;define("web-shell/models/project", ["exports", "@ember-data/model"], function (_exports, _model) {
   "use strict";
@@ -1670,6 +2270,177 @@
   })), _class));
   _exports.default = ProjectModel;
 });
+;define("web-shell/models/report", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ReportModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('date'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.belongsTo)('image'), _dec8 = (0, _model.belongsTo)('activity'), _dec9 = (0, _model.hasMany)("participant"), (_class = class ReportModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "description", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "date", _descriptor5, this);
+
+      _initializerDefineProperty(this, "language", _descriptor6, this);
+
+      _initializerDefineProperty(this, "cover", _descriptor7, this);
+
+      _initializerDefineProperty(this, "actAttachments", _descriptor8, this);
+
+      _initializerDefineProperty(this, "writers", _descriptor9, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "date", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "cover", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "actAttachments", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "writers", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ReportModel;
+});
+;define("web-shell/models/zone", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ZoneModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('date'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.hasMany)("participant"), _dec8 = (0, _model.hasMany)("event"), (_class = class ZoneModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "description", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "endDate", _descriptor5, this);
+
+      _initializerDefineProperty(this, "language", _descriptor6, this);
+
+      _initializerDefineProperty(this, "hosts", _descriptor7, this);
+
+      _initializerDefineProperty(this, "agendas", _descriptor8, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "endDate", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "hosts", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "agendas", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ZoneModel;
+});
 ;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
   "use strict";
 
@@ -1732,18 +2503,8 @@
 
   _exports.default = Router;
   Router.map(async function () {
-    let scriptOptions = {
-      method: "GET",
-      headers: {
-        Authorization: _environment.default.APP.debugToken,
-        Accept: "application/vnd.api+json",
-        "Content-Type": "application/vnd.api+json"
-      }
-    };
-    const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json());
-    console.log(result);
     this.route("shell", {
-      path: "/"
+      path: "/*path"
     });
   });
 });
@@ -1801,7 +2562,7 @@
   })), _class));
   _exports.default = ApplicationRoute;
 });
-;define("web-shell/routes/shell", ["exports"], function (_exports) {
+;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1809,7 +2570,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor;
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -1819,18 +2580,51 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, (_class = class ShellRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("remote-loading"), (_class = class ShellRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor2, this);
     }
 
-    model() {
-      return this.store.findAll("project");
+    async model(params) {
+      /**
+       * 1. 第一步，需要从读取JS模版
+       */
+      let pages = this.store.peekAll("page");
+
+      if (pages.length === 0) {
+        console.log("need query page configures");
+        pages = await this.store.query("page", {
+          "filter[clientId]": _environment.default.APP.clientId
+        });
+      }
+
+      const curPage = pages.find(x => x.route === "/" + params.path);
+      /**
+       * 2. 动态的把需要的JS加载到dom中
+       */
+
+      this.jsl.loadRemoteJs(curPage.uri);
+      this.jsl.loadRemoteJs(curPage.cat);
+      const clientName = curPage.clientName;
+      const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
+      const data = await window[clientName][modelName](this);
+      return Ember.RSVP.hash({
+        page: curPage,
+        data: data,
+        isVue: true
+      });
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -1918,49 +2712,18 @@
 
   _exports.default = ApplicationSerializer;
 });
-;define("web-shell/services/ajax", ["exports"], function (_exports) {
+;define("web-shell/services/-ensure-registered", ["exports", "@embroider/util/services/ensure-registered"], function (_exports, _ensureRegistered) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.default = void 0;
-
-  var _dec, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
-  // import { computed } from "@ember/object"
-  let AjaxService = (_dec = Ember.inject.service("cookies"), (_class = class AjaxService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "cookies", _descriptor, this);
-    }
-
-    get headers() {
-      let cookies = this.cookies;
-      return {
-        "Content-Type": "application/json",
-        // 默认值
-        Accept: "application/json",
-        Authorization: `Bearer ${cookies.read("access_token")}`
-      };
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
-    configurable: true,
+  Object.defineProperty(_exports, "default", {
     enumerable: true,
-    writable: true,
-    initializer: null
-  })), _class));
-  _exports.default = AjaxService;
+    get: function () {
+      return _ensureRegistered.default;
+    }
+  });
 });
 ;define("web-shell/services/aws-service", ["exports"], function (_exports) {
   "use strict";
@@ -2542,6 +3305,43 @@
     }
   });
 });
+;define("web-shell/services/remote-loading", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class RemoteLoadingService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "loadedJs", []);
+    }
+
+    loadRemoteJs(source, callback) {
+      let that = this;
+      const script = document.createElement("script");
+
+      script.onload = function () {
+        that.loadedJs.push(source);
+
+        if (callback) {
+          callback();
+        }
+      };
+
+      script.src = source;
+      document.head.appendChild(script);
+    }
+
+  }
+
+  _exports.default = RemoteLoadingService;
+});
 ;define("web-shell/services/store", ["exports", "ember-data/store"], function (_exports, _store) {
   "use strict";
 
@@ -2581,8 +3381,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "9Lg1le8/",
-    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"    \"],[10,\"li\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n\"]],[1]],null],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"]],[\"iter\"],false,[\"page-title\",\"each\",\"-track-array\",\"component\",\"-outlet\"]]",
+    "id": "n5K90ut1",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@model\"],[[30,1]]],null],[1,\"\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"shell-component\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/shell.hbs",
     "isStrictMode": false
   });
@@ -2677,7 +3477,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"2409e17c0ee70a7048c585c07c060fad5fc83ccf378ec0e0c80943ddc9cb783a","name":"web-shell","version":"0.0.0+c9448cf4"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"7687786f049836b870354f296e21babbdce94d50e1031399ec5d9400297273af","name":"web-shell","version":"0.0.0+a162504e"});
           }
         
 //# sourceMappingURL=web-shell.map

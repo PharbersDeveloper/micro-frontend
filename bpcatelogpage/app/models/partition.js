@@ -6,4 +6,5 @@ export default class PartitionModel extends Model {
 	@attr schema;
 	@attr('number') date;
 	@attr('string') partitions;
+	@attr('string') attribute
 }

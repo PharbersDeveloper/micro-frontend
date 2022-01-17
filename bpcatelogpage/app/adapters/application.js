@@ -9,7 +9,7 @@ import PhSigV4ClientUtils from "../lib/PhSigV4ClientUtils"
 import PhUrlTemplate from "../lib/PhUrlTemplate"
 
 export default DS.JSONAPIAdapter.extend( {
-	namespace: ENV.namespace,
+	namespace: ENV.APP.namespace,
 	host: "http://general.pharbers.com",
 	serviceHost: ENV.host,
 	scope: "APP/CHC",
@@ -34,7 +34,7 @@ export default DS.JSONAPIAdapter.extend( {
 			"push": "POST"
 		}
 		let url = this._super( ...arguments ) // url: http://general.pharbers.com:4200/v0/assets
-		let curType = url.split( "/" ).splice( 4,2 ) // ["activities" , ... ]
+		let curType = url.split( "/" ).splice( 4, 2 ) // ["activities" , ... ]
 		let curPath = curType.join( "/" )
 		let newUrl = `/entry/${curPath}` // newUrl: "/v0/entry/assets"
 

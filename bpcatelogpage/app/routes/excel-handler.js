@@ -28,7 +28,7 @@ export default class ExcelHandlerRoute extends Route {
 	beforeModel( params ) {
 		this._super( ...arguments )
 		this.browserEventsService.clearListener()
-		this.browserEventsService.registerListener('dataset-lst')
+		// this.browserEventsService.registerListener('dataset-lst')
 	}
 	async model(params) {
 		this.afterModel = function() {

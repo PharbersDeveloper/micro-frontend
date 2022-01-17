@@ -10,7 +10,7 @@ export default class PrepareSetComponent extends Component {
     @service('loading') loadingService;
     @service noticeService;
     @service ajax
-	@tracked messageParam = {}
+	@tracked msg = "新建"
 
     @action
     async listener(e) {
@@ -39,11 +39,11 @@ export default class PrepareSetComponent extends Component {
 				const uuid = this.guid()
 				this.loadingService.loading.style.display = 'flex'
         		this.loadingService.loading.style['z-index'] = 2
-				//需要新建dataset
 				this.projectId = scriptsParams.projectId
 				this.projectName = scriptsParams.projectName
 				let operatorParameters = []
 				operatorParameters.push("filter", preParam.rowParams, "select", preParam.colParams, "operation_null", preParam.changeParams)
+				//需要新建dataset
 				if(scriptsParams.outputs[0].id == "") {
 					scriptsParams.outputs[0].id = uuid
 					let body = {
@@ -70,26 +70,48 @@ export default class PrepareSetComponent extends Component {
 					}
 					await fetch(url, options)
 				}
-				let message = {
-					"dagName": scriptsParams.projectName,
-					"flowVersion": "developer",
-					"jobName": scriptsParams.jobName,
-					"jobId": "",
-					"inputs": scriptsParams.inputs,
-					"outputs": scriptsParams.outputs,
-					"jobVersion": scriptsParams.jobVersion,
-					"projectId": scriptsParams.projectId,
-					"timeout": "1000",
-					"runtime": "prepare",
-					"owner": decodeURI(this.cookies.read('user_name_show')),
-					"targetJobId": "",
-					"projectName": scriptsParams.projectName,
-					"labels": [],
-					"operatorParameters": operatorParameters,
-					"prop": {
-						path: scriptsParams.path,
-						partitions: 1
+				let message = {}
+				let job_cat_name = ""
+				if(scriptsParams.jobCat && scriptsParams.jobCat === "prepare_edit") {
+					//用于配置页面数据回显
+					message = {
+						"actionName": scriptsParams.jobShowName,
+						"projectId": scriptsParams.projectId,
+						"flowVersion": "developer",
+						"jobCat": "prepare_edit",
+						"jobDisplayName": scriptsParams.jobDisplayName,
+						"projectName": scriptsParams.projectName,
+						"jobName": scriptsParams.jobName,
+						"operatorParameters": operatorParameters,
+						"runtime": "prepare"
 					}
+					job_cat_name = "prepare_edit"
+					this.msg = "编辑"
+				} else {
+					// 创建
+					message = {
+						"actionName": scriptsParams.jobName,
+						"dagName": scriptsParams.projectName,
+						"flowVersion": "developer",
+						"jobName": scriptsParams.jobName,
+						"jobId": "",
+						"inputs": scriptsParams.inputs,
+						"outputs": scriptsParams.outputs,
+						"jobVersion": scriptsParams.jobVersion,
+						"projectId": scriptsParams.projectId,
+						"timeout": "1000",
+						"runtime": "prepare",
+						"owner": decodeURI(this.cookies.read('user_name_show')),
+						"targetJobId": "",
+						"projectName": scriptsParams.projectName,
+						"labels": [],
+						"operatorParameters": operatorParameters,
+						"prop": {
+							path: scriptsParams.path,
+							partitions: 1
+						}
+					}
+					job_cat_name = "dag_create"
 				}
 				let scriptBody = {
 					"table": "action",
@@ -99,8 +121,9 @@ export default class PrepareSetComponent extends Component {
 						"showName": decodeURI(this.cookies.read('user_name_show')),
 						"code": 0,
 						"jobDesc": "created",
-						"jobCat": "intermediate",
+						"jobCat": job_cat_name,
 						"comments": "",
+						"date": String(new Date().getTime()),
 						"message": JSON.stringify(message)
 					}
 				}
@@ -130,17 +153,16 @@ export default class PrepareSetComponent extends Component {
 	}
 
 	@action createScriptNoticeCallback(response, ele) {
-		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let create_scripts_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		this.loadingService.loading.style.display = 'none'
 		if(create_scripts_status == "dag insert success") {
-			alert("新建脚本成功！")
-			
-			// let message = JSON.parse(response.data[0].attributes.message)
-			// let jobName = message.cnotification.jobName
-			// let jobPath = message.cnotification.jobPath
+			alert(`${this.msg}脚本成功！`)
 			this.router.transitionTo(`/flow?projectId=${this.projectId}&projectName=${this.projectName}&flowVersion=developer`)
 		} else {
-			alert("新建脚本失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : `${this.msg}脚本失败，请重新操作！`
+			alert(msg)
 		}
 	}
 

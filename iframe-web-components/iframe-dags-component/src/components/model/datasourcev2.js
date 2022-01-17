@@ -1,13 +1,13 @@
 
 export default class PhDagDatasource {
-    constructor(id, adapter) {
+    constructor(id, adapter, url) {
         this.id = id
         this.data = []
         this.jobArr = []
-        // this.projectId = "JfSmQBYUpyb4jsei"
-        this.projectId = "HfSZTr74gRcQOYoA"
+        this.name = "prod_clean_v2"
+        this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = 'b8fa79615209d4eaf6a73d0c738ef8c722ed22601a65af554d5c98115d4aae73'
+        this.debugToken = 'eda8ba6defce8ac13abb4938f1dabc9b1336594ffc7a6121792efb13217afe46'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
@@ -38,6 +38,46 @@ export default class PhDagDatasource {
         return fetch(url, options)
     }
 
+    //查询version
+    buildDistinctColQuery(ele, col) {
+        const url = "https://apiv2.pharbers.com/phdadatasource"
+        function buildDistinctColSql() {
+            let sql_str = "SELECT DISTINCT " + col
+
+            if (ele.datasource.projectId.length === 0)
+                sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+            else
+                sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+
+            sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+
+            return sql_str
+        }
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            "query": buildDistinctColSql(),
+            "schema": [col]
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    queryDlgDistinctCol(ele, row) {
+        return ele.datasource.buildDistinctColQuery(ele, row)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.map(x => x[row])
+            })
+    }
+
     refreshData(ele) {
         let that = this
         ele.datasource.buildQuery(ele)
@@ -50,7 +90,7 @@ export default class PhDagDatasource {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
                     x["representId"] = x["attributes"]["represent-id"]
-                    x["status"] = "normal"
+                    x["status"] = x["attributes"]["runtime"]
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
                     const name = x["attributes"]["name"]
@@ -93,10 +133,13 @@ export default class PhDagDatasource {
                     const sourceId = cmessage["sourceId"]
                     if (sourceId && sourceId.length > 0) {
                         const tmp = ele.datasource.data.find(x => x["id"] === targetId)
-                        tmp["parentIds"].push(sourceId)
-                        if (maxHeight < tmp["parentIds"].length) {
-                            maxHeight = tmp["parentIds"].length
+                        if(tmp) {
+                            tmp["parentIds"].push(sourceId)
+                            if (maxHeight < tmp["parentIds"].length) {
+                                maxHeight = tmp["parentIds"].length
+                            }
                         }
+                        
                     }
                 }
                 that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]

@@ -62,12 +62,12 @@ export default class ExcelHandlerComponent extends Component {
 	@action noticeCallback(response, ele) {
 		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
 		let upload_status = cnotification.status
-		let error = cnotification.error
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(upload_status == "project_file_to_DS_succeed") {
 			//跳转下一页面
 			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
 		} else if(upload_status == "project_file_to_DS_failed") {
-			let msg = error !== '' ? error : '导入失败，请重新上传！'
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '导入失败，请重新上传！'
 			alert(msg)
 		}
 		this.loadingService.loading.style.display = 'none'
@@ -97,10 +97,11 @@ export default class ExcelHandlerComponent extends Component {
 		param.opname = this.cookies.read( "account_id" )
 		param.opgroup = this.cookies.read( "company_id" )
 		param.cat = "uploaded"
-		param.prop = {
+		param.actionName = param.destination // actions列表展示的名称
+		param.prop = JSON.stringify({
 			path: "",
 			partitions: 1
-		}
+		})
 		//直接导入数据集
         const push_type = "put_item"
         const project_files_body = {
@@ -112,7 +113,7 @@ export default class ExcelHandlerComponent extends Component {
                 "jobCat": "project_file_to_DS",
                 "jobDesc": "creating",
                 "message": JSON.stringify(param),
-                "date": Date.now(),
+                "date": String(new Date().getTime()),
                 "owner": this.cookies.read('account_id'),
                 "showName": decodeURI(this.cookies.read('user_name_show'))
             }

@@ -50,6 +50,7 @@ export default class AnalyzeComponent extends Component {
 						"jobCat": "transform_schema",
 						"jobDesc": "running",
 						"message": JSON.stringify({
+							"actionName": cstParam.datasetName,
 							"dsid": cstParam.datasetId,
 							"destination": cstParam.datasetName,
 							"schema": [{
@@ -58,7 +59,7 @@ export default class AnalyzeComponent extends Component {
 								"type": type
 							}]
 						}),
-						"date": new Date().getTime(),
+						"date": String(new Date().getTime()),
 						"owner": this.cookies.read( "account_id" ),
 						"showName": decodeURI(this.cookies.read('user_name_show'))
 					}

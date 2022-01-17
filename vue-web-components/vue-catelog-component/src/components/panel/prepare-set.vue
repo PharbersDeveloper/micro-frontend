@@ -48,9 +48,9 @@ export default {
         return {
             prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
             error_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/error.svg",
-            rowParams: "",
-            colParams: "",
-            changeParams: ""
+            rowParams: '[{"key": ["=", "value"]}]',
+            colParams: '["col1", "col2"]',
+            changeParams: "value"
         }
     },
     props: {
@@ -58,6 +58,16 @@ export default {
             type: Object,
             default: function() {
                 return {}
+            }
+        }
+    },
+    watch: {
+        "allData.operatorParameters": function() {
+            console.log(this.allData.operatorParameters)
+            if(this.allData.operatorParameters && this.allData.operatorParameters.length > 0) {
+                this.rowParams = JSON.stringify(this.allData.operatorParameters[1])
+                this.colParams = JSON.stringify(this.allData.operatorParameters[3])
+                this.changeParams = this.allData.operatorParameters[5]
             }
         }
     },

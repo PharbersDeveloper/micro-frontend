@@ -31,16 +31,32 @@ export default class RecipesComponent extends Component {
 					uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if(params.name === "scripts") {
 					uri = '/recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
-				} else if (params.name === "codeditor" && params.recipt !== "prepare") {
+				} else if (params.name === "codeditor" && params.recipt.runtime !== "prepare") {
 					uri = '/codeditor?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
-				} else if (params.name === "codeditor" && params.recipt === "prepare") {
-					uri = '/prepare-set?projectName=' + params.projectName + '&projectId=' + params.projectId + '&jobName=' + params.recipt.jobName + '&jobPath=' + params.recipt.jobPath
+				} else if (params.name === "codeditor" && params.recipt.runtime === "prepare") {
+					let recipt = params.recipt
+					let scripts = {
+						"name": "editScripts",
+						"jobName": recipt.jobName,
+						"jobId": recipt.jobId,
+						"targetJobId": recipt.targetJobId,
+						"inputs": JSON.parse(recipt.inputs),
+						"outputs": JSON.parse(recipt.outputs),
+						"jobVersion": recipt.jobVersion,
+						"projectName": params.projectName,
+						"jobDisplayName": recipt.jobDisplayName,
+						"jobShowName": recipt.jobShowName,
+						"projectName": params.projectName,
+						"projectId": params.projectId,
+						"jobCat": "prepare_edit"
+					}
+					uri = '/prepare-set?projectName=' + params.projectName + '&projectId=' + params.projectId + '&operatorParameters=' + escape(recipt.operatorParameters) + '&message=' + encodeURI(JSON.stringify(scripts))
 				} else if (params.name == "flow") {
 					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}  else if(params.name == "airflow") {
 					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}
-                this.router.transitionTo( uri )
+                this.router.transitionTo( encodeURI(uri) )
 				break
 			case "createScripts":
 				let scriptsParams = e.detail[0].args.param;
@@ -54,12 +70,11 @@ export default class RecipesComponent extends Component {
 				this.projectId = scriptsParams.projectId
 				this.projectName = scriptsParams.projectName
 				if(scriptsParams.runtime === "prepare") {
-					// message["path"] = scriptsParams.path
-					// message["format"] = scriptsParams.format
 					let preUrl = `/prepare-set?projectName=${scriptsParams.projectName}&projectId=${scriptsParams.projectId}&message=${encodeURI(JSON.stringify(scriptsParams))}`
 					this.router.transitionTo(preUrl)
 				} else {
 					if(scriptsParams.outputs[0].id == "") {
+						//没有id要先创建dataset
 						scriptsParams.outputs[0].id = uuid
 						let body = {
 							"table": "dataset",
@@ -86,6 +101,7 @@ export default class RecipesComponent extends Component {
 						await fetch(url, options)
 					}
 					let message = {
+						"actionName": scriptsParams.jobName,
 						"dagName": scriptsParams.projectName,
 						"flowVersion": "developer",
 						"jobName": scriptsParams.jobName,
@@ -105,8 +121,6 @@ export default class RecipesComponent extends Component {
 							path: scriptsParams.path,
 							partitions: 1
 						}
-						// "path": scriptsParams.path,
-						// "format": scriptsParams.format
 					}
 					let scriptBody = {
 						"table": "action",
@@ -116,8 +130,9 @@ export default class RecipesComponent extends Component {
 							"showName": decodeURI(this.cookies.read('user_name_show')),
 							"code": 0,
 							"jobDesc": "created",
-							"jobCat": "intermediate",
+							"jobCat": "dag_create",
 							"comments": "",
+							"date": String(new Date().getTime()),
 							"message": JSON.stringify(message)
 						}
 					}
@@ -182,6 +197,7 @@ export default class RecipesComponent extends Component {
 				selectedDatasetsDel.forEach(async targetId => {
 					let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
 					msgArr.push({
+						"actionName": targetDataset.jobShowName,
 						"targetId": targetDataset.jobId, 
 						"jobName":targetDataset.jobName,
 						"flowVersion": "developer"
@@ -196,7 +212,7 @@ export default class RecipesComponent extends Component {
 						"jobCat": "remove_Job",
 						"jobDesc": "running",
 						"message": JSON.stringify(msgArr),
-						"date": new Date().getTime(),
+						"date": String(new Date().getTime()),
 						"owner": this.cookies.read( "account_id" ),
 						"showName": decodeURI(this.cookies.read('user_name_show'))
 					}
@@ -232,6 +248,7 @@ export default class RecipesComponent extends Component {
 					const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 					const accessToken = this.cookies.read( "access_token" )
 					let msg = {
+						"actionName": targetDataset.name,
 						"version": "",
 						"dsid": targetDataset.id,
 						"destination": targetDataset.name,
@@ -247,7 +264,7 @@ export default class RecipesComponent extends Component {
 							"jobCat": "clear_DS_data",
 							"jobDesc": "running",
 							"message": JSON.stringify(msg),
-							"date": new Date().getTime(),
+							"date": String(new Date().getTime()),
 							"owner": this.cookies.read( "account_id" ),
 							"showName": decodeURI(this.cookies.read('user_name_show'))
 						}
@@ -279,27 +296,32 @@ export default class RecipesComponent extends Component {
 	}
 
 	@action createScriptNoticeCallback(response, ele) {
-		let create_scripts_status = JSON.parse(response.data[0].attributes.message).cnotification.status
 		this.loadingService.loading.style.display = 'none'
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let create_scripts_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(create_scripts_status == "dag insert success") {
 			alert("新建脚本成功！")
-			
 			let message = JSON.parse(response.data[0].attributes.message)
 			let jobName = message.cnotification.jobName
 			let jobPath = message.cnotification.jobPath
 			this.router.transitionTo(`/codeditor?projectName=${this.projectName}&projectId=${this.projectId}&jobName=${jobName}&jobPath=${jobPath}`)
 		} else {
-			alert("新建脚本失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '新建脚本失败，请重新操作！'
+			alert(msg)
 		}
 	}
 
 	@action noticeCallback(response, ele) {
-		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(upload_status == "project_file_to_DS_succeed") {
 			//跳转下一页面
 			this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
 		} else if(upload_status == "project_file_to_DS_failed") {
-			alert("清除数据失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '清除数据失败，请重新操作！'
+			alert(msg)
 		}
 		this.loadingService.loading.style.display = 'none'
 	}

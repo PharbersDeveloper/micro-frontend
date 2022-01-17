@@ -164,10 +164,13 @@ export default class DataSetComponent extends Component {
     }
 
 	@action noticeCallback(response, ele) {
-		let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status 
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if(upload_status != "upload_succeed") {
 			//跳转回dataset页面
-			alert("上传失败，请重新跳转！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '上传失败，请重新上传！'
+			alert(msg)
 			this.router.transitionTo('/dataset-lst?projectName=' + this.tranParam.projectName + '&projectId=' + this.tranParam.projectId)
 		} else {
 			this.noticeService.uploadStatus = true
@@ -197,16 +200,17 @@ export default class DataSetComponent extends Component {
         let project_files = this.postUrl(push_type, project_files_body)
         //push actions
         let messages = {
-			file: file,
-			message: message,
-			property: property,
-			projectId: projectId,
-            projectName: projectName,
-			cat: cat,
-			"prop": {
+			"actionName": property.dataset,
+			"file": file,
+			"message": message,
+			"property": property,
+			"projectId": projectId,
+            "projectName": projectName,
+			"cat": cat,
+			"prop": JSON.stringify({
 				path: "",
 				partitions: 1
-			}
+			})
 		}
         let actions_body ={
             "table": "action",
@@ -218,6 +222,7 @@ export default class DataSetComponent extends Component {
                 "jobDesc": "created",
                 "jobCat": "upload",
                 "comments": "",
+				"date": String(new Date().getTime()),
                 "message": JSON.stringify(messages)
             }
         }

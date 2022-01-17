@@ -25,7 +25,7 @@ export default class DatasetLstComponent extends Component {
                 } else if(params.name === "analyze" && params.dataset.cat !== "input_index" && params.dataset.cat !== "output_index") {
                     uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
                 }else if(params.name === "analyze" && params.dataset.cat !== "uploaded" && params.dataset.cat !== "intermediate") {
-					console.log(params.dataset)
+                    console.log(params.dataset)
                     uri = `/dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}&format=${params.dataset.format}&cat=${params.dataset.cat}`
                 } else if(params.name === "datasets") {
                     uri = '/dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId
@@ -34,8 +34,8 @@ export default class DatasetLstComponent extends Component {
                 } else if (params.name == "flow") {
                     uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
                 }  else if(params.name == "airflow") {
-					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
-				}
+                    uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
+                }
                 this.router.transitionTo( uri )
                 break
             case "addTags":
@@ -77,6 +77,8 @@ export default class DatasetLstComponent extends Component {
                 })
             break
             case "deleteDatasets":
+				this.loadingService.loading.style.display = 'flex'
+                this.loadingService.loading.style['z-index'] = 2
                 let delTagParam = e.detail[0].args.param;
                 let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
                 let datasetArrayDel = delTagParam.datasetArray //发送请求的参数
@@ -86,6 +88,7 @@ export default class DatasetLstComponent extends Component {
                 selectedDatasetsDel.forEach(async targetId => {
                     let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
                     msgArr.push({
+						"actionName": targetDataset.name,
                         "version": "",
                         "dsid": targetDataset.id,
                         "destination": targetDataset.name,
@@ -103,7 +106,7 @@ export default class DatasetLstComponent extends Component {
                         "jobCat": "remove_DS",
                         "jobDesc": "running",
                         "message": JSON.stringify(msgArr),
-                        "date": new Date().getTime(),
+						"date": String(new Date().getTime()),
                         "owner": this.cookies.read( "account_id" ),
                         "showName": decodeURI(this.cookies.read('user_name_show'))
                     }
@@ -121,24 +124,24 @@ export default class DatasetLstComponent extends Component {
                 if(result.data) {
                     _that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
                 }
-                alert("删除数据集成功！")
-                window.location.reload()
             break
             case "fitMax":
                 let uuid = this.guid()
                 let suit_max_Param = e.detail[0].args.param;
                 const suit_max_url = "https://apiv2.pharbers.com/phdydatasource/put_item"
                 let message = {
+					"actionName": suit_max_Param.dsName,
                     "keys": suit_max_Param.path,
                     "name": suit_max_Param.dsName,
                     "version": suit_max_Param.version,
                     "id": uuid,
                     "cat": suit_max_Param.maxcat,
-					"format": suit_max_Param.format,
-					"prop": {
-						path: suit_max_Param.path,
-						partitions: 1
-					}
+                    "format": suit_max_Param.format,
+                    "prop": {
+                        path: suit_max_Param.path,
+                        partitions: 1,
+                        format: suit_max_Param.format
+                    }
                 }
                 let suit_max_body = {
                     "table": "action",
@@ -149,7 +152,7 @@ export default class DatasetLstComponent extends Component {
                         "jobCat": "max1.0",
                         "jobDesc": "max1.0",
                         "message": JSON.stringify(message),
-                        "date": new Date().getTime(),
+                        "date": String(new Date().getTime()),
                         "owner": this.cookies.read( "account_id" ),
                         "showName": decodeURI(this.cookies.read('user_name_show'))
                     }
@@ -178,51 +181,52 @@ export default class DatasetLstComponent extends Component {
                 let datasetArrayClear = clearTagParam.datasetArray //发送请求的参数在这取
                 let _this = this
                 let promiseList = [];
+				let msg = []
                 selectedDatasetsClear.forEach(async targetId => {
-                    let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
-                    const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-                    const accessToken = this.cookies.read( "access_token" )
-                    let msg = {
-                        "version": "",
-                        "dsid": targetDataset.id,
-                        "destination": targetDataset.name,
-                        "opname": this.cookies.read( "account_id" ),
-                        "opgroup": this.cookies.read( "company_id" )
-                    }
-                    let body = {
-                        "table": "action",
-                        "item": {
-                            "projectId": clearTagParam.projectId,
-                            "code": 0,
-                            "comments": "clear_dataset_tags",
-                            "jobCat": "clear_DS_data",
-                            "jobDesc": "running",
-                            "message": JSON.stringify(msg),
-                            "date": new Date().getTime(),
-                            "owner": this.cookies.read( "account_id" ),
-                            "showName": decodeURI(this.cookies.read('user_name_show'))
-                        }
-                    }
-                    let options = {
-                        method: "POST",
-                        headers: {
-                            "Authorization": accessToken,
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                            "accept": "application/json"
-                        },
-                        body: JSON.stringify(body)
-                    }
-                    let result = fetch(url, options).then(res => res.json())
-                    promiseList.push(result)
-                })
-                let results = await Promise.all(promiseList)
-                results.forEach(item => {
+					let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
+					msg.push({
+						"actionName": targetDataset.name,
+						"version": "",
+						"dsid": targetDataset.id,
+						"destination": targetDataset.name,
+						"opname": this.cookies.read( "account_id" ),
+						"opgroup": this.cookies.read( "company_id" )
+					})
+				})
+				
+				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const token = this.cookies.read( "access_token" )
+				let clearBody = {
+					"table": "action",
+					"item": {
+						"projectId": clearTagParam.projectId,
+						"code": 0,
+						"comments": "clear_dataset_tags",
+						"jobCat": "clear_DS_data",
+						"jobDesc": "running",
+						"message": JSON.stringify(msg),
+						"date": String(new Date().getTime()),
+						"owner": this.cookies.read( "account_id" ),
+						"showName": decodeURI(this.cookies.read('user_name_show'))
+					}
+				}
+				let clearOptions = {
+					method: "POST",
+					headers: {
+						"Authorization": token,
+						'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+						"accept": "application/json"
+					},
+					body: JSON.stringify(clearBody)
+				}
+				let clearResult = fetch(url, clearOptions).then(res => res.json())
+				promiseList.push(clearResult)
+                let clearResults = await Promise.all(promiseList)
+                clearResults.forEach(item => {
                     if(item.data) {
-                        _this.noticeService.register("notification", item.data.id, this.noticeCallback, this, clearTagParam.projectId)
+                        _this.noticeService.register("notification", item.data.id, this.clearTagsNoticeCallback, this, clearTagParam.projectId)
                     }
                 })
-                alert("清除数据成功！")
-                window.location.reload()
             break
             default:
                 console.log("other click event!")
@@ -236,25 +240,34 @@ export default class DatasetLstComponent extends Component {
             return v.toString(16);
         });
     }
-
-    @action noticeCallback(response, ele) {
-        let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
-        if(upload_status == "project_file_to_DS_succeed") {
-            //跳转下一页面
-            this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
-        } else if(upload_status == "project_file_to_DS_failed") {
-            alert("清除数据失败，请重新操作！")
+	
+	//清空数据集回调
+	@action
+	clearTagsNoticeCallback(response, ele) {
+		let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
+        if(upload_status == "clear_DS_succeed") {
+			alert("清楚数据成功！")
+            window.location.reload()
+        } else if(upload_status == "clear_DS_failed") {
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '清除数据失败，请重新操作！'
+			alert(msg)
         }
         this.loadingService.loading.style.display = 'none'
-    }
+	}
 
+	// 删除数据集回调
     @action delNoticeCallback(response, ele) {
-        let upload_status = JSON.parse(response.data[0].attributes.message).cnotification.status
+        let cnotification = JSON.parse(response.data[0].attributes.message).cnotification
+		let upload_status = cnotification.status
+		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
         if(upload_status == "remove_DS_succeed") {
-            //跳转下一页面
-            this.router.transitionTo( `/dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}` )
+			alert("删除数据集成功！")
+			window.location.reload()
         } else if(upload_status == "remove_DS_failed") {
-            alert("删除数据集失败，请重新操作！")
+			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '删除数据集失败，请重新操作！'
+			alert(msg)
         }
         this.loadingService.loading.style.display = 'none'
     }

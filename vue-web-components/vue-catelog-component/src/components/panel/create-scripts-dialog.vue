@@ -5,7 +5,7 @@
             <div class="dialog_area">
                <div class="header">
                     <div class="left">
-                        <p class="dataset_name">新建 {{runtime}} 脚本</p>
+                        <p class="dataset_name">新建 {{runtimeShow[runtime]}} 脚本</p>
                     </div>
                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="close_icon" @click="close">
                </div>
@@ -24,8 +24,8 @@
                                         <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
                                     </div>
                                 </div>
-                                <el-button class="add" type="primary" v-if="runtime !== 'prepare'" @click="on_clickAddInput">增加</el-button>
-                                <el-button class="add" type="primary" v-if="runtime === 'prepare'" @click="on_clickAddInput">更改</el-button>
+                                <el-button class="add" type="primary" v-if="runtime === 'prepare' && addDatasetList.length > 0" @click="on_clickAddInput">更改</el-button>
+                                <el-button class="add" type="primary" v-else @click="on_clickAddInput">增加</el-button>
                             </div>
                             <!-- 未选的input -->
                             <div class="addInput" v-show="datasetListShow">
@@ -152,7 +152,14 @@ export default {
             oldDatasetList: [], //现有数据集
             showOldDataset: true,
             path: "",
-            format: "请选择"
+            format: "请选择",
+            runtimeShow: {
+                "python3": "Python",
+                "pyspark": "PySpark",
+                "r": "R",
+                "sparkr": "SparkR",
+                "prepare": "Prepare"
+            }
         }
     },
     components: {
@@ -167,41 +174,22 @@ export default {
     },
     computed: {
         remainDatasetListSearch: function() {
+            //input未选中列表
             let searchValue = this.searchInput
-            if(this.runtime != "download") {
-                // 正常创建脚本逻辑
-                if(searchValue) {
-                    return this.remainDatasetList.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-                }
-                return this.remainDatasetList
-            } else {
-                // download逻辑
-                // let remainDatasetListInputData = this.remainDatasetList.filter(item => item.cat === "normal")
-                let remainDatasetListInputData = this.remainDatasetList
-                if(searchValue) {
-                    return remainDatasetListInputData.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-                }
-                return remainDatasetListInputData
+            let remainDatasetListInputData = this.remainDatasetList.filter(item => item.cat !== "output_index")
+            if(searchValue) {
+                return remainDatasetListInputData.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
+            return remainDatasetListInputData
         },
         remainDatasetListOutputsSearch: function() {
+            // output未选中列表
             let searchValueOutput = this.searchOutput
-            if(this.runtime != "download") {
-                // 正常创建脚本逻辑
-                if(searchValueOutput) {
-                    return this.remainDatasetListOutputs.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
-                } 
-                return this.remainDatasetListOutputs
-            } else {
-                // 下载逻辑
-                // let remainDatasetListOutputsData = this.remainDatasetListOutputs.filter(item => item.cat === "output_index")
-                let remainDatasetListOutputsData = this.remainDatasetListOutputs
-                if(searchValueOutput) {
-                    return remainDatasetListOutputsData.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
-                }
-                return remainDatasetListOutputsData
-            }
-            
+            let remainDatasetListOutputsData = this.remainDatasetList.filter(item => item.cat === "output_index")
+            if(searchValueOutput) {
+                return remainDatasetListOutputsData.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
+            } 
+            return remainDatasetListOutputsData
         }
     },
     mounted() {
@@ -219,12 +207,9 @@ export default {
                 name: item.name,
                 id: item.id,
                 cat: item.cat
-                // schema: item.schema,
-                // version: item.version
             })
         })
     },
-    watch: {},
     methods: {
         changeFormat(data) {
             this.format = data
@@ -233,8 +218,7 @@ export default {
             if(this.addDatasetList.length > 0 && this.datasetOutputListShow && this.showOldDataset && this.dsName.name) {
                 /**
                  * 1. 先判断output是新增还是选择原有数据
-                 * 2. 若新增，生成一个id（类似f9fab7a26dc2e5ff48bd6e13914bbe79.xlsx），
-                 *    创建一个dataset，否则直接3
+                 * 2. 若新增，生成一个id,创建一个dataset，否则直接3
                  * 3. 调用赵的接口，往action里面插数据
                 */
                 let inputsArr = []

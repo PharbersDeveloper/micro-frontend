@@ -7,15 +7,5 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(async function () {
-	let scriptOptions = {
-		method: "GET",
-		headers: {
-			Authorization: config.APP.debugToken,
-			Accept: "application/vnd.api+json",
-			"Content-Type": "application/vnd.api+json",
-		}
-	}
-	const result = await fetch("https://apiv2.pharbers.com/phplatform/projects", scriptOptions).then(res => res.json())
-	console.log(result)
-	this.route("shell", { path: "/" })
+	this.route("shell", { path: "/*path" })
 })
