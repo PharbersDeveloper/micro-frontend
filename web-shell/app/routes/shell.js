@@ -2,6 +2,7 @@ import Route from "@ember/routing/route"
 import { inject as service } from "@ember/service"
 import RSVP from "rsvp"
 import { camelize } from "@ember/string"
+import ENV from "web-shell/config/environment"
 
 export default class ShellRoute extends Route {
 	@service store
@@ -15,7 +16,7 @@ export default class ShellRoute extends Route {
 		if (pages.length === 0) {
 			console.log("need query page configures")
 			pages = await this.store.query("page", {
-				"filter[clientId]": "fjjnl2uSalHTdrppHG9u"
+				"filter[clientId]": ENV.APP.clientId
 			})
 		}
 		const curPage = pages.find((x) => x.route === "/" + params.path)

@@ -26,7 +26,7 @@ module.exports = function (environment) {
 			host: "https://oauth.pharbers.com",
 			apiUri: "https://apiv2.pharbers.com",
 			apiHost: "apiv2.pharbers.com",
-			clientId: "V5I67BHIRVR2Z59kq-a-",
+			clientId: "fjjnl2uSalHTdrppHG9u",
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAPOX3QT6U",
