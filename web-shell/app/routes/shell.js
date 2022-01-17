@@ -23,12 +23,12 @@ export default class ShellRoute extends Route {
 		 * 2. 动态的把需要的JS加载到dom中
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
-
-		const projects = await pharbersHomeRouteModel(this)
+		const data = await pharbersHomeRouteModel(this)
 		debugger
 		return RSVP.hash({
 			page: curPage,
-			projects: projects
+			data: data,
+			_isVue: true
 		})
 	}
 }
