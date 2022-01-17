@@ -24,7 +24,7 @@ export default class ShellRoute extends Route {
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
 
-		const projects = await alfredTest(this)
+		const projects = await pharbersHomeRouteModel(this)
 		debugger
 		return RSVP.hash({
 			page: curPage,

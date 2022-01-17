@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-	entry: './src/index.js',
+	entry: './src/',
 	output: {
 		filename: 'bundle.js',
 		path: path.resolve(__dirname, 'dist')
