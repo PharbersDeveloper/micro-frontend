@@ -1,6 +1,7 @@
 import Route from "@ember/routing/route"
 import { inject as service } from "@ember/service"
 import RSVP from "rsvp"
+import { camelize } from "@ember/string"
 
 export default class ShellRoute extends Route {
 	@service store
@@ -23,8 +24,11 @@ export default class ShellRoute extends Route {
 		 * 2. 动态的把需要的JS加载到dom中
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
+		this.jsl.loadRemoteJs(curPage.cat)
 
-		const data = await offweb.pharbersHomeRouteModel(this)
+		const clientName = curPage.clientName
+		const modelName = camelize(curPage.name) + "RouteModel"
+		const data = await window[clientName][modelName](this)
 		return RSVP.hash({
 			page: curPage,
 			data: data,

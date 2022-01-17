@@ -2589,7 +2589,10 @@
        */
 
       this.jsl.loadRemoteJs(curPage.uri);
-      const data = await offweb.pharbersHomeRouteModel(this);
+      this.jsl.loadRemoteJs(curPage.cat);
+      const clientName = curPage.clientName;
+      const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
+      const data = await window[clientName][modelName](this);
       return Ember.RSVP.hash({
         page: curPage,
         data: data,
