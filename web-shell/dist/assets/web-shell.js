@@ -308,7 +308,7 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <h2>{{@name}}</h2>
+    {{!-- <h2>{{@name}}</h2> --}}
   {{#let (element @name) as |E|}}
       <E
   		allData={{@allData}}
@@ -320,8 +320,8 @@
   
   */
   {
-    "id": "Sgp2Tvts",
-    "block": "[[[10,\"h2\"],[12],[1,[30,1]],[13],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "id": "TIMGW/BO",
+    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/wc-context.hbs",
     "isStrictMode": false
   });
@@ -2570,7 +2570,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _class, _descriptor, _descriptor2;
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -2580,13 +2580,15 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("remote-loading"), (_class = class ShellRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("remote-loading"), _dec3 = Ember.inject.service("route-parse"), (_class = class ShellRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "store", _descriptor, this);
 
       _initializerDefineProperty(this, "jsl", _descriptor2, this);
+
+      _initializerDefineProperty(this, "rps", _descriptor3, this);
     }
 
     async model(params) {
@@ -2594,18 +2596,32 @@
        * 1. 第一步，需要从读取JS模版
        */
       let pages = this.store.peekAll("page");
+      pages = pages.filter(_ => true);
 
       if (pages.length === 0) {
-        console.log("need query page configures");
         pages = await this.store.query("page", {
           "filter[clientId]": _environment.default.APP.clientId
         });
+        pages = pages.filter(_ => true);
       }
 
-      const curPage = pages.find(x => x.route === "/" + params.path);
+      const pageCount = pages.length;
+      let curPage = ""; // not found page
+
+      for (let idx = 0; idx < pageCount; ++idx) {
+        const tmp = pages[idx];
+        const [match, parseParams] = this.rps.parse("/" + params.path, tmp.route);
+
+        if (match) {
+          curPage = tmp;
+          break;
+        }
+      } // const curPage = pages.find((x) => x.route === "/" + params.path)
+
       /**
        * 2. 动态的把需要的JS加载到dom中
        */
+
 
       this.jsl.loadRemoteJs(curPage.uri);
       this.jsl.loadRemoteJs(curPage.cat);
@@ -2614,7 +2630,7 @@
       const data = await window[clientName][modelName](this);
       return Ember.RSVP.hash({
         page: curPage,
-        data: data,
+        data: data ? data : {},
         isVue: true
       });
     }
@@ -2625,6 +2641,11 @@
     writable: true,
     initializer: null
   }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -3342,6 +3363,160 @@
 
   _exports.default = RemoteLoadingService;
 });
+;define("web-shell/services/route-parse", ["exports", "ramda"], function (_exports, _ramda) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class RouteParseService extends Ember.Service {
+    parse(uri, template) {
+      debugger;
+      const qIdx = uri.indexOf("?");
+      let resourceUri = uri;
+      let queryUri = "";
+
+      if (qIdx > -1) {
+        resourceUri = uri.substring(0, qIdx);
+        queryUri = uri.substring(qIdx + 1);
+      }
+
+      const factory = new StageFactory();
+      const templateArr = template.split("/");
+      const resourceArr = resourceUri.split("/");
+      const isMatch = templateArr.length === resourceArr.length;
+
+      if (isMatch) {
+        try {
+          const paramArr = factory.zip(templateArr, resourceArr);
+          let stages = [];
+
+          for (let idx = 0; idx < paramArr.length; ++idx) {
+            stages.push(factory.createStageInstance("param", paramArr[idx][0], paramArr[idx][1]));
+          }
+
+          let queryArr = queryUri.split("&");
+          queryArr = queryArr.map(_ => _.split("="));
+
+          for (let idx = 0; idx < queryArr.length; ++idx) {
+            stages.push(factory.createStageInstance("query", queryArr[idx][0], queryArr[idx][1]));
+          }
+
+          const byCat = _ramda.default.groupBy(_ => _.cat);
+
+          let reVal = byCat(stages.map(_ => _.parse()));
+          const keys = Object.keys(reVal);
+          const result = {};
+
+          for (let idx = 0; idx < keys.length; ++idx) {
+            result[keys[idx]] = factory.array2Object(reVal[keys[idx]]);
+          }
+
+          return [true, result];
+        } catch (e) {
+          return [false, null];
+        }
+      }
+    }
+
+  }
+
+  _exports.default = RouteParseService;
+
+  class Stage {
+    constructor(_t, _r) {
+      _defineProperty(this, "template", "");
+
+      _defineProperty(this, "resource", "");
+
+      this.template = _t;
+      this.resource = _r;
+    }
+
+    parse() {
+      throw new Error("not implemented");
+    }
+
+  }
+
+  class ParamStage extends Stage {
+    constructor(_t, _r) {
+      super(_t, _r);
+    }
+
+    parse() {
+      let tmp = {
+        cat: "param"
+      };
+
+      if (this.template.startsWith("{") && this.template.endsWith("}")) {
+        this.template = this.template.substring(this.template.indexOf("{" + 1), this.template.lastIndexOf("}"));
+        tmp[this.template] = this.resource;
+      } else {
+        if (this.template !== this.resource) {
+          throw new Error("not match");
+        }
+      }
+
+      return tmp;
+    }
+
+  }
+
+  class QueryStage extends Stage {
+    constructor(_t, _r) {
+      super(_t, _r);
+    }
+
+    parse() {
+      let tmp = {
+        cat: "query"
+      };
+      tmp[this.template] = this.resource;
+      return tmp;
+    }
+
+  }
+
+  class StageFactory {
+    constructor() {
+      _defineProperty(this, "zip", (...arr) => Array.from({
+        length: Math.max(...arr.map(a => a.length))
+      }, (_, i) => arr.map(a => a[i])));
+    }
+
+    createStageInstance(category, template, resource) {
+      if (category === "param") {
+        return new ParamStage(template, resource);
+      } else if (category === "query") {
+        return new QueryStage(template, resource);
+      } else {
+        throw new Error("not implemented");
+      }
+    }
+
+    array2Object(arr) {
+      const result = {};
+      const length = arr.length;
+
+      for (let idx = 0; idx < length; ++idx) {
+        const tmp = arr[idx];
+        const keys = Object.keys(tmp);
+
+        for (let ik = 0; ik < keys.length; ++ik) {
+          result[keys[ik]] = tmp[keys[ik]];
+        }
+      }
+
+      return result;
+    }
+
+  }
+});
 ;define("web-shell/services/store", ["exports", "ember-data/store"], function (_exports, _store) {
   "use strict";
 
@@ -3477,7 +3652,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"7687786f049836b870354f296e21babbdce94d50e1031399ec5d9400297273af","name":"web-shell","version":"0.0.0+a162504e"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"f08683bfbb0cc6c0a3f06013a20ccc3f288a05239aa09ea6944d20faed1715ce","name":"web-shell","version":"0.0.0+9c256626"});
           }
         
 //# sourceMappingURL=web-shell.map

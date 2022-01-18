@@ -7,19 +7,35 @@ import ENV from "web-shell/config/environment"
 export default class ShellRoute extends Route {
 	@service store
 	@service("remote-loading") jsl
+	@service("route-parse") rps
 
 	async model(params) {
 		/**
 		 * 1. 第一步，需要从读取JS模版
 		 */
 		let pages = this.store.peekAll("page")
+		pages = pages.filter((_) => true)
 		if (pages.length === 0) {
-			console.log("need query page configures")
 			pages = await this.store.query("page", {
 				"filter[clientId]": ENV.APP.clientId
 			})
+			pages = pages.filter(_ => true)
 		}
-		const curPage = pages.find((x) => x.route === "/" + params.path)
+
+		const pageCount = pages.length
+		let curPage = "" // not found page
+		for (let idx = 0; idx < pageCount; ++idx) {
+			const tmp = pages[idx]
+			const [match, parseParams] = this.rps.parse(
+				"/" + params.path,
+				tmp.route
+			)
+			if (match) {
+				curPage = tmp
+				break
+			}
+		}
+		// const curPage = pages.find((x) => x.route === "/" + params.path)
 
 		/**
 		 * 2. 动态的把需要的JS加载到dom中
@@ -32,7 +48,7 @@ export default class ShellRoute extends Route {
 		const data = await window[clientName][modelName](this)
 		return RSVP.hash({
 			page: curPage,
-			data: data,
+			data: data ? data : {},
 			isVue: true
 		})
 	}
