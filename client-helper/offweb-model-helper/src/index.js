@@ -7,6 +7,8 @@ import { pharbersActivityListRouteModel } from "./pharbersActivityListRouteModel
 import { pharbersAboutUsRouteModel } from "./pharbersAboutUsRouteModel"
 import { pharbersBoyunhuiRouteModel } from "./pharbersBoyunhuiRouteModel"
 import { pharbersAboveDataDetailRouteModel } from "./pharbersAboveDataDetailRouteModel"
+import { pharbersActivityListEventHandler } from "./pharbersActivityListEventHandler"
+import { pharbersIndustryActivityDetailRouteModel } from "./pharbersIndustryActivityDetailRouteModel"
 
 export {
 	pharbersHomeRouteModel,
@@ -17,5 +19,7 @@ export {
 	pharbersActivityListRouteModel,
 	pharbersAboutUsRouteModel,
 	pharbersBoyunhuiRouteModel,
-	pharbersAboveDataDetailRouteModel
+	pharbersAboveDataDetailRouteModel,
+	pharbersActivityListEventHandler,
+	pharbersIndustryActivityDetailRouteModel
 }

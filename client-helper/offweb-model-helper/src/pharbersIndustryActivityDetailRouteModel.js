@@ -129,20 +129,20 @@ export async function pharbersIndustryActivityDetailRouteModel(
 	}
 	for (let i = 0; i < eventLists.length; i++) {
 		eventAll[i] = {
-			event: eventLists,
+			event: eventLists[i],
 			image: image[i][0],
 			speaker: participantLists[i].name
 		}
 	}
 	return {
 		imageIds: results[5],
-		data: activityList.then((x) => x.filter((it) => it.language === lang)),
-		agenda: zoneList,
+		data: results[0].filter((it) => it.language === lang),
+		agenda: results[1],
 		eventList: eventLists,
 		participantList: participantLists,
 		imageList: imageLists,
-		galleryList: galleryList.then((x) => x.filter((it) => it.path != "")),
-		galleryShow: galleryShow,
+		galleryList: results[5].filter((it) => it.path != ""),
+		galleryShow: results[7],
 		index: id,
 		eventAll: eventAll
 	}
