@@ -19,7 +19,7 @@ export default class ShellRoute extends Route {
 			pages = await this.store.query("page", {
 				"filter[clientId]": ENV.APP.clientId
 			})
-			pages = pages.filter(_ => true)
+			pages = pages.filter((_) => true)
 		}
 
 		const pageCount = pages.length
@@ -27,10 +27,7 @@ export default class ShellRoute extends Route {
 		let parseParams
 		for (let idx = 0; idx < pageCount; ++idx) {
 			const tmp = pages[idx]
-			const [match, result] = this.rps.parse(
-				"/" + params.path,
-				tmp.route
-			)
+			const [match, result] = this.rps.parse("/" + params.path, tmp.route)
 			if (match) {
 				curPage = tmp
 				parseParams = result
