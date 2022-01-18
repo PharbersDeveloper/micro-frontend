@@ -83,7 +83,7 @@ class ParamStage extends Stage {
 		}
 		if (this.template.startsWith("{") && this.template.endsWith("}")) {
 			this.template = this.template.substring(
-				this.template.indexOf("{" + 1),
+				this.template.indexOf("{") + 1,
 				this.template.lastIndexOf("}")
 			)
 			tmp[this.template] = this.resource

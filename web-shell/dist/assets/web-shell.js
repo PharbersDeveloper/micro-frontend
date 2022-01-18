@@ -3466,7 +3466,7 @@
       };
 
       if (this.template.startsWith("{") && this.template.endsWith("}")) {
-        this.template = this.template.substring(this.template.indexOf("{" + 1), this.template.lastIndexOf("}"));
+        this.template = this.template.substring(this.template.indexOf("{") + 1, this.template.lastIndexOf("}"));
         tmp[this.template] = this.resource;
       } else {
         if (this.template !== this.resource) {
@@ -3551,8 +3551,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "xn46rKZ4",
-    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\\n\"],[46,[28,[37,2],null,null],null,null,null],[1,\"\\n\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "id": "I7VKr8m+",
+    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\"],[41,[30,1],[[[1,\"        \"],[10,\"pharbers-bp-nav-top\"],[14,\"inversebase\",\"\"],[15,\"is-login\",[36,2]],[12],[13],[1,\"\\n\"]],[]],[[[1,\"        \"],[10,\"pharbers-bp-nav-top\"],[15,\"is-login\",[36,2]],[12],[13],[1,\"\\n\"]],[]]],[1,\"\\n\"],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"],[10,\"pharbers-bp-page-bottom\"],[12],[13],[1,\"\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[\"@inverse\"],false,[\"page-title\",\"if\",\"isLogin\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
@@ -3664,7 +3664,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"f08683bfbb0cc6c0a3f06013a20ccc3f288a05239aa09ea6944d20faed1715ce","name":"web-shell","version":"0.0.0+4c966eba"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"f08683bfbb0cc6c0a3f06013a20ccc3f288a05239aa09ea6944d20faed1715ce","name":"web-shell","version":"0.0.0+436e0065"});
           }
         
 //# sourceMappingURL=web-shell.map

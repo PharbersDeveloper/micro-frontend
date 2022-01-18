@@ -1,6 +1,11 @@
 {{page-title "web shell"}}
 <!--<pharbers-bp-nav-top></pharbers-bp-nav-top>-->
+{{#if @inverse}}
+        <pharbers-bp-nav-top inversebase is-login={{isLogin}}></pharbers-bp-nav-top>
+{{else}}
+        <pharbers-bp-nav-top is-login={{isLogin}}></pharbers-bp-nav-top>
+{{/if}}
 
 {{outlet}}
-
+<pharbers-bp-page-bottom ></pharbers-bp-page-bottom>
 <!--<pharbers-bp-page-bottom></pharbers-bp-page-bottom>-->
