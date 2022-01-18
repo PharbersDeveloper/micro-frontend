@@ -308,8 +308,7 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{!-- <h2>{{@name}}</h2> --}}
-  {{#let (element @name) as |E|}}
+    {{#let (element @name) as |E|}}
       <E
   		allData={{@allData}}
           {{did-insert this.registerListener}}
@@ -2634,7 +2633,7 @@
 
 
       this.jsl.loadRemoteJs(curPage.uri);
-      this.jsl.loadRemoteJs(curPage.cat);
+      await this.jsl.loadRemoteJsSync(curPage.cat);
       const clientName = curPage.clientName;
       const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
       const data = await window[clientName][modelName](this, parseParams);
@@ -3367,6 +3366,23 @@
 
       script.src = source;
       document.head.appendChild(script);
+    }
+
+    loadRemoteJsSync(source) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = source;
+
+        script.onload = () => {
+          resolve();
+        };
+
+        script.onerror = () => {
+          reject("cannot load script " + source);
+        };
+
+        document.body.appendChild(script);
+      });
     }
 
   }
