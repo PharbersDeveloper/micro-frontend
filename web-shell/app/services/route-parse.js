@@ -3,6 +3,7 @@ import R from "ramda"
 
 export default class RouteParseService extends Service {
 	parse(uri, template) {
+		debugger
 		const qIdx = uri.indexOf("?")
 		let resourceUri = uri
 		let queryUri = ""
@@ -21,23 +22,23 @@ export default class RouteParseService extends Service {
 				const paramArr = factory.zip(templateArr, resourceArr)
 				let stages = []
 				for (let idx = 0; idx < paramArr.length; ++idx) {
-					stages = stages.push(
+					stages.push(
 						factory.createStageInstance(
 							"param",
-							paramArr[0],
-							paramArr[1]
+							paramArr[idx][0],
+							paramArr[idx][1]
 						)
 					)
 				}
 
 				let queryArr = queryUri.split("&")
 				queryArr = queryArr.map(_ => _.split("="))
-				for (let idx = 0; idx < queryArr; ++idx) {
-					stages = stages.push(
+				for (let idx = 0; idx < queryArr.length; ++idx) {
+					stages.push(
 						factory.createStageInstance(
 							"query",
-							queryArr[0],
-							queryArr[1]
+							queryArr[idx][0],
+							queryArr[idx][1]
 						)
 					)
 				}
@@ -112,9 +113,9 @@ class QueryStage extends Stage {
 class StageFactory {
 	createStageInstance(category, template, resource) {
 		if (category === "param") {
-			new ParamStage(template, resource)
+			return new ParamStage(template, resource)
 		} else if (category === "query") {
-			new QueryStage(template, resource)
+			return new QueryStage(template, resource)
 		} else {
 			throw new Error("not implemented")
 		}

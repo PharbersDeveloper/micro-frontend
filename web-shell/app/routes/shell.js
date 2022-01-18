@@ -14,17 +14,22 @@ export default class ShellRoute extends Route {
 		 * 1. 第一步，需要从读取JS模版
 		 */
 		let pages = this.store.peekAll("page")
+		pages = pages.filter((_) => true)
 		if (pages.length === 0) {
 			pages = await this.store.query("page", {
 				"filter[clientId]": ENV.APP.clientId
 			})
+			pages = pages.filter(_ => true)
 		}
 
-		const pageCount = pages.length()
+		const pageCount = pages.length
 		let curPage = "" // not found page
 		for (let idx = 0; idx < pageCount; ++idx) {
-			const tmp = page[idx]
-			const [match, parseParams] = rps.parse("/" + params.path, x.route)
+			const tmp = pages[idx]
+			const [match, parseParams] = this.rps.parse(
+				"/" + params.path,
+				tmp.route
+			)
 			if (match) {
 				curPage = tmp
 				break

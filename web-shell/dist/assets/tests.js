@@ -215,6 +215,18 @@ define("web-shell/tests/unit/services/remote-loading-test", ["qunit", "ember-qun
     });
   });
 });
+define("web-shell/tests/unit/services/route-parse-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | route-parse', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // TODO: Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:route-parse');
+      assert.ok(service);
+    });
+  });
+});
 define('web-shell/config/environment', [], function() {
   var prefix = 'web-shell';
 try {
