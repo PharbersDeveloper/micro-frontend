@@ -14,7 +14,6 @@ export default class ShellRoute extends Route {
 		 */
 		let pages = this.store.peekAll("page")
 		if (pages.length === 0) {
-			console.log("need query page configures")
 			pages = await this.store.query("page", {
 				"filter[clientId]": ENV.APP.clientId
 			})
@@ -32,7 +31,7 @@ export default class ShellRoute extends Route {
 		const data = await window[clientName][modelName](this)
 		return RSVP.hash({
 			page: curPage,
-			data: data,
+			data: data ? data : {},
 			isVue: true
 		})
 	}
