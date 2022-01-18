@@ -7,6 +7,7 @@ import ENV from "web-shell/config/environment"
 export default class ShellRoute extends Route {
 	@service store
 	@service("remote-loading") jsl
+	@service("route-parse") rps
 
 	async model(params) {
 		/**
@@ -18,7 +19,18 @@ export default class ShellRoute extends Route {
 				"filter[clientId]": ENV.APP.clientId
 			})
 		}
-		const curPage = pages.find((x) => x.route === "/" + params.path)
+
+		const pageCount = pages.length()
+		let curPage = "" // not found page
+		for (let idx = 0; idx < pageCount; ++idx) {
+			const tmp = page[idx]
+			const [match, parseParams] = rps.parse("/" + params.path, x.route)
+			if (match) {
+				curPage = tmp
+				break
+			}
+		}
+		// const curPage = pages.find((x) => x.route === "/" + params.path)
 
 		/**
 		 * 2. 动态的把需要的JS加载到dom中
