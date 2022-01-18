@@ -2608,16 +2608,18 @@
       const pageCount = pages.length;
       let curPage = ""; // not found page
 
+      let parseParams;
+
       for (let idx = 0; idx < pageCount; ++idx) {
         const tmp = pages[idx];
-        const [match, parseParams] = this.rps.parse("/" + params.path, tmp.route);
+        const [match, result] = this.rps.parse("/" + params.path, tmp.route);
 
         if (match) {
           curPage = tmp;
+          parseParams = result;
           break;
         }
-      } // const curPage = pages.find((x) => x.route === "/" + params.path)
-
+      }
       /**
        * 2. 动态的把需要的JS加载到dom中
        */
@@ -2627,7 +2629,7 @@
       this.jsl.loadRemoteJs(curPage.cat);
       const clientName = curPage.clientName;
       const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
-      const data = await window[clientName][modelName](this);
+      const data = await window[clientName][modelName](this, parseParams);
       return Ember.RSVP.hash({
         page: curPage,
         data: data ? data : {},
@@ -3375,7 +3377,6 @@
 
   class RouteParseService extends Ember.Service {
     parse(uri, template) {
-      debugger;
       const qIdx = uri.indexOf("?");
       let resourceUri = uri;
       let queryUri = "";
@@ -3388,38 +3389,41 @@
       const factory = new StageFactory();
       const templateArr = template.split("/");
       const resourceArr = resourceUri.split("/");
-      const isMatch = templateArr.length === resourceArr.length;
 
-      if (isMatch) {
-        try {
-          const paramArr = factory.zip(templateArr, resourceArr);
-          let stages = [];
+      try {
+        const isMatch = templateArr.length === resourceArr.length;
 
-          for (let idx = 0; idx < paramArr.length; ++idx) {
-            stages.push(factory.createStageInstance("param", paramArr[idx][0], paramArr[idx][1]));
-          }
-
-          let queryArr = queryUri.split("&");
-          queryArr = queryArr.map(_ => _.split("="));
-
-          for (let idx = 0; idx < queryArr.length; ++idx) {
-            stages.push(factory.createStageInstance("query", queryArr[idx][0], queryArr[idx][1]));
-          }
-
-          const byCat = _ramda.default.groupBy(_ => _.cat);
-
-          let reVal = byCat(stages.map(_ => _.parse()));
-          const keys = Object.keys(reVal);
-          const result = {};
-
-          for (let idx = 0; idx < keys.length; ++idx) {
-            result[keys[idx]] = factory.array2Object(reVal[keys[idx]]);
-          }
-
-          return [true, result];
-        } catch (e) {
-          return [false, null];
+        if (!isMatch) {
+          throw new Error("not match");
         }
+
+        const paramArr = factory.zip(templateArr, resourceArr);
+        let stages = [];
+
+        for (let idx = 0; idx < paramArr.length; ++idx) {
+          stages.push(factory.createStageInstance("param", paramArr[idx][0], paramArr[idx][1]));
+        }
+
+        let queryArr = queryUri.split("&");
+        queryArr = queryArr.map(_ => _.split("="));
+
+        for (let idx = 0; idx < queryArr.length; ++idx) {
+          stages.push(factory.createStageInstance("query", queryArr[idx][0], queryArr[idx][1]));
+        }
+
+        const byCat = _ramda.default.groupBy(_ => _.cat);
+
+        let reVal = byCat(stages.map(_ => _.parse()));
+        const keys = Object.keys(reVal);
+        const result = {};
+
+        for (let idx = 0; idx < keys.length; ++idx) {
+          result[keys[idx]] = factory.array2Object(reVal[keys[idx]]);
+        }
+
+        return [true, result];
+      } catch (e) {
+        return [false, null];
       }
     }
 

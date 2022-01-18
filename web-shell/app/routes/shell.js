@@ -24,18 +24,19 @@ export default class ShellRoute extends Route {
 
 		const pageCount = pages.length
 		let curPage = "" // not found page
+		let parseParams
 		for (let idx = 0; idx < pageCount; ++idx) {
 			const tmp = pages[idx]
-			const [match, parseParams] = this.rps.parse(
+			const [match, result] = this.rps.parse(
 				"/" + params.path,
 				tmp.route
 			)
 			if (match) {
 				curPage = tmp
+				parseParams = result
 				break
 			}
 		}
-		// const curPage = pages.find((x) => x.route === "/" + params.path)
 
 		/**
 		 * 2. 动态的把需要的JS加载到dom中
@@ -45,7 +46,7 @@ export default class ShellRoute extends Route {
 
 		const clientName = curPage.clientName
 		const modelName = camelize(curPage.name) + "RouteModel"
-		const data = await window[clientName][modelName](this)
+		const data = await window[clientName][modelName](this, parseParams)
 		return RSVP.hash({
 			page: curPage,
 			data: data ? data : {},
