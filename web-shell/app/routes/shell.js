@@ -10,6 +10,10 @@ export default class ShellRoute extends Route {
 	@service("route-parse") rps
 
 	async model(params) {
+		if (Object.keys(params).length === 0) {
+			params["path"] = "home"
+		}
+
 		/**
 		 * 1. 第一步，需要从读取JS模版
 		 */

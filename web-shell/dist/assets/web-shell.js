@@ -2504,6 +2504,9 @@
   _exports.default = Router;
   Router.map(async function () {
     this.route("shell", {
+      path: "/"
+    });
+    this.route("shell", {
       path: "/*path"
     });
   });
@@ -2592,9 +2595,14 @@
     }
 
     async model(params) {
+      if (Object.keys(params).length === 0) {
+        params["path"] = "home";
+      }
       /**
        * 1. 第一步，需要从读取JS模版
        */
+
+
       let pages = this.store.peekAll("page");
       pages = pages.filter(_ => true);
 
