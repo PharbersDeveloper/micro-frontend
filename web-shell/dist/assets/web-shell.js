@@ -243,6 +243,151 @@
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
 });
+;define("web-shell/components/pharbers-footer", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <pharbers-bp-page-bottom {{on "linkToPage" linkToPage}}></pharbers-bp-page-bottom>
+  */
+  {
+    "id": "2cTCYmx2",
+    "block": "[[[11,\"pharbers-bp-page-bottom\"],[4,[38,0],[\"linkToPage\",[33,1]],null],[12],[13]],[],false,[\"on\",\"linkToPage\"]]",
+    "moduleName": "web-shell/components/pharbers-footer.hbs",
+    "isStrictMode": false
+  });
+
+  let PharbersFooterComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, (_class = class PharbersFooterComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+    }
+
+    linkToPage(data) {
+      if (data.detail[0] == "home" && this.router.currentRouteName == "home") {
+        window.location.reload();
+      } else {
+        this.router.transitionTo("shell", data.detail[0]);
+      }
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype)), _class));
+  _exports.default = PharbersFooterComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PharbersFooterComponent);
+});
+;define("web-shell/components/pharbers-nav-top", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#if @model.inverse}}
+  	<pharbers-bp-nav-top 
+  		inversebase 
+  		{{on "linkToPage" linkToPage}} 
+  		{{on "logout" logout}} 
+  		is-login={{isLogin}}
+  	></pharbers-bp-nav-top>
+  {{else}}
+  	<pharbers-bp-nav-top 
+  		{{on "linkToPage" linkToPage}} 
+  		{{on "logout" logout}} 
+  		is-login={{isLogin}}
+  	></pharbers-bp-nav-top>
+  {{/if}}
+  
+  */
+  {
+    "id": "U/RQt9av",
+    "block": "[[[41,[30,1,[\"inverse\"]],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[24,\"inversebase\",\"\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]]]],[\"@model\"],false,[\"if\",\"isLogin\",\"on\",\"linkToPage\",\"logout\"]]",
+    "moduleName": "web-shell/components/pharbers-nav-top.hbs",
+    "isStrictMode": false
+  });
+
+  let PharbersNavTopComponent = (_dec = Ember.inject.service('oauth'), _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.inject.service, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class PharbersNavTopComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "oauthService", _descriptor, this);
+
+      _initializerDefineProperty(this, "topResponseMini", _descriptor2, this);
+
+      _initializerDefineProperty(this, "isLogin", _descriptor3, this);
+
+      _initializerDefineProperty(this, "router", _descriptor4, this);
+    }
+
+    linkToPage(data) {
+      this.router.transitionTo("shell", data.detail[0]);
+    }
+
+    logout() {
+      this.oauthService.removeAuth();
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "topResponseMini", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "isLogin", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return false;
+    }
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class));
+  _exports.default = PharbersNavTopComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PharbersNavTopComponent);
+});
 ;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
 
@@ -2518,7 +2663,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor;
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -2528,15 +2673,16 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ApplicationRoute = (_dec = Ember.inject.service, (_class = class ApplicationRoute extends Ember.Route {
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "intl", _descriptor, this);
+
+      _initializerDefineProperty(this, "inverse", _descriptor2, this);
     }
 
-    // @service oauthService
-    beforeModel() {
+    beforeModel(param) {
       let curLang = window.localStorage.getItem("lang");
 
       if (curLang) {
@@ -2548,12 +2694,33 @@
       } else {
         this.intl.setLocale(["zh-cn"]);
         window.localStorage.setItem("lang", "中文");
-      } // TODO: 判断token
-      // const judge = this.oauthService.judgeAuth()
-      // if (!judge) {
-      // 	window.href = ""
-      // }
+      } //临时解决方案，判断当前route是否为home
+      // window.location.href.split("?")[0].indexOf("home")
 
+
+      if (param.router.activeTransition.intent.url === "/home") {
+        this.inverse = false;
+      } else {
+        this.inverse = true;
+      }
+    }
+
+    willTransition(transition) {
+      if (transition.router.activeTransition.intent.contexts[0] === "home") {
+        this.inverse = false;
+      } else {
+        this.inverse = true;
+      }
+
+      this.currentModel.inverse = this.inverse;
+      console.log("willTransition", this.inverse);
+    }
+
+    async model() {
+      console.log("inverse", this.inverse);
+      return Ember.RSVP.hash({
+        inverse: this.inverse
+      });
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
@@ -2561,7 +2728,14 @@
     enumerable: true,
     writable: true,
     initializer: null
-  })), _class));
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "inverse", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return true;
+    }
+  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype)), _class));
   _exports.default = ApplicationRoute;
 });
 ;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
@@ -3364,8 +3538,10 @@
         }
       };
 
-      script.src = source;
-      document.head.appendChild(script);
+      if (this.loadedJs.indexOf(source) == -1) {
+        script.src = source;
+        document.head.appendChild(script);
+      }
     }
 
     loadRemoteJsSync(source) {
@@ -3381,7 +3557,9 @@
           reject("cannot load script " + source);
         };
 
-        document.body.appendChild(script);
+        if (this.loadedJs.indexOf(source) == -1) {
+          document.body.appendChild(script);
+        }
       });
     }
 
@@ -3567,8 +3745,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "I7VKr8m+",
-    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\"],[41,[30,1],[[[1,\"        \"],[10,\"pharbers-bp-nav-top\"],[14,\"inversebase\",\"\"],[15,\"is-login\",[36,2]],[12],[13],[1,\"\\n\"]],[]],[[[1,\"        \"],[10,\"pharbers-bp-nav-top\"],[15,\"is-login\",[36,2]],[12],[13],[1,\"\\n\"]],[]]],[1,\"\\n\"],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\"],[10,\"pharbers-bp-page-bottom\"],[12],[13],[1,\"\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[\"@inverse\"],false,[\"page-title\",\"if\",\"isLogin\",\"component\",\"-outlet\"]]",
+    "id": "HywqddZ/",
+    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\"],[41,[30,1,[\"inverse\"]],[[[1,\"        \"],[8,[39,2],null,[[\"@model\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"        \"],[8,[39,2],null,[[\"@model\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]]],[1,\"\\n\"],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\\n\"],[8,[39,5],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"if\",\"pharbers-nav-top\",\"component\",\"-outlet\",\"pharbers-footer\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
@@ -3680,7 +3858,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba","name":"web-shell","version":"0.0.0+91c4a5c0"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"general","isNeedMenu":true,"debugToken":"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba","name":"web-shell","version":"0.0.0+60efdb2d"});
           }
         
 //# sourceMappingURL=web-shell.map
