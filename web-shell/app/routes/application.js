@@ -31,17 +31,22 @@ export default class ApplicationRoute extends Route {
 
 	@action
 	willTransition(transition) {
-		if(transition.router.activeTransition.intent.contexts[0] === "home") {
+		if(transition.router.activeTransition.intent.contexts && transition.router.activeTransition.intent.contexts[0] === "home") {
 			this.inverse = false
 		} else {
 			this.inverse = true
 		}
 		this.currentModel.inverse = this.inverse
-		console.log("willTransition",this.inverse)
 	}
 
+	@action
+    didTransition() {
+		//跳转到页面顶部
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+    }
+
 	async model() {
-		console.log("inverse", this.inverse)
 		return RSVP.hash({
 			inverse: this.inverse
 		})

@@ -2663,7 +2663,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2;
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -2673,7 +2673,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -2706,18 +2706,22 @@
     }
 
     willTransition(transition) {
-      if (transition.router.activeTransition.intent.contexts[0] === "home") {
+      if (transition.router.activeTransition.intent.contexts && transition.router.activeTransition.intent.contexts[0] === "home") {
         this.inverse = false;
       } else {
         this.inverse = true;
       }
 
       this.currentModel.inverse = this.inverse;
-      console.log("willTransition", this.inverse);
+    }
+
+    didTransition() {
+      //跳转到页面顶部
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
 
     async model() {
-      console.log("inverse", this.inverse);
       return Ember.RSVP.hash({
         inverse: this.inverse
       });
@@ -2735,7 +2739,7 @@
     initializer: function () {
       return true;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
   _exports.default = ApplicationRoute;
 });
 ;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
@@ -3745,8 +3749,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "HywqddZ/",
-    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[3,\"<pharbers-bp-nav-top></pharbers-bp-nav-top>\"],[1,\"\\n\"],[41,[30,1,[\"inverse\"]],[[[1,\"        \"],[8,[39,2],null,[[\"@model\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"        \"],[8,[39,2],null,[[\"@model\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]]],[1,\"\\n\"],[46,[28,[37,4],null,null],null,null,null],[1,\"\\n\\n\"],[8,[39,5],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[3,\"<pharbers-bp-page-bottom></pharbers-bp-page-bottom>\"],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"if\",\"pharbers-nav-top\",\"component\",\"-outlet\",\"pharbers-footer\"]]",
+    "id": "xNbhUJ8Q",
+    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@model\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\\n\"],[8,[39,4],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"pharbers-nav-top\",\"component\",\"-outlet\",\"pharbers-footer\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
