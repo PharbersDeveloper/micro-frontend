@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-export async function pharbersHomeEventHandler(e, route) {
+export async function pharbersActivityListEventHandler(e, route) {
 	console.log("component", e)
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":

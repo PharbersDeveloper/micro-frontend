@@ -29,8 +29,11 @@ module.exports = function (environment) {
 			clientId: "fjjnl2uSalHTdrppHG9u",
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
-			AWS_ACCESS_KEY: "AKIAWPBDTVEAPOX3QT6U",
-			AWS_SECRET_KEY: "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",
+			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
+			AWS_SECRET_KEY: "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",
+			AWS_IOT_ENDPOINT: "a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn",
+			AWS_REGION: "cn-northwest-1",
+			AWS_IOT_DEFAULT_CLIENT_ID: "VQ4L9e4RGDZEI2Ln7fvE",
 			scope: "APP|*|R",
 
 			clientName: "general",
@@ -45,7 +48,7 @@ module.exports = function (environment) {
 		// ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		// ENV.APP.LOG_VIEW_LOOKUPS = true;
 		ENV.APP.debugToken =
-			"7687786f049836b870354f296e21babbdce94d50e1031399ec5d9400297273af"
+			"f08683bfbb0cc6c0a3f06013a20ccc3f288a05239aa09ea6944d20faed1715ce"
 	}
 
 	if (environment === "test") {

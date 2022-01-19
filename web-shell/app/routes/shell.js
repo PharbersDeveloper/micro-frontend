@@ -7,32 +7,50 @@ import ENV from "web-shell/config/environment"
 export default class ShellRoute extends Route {
 	@service store
 	@service("remote-loading") jsl
+	@service("route-parse") rps
 
 	async model(params) {
+		if (Object.keys(params).length === 0) {
+			params["path"] = "home"
+		}
+
 		/**
 		 * 1. 第一步，需要从读取JS模版
 		 */
 		let pages = this.store.peekAll("page")
+		pages = pages.filter((_) => true)
 		if (pages.length === 0) {
-			console.log("need query page configures")
 			pages = await this.store.query("page", {
 				"filter[clientId]": ENV.APP.clientId
 			})
+			pages = pages.filter((_) => true)
 		}
-		const curPage = pages.find((x) => x.route === "/" + params.path)
+
+		const pageCount = pages.length
+		let curPage = "" // not found page
+		let parseParams
+		for (let idx = 0; idx < pageCount; ++idx) {
+			const tmp = pages[idx]
+			const [match, result] = this.rps.parse("/" + params.path, tmp.route)
+			if (match) {
+				curPage = tmp
+				parseParams = result
+				break
+			}
+		}
 
 		/**
 		 * 2. 动态的把需要的JS加载到dom中
 		 */
 		this.jsl.loadRemoteJs(curPage.uri)
-		this.jsl.loadRemoteJs(curPage.cat)
+		await this.jsl.loadRemoteJsSync(curPage.cat)
 
 		const clientName = curPage.clientName
 		const modelName = camelize(curPage.name) + "RouteModel"
-		const data = await window[clientName][modelName](this)
+		const data = await window[clientName][modelName](this, parseParams)
 		return RSVP.hash({
 			page: curPage,
-			data: data,
+			data: data ? data : {},
 			isVue: true
 		})
 	}

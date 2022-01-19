@@ -8,7 +8,14 @@ module.exports = function (defaults) {
 		// Add options here
 		minifyJS: { enabled: true },
 		fingerprint: { enabled: false },
-		SRI: { enabled: false }
+		SRI: { enabled: false },
+		autoImport: {
+			webpack: {
+				node: {
+					global: true
+				}
+			}
+		},
 	})
 
 	// auth signiture lib
