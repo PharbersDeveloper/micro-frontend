@@ -32,8 +32,7 @@ module.exports = function (environment) {
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAPOX3QT6U",
 			AWS_SECRET_KEY: "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",
 			scope: "APP|*|R",
-
-			clientName: "general",
+			clientName: "offweb",
 			isNeedMenu: true
 		}
 	}

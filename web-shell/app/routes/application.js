@@ -25,7 +25,8 @@ export default class ApplicationRoute extends Route {
 		}
 		//临时解决方案，判断当前route是否为home
 		// window.location.href.split("?")[0].indexOf("home")
-		if(param.router.activeTransition.intent.url === "/home") {
+		let url = param.router.activeTransition.intent.url
+		if(url === "/home" || url === "/") {
 			this.inverse = false
 		} else {
 			this.inverse = true
@@ -38,7 +39,7 @@ export default class ApplicationRoute extends Route {
 		this.loadingService.loading.style['z-index'] = 2
 		let context = transition.router.activeTransition.intent.contexts
 		if(context) {
-			if(context[0] === "home" || context[0].indexOf("download-report") != -1) {
+			if(context[0] === "home" || context[0].indexOf("download-report") != -1 || context[0] === "/") {
 				this.inverse = false
 			} else {
 				this.inverse = true
