@@ -12,7 +12,8 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 	authType = "oauth"
 
 	pathForType(type) {
-		if (type === "page") {
+		let typeArray = ["activity", "cooperation", "event", "image", "page", "participant", "project", "report", "zone"]
+		if (typeArray.indexOf(type) !== -1) {
 			this.authType = "iam"
 			return "phtemplate/" + pluralize(dasherize(type))
 		} else {

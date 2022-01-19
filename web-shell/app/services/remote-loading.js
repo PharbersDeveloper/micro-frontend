@@ -13,8 +13,10 @@ export default class RemoteLoadingService extends Service {
 				callback()
 			}
 		}
-		script.src = source
-		document.head.appendChild(script)
+		if(this.loadedJs.indexOf(source) == -1) {
+			script.src = source
+			document.head.appendChild(script)
+		}
 	}
 
 	loadRemoteJsSync(source) {
@@ -27,7 +29,9 @@ export default class RemoteLoadingService extends Service {
 			script.onerror = () => {
 				reject("cannot load script " + source)
 			}
-			document.body.appendChild(script)
+			if(this.loadedJs.indexOf(source) == -1) {
+				document.body.appendChild(script)
+			}
 		})
 	}
 }

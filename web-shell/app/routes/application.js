@@ -1,11 +1,17 @@
 import { inject as service } from "@ember/service"
+import { tracked } from '@glimmer/tracking'
+import RSVP from 'rsvp';
 import Route from "@ember/routing/route"
+import { action } from '@ember/object'
 
 export default class ApplicationRoute extends Route {
 	@service intl
-	// @service oauthService
-
-	beforeModel() {
+	@service('loading') loadingService;
+	@tracked inverse = true
+	
+	beforeModel(param) {
+		this.loadingService.loading.style.display = 'flex'
+		this.loadingService.loading.style['z-index'] = 2
 		let curLang = window.localStorage.getItem("lang")
 		if (curLang) {
 			if (curLang === "中文") {
@@ -17,11 +23,47 @@ export default class ApplicationRoute extends Route {
 			this.intl.setLocale(["zh-cn"])
 			window.localStorage.setItem("lang", "中文")
 		}
+		//临时解决方案，判断当前route是否为home
+		// window.location.href.split("?")[0].indexOf("home")
+		let url = param.router.activeTransition.intent.url
+		if(url === "/home" || url === "/") {
+			this.inverse = false
+		} else {
+			this.inverse = true
+		}
+	}
 
-		// TODO: 判断token
-		// const judge = this.oauthService.judgeAuth()
-		// if (!judge) {
-		// 	window.href = ""
-		// }
+	@action
+	willTransition(transition) {
+		this.loadingService.loading.style.display = 'flex'
+		this.loadingService.loading.style['z-index'] = 2
+		let context = transition.router.activeTransition.intent.contexts
+		if(context) {
+			if(context[0] === "home" || context[0].indexOf("download-report") != -1 || context[0] === "/") {
+				this.inverse = false
+			} else {
+				this.inverse = true
+			}
+		}
+		this.currentModel.inverse = this.inverse
+		this.loadingService.loading.style.display = 'none'
+	}
+
+	@action
+    didTransition() {
+		//跳转到页面顶部
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+    }
+
+	async model() {
+		this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
+		return RSVP.hash({
+			inverse: this.inverse
+		})
 	}
 }
