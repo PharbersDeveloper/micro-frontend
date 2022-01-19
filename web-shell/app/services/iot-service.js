@@ -2,24 +2,18 @@ import Service from '@ember/service';
 import { mqtt, io, iot } from "aws-crt";
 import ENV from "web-shell/config/environment";
 
-const credentials = {
-	accessKeyId: "AKIAWPBDTVEAI6LUCLPX",
-    secretAccessKey: "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",
-    region: "cn-northwest-1"
-}
-
 export default class IotServiceService extends Service {
 
     client = null
     connection = null
     config = null
 
-    client_id = "VQ4L9e4RGDZEI2Ln7fvE" // 次id不能重复 准备用account id  #号替换_
+    client_id = ENV.APP.AWS_IOT_DEFAULT_CLIENT_ID // 此id不能重复 准备用account id  #号替换_
     endpoint = ENV.APP.AWS_IOT_ENDPOINT
+    aws_region = ENV.APP.AWS_REGION
+    aws_access_id = ENV.APP.AWS_ACCESS_KEY
+    aws_secret_key = ENV.APP.AWS_SECRET_KEY
     client_bootstrap = new io.ClientBootstrap()
-    aws_region = credentials.region
-    aws_access_id = credentials.accessKeyId
-    aws_secret_key = credentials.secretAccessKey
     qos = mqtt.QoS.AtLeastOnce
 
     setClientId(id) {
@@ -51,8 +45,6 @@ export default class IotServiceService extends Service {
     __heartbeat() {
         if (this.connection) {
             let sequence = 0
-            // this.__stringToArrayBuffer(this.client_id)
-            
             setInterval(() => {
                 sequence+=1
                 this.connection.publish(
@@ -94,31 +86,4 @@ export default class IotServiceService extends Service {
             })
         }
     }
-
-    // events(connection) { 
-    //     connection.on("connect", (session_present) => { 
-    //         console.log(`session_present ===> ${session_present}`)
-    //     })
-
-    //     connection.on("disconnect", () => { 
-    //         console.log(`disconnect`)
-    //     })
-
-    //     connection.on("error", (error) => { 
-    //         console.log(`error ===> ${error}`)
-    //     })
-
-    //     connection.on("interrupt", (error) => { 
-    //         console.log(`interrupt ===> ${error}`)
-    //     })
-
-    //     connection.on("resume", (return_code, session_present) => { 
-    //         console.log(`resume ===> ${return_code}  session_present  ====> ${session_present}`)
-    //     })
-
-    //     connection.on("message", (topic, payload, dup, qos, retain) => { 
-    //         console.log(`topic ===> ${topic}  payload  ====> ${this.__byteToString(payload)}    dup  =====> ${dup}  qos  ===> ${qos}   retain  => ${retain}`)
-    //     })
-    // }
-
 }
