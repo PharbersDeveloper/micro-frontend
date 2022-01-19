@@ -2663,7 +2663,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -2673,16 +2673,20 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service('loading'), _dec3 = Ember._tracked, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "intl", _descriptor, this);
 
-      _initializerDefineProperty(this, "inverse", _descriptor2, this);
+      _initializerDefineProperty(this, "loadingService", _descriptor2, this);
+
+      _initializerDefineProperty(this, "inverse", _descriptor3, this);
     }
 
     beforeModel(param) {
+      this.loadingService.loading.style.display = 'flex';
+      this.loadingService.loading.style['z-index'] = 2;
       let curLang = window.localStorage.getItem("lang");
 
       if (curLang) {
@@ -2706,13 +2710,20 @@
     }
 
     willTransition(transition) {
-      if (transition.router.activeTransition.intent.contexts && transition.router.activeTransition.intent.contexts[0] === "home") {
-        this.inverse = false;
-      } else {
-        this.inverse = true;
+      this.loadingService.loading.style.display = 'flex';
+      this.loadingService.loading.style['z-index'] = 2;
+      let context = transition.router.activeTransition.intent.contexts;
+
+      if (context) {
+        if (context[0] === "home" || context[0].indexOf("download-report") != -1) {
+          this.inverse = false;
+        } else {
+          this.inverse = true;
+        }
       }
 
       this.currentModel.inverse = this.inverse;
+      this.loadingService.loading.style.display = 'none';
     }
 
     didTransition() {
@@ -2722,6 +2733,12 @@
     }
 
     async model() {
+      this.afterModel = function () {
+        if (this.loadingService.afterLoading) {
+          this.loadingService.loading.style.display = 'none';
+        }
+      };
+
       return Ember.RSVP.hash({
         inverse: this.inverse
       });
@@ -2732,14 +2749,19 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "inverse", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "inverse", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return true;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
   _exports.default = ApplicationRoute;
 });
 ;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {

@@ -6,9 +6,12 @@ import { action } from '@ember/object'
 
 export default class ApplicationRoute extends Route {
 	@service intl
+	@service('loading') loadingService;
 	@tracked inverse = true
 	
 	beforeModel(param) {
+		this.loadingService.loading.style.display = 'flex'
+		this.loadingService.loading.style['z-index'] = 2
 		let curLang = window.localStorage.getItem("lang")
 		if (curLang) {
 			if (curLang === "中文") {
@@ -31,12 +34,18 @@ export default class ApplicationRoute extends Route {
 
 	@action
 	willTransition(transition) {
-		if(transition.router.activeTransition.intent.contexts && transition.router.activeTransition.intent.contexts[0] === "home") {
-			this.inverse = false
-		} else {
-			this.inverse = true
+		this.loadingService.loading.style.display = 'flex'
+		this.loadingService.loading.style['z-index'] = 2
+		let context = transition.router.activeTransition.intent.contexts
+		if(context) {
+			if(context[0] === "home" || context[0].indexOf("download-report") != -1) {
+				this.inverse = false
+			} else {
+				this.inverse = true
+			}
 		}
 		this.currentModel.inverse = this.inverse
+		this.loadingService.loading.style.display = 'none'
 	}
 
 	@action
@@ -47,6 +56,11 @@ export default class ApplicationRoute extends Route {
     }
 
 	async model() {
+		this.afterModel = function() {
+            if(this.loadingService.afterLoading){
+                this.loadingService.loading.style.display = 'none'
+            }
+        }
 		return RSVP.hash({
 			inverse: this.inverse
 		})
