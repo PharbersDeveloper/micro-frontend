@@ -4,10 +4,10 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class PharbersNavTopComponent extends Component {
-	@service('oauth') oauthService;
+	@service('oauth-service') oauthService;
     @tracked topResponseMini;
     // @tracked isLogin = this.oauthService.judgeAuth();
-    @tracked isLogin = false
+	@tracked isLogin = false
     @service router
 
     @action

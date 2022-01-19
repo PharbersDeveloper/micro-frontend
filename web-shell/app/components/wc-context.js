@@ -14,7 +14,7 @@ export default class WcContextComponent extends Component {
 
 	@action
 	async registerListener(element) {
-		this.args.allData.data.isVue = true
+		this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
 		element.addEventListener("event", this.listener)
 	}

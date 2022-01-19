@@ -45,7 +45,9 @@
     }
 
     pathForType(type) {
-      if (type === "page") {
+      let typeArray = ["activity", "cooperation", "event", "image", "page", "participant", "project", "report", "zone"];
+
+      if (typeArray.indexOf(type) !== -1) {
         this.authType = "iam";
         return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
       } else {
@@ -340,7 +342,7 @@
     "isStrictMode": false
   });
 
-  let PharbersNavTopComponent = (_dec = Ember.inject.service('oauth'), _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.inject.service, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class PharbersNavTopComponent extends _component.default {
+  let PharbersNavTopComponent = (_dec = Ember.inject.service('oauth-service'), _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.inject.service, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class PharbersNavTopComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -484,7 +486,7 @@
     }
 
     async registerListener(element) {
-      this.args.allData.data.isVue = true;
+      this.args.allData.data._isVue = true;
       element.allData = this.args.allData.data;
       element.addEventListener("event", this.listener);
     }
@@ -2842,7 +2844,7 @@
       return Ember.RSVP.hash({
         page: curPage,
         data: data ? data : {},
-        isVue: true
+        _isVue: true
       });
     }
 
@@ -3886,7 +3888,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"offweb","isNeedMenu":true,"debugToken":"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba","name":"web-shell","version":"0.0.0+cc0a3e6e"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"offweb","isNeedMenu":true,"debugToken":"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba","name":"web-shell","version":"0.0.0+df2757d2"});
           }
         
 //# sourceMappingURL=web-shell.map

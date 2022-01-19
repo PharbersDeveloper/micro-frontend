@@ -50,7 +50,7 @@ export default class ShellRoute extends Route {
 		return RSVP.hash({
 			page: curPage,
 			data: data ? data : {},
-			isVue: true
+			_isVue: true
 		})
 	}
 }
