@@ -9,7 +9,7 @@ export async function pharbersHomeEventHandler(e, route) {
 					`${e.detail[0].args.param.name}/${e.detail[0].args.param.index}`
 				)
 			} else {
-				route.router.transitionTo(e.detail[0].args.param.name)
+				route.router.transitionTo("shell", e.detail[0].args.param.name)
 			}
 			break
 		default:

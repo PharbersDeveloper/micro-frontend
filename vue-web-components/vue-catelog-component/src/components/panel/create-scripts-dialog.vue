@@ -185,7 +185,7 @@ export default {
         remainDatasetListOutputsSearch: function() {
             // output未选中列表
             let searchValueOutput = this.searchOutput
-            let remainDatasetListOutputsData = this.remainDatasetList.filter(item => item.cat === "output_index")
+            let remainDatasetListOutputsData = this.remainDatasetList.filter(item => item.cat === "output_index" || item.cat === "intermediate")
             if(searchValueOutput) {
                 return remainDatasetListOutputsData.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
             } 

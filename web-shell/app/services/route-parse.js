@@ -3,7 +3,6 @@ import R from "ramda"
 
 export default class RouteParseService extends Service {
 	parse(uri, template) {
-		debugger
 		const qIdx = uri.indexOf("?")
 		let resourceUri = uri
 		let queryUri = ""
@@ -16,44 +15,45 @@ export default class RouteParseService extends Service {
 		const templateArr = template.split("/")
 		const resourceArr = resourceUri.split("/")
 
-		const isMatch = templateArr.length === resourceArr.length
-		if (isMatch) {
-			try {
-				const paramArr = factory.zip(templateArr, resourceArr)
-				let stages = []
-				for (let idx = 0; idx < paramArr.length; ++idx) {
-					stages.push(
-						factory.createStageInstance(
-							"param",
-							paramArr[idx][0],
-							paramArr[idx][1]
-						)
-					)
-				}
-
-				let queryArr = queryUri.split("&")
-				queryArr = queryArr.map(_ => _.split("="))
-				for (let idx = 0; idx < queryArr.length; ++idx) {
-					stages.push(
-						factory.createStageInstance(
-							"query",
-							queryArr[idx][0],
-							queryArr[idx][1]
-						)
-					)
-				}
-
-				const byCat = R.groupBy(_ => _.cat)
-				let reVal = byCat(stages.map(_ => _.parse()))
-				const keys = Object.keys(reVal)
-				const result = {}
-				for (let idx = 0; idx < keys.length; ++idx) {
-					result[keys[idx]] = factory.array2Object(reVal[keys[idx]])
-				}
-				return [true, result]
-			} catch (e) {
-				return [false, null]
+		try {
+			const isMatch = templateArr.length === resourceArr.length
+			if (!isMatch) {
+				throw new Error("not match")
 			}
+			const paramArr = factory.zip(templateArr, resourceArr)
+			let stages = []
+			for (let idx = 0; idx < paramArr.length; ++idx) {
+				stages.push(
+					factory.createStageInstance(
+						"param",
+						paramArr[idx][0],
+						paramArr[idx][1]
+					)
+				)
+			}
+
+			let queryArr = queryUri.split("&")
+			queryArr = queryArr.map(_ => _.split("="))
+			for (let idx = 0; idx < queryArr.length; ++idx) {
+				stages.push(
+					factory.createStageInstance(
+						"query",
+						queryArr[idx][0],
+						queryArr[idx][1]
+					)
+				)
+			}
+
+			const byCat = R.groupBy(_ => _.cat)
+			let reVal = byCat(stages.map(_ => _.parse()))
+			const keys = Object.keys(reVal)
+			const result = {}
+			for (let idx = 0; idx < keys.length; ++idx) {
+				result[keys[idx]] = factory.array2Object(reVal[keys[idx]])
+			}
+			return [true, result]
+		} catch (e) {
+			return [false, null]
 		}
 	}
 }
@@ -83,7 +83,7 @@ class ParamStage extends Stage {
 		}
 		if (this.template.startsWith("{") && this.template.endsWith("}")) {
 			this.template = this.template.substring(
-				this.template.indexOf("{" + 1),
+				this.template.indexOf("{") + 1,
 				this.template.lastIndexOf("}")
 			)
 			tmp[this.template] = this.resource
