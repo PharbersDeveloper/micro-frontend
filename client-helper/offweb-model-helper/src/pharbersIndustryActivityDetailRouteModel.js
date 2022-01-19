@@ -9,7 +9,7 @@ export async function pharbersIndustryActivityDetailRouteModel(
 	} else {
 		lang = 0
 	}
-	const id = parseParams.industry_id
+	const id = parseParams.param.industry_id
 	// filter activity type
 	const activityList = route.store.query("activity", {
 		"filter[activityType]": "industry",

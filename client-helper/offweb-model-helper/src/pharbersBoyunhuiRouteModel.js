@@ -6,7 +6,7 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 	} else {
 		lang = 0
 	}
-	const id = parseParams.boyunhui_id
+	const id = parseParams.param.boyunhui_id
 	const activityList = route.store.query("activity", {
 		"filter[activityType]": "boyunhui",
 		"filter[language]": lang,

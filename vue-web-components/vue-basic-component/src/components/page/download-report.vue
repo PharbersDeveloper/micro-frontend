@@ -5,7 +5,7 @@
         </bp-text>
 
         <div class="download-report-main">
-            <div v-for="(report,index) in reports" :key="index" class="download-report-left">
+            <div v-for="(report,index) in allData.reports" :key="index" class="download-report-left">
                 <div class="opacity-background"></div>
                 <div class="download-report-imgcontainer">
                     <bp-img v-if="report" :src="'https://www.pharbers.com'+report.cover.get('path')" class="download-report-img"></bp-img>
@@ -96,7 +96,14 @@ export default {
         bpTextarea
     },
     props: {
-        reports: Array
+        allData: {
+            type: Object,
+            default: function() {
+                return {
+                    reports: []
+                }
+            }
+        }
     },
     data() {
         return {

@@ -6,7 +6,7 @@ export async function pharbersAboveDataDetailRouteModel(route, parseParams) {
 	} else {
 		lang = 0
 	}
-	const id = parseParams.activity_id
+	const id = parseParams.param.activity_id
 	// filter activity type
 	const activityList = route.store.query("activity", {
 		"filter[activityType]": "Above Data",
