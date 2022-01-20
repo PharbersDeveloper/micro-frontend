@@ -42,6 +42,7 @@ function ComputeJSONAPIIamHeader(
 		const v = encodeURI(query[queryKeys[idx]])
 		queryParams[k] = v
 	}
+
 	let req = {
 		verb: method.toUpperCase(),
 		path: queryURL,

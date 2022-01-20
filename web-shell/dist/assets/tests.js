@@ -279,6 +279,18 @@ define("web-shell/tests/unit/routes/shell-test", ["qunit", "ember-qunit"], funct
     });
   });
 });
+define("web-shell/tests/unit/services/iot-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | iot-service', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // TODO: Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:iot-service');
+      assert.ok(service);
+    });
+  });
+});
 define("web-shell/tests/unit/services/remote-loading-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
