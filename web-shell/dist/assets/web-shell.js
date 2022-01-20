@@ -1063,7 +1063,15 @@
       let canonicalQueryString = '';
 
       for (let i = 0; i < sortedQueryParams.length; i++) {
-        canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
+        if (sortedQueryParams[i] === encodeURI("ids[]")) {
+          let idsArr = queryParams[sortedQueryParams[i]].split(",").sort();
+
+          for (let j = 0; j < idsArr.length; j++) {
+            canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(idsArr[j]) + '&';
+          }
+        } else {
+          canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
+        }
       }
 
       return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
@@ -3189,6 +3197,113 @@
     }
   });
 });
+;define("web-shell/services/iot-service", ["exports", "aws-crt", "web-shell/config/environment"], function (_exports, _awsCrt, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class IotServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "client", null);
+
+      _defineProperty(this, "connection", null);
+
+      _defineProperty(this, "config", null);
+
+      _defineProperty(this, "client_id", _environment.default.APP.AWS_IOT_DEFAULT_CLIENT_ID);
+
+      _defineProperty(this, "endpoint", _environment.default.APP.AWS_IOT_ENDPOINT);
+
+      _defineProperty(this, "aws_region", _environment.default.APP.AWS_REGION);
+
+      _defineProperty(this, "aws_access_id", _environment.default.APP.AWS_ACCESS_KEY);
+
+      _defineProperty(this, "aws_secret_key", _environment.default.APP.AWS_SECRET_KEY);
+
+      _defineProperty(this, "client_bootstrap", new _awsCrt.io.ClientBootstrap());
+
+      _defineProperty(this, "qos", _awsCrt.mqtt.QoS.AtLeastOnce);
+    }
+
+    setClientId(id) {
+      this.client_id = id;
+      return this;
+    }
+
+    build() {
+      const config_builder = _awsCrt.iot.AwsIotMqttConnectionConfigBuilder.new_mtls_builder();
+
+      config_builder.with_credentials(this.aws_region, this.aws_access_id, this.aws_secret_key);
+      config_builder.with_clean_session(false); //将 clean_session参数设置为 False即表示连接应该是持久连接
+
+      config_builder.with_client_id(this.client_id);
+      config_builder.with_endpoint(this.endpoint);
+      config_builder.with_ping_timeout_ms(5000);
+      config_builder.with_keep_alive_seconds(5000);
+      this.config = config_builder.build();
+      this.client = new _awsCrt.mqtt.MqttClient(this.client_bootstrap);
+      return this;
+    }
+
+    __byteToString(arrayBuffer) {
+      return new TextDecoder().decode(arrayBuffer);
+    }
+
+    __heartbeat() {
+      if (this.connection) {
+        let sequence = 0;
+        setInterval(() => {
+          sequence += 1;
+          this.connection.publish("pharbers/heartbeat", JSON.stringify({
+            "message": `client_id => ${this.client_id}`,
+            "sequence": sequence
+          }), _awsCrt.mqtt.QoS.AtMostOnce, false).catch(error => console.log("heartbeat"));
+        }, 30 * 1000);
+      }
+    }
+
+    async connect() {
+      if (this.client) {
+        this.connection = this.client.new_connection(this.config);
+        await this.connection.connect();
+
+        this.__heartbeat();
+
+        console.log("connect");
+      }
+    }
+
+    disconnect() {
+      if (this.connection) {
+        this.connection.disconnect();
+        this.connection = null;
+        console.log("disconnect");
+      }
+    }
+
+    setSub(topic = "pharbers", func) {
+      if (this.connection) {
+        if (!func) {
+          throw Error("CallBack Is Undefined");
+        }
+
+        this.connection.subscribe(topic, this.qos, (_, payload) => {
+          func(this.__byteToString(payload));
+        });
+      }
+    }
+
+  }
+
+  _exports.default = IotServiceService;
+});
 ;define("web-shell/services/loading", ["exports"], function (_exports) {
   "use strict";
 
@@ -3888,7 +4003,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAPOX3QT6U","AWS_SECRET_KEY":"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","scope":"APP|*|R","clientName":"offweb","isNeedMenu":true,"debugToken":"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba","name":"web-shell","version":"0.0.0+df2757d2"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","clientName":"offweb","isNeedMenu":true,"debugToken":"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba","name":"web-shell","version":"0.0.0+b200813e"});
           }
         
 //# sourceMappingURL=web-shell.map
