@@ -15,7 +15,7 @@ export async function pharbersIndustryActivityDetailRouteModel(
 		"filter[activityType]": "industry",
 		"filter[language]": lang,
 		"page[limit]": 1,
-		"page[offset]": 2 * id,
+		"page[offset]": id,
 		sort: "-startDate"
 	})
 

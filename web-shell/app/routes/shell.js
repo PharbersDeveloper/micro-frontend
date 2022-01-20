@@ -42,7 +42,7 @@ export default class ShellRoute extends Route {
 		/**
 		 * 2. 动态的把需要的JS加载到dom中
 		 */
-		this.jsl.loadRemoteJs(curPage.uri)
+		await this.jsl.loadRemoteJs(curPage.uri)
 		await this.jsl.loadRemoteJsSync(curPage.cat)
 		const clientName = curPage.clientName
 		const modelName = camelize(curPage.name) + "RouteModel"

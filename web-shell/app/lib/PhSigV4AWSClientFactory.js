@@ -73,7 +73,15 @@ PhSigV4AWSClientFactory.newClient = function (config) {
 
         let canonicalQueryString = '';
         for (let i = 0; i < sortedQueryParams.length; i++) {
-            canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
+            if (sortedQueryParams[i] === encodeURI("ids[]")) {
+                // let idsArr = queryParams[sortedQueryParams[i]].split(",").sort()
+                let idsArr = queryParams[sortedQueryParams[i]].sort()
+                for (let j = 0; j < idsArr.length; j++) {
+                    canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(idsArr[j]) + '&';
+                }
+            } else {
+                canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
+            }
         }
         return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
     }

@@ -224,6 +224,7 @@ export default {
                     },
                     choosed_value: "PRODUCTS",
                     aboutUs: "COMPANY",
+                    activity: "EVENTS",
                     contactUs: "Contact Us",
                     login: "Log in",
                     general: "General",
