@@ -210,7 +210,7 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 	])
 	let participants = results[5].filter((it) => it.language === lang)
 	let nameArr = []
-	if (lang === "中文") {
+	if (lang === 1) {
 		nameArr = [
 			"郭云沛",
 			"梁万年",
