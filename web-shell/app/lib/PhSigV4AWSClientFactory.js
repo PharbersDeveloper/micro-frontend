@@ -74,7 +74,8 @@ PhSigV4AWSClientFactory.newClient = function (config) {
         let canonicalQueryString = '';
         for (let i = 0; i < sortedQueryParams.length; i++) {
             if (sortedQueryParams[i] === encodeURI("ids[]")) {
-                let idsArr = queryParams[sortedQueryParams[i]].split(",").sort()
+                // let idsArr = queryParams[sortedQueryParams[i]].split(",").sort()
+                let idsArr = queryParams[sortedQueryParams[i]].sort()
                 for (let j = 0; j < idsArr.length; j++) {
                     canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(idsArr[j]) + '&';
                 }
