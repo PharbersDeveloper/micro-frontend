@@ -1,6 +1,5 @@
 <template>
     <div class="home-container">
-        <!-- <navTop @linkToPage="linkToPage"></navTop> -->
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -30,8 +29,8 @@
                     :curIndex="card.curIndex"
                 ></bpCardActive>
                 <div class="content-active-review-more-button">
-                    <div class="show-more-button-container">
-                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line" @click="linkToPage('activity-list')"></bpButton>
+                    <div class="show-more-button-container" @click="linkToPage('activity-list')">
+                        <bpButton :text="translation_data.moreActivity" class="button-official-gray-line"></bpButton>
                         <bpImg class="active-button-go" :src="buttonGo"></bpImg>
                     </div>
                 </div>
@@ -77,8 +76,8 @@
                 <bpImg :src="reportConnectImg" class="report-connect-img"></bpImg>
                 <bpText class="home-about-us-peoples">{{translation_data.dataShowAboutUs}}</bpText>
                 <bpText class="ph-H-xLarge">{{translation_data.dataShowTitle}}</bpText>
-                <div class="show-more-button-container">
-                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact" @click="linkToPage('about-us')"></bpButton>
+                <div class="show-more-button-container"  @click="linkToPage('about-us')">
+                    <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                     <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                 </div>
                 <div class="data-show-text-part">
@@ -100,8 +99,8 @@
                     </div>
                     <bpText class="max-text-center">{{translation_data.maxTextCenter}}</bpText>
                     <bpText class="max-text-center-brand">{{translation_data.maxTextCenterBrand}}</bpText>
-                    <div class="max-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('max')"
+                    <div class="max-show-more-button-container" @click="linkToPage('max')">
+                        <bpButton :text="translation_data.showMoreButton"
                         class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
@@ -122,8 +121,8 @@
                     </div>
                     <bpText class="ph-H-Large">{{translation_data.realWorldTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.realWorldBrand}}</bpText>
-                    <div class="real-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('rw')" class="button-official-yellow-line-compact"></bpButton>
+                    <div class="real-show-more-button-container" @click="linkToPage('rw')">
+                        <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
@@ -137,8 +136,8 @@
                     </div>
                     <bpText class="ph-H-Large">{{translation_data.advisoryTitleSmall}}</bpText>
                     <bpText class="ph-H-Large_brand">{{translation_data.advisoryBrand}}</bpText>
-                    <div class="advisory-show-more-button-container">
-                        <bpButton :text="translation_data.showMoreButton" @click="linkToPage('consulting')" class="button-official-yellow-line-compact"></bpButton>
+                    <div class="advisory-show-more-button-container" @click="linkToPage('consulting')">
+                        <bpButton :text="translation_data.showMoreButton" class="button-official-yellow-line-compact"></bpButton>
                         <bpImg :src="showMoreButtonGo" class="show-more-button-go"></bpImg>
                     </div>
                 </div>
