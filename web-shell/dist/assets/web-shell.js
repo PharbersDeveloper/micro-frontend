@@ -480,7 +480,6 @@
     }
 
     async listener(e) {
-      console.log("alfred listener action");
       let modelName = Ember.String.camelize(this.args.allData.page.name) + "EventHandler";
       await window[this.args.allData.page.clientName][modelName](e, this);
     }
@@ -3321,8 +3320,6 @@
     },
     afterLoading: function () {
       const server = setTimeout(() => {
-        console.log(document.readyState);
-
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
           this.loading.style["display"] = "none";
           this.loading.style["z-index"] = 2;

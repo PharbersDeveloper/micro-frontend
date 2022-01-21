@@ -16,7 +16,6 @@ export default Service.extend({
 	},
 	afterLoading: function () {
 		const server = setTimeout(() => {
-			console.log(document.readyState)
 			if(document.readyState === 'complete' || document.readyState === 'interactive') {
 				this.loading.style["display"] = "none"
 				this.loading.style["z-index"] = 2

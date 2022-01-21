@@ -7,7 +7,6 @@ export default class WcContextComponent extends Component {
 	@service router
 	@action
 	async listener(e) {
-		console.log("alfred listener action")
 		let modelName = camelize(this.args.allData.page.name) + "EventHandler"
 		await window[this.args.allData.page.clientName][modelName](e, this)
 	}
