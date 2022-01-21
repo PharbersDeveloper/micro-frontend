@@ -10,8 +10,7 @@ export default class ApplicationRoute extends Route {
 	@tracked inverse = true
 	
 	beforeModel(param) {
-		this.loadingService.loading.style.display = 'flex'
-		this.loadingService.loading.style['z-index'] = 2
+		this.loadingService.beforeLoading()
 		let curLang = window.localStorage.getItem("lang")
 		if (curLang) {
 			if (curLang === "中文") {
@@ -35,8 +34,7 @@ export default class ApplicationRoute extends Route {
 
 	@action
 	willTransition(transition) {
-		this.loadingService.loading.style.display = 'flex'
-		this.loadingService.loading.style['z-index'] = 2
+		this.loadingService.beforeLoading()
 		let context = transition.router.activeTransition.intent.contexts
 		if(context) {
 			if(context[0] === "home" || context[0].indexOf("download-report") != -1 || context[0] === "/") {
@@ -46,7 +44,6 @@ export default class ApplicationRoute extends Route {
 			}
 		}
 		this.currentModel.inverse = this.inverse
-		this.loadingService.loading.style.display = 'none'
 	}
 
 	@action
@@ -54,13 +51,12 @@ export default class ApplicationRoute extends Route {
 		//跳转到页面顶部
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0
+		this.loadingService.afterLoading()
     }
 
 	async model() {
 		this.afterModel = function() {
-            if(this.loadingService.afterLoading){
-                this.loadingService.loading.style.display = 'none'
-            }
+            this.loadingService.afterLoading()
         }
 		return RSVP.hash({
 			inverse: this.inverse

@@ -6,14 +6,22 @@ export default Service.extend({
 	loading: document.getElementById(
 		"loadingio-spinner-double-ring-ho1zizxmctu"
 	),
-	afterLoading: computed(function () {
-		let loadingNum = 0
-		if (
-			document.readyState === "complete" ||
-			document.readyState === "interactive"
-		) {
-			loadingNum = 1
-		}
-		return loadingNum
-	})
+	body: document.getElementsByTagName(
+		"body"
+	),
+	beforeLoading: function() {
+		this.loading.style["display"] = "flex"
+		this.loading.style["z-index"] = 2
+		this.body[0].style["overflow"] = "hidden"
+	},
+	afterLoading: function () {
+		const server = setTimeout(() => {
+			console.log(document.readyState)
+			if(document.readyState === 'complete' || document.readyState === 'interactive') {
+				this.loading.style["display"] = "none"
+				this.loading.style["z-index"] = 2
+				this.body[0].style["overflow"] = "auto"
+			}
+		},100)
+	}
 })
