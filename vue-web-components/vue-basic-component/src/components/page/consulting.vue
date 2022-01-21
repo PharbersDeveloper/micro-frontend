@@ -22,7 +22,7 @@
             <bpText class="consult-text-info-text">{{translation_data.consultingDescription}}</bpText>
         </div>
         <div class="consult-advantage-card-container">
-            <bpImg class="consult-advantage-card-container-img" :src="consultAdvantageCardImg"></bpImg>
+            <!-- <bpImg class="consult-advantage-card-container-img" :src="consultAdvantageCardImg"></bpImg> -->
             <bpImg class="consult-connect-img" :src="consultConnectImg"></bpImg>
             <bpText class="consult-advantage-container-title">{{translation_data.advtantages.advantagesText}}</bpText>
             <div class="consult-cards-row-a">
