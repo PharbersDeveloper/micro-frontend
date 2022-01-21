@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="rw-advantage-card-container">
-            <bpImg class="rw-advantage-card-container-img" :src="rwAdvantageImg"></bpImg>
+            <!-- <bpImg class="rw-advantage-card-container-img" :src="rwAdvantageImg"></bpImg> -->
             <bpImg class="rw-connect-img" :src="rwConnectImg"></bpImg>
             <bpText class="rw-advantage-container-title">{{translation_data.advantages.advantagesText}}</bpText>
             <div class="rw-cards-row">
