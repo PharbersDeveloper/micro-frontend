@@ -21,6 +21,7 @@ export default Service.extend({
 				this.loading.style["display"] = "none"
 				this.loading.style["z-index"] = 2
 				this.body[0].style["overflow"] = "auto"
+				clearInterval(server)
 			}
 		},100)
 	}
