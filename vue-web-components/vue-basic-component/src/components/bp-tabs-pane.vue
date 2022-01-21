@@ -17,7 +17,7 @@
         </div>
     </div>
      <div class="activity-list-container" v-if="responseMini">
-        <div class="activity-in-little"  v-for="item in content" :key="item.activity.title">
+        <div class="activity-in-little"  v-for="(item, index) in content" :key="item.activity.title"  @click="toActivity(index)">
             <div class="activity-img-container">
                 <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="activity-img"></bpImg>
             </div>

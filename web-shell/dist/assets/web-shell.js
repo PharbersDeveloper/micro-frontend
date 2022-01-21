@@ -460,14 +460,14 @@
   		allData={{@allData}}
           {{did-insert this.registerListener}}
           {{will-destroy this.unregisterListener}}>
-      ></E>
+      </E>
   {{/let}}
   {{yield}}
   
   */
   {
-    "id": "TIMGW/BO",
-    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    >\"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "id": "4D1zd12F",
+    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    \"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/wc-context.hbs",
     "isStrictMode": false
   });
