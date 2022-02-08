@@ -26,8 +26,10 @@ module.exports = function (environment) {
 			host: "https://oauth.pharbers.com",
 			apiUri: "https://apiv2.pharbers.com",
 			apiHost: "apiv2.pharbers.com",
-			clientId: "fjjnl2uSalHTdrppHG9u",
-			clientName: "offweb",
+			// clientId: "fjjnl2uSalHTdrppHG9u",
+			// clientName: "offweb",
+			clientId: "V5I67BHIRVR2Z59kq-a-",
+			clientName: "platform",
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
@@ -47,7 +49,7 @@ module.exports = function (environment) {
 		// ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		// ENV.APP.LOG_VIEW_LOOKUPS = true;
 		ENV.APP.debugToken =
-			"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba"
+			"46a1299cee5e8e4848ee50b24e5dcb08b147354f5462f21233eba5b7e9f92ba8"
 	}
 
 	if (environment === "test") {

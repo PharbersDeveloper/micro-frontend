@@ -5,6 +5,7 @@ import { camelize } from "@ember/string"
 import ENV from "web-shell/config/environment"
 
 export default class ShellRoute extends Route {
+    @service cookies
 	@service store
 	@service("remote-loading") jsl
 	@service("route-parse") rps
