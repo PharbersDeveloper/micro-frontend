@@ -45,7 +45,7 @@
     }
 
     pathForType(type) {
-      let typeArray = ["activity", "cooperation", "event", "image", "page", "participant", "project", "report", "zone"];
+      let typeArray = _environment.default.APP.typeArray;
 
       if (typeArray.indexOf(type) !== -1) {
         this.authType = "iam";
@@ -4679,10 +4679,6 @@
       _initializerDefineProperty(this, "jsl", _descriptor4, this);
     }
 
-    get layoutName() {
-      return this.layout.name;
-    }
-
     get clientName() {
       return _environment.default.APP.clientName;
     }
@@ -4728,6 +4724,7 @@
 
       if (layout.css !== null) {}
 
+      layout.name = "ph-tbc-layout";
       return layout;
     }
 
@@ -4788,6 +4785,8 @@
     }
 
     async model(params) {
+      console.log(params);
+
       if (Object.keys(params).length === 0) {
         params["path"] = "home";
       }
@@ -4803,7 +4802,8 @@
       let parseParams;
 
       for (let idx = 0; idx < pageCount; ++idx) {
-        const tmp = pages[idx];
+        const tmp = pages[idx]; // let path = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
         const [match, result] = this.rps.parse("/" + params.path, tmp.route);
 
         if (match) {
@@ -6050,7 +6050,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+18492677"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+b0412f7a"});
           }
         
 //# sourceMappingURL=web-shell.map

@@ -10,10 +10,6 @@ export default class ApplicationRoute extends Route {
 	@service("ph-menu") menuService
 	@service("remote-loading") jsl
 
-	get layoutName() {
-		return this.layout.name
-	}
-
 	get clientName() {
 		return ENV.APP.clientName
 	}
@@ -62,6 +58,7 @@ export default class ApplicationRoute extends Route {
 
 		}
 
+		layout.name = "ph-tbc-layout"
 		return layout
 	}
 }
