@@ -367,7 +367,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class, _descriptor;
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -379,31 +379,43 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{#let (element this.navComponent) as |Nav|}}
-      <Nav inverse={{this.inverse}}
-          {{on "linkToPage" linkToPage}}
-          {{on "logout" logout}}
-          is-login={{isLogin}}
-      />
-  {{/let}}
-  {{yield}}
-  {{#let (element this.footComponent) as |Footer|}}
-      <Footer {{on "linkToPage" linkToPage}} />
-  {{/let}}
+    <div>
+      {{#let (element this.navComponent) as |Nav|}}
+          {{#if this.inverse}}
+              <Nav inversebase
+                  {{on "linkToPage" linkToPage}}
+                  {{on "logout" logout}}
+                   is-login={{isLogin}}
+              />
+          {{else}}
+              <Nav
+                  {{on "linkToPage" linkToPage}}
+                  {{on "logout" logout}}
+                  is-login={{isLogin}}
+              />
+          {{/if}}
+      {{/let}}
+      {{yield}}
+      {{#let (element this.footComponent) as |Footer|}}
+          <Footer {{on "linkToPage" linkToPage}} />
+      {{/let}}
+  </div>
   
   */
   {
-    "id": "44K5EM8c",
-    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"navComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"navComponent\"]]]]]],[[[1,\"    \"],[8,[30,1],[[16,\"inverse\",[30,0,[\"inverse\"]]],[16,\"is-login\",[36,4]],[4,[38,5],[\"linkToPage\",[33,6]],null],[4,[38,5],[\"logout\",[33,7]],null]],null,null],[1,\"\\n\"]],[1]]],[18,3,null],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"footComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"footComponent\"]]]]]],[[[1,\"    \"],[8,[30,2],[[4,[38,5],[\"linkToPage\",[33,6]],null]],null,null],[1,\"\\n\"]],[2]]]],[\"Nav\",\"Footer\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"isLogin\",\"on\",\"linkToPage\",\"logout\",\"yield\"]]",
+    "id": "jcPTpUUw",
+    "block": "[[[10,0],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"navComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"navComponent\"]]]]]],[[[41,[30,0,[\"inverse\"]],[[[1,\"            \"],[8,[30,1],[[24,\"inversebase\",\"\"],[16,\"is-login\",[36,5]],[4,[38,6],[\"linkToPage\",[33,7]],null],[4,[38,6],[\"logout\",[33,8]],null]],null,null],[1,\"\\n\"]],[]],[[[1,\"            \"],[8,[30,1],[[16,\"is-login\",[36,5]],[4,[38,6],[\"linkToPage\",[33,7]],null],[4,[38,6],[\"logout\",[33,8]],null]],null,null],[1,\"\\n\"]],[]]]],[1]]],[1,\"    \"],[18,3,null],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"footComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"footComponent\"]]]]]],[[[1,\"        \"],[8,[30,2],[[4,[38,6],[\"linkToPage\",[33,7]],null]],null,null],[1,\"\\n\"]],[2]]],[13],[1,\"\\n\"]],[\"Nav\",\"Footer\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"if\",\"isLogin\",\"on\",\"linkToPage\",\"logout\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-tbc-layout.hbs",
     "isStrictMode": false
   });
 
-  let PhTbcLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class PhTbcLayoutComponent extends _component.default {
+  let PhTbcLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("route-parse"), _dec3 = Ember._action, _dec4 = Ember._action, (_class = class PhTbcLayoutComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "rps", _descriptor2, this);
     }
 
     get isLogin() {
@@ -420,7 +432,9 @@
     }
 
     get activeRoute() {
-      return this.router.currentRouteName;
+      let path = this.router.currentRoute.params.path;
+      path = this.rps.queryLogicControllerName(path);
+      return path;
     }
 
     get navComponent() {
@@ -452,7 +466,12 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class));
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class));
   _exports.default = PhTbcLayoutComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhTbcLayoutComponent);
@@ -5837,6 +5856,22 @@
       } catch (e) {
         return [false, null];
       }
+    }
+
+    queryLogicControllerName(uri) {
+      let result = uri;
+
+      if (uri && uri.length > 0) {
+        const cIdx = uri.indexOf("/");
+
+        if (cIdx === -1) {
+          result = uri;
+        } else {
+          result = uri.subString(0, cIdx);
+        }
+      }
+
+      return result;
     }
 
   }
