@@ -7,7 +7,7 @@ module.exports = {
 	mode: "production",
 	entry: './src/',
 	output: {
-		filename: 'platFormBundle.js',
+		filename: 'platfromBundle.js',
 		path: path.resolve(__dirname, 'dist'),
 		libraryTarget: "umd",
 		globalObject: "this",

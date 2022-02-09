@@ -65,12 +65,6 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 		const ids = [
 			...new Set(pidArr.reduce((acc, val) => acc.concat(val), []))
 		]
-		// const pids = ids
-		// 	.map((x) => {
-		// 		return "`" + `${x}` + "`"
-		// 	})
-		// 	.join(",")
-
 		return route.store.query("participant", { "ids[]": ids })
 	})
 
@@ -102,11 +96,6 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 		const ids = [
 			...new Set(idArr.reduce((acc, val) => acc.concat(val), []))
 		].filter((x) => x)
-		// const imageids = ids
-		// 	.map((x) => {
-		// 		return "`" + `${x}` + "`"
-		// 	})
-		// 	.join(",")
 		return route.store.query("image", { "ids[]": ids })
 	})
 
@@ -118,12 +107,6 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 		const ids = [
 			...new Set(idArr.reduce((acc, val) => acc.concat(val), []))
 		]
-		// const imageids = ids
-		// 	.map((x) => {
-		// 		return "`" + `${x}` + "`"
-		// 	})
-		// 	.join(",")
-
 		return route.store.query("image", { "ids[]": ids })
 	})
 
@@ -165,12 +148,6 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 		const ids = [
 			...new Set(cidsArr.reduce((acc, val) => acc.concat(val), []))
 		]
-		// const cids = ids
-		// 	.map((x) => {
-		// 		return "`" + `${x}` + "`"
-		// 	})
-		// 	.join(",")
-
 		return route.store.query("cooperation", { "ids[]": ids })
 	})
 
@@ -181,12 +158,6 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 		const ids = [
 			...new Set(cidsArr.reduce((acc, val) => acc.concat(val), []))
 		]
-		// const cids = ids
-		// 	.map((x) => {
-		// 		return "`" + `${x}` + "`"
-		// 	})
-		// 	.join(",")
-
 		return route.store.query("image", { "ids[]": ids })
 	})
 	this.afterModel = function () {

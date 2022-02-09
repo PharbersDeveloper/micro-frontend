@@ -443,7 +443,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -472,11 +472,13 @@
     "isStrictMode": false
   });
 
-  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class WcContextComponent extends _component.default {
+  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._action, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class WcContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "cookies", _descriptor2, this);
     }
 
     async listener(e) {
@@ -499,7 +501,12 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = WcContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);

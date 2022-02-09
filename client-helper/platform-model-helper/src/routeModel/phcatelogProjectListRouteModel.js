@@ -18,8 +18,11 @@ export async function phcatelogProjectListRouteModel(route, parseParams) {
 			this.loadingService.loading.style.display = "none"
 		}
 	}
+	let resourcesList = resources.filter((it) => it)
+	console.log(resourcesList)
 	return {
-		resources: resources.filter((it) => it),
+		resources: resourcesList,
+		projects: resourcesList[0].includes,
 		name_show: name_show,
 		company_name_show: company_name_show,
 		_isVue: true

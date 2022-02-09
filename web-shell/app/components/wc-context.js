@@ -5,6 +5,7 @@ import { camelize } from "@ember/string"
 
 export default class WcContextComponent extends Component {
 	@service router
+	@service cookies
 	@action
 	async listener(e) {
 		let modelName = camelize(this.args.allData.page.name) + "EventHandler"
