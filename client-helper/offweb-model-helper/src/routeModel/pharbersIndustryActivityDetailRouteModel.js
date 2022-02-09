@@ -39,6 +39,7 @@ export async function pharbersIndustryActivityDetailRouteModel(
 		const ids = [
 			...new Set(eidArr.reduce((acc, val) => acc.concat(val), []))
 		]
+		ids.push("") //todo
 		return route.store.query("event", { "ids[]": ids })
 	})
 
@@ -50,12 +51,14 @@ export async function pharbersIndustryActivityDetailRouteModel(
 		const ids = [
 			...new Set(pidArr.reduce((acc, val) => acc.concat(val), []))
 		]
+		ids.push("") //todo
 		return route.store.query("participant", { "ids[]": ids })
 	})
 	const imageList = participantList.then((x) => {
 		const idArr = x.map((event) => {
 			return event.belongsTo("avatar").id()
 		})
+		idArr.push("") //todo
 		return route.store.query("image", { "ids[]": idArr })
 	})
 	const imageIds = participantList.then((x) => {
@@ -73,6 +76,7 @@ export async function pharbersIndustryActivityDetailRouteModel(
 		const ids = [
 			...new Set(idArr.reduce((acc, val) => acc.concat(val), []))
 		]
+		ids.push("") //todo
 		return route.store.query("image", { "ids[]": ids })
 	})
 
