@@ -5,10 +5,11 @@ import { camelize } from "@ember/string"
 import ENV from "web-shell/config/environment"
 
 export default class ShellRoute extends Route {
-    @service cookies
+	@service cookies
 	@service store
 	@service("remote-loading") jsl
 	@service("route-parse") rps
+	@service("ph-menu") ms
 
 	async model(params) {
 		console.log(params)
@@ -19,14 +20,7 @@ export default class ShellRoute extends Route {
 		/**
 		 * 1. 第一步，需要从读取JS模版
 		 */
-		let pages = this.store.peekAll("page")
-		pages = pages.filter((_) => true)
-		if (pages.length === 0) {
-			pages = await this.store.query("page", {
-				"filter[clientId]": ENV.APP.clientId
-			})
-			pages = pages.filter((_) => true)
-		}
+		const pages = await this.ms.queryClientPages()
 
 		const pageCount = pages.length
 		let curPage = "" // not found page

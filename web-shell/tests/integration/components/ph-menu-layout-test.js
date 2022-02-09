@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | pharbers-nav-top', function(hooks) {
+module('Integration | Component | ph-menu-layout', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<PharbersNavTop />`);
+    await render(hbs`<PhMenuLayout />`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      <PharbersNavTop>
+      <PhMenuLayout>
         template block text
-      </PharbersNavTop>
+      </PhMenuLayout>
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

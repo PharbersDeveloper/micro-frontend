@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | pharbers-footer', function(hooks) {
+module('Integration | Component | ph-tbc-layout', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<PharbersFooter />`);
+    await render(hbs`<PhTbcLayout />`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      <PharbersFooter>
+      <PhTbcLayout>
         template block text
-      </PharbersFooter>
+      </PhTbcLayout>
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

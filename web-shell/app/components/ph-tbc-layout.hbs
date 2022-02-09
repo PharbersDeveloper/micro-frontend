@@ -1,0 +1,11 @@
+{{#let (element this.navComponent) as |Nav|}}
+    <Nav inverse={{this.inverse}}
+        {{on "linkToPage" linkToPage}}
+        {{on "logout" logout}}
+        is-login={{isLogin}}
+    />
+{{/let}}
+{{yield}}
+{{#let (element this.footComponent) as |Footer|}}
+    <Footer {{on "linkToPage" linkToPage}} />
+{{/let}}
