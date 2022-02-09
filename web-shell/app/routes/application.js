@@ -11,7 +11,8 @@ export default class ApplicationRoute extends Route {
 	@service("remote-loading") jsl
 
 	get layoutName() {
-		return this.layout.name
+		// return this.layout.name
+		return "ph-tbc-layout"
 	}
 
 	get clientName() {
