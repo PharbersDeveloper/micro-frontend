@@ -38,7 +38,8 @@ module.exports = function (environment) {
 			AWS_REGION: "cn-northwest-1",
 			AWS_IOT_DEFAULT_CLIENT_ID: "VQ4L9e4RGDZEI2Ln7fvE",
 			scope: "APP|*|R",
-			isNeedMenu: true
+			isNeedMenu: true,
+			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone"] // project
 		}
 	}
 
