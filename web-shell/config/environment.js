@@ -26,10 +26,11 @@ module.exports = function (environment) {
 			host: "https://oauth.pharbers.com",
 			apiUri: "https://apiv2.pharbers.com",
 			apiHost: "apiv2.pharbers.com",
-			clientId: "fjjnl2uSalHTdrppHG9u",
-			clientName: "offweb",
-			// clientId: "V5I67BHIRVR2Z59kq-a-",
-			// clientName: "platform",
+			// clientId: "fjjnl2uSalHTdrppHG9u",
+			// clientName: "offweb",
+			clientId: "V5I67BHIRVR2Z59kq-a-",
+			clientName: "platform",
+			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone"], // project
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
@@ -38,8 +39,7 @@ module.exports = function (environment) {
 			AWS_REGION: "cn-northwest-1",
 			AWS_IOT_DEFAULT_CLIENT_ID: "VQ4L9e4RGDZEI2Ln7fvE",
 			scope: "APP|*|R",
-			isNeedMenu: true,
-			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "project"] // project
+			isNeedMenu: true
 		}
 	}
 
