@@ -6,44 +6,46 @@ export async function phcatelogDataListHomeEventHandler(e, route) {
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name == "datasets") {
+				console.log(params)
 				uri =
-					"/dataset-lst?projectName=" +
+					"dataset-lst?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
 			} else if (params.name == "project") {
-				uri = "/projects/" + params.projectId
+				uri = "projects/" + params.projectId
 			} else if (params.name === "scripts") {
 				//recipe页面
 				uri =
-					"/recipes?projectName=" +
+					"recipes?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
 			} else if (params.name === "script") {
 				//script list页面
 				uri =
-					"/recipes?projectName=" +
+					"recipes?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
 			} else if (params.name === "flow") {
 				uri =
-					"/flow?projectName=" +
+					"flow?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
 			} else if (params.name == "projects") {
-				uri = "/projects"
+				uri = "projects"
 			} else if (params.name == "airflow") {
 				uri =
-					"/airflow?projectName=" +
+					"airflow?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
 			}
 			//执行列表 分页
-			route.router.transitionTo(uri)
+			console.log(uri)
+			route.router.transitionTo("shell", uri)
 			break
 		default:
 			console.log("submit event to parent")

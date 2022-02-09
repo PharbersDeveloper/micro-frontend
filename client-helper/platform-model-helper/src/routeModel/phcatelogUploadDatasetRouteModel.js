@@ -1,46 +1,62 @@
 // eslint-disable-next-line no-unused-vars
-export async function phcatelogDataListHomeRouteModel(route, parseParams) {
-	let debugToken = "bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
-	route.store.unloadAll("dataset");
+export async function phcatelogUploadDatasetRouteModel(route, parseParams) {
+	console.log(parseParams)
+	let debugToken =
+		"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
+	route.store.unloadAll("dataset")
 	const url = "https://apiv2.pharbers.com/phdydatasource/scan"
-	const accessToken = route.cookies.read( "access_token" ) || debugToken
+	const accessToken = route.cookies.read("access_token") || debugToken
 	let body = {
-		"table": "dataset",
-		"conditions": {
-			"projectId":  ["=", parseParams.params.projectId]
+		table: "dataset",
+		conditions: {
+			projectId: ["=", parseParams.query.projectId]
 		},
-		"limit": 100,
-		"start_key": ""
+		limit: 100,
+		start_key: ""
 	}
 
 	let options = {
 		method: "POST",
 		headers: {
-			"Authorization": accessToken,
-			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-			"accept": "application/json"
+			Authorization: accessToken,
+			"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+			accept: "application/json"
 		},
 		body: JSON.stringify(body)
 	}
 	const ds = fetch(url, options)
-	let that = this
-	let tmp = await ds.then((response) => response.json()).then((response) => {
-		this.store.pushPayload(response)
-		return new Promise((resolve, reject) => {
-			resolve(that.store.peekAll("dataset"))
+	let that = route
+	let tmp = await ds
+		.then((response) => response.json())
+		.then((response) => {
+			that.store.pushPayload(response)
+			return new Promise((resolve) => {
+				resolve(that.store.peekAll("dataset"))
+			})
 		})
-	})
 
-	this.afterModel = function() {
-		if(this.loadingService.afterLoading){
-			this.loadingService.loading.style.display = 'none'
+	let dss = tmp.filter((it) => it)
+	let tags = new Set()
+	dss.forEach((iter) => {
+		if (typeof iter.label == "string") {
+			iter.label = JSON.parse(iter.label)
+			iter.label.map((it) => {
+				tags.add(it)
+			})
 		}
-	}
-	return RSVP.hash( {
-		projectName: params.projectName,
-		projectId: params.projectId,
-		dss: tmp.filter(it => it),
-		tagsArray: [],
+	})
+	let tagsArray = Array.from(tags)
+
+	// route.afterModel = function () {
+	// 	if (route.loadingService.afterLoading) {
+	// 		route.loadingService.loading.style.display = "none"
+	// 	}
+	// }
+	return {
+		projectName: parseParams.query.projectName,
+		projectId: parseParams.query.projectId,
+		dss: dss,
+		tagsArray: tagsArray,
 		_isVue: true
-	} )
+	}
 }

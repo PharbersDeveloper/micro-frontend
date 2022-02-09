@@ -12,6 +12,7 @@ export default class ShellRoute extends Route {
 	@service("ph-menu") ms
 
 	async model(params) {
+		console.log(params)
 		if (Object.keys(params).length === 0) {
 			params["path"] = "home"
 		}
@@ -26,6 +27,7 @@ export default class ShellRoute extends Route {
 		let parseParams
 		for (let idx = 0; idx < pageCount; ++idx) {
 			const tmp = pages[idx]
+			// let path = window.location.href.split("/")[window.location.href.split("/").length - 1]
 			const [match, result] = this.rps.parse("/" + params.path, tmp.route)
 			if (match) {
 				curPage = tmp
