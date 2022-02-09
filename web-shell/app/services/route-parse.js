@@ -64,7 +64,7 @@ export default class RouteParseService extends Service {
 			if (cIdx === -1) {
 				result = uri
 			} else {
-				result = uri.subString(0, cIdx)
+				result = uri.substring(0, cIdx)
 			}
 		}
 		return result

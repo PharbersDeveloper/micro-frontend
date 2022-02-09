@@ -141,6 +141,7 @@ export async function pharbersAboveDataDetailRouteModel(route, parseParams) {
 			}
 		})
 	}
+	
 	return {
 		data: results[0].filter((it) => it.language === lang),
 		agendas: results[1].filter((it) => it),
