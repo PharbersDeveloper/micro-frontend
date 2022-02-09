@@ -1,3 +1,7 @@
-<Pharbers-nav-top @inverse={{false}} ></Pharbers-nav-top>
+{{#let (component this.navComponent) as |Nav|}}
+    <Nav @inverse=(contains this.needInverse this.activeRoute) />
+{{/let}}
 {{yield}}
-<Pharbers-footer></Pharbers-footer>
+{{#let (component this.footComponent) as |Footer|}}
+    <Footer />
+{{/let}}

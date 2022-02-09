@@ -281,21 +281,49 @@
   });
   _exports.default = void 0;
 
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <Pharbers-nav-top @inverse={{false}} ></Pharbers-nav-top>
+    {{#let (component this.navComponent) as |Nav|}}
+      <Nav @inverse=(contains this.needInverse this.activeRoute) />
+  {{/let}}
   {{yield}}
-  <Pharbers-footer></Pharbers-footer>
+  {{#let (component this.footComponent) as |Footer|}}
+      <Footer />
+  {{/let}}
   
   */
   {
-    "id": "4hqFnN9/",
-    "block": "[[[8,[39,0],null,[[\"@inverse\"],[false]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[18,1,null],[1,\"\\n\"],[8,[39,2],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[\"&default\"],false,[\"pharbers-nav-top\",\"yield\",\"pharbers-footer\"]]",
+    "id": "CHU0IZ6p",
+    "block": "[[[44,[[50,[30,0,[\"navComponent\"]],0,null,null]],[[[1,\"    \"],[8,[30,1],[[24,\"this.needInverse\",\"\"],[24,\"this.activeRoute)\",\"\"]],[[\"@inverse\"],[\"(contains\"]],null],[1,\"\\n\"]],[1]]],[18,3,null],[1,\"\\n\"],[44,[[50,[30,0,[\"footComponent\"]],0,null,null]],[[[1,\"    \"],[8,[30,2],null,null,null],[1,\"\\n\"]],[2]]]],[\"Nav\",\"Footer\",\"&default\"],false,[\"let\",\"component\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-tbc-layout.hbs",
     "isStrictMode": false
   });
 
-  class PhTbcLayoutComponent extends _component.default {
+  let PhTbcLayoutComponent = (_dec = Ember.inject.service, (_class = class PhTbcLayoutComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+    }
+
+    get needInverse() {
+      return ["max", "rw", "consulting", "activity-list", "about-us", "report-list", "boyunhui", "download-report", "above-data-detail", "industry-activity-detail"];
+    }
+
+    get activeRoute() {
+      return this.router.currentRouteName;
+    }
+
     get navComponent() {
       if (this.args.navComponent) {
         return this.args.navComponent;
@@ -308,8 +336,12 @@
       } else return "pharbers-footer";
     }
 
-  }
-
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
   _exports.default = PhTbcLayoutComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhTbcLayoutComponent);
@@ -693,6 +725,20 @@
   }
 
   var _default = Ember.Helper.helper(appVersion);
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/contains", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.Helper.helper(function tbcNavInverse(arr, cur) {
+    return arr.includes(cur);
+  });
 
   _exports.default = _default;
 });
@@ -6006,7 +6052,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+48b06d24"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+36bc0fa7"});
           }
         
 //# sourceMappingURL=web-shell.map
