@@ -7,8 +7,6 @@ import ENV from "web-shell/config/environment"
 export default class ApplicationRoute extends Route {
 	@service intl
 	@service("loading") loadingService
-	@tracked inverse = true
-	layout = null
 
 	get layoutName() {
 		return this.layout.name
