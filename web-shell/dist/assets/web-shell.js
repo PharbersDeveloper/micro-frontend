@@ -293,17 +293,15 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{#let (component this.menuComponent) as |Menu|}}
+    {{#let (element this.menuComponent) as |Menu|}}
       <Menu />
   {{/let}}
-  {{#let (component this.navComponent) as |Nav|}}
-      {{yield}}
-  {{/let}}
+  {{yield}}
   
   */
   {
-    "id": "KSDOL6Zf",
-    "block": "[[[44,[[50,[30,0,[\"menuComponent\"]],0,null,null]],[[[1,\"    \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[44,[[50,[30,0,[\"navComponent\"]],0,null,null]],[[[1,\"    \"],[18,3,null],[1,\"\\n\"]],[2]]]],[\"Menu\",\"Nav\",\"&default\"],false,[\"let\",\"component\",\"yield\"]]",
+    "id": "qAR7SQt9",
+    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"    \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[18,2,null],[1,\"\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-menu-layout.hbs",
     "isStrictMode": false
   });
@@ -4724,7 +4722,6 @@
 
       if (layout.css !== null) {}
 
-      layout.name = "ph-tbc-layout";
       return layout;
     }
 
@@ -6050,7 +6047,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+0500d3cf"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","typeArray":["activity","cooperation","event","image","page","participant","report","zone"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+433b88cf"});
           }
         
 //# sourceMappingURL=web-shell.map

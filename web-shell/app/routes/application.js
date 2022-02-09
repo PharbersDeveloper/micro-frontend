@@ -58,7 +58,6 @@ export default class ApplicationRoute extends Route {
 
 		}
 
-		layout.name = "ph-tbc-layout"
 		return layout
 	}
 }
