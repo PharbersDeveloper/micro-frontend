@@ -27,6 +27,7 @@ export async function pharbersIndustryActivityDetailRouteModel(
 		const ids = [
 			...new Set(zidsArr.reduce((acc, val) => acc.concat(val), []))
 		]
+		ids.push("") //todo
 		return route.store.query("zone", { "ids[]": ids })
 	})
 
