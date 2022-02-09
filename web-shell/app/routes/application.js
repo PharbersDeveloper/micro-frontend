@@ -8,7 +8,7 @@ export default class ApplicationRoute extends Route {
 	@service intl
 	@service('loading') loadingService;
 	@tracked inverse = true
-	
+
 	beforeModel(param) {
 		this.loadingService.beforeLoading()
 		let curLang = window.localStorage.getItem("lang")
@@ -54,12 +54,12 @@ export default class ApplicationRoute extends Route {
 		this.loadingService.afterLoading()
     }
 
-	async model() {
-		this.afterModel = function() {
-            this.loadingService.afterLoading()
-        }
-		return RSVP.hash({
-			inverse: this.inverse
-		})
-	}
+	// async model() {
+	// 	this.afterModel = function() {
+    //         this.loadingService.afterLoading()
+    //     }
+	// 	return RSVP.hash({
+	// 		inverse: this.inverse
+	// 	})
+	// }
 }

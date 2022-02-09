@@ -319,30 +319,30 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{#if @model.inverse}}
-  	<pharbers-bp-nav-top 
-  		inversebase 
-  		{{on "linkToPage" linkToPage}} 
-  		{{on "logout" logout}} 
+    {{#if @inverse}}
+  	<pharbers-bp-nav-top
+  		inversebase
+  		{{on "linkToPage" linkToPage}}
+  		{{on "logout" logout}}
   		is-login={{isLogin}}
   	></pharbers-bp-nav-top>
   {{else}}
-  	<pharbers-bp-nav-top 
-  		{{on "linkToPage" linkToPage}} 
-  		{{on "logout" logout}} 
+  	<pharbers-bp-nav-top
+  		{{on "linkToPage" linkToPage}}
+  		{{on "logout" logout}}
   		is-login={{isLogin}}
   	></pharbers-bp-nav-top>
   {{/if}}
   
   */
   {
-    "id": "U/RQt9av",
-    "block": "[[[41,[30,1,[\"inverse\"]],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[24,\"inversebase\",\"\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]]]],[\"@model\"],false,[\"if\",\"isLogin\",\"on\",\"linkToPage\",\"logout\"]]",
+    "id": "W1OBTxNC",
+    "block": "[[[41,[30,1],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[24,\"inversebase\",\"\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]]]],[\"@inverse\"],false,[\"if\",\"isLogin\",\"on\",\"linkToPage\",\"logout\"]]",
     "moduleName": "web-shell/components/pharbers-nav-top.hbs",
     "isStrictMode": false
   });
 
-  let PharbersNavTopComponent = (_dec = Ember.inject.service('oauth-service'), _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.inject.service, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class PharbersNavTopComponent extends _component.default {
+  let PharbersNavTopComponent = (_dec = Ember.inject.service("oauth-service"), _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.inject.service, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class PharbersNavTopComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -4589,17 +4589,15 @@
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       this.loadingService.afterLoading();
-    }
+    } // async model() {
+    // 	this.afterModel = function() {
+    //         this.loadingService.afterLoading()
+    //     }
+    // 	return RSVP.hash({
+    // 		inverse: this.inverse
+    // 	})
+    // }
 
-    async model() {
-      this.afterModel = function () {
-        this.loadingService.afterLoading();
-      };
-
-      return Ember.RSVP.hash({
-        inverse: this.inverse
-      });
-    }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
     configurable: true,
@@ -5749,8 +5747,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "xNbhUJ8Q",
-    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@model\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\\n\"],[8,[39,4],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"pharbers-nav-top\",\"component\",\"-outlet\",\"pharbers-footer\"]]",
+    "id": "RUlm1WbP",
+    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@inverse\"],[[30,0,[\"inverse\"]]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\\n\"],[8,[39,4],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[],false,[\"page-title\",\"pharbers-nav-top\",\"component\",\"-outlet\",\"pharbers-footer\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
@@ -5862,7 +5860,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+ad1d21c6"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+ac81e774"});
           }
         
 //# sourceMappingURL=web-shell.map
