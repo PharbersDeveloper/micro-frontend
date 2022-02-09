@@ -273,7 +273,7 @@
 
   _exports.default = _default;
 });
-;define("web-shell/components/ph-menu-layout", ["exports", "@glimmer/component"], function (_exports, _component) {
+;define("web-shell/components/ph-menu-layout", ["exports", "@glimmer/component", "web-shell/config/environment"], function (_exports, _component, _environment) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -281,7 +281,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _class, _descriptor, _descriptor2;
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -293,26 +293,36 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{#let (element this.menuComponent) as |Menu|}}
-      <Menu />
-  {{/let}}
-  {{yield}}
+    <div style={{this.layoutCss}} >
+      {{#let (element this.menuComponent) as |Menu|}}
+          <Menu />
+      {{/let}}
+      {{yield}}
+  </div>
+  
   
   */
   {
-    "id": "qAR7SQt9",
-    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"    \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[18,2,null],[1,\"\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
+    "id": "fSNJJfsC",
+    "block": "[[[10,0],[15,5,[30,0,[\"layoutCss\"]]],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"        \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[1,\"    \"],[18,2,null],[1,\"\\n\"],[13],[1,\"\\n\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-menu-layout.hbs",
     "isStrictMode": false
   });
 
-  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), (_class = class PhMenuLayoutComponent extends _component.default {
+  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), _dec3 = Ember.inject.service, (_class = class PhMenuLayoutComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "router", _descriptor, this);
 
       _initializerDefineProperty(this, "ms", _descriptor2, this);
+
+      _initializerDefineProperty(this, "store", _descriptor3, this);
+    }
+
+    get layoutCss() {
+      const layout = this.store.peekRecord("layout", _environment.default.APP.clientId);
+      return layout.css;
     }
 
     get menuComponent() {
@@ -333,6 +343,11 @@
     writable: true,
     initializer: null
   }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
