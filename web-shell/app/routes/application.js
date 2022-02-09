@@ -31,32 +31,11 @@ export default class ApplicationRoute extends Route {
 			this.intl.setLocale(["zh-cn"])
 			window.localStorage.setItem("lang", "中文")
 		}
-		//临时解决方案，判断当前route是否为home
-		// window.location.href.split("?")[0].indexOf("home")
-		let url = param.router.activeTransition.intent.url
-		if (url === "/home" || url === "/") {
-			this.inverse = false
-		} else {
-			this.inverse = true
-		}
 	}
 
 	@action
-	willTransition(transition) {
+	willTransition(_) {
 		this.loadingService.beforeLoading()
-		let context = transition.router.activeTransition.intent.contexts
-		if (context) {
-			if (
-				context[0] === "home" ||
-				context[0].indexOf("download-report") != -1 ||
-				context[0] === "/"
-			) {
-				this.inverse = false
-			} else {
-				this.inverse = true
-			}
-		}
-		this.currentModel.inverse = this.inverse
 	}
 
 	@action
@@ -74,10 +53,7 @@ export default class ApplicationRoute extends Route {
 
 		let layout = this.store.peekRecord("layout", ENV.APP.clientId)
 		if (layout === null) {
-			layout = await this.store.findRecord(
-				"layout",
-				ENV.APP.clientId
-			)
+			layout = await this.store.findRecord("layout", ENV.APP.clientId)
 		}
 		return layout
 	}
