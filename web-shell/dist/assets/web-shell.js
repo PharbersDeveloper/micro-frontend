@@ -4698,7 +4698,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4708,13 +4708,15 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("loading"), _dec3 = Ember._action, _dec4 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("loading"), _dec3 = Ember.inject.service("ph-menu"), _dec4 = Ember._action, _dec5 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "intl", _descriptor, this);
 
       _initializerDefineProperty(this, "loadingService", _descriptor2, this);
+
+      _initializerDefineProperty(this, "menuService", _descriptor3, this);
     }
 
     get layoutName() {
@@ -4757,13 +4759,7 @@
         this.loadingService.afterLoading();
       };
 
-      let layout = this.store.peekRecord("layout", _environment.default.APP.clientId);
-
-      if (layout === null) {
-        layout = await this.store.findRecord("layout", _environment.default.APP.clientId);
-      }
-
-      return layout;
+      return await this.menuService.queryLayoutByClient();
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
@@ -4776,7 +4772,12 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "menuService", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
   _exports.default = ApplicationRoute;
 });
 ;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
@@ -4787,7 +4788,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4797,7 +4798,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service("remote-loading"), _dec4 = Ember.inject.service("route-parse"), (_class = class ShellRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service("remote-loading"), _dec4 = Ember.inject.service("route-parse"), _dec5 = Ember.inject.service("ph-menu"), (_class = class ShellRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -4808,6 +4809,8 @@
       _initializerDefineProperty(this, "jsl", _descriptor3, this);
 
       _initializerDefineProperty(this, "rps", _descriptor4, this);
+
+      _initializerDefineProperty(this, "ms", _descriptor5, this);
     }
 
     async model(params) {
@@ -4819,16 +4822,7 @@
        */
 
 
-      let pages = this.store.peekAll("page");
-      pages = pages.filter(_ => true);
-
-      if (pages.length === 0) {
-        pages = await this.store.query("page", {
-          "filter[clientId]": _environment.default.APP.clientId
-        });
-        pages = pages.filter(_ => true);
-      }
-
+      const pages = await this.ms.queryClientPages();
       const pageCount = pages.length;
       let curPage = ""; // not found page
 
@@ -4877,6 +4871,11 @@
     writable: true,
     initializer: null
   }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -5671,6 +5670,63 @@
     }
   });
 });
+;define("web-shell/services/ph-menu", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PhMenuService = (_dec = Ember.inject.service, (_class = class PhMenuService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "store", _descriptor, this);
+    }
+
+    async queryLayoutByClient() {
+      let layout = this.store.peekRecord("layout", _environment.default.APP.clientId);
+
+      if (layout === null) {
+        layout = await this.store.findRecord("layout", _environment.default.APP.clientId);
+      }
+
+      return layout;
+    }
+
+    async queryClientPages() {
+      let pages = this.store.peekAll("page");
+      pages = pages.filter(_ => true);
+
+      if (pages.length === 0) {
+        pages = await this.store.query("page", {
+          "filter[clientId]": _environment.default.APP.clientId
+        });
+        pages = pages.filter(_ => true);
+      }
+
+      return pages;
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PhMenuService;
+});
 ;define("web-shell/services/remote-loading", ["exports"], function (_exports) {
   "use strict";
 
@@ -6020,7 +6076,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+36bc0fa7"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+a09adac1"});
           }
         
 //# sourceMappingURL=web-shell.map

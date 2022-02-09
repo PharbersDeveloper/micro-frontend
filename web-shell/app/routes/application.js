@@ -7,6 +7,7 @@ import ENV from "web-shell/config/environment"
 export default class ApplicationRoute extends Route {
 	@service intl
 	@service("loading") loadingService
+	@service("ph-menu") menuService
 
 	get layoutName() {
 		return this.layout.name
@@ -49,10 +50,6 @@ export default class ApplicationRoute extends Route {
 			this.loadingService.afterLoading()
 		}
 
-		let layout = this.store.peekRecord("layout", ENV.APP.clientId)
-		if (layout === null) {
-			layout = await this.store.findRecord("layout", ENV.APP.clientId)
-		}
-		return layout
+		return await this.menuService.queryLayoutByClient()
 	}
 }
