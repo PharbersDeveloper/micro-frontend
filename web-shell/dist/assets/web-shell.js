@@ -297,14 +297,16 @@
       {{#let (element this.menuComponent) as |Menu|}}
           <Menu />
       {{/let}}
-      {{yield}}
+      <div style="width: 100%">
+          {{yield}}
+      </div>
   </div>
   
   
   */
   {
-    "id": "fSNJJfsC",
-    "block": "[[[10,0],[15,5,[30,0,[\"layoutCss\"]]],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"        \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[1,\"    \"],[18,2,null],[1,\"\\n\"],[13],[1,\"\\n\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
+    "id": "tNXlQ3JD",
+    "block": "[[[10,0],[15,5,[30,0,[\"layoutCss\"]]],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"        \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[1,\"    \"],[10,0],[14,5,\"width: 100%\"],[12],[1,\"\\n        \"],[18,2,null],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-menu-layout.hbs",
     "isStrictMode": false
   });
