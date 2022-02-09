@@ -30,7 +30,7 @@ module.exports = function (environment) {
 			// clientName: "offweb",
 			clientId: "V5I67BHIRVR2Z59kq-a-",
 			clientName: "platform",
-			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone"], //project 
+			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout"], // project
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
