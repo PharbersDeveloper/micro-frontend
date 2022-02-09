@@ -1,6 +1,5 @@
-{{page-title "web shell"}}
-<Pharbers-nav-top @inverse={{this.inverse}} ></Pharbers-nav-top>
+{{page-title this.clientName}}
 
-{{outlet}}
-
-<Pharbers-footer></Pharbers-footer>
+<MainLayout @layout={{this.model.name}} >
+    {{outlet}}
+</MainLayout>

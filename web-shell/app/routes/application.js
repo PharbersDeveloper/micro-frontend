@@ -1,13 +1,22 @@
 import { inject as service } from "@ember/service"
-import { tracked } from '@glimmer/tracking'
-import RSVP from 'rsvp';
+import { tracked } from "@glimmer/tracking"
 import Route from "@ember/routing/route"
-import { action } from '@ember/object'
+import { action } from "@ember/object"
+import ENV from "web-shell/config/environment"
 
 export default class ApplicationRoute extends Route {
 	@service intl
-	@service('loading') loadingService;
+	@service("loading") loadingService
 	@tracked inverse = true
+	layout = null
+
+	get layoutName() {
+		return this.layout.name
+	}
+
+	get clientName() {
+		return ENV.APP.clientName
+	}
 
 	beforeModel(param) {
 		this.loadingService.beforeLoading()
@@ -25,7 +34,7 @@ export default class ApplicationRoute extends Route {
 		//临时解决方案，判断当前route是否为home
 		// window.location.href.split("?")[0].indexOf("home")
 		let url = param.router.activeTransition.intent.url
-		if(url === "/home" || url === "/") {
+		if (url === "/home" || url === "/") {
 			this.inverse = false
 		} else {
 			this.inverse = true
@@ -36,8 +45,12 @@ export default class ApplicationRoute extends Route {
 	willTransition(transition) {
 		this.loadingService.beforeLoading()
 		let context = transition.router.activeTransition.intent.contexts
-		if(context) {
-			if(context[0] === "home" || context[0].indexOf("download-report") != -1 || context[0] === "/") {
+		if (context) {
+			if (
+				context[0] === "home" ||
+				context[0].indexOf("download-report") != -1 ||
+				context[0] === "/"
+			) {
 				this.inverse = false
 			} else {
 				this.inverse = true
@@ -47,19 +60,25 @@ export default class ApplicationRoute extends Route {
 	}
 
 	@action
-    didTransition() {
+	didTransition() {
 		//跳转到页面顶部
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
+		document.documentElement.scrollTop = 0
+		document.body.scrollTop = 0
 		this.loadingService.afterLoading()
-    }
+	}
 
-	// async model() {
-	// 	this.afterModel = function() {
-    //         this.loadingService.afterLoading()
-    //     }
-	// 	return RSVP.hash({
-	// 		inverse: this.inverse
-	// 	})
-	// }
+	async model() {
+		this.afterModel = function () {
+			this.loadingService.afterLoading()
+		}
+
+		let layout = this.store.peekRecord("layout", ENV.APP.clientId)
+		if (layout === null) {
+			layout = await this.store.findRecord(
+				"layout",
+				ENV.APP.clientId
+			)
+		}
+		return layout
+	}
 }

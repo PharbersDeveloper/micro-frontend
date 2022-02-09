@@ -245,6 +245,75 @@
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
 });
+;define("web-shell/components/main-layout", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#let (component @layout) as |Layout|}}
+      <Layout >
+          {{yield}}
+      </Layout>
+  {{/let}}
+  
+  */
+  {
+    "id": "IAfcXorx",
+    "block": "[[[44,[[50,[30,1],0,null,null]],[[[1,\"    \"],[8,[30,2],null,null,[[\"default\"],[[[[1,\"\\n        \"],[18,3,null],[1,\"\\n    \"]],[]]]]],[1,\"\\n\"]],[2]]]],[\"@layout\",\"Layout\",\"&default\"],false,[\"let\",\"component\",\"yield\"]]",
+    "moduleName": "web-shell/components/main-layout.hbs",
+    "isStrictMode": false
+  });
+
+  var _default = Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, Ember._templateOnlyComponent());
+
+  _exports.default = _default;
+});
+;define("web-shell/components/ph-tbc-layout", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <Pharbers-nav-top @inverse={{false}} ></Pharbers-nav-top>
+  {{yield}}
+  <Pharbers-footer></Pharbers-footer>
+  
+  */
+  {
+    "id": "4hqFnN9/",
+    "block": "[[[8,[39,0],null,[[\"@inverse\"],[false]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"],[18,1,null],[1,\"\\n\"],[8,[39,2],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[\"&default\"],false,[\"pharbers-nav-top\",\"yield\",\"pharbers-footer\"]]",
+    "moduleName": "web-shell/components/ph-tbc-layout.hbs",
+    "isStrictMode": false
+  });
+
+  class PhTbcLayoutComponent extends _component.default {
+    get navComponent() {
+      if (this.args.navComponent) {
+        return this.args.navComponent;
+      } else return "pharbers-nav-top";
+    }
+
+    get footComponent() {
+      if (this.args.footComponent) {
+        return this.args.footComponent;
+      } else return "pharbers-footer";
+    }
+
+  }
+
+  _exports.default = PhTbcLayoutComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhTbcLayoutComponent);
+});
 ;define("web-shell/components/pharbers-footer", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
 
@@ -3103,6 +3172,67 @@
   })), _class));
   _exports.default = ImageModel;
 });
+;define("web-shell/models/layout", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let LayoutModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), (_class = class LayoutModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "clientId", _descriptor, this);
+
+      _initializerDefineProperty(this, "clientName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "version", _descriptor3, this);
+
+      _initializerDefineProperty(this, "name", _descriptor4, this);
+
+      _initializerDefineProperty(this, "css", _descriptor5, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "clientId", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "clientName", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "css", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = LayoutModel;
+});
 ;define("web-shell/models/model", ["exports", "@ember-data/model"], function (_exports, _model) {
   "use strict";
 
@@ -4514,7 +4644,7 @@
     });
   });
 });
-;define("web-shell/routes/application", ["exports"], function (_exports) {
+;define("web-shell/routes/application", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -4532,7 +4662,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service('loading'), _dec3 = Ember._tracked, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("loading"), _dec3 = Ember._tracked, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -4541,6 +4671,16 @@
       _initializerDefineProperty(this, "loadingService", _descriptor2, this);
 
       _initializerDefineProperty(this, "inverse", _descriptor3, this);
+
+      _defineProperty(this, "layout", null);
+    }
+
+    get layoutName() {
+      return this.layout.name;
+    }
+
+    get clientName() {
+      return _environment.default.APP.clientName;
     }
 
     beforeModel(param) {
@@ -4589,15 +4729,21 @@
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       this.loadingService.afterLoading();
-    } // async model() {
-    // 	this.afterModel = function() {
-    //         this.loadingService.afterLoading()
-    //     }
-    // 	return RSVP.hash({
-    // 		inverse: this.inverse
-    // 	})
-    // }
+    }
 
+    async model() {
+      this.afterModel = function () {
+        this.loadingService.afterLoading();
+      };
+
+      let layout = this.store.peekRecord("layout", _environment.default.APP.clientId);
+
+      if (layout === null) {
+        layout = await this.store.findRecord("layout", _environment.default.APP.clientId);
+      }
+
+      return layout;
+    }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
     configurable: true,
@@ -5747,8 +5893,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "RUlm1WbP",
-    "block": "[[[1,[28,[35,0],[\"web shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@inverse\"],[[30,0,[\"inverse\"]]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\\n\"],[8,[39,4],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[],false,[\"page-title\",\"pharbers-nav-top\",\"component\",\"-outlet\",\"pharbers-footer\"]]",
+    "id": "CG8n8Gu+",
+    "block": "[[[1,[28,[35,0],[[30,0,[\"clientName\"]]],null]],[1,\"\\n\\n\"],[8,[39,1],null,[[\"@layout\"],[[30,0,[\"model\",\"name\"]]]],[[\"default\"],[[[[1,\"\\n    \"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[]]]]],[1,\"\\n\"]],[],false,[\"page-title\",\"main-layout\",\"component\",\"-outlet\"]]",
     "moduleName": "web-shell/templates/application.hbs",
     "isStrictMode": false
   });
@@ -5860,7 +6006,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+ac81e774"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+48b06d24"});
           }
         
 //# sourceMappingURL=web-shell.map
