@@ -56,6 +56,19 @@ export default class RouteParseService extends Service {
 			return [false, null]
 		}
 	}
+
+	queryLogicControllerName(uri) {
+		let result = uri
+		if (uri && uri.length > 0) {
+			const cIdx = uri.indexOf("/")
+			if (cIdx === -1) {
+				result = uri
+			} else {
+				result = uri.subString(0, cIdx)
+			}
+		}
+		return result
+	}
 }
 
 class Stage {

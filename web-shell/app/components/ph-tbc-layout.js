@@ -4,6 +4,7 @@ import { action } from "@ember/object"
 
 export default class PhTbcLayoutComponent extends Component {
 	@service router
+	@service("route-parse") rps
 
 	get isLogin() {
 		// TODO: 通过token，cookies去判断
@@ -30,7 +31,9 @@ export default class PhTbcLayoutComponent extends Component {
 	}
 
 	get activeRoute() {
-		return this.router.currentRouteName
+		let path = this.router.currentRoute.params.path
+		path = this.rps.queryLogicControllerName(path)
+		return path
 	}
 
 	get navComponent() {
