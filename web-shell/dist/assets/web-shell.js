@@ -1,1267 +1,6108 @@
-"use strict"
-function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}define("web-shell/adapters/-json-api",["exports","@ember-data/adapter/json-api"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/adapters/application",["exports","ember-inflector","web-shell/config/environment","@ember-data/adapter/json-api","web-shell/lib/PhIamClicent"],(function(e,t,r,n,o){var i,l,a
-function u(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function c(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function f(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function s(e,t,r){return(s="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(e,t,r){var n=function(e,t){for(;!Object.prototype.hasOwnProperty.call(e,t)&&null!==(e=m(e)););return e}(e,t)
-if(n){var o=Object.getOwnPropertyDescriptor(n,t)
-return o.get?o.get.call(r):o.value}})(e,t,r||e)}function p(e,t){return(p=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function b(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=m(e)
-if(t){var o=m(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return y(this,r)}}function y(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?d(e):t}function d(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function m(e){return(m=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function v(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var h,g,w,_,O,j,z=(i=Ember.inject.service,l=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&p(e,t)})(h,e)
-var n,i,l,y=b(h)
-function h(){var e
-c(this,h)
-for(var t=arguments.length,n=new Array(t),o=0;o<t;o++)n[o]=arguments[o]
-return u(d(e=y.call.apply(y,[this].concat(n))),"cookies",a,d(e)),v(d(e),"host",r.default.APP.apiUri),v(d(e),"authType","oauth"),e}return n=h,(i=[{key:"pathForType",value:function(e){return-1!==r.default.APP.typeArray.indexOf(e)?(this.authType="iam","phtemplate/"+(0,t.pluralize)(Ember.String.dasherize(e))):(this.authType="oauth","phplatform/"+(0,t.pluralize)(Ember.String.dasherize(e)))}},{key:"sortQueryParams",value:function(e){for(var t={},r=Object.keys(e).sort(),n=0;n<r.length;++n){var o=r[n],i=e[o]
-i instanceof Array&&(i=i.sort()),t[o]=i}return t}},{key:"buildURL",value:function(e,t,n,i,l){var a=s(m(h.prototype),"buildURL",this).apply(this,arguments)
-return"iam"===this.authType&&(this.iamHeaders=(0,o.ComputeJSONAPIIamHeader)(r.default.APP.apiHost,a,{},l,r.default.APP.AWS_ACCESS_KEY,r.default.APP.AWS_SECRET_KEY)),a}},{key:"attributesToDeal",value:function(e){var t=Object.keys(e).sort(),r={}
-return t.forEach((function(t){var n=Ember.String.dasherize(t)
-r[n]=e[t]})),r}},{key:"handleResponse",value:function(e,t,r,n){return r&&r.data&&r.data.length>0&&r.meta&&r.meta.count>0&&r.data.forEach((function(e,t){e.attributes.meta=e.meta,e.attributes.includes=r.included})),r&&r.data&&r.data.length>0&&r.data[0].meta?r.data.forEach((function(e,t){e.attributes.meta=e.meta})):r&&r.data&&r.data.meta&&(r.data.attributes.meta=r.data.meta),r}},{key:"headers",get:function(){return"oauth"===this.authType?"development"===r.default.environment?{Accept:"application/vnd.api+json","Content-Type":"application/vnd.api+json",Authorization:r.default.APP.debugToken}:{Accept:"application/vnd.api+json","Content-Type":"application/vnd.api+json",Authorization:this.cookies.read("access_token")}:"iam"===this.authType?this.iamHeaders:void 0}}])&&f(n.prototype,i),l&&f(n,l),h}(n.default),h=l.prototype,g="cookies",w=[i],_={configurable:!0,enumerable:!0,writable:!0,initializer:null},j={},Object.keys(_).forEach((function(e){j[e]=_[e]})),j.enumerable=!!j.enumerable,j.configurable=!!j.configurable,("value"in j||j.initializer)&&(j.writable=!0),j=w.slice().reverse().reduce((function(e,t){return t(h,g,e)||e}),j),O&&void 0!==j.initializer&&(j.value=j.initializer?j.initializer.call(O):void 0,j.initializer=void 0),void 0===j.initializer&&(Object.defineProperty(h,g,j),j=null),a=j,l)
-e.default=z})),define("web-shell/app",["exports","ember-resolver","ember-load-initializers","web-shell/config/environment"],(function(e,t,r,n){function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){return(i=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function l(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=c(e)
-if(t){var o=c(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return a(this,r)}}function a(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?u(e):t}function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function c(e){return(c=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function f(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var s=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&i(e,t)})(a,Ember.Application)
-var r=l(a)
-function a(){var e
-o(this,a)
-for(var i=arguments.length,l=new Array(i),c=0;c<i;c++)l[c]=arguments[c]
-return f(u(e=r.call.apply(r,[this].concat(l))),"modulePrefix",n.default.modulePrefix),f(u(e),"podModulePrefix",n.default.podModulePrefix),f(u(e),"Resolver",t.default),e}return a}()
-e.default=s,(0,r.default)(s,n.default.modulePrefix)})),define("web-shell/component-managers/glimmer",["exports","@glimmer/component/-private/ember-component-manager"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/components/-dynamic-element-alt",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.Component.extend()
-e.default=t})),define("web-shell/components/-dynamic-element",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.Component.extend()
-e.default=t})),define("web-shell/components/iframe-context",["exports","@glimmer/component"],(function(e,t){function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){return(n=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function o(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=l(e)
-if(t){var o=l(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return i(this,r)}}function i(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}(e):t}function l(e){return(l=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var a=Ember.HTMLBars.template({id:"qBmSBU+/",block:'[[[10,"h2"],[12],[1,"iframe component"],[13],[1,"\\n"],[18,1,null],[1,"\\n"]],["&default"],false,["yield"]]',moduleName:"web-shell/components/iframe-context.hbs",isStrictMode:!1}),u=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&n(e,t)})(i,e)
-var t=o(i)
-function i(){return r(this,i),t.apply(this,arguments)}return i}(t.default)
-e.default=u,Ember._setComponentTemplate(a,u)})),define("web-shell/components/main-layout",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.HTMLBars.template({id:"IAfcXorx",block:'[[[44,[[50,[30,1],0,null,null]],[[[1,"    "],[8,[30,2],null,null,[["default"],[[[[1,"\\n        "],[18,3,null],[1,"\\n    "]],[]]]]],[1,"\\n"]],[2]]]],["@layout","Layout","&default"],false,["let","component","yield"]]',moduleName:"web-shell/components/main-layout.hbs",isStrictMode:!1}),r=Ember._setComponentTemplate(t,Ember._templateOnlyComponent())
-e.default=r})),define("web-shell/components/ph-menu-layout",["exports","@glimmer/component","web-shell/config/environment"],(function(e,t,r){var n,o,i,l,a,u,c
-function f(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function s(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function p(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function b(e,t){return(b=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function y(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=v(e)
-if(t){var o=v(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return d(this,r)}}function d(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?m(e):t}function m(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function v(e){return(v=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function h(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var g=Ember.HTMLBars.template({id:"tNXlQ3JD",block:'[[[10,0],[15,5,[30,0,["layoutCss"]]],[12],[1,"\\n"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,["menuComponent"]]],null]],null],0,null,[["tagName"],[[30,0,["menuComponent"]]]]]],[[[1,"        "],[8,[30,1],null,null,null],[1,"\\n"]],[1]]],[1,"    "],[10,0],[14,5,"width: 100%"],[12],[1,"\\n        "],[18,2,null],[1,"\\n    "],[13],[1,"\\n"],[13],[1,"\\n\\n"]],["Menu","&default"],false,["let","component","ensure-safe-component","-element","yield"]]',moduleName:"web-shell/components/ph-menu-layout.hbs",isStrictMode:!1}),w=(n=Ember.inject.service,o=Ember.inject.service("ph-menu"),i=Ember.inject.service,l=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&b(e,t)})(l,e)
-var t,n,o,i=y(l)
-function l(){var e
-s(this,l)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return f(m(e=i.call.apply(i,[this].concat(r))),"router",a,m(e)),f(m(e),"ms",u,m(e)),f(m(e),"store",c,m(e)),e}return t=l,(n=[{key:"layoutCss",get:function(){return this.store.peekRecord("layout",r.default.APP.clientId).css}},{key:"menuComponent",get:function(){return this.args.menuComponent?this.args.menuComponent:"phcatelog-menu"}},{key:"navComponent",get:function(){return this.args.navComponent?this.args.navComponent:""}}])&&p(t.prototype,n),o&&p(t,o),l}(t.default),a=h(l.prototype,"router",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=h(l.prototype,"ms",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=h(l.prototype,"store",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l)
-e.default=w,Ember._setComponentTemplate(g,w)})),define("web-shell/components/ph-tbc-layout",["exports","@glimmer/component"],(function(e,t){var r,n,o,i,l,a,u
-function c(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function f(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function s(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function p(e,t){return(p=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function b(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=m(e)
-if(t){var o=m(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return y(this,r)}}function y(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?d(e):t}function d(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function m(e){return(m=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function v(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var h=Ember.HTMLBars.template({id:"jcPTpUUw",block:'[[[10,0],[12],[1,"\\n"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,["navComponent"]]],null]],null],0,null,[["tagName"],[[30,0,["navComponent"]]]]]],[[[41,[30,0,["inverse"]],[[[1,"            "],[8,[30,1],[[24,"inversebase",""],[16,"is-login",[36,5]],[4,[38,6],["linkToPage",[33,7]],null],[4,[38,6],["logout",[33,8]],null]],null,null],[1,"\\n"]],[]],[[[1,"            "],[8,[30,1],[[16,"is-login",[36,5]],[4,[38,6],["linkToPage",[33,7]],null],[4,[38,6],["logout",[33,8]],null]],null,null],[1,"\\n"]],[]]]],[1]]],[1,"    "],[18,3,null],[1,"\\n"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,["footComponent"]]],null]],null],0,null,[["tagName"],[[30,0,["footComponent"]]]]]],[[[1,"        "],[8,[30,2],[[4,[38,6],["linkToPage",[33,7]],null]],null,null],[1,"\\n"]],[2]]],[13],[1,"\\n"]],["Nav","Footer","&default"],false,["let","component","ensure-safe-component","-element","if","isLogin","on","linkToPage","logout","yield"]]',moduleName:"web-shell/components/ph-tbc-layout.hbs",isStrictMode:!1}),g=(r=Ember.inject.service,n=Ember.inject.service("route-parse"),o=Ember._action,i=Ember._action,l=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&p(e,t)})(i,e)
-var t,r,n,o=b(i)
-function i(){var e
-f(this,i)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return c(d(e=o.call.apply(o,[this].concat(r))),"router",a,d(e)),c(d(e),"rps",u,d(e)),e}return t=i,(r=[{key:"isLogin",get:function(){return!1}},{key:"inverse",get:function(){return this.needInverse.includes(this.activeRoute)}},{key:"needInverse",get:function(){return["max","rw","consulting","activity-list","about-us","report-list","boyunhui","download-report","above-data-detail","industry-activity-detail"]}},{key:"activeRoute",get:function(){var e=this.router.currentRoute.params.path
-return e=this.rps.queryLogicControllerName(e)}},{key:"navComponent",get:function(){return this.args.navComponent?this.args.navComponent:"pharbers-bp-nav-top"}},{key:"footComponent",get:function(){return this.args.footComponent?this.args.footComponent:"pharbers-bp-page-bottom"}},{key:"linkToPage",value:function(e){"home"==e.detail[0]&&"home"==this.router.currentRouteName?window.location.reload():this.router.transitionTo("shell",e.detail[0])}},{key:"logout",value:function(){this.oauthService.removeAuth()}}])&&s(t.prototype,r),n&&s(t,n),i}(t.default),a=v(l.prototype,"router",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=v(l.prototype,"rps",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v(l.prototype,"linkToPage",[o],Object.getOwnPropertyDescriptor(l.prototype,"linkToPage"),l.prototype),v(l.prototype,"logout",[i],Object.getOwnPropertyDescriptor(l.prototype,"logout"),l.prototype),l)
-e.default=g,Ember._setComponentTemplate(h,g)})),define("web-shell/components/shell-component",["exports","@glimmer/component"],(function(e,t){function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function o(e,t){return(o=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function i(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=a(e)
-if(t){var o=a(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return l(this,r)}}function l(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}(e):t}function a(e){return(a=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var u=Ember.HTMLBars.template({id:"6SHiJWWM",block:'[[[41,[28,[37,1],[[30,0,["engine"]],"web-component"],null],[[[1,"    "],[8,[39,2],null,[["@name","@allData"],[[30,0,["name"]],[30,1]]],null],[1,"\\n"]],[]],[[[41,[28,[37,1],[[30,0,["engine"]],"iframe-component"],null],[[[1,"    "],[8,[39,3],null,null,[["default"],[[[],[]]]]],[1,"\\n"]],[]],[[[1,"    "],[10,"h2"],[12],[1,"not implement shell component"],[13],[1,"\\n"]],[]]]],[]]],[18,2,null],[1,"\\n"]],["@model","&default"],false,["if","eq","wc-context","iframe-context","yield"]]',moduleName:"web-shell/components/shell-component.hbs",isStrictMode:!1}),c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&o(e,t)})(c,e)
-var t,l,a,u=i(c)
-function c(){return r(this,c),u.apply(this,arguments)}return t=c,(l=[{key:"engine",get:function(){return this.args.model.page.engine}},{key:"name",get:function(){return this.args.model.page.name}}])&&n(t.prototype,l),a&&n(t,a),c}(t.default)
-e.default=c,Ember._setComponentTemplate(u,c)})),define("web-shell/components/wc-context",["exports","@glimmer/component"],(function(e,t){var r,n,o,i,l,a,u,c
-function f(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function s(e){return function(){var t=this,r=arguments
-return new Promise((function(n,o){var i=e.apply(t,r)
-function l(e){f(i,n,o,l,a,"next",e)}function a(e){f(i,n,o,l,a,"throw",e)}l(void 0)}))}}function p(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function b(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function y(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function d(e,t){return(d=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function m(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=g(e)
-if(t){var o=g(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return v(this,r)}}function v(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?h(e):t}function h(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function g(e){return(g=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function w(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var _=Ember.HTMLBars.template({id:"4D1zd12F",block:'[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[["tagName"],[[30,1]]]]],[[[1,"    "],[8,[30,2],[[16,"allData",[30,3]],[4,[38,4],[[30,0,["registerListener"]]],null],[4,[38,5],[[30,0,["unregisterListener"]]],null]],null,[["default"],[[[[1,"\\n    "]],[]]]]],[1,"\\n"]],[2]]],[18,4,null],[1,"\\n"]],["@name","E","@allData","&default"],false,["let","component","ensure-safe-component","-element","did-insert","will-destroy","yield"]]',moduleName:"web-shell/components/wc-context.hbs",isStrictMode:!1}),O=(r=Ember.inject.service,n=Ember.inject.service,o=Ember._action,i=Ember._action,l=Ember._action,a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&d(e,t)})(a,e)
-var t,r,n,o,i,l=m(a)
-function a(){var e
-b(this,a)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return p(h(e=l.call.apply(l,[this].concat(r))),"router",u,h(e)),p(h(e),"cookies",c,h(e)),e}return t=a,(r=[{key:"listener",value:(i=s(regeneratorRuntime.mark((function e(t){var r
-return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return r=Ember.String.camelize(this.args.allData.page.name)+"EventHandler",e.next=3,window[this.args.allData.page.clientName][r](t,this)
-case 3:case"end":return e.stop()}}),e,this)}))),function(e){return i.apply(this,arguments)})},{key:"registerListener",value:(o=s(regeneratorRuntime.mark((function e(t){return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:this.args.allData.data._isVue=!0,t.allData=this.args.allData.data,t.addEventListener("event",this.listener)
-case 3:case"end":return e.stop()}}),e,this)}))),function(e){return o.apply(this,arguments)})},{key:"unregisterListener",value:function(e){e.removeEventListener("event",this.listener)}}])&&y(t.prototype,r),n&&y(t,n),a}(t.default),u=w(a.prototype,"router",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=w(a.prototype,"cookies",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w(a.prototype,"listener",[o],Object.getOwnPropertyDescriptor(a.prototype,"listener"),a.prototype),w(a.prototype,"registerListener",[i],Object.getOwnPropertyDescriptor(a.prototype,"registerListener"),a.prototype),w(a.prototype,"unregisterListener",[l],Object.getOwnPropertyDescriptor(a.prototype,"unregisterListener"),a.prototype),a)
-e.default=O,Ember._setComponentTemplate(_,O)})),define("web-shell/data-adapter",["exports","@ember-data/debug"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/formats",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-e.default={time:{hhmmss:{hour:"numeric",minute:"numeric",second:"numeric"}},date:{hhmmss:{hour:"numeric",minute:"numeric",second:"numeric"}},number:{compact:{notation:"compact"},EUR:{style:"currency",currency:"EUR"},USD:{style:"currency",currency:"USD"}}}})),define("web-shell/helpers/-element",["exports","ember-element-helper/helpers/-element"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/app-version",["exports","web-shell/config/environment","ember-cli-app-version/utils/regexp"],(function(e,t,r){function n(e){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},o=t.default.APP.version,i=n.versionOnly||n.hideSha,l=n.shaOnly||n.hideVersion,a=null
-return i&&(n.showExtended&&(a=o.match(r.versionExtendedRegExp)),a||(a=o.match(r.versionRegExp))),l&&(a=o.match(r.shaRegExp)),a?a[0]:o}Object.defineProperty(e,"__esModule",{value:!0}),e.appVersion=n,e.default=void 0
-var o=Ember.Helper.helper(n)
-e.default=o})),define("web-shell/helpers/contains",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.Helper.helper((function(e,t){return e.includes(t)}))
-e.default=t})),define("web-shell/helpers/element",["exports","ember-element-helper/helpers/element"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/ensure-safe-component",["exports","@embroider/util"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.EnsureSafeComponentHelper}})})),define("web-shell/helpers/eq",["exports"],(function(e){function t(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var r=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"])
-if(null==r)return
-var n,o,i=[],l=!0,a=!1
-try{for(r=r.call(e);!(l=(n=r.next()).done)&&(i.push(n.value),!t||i.length!==t);l=!0);}catch(u){a=!0,o=u}finally{try{l||null==r.return||r.return()}finally{if(a)throw o}}return i}(e,t)||function(e,t){if(!e)return
-if("string"==typeof e)return r(e,t)
-var n=Object.prototype.toString.call(e).slice(8,-1)
-"Object"===n&&e.constructor&&(n=e.constructor.name)
-if("Map"===n||"Set"===n)return Array.from(e)
-if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return r(e,t)}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function r(e,t){(null==t||t>e.length)&&(t=e.length)
-for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r]
-return n}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var n=Ember.Helper.helper((function(e){var r=t(e,2)
-return r[0]===r[1]}))
-e.default=n})),define("web-shell/helpers/format-date",["exports","ember-intl/helpers/format-date"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/format-message",["exports","ember-intl/helpers/format-message"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/format-number",["exports","ember-intl/helpers/format-number"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/format-relative",["exports","ember-intl/helpers/format-relative"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/format-time",["exports","ember-intl/helpers/format-time"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/helpers/loc",["exports","@ember/string/helpers/loc"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}}),Object.defineProperty(e,"loc",{enumerable:!0,get:function(){return t.loc}})})),define("web-shell/helpers/page-title",["exports","ember-page-title/helpers/page-title"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var r=t.default
-e.default=r})),define("web-shell/helpers/pluralize",["exports","ember-inflector/lib/helpers/pluralize"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var r=t.default
-e.default=r})),define("web-shell/helpers/singularize",["exports","ember-inflector/lib/helpers/singularize"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var r=t.default
-e.default=r})),define("web-shell/helpers/t",["exports","ember-intl/helpers/t"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})}))
-function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}define("web-shell/initializers/app-version",["exports","ember-cli-app-version/initializer-factory","web-shell/config/environment"],(function(e,t,r){var n,o
-Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0,r.default.APP&&(n=r.default.APP.name,o=r.default.APP.version)
-var i={name:"App Version",initialize:(0,t.default)(n,o)}
-e.default=i})),define("web-shell/initializers/container-debug-adapter",["exports","ember-resolver/resolvers/classic/container-debug-adapter"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var r={name:"container-debug-adapter",initialize:function(){var e=arguments[1]||arguments[0]
-e.register("container-debug-adapter:main",t.default),e.inject("container-debug-adapter:main","namespace","application:main")}}
-e.default=r})),define("web-shell/initializers/ember-data-data-adapter",["exports","@ember-data/debug/setup"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/initializers/ember-data",["exports","ember-data","ember-data/setup-container"],(function(e,t,r){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var n={name:"ember-data",initialize:r.default}
-e.default=n})),define("web-shell/initializers/export-application-global",["exports","web-shell/config/environment"],(function(e,t){function r(){var e=arguments[1]||arguments[0]
-if(!1!==t.default.exportApplicationGlobal){var r
-if("undefined"!=typeof window)r=window
-else if("undefined"!=typeof global)r=global
-else{if("undefined"==typeof self)return
-r=self}var n,o=t.default.exportApplicationGlobal
-n="string"==typeof o?o:Ember.String.classify(t.default.modulePrefix),r[n]||(r[n]=e,e.reopen({willDestroy:function(){this._super.apply(this,arguments),delete r[n]}}))}}Object.defineProperty(e,"__esModule",{value:!0}),e.initialize=r,e.default=void 0
-var n={name:"export-application-global",initialize:r}
-e.default=n})),define("web-shell/instance-initializers/ember-data",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-e.default={name:"ember-data",initialize:function(){}}})),define("web-shell/lib/PhIamClicent",["exports","web-shell/lib/PhSigV4AWSClientFactory"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.ComputeJSONAPIIamHeader=function(e,r,n,o,i,l){var a=arguments.length>6&&void 0!==arguments[6]?arguments[6]:"application/vnd.api+json",u=arguments.length>7&&void 0!==arguments[7]?arguments[7]:"application/vnd.api+json",c=arguments.length>8&&void 0!==arguments[8]?arguments[8]:"GET",f=t.default,s=/(^https?:\/\/[^\/]+)/g.exec(r)[1],p=r.substring(s.length),b=p,y=b.lastIndexOf("?")
-y>-1&&(b=b.substring(0,y))
-var d={accessKey:i,secretKey:l,sessionToken:"",serviceName:"execute-api",region:"cn-northwest-1",endpoint:e,defaultContentType:a,defaultAcceptType:u},m=f.PhSigV4AWSClientFactory.newClient(d),v={}
-if(o)for(var h=Object.keys(o),g=0;g<h.length;++g){var w=encodeURI(h[g]),_=o[h[g]]
-v[w]=_}var O={verb:c.toUpperCase(),path:b,queryParams:v,body:{}},j=m.makeRequest(O)
-return j.headers}})),define("web-shell/lib/PhSigV4AWSClientFactory",["exports","web-shell/lib/PhSigV4ClientUtils"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.PhSigV4AWSClientFactory=void 0
-var r=require("crypto-js"),n={}
-e.PhSigV4AWSClientFactory=n,n.newClient=function(e){var n="AWS4-HMAC-SHA256",o="aws4_request"
-function i(e){return r.SHA256(e)}function l(e){return e.toString(r.enc.Hex)}function a(e,t){return r.HmacSHA256(t,e,{asBytes:!0})}function u(e,t,r,n,o){return e+"\n"+(encodeURI(t)+"\n")+c(r)+"\n"+function(e){var t="",r=[]
-for(var n in e)e.hasOwnProperty(n)&&r.push(n)
-r.sort()
-for(var o=0;o<r.length;o++)t+=r[o].toLowerCase()+":"+e[r[o]]+"\n"
-return t}(n)+"\n"+s(n)+"\n"+l(i(o))}function c(e){if(Object.keys(e).length<1)return""
-var t=[]
-for(var r in e)e.hasOwnProperty(r)&&t.push(r)
-t.sort()
-for(var n="",o=0;o<t.length;o++)if(t[o]===encodeURI("ids[]"))for(var i=e[t[o]].sort(),l=0;l<i.length;l++)n+=t[o]+"="+f(i[l])+"&"
-else n+=t[o]+"="+f(e[t[o]])+"&"
-return n.substr(0,n.length-1)}function f(e){var t=encodeURIComponent(e).replace(/[!'()*]/g,(function(e){return"%"+e.charCodeAt(0).toString(16).toUpperCase()}))
-return t=(t=t.replace(/%26/g,"&")).replace(/%3D/g,"=")}function s(e){var t=[]
-for(var r in e)e.hasOwnProperty(r)&&t.push(r.toLowerCase())
-return t.sort(),t.join(";")}var p={}
-return void 0===e.accessKey||void 0===e.secretKey||(p.accessKey=t.default.assertDefined(e.accessKey,"accessKey"),p.secretKey=t.default.assertDefined(e.secretKey,"secretKey"),p.sessionToken=e.sessionToken,p.serviceName=t.default.assertDefined(e.serviceName,"serviceName"),p.region=t.default.assertDefined(e.region,"region"),p.endpoint=t.default.assertDefined(e.endpoint,"endpoint"),p.makeRequest=function(r){var f=t.default.assertDefined(r.verb,"verb"),b=t.default.assertDefined(r.path,"path"),y=t.default.copy(r.queryParams)
-void 0===y&&(y={})
-var d=t.default.copy(r.headers)
-void 0===d&&(d={}),void 0===d["Content-Type"]&&(d["Content-Type"]=e.defaultContentType),void 0===d.Accept&&(d.Accept=e.defaultAcceptType)
-var m=t.default.copy(r.body)
-""!==(m=void 0===m||"GET"===f?"":JSON.stringify(m))&&null!=m||delete d["Content-Type"]
-var v=(new Date).toISOString().replace(/\.\d{3}Z$/,"Z").replace(/[:\-]|\.\d{3}/g,"")
-d["x-amz-date"]=v,d.host="apiv2.pharbers.com"
-var h=function(e){return l(i(e))}(u(f,b,y,d,m)),g=function(e,t,r){return e.substr(0,8)+"/"+t+"/"+r+"/"+o}(v,p.region,p.serviceName),w=function(e,t,r){return n+"\n"+e+"\n"+t+"\n"+r}(v,g,h),_=function(e,t){return l(a(e,t))}(function(e,t,r,n){return a(a(a(a("AWS4"+e,t.substr(0,8)),r),n),o)}(p.secretKey,v,p.region,p.serviceName),w)
-d.Authorization=function(e,t,r,o){return n+" Credential="+e+"/"+t+", SignedHeaders="+s(r)+", Signature="+o}(p.accessKey,g,d,_),void 0!==p.sessionToken&&""!==p.sessionToken&&(d["x-amz-security-token"]=p.sessionToken),delete d.host
-var O=e.endpoint+b,j=c(y)
-return""!==j&&(O+="?"+j),void 0===d["Content-Type"]&&(d["Content-Type"]=e.defaultContentType),{method:f,url:O,headers:d,data:m,timeout:3e4}}),p}})),define("web-shell/lib/PhSigV4ClientUtils",["exports"],(function(e){function t(e){return(t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var r={assertDefined:function(e,t){if(void 0===e)throw t+" must be defined"
-return e},assertParametersDefined:function(e,t,r){if(void 0!==t){t.length>0&&void 0===e&&(e={})
-for(var n=0;n<t.length;n++)this.contains(r,t[n])||this.assertDefined(e[t[n]],t[n])}},parseParametersToObject:function(e,t){if(void 0===e)return{}
-for(var r={},n=0;n<t.length;n++)r[t[n]]=e[t[n]]
-return r},contains:function(e,t){if(void 0===e)return!1
-for(var r=e.length;r--;)if(e[r]===t)return!0
-return!1},copy:function(e){if(null==e||"object"!=t(e))return e
-var r=e.constructor()
-for(var n in e)e.hasOwnProperty(n)&&(r[n]=e[n])
-return r},mergeInto:function(e,r){if(null==e||"object"!=t(e))return e
-var n=e.constructor()
-for(var o in e)e.hasOwnProperty(o)&&(n[o]=e[o])
-if(null==r||"object"!=t(r))return e
-for(attr in r)r.hasOwnProperty(attr)&&(n[attr]=r[attr])
-return n}}
-e.default=r})),define("web-shell/lib/PhUrlTemplate",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.PhUriTemplate=void 0
-var t=function(){function e(e){this.raw=e,this.cache={}}function t(e){this.set=e}function r(e){this.txt=e}e.prototype.get=function(e){var t=this.lookupRaw(e),r=t
-if("function"==typeof t){var n=this.cache[e]
-null!=n?r=n.val:(r=t(this.raw),this.cache[e]={key:e,val:r})}return r},e.prototype.lookupRaw=function(t){return e.lookup(this,this.raw,t)},e.lookup=function(t,r,n){var o=r[n]
-if(void 0!==o)return o
-var i=n.split("."),l=0,a=i.length-1
-for(l=0;l<a;l++){var u=i.slice(0,a-l).join("."),c=i.slice(-l-1).join("."),f=r[u]
-if(void 0!==f)return e.lookup(t,f,c)}},t.prototype.expand=function(t){var r=new e(t),n="",o=0,i=this.set.length
-for(o=0;o<i;o++)n+=this.set[o].expand(r)
-return n},r.prototype.expand=function(){return this.txt}
-var n=new RegExp("[:/?#\\[\\]@!$&()*+,;=']","g")
-function o(e){return encodeURIComponent(e).replace(n,(function(e){return escape(e)}))}function i(e){return encodeURI(e)}function l(e,t,r){return t+(t.length>0?"=":"")+r}function a(e,t,r,n){return(n=n||!1)&&(e=""),t&&0!==t.length||(t=e),t+(t.length>0?"=":"")+r}var u={prefix:"",joiner:",",encode:o,builder:l},c={prefix:"",joiner:",",encode:i,builder:l},f={prefix:"#",joiner:",",encode:i,builder:l},s={prefix:";",joiner:";",encode:o,builder:function(e,t,r,n){return(n=n||!1)&&(e=""),t&&0!==t.length||(t=e),t+(t.length>0&&r?"=":"")+r}},p={prefix:"?",joiner:"&",encode:o,builder:a},b={prefix:"&",joiner:"&",encode:o,builder:a},y={prefix:"/",joiner:"/",encode:o,builder:l},d={prefix:".",joiner:".",encode:o,builder:l}
-function m(e,t){(function(e,t){for(var r in t)e[r]=t[r]})(this,e),this.vars=t}m.build=function(e,t){var r
-switch(e){case"":r=u
-break
-case"+":r=c
-break
-case"#":r=f
-break
-case";":r=s
-break
-case"?":r=p
-break
-case"&":r=b
-break
-case"/":r=y
-break
-case".":r=d
-break
-default:throw"Unexpected operator: '"+e+"'"}return new m(r,t)},m.prototype.expand=function(e){var t=this.prefix,r=this.joiner,n=this.builder,o="",i=0,l=this.vars.length
-for(i=0;i<l;i++){var a=this.vars[i]
-a.addValues(e,this.encode,(function(e,i,l){var u=n(a.name,e,i,l)
-null!=u&&(o+=t+u,t=r)}))}return o}
-var v={}
-function h(e){this.str="",e===v?this.appender=h.UnboundAppend:(this.len=0,this.limit=e,this.appender=h.BoundAppend)}function g(e,t,r,n,o){var i
-if(r.isArr)i=function(e,t,r){var n=new h(r),o="",i=0,l=e.length
-for(i=0;i<l;i++)null!==e[i]&&void 0!==e[i]&&(n.append(o).append(e[i],t),o=",")
-return n.str}(t,n,e.maxLength)
-else if(r.isObj)i=function(e,t,r){var n,o=new h(r),i=""
-for(n in e)e.hasOwnProperty(n)&&null!==e[n]&&void 0!==e[n]&&(o.append(i+n+",").append(e[n],t),i=",")
-return o.str}(t,n,e.maxLength)
-else{i=new h(e.maxLength).append(t,n).str}o("",i)}function w(e,t,r,n,o){if(r.isArr){var i=0,l=t.length
-for(i=0;i<l;i++)o("",n(t[i]))}else if(r.isObj){var a
-for(a in t)t.hasOwnProperty(a)&&o(a,n(t[a]))}else o("",n(t))}function _(e,t,r){this.name=unescape(e),this.valueHandler=t,this.maxLength=r}h.prototype.append=function(e,t){return this.appender(this,e,t)},h.UnboundAppend=function(e,t,r){return t=r?r(t):t,e.str+=t,e},h.BoundAppend=function(e,t,r){return t=t.substring(0,e.limit-e.len),e.len+=t.length,t=r?r(t):t,e.str+=t,e},_.build=function(e,t,r,n){return r||(n=v),new _(e,t?w:g,n)},_.prototype.addValues=function(e,t,r){var n=e.get(this.name),o=function(e){var t=!1,r=!1,n=!0
-return null!=e&&(t=e.constructor===Array,r=e.constructor===Object,n=t&&0===e.length||r&&function(e){for(var t in e)return!1
-return!0}(e)),{isArr:t,isObj:r,isUndef:n}}(n)
-o.isUndef||this.valueHandler(this,n,o,t,r)}
-var O=/([^*:]*)((\*)|(:)([0-9]+))?/,j=function(e){var t=e[1],r=e[3],n=e[4],o=parseInt(e[5],10)
-return _.build(t,r,n,o)},z=/(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g,P=function(e){e[0]
-var t=e[2]||"",r=e[3].split(","),n=0,o=r.length
-for(n=0;n<o;n++){var i
-if(null===(i=r[n].match(O)))throw"unexpected parse error in varspec: "+r[n]
-r[n]=j(i)}return m.build(t,r)},S=function(e,t,n,o){if(n<o){var i=t.substr(n,o-n)
-e.push(new r(i))}}
-return function(e){var r,n=0,o=[],i=z
-for(i.lastIndex=0;null!==(r=i.exec(e));){var l=r.index
-S(o,e,n,l),o.push(P(r)),n=i.lastIndex}return S(o,e,n,e.length),new t(o)}}()
-e.PhUriTemplate=t})),define("web-shell/models/account",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_,O,j,z,P,S
-function R(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function E(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function x(e,t){return(x=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function T(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=M(e)
-if(t){var o=M(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return k(this,r)}}function k(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?A(e):t}function A(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function M(e){return(M=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function C(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var B=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("string"),f=(0,t.attr)("string"),s=(0,t.attr)("date"),p=(0,t.attr)("date"),b=(0,t.belongsTo)("partner"),y=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&x(e,t)})(r,e)
-var t=T(r)
-function r(){var e
-E(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return R(A(e=t.call.apply(t,[this].concat(o))),"name",d,A(e)),R(A(e),"firstName",m,A(e)),R(A(e),"lastName",v,A(e)),R(A(e),"picture",h,A(e)),R(A(e),"wechatOpenId",g,A(e)),R(A(e),"password",w,A(e)),R(A(e),"phoneNumber",_,A(e)),R(A(e),"email",O,A(e)),R(A(e),"notification",j,A(e)),R(A(e),"created",z,A(e)),R(A(e),"modified",P,A(e)),R(A(e),"employer",S,A(e)),e}return r}(t.default),d=C(y.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=C(y.prototype,"firstName",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=C(y.prototype,"lastName",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=C(y.prototype,"picture",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=C(y.prototype,"wechatOpenId",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=C(y.prototype,"password",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=C(y.prototype,"phoneNumber",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O=C(y.prototype,"email",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),j=C(y.prototype,"notification",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),z=C(y.prototype,"created",[s],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),P=C(y.prototype,"modified",[p],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),S=C(y.prototype,"employer",[b],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y)
-e.default=B})),define("web-shell/models/action",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_,O
-function j(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function z(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function P(e,t){return(P=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function S(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=x(e)
-if(t){var o=x(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return R(this,r)}}function R(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?E(e):t}function E(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function x(e){return(x=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function T(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var k=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("number"),l=(0,t.attr)("number"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("string"),f=(0,t.attr)("string"),s=(0,t.attr)("number"),p=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&P(e,t)})(r,e)
-var t=S(r)
-function r(){var e
-z(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return j(E(e=t.call.apply(t,[this].concat(o))),"projectID",b,E(e)),j(E(e),"owner",y,E(e)),j(E(e),"showName",d,E(e)),j(E(e),"time",m,E(e)),j(E(e),"code",v,E(e)),j(E(e),"jobDesc",h,E(e)),j(E(e),"jobCat",g,E(e)),j(E(e),"comments",w,E(e)),j(E(e),"message",_,E(e)),j(E(e),"date",O,E(e)),e}return r}(t.default),b=T(p.prototype,"projectID",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=T(p.prototype,"owner",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=T(p.prototype,"showName",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=T(p.prototype,"time",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=T(p.prototype,"code",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=T(p.prototype,"jobDesc",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=T(p.prototype,"jobCat",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=T(p.prototype,"comments",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=T(p.prototype,"message",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O=T(p.prototype,"date",[s],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p)
-e.default=k})),define("web-shell/models/activity",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_,O,j,z,P,S,R,E,x,T,k,A,M,C
-function B(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function I(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function D(e,t){return(D=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function N(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=q(e)
-if(t){var o=q(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return L(this,r)}}function L(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?U(e):t}function U(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function q(e){return(q=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function W(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var H=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("date"),i=(0,t.attr)("date"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("string"),f=(0,t.attr)("string"),s=(0,t.hasMany)("image"),p=(0,t.hasMany)("report"),b=(0,t.hasMany)("zone"),y=(0,t.belongsTo)("image"),d=(0,t.belongsTo)("image"),m=(0,t.hasMany)("cooperation"),v=(0,t.attr)("number"),h=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&D(e,t)})(r,e)
-var t=N(r)
-function r(){var e
-I(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return B(U(e=t.call.apply(t,[this].concat(o))),"title",g,U(e)),B(U(e),"subTitle",w,U(e)),B(U(e),"startDate",_,U(e)),B(U(e),"endDate",O,U(e)),B(U(e),"location",j,U(e)),B(U(e),"city",z,U(e)),B(U(e),"activityType",P,U(e)),B(U(e),"contentTitle",S,U(e)),B(U(e),"contentDesc",R,U(e)),B(U(e),"gallery",E,U(e)),B(U(e),"attachments",x,U(e)),B(U(e),"agendas",T,U(e)),B(U(e),"logo",k,U(e)),B(U(e),"logoOnTime",A,U(e)),B(U(e),"partners",M,U(e)),B(U(e),"language",C,U(e)),e}return r}(t.default),g=W(h.prototype,"title",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=W(h.prototype,"subTitle",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=W(h.prototype,"startDate",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O=W(h.prototype,"endDate",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),j=W(h.prototype,"location",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),z=W(h.prototype,"city",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),P=W(h.prototype,"activityType",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),S=W(h.prototype,"contentTitle",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),R=W(h.prototype,"contentDesc",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),E=W(h.prototype,"gallery",[s],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),x=W(h.prototype,"attachments",[p],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),T=W(h.prototype,"agendas",[b],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),k=W(h.prototype,"logo",[y],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),A=W(h.prototype,"logoOnTime",[d],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),M=W(h.prototype,"partners",[m],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),C=W(h.prototype,"language",[v],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h)
-e.default=H})),define("web-shell/models/analysis",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l
-function a(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function u(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function c(e,t){return(c=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function f(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=b(e)
-if(t){var o=b(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return s(this,r)}}function s(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?p(e):t}function p(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function b(e){return(b=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function y(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var d=(r=(0,t.attr)("string"),n=(0,t.belongsTo)("project"),o=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&c(e,t)})(r,e)
-var t=f(r)
-function r(){var e
-u(this,r)
-for(var n=arguments.length,o=new Array(n),c=0;c<n;c++)o[c]=arguments[c]
-return a(p(e=t.call.apply(t,[this].concat(o))),"name",i,p(e)),a(p(e),"project",l,p(e)),e}return r}(t.default),i=y(o.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l=y(o.prototype,"project",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),o)
-e.default=d})),define("web-shell/models/chat",["exports","@ember-data/model"],(function(e,t){var r,n,o
-function i(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function l(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){return(a=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function u(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=s(e)
-if(t){var o=s(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return c(this,r)}}function c(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?f(e):t}function f(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function s(e){return(s=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var p,b,y,d,m,v,h=(r=(0,t.belongsTo)("slide"),n=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&a(e,t)})(r,e)
-var t=u(r)
-function r(){var e
-l(this,r)
-for(var n=arguments.length,a=new Array(n),u=0;u<n;u++)a[u]=arguments[u]
-return i(f(e=t.call.apply(t,[this].concat(a))),"slide",o,f(e)),e}return r}(t.default),p=n.prototype,b="slide",y=[r],d={configurable:!0,enumerable:!0,writable:!0,initializer:null},v={},Object.keys(d).forEach((function(e){v[e]=d[e]})),v.enumerable=!!v.enumerable,v.configurable=!!v.configurable,("value"in v||v.initializer)&&(v.writable=!0),v=y.slice().reverse().reduce((function(e,t){return t(p,b,e)||e}),v),m&&void 0!==v.initializer&&(v.value=v.initializer?v.initializer.call(m):void 0,v.initializer=void 0),void 0===v.initializer&&(Object.defineProperty(p,b,v),v=null),o=v,n)
-e.default=h})),define("web-shell/models/cooperation",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p
-function b(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function y(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function d(e,t){return(d=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function m(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=g(e)
-if(t){var o=g(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return v(this,r)}}function v(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?h(e):t}function h(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function g(e){return(g=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function w(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var _=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("number"),l=(0,t.belongsTo)("image"),a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&d(e,t)})(r,e)
-var t=m(r)
-function r(){var e
-y(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return b(h(e=t.call.apply(t,[this].concat(o))),"name",u,h(e)),b(h(e),"companyType",c,h(e)),b(h(e),"logo",f,h(e)),b(h(e),"language",s,h(e)),b(h(e),"logo",p,h(e)),e}return r}(t.default),u=w(a.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=w(a.prototype,"companyType",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=w(a.prototype,"logo",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=w(a.prototype,"language",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=w(a.prototype,"logo",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=_})),define("web-shell/models/dag-conf",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_,O,j,z,P,S,R,E,x,T,k,A,M,C,B,I
-function D(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function N(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function L(e,t){return(L=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function U(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=H(e)
-if(t){var o=H(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return q(this,r)}}function q(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?W(e):t}function W(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function H(e){return(H=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function K(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var V=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("string"),f=(0,t.attr)("string"),s=(0,t.attr)("string"),p=(0,t.attr)("string"),b=(0,t.attr)("string"),y=(0,t.attr)("string"),d=(0,t.attr)("string"),m=(0,t.attr)("string"),v=(0,t.attr)("string"),h=(0,t.attr)("string"),g=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&L(e,t)})(r,e)
-var t=U(r)
-function r(){var e
-N(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return D(W(e=t.call.apply(t,[this].concat(o))),"flowVersion",w,W(e)),D(W(e),"jobPath",_,W(e)),D(W(e),"jobName",O,W(e)),D(W(e),"version",j,W(e)),D(W(e),"dagName",z,W(e)),D(W(e),"jobShowName",P,W(e)),D(W(e),"inputs",S,W(e)),D(W(e),"jobDisplayName",R,W(e)),D(W(e),"jobId",E,W(e)),D(W(e),"jobVersion",x,W(e)),D(W(e),"outputs",T,W(e)),D(W(e),"owner",k,W(e)),D(W(e),"projectId",A,W(e)),D(W(e),"runtime",M,W(e)),D(W(e),"targetJobId",C,W(e)),D(W(e),"timeout",B,W(e)),D(W(e),"operatorParameters",I,W(e)),e}return r}(t.default),w=K(g.prototype,"flowVersion",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=K(g.prototype,"jobPath",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O=K(g.prototype,"jobName",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),j=K(g.prototype,"version",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),z=K(g.prototype,"dagName",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),P=K(g.prototype,"jobShowName",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),S=K(g.prototype,"inputs",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),R=K(g.prototype,"jobDisplayName",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),E=K(g.prototype,"jobId",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),x=K(g.prototype,"jobVersion",[s],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),T=K(g.prototype,"outputs",[p],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),k=K(g.prototype,"owner",[b],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),A=K(g.prototype,"projectId",[y],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),M=K(g.prototype,"runtime",[d],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),C=K(g.prototype,"targetJobId",[m],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),B=K(g.prototype,"timeout",[v],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),I=K(g.prototype,"operatorParameters",[h],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g)
-e.default=V})),define("web-shell/models/dash-board",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l
-function a(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function u(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function c(e,t){return(c=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function f(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=b(e)
-if(t){var o=b(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return s(this,r)}}function s(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?p(e):t}function p(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function b(e){return(b=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function y(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var d=(r=(0,t.belongsTo)("project"),n=(0,t.hasMany)("slide"),o=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&c(e,t)})(r,e)
-var t=f(r)
-function r(){var e
-u(this,r)
-for(var n=arguments.length,o=new Array(n),c=0;c<n;c++)o[c]=arguments[c]
-return a(p(e=t.call.apply(t,[this].concat(o))),"project",i,p(e)),a(p(e),"slides",l,p(e)),e}return r}(t.default),i=y(o.prototype,"project",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l=y(o.prototype,"slides",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),o)
-e.default=d})),define("web-shell/models/dataset",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h
-function g(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function w(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _(e,t){return(_=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function O(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=P(e)
-if(t){var o=P(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return j(this,r)}}function j(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?z(e):t}function z(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function P(e){return(P=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function S(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var R=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("string"),f=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&_(e,t)})(r,e)
-var t=O(r)
-function r(){var e
-w(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return g(z(e=t.call.apply(t,[this].concat(o))),"projectId",s,z(e)),g(z(e),"schema",p,z(e)),g(z(e),"version",b,z(e)),g(z(e),"name",y,z(e)),g(z(e),"label",d,z(e)),g(z(e),"cat",m,z(e)),g(z(e),"path",v,z(e)),g(z(e),"format",h,z(e)),e}return r}(t.default),s=S(f.prototype,"projectId",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=S(f.prototype,"schema",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=S(f.prototype,"version",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=S(f.prototype,"name",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=S(f.prototype,"label",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=S(f.prototype,"cat",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=S(f.prototype,"path",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=S(f.prototype,"format",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f)
-e.default=R})),define("web-shell/models/db",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c
-function f(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function s(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function p(e,t){return(p=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function b(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=m(e)
-if(t){var o=m(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return y(this,r)}}function y(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?d(e):t}function d(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function m(e){return(m=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function v(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var h=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.hasMany)("table"),i=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&p(e,t)})(r,e)
-var t=b(r)
-function r(){var e
-s(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return f(d(e=t.call.apply(t,[this].concat(o))),"name",l,d(e)),f(d(e),"provider",a,d(e)),f(d(e),"tables",u,d(e)),f(d(e),"owner",c,d(e)),e}return r}(t.default),l=v(i.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a=v(i.prototype,"provider",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=v(i.prototype,"tables",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=v(i.prototype,"owner",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),i)
-e.default=h})),define("web-shell/models/diagram",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_,O
-function j(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function z(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function P(e,t){return(P=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function S(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=x(e)
-if(t){var o=x(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return R(this,r)}}function R(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?E(e):t}function E(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function x(e){return(x=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function T(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var k=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("string"),f=(0,t.attr)("date"),s=(0,t.attr)("date"),p=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&P(e,t)})(r,e)
-var t=S(r)
-function r(){var e
-z(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return j(E(e=t.call.apply(t,[this].concat(o))),"partner",b,E(e)),j(E(e),"name",y,E(e)),j(E(e),"source",d,E(e)),j(E(e),"rid",m,E(e)),j(E(e),"gid",v,E(e)),j(E(e),"tag",h,E(e)),j(E(e),"version",g,E(e)),j(E(e),"description",w,E(e)),j(E(e),"created",_,E(e)),j(E(e),"modified",O,E(e)),e}return r}(t.default),b=T(p.prototype,"partner",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=T(p.prototype,"name",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=T(p.prototype,"source",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=T(p.prototype,"rid",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=T(p.prototype,"gid",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=T(p.prototype,"tag",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=T(p.prototype,"version",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=T(p.prototype,"description",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=T(p.prototype,"created",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O=T(p.prototype,"modified",[s],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p)
-e.default=k})),define("web-shell/models/event",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m
-function v(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function h(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function g(e,t){return(g=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function w(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=j(e)
-if(t){var o=j(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return _(this,r)}}function _(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function j(e){return(j=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function z(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var P=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("date"),l=(0,t.attr)("date"),a=(0,t.attr)("number"),u=(0,t.hasMany)("participant"),c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&g(e,t)})(r,e)
-var t=w(r)
-function r(){var e
-h(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return v(O(e=t.call.apply(t,[this].concat(o))),"title",f,O(e)),v(O(e),"subTitle",s,O(e)),v(O(e),"description",p,O(e)),v(O(e),"startDate",b,O(e)),v(O(e),"endDate",y,O(e)),v(O(e),"language",d,O(e)),v(O(e),"speakers",m,O(e)),e}return r}(t.default),f=z(c.prototype,"title",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=z(c.prototype,"subTitle",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=z(c.prototype,"description",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=z(c.prototype,"startDate",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=z(c.prototype,"endDate",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=z(c.prototype,"language",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=z(c.prototype,"speakers",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c)
-e.default=P})),define("web-shell/models/execution",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m
-function v(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function h(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function g(e,t){return(g=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function w(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=j(e)
-if(t){var o=j(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return _(this,r)}}function _(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function j(e){return(j=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function z(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var P=(r=(0,t.attr)("string"),n=(0,t.attr)("number"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("number"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&g(e,t)})(r,e)
-var t=w(r)
-function r(){var e
-h(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return v(O(e=t.call.apply(t,[this].concat(o))),"input",f,O(e)),v(O(e),"endTime",s,O(e)),v(O(e),"owner",p,O(e)),v(O(e),"smId",b,O(e)),v(O(e),"startTime",y,O(e)),v(O(e),"state",d,O(e)),v(O(e),"steps",m,O(e)),e}return r}(t.default),f=z(c.prototype,"input",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=z(c.prototype,"endTime",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=z(c.prototype,"owner",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=z(c.prototype,"smId",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=z(c.prototype,"startTime",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=z(c.prototype,"state",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=z(c.prototype,"steps",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c)
-e.default=P})),define("web-shell/models/file",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_
-function O(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function j(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function z(e,t){return(z=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function P(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=E(e)
-if(t){var o=E(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return S(this,r)}}function S(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?R(e):t}function R(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function E(e){return(E=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function x(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var T=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("number"),l=(0,t.attr)("string"),a=(0,t.attr)("date"),u=(0,t.attr)("date"),c=(0,t.attr)("string"),f=(0,t.attr)("string"),s=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&z(e,t)})(r,e)
-var t=P(r)
-function r(){var e
-j(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return O(R(e=t.call.apply(t,[this].concat(o))),"name",p,R(e)),O(R(e),"owner",b,R(e)),O(R(e),"extension",y,R(e)),O(R(e),"size",d,R(e)),O(R(e),"source",m,R(e)),O(R(e),"labels",v,R(e)),O(R(e),"created",h,R(e)),O(R(e),"modified",g,R(e)),O(R(e),"version",w,R(e)),O(R(e),"description",_,R(e)),e}return r}(t.default),p=x(s.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=x(s.prototype,"owner",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=x(s.prototype,"extension",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=x(s.prototype,"size",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=x(s.prototype,"source",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=x(s.prototype,"labels",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=x(s.prototype,"created",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=x(s.prototype,"modified",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=x(s.prototype,"version",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=x(s.prototype,"description",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s)
-e.default=T})),define("web-shell/models/flow",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l
-function a(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function u(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function c(e,t){return(c=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function f(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=b(e)
-if(t){var o=b(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return s(this,r)}}function s(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?p(e):t}function p(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function b(e){return(b=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function y(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var d=(r=(0,t.belongsTo)("project"),n=(0,t.hasMany)("stateMachine"),o=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&c(e,t)})(r,e)
-var t=f(r)
-function r(){var e
-u(this,r)
-for(var n=arguments.length,o=new Array(n),c=0;c<n;c++)o[c]=arguments[c]
-return a(p(e=t.call.apply(t,[this].concat(o))),"project",i,p(e)),a(p(e),"stateMachines",l,p(e)),e}return r}(t.default),i=y(o.prototype,"project",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l=y(o.prototype,"stateMachines",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),o)
-e.default=d})),define("web-shell/models/image",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u
-function c(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function f(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function s(e,t){return(s=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function p(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=d(e)
-if(t){var o=d(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return b(this,r)}}function b(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?y(e):t}function y(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function d(e){return(d=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function m(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var v=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.belongsTo)("image"),i=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&s(e,t)})(r,e)
-var t=p(r)
-function r(){var e
-f(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return c(y(e=t.call.apply(t,[this].concat(o))),"path",l,y(e)),c(y(e),"tag",a,y(e)),c(y(e),"report",u,y(e)),e}return r}(t.default),l=m(i.prototype,"path",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a=m(i.prototype,"tag",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=m(i.prototype,"report",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),i)
-e.default=v})),define("web-shell/models/layout",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y
-function d(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function m(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function v(e,t){return(v=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function h(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=_(e)
-if(t){var o=_(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return g(this,r)}}function g(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?w(e):t}function w(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function _(e){return(_=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function O(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var j=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&v(e,t)})(r,e)
-var t=h(r)
-function r(){var e
-m(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return d(w(e=t.call.apply(t,[this].concat(o))),"clientId",c,w(e)),d(w(e),"clientName",f,w(e)),d(w(e),"version",s,w(e)),d(w(e),"name",p,w(e)),d(w(e),"css",b,w(e)),d(w(e),"script",y,w(e)),e}return r}(t.default),c=O(u.prototype,"clientId",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=O(u.prototype,"clientName",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=O(u.prototype,"version",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=O(u.prototype,"name",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=O(u.prototype,"css",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=O(u.prototype,"script",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u)
-e.default=j})),define("web-shell/models/model",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p
-function b(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function y(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function d(e,t){return(d=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function m(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=g(e)
-if(t){var o=g(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return v(this,r)}}function v(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?h(e):t}function h(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function g(e){return(g=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function w(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var _=(r=(0,t.belongsTo)("project"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&d(e,t)})(r,e)
-var t=m(r)
-function r(){var e
-y(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return b(h(e=t.call.apply(t,[this].concat(o))),"project",u,h(e)),b(h(e),"name",c,h(e)),b(h(e),"type",f,h(e)),b(h(e),"location",s,h(e)),b(h(e),"definition",p,h(e)),e}return r}(t.default),u=w(a.prototype,"project",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=w(a.prototype,"name",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=w(a.prototype,"type",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=w(a.prototype,"location",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=w(a.prototype,"definition",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=_})),define("web-shell/models/notebook",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p
-function b(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function y(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function d(e,t){return(d=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function m(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=g(e)
-if(t){var o=g(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return v(this,r)}}function v(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?h(e):t}function h(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function g(e){return(g=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function w(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var _=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.belongsTo)("project"),a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&d(e,t)})(r,e)
-var t=m(r)
-function r(){var e
-y(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return b(h(e=t.call.apply(t,[this].concat(o))),"name",u,h(e)),b(h(e),"url",c,h(e)),b(h(e),"type",f,h(e)),b(h(e),"resource",s,h(e)),b(h(e),"project",p,h(e)),e}return r}(t.default),u=w(a.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=w(a.prototype,"url",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=w(a.prototype,"type",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=w(a.prototype,"resource",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=w(a.prototype,"project",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=_})),define("web-shell/models/page",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w
-function _(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function O(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function j(e,t){return(j=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function z(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=R(e)
-if(t){var o=R(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return P(this,r)}}function P(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?S(e):t}function S(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function R(e){return(R=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function E(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var x=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=(0,t.attr)("number"),f=(0,t.attr)("string"),s=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&j(e,t)})(r,e)
-var t=z(r)
-function r(){var e
-O(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return _(S(e=t.call.apply(t,[this].concat(o))),"client-id",p,S(e)),_(S(e),"clientName",b,S(e)),_(S(e),"version",y,S(e)),_(S(e),"name",d,S(e)),_(S(e),"route",m,S(e)),_(S(e),"uri",v,S(e)),_(S(e),"cat",h,S(e)),_(S(e),"level",g,S(e)),_(S(e),"engine",w,S(e)),e}return r}(t.default),p=E(s.prototype,"client-id",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=E(s.prototype,"clientName",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=E(s.prototype,"version",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=E(s.prototype,"name",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=E(s.prototype,"route",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=E(s.prototype,"uri",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=E(s.prototype,"cat",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=E(s.prototype,"level",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=E(s.prototype,"engine",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s)
-e.default=x}))
-function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}define("web-shell/models/participant",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m
-function v(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function h(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function g(e,t){return(g=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function w(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=j(e)
-if(t){var o=j(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return _(this,r)}}function _(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function j(e){return(j=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function z(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var P=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("number"),l=(0,t.belongsTo)("image"),a=(0,t.belongsTo)("event"),u=(0,t.belongsTo)("zone"),c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&g(e,t)})(r,e)
-var t=w(r)
-function r(){var e
-h(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return v(O(e=t.call.apply(t,[this].concat(o))),"name",f,O(e)),v(O(e),"title",s,O(e)),v(O(e),"occupation",p,O(e)),v(O(e),"language",b,O(e)),v(O(e),"avatar",y,O(e)),v(O(e),"event",d,O(e)),v(O(e),"zone",m,O(e)),e}return r}(t.default),f=z(c.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=z(c.prototype,"title",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=z(c.prototype,"occupation",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=z(c.prototype,"language",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=z(c.prototype,"avatar",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=z(c.prototype,"event",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=z(c.prototype,"zone",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c)
-e.default=P})),define("web-shell/models/partition",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b
-function y(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function d(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function m(e,t){return(m=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function v(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=w(e)
-if(t){var o=w(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return h(this,r)}}function h(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?g(e):t}function g(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function w(e){return(w=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function _(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var O=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("number"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&m(e,t)})(r,e)
-var t=v(r)
-function r(){var e
-d(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return y(g(e=t.call.apply(t,[this].concat(o))),"smID",u,g(e)),y(g(e),"source",c,g(e)),y(g(e),"schema",f,g(e)),y(g(e),"date",s,g(e)),y(g(e),"partitions",p,g(e)),y(g(e),"attribute",b,g(e)),e}return r}(t.default),u=_(a.prototype,"smID",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=_(a.prototype,"source",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=_(a.prototype,"schema",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=_(a.prototype,"date",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=_(a.prototype,"partitions",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=_(a.prototype,"attribute",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=O})),define("web-shell/models/partner",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w
-function _(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function O(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function j(e,t){return(j=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function z(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=R(e)
-if(t){var o=R(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return P(this,r)}}function P(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?S(e):t}function S(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function R(e){return(R=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function E(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var x=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.hasMany)("template"),u=(0,t.attr)("date"),c=(0,t.attr)("date"),f=(0,t.hasMany)("account"),s=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&j(e,t)})(r,e)
-var t=z(r)
-function r(){var e
-O(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return _(S(e=t.call.apply(t,[this].concat(o))),"name",p,S(e)),_(S(e),"address",b,S(e)),_(S(e),"phoneNumber",y,S(e)),_(S(e),"web",d,S(e)),_(S(e),"pid",m,S(e)),_(S(e),"templates",v,S(e)),_(S(e),"created",h,S(e)),_(S(e),"modified",g,S(e)),_(S(e),"employees",w,S(e)),e}return r}(t.default),p=E(s.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=E(s.prototype,"address",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=E(s.prototype,"phoneNumber",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=E(s.prototype,"web",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=E(s.prototype,"pid",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=E(s.prototype,"templates",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=E(s.prototype,"created",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=E(s.prototype,"modified",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=E(s.prototype,"employees",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s)
-e.default=x})),define("web-shell/models/project-file",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m
-function v(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function h(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function g(e,t){return(g=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function w(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=j(e)
-if(t){var o=j(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return _(this,r)}}function _(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function j(e){return(j=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function z(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var P=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("number"),l=(0,t.attr)("number"),a=(0,t.attr)("string"),u=(0,t.attr)("string"),c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&g(e,t)})(r,e)
-var t=w(r)
-function r(){var e
-h(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return v(O(e=t.call.apply(t,[this].concat(o))),"smID",f,O(e)),v(O(e),"name",s,O(e)),v(O(e),"status",p,O(e)),v(O(e),"date",b,O(e)),v(O(e),"size",y,O(e)),v(O(e),"category",d,O(e)),v(O(e),"property",m,O(e)),e}return r}(t.default),f=z(c.prototype,"smID",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=z(c.prototype,"name",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=z(c.prototype,"status",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=z(c.prototype,"date",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=z(c.prototype,"size",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=z(c.prototype,"category",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=z(c.prototype,"property",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c)
-e.default=P})),define("web-shell/models/project",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w,_,O,j,z,P,S,R,E,x,T
-function k(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function A(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function M(e,t){return(M=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function C(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=D(e)
-if(t){var o=D(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return B(this,r)}}function B(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?I(e):t}function I(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function D(e){return(D=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function N(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var L=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("date"),a=(0,t.hasMany)("model"),u=(0,t.hasMany)("script"),c=(0,t.hasMany)("dataset"),f=(0,t.belongsTo)("flow"),s=(0,t.belongsTo)("analysis"),p=(0,t.hasMany)("notebook"),b=(0,t.hasMany)("dash-board"),y=(0,t.hasMany)("wiki"),d=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&M(e,t)})(r,e)
-var t=C(r)
-function r(){var e
-A(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return k(I(e=t.call.apply(t,[this].concat(o))),"name",m,I(e)),k(I(e),"provider",v,I(e)),k(I(e),"owner",h,I(e)),k(I(e),"type",g,I(e)),k(I(e),"created",w,I(e)),k(I(e),"models",_,I(e)),k(I(e),"scripts",O,I(e)),k(I(e),"datasets",j,I(e)),k(I(e),"flow",z,I(e)),k(I(e),"analysis",P,I(e)),k(I(e),"notebooks",S,I(e)),k(I(e),"dashBoards",R,I(e)),k(I(e),"wikis",E,I(e)),k(I(e),"tasks",x,I(e)),k(I(e),"actions",T,I(e)),e}return r}(t.default),m=N(d.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=N(d.prototype,"provider",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=N(d.prototype,"owner",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=N(d.prototype,"type",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=N(d.prototype,"created",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),_=N(d.prototype,"models",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O=N(d.prototype,"scripts",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),j=N(d.prototype,"datasets",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),z=N(d.prototype,"flow",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),P=N(d.prototype,"analysis",[s],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),S=N(d.prototype,"notebooks",[p],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),R=N(d.prototype,"dashBoards",[b],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),E=N(d.prototype,"wikis",[y],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),x=N(d.prototype,"tasks",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),T=N(d.prototype,"actions",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d)
-e.default=L})),define("web-shell/models/report",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h,g,w
-function _(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function O(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function j(e,t){return(j=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function z(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=R(e)
-if(t){var o=R(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return P(this,r)}}function P(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?S(e):t}function S(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function R(e){return(R=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function E(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var x=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("date"),l=(0,t.attr)("date"),a=(0,t.attr)("number"),u=(0,t.belongsTo)("image"),c=(0,t.belongsTo)("activity"),f=(0,t.hasMany)("participant"),s=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&j(e,t)})(r,e)
-var t=z(r)
-function r(){var e
-O(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return _(S(e=t.call.apply(t,[this].concat(o))),"title",p,S(e)),_(S(e),"subTitle",b,S(e)),_(S(e),"description",y,S(e)),_(S(e),"startDate",d,S(e)),_(S(e),"date",m,S(e)),_(S(e),"language",v,S(e)),_(S(e),"cover",h,S(e)),_(S(e),"actAttachments",g,S(e)),_(S(e),"writers",w,S(e)),e}return r}(t.default),p=E(s.prototype,"title",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=E(s.prototype,"subTitle",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=E(s.prototype,"description",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=E(s.prototype,"startDate",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=E(s.prototype,"date",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=E(s.prototype,"language",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=E(s.prototype,"cover",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),g=E(s.prototype,"actAttachments",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),w=E(s.prototype,"writers",[f],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s)
-e.default=x})),define("web-shell/models/resource",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b
-function y(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function d(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function m(e,t){return(m=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function v(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=w(e)
-if(t){var o=w(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return h(this,r)}}function h(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?g(e):t}function g(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function w(e){return(w=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function _(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var O=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("date"),i=(0,t.attr)("string"),l=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&m(e,t)})(r,e)
-var t=v(r)
-function r(){var e
-d(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return y(g(e=t.call.apply(t,[this].concat(o))),"name",a,g(e)),y(g(e),"resourceType",u,g(e)),y(g(e),"created",c,g(e)),y(g(e),"tenant",f,g(e)),y(g(e),"accounts",s,g(e)),y(g(e),"concrets",p,g(e)),y(g(e),"includes",b,g(e)),e}return r}(t.default),a=_(l.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=_(l.prototype,"resourceType",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=_(l.prototype,"created",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=_(l.prototype,"tenant",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=_(l.prototype,"accounts",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=_(l.prototype,"concrets",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=_(l.prototype,"includes",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l)
-e.default=O})),define("web-shell/models/script",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h
-function g(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function w(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _(e,t){return(_=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function O(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=P(e)
-if(t){var o=P(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return j(this,r)}}function j(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?z(e):t}function z(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function P(e){return(P=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function S(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var R=(r=(0,t.belongsTo)("project"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.hasMany)("dataset",{inverse:"scriptInput"}),u=(0,t.hasMany)("dataset",{inverse:"scriptOutput"}),c=(0,t.belongsTo)("stateDisplay"),f=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&_(e,t)})(r,e)
-var t=O(r)
-function r(){var e
-w(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return g(z(e=t.call.apply(t,[this].concat(o))),"project",s,z(e)),g(z(e),"type",p,z(e)),g(z(e),"name",b,z(e)),g(z(e),"args",y,z(e)),g(z(e),"reverse",d,z(e)),g(z(e),"inputDfs",m,z(e)),g(z(e),"outputDfs",v,z(e)),g(z(e),"stateDisplay",h,z(e)),e}return r}(t.default),s=S(f.prototype,"project",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=S(f.prototype,"type",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=S(f.prototype,"name",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=S(f.prototype,"args",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=S(f.prototype,"reverse",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=S(f.prototype,"inputDfs",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=S(f.prototype,"outputDfs",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=S(f.prototype,"stateDisplay",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f)
-e.default=R})),define("web-shell/models/slide",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l
-function a(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function u(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function c(e,t){return(c=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function f(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=b(e)
-if(t){var o=b(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return s(this,r)}}function s(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?p(e):t}function p(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function b(e){return(b=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function y(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var d=(r=(0,t.belongsTo)("dash-board"),n=(0,t.hasMany)("chat"),o=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&c(e,t)})(r,e)
-var t=f(r)
-function r(){var e
-u(this,r)
-for(var n=arguments.length,o=new Array(n),c=0;c<n;c++)o[c]=arguments[c]
-return a(p(e=t.call.apply(t,[this].concat(o))),"dashBoard",i,p(e)),a(p(e),"chats",l,p(e)),e}return r}(t.default),i=y(o.prototype,"dashBoard",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l=y(o.prototype,"chats",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),o)
-e.default=d})),define("web-shell/models/state-display",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f
-function s(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function p(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function b(e,t){return(b=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function y(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=v(e)
-if(t){var o=v(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return d(this,r)}}function d(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?m(e):t}function m(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function v(e){return(v=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function h(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var g=(r=(0,t.belongsTo)("stateMachine"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.hasMany)("script"),l=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&b(e,t)})(r,e)
-var t=y(r)
-function r(){var e
-p(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return s(m(e=t.call.apply(t,[this].concat(o))),"stateMachine",a,m(e)),s(m(e),"name",u,m(e)),s(m(e),"definition",c,m(e)),s(m(e),"startScripts",f,m(e)),e}return r}(t.default),a=h(l.prototype,"stateMachine",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=h(l.prototype,"name",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=h(l.prototype,"definition",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=h(l.prototype,"startScripts",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),l)
-e.default=g})),define("web-shell/models/state-machine",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y
-function d(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function m(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function v(e,t){return(v=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function h(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=_(e)
-if(t){var o=_(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return g(this,r)}}function g(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?w(e):t}function w(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function _(e){return(_=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function O(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var j=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.belongsTo)("flow"),l=(0,t.attr)("string"),a=(0,t.belongsTo)("stateDisplay"),u=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&v(e,t)})(r,e)
-var t=h(r)
-function r(){var e
-m(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return d(w(e=t.call.apply(t,[this].concat(o))),"name",c,w(e)),d(w(e),"project",f,w(e)),d(w(e),"type",s,w(e)),d(w(e),"flow",p,w(e)),d(w(e),"displayName",b,w(e)),d(w(e),"display",y,w(e)),e}return r}(t.default),c=O(u.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=O(u.prototype,"project",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=O(u.prototype,"type",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=O(u.prototype,"flow",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=O(u.prototype,"displayName",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=O(u.prototype,"display",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u)
-e.default=j})),define("web-shell/models/step",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h
-function g(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function w(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _(e,t){return(_=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function O(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=P(e)
-if(t){var o=P(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return j(this,r)}}function j(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?z(e):t}function z(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function P(e){return(P=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function S(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var R=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.attr)("string"),a=(0,t.attr)("string"),u=(0,t.attr)("number"),c=(0,t.attr)("endTime"),f=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&_(e,t)})(r,e)
-var t=O(r)
-function r(){var e
-w(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return g(z(e=t.call.apply(t,[this].concat(o))),"stId",s,z(e)),g(z(e),"input",p,z(e)),g(z(e),"logLocation",b,z(e)),g(z(e),"output",y,z(e)),g(z(e),"state",d,z(e)),g(z(e),"stepLog",m,z(e)),g(z(e),"startTime",v,z(e)),g(z(e),"startTime",h,z(e)),e}return r}(t.default),s=S(f.prototype,"stId",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=S(f.prototype,"input",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=S(f.prototype,"logLocation",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=S(f.prototype,"output",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=S(f.prototype,"state",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=S(f.prototype,"stepLog",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=S(f.prototype,"startTime",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=S(f.prototype,"startTime",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f)
-e.default=R})),define("web-shell/models/table",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b
-function y(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function d(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function m(e,t){return(m=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function v(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=w(e)
-if(t){var o=w(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return h(this,r)}}function h(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?g(e):t}function g(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function w(e){return(w=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function _(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var O=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("string"),l=(0,t.belongsTo)("db"),a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&m(e,t)})(r,e)
-var t=v(r)
-function r(){var e
-d(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return y(g(e=t.call.apply(t,[this].concat(o))),"name",u,g(e)),y(g(e),"database",c,g(e)),y(g(e),"provider",f,g(e)),y(g(e),"version",s,g(e)),y(g(e),"db",p,g(e)),y(g(e),"meta",b,g(e)),e}return r}(t.default),u=_(a.prototype,"name",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=_(a.prototype,"database",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=_(a.prototype,"provider",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=_(a.prototype,"version",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=_(a.prototype,"db",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=_(a.prototype,"meta",[t.attr],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=O})),define("web-shell/models/wiki",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u
-function c(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function f(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function s(e,t){return(s=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function p(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=d(e)
-if(t){var o=d(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return b(this,r)}}function b(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?y(e):t}function y(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function d(e){return(d=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function m(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var v=(r=(0,t.belongsTo)("project"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&s(e,t)})(r,e)
-var t=p(r)
-function r(){var e
-f(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return c(y(e=t.call.apply(t,[this].concat(o))),"project",l,y(e)),c(y(e),"type",a,y(e)),c(y(e),"location",u,y(e)),e}return r}(t.default),l=m(i.prototype,"project",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a=m(i.prototype,"type",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=m(i.prototype,"location",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),i)
-e.default=v})),define("web-shell/models/zone",["exports","@ember-data/model"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p,b,y,d,m,v,h
-function g(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function w(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _(e,t){return(_=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function O(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=P(e)
-if(t){var o=P(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return j(this,r)}}function j(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?z(e):t}function z(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function P(e){return(P=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function S(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var R=(r=(0,t.attr)("string"),n=(0,t.attr)("string"),o=(0,t.attr)("string"),i=(0,t.attr)("date"),l=(0,t.attr)("date"),a=(0,t.attr)("number"),u=(0,t.hasMany)("participant"),c=(0,t.hasMany)("event"),f=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&_(e,t)})(r,e)
-var t=O(r)
-function r(){var e
-w(this,r)
-for(var n=arguments.length,o=new Array(n),i=0;i<n;i++)o[i]=arguments[i]
-return g(z(e=t.call.apply(t,[this].concat(o))),"title",s,z(e)),g(z(e),"subTitle",p,z(e)),g(z(e),"description",b,z(e)),g(z(e),"startDate",y,z(e)),g(z(e),"endDate",d,z(e)),g(z(e),"language",m,z(e)),g(z(e),"hosts",v,z(e)),g(z(e),"agendas",h,z(e)),e}return r}(t.default),s=S(f.prototype,"title",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=S(f.prototype,"subTitle",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),b=S(f.prototype,"description",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),y=S(f.prototype,"startDate",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),d=S(f.prototype,"endDate",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),m=S(f.prototype,"language",[a],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v=S(f.prototype,"hosts",[u],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),h=S(f.prototype,"agendas",[c],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f)
-e.default=R})),define("web-shell/modifiers/did-insert",["exports","@ember/render-modifiers/modifiers/did-insert"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/modifiers/did-update",["exports","@ember/render-modifiers/modifiers/did-update"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/modifiers/will-destroy",["exports","@ember/render-modifiers/modifiers/will-destroy"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/router",["exports","web-shell/config/environment"],(function(e,t){function r(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function n(e){return function(){var t=this,n=arguments
-return new Promise((function(o,i){var l=e.apply(t,n)
-function a(e){r(l,o,i,a,u,"next",e)}function u(e){r(l,o,i,a,u,"throw",e)}a(void 0)}))}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){return(i=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function l(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=c(e)
-if(t){var o=c(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return a(this,r)}}function a(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?u(e):t}function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function c(e){return(c=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function f(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var s=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&i(e,t)})(n,Ember.Router)
-var r=l(n)
-function n(){var e
-o(this,n)
-for(var i=arguments.length,l=new Array(i),a=0;a<i;a++)l[a]=arguments[a]
-return f(u(e=r.call.apply(r,[this].concat(l))),"location",t.default.locationType),f(u(e),"rootURL",t.default.rootURL),e}return n}()
-e.default=s,s.map(n(regeneratorRuntime.mark((function e(){return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:this.route("shell",{path:"/"}),this.route("shell",{path:"/*path"})
-case 2:case"end":return e.stop()}}),e,this)}))))})),define("web-shell/routes/application",["exports","web-shell/config/environment"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p
-function b(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function y(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function d(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function m(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function v(e,t){return(v=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function h(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=_(e)
-if(t){var o=_(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return g(this,r)}}function g(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?w(e):t}function w(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function _(e){return(_=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function O(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var j=(r=Ember.inject.service,n=Ember.inject.service("loading"),o=Ember.inject.service("ph-menu"),i=Ember.inject.service("remote-loading"),l=Ember._action,a=Ember._action,c=O((u=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&v(e,t)})(u,Ember.Route)
-var r,n,o,i,l,a=h(u)
-function u(){var e
-d(this,u)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return y(w(e=a.call.apply(a,[this].concat(r))),"intl",c,w(e)),y(w(e),"loadingService",f,w(e)),y(w(e),"menuService",s,w(e)),y(w(e),"jsl",p,w(e)),e}return r=u,(n=[{key:"clientName",get:function(){return t.default.APP.clientName}},{key:"beforeModel",value:function(e){this.loadingService.beforeLoading()
-var t=window.localStorage.getItem("lang")
-t?"中文"===t?this.intl.setLocale(["zh-cn"]):this.intl.setLocale(["en-us"]):(this.intl.setLocale(["zh-cn"]),window.localStorage.setItem("lang","中文"))}},{key:"willTransition",value:function(e){this.loadingService.beforeLoading()}},{key:"didTransition",value:function(){document.documentElement.scrollTop=0,document.body.scrollTop=0,this.loadingService.afterLoading()}},{key:"model",value:(i=regeneratorRuntime.mark((function e(){var t
-return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return this.afterModel=function(){this.loadingService.afterLoading()},e.next=3,this.menuService.queryLayoutByClient()
-case 3:return null!==(t=e.sent).script&&this.jsl.loadRemoteJs(t.script),t.css,e.abrupt("return",t)
-case 7:case"end":return e.stop()}}),e,this)})),l=function(){var e=this,t=arguments
-return new Promise((function(r,n){var o=i.apply(e,t)
-function l(e){b(o,r,n,l,a,"next",e)}function a(e){b(o,r,n,l,a,"throw",e)}l(void 0)}))},function(){return l.apply(this,arguments)})}])&&m(r.prototype,n),o&&m(r,o),u}()).prototype,"intl",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=O(u.prototype,"loadingService",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=O(u.prototype,"menuService",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=O(u.prototype,"jsl",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),O(u.prototype,"willTransition",[l],Object.getOwnPropertyDescriptor(u.prototype,"willTransition"),u.prototype),O(u.prototype,"didTransition",[a],Object.getOwnPropertyDescriptor(u.prototype,"didTransition"),u.prototype),u)
-e.default=j})),define("web-shell/routes/shell",["exports","web-shell/config/environment"],(function(e,t){var r,n,o,i,l,a,u,c,f,s,p
-function b(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var r=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"])
-if(null==r)return
-var n,o,i=[],l=!0,a=!1
-try{for(r=r.call(e);!(l=(n=r.next()).done)&&(i.push(n.value),!t||i.length!==t);l=!0);}catch(u){a=!0,o=u}finally{try{l||null==r.return||r.return()}finally{if(a)throw o}}return i}(e,t)||function(e,t){if(!e)return
-if("string"==typeof e)return y(e,t)
-var r=Object.prototype.toString.call(e).slice(8,-1)
-"Object"===r&&e.constructor&&(r=e.constructor.name)
-if("Map"===r||"Set"===r)return Array.from(e)
-if("Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))return y(e,t)}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function y(e,t){(null==t||t>e.length)&&(t=e.length)
-for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r]
-return n}function d(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function m(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function v(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function h(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function g(e,t){return(g=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function w(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=j(e)
-if(t){var o=j(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return _(this,r)}}function _(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function j(e){return(j=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function z(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var P=(r=Ember.inject.service,n=Ember.inject.service,o=Ember.inject.service("remote-loading"),i=Ember.inject.service("route-parse"),l=Ember.inject.service("ph-menu"),u=z((a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&g(e,t)})(a,Ember.Route)
-var t,r,n,o,i,l=w(a)
-function a(){var e
-v(this,a)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return m(O(e=l.call.apply(l,[this].concat(r))),"cookies",u,O(e)),m(O(e),"store",c,O(e)),m(O(e),"jsl",f,O(e)),m(O(e),"rps",s,O(e)),m(O(e),"ms",p,O(e)),e}return t=a,(r=[{key:"model",value:(o=regeneratorRuntime.mark((function e(t){var r,n,o,i,l,a,u,c,f,s,p,y,d
-return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return console.log(t),0===Object.keys(t).length&&(t.path="home"),e.next=4,this.ms.queryClientPages()
-case 4:r=e.sent,n=r.length,o="",l=0
-case 8:if(!(l<n)){e.next=18
-break}if(a=r[l],u=this.rps.parse("/"+t.path,a.route),c=b(u,2),f=c[0],s=c[1],!f){e.next=15
-break}return o=a,i=s,e.abrupt("break",18)
-case 15:++l,e.next=8
-break
-case 18:return e.next=20,this.jsl.loadRemoteJs(o.uri)
-case 20:return e.next=22,this.jsl.loadRemoteJsSync(o.cat)
-case 22:return p=o.clientName,y=Ember.String.camelize(o.name)+"RouteModel",e.next=26,window[p][y](this,i)
-case 26:return d=e.sent,e.abrupt("return",Ember.RSVP.hash({page:o,data:d||{},_isVue:!0}))
-case 28:case"end":return e.stop()}}),e,this)})),i=function(){var e=this,t=arguments
-return new Promise((function(r,n){var i=o.apply(e,t)
-function l(e){d(i,r,n,l,a,"next",e)}function a(e){d(i,r,n,l,a,"throw",e)}l(void 0)}))},function(e){return i.apply(this,arguments)})}])&&h(t.prototype,r),n&&h(t,n),a}()).prototype,"cookies",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=z(a.prototype,"store",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=z(a.prototype,"jsl",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=z(a.prototype,"rps",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),p=z(a.prototype,"ms",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=P})),define("web-shell/serializers/-default",["exports","@ember-data/serializer/json"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/serializers/-json-api",["exports","@ember-data/serializer/json-api"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/serializers/-rest",["exports","@ember-data/serializer/rest"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/serializers/application",["exports","ember-inflector","@ember-data/serializer/json-api"],(function(e,t,r){function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function i(e,t){return(i=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function l(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=u(e)
-if(t){var o=u(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return a(this,r)}}function a(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}(e):t}function u(e){return(u=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&i(e,t)})(f,e)
-var r,a,u,c=l(f)
-function f(){return n(this,f),c.apply(this,arguments)}return r=f,(a=[{key:"modelNameFromPayloadKey",value:function(e){return(0,t.singularize)(Ember.String.dasherize(e))}},{key:"payloadKeyFromModelName",value:function(e){return(0,t.pluralize)(Ember.String.camelize(e))}},{key:"keyForAttribute",value:function(e){return Ember.String.dasherize(e).toLowerCase()}},{key:"keyForRelationship",value:function(e){return e}}])&&o(r.prototype,a),u&&o(r,u),f}(r.default)
-e.default=c})),define("web-shell/services/-ensure-registered",["exports","@embroider/util/services/ensure-registered"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/services/aws-service",["exports"],(function(e){function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function n(e,t){return(n=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function o(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=l(e)
-if(t){var o=l(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return i(this,r)}}function i(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}(e):t}function l(e){return(l=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var a={accessKeyId:"AKIAWPBDTVEAPOX3QT6U",secretAccessKey:"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"},u=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&n(e,t)})(f,Ember.Service)
-var i,l,u,c=o(f)
-function f(){return t(this,f),c.apply(this,arguments)}return i=f,(l=[{key:"s3Client",get:function(){return AWS.config.update(a),AWS.config.update({region:"cn-northwest-1"}),new AWS.S3({apiVersion:"2006-03-01"})}},{key:"s3Avatar",get:function(){return AWS.config.update(a),AWS.config.update({region:"cn-northwest-1"}),new AWS.S3({apiVersion:"2006-03-01",params:{Bucket:"general.pharbers.com"}})}}])&&r(i.prototype,l),u&&r(i,u),f}()
-e.default=u})),define("web-shell/services/browser-events-service",["exports"],(function(e){var t,r,n,o,i,l,a,u
-function c(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function f(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function s(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function p(e,t){return(p=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function b(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=m(e)
-if(t){var o=m(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return y(this,r)}}function y(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?d(e):t}function d(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function m(e){return(m=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function v(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var h=(t=Ember._tracked,r=Ember._tracked,n=Ember.inject.service,o=Ember._action,l=v((i=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&p(e,t)})(i,Ember.Service)
-var t,r,n,o=b(i)
-function i(){var e
-f(this,i)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return c(d(e=o.call.apply(o,[this].concat(r))),"param",l,d(e)),c(d(e),"routeName",a,d(e)),c(d(e),"router",u,d(e)),e}return t=i,(r=[{key:"registerListener",value:function(e){var t=this
-$((function(){t.param=this.location.href.split("?")[1],t.routeName="/".concat(e,"?"),window.history&&window.history.pushState&&(history.pushState(null,null,document.URL),window.addEventListener("popstate",t.popstateFun,!1)),window.onbeforeunload=function(e){return!1},window.onload=function(){t.router.transitionTo("".concat(t.routeName).concat(t.param))}}))}},{key:"popstateFun",value:function(){var e=this
-confirm("您还没有保存更改，确认返回吗?")?(window.removeEventListener("popstate",e.popstateFun),e.router.transitionTo("".concat(e.routeName).concat(e.param))):history.pushState(null,null,document.URL)}},{key:"clearListener",value:function(){window.onbeforeunload=void 0,window.removeEventListener("popstate",this.popstateFun)}}])&&s(t.prototype,r),n&&s(t,n),i}()).prototype,"param",[t],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a=v(i.prototype,"routeName",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=v(i.prototype,"router",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),v(i.prototype,"popstateFun",[o],Object.getOwnPropertyDescriptor(i.prototype,"popstateFun"),i.prototype),i)
-e.default=h})),define("web-shell/services/cookies",["exports","ember-cookies/services/cookies"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var r=t.default
-e.default=r})),define("web-shell/services/download-file",["exports","fetch"],(function(e,t){var r,n,o
-function i(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function l(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function u(e,t){return(u=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function c(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=p(e)
-if(t){var o=p(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return f(this,r)}}function f(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?s(e):t}function s(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function p(e){return(p=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var b,y,d,m,v,h,g=(r=Ember.inject.service,b=(n=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&u(e,t)})(b,Ember.Service)
-var r,n,f,p=c(b)
-function b(){var e
-l(this,b)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return i(s(e=p.call.apply(p,[this].concat(r))),"cookies",o,s(e)),e}return r=b,(n=[{key:"downloadFile",value:function(e){var r=e,n="",o=""
-if(-1!=r.indexOf("s3a://")){var i=r.slice(6,r.length),l=i.indexOf("/")
-n=i.substring(0,l),o=i.substring(l+1,i.length)}else n="ph-origin-files",o=r
-var a={bucket:n,key:o},u={method:"POST",headers:{authorization:this.cookies.read("access_token"),"Content-Type":"application/json",accept:"application/json"},body:JSON.stringify(a)};(0,t.default)("https://api.pharbers.com/entry/download",u).then((function(e){return e.json()})).then((function(e){var t=e.url
-window.open(t)}))}}])&&a(r.prototype,n),f&&a(r,f),b}()).prototype,y="cookies",d=[r],m={configurable:!0,enumerable:!0,writable:!0,initializer:null},h={},Object.keys(m).forEach((function(e){h[e]=m[e]})),h.enumerable=!!h.enumerable,h.configurable=!!h.configurable,("value"in h||h.initializer)&&(h.writable=!0),h=d.slice().reverse().reduce((function(e,t){return t(b,y,e)||e}),h),v&&void 0!==h.initializer&&(h.value=h.initializer?h.initializer.call(v):void 0,h.initializer=void 0),void 0===h.initializer&&(Object.defineProperty(b,y,h),h=null),o=h,n)
-e.default=g}))
-define("web-shell/services/intl",["exports","ember-intl/services/intl"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/services/iot-service",["exports","aws-crt","web-shell/config/environment"],(function(e,t,r){function n(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function l(e,t){return(l=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function a(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=f(e)
-if(t){var o=f(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return u(this,r)}}function u(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?c(e):t}function c(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function f(e){return(f=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function s(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var p=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&l(e,t)})(m,Ember.Service)
-var u,f,p,b,y,d=a(m)
-function m(){var e
-o(this,m)
-for(var n=arguments.length,i=new Array(n),l=0;l<n;l++)i[l]=arguments[l]
-return s(c(e=d.call.apply(d,[this].concat(i))),"client",null),s(c(e),"connection",null),s(c(e),"config",null),s(c(e),"client_id",r.default.APP.AWS_IOT_DEFAULT_CLIENT_ID),s(c(e),"endpoint",r.default.APP.AWS_IOT_ENDPOINT),s(c(e),"aws_region",r.default.APP.AWS_REGION),s(c(e),"aws_access_id",r.default.APP.AWS_ACCESS_KEY),s(c(e),"aws_secret_key",r.default.APP.AWS_SECRET_KEY),s(c(e),"client_bootstrap",new t.io.ClientBootstrap),s(c(e),"qos",t.mqtt.QoS.AtLeastOnce),e}return u=m,(f=[{key:"setClientId",value:function(e){return this.client_id=e,this}},{key:"build",value:function(){var e=t.iot.AwsIotMqttConnectionConfigBuilder.new_mtls_builder()
-return e.with_credentials(this.aws_region,this.aws_access_id,this.aws_secret_key),e.with_clean_session(!1),e.with_client_id(this.client_id),e.with_endpoint(this.endpoint),e.with_ping_timeout_ms(5e3),e.with_keep_alive_seconds(5e3),this.config=e.build(),this.client=new t.mqtt.MqttClient(this.client_bootstrap),this}},{key:"__byteToString",value:function(e){return(new TextDecoder).decode(e)}},{key:"__heartbeat",value:function(){var e=this
-if(this.connection){var r=0
-setInterval((function(){r+=1,e.connection.publish("pharbers/heartbeat",JSON.stringify({message:"client_id => ".concat(e.client_id),sequence:r}),t.mqtt.QoS.AtMostOnce,!1).catch((function(e){return console.log("heartbeat")}))}),3e4)}}},{key:"connect",value:(b=regeneratorRuntime.mark((function e(){return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:if(!this.client){e.next=6
-break}return this.connection=this.client.new_connection(this.config),e.next=4,this.connection.connect()
-case 4:this.__heartbeat(),console.log("connect")
-case 6:case"end":return e.stop()}}),e,this)})),y=function(){var e=this,t=arguments
-return new Promise((function(r,o){var i=b.apply(e,t)
-function l(e){n(i,r,o,l,a,"next",e)}function a(e){n(i,r,o,l,a,"throw",e)}l(void 0)}))},function(){return y.apply(this,arguments)})},{key:"disconnect",value:function(){this.connection&&(this.connection.disconnect(),this.connection=null,console.log("disconnect"))}},{key:"setSub",value:function(){var e=this,t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"pharbers",r=arguments.length>1?arguments[1]:void 0
-if(this.connection){if(!r)throw Error("CallBack Is Undefined")
-this.connection.subscribe(t,this.qos,(function(t,n){r(e.__byteToString(n))}))}}}])&&i(u.prototype,f),p&&i(u,p),m}()
-e.default=p})),define("web-shell/services/loading",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.Service.extend({loading:document.getElementById("loadingio-spinner-double-ring-ho1zizxmctu"),body:document.getElementsByTagName("body"),beforeLoading:function(){this.loading.style.display="flex",this.loading.style["z-index"]=2,this.body[0].style.overflow="hidden"},afterLoading:function(){var e=this,t=setTimeout((function(){"complete"!==document.readyState&&"interactive"!==document.readyState||(e.loading.style.display="none",e.loading.style["z-index"]=2,e.body[0].style.overflow="auto",clearInterval(t))}),100)}})
-e.default=t})),define("web-shell/services/notice-service",["exports","fetch"],(function(e,t){var r,n,o,i,l,a,u,c,f
-function s(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function p(e){return function(){var t=this,r=arguments
-return new Promise((function(n,o){var i=e.apply(t,r)
-function l(e){s(i,n,o,l,a,"next",e)}function a(e){s(i,n,o,l,a,"throw",e)}l(void 0)}))}}function b(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function y(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function d(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function m(e,t){return(m=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function v(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=w(e)
-if(t){var o=w(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return h(this,r)}}function h(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?g(e):t}function g(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function w(e){return(w=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function _(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var O=(r=Ember.inject.service,n=Ember._tracked,o=Ember._tracked,i=Ember._tracked,a=_((l=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&m(e,t)})(l,Ember.Service)
-var r,n,o,i=v(l)
-function l(){var e
-y(this,l)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return b(g(e=i.call.apply(i,[this].concat(r))),"cookies",a,g(e)),b(g(e),"subjectID",u,g(e)),b(g(e),"subjectCallback",c,g(e)),b(g(e),"uploadStatus",f,g(e)),e}return r=l,(n=[{key:"register",value:function(e,t,r,n,o){-1==this.subjectID.indexOf(t)&&(this.subjectID.push(t),this.subjectCallback.push({ele:n,callback:r,tableName:e,date:(new Date).getTime(),projectId:o}))}},{key:"unregister",value:function(e){var t=this.subjectID.indexOf(e)
-this.subjectID.splice(t,1),this.subjectCallback.splice(t,1)}},{key:"observer",value:function(){var e=this
-setInterval(p(regeneratorRuntime.mark((function r(){var n,o,i,l,a
-return regeneratorRuntime.wrap((function(r){for(;;)switch(r.prev=r.next){case 0:n=(new Date).getTime(),e.subjectCallback.forEach((function(t,r){n-t.date>12e4&&e.unregister(e.subjectID[r])})),e.subjectID.length>0?(o=[],e.subjectID.forEach((function(t,r){o.push({id:t,projectId:e.subjectCallback[r].projectId})})),i={Authorization:e.cookies.read("access_token"),"Content-Type":"application/vnd.api+json",Accept:"application/vnd.api+json"},l={table:"notification",conditions:o},a={method:"POST",headers:i,body:JSON.stringify(l)},(0,t.default)("https://apiv2.pharbers.com/phdydatasource/batch_get_item",a).then((function(e){return e.json()})).then((function(t){if(t.data&&t.data.length>0){var r=JSON.parse(t.data[0].attributes.message).cnotification.status
-if(console.log(r),"project_file_to_DS_running"!=r&&"dag_conf insert success"!=r){var n=e.subjectID.indexOf(t.data[0].id),o=e.subjectCallback[n]
-o.callback(t,o.ele),e.unregister(t.data[0].id)}}}))):console.log("notice observer")
-case 3:case"end":return r.stop()}}),r)}))),5e3)}}])&&d(r.prototype,n),o&&d(r,o),l}()).prototype,"cookies",[r],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),u=_(l.prototype,"subjectID",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return[]}}),c=_(l.prototype,"subjectCallback",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return[]}}),f=_(l.prototype,"uploadStatus",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return!1}}),l)
-e.default=O})),define("web-shell/services/oauth-service",["exports","web-shell/config/environment","fetch"],(function(e,t,r){var n,o,i,l,a,u,c,f,s
-function p(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function b(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function y(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function d(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function m(e,t){return(m=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function v(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=w(e)
-if(t){var o=w(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return h(this,r)}}function h(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?g(e):t}function g(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function w(e){return(w=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function _(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function O(e,t,r,n,o){var i={}
-return Object.keys(n).forEach((function(e){i[e]=n[e]})),i.enumerable=!!i.enumerable,i.configurable=!!i.configurable,("value"in i||i.initializer)&&(i.writable=!0),i=r.slice().reverse().reduce((function(r,n){return n(e,t,r)||r}),i),o&&void 0!==i.initializer&&(i.value=i.initializer?i.initializer.call(o):void 0,i.initializer=void 0),void 0===i.initializer&&(Object.defineProperty(e,t,i),i=null),i}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var j=(n=Ember.inject.service,o=Ember.inject.service,i=Ember.inject.service,l=Ember.inject.service,u=O((a=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&m(e,t)})(a,Ember.Service)
-var n,o,i,l=v(a)
-function a(){var e
-y(this,a)
-for(var r=arguments.length,n=new Array(r),o=0;o<r;o++)n[o]=arguments[o]
-return b(g(e=l.call.apply(l,[this].concat(n))),"cookies",u,g(e)),b(g(e),"ajax",c,g(e)),b(g(e),"router",f,g(e)),b(g(e),"store",s,g(e)),_(g(e),"clientId",t.default.APP.clientId),_(g(e),"clientSecret",t.default.APP.clientSecret),_(g(e),"redirectUri",t.default.APP.redirectUri),e}return n=a,(o=[{key:"oauthCallback",value:function(e){var t=this,n=this.cookies,o=this
-e.queryParams={code:e.intent.router._lastQueryParams.code,state:e.intent.router._lastQueryParams.state}
-var i=e.queryParams
-if(i.code&&i.state){var l=this.redirectUri,a=this.clientId,u=this.clientSecret,c=i.code,f="code=".concat(c,"&grant_type=").concat("authorization_code","&redirect_uri=").concat(l),s=window.btoa("".concat(a,":").concat(u)),b={method:"POST",headers:{authorization:"Basic ".concat(s),"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8",accept:"application/json, text/javascript, */*; q=0.01"},body:f};(0,r.default)("https://apiv2.pharbers.com/oauth/token",b).then((function(e){return e.json()})).then(function(){var e,r=(e=regeneratorRuntime.mark((function e(r){var i,l,a,u
-return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return t.removeAuth(),i={domain:".pharbers.com",path:"/",maxAge:r.expiresIn},n.write("access_token",r.access_token,i),n.write("refresh_token",r.refresh_token,i),n.write("token_type",r.token_type,i),n.write("expires_in",r.expiresIn,i),n.write("user_name",r.user.name,i),n.write("user_name_show",encodeURI(r.user.lastName+r.user.firstName),i),n.write("user_email",r.user.email,i),n.write("company_id",r.user.employerId,i),n.write("user_name_show",encodeURI(r.user.lastName+r.user.firstName),i),n.write("account_id",r.user.id,i),e.next=14,o.store.findRecord("account",o.cookies.read("account_id"))
-case 14:return l=e.sent,e.next=17,l.belongsTo("employer").id()
-case 17:return a=e.sent,e.next=20,o.store.findRecord("partner",a)
-case 20:u=e.sent,n.write("company_name_show",encodeURI(u.name),i),t.router.transitionTo("/download/my-data")
-case 23:case"end":return e.stop()}}),e)})),function(){var t=this,r=arguments
-return new Promise((function(n,o){var i=e.apply(t,r)
-function l(e){p(i,n,o,l,a,"next",e)}function a(e){p(i,n,o,l,a,"throw",e)}l(void 0)}))})
-return function(e){return r.apply(this,arguments)}}()).catch((function(e){t.router.transitionTo("/download/my-data")}))}else this.router.transitionTo("/download/my-data")}},{key:"judgeAuth",value:function(){var e=!1,t=this.cookies.read("access_token")
-return null!=t&&""!==t&&(e=!0),e}},{key:"removeAuth",value:function(){var e=this,t={domain:".pharbers.com",path:"/"},r=document.cookie.match(/[^ =;]+(?=\=)/g)
-r&&r.forEach((function(r){e.cookies.clear(r,t)})),window.console.log("clear cookies!")}}])&&d(n.prototype,o),i&&d(n,i),a}()).prototype,"cookies",[n],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),c=O(a.prototype,"ajax",[o],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),f=O(a.prototype,"router",[i],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),s=O(a.prototype,"store",[l],{configurable:!0,enumerable:!0,writable:!0,initializer:null}),a)
-e.default=j})),define("web-shell/services/page-title-list",["exports","ember-page-title/services/page-title-list"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/services/page-title",["exports","ember-page-title/services/page-title"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/services/ph-menu",["exports","web-shell/config/environment"],(function(e,t){var r,n,o
-function i(e,t,r,n,o,i,l){try{var a=e[i](l),u=a.value}catch(c){return void r(c)}a.done?t(u):Promise.resolve(u).then(n,o)}function l(e){return function(){var t=this,r=arguments
-return new Promise((function(n,o){var l=e.apply(t,r)
-function a(e){i(l,n,o,a,u,"next",e)}function u(e){i(l,n,o,a,u,"throw",e)}a(void 0)}))}}function a(e,t,r,n){r&&Object.defineProperty(e,t,{enumerable:r.enumerable,configurable:r.configurable,writable:r.writable,value:r.initializer?r.initializer.call(n):void 0})}function u(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function c(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function f(e,t){return(f=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function s(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=y(e)
-if(t){var o=y(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return p(this,r)}}function p(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?b(e):t}function b(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function y(e){return(y=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var d,m,v,h,g,w,_=(r=Ember.inject.service,d=(n=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&f(e,t)})(m,Ember.Service)
-var r,n,i,p,y,d=s(m)
-function m(){var e
-u(this,m)
-for(var t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n]
-return a(b(e=d.call.apply(d,[this].concat(r))),"store",o,b(e)),e}return r=m,(n=[{key:"queryLayoutByClient",value:(y=l(regeneratorRuntime.mark((function e(){var r
-return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:if(null!==(r=this.store.peekRecord("layout",t.default.APP.clientId))){e.next=5
-break}return e.next=4,this.store.findRecord("layout",t.default.APP.clientId)
-case 4:r=e.sent
-case 5:return e.abrupt("return",r)
-case 6:case"end":return e.stop()}}),e,this)}))),function(){return y.apply(this,arguments)})},{key:"queryClientPages",value:(p=l(regeneratorRuntime.mark((function e(){var r
-return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:if(0!==(r=(r=this.store.peekAll("page")).filter((function(e){return!0}))).length){e.next=7
-break}return e.next=5,this.store.query("page",{"filter[clientId]":t.default.APP.clientId})
-case 5:r=(r=e.sent).filter((function(e){return!0}))
-case 7:return e.abrupt("return",r)
-case 8:case"end":return e.stop()}}),e,this)}))),function(){return p.apply(this,arguments)})}])&&c(r.prototype,n),i&&c(r,i),m}()).prototype,m="store",v=[r],h={configurable:!0,enumerable:!0,writable:!0,initializer:null},w={},Object.keys(h).forEach((function(e){w[e]=h[e]})),w.enumerable=!!w.enumerable,w.configurable=!!w.configurable,("value"in w||w.initializer)&&(w.writable=!0),w=v.slice().reverse().reduce((function(e,t){return t(d,m,e)||e}),w),g&&void 0!==w.initializer&&(w.value=w.initializer?w.initializer.call(g):void 0,w.initializer=void 0),void 0===w.initializer&&(Object.defineProperty(d,m,w),w=null),o=w,n)
-e.default=_})),define("web-shell/services/remote-loading",["exports"],(function(e){function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function n(e,t){return(n=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function o(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=a(e)
-if(t){var o=a(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return i(this,r)}}function i(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?l(e):t}function l(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}function a(e){return(a=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function u(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var c=function(e){(function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&n(e,t)})(s,Ember.Service)
-var i,a,c,f=o(s)
-function s(){var e
-t(this,s)
-for(var r=arguments.length,n=new Array(r),o=0;o<r;o++)n[o]=arguments[o]
-return u(l(e=f.call.apply(f,[this].concat(n))),"loadedJs",[]),e}return i=s,(a=[{key:"loadRemoteJs",value:function(e,t){var r=this,n=document.createElement("script")
-n.onload=function(){r.loadedJs.push(e),t&&t()},-1==this.loadedJs.indexOf(e)&&(n.src=e,document.head.appendChild(n))}},{key:"loadRemoteJsSync",value:function(e){var t=this
-return new Promise((function(r,n){var o=document.createElement("script")
-o.src=e,o.onload=function(){r()},o.onerror=function(){n("cannot load script "+e)},-1==t.loadedJs.indexOf(e)&&document.body.appendChild(o)}))}}])&&r(i.prototype,a),c&&r(i,c),s}()
-e.default=c})),define("web-shell/services/route-parse",["exports","ramda"],(function(e,t){function r(e){return function(e){if(Array.isArray(e))return n(e)}(e)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(e)||function(e,t){if(!e)return
-if("string"==typeof e)return n(e,t)
-var r=Object.prototype.toString.call(e).slice(8,-1)
-"Object"===r&&e.constructor&&(r=e.constructor.name)
-if("Map"===r||"Set"===r)return Array.from(e)
-if("Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))return n(e,t)}(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function n(e,t){(null==t||t>e.length)&&(t=e.length)
-for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r]
-return n}function o(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function l(e,t){for(var r=0;r<t.length;r++){var n=t[r]
-n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function a(e,t,r){return t&&l(e.prototype,t),r&&l(e,r),e}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function")
-e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&c(e,t)}function c(e,t){return(c=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function f(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1
-if(Reflect.construct.sham)return!1
-if("function"==typeof Proxy)return!0
-try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}()
-return function(){var r,n=p(e)
-if(t){var o=p(this).constructor
-r=Reflect.construct(n,arguments,o)}else r=n.apply(this,arguments)
-return s(this,r)}}function s(e,t){return!t||"object"!==_typeof(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called")
-return e}(e):t}function p(e){return(p=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var b=function(e){u(n,Ember.Service)
-var r=f(n)
-function n(){return i(this,n),r.apply(this,arguments)}return a(n,[{key:"parse",value:function(e,r){var n=e.indexOf("?"),o=e,i=""
-n>-1&&(o=e.substring(0,n),i=e.substring(n+1))
-var l=new v,a=r.split("/"),u=o.split("/")
-try{if(!(a.length===u.length))throw new Error("not match")
-for(var c=l.zip(a,u),f=[],s=0;s<c.length;++s)f.push(l.createStageInstance("param",c[s][0],c[s][1]))
-var p=i.split("&")
-p=p.map((function(e){return e.split("=")}))
-for(var b=0;b<p.length;++b)f.push(l.createStageInstance("query",p[b][0],p[b][1]))
-for(var y=t.default.groupBy((function(e){return e.cat}))(f.map((function(e){return e.parse()}))),d=Object.keys(y),m={},h=0;h<d.length;++h)m[d[h]]=l.array2Object(y[d[h]])
-return[!0,m]}catch(g){return[!1,null]}}},{key:"queryLogicControllerName",value:function(e){var t=e
-if(e&&e.length>0){var r=e.indexOf("/")
-t=-1===r?e:e.substring(0,r)}return t}}]),n}()
-e.default=b
-var y=function(){function e(t,r){i(this,e),o(this,"template",""),o(this,"resource",""),this.template=t,this.resource=r}return a(e,[{key:"parse",value:function(){throw new Error("not implemented")}}]),e}(),d=function(e){u(r,e)
-var t=f(r)
-function r(e,n){return i(this,r),t.call(this,e,n)}return a(r,[{key:"parse",value:function(){var e={cat:"param"}
-if(this.template.startsWith("{")&&this.template.endsWith("}"))this.template=this.template.substring(this.template.indexOf("{")+1,this.template.lastIndexOf("}")),e[this.template]=this.resource
-else if(this.template!==this.resource)throw new Error("not match")
-return e}}]),r}(y),m=function(e){u(r,e)
-var t=f(r)
-function r(e,n){return i(this,r),t.call(this,e,n)}return a(r,[{key:"parse",value:function(){var e={cat:"query"}
-return e[this.template]=this.resource,e}}]),r}(y),v=function(){function e(){i(this,e),o(this,"zip",(function(){for(var e=arguments.length,t=new Array(e),n=0;n<e;n++)t[n]=arguments[n]
-return Array.from({length:Math.max.apply(Math,r(t.map((function(e){return e.length}))))},(function(e,r){return t.map((function(e){return e[r]}))}))}))}return a(e,[{key:"createStageInstance",value:function(e,t,r){if("param"===e)return new d(t,r)
-if("query"===e)return new m(t,r)
-throw new Error("not implemented")}},{key:"array2Object",value:function(e){for(var t={},r=e.length,n=0;n<r;++n)for(var o=e[n],i=Object.keys(o),l=0;l<i.length;++l)t[i[l]]=o[i[l]]
-return t}}]),e}()})),define("web-shell/services/store",["exports","ember-data/store"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/templates/application",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.HTMLBars.template({id:"CG8n8Gu+",block:'[[[1,[28,[35,0],[[30,0,["clientName"]]],null]],[1,"\\n\\n"],[8,[39,1],null,[["@layout"],[[30,0,["model","name"]]]],[["default"],[[[[1,"\\n    "],[46,[28,[37,3],null,null],null,null,null],[1,"\\n"]],[]]]]],[1,"\\n"]],[],false,["page-title","main-layout","component","-outlet"]]',moduleName:"web-shell/templates/application.hbs",isStrictMode:!1})
-e.default=t})),define("web-shell/templates/shell",["exports"],(function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.HTMLBars.template({id:"n5K90ut1",block:'[[[1,[28,[35,0],["shell"],null]],[1,"\\n"],[8,[39,1],null,[["@model"],[[30,1]]],null],[1,"\\n"],[46,[28,[37,3],null,null],null,null,null],[1,"\\n"]],["@model"],false,["page-title","shell-component","component","-outlet"]]',moduleName:"web-shell/templates/shell.hbs",isStrictMode:!1})
-e.default=t})),define("web-shell/transforms/boolean",["exports","@ember-data/serializer/-private"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.BooleanTransform}})})),define("web-shell/transforms/date",["exports","@ember-data/serializer/-private"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.DateTransform}})})),define("web-shell/transforms/number",["exports","@ember-data/serializer/-private"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.NumberTransform}})})),define("web-shell/transforms/string",["exports","@ember-data/serializer/-private"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.StringTransform}})})),define("web-shell/utils/intl/missing-message",["exports","ember-intl/-private/utils/missing-message"],(function(e,t){Object.defineProperty(e,"__esModule",{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return t.default}})})),define("web-shell/config/environment",[],(function(){try{var e="web-shell/config/environment",t=document.querySelector('meta[name="'+e+'"]').getAttribute("content"),r={default:JSON.parse(decodeURIComponent(t))}
-return Object.defineProperty(r,"__esModule",{value:!0}),r}catch(n){throw new Error('Could not read config from meta tag with name "'+e+'".')}})),runningTests||require("web-shell/app").default.create({redirectUri:"https://general.pharbers.com/oauth-callback",pharbersUri:"https://www.pharbers.com",accountsUri:"https://accounts.pharbers.com",host:"https://oauth.pharbers.com",apiUri:"https://apiv2.pharbers.com",apiHost:"apiv2.pharbers.com",clientId:"fjjnl2uSalHTdrppHG9u",clientName:"offweb",typeArray:["activity","cooperation","event","image","page","participant","report","zone","layout"],clientSecret:"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",AWS_ACCESS_KEY:"AKIAWPBDTVEAI6LUCLPX",AWS_SECRET_KEY:"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",AWS_IOT_ENDPOINT:"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn",AWS_REGION:"cn-northwest-1",AWS_IOT_DEFAULT_CLIENT_ID:"VQ4L9e4RGDZEI2Ln7fvE",scope:"APP|*|R",isNeedMenu:!0,name:"web-shell",version:"0.0.0+d0a31980"})
+'use strict';
+
+
+
+;define("web-shell/adapters/-json-api", ["exports", "@ember-data/adapter/json-api"], function (_exports, _jsonApi) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _jsonApi.default;
+    }
+  });
+});
+;define("web-shell/adapters/application", ["exports", "ember-inflector", "web-shell/config/environment", "@ember-data/adapter/json-api", "web-shell/lib/PhIamClicent"], function (_exports, _emberInflector, _environment, _jsonApi, _PhIamClicent) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ApplicationAdapter = (_dec = Ember.inject.service, (_class = class ApplicationAdapter extends _jsonApi.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _defineProperty(this, "host", _environment.default.APP.apiUri);
+
+      _defineProperty(this, "authType", "oauth");
+    }
+
+    pathForType(type) {
+      let typeArray = _environment.default.APP.typeArray;
+
+      if (typeArray.indexOf(type) !== -1) {
+        this.authType = "iam";
+        return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      } else {
+        this.authType = "oauth";
+        return "phplatform/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      }
+    }
+
+    sortQueryParams(params) {
+      let result = {};
+      const keys = Object.keys(params).sort();
+
+      for (let index = 0; index < keys.length; ++index) {
+        const key = keys[index];
+        let cur = params[key];
+
+        if (cur instanceof Array) {
+          cur = cur.sort();
+        }
+
+        result[key] = cur;
+      }
+
+      return result;
+    } // eslint-disable-next-line no-unused-vars
+
+
+    buildURL(modelName, id, snapshot, requestType, query) {
+      const url = super.buildURL(...arguments);
+
+      if (this.authType === "iam") {
+        this.iamHeaders = (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, url, {}, query, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY);
+      }
+
+      return url;
+    }
+
+    attributesToDeal(data) {
+      // data is object
+      const keys = Object.keys(data).sort();
+      const obj = {};
+      keys.forEach(k => {
+        const key = Ember.String.dasherize(k);
+        obj[key] = data[k];
+      });
+      return obj;
+    } // eslint-disable-next-line no-unused-vars
+
+
+    handleResponse(status, headers, payload, _) {
+      //处理project list(resource)数据
+      if (payload && payload.data && payload.data.length > 0 && payload.meta && payload.meta.count > 0) {
+        // eslint-disable-next-line no-unused-vars
+        payload.data.forEach((item, _) => {
+          item.attributes.meta = item.meta;
+          item.attributes.includes = payload.included;
+        });
+      } //处理executions数据
+
+
+      if (payload && payload.data && payload.data.length > 0 && payload.data[0].meta) {
+        // eslint-disable-next-line no-unused-vars
+        payload.data.forEach((item, _) => {
+          item.attributes.meta = item.meta;
+        });
+      } //处理dag数据
+      else if (payload && payload.data && payload.data.meta) {
+          payload.data.attributes.meta = payload.data.meta;
+        }
+
+      return payload;
+    }
+
+    get headers() {
+      if (this.authType === "oauth") {
+        if (_environment.default.environment === "development") {
+          return {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: _environment.default.APP.debugToken
+          };
+        } else {
+          return {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: this.cookies.read("access_token")
+          };
+        }
+      } else if (this.authType === "iam") {
+        return this.iamHeaders;
+      }
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ApplicationAdapter;
+});
+;define("web-shell/app", ["exports", "ember-resolver", "ember-load-initializers", "web-shell/config/environment"], function (_exports, _emberResolver, _emberLoadInitializers, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class App extends Ember.Application {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "modulePrefix", _environment.default.modulePrefix);
+
+      _defineProperty(this, "podModulePrefix", _environment.default.podModulePrefix);
+
+      _defineProperty(this, "Resolver", _emberResolver.default);
+    }
+
+  }
+
+  _exports.default = App;
+  (0, _emberLoadInitializers.default)(App, _environment.default.modulePrefix);
+});
+;define("web-shell/component-managers/glimmer", ["exports", "@glimmer/component/-private/ember-component-manager"], function (_exports, _emberComponentManager) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _emberComponentManager.default;
+    }
+  });
+});
+;define("web-shell/components/-dynamic-element-alt", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  // This component is not needed anymore. However we can only safely remove it once we have an Embroider release that
+  // has the special dependency rule for this addon removed:
+  // https://github.com/embroider-build/embroider/blob/4fad67f16f811e7f93199a1ee92dba8254c42978/packages/compat/src/addon-dependency-rules/ember-element-helper.ts
+  var _default = Ember.Component.extend();
+
+  _exports.default = _default;
+});
+;define("web-shell/components/-dynamic-element", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  // This component is not needed anymore. However we can only safely remove it once we have an Embroider release that
+  // has the special dependency rule for this addon removed:
+  // https://github.com/embroider-build/embroider/blob/4fad67f16f811e7f93199a1ee92dba8254c42978/packages/compat/src/addon-dependency-rules/ember-element-helper.ts
+  var _default = Ember.Component.extend();
+
+  _exports.default = _default;
+});
+;define("web-shell/components/iframe-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <h2>iframe component</h2>
+  {{yield}}
+  
+  */
+  {
+    "id": "qBmSBU+/",
+    "block": "[[[10,\"h2\"],[12],[1,\"iframe component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "moduleName": "web-shell/components/iframe-context.hbs",
+    "isStrictMode": false
+  });
+
+  class IframeContextComponent extends _component.default {}
+
+  _exports.default = IframeContextComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
+});
+;define("web-shell/components/main-layout", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#let (component @layout) as |Layout|}}
+      <Layout >
+          {{yield}}
+      </Layout>
+  {{/let}}
+  
+  */
+  {
+    "id": "IAfcXorx",
+    "block": "[[[44,[[50,[30,1],0,null,null]],[[[1,\"    \"],[8,[30,2],null,null,[[\"default\"],[[[[1,\"\\n        \"],[18,3,null],[1,\"\\n    \"]],[]]]]],[1,\"\\n\"]],[2]]]],[\"@layout\",\"Layout\",\"&default\"],false,[\"let\",\"component\",\"yield\"]]",
+    "moduleName": "web-shell/components/main-layout.hbs",
+    "isStrictMode": false
+  });
+
+  var _default = Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, Ember._templateOnlyComponent());
+
+  _exports.default = _default;
+});
+;define("web-shell/components/ph-menu-layout", ["exports", "@glimmer/component", "web-shell/config/environment"], function (_exports, _component, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <div style={{this.layoutCss}} >
+      {{#let (element this.menuComponent) as |Menu|}}
+          <Menu />
+      {{/let}}
+      <div style="width: 100%">
+          {{yield}}
+      </div>
+  </div>
+  
+  
+  */
+  {
+    "id": "tNXlQ3JD",
+    "block": "[[[10,0],[15,5,[30,0,[\"layoutCss\"]]],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"        \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[1,\"    \"],[10,0],[14,5,\"width: 100%\"],[12],[1,\"\\n        \"],[18,2,null],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
+    "moduleName": "web-shell/components/ph-menu-layout.hbs",
+    "isStrictMode": false
+  });
+
+  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), _dec3 = Ember.inject.service, (_class = class PhMenuLayoutComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "ms", _descriptor2, this);
+
+      _initializerDefineProperty(this, "store", _descriptor3, this);
+    }
+
+    get layoutCss() {
+      const layout = this.store.peekRecord("layout", _environment.default.APP.clientId);
+      return layout.css;
+    }
+
+    get menuComponent() {
+      if (this.args.menuComponent) {
+        return this.args.menuComponent;
+      } else return "phcatelog-menu";
+    }
+
+    get navComponent() {
+      if (this.args.navComponent) {
+        return this.args.navComponent;
+      } else return "";
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PhMenuLayoutComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhMenuLayoutComponent);
+});
+;define("web-shell/components/ph-tbc-layout", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    <div>
+      {{#let (element this.navComponent) as |Nav|}}
+          {{#if this.inverse}}
+              <Nav inversebase
+                  {{on "linkToPage" linkToPage}}
+                  {{on "logout" logout}}
+                   is-login={{isLogin}}
+              />
+          {{else}}
+              <Nav
+                  {{on "linkToPage" linkToPage}}
+                  {{on "logout" logout}}
+                  is-login={{isLogin}}
+              />
+          {{/if}}
+      {{/let}}
+      {{yield}}
+      {{#let (element this.footComponent) as |Footer|}}
+          <Footer {{on "linkToPage" linkToPage}} />
+      {{/let}}
+  </div>
+  
+  */
+  {
+    "id": "jcPTpUUw",
+    "block": "[[[10,0],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"navComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"navComponent\"]]]]]],[[[41,[30,0,[\"inverse\"]],[[[1,\"            \"],[8,[30,1],[[24,\"inversebase\",\"\"],[16,\"is-login\",[36,5]],[4,[38,6],[\"linkToPage\",[33,7]],null],[4,[38,6],[\"logout\",[33,8]],null]],null,null],[1,\"\\n\"]],[]],[[[1,\"            \"],[8,[30,1],[[16,\"is-login\",[36,5]],[4,[38,6],[\"linkToPage\",[33,7]],null],[4,[38,6],[\"logout\",[33,8]],null]],null,null],[1,\"\\n\"]],[]]]],[1]]],[1,\"    \"],[18,3,null],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"footComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"footComponent\"]]]]]],[[[1,\"        \"],[8,[30,2],[[4,[38,6],[\"linkToPage\",[33,7]],null]],null,null],[1,\"\\n\"]],[2]]],[13],[1,\"\\n\"]],[\"Nav\",\"Footer\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"if\",\"isLogin\",\"on\",\"linkToPage\",\"logout\",\"yield\"]]",
+    "moduleName": "web-shell/components/ph-tbc-layout.hbs",
+    "isStrictMode": false
+  });
+
+  let PhTbcLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("route-parse"), _dec3 = Ember._action, _dec4 = Ember._action, (_class = class PhTbcLayoutComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "rps", _descriptor2, this);
+    }
+
+    get isLogin() {
+      // TODO: 通过token，cookies去判断
+      return false;
+    }
+
+    get inverse() {
+      return this.needInverse.includes(this.activeRoute);
+    }
+
+    get needInverse() {
+      return ["max", "rw", "consulting", "activity-list", "about-us", "report-list", "boyunhui", "download-report", "above-data-detail", "industry-activity-detail"];
+    }
+
+    get activeRoute() {
+      let path = this.router.currentRoute.params.path;
+      path = this.rps.queryLogicControllerName(path);
+      return path;
+    }
+
+    get navComponent() {
+      if (this.args.navComponent) {
+        return this.args.navComponent;
+      } else return "pharbers-bp-nav-top";
+    }
+
+    get footComponent() {
+      if (this.args.footComponent) {
+        return this.args.footComponent;
+      } else return "pharbers-bp-page-bottom";
+    }
+
+    linkToPage(data) {
+      if (data.detail[0] == "home" && this.router.currentRouteName == "home") {
+        window.location.reload();
+      } else {
+        this.router.transitionTo("shell", data.detail[0]);
+      }
+    }
+
+    logout() {
+      this.oauthService.removeAuth();
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class));
+  _exports.default = PhTbcLayoutComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhTbcLayoutComponent);
+});
+;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#if (eq this.engine "web-component")}}
+      <Wc-context @name={{this.name}} @allData={{@model}}/>
+  {{else if (eq this.engine "iframe-component")}}
+      <Iframe-context></Iframe-context>
+  {{else}}
+      <h2>not implement shell component</h2>
+  {{/if}}
+  {{yield}}
+  
+  */
+  {
+    "id": "6SHiJWWM",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\",\"@allData\"],[[30,0,[\"name\"]],[30,1]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,2,null],[1,\"\\n\"]],[\"@model\",\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
+    "moduleName": "web-shell/components/shell-component.hbs",
+    "isStrictMode": false
+  });
+
+  class ShellComponentComponent extends _component.default {
+    /**
+     * 3. 动态加载Component, 这里的作用是将事件利用Event隔离
+     */
+    get engine() {
+      return this.args.model.page.engine;
+    }
+
+    get name() {
+      return this.args.model.page.name;
+    }
+
+  }
+
+  _exports.default = ShellComponentComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, ShellComponentComponent);
+});
+;define("web-shell/components/wc-context", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#let (element @name) as |E|}}
+      <E
+  		allData={{@allData}}
+          {{did-insert this.registerListener}}
+          {{will-destroy this.unregisterListener}}>
+      </E>
+  {{/let}}
+  {{yield}}
+  
+  */
+  {
+    "id": "4D1zd12F",
+    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,1]],null]],null],0,null,[[\"tagName\"],[[30,1]]]]],[[[1,\"    \"],[8,[30,2],[[16,\"allData\",[30,3]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,[[\"default\"],[[[[1,\"\\n    \"]],[]]]]],[1,\"\\n\"]],[2]]],[18,4,null],[1,\"\\n\"]],[\"@name\",\"E\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "moduleName": "web-shell/components/wc-context.hbs",
+    "isStrictMode": false
+  });
+
+  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._action, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class WcContextComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "cookies", _descriptor2, this);
+    }
+
+    async listener(e) {
+      let modelName = Ember.String.camelize(this.args.allData.page.name) + "EventHandler";
+      await window[this.args.allData.page.clientName][modelName](e, this);
+    }
+
+    async registerListener(element) {
+      this.args.allData.data._isVue = true;
+      element.allData = this.args.allData.data;
+      element.addEventListener("event", this.listener);
+    }
+
+    unregisterListener(element) {
+      element.removeEventListener("event", this.listener);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  _exports.default = WcContextComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
+});
+;define("web-shell/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _welcomePage.default;
+    }
+  });
+});
+;define("web-shell/data-adapter", ["exports", "@ember-data/debug"], function (_exports, _debug) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _debug.default;
+    }
+  });
+});
+;define("web-shell/formats", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = {
+    time: {
+      hhmmss: {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }
+    },
+    date: {
+      hhmmss: {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }
+    },
+    number: {
+      compact: {
+        notation: 'compact'
+      },
+      EUR: {
+        style: 'currency',
+        currency: 'EUR'
+      },
+      USD: {
+        style: 'currency',
+        currency: 'USD'
+      }
+    }
+  };
+  _exports.default = _default;
+});
+;define("web-shell/helpers/-element", ["exports", "ember-element-helper/helpers/-element"], function (_exports, _element) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _element.default;
+    }
+  });
+});
+;define("web-shell/helpers/app-version", ["exports", "web-shell/config/environment", "ember-cli-app-version/utils/regexp"], function (_exports, _environment, _regexp) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.appVersion = appVersion;
+  _exports.default = void 0;
+
+  function appVersion(_, hash = {}) {
+    const version = _environment.default.APP.version; // e.g. 1.0.0-alpha.1+4jds75hf
+    // Allow use of 'hideSha' and 'hideVersion' For backwards compatibility
+
+    let versionOnly = hash.versionOnly || hash.hideSha;
+    let shaOnly = hash.shaOnly || hash.hideVersion;
+    let match = null;
+
+    if (versionOnly) {
+      if (hash.showExtended) {
+        match = version.match(_regexp.versionExtendedRegExp); // 1.0.0-alpha.1
+      } // Fallback to just version
+
+
+      if (!match) {
+        match = version.match(_regexp.versionRegExp); // 1.0.0
+      }
+    }
+
+    if (shaOnly) {
+      match = version.match(_regexp.shaRegExp); // 4jds75hf
+    }
+
+    return match ? match[0] : version;
+  }
+
+  var _default = Ember.Helper.helper(appVersion);
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/contains", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.Helper.helper(function tbcNavInverse(arr, cur) {
+    return arr.includes(cur);
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/element", ["exports", "ember-element-helper/helpers/element"], function (_exports, _element) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _element.default;
+    }
+  });
+});
+;define("web-shell/helpers/ensure-safe-component", ["exports", "@embroider/util"], function (_exports, _util) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _util.EnsureSafeComponentHelper;
+    }
+  });
+});
+;define("web-shell/helpers/eq", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.Helper.helper(function eq([left, right]) {
+    return left === right;
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/helpers/format-date", ["exports", "ember-intl/helpers/format-date"], function (_exports, _formatDate) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatDate.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-message", ["exports", "ember-intl/helpers/format-message"], function (_exports, _formatMessage) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatMessage.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-number", ["exports", "ember-intl/helpers/format-number"], function (_exports, _formatNumber) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatNumber.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-relative", ["exports", "ember-intl/helpers/format-relative"], function (_exports, _formatRelative) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatRelative.default;
+    }
+  });
+});
+;define("web-shell/helpers/format-time", ["exports", "ember-intl/helpers/format-time"], function (_exports, _formatTime) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _formatTime.default;
+    }
+  });
+});
+;define("web-shell/helpers/loc", ["exports", "@ember/string/helpers/loc"], function (_exports, _loc) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _loc.default;
+    }
+  });
+  Object.defineProperty(_exports, "loc", {
+    enumerable: true,
+    get: function () {
+      return _loc.loc;
+    }
+  });
+});
+;define("web-shell/helpers/page-title", ["exports", "ember-page-title/helpers/page-title"], function (_exports, _pageTitle) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _pageTitle.default;
+  _exports.default = _default;
+});
+;define("web-shell/helpers/pluralize", ["exports", "ember-inflector/lib/helpers/pluralize"], function (_exports, _pluralize) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _pluralize.default;
+  _exports.default = _default;
+});
+;define("web-shell/helpers/singularize", ["exports", "ember-inflector/lib/helpers/singularize"], function (_exports, _singularize) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _singularize.default;
+  _exports.default = _default;
+});
+;define("web-shell/helpers/t", ["exports", "ember-intl/helpers/t"], function (_exports, _t) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _t.default;
+    }
+  });
+});
+;define("web-shell/initializers/app-version", ["exports", "ember-cli-app-version/initializer-factory", "web-shell/config/environment"], function (_exports, _initializerFactory, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  let name, version;
+
+  if (_environment.default.APP) {
+    name = _environment.default.APP.name;
+    version = _environment.default.APP.version;
+  }
+
+  var _default = {
+    name: 'App Version',
+    initialize: (0, _initializerFactory.default)(name, version)
+  };
+  _exports.default = _default;
+});
+;define("web-shell/initializers/container-debug-adapter", ["exports", "ember-resolver/resolvers/classic/container-debug-adapter"], function (_exports, _containerDebugAdapter) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = {
+    name: 'container-debug-adapter',
+
+    initialize() {
+      let app = arguments[1] || arguments[0];
+      app.register('container-debug-adapter:main', _containerDebugAdapter.default);
+      app.inject('container-debug-adapter:main', 'namespace', 'application:main');
+    }
+
+  };
+  _exports.default = _default;
+});
+;define("web-shell/initializers/ember-data-data-adapter", ["exports", "@ember-data/debug/setup"], function (_exports, _setup) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _setup.default;
+    }
+  });
+});
+;define("web-shell/initializers/ember-data", ["exports", "ember-data", "ember-data/setup-container"], function (_exports, _emberData, _setupContainer) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  /*
+    This code initializes EmberData in an Ember application.
+  
+    It ensures that the `store` service is automatically injected
+    as the `store` property on all routes and controllers.
+  */
+  var _default = {
+    name: 'ember-data',
+    initialize: _setupContainer.default
+  };
+  _exports.default = _default;
+});
+;define("web-shell/initializers/export-application-global", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.initialize = initialize;
+  _exports.default = void 0;
+
+  function initialize() {
+    var application = arguments[1] || arguments[0];
+
+    if (_environment.default.exportApplicationGlobal !== false) {
+      var theGlobal;
+
+      if (typeof window !== 'undefined') {
+        theGlobal = window;
+      } else if (typeof global !== 'undefined') {
+        theGlobal = global;
+      } else if (typeof self !== 'undefined') {
+        theGlobal = self;
+      } else {
+        // no reasonable global, just bail
+        return;
+      }
+
+      var value = _environment.default.exportApplicationGlobal;
+      var globalName;
+
+      if (typeof value === 'string') {
+        globalName = value;
+      } else {
+        globalName = Ember.String.classify(_environment.default.modulePrefix);
+      }
+
+      if (!theGlobal[globalName]) {
+        theGlobal[globalName] = application;
+        application.reopen({
+          willDestroy: function () {
+            this._super.apply(this, arguments);
+
+            delete theGlobal[globalName];
+          }
+        });
+      }
+    }
+  }
+
+  var _default = {
+    name: 'export-application-global',
+    initialize: initialize
+  };
+  _exports.default = _default;
+});
+;define("web-shell/instance-initializers/ember-data", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  /* exists only for things that historically used "after" or "before" */
+  var _default = {
+    name: 'ember-data',
+
+    initialize() {}
+
+  };
+  _exports.default = _default;
+});
+;define("web-shell/lib/PhIamClicent", ["exports", "web-shell/lib/PhSigV4AWSClientFactory"], function (_exports, _PhSigV4AWSClientFactory) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.ComputeJSONAPIIamHeader = ComputeJSONAPIIamHeader;
+
+  /**
+   *  alfredyang@pharbers.com 2021.12.31
+   */
+  function ComputeJSONAPIIamHeader(apiHost, path, body, query, ak, sk, ct = "application/vnd.api+json", at = "application/vnd.api+json", method = "GET") {
+    const factory = _PhSigV4AWSClientFactory.default;
+    const endpoint = /(^https?:\/\/[^\/]+)/g.exec(path)[1];
+    const pathComponent = path.substring(endpoint.length);
+    let queryURL = pathComponent;
+    const queryParamIndex = queryURL.lastIndexOf("?");
+
+    if (queryParamIndex > -1) {
+      queryURL = queryURL.substring(0, queryParamIndex);
+    }
+
+    const sigV4ClientConfig = {
+      accessKey: ak,
+      secretKey: sk,
+      sessionToken: "",
+      serviceName: "execute-api",
+      region: "cn-northwest-1",
+      endpoint: apiHost,
+      defaultContentType: ct,
+      defaultAcceptType: at
+    };
+    const client = factory.PhSigV4AWSClientFactory.newClient(sigV4ClientConfig);
+    let queryParams = {};
+
+    if (query) {
+      const queryKeys = Object.keys(query);
+
+      for (let idx = 0; idx < queryKeys.length; ++idx) {
+        const k = encodeURI(queryKeys[idx]); // const v = encodeURI(query[queryKeys[idx]])
+
+        const v = query[queryKeys[idx]];
+        queryParams[k] = v;
+      }
+    }
+
+    let req = {
+      verb: method.toUpperCase(),
+      path: queryURL,
+      queryParams: queryParams,
+      body: {}
+    };
+    const request = client.makeRequest(req);
+    return request.headers;
+  }
+});
+;define("web-shell/lib/PhSigV4AWSClientFactory", ["exports", "web-shell/lib/PhSigV4ClientUtils"], function (_exports, _PhSigV4ClientUtils) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.PhSigV4AWSClientFactory = void 0;
+
+  /*
+   * Copyright 2010-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License").
+   * You may not use this file except in compliance with the License.
+   * A copy of the License is located at
+   *
+   *  http://aws.amazon.com/apache2.0
+   *
+   * or in the "license" file accompanying this file. This file is distributed
+   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+   * express or implied. See the License for the specific language governing
+   * permissions and limitations under the License.
+   */
+  const CryptoJS = require("crypto-js"); // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
+
+
+  let PhSigV4AWSClientFactory = {};
+  _exports.PhSigV4AWSClientFactory = PhSigV4AWSClientFactory;
+
+  PhSigV4AWSClientFactory.newClient = function (config) {
+    const AWS_SHA_256 = 'AWS4-HMAC-SHA256';
+    const AWS4_REQUEST = 'aws4_request';
+    const AWS4 = 'AWS4';
+    const X_AMZ_DATE = 'x-amz-date';
+    const X_AMZ_SECURITY_TOKEN = 'x-amz-security-token';
+    const HOST = 'host';
+    const AUTHORIZATION = 'Authorization';
+
+    function hash(value) {
+      return CryptoJS.SHA256(value);
+    }
+
+    function hexEncode(value) {
+      return value.toString(CryptoJS.enc.Hex);
+    }
+
+    function hmac(secret, value) {
+      return CryptoJS.HmacSHA256(value, secret, {
+        asBytes: true
+      });
+    }
+
+    function buildCanonicalRequest(method, path, queryParams, headers, payload) {
+      return method + '\n' + buildCanonicalUri(path) + '\n' + buildCanonicalQueryString(queryParams) + '\n' + buildCanonicalHeaders(headers) + '\n' + buildCanonicalSignedHeaders(headers) + '\n' + hexEncode(hash(payload));
+    }
+
+    function hashCanonicalRequest(request) {
+      return hexEncode(hash(request));
+    }
+
+    function buildCanonicalUri(uri) {
+      return encodeURI(uri);
+    }
+
+    function buildCanonicalQueryString(queryParams) {
+      if (Object.keys(queryParams).length < 1) {
+        return '';
+      }
+
+      let sortedQueryParams = [];
+
+      for (const property in queryParams) {
+        if (queryParams.hasOwnProperty(property)) {
+          sortedQueryParams.push(property);
+        }
+      }
+
+      sortedQueryParams.sort();
+      let canonicalQueryString = '';
+
+      for (let i = 0; i < sortedQueryParams.length; i++) {
+        if (sortedQueryParams[i] === encodeURI("ids[]")) {
+          // let idsArr = queryParams[sortedQueryParams[i]].split(",").sort()
+          let idsArr = queryParams[sortedQueryParams[i]].sort();
+
+          for (let j = 0; j < idsArr.length; j++) {
+            canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(idsArr[j]) + '&';
+          }
+        } else {
+          canonicalQueryString += sortedQueryParams[i] + '=' + fixedEncodeURIComponent(queryParams[sortedQueryParams[i]]) + '&';
+        }
+      }
+
+      return canonicalQueryString.substr(0, canonicalQueryString.length - 1);
+    }
+
+    function fixedEncodeURIComponent(str) {
+      let newStr = encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+      });
+      newStr = newStr.replace(/%26/g, "&");
+      newStr = newStr.replace(/%3D/g, "=");
+      return newStr; //   return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+      //     return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+      //   });
+    }
+
+    function buildCanonicalHeaders(headers) {
+      let canonicalHeaders = '';
+      let sortedKeys = [];
+
+      for (const property in headers) {
+        if (headers.hasOwnProperty(property)) {
+          sortedKeys.push(property);
+        }
+      }
+
+      sortedKeys.sort();
+
+      for (let i = 0; i < sortedKeys.length; i++) {
+        canonicalHeaders += sortedKeys[i].toLowerCase() + ':' + headers[sortedKeys[i]] + '\n';
+      }
+
+      return canonicalHeaders;
+    }
+
+    function buildCanonicalSignedHeaders(headers) {
+      let sortedKeys = [];
+
+      for (const property in headers) {
+        if (headers.hasOwnProperty(property)) {
+          sortedKeys.push(property.toLowerCase());
+        }
+      }
+
+      sortedKeys.sort();
+      return sortedKeys.join(';');
+    }
+
+    function buildStringToSign(datetime, credentialScope, hashedCanonicalRequest) {
+      return AWS_SHA_256 + '\n' + datetime + '\n' + credentialScope + '\n' + hashedCanonicalRequest;
+    }
+
+    function buildCredentialScope(datetime, region, service) {
+      return datetime.substr(0, 8) + '/' + region + '/' + service + '/' + AWS4_REQUEST;
+    }
+
+    function calculateSigningKey(secretKey, datetime, region, service) {
+      return hmac(hmac(hmac(hmac(AWS4 + secretKey, datetime.substr(0, 8)), region), service), AWS4_REQUEST);
+    }
+
+    function calculateSignature(key, stringToSign) {
+      return hexEncode(hmac(key, stringToSign));
+    }
+
+    function buildAuthorizationHeader(accessKey, credentialScope, headers, signature) {
+      return AWS_SHA_256 + ' Credential=' + accessKey + '/' + credentialScope + ', SignedHeaders=' + buildCanonicalSignedHeaders(headers) + ', Signature=' + signature;
+    }
+
+    let awsSigV4Client = {};
+
+    if (config.accessKey === undefined || config.secretKey === undefined) {
+      return awsSigV4Client;
+    }
+
+    awsSigV4Client.accessKey = _PhSigV4ClientUtils.default.assertDefined(config.accessKey, 'accessKey');
+    awsSigV4Client.secretKey = _PhSigV4ClientUtils.default.assertDefined(config.secretKey, 'secretKey');
+    awsSigV4Client.sessionToken = config.sessionToken;
+    awsSigV4Client.serviceName = _PhSigV4ClientUtils.default.assertDefined(config.serviceName, 'serviceName');
+    awsSigV4Client.region = _PhSigV4ClientUtils.default.assertDefined(config.region, 'region');
+    awsSigV4Client.endpoint = _PhSigV4ClientUtils.default.assertDefined(config.endpoint, 'endpoint');
+
+    awsSigV4Client.makeRequest = function (request) {
+      const verb = _PhSigV4ClientUtils.default.assertDefined(request.verb, 'verb');
+
+      const path = _PhSigV4ClientUtils.default.assertDefined(request.path, 'path');
+
+      let queryParams = _PhSigV4ClientUtils.default.copy(request.queryParams);
+
+      if (queryParams === undefined) {
+        queryParams = {};
+      }
+
+      let headers = _PhSigV4ClientUtils.default.copy(request.headers);
+
+      if (headers === undefined) {
+        headers = {};
+      } //If the user has not specified an override for Content type the use default
+
+
+      if (headers['Content-Type'] === undefined) {
+        headers['Content-Type'] = config.defaultContentType;
+      } //If the user has not specified an override for Accept type the use default
+
+
+      if (headers['Accept'] === undefined) {
+        headers['Accept'] = config.defaultAcceptType;
+      }
+
+      let body = _PhSigV4ClientUtils.default.copy(request.body);
+
+      if (body === undefined || verb === 'GET') {
+        // override request body and set to empty when signing GET requests
+        body = '';
+      } else {
+        body = JSON.stringify(body);
+      } //If there is no body remove the content-type header so it is not included in SigV4 calculation
+
+
+      if (body === '' || body === undefined || body === null) {
+        delete headers['Content-Type'];
+      }
+
+      let datetime = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/[:\-]|\.\d{3}/g, '');
+      headers[X_AMZ_DATE] = datetime; // const parser = document.createElement('a');
+      // parser.href = awsSigV4Client.endpoint;
+      // headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn"
+
+      headers[HOST] = "apiv2.pharbers.com";
+      const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
+      const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
+      const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
+      const stringToSign = buildStringToSign(datetime, credentialScope, hashedCanonicalRequest);
+      const signingKey = calculateSigningKey(awsSigV4Client.secretKey, datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
+      const signature = calculateSignature(signingKey, stringToSign);
+      headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
+
+      if (awsSigV4Client.sessionToken !== undefined && awsSigV4Client.sessionToken !== '') {
+        headers[X_AMZ_SECURITY_TOKEN] = awsSigV4Client.sessionToken;
+      }
+
+      delete headers[HOST];
+      let url = config.endpoint + path;
+      const queryString = buildCanonicalQueryString(queryParams);
+
+      if (queryString !== '') {
+        url += '?' + queryString;
+      } //Need to re-attach Content-Type if it is not specified at this point
+
+
+      if (headers['Content-Type'] === undefined) {
+        headers['Content-Type'] = config.defaultContentType;
+      }
+
+      return {
+        method: verb,
+        url: url,
+        headers: headers,
+        data: body,
+        timeout: 30000
+      }; // return axios(signedRequest);
+    };
+
+    return awsSigV4Client;
+  }; // module.exports = { PhSigV4AWSClientFactory }
+
+});
+;define("web-shell/lib/PhSigV4ClientUtils", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  /*
+   * Copyright 2010-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License").
+   * You may not use this file except in compliance with the License.
+   * A copy of the License is located at
+   *
+   *  http://aws.amazon.com/apache2.0
+   *
+   * or in the "license" file accompanying this file. This file is distributed
+   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+   * express or implied. See the License for the specific language governing
+   * permissions and limitations under the License.
+   */
+  let PhSigV4ClientUtils = {
+    assertDefined: function (object, name) {
+      if (object === undefined) {
+        throw name + ' must be defined';
+      } else {
+        return object;
+      }
+    },
+    assertParametersDefined: function (params, keys, ignore) {
+      if (keys === undefined) {
+        return;
+      }
+
+      if (keys.length > 0 && params === undefined) {
+        params = {};
+      }
+
+      for (let i = 0; i < keys.length; i++) {
+        if (!this.contains(ignore, keys[i])) {
+          this.assertDefined(params[keys[i]], keys[i]);
+        }
+      }
+    },
+    parseParametersToObject: function (params, keys) {
+      if (params === undefined) {
+        return {};
+      }
+
+      let object = {};
+
+      for (let i = 0; i < keys.length; i++) {
+        object[keys[i]] = params[keys[i]];
+      }
+
+      return object;
+    },
+    contains: function (a, obj) {
+      if (a === undefined) {
+        return false;
+      }
+
+      let i = a.length;
+
+      while (i--) {
+        if (a[i] === obj) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    copy: function (obj) {
+      if (null == obj || "object" != typeof obj) return obj;
+      const copy = obj.constructor();
+
+      for (const attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+      }
+
+      return copy;
+    },
+    mergeInto: function (baseObj, additionalProps) {
+      if (null == baseObj || "object" != typeof baseObj) return baseObj;
+      const merged = baseObj.constructor();
+
+      for (const attr in baseObj) {
+        if (baseObj.hasOwnProperty(attr)) merged[attr] = baseObj[attr];
+      }
+
+      if (null == additionalProps || "object" != typeof additionalProps) return baseObj;
+
+      for (attr in additionalProps) {
+        if (additionalProps.hasOwnProperty(attr)) merged[attr] = additionalProps[attr];
+      }
+
+      return merged;
+    }
+  }; // module.exports = { PhSigV4ClientUtils }
+
+  _exports.default = PhSigV4ClientUtils;
+});
+;define("web-shell/lib/PhUrlTemplate", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.PhUriTemplate = void 0;
+
+  /*
+   UriTemplates Template Processor - Version: @VERSION - Dated: @DATE
+   (c) marc.portier@gmail.com - 2011-2012
+   Licensed under APLv2 (http://opensource.org/licenses/Apache-2.0)
+   */
+  ;
+
+  var PhUriTemplate = function () {
+    // Below are the functions we originally used from jQuery.
+    // The implementations below are often more naive then what is inside jquery, but they suffice for our needs.
+    function isFunction(fn) {
+      return typeof fn == 'function';
+    }
+
+    function isEmptyObject(obj) {
+      for (var name in obj) {
+        return false;
+      }
+
+      return true;
+    }
+
+    function extend(base, newprops) {
+      for (var name in newprops) {
+        base[name] = newprops[name];
+      }
+
+      return base;
+    }
+    /**
+     * Create a runtime cache around retrieved values from the context.
+     * This allows for dynamic (function) results to be kept the same for multiple
+     * occuring expansions within one template.
+     * Note: Uses key-value tupples to be able to cache null values as well.
+     */
+    //TODO move this into prep-processing
+
+
+    function CachingContext(context) {
+      this.raw = context;
+      this.cache = {};
+    }
+
+    CachingContext.prototype.get = function (key) {
+      var val = this.lookupRaw(key);
+      var result = val;
+
+      if (isFunction(val)) {
+        // check function-result-cache
+        var tupple = this.cache[key];
+
+        if (tupple !== null && tupple !== undefined) {
+          result = tupple.val;
+        } else {
+          result = val(this.raw);
+          this.cache[key] = {
+            key: key,
+            val: result
+          }; // NOTE: by storing tupples we make sure a null return is validly consistent too in expansions
+        }
+      }
+
+      return result;
+    };
+
+    CachingContext.prototype.lookupRaw = function (key) {
+      return CachingContext.lookup(this, this.raw, key);
+    };
+
+    CachingContext.lookup = function (me, context, key) {
+      var result = context[key];
+
+      if (result !== undefined) {
+        return result;
+      } else {
+        var keyparts = key.split('.');
+        var i = 0,
+            keysplits = keyparts.length - 1;
+
+        for (i = 0; i < keysplits; i++) {
+          var leadKey = keyparts.slice(0, keysplits - i).join('.');
+          var trailKey = keyparts.slice(-i - 1).join('.');
+          var leadContext = context[leadKey];
+
+          if (leadContext !== undefined) {
+            return CachingContext.lookup(me, leadContext, trailKey);
+          }
+        }
+
+        return undefined;
+      }
+    };
+
+    function UriTemplate(set) {
+      this.set = set;
+    }
+
+    UriTemplate.prototype.expand = function (context) {
+      var cache = new CachingContext(context);
+      var res = "";
+      var i = 0,
+          cnt = this.set.length;
+
+      for (i = 0; i < cnt; i++) {
+        res += this.set[i].expand(cache);
+      }
+
+      return res;
+    }; //TODO: change since draft-0.6 about characters in literals
+
+    /* extract:
+     The characters outside of expressions in a URI Template string are intended to be copied literally to the URI-reference if the character is allowed in a URI (reserved / unreserved / pct-encoded) or, if not allowed, copied to the URI-reference in its UTF-8 pct-encoded form.
+     */
+
+
+    function Literal(txt) {
+      this.txt = txt;
+    }
+
+    Literal.prototype.expand = function () {
+      return this.txt;
+    };
+
+    var RESERVEDCHARS_RE = new RegExp("[:/?#\\[\\]@!$&()*+,;=']", "g");
+
+    function encodeNormal(val) {
+      return encodeURIComponent(val).replace(RESERVEDCHARS_RE, function (s) {
+        return escape(s);
+      });
+    } //var SELECTEDCHARS_RE = new RegExp("[]","g");
+
+
+    function encodeReserved(val) {
+      //return encodeURI(val).replace(SELECTEDCHARS_RE, function(s) {return escape(s)} );
+      return encodeURI(val); // no need for additional replace if selected-chars is empty
+    }
+
+    function addUnNamed(name, key, val) {
+      return key + (key.length > 0 ? "=" : "") + val;
+    }
+
+    function addNamed(name, key, val, noName) {
+      noName = noName || false;
+
+      if (noName) {
+        name = "";
+      }
+
+      if (!key || key.length === 0) {
+        key = name;
+      }
+
+      return key + (key.length > 0 ? "=" : "") + val;
+    }
+
+    function addLabeled(name, key, val, noName) {
+      noName = noName || false;
+
+      if (noName) {
+        name = "";
+      }
+
+      if (!key || key.length === 0) {
+        key = name;
+      }
+
+      return key + (key.length > 0 && val ? "=" : "") + val;
+    }
+
+    var simpleConf = {
+      prefix: "",
+      joiner: ",",
+      encode: encodeNormal,
+      builder: addUnNamed
+    };
+    var reservedConf = {
+      prefix: "",
+      joiner: ",",
+      encode: encodeReserved,
+      builder: addUnNamed
+    };
+    var fragmentConf = {
+      prefix: "#",
+      joiner: ",",
+      encode: encodeReserved,
+      builder: addUnNamed
+    };
+    var pathParamConf = {
+      prefix: ";",
+      joiner: ";",
+      encode: encodeNormal,
+      builder: addLabeled
+    };
+    var formParamConf = {
+      prefix: "?",
+      joiner: "&",
+      encode: encodeNormal,
+      builder: addNamed
+    };
+    var formContinueConf = {
+      prefix: "&",
+      joiner: "&",
+      encode: encodeNormal,
+      builder: addNamed
+    };
+    var pathHierarchyConf = {
+      prefix: "/",
+      joiner: "/",
+      encode: encodeNormal,
+      builder: addUnNamed
+    };
+    var labelConf = {
+      prefix: ".",
+      joiner: ".",
+      encode: encodeNormal,
+      builder: addUnNamed
+    };
+
+    function Expression(conf, vars) {
+      extend(this, conf);
+      this.vars = vars;
+    }
+
+    Expression.build = function (ops, vars) {
+      var conf;
+
+      switch (ops) {
+        case '':
+          conf = simpleConf;
+          break;
+
+        case '+':
+          conf = reservedConf;
+          break;
+
+        case '#':
+          conf = fragmentConf;
+          break;
+
+        case ';':
+          conf = pathParamConf;
+          break;
+
+        case '?':
+          conf = formParamConf;
+          break;
+
+        case '&':
+          conf = formContinueConf;
+          break;
+
+        case '/':
+          conf = pathHierarchyConf;
+          break;
+
+        case '.':
+          conf = labelConf;
+          break;
+
+        default:
+          throw "Unexpected operator: '" + ops + "'";
+      }
+
+      return new Expression(conf, vars);
+    };
+
+    Expression.prototype.expand = function (context) {
+      var joiner = this.prefix;
+      var nextjoiner = this.joiner;
+      var buildSegment = this.builder;
+      var res = "";
+      var i = 0,
+          cnt = this.vars.length;
+
+      for (i = 0; i < cnt; i++) {
+        var varspec = this.vars[i];
+        varspec.addValues(context, this.encode, function (key, val, noName) {
+          var segm = buildSegment(varspec.name, key, val, noName);
+
+          if (segm !== null && segm !== undefined) {
+            res += joiner + segm;
+            joiner = nextjoiner;
+          }
+        });
+      }
+
+      return res;
+    };
+
+    var UNBOUND = {};
+    /**
+     * Helper class to help grow a string of (possibly encoded) parts until limit is reached
+     */
+
+    function Buffer(limit) {
+      this.str = "";
+
+      if (limit === UNBOUND) {
+        this.appender = Buffer.UnboundAppend;
+      } else {
+        this.len = 0;
+        this.limit = limit;
+        this.appender = Buffer.BoundAppend;
+      }
+    }
+
+    Buffer.prototype.append = function (part, encoder) {
+      return this.appender(this, part, encoder);
+    };
+
+    Buffer.UnboundAppend = function (me, part, encoder) {
+      part = encoder ? encoder(part) : part;
+      me.str += part;
+      return me;
+    };
+
+    Buffer.BoundAppend = function (me, part, encoder) {
+      part = part.substring(0, me.limit - me.len);
+      me.len += part.length;
+      part = encoder ? encoder(part) : part;
+      me.str += part;
+      return me;
+    };
+
+    function arrayToString(arr, encoder, maxLength) {
+      var buffer = new Buffer(maxLength);
+      var joiner = "";
+      var i = 0,
+          cnt = arr.length;
+
+      for (i = 0; i < cnt; i++) {
+        if (arr[i] !== null && arr[i] !== undefined) {
+          buffer.append(joiner).append(arr[i], encoder);
+          joiner = ",";
+        }
+      }
+
+      return buffer.str;
+    }
+
+    function objectToString(obj, encoder, maxLength) {
+      var buffer = new Buffer(maxLength);
+      var joiner = "";
+      var k;
+
+      for (k in obj) {
+        if (obj.hasOwnProperty(k)) {
+          if (obj[k] !== null && obj[k] !== undefined) {
+            buffer.append(joiner + k + ',').append(obj[k], encoder);
+            joiner = ",";
+          }
+        }
+      }
+
+      return buffer.str;
+    }
+
+    function simpleValueHandler(me, val, valprops, encoder, adder) {
+      var result;
+
+      if (valprops.isArr) {
+        result = arrayToString(val, encoder, me.maxLength);
+      } else if (valprops.isObj) {
+        result = objectToString(val, encoder, me.maxLength);
+      } else {
+        var buffer = new Buffer(me.maxLength);
+        result = buffer.append(val, encoder).str;
+      }
+
+      adder("", result);
+    }
+
+    function explodeValueHandler(me, val, valprops, encoder, adder) {
+      if (valprops.isArr) {
+        var i = 0,
+            cnt = val.length;
+
+        for (i = 0; i < cnt; i++) {
+          adder("", encoder(val[i]));
+        }
+      } else if (valprops.isObj) {
+        var k;
+
+        for (k in val) {
+          if (val.hasOwnProperty(k)) {
+            adder(k, encoder(val[k]));
+          }
+        }
+      } else {
+        // explode-requested, but single value
+        adder("", encoder(val));
+      }
+    }
+
+    function valueProperties(val) {
+      var isArr = false;
+      var isObj = false;
+      var isUndef = true; //note: "" is empty but not undef
+
+      if (val !== null && val !== undefined) {
+        isArr = val.constructor === Array;
+        isObj = val.constructor === Object;
+        isUndef = isArr && val.length === 0 || isObj && isEmptyObject(val);
+      }
+
+      return {
+        isArr: isArr,
+        isObj: isObj,
+        isUndef: isUndef
+      };
+    }
+
+    function VarSpec(name, vhfn, nums) {
+      this.name = unescape(name);
+      this.valueHandler = vhfn;
+      this.maxLength = nums;
+    }
+
+    VarSpec.build = function (name, expl, part, nums) {
+      var valueHandler, valueModifier;
+
+      if (!!expl) {
+        //interprete as boolean
+        valueHandler = explodeValueHandler;
+      } else {
+        valueHandler = simpleValueHandler;
+      }
+
+      if (!part) {
+        nums = UNBOUND;
+      }
+
+      return new VarSpec(name, valueHandler, nums);
+    };
+
+    VarSpec.prototype.addValues = function (context, encoder, adder) {
+      var val = context.get(this.name);
+      var valprops = valueProperties(val);
+
+      if (valprops.isUndef) {
+        return;
+      } // ignore empty values
+
+
+      this.valueHandler(this, val, valprops, encoder, adder);
+    }; //----------------------------------------------parsing logic
+    // How each varspec should look like
+
+
+    var VARSPEC_RE = /([^*:]*)((\*)|(:)([0-9]+))?/;
+
+    var match2varspec = function (m) {
+      var name = m[1];
+      var expl = m[3];
+      var part = m[4];
+      var nums = parseInt(m[5], 10);
+      return VarSpec.build(name, expl, part, nums);
+    }; // Splitting varspecs in list with:
+
+
+    var LISTSEP = ","; // How each template should look like
+
+    var TEMPL_RE = /(\{([+#.;?&\/])?(([^.*:,{}|@!=$()][^*:,{}$()]*)(\*|:([0-9]+))?(,([^.*:,{}][^*:,{}]*)(\*|:([0-9]+))?)*)\})/g; // Note: reserved operators: |!@ are left out of the regexp in order to make those templates degrade into literals
+    // (as expected by the spec - see tests.html "reserved operators")
+
+    var match2expression = function (m) {
+      var expr = m[0];
+      var ops = m[2] || '';
+      var vars = m[3].split(LISTSEP);
+      var i = 0,
+          len = vars.length;
+
+      for (i = 0; i < len; i++) {
+        var match;
+
+        if ((match = vars[i].match(VARSPEC_RE)) === null) {
+          throw "unexpected parse error in varspec: " + vars[i];
+        }
+
+        vars[i] = match2varspec(match);
+      }
+
+      return Expression.build(ops, vars);
+    };
+
+    var pushLiteralSubstr = function (set, src, from, to) {
+      if (from < to) {
+        var literal = src.substr(from, to - from);
+        set.push(new Literal(literal));
+      }
+    };
+
+    var parse = function (str) {
+      var lastpos = 0;
+      var comp = [];
+      var match;
+      var pattern = TEMPL_RE;
+      pattern.lastIndex = 0; // just to be sure
+
+      while ((match = pattern.exec(str)) !== null) {
+        var newpos = match.index;
+        pushLiteralSubstr(comp, str, lastpos, newpos);
+        comp.push(match2expression(match));
+        lastpos = pattern.lastIndex;
+      }
+
+      pushLiteralSubstr(comp, str, lastpos, str.length);
+      return new UriTemplate(comp);
+    }; //-------------------------------------------comments and ideas
+    //TODO: consider building cache of previously parsed uris or even parsed expressions?
+
+
+    return parse;
+  }(); // module.exports = { PhUriTemplate }
+
+
+  _exports.PhUriTemplate = PhUriTemplate;
+});
+;define("web-shell/models/account", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("string"), _dec9 = (0, _model.attr)("string"), _dec10 = (0, _model.attr)("date"), _dec11 = (0, _model.attr)("date"), _dec12 = (0, _model.belongsTo)("partner"), (_class = class AccountModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "firstName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "lastName", _descriptor3, this);
+
+      _initializerDefineProperty(this, "picture", _descriptor4, this);
+
+      _initializerDefineProperty(this, "wechatOpenId", _descriptor5, this);
+
+      _initializerDefineProperty(this, "password", _descriptor6, this);
+
+      _initializerDefineProperty(this, "phoneNumber", _descriptor7, this);
+
+      _initializerDefineProperty(this, "email", _descriptor8, this);
+
+      _initializerDefineProperty(this, "notification", _descriptor9, this);
+
+      _initializerDefineProperty(this, "created", _descriptor10, this);
+
+      _initializerDefineProperty(this, "modified", _descriptor11, this);
+
+      _initializerDefineProperty(this, "employer", _descriptor12, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "firstName", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "lastName", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "picture", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "wechatOpenId", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "password", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "phoneNumber", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "email", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "notification", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "modified", [_dec11], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "employer", [_dec12], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountModel;
+});
+;define("web-shell/models/action", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ActionModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.attr)('number'), _dec6 = (0, _model.attr)('string'), _dec7 = (0, _model.attr)('string'), _dec8 = (0, _model.attr)('string'), _dec9 = (0, _model.attr)('string'), _dec10 = (0, _model.attr)('number'), (_class = class ActionModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "projectID", _descriptor, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor2, this);
+
+      _initializerDefineProperty(this, "showName", _descriptor3, this);
+
+      _initializerDefineProperty(this, "time", _descriptor4, this);
+
+      _initializerDefineProperty(this, "code", _descriptor5, this);
+
+      _initializerDefineProperty(this, "jobDesc", _descriptor6, this);
+
+      _initializerDefineProperty(this, "jobCat", _descriptor7, this);
+
+      _initializerDefineProperty(this, "comments", _descriptor8, this);
+
+      _initializerDefineProperty(this, "message", _descriptor9, this);
+
+      _initializerDefineProperty(this, "date", _descriptor10, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "projectID", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "showName", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "time", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "code", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "jobDesc", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "jobCat", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "comments", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "message", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "date", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ActionModel;
+});
+;define("web-shell/models/activity", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ActivityModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('date'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('string'), _dec6 = (0, _model.attr)('string'), _dec7 = (0, _model.attr)('string'), _dec8 = (0, _model.attr)('string'), _dec9 = (0, _model.attr)('string'), _dec10 = (0, _model.hasMany)('image'), _dec11 = (0, _model.hasMany)("report"), _dec12 = (0, _model.hasMany)("zone"), _dec13 = (0, _model.belongsTo)('image'), _dec14 = (0, _model.belongsTo)('image'), _dec15 = (0, _model.hasMany)("cooperation"), _dec16 = (0, _model.attr)('number'), (_class = class ActivityModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor3, this);
+
+      _initializerDefineProperty(this, "endDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "location", _descriptor5, this);
+
+      _initializerDefineProperty(this, "city", _descriptor6, this);
+
+      _initializerDefineProperty(this, "activityType", _descriptor7, this);
+
+      _initializerDefineProperty(this, "contentTitle", _descriptor8, this);
+
+      _initializerDefineProperty(this, "contentDesc", _descriptor9, this);
+
+      _initializerDefineProperty(this, "gallery", _descriptor10, this);
+
+      _initializerDefineProperty(this, "attachments", _descriptor11, this);
+
+      _initializerDefineProperty(this, "agendas", _descriptor12, this);
+
+      _initializerDefineProperty(this, "logo", _descriptor13, this);
+
+      _initializerDefineProperty(this, "logoOnTime", _descriptor14, this);
+
+      _initializerDefineProperty(this, "partners", _descriptor15, this);
+
+      _initializerDefineProperty(this, "language", _descriptor16, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "endDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "location", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "city", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "activityType", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "contentTitle", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "contentDesc", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "gallery", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "attachments", [_dec11], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "agendas", [_dec12], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "logo", [_dec13], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, "logoOnTime", [_dec14], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, "partners", [_dec15], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec16], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ActivityModel;
+});
+;define("web-shell/models/analysis", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AnalysisModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.belongsTo)("project"), (_class = class AnalysisModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "project", _descriptor2, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "project", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AnalysisModel;
+});
+;define("web-shell/models/chat", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ChatModel = (_dec = (0, _model.belongsTo)("slide"), (_class = class ChatModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "slide", _descriptor, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "slide", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ChatModel;
+});
+;define("web-shell/models/cooperation", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let CooperationModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.belongsTo)('image'), (_class = class CooperationModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "companyType", _descriptor2, this);
+
+      _initializerDefineProperty(this, "logo", _descriptor3, this);
+
+      _initializerDefineProperty(this, "language", _descriptor4, this);
+
+      _initializerDefineProperty(this, "logo", _descriptor5, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "companyType", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "logo", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "logo", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = CooperationModel;
+});
+;define("web-shell/models/dag-conf", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DagConfModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("string"), _dec9 = (0, _model.attr)("string"), _dec10 = (0, _model.attr)("string"), _dec11 = (0, _model.attr)("string"), _dec12 = (0, _model.attr)("string"), _dec13 = (0, _model.attr)("string"), _dec14 = (0, _model.attr)("string"), _dec15 = (0, _model.attr)("string"), _dec16 = (0, _model.attr)("string"), _dec17 = (0, _model.attr)("string"), (_class = class DagConfModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "flowVersion", _descriptor, this);
+
+      _initializerDefineProperty(this, "jobPath", _descriptor2, this);
+
+      _initializerDefineProperty(this, "jobName", _descriptor3, this);
+
+      _initializerDefineProperty(this, "version", _descriptor4, this);
+
+      _initializerDefineProperty(this, "dagName", _descriptor5, this);
+
+      _initializerDefineProperty(this, "jobShowName", _descriptor6, this);
+
+      _initializerDefineProperty(this, "inputs", _descriptor7, this);
+
+      _initializerDefineProperty(this, "jobDisplayName", _descriptor8, this);
+
+      _initializerDefineProperty(this, "jobId", _descriptor9, this);
+
+      _initializerDefineProperty(this, "jobVersion", _descriptor10, this);
+
+      _initializerDefineProperty(this, "outputs", _descriptor11, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor12, this);
+
+      _initializerDefineProperty(this, "projectId", _descriptor13, this);
+
+      _initializerDefineProperty(this, "runtime", _descriptor14, this);
+
+      _initializerDefineProperty(this, "targetJobId", _descriptor15, this);
+
+      _initializerDefineProperty(this, "timeout", _descriptor16, this);
+
+      _initializerDefineProperty(this, "operatorParameters", _descriptor17, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "flowVersion", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "jobPath", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "jobName", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "dagName", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "jobShowName", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "inputs", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "jobDisplayName", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "jobId", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "jobVersion", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "outputs", [_dec11], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec12], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "projectId", [_dec13], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, "runtime", [_dec14], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, "targetJobId", [_dec15], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, "timeout", [_dec16], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor17 = _applyDecoratedDescriptor(_class.prototype, "operatorParameters", [_dec17], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DagConfModel;
+});
+;define("web-shell/models/dash-board", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DashBoardModel = (_dec = (0, _model.belongsTo)("project"), _dec2 = (0, _model.hasMany)("slide"), (_class = class DashBoardModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "project", _descriptor, this);
+
+      _initializerDefineProperty(this, "slides", _descriptor2, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "project", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "slides", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DashBoardModel;
+});
+;define("web-shell/models/dataset", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DatasetModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("string"), (_class = class DatasetModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "projectId", _descriptor, this);
+
+      _initializerDefineProperty(this, "schema", _descriptor2, this);
+
+      _initializerDefineProperty(this, "version", _descriptor3, this);
+
+      _initializerDefineProperty(this, "name", _descriptor4, this);
+
+      _initializerDefineProperty(this, "label", _descriptor5, this);
+
+      _initializerDefineProperty(this, "cat", _descriptor6, this);
+
+      _initializerDefineProperty(this, "path", _descriptor7, this);
+
+      _initializerDefineProperty(this, "format", _descriptor8, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "projectId", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "schema", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "label", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "path", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "format", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DatasetModel;
+});
+;define("web-shell/models/db", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DbsModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.hasMany)("table"), (_class = class DbsModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "provider", _descriptor2, this);
+
+      _initializerDefineProperty(this, "tables", _descriptor3, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor4, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "provider", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "tables", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "owner", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DbsModel;
+});
+;define("web-shell/models/diagram", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DiagramModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("string"), _dec9 = (0, _model.attr)("date"), _dec10 = (0, _model.attr)("date"), (_class = class DiagramModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "partner", _descriptor, this);
+
+      _initializerDefineProperty(this, "name", _descriptor2, this);
+
+      _initializerDefineProperty(this, "source", _descriptor3, this);
+
+      _initializerDefineProperty(this, "rid", _descriptor4, this);
+
+      _initializerDefineProperty(this, "gid", _descriptor5, this);
+
+      _initializerDefineProperty(this, "tag", _descriptor6, this);
+
+      _initializerDefineProperty(this, "version", _descriptor7, this);
+
+      _initializerDefineProperty(this, "description", _descriptor8, this);
+
+      _initializerDefineProperty(this, "created", _descriptor9, this);
+
+      _initializerDefineProperty(this, "modified", _descriptor10, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "partner", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "source", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "rid", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "gid", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "modified", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DiagramModel;
+});
+;define("web-shell/models/event", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let EventModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('date'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.hasMany)("participant"), (_class = class EventModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "description", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "endDate", _descriptor5, this);
+
+      _initializerDefineProperty(this, "language", _descriptor6, this);
+
+      _initializerDefineProperty(this, "speakers", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "endDate", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "speakers", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = EventModel;
+});
+;define("web-shell/models/execution", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ExecutionModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('number'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('string'), _dec5 = (0, _model.attr)('number'), _dec6 = (0, _model.attr)('string'), _dec7 = (0, _model.attr)('string'), (_class = class ExecutionModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "input", _descriptor, this);
+
+      _initializerDefineProperty(this, "endTime", _descriptor2, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor3, this);
+
+      _initializerDefineProperty(this, "smId", _descriptor4, this);
+
+      _initializerDefineProperty(this, "startTime", _descriptor5, this);
+
+      _initializerDefineProperty(this, "state", _descriptor6, this);
+
+      _initializerDefineProperty(this, "steps", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "input", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "endTime", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "smId", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "startTime", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "state", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "steps", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ExecutionModel;
+});
+;define("web-shell/models/file", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let FileModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("number"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("date"), _dec7 = (0, _model.attr)("date"), _dec8 = (0, _model.attr)("string"), _dec9 = (0, _model.attr)("string"), (_class = class FileModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor2, this);
+
+      _initializerDefineProperty(this, "extension", _descriptor3, this);
+
+      _initializerDefineProperty(this, "size", _descriptor4, this);
+
+      _initializerDefineProperty(this, "source", _descriptor5, this);
+
+      _initializerDefineProperty(this, "labels", _descriptor6, this);
+
+      _initializerDefineProperty(this, "created", _descriptor7, this);
+
+      _initializerDefineProperty(this, "modified", _descriptor8, this);
+
+      _initializerDefineProperty(this, "version", _descriptor9, this);
+
+      _initializerDefineProperty(this, "description", _descriptor10, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "extension", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "size", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "source", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "labels", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "modified", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = FileModel;
+});
+;define("web-shell/models/flow", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let FlowModel = (_dec = (0, _model.belongsTo)("project"), _dec2 = (0, _model.hasMany)("stateMachine"), (_class = class FlowModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "project", _descriptor, this);
+
+      _initializerDefineProperty(this, "stateMachines", _descriptor2, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "project", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "stateMachines", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = FlowModel;
+});
+;define("web-shell/models/image", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ImageModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.belongsTo)('image'), (_class = class ImageModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "path", _descriptor, this);
+
+      _initializerDefineProperty(this, "tag", _descriptor2, this);
+
+      _initializerDefineProperty(this, "report", _descriptor3, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "path", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "tag", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "report", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ImageModel;
+});
+;define("web-shell/models/layout", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let LayoutModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), (_class = class LayoutModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "clientId", _descriptor, this);
+
+      _initializerDefineProperty(this, "clientName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "version", _descriptor3, this);
+
+      _initializerDefineProperty(this, "name", _descriptor4, this);
+
+      _initializerDefineProperty(this, "css", _descriptor5, this);
+
+      _initializerDefineProperty(this, "script", _descriptor6, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "clientId", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "clientName", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "css", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "script", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = LayoutModel;
+});
+;define("web-shell/models/model", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ModelModel = (_dec = (0, _model.belongsTo)("project"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), (_class = class ModelModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "project", _descriptor, this);
+
+      _initializerDefineProperty(this, "name", _descriptor2, this);
+
+      _initializerDefineProperty(this, "type", _descriptor3, this);
+
+      _initializerDefineProperty(this, "location", _descriptor4, this);
+
+      _initializerDefineProperty(this, "definition", _descriptor5, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "project", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "location", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "definition", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ModelModel;
+});
+;define("web-shell/models/notebook", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let NotebookModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.belongsTo)("project"), (_class = class NotebookModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "url", _descriptor2, this);
+
+      _initializerDefineProperty(this, "type", _descriptor3, this);
+
+      _initializerDefineProperty(this, "resource", _descriptor4, this);
+
+      _initializerDefineProperty(this, "project", _descriptor5, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "url", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "resource", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "project", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = NotebookModel;
+});
+;define("web-shell/models/page", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PageModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), _dec7 = (0, _model.attr)("string"), _dec8 = (0, _model.attr)("number"), _dec9 = (0, _model.attr)("string"), (_class = class PageModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "client-id", _descriptor, this);
+
+      _initializerDefineProperty(this, "clientName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "version", _descriptor3, this);
+
+      _initializerDefineProperty(this, "name", _descriptor4, this);
+
+      _initializerDefineProperty(this, "route", _descriptor5, this);
+
+      _initializerDefineProperty(this, "uri", _descriptor6, this);
+
+      _initializerDefineProperty(this, "cat", _descriptor7, this);
+
+      _initializerDefineProperty(this, "level", _descriptor8, this);
+
+      _initializerDefineProperty(this, "engine", _descriptor9, this);
+    } // ember, vue, react
+
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "client-id", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "clientName", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "route", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "uri", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "cat", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "level", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "engine", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PageModel;
+});
+;define("web-shell/models/participant", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ReportModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.belongsTo)('image'), _dec6 = (0, _model.belongsTo)('event'), _dec7 = (0, _model.belongsTo)('zone'), (_class = class ReportModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "title", _descriptor2, this);
+
+      _initializerDefineProperty(this, "occupation", _descriptor3, this);
+
+      _initializerDefineProperty(this, "language", _descriptor4, this);
+
+      _initializerDefineProperty(this, "avatar", _descriptor5, this);
+
+      _initializerDefineProperty(this, "event", _descriptor6, this);
+
+      _initializerDefineProperty(this, "zone", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "title", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "occupation", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "avatar", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "event", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "zone", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ReportModel;
+});
+;define("web-shell/models/partition", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PartitionModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('number'), _dec4 = (0, _model.attr)('string'), _dec5 = (0, _model.attr)('string'), (_class = class PartitionModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "smID", _descriptor, this);
+
+      _initializerDefineProperty(this, "source", _descriptor2, this);
+
+      _initializerDefineProperty(this, "schema", _descriptor3, this);
+
+      _initializerDefineProperty(this, "date", _descriptor4, this);
+
+      _initializerDefineProperty(this, "partitions", _descriptor5, this);
+
+      _initializerDefineProperty(this, "attribute", _descriptor6, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "smID", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "source", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "schema", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "date", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "partitions", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "attribute", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PartitionModel;
+});
+;define("web-shell/models/partner", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PartnerModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.hasMany)("template"), _dec7 = (0, _model.attr)("date"), _dec8 = (0, _model.attr)("date"), _dec9 = (0, _model.hasMany)("account"), (_class = class PartnerModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "address", _descriptor2, this);
+
+      _initializerDefineProperty(this, "phoneNumber", _descriptor3, this);
+
+      _initializerDefineProperty(this, "web", _descriptor4, this);
+
+      _initializerDefineProperty(this, "pid", _descriptor5, this);
+
+      _initializerDefineProperty(this, "templates", _descriptor6, this);
+
+      _initializerDefineProperty(this, "created", _descriptor7, this);
+
+      _initializerDefineProperty(this, "modified", _descriptor8, this);
+
+      _initializerDefineProperty(this, "employees", _descriptor9, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "address", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "phoneNumber", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "web", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "pid", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "templates", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "modified", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "employees", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PartnerModel;
+});
+;define("web-shell/models/project-file", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ProjectFileModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.attr)('number'), _dec6 = (0, _model.attr)('string'), _dec7 = (0, _model.attr)('string'), (_class = class ProjectFileModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "smID", _descriptor, this);
+
+      _initializerDefineProperty(this, "name", _descriptor2, this);
+
+      _initializerDefineProperty(this, "status", _descriptor3, this);
+
+      _initializerDefineProperty(this, "date", _descriptor4, this);
+
+      _initializerDefineProperty(this, "size", _descriptor5, this);
+
+      _initializerDefineProperty(this, "category", _descriptor6, this);
+
+      _initializerDefineProperty(this, "property", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "smID", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "status", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "date", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "size", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "category", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "property", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ProjectFileModel;
+});
+;define("web-shell/models/project", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ProjectModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("date"), _dec6 = (0, _model.hasMany)("model"), _dec7 = (0, _model.hasMany)("script"), _dec8 = (0, _model.hasMany)("dataset"), _dec9 = (0, _model.belongsTo)("flow"), _dec10 = (0, _model.belongsTo)("analysis"), _dec11 = (0, _model.hasMany)("notebook"), _dec12 = (0, _model.hasMany)("dash-board"), _dec13 = (0, _model.hasMany)("wiki"), (_class = class ProjectModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "provider", _descriptor2, this);
+
+      _initializerDefineProperty(this, "owner", _descriptor3, this);
+
+      _initializerDefineProperty(this, "type", _descriptor4, this);
+
+      _initializerDefineProperty(this, "created", _descriptor5, this);
+
+      _initializerDefineProperty(this, "models", _descriptor6, this);
+
+      _initializerDefineProperty(this, "scripts", _descriptor7, this);
+
+      _initializerDefineProperty(this, "datasets", _descriptor8, this);
+
+      _initializerDefineProperty(this, "flow", _descriptor9, this);
+
+      _initializerDefineProperty(this, "analysis", _descriptor10, this);
+
+      _initializerDefineProperty(this, "notebooks", _descriptor11, this);
+
+      _initializerDefineProperty(this, "dashBoards", _descriptor12, this);
+
+      _initializerDefineProperty(this, "wikis", _descriptor13, this);
+
+      _initializerDefineProperty(this, "tasks", _descriptor14, this);
+
+      _initializerDefineProperty(this, "actions", _descriptor15, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "provider", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "owner", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "models", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "scripts", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "datasets", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "flow", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "analysis", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "notebooks", [_dec11], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "dashBoards", [_dec12], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "wikis", [_dec13], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, "tasks", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, "actions", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ProjectModel;
+});
+;define("web-shell/models/report", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ReportModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('date'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.belongsTo)('image'), _dec8 = (0, _model.belongsTo)('activity'), _dec9 = (0, _model.hasMany)("participant"), (_class = class ReportModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "description", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "date", _descriptor5, this);
+
+      _initializerDefineProperty(this, "language", _descriptor6, this);
+
+      _initializerDefineProperty(this, "cover", _descriptor7, this);
+
+      _initializerDefineProperty(this, "actAttachments", _descriptor8, this);
+
+      _initializerDefineProperty(this, "writers", _descriptor9, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "date", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "cover", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "actAttachments", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "writers", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ReportModel;
+});
+;define("web-shell/models/resource", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ResourceModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("date"), _dec4 = (0, _model.attr)("string"), (_class = class ResourceModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "resourceType", _descriptor2, this);
+
+      _initializerDefineProperty(this, "created", _descriptor3, this);
+
+      _initializerDefineProperty(this, "tenant", _descriptor4, this);
+
+      _initializerDefineProperty(this, "accounts", _descriptor5, this);
+
+      _initializerDefineProperty(this, "concrets", _descriptor6, this);
+
+      _initializerDefineProperty(this, "includes", _descriptor7, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "resourceType", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "created", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "tenant", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "accounts", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "concrets", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "includes", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ResourceModel;
+});
+;define("web-shell/models/script", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ScriptModel = (_dec = (0, _model.belongsTo)("project"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.hasMany)("dataset", {
+    inverse: "scriptInput"
+  }), _dec7 = (0, _model.hasMany)("dataset", {
+    inverse: "scriptOutput"
+  }), _dec8 = (0, _model.belongsTo)("stateDisplay"), (_class = class ScriptModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "project", _descriptor, this);
+
+      _initializerDefineProperty(this, "type", _descriptor2, this);
+
+      _initializerDefineProperty(this, "name", _descriptor3, this);
+
+      _initializerDefineProperty(this, "args", _descriptor4, this);
+
+      _initializerDefineProperty(this, "reverse", _descriptor5, this);
+
+      _initializerDefineProperty(this, "inputDfs", _descriptor6, this);
+
+      _initializerDefineProperty(this, "outputDfs", _descriptor7, this);
+
+      _initializerDefineProperty(this, "stateDisplay", _descriptor8, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "project", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "args", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "reverse", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "inputDfs", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "outputDfs", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "stateDisplay", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ScriptModel;
+});
+;define("web-shell/models/slide", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let SlideModel = (_dec = (0, _model.belongsTo)("dash-board"), _dec2 = (0, _model.hasMany)("chat"), (_class = class SlideModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "dashBoard", _descriptor, this);
+
+      _initializerDefineProperty(this, "chats", _descriptor2, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "dashBoard", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "chats", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = SlideModel;
+});
+;define("web-shell/models/state-display", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let StateDisplayModel = (_dec = (0, _model.belongsTo)("stateMachine"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.hasMany)("script"), (_class = class StateDisplayModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "stateMachine", _descriptor, this);
+
+      _initializerDefineProperty(this, "name", _descriptor2, this);
+
+      _initializerDefineProperty(this, "definition", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startScripts", _descriptor4, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "stateMachine", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "definition", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startScripts", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = StateDisplayModel;
+});
+;define("web-shell/models/state-machine", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let StateMachineModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.belongsTo)("flow"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.belongsTo)("stateDisplay"), (_class = class StateMachineModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "project", _descriptor2, this);
+
+      _initializerDefineProperty(this, "type", _descriptor3, this);
+
+      _initializerDefineProperty(this, "flow", _descriptor4, this);
+
+      _initializerDefineProperty(this, "displayName", _descriptor5, this);
+
+      _initializerDefineProperty(this, "display", _descriptor6, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "project", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "flow", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "displayName", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "display", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = StateMachineModel;
+});
+;define("web-shell/models/step", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let StepModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('string'), _dec5 = (0, _model.attr)('string'), _dec6 = (0, _model.attr)('string'), _dec7 = (0, _model.attr)('number'), _dec8 = (0, _model.attr)('endTime'), (_class = class StepModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "stId", _descriptor, this);
+
+      _initializerDefineProperty(this, "input", _descriptor2, this);
+
+      _initializerDefineProperty(this, "logLocation", _descriptor3, this);
+
+      _initializerDefineProperty(this, "output", _descriptor4, this);
+
+      _initializerDefineProperty(this, "state", _descriptor5, this);
+
+      _initializerDefineProperty(this, "stepLog", _descriptor6, this);
+
+      _initializerDefineProperty(this, "startTime", _descriptor7, this);
+
+      _initializerDefineProperty(this, "startTime", _descriptor8, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "stId", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "input", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "logLocation", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "output", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "state", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "stepLog", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "startTime", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "startTime", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = StepModel;
+});
+;define("web-shell/models/table", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let TableModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.belongsTo)("db"), (_class = class TableModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "name", _descriptor, this);
+
+      _initializerDefineProperty(this, "database", _descriptor2, this);
+
+      _initializerDefineProperty(this, "provider", _descriptor3, this);
+
+      _initializerDefineProperty(this, "version", _descriptor4, this);
+
+      _initializerDefineProperty(this, "db", _descriptor5, this);
+
+      _initializerDefineProperty(this, "meta", _descriptor6, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "name", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "database", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "provider", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "version", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "db", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "meta", [_model.attr], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = TableModel;
+});
+;define("web-shell/models/wiki", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let WikiModel = (_dec = (0, _model.belongsTo)("project"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), (_class = class WikiModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "project", _descriptor, this);
+
+      _initializerDefineProperty(this, "type", _descriptor2, this);
+
+      _initializerDefineProperty(this, "location", _descriptor3, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "project", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "type", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "location", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = WikiModel;
+});
+;define("web-shell/models/zone", ["exports", "@ember-data/model"], function (_exports, _model) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ZoneModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('date'), _dec5 = (0, _model.attr)('date'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.hasMany)("participant"), _dec8 = (0, _model.hasMany)("event"), (_class = class ZoneModel extends _model.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "title", _descriptor, this);
+
+      _initializerDefineProperty(this, "subTitle", _descriptor2, this);
+
+      _initializerDefineProperty(this, "description", _descriptor3, this);
+
+      _initializerDefineProperty(this, "startDate", _descriptor4, this);
+
+      _initializerDefineProperty(this, "endDate", _descriptor5, this);
+
+      _initializerDefineProperty(this, "language", _descriptor6, this);
+
+      _initializerDefineProperty(this, "hosts", _descriptor7, this);
+
+      _initializerDefineProperty(this, "agendas", _descriptor8, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "title", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subTitle", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "description", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "startDate", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "endDate", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "language", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "hosts", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "agendas", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ZoneModel;
+});
+;define("web-shell/modifiers/did-insert", ["exports", "@ember/render-modifiers/modifiers/did-insert"], function (_exports, _didInsert) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _didInsert.default;
+    }
+  });
+});
+;define("web-shell/modifiers/did-update", ["exports", "@ember/render-modifiers/modifiers/did-update"], function (_exports, _didUpdate) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _didUpdate.default;
+    }
+  });
+});
+;define("web-shell/modifiers/will-destroy", ["exports", "@ember/render-modifiers/modifiers/will-destroy"], function (_exports, _willDestroy) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _willDestroy.default;
+    }
+  });
+});
+;define("web-shell/router", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class Router extends Ember.Router {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "location", _environment.default.locationType);
+
+      _defineProperty(this, "rootURL", _environment.default.rootURL);
+    }
+
+  }
+
+  _exports.default = Router;
+  Router.map(async function () {
+    this.route("shell", {
+      path: "/"
+    });
+    this.route("shell", {
+      path: "/*path"
+    });
+  });
+});
+;define("web-shell/routes/application", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("loading"), _dec3 = Ember.inject.service("ph-menu"), _dec4 = Ember.inject.service("remote-loading"), _dec5 = Ember._action, _dec6 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "intl", _descriptor, this);
+
+      _initializerDefineProperty(this, "loadingService", _descriptor2, this);
+
+      _initializerDefineProperty(this, "menuService", _descriptor3, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor4, this);
+    }
+
+    get clientName() {
+      return _environment.default.APP.clientName;
+    }
+
+    beforeModel(param) {
+      this.loadingService.beforeLoading();
+      let curLang = window.localStorage.getItem("lang");
+
+      if (curLang) {
+        if (curLang === "中文") {
+          this.intl.setLocale(["zh-cn"]);
+        } else {
+          this.intl.setLocale(["en-us"]);
+        }
+      } else {
+        this.intl.setLocale(["zh-cn"]);
+        window.localStorage.setItem("lang", "中文");
+      }
+    }
+
+    willTransition(_) {
+      this.loadingService.beforeLoading();
+    }
+
+    didTransition() {
+      //跳转到页面顶部
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      this.loadingService.afterLoading();
+    }
+
+    async model() {
+      this.afterModel = function () {
+        this.loadingService.afterLoading();
+      };
+
+      const layout = await this.menuService.queryLayoutByClient();
+
+      if (layout.script !== null) {
+        this.jsl.loadRemoteJs(layout.script);
+      } // TODO: remote load css
+
+
+      if (layout.css !== null) {}
+
+      return layout;
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "menuService", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
+  _exports.default = ApplicationRoute;
+});
+;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service("remote-loading"), _dec4 = Ember.inject.service("route-parse"), _dec5 = Ember.inject.service("ph-menu"), (_class = class ShellRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _initializerDefineProperty(this, "store", _descriptor2, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor3, this);
+
+      _initializerDefineProperty(this, "rps", _descriptor4, this);
+
+      _initializerDefineProperty(this, "ms", _descriptor5, this);
+    }
+
+    async model(params) {
+      console.log(params);
+
+      if (Object.keys(params).length === 0) {
+        params["path"] = "home";
+      }
+      /**
+       * 1. 第一步，需要从读取JS模版
+       */
+
+
+      const pages = await this.ms.queryClientPages();
+      const pageCount = pages.length;
+      let curPage = ""; // not found page
+
+      let parseParams;
+
+      for (let idx = 0; idx < pageCount; ++idx) {
+        const tmp = pages[idx]; // let path = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
+        const [match, result] = this.rps.parse("/" + params.path, tmp.route);
+
+        if (match) {
+          curPage = tmp;
+          parseParams = result;
+          break;
+        }
+      }
+      /**
+       * 2. 动态的把需要的JS加载到dom中
+       */
+
+
+      await this.jsl.loadRemoteJs(curPage.uri);
+      await this.jsl.loadRemoteJsSync(curPage.cat);
+      const clientName = curPage.clientName;
+      const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
+      const data = await window[clientName][modelName](this, parseParams);
+      return Ember.RSVP.hash({
+        page: curPage,
+        data: data ? data : {},
+        _isVue: true
+      });
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ShellRoute;
+});
+;define("web-shell/serializers/-default", ["exports", "@ember-data/serializer/json"], function (_exports, _json) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _json.default;
+    }
+  });
+});
+;define("web-shell/serializers/-json-api", ["exports", "@ember-data/serializer/json-api"], function (_exports, _jsonApi) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _jsonApi.default;
+    }
+  });
+});
+;define("web-shell/serializers/-rest", ["exports", "@ember-data/serializer/rest"], function (_exports, _rest) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _rest.default;
+    }
+  });
+});
+;define("web-shell/serializers/application", ["exports", "ember-inflector", "@ember-data/serializer/json-api"], function (_exports, _emberInflector, _jsonApi) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class ApplicationSerializer extends _jsonApi.default {
+    modelNameFromPayloadKey(key) {
+      return (0, _emberInflector.singularize)(Ember.String.dasherize(key));
+    }
+
+    payloadKeyFromModelName(modelName) {
+      return (0, _emberInflector.pluralize)(Ember.String.camelize(modelName));
+    }
+
+    keyForAttribute(key) {
+      return Ember.String.dasherize(key).toLowerCase();
+    }
+
+    keyForRelationship(key) {
+      return key;
+    } // extractAttributes(modelClass, resourceHash) {
+    // 	let keys = Object.keys(resourceHash.attributes)
+    // 	let obj = {}
+    // 	keys.forEach(ele => {
+    // 		let k = camelize(ele)
+    // 		obj[k] = resourceHash.attributes[ele]
+    // 		if (ele === "start-date" || ele === "end-date" || ele === "date" ) {
+    // 			obj[k] = Date.parse(resourceHash.attributes[ele])
+    // 		}
+    // 	})
+    // 	return obj
+    // }
+
+
+  }
+
+  _exports.default = ApplicationSerializer;
+});
+;define("web-shell/services/-ensure-registered", ["exports", "@embroider/util/services/ensure-registered"], function (_exports, _ensureRegistered) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _ensureRegistered.default;
+    }
+  });
+});
+;define("web-shell/services/aws-service", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  // import { computed } from "@ember/object"
+  const credentials = {
+    accessKeyId: "AKIAWPBDTVEAPOX3QT6U",
+    secretAccessKey: "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"
+  };
+
+  class AwsServiceService extends Ember.Service {
+    get s3Client() {
+      AWS.config.update(credentials);
+      AWS.config.update({
+        region: "cn-northwest-1"
+      });
+      return new AWS.S3({
+        apiVersion: "2006-03-01"
+      });
+    }
+
+    get s3Avatar() {
+      AWS.config.update(credentials);
+      AWS.config.update({
+        region: "cn-northwest-1"
+      });
+      return new AWS.S3({
+        apiVersion: "2006-03-01",
+        params: {
+          Bucket: "general.pharbers.com"
+        }
+      });
+    }
+
+  }
+
+  _exports.default = AwsServiceService;
+});
+;define("web-shell/services/browser-events-service", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let BrowserEventsServiceService = (_dec = Ember._tracked, _dec2 = Ember._tracked, _dec3 = Ember.inject.service, _dec4 = Ember._action, (_class = class BrowserEventsServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "param", _descriptor, this);
+
+      _initializerDefineProperty(this, "routeName", _descriptor2, this);
+
+      _initializerDefineProperty(this, "router", _descriptor3, this);
+    }
+
+    // 注册浏览器监听事件
+    registerListener(route) {
+      let that = this; // eslint-disable-next-line no-undef
+
+      $(function () {
+        that.param = this.location.href.split("?")[1];
+        that.routeName = `/${route}?`; //回退
+
+        if (window.history && window.history.pushState) {
+          history.pushState(null, null, document.URL);
+          window.addEventListener("popstate", that.popstateFun, false);
+        } //关闭&刷新（页面有变动或距上次刷新间隔超过5s时生效）
+
+
+        window.onbeforeunload = function (e) {
+          return false;
+        }; //文档加载完成后立即触发
+
+
+        window.onload = function () {
+          // 刷新回到指定页面
+          that.router.transitionTo(`${that.routeName}${that.param}`);
+        };
+      });
+    }
+
+    popstateFun() {
+      let that = this;
+      let sel = confirm("您还没有保存更改，确认返回吗?");
+
+      if (sel) {
+        window.removeEventListener("popstate", that.popstateFun);
+        that.router.transitionTo(`${that.routeName}${that.param}`);
+      } else {
+        history.pushState(null, null, document.URL);
+      }
+    } //清除浏览器监听事件
+
+
+    clearListener() {
+      window.onbeforeunload = undefined;
+      window.removeEventListener("popstate", this.popstateFun);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "param", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "routeName", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "popstateFun", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "popstateFun"), _class.prototype)), _class));
+  _exports.default = BrowserEventsServiceService;
+});
+;define("web-shell/services/cookies", ["exports", "ember-cookies/services/cookies"], function (_exports, _cookies) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var _default = _cookies.default;
+  _exports.default = _default;
+});
+;define("web-shell/services/download-file", ["exports", "fetch"], function (_exports, _fetch) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let DownloadFileService = (_dec = Ember.inject.service, (_class = class DownloadFileService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+    }
+
+    downloadFile(param) {
+      let source = param;
+      let bucket = "";
+      let key = "";
+      const url = "https://api.pharbers.com/entry/download";
+
+      if (source.indexOf("s3a://") != -1) {
+        let str = source.slice(6, source.length);
+        let num = str.indexOf("/");
+        bucket = str.substring(0, num);
+        key = str.substring(num + 1, str.length);
+      } else {
+        bucket = "ph-origin-files";
+        key = source;
+      }
+
+      const body = {
+        bucket: bucket,
+        key: key
+      };
+      let options = {
+        method: "POST",
+        headers: {
+          authorization: this.cookies.read("access_token"),
+          "Content-Type": "application/json",
+          accept: "application/json"
+        },
+        body: JSON.stringify(body)
+      };
+      (0, _fetch.default)(url, options).then(res => {
+        return res.json();
+      }).then(response => {
+        let url = response.url;
+        window.open(url); // let link = document.createElement( "a" )
+        // link.download = "filename"
+        // link.href = url
+        // document.body.appendChild( link )
+        // link.click()
+        // document.body.removeChild( link )
+      });
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = DownloadFileService;
+});
+;define("web-shell/services/intl", ["exports", "ember-intl/services/intl"], function (_exports, _intl) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _intl.default;
+    }
+  });
+});
+;define("web-shell/services/iot-service", ["exports", "aws-crt", "web-shell/config/environment"], function (_exports, _awsCrt, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class IotServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "client", null);
+
+      _defineProperty(this, "connection", null);
+
+      _defineProperty(this, "config", null);
+
+      _defineProperty(this, "client_id", _environment.default.APP.AWS_IOT_DEFAULT_CLIENT_ID);
+
+      _defineProperty(this, "endpoint", _environment.default.APP.AWS_IOT_ENDPOINT);
+
+      _defineProperty(this, "aws_region", _environment.default.APP.AWS_REGION);
+
+      _defineProperty(this, "aws_access_id", _environment.default.APP.AWS_ACCESS_KEY);
+
+      _defineProperty(this, "aws_secret_key", _environment.default.APP.AWS_SECRET_KEY);
+
+      _defineProperty(this, "client_bootstrap", new _awsCrt.io.ClientBootstrap());
+
+      _defineProperty(this, "qos", _awsCrt.mqtt.QoS.AtLeastOnce);
+    }
+
+    setClientId(id) {
+      this.client_id = id;
+      return this;
+    }
+
+    build() {
+      const config_builder = _awsCrt.iot.AwsIotMqttConnectionConfigBuilder.new_mtls_builder();
+
+      config_builder.with_credentials(this.aws_region, this.aws_access_id, this.aws_secret_key);
+      config_builder.with_clean_session(false); //将 clean_session参数设置为 False即表示连接应该是持久连接
+
+      config_builder.with_client_id(this.client_id);
+      config_builder.with_endpoint(this.endpoint);
+      config_builder.with_ping_timeout_ms(5000);
+      config_builder.with_keep_alive_seconds(5000);
+      this.config = config_builder.build();
+      this.client = new _awsCrt.mqtt.MqttClient(this.client_bootstrap);
+      return this;
+    }
+
+    __byteToString(arrayBuffer) {
+      return new TextDecoder().decode(arrayBuffer);
+    }
+
+    __heartbeat() {
+      if (this.connection) {
+        let sequence = 0;
+        setInterval(() => {
+          sequence += 1;
+          this.connection.publish("pharbers/heartbeat", JSON.stringify({
+            "message": `client_id => ${this.client_id}`,
+            "sequence": sequence
+          }), _awsCrt.mqtt.QoS.AtMostOnce, false).catch(error => console.log("heartbeat"));
+        }, 30 * 1000);
+      }
+    }
+
+    async connect() {
+      if (this.client) {
+        this.connection = this.client.new_connection(this.config);
+        await this.connection.connect();
+
+        this.__heartbeat();
+
+        console.log("connect");
+      }
+    }
+
+    disconnect() {
+      if (this.connection) {
+        this.connection.disconnect();
+        this.connection = null;
+        console.log("disconnect");
+      }
+    }
+
+    setSub(topic = "pharbers", func) {
+      if (this.connection) {
+        if (!func) {
+          throw Error("CallBack Is Undefined");
+        }
+
+        this.connection.subscribe(topic, this.qos, (_, payload) => {
+          func(this.__byteToString(payload));
+        });
+      }
+    }
+
+  }
+
+  _exports.default = IotServiceService;
+});
+;define("web-shell/services/loading", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  // eslint-disable-next-line ember/no-classic-classes
+  var _default = Ember.Service.extend({
+    loading: document.getElementById("loadingio-spinner-double-ring-ho1zizxmctu"),
+    body: document.getElementsByTagName("body"),
+    beforeLoading: function () {
+      this.loading.style["display"] = "flex";
+      this.loading.style["z-index"] = 2;
+      this.body[0].style["overflow"] = "hidden";
+    },
+    afterLoading: function () {
+      const server = setTimeout(() => {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          this.loading.style["display"] = "none";
+          this.loading.style["z-index"] = 2;
+          this.body[0].style["overflow"] = "auto";
+          clearInterval(server);
+        }
+      }, 100);
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/services/notice-service", ["exports", "fetch"], function (_exports, _fetch) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let NoticeServiceService = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, (_class = class NoticeServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _initializerDefineProperty(this, "subjectID", _descriptor2, this);
+
+      _initializerDefineProperty(this, "subjectCallback", _descriptor3, this);
+
+      _initializerDefineProperty(this, "uploadStatus", _descriptor4, this);
+    }
+
+    register(tableName, id, callback, ele, projectId) {
+      // 持续30s，调用unregister删除
+      if (this.subjectID.indexOf(id) == -1) {
+        this.subjectID.push(id);
+        this.subjectCallback.push({
+          ele: ele,
+          callback: callback,
+          tableName: tableName,
+          date: new Date().getTime(),
+          projectId: projectId
+        });
+      }
+    }
+
+    unregister(id) {
+      //删除id和callback函数
+      let index = this.subjectID.indexOf(id);
+      this.subjectID.splice(index, 1);
+      this.subjectCallback.splice(index, 1);
+    }
+
+    observer() {
+      // 定义timer，5秒请求一次, 无限循环，id数组大于0调用register，无返回不进行处理
+      // query notification, id数组大于0时请求数据，超过30秒删除id，用callback进行处理
+      let that = this;
+      setInterval(async function () {
+        let currentTime = new Date().getTime(); // 设置30s超时
+
+        that.subjectCallback.forEach((item, index) => {
+          if (currentTime - item.date > 120 * 1000) {
+            that.unregister(that.subjectID[index]);
+          }
+        });
+
+        if (that.subjectID.length > 0) {
+          // let url = "https://apiv2.pharbers.com/phdydatasource/query"
+          let conditions = [];
+          that.subjectID.forEach((item, index) => {
+            conditions.push({
+              id: item,
+              projectId: that.subjectCallback[index].projectId
+            });
+          });
+          let url = "https://apiv2.pharbers.com/phdydatasource/batch_get_item";
+          let headers = {
+            Authorization: that.cookies.read("access_token"),
+            "Content-Type": "application/vnd.api+json",
+            Accept: "application/vnd.api+json"
+          };
+          let statusBody = {
+            table: "notification",
+            conditions: conditions
+          };
+          let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(statusBody)
+          };
+          (0, _fetch.default)(url, options).then(res => res.json()).then(response => {
+            if (response.data && response.data.length > 0) {
+              let status = JSON.parse(response.data[0].attributes.message).cnotification.status;
+              console.log(status); //以后会做成进度条
+
+              if (status != "project_file_to_DS_running" && status != "dag_conf insert success") {
+                let index = that.subjectID.indexOf(response.data[0].id);
+                let targetCallback = that.subjectCallback[index]; // 将消息分发给不同component处理
+
+                targetCallback.callback(response, targetCallback.ele); // 调用unregister
+
+                that.unregister(response.data[0].id);
+              }
+            }
+          });
+        } else {
+          console.log("notice observer");
+        }
+      }, 5 * 1000);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "subjectID", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return [];
+    }
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "subjectCallback", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return [];
+    }
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "uploadStatus", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return false;
+    }
+  })), _class));
+  _exports.default = NoticeServiceService;
+});
+;define("web-shell/services/oauth-service", ["exports", "web-shell/config/environment", "fetch"], function (_exports, _environment, _fetch) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, (_class = class OauthServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _initializerDefineProperty(this, "ajax", _descriptor2, this);
+
+      _initializerDefineProperty(this, "router", _descriptor3, this);
+
+      _initializerDefineProperty(this, "store", _descriptor4, this);
+
+      _defineProperty(this, "clientId", _environment.default.APP.clientId);
+
+      _defineProperty(this, "clientSecret", _environment.default.APP.clientSecret);
+
+      _defineProperty(this, "redirectUri", _environment.default.APP.redirectUri);
+    }
+
+    oauthCallback(transition) {
+      const cookies = this.cookies;
+      let that = this; // let urli = window.location.href
+
+      transition.queryParams = {
+        // "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
+        // "state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
+        code: transition.intent.router._lastQueryParams.code,
+        state: transition.intent.router._lastQueryParams.state
+      };
+      const {
+        queryParams
+      } = transition;
+
+      if (queryParams.code && queryParams.state) {
+        // 获取oauth-callback 中的query
+        const redirectUri = this.redirectUri;
+        const clientId = this.clientId;
+        const secret = this.clientSecret;
+        const grantType = "authorization_code";
+        const code = queryParams.code; // const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
+
+        const url = "https://apiv2.pharbers.com/oauth/token";
+        const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`; // const data = {
+        // 	code: code,
+        // 	grant_type: grantType,
+        // 	redirect_uri: redirectUri
+        // }
+
+        const b64 = window.btoa(`${clientId}:${secret}`);
+        const authorization = `Basic ${b64}`;
+        let options = {
+          method: "POST",
+          headers: {
+            authorization,
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            accept: "application/json, text/javascript, */*; q=0.01"
+          },
+          body: body
+        };
+        (0, _fetch.default)(url, options).then(res => {
+          return res.json();
+        }).then(async response => {
+          this.removeAuth();
+          let options = {
+            domain: ".pharbers.com",
+            path: "/",
+            maxAge: response.expiresIn
+          };
+          cookies.write("access_token", response.access_token, options);
+          cookies.write("refresh_token", response.refresh_token, options);
+          cookies.write("token_type", response.token_type, options);
+          cookies.write("expires_in", response.expiresIn, options);
+          cookies.write("user_name", response.user.name, options);
+          cookies.write("user_name_show", encodeURI(response.user.lastName + response.user.firstName), options);
+          cookies.write("user_email", response.user.email, options);
+          cookies.write("company_id", response.user.employerId, options);
+          cookies.write("user_name_show", encodeURI(response.user.lastName + response.user.firstName), options);
+          cookies.write("account_id", response.user.id, options);
+          let userData = await that.store.findRecord("account", that.cookies.read("account_id")); //请求employer的数据
+
+          let employerId = await userData.belongsTo("employer").id();
+          let employerData = await that.store.findRecord("partner", employerId);
+          cookies.write("company_name_show", encodeURI(employerData.name), options); // this.mqttService.mqttConnect()
+
+          this.router.transitionTo("/download/my-data");
+        }).catch(_ => {
+          this.router.transitionTo("/download/my-data");
+        });
+      } else {
+        this.router.transitionTo("/download/my-data");
+      }
+    }
+
+    judgeAuth() {
+      let tokenFlag = false;
+      let token = this.cookies.read("access_token");
+
+      if (typeof token !== "undefined" && token !== null && token !== "") {
+        tokenFlag = true;
+      }
+
+      return tokenFlag; // 前端没有scope，能否访问进行对应的query
+    }
+
+    removeAuth() {
+      let options = {
+        domain: ".pharbers.com",
+        path: "/"
+      };
+      let keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+
+      if (keys) {
+        keys.forEach(x => {
+          this.cookies.clear(x, options);
+        });
+      }
+
+      window.console.log("clear cookies!");
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "ajax", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = OauthServiceService;
+});
+;define("web-shell/services/page-title-list", ["exports", "ember-page-title/services/page-title-list"], function (_exports, _pageTitleList) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _pageTitleList.default;
+    }
+  });
+});
+;define("web-shell/services/page-title", ["exports", "ember-page-title/services/page-title"], function (_exports, _pageTitle) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _pageTitle.default;
+    }
+  });
+});
+;define("web-shell/services/ph-menu", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let PhMenuService = (_dec = Ember.inject.service, (_class = class PhMenuService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "store", _descriptor, this);
+    }
+
+    async queryLayoutByClient() {
+      let layout = this.store.peekRecord("layout", _environment.default.APP.clientId);
+
+      if (layout === null) {
+        layout = await this.store.findRecord("layout", _environment.default.APP.clientId);
+      }
+
+      return layout;
+    }
+
+    async queryClientPages() {
+      let pages = this.store.peekAll("page");
+      pages = pages.filter(_ => true);
+
+      if (pages.length === 0) {
+        pages = await this.store.query("page", {
+          "filter[clientId]": _environment.default.APP.clientId
+        });
+        pages = pages.filter(_ => true);
+      }
+
+      return pages;
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PhMenuService;
+});
+;define("web-shell/services/remote-loading", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class RemoteLoadingService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "loadedJs", []);
+    }
+
+    loadRemoteJs(source, callback) {
+      let that = this;
+      const script = document.createElement("script");
+
+      script.onload = function () {
+        that.loadedJs.push(source);
+
+        if (callback) {
+          callback();
+        }
+      };
+
+      if (this.loadedJs.indexOf(source) == -1) {
+        script.src = source;
+        document.head.appendChild(script);
+      }
+    }
+
+    loadRemoteJsSync(source) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = source;
+
+        script.onload = () => {
+          resolve();
+        };
+
+        script.onerror = () => {
+          reject("cannot load script " + source);
+        };
+
+        if (this.loadedJs.indexOf(source) == -1) {
+          document.body.appendChild(script);
+        }
+      });
+    }
+
+  }
+
+  _exports.default = RemoteLoadingService;
+});
+;define("web-shell/services/route-parse", ["exports", "ramda"], function (_exports, _ramda) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  class RouteParseService extends Ember.Service {
+    parse(uri, template) {
+      const qIdx = uri.indexOf("?");
+      let resourceUri = uri;
+      let queryUri = "";
+
+      if (qIdx > -1) {
+        resourceUri = uri.substring(0, qIdx);
+        queryUri = uri.substring(qIdx + 1);
+      }
+
+      const factory = new StageFactory();
+      const templateArr = template.split("/");
+      const resourceArr = resourceUri.split("/");
+
+      try {
+        const isMatch = templateArr.length === resourceArr.length;
+
+        if (!isMatch) {
+          throw new Error("not match");
+        }
+
+        const paramArr = factory.zip(templateArr, resourceArr);
+        let stages = [];
+
+        for (let idx = 0; idx < paramArr.length; ++idx) {
+          stages.push(factory.createStageInstance("param", paramArr[idx][0], paramArr[idx][1]));
+        }
+
+        let queryArr = queryUri.split("&");
+        queryArr = queryArr.map(_ => _.split("="));
+
+        for (let idx = 0; idx < queryArr.length; ++idx) {
+          stages.push(factory.createStageInstance("query", queryArr[idx][0], queryArr[idx][1]));
+        }
+
+        const byCat = _ramda.default.groupBy(_ => _.cat);
+
+        let reVal = byCat(stages.map(_ => _.parse()));
+        const keys = Object.keys(reVal);
+        const result = {};
+
+        for (let idx = 0; idx < keys.length; ++idx) {
+          result[keys[idx]] = factory.array2Object(reVal[keys[idx]]);
+        }
+
+        return [true, result];
+      } catch (e) {
+        return [false, null];
+      }
+    }
+
+    queryLogicControllerName(uri) {
+      let result = uri;
+
+      if (uri && uri.length > 0) {
+        const cIdx = uri.indexOf("/");
+
+        if (cIdx === -1) {
+          result = uri;
+        } else {
+          result = uri.substring(0, cIdx);
+        }
+      }
+
+      return result;
+    }
+
+  }
+
+  _exports.default = RouteParseService;
+
+  class Stage {
+    constructor(_t, _r) {
+      _defineProperty(this, "template", "");
+
+      _defineProperty(this, "resource", "");
+
+      this.template = _t;
+      this.resource = _r;
+    }
+
+    parse() {
+      throw new Error("not implemented");
+    }
+
+  }
+
+  class ParamStage extends Stage {
+    constructor(_t, _r) {
+      super(_t, _r);
+    }
+
+    parse() {
+      let tmp = {
+        cat: "param"
+      };
+
+      if (this.template.startsWith("{") && this.template.endsWith("}")) {
+        this.template = this.template.substring(this.template.indexOf("{") + 1, this.template.lastIndexOf("}"));
+        tmp[this.template] = this.resource;
+      } else {
+        if (this.template !== this.resource) {
+          throw new Error("not match");
+        }
+      }
+
+      return tmp;
+    }
+
+  }
+
+  class QueryStage extends Stage {
+    constructor(_t, _r) {
+      super(_t, _r);
+    }
+
+    parse() {
+      let tmp = {
+        cat: "query"
+      };
+      tmp[this.template] = this.resource;
+      return tmp;
+    }
+
+  }
+
+  class StageFactory {
+    constructor() {
+      _defineProperty(this, "zip", (...arr) => Array.from({
+        length: Math.max(...arr.map(a => a.length))
+      }, (_, i) => arr.map(a => a[i])));
+    }
+
+    createStageInstance(category, template, resource) {
+      if (category === "param") {
+        return new ParamStage(template, resource);
+      } else if (category === "query") {
+        return new QueryStage(template, resource);
+      } else {
+        throw new Error("not implemented");
+      }
+    }
+
+    array2Object(arr) {
+      const result = {};
+      const length = arr.length;
+
+      for (let idx = 0; idx < length; ++idx) {
+        const tmp = arr[idx];
+        const keys = Object.keys(tmp);
+
+        for (let ik = 0; ik < keys.length; ++ik) {
+          result[keys[ik]] = tmp[keys[ik]];
+        }
+      }
+
+      return result;
+    }
+
+  }
+});
+;define("web-shell/services/store", ["exports", "ember-data/store"], function (_exports, _store) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _store.default;
+    }
+  });
+});
+;define("web-shell/templates/application", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "CG8n8Gu+",
+    "block": "[[[1,[28,[35,0],[[30,0,[\"clientName\"]]],null]],[1,\"\\n\\n\"],[8,[39,1],null,[[\"@layout\"],[[30,0,[\"model\",\"name\"]]]],[[\"default\"],[[[[1,\"\\n    \"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[]]]]],[1,\"\\n\"]],[],false,[\"page-title\",\"main-layout\",\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/application.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/templates/shell", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "n5K90ut1",
+    "block": "[[[1,[28,[35,0],[\"shell\"],null]],[1,\"\\n\"],[8,[39,1],null,[[\"@model\"],[[30,1]]],null],[1,\"\\n\"],[46,[28,[37,3],null,null],null,null,null],[1,\"\\n\"]],[\"@model\"],false,[\"page-title\",\"shell-component\",\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/shell.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
+;define("web-shell/transforms/boolean", ["exports", "@ember-data/serializer/-private"], function (_exports, _private) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _private.BooleanTransform;
+    }
+  });
+});
+;define("web-shell/transforms/date", ["exports", "@ember-data/serializer/-private"], function (_exports, _private) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _private.DateTransform;
+    }
+  });
+});
+;define("web-shell/transforms/number", ["exports", "@ember-data/serializer/-private"], function (_exports, _private) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _private.NumberTransform;
+    }
+  });
+});
+;define("web-shell/transforms/string", ["exports", "@ember-data/serializer/-private"], function (_exports, _private) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _private.StringTransform;
+    }
+  });
+});
+;define("web-shell/utils/intl/missing-message", ["exports", "ember-intl/-private/utils/missing-message"], function (_exports, _missingMessage) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(_exports, "default", {
+    enumerable: true,
+    get: function () {
+      return _missingMessage.default;
+    }
+  });
+});
+;
+
+;define('web-shell/config/environment', [], function() {
+  var prefix = 'web-shell';
+try {
+  var metaName = prefix + '/config/environment';
+  var rawConfig = document.querySelector('meta[name="' + metaName + '"]').getAttribute('content');
+  var config = JSON.parse(decodeURIComponent(rawConfig));
+
+  var exports = { 'default': config };
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+  return exports;
+}
+catch(err) {
+  throw new Error('Could not read config from meta tag with name "' + metaName + '".');
+}
+
+});
+
+;
+          if (!runningTests) {
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+f49734a5"});
+          }
+        
+//# sourceMappingURL=web-shell.map
