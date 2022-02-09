@@ -6,4 +6,5 @@ export default class LayoutModel extends Model {
 	@attr("string") version
 	@attr("string") name
 	@attr("string") css
+	@attr("string") script
 }

@@ -8,6 +8,7 @@ export default class ApplicationRoute extends Route {
 	@service intl
 	@service("loading") loadingService
 	@service("ph-menu") menuService
+	@service("remote-loading") jsl
 
 	get layoutName() {
 		return this.layout.name
@@ -50,6 +51,17 @@ export default class ApplicationRoute extends Route {
 			this.loadingService.afterLoading()
 		}
 
-		return await this.menuService.queryLayoutByClient()
+		const layout = await this.menuService.queryLayoutByClient()
+
+		if (layout.script !== null) {
+			this.jsl.loadRemoteJs(layout.script)
+		}
+
+		// TODO: remote load css
+		if (layout.css !== null) {
+
+		}
+
+		return layout
 	}
 }

@@ -1,7 +1,11 @@
-{{#let (component this.navComponent) as |Nav|}}
-    <Nav @inverse=(contains this.needInverse this.activeRoute) />
+{{#let (element this.navComponent) as |Nav|}}
+    <Nav inverse={{this.inverse}}
+        {{on "linkToPage" linkToPage}}
+        {{on "logout" logout}}
+        is-login={{isLogin}}
+    />
 {{/let}}
 {{yield}}
-{{#let (component this.footComponent) as |Footer|}}
-    <Footer />
+{{#let (element this.footComponent) as |Footer|}}
+    <Footer {{on "linkToPage" linkToPage}} />
 {{/let}}

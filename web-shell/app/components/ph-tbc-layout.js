@@ -1,8 +1,18 @@
 import Component from "@glimmer/component"
 import { inject as service } from "@ember/service"
+import { action } from "@ember/object"
 
 export default class PhTbcLayoutComponent extends Component {
 	@service router
+
+	get isLogin() {
+		// TODO: 通过token，cookies去判断
+		return false
+	}
+
+	get inverse() {
+		return this.needInverse.includes(this.activeRoute)
+	}
 
 	get needInverse() {
 		return [
@@ -26,12 +36,26 @@ export default class PhTbcLayoutComponent extends Component {
 	get navComponent() {
 		if (this.args.navComponent) {
 			return this.args.navComponent
-		} else return "pharbers-nav-top"
+		} else return "pharbers-bp-nav-top"
 	}
 
 	get footComponent() {
 		if (this.args.footComponent) {
 			return this.args.footComponent
-		} else return "pharbers-footer"
+		} else return "pharbers-bp-page-bottom"
+	}
+
+	@action
+	linkToPage(data) {
+		if (data.detail[0] == "home" && this.router.currentRouteName == "home") {
+			window.location.reload()
+		} else {
+			this.router.transitionTo("shell", data.detail[0])
+		}
+	}
+
+	@action
+	logout() {
+		this.oauthService.removeAuth()
 	}
 }

@@ -273,7 +273,7 @@
 
   _exports.default = _default;
 });
-;define("web-shell/components/ph-tbc-layout", ["exports", "@glimmer/component"], function (_exports, _component) {
+;define("web-shell/components/ph-menu-layout", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -281,7 +281,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor;
+  var _dec, _dec2, _class, _descriptor, _descriptor2;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -293,27 +293,111 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{#let (component this.navComponent) as |Nav|}}
-      <Nav @inverse=(contains this.needInverse this.activeRoute) />
+    {{#let (component this.menuComponent) as |Menu|}}
+      <Menu />
   {{/let}}
-  {{yield}}
-  {{#let (component this.footComponent) as |Footer|}}
-      <Footer />
+  {{#let (component this.navComponent) as |Nav|}}
+      {{yield}}
   {{/let}}
   
   */
   {
-    "id": "CHU0IZ6p",
-    "block": "[[[44,[[50,[30,0,[\"navComponent\"]],0,null,null]],[[[1,\"    \"],[8,[30,1],[[24,\"this.needInverse\",\"\"],[24,\"this.activeRoute)\",\"\"]],[[\"@inverse\"],[\"(contains\"]],null],[1,\"\\n\"]],[1]]],[18,3,null],[1,\"\\n\"],[44,[[50,[30,0,[\"footComponent\"]],0,null,null]],[[[1,\"    \"],[8,[30,2],null,null,null],[1,\"\\n\"]],[2]]]],[\"Nav\",\"Footer\",\"&default\"],false,[\"let\",\"component\",\"yield\"]]",
-    "moduleName": "web-shell/components/ph-tbc-layout.hbs",
+    "id": "KSDOL6Zf",
+    "block": "[[[44,[[50,[30,0,[\"menuComponent\"]],0,null,null]],[[[1,\"    \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[44,[[50,[30,0,[\"navComponent\"]],0,null,null]],[[[1,\"    \"],[18,3,null],[1,\"\\n\"]],[2]]]],[\"Menu\",\"Nav\",\"&default\"],false,[\"let\",\"component\",\"yield\"]]",
+    "moduleName": "web-shell/components/ph-menu-layout.hbs",
     "isStrictMode": false
   });
 
-  let PhTbcLayoutComponent = (_dec = Ember.inject.service, (_class = class PhTbcLayoutComponent extends _component.default {
+  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), (_class = class PhMenuLayoutComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "ms", _descriptor2, this);
+    }
+
+    get menuComponent() {
+      if (this.args.menuComponent) {
+        return this.args.menuComponent;
+      } else return "phcatelog-menu";
+    }
+
+    get navComponent() {
+      if (this.args.navComponent) {
+        return this.args.navComponent;
+      } else return "";
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = PhMenuLayoutComponent;
+
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhMenuLayoutComponent);
+});
+;define("web-shell/components/ph-tbc-layout", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
+  /*
+    {{#let (element this.navComponent) as |Nav|}}
+      <Nav inverse={{this.inverse}}
+          {{on "linkToPage" linkToPage}}
+          {{on "logout" logout}}
+          is-login={{isLogin}}
+      />
+  {{/let}}
+  {{yield}}
+  {{#let (element this.footComponent) as |Footer|}}
+      <Footer {{on "linkToPage" linkToPage}} />
+  {{/let}}
+  
+  */
+  {
+    "id": "44K5EM8c",
+    "block": "[[[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"navComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"navComponent\"]]]]]],[[[1,\"    \"],[8,[30,1],[[16,\"inverse\",[30,0,[\"inverse\"]]],[16,\"is-login\",[36,4]],[4,[38,5],[\"linkToPage\",[33,6]],null],[4,[38,5],[\"logout\",[33,7]],null]],null,null],[1,\"\\n\"]],[1]]],[18,3,null],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"footComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"footComponent\"]]]]]],[[[1,\"    \"],[8,[30,2],[[4,[38,5],[\"linkToPage\",[33,6]],null]],null,null],[1,\"\\n\"]],[2]]]],[\"Nav\",\"Footer\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"isLogin\",\"on\",\"linkToPage\",\"logout\",\"yield\"]]",
+    "moduleName": "web-shell/components/ph-tbc-layout.hbs",
+    "isStrictMode": false
+  });
+
+  let PhTbcLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class PhTbcLayoutComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "router", _descriptor, this);
+    }
+
+    get isLogin() {
+      // TODO: 通过token，cookies去判断
+      return false;
+    }
+
+    get inverse() {
+      return this.needInverse.includes(this.activeRoute);
     }
 
     get needInverse() {
@@ -327,59 +411,13 @@
     get navComponent() {
       if (this.args.navComponent) {
         return this.args.navComponent;
-      } else return "pharbers-nav-top";
+      } else return "pharbers-bp-nav-top";
     }
 
     get footComponent() {
       if (this.args.footComponent) {
         return this.args.footComponent;
-      } else return "pharbers-footer";
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  })), _class));
-  _exports.default = PhTbcLayoutComponent;
-
-  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhTbcLayoutComponent);
-});
-;define("web-shell/components/pharbers-footer", ["exports", "@glimmer/component"], function (_exports, _component) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _dec, _dec2, _class, _descriptor;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
-  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
-  /*
-    <pharbers-bp-page-bottom {{on "linkToPage" linkToPage}}></pharbers-bp-page-bottom>
-  */
-  {
-    "id": "2cTCYmx2",
-    "block": "[[[11,\"pharbers-bp-page-bottom\"],[4,[38,0],[\"linkToPage\",[33,1]],null],[12],[13]],[],false,[\"on\",\"linkToPage\"]]",
-    "moduleName": "web-shell/components/pharbers-footer.hbs",
-    "isStrictMode": false
-  });
-
-  let PharbersFooterComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, (_class = class PharbersFooterComponent extends _component.default {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "router", _descriptor, this);
+      } else return "pharbers-bp-page-bottom";
     }
 
     linkToPage(data) {
@@ -390,106 +428,19 @@
       }
     }
 
+    logout() {
+      this.oauthService.removeAuth();
+    }
+
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype)), _class));
-  _exports.default = PharbersFooterComponent;
+  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class));
+  _exports.default = PhTbcLayoutComponent;
 
-  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PharbersFooterComponent);
-});
-;define("web-shell/components/pharbers-nav-top", ["exports", "@glimmer/component"], function (_exports, _component) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
-
-  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
-  const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
-  /*
-    {{#if @inverse}}
-  	<pharbers-bp-nav-top
-  		inversebase
-  		{{on "linkToPage" linkToPage}}
-  		{{on "logout" logout}}
-  		is-login={{isLogin}}
-  	></pharbers-bp-nav-top>
-  {{else}}
-  	<pharbers-bp-nav-top
-  		{{on "linkToPage" linkToPage}}
-  		{{on "logout" logout}}
-  		is-login={{isLogin}}
-  	></pharbers-bp-nav-top>
-  {{/if}}
-  
-  */
-  {
-    "id": "W1OBTxNC",
-    "block": "[[[41,[30,1],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[24,\"inversebase\",\"\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]],[[[1,\"\\t\"],[11,\"pharbers-bp-nav-top\"],[16,\"is-login\",[36,1]],[4,[38,2],[\"linkToPage\",[33,3]],null],[4,[38,2],[\"logout\",[33,4]],null],[12],[13],[1,\"\\n\"]],[]]]],[\"@inverse\"],false,[\"if\",\"isLogin\",\"on\",\"linkToPage\",\"logout\"]]",
-    "moduleName": "web-shell/components/pharbers-nav-top.hbs",
-    "isStrictMode": false
-  });
-
-  let PharbersNavTopComponent = (_dec = Ember.inject.service("oauth-service"), _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.inject.service, _dec5 = Ember._action, _dec6 = Ember._action, (_class = class PharbersNavTopComponent extends _component.default {
-    constructor(...args) {
-      super(...args);
-
-      _initializerDefineProperty(this, "oauthService", _descriptor, this);
-
-      _initializerDefineProperty(this, "topResponseMini", _descriptor2, this);
-
-      _initializerDefineProperty(this, "isLogin", _descriptor3, this);
-
-      _initializerDefineProperty(this, "router", _descriptor4, this);
-    }
-
-    linkToPage(data) {
-      this.router.transitionTo("shell", data.detail[0]);
-    }
-
-    logout() {
-      this.oauthService.removeAuth();
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "topResponseMini", [_dec2], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "isLogin", [_dec3], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: function () {
-      return false;
-    }
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec4], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "linkToPage", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "linkToPage"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class));
-  _exports.default = PharbersNavTopComponent;
-
-  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PharbersNavTopComponent);
+  Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhTbcLayoutComponent);
 });
 ;define("web-shell/components/shell-component", ["exports", "@glimmer/component"], function (_exports, _component) {
   "use strict";
@@ -3226,7 +3177,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -3236,7 +3187,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let LayoutModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), (_class = class LayoutModel extends _model.default {
+  let LayoutModel = (_dec = (0, _model.attr)("string"), _dec2 = (0, _model.attr)("string"), _dec3 = (0, _model.attr)("string"), _dec4 = (0, _model.attr)("string"), _dec5 = (0, _model.attr)("string"), _dec6 = (0, _model.attr)("string"), (_class = class LayoutModel extends _model.default {
     constructor(...args) {
       super(...args);
 
@@ -3249,6 +3200,8 @@
       _initializerDefineProperty(this, "name", _descriptor4, this);
 
       _initializerDefineProperty(this, "css", _descriptor5, this);
+
+      _initializerDefineProperty(this, "script", _descriptor6, this);
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "clientId", [_dec], {
@@ -3272,6 +3225,11 @@
     writable: true,
     initializer: null
   }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "css", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "script", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -4698,7 +4656,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4708,7 +4666,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("loading"), _dec3 = Ember.inject.service("ph-menu"), _dec4 = Ember._action, _dec5 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
+  let ApplicationRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("loading"), _dec3 = Ember.inject.service("ph-menu"), _dec4 = Ember.inject.service("remote-loading"), _dec5 = Ember._action, _dec6 = Ember._action, (_class = class ApplicationRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -4717,6 +4675,8 @@
       _initializerDefineProperty(this, "loadingService", _descriptor2, this);
 
       _initializerDefineProperty(this, "menuService", _descriptor3, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor4, this);
     }
 
     get layoutName() {
@@ -4759,7 +4719,16 @@
         this.loadingService.afterLoading();
       };
 
-      return await this.menuService.queryLayoutByClient();
+      const layout = await this.menuService.queryLayoutByClient();
+
+      if (layout.script !== null) {
+        this.jsl.loadRemoteJs(layout.script);
+      } // TODO: remote load css
+
+
+      if (layout.css !== null) {}
+
+      return layout;
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "intl", [_dec], {
@@ -4777,7 +4746,12 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
   _exports.default = ApplicationRoute;
 });
 ;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
@@ -6076,7 +6050,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+a09adac1"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"fjjnl2uSalHTdrppHG9u","clientName":"offweb","clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+18492677"});
           }
         
 //# sourceMappingURL=web-shell.map
