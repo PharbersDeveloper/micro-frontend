@@ -48,7 +48,6 @@ export default class ApplicationRoute extends Route {
 		}
 
 		const layout = await this.menuService.queryLayoutByClient()
-
 		if (layout.script !== null) {
 			this.jsl.loadRemoteJs(layout.script)
 		}
