@@ -10,6 +10,8 @@ export default class OauthServiceService extends Service {
 	@service store
 
 	clientSecret = config.APP.clientSecret
+	accountsUri = ENV.APP.accountsUri
+	scope =  ENV.APP.scope
 
 	get redirectUri() {
 		if (ENV.environment === "development") {
@@ -137,8 +139,6 @@ export default class OauthServiceService extends Service {
 		}
 
 		return tokenFlag
-
-		// 前端没有scope，能否访问进行对应的query
 	}
 
 	removeAuth() {
@@ -155,5 +155,15 @@ export default class OauthServiceService extends Service {
 		}
 
 		window.console.log("clear cookies!")
+	}
+
+	obtainAuth() {
+		let cookies = this.get( "cookies" )
+		if (!cookies.read("access_token")) {
+			const x = JSON.stringify({"client_id": this.clientId, "redirect_uri": this.redirectUri, "time": new Date().getTime()})
+			const state = window.btoa(x)
+			window.location.href =
+				`${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`
+		}
 	}
 }

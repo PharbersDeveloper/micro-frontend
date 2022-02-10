@@ -12,34 +12,10 @@ export default class ShellRoute extends Route {
 	@service("route-parse") rps
 	@service("ph-menu") ms
 
-	accountsUri = ENV.APP.accountsUri
-	scope =  ENV.APP.scope
-
-	get redirectUri() {
-		if (ENV.environment === "development") {
-			return ENV.APP.DEV.redirectUri
-		} else {
-			return ENV.APP.redirectUri
-		}
-	}
-
-	get clientId() {
-		if (ENV.environment === "development") {
-			return ENV.APP.DEV.clientId
-		} else {
-			return ENV.APP.clientId
-		}
-	}
 
 	beforeModel(transition){
-		let cookies = this.get( "cookies" )
-		if (!cookies.read("access_token")) {
-			const x = JSON.stringify({"client_id": this.clientId, "redirect_uri": this.redirectUri, "time": new Date().getTime()})
-			const state = window.btoa(x)
-			window.location.href =
-				`${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`
-		}else {
-			this.transitionTo("shell", "download/my-data")
+		if (!this.oauthService.judgeAuth()) {
+			this.oauthService.obtainAuth()
 		}
 	}
 

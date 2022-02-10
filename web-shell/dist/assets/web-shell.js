@@ -281,7 +281,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -314,7 +314,7 @@
     "isStrictMode": false
   });
 
-  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, (_class = class PhMenuLayoutComponent extends _component.default {
+  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, _dec8 = Ember._action, (_class = class PhMenuLayoutComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -372,11 +372,11 @@
           let idx = e.detail[0].args.param.index;
 
           if (idx == 0) {
-            this.router.transitionTo(`/overview`);
+            this.router.transitionTo("shell", `overview`);
           } else if (idx == 1) {
-            this.router.transitionTo(`/download/my-data`);
+            this.router.transitionTo("shell", `download/my-data`);
           } else if (idx == 2) {
-            this.router.transitionTo(`/projects`);
+            this.router.transitionTo("shell", `projects`);
           }
 
           break;
@@ -407,6 +407,10 @@
       element.addEventListener("event", this.listener);
     }
 
+    unregisterListener(element) {
+      element.removeEventListener("event", this.listener);
+    }
+
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
     configurable: true,
     enumerable: true,
@@ -432,7 +436,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = PhMenuLayoutComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhMenuLayoutComponent);
@@ -4801,18 +4805,6 @@
 
     beforeModel(param) {
       this.loadingService.beforeLoading();
-      let curLang = window.localStorage.getItem("lang");
-
-      if (curLang) {
-        if (curLang === "中文") {
-          this.intl.setLocale(["zh-cn"]);
-        } else {
-          this.intl.setLocale(["en-us"]);
-        }
-      } else {
-        this.intl.setLocale(["zh-cn"]);
-        window.localStorage.setItem("lang", "中文");
-      }
     }
 
     willTransition(_) {
@@ -4936,41 +4928,11 @@
       _initializerDefineProperty(this, "rps", _descriptor5, this);
 
       _initializerDefineProperty(this, "ms", _descriptor6, this);
-
-      _defineProperty(this, "accountsUri", _environment.default.APP.accountsUri);
-
-      _defineProperty(this, "scope", _environment.default.APP.scope);
-    }
-
-    get redirectUri() {
-      if (_environment.default.environment === "development") {
-        return _environment.default.APP.DEV.redirectUri;
-      } else {
-        return _environment.default.APP.redirectUri;
-      }
-    }
-
-    get clientId() {
-      if (_environment.default.environment === "development") {
-        return _environment.default.APP.DEV.clientId;
-      } else {
-        return _environment.default.APP.clientId;
-      }
     }
 
     beforeModel(transition) {
-      let cookies = this.get("cookies");
-
-      if (!cookies.read("access_token")) {
-        const x = JSON.stringify({
-          "client_id": this.clientId,
-          "redirect_uri": this.redirectUri,
-          "time": new Date().getTime()
-        });
-        const state = window.btoa(x);
-        window.location.href = `${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`;
-      } else {
-        this.transitionTo("shell", "download/my-data");
+      if (!this.oauthService.judgeAuth()) {
+        this.oauthService.obtainAuth();
       }
     }
 
@@ -5669,6 +5631,10 @@
       _initializerDefineProperty(this, "store", _descriptor3, this);
 
       _defineProperty(this, "clientSecret", _environment.default.APP.clientSecret);
+
+      _defineProperty(this, "accountsUri", _environment.default.APP.accountsUri);
+
+      _defineProperty(this, "scope", _environment.default.APP.scope);
     }
 
     get redirectUri() {
@@ -5760,7 +5726,7 @@
         tokenFlag = true;
       }
 
-      return tokenFlag; // 前端没有scope，能否访问进行对应的query
+      return tokenFlag;
     }
 
     removeAuth() {
@@ -5777,6 +5743,20 @@
       }
 
       window.console.log("clear cookies!");
+    }
+
+    obtainAuth() {
+      let cookies = this.get("cookies");
+
+      if (!cookies.read("access_token")) {
+        const x = JSON.stringify({
+          "client_id": this.clientId,
+          "redirect_uri": this.redirectUri,
+          "time": new Date().getTime()
+        });
+        const state = window.btoa(x);
+        window.location.href = `${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`;
+      }
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {

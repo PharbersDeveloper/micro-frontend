@@ -16,17 +16,6 @@ export default class ApplicationRoute extends Route {
 
 	beforeModel(param) {
 		this.loadingService.beforeLoading()
-		let curLang = window.localStorage.getItem("lang")
-		if (curLang) {
-			if (curLang === "中文") {
-				this.intl.setLocale(["zh-cn"])
-			} else {
-				this.intl.setLocale(["en-us"])
-			}
-		} else {
-			this.intl.setLocale(["zh-cn"])
-			window.localStorage.setItem("lang", "中文")
-		}
 	}
 
 	@action
@@ -46,7 +35,6 @@ export default class ApplicationRoute extends Route {
 		this.afterModel = function () {
 			this.loadingService.afterLoading()
 		}
-
 		const layout = await this.menuService.queryLayoutByClient()
 		if (layout.script !== null) {
 			this.jsl.loadRemoteJs(layout.script)

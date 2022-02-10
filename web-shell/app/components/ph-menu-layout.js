@@ -52,11 +52,11 @@ export default class PhMenuLayoutComponent extends Component {
             case "linkToPage":
 				let idx = e.detail[0].args.param.index
 				if(idx == 0) {
-					this.router.transitionTo(`/overview`)
+					this.router.transitionTo("shell", `overview`)
 				} else if(idx == 1) {
-					this.router.transitionTo(`/download/my-data`)
+					this.router.transitionTo("shell", `download/my-data`)
 				} else if(idx == 2) {
-					this.router.transitionTo(`/projects`)
+					this.router.transitionTo("shell", `projects`)
 				}
                 break
 			case "logOut":
@@ -79,5 +79,10 @@ export default class PhMenuLayoutComponent extends Component {
 			_isVue: true
 		}
         element.addEventListener("event", this.listener)
+    }
+
+	@action
+    unregisterListener(element) {
+        element.removeEventListener("event", this.listener)
     }
 }
