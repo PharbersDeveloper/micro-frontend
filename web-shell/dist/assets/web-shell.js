@@ -611,7 +611,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -640,13 +640,19 @@
     "isStrictMode": false
   });
 
-  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._action, _dec4 = Ember._action, _dec5 = Ember._action, (_class = class WcContextComponent extends _component.default {
+  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, _dec8 = Ember._action, (_class = class WcContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "router", _descriptor, this);
 
-      _initializerDefineProperty(this, "cookies", _descriptor2, this);
+      _initializerDefineProperty(this, "store", _descriptor2, this);
+
+      _initializerDefineProperty(this, "cookies", _descriptor3, this);
+
+      _initializerDefineProperty(this, "awsService", _descriptor4, this);
+
+      _initializerDefineProperty(this, "downloadFile", _descriptor5, this);
     }
 
     async listener(e) {
@@ -669,12 +675,27 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "awsService", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "downloadFile", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = WcContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
