@@ -5,19 +5,24 @@ export async function phcatelogMyDataTableEventHandler(e, route) {
 		case "linkToPage":
 			if (param.index != undefined) {
 				if (param.queryParams) {
-					this.router.transitionTo(
+					route.router.transitionTo(
+						"shell",
 						`${param.name}/${param.index}?${param.queryParams}`
 					)
 				} else {
-					this.router.transitionTo(`${param.name}/${param.index}`)
+					route.router.transitionTo(
+						"shell",
+						`${param.name}/${param.index}`
+					)
 				}
 			} else {
 				if (param.queryParams) {
-					this.router.transitionTo(
+					route.router.transitionTo(
+						"shell",
 						`${param.name}?${param.queryParams}`
 					)
 				} else {
-					this.router.transitionTo(param.name)
+					route.router.transitionTo("shell", param.name)
 				}
 			}
 			break

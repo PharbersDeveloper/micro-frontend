@@ -430,7 +430,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/my-data',
+                    name: 'download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
                 }
             }
