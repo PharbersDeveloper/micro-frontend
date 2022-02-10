@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogMyDataTableRouteModel(route, parseParams) {
-	console.log(parseParams)
 	const limit = 10
 	let tab = parseParams.query.tab || "mine"
 	let page = parseInt(parseParams.query.page, 10)

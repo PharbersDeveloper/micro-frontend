@@ -311,7 +311,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/my-data',
+                    name: 'download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
                 }
             }
@@ -323,7 +323,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/data-directory-table',
+                    name: 'download/data-directory-table',
                     queryParams: `database=${param}`
                 }
             }

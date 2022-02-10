@@ -144,7 +144,6 @@ export async function pharbersBoyunhuiRouteModel(route, parseParams) {
 		const cidsArr = x.map((activity) => {
 			return activity.hasMany("partners").ids()
 		})
-		// console.log("cccc", cidsArr)
 		const ids = [
 			...new Set(cidsArr.reduce((acc, val) => acc.concat(val), []))
 		]

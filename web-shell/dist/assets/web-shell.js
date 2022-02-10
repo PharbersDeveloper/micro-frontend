@@ -4958,8 +4958,6 @@
     }
 
     async model(params) {
-      console.log(params);
-
       if (Object.keys(params).length === 0) {
         params["path"] = "home";
       }
