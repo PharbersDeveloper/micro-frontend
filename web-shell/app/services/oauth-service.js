@@ -2,24 +2,35 @@ import Service from "@ember/service"
 import { inject as service } from "@ember/service"
 import config from "web-shell/config/environment"
 import fetch from "fetch"
+import ENV from "web-shell/config/environment"
 
 export default class OauthServiceService extends Service {
-	@service cookies
-	@service ajax
+	@service cookies;
 	@service router
 	@service store
 
-	clientId = config.APP.clientId
 	clientSecret = config.APP.clientSecret
-	redirectUri = config.APP.redirectUri
+
+	get redirectUri() {
+		if (ENV.environment === "development") {
+			return ENV.APP.DEV.redirectUri
+		} else {
+			return ENV.APP.redirectUri
+		}
+	}
+
+	get clientId() {
+		if (ENV.environment === "development") {
+			return ENV.APP.DEV.clientId
+		} else {
+			return ENV.APP.clientId
+		}
+	}
 
 	oauthCallback(transition) {
 		const cookies = this.cookies
 		let that = this
-		// let urli = window.location.href
 		transition.queryParams = {
-			// "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
-			// "state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
 			code: transition.intent.router._lastQueryParams.code,
 			state: transition.intent.router._lastQueryParams.state
 		}
@@ -32,14 +43,8 @@ export default class OauthServiceService extends Service {
 			const secret = this.clientSecret
 			const grantType = "authorization_code"
 			const code = queryParams.code
-			// const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
 			const url = "https://apiv2.pharbers.com/oauth/token"
 			const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`
-			// const data = {
-			// 	code: code,
-			// 	grant_type: grantType,
-			// 	redirect_uri: redirectUri
-			// }
 			const b64 = window.btoa(`${clientId}:${secret}`)
 			const authorization = `Basic ${b64}`
 			let options = {
@@ -113,13 +118,13 @@ export default class OauthServiceService extends Service {
 						options
 					)
 					// this.mqttService.mqttConnect()
-					this.router.transitionTo("/download/my-data")
+					this.router.transitionTo("shell", "download/my-data")
 				})
 				.catch((_) => {
-					this.router.transitionTo("/download/my-data")
+					this.router.transitionTo("shell", "download/my-data")
 				})
 		} else {
-			this.router.transitionTo("/download/my-data")
+			this.router.transitionTo("shell", "download/my-data")
 		}
 	}
 

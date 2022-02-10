@@ -4,6 +4,8 @@ import { phcatelogDataListHomeEventHandler } from "./eventHandler/phcatelogDataL
 import { phcatelogDataListHomeRouteModel } from "./routeModel/phcatelogDataListHomeRouteModel"
 import { phcatelogUploadDatasetEventHandler } from "./eventHandler/phcatelogUploadDatasetEventHandler"
 import { phcatelogUploadDatasetRouteModel } from "./routeModel/phcatelogUploadDatasetRouteModel"
+import { phcatelogMyDataTableEventHandler } from "./eventHandler/phcatelogMyDataTableEventHandler"
+import { phcatelogMyDataTableRouteModel } from "./routeModel/phcatelogMyDataTableRouteModel"
 
 export {
 	phcatelogProjectListRouteModel,
@@ -11,5 +13,7 @@ export {
 	phcatelogDataListHomeEventHandler,
 	phcatelogDataListHomeRouteModel,
 	phcatelogUploadDatasetRouteModel,
-	phcatelogUploadDatasetEventHandler
+	phcatelogUploadDatasetEventHandler,
+	phcatelogMyDataTableRouteModel,
+	phcatelogMyDataTableEventHandler
 }

@@ -49,8 +49,11 @@ module.exports = function (environment) {
 		// ENV.APP.LOG_TRANSITIONS = true;
 		// ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		// ENV.APP.LOG_VIEW_LOOKUPS = true;
+		ENV.APP.DEV = {}
+		ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0"
+		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.APP.debugToken =
-			"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
+			"cfd7b64b6af6c026f766efa4b71f316369f46629c457c823788ff53a3835cb1d"
 	}
 
 	if (environment === "test") {

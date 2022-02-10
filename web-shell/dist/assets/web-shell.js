@@ -281,7 +281,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -295,7 +295,10 @@
   /*
     <div style={{this.layoutCss}} >
       {{#let (element this.menuComponent) as |Menu|}}
-          <Menu />
+          <Menu 
+  			allData={{@allData}}
+          	{{did-insert this.registerListener}}
+          	{{will-destroy this.unregisterListener}}/>
       {{/let}}
       <div style="width: 100%">
           {{yield}}
@@ -305,13 +308,13 @@
   
   */
   {
-    "id": "tNXlQ3JD",
-    "block": "[[[10,0],[15,5,[30,0,[\"layoutCss\"]]],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"        \"],[8,[30,1],null,null,null],[1,\"\\n\"]],[1]]],[1,\"    \"],[10,0],[14,5,\"width: 100%\"],[12],[1,\"\\n        \"],[18,2,null],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\\n\"]],[\"Menu\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"yield\"]]",
+    "id": "U8M8A2Ln",
+    "block": "[[[10,0],[15,5,[30,0,[\"layoutCss\"]]],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"menuComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"menuComponent\"]]]]]],[[[1,\"        \"],[8,[30,1],[[16,\"allData\",[30,2]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,null],[1,\"\\n\"]],[1]]],[1,\"    \"],[10,0],[14,5,\"width: 100%\"],[12],[1,\"\\n        \"],[18,3,null],[1,\"\\n    \"],[13],[1,\"\\n\"],[13],[1,\"\\n\\n\"]],[\"Menu\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-menu-layout.hbs",
     "isStrictMode": false
   });
 
-  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), _dec3 = Ember.inject.service, (_class = class PhMenuLayoutComponent extends _component.default {
+  let PhMenuLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service("ph-menu"), _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, (_class = class PhMenuLayoutComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -319,7 +322,31 @@
 
       _initializerDefineProperty(this, "ms", _descriptor2, this);
 
-      _initializerDefineProperty(this, "store", _descriptor3, this);
+      _initializerDefineProperty(this, "oauthService", _descriptor3, this);
+
+      _initializerDefineProperty(this, "cookies", _descriptor4, this);
+
+      _initializerDefineProperty(this, "store", _descriptor5, this);
+
+      _defineProperty(this, "accountsUri", _environment.default.APP.accountsUri);
+
+      _defineProperty(this, "scope", _environment.default.APP.scope);
+    }
+
+    get redirectUri() {
+      if (_environment.default.environment === "development") {
+        return _environment.default.APP.DEV.redirectUri;
+      } else {
+        return _environment.default.APP.redirectUri;
+      }
+    }
+
+    get clientId() {
+      if (_environment.default.environment === "development") {
+        return _environment.default.APP.DEV.clientId;
+      } else {
+        return _environment.default.APP.clientId;
+      }
     }
 
     get layoutCss() {
@@ -339,6 +366,47 @@
       } else return "";
     }
 
+    listener(e) {
+      switch (e.detail[0].args.callback) {
+        case "linkToPage":
+          let idx = e.detail[0].args.param.index;
+
+          if (idx == 0) {
+            this.router.transitionTo(`/overview`);
+          } else if (idx == 1) {
+            this.router.transitionTo(`/download/my-data`);
+          } else if (idx == 2) {
+            this.router.transitionTo(`/projects`);
+          }
+
+          break;
+
+        case "logOut":
+          this.oauthService.removeAuth();
+          window.localStorage.clear();
+          const x = JSON.stringify({
+            "client_id": this.clientId,
+            "redirect_uri": this.redirectUri,
+            "time": new Date().getTime()
+          });
+          const state = window.btoa(x);
+          window.location.href = `${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`;
+          break;
+
+        default:
+          console.log("other click event!");
+      }
+    }
+
+    registerListener(element) {
+      element.allData = {
+        name_show: decodeURI(this.cookies.read('user_name_show')),
+        company_name_show: decodeURI(this.cookies.read('company_name_show')),
+        _isVue: true
+      };
+      element.addEventListener("event", this.listener);
+    }
+
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
     configurable: true,
     enumerable: true,
@@ -349,12 +417,22 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  })), _class));
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype)), _class));
   _exports.default = PhMenuLayoutComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhMenuLayoutComponent);
@@ -4683,6 +4761,7 @@
     this.route("shell", {
       path: "/*path"
     });
+    this.route('oauth-callback');
   });
 });
 ;define("web-shell/routes/application", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
@@ -4787,7 +4866,7 @@
   }), _applyDecoratedDescriptor(_class.prototype, "willTransition", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "willTransition"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "didTransition", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "didTransition"), _class.prototype)), _class));
   _exports.default = ApplicationRoute;
 });
-;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+;define("web-shell/routes/oauth-callback", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -4795,7 +4874,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+  var _dec, _class, _descriptor;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4805,19 +4884,94 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service("remote-loading"), _dec4 = Ember.inject.service("route-parse"), _dec5 = Ember.inject.service("ph-menu"), (_class = class ShellRoute extends Ember.Route {
+  let OauthCallbackRoute = (_dec = Ember.inject.service, (_class = class OauthCallbackRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
-      _initializerDefineProperty(this, "cookies", _descriptor, this);
+      _initializerDefineProperty(this, "oauthService", _descriptor, this);
+    }
 
-      _initializerDefineProperty(this, "store", _descriptor2, this);
+    beforeModel(transition) {
+      this.oauthService.oauthCallback(transition);
+    }
 
-      _initializerDefineProperty(this, "jsl", _descriptor3, this);
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = OauthCallbackRoute;
+});
+;define("web-shell/routes/shell", ["exports", "web-shell/config/environment"], function (_exports, _environment) {
+  "use strict";
 
-      _initializerDefineProperty(this, "rps", _descriptor4, this);
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
 
-      _initializerDefineProperty(this, "ms", _descriptor5, this);
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service("remote-loading"), _dec5 = Ember.inject.service("route-parse"), _dec6 = Ember.inject.service("ph-menu"), (_class = class ShellRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "oauthService", _descriptor, this);
+
+      _initializerDefineProperty(this, "cookies", _descriptor2, this);
+
+      _initializerDefineProperty(this, "store", _descriptor3, this);
+
+      _initializerDefineProperty(this, "jsl", _descriptor4, this);
+
+      _initializerDefineProperty(this, "rps", _descriptor5, this);
+
+      _initializerDefineProperty(this, "ms", _descriptor6, this);
+
+      _defineProperty(this, "accountsUri", _environment.default.APP.accountsUri);
+
+      _defineProperty(this, "scope", _environment.default.APP.scope);
+    }
+
+    get redirectUri() {
+      if (_environment.default.environment === "development") {
+        return _environment.default.APP.DEV.redirectUri;
+      } else {
+        return _environment.default.APP.redirectUri;
+      }
+    }
+
+    get clientId() {
+      if (_environment.default.environment === "development") {
+        return _environment.default.APP.DEV.clientId;
+      } else {
+        return _environment.default.APP.clientId;
+      }
+    }
+
+    beforeModel(transition) {
+      let cookies = this.get("cookies");
+
+      if (!cookies.read("access_token")) {
+        const x = JSON.stringify({
+          "client_id": this.clientId,
+          "redirect_uri": this.redirectUri,
+          "time": new Date().getTime()
+        });
+        const state = window.btoa(x);
+        window.location.href = `${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`;
+      } else {
+        this.transitionTo("shell", "download/my-data");
+      }
     }
 
     async model(params) {
@@ -4865,27 +5019,32 @@
       });
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -4955,19 +5114,7 @@
 
     keyForRelationship(key) {
       return key;
-    } // extractAttributes(modelClass, resourceHash) {
-    // 	let keys = Object.keys(resourceHash.attributes)
-    // 	let obj = {}
-    // 	keys.forEach(ele => {
-    // 		let k = camelize(ele)
-    // 		obj[k] = resourceHash.attributes[ele]
-    // 		if (ele === "start-date" || ele === "end-date" || ele === "date" ) {
-    // 			obj[k] = Date.parse(resourceHash.attributes[ele])
-    // 		}
-    // 	})
-    // 	return obj
-    // }
-
+    }
 
   }
 
@@ -5501,7 +5648,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -5511,32 +5658,39 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, (_class = class OauthServiceService extends Ember.Service {
+  let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, (_class = class OauthServiceService extends Ember.Service {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "cookies", _descriptor, this);
 
-      _initializerDefineProperty(this, "ajax", _descriptor2, this);
+      _initializerDefineProperty(this, "router", _descriptor2, this);
 
-      _initializerDefineProperty(this, "router", _descriptor3, this);
-
-      _initializerDefineProperty(this, "store", _descriptor4, this);
-
-      _defineProperty(this, "clientId", _environment.default.APP.clientId);
+      _initializerDefineProperty(this, "store", _descriptor3, this);
 
       _defineProperty(this, "clientSecret", _environment.default.APP.clientSecret);
+    }
 
-      _defineProperty(this, "redirectUri", _environment.default.APP.redirectUri);
+    get redirectUri() {
+      if (_environment.default.environment === "development") {
+        return _environment.default.APP.DEV.redirectUri;
+      } else {
+        return _environment.default.APP.redirectUri;
+      }
+    }
+
+    get clientId() {
+      if (_environment.default.environment === "development") {
+        return _environment.default.APP.DEV.clientId;
+      } else {
+        return _environment.default.APP.clientId;
+      }
     }
 
     oauthCallback(transition) {
       const cookies = this.cookies;
-      let that = this; // let urli = window.location.href
-
+      let that = this;
       transition.queryParams = {
-        // "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
-        // "state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
         code: transition.intent.router._lastQueryParams.code,
         state: transition.intent.router._lastQueryParams.state
       };
@@ -5550,15 +5704,9 @@
         const clientId = this.clientId;
         const secret = this.clientSecret;
         const grantType = "authorization_code";
-        const code = queryParams.code; // const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
-
+        const code = queryParams.code;
         const url = "https://apiv2.pharbers.com/oauth/token";
-        const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`; // const data = {
-        // 	code: code,
-        // 	grant_type: grantType,
-        // 	redirect_uri: redirectUri
-        // }
-
+        const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`;
         const b64 = window.btoa(`${clientId}:${secret}`);
         const authorization = `Basic ${b64}`;
         let options = {
@@ -5595,12 +5743,12 @@
           let employerData = await that.store.findRecord("partner", employerId);
           cookies.write("company_name_show", encodeURI(employerData.name), options); // this.mqttService.mqttConnect()
 
-          this.router.transitionTo("/download/my-data");
+          this.router.transitionTo("shell", "download/my-data");
         }).catch(_ => {
-          this.router.transitionTo("/download/my-data");
+          this.router.transitionTo("shell", "download/my-data");
         });
       } else {
-        this.router.transitionTo("/download/my-data");
+        this.router.transitionTo("shell", "download/my-data");
       }
     }
 
@@ -5636,17 +5784,12 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "ajax", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec4], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -5997,6 +6140,23 @@
 
   _exports.default = _default;
 });
+;define("web-shell/templates/oauth-callback", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "ekFT7+Xu",
+    "block": "[[[46,[28,[37,1],null,null],null,null,null]],[],false,[\"component\",\"-outlet\"]]",
+    "moduleName": "web-shell/templates/oauth-callback.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
 ;define("web-shell/templates/shell", ["exports"], function (_exports) {
   "use strict";
 
@@ -6102,7 +6262,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"debugToken":"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def","name":"web-shell","version":"0.0.0+7ad5abae"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"wsOelHMK2tLAVhj0","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cfd7b64b6af6c026f766efa4b71f316369f46629c457c823788ff53a3835cb1d","name":"web-shell","version":"0.0.0+6b094fb9"});
           }
         
 //# sourceMappingURL=web-shell.map
