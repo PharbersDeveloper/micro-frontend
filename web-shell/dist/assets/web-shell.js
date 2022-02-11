@@ -47,7 +47,13 @@
     pathForType(type) {
       let typeArray = _environment.default.APP.typeArray;
 
-      if (typeArray.indexOf(type) !== -1) {
+      if (type === "account" || type === "role" || type === "scope") {
+        this.authType = "oauth";
+        return "phcommon/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      } else if (type === "db" || type === "file") {
+        this.authType = "oauth";
+        return "entry/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
+      } else if (typeArray.indexOf(type) !== -1) {
         this.authType = "iam";
         return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
       } else {
@@ -82,7 +88,16 @@
         this.iamHeaders = (0, _PhIamClicent.ComputeJSONAPIIamHeader)(_environment.default.APP.apiHost, url, {}, query, _environment.default.APP.AWS_ACCESS_KEY, _environment.default.APP.AWS_SECRET_KEY);
       }
 
-      return url;
+      return url; // let curName = url.split( "/" ).splice(3, 1).join("/")
+      // let curPath= url.split( "/" ).splice( 4, 2).join( "/" )
+      // let newUrl = `/${curName}/${curPath}`
+      //account component
+      // if(modelName === "account" || modelName === "role" || modelName === "scope") {
+      // 	newUrl = `/phcommon/${curPath}`
+      // }else if(modelName === "file" || modelName === "db") {
+      // 	newUrl = `/entry/${curPath}`
+      // }
+      // return "https://apiv2.pharbers.com" + newUrl
     }
 
     attributesToDeal(data) {
@@ -5722,13 +5737,12 @@
           cookies.write("company_id", response.user.employerId, options);
           cookies.write("user_name_show", encodeURI(response.user.lastName + response.user.firstName), options);
           cookies.write("account_id", response.user.id, options);
-          let userData = await that.store.findRecord("account", that.cookies.read("account_id")); //请求employer的数据
+          let userData = await that.store.findRecord("account", that.cookies.read('account_id')); //请求employer的数据
 
-          let employerId = await userData.belongsTo("employer").id();
+          let employerId = await userData.belongsTo('employer').id();
           let employerData = await that.store.findRecord("partner", employerId);
-          cookies.write("company_name_show", encodeURI(employerData.name), options); // this.mqttService.mqttConnect()
-
-          this.router.transitionTo("shell", "download/my-data");
+          cookies.write("company_name_show", encodeURI(employerData.name), options);
+          this.get("router").transitionTo("shell", "download/my-data");
         }).catch(_ => {
           this.router.transitionTo("shell", "download/my-data");
         });
@@ -6261,7 +6275,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"wsOelHMK2tLAVhj0","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cfd7b64b6af6c026f766efa4b71f316369f46629c457c823788ff53a3835cb1d","name":"web-shell","version":"0.0.0+6b094fb9"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"V5I67BHIRVR2Z59kq-a-","clientName":"platform","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"wsOelHMK2tLAVhj0","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cfd7b64b6af6c026f766efa4b71f316369f46629c457c823788ff53a3835cb1d","name":"web-shell","version":"0.0.0+9b4aff20"});
           }
         
 //# sourceMappingURL=web-shell.map

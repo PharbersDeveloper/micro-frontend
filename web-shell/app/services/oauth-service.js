@@ -70,57 +70,22 @@ export default class OauthServiceService extends Service {
 						path: "/",
 						maxAge: response.expiresIn
 					}
-					cookies.write(
-						"access_token",
-						response.access_token,
-						options
-					)
-					cookies.write(
-						"refresh_token",
-						response.refresh_token,
-						options
-					)
-					cookies.write("token_type", response.token_type, options)
-					cookies.write("expires_in", response.expiresIn, options)
-					cookies.write("user_name", response.user.name, options)
-					cookies.write(
-						"user_name_show",
-						encodeURI(
-							response.user.lastName + response.user.firstName
-						),
-						options
-					)
-					cookies.write("user_email", response.user.email, options)
-					cookies.write(
-						"company_id",
-						response.user.employerId,
-						options
-					)
-					cookies.write(
-						"user_name_show",
-						encodeURI(
-							response.user.lastName + response.user.firstName
-						),
-						options
-					)
-					cookies.write("account_id", response.user.id, options)
-					let userData = await that.store.findRecord(
-						"account",
-						that.cookies.read("account_id")
-					)
+					cookies.write( "access_token", response.access_token, options )
+					cookies.write( "refresh_token", response.refresh_token, options )
+					cookies.write( "token_type", response.token_type, options )
+					cookies.write( "expires_in", response.expiresIn, options )
+					cookies.write( "user_name", response.user.name, options)
+					cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
+					cookies.write( "user_email", response.user.email, options)
+					cookies.write( "company_id", response.user.employerId, options)
+					cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
+					cookies.write( "account_id", response.user.id, options )
+					let userData = await that.store.findRecord( "account", that.cookies.read('account_id') )
 					//请求employer的数据
-					let employerId = await userData.belongsTo("employer").id()
-					let employerData = await that.store.findRecord(
-						"partner",
-						employerId
-					)
-					cookies.write(
-						"company_name_show",
-						encodeURI(employerData.name),
-						options
-					)
-					// this.mqttService.mqttConnect()
-					this.router.transitionTo("shell", "download/my-data")
+					let employerId = await userData.belongsTo('employer').id()
+					let employerData = await that.store.findRecord( "partner", employerId )
+					cookies.write( "company_name_show", encodeURI(employerData.name), options)
+					this.get( "router" ).transitionTo("shell", "download/my-data") 
 				})
 				.catch((_) => {
 					this.router.transitionTo("shell", "download/my-data")

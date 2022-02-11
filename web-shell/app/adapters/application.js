@@ -13,7 +13,13 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 
 	pathForType(type) {
 		let typeArray = ENV.APP.typeArray
-		if (typeArray.indexOf(type) !== -1) {
+		if(type === "account" || type === "role" || type === "scope") {
+			this.authType = "oauth"
+			return "phcommon/" + pluralize(dasherize(type))
+		} else if(type === "db" || type === "file") {
+			this.authType = "oauth"
+			return "entry/" + pluralize(dasherize(type))
+		} else if (typeArray.indexOf(type) !== -1) {
 			this.authType = "iam"
 			return "phtemplate/" + pluralize(dasherize(type))
 		} else {
@@ -50,6 +56,16 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 			)
 		}
 		return url
+		// let curName = url.split( "/" ).splice(3, 1).join("/")
+		// let curPath= url.split( "/" ).splice( 4, 2).join( "/" )
+		// let newUrl = `/${curName}/${curPath}`
+		//account component
+		// if(modelName === "account" || modelName === "role" || modelName === "scope") {
+		// 	newUrl = `/phcommon/${curPath}`
+		// }else if(modelName === "file" || modelName === "db") {
+		// 	newUrl = `/entry/${curPath}`
+		// }
+		// return "https://apiv2.pharbers.com" + newUrl
 	}
 
 	attributesToDeal(data) {
