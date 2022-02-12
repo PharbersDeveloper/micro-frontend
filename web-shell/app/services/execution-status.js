@@ -1,9 +1,13 @@
 import Service from '@ember/service';
 import ENV from "web-shell/config/environment";
+import { inject as service } from "@ember/service"
+import fetch from "fetch"
 import Iot from '../lib/iot/PhIot';
 
 
 export default class ExecutionStatusService extends Service {
+
+    @service cookies
 
     endpoint = ENV.APP.AWS_IOT_ENDPOINT
     aws_region = ENV.APP.AWS_REGION
@@ -47,12 +51,43 @@ export default class ExecutionStatusService extends Service {
                 await iot.connect()
             }
         },
-
+        // "other": (item) => {
+        //     const parameter = Object.assign({}, item)
+        //     delete parameter.callBack
+        //     item.callBack(parameter, this.destroyQueue)
+        // },
+        // "executionStatus": async (item) => {
+        //     const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        //     const headers = {
+        //         Authorization: that.cookies.read("access_token"),
+        //         "Content-Type": "application/vnd.api+json",
+        //         Accept: "application/vnd.api+json",
+        //     }
+        //     const body = {
+        //         table: item.tableName,
+        //         conditions: {
+        //             "id": ["=", `${item.projectId}${item.ownerId}`],
+        //             "date": ["<", `${new Date().getTime()}`]
+        //         }
+        //     }
+        //     const response = await fetch(url, {
+        //         method: "POST",
+		// 			headers: headers,
+		// 			body: JSON.stringify(body)
+        //     })
+        //     if (response) {
+        //         this.__destroyQueue.push(item.id)
+        //         item.callBack(response)
+        //     }
+        // }
 
     }
 
     defineAction(
-        {   id,
+        {   
+            type,
+            id,
+            tableName,
             projectId,
             ownerId,
             callBack,
@@ -60,7 +95,9 @@ export default class ExecutionStatusService extends Service {
         } = {}) { 
         if (!this.action.find(item => item.id == id)) {
             this.action.push({
+                type: type,
                 id: id,
+                tableName: tableName,
                 projectId: projectId,
                 ownerId: ownerId,
                 timeout: timeout,
@@ -98,7 +135,7 @@ export default class ExecutionStatusService extends Service {
         setInterval(() => {
             if (this.action.length > 0) {
                 this.action.forEach(async (item, index) => {
-                    this.functions["iot"](item)
+                    this.functions[item.type](item)
                 })
             } else {
                 console.log("notice observer")
