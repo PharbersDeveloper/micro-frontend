@@ -45,15 +45,15 @@
     }
 
     pathForType(type) {
-      let typeArray = _environment.default.APP.typeArray;
+      let typeArray = _environment.default.APP.typeArray; // if(type === "account" || type === "role" || type === "scope") {
+      // 	this.authType = "oauth"
+      // 	return "phcommon/" + pluralize(dasherize(type))
+      // } else if( type === "file" || type === "table" || type === "db") {
+      // 	this.authType = "oauth"
+      // 	return "entry/" + pluralize(dasherize(type))
+      // } else 
 
-      if (type === "account" || type === "role" || type === "scope") {
-        this.authType = "oauth";
-        return "phcommon/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
-      } else if (type === "file" || type === "table" || type === "db") {
-        this.authType = "oauth";
-        return "entry/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
-      } else if (typeArray.indexOf(type) !== -1) {
+      if (typeArray.indexOf(type) !== -1) {
         this.authType = "iam";
         return "phtemplate/" + (0, _emberInflector.pluralize)(Ember.String.dasherize(type));
       } else {
