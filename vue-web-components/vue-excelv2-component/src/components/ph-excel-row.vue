@@ -1,7 +1,7 @@
 <template>
-    <div class="ph-row">
+    <div class="ph-row" :style="style">
         <ph-cell v-for="(item, index) in value" :value="item" :cellWidth="cellWidth(index)"
-                 :cellHeight="rowHeight" :state="state" :dtype="dtype(index)" :key="index"/>
+                 :cellHeight="rowHeight" :state="rowState" :dtype="dtype(index)" :key="index"/>
     </div>
 </template>
 <script>
@@ -16,7 +16,11 @@ export default {
         }
     },
     computed: {
-
+        style: function() {
+        	if (this.rowState === "reverse") {
+        	    return "background-color: red"
+            } else return ""
+        }
     },
     components: {
         PhExcelDataSchema,
@@ -27,10 +31,6 @@ export default {
             type: Object,
             default: new PhExcelDataSchema('1')
         },
-        state: {
-            type: String,
-            default: "loading"
-        },
         rowHeight: {
             type: Number,
             default: 24
@@ -38,6 +38,10 @@ export default {
         value: {
             type: Array,
             default: []
+        },
+        rowState: {
+        	type: String,
+            default: "normal" // normal, reverse
         }
     },
     beforeMount() {

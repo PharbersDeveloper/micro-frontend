@@ -1,9 +1,12 @@
 
+import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
+
 export default class PhDataSource {
     constructor(id, adapter) {
         this.id = id
         this.sort = {}
         this.filter = {}
+        this.funcChains = (new FunctionChains()).push("filter-eq", "Index", "1")
         this.projectId = ''
         this.name = "prod_clean_v2"
         this.batch_size = 100
