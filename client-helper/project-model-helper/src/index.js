@@ -4,11 +4,16 @@ import { phAnalyzeUploadDatasetEventHandler } from "./eventHandler/phAnalyzeUplo
 import { phAnalyzeUploadDatasetRouteModel } from "./routeModel/phAnalyzeUploadDatasetRouteModel"
 import { phAnalyzeDataListHomeEventHandler } from "./eventHandler/phAnalyzeDataListHomeEventHandler"
 import { phAnalyzeDataListHomeRouteModel } from "./routeModel/phAnalyzeDataListHomeRouteModel"
+import { phAnalyzeSelectFileRouteModel } from "./routeModel/phAnalyzeSelectFileRouteModel"
+import { phAnalyzeSelectFileEventHandler } from "./eventHandler/phAnalyzeSelectFileEventHandler"
+
 export {
 	phAnalyzeProjectListRouteModel,
 	phAnalyzeProjectListEventHandler,
 	phAnalyzeUploadDatasetEventHandler,
 	phAnalyzeUploadDatasetRouteModel,
 	phAnalyzeDataListHomeEventHandler,
-	phAnalyzeDataListHomeRouteModel
+	phAnalyzeDataListHomeRouteModel,
+	phAnalyzeSelectFileRouteModel,
+	phAnalyzeSelectFileEventHandler
 }
