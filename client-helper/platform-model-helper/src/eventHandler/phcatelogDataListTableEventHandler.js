@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogDataListTableEventHandler(e, route) {
-	
 	let param = e.detail[0].args.param
 	let element = e.detail[0].args.element
 	const limit = 100
