@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {

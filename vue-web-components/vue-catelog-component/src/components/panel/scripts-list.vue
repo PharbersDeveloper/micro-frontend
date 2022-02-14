@@ -223,10 +223,10 @@
 </template>
 
 <script>
-import clearReciptDialog from './clear-dataset-dialog.vue'
+import clearReciptDialog from '../../../../vue-analyze-component/src/components/clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog-script.vue'
-import createTagsDialog from './create-tags-dialog.vue'
-import deleteTagsDialog from './delete-tags-dialog.vue'
+import createTagsDialog from '../../../../vue-analyze-component/src/components/create-tags-dialog.vue'
+import deleteTagsDialog from '../../../../vue-analyze-component/src/components/delete-tags-dialog.vue'
 import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
