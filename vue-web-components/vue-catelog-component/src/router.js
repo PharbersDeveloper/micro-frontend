@@ -18,6 +18,7 @@ import clearDatasetDialog from './components/panel/clear-dataset-dialog.vue'
 import createTagsDialog from './components/panel/create-tags-dialog.vue'
 import deleteTagsDialog from './components/panel/delete-tags-dialog.vue'
 import prepare from './components/panel/prepare-set.vue'
+import overview from './components/panel/overview.vue'
 import codeditor from './components/bp-codeditor-page'
 // import fileContent from './components/panel/file-content.vue'
 
@@ -122,6 +123,11 @@ export default new Router({
             path: '/prepare',
             name: 'prepare',
             component: prepare
+        },
+        {
+            path: '/overview',
+            name: 'overview',
+            component: overview
         }
     ]
 })

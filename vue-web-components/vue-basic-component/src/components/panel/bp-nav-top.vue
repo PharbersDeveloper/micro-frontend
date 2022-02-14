@@ -36,6 +36,7 @@
     </div>
     <div class="vue_container fixed-nav-response" 
         :class="[inverse ? 'navInverse' : 'nav']"
+		:style="bgc"
     >
         <div 
             :class="[

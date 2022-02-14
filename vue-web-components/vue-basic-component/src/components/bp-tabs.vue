@@ -91,7 +91,7 @@ export default {
     height: 66px;
     background-color: #fff!important;
     position: sticky;
-    z-index: 999;
+    z-index: 1;
     display: flex;
     .activity-tabs {
         border-bottom: 2px solid rgba(22,28,57,.1);

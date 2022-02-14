@@ -155,6 +155,7 @@
                 <div class="cross"></div>
             </div>
         </div>
+        <input style="display: none;" type="file" name="" id="my-file" ref="myFile" @change="uploadFiles" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.csv,.xlsx,.xls,.xlsm">
     </div>
     
 </template>
@@ -187,7 +188,15 @@ export default {
             title: "数据资产",
             subscribedTitle: "文件名称",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
-            goDetail: "查看详情"
+            goDetail: "查看详情",
+            /** 文件上传弹窗状态 */
+            uploadToastBorder: "red",
+            uploadTextStatus: "",
+            uploadText: "",
+            closeuploadToast: "1",
+            showProgress: "",
+            uploadLoadedSize: 0,
+            uploadFileSize: 0
         }
     },
     props: {
@@ -200,17 +209,7 @@ export default {
                     database: []
                 }
             }
-        },
-        uploadToastBorder: String,
-        uploadTextStatus: String,
-        uploadText: String,
-        closeuploadToast: {
-            type: String,
-            default: '1'
-        },
-        showProgress: String,
-        uploadLoadedSize: Number,
-        uploadFileSize: Number
+        }
     },
     computed: {
         haveData() {
@@ -312,7 +311,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/my-data',
+                    name: 'download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
                 }
             }
@@ -324,7 +323,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/data-directory-table',
+                    name: 'download/data-directory-table',
                     queryParams: `database=${param}`
                 }
             }
@@ -431,20 +430,50 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: '/download/my-data',
+                    name: 'download/my-data',
                     queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
                 }
             }
             this.$emit('event', event)
         },
         upload() {
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "service",
+            //     element: this,
+            //     param: {
+            //         name: 'uploadFile',
+            //         use: 'uploadFile'
+            //     }
+            // }
+            // this.$emit('event', event)
+            this.$refs.myFile.click()
+        },
+        guid() {
+            return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
+                var r = Math.random() * 16 | 0,
+                    v = c === "x" ? r : r & 0x3 | 0x8
+
+                return v.toString( 16 )
+            } )
+        },
+
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return "15920cd6809a2020f78d5121a54a9273d82b389576ecc2bd59fd9bab91a00be7";
+        },
+        uploadFiles(events) {
             const event = new Event("event")
             event.args = {
                 callback: "service",
                 element: this,
                 param: {
                     name: 'uploadFile',
-                    use: 'uploadFile'
+                    use: 'uploadFile',
+                    event: events
                 }
             }
             this.$emit('event', event)

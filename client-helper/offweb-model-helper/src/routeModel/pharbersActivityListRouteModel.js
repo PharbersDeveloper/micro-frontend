@@ -26,7 +26,6 @@ export async function pharbersActivityListRouteModel(route) {
 		}
 	}
 	let results = await Promise.all([activityList, galleryList, galleryIds])
-	console.log(results)
 	let data = results[0].filter((it) => it.language === lang)
 	let gallery = []
 	let dataAll = []

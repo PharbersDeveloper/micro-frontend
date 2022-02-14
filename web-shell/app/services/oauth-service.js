@@ -2,24 +2,37 @@ import Service from "@ember/service"
 import { inject as service } from "@ember/service"
 import config from "web-shell/config/environment"
 import fetch from "fetch"
+import ENV from "web-shell/config/environment"
 
 export default class OauthServiceService extends Service {
-	@service cookies
-	@service ajax
+	@service cookies;
 	@service router
 	@service store
 
-	clientId = config.APP.clientId
 	clientSecret = config.APP.clientSecret
-	redirectUri = config.APP.redirectUri
+	accountsUri = ENV.APP.accountsUri
+	scope =  ENV.APP.scope
+
+	get redirectUri() {
+		if (ENV.environment === "development") {
+			return ENV.APP.DEV.redirectUri
+		} else {
+			return ENV.APP.redirectUri
+		}
+	}
+
+	get clientId() {
+		if (ENV.environment === "development") {
+			return ENV.APP.DEV.clientId
+		} else {
+			return ENV.APP.clientId
+		}
+	}
 
 	oauthCallback(transition) {
 		const cookies = this.cookies
 		let that = this
-		// let urli = window.location.href
 		transition.queryParams = {
-			// "code": urli.substring(urli.lastIndexOf('code=')+5, urli.lastIndexOf('&state')),
-			// "state":urli.substring(urli.lastIndexOf('state=')+6, urli.length),
 			code: transition.intent.router._lastQueryParams.code,
 			state: transition.intent.router._lastQueryParams.state
 		}
@@ -32,14 +45,8 @@ export default class OauthServiceService extends Service {
 			const secret = this.clientSecret
 			const grantType = "authorization_code"
 			const code = queryParams.code
-			// const url = "https://2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn/v0/oauth/token"
 			const url = "https://apiv2.pharbers.com/oauth/token"
 			const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`
-			// const data = {
-			// 	code: code,
-			// 	grant_type: grantType,
-			// 	redirect_uri: redirectUri
-			// }
 			const b64 = window.btoa(`${clientId}:${secret}`)
 			const authorization = `Basic ${b64}`
 			let options = {
@@ -63,63 +70,28 @@ export default class OauthServiceService extends Service {
 						path: "/",
 						maxAge: response.expiresIn
 					}
-					cookies.write(
-						"access_token",
-						response.access_token,
-						options
-					)
-					cookies.write(
-						"refresh_token",
-						response.refresh_token,
-						options
-					)
-					cookies.write("token_type", response.token_type, options)
-					cookies.write("expires_in", response.expiresIn, options)
-					cookies.write("user_name", response.user.name, options)
-					cookies.write(
-						"user_name_show",
-						encodeURI(
-							response.user.lastName + response.user.firstName
-						),
-						options
-					)
-					cookies.write("user_email", response.user.email, options)
-					cookies.write(
-						"company_id",
-						response.user.employerId,
-						options
-					)
-					cookies.write(
-						"user_name_show",
-						encodeURI(
-							response.user.lastName + response.user.firstName
-						),
-						options
-					)
-					cookies.write("account_id", response.user.id, options)
-					let userData = await that.store.findRecord(
-						"account",
-						that.cookies.read("account_id")
-					)
+					cookies.write( "access_token", response.access_token, options )
+					cookies.write( "refresh_token", response.refresh_token, options )
+					cookies.write( "token_type", response.token_type, options )
+					cookies.write( "expires_in", response.expiresIn, options )
+					cookies.write( "user_name", response.user.name, options)
+					cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
+					cookies.write( "user_email", response.user.email, options)
+					cookies.write( "company_id", response.user.employerId, options)
+					cookies.write( "user_name_show", encodeURI(response.user.lastName+response.user.firstName), options)
+					cookies.write( "account_id", response.user.id, options )
+					let userData = await that.store.findRecord( "account", that.cookies.read('account_id') )
 					//请求employer的数据
-					let employerId = await userData.belongsTo("employer").id()
-					let employerData = await that.store.findRecord(
-						"partner",
-						employerId
-					)
-					cookies.write(
-						"company_name_show",
-						encodeURI(employerData.name),
-						options
-					)
-					// this.mqttService.mqttConnect()
-					this.router.transitionTo("/download/my-data")
+					let employerId = await userData.belongsTo('employer').id()
+					let employerData = await that.store.findRecord( "partner", employerId )
+					cookies.write( "company_name_show", encodeURI(employerData.name), options)
+					this.get( "router" ).transitionTo("shell", "download/my-data")
 				})
 				.catch((_) => {
-					this.router.transitionTo("/download/my-data")
+					this.router.transitionTo("shell", "download/my-data")
 				})
 		} else {
-			this.router.transitionTo("/download/my-data")
+			this.router.transitionTo("shell", "download/my-data")
 		}
 	}
 
@@ -132,8 +104,6 @@ export default class OauthServiceService extends Service {
 		}
 
 		return tokenFlag
-
-		// 前端没有scope，能否访问进行对应的query
 	}
 
 	removeAuth() {
@@ -150,5 +120,15 @@ export default class OauthServiceService extends Service {
 		}
 
 		window.console.log("clear cookies!")
+	}
+
+	obtainAuth() {
+		let cookies = this.get( "cookies" )
+		if (!cookies.read("access_token")) {
+			const x = JSON.stringify({"client_id": this.clientId, "redirect_uri": this.redirectUri, "time": new Date().getTime()})
+			const state = window.btoa(x)
+			window.location.href =
+				`${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`
+		}
 	}
 }

@@ -5,9 +5,19 @@ import { camelize } from "@ember/string"
 import ENV from "web-shell/config/environment"
 
 export default class ShellRoute extends Route {
+	@service oauthService
+	@service cookies
 	@service store
 	@service("remote-loading") jsl
 	@service("route-parse") rps
+	@service("ph-menu") ms
+
+
+	beforeModel(transition){
+		if (!this.oauthService.judgeAuth()) {
+			this.oauthService.obtainAuth()
+		}
+	}
 
 	async model(params) {
 		if (Object.keys(params).length === 0) {
@@ -17,20 +27,14 @@ export default class ShellRoute extends Route {
 		/**
 		 * 1. 第一步，需要从读取JS模版
 		 */
-		let pages = this.store.peekAll("page")
-		pages = pages.filter((_) => true)
-		if (pages.length === 0) {
-			pages = await this.store.query("page", {
-				"filter[clientId]": ENV.APP.clientId
-			})
-			pages = pages.filter((_) => true)
-		}
+		const pages = await this.ms.queryClientPages()
 
 		const pageCount = pages.length
 		let curPage = "" // not found page
 		let parseParams
 		for (let idx = 0; idx < pageCount; ++idx) {
 			const tmp = pages[idx]
+			// let path = window.location.href.split("/")[window.location.href.split("/").length - 1]
 			const [match, result] = this.rps.parse("/" + params.path, tmp.route)
 			if (match) {
 				curPage = tmp

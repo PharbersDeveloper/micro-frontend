@@ -11,7 +11,7 @@
         <div v-if="countIsReady === 0" :style="{height: '100%', width: '100%'}">&nbsp;</div>
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
             <div class="body" :style="{height: totalHeight +'px'}">
-                <ph-excel-page v-for="(item, index) in pageRange"
+                <ph-lazy-excel-page v-if="isLazyRendering" v-for="(item, index) in pageRange"
                     :page="index" :curPage="curPage"
                     :datasource="datasource"
                     :schema="schema"
@@ -22,6 +22,18 @@
                     :needRefresh="item"
                     :totalPageCount="pageRange.length - 1"
                     :key="index"/>
+                <ph-excel-page v-else v-for="(item, index) in pageRange"
+                   :page="index" :curPage="curPage"
+                   :datasource="datasource"
+                   :schema="schema"
+                   :rowHeight="rowHeight"
+                   :page-height="pageHeight"
+                   :last-page-height="lastPageHeight"
+                   :page-width="schema.totalWidth()"
+                   :needRefresh="item"
+                   :totalPageCount="pageRange.length - 1"
+                   :key="index"/>
+
             </div>
         </div>
     </div>
@@ -29,7 +41,8 @@
 <script>
 import PhDataSource from './model/datasource'
 import PhExcelDataSchema from './model/schema'
-import PhExcelPage from './bp-excel-page'
+import PhExcelPage from './ph-excel-page'
+import PhLazyExcelPage from './ph-excel-lazy-page'
 export default {
     data() {
         return {
@@ -53,8 +66,9 @@ export default {
 
     },
     components: {
-        headerItem:require('./bp-excel-header.vue').default,
-        PhExcelPage
+        headerItem:require('./ph-excel-header.vue').default,
+        PhExcelPage,
+        PhLazyExcelPage
     },
     props: {
         isNeedPopmenu: {
@@ -76,6 +90,10 @@ export default {
             default: function() {
                 return new PhDataSource('1')
             }
+        },
+        isLazyRendering: {
+        	type: Boolean,
+            default: true
         }
     },
     mounted() {
@@ -96,7 +114,6 @@ export default {
             this.$emit('changeSchemaTypeEvent', data)
         },
         scrollGet (e) {
-            
             this.$refs.schemas.scrollLeft = e.target.scrollLeft
             let scroll_to_line = Math.floor(e.target.scrollTop / this.pageHeight)
             const tmp = [scroll_to_line - 1, scroll_to_line, scroll_to_line + 1]
@@ -205,6 +222,7 @@ export default {
             display: flex;
             .body {
                 // overflow: auto;
+                position: relative;
             }
         }
         .schemas {

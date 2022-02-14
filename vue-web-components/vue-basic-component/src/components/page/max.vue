@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="max-advantage-card-container">
-            <bpImg :src="maxAdvantageImg" class="max-advantage-card-container-img"></bpImg>
+            <!-- <bpImg :src="maxAdvantageImg" class="max-advantage-card-container-img"></bpImg> -->
             <bpImg :src="maxConnectImg" class="max-connect-img"></bpImg>
             <bpText class="rw-advantage-container-title">{{translation_data.advantages.advantagesText}}</bpText>
             <div class="max-cards-row-a">

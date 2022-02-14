@@ -12,7 +12,14 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 	authType = "oauth"
 
 	pathForType(type) {
-		let typeArray = ["activity", "cooperation", "event", "image", "page", "participant", "project", "report", "zone"]
+		let typeArray = ENV.APP.typeArray
+		// if(type === "account" || type === "role" || type === "scope") {
+		// 	this.authType = "oauth"
+		// 	return "phcommon/" + pluralize(dasherize(type))
+		// } else if( type === "file" || type === "table" || type === "db") {
+		// 	this.authType = "oauth"
+		// 	return "entry/" + pluralize(dasherize(type))
+		// } else 
 		if (typeArray.indexOf(type) !== -1) {
 			this.authType = "iam"
 			return "phtemplate/" + pluralize(dasherize(type))
@@ -46,7 +53,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 				{},
 				query,
 				ENV.APP.AWS_ACCESS_KEY,
-				ENV.APP.AWS_SECRET_KEY
+				 ENV.APP.AWS_SECRET_KEY
 			)
 		}
 		return url

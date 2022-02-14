@@ -25,7 +25,7 @@ export async function pharbersAboveDataDetailRouteModel(route, parseParams) {
 		const ids = [
 			...new Set(zidsArr.reduce((acc, val) => acc.concat(val), []))
 		]
-
+		ids.push("") //todo
 		return route.store.query("zone", { "ids[]": ids })
 	})
 
@@ -141,6 +141,7 @@ export async function pharbersAboveDataDetailRouteModel(route, parseParams) {
 			}
 		})
 	}
+
 	return {
 		data: results[0].filter((it) => it.language === lang),
 		agendas: results[1].filter((it) => it),

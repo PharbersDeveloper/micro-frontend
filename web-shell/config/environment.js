@@ -26,8 +26,11 @@ module.exports = function (environment) {
 			host: "https://oauth.pharbers.com",
 			apiUri: "https://apiv2.pharbers.com",
 			apiHost: "apiv2.pharbers.com",
-			clientId: "fjjnl2uSalHTdrppHG9u",
-			clientName: "offweb",
+			// clientId: "fjjnl2uSalHTdrppHG9u",
+			// clientName: "offweb",
+			clientId: "V5I67BHIRVR2Z59kq-a-",
+			clientName: "platform",
+			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout"],
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
@@ -46,8 +49,11 @@ module.exports = function (environment) {
 		// ENV.APP.LOG_TRANSITIONS = true;
 		// ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		// ENV.APP.LOG_VIEW_LOOKUPS = true;
+		ENV.APP.DEV = {}
+		ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0"
+		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.APP.debugToken =
-			"45bb4ba0c3194b2011ec1c976c3b37e9b427df6f6d19767d37e1dea50481e0ba"
+			"c0ff6d3cc2d9749002d41f0cc5e7105388dc5cc96b8f4405475323bc5cd3b928"
 	}
 
 	if (environment === "test") {
