@@ -85,7 +85,7 @@ export default class OauthServiceService extends Service {
 					let employerId = await userData.belongsTo('employer').id()
 					let employerData = await that.store.findRecord( "partner", employerId )
 					cookies.write( "company_name_show", encodeURI(employerData.name), options)
-					this.get( "router" ).transitionTo("shell", "download/my-data") 
+					this.get( "router" ).transitionTo("shell", "download/my-data")
 				})
 				.catch((_) => {
 					this.router.transitionTo("shell", "download/my-data")

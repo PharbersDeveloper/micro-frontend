@@ -53,7 +53,7 @@ module.exports = function (environment) {
 		ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0"
 		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.APP.debugToken =
-			"cfd7b64b6af6c026f766efa4b71f316369f46629c457c823788ff53a3835cb1d"
+			"c0ff6d3cc2d9749002d41f0cc5e7105388dc5cc96b8f4405475323bc5cd3b928"
 	}
 
 	if (environment === "test") {
