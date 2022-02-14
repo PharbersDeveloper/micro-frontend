@@ -10,7 +10,7 @@
 <script>
 import PhDataSource from './model/datasource'
 import PhExcelDataSchema from './model/schema'
-import PhRow from './bp-excel-row'
+import PhRow from './ph-excel-row'
 export default {
     data() {
         return {
