@@ -7,7 +7,7 @@
 <script>
 
 import PhExcelDataSchema from './model/schema'
-import PhCell from './bp-excel-cell'
+import PhCell from './ph-excel-cell'
 
 export default {
     data() {
