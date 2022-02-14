@@ -20,6 +20,7 @@ export default class ShellRoute extends Route {
 	}
 
 	async model(params) {
+		debugger
 		if (Object.keys(params).length === 0) {
 			params["path"] = "home"
 		}

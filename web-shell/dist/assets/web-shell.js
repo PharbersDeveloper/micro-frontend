@@ -455,19 +455,75 @@
   });
   _exports.default = void 0;
 
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{yield}}
+    <div>
+  	{{#let (element this.navComponent) as |NavTop|}}
+  		<NavTop allData={{@allData}}
+          	{{did-insert this.registerListener}}
+          	{{will-destroy this.unregisterListener}} />
+  	{{/let}}
+  	<div style="width: 100%;">
+  		{{yield}}
+  	</div>
+  </div>
   */
   {
-    "id": "YmRmotUX",
-    "block": "[[[18,1,null]],[\"&default\"],false,[\"yield\"]]",
+    "id": "nEHWyAfN",
+    "block": "[[[10,0],[12],[1,\"\\n\"],[44,[[50,[28,[37,2],[[28,[37,3],[[30,0,[\"navComponent\"]]],null]],null],0,null,[[\"tagName\"],[[30,0,[\"navComponent\"]]]]]],[[[1,\"\\t\\t\"],[8,[30,1],[[16,\"allData\",[30,2]],[4,[38,4],[[30,0,[\"registerListener\"]]],null],[4,[38,5],[[30,0,[\"unregisterListener\"]]],null]],null,null],[1,\"\\n\"]],[1]]],[1,\"\\t\"],[10,0],[14,5,\"width: 100%;\"],[12],[1,\"\\n\\t\\t\"],[18,3,null],[1,\"\\n\\t\"],[13],[1,\"\\n\"],[13]],[\"NavTop\",\"@allData\",\"&default\"],false,[\"let\",\"component\",\"ensure-safe-component\",\"-element\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/ph-pnt-layout.hbs",
     "isStrictMode": false
   });
 
-  class PhPntLayoutComponent extends _component.default {}
+  let PhPntLayoutComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._action, _dec4 = Ember._action, (_class = class PhPntLayoutComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
 
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _initializerDefineProperty(this, "router", _descriptor2, this);
+    }
+
+    get navComponent() {
+      if (this.args.navComponent) {
+        return this.args.navComponent;
+      } else return "ph-analyze-bp-nav-top-max";
+    }
+
+    registerListener(element) {
+      element.allData = {
+        name_show: decodeURI(this.cookies.read('user_name_show')),
+        company_name_show: decodeURI(this.cookies.read('company_name_show')),
+        _isVue: true
+      };
+      element.addEventListener("event", this.listener);
+    }
+
+    unregisterListener(element) {
+      element.removeEventListener("event", this.listener);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = PhPntLayoutComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, PhPntLayoutComponent);
@@ -4997,6 +5053,8 @@
     }
 
     async model(params) {
+      debugger;
+
       if (Object.keys(params).length === 0) {
         params["path"] = "home";
       }
