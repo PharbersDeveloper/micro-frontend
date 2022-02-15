@@ -92,7 +92,7 @@ export default class ExecutionStatusService extends Service {
             ownerId,
             callBack,
             timeout = this.timeout
-        } = {}) { 
+        } = {}) {
         if (!this.action.find(item => item.id == id)) {
             this.action.push({
                 type: type,

@@ -9,6 +9,7 @@ import nav from './components/bp-nav-top-max.vue'
 import importPage from './components/deprecated/page/max-saas-import.vue'
 import bpExcelContainer from './components/bp-excel-container'
 import bpNavMax from './components/bp-nav-top-max'
+import eh from './components/bp-excel-handler'
 
 Vue.use(Router)
 
@@ -65,6 +66,11 @@ export default new Router({
             path: '/bp-nav-max',
             name: 'bp-nav-max',
             component: bpNavMax
+        },
+        {
+            path: '/eh',
+            name: 'eh',
+            component: eh
         }
     ]
 })

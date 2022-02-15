@@ -728,7 +728,7 @@
     "isStrictMode": false
   });
 
-  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember.inject.service, _dec7 = Ember.inject.service('loading'), _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = class WcContextComponent extends _component.default {
+  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember.inject.service('loading'), _dec7 = Ember.inject.service("execution-status"), _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = class WcContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -742,9 +742,9 @@
 
       _initializerDefineProperty(this, "downloadFile", _descriptor5, this);
 
-      _initializerDefineProperty(this, "noticeService", _descriptor6, this);
+      _initializerDefineProperty(this, "loadingService", _descriptor6, this);
 
-      _initializerDefineProperty(this, "loadingService", _descriptor7, this);
+      _initializerDefineProperty(this, "noticeService", _descriptor7, this);
     }
 
     async listener(e) {
@@ -787,12 +787,12 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "noticeService", [_dec6], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec7], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "noticeService", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -2182,6 +2182,186 @@
 
 
   _exports.PhUriTemplate = PhUriTemplate;
+});
+;define("web-shell/lib/iot/PhAWSMqtt", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.PhMQTT = PhMQTT;
+
+  /**
+   * pqian@pharbers.com 2022.2.10
+   */
+  const awsCrt = require("aws-crt");
+
+  function PhMQTT(config, callBack, timeoutQueue) {
+    let connection = null;
+    let intervalId = null;
+    let timeoutId = null;
+    const id = config.id;
+    const topic = config.topic;
+    const client_id = config.client_id;
+    const endpoint = config.endpoint;
+    const aws_region = config.aws_region;
+    const aws_access_id = config.aws_access_id;
+    const aws_secret_key = config.aws_secret_key;
+    const timeout = config.timeout + 5; // 延迟5秒
+
+    let time = new Date().getTime();
+    const client_bootstrap = new awsCrt.io.ClientBootstrap();
+    const qos = awsCrt.mqtt.QoS.AtLeastOnce; // 1
+
+    const config_builder = awsCrt.iot.AwsIotMqttConnectionConfigBuilder.new_mtls_builder();
+    config_builder.with_credentials(aws_region, aws_access_id, aws_secret_key);
+    config_builder.with_clean_session(false); //将 clean_session参数设置为 False即表示连接应该是持久连接
+
+    config_builder.with_client_id(client_id);
+    config_builder.with_endpoint(endpoint);
+    config_builder.with_ping_timeout_ms(5000);
+    config_builder.with_keep_alive_seconds(5000);
+    const mqttConfig = config_builder.build();
+    const client = new awsCrt.mqtt.MqttClient(client_bootstrap);
+
+    const __byteToString = arrayBuffer => {
+      return new TextDecoder().decode(arrayBuffer);
+    };
+
+    const __heartbeat = () => {
+      if (connection) {
+        let sequence = 0;
+        intervalId = setInterval(() => {
+          sequence += 1;
+          connection.publish("pharbers/heartbeat", JSON.stringify({
+            "message": `client_id => ${client_id}`,
+            "sequence": sequence
+          }), awsCrt.mqtt.QoS.AtLeastOnce, false).catch(error => console.log("heartbeat"));
+        }, 30 * 1000);
+      }
+    };
+
+    const __timeout = () => {
+      timeoutId = setInterval(() => {
+        const currentTime = new Date().getTime() / 1000;
+
+        if (currentTime - time / 1000 > timeout) {
+          timeoutQueue.push(id);
+        }
+      }, 1 * 1000);
+    };
+
+    const __subscribe = () => {
+      if (connection) {
+        if (!callBack) {
+          throw Error("CallBack Is Undefined");
+        }
+
+        connection.subscribe(topic, qos, (_, payload) => {
+          time = new Date().getTime();
+          const parameter = Object.assign({}, config.parameter);
+          delete parameter.callBack;
+          callBack(parameter, __byteToString(payload));
+        });
+      }
+    };
+
+    const connect = async () => {
+      if (client) {
+        connection = client.new_connection(mqttConfig);
+        await connection.connect();
+
+        __heartbeat(); // 测试重点
+
+
+        __subscribe(); // 测试重点
+
+
+        __timeout(); // 测试重点
+
+      }
+    };
+
+    const disconnect = () => {
+      if (connection && intervalId) {
+        clearInterval(intervalId);
+        clearInterval(timeoutId);
+        connection.disconnect();
+        intervalId = null;
+        timeoutId = null;
+        connection = null;
+        console.log("Mqtt Disconnect");
+      }
+    };
+
+    return {
+      "connect": connect,
+      "disconnect": disconnect
+    };
+  }
+});
+;define("web-shell/lib/iot/PhHttpMqtt", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.PhHttpMQTT = PhHttpMQTT;
+
+  /**
+   * pqian@pharbers.com 2022.2.10
+   */
+  function PhHttpMQTT(config, callBack, timeoutQueue) {
+    let intervalId = null;
+    const topic = config.topic || "pharbers";
+    const client_id = config.client_id;
+    const endpoint = config.endpoint;
+    const qos = 1; // LeastOnce
+
+    const __subscribe = () => {
+      intervalId = setInterval(() => {// Query http mqtt interface 获取的数据交给callBack
+      }, 1000 * 2); // 2秒 后续可编程参数，先实现
+    };
+
+    const connect = async () => {
+      __subscribe();
+    };
+
+    const disconnect = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+
+    return {
+      "connect": connect,
+      "disconnect": disconnect
+    };
+  }
+});
+;define("web-shell/lib/iot/PhIot", ["exports", "web-shell/lib/iot/PhAWSMqtt", "web-shell/lib/iot/PhHttpMqtt"], function (_exports, _PhAWSMqtt, _PhHttpMqtt) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.PhIot = void 0;
+
+  /**
+   * pqian@pharbers.com 2022.2.10
+   */
+  const contextIot = {
+    "aws-mqtt": _PhAWSMqtt.default,
+    "http-mqtt": _PhHttpMqtt.default
+  };
+  const PhIot = {};
+  _exports.PhIot = PhIot;
+
+  PhIot.newInstance = (config, callBack, timeoutQueue) => {
+    const mqtt = config.type || "aws-mqtt";
+    const method = contextIot[mqtt].PhMQTT;
+    return method(config, callBack, timeoutQueue);
+  };
 });
 ;define("web-shell/models/account", ["exports", "@ember-data/model"], function (_exports, _model) {
   "use strict";
@@ -5440,6 +5620,188 @@
     initializer: null
   })), _class));
   _exports.default = DownloadFileService;
+});
+;define("web-shell/services/execution-status", ["exports", "web-shell/config/environment", "fetch", "web-shell/lib/iot/PhIot"], function (_exports, _environment, _fetch, _PhIot) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let ExecutionStatusService = (_dec = Ember.inject.service, (_class = class ExecutionStatusService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "cookies", _descriptor, this);
+
+      _defineProperty(this, "endpoint", _environment.default.APP.AWS_IOT_ENDPOINT);
+
+      _defineProperty(this, "aws_region", _environment.default.APP.AWS_REGION);
+
+      _defineProperty(this, "aws_access_id", _environment.default.APP.AWS_ACCESS_KEY);
+
+      _defineProperty(this, "aws_secret_key", _environment.default.APP.AWS_SECRET_KEY);
+
+      _defineProperty(this, "mqtt_type", _environment.default.APP.MQTT_TYPE);
+
+      _defineProperty(this, "timeout", _environment.default.APP.OBSERVER_TIME_OUT);
+
+      _defineProperty(this, "startOb", false);
+
+      _defineProperty(this, "action", []);
+
+      _defineProperty(this, "iotInstance", []);
+
+      _defineProperty(this, "destroyQueue", []);
+
+      _defineProperty(this, "functions", {
+        "iot": async item => {
+          const topic = `${item.projectId}/${item.ownerId}`;
+          const iotId = this.iotInstance.find(iot => iot.id == item.id);
+
+          if (!iotId) {
+            const iotTopic = this.iotInstance.find(iot => iot.topic == topic);
+
+            if (iotTopic) {
+              this.destroyQueue.push(iotTopic.id);
+            }
+
+            const iotConfig = {
+              id: item.id,
+              type: this.mqtt_type,
+              topic: topic,
+              client_id: item.ownerId,
+              endpoint: this.endpoint,
+              aws_region: this.aws_region,
+              aws_access_id: this.aws_access_id,
+              aws_secret_key: this.aws_secret_key,
+              timeout: item.timeout || this.timeout,
+              parameter: item
+            };
+
+            const iot = _PhIot.default.PhIot.newInstance(iotConfig, item.callBack, this.destroyQueue);
+
+            this.iotInstance.push({
+              id: item.id,
+              topic: topic,
+              ins: iot
+            });
+            await iot.connect();
+          }
+        } // "other": (item) => {
+        //     const parameter = Object.assign({}, item)
+        //     delete parameter.callBack
+        //     item.callBack(parameter, this.destroyQueue)
+        // },
+        // "executionStatus": async (item) => {
+        //     const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        //     const headers = {
+        //         Authorization: that.cookies.read("access_token"),
+        //         "Content-Type": "application/vnd.api+json",
+        //         Accept: "application/vnd.api+json",
+        //     }
+        //     const body = {
+        //         table: item.tableName,
+        //         conditions: {
+        //             "id": ["=", `${item.projectId}${item.ownerId}`],
+        //             "date": ["<", `${new Date().getTime()}`]
+        //         }
+        //     }
+        //     const response = await fetch(url, {
+        //         method: "POST",
+        // 			headers: headers,
+        // 			body: JSON.stringify(body)
+        //     })
+        //     if (response) {
+        //         this.__destroyQueue.push(item.id)
+        //         item.callBack(response)
+        //     }
+        // }
+
+      });
+    }
+
+    defineAction({
+      type,
+      id,
+      tableName,
+      projectId,
+      ownerId,
+      callBack,
+      timeout = this.timeout
+    } = {}) {
+      if (!this.action.find(item => item.id == id)) {
+        this.action.push({
+          type: type,
+          id: id,
+          tableName: tableName,
+          projectId: projectId,
+          ownerId: ownerId,
+          timeout: timeout,
+          callBack: callBack
+        });
+      } else {
+        console.warn("id 重复");
+      }
+
+      if (!this.startOb) {
+        this.__observer();
+      }
+    }
+
+    __unregister(id) {
+      this.action = this.action.filter(item => item.id != id);
+      const iot = this.iotInstance.find(item => item.id == id);
+      this.iotInstance = this.iotInstance.filter(item => item.id != id);
+
+      if (iot) {
+        iot.ins.disconnect();
+      }
+    }
+
+    __destroyQueue() {
+      setInterval(() => {
+        const id = this.destroyQueue.shift();
+
+        if (id) {
+          this.__unregister(id);
+        }
+      }, 1000);
+    }
+
+    __observer() {
+      this.__destroyQueue();
+
+      this.startOb = true;
+      setInterval(() => {
+        if (this.action.length > 0) {
+          this.action.forEach(async (item, index) => {
+            this.functions[item.type](item);
+          });
+        } else {
+          console.log("notice observer");
+        }
+      }, 1000 * 5);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = ExecutionStatusService;
 });
 ;define("web-shell/services/intl", ["exports", "ember-intl/services/intl"], function (_exports, _intl) {
   "use strict";

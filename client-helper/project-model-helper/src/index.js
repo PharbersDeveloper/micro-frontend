@@ -4,6 +4,8 @@ import { phAnalyzeDataListHomeEventHandler } from "./eventHandler/phAnalyzeDataL
 import { phAnalyzeDataListHomeRouteModel } from "./routeModel/phAnalyzeDataListHomeRouteModel"
 import { phAnalyzeSelectFileRouteModel } from "./routeModel/phAnalyzeSelectFileRouteModel"
 import { phAnalyzeSelectFileEventHandler } from "./eventHandler/phAnalyzeSelectFileEventHandler"
+import { phAnalyzeBpExcelHandlerRouteModel } from "./routeModel/phAnalyzeBpExcelHandlerRouteModel"
+import { phAnalyzeBpExcelHandlerEventHandler } from "./eventHandler/phAnalyzeBpExcelHandlerEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -11,5 +13,7 @@ export {
 	phAnalyzeDataListHomeEventHandler,
 	phAnalyzeDataListHomeRouteModel,
 	phAnalyzeSelectFileRouteModel,
-	phAnalyzeSelectFileEventHandler
+	phAnalyzeSelectFileEventHandler,
+	phAnalyzeBpExcelHandlerRouteModel,
+	phAnalyzeBpExcelHandlerEventHandler
 }

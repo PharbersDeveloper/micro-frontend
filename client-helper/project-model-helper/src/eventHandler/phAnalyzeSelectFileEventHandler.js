@@ -235,15 +235,25 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			}
 		}
 		let actions = postUrl(push_type, actions_body)
-		let results = await Promise.all([project_files, actions])
+		await Promise.all([project_files, actions])
 		//请求status，持续30s
-		route.noticeService.register(
-			"notification",
-			results[0].data.id,
-			noticeCallback,
-			route,
-			projectId
-		)
+		// route.noticeService.register(
+		// 	"notification",
+		// 	results[0].data.id,
+		// 	noticeCallback,
+		// 	route,
+		// 	projectId
+		// )
+		console.log(route)
+		route.noticeService.defineAction({
+			type: "iot",
+			// id: results[0].data.id,
+			ele: route,
+			id: "uploadfiles",
+			projectId: projectId,
+			ownerId: route.cookies.read("account_id"),
+			callBack: noticeCallback
+		})
 	}
 
 	async function postUrl(type, body) {
@@ -261,9 +271,9 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		return fetch(url + type, options).then((res) => res.json())
 	}
 
-	function noticeCallback(response) {
+	function noticeCallback(params, payload) {
 		let cnotification = JSON.parse(
-			response.data[0].attributes.message
+			JSON.parse(payload).message
 		).cnotification
 		let upload_status = cnotification.status
 		let error =
@@ -284,7 +294,8 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		} else {
 			route.noticeService.uploadStatus = true
 			route.router.transitionTo(
-				`/excel-handler?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}&filename=${route.tranParam.file.name}&version=${route.tranParam.property.dataID}&dataset=${route.tranParam.property.dataset}&tmpname=${route.tranParam.message.tmpname}`
+				"shell",
+				`excel-handler?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}&filename=${route.tranParam.file.name}&version=${route.tranParam.property.dataID}&dataset=${route.tranParam.property.dataset}&tmpname=${route.tranParam.message.tmpname}`
 			)
 		}
 		route.loadingService.loading.style.display = "none"
