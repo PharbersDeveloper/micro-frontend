@@ -146,9 +146,18 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
+		console.log("notice")
+		route.noticeService.defineAction({
+			type: "iot",
+			// id: results[0].data.id,
+			ele: route,
+			id: "uploadfiles",
+			projectId: projectId,
+			ownerId: route.cookies.read("account_id"),
+			callBack: noticeCallback
+		})
 		let uploadMessage = {}
 		uploadMessage.file = file
-
 		const API_ENDPOINT = "https://max.pharbers.com/upload"
 		const request = new XMLHttpRequest()
 		const formData = new FormData()
@@ -190,16 +199,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
-		console.log("开始notice！！！！")
-		route.noticeService.defineAction({
-			type: "iot",
-			// id: results[0].data.id,
-			ele: route,
-			id: "uploadfiles",
-			projectId: projectId,
-			ownerId: route.cookies.read("account_id"),
-			callBack: noticeCallback
-		})
 		route.loadingService.loading.style.display = "flex"
 		route.loadingService.loading.style["z-index"] = 2
 		//push project_files
@@ -215,7 +214,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 				id: message.tmpname
 			}
 		}
-		console.log("开始上传文件！！！")
 		let project_files = postUrl(push_type, project_files_body)
 		//push actions
 		let messages = {

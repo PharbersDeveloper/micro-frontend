@@ -6,6 +6,8 @@ import { phAnalyzeSelectFileRouteModel } from "./routeModel/phAnalyzeSelectFileR
 import { phAnalyzeSelectFileEventHandler } from "./eventHandler/phAnalyzeSelectFileEventHandler"
 import { phAnalyzeBpExcelHandlerRouteModel } from "./routeModel/phAnalyzeBpExcelHandlerRouteModel"
 import { phAnalyzeBpExcelHandlerEventHandler } from "./eventHandler/phAnalyzeBpExcelHandlerEventHandler"
+import { phAnalyzeBpExcelContainerEventHandler } from "./eventHandler/phAnalyzeBpExcelContainerEventHandler"
+import { phAnalyzeBpExcelContainerRouteModel } from "./routeModel/phAnalyzeBpExcelContainerRouteModel"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -15,5 +17,7 @@ export {
 	phAnalyzeSelectFileRouteModel,
 	phAnalyzeSelectFileEventHandler,
 	phAnalyzeBpExcelHandlerRouteModel,
-	phAnalyzeBpExcelHandlerEventHandler
+	phAnalyzeBpExcelHandlerEventHandler,
+	phAnalyzeBpExcelContainerEventHandler,
+	phAnalyzeBpExcelContainerRouteModel
 }
