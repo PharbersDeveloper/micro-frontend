@@ -77,11 +77,10 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if (upload_status == "project_file_to_DS_succeed") {
 			//跳转下一页面
-			// route.router.transitionTo(
-			// 	"shell",
-			// 	`dataset-lst?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}`
-			// )
-			console.log("跳转下一页面跳转下一页面跳转下一页面")
+			route.router.transitionTo(
+				"shell",
+				`dataset-lst?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}`
+			)
 		} else if (upload_status == "project_file_to_DS_failed") {
 			let msg =
 				error["message"]["zh"] !== ""

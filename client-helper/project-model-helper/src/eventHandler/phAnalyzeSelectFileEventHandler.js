@@ -190,6 +190,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
+		console.log("开始notice！！！！")
 		route.noticeService.defineAction({
 			type: "iot",
 			// id: results[0].data.id,
@@ -214,6 +215,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 				id: message.tmpname
 			}
 		}
+		console.log("开始上传文件！！！")
 		let project_files = postUrl(push_type, project_files_body)
 		//push actions
 		let messages = {
