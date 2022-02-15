@@ -65,7 +65,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					new Set(targetDataset.label.concat(selectedTags))
 				)
 				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-				const accessToken = this.cookies.read("access_token")
+				const accessToken = route.cookies.read("access_token")
 				let body = {
 					table: "dataset",
 					item: {
@@ -93,159 +93,246 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				window.location.reload()
 			})
 			break
-		// case "deleteDatasets":
-		// 	this.loadingService.loading.style.display = 'flex'
-		// 	this.loadingService.loading.style['z-index'] = 2
-		// 	let delTagParam = e.detail[0].args.param;
-		// 	let selectedDatasetsDel = delTagParam.selectedDatasets //需要更新的dataset
-		// 	let datasetArrayDel = delTagParam.datasetArray //发送请求的参数
-		// 	const accessToken = this.cookies.read( "access_token" )
-		// 	let _that = this
-		// 	let msgArr = []
-		// 	selectedDatasetsDel.forEach(async targetId => {
-		// 		let targetDataset = datasetArrayDel.filter(it => it.id == targetId)[0]
-		// 		msgArr.push({
-		// 			"actionName": targetDataset.name,
-		// 			"version": "",
-		// 			"dsid": targetDataset.id,
-		// 			"destination": targetDataset.name,
-		// 			"opname": this.cookies.read( "account_id" ),
-		// 			"opgroup": this.cookies.read( "company_id" )
-		// 		})
-		// 	})
-		// 	const urldel = "https://apiv2.pharbers.com/phdydatasource/put_item"
-		// 	let body = {
-		// 		"table": "action",
-		// 		"item": {
-		// 			"projectId": delTagParam.projectId,
-		// 			"code": 0,
-		// 			"comments": "delete_dataset",
-		// 			"jobCat": "remove_DS",
-		// 			"jobDesc": "running",
-		// 			"message": JSON.stringify(msgArr),
-		// 			"date": String(new Date().getTime()),
-		// 			"owner": this.cookies.read( "account_id" ),
-		// 			"showName": decodeURI(this.cookies.read('user_name_show'))
-		// 		}
-		// 	}
-		// 	let options = {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Authorization": accessToken,
-		// 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-		// 			"accept": "application/json"
-		// 		},
-		// 		body: JSON.stringify(body)
-		// 	}
-		// 	let result = await fetch(urldel, options).then(res => res.json())
-		// 	if(result.data) {
-		// 		_that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
-		// 	}
-		// break
-		// case "fitMax":
-		// 	let uuid = this.guid()
-		// 	let suit_max_Param = e.detail[0].args.param;
-		// 	const suit_max_url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-		// 	let message = {
-		// 		"actionName": suit_max_Param.dsName,
-		// 		"keys": suit_max_Param.path,
-		// 		"name": suit_max_Param.dsName,
-		// 		"version": suit_max_Param.version,
-		// 		"id": uuid,
-		// 		"cat": suit_max_Param.maxcat,
-		// 		"format": suit_max_Param.format,
-		// 		"prop": {
-		// 			path: suit_max_Param.path,
-		// 			partitions: 1,
-		// 			format: suit_max_Param.format
-		// 		}
-		// 	}
-		// 	let suit_max_body = {
-		// 		"table": "action",
-		// 		"item": {
-		// 			"projectId": suit_max_Param.projectId,
-		// 			"code": 0,
-		// 			"comments": "",
-		// 			"jobCat": "max1.0",
-		// 			"jobDesc": "max1.0",
-		// 			"message": JSON.stringify(message),
-		// 			"date": String(new Date().getTime()),
-		// 			"owner": this.cookies.read( "account_id" ),
-		// 			"showName": decodeURI(this.cookies.read('user_name_show'))
-		// 		}
-		// 	}
-		// 	let suit_max_options = {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Authorization": this.cookies.read( "access_token" ),
-		// 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-		// 			"accept": "application/json"
-		// 		},
-		// 		body: JSON.stringify(suit_max_body)
-		// 	}
-		// 	let suit_max_result = await fetch(suit_max_url, suit_max_options).then(res => res.json())
-		// 	if(suit_max_result.data) {
-		// 		// _that.noticeService.register("notification", result.data.id, this.delNoticeCallback, this, delTagParam.projectId)
-		// 	}
-		// 	alert("新建数据集成功！")
-		// 	window.location.reload()
-		// 	break
-		// case "clearTags":
-		// 	this.loadingService.loading.style.display = 'flex'
-		// 	this.loadingService.loading.style['z-index'] = 2
-		// 	let clearTagParam = e.detail[0].args.param;
-		// 	let selectedDatasetsClear = clearTagParam.selectedDatasets //需要更新的dataset
-		// 	let datasetArrayClear = clearTagParam.datasetArray //发送请求的参数在这取
-		// 	let _this = this
-		// 	let promiseList = [];
-		// 	let msg = []
-		// 	selectedDatasetsClear.forEach(async targetId => {
-		// 		let targetDataset = datasetArrayClear.filter(it => it.id == targetId)[0]
-		// 		msg.push({
-		// 			"actionName": targetDataset.name,
-		// 			"version": "",
-		// 			"dsid": targetDataset.id,
-		// 			"destination": targetDataset.name,
-		// 			"opname": this.cookies.read( "account_id" ),
-		// 			"opgroup": this.cookies.read( "company_id" )
-		// 		})
-		// 	})
+		case "deleteDatasets":
+			route.noticeService.defineAction({
+				type: "iot",
+				ele: route,
+				id: "deleteDatasets",
+				projectId: params.projectId,
+				ownerId: route.cookies.read("account_id"),
+				callBack: delNoticeCallback
+			})
+			route.loadingService.loading.style.display = "flex"
+			route.loadingService.loading.style["z-index"] = 2
+			if (params) {
+				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
+				let datasetArrayDel = params.datasetArray //发送请求的参数
+				const accessToken = route.cookies.read("access_token")
+				let msgArr = []
+				selectedDatasetsDel.forEach(async (targetId) => {
+					let targetDataset = datasetArrayDel.filter(
+						(it) => it.id == targetId
+					)[0]
+					msgArr.push({
+						actionName: targetDataset.name,
+						version: "",
+						dsid: targetDataset.id,
+						destination: targetDataset.name,
+						opname: route.cookies.read("account_id"),
+						opgroup: route.cookies.read("company_id")
+					})
+				})
+				const urldel =
+					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				let body = {
+					table: "action",
+					item: {
+						projectId: params.projectId,
+						code: 0,
+						comments: "delete_dataset",
+						jobCat: "remove_DS",
+						jobDesc: "running",
+						message: JSON.stringify(msgArr),
+						date: String(new Date().getTime()),
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					}
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(urldel, options).then((res) => res.json())
+			}
+			break
+		case "fitMax":
+			if (params) {
+				let uuid = guid()
+				const suit_max_url =
+					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				let message = {
+					actionName: params.dsName,
+					keys: params.path,
+					name: params.dsName,
+					version: params.version,
+					id: uuid,
+					cat: params.maxcat,
+					format: params.format,
+					prop: {
+						path: params.path,
+						partitions: 1,
+						format: params.format
+					}
+				}
+				let suit_max_body = {
+					table: "action",
+					item: {
+						projectId: params.projectId,
+						code: 0,
+						comments: "",
+						jobCat: "max1.0",
+						jobDesc: "max1.0",
+						message: JSON.stringify(message),
+						date: String(new Date().getTime()),
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					}
+				}
+				let suit_max_options = {
+					method: "POST",
+					headers: {
+						Authorization: route.cookies.read("access_token"),
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(suit_max_body)
+				}
+				let suit_max_result = await fetch(
+					suit_max_url,
+					suit_max_options
+				).then((res) => res.json())
+				if (suit_max_result.data) {
+					// route.noticeService.register("notification", result.data.id, delNoticeCallback, route, params.projectId)
+				}
+				alert("新建数据集成功！")
+				window.location.reload()
+			}
+			break
+		case "clearTags":
+			route.noticeService.defineAction({
+				type: "iot",
+				// id: results[0].data.id,
+				ele: route,
+				id: "clearTags",
+				projectId: params.projectId,
+				ownerId: route.cookies.read("account_id"),
+				callBack: clearTagsNoticeCallback
+			})
+			route.loadingService.loading.style.display = "flex"
+			route.loadingService.loading.style["z-index"] = 2
+			if (params) {
+				let selectedDatasetsClear = params.selectedDatasets //需要更新的dataset
+				let datasetArrayClear = params.datasetArray //发送请求的参数在这取
+				let promiseList = []
+				let msg = []
+				selectedDatasetsClear.forEach(async (targetId) => {
+					let targetDataset = datasetArrayClear.filter(
+						(it) => it.id == targetId
+					)[0]
+					msg.push({
+						actionName: targetDataset.name,
+						version: "",
+						dsid: targetDataset.id,
+						destination: targetDataset.name,
+						opname: route.cookies.read("account_id"),
+						opgroup: route.cookies.read("company_id")
+					})
+				})
 
-		// 	const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-		// 	const token = this.cookies.read( "access_token" )
-		// 	let clearBody = {
-		// 		"table": "action",
-		// 		"item": {
-		// 			"projectId": clearTagParam.projectId,
-		// 			"code": 0,
-		// 			"comments": "clear_dataset_tags",
-		// 			"jobCat": "clear_DS_data",
-		// 			"jobDesc": "running",
-		// 			"message": JSON.stringify(msg),
-		// 			"date": String(new Date().getTime()),
-		// 			"owner": this.cookies.read( "account_id" ),
-		// 			"showName": decodeURI(this.cookies.read('user_name_show'))
-		// 		}
-		// 	}
-		// 	let clearOptions = {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Authorization": token,
-		// 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-		// 			"accept": "application/json"
-		// 		},
-		// 		body: JSON.stringify(clearBody)
-		// 	}
-		// 	let clearResult = fetch(url, clearOptions).then(res => res.json())
-		// 	promiseList.push(clearResult)
-		// 	let clearResults = await Promise.all(promiseList)
-		// 	clearResults.forEach(item => {
-		// 		if(item.data) {
-		// 			_this.noticeService.register("notification", item.data.id, this.clearTagsNoticeCallback, this, clearTagParam.projectId)
-		// 		}
-		// 	})
-		// break
+				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const token = route.cookies.read("access_token")
+				let clearBody = {
+					table: "action",
+					item: {
+						projectId: params.projectId,
+						code: 0,
+						comments: "clear_dataset_tags",
+						jobCat: "clear_DS_data",
+						jobDesc: "running",
+						message: JSON.stringify(msg),
+						date: String(new Date().getTime()),
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					}
+				}
+				let clearOptions = {
+					method: "POST",
+					headers: {
+						Authorization: token,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(clearBody)
+				}
+				let clearResult = fetch(url, clearOptions).then((res) =>
+					res.json()
+				)
+				promiseList.push(clearResult)
+				await Promise.all(promiseList)
+			}
+			break
 		default:
 			console.log("other click event!")
+	}
+
+	function guid() {
+		return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
+			/[xy]/g,
+			function (c) {
+				var r = (Math.random() * 16) | 0,
+					v = c == "x" ? r : (r & 0x3) | 0x8
+				return v.toString(16)
+			}
+		)
+	}
+
+	function clearTagsNoticeCallback(param, payload) {
+		console.log("清除数据")
+		console.log(payload)
+		console.log(param)
+		let cnotification = JSON.parse(
+			JSON.parse(payload).message
+		).cnotification
+		let upload_status = cnotification.status
+		let error =
+			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
+		if (upload_status == "clear_DS_succeed") {
+			alert("清楚数据成功！")
+			// window.location.reload()
+		} else if (upload_status == "clear_DS_failed") {
+			let msg =
+				error["message"]["zh"] !== ""
+					? error["message"]["zh"]
+					: "清除数据失败，请重新操作！"
+			alert(msg)
+		}
+		route.loadingService.loading.style.display = "none"
+	}
+
+	function delNoticeCallback(param, payload) {
+		console.log("删除dataset")
+		console.log(payload)
+		console.log(param)
+		let cnotification = JSON.parse(
+			JSON.parse(payload).message
+		).cnotification
+		let upload_status = cnotification.status
+		let error =
+			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
+		if (upload_status == "remove_DS_succeed") {
+			alert("删除数据集成功！")
+			// window.location.reload()
+		} else if (upload_status == "remove_DS_failed") {
+			let msg =
+				error["message"]["zh"] !== ""
+					? error["message"]["zh"]
+					: "删除数据集失败，请重新操作！"
+			alert(msg)
+		}
+		route.loadingService.loading.style.display = "none"
 	}
 }
