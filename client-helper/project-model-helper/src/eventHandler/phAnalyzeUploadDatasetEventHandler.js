@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	let params = e.detail[0].args.param
+	console.log(params)
 	let uri = ""
 	// addTags
 	let selectedDatasets = params.selectedDatasets //需要更新的dataset

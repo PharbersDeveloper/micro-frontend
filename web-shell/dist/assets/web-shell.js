@@ -133,7 +133,8 @@
           return {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: _environment.default.APP.debugToken
+            // Authorization: ENV.APP.debugToken
+            Authorization: this.cookies.read("access_token")
           };
         } else {
           return {
@@ -698,7 +699,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -727,7 +728,7 @@
     "isStrictMode": false
   });
 
-  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember._action, _dec7 = Ember._action, _dec8 = Ember._action, (_class = class WcContextComponent extends _component.default {
+  let WcContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember.inject.service, _dec7 = Ember.inject.service('loading'), _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = class WcContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -740,6 +741,10 @@
       _initializerDefineProperty(this, "awsService", _descriptor4, this);
 
       _initializerDefineProperty(this, "downloadFile", _descriptor5, this);
+
+      _initializerDefineProperty(this, "noticeService", _descriptor6, this);
+
+      _initializerDefineProperty(this, "loadingService", _descriptor7, this);
     }
 
     async listener(e) {
@@ -782,7 +787,17 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "noticeService", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = WcContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, WcContextComponent);
@@ -6355,7 +6370,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"rB9jOc347FswXebo","clientName":"project","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"fxXKqdI26bZEBywu","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"c0ff6d3cc2d9749002d41f0cc5e7105388dc5cc96b8f4405475323bc5cd3b928","name":"web-shell","version":"0.0.0+b351c836"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"rB9jOc347FswXebo","clientName":"project","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"fxXKqdI26bZEBywu","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da","name":"web-shell","version":"0.0.0+0c9fbd4f"});
           }
         
 //# sourceMappingURL=web-shell.map

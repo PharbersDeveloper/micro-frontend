@@ -9,6 +9,9 @@ export default class WcContextComponent extends Component {
 	@service cookies
 	@service awsService
 	@service downloadFile
+    @service noticeService;
+    @service('loading') loadingService;
+
 	
 	@action
 	async listener(e) {
