@@ -126,7 +126,7 @@ export default class ExecutionStatusService extends Service {
             if (id) {
                 this.__unregister(id)
             }
-        }, 500)
+        }, 1000)
     }
 
     __observer() {
