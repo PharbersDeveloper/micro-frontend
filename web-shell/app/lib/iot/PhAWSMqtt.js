@@ -73,7 +73,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
                 const { id, projectId, date } = JSON.parse(content)
                 if (use_cache.indexOf(`${id}_${projectId}_${date}`) === -1) {
                     use_cache.push(`${id}_${projectId}_${date}`)
-                    callBack(parameter, content);
+                    callBack(parameter, content); 
                 }
                 
             })
