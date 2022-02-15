@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelHandlerRouteModel(route, parseParams) {
 	console.log(route)
+	console.log(parseParams)
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,

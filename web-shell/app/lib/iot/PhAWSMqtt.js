@@ -6,7 +6,6 @@
 const awsCrt = require("aws-crt");
 
 function PhMQTT(config, callBack, timeoutQueue) {
-
     let connection = null;
     let intervalId = null;
     let timeoutId = null;
@@ -17,7 +16,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
     const aws_secret_key = config.aws_secret_key;
-    const timeout = config.timeout + 5; // 延迟5秒
+    const timeout = config.timeout; // 延迟5秒
     let time = new Date().getTime();
     const client_bootstrap = new awsCrt.io.ClientBootstrap()
     const qos = awsCrt.mqtt.QoS.AtLeastOnce // 1
@@ -59,7 +58,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
             if (currentTime - (time / 1000) > timeout) {
                 timeoutQueue.push(id)
             }
-        }, 1 * 1000);
+        }, 1 * 500);
     }
 
     const __subscribe = () => {

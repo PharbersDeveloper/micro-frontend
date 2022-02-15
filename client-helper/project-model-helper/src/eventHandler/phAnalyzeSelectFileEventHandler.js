@@ -190,6 +190,15 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
+		route.noticeService.defineAction({
+			type: "iot",
+			// id: results[0].data.id,
+			ele: route,
+			id: "uploadfiles",
+			projectId: projectId,
+			ownerId: route.cookies.read("account_id"),
+			callBack: noticeCallback
+		})
 		route.loadingService.loading.style.display = "flex"
 		route.loadingService.loading.style["z-index"] = 2
 		//push project_files
@@ -244,16 +253,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		// 	route,
 		// 	projectId
 		// )
-		console.log(route)
-		route.noticeService.defineAction({
-			type: "iot",
-			// id: results[0].data.id,
-			ele: route,
-			id: "uploadfiles",
-			projectId: projectId,
-			ownerId: route.cookies.read("account_id"),
-			callBack: noticeCallback
-		})
 	}
 
 	async function postUrl(type, body) {
@@ -272,6 +271,9 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 	}
 
 	function noticeCallback(params, payload) {
+		console.log("上传的")
+		console.log(params)
+		console.log(payload)
 		let cnotification = JSON.parse(
 			JSON.parse(payload).message
 		).cnotification

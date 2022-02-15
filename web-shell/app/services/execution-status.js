@@ -126,7 +126,7 @@ export default class ExecutionStatusService extends Service {
             if (id) {
                 this.__unregister(id)
             }
-        }, 1000)
+        }, 500)
     }
 
     __observer() {
@@ -140,6 +140,6 @@ export default class ExecutionStatusService extends Service {
             } else {
                 console.log("notice observer")
             }
-        }, 1000 * 5)
+        }, 500 * 1)
     }
 }

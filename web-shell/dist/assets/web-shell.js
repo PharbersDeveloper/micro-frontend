@@ -2207,7 +2207,7 @@
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
     const aws_secret_key = config.aws_secret_key;
-    const timeout = config.timeout + 5; // 延迟5秒
+    const timeout = config.timeout; // 延迟5秒
 
     let time = new Date().getTime();
     const client_bootstrap = new awsCrt.io.ClientBootstrap();
@@ -2248,7 +2248,7 @@
         if (currentTime - time / 1000 > timeout) {
           timeoutQueue.push(id);
         }
-      }, 1 * 1000);
+      }, 1 * 500);
     };
 
     const __subscribe = () => {
@@ -5777,7 +5777,7 @@
         if (id) {
           this.__unregister(id);
         }
-      }, 1000);
+      }, 500);
     }
 
     __observer() {
@@ -5792,7 +5792,7 @@
         } else {
           console.log("notice observer");
         }
-      }, 1000 * 5);
+      }, 500 * 1);
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec], {
