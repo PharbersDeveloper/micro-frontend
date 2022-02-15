@@ -5263,9 +5263,15 @@
       let parseParams;
 
       for (let idx = 0; idx < pageCount; ++idx) {
-        const tmp = pages[idx]; // let path = window.location.href.split("/")[window.location.href.split("/").length - 1]
+        const tmp = pages[idx];
+        let param = window.location.href.split("?")[1];
+        let routeName = params.path;
 
-        const [match, result] = this.rps.parse("/" + params.path, tmp.route);
+        if (param && !params.path.split("?")[1]) {
+          routeName = `${params.path}?${param}`;
+        }
+
+        const [match, result] = this.rps.parse("/" + routeName, tmp.route);
 
         if (match) {
           curPage = tmp;
