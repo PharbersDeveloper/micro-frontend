@@ -302,9 +302,21 @@ export default {
         this.flowVersion = decodeURI(paramArr[2].split("=")[1])
         this.datasource.projectId = this.projectId
         this.initChart()
-        this.noticeService.observer()
+        // this.noticeService.observer()
+        window.addEventListener('message', this.handleMessage)
+        // 告诉父组件准备好接收消息了
+        // window.parent.postMessage({
+        //     cmd: 'ready-for-receiving'
+        // }, '*')
+    },
+    destroyed () {
+        // 注意移除监听！注意移除监听！注意移除监听！
+        window.removeEventListener('message', this.handleMessage)
     },
     methods: {
+        handleMessage(data) {
+            debugger
+        },
         closeLogDialog() {
             this.showDagLogs = false
         },
@@ -347,7 +359,8 @@ export default {
             this.showProgress = true
             this.showRunJson = false
             let timeout = data.args.param.timeout
-            this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
+            debugger
+            // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         /**
          * 更新状态的回调函数
@@ -410,7 +423,7 @@ export default {
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
         async on_click_run_script(data) {
-            this.noticeService.progress = false
+            // this.noticeService.progress = false
             this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
@@ -434,13 +447,16 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
-            this.noticeService.projectName = this.projectName
-            let timeout = 60
-            this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
+            // this.noticeService.projectName = this.projectName
+            // let timeout = 60
+            // this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
             this.showProgress = true
         },
         // 点击运行整体
         on_click_runDag() {
+            window.parent.postMessage({
+                cmd: 'runDag'
+            }, '*')
             let roots = []
             console.log(this.datasource.data)
             this.datasource.data.forEach(item => {

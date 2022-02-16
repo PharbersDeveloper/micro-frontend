@@ -125,7 +125,8 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 								schema: JSON.stringify([]),
 								path: params.path,
 								format: params.format,
-								cat: "intermediate"
+								cat: "intermediate",
+								prop: ""
 							}
 						}
 						let options = {

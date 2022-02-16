@@ -175,13 +175,13 @@ export default {
             actionsKey: ""
         }
     },
-    watch: {
-    },
     async mounted() {
         const accessToken = this.getCookie("access_token") || "bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
-        let uriArr = window.location.href.split("/")
-        let projectId = uriArr[uriArr.length - 1]
+        // href param
+        const href = window.location.href.split("?")[1]
+        const hrefParam = href.split("&")
+        let projectId = hrefParam[1].split("=")[1]
         let acbody = {
             "table": "action",
             "conditions": {
@@ -257,7 +257,6 @@ export default {
         },
         //滚动
         scrollGet(e) {
-            console.log(e)
             let scrollTop = e.target.scrollTop || document.body.scrollTop;
             let clientHeight = e.target.clientHeight;
             let scrollHeight = e.target.scrollHeight;

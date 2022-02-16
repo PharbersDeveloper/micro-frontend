@@ -233,7 +233,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -245,24 +245,45 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
-  	src={{iframeURL}}
+    <iframe id="mainIframe" name="mainIframe" class="mainIframe"
   	frameborder="0" scrolling="auto"
+  	{{!-- src={{@allData.data.uri}} --}}
+  	src="http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/"
   	allData={{@allData}}
-      {{did-insert this.registerListenerIframe}}
-      {{will-destroy this.unregisterListener}}>
+  	{{did-insert this.registerListener}}
+  	{{will-destroy this.unregisterListener}}>
   </iframe>
   {{yield}}
   
+  {{!-- 生命周期函数
+  回调
+  ember 的 this指针 
+  window
+  
+  ----------------------------
+  | window.1
+  |    ==================
+  |    | window 2
+  |
+  
+  1. window1. create window 2
+  2. window1 window2 daddy
+  3. onReady
+  	<iframe onReady=function()>
+  4. ember funcion 
+  	window2.func
+  5. window2.func(adfj) --}}
+  
+  
   */
   {
-    "id": "KNxv7gh7",
-    "block": "[[[11,\"iframe\"],[24,1,\"mainIframe\"],[24,\"ref\",\"mainIframe\"],[24,3,\"mainIframe\"],[24,0,\"mainIframe\"],[16,\"src\",[36,0]],[24,\"frameborder\",\"0\"],[24,\"scrolling\",\"auto\"],[16,\"allData\",[30,1]],[4,[38,1],[[30,0,[\"registerListenerIframe\"]]],null],[4,[38,2],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n\"],[13],[1,\"\\n\"],[18,2,null],[1,\"\\n\"]],[\"@allData\",\"&default\"],false,[\"iframeURL\",\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "id": "fyeXAQSo",
+    "block": "[[[11,\"iframe\"],[24,1,\"mainIframe\"],[24,3,\"mainIframe\"],[24,0,\"mainIframe\"],[24,\"frameborder\",\"0\"],[24,\"scrolling\",\"auto\"],[24,\"src\",\"http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/\"],[16,\"allData\",[30,1]],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n\"],[13],[1,\"\\n\"],[18,2,null],[1,\"\\n\\n\"],[1,\"\\n\"]],[\"@allData\",\"&default\"],false,[\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/iframe-context.hbs",
     "isStrictMode": false
   });
 
-  let IframeContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service('loading'), _dec5 = Ember.inject.service, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = class IframeContextComponent extends _component.default {
+  let IframeContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service, _dec6 = Ember.inject.service('loading'), _dec7 = Ember.inject.service("execution-status"), _dec8 = Ember._tracked, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, _dec12 = Ember._action, _dec13 = Ember._action, (_class = class IframeContextComponent extends _component.default {
     constructor(...args) {
       super(...args);
 
@@ -272,63 +293,98 @@
 
       _initializerDefineProperty(this, "cookies", _descriptor3, this);
 
-      _initializerDefineProperty(this, "loadingService", _descriptor4, this);
+      _initializerDefineProperty(this, "awsService", _descriptor4, this);
 
-      _initializerDefineProperty(this, "ajax", _descriptor5, this);
+      _initializerDefineProperty(this, "downloadFile", _descriptor5, this);
 
-      _initializerDefineProperty(this, "iframeURL", _descriptor6, this);
+      _initializerDefineProperty(this, "loadingService", _descriptor6, this);
 
-      _initializerDefineProperty(this, "projectName", _descriptor7, this);
+      _initializerDefineProperty(this, "noticeService", _descriptor7, this);
 
-      _initializerDefineProperty(this, "projectId", _descriptor8, this);
+      _initializerDefineProperty(this, "allData", _descriptor8, this);
     }
 
+    // @action
+    // async listener(e) {
+    //     switch(e.detail[0].args.callback) {
+    //         case "linkToPage":
+    //             let params = e.detail[0].args.param;
+    //             let uri = ''
+    //             if(params.name === "project") {
+    //                 //返回project
+    //                 uri = `projects/`+ params.projectId
+    //             } else if (params.name == "datasets") {
+    //                 uri = 'dataset-lst?projectName=' + params.projectName +'&projectId=' + params.projectId
+    //             } else if(params.name === "scripts") {
+    //                 uri = 'recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
+    //             } else if (params.name == "flow") {
+    //                 uri = 'flow?projectName=' + params.projectName + '&projectId=' + params.projectId
+    //             }  else if(params.name == "airflow") {
+    // 				uri = 'airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
+    // 			}
+    //             this.router.transitionTo( "shell", uri )
+    //             break
+    //         case "itemClicked":
+    //             console.log("alfred test item clicked")
+    //             break
+    //         default:
+    //             console.log("other click event!")
+    //     }
+    // }
+    // @action
+    // unregisterListener(element) {
+    //     element.removeEventListener("event", this.listener)
+    // }
+    // @action
+    // registerListenerIframe(element) {
+    // 	// href param
+    // 	const href = window.location.href.split("?")[1]
+    // 	const hrefParam = href.split("&")
+    // 	this.projectName = hrefParam[0].split("=")[1]
+    // 	this.projectId = hrefParam[1].split("=")[1]
+    // 	this.args.allData._isVue = true
+    // 	element.allData = this.args.allData
+    // 	this.iframeURL = `${this.iframeURL}?projectId=${this.projectId}&projectName=${this.projectId}&flowVersion=developer`
+    //     element.addEventListener("event", this.listener)
+    //     document.domain = "pharbers.com"
+    // }
     async listener(e) {
-      switch (e.detail[0].args.callback) {
-        case "linkToPage":
-          let params = e.detail[0].args.param;
-          let uri = '';
+      let modelName = Ember.String.camelize(this.args.allData.page.name) + "EventHandler";
+      await window[this.args.allData.page.clientName][modelName](e, this);
+    }
 
-          if (params.name === "project") {
-            //返回project
-            uri = `projects/` + params.projectId;
-          } else if (params.name == "datasets") {
-            uri = 'dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId;
-          } else if (params.name === "scripts") {
-            uri = 'recipes?projectName=' + params.projectName + '&projectId=' + params.projectId;
-          } else if (params.name == "flow") {
-            uri = 'flow?projectName=' + params.projectName + '&projectId=' + params.projectId;
-          } else if (params.name == "airflow") {
-            uri = 'airflow?projectName=' + params.projectName + '&projectId=' + params.projectId;
-          }
+    iframeEvent(msg) {
+      debugger;
+      let that = this;
+      this.noticeService.defineAction({
+        type: "iot",
+        // id: results[0].data.id,
+        ele: that,
+        id: msg.cmd,
+        projectId: this.args.allData.data.projectId,
+        ownerId: this.cookies.read("account_id"),
+        callBack: this[`${msg.cmd}Callback`]
+      }); // 向iframe传递消息
 
-          this.router.transitionTo("shell", uri);
-          break;
+      document.getElementById("mainIframe").contentWindow.postMessage({
+        cmd: "you know???"
+      }, '*');
+    }
 
-        case "itemClicked":
-          console.log("alfred test item clicked");
-          break;
+    runDagCallback(param, payload) {
+      debugger;
+    }
 
-        default:
-          console.log("other click event!");
-      }
+    async registerListener(element) {
+      window.addEventListener('message', this.iframeEvent);
+      this.args.allData.data._isVue = true;
+      element.allData = this.args.allData.data;
+      element.addEventListener("event", this.listener);
+      document.domain = "pharbers.com";
     }
 
     unregisterListener(element) {
       element.removeEventListener("event", this.listener);
-    }
-
-    registerListenerIframe(element) {
-      // href param
-      const href = window.location.href.split("?")[1];
-      const hrefParam = href.split("&");
-      this.projectName = hrefParam[0].split("=")[1];
-      this.projectId = hrefParam[1].split("=")[1];
-      this.args.allData._isVue = true;
-      element.allData = this.args.allData;
-      this.iframeURL = `${this.iframeURL}?projectId=${this.projectId}&projectName=${this.projectId}&flowVersion=developer`;
-      element.addEventListener("event", this.listener);
-      document.domain = "pharbers.com";
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
@@ -346,34 +402,32 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "awsService", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "ajax", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "downloadFile", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "iframeURL", [_dec6], {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    initializer: function () {
-      return "https://dag.pharbers.com/index.html#/graph";
-    }
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "projectName", [_dec7], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "projectId", [_dec8], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "noticeService", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListenerIframe", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "registerListenerIframe"), _class.prototype)), _class));
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "allData", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "iframeEvent", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "iframeEvent"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "runDagCallback", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "runDagCallback"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListener", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "registerListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype)), _class));
   _exports.default = IframeContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
@@ -5472,7 +5526,7 @@
       if (curPage.cat) await this.jsl.loadRemoteJsSync(curPage.cat);
       const clientName = curPage.clientName;
       const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
-      const data = await window[clientName][modelName](this, parseParams);
+      const data = await window[clientName][modelName](this, parseParams, curPage);
       return Ember.RSVP.hash({
         page: curPage,
         data: data ? data : {},
@@ -6922,7 +6976,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"rB9jOc347FswXebo","clientName":"project","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"fxXKqdI26bZEBywu","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da","name":"web-shell","version":"0.0.0+e9657b41"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"rB9jOc347FswXebo","clientName":"project","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","MQTT_TYPE":"aws-mqtt","OBSERVER_TIME_OUT":600,"scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"fxXKqdI26bZEBywu","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da","name":"web-shell","version":"0.0.0+ded14044"});
           }
         
 //# sourceMappingURL=web-shell.map
