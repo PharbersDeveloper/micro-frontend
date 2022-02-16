@@ -15,7 +15,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				params.name === "linkToProject" ||
 				params.name === "project"
 			) {
-				uri = `projects/` + params.projectId
+				uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
 			} else if (
 				params.name === "analyze" &&
 				params.dataset.cat !== "input_index" &&

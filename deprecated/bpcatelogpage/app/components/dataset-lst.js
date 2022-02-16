@@ -21,7 +21,7 @@ export default class DatasetLstComponent extends Component {
                 if(params.name === "upload") {
                     uri = `/dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
                 }else if(params.name === "linkToProject" || params.name === "project") {
-                    uri = `/projects/`+ params.projectId
+                    uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
                 } else if(params.name === "analyze" && params.dataset.cat !== "input_index" && params.dataset.cat !== "output_index") {
                     uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
                 }else if(params.name === "analyze" && params.dataset.cat !== "uploaded" && params.dataset.cat !== "intermediate") {

@@ -119,7 +119,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: params.name,
+                    name: params["attributes"]["name"],
                     pid: params.id
                 }
             }
