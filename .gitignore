@@ -1,7 +1,7 @@
 **/node_modules/
 **/.idea/
 **/dist/
-**/yarn.lock/
+**/yarn.lock
 **/.DS_Store
 
 
@@ -11,6 +11,5 @@ venv
 dist/
 yarn-error.log
 yarn.lock
-*/*/dist/
 
 dist.zip
