@@ -2200,6 +2200,7 @@
     let connection = null;
     let intervalId = null;
     let timeoutId = null;
+    let use_cache = [];
     const id = config.id;
     const topic = config.topic;
     const client_id = config.client_id;
@@ -2207,8 +2208,7 @@
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
     const aws_secret_key = config.aws_secret_key;
-    const timeout = config.timeout; // 延迟5秒
-
+    const timeout = config.timeout;
     let time = new Date().getTime();
     const client_bootstrap = new awsCrt.io.ClientBootstrap();
     const qos = awsCrt.mqtt.QoS.AtLeastOnce; // 1
@@ -2261,7 +2261,19 @@
           time = new Date().getTime();
           const parameter = Object.assign({}, config.parameter);
           delete parameter.callBack;
-          callBack(parameter, __byteToString(payload));
+
+          const content = __byteToString(payload);
+
+          const {
+            id,
+            projectId,
+            date
+          } = JSON.parse(content);
+
+          if (use_cache.indexOf(`${id}_${projectId}_${date}`) === -1) {
+            use_cache.push(`${id}_${projectId}_${date}`);
+            callBack(parameter, content);
+          }
         });
       }
     };
@@ -2290,6 +2302,7 @@
         intervalId = null;
         timeoutId = null;
         connection = null;
+        use_cache = [];
         console.log("Mqtt Disconnect");
       }
     };
