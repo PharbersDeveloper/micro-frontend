@@ -206,7 +206,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					// route.noticeService.register("notification", result.data.id, delNoticeCallback, route, params.projectId)
 				}
 				alert("新建数据集成功！")
-				window.location.reload()
+				// window.location.reload()
 			}
 			break
 		case "clearTags":

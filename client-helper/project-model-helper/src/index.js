@@ -8,6 +8,8 @@ import { phAnalyzeBpExcelHandlerRouteModel } from "./routeModel/phAnalyzeBpExcel
 import { phAnalyzeBpExcelHandlerEventHandler } from "./eventHandler/phAnalyzeBpExcelHandlerEventHandler"
 import { phAnalyzeBpExcelContainerEventHandler } from "./eventHandler/phAnalyzeBpExcelContainerEventHandler"
 import { phAnalyzeBpExcelContainerRouteModel } from "./routeModel/phAnalyzeBpExcelContainerRouteModel"
+import { phAnalyzeScriptsListEventHandler } from "./eventHandler/phAnalyzeScriptsListEventHandler"
+import { phAnalyzeScriptsListRouteModel } from "./routeModel/phAnalyzeScriptsListRouteModel"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -19,5 +21,7 @@ export {
 	phAnalyzeBpExcelHandlerRouteModel,
 	phAnalyzeBpExcelHandlerEventHandler,
 	phAnalyzeBpExcelContainerEventHandler,
-	phAnalyzeBpExcelContainerRouteModel
+	phAnalyzeBpExcelContainerRouteModel,
+	phAnalyzeScriptsListEventHandler,
+	phAnalyzeScriptsListRouteModel
 }
