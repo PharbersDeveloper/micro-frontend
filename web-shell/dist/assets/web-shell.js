@@ -233,21 +233,147 @@
   });
   _exports.default = void 0;
 
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    <h2>iframe component</h2>
+    <iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
+  	src={{iframeURL}}
+  	frameborder="0" scrolling="auto"
+  	allData={{@allData}}
+      {{did-insert this.registerListenerIframe}}
+      {{will-destroy this.unregisterListener}}>
+  </iframe>
   {{yield}}
   
   */
   {
-    "id": "qBmSBU+/",
-    "block": "[[[10,\"h2\"],[12],[1,\"iframe component\"],[13],[1,\"\\n\"],[18,1,null],[1,\"\\n\"]],[\"&default\"],false,[\"yield\"]]",
+    "id": "KNxv7gh7",
+    "block": "[[[11,\"iframe\"],[24,1,\"mainIframe\"],[24,\"ref\",\"mainIframe\"],[24,3,\"mainIframe\"],[24,0,\"mainIframe\"],[16,\"src\",[36,0]],[24,\"frameborder\",\"0\"],[24,\"scrolling\",\"auto\"],[16,\"allData\",[30,1]],[4,[38,1],[[30,0,[\"registerListenerIframe\"]]],null],[4,[38,2],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n\"],[13],[1,\"\\n\"],[18,2,null],[1,\"\\n\"]],[\"@allData\",\"&default\"],false,[\"iframeURL\",\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/iframe-context.hbs",
     "isStrictMode": false
   });
 
-  class IframeContextComponent extends _component.default {}
+  let IframeContextComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service('loading'), _dec5 = Ember.inject.service, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = class IframeContextComponent extends _component.default {
+    constructor(...args) {
+      super(...args);
 
+      _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _initializerDefineProperty(this, "store", _descriptor2, this);
+
+      _initializerDefineProperty(this, "cookies", _descriptor3, this);
+
+      _initializerDefineProperty(this, "loadingService", _descriptor4, this);
+
+      _initializerDefineProperty(this, "ajax", _descriptor5, this);
+
+      _initializerDefineProperty(this, "iframeURL", _descriptor6, this);
+
+      _initializerDefineProperty(this, "projectName", _descriptor7, this);
+
+      _initializerDefineProperty(this, "projectId", _descriptor8, this);
+    }
+
+    async listener(e) {
+      switch (e.detail[0].args.callback) {
+        case "linkToPage":
+          let params = e.detail[0].args.param;
+          let uri = '';
+
+          if (params.name === "project") {
+            //返回project
+            uri = `projects/` + params.projectId;
+          } else if (params.name == "datasets") {
+            uri = 'dataset-lst?projectName=' + params.projectName + '&projectId=' + params.projectId;
+          } else if (params.name === "scripts") {
+            uri = 'recipes?projectName=' + params.projectName + '&projectId=' + params.projectId;
+          } else if (params.name == "flow") {
+            uri = 'flow?projectName=' + params.projectName + '&projectId=' + params.projectId;
+          } else if (params.name == "airflow") {
+            uri = 'airflow?projectName=' + params.projectName + '&projectId=' + params.projectId;
+          }
+
+          this.router.transitionTo("shell", uri);
+          break;
+
+        case "itemClicked":
+          console.log("alfred test item clicked");
+          break;
+
+        default:
+          console.log("other click event!");
+      }
+    }
+
+    unregisterListener(element) {
+      element.removeEventListener("event", this.listener);
+    }
+
+    registerListenerIframe(element) {
+      // href param
+      const href = window.location.href.split("?")[1];
+      const hrefParam = href.split("&");
+      this.projectName = hrefParam[0].split("=")[1];
+      this.projectId = hrefParam[1].split("=")[1];
+      this.args.allData._isVue = true;
+      element.allData = this.args.allData;
+      this.iframeURL = `${this.iframeURL}?projectId=${this.projectId}&projectName=${this.projectId}&flowVersion=developer`;
+      element.addEventListener("event", this.listener);
+      document.domain = "pharbers.com";
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "store", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "cookies", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "loadingService", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "ajax", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "iframeURL", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return "https://dag.pharbers.com/index.html#/graph";
+    }
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "projectName", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "projectId", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "listener", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "listener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "unregisterListener", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "unregisterListener"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "registerListenerIframe", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "registerListenerIframe"), _class.prototype)), _class));
   _exports.default = IframeContextComponent;
 
   Ember._setComponentTemplate(__COLOCATED_TEMPLATE__, IframeContextComponent);
@@ -703,8 +829,8 @@
   /*
     {{#if (eq this.engine "web-component")}}
       <Wc-context @name={{this.name}} @allData={{@model}}/>
-  {{else if (eq this.engine "iframe-component")}}
-      <Iframe-context></Iframe-context>
+  {{else if (eq this.engine "iframe")}}
+      <Iframe-context @allData={{@model}}></Iframe-context>
   {{else}}
       <h2>not implement shell component</h2>
   {{/if}}
@@ -712,8 +838,8 @@
   
   */
   {
-    "id": "6SHiJWWM",
-    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\",\"@allData\"],[[30,0,[\"name\"]],[30,1]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe-component\"],null],[[[1,\"    \"],[8,[39,3],null,null,[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,2,null],[1,\"\\n\"]],[\"@model\",\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
+    "id": "rLHmftD2",
+    "block": "[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"web-component\"],null],[[[1,\"    \"],[8,[39,2],null,[[\"@name\",\"@allData\"],[[30,0,[\"name\"]],[30,1]]],null],[1,\"\\n\"]],[]],[[[41,[28,[37,1],[[30,0,[\"engine\"]],\"iframe\"],null],[[[1,\"    \"],[8,[39,3],null,[[\"@allData\"],[[30,1]]],[[\"default\"],[[[],[]]]]],[1,\"\\n\"]],[]],[[[1,\"    \"],[10,\"h2\"],[12],[1,\"not implement shell component\"],[13],[1,\"\\n\"]],[]]]],[]]],[18,2,null],[1,\"\\n\"]],[\"@model\",\"&default\"],false,[\"if\",\"eq\",\"wc-context\",\"iframe-context\",\"yield\"]]",
     "moduleName": "web-shell/components/shell-component.hbs",
     "isStrictMode": false
   });
@@ -5342,8 +5468,8 @@
        */
 
 
-      await this.jsl.loadRemoteJs(curPage.uri);
-      await this.jsl.loadRemoteJsSync(curPage.cat);
+      if (curPage.uri) await this.jsl.loadRemoteJs(curPage.uri);
+      if (curPage.cat) await this.jsl.loadRemoteJsSync(curPage.cat);
       const clientName = curPage.clientName;
       const modelName = Ember.String.camelize(curPage.name) + "RouteModel";
       const data = await window[clientName][modelName](this, parseParams);

@@ -1,2 +1,8 @@
-<h2>iframe component</h2>
+<iframe id="mainIframe" ref="mainIframe" name="mainIframe" class="mainIframe"
+	src={{iframeURL}}
+	frameborder="0" scrolling="auto"
+	allData={{@allData}}
+    {{did-insert this.registerListenerIframe}}
+    {{will-destroy this.unregisterListener}}>
+</iframe>
 {{yield}}

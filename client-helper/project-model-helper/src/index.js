@@ -10,6 +10,7 @@ import { phAnalyzeBpExcelContainerEventHandler } from "./eventHandler/phAnalyzeB
 import { phAnalyzeBpExcelContainerRouteModel } from "./routeModel/phAnalyzeBpExcelContainerRouteModel"
 import { phAnalyzeScriptsListEventHandler } from "./eventHandler/phAnalyzeScriptsListEventHandler"
 import { phAnalyzeScriptsListRouteModel } from "./routeModel/phAnalyzeScriptsListRouteModel"
+import { iframeRouteModel } from "./routeModel/iframeRouteModel"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -23,5 +24,6 @@ export {
 	phAnalyzeBpExcelContainerEventHandler,
 	phAnalyzeBpExcelContainerRouteModel,
 	phAnalyzeScriptsListEventHandler,
-	phAnalyzeScriptsListRouteModel
+	phAnalyzeScriptsListRouteModel,
+	iframeRouteModel
 }
