@@ -58,13 +58,24 @@ export async function phAnalyzeScriptsListRouteModel(route, parseParams) {
 				resolve(route.store.peekAll("dataset"))
 			})
 		})
-
+	//tags
+	let dss = ds.filter((it) => it)
+	let tags = new Set()
+	dss.forEach((iter) => {
+		if (typeof iter.label == "string") {
+			iter.label = JSON.parse(iter.label)
+			iter.label.map((it) => {
+				tags.add(it)
+			})
+		}
+	})
+	let tagsArray = Array.from(tags)
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
 		dcs: dc.filter((it) => it),
-		dss: ds.filter((it) => it),
-		tagsArray: [],
+		dss: dss,
+		tagsArray: tagsArray,
 		_isVue: true
 	}
 }
