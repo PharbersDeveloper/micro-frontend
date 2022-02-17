@@ -363,7 +363,7 @@
         id: msg.cmd,
         projectId: this.args.allData.data.projectId,
         ownerId: this.cookies.read("account_id"),
-        callBack: this[`${msg.cmd}Callback`]
+        callBack: that.runDagCallback
       }); // 向iframe传递消息
 
       document.getElementById("mainIframe").contentWindow.postMessage({
@@ -379,8 +379,8 @@
       window.addEventListener('message', this.iframeEvent);
       this.args.allData.data._isVue = true;
       element.allData = this.args.allData.data;
-      element.addEventListener("event", this.listener);
-      document.domain = "pharbers.com";
+      element.addEventListener("event", this.listener); // document.domain = "pharbers.com"
+      // document.domain = "127.0.0.1"
     }
 
     unregisterListener(element) {
@@ -6976,7 +6976,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"rB9jOc347FswXebo","clientName":"project","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","MQTT_TYPE":"aws-mqtt","OBSERVER_TIME_OUT":600,"scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"fxXKqdI26bZEBywu","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da","name":"web-shell","version":"0.0.0+2a2d1739"});
+            require("web-shell/app")["default"].create({"redirectUri":"https://general.pharbers.com/oauth-callback","pharbersUri":"https://www.pharbers.com","accountsUri":"https://accounts.pharbers.com","host":"https://oauth.pharbers.com","apiUri":"https://apiv2.pharbers.com","apiHost":"apiv2.pharbers.com","clientId":"rB9jOc347FswXebo","clientName":"project","typeArray":["activity","cooperation","event","image","page","participant","report","zone","layout"],"clientSecret":"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72","AWS_ACCESS_KEY":"AKIAWPBDTVEAI6LUCLPX","AWS_SECRET_KEY":"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","AWS_IOT_ENDPOINT":"a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn","AWS_REGION":"cn-northwest-1","AWS_IOT_DEFAULT_CLIENT_ID":"VQ4L9e4RGDZEI2Ln7fvE","scope":"APP|*|R","isNeedMenu":true,"DEV":{"clientId":"fxXKqdI26bZEBywu","redirectUri":"http://general.pharbers.com:4200/oauth-callback"},"debugToken":"c0ff6d3cc2d9749002d41f0cc5e7105388dc5cc96b8f4405475323bc5cd3b928","name":"web-shell","version":"0.0.0+0f9a9396"});
           }
         
 //# sourceMappingURL=web-shell.map

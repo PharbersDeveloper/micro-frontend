@@ -79,7 +79,7 @@ export default class IframeContextComponent extends Component {
 			id: msg.cmd,
 			projectId: this.args.allData.data.projectId,
 			ownerId: this.cookies.read("account_id"),
-			callBack: this[`${msg.cmd}Callback`]
+			callBack: that.runDagCallback
 		})
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({
@@ -98,7 +98,8 @@ export default class IframeContextComponent extends Component {
 		this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
 		element.addEventListener("event", this.listener)
-		document.domain = "pharbers.com"
+		// document.domain = "pharbers.com"
+		// document.domain = "127.0.0.1"
 	}
 
 	@action
