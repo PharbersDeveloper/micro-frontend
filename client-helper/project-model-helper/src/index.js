@@ -16,6 +16,8 @@ import { airflowIframeRouteModel } from "./routeModel/airflowIframeRouteModel"
 import { flowIframeEventHandler } from "./eventHandler/flowIframeEventHandler"
 import { codeditorIframeEventHandler } from "./eventHandler/codeditorIframeEventHandler"
 import { airflowIframeEventHandler } from "./eventHandler/airflowIframeEventHandler"
+import { phAnalyzePrepareSetEventHandler } from "./eventHandler/phAnalyzePrepareSetEventHandler"
+import { phAnalyzePrepareSetRouteModel } from "./routeModel/phAnalyzePrepareSetRouteModel"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -35,5 +37,7 @@ export {
 	airflowIframeRouteModel,
 	flowIframeEventHandler,
 	codeditorIframeEventHandler,
-	airflowIframeEventHandler
+	airflowIframeEventHandler,
+	phAnalyzePrepareSetEventHandler,
+	phAnalyzePrepareSetRouteModel
 }

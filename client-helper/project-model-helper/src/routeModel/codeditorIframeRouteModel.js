@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-export async function codeditorIframeRouteModel(route, parseParams) {
-	let uri = `${route.args.allData.cat}?projectId=${parseParams.query.projectId}&projectName=${parseParams.query.projectName}&flowVersion=developer`
+export async function codeditorIframeRouteModel(route, parseParams, curPage) {
+	let uri = `${curPage.uri}?projectId=${parseParams.query.projectId}&jobName=${parseParams.query.jobName}&jobPath=${parseParams.query.jobPath}`
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
