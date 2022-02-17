@@ -70,16 +70,15 @@ export default class IframeContextComponent extends Component {
 
 	@action
 	iframeEvent(msg) {
-		debugger
-		let that = this
+		console.log("ember接受iframe消息", msg)
 		this.noticeService.defineAction({
 			type: "iot",
 			// id: results[0].data.id,
-			ele: that,
+			ele: this,
 			id: msg.cmd,
 			projectId: this.args.allData.data.projectId,
 			ownerId: this.cookies.read("account_id"),
-			callBack: that.runDagCallback
+			callBack: this.runDagCallback
 		})
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({
@@ -99,7 +98,6 @@ export default class IframeContextComponent extends Component {
 		element.allData = this.args.allData.data
 		element.addEventListener("event", this.listener)
 		// document.domain = "pharbers.com"
-		// document.domain = "127.0.0.1"
 	}
 
 	@action

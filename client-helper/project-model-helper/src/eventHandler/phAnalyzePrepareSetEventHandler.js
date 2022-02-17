@@ -76,7 +76,8 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 							schema: JSON.stringify([]),
 							path: scriptsParams.path,
 							format: scriptsParams.format,
-							cat: "intermediate"
+							cat: "intermediate",
+							prop: ""
 						}
 					}
 					let options = {
@@ -125,7 +126,11 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 						projectId: scriptsParams.projectId,
 						timeout: "1000",
 						runtime: "prepare",
-						owner: decodeURI(route.cookies.read("user_name_show")),
+						// owner: decodeURI(route.cookies.read("user_name_show")),
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
 						targetJobId: "",
 						projectName: scriptsParams.projectName,
 						labels: [],

@@ -153,7 +153,11 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						projectId: params.projectId,
 						timeout: "1000",
 						runtime: params.runtime,
-						owner: decodeURI(route.cookies.read("user_name_show")),
+						// owner: decodeURI(route.cookies.read("user_name_show")),
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
 						targetJobId: "",
 						projectName: params.projectName,
 						labels: [],

@@ -21,19 +21,23 @@ export default class PhPntLayoutComponent extends Component {
             case "linkToPage":
                 let params = e.detail[0].args.param;
                 let uri = ''
-                if(params.name === "project") {
-                    //返回project
-                    uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
-                } else if (params.name == "datasets") {
-                    uri = 'dataset-lst?projectName=' + this.projectName +'&projectId=' + this.projectId
-                } else if(params.name === "scripts") {
-                    uri = 'recipes?projectName=' + this.projectName + '&projectId=' + this.projectId
-                } else if (params.name == "flow") {
-                    uri = 'flow?projectName=' + this.projectName + '&projectId=' + this.projectId
-                }  else if(params.name == "airflow") {
-					uri = 'airflow?projectName=' + this.projectName + '&projectId=' + this.projectId
+				if (params.name === "projects") {
+					window.open(`https://general.pharbers.com/projects`)
+				} else {
+					if(params.name === "project") {
+						//返回project
+						uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
+					} else if (params.name == "datasets") {
+						uri = 'dataset-lst?projectName=' + this.projectName +'&projectId=' + this.projectId
+					} else if(params.name === "scripts") {
+						uri = 'recipes?projectName=' + this.projectName + '&projectId=' + this.projectId
+					} else if (params.name == "flow") {
+						uri = 'flow?projectName=' + this.projectName + '&projectId=' + this.projectId
+					}  else if(params.name == "airflow") {
+						uri = 'airflow?projectName=' + this.projectName + '&projectId=' + this.projectId
+					} 
+                	this.router.transitionTo( "shell", uri )
 				}
-                this.router.transitionTo( "shell", uri )
                 break
             default:
                 console.log("other click event!")

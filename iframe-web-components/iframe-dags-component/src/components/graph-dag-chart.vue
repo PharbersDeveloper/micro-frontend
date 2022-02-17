@@ -315,7 +315,7 @@ export default {
     },
     methods: {
         handleMessage(data) {
-            debugger
+            console.log("dag", data)
         },
         closeLogDialog() {
             this.showDagLogs = false
@@ -335,7 +335,7 @@ export default {
          * 2. query notification接收正确或错误消息
          */
         async confirmeRunDag(data) {
-            this.noticeService.progress = false //重置进度条
+            // this.noticeService.progress = false //重置进度条
             this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
@@ -353,13 +353,12 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
-            let result = await fetch(url, options).then(res => res.json())
-            let queryId = result.data.dag_run_id
-            this.noticeService.projectName = this.projectName
+            await fetch(url, options).then(res => res.json())
             this.showProgress = true
             this.showRunJson = false
-            let timeout = data.args.param.timeout
-            debugger
+            // this.noticeService.projectName = this.projectName
+            // let queryId = result.data.dag_run_id
+            // let timeout = data.args.param.timeout
             // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         /**
@@ -423,7 +422,6 @@ export default {
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
         async on_click_run_script(data) {
-            // this.noticeService.progress = false
             this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
@@ -458,7 +456,6 @@ export default {
                 cmd: 'runDag'
             }, '*')
             let roots = []
-            console.log(this.datasource.data)
             this.datasource.data.forEach(item => {
                 if(item.attributes.runtime === "output_index") {
                     roots.push(item)
@@ -480,7 +477,6 @@ export default {
                 "scripts": [],
                 "userConf": {}
             }
-            console.log(this.textConf)
             this.showRunJson = true
         },
         closeRunDagDialog() {

@@ -247,7 +247,7 @@
   /*
     <iframe id="mainIframe" name="mainIframe" class="mainIframe"
   	frameborder="0" scrolling="auto"
-  	{{!-- src={{@allData.data.uri}} --}}
+  	{{!-- src={{@allData.data.url}} --}}
   	src="http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/"
   	allData={{@allData}}
   	{{did-insert this.registerListener}}
@@ -354,16 +354,15 @@
     }
 
     iframeEvent(msg) {
-      debugger;
-      let that = this;
+      console.log("ember接受iframe消息", msg);
       this.noticeService.defineAction({
         type: "iot",
         // id: results[0].data.id,
-        ele: that,
+        ele: this,
         id: msg.cmd,
         projectId: this.args.allData.data.projectId,
         ownerId: this.cookies.read("account_id"),
-        callBack: that.runDagCallback
+        callBack: this.runDagCallback
       }); // 向iframe传递消息
 
       document.getElementById("mainIframe").contentWindow.postMessage({
@@ -380,7 +379,6 @@
       this.args.allData.data._isVue = true;
       element.allData = this.args.allData.data;
       element.addEventListener("event", this.listener); // document.domain = "pharbers.com"
-      // document.domain = "127.0.0.1"
     }
 
     unregisterListener(element) {
@@ -691,20 +689,25 @@
           let params = e.detail[0].args.param;
           let uri = '';
 
-          if (params.name === "project") {
-            //返回project
-            uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`;
-          } else if (params.name == "datasets") {
-            uri = 'dataset-lst?projectName=' + this.projectName + '&projectId=' + this.projectId;
-          } else if (params.name === "scripts") {
-            uri = 'recipes?projectName=' + this.projectName + '&projectId=' + this.projectId;
-          } else if (params.name == "flow") {
-            uri = 'flow?projectName=' + this.projectName + '&projectId=' + this.projectId;
-          } else if (params.name == "airflow") {
-            uri = 'airflow?projectName=' + this.projectName + '&projectId=' + this.projectId;
+          if (params.name === "projects") {
+            window.open(`https://general.pharbers.com/projects`);
+          } else {
+            if (params.name === "project") {
+              //返回project
+              uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`;
+            } else if (params.name == "datasets") {
+              uri = 'dataset-lst?projectName=' + this.projectName + '&projectId=' + this.projectId;
+            } else if (params.name === "scripts") {
+              uri = 'recipes?projectName=' + this.projectName + '&projectId=' + this.projectId;
+            } else if (params.name == "flow") {
+              uri = 'flow?projectName=' + this.projectName + '&projectId=' + this.projectId;
+            } else if (params.name == "airflow") {
+              uri = 'airflow?projectName=' + this.projectName + '&projectId=' + this.projectId;
+            }
+
+            this.router.transitionTo("shell", uri);
           }
 
-          this.router.transitionTo("shell", uri);
           break;
 
         default:
