@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function airflowIframeRouteModel(route, parseParams, curPage) {
-	let uri = `${curPage.uri}?projectId=${parseParams.query.projectId}&jobName=${parseParams.query.jobName}&jobPath=${parseParams.query.jobPath}`
+	let name = parseParams.query.projectName.toLowerCase().
+	let uri = `https://${}.pharbers.com/airflow/graph?dag_id=${parseParams.query.projectName}_${parseParams.query.projectName}_developer`
 
 	return {
 		projectName: parseParams.query.projectName,
