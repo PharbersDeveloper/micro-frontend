@@ -161,7 +161,8 @@ export default {
             selectItemName: "", //单击的dag的名字
             responseArr: [],
             showProgress: false,
-            textConf: {} //运行弹框textarea的默认值
+            textConf: {}, //运行弹框textarea的默认值
+			nodeLevel: {}
         }
     },
     components: {
@@ -319,7 +320,7 @@ export default {
         handleMessage(event) {
 			let that = this
 			if (event.data.message) {
-				if (event.data.message.cmd === "renderDag") {
+				if (event.data.message.cmd === "render_dag") {
             		console.log("iframe接收的", event.data.message.cmd)
 					that.runDagCallback(event.data.message, that)
 				}
@@ -343,7 +344,6 @@ export default {
          * 2. query notification接收正确或错误消息
          */
         async confirmeRunDag(data) {
-			debugger
             // this.noticeService.progress = false //重置进度条
             this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
@@ -379,7 +379,6 @@ export default {
             let represent_id = ""
             // this.responseArr = response.message
 			let payload = JSON.parse(response.payload)
-			debugger
 			let jobCat = payload["jobCat"]
 			let jobName = JSON.parse(payload.message).cnotification.jobName
 			let data = ele.datasource.data
@@ -458,8 +457,15 @@ export default {
             // this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
             this.showProgress = true
         },
+		getNodeLevel() {
+			debugger
+		},
         // 点击运行整体
         on_click_runDag() {
+			debugger
+			if (this.nodeLevel) {
+				this.getNodeLevel()
+			}
             window.parent.postMessage({
 				message: {
                 	cmd: 'runDag'
@@ -497,7 +503,6 @@ export default {
             await this.datasource.refreshData(this)
             // 发布前解注
             // document.domain = "pharbers.com"
-            // document.domain = "127.0.0.1"
         },
 
         // 监听屏幕大小改变

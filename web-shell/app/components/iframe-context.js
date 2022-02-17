@@ -29,6 +29,7 @@ export default class IframeContextComponent extends Component {
 				type: "iot",
 				// id: results[0].data.id,
 				ele: this,
+				timeout: 1000 * 60 * 60,
 				id: event.data.message.cmd,
 				projectId: this.args.allData.data.projectId,
 				ownerId: this.cookies.read("account_id"),
@@ -42,7 +43,7 @@ export default class IframeContextComponent extends Component {
 		let obj = {
 			param,
 			payload,
-			cmd: "renderDag"
+			cmd: "render_dag"
 		}
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({
