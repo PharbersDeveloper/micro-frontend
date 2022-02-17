@@ -206,7 +206,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					// route.noticeService.register("notification", result.data.id, delNoticeCallback, route, params.projectId)
 				}
 				alert("新建数据集成功！")
-				// window.location.reload()
+				window.location.reload()
 			}
 			break
 		case "clearTags":
@@ -302,7 +302,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if (upload_status == "clear_DS_succeed") {
 			alert("清楚数据成功！")
-			// window.location.reload()
+			window.location.reload()
 		} else if (upload_status == "clear_DS_failed") {
 			let msg =
 				error["message"]["zh"] !== ""
@@ -325,7 +325,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
 		if (upload_status == "remove_DS_succeed") {
 			alert("删除数据集成功！")
-			// window.location.reload()
+			window.location.reload()
 		} else if (upload_status == "remove_DS_failed") {
 			let msg =
 				error["message"]["zh"] !== ""

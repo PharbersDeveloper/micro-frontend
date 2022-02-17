@@ -8,6 +8,7 @@ export default class ShellRoute extends Route {
 	@service oauthService
 	@service cookies
 	@service store
+    @service browserEventsService;
 	@service("remote-loading") jsl
 	@service("route-parse") rps
 	@service("ph-menu") ms

@@ -305,50 +305,6 @@
       _initializerDefineProperty(this, "allData", _descriptor8, this);
     }
 
-    // @action
-    // async listener(e) {
-    //     switch(e.detail[0].args.callback) {
-    //         case "linkToPage":
-    //             let params = e.detail[0].args.param;
-    //             let uri = ''
-    //             if(params.name === "project") {
-    //                 //返回project
-    //                 uri = `projects/`+ params.projectId
-    //             } else if (params.name == "datasets") {
-    //                 uri = 'dataset-lst?projectName=' + params.projectName +'&projectId=' + params.projectId
-    //             } else if(params.name === "scripts") {
-    //                 uri = 'recipes?projectName=' + params.projectName + '&projectId=' + params.projectId
-    //             } else if (params.name == "flow") {
-    //                 uri = 'flow?projectName=' + params.projectName + '&projectId=' + params.projectId
-    //             }  else if(params.name == "airflow") {
-    // 				uri = 'airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
-    // 			}
-    //             this.router.transitionTo( "shell", uri )
-    //             break
-    //         case "itemClicked":
-    //             console.log("alfred test item clicked")
-    //             break
-    //         default:
-    //             console.log("other click event!")
-    //     }
-    // }
-    // @action
-    // unregisterListener(element) {
-    //     element.removeEventListener("event", this.listener)
-    // }
-    // @action
-    // registerListenerIframe(element) {
-    // 	// href param
-    // 	const href = window.location.href.split("?")[1]
-    // 	const hrefParam = href.split("&")
-    // 	this.projectName = hrefParam[0].split("=")[1]
-    // 	this.projectId = hrefParam[1].split("=")[1]
-    // 	this.args.allData._isVue = true
-    // 	element.allData = this.args.allData
-    // 	this.iframeURL = `${this.iframeURL}?projectId=${this.projectId}&projectName=${this.projectId}&flowVersion=developer`
-    //     element.addEventListener("event", this.listener)
-    //     document.domain = "pharbers.com"
-    // }
     async listener(e) {
       let modelName = Ember.String.camelize(this.args.allData.page.name) + "EventHandler";
       await window[this.args.allData.page.clientName][modelName](e, this);
@@ -364,15 +320,15 @@
         projectId: this.args.allData.data.projectId,
         ownerId: this.cookies.read("account_id"),
         callBack: this.runDagCallback
-      }); // 向iframe传递消息
-
-      document.getElementById("mainIframe").contentWindow.postMessage({
-        cmd: "you know???"
-      }, '*');
+      });
     }
 
     runDagCallback(param, payload) {
-      debugger;
+      debugger; // 向iframe传递消息
+
+      document.getElementById("mainIframe").contentWindow.postMessage({
+        cmd: "爸爸接到啦"
+      }, '*');
     }
 
     async registerListener(element) {
@@ -5456,7 +5412,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -5466,7 +5422,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service("remote-loading"), _dec5 = Ember.inject.service("route-parse"), _dec6 = Ember.inject.service("ph-menu"), (_class = class ShellRoute extends Ember.Route {
+  let ShellRoute = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.inject.service("remote-loading"), _dec6 = Ember.inject.service("route-parse"), _dec7 = Ember.inject.service("ph-menu"), (_class = class ShellRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -5476,11 +5432,13 @@
 
       _initializerDefineProperty(this, "store", _descriptor3, this);
 
-      _initializerDefineProperty(this, "jsl", _descriptor4, this);
+      _initializerDefineProperty(this, "browserEventsService", _descriptor4, this);
 
-      _initializerDefineProperty(this, "rps", _descriptor5, this);
+      _initializerDefineProperty(this, "jsl", _descriptor5, this);
 
-      _initializerDefineProperty(this, "ms", _descriptor6, this);
+      _initializerDefineProperty(this, "rps", _descriptor6, this);
+
+      _initializerDefineProperty(this, "ms", _descriptor7, this);
     }
 
     beforeModel(transition) {
@@ -5553,17 +5511,22 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "browserEventsService", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "jsl", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec6], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "rps", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "ms", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
