@@ -24,23 +24,31 @@ export default class IframeContextComponent extends Component {
 	@action
 	iframeEvent(msg) {
 		console.log("ember接受iframe消息", msg)
-		this.noticeService.defineAction({
-			type: "iot",
-			// id: results[0].data.id,
-			ele: this,
-			id: msg.cmd,
-			projectId: this.args.allData.data.projectId,
-			ownerId: this.cookies.read("account_id"),
-			callBack: this.runDagCallback
-		})
+		// this.noticeService.defineAction({
+		// 	type: "iot",
+		// 	// id: results[0].data.id,
+		// 	ele: this,
+		// 	id: msg.cmd,
+		// 	projectId: this.args.allData.data.projectId,
+		// 	ownerId: this.cookies.read("account_id"),
+		// 	callBack: this.runDagCallback
+		// })
+		document.getElementById("mainIframe").contentWindow.postMessage({
+			cmd: obj
+		}, '*')
 	}
 
 	@action
 	runDagCallback(param, payload) {
 		debugger
+		let obj = {
+			param,
+			payload,
+			cmd: "renderDag"
+		}
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({
-			cmd: "爸爸接到啦"
+			cmd: obj
 		}, '*')
 	}
 

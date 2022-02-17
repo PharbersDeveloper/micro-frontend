@@ -245,11 +245,10 @@
 
   const __COLOCATED_TEMPLATE__ = Ember.HTMLBars.template(
   /*
-    {{@allData.data.url}}
-  <iframe id="mainIframe" name="mainIframe" class="mainIframe"
+    <iframe id="mainIframe" name="mainIframe" class="mainIframe"
   	frameborder="0" scrolling="auto"
-  	src={{@allData.data.url}}
-  	{{!-- src="http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/" --}}
+  	{{!-- src={{@allData.data.url}} --}}
+  	src="http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/"
   	allData={{@allData}}
   	{{did-insert this.registerListener}}
   	{{will-destroy this.unregisterListener}}>
@@ -278,8 +277,8 @@
   
   */
   {
-    "id": "LCvfubQh",
-    "block": "[[[1,[30,1,[\"data\",\"url\"]]],[1,\"\\n\"],[11,\"iframe\"],[24,1,\"mainIframe\"],[24,3,\"mainIframe\"],[24,0,\"mainIframe\"],[24,\"frameborder\",\"0\"],[24,\"scrolling\",\"auto\"],[16,\"src\",[30,1,[\"data\",\"url\"]]],[16,\"allData\",[30,1]],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n\"],[13],[1,\"\\n\"],[18,2,null],[1,\"\\n\\n\"],[1,\"\\n\"]],[\"@allData\",\"&default\"],false,[\"did-insert\",\"will-destroy\",\"yield\"]]",
+    "id": "fyeXAQSo",
+    "block": "[[[11,\"iframe\"],[24,1,\"mainIframe\"],[24,3,\"mainIframe\"],[24,0,\"mainIframe\"],[24,\"frameborder\",\"0\"],[24,\"scrolling\",\"auto\"],[24,\"src\",\"http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/\"],[16,\"allData\",[30,1]],[4,[38,0],[[30,0,[\"registerListener\"]]],null],[4,[38,1],[[30,0,[\"unregisterListener\"]]],null],[12],[1,\"\\n\"],[13],[1,\"\\n\"],[18,2,null],[1,\"\\n\\n\"],[1,\"\\n\"]],[\"@allData\",\"&default\"],false,[\"did-insert\",\"will-destroy\",\"yield\"]]",
     "moduleName": "web-shell/components/iframe-context.hbs",
     "isStrictMode": false
   });
@@ -311,23 +310,31 @@
     }
 
     iframeEvent(msg) {
-      console.log("ember接受iframe消息", msg);
-      this.noticeService.defineAction({
-        type: "iot",
-        // id: results[0].data.id,
-        ele: this,
-        id: msg.cmd,
-        projectId: this.args.allData.data.projectId,
-        ownerId: this.cookies.read("account_id"),
-        callBack: this.runDagCallback
-      });
+      console.log("ember接受iframe消息", msg); // this.noticeService.defineAction({
+      // 	type: "iot",
+      // 	// id: results[0].data.id,
+      // 	ele: this,
+      // 	id: msg.cmd,
+      // 	projectId: this.args.allData.data.projectId,
+      // 	ownerId: this.cookies.read("account_id"),
+      // 	callBack: this.runDagCallback
+      // })
+
+      document.getElementById("mainIframe").contentWindow.postMessage({
+        cmd: obj
+      }, '*');
     }
 
     runDagCallback(param, payload) {
-      debugger; // 向iframe传递消息
+      debugger;
+      let obj = {
+        param,
+        payload,
+        cmd: "renderDag"
+      }; // 向iframe传递消息
 
       document.getElementById("mainIframe").contentWindow.postMessage({
-        cmd: "爸爸接到啦"
+        cmd: obj
       }, '*');
     }
 
@@ -5689,7 +5696,7 @@
     registerListener(route) {
       let that = this; // eslint-disable-next-line no-undef
 
-      $(function () {
+      window.onload = function () {
         that.param = this.location.href.split("?")[1];
         that.routeName = `/${route}?`; //回退
 
@@ -5708,7 +5715,7 @@
           // 刷新回到指定页面
           that.router.transitionTo(`${that.routeName}${that.param}`);
         };
-      });
+      };
     }
 
     popstateFun() {

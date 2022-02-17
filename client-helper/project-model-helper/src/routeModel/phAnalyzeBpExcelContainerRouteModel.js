@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelContainerRouteModel(route, parseParams) {
 	route.browserEventsService.clearListener()
-	route.browserEventsService.registerListener('dataset-lst')
+	route.browserEventsService.registerListener("dataset-lst")
 	let targetDataset = await route.store.peekRecord(
 		"dataset",
 		parseParams.query.datasetId
