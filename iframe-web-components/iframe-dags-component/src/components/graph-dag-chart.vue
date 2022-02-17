@@ -306,7 +306,9 @@ export default {
         window.addEventListener('message', this.handleMessage)
         // 告诉父组件准备好接收消息了
         // window.parent.postMessage({
-        //     cmd: 'ready-for-receiving'
+		// 	message: {
+        //     	cmd: 'ready-for-receiving'
+		// 	}
         // }, '*')
     },
     destroyed () {
@@ -314,15 +316,21 @@ export default {
         window.removeEventListener('message', this.handleMessage)
     },
     methods: {
-        handleMessage(data) {
-            console.log("dag", data)
+        handleMessage(event) {
+			let that = this
+			if (event.data.message) {
+				if (event.data.message.cmd === "renderDag") {
+            		console.log("iframe接收的", event.data.message.cmd)
+					that.runDagCallback(event.data.message, that)
+				}
+			}
         },
         closeLogDialog() {
             this.showDagLogs = false
         },
         showLogs(data, representId) {
-            this.runId = JSON.parse(data.attributes.message).cnotification.runId
-            this.jobShowName = JSON.parse(data.attributes.message).cnotification.jobShowName
+            this.runId = JSON.parse(data.message).cnotification.runId
+            this.jobShowName = JSON.parse(data.message).cnotification.jobShowName
             this.representId = representId
             this.showDagLogs = true
         },
@@ -335,6 +343,7 @@ export default {
          * 2. query notification接收正确或错误消息
          */
         async confirmeRunDag(data) {
+			debugger
             // this.noticeService.progress = false //重置进度条
             this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
@@ -368,34 +377,33 @@ export default {
             let that = this
             that.failedLogs = []
             let represent_id = ""
-            this.responseArr = response
-            response.forEach(item => {
-                let jobCat = item.attributes["job-cat"]
-                let jobName = JSON.parse(item.attributes.message).cnotification.jobName
-                let data = ele.datasource.data
-                // 1.找到对应job节点并更新状态
-                data.map((it,index) => {
-                    if(jobName.indexOf(it.attributes.name) != -1) {
-                        if(jobCat === "success") {
-                            it.status = "succeed"
-                        } else if(jobCat === "failed") {
-                            it.status = "failed"
-                            represent_id = it.representId
-                        }
-                    }
-                    that.refreshNodeStatus(it)
-                })
-                // 2.失败时出现弹框
-                if(jobCat === "failed") {
-                    that.failedLogs.push({
-                        data: item,
-                        jobShowName: JSON.parse(item.attributes.message).cnotification.jobShowName,
-                        representId: represent_id
-                    })
-                }
-                console.log("failedLogs", that.failedLogs)
-                // this.needRefresh++
-            })
+            // this.responseArr = response.message
+			let payload = JSON.parse(response.payload)
+			debugger
+			let jobCat = payload["jobCat"]
+			let jobName = JSON.parse(payload.message).cnotification.jobName
+			let data = ele.datasource.data
+			// 1.找到对应job节点并更新状态
+			data.map((it,index) => {
+				if(jobName.indexOf(it.attributes.name) != -1) {
+					if(jobCat === "success") {
+						it.status = "succeed"
+					} else if(jobCat === "failed") {
+						it.status = "failed"
+						represent_id = it.representId
+					}
+				}
+				that.refreshNodeStatus(it)
+			})
+			// 2.失败时出现弹框
+			if(jobCat === "failed") {
+				that.failedLogs.push({
+					data: payload,
+					jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
+					representId: represent_id
+				})
+			}
+			console.log("failedLogs", that.failedLogs)
         },
         refreshNodeStatus(node) {
             const that = this
@@ -453,7 +461,9 @@ export default {
         // 点击运行整体
         on_click_runDag() {
             window.parent.postMessage({
-                cmd: 'runDag'
+				message: {
+                	cmd: 'runDag'
+				}
             }, '*')
             let roots = []
             this.datasource.data.forEach(item => {

@@ -22,25 +22,23 @@ export default class IframeContextComponent extends Component {
 	}
 
 	@action
-	iframeEvent(msg) {
-		console.log("ember接受iframe消息", msg)
-		// this.noticeService.defineAction({
-		// 	type: "iot",
-		// 	// id: results[0].data.id,
-		// 	ele: this,
-		// 	id: msg.cmd,
-		// 	projectId: this.args.allData.data.projectId,
-		// 	ownerId: this.cookies.read("account_id"),
-		// 	callBack: this.runDagCallback
-		// })
-		document.getElementById("mainIframe").contentWindow.postMessage({
-			cmd: obj
-		}, '*')
+	iframeEvent(event) {
+		console.log("ember接受iframe消息", event)
+		if(event.data.message) {
+			this.noticeService.defineAction({
+				type: "iot",
+				// id: results[0].data.id,
+				ele: this,
+				id: event.data.message.cmd,
+				projectId: this.args.allData.data.projectId,
+				ownerId: this.cookies.read("account_id"),
+				callBack: this.runDagCallback
+			})
+		}
 	}
 
 	@action
 	runDagCallback(param, payload) {
-		debugger
 		let obj = {
 			param,
 			payload,
@@ -48,7 +46,7 @@ export default class IframeContextComponent extends Component {
 		}
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({
-			cmd: obj
+			message: obj
 		}, '*')
 	}
 
