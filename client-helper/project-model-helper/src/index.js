@@ -18,6 +18,10 @@ import { codeditorIframeEventHandler } from "./eventHandler/codeditorIframeEvent
 import { airflowIframeEventHandler } from "./eventHandler/airflowIframeEventHandler"
 import { phAnalyzePrepareSetEventHandler } from "./eventHandler/phAnalyzePrepareSetEventHandler"
 import { phAnalyzePrepareSetRouteModel } from "./routeModel/phAnalyzePrepareSetRouteModel"
+import { phAnalyzeExcelColumnCleanRouteModel } from "./routeModel/phAnalyzeExcelColumnCleanRouteModel"
+import { phAnalyzeExcelColumnCleanEventHandler } from "./eventHandler/phAnalyzeExcelColumnCleanEventHandler"
+import { phAnalyzeDatasetMaxEventHandler } from "./eventHandler/phAnalyzeDatasetMaxEventHandler"
+import { phAnalyzeDatasetMaxRouteModel } from "./routeModel/phAnalyzeDatasetMaxRouteModel"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -39,5 +43,9 @@ export {
 	codeditorIframeEventHandler,
 	airflowIframeEventHandler,
 	phAnalyzePrepareSetEventHandler,
-	phAnalyzePrepareSetRouteModel
+	phAnalyzePrepareSetRouteModel,
+	phAnalyzeExcelColumnCleanRouteModel,
+	phAnalyzeExcelColumnCleanEventHandler,
+	phAnalyzeDatasetMaxEventHandler,
+	phAnalyzeDatasetMaxRouteModel
 }

@@ -161,8 +161,7 @@ export default {
             selectItemName: "", //单击的dag的名字
             responseArr: [],
             showProgress: false,
-            textConf: {}, //运行弹框textarea的默认值
-			nodeLevel: {}
+            textConf: {} //运行弹框textarea的默认值
         }
     },
     components: {
@@ -457,15 +456,8 @@ export default {
             // this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
             this.showProgress = true
         },
-		getNodeLevel() {
-			debugger
-		},
         // 点击运行整体
         on_click_runDag() {
-			debugger
-			if (this.nodeLevel) {
-				this.getNodeLevel()
-			}
             window.parent.postMessage({
 				message: {
                 	cmd: 'runDag'
