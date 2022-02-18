@@ -103,11 +103,11 @@
             </div>
         </div>
 
-        <progress-bar 
+        <!-- <progress-bar 
             v-if="showProgress"
             @closeProgress="closeProgress"
-            :progressOver="noticeService.progress">
-        </progress-bar>
+            :progressOver="progressOver">
+        </progress-bar> -->
 
     </div>
 </template>
@@ -161,7 +161,8 @@ export default {
             selectItemName: "", //单击的dag的名字
             responseArr: [],
             showProgress: false,
-            textConf: {} //运行弹框textarea的默认值
+            textConf: {}, //运行弹框textarea的默认值
+            progressOver: false
         }
     },
     components: {
@@ -323,10 +324,10 @@ export default {
             		console.log("iframe接收的", event.data.message.cmd)
                     that.runDagCallback(event.data.message, that)
                 }
-				if(event.data.message.cmd === "dag_failed") {
+                if(event.data.message.cmd === "dag_failed") {
             		console.log("iframe接收的dag failed", event.data.message.cmd)
-					that.runDagFailedCallback(event.data.message, that)
-				}
+                    that.runDagFailedCallback(event.data.message, that)
+                }
             }
         },
         closeLogDialog() {
@@ -375,9 +376,10 @@ export default {
             // let timeout = data.args.param.timeout
             // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
-		runDagFailedCallback(response, ele) {
-			// 更新进度条
-		}
+        runDagFailedCallback(response, ele) {
+            // 更新进度条
+            this.progressOver = true
+        },
         /**
          * 更新状态的回调函数
          */
