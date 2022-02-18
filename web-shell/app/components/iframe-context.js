@@ -40,10 +40,32 @@ export default class IframeContextComponent extends Component {
 
 	@action
 	runDagCallback(param, payload) {
-		let obj = {
-			param,
-			payload,
-			cmd: "render_dag"
+		console.log(payload)
+		console.log(param)
+		let obj = {}
+		//包含runid 整个dag failed
+		if (JSON.parse(payload).runnerId) {
+			debugger
+			obj = {
+				param,
+				payload,
+				cmd: "dag_failed"
+			}
+		} else {
+			let message = JSON.parse(JSON.parse(payload).message)
+			let cnotification = message.cnotification
+			
+			if(cnotification.runId && cnotification.runId !== "") {
+
+			}
+			/**
+			 * 1.有
+			 */
+			obj = {
+				param,
+				payload,
+				cmd: "render_dag"
+			}
 		}
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({

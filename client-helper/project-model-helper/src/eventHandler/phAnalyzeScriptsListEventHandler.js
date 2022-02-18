@@ -373,6 +373,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 	}
 
 	function createScriptNoticeCallback(param, payload) {
+		console.log(payload)
 		route.loadingService.loading.style.display = "none"
 		let cnotification = JSON.parse(
 			JSON.parse(payload).message

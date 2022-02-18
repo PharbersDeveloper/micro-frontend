@@ -306,9 +306,9 @@ export default {
         window.addEventListener('message', this.handleMessage)
         // 告诉父组件准备好接收消息了
         // window.parent.postMessage({
-		// 	message: {
+        // 	message: {
         //     	cmd: 'ready-for-receiving'
-		// 	}
+        // 	}
         // }, '*')
     },
     destroyed () {
@@ -317,13 +317,17 @@ export default {
     },
     methods: {
         handleMessage(event) {
-			let that = this
-			if (event.data.message) {
-				if (event.data.message.cmd === "render_dag") {
+            let that = this
+            if (event.data.message) {
+                if (event.data.message.cmd === "render_dag") {
             		console.log("iframe接收的", event.data.message.cmd)
-					that.runDagCallback(event.data.message, that)
+                    that.runDagCallback(event.data.message, that)
+                }
+				if(event.data.message.cmd === "dag_failed") {
+            		console.log("iframe接收的dag failed", event.data.message.cmd)
+					that.runDagFailedCallback(event.data.message, that)
 				}
-			}
+            }
         },
         closeLogDialog() {
             this.showDagLogs = false
@@ -347,10 +351,12 @@ export default {
             this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
+            let confData = data.args.param.jsonValue
+            confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
-                "conf": data.args.param.jsonValue
+                "conf": confData
             }
             let options = {
                 method: "POST",
@@ -369,6 +375,9 @@ export default {
             // let timeout = data.args.param.timeout
             // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
+		runDagFailedCallback(response, ele) {
+			// 更新进度条
+		}
         /**
          * 更新状态的回调函数
          */
@@ -377,31 +386,31 @@ export default {
             that.failedLogs = []
             let represent_id = ""
             // this.responseArr = response.message
-			let payload = JSON.parse(response.payload)
-			let jobCat = payload["jobCat"]
-			let jobName = JSON.parse(payload.message).cnotification.jobName
-			let data = ele.datasource.data
-			// 1.找到对应job节点并更新状态
-			data.map((it,index) => {
-				if(jobName.indexOf(it.attributes.name) != -1) {
-					if(jobCat === "success") {
-						it.status = "succeed"
-					} else if(jobCat === "failed") {
-						it.status = "failed"
-						represent_id = it.representId
-					}
-				}
-				that.refreshNodeStatus(it)
-			})
-			// 2.失败时出现弹框
-			if(jobCat === "failed") {
-				that.failedLogs.push({
-					data: payload,
-					jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
-					representId: represent_id
-				})
-			}
-			console.log("failedLogs", that.failedLogs)
+            let payload = JSON.parse(response.payload)
+            let jobCat = payload["jobCat"]
+            let jobName = JSON.parse(payload.message).cnotification.jobName
+            let data = ele.datasource.data
+            // 1.找到对应job节点并更新状态
+            data.map((it,index) => {
+                if(jobName.indexOf(it.attributes.name) != -1) {
+                    if(jobCat === "success") {
+                        it.status = "succeed"
+                    } else if(jobCat === "failed") {
+                        it.status = "failed"
+                        represent_id = it.representId
+                    }
+                }
+                that.refreshNodeStatus(it)
+            })
+            // 2.失败时出现弹框
+            if(jobCat === "failed") {
+                that.failedLogs.push({
+                    data: payload,
+                    jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
+                    representId: represent_id
+                })
+            }
+            console.log("failedLogs", that.failedLogs)
         },
         refreshNodeStatus(node) {
             const that = this
@@ -459,9 +468,9 @@ export default {
         // 点击运行整体
         on_click_runDag() {
             window.parent.postMessage({
-				message: {
+                message: {
                 	cmd: 'runDag'
-				}
+                }
             }, '*')
             let roots = []
             this.datasource.data.forEach(item => {

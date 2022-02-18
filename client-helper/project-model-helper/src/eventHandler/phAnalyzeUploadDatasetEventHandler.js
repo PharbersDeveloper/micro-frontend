@@ -170,7 +170,9 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						path: params.path,
 						partitions: 1,
 						format: params.format
-					}
+					},
+					opname: route.cookies.read("account_id"),
+					opgroup: route.cookies.read("company_id")
 				}
 				let suit_max_body = {
 					table: "action",
