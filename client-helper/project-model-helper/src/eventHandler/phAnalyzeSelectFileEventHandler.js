@@ -279,11 +279,13 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 
 		if (status != "succeed") {
 			//跳转回dataset页面
-			let msg =
-				error["message"]["zh"] !== ""
-					? error["message"]["zh"]
-					: "上传失败，请重新上传！"
-			alert(msg)
+			// 这边错误返回后端没做格式处理，目前只有这个接口返回的是一个字符串
+			// const errorObj = JSON.parse(error)
+			// const msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "上传失败，请重新上传！"
+			alert("上传失败，请重新上传！" + error)
 			route.router.transitionTo(
 				"/dataset-lst?projectName=" +
 					route.tranParam.projectName +
