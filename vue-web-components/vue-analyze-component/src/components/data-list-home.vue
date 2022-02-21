@@ -1,19 +1,20 @@
 <template>
     <div class="data-list-home">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="data-home-container">
                <div class="content">  
                 <div class="left-area">
                     <div class="projectInfo">
-						<div class="left">
-							<div class="color"></div>
-							<div class="project_Information">
-								<p class="project_name">{{allData.projectDetail.name}}</p>
-								<p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
-							</div>
-						</div>
-						<div class="right">
-							<button @click="startResource">启动资源</button>
-						</div>
+                        <div class="left">
+                            <div class="color"></div>
+                            <div class="project_Information">
+                                <p class="project_name">{{allData.projectDetail.name}}</p>
+                                <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <button @click="dialogStart = true">启动资源</button>
+                        </div>
                     </div>
                     <div class="items">
                         <div class="item">
@@ -147,10 +148,22 @@
                 </div>
             </div>
         </div>
+        <el-dialog
+                title="启动资源"
+                :visible.sync="dialogStart"
+                width="460px">
+            <span>是否确认启动资源？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogStart = false">取消</el-button>
+                <el-button type="primary" @click="on_clickStartConfirm">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElButton from 'element-ui/packages/button/index'
 export default {
     data() {
         return {
@@ -177,11 +190,16 @@ export default {
             },
             actions: [],
             actionsShow: [],
-            actionsKey: ""
+            actionsKey: "",
+            dialogStart: false
         }
     },
+    components: {
+        ElDialog,
+        ElButton
+    },
     async mounted() {
-        const accessToken = this.getCookie("access_token") || "bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
+        const accessToken = this.getCookie("access_token") || "1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
@@ -222,13 +240,12 @@ export default {
         }
     },
     methods: {
-        startResource() {
+        on_clickStartConfirm() {
             const event = new Event("event")
             event.args = {
                 callback: "startResource",
                 element: this,
                 param: {
-                    name: param,
                     projectName: this.allData.projectDetail.name,
                     projectId: this.allData.projectDetail.id
                 }
@@ -284,7 +301,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
+            const accessToken = this.getCookie("access_token") || "1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",
@@ -415,11 +432,35 @@ export default {
     padding: 0;
     box-sizing: border-box;
 }
+/deep/.el-dialog__header {
+    border-bottom: 1px solid #ccc;
+}
+/deep/.el-dialog__headerbtn {
+    display: none;
+}
+/deep/.el-dialog__wrapper {
+    background: rgba(0, 0, 0, 0.31);
+}
 .data-home-container {
-    
     height: calc(100vh - 40px);
     width: 100vw;
     background: #f2f2f2;
+    
+    .dataset_header {
+        height: 48px;
+        background: #ffffff;
+        border-bottom: 1px solid #dddddd;
+        margin: 0 !important;
+        color: #333333;
+        display: flex;
+        padding: 0 20px;
+        align-items: center;
+        .script_icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+    }
     .content {
         display: flex;
     }
@@ -449,7 +490,10 @@ export default {
             border: 1px solid #ddd;
             margin-left: 20px;
             margin-top: 25px;
-			justify-content: space-between;
+            justify-content: space-between;
+            .left {
+                display: flex
+            }
             .color {
                 width: 80px;
                 height: 100%;
@@ -472,19 +516,20 @@ export default {
                     font-weight: 500;
                 }
             }
-			.right {
-				display: flex;
-				padding-top: 20px;
-				padding-right: 20px;
-				button {
-					min-width: 80px;
-					height: 32px;
-					background: #5342B3;
-					border-radius: 2px;
-					color: white;
-					border: none;
-				}
-			}
+            .right {
+                display: flex;
+                padding-top: 20px;
+                padding-right: 20px;
+                button {
+                    min-width: 80px;
+                    height: 32px;
+                    background: #5342B3;
+                    border-radius: 2px;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                }
+            }
         }
     }
     .items {

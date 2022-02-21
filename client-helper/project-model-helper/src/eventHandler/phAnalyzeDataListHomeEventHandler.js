@@ -45,7 +45,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			route.router.transitionTo("shell", uri)
 			break
 		case startResource:
-			debugger
+			console.log(params)
 			break
 		default:
 			console.log("submit event to parent")
