@@ -45,7 +45,6 @@ export default class IframeContextComponent extends Component {
 		let obj = {}
 		//包含runid 整个dag failed
 		if (JSON.parse(payload).runnerId) {
-			debugger
 			obj = {
 				param,
 				payload,
