@@ -273,8 +273,9 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		console.log(params)
 		console.log(payload)
 		const { message, status } = JSON.parse(payload)
-		const { cnotification: { error } } = JSON.parse(message)
-
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
 
 		if (status != "succeed") {
 			//跳转回dataset页面
