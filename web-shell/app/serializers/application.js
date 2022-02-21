@@ -18,17 +18,4 @@ export default class ApplicationSerializer extends JSONAPISerializer {
 	keyForRelationship(key) {
 		return key
 	}
-	// extractAttributes(modelClass, resourceHash) {
-	// 	let keys = Object.keys(resourceHash.attributes)
-	// 	let obj = {}
-
-	// 	keys.forEach(ele => {
-	// 		let k = camelize(ele)
-	// 		obj[k] = resourceHash.attributes[ele]
-	// 		if (ele === "start-date" || ele === "end-date" || ele === "date" ) {
-	// 			obj[k] = Date.parse(resourceHash.attributes[ele])
-	// 		}
-	// 	})
-	// 	return obj
-	// }
 }

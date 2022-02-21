@@ -13,7 +13,7 @@ export default class BrowserEventsServiceService extends Service {
 	registerListener(route) {
 		let that = this
 		// eslint-disable-next-line no-undef
-		$(function(){
+		window.onload = function(){
 			that.param = this.location.href.split("?")[1]
 			that.routeName = `/${route}?`
 			//回退
@@ -31,7 +31,7 @@ export default class BrowserEventsServiceService extends Service {
 				// 刷新回到指定页面
 				that.router.transitionTo(`${that.routeName}${that.param}`)
 			}
-		})
+		}
 	}
 
 	@action

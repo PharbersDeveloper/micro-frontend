@@ -103,11 +103,11 @@
             </div>
         </div>
 
-        <progress-bar 
+        <!-- <progress-bar 
             v-if="showProgress"
             @closeProgress="closeProgress"
-            :progressOver="noticeService.progress">
-        </progress-bar>
+            :progressOver="progressOver">
+        </progress-bar> -->
 
     </div>
 </template>
@@ -161,7 +161,8 @@ export default {
             selectItemName: "", //单击的dag的名字
             responseArr: [],
             showProgress: false,
-            textConf: {} //运行弹框textarea的默认值
+            textConf: {}, //运行弹框textarea的默认值
+            progressOver: false
         }
     },
     components: {
@@ -302,15 +303,39 @@ export default {
         this.flowVersion = decodeURI(paramArr[2].split("=")[1])
         this.datasource.projectId = this.projectId
         this.initChart()
-        this.noticeService.observer()
+        // this.noticeService.observer()
+        window.addEventListener('message', this.handleMessage)
+        // 告诉父组件准备好接收消息了
+        // window.parent.postMessage({
+        // 	message: {
+        //     	cmd: 'ready-for-receiving'
+        // 	}
+        // }, '*')
+    },
+    destroyed () {
+        // 注意移除监听！注意移除监听！注意移除监听！
+        window.removeEventListener('message', this.handleMessage)
     },
     methods: {
+        handleMessage(event) {
+            let that = this
+            if (event.data.message) {
+                if (event.data.message.cmd === "render_dag") {
+            		console.log("iframe接收的", event.data.message.cmd)
+                    that.runDagCallback(event.data.message, that)
+                }
+                if(event.data.message.cmd === "dag_failed") {
+            		console.log("iframe接收的dag failed", event.data.message.cmd)
+                    that.runDagFailedCallback(event.data.message, that)
+                }
+            }
+        },
         closeLogDialog() {
             this.showDagLogs = false
         },
         showLogs(data, representId) {
-            this.runId = JSON.parse(data.attributes.message).cnotification.runId
-            this.jobShowName = JSON.parse(data.attributes.message).cnotification.jobShowName
+            this.runId = JSON.parse(data.message).cnotification.runId
+            this.jobShowName = JSON.parse(data.message).cnotification.jobShowName
             this.representId = representId
             this.showDagLogs = true
         },
@@ -323,14 +348,16 @@ export default {
          * 2. query notification接收正确或错误消息
          */
         async confirmeRunDag(data) {
-            this.noticeService.progress = false //重置进度条
+            // this.noticeService.progress = false //重置进度条
             this.showProgress = false
             const url = `https://api.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
+            let confData = data.args.param.jsonValue
+            confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
-                "conf": data.args.param.jsonValue
+                "conf": confData
             }
             let options = {
                 method: "POST",
@@ -341,13 +368,17 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
-            let result = await fetch(url, options).then(res => res.json())
-            let queryId = result.data.dag_run_id
-            this.noticeService.projectName = this.projectName
+            await fetch(url, options).then(res => res.json())
             this.showProgress = true
             this.showRunJson = false
-            let timeout = data.args.param.timeout
-            this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
+            // this.noticeService.projectName = this.projectName
+            // let queryId = result.data.dag_run_id
+            // let timeout = data.args.param.timeout
+            // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
+        },
+        runDagFailedCallback(response, ele) {
+            // 更新进度条
+            this.progressOver = true
         },
         /**
          * 更新状态的回调函数
@@ -356,34 +387,32 @@ export default {
             let that = this
             that.failedLogs = []
             let represent_id = ""
-            this.responseArr = response
-            response.forEach(item => {
-                let jobCat = item.attributes["job-cat"]
-                let jobName = JSON.parse(item.attributes.message).cnotification.jobName
-                let data = ele.datasource.data
-                // 1.找到对应job节点并更新状态
-                data.map((it,index) => {
-                    if(jobName.indexOf(it.attributes.name) != -1) {
-                        if(jobCat === "success") {
-                            it.status = "succeed"
-                        } else if(jobCat === "failed") {
-                            it.status = "failed"
-                            represent_id = it.representId
-                        }
+            // this.responseArr = response.message
+            let payload = JSON.parse(response.payload)
+            let jobCat = payload["jobCat"]
+            let jobName = JSON.parse(payload.message).cnotification.jobName
+            let data = ele.datasource.data
+            // 1.找到对应job节点并更新状态
+            data.map((it,index) => {
+                if(jobName.indexOf(it.attributes.name) != -1) {
+                    if(jobCat === "success") {
+                        it.status = "succeed"
+                    } else if(jobCat === "failed") {
+                        it.status = "failed"
+                        represent_id = it.representId
                     }
-                    that.refreshNodeStatus(it)
-                })
-                // 2.失败时出现弹框
-                if(jobCat === "failed") {
-                    that.failedLogs.push({
-                        data: item,
-                        jobShowName: JSON.parse(item.attributes.message).cnotification.jobShowName,
-                        representId: represent_id
-                    })
                 }
-                console.log("failedLogs", that.failedLogs)
-                // this.needRefresh++
+                that.refreshNodeStatus(it)
             })
+            // 2.失败时出现弹框
+            if(jobCat === "failed") {
+                that.failedLogs.push({
+                    data: payload,
+                    jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
+                    representId: represent_id
+                })
+            }
+            console.log("failedLogs", that.failedLogs)
         },
         refreshNodeStatus(node) {
             const that = this
@@ -410,7 +439,6 @@ export default {
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
         async on_click_run_script(data) {
-            this.noticeService.progress = false
             this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
@@ -434,15 +462,19 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
-            this.noticeService.projectName = this.projectName
-            let timeout = 60
-            this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
+            // this.noticeService.projectName = this.projectName
+            // let timeout = 60
+            // this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
             this.showProgress = true
         },
         // 点击运行整体
         on_click_runDag() {
+            window.parent.postMessage({
+                message: {
+                	cmd: 'runDag'
+                }
+            }, '*')
             let roots = []
-            console.log(this.datasource.data)
             this.datasource.data.forEach(item => {
                 if(item.attributes.runtime === "output_index") {
                     roots.push(item)
@@ -464,7 +496,6 @@ export default {
                 "scripts": [],
                 "userConf": {}
             }
-            console.log(this.textConf)
             this.showRunJson = true
         },
         closeRunDagDialog() {
@@ -474,7 +505,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
             // 发布前解注
-            document.domain = "pharbers.com"
+            // document.domain = "pharbers.com"
         },
 
         // 监听屏幕大小改变

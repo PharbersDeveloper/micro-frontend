@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import BpExcelHandler from '../components/bp-excel-handler.vue'
+import BpExcelHandler from '../../../vue-analyze-component/src/components/bp-excel-handler.vue'
 export default {
     components: {
         BpExcelHandler

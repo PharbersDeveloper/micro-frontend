@@ -7,6 +7,7 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(async function () {
-	this.route("shell", { path: "/" })
-	this.route("shell", { path: "/*path" })
+  this.route("shell", { path: "/" })
+  this.route("shell", { path: "/*path" })
+  this.route('oauth-callback')
 })

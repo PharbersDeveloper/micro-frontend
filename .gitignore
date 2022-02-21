@@ -1,7 +1,7 @@
 **/node_modules/
 **/.idea/
 **/dist/
-**/yarn.lock/
+**/yarn.lock
 **/.DS_Store
 
 

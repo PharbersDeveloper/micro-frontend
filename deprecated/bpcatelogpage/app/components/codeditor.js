@@ -22,7 +22,7 @@ export default class CodeditorComponent extends Component {
 				if(params.name === "localUpload") {
 					uri = '/dataset?projectName=' + params.projectName +'&projectId=' + params.projectId
 				}else if(params.name === "linkToProject" || params.name === "project") {
-					uri = `/projects/`+ params.projectId
+					uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
 				} else if(params.name === "analyze") {
 					uri = `/dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
 				} else if(params.name === "datasets") {

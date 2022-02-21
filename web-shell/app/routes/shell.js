@@ -5,14 +5,22 @@ import { camelize } from "@ember/string"
 import ENV from "web-shell/config/environment"
 
 export default class ShellRoute extends Route {
+	@service oauthService
 	@service cookies
 	@service store
+    @service browserEventsService;
 	@service("remote-loading") jsl
 	@service("route-parse") rps
 	@service("ph-menu") ms
 
+
+	beforeModel(transition){
+		if (!this.oauthService.judgeAuth()) {
+			this.oauthService.obtainAuth()
+		}
+	}
+
 	async model(params) {
-		console.log(params)
 		if (Object.keys(params).length === 0) {
 			params["path"] = "home"
 		}
@@ -27,8 +35,12 @@ export default class ShellRoute extends Route {
 		let parseParams
 		for (let idx = 0; idx < pageCount; ++idx) {
 			const tmp = pages[idx]
-			// let path = window.location.href.split("/")[window.location.href.split("/").length - 1]
-			const [match, result] = this.rps.parse("/" + params.path, tmp.route)
+			let param = window.location.href.split("?")[1]
+			let routeName = params.path
+			if(param && !params.path.split("?")[1]) {
+				routeName = `${params.path}?${param}`
+			}
+			const [match, result] = this.rps.parse("/" + routeName, tmp.route)
 			if (match) {
 				curPage = tmp
 				parseParams = result
@@ -39,11 +51,13 @@ export default class ShellRoute extends Route {
 		/**
 		 * 2. 动态的把需要的JS加载到dom中
 		 */
-		await this.jsl.loadRemoteJs(curPage.uri)
-		await this.jsl.loadRemoteJsSync(curPage.cat)
+		if (curPage.uri)
+			await this.jsl.loadRemoteJs(curPage.uri)
+		if (curPage.cat)
+			await this.jsl.loadRemoteJsSync(curPage.cat)
 		const clientName = curPage.clientName
 		const modelName = camelize(curPage.name) + "RouteModel"
-		const data = await window[clientName][modelName](this, parseParams)
+		const data = await window[clientName][modelName](this, parseParams, curPage)
 		return RSVP.hash({
 			page: curPage,
 			data: data ? data : {},

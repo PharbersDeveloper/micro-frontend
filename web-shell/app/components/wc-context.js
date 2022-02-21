@@ -5,7 +5,16 @@ import { camelize } from "@ember/string"
 
 export default class WcContextComponent extends Component {
 	@service router
+	@service store
 	@service cookies
+	@service awsService
+	@service downloadFile
+    // @service noticeService;
+    @service('loading') loadingService
+	@service("execution-status") noticeService
+
+
+	
 	@action
 	async listener(e) {
 		let modelName = camelize(this.args.allData.page.name) + "EventHandler"

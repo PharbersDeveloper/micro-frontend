@@ -1,9 +1,12 @@
 
+import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
+
 export default class PhDataSource {
     constructor(id, adapter) {
         this.id = id
         this.sort = {}
         this.filter = {}
+        this.funcChains = (new FunctionChains()).push("filter-eq", "Index", "1")
         this.projectId = ''
         this.name = "prod_clean_v2"
         this.batch_size = 100
@@ -12,7 +15,7 @@ export default class PhDataSource {
         // this.cols = this.schema
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "eec9e7b5a49cff20a893307d8de8bd7ed29b761b82b8ecc0db0fe63aaad7efbc"
+        this.debugToken = "29d19c5690360c3e7e1394284aa5e423eb2fbae886308e9626cd99743a28e9c8"
     }
 
     defaultAdapter(row, cols) {

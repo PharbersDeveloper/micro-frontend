@@ -23,7 +23,7 @@ export default class ExcelCleanComponent extends Component {
 				} else if (params.name == "flow") {
 					uri = '/flow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				} else if(params.name === "linkToProject" || params.name === "project") {
-					uri = `/projects/`+ params.projectId
+					uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
 				} else if(params.name == "airflow") {
 					uri = '/airflow?projectName=' + params.projectName + '&projectId=' + params.projectId
 				}

@@ -1,2 +1,29 @@
-<h2>iframe component</h2>
+<iframe id="mainIframe" name="mainIframe" class="mainIframe"
+	frameborder="0" scrolling="auto"
+	{{!-- src={{@allData.data.url}} --}}
+	src="http://localhost:8080/?projectId=JfSmQBYUpyb4jsei&projectName=ETL_Iterator&flowVersion=developer#/"
+	allData={{@allData}}
+	{{did-insert this.registerListener}}
+	{{will-destroy this.unregisterListener}}>
+</iframe>
 {{yield}}
+
+{{!-- 生命周期函数
+回调
+ember 的 this指针 
+window
+
+----------------------------
+| window.1
+|    ==================
+|    | window 2
+|
+
+1. window1. create window 2
+2. window1 window2 daddy
+3. onReady
+	<iframe onReady=function()>
+4. ember funcion 
+	window2.func
+5. window2.func(adfj) --}}
+

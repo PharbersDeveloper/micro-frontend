@@ -1,12 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogDataListHomeEventHandler(e, route) {
-	console.log("component", e)
 	let params = e.detail[0].args.param
 	let uri = "/projects"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name == "datasets") {
-				console.log(params)
 				uri =
 					"dataset-lst?projectName=" +
 					params.projectName +
@@ -44,7 +42,6 @@ export async function phcatelogDataListHomeEventHandler(e, route) {
 					params.projectId
 			}
 			//执行列表 分页
-			console.log(uri)
 			route.router.transitionTo("shell", uri)
 			break
 		default:

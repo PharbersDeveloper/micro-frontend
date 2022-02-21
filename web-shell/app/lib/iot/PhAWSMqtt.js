@@ -6,18 +6,17 @@
 const awsCrt = require("aws-crt");
 
 function PhMQTT(config, callBack, timeoutQueue) {
-
     let connection = null;
     let intervalId = null;
     let timeoutId = null;
-    const id = config.id;
+    let use_cache = [];
     const topic = config.topic;
     const client_id = config.client_id;
     const endpoint = config.endpoint;
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
     const aws_secret_key = config.aws_secret_key;
-    const timeout = config.timeout + 5; // 延迟5秒
+    const timeout = config.timeout;
     let time = new Date().getTime();
     const client_bootstrap = new awsCrt.io.ClientBootstrap()
     const qos = awsCrt.mqtt.QoS.AtLeastOnce // 1
@@ -57,7 +56,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
         timeoutId = setInterval(() => {
             const currentTime = new Date().getTime() / 1000;
             if (currentTime - (time / 1000) > timeout) {
-                timeoutQueue.push(id)
+                timeoutQueue.push(topic)
             }
         }, 1 * 1000);
     }
@@ -67,9 +66,26 @@ function PhMQTT(config, callBack, timeoutQueue) {
             if (!callBack) { throw Error("CallBack Is Undefined") }
             connection.subscribe(topic, qos, (_, payload) => {
                 time = new Date().getTime()
+
                 const parameter = Object.assign({}, config.parameter)
                 delete parameter.callBack
-                callBack(parameter, __byteToString(payload));
+
+                const content = __byteToString(payload)
+
+                const { id, projectId, date } = JSON.parse(content)
+
+                if (use_cache.indexOf(`${id}_${projectId}_${date}`) === -1) {
+                    use_cache.push(`${id}_${projectId}_${date}`)
+                    const { status , jobCat } = JSON.parse(content)
+                    // 只接受jobCat为Notification标识
+                    if (jobCat === "notification") {
+                        // UnRegister 将错误的和完成的关掉连接
+                        if (status === "failed" || status === "succeed") {
+                            timeoutQueue.push(topic);
+                        }
+                        callBack(parameter, content); 
+                    }
+                }
             })
         }
     }
@@ -92,6 +108,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
             intervalId = null;
             timeoutId = null;
             connection = null;
+            use_cache = [];
             console.log("Mqtt Disconnect");
         }
     }

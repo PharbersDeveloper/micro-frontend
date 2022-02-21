@@ -19,7 +19,6 @@ export async function phcatelogProjectListRouteModel(route, parseParams) {
 		}
 	}
 	let resourcesList = resources.filter((it) => it)
-	console.log(resourcesList)
 	return {
 		resources: resourcesList,
 		projects: resourcesList[0].includes,

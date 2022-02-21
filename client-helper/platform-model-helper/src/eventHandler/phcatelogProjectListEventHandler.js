@@ -1,11 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogProjectListEventHandler(e, route) {
-	console.log("component", e)
+	const param = e.detail[0].args.param
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
-			route.router.transitionTo(
-				"shell",
-				`projects/${e.detail[0].args.param.pid}`
+			window.open(
+				`https://deploy.pharbers.com/projects/${param.pid}?projectName=${param.name}&projectId=${param.pid}`
 			)
 			break
 		default:
