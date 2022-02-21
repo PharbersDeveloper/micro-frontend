@@ -190,7 +190,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 	function createScriptNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
-			cnotification: { error}
+			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			alert(`${route.msg}脚本成功！`)

@@ -365,10 +365,10 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			console.log("other click event!")
 	}
 
-	function deleteDatasetsNoticeCallback() {
+	function deleteDatasetsNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
-			cnotification: { error}
+			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			alert("删除脚本成功！")
@@ -387,7 +387,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 	function createScriptNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
-			cnotification: { error, jobName, jobPath}
+			cnotification: { error, jobName, jobPath }
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			alert("新建脚本成功！")
@@ -395,7 +395,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				"shell",
 				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&jobPath=${jobPath}`
 			)
-		} else if (status == "failed")  {
+		} else if (status == "failed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
 				errorObj["message"]["zh"] !== ""
@@ -409,7 +409,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 	function clearTagsNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
-			cnotification: { error}
+			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			alert("清除数据成功！")
