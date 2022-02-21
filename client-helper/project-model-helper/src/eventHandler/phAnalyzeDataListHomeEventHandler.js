@@ -44,6 +44,9 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			//执行列表 分页
 			route.router.transitionTo("shell", uri)
 			break
+		case startResource:
+			debugger
+			break
 		default:
 			console.log("submit event to parent")
 	}

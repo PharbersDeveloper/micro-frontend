@@ -10,6 +10,7 @@ import importPage from './components/deprecated/page/max-saas-import.vue'
 import bpExcelContainer from './components/bp-excel-container'
 import bpNavMax from './components/bp-nav-top-max'
 import eh from './components/bp-excel-handler'
+import dataList from './components/data-list-home'
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ export default new Router({
             path: '/max-saas',
             name: 'maxSaas',
             component: maxSaas
+        },
+        {
+            path: '/data-list',
+            name: 'dataList',
+            component: dataList
         },
         {
             path: '/import-file-list',

@@ -4,11 +4,16 @@
                <div class="content">  
                 <div class="left-area">
                     <div class="projectInfo">
-                        <div class="color"></div>
-                        <div class="project_Information">
-                            <p class="project_name">{{allData.projectDetail.name}}</p>
-                            <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
-                        </div>
+						<div class="left">
+							<div class="color"></div>
+							<div class="project_Information">
+								<p class="project_name">{{allData.projectDetail.name}}</p>
+								<p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
+							</div>
+						</div>
+						<div class="right">
+							<button @click="startResource">启动资源</button>
+						</div>
                     </div>
                     <div class="items">
                         <div class="item">
@@ -217,6 +222,19 @@ export default {
         }
     },
     methods: {
+        startResource() {
+            const event = new Event("event")
+            event.args = {
+                callback: "startResource",
+                element: this,
+                param: {
+                    name: param,
+                    projectName: this.allData.projectDetail.name,
+                    projectId: this.allData.projectDetail.id
+                }
+            }
+            this.$emit('event', event)
+        },
         dealActions() {
             this.actions.data.map(mapItem => {
                 //过滤掉dag_refresh
@@ -431,6 +449,7 @@ export default {
             border: 1px solid #ddd;
             margin-left: 20px;
             margin-top: 25px;
+			justify-content: space-between;
             .color {
                 width: 80px;
                 height: 100%;
@@ -453,6 +472,19 @@ export default {
                     font-weight: 500;
                 }
             }
+			.right {
+				display: flex;
+				padding-top: 20px;
+				padding-right: 20px;
+				button {
+					min-width: 80px;
+					height: 32px;
+					background: #5342B3;
+					border-radius: 2px;
+					color: white;
+					border: none;
+				}
+			}
         }
     }
     .items {
