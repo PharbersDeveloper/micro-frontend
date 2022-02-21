@@ -292,10 +292,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	}
 
 	function clearTagsNoticeCallback(param, payload) {
-		console.log("清除数据")
-		console.log(payload)
-		console.log(param)
-
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
@@ -312,30 +308,10 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					: "清除数据失败，请重新操作！"
 			alert(msg)
 		}
-
-		// let cnotification = JSON.parse(
-		// 	JSON.parse(payload).message
-		// ).cnotification
-		// let upload_status = cnotification.status
-		// let error =
-		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		// if (upload_status == "clear_DS_succeed") {
-		// 	alert("清楚数据成功！")
-		// 	window.location.reload()
-		// } else if (upload_status == "clear_DS_failed") {
-		// 	let msg =
-		// 		error["message"]["zh"] !== ""
-		// 			? error["message"]["zh"]
-		// 			: "清除数据失败，请重新操作！"
-		// 	alert(msg)
-		// }
 		route.loadingService.loading.style.display = "none"
 	}
 
 	function delNoticeCallback(param, payload) {
-		console.log("删除dataset")
-		console.log(payload)
-		console.log(param)
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
@@ -352,23 +328,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					: "删除数据集失败，请重新操作！"
 			alert(msg)
 		}
-
-		// let cnotification = JSON.parse(
-		// 	JSON.parse(payload).message
-		// ).cnotification
-		// let upload_status = cnotification.status
-		// let error =
-		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		// if (upload_status == "remove_DS_succeed") {
-		// 	alert("删除数据集成功！")
-		// 	window.location.reload()
-		// } else if (upload_status == "remove_DS_failed") {
-		// 	let msg =
-		// 		error["message"]["zh"] !== ""
-		// 			? error["message"]["zh"]
-		// 			: "删除数据集失败，请重新操作！"
-		// 	alert(msg)
-		// }
 		route.loadingService.loading.style.display = "none"
 	}
 }
