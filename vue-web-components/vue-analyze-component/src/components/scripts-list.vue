@@ -43,7 +43,7 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
 								<!-- @click="selectScripts('python3')" -->
-                                <div class="list">
+                                <div class="list" @click="selectScripts('python3')">
                                     <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
                                     <p class="dis">Python</p>
                                 </div>
