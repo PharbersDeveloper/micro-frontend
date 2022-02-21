@@ -10,7 +10,6 @@ function PhMQTT(config, callBack, timeoutQueue) {
     let intervalId = null;
     let timeoutId = null;
     let use_cache = [];
-    const id = config.id;
     const topic = config.topic;
     const client_id = config.client_id;
     const endpoint = config.endpoint;
@@ -57,9 +56,9 @@ function PhMQTT(config, callBack, timeoutQueue) {
         timeoutId = setInterval(() => {
             const currentTime = new Date().getTime() / 1000;
             if (currentTime - (time / 1000) > timeout) {
-                timeoutQueue.push(id)
+                timeoutQueue.push(topic)
             }
-        }, 1 * 500);
+        }, 1 * 1000);
     }
 
     const __subscribe = () => {
@@ -67,15 +66,26 @@ function PhMQTT(config, callBack, timeoutQueue) {
             if (!callBack) { throw Error("CallBack Is Undefined") }
             connection.subscribe(topic, qos, (_, payload) => {
                 time = new Date().getTime()
+
                 const parameter = Object.assign({}, config.parameter)
                 delete parameter.callBack
+
                 const content = __byteToString(payload)
+
                 const { id, projectId, date } = JSON.parse(content)
+
                 if (use_cache.indexOf(`${id}_${projectId}_${date}`) === -1) {
                     use_cache.push(`${id}_${projectId}_${date}`)
-                    callBack(parameter, content); 
+                    const { status , jobCat } = JSON.parse(content)
+                    // 只接受jobCat为Notification标识
+                    if (jobCat === "notification") {
+                        // UnRegister 将错误的和完成的关掉连接
+                        if (status === "failed" || status === "succeed") {
+                            timeoutQueue.push(topic);
+                        }
+                        callBack(parameter, content); 
+                    }
                 }
-                
             })
         }
     }

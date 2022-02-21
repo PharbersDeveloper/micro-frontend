@@ -149,8 +149,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		console.log("notice")
 		route.noticeService.defineAction({
 			type: "iot",
-			// id: results[0].data.id,
-			ele: route,
 			id: "uploadfiles",
 			projectId: projectId,
 			ownerId: route.cookies.read("account_id"),
@@ -266,19 +264,20 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		console.log("上传的")
 		console.log(params)
 		console.log(payload)
-		let cnotification = JSON.parse(
-			JSON.parse(payload).message
-		).cnotification
-		let upload_status = cnotification.status
-		let error =
-			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		if (upload_status != "upload_succeed") {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+
+		if (status != "succeed") {
 			//跳转回dataset页面
-			let msg =
-				error["message"]["zh"] !== ""
-					? error["message"]["zh"]
-					: "上传失败，请重新上传！"
-			alert(msg)
+			// 这边错误返回后端没做格式处理，目前只有这个接口返回的是一个字符串
+			// const errorObj = JSON.parse(error)
+			// const msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "上传失败，请重新上传！"
+			alert("上传失败，请重新上传！" + error)
 			route.router.transitionTo(
 				"/dataset-lst?projectName=" +
 					route.tranParam.projectName +
@@ -287,11 +286,48 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			)
 		} else {
 			route.noticeService.uploadStatus = true
+			const parameter = [
+				`projectName=${route.tranParam.projectName}`,
+				`projectId=${route.tranParam.projectId}`,
+				`filename=${route.tranParam.file.name}`,
+				`version=${route.tranParam.property.dataID}`,
+				`dataset=${route.tranParam.property.dataset}`,
+				`tmpname=${route.tranParam.message.tmpname}`
+			]
 			route.router.transitionTo(
 				"shell",
-				`excel-handler?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}&filename=${route.tranParam.file.name}&version=${route.tranParam.property.dataID}&dataset=${route.tranParam.property.dataset}&tmpname=${route.tranParam.message.tmpname}`
+				`excel-handler?${parameter.join("&")}`
 			)
 		}
+
+		// const error = error !== "" ? JSON.parse(error) : ""
+
+		// let cnotification = JSON.parse(
+		// 	JSON.parse(payload).message
+		// ).cnotification
+		// let upload_status = cnotification.status
+		// let error =
+		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
+		// if (upload_status != "upload_succeed") {
+		// 	//跳转回dataset页面
+		// 	let msg =
+		// 		error["message"]["zh"] !== ""
+		// 			? error["message"]["zh"]
+		// 			: "上传失败，请重新上传！"
+		// 	alert(msg)
+		// 	route.router.transitionTo(
+		// 		"/dataset-lst?projectName=" +
+		// 			route.tranParam.projectName +
+		// 			"&projectId=" +
+		// 			route.tranParam.projectId
+		// 	)
+		// } else {
+		// 	route.noticeService.uploadStatus = true
+		// 	route.router.transitionTo(
+		// 		"shell",
+		// 		`excel-handler?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}&filename=${route.tranParam.file.name}&version=${route.tranParam.property.dataID}&dataset=${route.tranParam.property.dataset}&tmpname=${route.tranParam.message.tmpname}`
+		// 	)
+		// }
 		route.loadingService.loading.style.display = "none"
 	}
 }
