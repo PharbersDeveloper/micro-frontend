@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	let debugToken =
-		"bf6e5cb27179218c0b00efe11e25ddd9acecc2c029902ccced92b2ff3b853def"
+		"1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
 	let numShow = {}
 	let promiseList = []
 	// project基本信息

@@ -243,14 +243,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		}
 		let actions = postUrl(push_type, actions_body)
 		await Promise.all([project_files, actions])
-		//请求status，持续30s
-		// route.noticeService.register(
-		// 	"notification",
-		// 	results[0].data.id,
-		// 	noticeCallback,
-		// 	route,
-		// 	projectId
-		// )
 	}
 
 	async function postUrl(type, body) {
