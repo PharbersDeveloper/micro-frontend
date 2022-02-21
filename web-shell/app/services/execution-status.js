@@ -19,7 +19,7 @@ export default class ExecutionStatusService extends Service {
     destroyQueue = [] // 测试重点
 
     functions = {
-        "iot": async (item) => {
+        "iot": async (item, topic) => {
             const hisIot = this.iotInstance.find((iot) => iot.topic == topic)
             if (hisIot) {
                 this.destroyQueue.push(hisIot.topic)
@@ -55,7 +55,7 @@ export default class ExecutionStatusService extends Service {
             timeout = this.timeout
         } = {}) {
         const topic = `${projectId}/${ownerId}/${id}`
-        if (!this.action.find(item => item.topic || "" == topic)) {
+        if (!this.action.find(item => item.topic == topic)) {
             const item = {
                 type: type,
                 topic: topic,
@@ -66,9 +66,9 @@ export default class ExecutionStatusService extends Service {
                 callBack: callBack,
             }
             this.action.push(item)
-            this.functions[item.type](item)
+            this.functions[item.type](item, topic)
         } else {
-            console.warn("重复定义操作")
+            console.warn("重复定义操作, Topic ===>  " + topic)
         }
         if (!this.startOb) { 
             this.__observer()
