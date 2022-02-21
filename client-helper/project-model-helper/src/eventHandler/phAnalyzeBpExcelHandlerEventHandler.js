@@ -69,35 +69,64 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 	function EHnoticeCallback(param, payload) {
 		console.log("导入的", payload)
 		console.log(param)
-		let cnotification = JSON.parse(
-			JSON.parse(payload).message
-		).cnotification
-		let upload_status = cnotification.status
-		let error =
-			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		if (upload_status == "project_file_to_DS_succeed") {
+
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { data, error }
+		} = JSON.parse(message)
+
+		if (status == "succeed") {
 			//跳转下一页面
+			const params = [
+				`projectName=${route.tranParam.projectName}`,
+				`projectId=${route.tranParam.projectId}`
+			]
 			route.router.transitionTo(
 				"shell",
-				`dataset-lst?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}`
+				`dataset-lst?${params.join("&")}`
 			)
 			route.loadingService.loading.style.display = "none"
-		} else if (upload_status == "project_file_to_DS_failed") {
+		} else if (status == "failed") {
+			const errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
-				error["message"]["zh"] !== ""
-					? error["message"]["zh"]
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
 					: "导入失败，请重新上传！"
 			alert(msg)
 			route.loadingService.loading.style.display = "none"
+		} else if (status == "running") {
+			console.info(data)
+			console.info("running", data.progress)
 		}
+
+		// let cnotification = JSON.parse(
+		// 	JSON.parse(payload).message
+		// ).cnotification
+		// let upload_status = cnotification.status
+		// let error =
+		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
+		// if (upload_status == "project_file_to_DS_succeed") {
+		// 	//跳转下一页面
+		// 	route.router.transitionTo(
+		// 		"shell",
+		// 		`dataset-lst?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}`
+		// 	)
+		// 	route.loadingService.loading.style.display = "none"
+		// } else if (upload_status == "project_file_to_DS_failed") {
+		// 	let msg =
+		// 		error["message"]["zh"] !== ""
+		// 			? error["message"]["zh"]
+		// 			: "导入失败，请重新上传！"
+		// 	alert(msg)
+		// 	route.loadingService.loading.style.display = "none"
+		// }
 	}
 
 	async function createDataSetIndex(param) {
+		const eventName = "importfiles"
 		route.noticeService.defineAction({
 			type: "iot",
-			// id: results[0].data.id,
-			ele: route,
-			id: "importfiles",
+			id: eventName,
 			projectId: params.projectId,
 			ownerId: route.cookies.read("account_id"),
 			callBack: EHnoticeCallback
@@ -121,7 +150,7 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 				code: 0,
 				comments: "project file to Data set",
 				jobCat: "project_file_to_DS",
-				jobDesc: "creating",
+				jobDesc: eventName,
 				message: JSON.stringify(param),
 				date: String(new Date().getTime()),
 				owner: route.cookies.read("account_id"),
