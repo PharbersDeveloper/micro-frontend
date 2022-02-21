@@ -261,9 +261,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 	}
 
 	function noticeCallback(params, payload) {
-		console.log("上传的")
-		console.log(params)
-		console.log(payload)
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
@@ -274,7 +271,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			// 这边错误返回后端没做格式处理，目前只有这个接口返回的是一个字符串
 			// const errorObj = JSON.parse(error)
 			// const msg =
-			// 	errorObj["message"]["zh"] !== ""
+			// errorObj["message"]["zh"] !== ""
 			// 		? errorObj["message"]["zh"]
 			// 		: "上传失败，请重新上传！"
 			alert("上传失败，请重新上传！" + error)

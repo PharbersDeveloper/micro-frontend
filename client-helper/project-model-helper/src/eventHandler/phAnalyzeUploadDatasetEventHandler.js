@@ -292,10 +292,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	}
 
 	function clearTagsNoticeCallback(param, payload) {
-		console.log("清除数据")
-		console.log(payload)
-		console.log(param)
-
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
