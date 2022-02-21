@@ -20,9 +20,9 @@ export default class ExecutionStatusService extends Service {
 
     functions = {
         "iot": async (item) => {
-            const iot = this.iotInstance.find((iot) => iot.topic == topic)
-            if (iot) {
-                this.destroyQueue.push(iot.topic)
+            const hisIot = this.iotInstance.find((iot) => iot.topic == topic)
+            if (hisIot) {
+                this.destroyQueue.push(hisIot.topic)
             }
             const iotConfig = {
                 type: this.mqtt_type,
@@ -35,12 +35,12 @@ export default class ExecutionStatusService extends Service {
                 timeout: item.timeout || this.timeout,
                 parameter: item
             }
-            const iot = Iot.PhIot.newInstance(iotConfig, item.callBack, this.destroyQueue)
+            const iotIns = Iot.PhIot.newInstance(iotConfig, item.callBack, this.destroyQueue)
             this.iotInstance.push({
                 topic: item.topic,
-                ins: iot
+                ins: iotIns
             })
-            await iot.connect()
+            await iotIns.connect()
         },
 
     }
