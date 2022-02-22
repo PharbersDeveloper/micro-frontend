@@ -89,13 +89,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			route.router.transitionTo("shell", encodeURI(uri))
 			break
 		case "createScripts":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: createScriptsEventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: createScriptNoticeCallback
-			})
 			if (params) {
 				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 				const accessToken = route.cookies.read("access_token")
@@ -113,6 +106,13 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					)}`
 					route.router.transitionTo("shell", preUrl)
 				} else {
+					route.noticeService.defineAction({
+						type: "iot",
+						id: createScriptsEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: createScriptNoticeCallback
+					})
 					if (params.outputs[0].id == "") {
 						//没有id要先创建dataset
 						params.outputs[0].id = uuid

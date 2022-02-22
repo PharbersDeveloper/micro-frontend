@@ -85,7 +85,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			console.log("submit event to parent")
 	}
 
-	function callback(param, payload) {
-		console.log(payload)
-	}
+	// function callback(param, payload) {
+	// 	console.log(payload)
+	// }
 }
