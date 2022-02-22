@@ -13,7 +13,11 @@
                             </div>
                         </div>
                         <div class="right">
-                            <button @click="dialogStart = true">启动资源</button>
+                            <button 
+								@click="dialogStart = true" 
+								v-if="allData.showStartButton && showStartButton">启动资源
+							</button>
+							<span v-if="!showStartButton || !allData.showStartButton">已启动</span>
                         </div>
                     </div>
                     <div class="items">
@@ -158,6 +162,26 @@
                 <el-button type="primary" @click="on_clickStartConfirm">确认</el-button>
             </span>
         </el-dialog>
+		<el-dialog
+                title="启动成功"
+                :visible.sync="dialogStartSucceed"
+                width="460px">
+            <span>资源启动成功</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogStartSucceed = false">取消</el-button>
+                <el-button type="primary" @click="dialogStartSucceed = false">确认</el-button>
+            </span>
+        </el-dialog>
+		<el-dialog
+                title="启动失败"
+                :visible.sync="dialogStartFailed"
+                width="460px">
+            <span>资源启动异常，请联系管理员。</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogStartFailed = false">取消</el-button>
+                <el-button type="primary" @click="dialogStartFailed = false">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -191,7 +215,10 @@ export default {
             actions: [],
             actionsShow: [],
             actionsKey: "",
-            dialogStart: false
+            dialogStart: false,
+            showStartButton: true,
+            dialogStartSucceed: false,
+            dialogStartFailed: false
         }
     },
     components: {
@@ -199,7 +226,7 @@ export default {
         ElButton
     },
     async mounted() {
-        const accessToken = this.getCookie("access_token") || "1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
+        const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
@@ -251,6 +278,7 @@ export default {
                 }
             }
             this.$emit('event', event)
+            this.dialogStart = false
         },
         dealActions() {
             this.actions.data.map(mapItem => {
@@ -301,7 +329,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
+            const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",
@@ -529,6 +557,11 @@ export default {
                     border: none;
                     cursor: pointer;
                 }
+				span {
+					font-size: 14px;
+					color: #7163C5;
+					font-weight: 500;
+				}
             }
         }
     }

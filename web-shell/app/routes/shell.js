@@ -12,6 +12,8 @@ export default class ShellRoute extends Route {
 	@service("remote-loading") jsl
 	@service("route-parse") rps
 	@service("ph-menu") ms
+	@service('loading') loadingService
+	@service("execution-status") noticeService
 
 
 	beforeModel(transition){

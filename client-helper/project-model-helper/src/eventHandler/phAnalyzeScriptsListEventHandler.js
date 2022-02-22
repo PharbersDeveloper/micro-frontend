@@ -381,7 +381,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					: "删除脚本失败，请重新操作！"
 			alert(msg)
 		}
-		this.loadingService.loading.style.display = "none"
+		route.loadingService.loading.style.display = "none"
 	}
 
 	function createScriptNoticeCallback(param, payload) {
@@ -422,7 +422,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					: "清除数据失败，请重新操作！"
 			alert(msg)
 		}
-		this.loadingService.loading.style.display = "none"
+		route.loadingService.loading.style.display = "none"
 	}
 
 	function guid() {

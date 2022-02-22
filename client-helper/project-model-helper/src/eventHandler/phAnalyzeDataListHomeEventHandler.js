@@ -50,20 +50,21 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			console.log(params)
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
-			// route.noticeService.defineAction({
-			// 	type: "iot",
-			// 	id: "startResource",
-			// 	projectId: params.projectId,
-			// 	ownerId: "*",
-			// 	callBack: callback
-			// })
+			route.noticeService.defineAction({
+				type: "iot",
+				id: "resource_create",
+				projectId: params.projectId,
+				ownerId: "*",
+				callBack: callback
+			})
 			if (params) {
 				let body = {
 					projectName: params.projectName,
 					projectId: params.projectId,
 					content_type: "start",
 					owner: route.cookies.read("account_id"),
-					showName: decodeURI(route.cookies.read("user_name_show"))
+					showName: decodeURI(route.cookies.read("user_name_show")),
+					operation_type: "operate_resource"
 				}
 				let options = {
 					method: "POST",
@@ -85,7 +86,15 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			console.log("submit event to parent")
 	}
 
-	// function callback(param, payload) {
-	// 	console.log(payload)
-	// }
+	function callback(param, payload) {
+		console.log(payload)
+		const { status } = JSON.parse(payload)
+		if (status == "succeed") {
+			e.detail[0].args.element.dialogStartSucceed = true //成功弹窗
+			e.detail[0].args.element.showStartButton = false //按钮disabled
+		} else if (status == "failed") {
+			e.detail[0].args.element.dialogStartFailed = true //失败弹窗
+		}
+		route.loadingService.loading.style.display = "none"
+	}
 }
