@@ -48,14 +48,14 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		case "startResource":
 			console.log(params)
-			// route.loadingService.loading.style.display = "flex"
-			// route.loadingService.loading.style["z-index"] = 2
+			route.loadingService.loading.style.display = "flex"
+			route.loadingService.loading.style["z-index"] = 2
 			// route.noticeService.defineAction({
 			// 	type: "iot",
 			// 	id: "startResource",
 			// 	projectId: params.projectId,
-			// 	ownerId: route.cookies.read("account_id"),
-			// 	callBack: clearTagsNoticeCallback
+			// 	ownerId: "*",
+			// 	callBack: callback
 			// })
 			if (params) {
 				let body = {
@@ -83,5 +83,9 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		default:
 			console.log("submit event to parent")
+	}
+
+	function callback(param, payload) {
+		console.log(payload)
 	}
 }
