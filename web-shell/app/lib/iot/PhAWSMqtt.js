@@ -11,7 +11,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
     let timeoutId = null;
     let use_cache = [];
     const topic = config.topic;
-    const client_id = config.client_id;
+    const client_id = new Date().getTime()// config.client_id;
     const endpoint = config.endpoint;
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
