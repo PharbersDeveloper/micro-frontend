@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import histogram from './components/histograme.vue'
+import histogram from './components/histogram.vue'
 
 export default {
     name: 'App',
