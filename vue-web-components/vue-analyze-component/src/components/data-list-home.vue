@@ -210,7 +210,8 @@ export default {
                 "max1.0": "创建了数据集",
                 "remove_DS": "删除了数据集",
                 "upload": "创建了数据集",
-                "dag_create": "创建了脚本"
+                "dag_create": "创建了脚本",
+                "resource_create": "启动了资源"
             },
             actions: [],
             actionsShow: [],
@@ -380,10 +381,12 @@ export default {
         //操作对象的名称
         showActionName(data) {
             let msg = JSON.parse(data)
-            if(Array.isArray(msg)) {
+            if (Array.isArray(msg)) {
                 return msg[0].actionName
-            } else if(msg.actionName) {
+            } else if (msg.actionName) {
                 return msg.actionName
+            } else if (!msg.actionName) {
+                return msg.projectName
             } else {
                 return "undefined"
             }
