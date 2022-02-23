@@ -57,9 +57,9 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
 			if (params) {
-				let checked = checkStartResourceFun()
+				let checked = await checkStartResourceFun()
 				if (checked) {
-					console.log("啥也不是。重新注册")
+					console.log("判断完了，closed，重新注册")
 					route.noticeService.defineAction({
 						type: "iot",
 						id: "resource_create",
@@ -135,6 +135,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		)
 		console.log("判断是否启动：", startResults)
 		if (startResults.data.resource_status === "starting") {
+			console.log("starting")
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
 			route.noticeService.defineAction({
@@ -147,9 +148,10 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			return false
 		} else if (startResults.data.resource_status === "started") {
 			e.detail[0].args.element.showStartButton = false //按钮disabled
+			route.loadingService.loading.style.display = "none"
 			return false
 		}
-		console.log("啥也不是")
+		console.log("closed,我要重新注册")
 		return true
 	}
 }

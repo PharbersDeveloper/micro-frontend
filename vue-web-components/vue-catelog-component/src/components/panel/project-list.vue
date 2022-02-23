@@ -11,8 +11,8 @@
                     <div class="project-list-header">
                         <bp-text>DAG 名称</bp-text>
                         <div class="opt-icon">
-                            <bp-text v-if="toggle">更新时间</bp-text>
-                            <div class="icon">
+                            <bp-text class="update_time" v-if="toggle">更新时间</bp-text>
+                            <!-- <div class="icon">
                                 <div @click="toggleClickCard">
                                     <bp-img :src="cardIcon"  v-if="toggle"></bp-img>
                                 </div>
@@ -25,6 +25,13 @@
                                 <div @click="toggleClickList">
                                     <bp-img :src="listIcon" v-if="!toggle"></bp-img>
                                 </div>
+                            </div> -->
+                            <div class="opt">
+                                <bp-select-vue class="select_opt" :src="selectIcon" choosedValue="操作" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                                    <bp-option-vue class="schema-select-item" text="新建项目" :src="addIcon" @click="buildProject"></bp-option-vue>
+                                    <bp-option-vue class="schema-select-item" text="缩略图" :src="cardIcon" @click="toggleClickCard"></bp-option-vue>
+                                    <bp-option-vue class="schema-select-item" text="详细信息" :src="listIcon" @click="toggleClickList"></bp-option-vue>
+                                </bp-select-vue>
                             </div>
                         </div>
                     </div>
@@ -62,21 +69,27 @@
 <script>
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
-
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     components: {
         bpText,
-        bpImg
+        bpImg,
+        bpSelectVue,
+        bpOptionVue
     },
     data() {
         return {
             title: "工作平台",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dag+list.svg",
-            cardIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_initial.svg",
-            listIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_list_initial.svg",
+            addIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0(1).svg",
+            cardIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%BC%A9%E7%95%A5%E5%9B%BE.svg",
+            listIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA.svg",
             listIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_list_slelect.svg",
+            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             cardIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_slelect.svg",
-            toggle: false
+            toggle: false,
+            closeTosts: false
         }
     },
     props: {
@@ -107,6 +120,12 @@ export default {
         }
     },
     methods: {
+        showSelectOption(data) {
+            console.log(data)
+        },
+        buildProject() {
+
+        },
         toggleClickCard() {
             this.toggle = false
         },
@@ -206,11 +225,26 @@ export default {
                         display: flex;
                         justify-content: flex-end;
                         align-items: center;
+                        .opt {
+                            width: 110px;
+                        }
                         .icon {
                             display: flex;
                             cursor: pointer;
                             width: 110px;
                             justify-content: flex-end;
+                        }
+                        .select_opt {
+                            width: 79px;
+                            height: 21px;
+                            background: #FFFFFF;
+                            border: 0.5px solid rgba(0,0,0,1);
+                            float: right;
+                            /deep/ .svg-icon {
+                                width: 12px;
+                                height: 12px;
+                                margin-right: 5px;
+                            }
                         }
                     }
                 }
