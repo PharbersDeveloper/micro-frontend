@@ -2,6 +2,9 @@
 export async function phAnalyzeScriptsListEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = "projects"
+	const createScriptsEventName = "createScripts"
+	const deleteDatasetsEventName = "deleteDatasets"
+	const clearTagsEventName = "clearTags"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "localUpload") {
@@ -86,15 +89,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			route.router.transitionTo("shell", encodeURI(uri))
 			break
 		case "createScripts":
-			route.noticeService.defineAction({
-				type: "iot",
-				// id: results[0].data.id,
-				ele: route,
-				id: "createScripts",
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: createScriptNoticeCallback
-			})
 			if (params) {
 				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 				const accessToken = route.cookies.read("access_token")
@@ -112,6 +106,13 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					)}`
 					route.router.transitionTo("shell", preUrl)
 				} else {
+					route.noticeService.defineAction({
+						type: "iot",
+						id: createScriptsEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: createScriptNoticeCallback
+					})
 					if (params.outputs[0].id == "") {
 						//没有id要先创建dataset
 						params.outputs[0].id = uuid
@@ -176,7 +177,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 								route.cookies.read("user_name_show")
 							),
 							code: 0,
-							jobDesc: "created",
+							jobDesc: createScriptsEventName,
 							jobCat: "dag_create",
 							comments: "",
 							date: String(new Date().getTime()),
@@ -247,12 +248,10 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 		case "deleteDatasets":
 			route.noticeService.defineAction({
 				type: "iot",
-				// id: results[0].data.id,
-				ele: route,
-				id: "deleteDatasets",
+				id: deleteDatasetsEventName,
 				projectId: params.projectId,
 				ownerId: route.cookies.read("account_id"),
-				callBack: noticeCallback
+				callBack: deleteDatasetsNoticeCallback
 			})
 			if (params) {
 				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
@@ -276,7 +275,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						code: 0,
 						comments: "delete_dataset",
 						jobCat: "remove_Job",
-						jobDesc: "running",
+						jobDesc: deleteDatasetsEventName,
 						message: JSON.stringify(msgArr),
 						date: String(new Date().getTime()),
 						owner: route.cookies.read("account_id"),
@@ -299,19 +298,15 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					body: JSON.stringify(body)
 				}
 				await fetch(urldel, options).then((res) => res.json())
-				alert("删除脚本成功！")
-				window.location.reload()
 			}
 			break
 		case "clearTags":
 			route.noticeService.defineAction({
 				type: "iot",
-				// id: results[0].data.id,
-				ele: route,
-				id: "deleteDatasets",
+				id: clearTagsEventName,
 				projectId: params.projectId,
 				ownerId: route.cookies.read("account_id"),
-				callBack: noticeCallback
+				callBack: clearTagsNoticeCallback
 			})
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
@@ -341,7 +336,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 							code: 0,
 							comments: "clear_dataset_tags",
 							jobCat: "clear_DS_data",
-							jobDesc: "running",
+							jobDesc: clearTagsEventName,
 							message: JSON.stringify(msg),
 							date: String(new Date().getTime()),
 							owner: route.cookies.read("account_id"),
@@ -364,61 +359,70 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					promiseList.push(result)
 				})
 				await Promise.all(promiseList)
-				alert("清除数据成功！")
-				window.location.reload()
 			}
 			break
 		default:
 			console.log("other click event!")
 	}
 
-	function createScriptNoticeCallback(param, payload) {
-		console.log(payload)
+	function deleteDatasetsNoticeCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "succeed") {
+			alert("删除脚本成功！")
+			window.location.reload()
+		} else if (status == "failed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
+			let msg =
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
+					: "删除脚本失败，请重新操作！"
+			alert(msg)
+		}
 		route.loadingService.loading.style.display = "none"
-		let cnotification = JSON.parse(
-			JSON.parse(payload).message
-		).cnotification
-		let create_scripts_status = cnotification.status
-		let error =
-			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		if (create_scripts_status == "dag insert success") {
+	}
+
+	function createScriptNoticeCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error, jobName, jobPath }
+		} = JSON.parse(message)
+		if (status == "succeed") {
 			alert("新建脚本成功！")
-			let jobName = cnotification.jobName
-			let jobPath = cnotification.jobPath
 			route.router.transitionTo(
 				"shell",
 				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&jobPath=${jobPath}`
 			)
-		} else {
+		} else if (status == "failed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
-				error["message"]["zh"] !== ""
-					? error["message"]["zh"]
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
 					: "新建脚本失败，请重新操作！"
 			alert(msg)
 		}
+		route.loadingService.loading.style.display = "none"
 	}
 
-	function noticeCallback(param, payload) {
-		let cnotification = JSON.parse(
-			JSON.parse(payload).message
-		).cnotification
-		let upload_status = cnotification.status
-		let error =
-			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		if (upload_status == "project_file_to_DS_succeed") {
-			//跳转下一页面
-			this.router.transitionTo(
-				"shell",
-				`dataset-lst?projectName=${this.tranParam.projectName}&projectId=${this.tranParam.projectId}`
-			)
-		} else if (upload_status == "project_file_to_DS_failed") {
+	function clearTagsNoticeCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "succeed") {
+			alert("清除数据成功！")
+			window.location.reload()
+		} else if (status == "failed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
-				error["message"]["zh"] !== ""
-					? error["message"]["zh"]
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
 					: "清除数据失败，请重新操作！"
 			alert(msg)
 		}
-		this.loadingService.loading.style.display = "none"
+		route.loadingService.loading.style.display = "none"
 	}
 
 	function guid() {

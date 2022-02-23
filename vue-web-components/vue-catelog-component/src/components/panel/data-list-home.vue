@@ -1,23 +1,13 @@
 <template>
     <div class="data-list-home">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="data-home-container">
                <div class="content">  
                 <div class="left-area">
                     <div class="projectInfo">
-                        <div class="left">
-                            <div class="color"></div>
-                            <div class="project_Information">
-                                <p class="project_name">{{allData.projectDetail.name}}</p>
-                                <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <button 
-								@click="dialogStart = true" 
-								v-if="showStartButton">启动资源
-							</button>
-							<span v-if="!showStartButton">已启动</span>
+                        <div class="color"></div>
+                        <div class="project_Information">
+                            <p class="project_name">{{allData.projectDetail.name}}</p>
+                            <p class="project_info">{{allData.projectDetail.provider}} , {{formatDateStandard(allData.projectDetail.created, 0)}}</p>
                         </div>
                     </div>
                     <div class="items">
@@ -124,8 +114,8 @@
                     <div class="hearder">
                         <p>时间线</p>
                     </div>
-                    <div class="actions" @scroll="scrollGet($event)">
-                        <div class="actions_list" v-for="(item, index) in actionsShow" :key="index+'actionsShow'">
+                    <div class="actions">
+                        <div class="actions_list" v-for="(item, index) in actions" :key="index+'actions'">
                             <div class="center">
                                 <p>{{formatDateStandard(item.date, 2)}}</p>
                             </div>
@@ -152,42 +142,10 @@
                 </div>
             </div>
         </div>
-        <el-dialog
-                title="启动资源"
-                :visible.sync="dialogStart"
-                width="460px">
-            <span>是否确认启动资源？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogStart = false">取消</el-button>
-                <el-button type="primary" @click="on_clickStartConfirm">确认</el-button>
-            </span>
-        </el-dialog>
-		<el-dialog
-                title="启动成功"
-                :visible.sync="dialogStartSucceed"
-                width="460px">
-            <span>资源启动成功</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogStartSucceed = false">取消</el-button>
-                <el-button type="primary" @click="dialogStartSucceed = false">确认</el-button>
-            </span>
-        </el-dialog>
-		<el-dialog
-                title="启动失败"
-                :visible.sync="dialogStartFailed"
-                width="460px">
-            <span>资源启动异常，请联系管理员。</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogStartFailed = false">取消</el-button>
-                <el-button type="primary" @click="dialogStartFailed = false">确认</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-import ElDialog from 'element-ui/packages/dialog/src/component'
-import ElButton from 'element-ui/packages/button/index'
 export default {
     data() {
         return {
@@ -209,65 +167,72 @@ export default {
                 "project_file_to_DS": "导入了数据",
                 "max1.0": "创建了数据集",
                 "remove_DS": "删除了数据集",
-                "upload": "创建了数据集",
-                "dag_create": "创建了脚本",
-                "resource_create": "启动了资源"
+                "upload": "创建了数据集"
             },
-            actions: [],
-            actionsShow: [],
-            actionsKey: "",
-            dialogStart: false,
-            showStartButton: true,
-            dialogStartSucceed: false,
-            dialogStartFailed: false
+            actions: []
         }
     },
-    components: {
-        ElDialog,
-        ElButton
+    watch: {
+        "allData.actionsArr": function() {
+            this.allData.actionsArr.map(mapItem => {
+                if(mapItem.attributes["job-cat"] === "dag_refresh") {
+                    return false
+                }
+                // 第一条数据直接存入actions数组
+                if(this.actions.length === 0) {
+                    this.actions.push({
+                        date: Number(mapItem.attributes.date),
+                        list: [mapItem]
+                    })
+                } else {
+                    // 判断当前数据的date在actions数组中是否已经存在
+                    let res = this.actions.some(item => {
+                        let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
+                        if(checkDate) {
+                            item.list.push(mapItem)
+                            return true
+                        }
+                    })
+                    // 若不存在则在actions中存入新的按时间分类的数组
+                    if(!res) {
+                        this.actions.push({
+                            date: Number(mapItem.attributes.date),
+                            list: [mapItem]
+                        })
+                    }
+                }
+            })
+        }
     },
-    async mounted() {
-        //actions数据
-        const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
-        const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
-        // href param
-        const href = window.location.href.split("?")[1]
-        console.log(href)
-        const hrefParam = href.split("&")
-        let projectId = hrefParam[1].split("=")[1]
-        let projectName = hrefParam[0].split("=")[1]
-        let acbody = {
-            "table": "action",
-            "conditions": {
-                "projectId": ["=", projectId]
-            },
-            "limit": 10,
-            "start_key": ""
-        }
-        let acoptions = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/json; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(acbody)
-        }
-        this.actions = await fetch(acurl, acoptions).then(res=>res.json())
-        this.actionsKey = this.actions.meta.start_key
-        this.dealActions() //处理actions数据
-
-        // 判断启动资源
-        const event = new Event("event")
-        event.args = {
-            callback: "checkStartResource",
-            element: this,
-            param: {
-                projectName: projectName,
-                projectId: projectId
-            }
-        }
-        this.$emit('event', event)
+    mounted() {
+        // this.allData.actionsArr.map(mapItem => {
+        //     if(mapItem.attributes["job-cat"] === "dag_refresh") {
+        //         return false
+        //     }
+        //     // 第一条数据直接存入actions数组
+        //     if(this.actions.length === 0) {
+        //         this.actions.push({
+        //             date: Number(mapItem.attributes.date),
+        //             list: [mapItem]
+        //         })
+        //     } else {
+        //         // 判断当前数据的date在actions数组中是否已经存在
+        //         let res = this.actions.some(item => {
+        //             let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
+        //             if(checkDate) {
+        //                 item.list.push(mapItem)
+        //                 return true
+        //             }
+        //         })
+        //         // 若不存在则在actions中存入新的按时间分类的数组
+        //         if(!res) {
+        //             this.actions.push({
+        //                 date: Number(mapItem.attributes.date),
+        //                 list: [mapItem]
+        //             })
+        //         }
+        //     }
+        // })
     },
     props: {
         allData: {
@@ -276,98 +241,14 @@ export default {
                 return {
                     "projectDetail": {},
                     "numShow": {},
-                    "projectName": "",
-                    "projectId": ""
+                    "actionsArr": [],
+                    "projectName": "ETL_Iterator",
+                    "projectId": "JfSmQBYUpyb4jsei"
                 }
             }
         }
     },
     methods: {
-        on_clickStartConfirm() {
-            const event = new Event("event")
-            event.args = {
-                callback: "startResource",
-                element: this,
-                param: {
-                    projectName: this.allData.projectDetail.name,
-                    projectId: this.allData.projectDetail.id
-                }
-            }
-            this.$emit('event', event)
-            this.dialogStart = false
-        },
-        dealActions() {
-            this.actions.data.map(mapItem => {
-                //过滤掉dag_refresh
-                if(mapItem.attributes["job-cat"] === "dag_refresh") {
-                    return false
-                }
-                // 第一条数据直接存入actionsShow数组
-                if(this.actionsShow.length === 0) {
-                    this.actionsShow.push({
-                        date: Number(mapItem.attributes.date),
-                        list: [mapItem]
-                    })
-                } else {
-                    // 判断当前数据的date在actionsShow数组中是否已经存在
-                    let res = this.actionsShow.some(item => {
-                        let checkDate = this.isSameDay(item.date, Number(mapItem.attributes.date))
-                        if(checkDate) {
-                            item.list.push(mapItem)
-                            return true
-                        }
-                    })
-                    // 若不存在则在actionsShow中存入新的按时间分类的数组
-                    if(!res) {
-                        this.actionsShow.push({
-                            date: Number(mapItem.attributes.date),
-                            list: [mapItem]
-                        })
-                    }
-                }
-            })
-        },
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
-        },
-        //滚动
-        scrollGet(e) {
-            let scrollTop = e.target.scrollTop || document.body.scrollTop;
-            let clientHeight = e.target.clientHeight;
-            let scrollHeight = e.target.scrollHeight;
-            if (scrollTop + clientHeight >= scrollHeight) { 
-                //滚动到底部
-                this.getActions(this.actionsKey)
-            }
-        },
-        async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
-            const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
-            let acbody = {
-                "table": "action",
-                "conditions": {
-                    "projectId": ["=", this.allData.projectId]
-                },
-                "limit": 10,
-                "start_key": value
-            }
-            let acoptions = {
-                method: "POST",
-                headers: {
-                    "Authorization": accessToken,
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    "accept": "application/json"
-                },
-                body: JSON.stringify(acbody)
-            }
-            this.actions = await fetch(acurl, acoptions).then(res=>res.json())
-            this.actionsKey = this.actions.meta.start_key
-            this.dealActions() //处理actions数据
-        },
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
@@ -381,12 +262,10 @@ export default {
         //操作对象的名称
         showActionName(data) {
             let msg = JSON.parse(data)
-            if (Array.isArray(msg)) {
+            if(Array.isArray(msg)) {
                 return msg[0].actionName
-            } else if (msg.actionName) {
+            } else if(msg.actionName) {
                 return msg.actionName
-            } else if (!msg.actionName) {
-                return msg.projectName
             } else {
                 return "undefined"
             }
@@ -478,35 +357,11 @@ export default {
     padding: 0;
     box-sizing: border-box;
 }
-/deep/.el-dialog__header {
-    border-bottom: 1px solid #ccc;
-}
-/deep/.el-dialog__headerbtn {
-    display: none;
-}
-/deep/.el-dialog__wrapper {
-    background: rgba(0, 0, 0, 0.31);
-}
 .data-home-container {
+    
     height: calc(100vh - 40px);
     width: 100vw;
     background: #f2f2f2;
-    
-    .dataset_header {
-        height: 48px;
-        background: #ffffff;
-        border-bottom: 1px solid #dddddd;
-        margin: 0 !important;
-        color: #333333;
-        display: flex;
-        padding: 0 20px;
-        align-items: center;
-        .script_icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-    }
     .content {
         display: flex;
     }
@@ -536,10 +391,6 @@ export default {
             border: 1px solid #ddd;
             margin-left: 20px;
             margin-top: 25px;
-            justify-content: space-between;
-            .left {
-                display: flex
-            }
             .color {
                 width: 80px;
                 height: 100%;
@@ -561,25 +412,6 @@ export default {
                     color: #000000;
                     font-weight: 500;
                 }
-            }
-            .right {
-                display: flex;
-                padding-top: 20px;
-                padding-right: 20px;
-                button {
-                    min-width: 80px;
-                    height: 32px;
-                    background: #5342B3;
-                    border-radius: 2px;
-                    color: white;
-                    border: none;
-                    cursor: pointer;
-                }
-				span {
-					font-size: 14px;
-					color: #7163C5;
-					font-weight: 500;
-				}
             }
         }
     }

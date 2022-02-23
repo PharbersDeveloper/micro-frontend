@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	let debugToken =
-		"1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
+		"57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
 	let numShow = {}
 	let promiseList = []
 	// project基本信息
@@ -16,7 +16,6 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 		tableName: "dataset",
 		projectId: parseParams.param.project_id
 	}
-
 	let options = {
 		method: "POST",
 		headers: {
@@ -26,9 +25,12 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 		},
 		body: JSON.stringify(body)
 	}
+
+	//数量
 	const nums = fetch(url, options).then((res) => res.json())
 	promiseList.push(projectDetail, nums)
 	let results = await Promise.all(promiseList)
+	let projectDetailData = results[0]
 	let numsArr = results[1]
 	numShow.dataset = numsArr.dataset ? numsArr.dataset : 0
 	numShow.flow = numsArr.dagconf ? numsArr.dagconf : 0
@@ -37,12 +39,6 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	numShow.notebook = numsArr.notebooks ? numsArr.length : 0
 	numShow.dashBoard = numsArr.dashBoards ? numsArr.length : 0
 	numShow.wiki = numsArr.wiki ? numsArr.length : 0
-	this.afterModel = function () {
-		if (this.loadingService.afterLoading) {
-			this.loadingService.loading.style.display = "none"
-		}
-	}
-	let projectDetailData = results[0]
 	return {
 		projectDetail: projectDetailData,
 		projectName: projectDetailData.name,

@@ -35,14 +35,6 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 			route.router.transitionTo(uri)
 			break
 		case "prepare":
-			route.noticeService.defineAction({
-				type: "iot",
-				ele: route,
-				id: "prepare",
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: createScriptNoticeCallback
-			})
 			if (params) {
 				let scriptsParams = JSON.parse(
 					unescape(decodeURI(params.message))
@@ -142,6 +134,13 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 					}
 					job_cat_name = "dag_create"
 				}
+				route.noticeService.defineAction({
+					type: "iot",
+					id: job_cat_name,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: createScriptNoticeCallback
+				})
 				let scriptBody = {
 					table: "action",
 					item: {
@@ -151,7 +150,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 							route.cookies.read("user_name_show")
 						),
 						code: 0,
-						jobDesc: "created",
+						jobDesc: job_cat_name,
 						jobCat: job_cat_name,
 						comments: "",
 						date: String(new Date().getTime()),
@@ -189,24 +188,24 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 	}
 
 	function createScriptNoticeCallback(param, payload) {
-		let cnotification = JSON.parse(
-			JSON.parse(payload).message
-		).cnotification
-		let create_scripts_status = cnotification.status
-		let error =
-			cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		route.loadingService.loading.style.display = "none"
-		if (create_scripts_status == "dag insert success") {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "succeed") {
 			alert(`${route.msg}脚本成功！`)
 			route.router.transitionTo(
-				`/flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+				"shell",
+				`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
 			)
 		} else {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
-				error["message"]["zh"] !== ""
-					? error["message"]["zh"]
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
 					: `${route.msg}脚本失败，请重新操作！`
 			alert(msg)
 		}
+		route.loadingService.loading.style.display = "none"
 	}
 }

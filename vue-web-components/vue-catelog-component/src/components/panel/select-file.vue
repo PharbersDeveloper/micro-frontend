@@ -37,10 +37,7 @@
                         </div>
                         <div class="item">
                             <span>文件路径:</span>
-                            <input type="text"
-								v-model="filePath" 
-								class="filepath" 
-								placeholder="2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/test.xlsx">
+                            <input type="text" placeholder="" v-model="filePath" class="filepath">
                         </div>
                         <div class="item">
                             <span class="title">格式:</span>
@@ -63,8 +60,8 @@
 
 <script>
 import nextDialog from './next-dialog'
-import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 
 export default {
     data() {
