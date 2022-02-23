@@ -46,6 +46,47 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			//执行列表 分页
 			route.router.transitionTo("shell", uri)
 			break
+		case "checkStartResource":
+			if (params) {
+				console.log("checkStartResource")
+				const startUrl = "https://apiv2.pharbers.com/phresourceaction"
+				let startBody = {
+					projectName: params.projectName,
+					projectId: params.projectId,
+					content_type: "start",
+					owner: route.cookies.read("account_id"),
+					showName: decodeURI(route.cookies.read("user_name_show")),
+					operation_type: "get_status"
+				}
+				let startOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(startBody)
+				}
+				const startResults = await fetch(startUrl, startOptions).then(
+					(res) => res.json()
+				)
+				console.log("判断是否启动：", startResults)
+				if (startResults.data.resource_status === "starting") {
+					route.loadingService.loading.style.display = "flex"
+					route.loadingService.loading.style["z-index"] = 2
+					route.noticeService.defineAction({
+						type: "iot",
+						id: "resource_create",
+						projectId: params.projectId,
+						ownerId: "*",
+						callBack: callback
+					})
+				} else if (startResults.data.resource_status === "started") {
+					e.detail[0].args.element.showStartButton = false //按钮disabled
+				}
+			}
+			break
 		case "startResource":
 			console.log(params)
 			route.loadingService.loading.style.display = "flex"

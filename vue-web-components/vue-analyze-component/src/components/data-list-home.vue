@@ -15,9 +15,9 @@
                         <div class="right">
                             <button 
 								@click="dialogStart = true" 
-								v-if="allData.showStartButton && showStartButton">启动资源
+								v-if="showStartButton">启动资源
 							</button>
-							<span v-if="!showStartButton || !allData.showStartButton">已启动</span>
+							<span v-if="!showStartButton">已启动</span>
                         </div>
                     </div>
                     <div class="items">
@@ -226,12 +226,15 @@ export default {
         ElButton
     },
     async mounted() {
+        //actions数据
         const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
+        console.log(href)
         const hrefParam = href.split("&")
         let projectId = hrefParam[1].split("=")[1]
+        let projectName = hrefParam[0].split("=")[1]
         let acbody = {
             "table": "action",
             "conditions": {
@@ -252,6 +255,18 @@ export default {
         this.actions = await fetch(acurl, acoptions).then(res=>res.json())
         this.actionsKey = this.actions.meta.start_key
         this.dealActions() //处理actions数据
+
+        // 判断启动资源
+        const event = new Event("event")
+        event.args = {
+            callback: "checkStartResource",
+            element: this,
+            param: {
+                projectName: projectName,
+                projectId: projectId
+            }
+        }
+        this.$emit('event', event)
     },
     props: {
         allData: {
