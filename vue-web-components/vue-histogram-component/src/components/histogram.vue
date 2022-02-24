@@ -1,167 +1,122 @@
 <template>
-    <div class="viewport" ref="viewport">
-        <div ref="chart" class="chart"></div>
+    <div class="viewport" ref="viewport" :style="viewportStyle()">
+        <div ref="chart" class="chart" ></div>
     </div>
 </template>
 <script>
 import * as d3_base from "d3";
 import PhHistogramDatasource from "./model/datasource"
+import PhHistogramSchema from "./model/schema"
+import BarPolicy from "./render-policy/bar-policy"
 
 export default {
+    props: {
+        d3: {
+            type: Object,
+            default: function () {
+                return Object.assign({}, d3_base)
+            }
+        },
+        initWidth: {
+            type: Number,
+            default: 1000
+        },
+        initHeight: {
+            type: Number,
+            default: 600
+        },
+        initPolicy: {
+            type: Object,
+            default: function () {
+                return null
+            }
+        }
+    },
     data: () => {
         return {
             name: "histogram",
-            needRefresh: 0
+            schemaIsReady: 0,
+            dataIsReady: 0,
+            needRefresh: 0,
+            policy: null,
+            width: 1000,
+            height: 600
         }
     },
     components: {
 
     },
-    props: {
-        datasource: {
-            type: Object,
-            default: function() {
-                return new PhHistogramDatasource('1')
-            }
-        },
-        d3: {
-        	type: Object,
-            default: function() {
-            	return Object.assign({}, d3_base)
-            }
+    mounted () {
+        // this.policy = new BarPolicy('1', this.datasource, this.schema,
+        //     { width: this.width, height: this.height, xProperty: this.xProperty, yProperty: this.yProperty })
+        this.width = this.initWidth
+        this.height = this.initHeight
+        if (this.initPolicy) {
+            this.resetPolicy(this.initPolicy)
         }
     },
-    mounted () {
-        this.initChart()
-    },
-    destroyed () {
-        // 注意移除监听！注意移除监听！注意移除监听！
-        // window.removeEventListener('message', this.handleMessage)
-    },
     methods: {
-        async initChart () {
-            // 初始化echarts实例
-            await this.datasource.refreshData(this)
-            // 发布前解注
-            // document.domain = "pharbers.com"
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         },
-
         // 监听屏幕大小改变
         bindChangeWindow () {
             window.onresize = () => {
                 if (this.timer) return
 
                 this.timer = setTimeout(() => {
-                    this.dag.resize()
+                    this.resizeHandler()
                     this.timer = null
                 }, 100)
             }
         },
 
-        renderBarChart (data, {
-	        x = (d, i) => i, // given d in data, returns the (ordinal) x-value
-	        y = d => d, // given d in data, returns the (quantitative) y-value
-	        title, // given d in data, returns the title text
-	        marginTop = 20, // the top margin, in pixels
-	        marginRight = 0, // the right margin, in pixels
-	        marginBottom = 30, // the bottom margin, in pixels
-	        marginLeft = 40, // the left margin, in pixels
-	        width = 640, // the outer width of the chart, in pixels
-	        height = 400, // the outer height of the chart, in pixels
-	        xDomain, // an array of (ordinal) x-values
-	        xRange = [marginLeft, width - marginRight], // [left, right]
-	        yType = this.d3.scaleLinear, // y-scale type
-	        yDomain, // [ymin, ymax]
-	        yRange = [height - marginBottom, marginTop], // [bottom, top]
-	        xPadding = 0.1, // amount of x-range to reserve to separate bars
-	        yFormat, // a format specifier string for the y-axis
-	        yLabel, // a label for the y-axis
-	        color = "currentColor" // bar fill color
-        } = {}) {
-            const that = this
+        viewportStyle() {
+            return "width: " + this.width + "px; height: " + this.height + "px;"
+        },
 
-            if (data === null || data === undefined) {
-                data = this.datasource.data
+        resizeHandler(w, h) {
+            if (w) this.width = w
+            else this.width = this.$refs.viewport.offsetWidth
+
+            if (h) this.height = h
+            else this.height = this.$refs.viewport.offsetHeight
+
+            if (this.policy) {
+                this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
             }
-            const d3 = this.d3
+            this.needRefresh++
+        },
 
-	        // Compute values.
-	        const X = d3.map(data, x);
-	        const Y = d3.map(data, y);
+        render() {
+            this.d3.select(this.$refs.chart).selectAll("svg").remove()
+            this.policy.render(this.d3, this.policy.datasource.data, this.$refs.chart)
+        },
 
-	        // Compute default domains, and unique the x-domain.
-	        if (xDomain === undefined) xDomain = X;
-	        if (yDomain === undefined) yDomain = [0, d3.max(Y)];
-	        xDomain = new d3.InternSet(xDomain);
-
-	        // Omit any data not present in the x-domain.
-	        const I = d3.range(X.length).filter(i => xDomain.has(X[i]));
-
-	        // Construct scales, axes, and formats.
-	        const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
-	        const yScale = yType(yDomain, yRange);
-	        const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
-	        const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
-
-	        // Compute titles.
-	        if (title === undefined) {
-		        const formatValue = yScale.tickFormat(100, yFormat);
-		        title = i => `${X[i]}\n${formatValue(Y[i])}`;
-	        } else {
-		        const O = d3.map(data, d => d);
-		        const T = title;
-		        title = i => T(O[i], i, data);
-	        }
-
-	        const svg = d3.select(this.$refs.chart)
-                .append("svg")
-		        .attr("width", width)
-		        .attr("height", height)
-		        .attr("viewBox", [0, 0, width, height])
-		        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-
-	        svg.append("g")
-		        .attr("transform", `translate(${marginLeft},0)`)
-		        .call(yAxis)
-		        .call(g => g.select(".domain").remove())
-		        .call(g => g.selectAll(".tick line").clone()
-			        .attr("x2", width - marginLeft - marginRight)
-			        .attr("stroke-opacity", 0.1))
-		        .call(g => g.append("text")
-			        .attr("x", -marginLeft)
-			        .attr("y", 10)
-			        .attr("fill", "currentColor")
-			        .attr("text-anchor", "start")
-			        .text(yLabel));
-
-	        const bar = svg.append("g")
-		        .attr("fill", color)
-		        .selectAll("rect")
-		        .data(I)
-		        .join("rect")
-		        .attr("x", i => xScale(X[i]))
-		        .attr("y", i => yScale(Y[i]))
-		        .attr("height", i => yScale(0) - yScale(Y[i]))
-		        .attr("width", xScale.bandwidth())
-
-	        if (title) bar.append("title")
-		        .text(title);
-
-	        svg.append("g")
-		        .attr("transform", `translate(0,${height - marginBottom})`)
-		        .call(xAxis)
+        resetPolicy(p) {
+            if (p) {
+                this.policy = p
+                const that = this
+                this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
+                this.policy.refreshSchema(this).then(_ => {
+                    that.schemaIsReady++
+                })
+            }
         }
     },
     watch: {
+        schemaIsReady(n, o) {
+            this.policy.refreshData(this)
+        },
+        dataIsReady(n, o) {
+            this.render()
+        },
         needRefresh(n, o) {
-            this.renderBarChart(this.datasource.data, {
-                x: d => d.letter,
-                y: d => d.frequency,
-                xDomain: this.d3.groupSort(this.datasource.data, ([d]) => -d.frequency, d => d.letter), // sort by descending frequency
-                yFormat: "%",
-                yLabel: "↑ Frequency",
-                color: "steelblue"
-            })
+            this.render()
         }
     }
 }
