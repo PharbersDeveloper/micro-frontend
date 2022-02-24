@@ -46,6 +46,27 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			//执行列表 分页
 			route.router.transitionTo("shell", uri)
 			break
+		case "deleteProject":
+			console.log(params)
+			if (params) {
+				let uri = `https://apiv2.pharbers.com/phcreateproject/projects/${params.projectId}`
+				let results = await fetch(uri, {
+					method: "delete",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type": "application/vnd.api+json",
+						Accept: "application/vnd.api+json"
+					}
+				})
+				if (results.status === 204) {
+					alert("删除项目成功！")
+					window.location.href =
+						"https://general.pharbers.com/projects"
+				} else {
+					alert("删除失败！")
+				}
+			}
+			break
 		case "checkStartResource":
 			if (params) {
 				console.log("checkStartResource")
