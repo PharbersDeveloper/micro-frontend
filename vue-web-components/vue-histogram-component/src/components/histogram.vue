@@ -116,7 +116,9 @@ export default {
             this.render()
         },
         needRefresh(n, o) {
-            this.render()
+            if (this.policy.isReady()) {
+                this.render()
+            }
         }
     }
 }

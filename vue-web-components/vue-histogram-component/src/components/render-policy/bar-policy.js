@@ -187,4 +187,8 @@ export default class PhBarChartPolicy extends policy{
             return this.datasource.refreshPolicyData(ele, this.buildBarChartQueryString(), this.buildPolicySchema())
         }
     }
+
+    isReady() {
+        return this.xProperty && this.yProperty && this.datasource.data
+    }
 }

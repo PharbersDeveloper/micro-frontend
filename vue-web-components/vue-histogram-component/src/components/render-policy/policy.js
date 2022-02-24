@@ -25,4 +25,8 @@ export default class policy {
     refreshData() {
         throw new Error("not implement")
     }
+
+    isReady() {
+        throw new Error("not implement")
+    }
 }

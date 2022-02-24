@@ -7,10 +7,18 @@
                 </ul>
                 <input type="text" v-model="xProperty" />
                 <input type="text" v-model="yProperty" />
+                <input type="text" v-model="policyName" />
                 <input type="submit" @click="refresh" value="refresh" />
+                <span><b>============</b></span>
+                <input type="text" v-model="xProperty2" />
+                <input type="text" v-model="yProperty2" />
+                <input type="text" v-model="policyName2" />
+                <input type="submit" @click="refresh2" value="refresh2" />
             </div>
             <div class="content">
-                <dragable :init-x-property="xProperty" :init-y-property="yProperty" :init-policy="policy" ref="container" />
+<!--                <dragable :init-width="300" :init-height="100" :init-policy="policy" ref="container" />-->
+                <dragable :init-left=0 :init-top=0 :init-width=300 :init-height=500 :init-policy="policy" ref="container" />
+                <dragable :init-left=300 :init-top=100 :init-width=300 :init-height=500 :init-policy="policy2" ref="container2" />
             </div>
         </div>
     </div>
@@ -31,6 +39,13 @@ export default {
                 { xProperty: "标准省份名称", yProperty: "sales" }),
             xProperty: "标准省份名称",
             yProperty: "sales",
+            policyName: "bar",
+
+            policy2: new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+                { xProperty: "标准省份名称", yProperty: "sales" }),
+            xProperty2: "标准省份名称",
+            yProperty2: "sales",
+            policyName2: "bar",
             lst: ["标准省份名称", "标准城市名称", "date", "quarter", "year", "month", "doi", "标准通用名", "atc", "sales", "units", "version", "provider", "owner"]
         }
     },
@@ -40,9 +55,22 @@ export default {
     },
     methods: {
         refresh() {
+            if (this.policy.name !== this.policyName) {
+
+            }
+
             this.policy.xProperty = this.xProperty
             this.policy.yProperty = this.yProperty
             this.$refs.container.resetPolicy(this.policy)
+        },
+        refresh2() {
+            if (this.policy2.name !== this.policyName2) {
+
+            }
+
+            this.policy2.xProperty = this.xProperty2
+            this.policy2.yProperty = this.yProperty2
+            this.$refs.container2.resetPolicy(this.policy2)
         }
     }
 }
