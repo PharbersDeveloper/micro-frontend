@@ -1,5 +1,6 @@
 <template>
     <div class="my-data-content-container">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="header">
             <span class="header-large">
                 {{title}}
@@ -28,7 +29,7 @@
                             </div> -->
                             <div class="opt">
                                 <bp-select-vue class="select_opt" :src="selectIcon" choosedValue="操作" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                                    <bp-option-vue class="schema-select-item" text="新建项目" :src="addIcon" @click="buildProject"></bp-option-vue>
+                                    <bp-option-vue class="schema-select-item" text="新建项目" :src="addIcon" @click="dialogCreateVisible = true"></bp-option-vue>
                                     <bp-option-vue class="schema-select-item" text="缩略图" :src="cardIcon" @click="toggleClickCard"></bp-option-vue>
                                     <bp-option-vue class="schema-select-item" text="详细信息" :src="listIcon" @click="toggleClickList"></bp-option-vue>
                                 </bp-select-vue>
@@ -63,20 +64,59 @@
                 </div>
             </template>
         </div>
+        <el-dialog
+            title="新建项目"
+            :visible.sync="dialogCreateVisible"
+            width="600px">
+            <div class="dlg-create-container">
+                <div class="name">
+                    <span>项目名称：</span>
+                    <el-input placeholder="搜索" v-model="projectNameValue" ref="project_name_value" @input="inputStrChecked(projectNameValue, 'project_name_value', 'projectNameValue')" class="search_row">
+                    </el-input>
+                </div>
+                <div class="deploy">
+                    <span>资源配置：</span>
+                    <div class="radio_area">
+                        <div class="radio_item">
+                            <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" checked>
+                            <input :value="singleValue" class="el-input__inner" type="text" name="" id="" placeholder="单机" disabled>
+                        </div>
+                        <div class="radio_item">
+                            <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" disabled>
+                            <input value="集群" class="el-input__inner" type="text" name="" id="" placeholder="集群" disabled>
+                        </div>
+                        <div class="radio_item">
+                            <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" disabled>
+                            <input value="企业定制" class="el-input__inner" type="text" name="" id="" placeholder="企业定制" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogCreateVisible = false">取消</el-button>
+                <el-button type="primary" @click="on_clickCreateConfirm">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
-    
 </template>
 <script>
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import ElButton from 'element-ui/packages/button/index'
+import ElInput from 'element-ui/packages/input/index'
+import ElDialog from 'element-ui/packages/dialog/src/component'
+
 export default {
     components: {
         bpText,
         bpImg,
         bpSelectVue,
-        bpOptionVue
+        bpOptionVue,
+        ElDialog,
+        ElButton,
+        ElInput
     },
     data() {
         return {
@@ -89,7 +129,10 @@ export default {
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             cardIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_slelect.svg",
             toggle: false,
-            closeTosts: false
+            closeTosts: false,
+            dialogCreateVisible: true,
+            projectNameValue: "",
+            singleValue: "单机"
         }
     },
     props: {
@@ -120,11 +163,19 @@ export default {
         }
     },
     methods: {
+        on_clickCreateConfirm(data) {
+            const event = new Event("event")
+            event.args = {
+                callback: "cerateProject",
+                element: this,
+                param: {
+                    name: this.projectNameValue
+                }
+            }
+            this.$emit('event', event)
+        },
         showSelectOption(data) {
             console.log(data)
-        },
-        buildProject() {
-
         },
         toggleClickCard() {
             this.toggle = false
@@ -143,6 +194,26 @@ export default {
                 }
             }
             this.$emit('event', event)
+        },
+        // 验证输入字符串时候的特殊字符
+        inputStrChecked(value, ref, name) {
+            // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
+            // 只允许输入数字、字母、汉字、下划线
+            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            if (r.test(value)) {
+                if(value.length > 30) {
+                    this.$refs[ref].value = ""
+                    this[name] = ""
+                    alert("输入内容过长！")
+                    return false;
+                }
+                return value
+            } else {
+                this.$refs[ref].value = ""
+                this[name] = ""
+                alert("请勿输入特殊字符！")
+                return false;
+            }
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
@@ -178,6 +249,15 @@ export default {
     * {
         box-sizing: border-box;
     }
+    /deep/.el-dialog__header {
+        border-bottom: 1px solid #ccc;
+    }
+    /deep/.el-dialog__headerbtn {
+        display: none;
+    }
+    /deep/.el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
+    }
     .my-data-content-container {
         width: 100%;
         height: 100%;
@@ -196,7 +276,44 @@ export default {
                 line-height: 28px;
             }
         }
-
+        .dlg-create-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .name {
+                display: flex;
+                span {
+                    min-width: 80px;
+                }
+                /deep/.el-input__inner {
+                    width: 240px;
+                    height: 30px;
+                }
+            }
+            .deploy {
+                display: flex;
+                flex-direction: column;
+                margin-top: 20px;
+                span {
+                    min-width: 320px;
+                }
+                .radio_area {
+                    margin-left: 60px;
+                    .radio_item {
+                        display: flex;
+                        align-items: center;
+                        margin-top: 5px;
+                        .radio {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+                /deep/.el-input__inner {
+                    width: 240px;
+                    height: 30px;
+                }
+            }
+        }
         .data-main-container {
             display: flex;
             flex-direction: column;
