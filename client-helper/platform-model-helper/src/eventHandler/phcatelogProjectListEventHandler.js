@@ -1,11 +1,52 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogProjectListEventHandler(e, route) {
-	const param = e.detail[0].args.param
+	const params = e.detail[0].args.param
+	const accessToken = route.cookies.read("access_token")
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			window.open(
-				`https://deploy.pharbers.com/projects/${param.pid}?projectName=${param.name}&projectId=${param.pid}`
+				`https://deploy.pharbers.com/projects/${params.pid}?projectName=${params.name}&projectId=${params.pid}`
 			)
+			break
+		case "cerateProject":
+			console.log(params)
+			if (params) {
+				let uri = "https://apiv2.pharbers.com/phcreateproject/projects"
+				let body = {
+					data: {
+						type: "projects",
+						attributes: {
+							provider: "pharbers",
+							name: params.name,
+							type: "paas"
+						},
+						relationships: {
+							owner: {
+								data: {
+									type: "resources",
+									id: params.id
+								}
+							}
+						}
+					}
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type": "application/vnd.api+json",
+						accept: "application/vnd.api+json"
+					},
+					body: JSON.stringify(body)
+				}
+				let results = await fetch(uri, options).then((res) =>
+					res.json()
+				)
+				if (results.data.id) {
+					alert("创建项目成功！")
+					window.location.reload()
+				}
+			}
 			break
 		default:
 			console.log("submit event to parent")

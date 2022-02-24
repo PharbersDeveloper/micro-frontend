@@ -13,20 +13,6 @@
                         <bp-text>DAG 名称</bp-text>
                         <div class="opt-icon">
                             <bp-text class="update_time" v-if="toggle">更新时间</bp-text>
-                            <!-- <div class="icon">
-                                <div @click="toggleClickCard">
-                                    <bp-img :src="cardIcon"  v-if="toggle"></bp-img>
-                                </div>
-                                <div @click="toggleClickCard">
-                                    <bp-img :src="cardIconSelect" v-if="!toggle"></bp-img>
-                                </div>
-                                <div @click="toggleClickList">
-                                    <bp-img :src="listIconSelect" v-if="toggle"></bp-img>
-                                </div>
-                                <div @click="toggleClickList">
-                                    <bp-img :src="listIcon" v-if="!toggle"></bp-img>
-                                </div>
-                            </div> -->
                             <div class="opt">
                                 <bp-select-vue class="select_opt" :src="selectIcon" choosedValue="操作" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue class="schema-select-item" text="新建项目" :src="addIcon" @click="dialogCreateVisible = true"></bp-option-vue>
@@ -71,23 +57,15 @@
             <div class="dlg-create-container">
                 <div class="name">
                     <span>项目名称：</span>
-                    <el-input placeholder="搜索" v-model="projectNameValue" ref="project_name_value" @input="inputStrChecked(projectNameValue, 'project_name_value', 'projectNameValue')" class="search_row">
+                    <el-input v-model="projectNameValue" ref="project_name_value" @input="inputStrChecked(projectNameValue, 'project_name_value', 'projectNameValue')" class="search_row">
                     </el-input>
                 </div>
                 <div class="deploy">
                     <span>资源配置：</span>
                     <div class="radio_area">
-                        <div class="radio_item">
-                            <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" checked>
-                            <input :value="singleValue" class="el-input__inner" type="text" name="" id="" placeholder="单机" disabled>
-                        </div>
-                        <div class="radio_item">
-                            <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" disabled>
-                            <input value="集群" class="el-input__inner" type="text" name="" id="" placeholder="集群" disabled>
-                        </div>
-                        <div class="radio_item">
-                            <input  @click="radio('dataSet')" type="radio" class="radio" name="radio" ref="radioData" disabled>
-                            <input value="企业定制" class="el-input__inner" type="text" name="" id="" placeholder="企业定制" disabled>
+                        <div class="radio_item" v-for="(item, index) in allData.resourcesTypesList" :key="'type'+index">
+                            <input type="radio" class="radio" name="radio" ref="radioData" :checked="item.name === '单机'" :disabled="item.name !== '单机'" >
+                            <input :value="item.name" class="el-input__inner" type="text" name="" id="">
                         </div>
                     </div>
                 </div>
@@ -131,8 +109,7 @@ export default {
             toggle: false,
             closeTosts: false,
             dialogCreateVisible: false,
-            projectNameValue: "",
-            singleValue: "单机"
+            projectNameValue: ""
         }
     },
     props: {
@@ -146,7 +123,8 @@ export default {
                             provider: "provider",
                             meta: {}
                         }}
-                    ]
+                    ],
+                    resourcesTypesList: []
                 }
             }
         }
@@ -164,15 +142,18 @@ export default {
     },
     methods: {
         on_clickCreateConfirm(data) {
+            console.log(data)
             const event = new Event("event")
             event.args = {
                 callback: "cerateProject",
                 element: this,
                 param: {
-                    name: this.projectNameValue
+                    name: this.projectNameValue,
+                    id: "VSq8W2iKoU3pY0OG"
                 }
             }
             this.$emit('event', event)
+			this.dialogCreateVisible = false
         },
         showSelectOption(data) {
             console.log(data)
