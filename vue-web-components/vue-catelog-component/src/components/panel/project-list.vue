@@ -130,7 +130,7 @@ export default {
             cardIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_slelect.svg",
             toggle: false,
             closeTosts: false,
-            dialogCreateVisible: true,
+            dialogCreateVisible: false,
             projectNameValue: "",
             singleValue: "单机"
         }
