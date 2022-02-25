@@ -39,6 +39,10 @@ export async function phcatelogProjectListEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
+
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+
 				let results = await fetch(uri, options).then((res) =>
 					res.json()
 				)
@@ -46,6 +50,7 @@ export async function phcatelogProjectListEventHandler(e, route) {
 					alert("创建项目成功！")
 					window.location.reload()
 				}
+				route.loadingService.loading.style.display = "none"
 			}
 			break
 		default:

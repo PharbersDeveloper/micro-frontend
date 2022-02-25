@@ -28,10 +28,10 @@ module.exports = function (environment) {
 			apiHost: "apiv2.pharbers.com",
 			// clientId: "fjjnl2uSalHTdrppHG9u",
 			// clientName: "offweb",
-			// clientId: "V5I67BHIRVR2Z59kq-a-",
-			// clientName: "platform",
-			clientId: "rB9jOc347FswXebo",
-			clientName: "project",
+			clientId: "V5I67BHIRVR2Z59kq-a-",
+			clientName: "platform",
+			// clientId: "rB9jOc347FswXebo",
+			// clientName: "project",
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout"],
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
@@ -49,8 +49,8 @@ module.exports = function (environment) {
 
 	if (environment === "development") {
 		ENV.APP.DEV = {}
-		// ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
-		ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
+		ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
+		// ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
 		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.APP.debugToken =
 			"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da"

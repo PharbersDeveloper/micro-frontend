@@ -153,7 +153,7 @@ export default {
                 }
             }
             this.$emit('event', event)
-			this.dialogCreateVisible = false
+            this.dialogCreateVisible = false
         },
         showSelectOption(data) {
             console.log(data)
@@ -179,18 +179,16 @@ export default {
         // 验证输入字符串时候的特殊字符
         inputStrChecked(value, ref, name) {
             // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
-            // 只允许输入数字、字母、汉字、下划线
-            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            // 只允许输入数字、字母、下划线
+            let r = /^[a-zA-Z0-9_^]{1,}$/
             if (r.test(value)) {
                 if(value.length > 30) {
-                    this.$refs[ref].value = ""
                     this[name] = ""
                     alert("输入内容过长！")
                     return false;
                 }
                 return value
             } else {
-                this.$refs[ref].value = ""
                 this[name] = ""
                 alert("请勿输入特殊字符！")
                 return false;
@@ -325,6 +323,9 @@ export default {
                         align-items: center;
                         .opt {
                             width: 110px;
+							/deep/.bp-option-group {
+								width: 100px;
+							}
                         }
                         .icon {
                             display: flex;

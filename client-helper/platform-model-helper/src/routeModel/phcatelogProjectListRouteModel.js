@@ -7,7 +7,8 @@ export async function phcatelogProjectListRouteModel(route, parseParams) {
 		include: "accounts"
 	})
 	let resourcesTypes = route.store.query("resource", {
-		"filter[tenant]": route.cookies.read("company_id")
+		"filter[tenant]": route.cookies.read("company_id"),
+		sort: "created"
 	})
 	let results = await Promise.all([resources, resourcesTypes])
 	//菜单栏个人信息
