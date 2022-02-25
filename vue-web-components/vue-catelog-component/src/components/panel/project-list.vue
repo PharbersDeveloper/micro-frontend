@@ -147,7 +147,7 @@ export default {
                 return false
             }
             this.allData.projects.forEach(item => {
-                if (item.attributes.name.indexOf(this.projectNameValue) != -1) {
+                if (item.attributes.name === this.projectNameValue) {
                     alert("项目名称重复！")
                     throw Error("项目名称重复")
                 }

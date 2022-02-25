@@ -188,7 +188,7 @@ export default {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            max-height: 150px;
+            max-height: 70px;
             overflow: auto;
             .dlg-flex-version-item {
                 font-size: 12px;
@@ -213,8 +213,8 @@ export default {
             flex-direction: column;
             flex-wrap: nowrap;
             overflow: auto;
-            max-height:200px;
-            height: 200px;
+            max-height:150px;
+            height: 150px;
                 .dlg-flex-version-item {
                     cursor: pointer;
                     padding: 5px;
