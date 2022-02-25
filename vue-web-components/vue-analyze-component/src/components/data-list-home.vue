@@ -13,6 +13,9 @@
                             </div>
                         </div>
                         <div class="right">
+							<button class="delete" 
+								@click="dialogDeleteProject = true">删除项目
+							</button>
                             <button 
 								@click="dialogStart = true" 
 								v-if="showStartButton">启动资源
@@ -152,6 +155,16 @@
                 </div>
             </div>
         </div>
+		<el-dialog
+                title="删除项目"
+                :visible.sync="dialogDeleteProject"
+                width="460px">
+            <span>确定删除该项目及包含的所有数据吗？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogDeleteProject = false">取消</el-button>
+                <el-button type="primary" @click="deleteProject">确认</el-button>
+            </span>
+        </el-dialog>
         <el-dialog
                 title="启动资源"
                 :visible.sync="dialogStart"
@@ -219,7 +232,8 @@ export default {
             dialogStart: false,
             showStartButton: true,
             dialogStartSucceed: false,
-            dialogStartFailed: false
+            dialogStartFailed: false,
+            dialogDeleteProject: false
         }
     },
     components: {
@@ -228,7 +242,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
+        const accessToken = this.getCookie("access_token") || "55f195f5335a89acccaa713c3f94b9f100cd9aad8217b00e98790e23e62bd89b"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
@@ -283,6 +297,19 @@ export default {
         }
     },
     methods: {
+        deleteProject() {
+            const event = new Event("event")
+            event.args = {
+                callback: "deleteProject",
+                element: this,
+                param: {
+                    projectName: this.allData.projectDetail.name,
+                    projectId: this.allData.projectDetail.id
+                }
+            }
+            this.$emit('event', event)
+            this.dialogDeleteProject = false
+        },
         on_clickStartConfirm() {
             const event = new Event("event")
             event.args = {
@@ -345,7 +372,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "57ce1cb2b12549a964e20345c9727468ca1fbc8f38019c3773deb4427e51b198"
+            const accessToken = this.getCookie("access_token") || "55f195f5335a89acccaa713c3f94b9f100cd9aad8217b00e98790e23e62bd89b"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",
@@ -566,6 +593,10 @@ export default {
                 display: flex;
                 padding-top: 20px;
                 padding-right: 20px;
+				.delete {
+					background: #DB4D71 !important;
+					margin-right: 10px;
+				}
                 button {
                     min-width: 80px;
                     height: 32px;
