@@ -65,7 +65,7 @@
                     <div class="radio_area">
                         <div class="radio_item" v-for="(item, index) in allData.resourcesTypesList" :key="'type'+index">
                             <input type="radio" class="radio" name="radio" ref="radioData" :checked="item.name === '单机'" :disabled="item.name !== '单机'" >
-                            <input :value="item.name" class="el-input__inner" type="text" name="" id="">
+                            <input :value="item.name" class="el-input__inner" type="text" name="" id="" disabled>
                         </div>
                     </div>
                 </div>
@@ -142,6 +142,16 @@ export default {
     },
     methods: {
         on_clickCreateConfirm(data) {
+            if (!this.projectNameValue || this.projectNameValue === "") {
+                alert("请输入项目名称！")
+                return false
+            }
+            this.allData.projects.forEach(item => {
+                if (item.attributes.name.indexOf(this.projectNameValue) != -1) {
+                    alert("项目名称重复！")
+                    throw Error("项目名称重复")
+                }
+            })
             console.log(data)
             const event = new Event("event")
             event.args = {
@@ -323,9 +333,9 @@ export default {
                         align-items: center;
                         .opt {
                             width: 110px;
-							/deep/.bp-option-group {
-								width: 100px;
-							}
+                            /deep/.bp-option-group {
+                                width: 100px;
+                            }
                         }
                         .icon {
                             display: flex;
