@@ -16,9 +16,8 @@
                 <input type="submit" @click="refresh2" value="refresh2" />
             </div>
             <div class="content">
-<!--                <dragable :init-width="300" :init-height="100" :init-policy="policy" ref="container" />-->
                 <dragable :init-left=0 :init-top=0 :init-width=300 :init-height=500 :init-policy="policy" ref="container" />
-                <dragable :init-left=300 :init-top=100 :init-width=300 :init-height=500 :init-policy="policy2" ref="container2" />
+                <dragable :init-left=500 :init-top=0 :init-width=400 :init-height=400 :init-policy="policy2" ref="container2" />
             </div>
         </div>
     </div>
@@ -28,6 +27,7 @@
 import histogram from './components/histogram.vue'
 import dragable from './components/dragable-container'
 import BarPolicy from "./components/render-policy/bar-policy"
+import PiePolicy from "./components/render-policy/pie-policy"
 import PhHistogramDatasource from "./components/model/datasource"
 import PhHistogramSchema from "./components/model/schema"
 
@@ -41,11 +41,12 @@ export default {
             yProperty: "sales",
             policyName: "bar",
 
-            policy2: new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+            policy2: new PiePolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
                 { xProperty: "标准省份名称", yProperty: "sales" }),
             xProperty2: "标准省份名称",
             yProperty2: "sales",
-            policyName2: "bar",
+            policyName2: "pie",
+
             lst: ["标准省份名称", "标准城市名称", "date", "quarter", "year", "month", "doi", "标准通用名", "atc", "sales", "units", "version", "provider", "owner"]
         }
     },
@@ -56,7 +57,7 @@ export default {
     methods: {
         refresh() {
             if (this.policy.name !== this.policyName) {
-
+                this.policy = this.createPolicyFactory(this.policyName)
             }
 
             this.policy.xProperty = this.xProperty
@@ -65,12 +66,21 @@ export default {
         },
         refresh2() {
             if (this.policy2.name !== this.policyName2) {
-
+                this.policy2 = this.createPolicyFactory(this.policyName2)
             }
 
             this.policy2.xProperty = this.xProperty2
             this.policy2.yProperty = this.yProperty2
             this.$refs.container2.resetPolicy(this.policy2)
+        },
+        createPolicyFactory(factoryType) {
+            if (factoryType === "pie") {
+                return new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+                    { xProperty: "标准省份名称", yProperty: "sales" })
+            } else if (factoryType === "bar") {
+                return new PiePolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+                    { xProperty: "标准省份名称", yProperty: "sales" })
+            }
         }
     }
 }

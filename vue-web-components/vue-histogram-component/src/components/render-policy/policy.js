@@ -14,7 +14,7 @@ export default class policy {
         throw new Error("not implement")
     }
 
-    render (d3, data, ele, option) {
+    render (d3, data, ele) {
         throw new Error("not implement")
     }
 

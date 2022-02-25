@@ -24,6 +24,7 @@ export default class PhBarChartPolicy extends policy{
 
         this.xLabel = ""
         this.yLabel = ""
+        this.color = "currentColor"
 
         this.resetPolicyConstraints(option)
     }
@@ -52,6 +53,7 @@ export default class PhBarChartPolicy extends policy{
 
         this.xLabel = option.xLabel ? option.xLabel : this.xLabel
         this.yLabel = option.yLabel ? option.yLabel : this.yLabel
+        this.color = option.color ? option.color : this.color
 
         this.datasource = option.datasource ? option.datasource : this.datasource
         this.schema = option.schema ? option.schema : this.schema
