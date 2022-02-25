@@ -1067,8 +1067,8 @@ export default {
                         font-size: 14px;
                         color: #000000;
                         font-weight: 600;
-                        width: 168px;
-                        min-width: 168px;
+                        width: 400px;
+                        min-width: 400px;
                         height: 40px;
                         line-height: 40px;
                         overflow: hidden;

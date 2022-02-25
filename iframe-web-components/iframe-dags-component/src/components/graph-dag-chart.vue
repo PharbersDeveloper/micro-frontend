@@ -321,11 +321,11 @@ export default {
             let that = this
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
-            		console.log("iframe接收的", event.data.message.cmd)
+                    console.log("iframe接收的", event.data.message.cmd)
                     that.runDagCallback(event.data.message, that)
                 }
                 if(event.data.message.cmd === "dag_failed") {
-            		console.log("iframe接收的dag failed", event.data.message.cmd)
+                    console.log("iframe接收的dag failed", event.data.message.cmd)
                     that.runDagFailedCallback(event.data.message, that)
                 }
             }
@@ -354,6 +354,8 @@ export default {
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
             confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
+            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "测试人员"
+            confData.jobDesc = "runDag"
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
@@ -368,13 +370,10 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
+            console.log(body)
             await fetch(url, options).then(res => res.json())
             this.showProgress = true
             this.showRunJson = false
-            // this.noticeService.projectName = this.projectName
-            // let queryId = result.data.dag_run_id
-            // let timeout = data.args.param.timeout
-            // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         runDagFailedCallback(response, ele) {
             // 更新进度条
@@ -471,7 +470,7 @@ export default {
         on_click_runDag() {
             window.parent.postMessage({
                 message: {
-                	cmd: 'runDag'
+                    cmd: 'runDag'
                 }
             }, '*')
             let roots = []
