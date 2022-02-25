@@ -17,7 +17,7 @@
                         <input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row_input" />
                         <img :src="search_row" class="search_row_icon" alt="">
                         <div class="dlg-all-version-container">
-                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item)">
+                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item, index)">
                                 <span>{{item}}</span>
                             </div>
                         </div>
@@ -70,10 +70,11 @@ export default {
     },
     watch: {},
     methods: {
-        appendSelectVersionTags(data) {
+        appendSelectVersionTags(data, index) {
             //去重
             let setArr = new Set(this.selectVersionTags).add(data)
             this.selectVersionTags = Array.from(setArr)
+            this.versionArrShow.splice(index, 1)
         },
         // 搜索框
         searchRowInput(data) {
@@ -84,6 +85,7 @@ export default {
             this.selectVersionTags = this.selectVersionTags.filter(function(item) {
                 return item !== data
             });
+            this.versionArrShow.push(data)
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
