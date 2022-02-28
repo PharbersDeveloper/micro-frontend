@@ -39,13 +39,14 @@ export default {
         progress() {
             let that = this
             const interval = setInterval(() => {
+                //接到消息，直接结束
                 if(this.progressOver) {
                     //循环结束
                     that.percent = 100
                     that.barWidth = 300
                     clearInterval(interval)
                 }
-                if(that.percent >= 82) {
+                if(that.percent >= 99) {
                     clearInterval(interval)
                 }
                 that.barWidth = that.barWidth + 1

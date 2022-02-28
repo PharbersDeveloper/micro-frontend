@@ -81,7 +81,10 @@ function PhMQTT(config, callBack, timeoutQueue) {
                     if (jobCat === "notification") {
                         // UnRegister 将错误的和完成的关掉连接
                         if (status === "failed" || status === "succeed") {
-                            timeoutQueue.push(topic);
+							setTimeout( ()=> {
+								timeoutQueue.push(topic);
+							}, 5000)
+                            
                         }
                         callBack(parameter, content); 
                     }
