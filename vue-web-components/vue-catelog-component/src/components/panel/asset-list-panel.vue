@@ -5,89 +5,99 @@
                 {{title}}
             </span>
         </div>
-        <div class="tabs">
-            <div class="upload-button" @click="upload" v-if="uploadToastBorder !== 'blue' && myDataTab === 0">
-                <span class="fileinput-button">
-                    <div class="icon_upload"></div>
-                    <span class="btn_secondary_initial">
-                        上传文件
-                    </span>
-                </span>
-            </div>
-        </div>
-        <div class="data-main-container">
-            <div v-if="haveData" class="myData-mine">
-                <div class="subtitle">
-                    <span class="heading-xsmall file-name-text">Name</span>
-                    <span class="heading-xsmall member-text">Owner</span>
-                    <span class="subscribe-number-header"></span>
-                    <span class="heading-xsmall time-text">
-                        <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
-                            <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
-                            <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
-                            <div class="option-line mt-1 mb-1"></div>
-                            <bp-option-vue text="Ascending" :src="mineSortAscendingIcon" @click="myDataSort('', 1)"></bp-option-vue>
-                            <bp-option-vue text="Descending" :src="mineSortDescendingIcon" @click="myDataSort('-', 1)"></bp-option-vue>
-                        </bp-select-vue>
-                    </span>
-                    <span class="blank-action-header"></span>
-                </div>
 
-                <div class="main-container">
-                    <div v-for="(file,index) in allData.files" :key="index" class="OneRecord">
-                        <div class="icon_datafile"></div>
-                        <div class="data-name-container">
-                            <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
-                            <div v-if="file.labels.length" class="data-name-bottom">
-                                <template v-for="label in file.labels">
-                                    <editable-component :tagName="label"></editable-component>
-                                </template>
+        <div class="data-main-container">
+            <template v-if="myDataTab === 0">
+                <div v-if="haveData" class="myData-mine">
+                    <div class="subtitle">
+                        <span class="heading-xsmall file-name-text">Name</span>
+                        <span class="heading-xsmall member-text">Owner</span>
+                        <span class="subscribe-number-header"></span>
+                        <span class="heading-xsmall time-text">
+                            <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
+                                <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
+                                <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
+                                <div class="option-line mt-1 mb-1"></div>
+                                <bp-option-vue text="Ascending" :src="mineSortAscendingIcon" @click="myDataSort('', 1)"></bp-option-vue>
+                                <bp-option-vue text="Descending" :src="mineSortDescendingIcon" @click="myDataSort('-', 1)"></bp-option-vue>
+                            </bp-select-vue>
+                        </span>
+                        <span class="blank-action-header"></span>
+                    </div>
+
+                    <div class="main-container">
+                        <div v-for="(file,index) in allData.files" :key="index" class="OneRecord">
+                            <div class="icon_datafile"></div>
+                            <div class="data-name-container">
+                                <div class="heading-small overflow-text" data-placement="bottom" data-toggle="tooltip" :title="file.name">{{formatFileName(file.name)}}</div>
+                                <div v-if="file.labels.length" class="data-name-bottom">
+                                    <template v-for="label in file.labels">
+                                        <editable-component :tagName="label"></editable-component>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="members">
+                                <bp-text class="body-primary">{{userName}}</bp-text>
+                            </div>
+
+                            <div class="subscribe-number">
+                                <div class="icon_subscribed"></div>
+                                <bp-text class="body-tertiary"></bp-text>
+                            </div>
+
+                            <div class="mine-time">
+                                <bp-text class="body-tertiary">
+                                    {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}}
+                                </bp-text>
+                            </div>
+
+                            <div class="action-menu">
+                                <bp-select-vue class="bp-select-option" choosedValue="">
+                                    <bp-option-vue text="Go to Data Instance" class="cursor-not-allow"></bp-option-vue>
+                                    <div class="option-line"></div>
+                                    <bp-option-vue text="Edit Tags" class="cursor-not-allow"></bp-option-vue>
+                                    <bp-option-vue text="Rename" @click="changeName(file)" class="rename-button"></bp-option-vue>
+                                    <div class="option-line"></div>
+                                    <bp-option-vue text="Share" class="cursor-not-allow"></bp-option-vue>
+                                    <bp-option-vue text="Download" @click="downloadFileService(file)" class="download-button"></bp-option-vue>
+                                    <div class="option-line"></div>
+                                    <bp-option-vue text="Remove" @click="deleteData(file)" class="remove-file"></bp-option-vue>
+                                </bp-select-vue>
                             </div>
                         </div>
 
-                        <div class="members">
-                            <bp-text class="body-primary">{{userName}}</bp-text>
+                        <div v-if="allPage && curPage" class="page-container">
+                            <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
                         </div>
-
-                        <div class="subscribe-number">
-                            <div class="icon_subscribed"></div>
-                            <bp-text class="body-tertiary"></bp-text>
-                        </div>
-
-                        <div class="mine-time">
-                            <bp-text class="body-tertiary">
-                                {{timeDisplay ? formatDateStandard(file.created, 0) : formatDateStandard(file.modified, 0)}}
-                            </bp-text>
-                        </div>
-
-                        <div class="action-menu">
-                            <bp-select-vue class="bp-select-option" choosedValue="">
-                                <bp-option-vue text="Go to Data Instance" class="cursor-not-allow"></bp-option-vue>
-                                <div class="option-line"></div>
-                                <bp-option-vue text="Edit Tags" class="cursor-not-allow"></bp-option-vue>
-                                <bp-option-vue text="Rename" @click="changeName(file)" class="rename-button"></bp-option-vue>
-                                <div class="option-line"></div>
-                                <bp-option-vue text="Share" class="cursor-not-allow"></bp-option-vue>
-                                <bp-option-vue text="Download" @click="downloadFileService(file)" class="download-button"></bp-option-vue>
-                                <div class="option-line"></div>
-                                <bp-option-vue text="Remove" @click="deleteData(file)" class="remove-file"></bp-option-vue>
-                            </bp-select-vue>
-                        </div>
-                    </div>
-
-                    <div v-if="allPage && curPage" class="page-container">
-                        <bp-pagination :curPage="curPage" :pages="allPage" @changePage="changePage"></bp-pagination>
                     </div>
                 </div>
-            </div>
 
-            <div v-else class="blank">
-                <div class="no_data-icon"></div>
-                <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
-                <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder != 'blue'"></bp-button>
-                <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
-            </div>
+                <div v-else class="blank">
+                    <div class="no_data-icon"></div>
+                    <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
+                    <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
+                    <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder != 'blue'"></bp-button>
+                    <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
+                </div>
+            </template>
+
+            <template v-if="myDataTab === 1">
+                <div class="subscribed-container">
+                    <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
+                    <div class="subscribed-item" v-for="file in allData.database" :key="file.name">
+                        <div class="left-text">
+                            <img :src="fileIconDark" class="file-icon-dark" alt="">
+                            <div class="text-area" >
+                                <bp-text class="title">{{file.name}}</bp-text>
+                                <bp-text v-if="file.description" class="subtitle">{{file.description}}</bp-text>
+                                <bp-text v-else class="subtitle">暂无描述</bp-text>
+                            </div>
+                        </div>
+                        <bp-text @click="linkToPage(file.name)" class="subscribed-button">{{goDetail}}</bp-text>
+                    </div>
+                </div>
+            </template>
         </div>
         <div v-if="closeuploadToast == '0'"
              class="upload-toast"
@@ -117,326 +127,326 @@
 
 </template>
 <script>
-import bpPagination from '../bp-pagination.vue'
-import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
-import bpText from 'vue-components/src/components/bp-text.vue'
-import bpButton from 'vue-components/src/components/bp-button.vue'
-import editableComponent from '../editable-component.vue'
-import util from '../util.vue'
+    import bpPagination from '../bp-pagination.vue'
+    import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+    import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
+    import bpText from 'vue-components/src/components/bp-text.vue'
+    import bpButton from 'vue-components/src/components/bp-button.vue'
+    import editableComponent from '../editable-component.vue'
+    import util from '../util.vue'
 
-export default {
-    components: {
-        bpPagination,
-        bpSelectVue,
-        bpOptionVue,
-        bpText,
-        bpButton,
-        editableComponent
-    },
-    data() {
-        return {
-            myDataTab: 0,
-            rename: false,
-            renameFile: '',
-            mineSortUpdatedTimeIcon: '',
-            mineSortAscendingIcon: '',
-            userName: util.methods.getCookie('user_name'),
-            title: "我的文件",
-            subscribedTitle: "文件名称",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
-            goDetail: "查看详情",
-            /** 文件上传弹窗状态 */
-            uploadToastBorder: "red",
-            uploadTextStatus: "",
-            uploadText: "",
-            closeuploadToast: "1",
-            showProgress: "",
-            uploadLoadedSize: 0,
-            uploadFileSize: 0
-        }
-    },
-    props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    sort: '-created',
-                    files: [],
-                    database: []
+    export default {
+        components: {
+            bpPagination,
+            bpSelectVue,
+            bpOptionVue,
+            bpText,
+            bpButton,
+            editableComponent
+        },
+        data() {
+            return {
+                myDataTab: 0,
+                rename: false,
+                renameFile: '',
+                mineSortUpdatedTimeIcon: '',
+                mineSortAscendingIcon: '',
+                userName: util.methods.getCookie('user_name'),
+                title: "数据资产",
+                subscribedTitle: "文件名称",
+                fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
+                goDetail: "查看详情",
+                /** 文件上传弹窗状态 */
+                uploadToastBorder: "red",
+                uploadTextStatus: "",
+                uploadText: "",
+                closeuploadToast: "1",
+                showProgress: "",
+                uploadLoadedSize: 0,
+                uploadFileSize: 0
+            }
+        },
+        props: {
+            allData: {
+                type: Object,
+                default: function() {
+                    return {
+                        sort: '-created',
+                        files: [],
+                        database: []
+                    }
                 }
             }
-        }
-    },
-    computed: {
-        haveData() {
-            // if (!this.allData.count) {
-            //     return false
-            // }
-            // if(this.allData.curTab == 1) {
-            //     this.myDataTab = 1
-            // }
-            return true
         },
-        allPage() {
-            const total = this.allData.count
-            const perPage = 10
-            if (Math.ceil(total / perPage) <= 1) {
-                return 0
-            }
-            return Math.max(1, Math.ceil(total / perPage))
-        },
-        curPage() {
-            return this.allData.page + 1
-        },
-        iconSort() {
-            if (this.allData.sort.indexOf('-') === -1) {
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-ascending.svg'
-            } else {
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg'
-            }
-        },
-        mineSortText() {
-            if (this.allData.sort.indexOf('created') === -1) {
-                return "Updated Time"
-            } else {
-                return "Created Time"
-            }
-        },
-        mineSortCreatedTimeIcon() {
-            if (this.allData.sort.indexOf('created') != -1) {
-                this.mineSortUpdatedTimeIcon = ''
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
-            } else {
-                this.mineSortUpdatedTimeIcon = 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
-                return ''
-            }
-        },
-        mineSortDescendingIcon() {
-            if (this.allData.sort.indexOf('-') != -1) {
-                this.mineSortAscendingIcon = ''
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
-            } else {
-                this.mineSortAscendingIcon = 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
-                return ''
-            }
-        },
-        timeDisplay() {
-            if (this.allData.sort.indexOf('created') !== -1) {
+        computed: {
+            haveData() {
+                if (!this.allData.count) {
+                    return false
+                }
+                if(this.allData.curTab == 1) {
+                    this.myDataTab = 1
+                }
                 return true
-            } else {
-                return false
-            }
-        }
-    },
-    methods: {
-        closeToast() {
-            const event = new Event("event")
-            event.args = {
-                callback: "closeToast",
-                element: this,
-                param: {
-                    name: 'closeToast',
-                    value: 0
+            },
+            allPage() {
+                const total = this.allData.count
+                const perPage = 10
+                if (Math.ceil(total / perPage) <= 1) {
+                    return 0
                 }
-            }
-            this.$emit('event', event)
-        },
-        // changeTab(num) {
-        //     this.myDataTab = num
-        //     this.$emit('changeTab', num)
-        // },
-        myDataSort(sortType, type) {
-            const event = new Event("event")
-            let sort
-
-            if (type === 0) {
-                if (this.mineSortDescendingIcon) {
-                    sort = `-${sortType}`
+                return Math.max(1, Math.ceil(total / perPage))
+            },
+            curPage() {
+                return this.allData.page + 1
+            },
+            iconSort() {
+                if (this.allData.sort.indexOf('-') === -1) {
+                    return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-ascending.svg'
                 } else {
-                    sort = sortType
+                    return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg'
                 }
-            } else {
-                if (this.mineSortCreatedTimeIcon) {
-                    sort = `${sortType}created`
+            },
+            mineSortText() {
+                if (this.allData.sort.indexOf('created') === -1) {
+                    return "Updated Time"
                 } else {
-                    sort = `${sortType}modified`
+                    return "Created Time"
                 }
-            }
-
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: 'download/my-data',
-                    queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
-                }
-            }
-            this.$emit('event', event)
-        },
-        linkToPage(param) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: 'download/data-directory-table',
-                    queryParams: `database=${param}`
-                }
-            }
-            this.$emit('event', event)
-        },
-        formatFileSize(...params) {
-            if ( !params[0] ) {
-                return 0
-            }
-            let fsize = params[0]
-            if ( fsize < 0.1 * 1024 ) {
-                fsize = fsize.toFixed( 2 ) + "B"
-            } else if ( fsize < 0.1 * 1024 * 1024 ) {
-                fsize = ( fsize / 1024 ).toFixed( 2 ) + "KB"
-            } else if ( fsize < 0.1 * 1024 * 1024 * 1024 ) {
-                fsize = ( fsize / ( 1024 * 1024 ) ).toFixed( 2 ) + "MB"
-            } else {
-                fsize = ( fsize / ( 1024 * 1024 * 1024 ) ).toFixed( 2 ) + "GB"
-            }
-            return fsize
-        },
-        formatFileName(...params) {
-            let resname = params[0]
-            let len = 0
-
-            if (resname === null) {
-                return "nameless"
-            }
-
-            for (let i = 0; i < resname.length; i++) {
-                if (resname.charCodeAt(i)>127 || resname.charCodeAt(i)==94) {
-                    len += 2
+            },
+            mineSortCreatedTimeIcon() {
+                if (this.allData.sort.indexOf('created') != -1) {
+                    this.mineSortUpdatedTimeIcon = ''
+                    return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
                 } else {
-                    len ++
+                    this.mineSortUpdatedTimeIcon = 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                    return ''
                 }
-                if (len > 64) {
-                    resname = resname.substring(0, i) + '...'
-                    break
+            },
+            mineSortDescendingIcon() {
+                if (this.allData.sort.indexOf('-') != -1) {
+                    this.mineSortAscendingIcon = ''
+                    return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                } else {
+                    this.mineSortAscendingIcon = 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                    return ''
+                }
+            },
+            timeDisplay() {
+                if (this.allData.sort.indexOf('created') !== -1) {
+                    return true
+                } else {
+                    return false
                 }
             }
-            return resname
         },
-        formatDateStandard(...params) {
-            if(params.length === 2) {
-                let date = new Date( Number(params[0]) ),
-                    Y = date.getFullYear(),
-                    M =
+        methods: {
+            closeToast() {
+                const event = new Event("event")
+                event.args = {
+                    callback: "closeToast",
+                    element: this,
+                    param: {
+                        name: 'closeToast',
+                        value: 0
+                    }
+                }
+                this.$emit('event', event)
+            },
+            changeTab(num) {
+                this.myDataTab = num
+                this.$emit('changeTab', num)
+            },
+            myDataSort(sortType, type) {
+                const event = new Event("event")
+                let sort
+
+                if (type === 0) {
+                    if (this.mineSortDescendingIcon) {
+                        sort = `-${sortType}`
+                    } else {
+                        sort = sortType
+                    }
+                } else {
+                    if (this.mineSortCreatedTimeIcon) {
+                        sort = `${sortType}created`
+                    } else {
+                        sort = `${sortType}modified`
+                    }
+                }
+
+                event.args = {
+                    callback: "linkToPage",
+                    element: this,
+                    param: {
+                        name: 'download/my-data',
+                        queryParams: `tab=${this.allData.tab}&page=${this.allData.page}&sort=${sort}`
+                    }
+                }
+                this.$emit('event', event)
+            },
+            linkToPage(param) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "linkToPage",
+                    element: this,
+                    param: {
+                        name: 'download/data-directory-table',
+                        queryParams: `database=${param}`
+                    }
+                }
+                this.$emit('event', event)
+            },
+            formatFileSize(...params) {
+                if ( !params[0] ) {
+                    return 0
+                }
+                let fsize = params[0]
+                if ( fsize < 0.1 * 1024 ) {
+                    fsize = fsize.toFixed( 2 ) + "B"
+                } else if ( fsize < 0.1 * 1024 * 1024 ) {
+                    fsize = ( fsize / 1024 ).toFixed( 2 ) + "KB"
+                } else if ( fsize < 0.1 * 1024 * 1024 * 1024 ) {
+                    fsize = ( fsize / ( 1024 * 1024 ) ).toFixed( 2 ) + "MB"
+                } else {
+                    fsize = ( fsize / ( 1024 * 1024 * 1024 ) ).toFixed( 2 ) + "GB"
+                }
+                return fsize
+            },
+            formatFileName(...params) {
+                let resname = params[0]
+                let len = 0
+
+                if (resname === null) {
+                    return "nameless"
+                }
+
+                for (let i = 0; i < resname.length; i++) {
+                    if (resname.charCodeAt(i)>127 || resname.charCodeAt(i)==94) {
+                        len += 2
+                    } else {
+                        len ++
+                    }
+                    if (len > 64) {
+                        resname = resname.substring(0, i) + '...'
+                        break
+                    }
+                }
+                return resname
+            },
+            formatDateStandard(...params) {
+                if(params.length === 2) {
+                    let date = new Date( Number(params[0]) ),
+                        Y = date.getFullYear(),
+                        M =
                             ( date.getMonth() + 1 < 10 ?
                                 `0${date.getMonth() + 1}` :
                                 date.getMonth() + 1 ),
-                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
-                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                        D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                        D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
 
-                    h =
+                        h =
                             ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
-                    m =
+                        m =
                             ( date.getMinutes() < 10 ?
                                 `0${date.getMinutes()}` :
                                 date.getMinutes() ) ,
-                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+                        s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
 
-                // 输出结果：yyyy/mm/dd hh:mm
-                if(params[1] === 0){
-                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
-                }else if(params[1] === 1) {
-                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                    // 输出结果：yyyy/mm/dd hh:mm
+                    if(params[1] === 0){
+                        return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                    }else if(params[1] === 1) {
+                        return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                    }
                 }
-            }
-        },
-        changeName(file) {
-            this.rename = true
-            this.renameFile = file
-            // 这里需要一个rename的组件
-        },
-        downloadFileService(file) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'downloadFile',
-                    use: 'downloadFile',
-                    file: file
+            },
+            changeName(file) {
+                this.rename = true
+                this.renameFile = file
+                // 这里需要一个rename的组件
+            },
+            downloadFileService(file) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "service",
+                    element: this,
+                    param: {
+                        name: 'downloadFile',
+                        use: 'downloadFile',
+                        file: file
+                    }
                 }
-            }
-            this.$emit('event', event)
-        },
-        deleteData(file) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'deleteFile',
-                    use: 'deleteFile',
-                    file: file
+                this.$emit('event', event)
+            },
+            deleteData(file) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "service",
+                    element: this,
+                    param: {
+                        name: 'deleteFile',
+                        use: 'deleteFile',
+                        file: file
+                    }
                 }
-            }
-            this.$emit('event', event)
-        },
-        changePage(page) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: 'download/my-data',
-                    queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
+                this.$emit('event', event)
+            },
+            changePage(page) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "linkToPage",
+                    element: this,
+                    param: {
+                        name: 'download/my-data',
+                        queryParams: `tab=${this.allData.tab}&page=${page - 1}&sort=${this.allData.sort}`
+                    }
                 }
-            }
-            this.$emit('event', event)
-        },
-        upload() {
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "service",
-            //     element: this,
-            //     param: {
-            //         name: 'uploadFile',
-            //         use: 'uploadFile'
-            //     }
-            // }
-            // this.$emit('event', event)
-            this.$refs.myFile.click()
-        },
-        guid() {
-            return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
-                var r = Math.random() * 16 | 0,
-                    v = c === "x" ? r : r & 0x3 | 0x8
+                this.$emit('event', event)
+            },
+            upload() {
+                // const event = new Event("event")
+                // event.args = {
+                //     callback: "service",
+                //     element: this,
+                //     param: {
+                //         name: 'uploadFile',
+                //         use: 'uploadFile'
+                //     }
+                // }
+                // this.$emit('event', event)
+                this.$refs.myFile.click()
+            },
+            guid() {
+                return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace( /[xy]/g, function ( c ) {
+                    var r = Math.random() * 16 | 0,
+                        v = c === "x" ? r : r & 0x3 | 0x8
 
-                return v.toString( 16 )
-            } )
-        },
+                    return v.toString( 16 )
+                } )
+            },
 
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return "15920cd6809a2020f78d5121a54a9273d82b389576ecc2bd59fd9bab91a00be7";
-        },
-        uploadFiles(events) {
-            const event = new Event("event")
-            event.args = {
-                callback: "service",
-                element: this,
-                param: {
-                    name: 'uploadFile',
-                    use: 'uploadFile',
-                    event: events
+            getCookie(name) {
+                let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+                if (arr = document.cookie.match(reg))
+                    return (arr[2]);
+                else
+                    return "15920cd6809a2020f78d5121a54a9273d82b389576ecc2bd59fd9bab91a00be7";
+            },
+            uploadFiles(events) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "service",
+                    element: this,
+                    param: {
+                        name: 'uploadFile',
+                        use: 'uploadFile',
+                        event: events
+                    }
                 }
+                this.$emit('event', event)
             }
-            this.$emit('event', event)
         }
     }
-}
 </script>
 <style lang="scss" scoped>
     * {
@@ -685,7 +695,80 @@ export default {
             flex-direction: column;
             flex: 1;
             position: relative;
-
+            .subscribed-container {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                padding: 12px 20px 8px 20px;
+                height: 507px;
+                min-height: 0;
+                .subscribed-title {
+                    font-family: SFProText-Regular;
+                    font-size: 12px;
+                    color: #706F79;
+                    letter-spacing: 0.25px;
+                    text-align: left;
+                    line-height: 16px;
+                    font-weight: 400;
+                    padding: 9px 0;
+                    border-bottom: 1px solid  rgba(37,35,45,0.08);
+                }
+                .subscribed-item {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid  rgba(37,35,45,0.08);
+                    padding: 12px 0;
+                    .left-text {
+                        display: flex;
+                        .file-icon-dark {
+                            width: 38px;
+                            height: 38px;
+                            margin-right: 14px;
+                        }
+                        .text-area {
+                            display: flex;
+                            flex-direction: column;
+                            .title {
+                                font-family: SFProText-Regular;
+                                font-size: 14px;
+                                color: #25232D;
+                                letter-spacing: 0.25px;
+                                text-align: left;
+                                line-height: 20px;
+                                font-weight: 400;
+                                margin-bottom: 3px;
+                            }
+                            .subtitle {
+                                font-family: SFProText-Light;
+                                font-size: 12px;
+                                color: #706F79;
+                                letter-spacing: 0.25px;
+                                line-height: 16px;
+                                font-weight: 200;
+                            }
+                        }
+                    }
+                    .subscribed-button {
+                        width: 80px;
+                        height: 32px;
+                        background: #f6f6f7;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-family: SFProText-Medium;
+                        font-size: 14px;
+                        color: #57565F;
+                        letter-spacing: 0;
+                        text-align: center;
+                        line-height: 20px;
+                        font-weight: 500;
+                        border-radius: 2px;
+                        cursor: pointer;
+                    }
+                }
+            }
             .myData-mine {
                 flex: 1;
                 display: flex;
