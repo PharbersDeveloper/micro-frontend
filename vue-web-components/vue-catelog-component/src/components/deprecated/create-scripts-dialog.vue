@@ -80,7 +80,7 @@
                             </div>
                             <div class="tab">
                                 <div class="new_data" @click="satasetTab('new')">新数据集</div>
-                                 ｜ 
+                                 ｜
                                 <div class="old_data" @click="satasetTab('old')">现有数据集</div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                             </div>
                             <div class="tab">
                                 <div class="new_data" @click="satasetTab('new')">新数据集</div>
-                                 ｜ 
+                                 ｜
                                 <div class="old_data" @click="satasetTab('old')">现有数据集</div>
                             </div>
                         </div>
@@ -128,8 +128,8 @@
 <script>
 import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return{
@@ -190,7 +190,7 @@ export default {
                 // 正常创建脚本逻辑
                 if(searchValueOutput) {
                     return this.remainDatasetListOutputs.filter(item => item.name.toLowerCase().indexOf(searchValueOutput.toLowerCase()) > -1)
-                } 
+                }
                 return this.remainDatasetListOutputs
             } else {
                 // 下载逻辑
@@ -201,7 +201,7 @@ export default {
                 }
                 return remainDatasetListOutputsData
             }
-            
+
         }
     },
     mounted() {

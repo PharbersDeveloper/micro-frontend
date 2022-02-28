@@ -49,8 +49,8 @@ module.exports = function (environment) {
 
 	if (environment === "development") {
 		ENV.APP.DEV = {}
-		// ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
-		ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
+		ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
+		// ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
 		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.APP.debugToken =
 			"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da"

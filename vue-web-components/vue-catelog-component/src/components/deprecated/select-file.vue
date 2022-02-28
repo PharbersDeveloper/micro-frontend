@@ -5,7 +5,7 @@
                 <p class="project_name new_upload">本地上传文件</p>
             </div>
             <div class="upload_file_area">
-                
+
                 <div class="upload_area">
                     <div class="file_content_area" v-for="(item,index) in fileList" :key="index">
                         <p>{{item.name}}</p>
@@ -22,7 +22,7 @@
                     </bp-select-vue>
                 </div>
             </div>
-            
+
         </div>
         <div class="upload_dataset_container" v-if="allData.uploadType == 's3Upload'">
             <div class="project_name_header">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <next-dialog v-if="show" @closeDialog="close" :fileList="fileList" @uploadFilesEvent="uploadFilesEvent" :datasetArr="allData.datasetArr"></next-dialog>
     </div>
@@ -60,8 +60,8 @@
 
 <script>
 import nextDialog from './next-dialog'
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 
 export default {
     data() {
@@ -369,7 +369,7 @@ export default {
                 opacity: 0;
             }
         }
-        
+
     }
 }
 </style>

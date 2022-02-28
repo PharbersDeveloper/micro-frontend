@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {
@@ -151,7 +151,7 @@ export default {
         line-height: 45px;
         margin-left: 20px;
     }
-   
+
 }
 .prompt {
     width: 100%;
@@ -208,7 +208,7 @@ export default {
     }
 }
 // button {
-    
+
 //     position: absolute;
 //     right: 0;
 // 	bottom: 0;

@@ -7,15 +7,15 @@
         </div>
         <div class="tabs">
             <div class="left">
-                <span 
-                    :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
+                <span
+                    :class="myDataTab === 0 ? 'label_button_theme tab-active': 'btn_secondary_initial'"
                     class="cursor-pointer mr-3"
                     @click="changeTab(0)"
                 >
                     我的文件
                 </span>
-                <span 
-                    :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'" 
+                <span
+                    :class="myDataTab === 1 ? 'label_button_theme tab-active': 'btn_secondary_initial'"
                     class="cursor-pointer"
                     @click="changeTab(1)"
                 >
@@ -114,7 +114,7 @@
                     <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
                 </div>
             </template>
-            
+
             <template v-if="myDataTab === 1">
                 <div class="subscribed-container">
                     <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
@@ -133,7 +133,7 @@
             </template>
         </div>
         <div v-if="closeuploadToast == '0'"
-            class="upload-toast" 
+            class="upload-toast"
             :class="[
                 {'upload-toast-border-green': uploadToastBorder == 'green'},
                 {'upload-toast-border-blue': uploadToastBorder == 'blue'},
@@ -157,14 +157,14 @@
         </div>
         <input style="display: none;" type="file" name="" id="my-file" ref="myFile" @change="uploadFiles" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.csv,.xlsx,.xls,.xlsm">
     </div>
-    
+
 </template>
 <script>
 import bpPagination from '../bp-pagination.vue'
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
-import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
+import bpText from 'vue-components/src/components/bp-text.vue'
+import bpButton from 'vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
 import util from '../util.vue'
 
@@ -292,7 +292,7 @@ export default {
         myDataSort(sortType, type) {
             const event = new Event("event")
             let sort
-            
+
             if (type === 0) {
                 if (this.mineSortDescendingIcon) {
                     sort = `-${sortType}`
@@ -306,7 +306,7 @@ export default {
                     sort = `${sortType}modified`
                 }
             }
-            
+
             event.args = {
                 callback: "linkToPage",
                 element: this,
@@ -478,7 +478,7 @@ export default {
             }
             this.$emit('event', event)
         }
-    } 
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -514,13 +514,13 @@ export default {
         @include btn_primary-initial;
 
         &:hover {
-            background: #9084D2 !important; 
+            background: #9084D2 !important;
             @include btn_primary-initial;
         }
 
         &:active {
             background: #5342B3 !important;
-            @include btn_primary-initial; 
+            @include btn_primary-initial;
         }
 
         &:disabled {
@@ -533,13 +533,13 @@ export default {
         background: #f6f6f7 !important;
         color: #AAAAAA !important;
         &:hover {
-            background: #f6f6f7 !important; 
+            background: #f6f6f7 !important;
             @include btn_primary-initial;
         }
 
         &:active {
             background: #f6f6f7 !important;
-            @include btn_primary-initial; 
+            @include btn_primary-initial;
         }
     }
 
@@ -617,7 +617,7 @@ export default {
     .icon_datafile {
         width: 24px;
         height: 24px;
-        background: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M6 2h7l6 6v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z' fill='%23E1DFE9'/%3E%3Cpath d='M13 2l6 6h-5a1 1 0 0 1-1-1V2z' fill='%23A3A1AB'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+        background: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M6 2h7l6 6v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z' fill='%23E1DFE9'/%3E%3Cpath d='M13 2l6 6h-5a1 1 0 0 1-1-1V2z' fill='%23A3A1AB'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important;
     }
 
     .icon_subscribed {
@@ -707,7 +707,7 @@ export default {
                 .icon_upload {
                     width: 20px;
                     height: 20px;
-                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important;
                 }
             }
             .disbutton {
@@ -718,7 +718,7 @@ export default {
                 .icon_upload {
                     width: 20px;
                     height: 20px;
-                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23AAAAAA' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+                    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23AAAAAA' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important;
                 }
             }
         }
@@ -845,7 +845,7 @@ export default {
                             height: 100%;
                             background-color: #fff;
                             margin-right: 1px;
-                            
+
                             .bp-select-title {
                                 padding: 0;
                                 display: flex;
@@ -935,7 +935,7 @@ export default {
                             .data-name-bottom {
                                 display: flex;
                                 height: 18px;
-                                
+
                                 .editable-component {
                                     margin-right: 2px;
                                     &:last-of-type {
@@ -1100,7 +1100,7 @@ export default {
             height: 36px;
             background: #FFF;
             box-shadow: 0 0 1px 0 rgba(7, 10, 14, 0.12), 0 8px 16px -4px rgba(9, 30, 66, 0.25);
-            border-radius: 2px; 
+            border-radius: 2px;
             span {
                 display: flex;
                 align-items: center;
