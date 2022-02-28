@@ -6,7 +6,7 @@
             </span>
         </div>
         <div class="tabs">
-            <div class="upload-button" @click="upload" v-if="uploadToastBorder !== 'blue'">
+            <div class="upload-button" @click="upload" v-if="uploadToastBorder !== 'blue' && haveData">
                 <span class="fileinput-button">
                     <div class="icon_upload"></div>
                     <span class="btn_secondary_initial">
@@ -161,19 +161,25 @@ export default {
             default: function() {
                 return {
                     sort: '-created',
-                    files: [],
-                    database: []
+                    page: 0,
+                    count: 0,
+                    files: []
                 }
             }
+        },
+        perPage: {
+            type: Number,
+            default: 10
         }
+
     },
     computed: {
         haveData() {
             return this.allData.count
         },
         allPage() {
-            const total = this.allData.count
-            const perPage = 10
+            const total = this.allData.count ? this.allPage.count : 0
+            const perPage = this.perPage
             if (Math.ceil(total / perPage) <= 1) {
                 return 0
             }
@@ -197,7 +203,7 @@ export default {
             }
         },
         mineSortCreatedTimeIcon() {
-            if (this.allData.sort.indexOf('created') != -1) {
+            if (this.allData.sort.indexOf('created') !== -1) {
                 this.mineSortUpdatedTimeIcon = ''
                 return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
             } else {
@@ -206,7 +212,7 @@ export default {
             }
         },
         mineSortDescendingIcon() {
-            if (this.allData.sort.indexOf('-') != -1) {
+            if (this.allData.sort.indexOf('-') !== -1) {
                 this.mineSortAscendingIcon = ''
                 return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
             } else {

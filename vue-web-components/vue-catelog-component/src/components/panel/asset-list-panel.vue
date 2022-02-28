@@ -43,10 +43,6 @@ export default {
     },
     data() {
         return {
-            rename: false,
-            renameFile: '',
-            mineSortUpdatedTimeIcon: '',
-            mineSortAscendingIcon: '',
             userName: util.methods.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
