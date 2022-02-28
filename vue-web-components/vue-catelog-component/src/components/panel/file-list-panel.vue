@@ -6,7 +6,7 @@
             </span>
         </div>
         <div class="tabs">
-            <div class="upload-button" @click="upload" v-if="uploadToastBorder !== 'blue' && myDataTab === 0">
+            <div class="upload-button" @click="upload" v-if="uploadToastBorder !== 'blue'">
                 <span class="fileinput-button">
                     <div class="icon_upload"></div>
                     <span class="btn_secondary_initial">
@@ -85,30 +85,30 @@
                 <div class="no_data-icon"></div>
                 <bp-text class="heading-small">Placeholder copywrite Empty</bp-text>
                 <bp-text class="body-secondary">Here’s where you would #do sth# and any files you access to.Lead to Upload</bp-text>
-                <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder != 'blue'"></bp-button>
-                <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder == 'blue'"></bp-button>
+                <bp-button text="Upload" class="btn_primary" @click="upload" v-if="uploadToastBorder !== 'blue'"></bp-button>
+                <bp-button text="Upload" class="btn_primary btn_primary_dis" @click="upload" v-if="uploadToastBorder === 'blue'"></bp-button>
             </div>
         </div>
-        <div v-if="closeuploadToast == '0'"
+        <div v-if="closeuploadToast === '0'"
              class="upload-toast"
              :class="[
-                {'upload-toast-border-green': uploadToastBorder == 'green'},
-                {'upload-toast-border-blue': uploadToastBorder == 'blue'},
-                {'upload-toast-border-red': uploadToastBorder == 'red'}
+                {'upload-toast-border-green': uploadToastBorder === 'green'},
+                {'upload-toast-border-blue': uploadToastBorder === 'blue'},
+                {'upload-toast-border-red': uploadToastBorder === 'red'}
             ]">
             <div class="upload-toast-img-container">
                 <div :class="[
-                    {'check_circle-24px': uploadToastBorder == 'green'},
-                    {'upload-24px': uploadToastBorder == 'blue'},
-                    {'cancel-24px': uploadToastBorder == 'red'}
+                    {'check_circle-24px': uploadToastBorder === 'green'},
+                    {'upload-24px': uploadToastBorder === 'blue'},
+                    {'cancel-24px': uploadToastBorder === 'red'}
                 ]"></div>
             </div>
             <bp-text class="size-14-6B7376">{{uploadTextStatus}}</bp-text>
             <bp-text class="size-12-6B7376">{{uploadText}}</bp-text>
-            <bp-text class="size-12-6B7376" v-if="showProgress == '1'">
+            <bp-text class="size-12-6B7376" v-if="showProgress === '1'">
                 {{formatFileSize(uploadLoadedSize)}} / {{formatFileSize(uploadFileSize)}}
             </bp-text>
-            <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder != 'blue'">
+            <div class="upload-toast-close-container" @click="closeToast" v-if="uploadToastBorder !== 'blue'">
                 <div class="cross"></div>
             </div>
         </div>
@@ -136,7 +136,6 @@ export default {
     },
     data() {
         return {
-            myDataTab: 0,
             rename: false,
             renameFile: '',
             mineSortUpdatedTimeIcon: '',
@@ -170,13 +169,7 @@ export default {
     },
     computed: {
         haveData() {
-            // if (!this.allData.count) {
-            //     return false
-            // }
-            // if(this.allData.curTab == 1) {
-            //     this.myDataTab = 1
-            // }
-            return true
+            return this.allData.count
         },
         allPage() {
             const total = this.allData.count
@@ -222,11 +215,7 @@ export default {
             }
         },
         timeDisplay() {
-            if (this.allData.sort.indexOf('created') !== -1) {
-                return true
-            } else {
-                return false
-            }
+            return this.allData.sort.indexOf('created') !== -1;
         }
     },
     methods: {
@@ -242,10 +231,6 @@ export default {
             }
             this.$emit('event', event)
         },
-        // changeTab(num) {
-        //     this.myDataTab = num
-        //     this.$emit('changeTab', num)
-        // },
         myDataSort(sortType, type) {
             const event = new Event("event")
             let sort
