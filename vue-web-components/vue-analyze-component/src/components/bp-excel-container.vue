@@ -494,7 +494,7 @@ export default {
     .ec-container {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        // height: 100vh;
         box-sizing: border-box;
         .project_name {
             cursor: pointer;
