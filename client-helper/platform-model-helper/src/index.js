@@ -10,15 +10,15 @@ import { phcatelogOverviewRouteModel } from "./routeModel/phcatelogOverviewRoute
 import { phcatelogDataListTableEventHandler } from "./eventHandler/phcatelogDataListTableEventHandler"
 import { phcatelogDataListTableRouteModel } from "./routeModel/phcatelogDataListTableRouteModel"
 export {
-	phcatelogProjectListRouteModel,
-	phcatelogProjectListEventHandler,
-	phcatelogDataListHomeEventHandler,
-	phcatelogDataListHomeRouteModel,
-	phcatelogUploadDatasetRouteModel,
-	phcatelogUploadDatasetEventHandler,
-	phcatelogMyDataTableRouteModel,
-	phcatelogMyDataTableEventHandler,
-	phcatelogOverviewRouteModel,
-	phcatelogDataListTableEventHandler,
-	phcatelogDataListTableRouteModel
+    phcatelogProjectListRouteModel,
+    phcatelogProjectListEventHandler,
+    phcatelogDataListHomeEventHandler,
+    phcatelogDataListHomeRouteModel,
+    phcatelogUploadDatasetRouteModel,
+    phcatelogUploadDatasetEventHandler,
+    phcatelogMyDataTableRouteModel,
+    phcatelogMyDataTableEventHandler,
+    phcatelogOverviewRouteModel,
+    phcatelogDataListTableEventHandler,
+    phcatelogDataListTableRouteModel
 }

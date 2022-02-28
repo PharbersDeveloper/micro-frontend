@@ -58,9 +58,9 @@ export default class PhMenuLayoutComponent extends Component {
 				} else if (idx === 2) {
 					this.router.transitionTo("shell", `projects`)
 				} else if (idx === 3) {
-					this.router.transitionTo("shell", `projects`)
+					this.router.transitionTo("shell", `files`)
 				} else if (idx === 4) {
-					this.router.transitionTo("shell", `projects`)
+					this.router.transitionTo("shell", `assets`)
 				} else {
 					this.router.transitionTo("shell", `overview`)
 				}
@@ -68,6 +68,7 @@ export default class PhMenuLayoutComponent extends Component {
 			case "logOut":
 				this.oauthService.removeAuth()
 				window.localStorage.clear()
+				// eslint-disable-next-line no-case-declarations
 				const x = JSON.stringify({
 					client_id: this.clientId,
 					redirect_uri: this.redirectUri,
