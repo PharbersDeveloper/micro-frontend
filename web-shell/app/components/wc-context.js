@@ -1,6 +1,6 @@
 import Component from "@glimmer/component"
 import { action } from "@ember/object"
-import { inject as service } from '@ember/service';
+import { inject as service } from "@ember/service"
 import { camelize } from "@ember/string"
 
 export default class WcContextComponent extends Component {
@@ -9,12 +9,10 @@ export default class WcContextComponent extends Component {
 	@service cookies
 	@service awsService
 	@service downloadFile
-    // @service noticeService;
-    @service('loading') loadingService
+	// @service noticeService;
+	@service("loading") loadingService
 	@service("execution-status") noticeService
 
-
-	
 	@action
 	async listener(e) {
 		let modelName = camelize(this.args.allData.page.name) + "EventHandler"

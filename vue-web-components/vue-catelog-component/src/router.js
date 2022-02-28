@@ -20,7 +20,7 @@ import deleteTagsDialog from './components/deprecated/delete-tags-dialog.vue'
 import prepare from './components/panel/prepare-set.vue'
 import overview from './components/panel/overview.vue'
 import codeditor from './components/bp-codeditor-page'
-import fileListPanel from './components/panel/file-list-panel'
+import fileListPanel from './components/panel/files-list'
 // import fileContent from './components/panel/file-content.vue'
 
 Vue.use(Router)
