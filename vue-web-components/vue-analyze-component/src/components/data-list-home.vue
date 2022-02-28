@@ -555,6 +555,7 @@ export default {
     }
     .left-area {
         flex: 1;
+		width: 75%;
         .projectInfo {
             display: flex;
             // width: 1400px;
@@ -713,7 +714,7 @@ export default {
         }
     }
     .right_area {
-        width:450px;
+		width: 22%;
         // border: 1px solid #000;
         margin-top: 30px;
         margin-left: 20px;
@@ -758,7 +759,7 @@ export default {
                 }
                 .cell_info {
                     width: 100%;
-                    margin-left: 10px;
+                    padding-left: 10px;
                     font-size: 14px; 
                     .top_info {
                         position: relative;
