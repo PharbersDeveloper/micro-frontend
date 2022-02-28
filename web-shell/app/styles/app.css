@@ -21,11 +21,12 @@
 	overflow: hidden;
 	position: absolute;
 }
+/* 	使用transform: translateZ(0)加快动画和过渡的速度
+	使用scale进行缩放
+*/
 .ldio-400lpppmiue {
 	position: absolute;
 	transform: translateZ(0) scale(0.8);
-	backface-visibility: hidden;
-	transform-origin: 0 0;
 }
 /*  创建动画
 	1. 0%是动画开始时间
@@ -43,7 +44,7 @@
 }
   
 .ldio-400lpppmiue div {
-	box-sizing: border-box !important
+	box-sizing: border-box;
 }
   
 .ldio-400lpppmiue>div {
@@ -131,14 +132,6 @@
 	left: -4px;
 	top: 23px;
 	box-shadow: 54px 0 0 0 #747789;
-}
-  
-
-  
-
-  
-.ldio-400lpppmiue div {
-	box-sizing: content-box;
 }
   
   /* iframe */
