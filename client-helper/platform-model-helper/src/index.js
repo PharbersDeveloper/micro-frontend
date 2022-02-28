@@ -9,6 +9,8 @@ import { phcatelogMyDataTableRouteModel } from "./routeModel/phcatelogMyDataTabl
 import { phcatelogOverviewRouteModel } from "./routeModel/phcatelogOverviewRouteModel"
 import { phcatelogDataListTableEventHandler } from "./eventHandler/phcatelogDataListTableEventHandler"
 import { phcatelogDataListTableRouteModel } from "./routeModel/phcatelogDataListTableRouteModel"
+import { phcatelogAssetsListRouteModel } from "./routeModel/phcatelogAssetsListRouteModel"
+import { phcatelogFilesListRouteModel } from "./routeModel/phcatelogFilesListRouteModel"
 export {
     phcatelogProjectListRouteModel,
     phcatelogProjectListEventHandler,
@@ -20,5 +22,7 @@ export {
     phcatelogMyDataTableEventHandler,
     phcatelogOverviewRouteModel,
     phcatelogDataListTableEventHandler,
-    phcatelogDataListTableRouteModel
+    phcatelogDataListTableRouteModel,
+    phcatelogAssetsListRouteModel,
+    phcatelogFilesListRouteModel
 }

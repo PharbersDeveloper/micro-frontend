@@ -178,7 +178,7 @@ export default {
             return this.allData.count
         },
         allPage() {
-            const total = this.allData.count ? this.allPage.count : 0
+            const total = this.allData.count
             const perPage = this.perPage
             if (Math.ceil(total / perPage) <= 1) {
                 return 0
