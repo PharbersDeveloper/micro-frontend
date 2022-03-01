@@ -14288,14 +14288,14 @@ var bp_linkshadow_component = normalizeComponent(
 )
 
 /* harmony default export */ var bp_linkshadow = (bp_linkshadow_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2ab5b1e6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-dataset-item.vue?vue&type=template&id=58fd61a8&scoped=true&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2ab5b1e6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-tree-item.vue?vue&type=template&id=58fd61a8&scoped=true&shadow
 var bp_menu_itemvue_type_template_id_58fd61a8_scoped_true_shadow_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{staticClass:"bp-push-button bp-menu-item",attrs:{"disabled":_vm.disabled},on:{"click":_vm.menu_item_data.click_event}},[(_vm.menu_item_data.src)?_c('img',{staticClass:"svg-icon",attrs:{"src":_vm.menu_item_data.src,"alt":"example"}}):_vm._e(),_c('span',[_vm._v(_vm._s(_vm.menu_item_data.text))])])}
 var bp_menu_itemvue_type_template_id_58fd61a8_scoped_true_shadow_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/bp-dataset-item.vue?vue&type=template&id=58fd61a8&scoped=true&shadow
+// CONCATENATED MODULE: ./src/components/bp-tree-item.vue?vue&type=template&id=58fd61a8&scoped=true&shadow
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-dataset-item.vue?vue&type=script&lang=js&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-tree-item.vue?vue&type=script&lang=js&shadow
 //
 //
 //
@@ -14312,9 +14312,9 @@ var bp_menu_itemvue_type_template_id_58fd61a8_scoped_true_shadow_staticRenderFns
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/bp-dataset-item.vue?vue&type=script&lang=js&shadow
+// CONCATENATED MODULE: ./src/components/bp-tree-item.vue?vue&type=script&lang=js&shadow
  /* harmony default export */ var components_bp_menu_itemvue_type_script_lang_js_shadow = (bp_menu_itemvue_type_script_lang_js_shadow);
-// CONCATENATED MODULE: ./src/components/bp-dataset-item.vue?shadow
+// CONCATENATED MODULE: ./src/components/bp-tree-item.vue?shadow
 
 
 
@@ -14353,14 +14353,14 @@ var bp_sub_menuvue_type_template_id_442e0eb6_scoped_true_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/bp-sub-menu.vue?vue&type=template&id=442e0eb6&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2ab5b1e6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-dataset-item.vue?vue&type=template&id=7ee67a87&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2ab5b1e6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-tree-item.vue?vue&type=template&id=7ee67a87&scoped=true&
 var bp_menu_itemvue_type_template_id_7ee67a87_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{staticClass:"bp-push-button bp-menu-item",attrs:{"disabled":_vm.disabled},on:{"click":_vm.menu_item_data.click_event}},[(_vm.menu_item_data.src)?_c('img',{staticClass:"svg-icon",attrs:{"src":_vm.menu_item_data.src,"alt":"example"}}):_vm._e(),_c('span',[_vm._v(_vm._s(_vm.menu_item_data.text))])])}
 var bp_menu_itemvue_type_template_id_7ee67a87_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/bp-dataset-item.vue?vue&type=template&id=7ee67a87&scoped=true&
+// CONCATENATED MODULE: ./src/components/bp-tree-item.vue?vue&type=template&id=7ee67a87&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-dataset-item.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/bp-tree-item.vue?vue&type=script&lang=js&
 //
 //
 //
@@ -14377,9 +14377,9 @@ var bp_menu_itemvue_type_template_id_7ee67a87_scoped_true_staticRenderFns = []
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/bp-dataset-item.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./src/components/bp-tree-item.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_bp_menu_itemvue_type_script_lang_js_ = (bp_menu_itemvue_type_script_lang_js_);
-// CONCATENATED MODULE: ./src/components/bp-dataset-item.vue
+// CONCATENATED MODULE: ./src/components/bp-tree-item.vue
 
 
 
