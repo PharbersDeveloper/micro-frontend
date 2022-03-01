@@ -3,6 +3,23 @@
  */
 
 
+ function generateId () {
+    const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+    'abcdefghijklmnopqrstuvwxyz' +
+    '0123456789-_'
+
+    const charsetLength = charset.length
+
+    const keyLength = 3 * 5
+    let i, array = []
+    for (i = 0; i < keyLength; i++) {
+        array.push(charset.charAt(Math.floor(Math.random() * charsetLength)))   
+    }
+    return array.join('')
+ }
+
+
 const awsCrt = require("aws-crt");
 
 function PhMQTT(config, callBack, timeoutQueue) {
@@ -11,7 +28,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
     let timeoutId = null;
     let use_cache = [];
     const topic = config.topic;
-    const client_id = new Date().getTime()// config.client_id;
+    const client_id = generateId() // config.client_id;
     const endpoint = config.endpoint;
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
@@ -62,6 +79,11 @@ function PhMQTT(config, callBack, timeoutQueue) {
     }
 
     const __subscribe = () => {
+        const states = {
+            "failed": true,
+            "succeed": true,
+            "succss": true
+        }
         if (connection) {
             if (!callBack) { throw Error("CallBack Is Undefined") }
             connection.subscribe(topic, qos, (_, payload) => {
@@ -72,19 +94,15 @@ function PhMQTT(config, callBack, timeoutQueue) {
 
                 const content = __byteToString(payload)
 
-                const { id, projectId, date } = JSON.parse(content)
+                const { id, projectId, date, status, jobCat } = JSON.parse(content)
 
-                if (use_cache.indexOf(`${id}_${projectId}_${date}`) === -1) {
-                    use_cache.push(`${id}_${projectId}_${date}`)
-                    const { status , jobCat } = JSON.parse(content)
+                if (use_cache.indexOf(`${id}_${projectId}_${date}_${status}`) === -1) {
+                    use_cache.push(`${id}_${projectId}_${date}_${status}`)
                     // 只接受jobCat为Notification标识
                     if (jobCat === "notification") {
                         // UnRegister 将错误的和完成的关掉连接
-                        if (status === "failed" || status === "succeed") {
-							setTimeout( ()=> {
-								timeoutQueue.push(topic);
-							}, 5000)
-                            
+                        if (states[status] || false) {
+							timeoutQueue.push(topic);
                         }
                         callBack(parameter, content); 
                     }
