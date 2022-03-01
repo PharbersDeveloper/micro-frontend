@@ -98,28 +98,6 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 			console.info(data)
 			console.info("running", data.progress)
 		}
-
-		// let cnotification = JSON.parse(
-		// 	JSON.parse(payload).message
-		// ).cnotification
-		// let upload_status = cnotification.status
-		// let error =
-		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		// if (upload_status == "project_file_to_DS_succeed") {
-		// 	//跳转下一页面
-		// 	route.router.transitionTo(
-		// 		"shell",
-		// 		`dataset-lst?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}`
-		// 	)
-		// 	route.loadingService.loading.style.display = "none"
-		// } else if (upload_status == "project_file_to_DS_failed") {
-		// 	let msg =
-		// 		error["message"]["zh"] !== ""
-		// 			? error["message"]["zh"]
-		// 			: "导入失败，请重新上传！"
-		// 	alert(msg)
-		// 	route.loadingService.loading.style.display = "none"
-		// }
 	}
 
 	async function createDataSetIndex(param) {

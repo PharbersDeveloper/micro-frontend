@@ -298,7 +298,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status == "succeed") {
-			alert("清楚数据成功！")
+			alert("清除数据成功！")
 			window.location.reload()
 		} else if (status == "failed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""

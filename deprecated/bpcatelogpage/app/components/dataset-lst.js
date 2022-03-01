@@ -248,7 +248,7 @@ export default class DatasetLstComponent extends Component {
 		let upload_status = cnotification.status
 		let error = cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
         if(upload_status == "clear_DS_succeed") {
-			alert("清楚数据成功！")
+			alert("清除数据成功！")
             window.location.reload()
         } else if(upload_status == "clear_DS_failed") {
 			let msg = error["message"]["zh"] !== '' ? error["message"]["zh"] : '清除数据失败，请重新操作！'

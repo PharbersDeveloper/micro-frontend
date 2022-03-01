@@ -41,7 +41,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			route.router.transitionTo("shell", uri)
 			break
 		case "s3UploadFiles":
-			console.log("s3UploadFiles")
 			if (param.s3UploadMessage.message) {
 				let resMessage = {
 					tmpname: param.s3UploadMessage.message.refer_name,
@@ -66,8 +65,15 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					message: resMessage,
 					projectId: param.projectId
 				}
+				route.noticeService.defineAction({
+					type: "iot",
+					id: "uploadfiles",
+					projectId: param.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: noticeCallback
+				})
 				//请求接口
-				route.updateDataset(
+				updateDataset(
 					file,
 					param.property,
 					param.projectName,
@@ -146,7 +152,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
-		console.log("notice")
 		route.noticeService.defineAction({
 			type: "iot",
 			id: "uploadfiles",
@@ -296,35 +301,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 				`excel-handler?${parameter.join("&")}`
 			)
 		}
-
-		// const error = error !== "" ? JSON.parse(error) : ""
-
-		// let cnotification = JSON.parse(
-		// 	JSON.parse(payload).message
-		// ).cnotification
-		// let upload_status = cnotification.status
-		// let error =
-		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		// if (upload_status != "upload_succeed") {
-		// 	//跳转回dataset页面
-		// 	let msg =
-		// 		error["message"]["zh"] !== ""
-		// 			? error["message"]["zh"]
-		// 			: "上传失败，请重新上传！"
-		// 	alert(msg)
-		// 	route.router.transitionTo(
-		// 		"/dataset-lst?projectName=" +
-		// 			route.tranParam.projectName +
-		// 			"&projectId=" +
-		// 			route.tranParam.projectId
-		// 	)
-		// } else {
-		// 	route.noticeService.uploadStatus = true
-		// 	route.router.transitionTo(
-		// 		"shell",
-		// 		`excel-handler?projectName=${route.tranParam.projectName}&projectId=${route.tranParam.projectId}&filename=${route.tranParam.file.name}&version=${route.tranParam.property.dataID}&dataset=${route.tranParam.property.dataset}&tmpname=${route.tranParam.message.tmpname}`
-		// 	)
-		// }
 		route.loadingService.loading.style.display = "none"
 	}
 }

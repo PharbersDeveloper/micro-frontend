@@ -120,24 +120,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				route.vueComponentEnv.itemValueType = "Number"
 			}
 		}
-
-		// let cnotification = JSON.parse(
-		// 	JSON.parse(payload).message
-		// ).cnotification
-		// let status = cnotification.status
-		// let error =
-		// 	cnotification.error !== "" ? JSON.parse(cnotification.error) : ""
-		// if (status == "transform_schema_succeed") {
-		// 	alert("修改成功")
-		// } else if (status == "transform_schema_failed") {
-		// 	alert(error)
-		// 	//刷新页面数据
-		// 	if (route.vueComponentEnvType === "Number") {
-		// 		route.vueComponentEnv.itemValueType = "Text"
-		// 	} else {
-		// 		route.vueComponentEnv.itemValueType = "Number"
-		// 	}
-		// }
 		route.loadingService.loading.style.display = "none"
 	}
 }

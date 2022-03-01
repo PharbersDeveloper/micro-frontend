@@ -25,46 +25,52 @@ export default class IframeContextComponent extends Component {
 	iframeEvent(event) {
 		console.log("ember接受iframe消息", event)
 		if(event.data.message) {
+			//dag实时
 			this.noticeService.defineAction({
 				type: "iot",
-				// id: results[0].data.id,
-				ele: this,
 				timeout: 1000 * 60 * 60,
 				id: event.data.message.cmd,
 				projectId: this.args.allData.data.projectId,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.runDagCallback
 			})
+			//dag整体
+			this.noticeService.defineAction({
+				type: "iot",
+				timeout: 1000 * 60 * 60,
+				id: "executionStatus",
+				projectId: this.args.allData.data.projectId,
+				ownerId: this.cookies.read("account_id"),
+				callBack: this.executionStatusCallback
+			})
 		}
 	}
 
 	@action
-	runDagCallback(param, payload) {
+	executionStatusCallback(param, payload) {
+		console.log("dag整体callback")
 		console.log(payload)
 		console.log(param)
-		let obj = {}
-		//包含runid 整个dag failed
-		if (JSON.parse(payload).runnerId) {
-			obj = {
-				param,
-				payload,
-				cmd: "dag_failed"
-			}
-		} else {
-			let message = JSON.parse(JSON.parse(payload).message)
-			let cnotification = message.cnotification
-			
-			if(cnotification.runId && cnotification.runId !== "") {
+		let obj = {
+			param,
+			payload,
+			cmd: "finish_dag"
+		}
+		// 向iframe传递消息
+		document.getElementById("mainIframe").contentWindow.postMessage({
+			message: obj
+		}, '*')
+	}
 
-			}
-			/**
-			 * 1.有
-			 */
-			obj = {
-				param,
-				payload,
-				cmd: "render_dag"
-			}
+	@action
+	runDagCallback(param, payload) {
+		console.log("dag实时callback")
+		console.log(payload)
+		console.log(param)
+		let obj = {
+			param,
+			payload,
+			cmd: "render_dag"
 		}
 		// 向iframe传递消息
 		document.getElementById("mainIframe").contentWindow.postMessage({

@@ -103,11 +103,11 @@
             </div>
         </div>
 
-        <!-- <progress-bar 
+        <progress-bar 
             v-if="showProgress"
             @closeProgress="closeProgress"
             :progressOver="progressOver">
-        </progress-bar> -->
+        </progress-bar>
 
     </div>
 </template>
@@ -321,11 +321,11 @@ export default {
             let that = this
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
-            		console.log("iframe接收的", event.data.message.cmd)
+                    console.log("iframe接收的", event.data.message.cmd)
                     that.runDagCallback(event.data.message, that)
                 }
-                if(event.data.message.cmd === "dag_failed") {
-            		console.log("iframe接收的dag failed", event.data.message.cmd)
+                if(event.data.message.cmd === "finish_dag") {
+                    console.log("iframe接收的dag finish", event.data.message.cmd)
                     that.runDagFailedCallback(event.data.message, that)
                 }
             }
@@ -354,6 +354,8 @@ export default {
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
             confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
+            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "测试人员"
+            confData.jobDesc = "runDag"
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
@@ -368,17 +370,18 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
+            console.log(body)
             await fetch(url, options).then(res => res.json())
             this.showProgress = true
             this.showRunJson = false
-            // this.noticeService.projectName = this.projectName
-            // let queryId = result.data.dag_run_id
-            // let timeout = data.args.param.timeout
-            // this.noticeService.register("notification", queryId, this.runDagCallback, this, this.projectId, timeout)
         },
         runDagFailedCallback(response, ele) {
-            // 更新进度条
-            this.progressOver = true
+            let payload = JSON.parse(response.payload)
+            let status = payload["status"]
+            if(status != "running") {
+                // 更新进度条
+                this.progressOver = true
+            }
         },
         /**
          * 更新状态的回调函数
@@ -389,15 +392,15 @@ export default {
             let represent_id = ""
             // this.responseArr = response.message
             let payload = JSON.parse(response.payload)
-            let jobCat = payload["jobCat"]
+            let status = payload["status"]
             let jobName = JSON.parse(payload.message).cnotification.jobName
             let data = ele.datasource.data
             // 1.找到对应job节点并更新状态
             data.map((it,index) => {
                 if(jobName.indexOf(it.attributes.name) != -1) {
-                    if(jobCat === "success") {
+                    if(status === "success") {
                         it.status = "succeed"
-                    } else if(jobCat === "failed") {
+                    } else if(status === "failed") {
                         it.status = "failed"
                         represent_id = it.representId
                     }
@@ -405,7 +408,7 @@ export default {
                 that.refreshNodeStatus(it)
             })
             // 2.失败时出现弹框
-            if(jobCat === "failed") {
+            if(status === "failed") {
                 that.failedLogs.push({
                     data: payload,
                     jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
@@ -471,7 +474,7 @@ export default {
         on_click_runDag() {
             window.parent.postMessage({
                 message: {
-                	cmd: 'runDag'
+                    cmd: 'runDag'
                 }
             }, '*')
             let roots = []

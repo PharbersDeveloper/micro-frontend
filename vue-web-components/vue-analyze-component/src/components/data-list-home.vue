@@ -13,7 +13,14 @@
                             </div>
                         </div>
                         <div class="right">
-                            <button @click="dialogStart = true">启动资源</button>
+							<button class="delete" 
+								@click="dialogDeleteProject = true">删除项目
+							</button>
+                            <button 
+								@click="dialogStart = true" 
+								v-if="showStartButton">启动资源
+							</button>
+							<span v-if="!showStartButton">已启动</span>
                         </div>
                     </div>
                     <div class="items">
@@ -148,6 +155,16 @@
                 </div>
             </div>
         </div>
+		<el-dialog
+                title="删除项目"
+                :visible.sync="dialogDeleteProject"
+                width="460px">
+            <span>确定删除该项目及包含的所有数据吗？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogDeleteProject = false">取消</el-button>
+                <el-button type="primary" @click="deleteProject">确认</el-button>
+            </span>
+        </el-dialog>
         <el-dialog
                 title="启动资源"
                 :visible.sync="dialogStart"
@@ -156,6 +173,26 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogStart = false">取消</el-button>
                 <el-button type="primary" @click="on_clickStartConfirm">确认</el-button>
+            </span>
+        </el-dialog>
+		<el-dialog
+                title="启动成功"
+                :visible.sync="dialogStartSucceed"
+                width="460px">
+            <span>资源启动成功</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogStartSucceed = false">取消</el-button>
+                <el-button type="primary" @click="dialogStartSucceed = false">确认</el-button>
+            </span>
+        </el-dialog>
+		<el-dialog
+                title="启动失败"
+                :visible.sync="dialogStartFailed"
+                width="460px">
+            <span>资源启动异常，请联系管理员。</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogStartFailed = false">取消</el-button>
+                <el-button type="primary" @click="dialogStartFailed = false">确认</el-button>
             </span>
         </el-dialog>
     </div>
@@ -186,12 +223,17 @@ export default {
                 "max1.0": "创建了数据集",
                 "remove_DS": "删除了数据集",
                 "upload": "创建了数据集",
-                "dag_create": "创建了脚本"
+                "dag_create": "创建了脚本",
+                "resource_create": "启动了资源"
             },
             actions: [],
             actionsShow: [],
             actionsKey: "",
-            dialogStart: false
+            dialogStart: false,
+            showStartButton: true,
+            dialogStartSucceed: false,
+            dialogStartFailed: false,
+            dialogDeleteProject: false
         }
     },
     components: {
@@ -199,12 +241,15 @@ export default {
         ElButton
     },
     async mounted() {
-        const accessToken = this.getCookie("access_token") || "1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
+        //actions数据
+        const accessToken = this.getCookie("access_token") || "f2082acf7080f24cde807d4650e3129168a6796f7f650976bbf2e6ec02a6abc0"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
+        console.log(href)
         const hrefParam = href.split("&")
         let projectId = hrefParam[1].split("=")[1]
+        let projectName = hrefParam[0].split("=")[1]
         let acbody = {
             "table": "action",
             "conditions": {
@@ -225,6 +270,18 @@ export default {
         this.actions = await fetch(acurl, acoptions).then(res=>res.json())
         this.actionsKey = this.actions.meta.start_key
         this.dealActions() //处理actions数据
+
+        // 判断启动资源
+        const event = new Event("event")
+        event.args = {
+            callback: "checkStartResource",
+            element: this,
+            param: {
+                projectName: projectName,
+                projectId: projectId
+            }
+        }
+        this.$emit('event', event)
     },
     props: {
         allData: {
@@ -240,6 +297,19 @@ export default {
         }
     },
     methods: {
+        deleteProject() {
+            const event = new Event("event")
+            event.args = {
+                callback: "deleteProject",
+                element: this,
+                param: {
+                    projectName: this.allData.projectDetail.name,
+                    projectId: this.allData.projectDetail.id
+                }
+            }
+            this.$emit('event', event)
+            this.dialogDeleteProject = false
+        },
         on_clickStartConfirm() {
             const event = new Event("event")
             event.args = {
@@ -251,6 +321,7 @@ export default {
                 }
             }
             this.$emit('event', event)
+            this.dialogStart = false
         },
         dealActions() {
             this.actions.data.map(mapItem => {
@@ -301,7 +372,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "1440b6d1f852c23d5efec36a2f30136c9eae44bd3cdf41c66d6d713b27911e0c"
+            const accessToken = this.getCookie("access_token") || "f2082acf7080f24cde807d4650e3129168a6796f7f650976bbf2e6ec02a6abc0"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",
@@ -337,10 +408,12 @@ export default {
         //操作对象的名称
         showActionName(data) {
             let msg = JSON.parse(data)
-            if(Array.isArray(msg)) {
+            if (Array.isArray(msg)) {
                 return msg[0].actionName
-            } else if(msg.actionName) {
+            } else if (msg.actionName) {
                 return msg.actionName
+            } else if (!msg.actionName) {
+                return msg.projectName
             } else {
                 return "undefined"
             }
@@ -482,6 +555,7 @@ export default {
     }
     .left-area {
         flex: 1;
+		width: 75%;
         .projectInfo {
             display: flex;
             // width: 1400px;
@@ -520,6 +594,10 @@ export default {
                 display: flex;
                 padding-top: 20px;
                 padding-right: 20px;
+				.delete {
+					background: #DB4D71 !important;
+					margin-right: 10px;
+				}
                 button {
                     min-width: 80px;
                     height: 32px;
@@ -529,6 +607,11 @@ export default {
                     border: none;
                     cursor: pointer;
                 }
+				span {
+					font-size: 14px;
+					color: #7163C5;
+					font-weight: 500;
+				}
             }
         }
     }
@@ -631,7 +714,7 @@ export default {
         }
     }
     .right_area {
-        width:450px;
+		width: 22%;
         // border: 1px solid #000;
         margin-top: 30px;
         margin-left: 20px;
@@ -676,7 +759,7 @@ export default {
                 }
                 .cell_info {
                     width: 100%;
-                    margin-left: 10px;
+                    padding-left: 10px;
                     font-size: 14px; 
                     .top_info {
                         position: relative;

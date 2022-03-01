@@ -17,7 +17,7 @@
                         <input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row_input" />
                         <img :src="search_row" class="search_row_icon" alt="">
                         <div class="dlg-all-version-container">
-                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item)">
+                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item, index)">
                                 <span>{{item}}</span>
                             </div>
                         </div>
@@ -70,10 +70,11 @@ export default {
     },
     watch: {},
     methods: {
-        appendSelectVersionTags(data) {
+        appendSelectVersionTags(data, index) {
             //去重
             let setArr = new Set(this.selectVersionTags).add(data)
             this.selectVersionTags = Array.from(setArr)
+            this.versionArrShow.splice(index, 1)
         },
         // 搜索框
         searchRowInput(data) {
@@ -84,6 +85,7 @@ export default {
             this.selectVersionTags = this.selectVersionTags.filter(function(item) {
                 return item !== data
             });
+            this.versionArrShow.push(data)
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -188,7 +190,7 @@ export default {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            max-height: 150px;
+            max-height: 70px;
             overflow: auto;
             .dlg-flex-version-item {
                 font-size: 12px;
@@ -213,8 +215,8 @@ export default {
             flex-direction: column;
             flex-wrap: nowrap;
             overflow: auto;
-            max-height:200px;
-            height: 200px;
+            max-height:150px;
+            height: 150px;
                 .dlg-flex-version-item {
                     cursor: pointer;
                     padding: 5px;
