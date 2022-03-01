@@ -10,6 +10,29 @@
 }
   
 /* 界面未加载loading */
+#loadingio-spinner-double-ring-ho1zizxmctu {
+	backdrop-filter: blur(1px); /* 毛玻璃特效 */
+	background: rgba(200, 0,0, 0.05);
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	overflow: hidden;
+	position: absolute;
+}
+/* 	使用transform: translateZ(0)加快动画和过渡的速度
+	使用scale进行缩放
+*/
+.ldio-400lpppmiue {
+	position: absolute;
+	transform: translateZ(0) scale(0.8);
+}
+/*  创建动画
+	1. 0%是动画开始时间
+	2. 100%是动画结束时间
+	3. transform: rorate()是正时针旋转的角度
+*/
 @keyframes ldio-400lpppmiue {
 	0% {
 		transform: rotate(0)
@@ -21,15 +44,15 @@
 }
   
 .ldio-400lpppmiue div {
-	box-sizing: border-box !important
+	box-sizing: border-box;
 }
   
 .ldio-400lpppmiue>div {
 	position: absolute;
 	width: 68px;
 	height: 68px;
-	top: 16px;
-	left: 16px;
+	top: -30px;
+	left: -30px;
 	border-radius: 50%;
 	border: 4px solid #000;
 	border-color: #f5c924 transparent #f5c924 transparent;
@@ -40,8 +63,8 @@
 .ldio-400lpppmiue>div:nth-child(4) {
 	width: 58px;
 	height: 58px;
-	top: 21px;
-	left: 21px;
+	top: -26px;
+	left: -26px;
 	animation: ldio-400lpppmiue 1s linear infinite reverse;
 }
   
@@ -109,40 +132,6 @@
 	left: -4px;
 	top: 23px;
 	box-shadow: 54px 0 0 0 #747789;
-}
-  
-#loadingio-spinner-double-ring-ho1zizxmctu {
-	backdrop-filter: blur(1px);
-	background: rgba(200, 0,0, 0.05);
-	justify-content: center;
-	align-items: center;
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-	overflow: hidden;
-	/* background: none; */
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	-webkit-transform: translate(-50%, -50%);
-	-ms-transform: translate(-50%, -50%);
-	-moz-transform: translate(-50%, -50%);
-	-o-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
-  
-.ldio-400lpppmiue {
-	/* width: 100%;
-	height: 100%; */
-	position: relative;
-	transform: translateZ(0) scale(0.8);
-	backface-visibility: hidden;
-	transform-origin: 0 0;
-	/* see note above */
-}
-  
-.ldio-400lpppmiue div {
-	box-sizing: content-box;
 }
   
   /* iframe */

@@ -1,21 +1,21 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogDataListHomeRouteModel(route, parseParams) {
-    let debugToken =
-        "f2082acf7080f24cde807d4650e3129168a6796f7f650976bbf2e6ec02a6abc0"
-    let numShow = {}
-    let promiseList = []
-    // project基本信息
-    let projectDetail = route.store.findRecord(
-        "project",
-        parseParams.param.project_id
-    )
-    // 目前只有数据集和脚本的num
-    const url = "https://apiv2.pharbers.com/phgetnumber"
-    const accessToken = route.cookies.read("access_token") || debugToken
-    let body = {
-        tableName: "dataset",
-        projectId: parseParams.param.project_id
-    }
+	let debugToken =
+		"b1d44d4c52e3d71db493f1639be152c386153e08f3b3ec4837d1451188df730a"
+	let numShow = {}
+	let promiseList = []
+	// project基本信息
+	let projectDetail = route.store.findRecord(
+		"project",
+		parseParams.param.project_id
+	)
+	// 目前只有数据集和脚本的num
+	const url = "https://apiv2.pharbers.com/phgetnumber"
+	const accessToken = route.cookies.read("access_token") || debugToken
+	let body = {
+		tableName: "dataset",
+		projectId: parseParams.param.project_id
+	}
 
     let options = {
         method: "POST",
