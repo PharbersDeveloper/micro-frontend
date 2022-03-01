@@ -32,24 +32,51 @@ export default {
         ElTree
     },
     methods: {
-        // <bp-text @click="linkToPage(file.name)" class="subscribed-button">{{goDetail}}</bp-text>
         handleNodeClick(data) {
             console.log(data);
+            data.expanded = !data.expanded
         },
         renderNodeContent(h, { node, data, store }) {
-            return (
-            <div class="left-text">
-                <img src="" class="file-icon-dark" alt="" />
-                <div class="text-area">
-                    <p class="title">{data.label}</p>
-                </div>
-            </div>
-            )
-        }
+            if (node.expanded) {
+                return (
+                    <div class="item-line">
+                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
+                             class="icon" alt=""/>
+                        <div class="content">
+                            <p class="title">{data.label}</p>
+                        </div>
+                    </div>
+                )
+            } else {
+                return (
+                    <div class="item-line">
+                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg"
+                             class="icon" alt=""/>
+                        <div class="content">
+                            <p class="title">{data.label}</p>
+                        </div>
+                    </div>
+                )
+            }
+        },
+
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+    .item-line {
+        display: flex;
+        flex-direction: row;
 
+        .icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 </style>
