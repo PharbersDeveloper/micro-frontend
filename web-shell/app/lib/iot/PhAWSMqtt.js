@@ -3,6 +3,23 @@
  */
 
 
+ function generateId () {
+    const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+    'abcdefghijklmnopqrstuvwxyz' +
+    '0123456789-_'
+
+    const charsetLength = charset.length
+
+    const keyLength = 3 * 5
+    let i, array = []
+    for (i = 0; i < keyLength; i++) {
+        array.push(charset.charAt(Math.floor(Math.random() * charsetLength)))   
+    }
+    return array.join('')
+ }
+
+
 const awsCrt = require("aws-crt");
 
 function PhMQTT(config, callBack, timeoutQueue) {
@@ -11,7 +28,7 @@ function PhMQTT(config, callBack, timeoutQueue) {
     let timeoutId = null;
     let use_cache = [];
     const topic = config.topic;
-    const client_id = new Date().getTime()// config.client_id;
+    const client_id = generateId() // config.client_id;
     const endpoint = config.endpoint;
     const aws_region = config.aws_region;
     const aws_access_id = config.aws_access_id;
@@ -62,6 +79,11 @@ function PhMQTT(config, callBack, timeoutQueue) {
     }
 
     const __subscribe = () => {
+        const states = {
+            "failed": true,
+            "succeed": true,
+            "succss": true
+        }
         if (connection) {
             if (!callBack) { throw Error("CallBack Is Undefined") }
             connection.subscribe(topic, qos, (_, payload) => {
@@ -80,11 +102,8 @@ function PhMQTT(config, callBack, timeoutQueue) {
                     // 只接受jobCat为Notification标识
                     if (jobCat === "notification") {
                         // UnRegister 将错误的和完成的关掉连接
-                        if (status === "failed" || status === "succeed") {
-							setTimeout( ()=> {
-								timeoutQueue.push(topic);
-							}, 5000)
-                            
+                        if (status === "failed" || status === "succeed" || status === "success") {
+							timeoutQueue.push(topic);
                         }
                         callBack(parameter, content); 
                     }
