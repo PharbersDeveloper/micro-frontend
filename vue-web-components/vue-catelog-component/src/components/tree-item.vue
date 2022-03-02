@@ -1,17 +1,20 @@
 <template>
-    <el-tree :data="this.adapter.exec(this.items)"
+	<div>
+		<link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/index.css">
+		<el-tree :data="this.adapter.exec(this.items)"
              @node-click="handleNodeClick"
              :render-content="renderNodeContent"
              :lazy="isLazy"
              :load="loadExpandedData"
              :props="defaultProp"
              check-strictly
-    />
+    	/>
+	</div>
 </template>
 
 <script>
 import ElTree from "element-ui/packages/tree"
-import "element-ui/lib/theme-chalk/index.css"
+// import "element-ui/lib/theme-chalk/index.css"
 import adapter from "./adapter/tree-node-adapter"
 
 export default {
@@ -78,6 +81,13 @@ export default {
 </script>
 
 <style lang="scss" >
+	@font-face {
+		font-family: element-icons;
+		src: url(https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff) format("woff"), url(https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf) format("truetype");
+		font-weight: 400;
+		font-display: "auto";
+		font-style: normal
+	}
     .item-line {
         display: flex;
         flex-direction: row;

@@ -350,7 +350,7 @@ export default {
         async confirmeRunDag(data) {
             // this.noticeService.progress = false //重置进度条
             this.showProgress = false
-            const url = `https://api.pharbers.com/phdagtrigger`
+            const url = `https://apiv2.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
             confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
