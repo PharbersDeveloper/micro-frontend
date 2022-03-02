@@ -144,7 +144,7 @@ export default {
     methods: {
         async queryData() {
             let url = "https://api.pharbers.com/phdadataquery"
-            const accessToken = this.getCookie("access_token") || "b1d44d4c52e3d71db493f1639be152c386153e08f3b3ec4837d1451188df730a"
+            const accessToken = this.getCookie("access_token") || "2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -171,7 +171,7 @@ export default {
         },
         async saveCode() {
             let url = "https://api.pharbers.com/phdadataupdata"
-            const accessToken = this.getCookie("access_token") || "b1d44d4c52e3d71db493f1639be152c386153e08f3b3ec4837d1451188df730a"
+            const accessToken = this.getCookie("access_token") || "2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,

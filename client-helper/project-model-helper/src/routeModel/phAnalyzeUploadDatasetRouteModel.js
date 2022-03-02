@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeUploadDatasetRouteModel(route, parseParams) {
+	route.browserEventsService.clearListener()
 	let debugToken =
-		"b1d44d4c52e3d71db493f1639be152c386153e08f3b3ec4837d1451188df730a"
+		"2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f"
 	route.store.unloadAll("dataset")
 	const url = "https://apiv2.pharbers.com/phdydatasource/scan"
 	const accessToken = route.cookies.read("access_token") || debugToken
