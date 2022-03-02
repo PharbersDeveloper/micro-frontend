@@ -6,31 +6,31 @@
             </span>
         </div>
         <div class="data-main-container">
+
             <div class="subscribed-container">
-                <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
-                <tree-item tenant-id="zudIcG_17yj8CEUoCTHg"/>
+                <el-tabs v-model="activeName" >
+                    <el-tab-pane label="公有数据" name="first">暂时未开放</el-tab-pane>
+                    <el-tab-pane label="项目数据" name="second">
+                        <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
+                        <tree-item tenant-id="zudIcG_17yj8CEUoCTHg"/>
+                    </el-tab-pane>
+                </el-tabs>
             </div>
         </div>
     </div>
 </template>
 <script>
-import bpPagination from '../bp-pagination.vue'
-import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 import bpText from 'vue-components/src/components/bp-text.vue'
-import bpButton from 'vue-components/src/components/bp-button.vue'
-import editableComponent from '../editable-component.vue'
+import ElTabs from "element-ui/packages/tabs"
+import ElTabPane from "element-ui/packages/tab-pane"
 import treeItem from '../tree-item'
 import util from '../util.vue'
 
 export default {
     components: {
-        bpPagination,
-        bpSelectVue,
-        bpOptionVue,
         bpText,
-        bpButton,
-        editableComponent,
+        ElTabs,
+        ElTabPane,
         treeItem
     },
     data() {
@@ -39,7 +39,8 @@ export default {
             title: "数据资产",
             subscribedTitle: "文件名称",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
-            goDetail: "查看详情"
+            goDetail: "查看详情",
+            activeName: "second"
         }
     },
     props: {
