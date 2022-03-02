@@ -125,6 +125,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			}
 			if (uploadParam) {
 				e.detail[0].args.element.show = false
+				e.detail[0].args.element.close()
 				param.property.projectId = param.projectId
 				param.property.opname = route.cookies.read("account_id")
 				param.property.owner = route.cookies.read("account_id")
@@ -272,13 +273,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status != "succeed") {
-			//跳转回dataset页面
-			// 这边错误返回后端没做格式处理，目前只有这个接口返回的是一个字符串
-			// const errorObj = JSON.parse(error)
-			// const msg =
-			// errorObj["message"]["zh"] !== ""
-			// 		? errorObj["message"]["zh"]
-			// 		: "上传失败，请重新上传！"
 			alert("上传失败，请重新上传！" + error)
 			route.router.transitionTo(
 				"/dataset-lst?projectName=" +
