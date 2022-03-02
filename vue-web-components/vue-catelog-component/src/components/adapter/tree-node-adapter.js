@@ -5,8 +5,6 @@ export default class PhTreeNodeAdapter {
     constructor(id) {
         this.id = id
         this.store = new JsonApiDataStore()
-        this.expandedIcon = "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
-        this.unExpandedIcon = "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg"
         this.url = "https://apiv2.pharbers.com/"
         this.debugToken = "e93301fe363280d0eae4518edc6771e07559361c7848fa7f695fb86dd770e986"
     }
@@ -15,25 +13,26 @@ export default class PhTreeNodeAdapter {
         this.tenantId = id
     }
 
+
     render(h, { node, data, store }) {
+        function detailBtnClicked(data, event) {
+            alert("this some project detail")
+            console.log(data)
+            event.preventDefault()
+        }
+
         if (node.expanded) {
             return (
                 <div class="item-line">
-                    <img src={this.expandedIcon}
-                         class="icon" alt=""/>
-                    <div class="content">
-                        <p class="title">{data.label}</p>
-                    </div>
+                    <p class="title">{data.label}</p>
+                    <button class="button" onClick={(e) => detailBtnClicked.bind(data, e)}>查看元数据</button>
                 </div>
             )
         } else {
             return (
                 <div class="item-line">
-                    <img src={this.unExpandedIcon}
-                         class="icon" alt=""/>
-                    <div class="content">
-                        <p class="title">{data.label}</p>
-                    </div>
+                    <p class="title">{data.label}</p>
+                    <button class="button" onClick={(e) => detailBtnClicked.bind(data, e)}>查看元数据</button>
                 </div>
             )
         }
@@ -42,6 +41,7 @@ export default class PhTreeNodeAdapter {
     async lazyLoadWithLevel(ele, node, resolve) {
         const projectId = node.data.id
         const that = this
+        that.store.reset()
         function loadProjectLevel() {
             const accessToken = ele.getCookie("access_token") || that.debugToken
             const requestArgs = "phplatform/resources?filter%5BresourceType%5D=standalone&filter%5Btenant%5D=" + that.tenantId + "&include=accounts"

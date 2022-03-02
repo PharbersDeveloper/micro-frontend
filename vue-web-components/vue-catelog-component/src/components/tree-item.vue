@@ -5,11 +5,13 @@
              :lazy="isLazy"
              :load="loadExpandedData"
              :props="defaultProp"
+             check-strictly
     />
 </template>
 
 <script>
 import ElTree from "element-ui/packages/tree"
+import "element-ui/lib/theme-chalk/index.css"
 import adapter from "./adapter/tree-node-adapter"
 
 export default {
@@ -61,7 +63,7 @@ export default {
             else
                 return null;
         },
-        handleNodeClick(data) {
+        handleNodeClick(data, node, b) {
             console.log(data)
         },
         renderNodeContent(h, { node, data, store }) {
@@ -79,15 +81,11 @@ export default {
     .item-line {
         display: flex;
         flex-direction: row;
-
-        .icon {
-            width: 32px;
-            height: 32px;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+        .button {
+            height: 26px;
+            margin: auto 0;
         }
     }
 </style>
