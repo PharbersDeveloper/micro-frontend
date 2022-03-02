@@ -8,17 +8,7 @@
         <div class="data-main-container">
             <div class="subscribed-container">
                 <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
-                <div class="subscribed-item" v-for="file in allData.database" :key="file.name">
-                    <div class="left-text">
-                        <img :src="fileIconDark" class="file-icon-dark" alt="">
-                        <div class="text-area" >
-                            <bp-text class="title">{{file.name}}</bp-text>
-                            <bp-text v-if="file.description" class="subtitle">{{file.description}}</bp-text>
-                            <bp-text v-else class="subtitle">暂无描述</bp-text>
-                        </div>
-                    </div>
-                    <bp-text @click="linkToPage(file.name)" class="subscribed-button">{{goDetail}}</bp-text>
-                </div>
+                <tree-item tenant-id="zudIcG_17yj8CEUoCTHg"/>
             </div>
         </div>
     </div>
@@ -30,6 +20,7 @@ import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 import bpText from 'vue-components/src/components/bp-text.vue'
 import bpButton from 'vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
+import treeItem from '../tree-item'
 import util from '../util.vue'
 
 export default {
@@ -39,7 +30,8 @@ export default {
         bpOptionVue,
         bpText,
         bpButton,
-        editableComponent
+        editableComponent,
+        treeItem
     },
     data() {
         return {

@@ -21,6 +21,7 @@ import prepare from './components/panel/prepare-set.vue'
 import overview from './components/panel/overview.vue'
 import codeditor from './components/bp-codeditor-page'
 import fileListPanel from './components/panel/files-list'
+import assetList from './components/panel/assets-list'
 import menuItem from './components/tree-item'
 // import fileContent from './components/panel/file-content.vue'
 
@@ -135,6 +136,11 @@ export default new Router({
             path: '/file-list-panel',
             name: 'fileListPanel',
             component: fileListPanel
+        },
+        {
+            path: '/assets-list',
+            name: 'assetList',
+            component: assetList
         },
         {
             path: '/menu-item',

@@ -1,7 +1,11 @@
 <template>
-    <div>
-        <el-tree :data="this.adapter.exec(this.items)" @node-click="handleNodeClick" :render-content="renderNodeContent" />
-    </div>
+    <el-tree :data="this.adapter.exec(this.items)"
+             @node-click="handleNodeClick"
+             :render-content="renderNodeContent"
+             :lazy="isLazy"
+             :load="loadExpandedData"
+             :props="defaultProp"
+    />
 </template>
 
 <script>
@@ -26,40 +30,47 @@ export default {
             default: function() {
                 return new adapter("1")
             }
+        },
+        defaultProp: {
+            type: Object,
+            default: function() {
+                return {
+                    label: "label",
+                    children: "children",
+                    isLeaf: "leaf"
+                }
+            }
+        },
+        isLazy: {
+            type: Boolean,
+            default: true
+        },
+        tenantId: {
+            type: String,
+            default: "zudIcG_17yj8CEUoCTHg"
         }
     },
     components: {
         ElTree
     },
     methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         handleNodeClick(data) {
-            console.log(data);
-            data.expanded = !data.expanded
+            console.log(data)
         },
         renderNodeContent(h, { node, data, store }) {
-            if (node.expanded) {
-                return (
-                    <div class="item-line">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
-                             class="icon" alt=""/>
-                        <div class="content">
-                            <p class="title">{data.label}</p>
-                        </div>
-                    </div>
-                )
-            } else {
-                return (
-                    <div class="item-line">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg"
-                             class="icon" alt=""/>
-                        <div class="content">
-                            <p class="title">{data.label}</p>
-                        </div>
-                    </div>
-                )
-            }
+            return this.adapter.render(...arguments)
         },
-
+        loadExpandedData(node, resolve) {
+            this.adapter.resetTenantId(this.tenantId)
+            this.adapter.lazyLoadWithLevel(this, node, resolve)
+        }
     }
 }
 </script>
