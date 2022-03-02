@@ -1,15 +1,17 @@
 <template>
-    <div class="upload-recipt">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+    <div class="upload-dataset">
         <div class="upload_dataset_container">
+            <!-- <div class="project_name_header">
+                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
+            </div> -->
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
                             <div class="selected"
                                 :class="[
-                                    {'bg_disabled': reciptcheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === allData.dcs.length">
+                                    {'bg_disabled': datasetcheckedIds.length == 0}]">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dss.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -30,40 +32,32 @@
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除脚本</p>
+                                            <p >删除数据集</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                           </div>
                             <div class="search_area">
                                    <div class="search_icon">
                                        <img :src="search_icon">
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="toggle">新建脚本</button>
+                            <button class="upload_btn" @click="toggle">新建数据集</button>
                             <div class="dialog" v-show="showDialog">
-                                <div class="list" @click="selectScripts('python3')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
-                                    <p>python</p>
-                                </div>
-                                <div class="list" @click="selectScripts('pyspark')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
-                                    <p>PySpark</p>
-                                </div>
-                                <div class="list" @click="selectScripts('r')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
-                                    <p>R</p>
-                                </div>
-                                <div class="list" @click="selectScripts('sparkr')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
-                                    <p>sparkR</p>
-                                </div>
-                                <div class="list last" @click="selectScripts('prepare')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
-                                    <p>prepare</p>
-                                </div>
+                            <div>
+                                <p @click="upload">本地上传</p>
                             </div>
+                            <div>
+                                <p @click="s3Upload">s3上传</p>
+                            </div>
+                            <div>
+                                <p @click="on_click_max_input">Max1.0入口</p>
+                            </div>
+                            <div>
+                                <p @click="on_click_max_output">Max1.0出口</p>
+                            </div>
+                        </div>
                         </div>
 
                         <div class="tag_selected">
@@ -98,21 +92,21 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{allData.dcs.length}} 条脚本</p>
+                                <p>{{allData.dss.length}} 条数据集</p>
                             </div>
                         </div>
                     </div>
                     <div class="upload_bottom">
-                        <div class="data_content" v-for="(recipt,index) in searchData" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
-                            <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
+                        <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
+                            <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
                             <div class="item_list">
                                 <span class="script_icon">
-                                    <img :src="selectScriptIcon(recipt.runtime)" alt="">
+                                    <img :src="selectDatasetIcon(dataset.cat)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.jobShowName">{{recipt.jobShowName}}</p>
+                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.name}}</p>
                                 <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in recipt.label" :key="inx">
-                                        <span v-if="recipt.label !== ''">
+                                    <div v-for="(tag,inx) in dataset.label" :key="inx">
+                                        <span v-if="dataset.label !== ''">
                                             <p
                                                 :title="tag"
                                                 class="tag_bg"
@@ -125,50 +119,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dcs == ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="reciptcheckedIds.length > 0" >
+                    <div class="view_content" v-if="datasetcheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="script_icon" alt="">
+                                <img :src="database_icon" alt="">
                             </span>
-                            <div class="show-name" v-if="reciptcheckedIds.length == 1">
-                                <p class="project_name_info" :title="reciptcheckedNames[0]">
-                                {{reciptcheckedNames[0]}}
+                            <div class="show-name" v-if="datasetcheckedIds.length == 1">
+                                <p class="project_name_info" :title="datasetcheckedNames[0]">
+                                {{datasetcheckedNames[0]}}
                                 </p>
                             </div>
                            <div class="show-name">
-                               <p class="project_name_info" v-if="reciptcheckedIds.length > 1">
-                                    {{reciptcheckedIds.length}} 条脚本
+                               <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
+                                    {{datasetcheckedIds.length}} 条数据集
                                 </p>
                            </div>
                         </div>
                         <div class="view_func">
-                            <span @click="edit" class="view_list" v-if="this.reciptcheckedIds.length == 1">
-                                <img class='tags_imgs_tag' :src="edit_icon" alt="">
-                                <span class='tags_func'>编辑</span>
-                            </span>
                             <span @click="createTagsOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span class="view_list" v-if="this.reciptcheckedIds.length == 1">
-                                <img class='tags_imgs_tag' :src="run_icon" alt="">
-                                <span class='tags_func'>运行</span>
-                            </span>
-                            <span class="view_list">
-                                <img class='tags_imgs_tag' :src="star_icon" alt="">
-                                <span class='tags_func'>收藏</span>
-                            </span>
-                            <span class="view_list" v-if="this.reciptcheckedIds.length == 1">
-                                <img class='tags_imgs_tag' :src="copy_icon" alt="">
-                                <span class='tags_func'>复制</span>
-                            </span>
-                             <span class="view_list">
-                                <img class='tags_imgs_tag' :src="hide_icon" alt="">
-                                <span class='tags_func'>隐藏</span>
+                            <span @click="clearDialogOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
+                                <span class='tags_func'>清除数据</span>
                             </span>
                             <span  @click='deletedialogopen' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
@@ -176,31 +154,33 @@
                             </span>
                         </div>
                     </div>
-                    <p v-if="reciptcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
+                    <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        <!-- 清除脚本数据 -->
-        <clear-recipt-dialog
+        </div>
+        <!-- 清除数据集数据 -->
+        <clear-dataset-dialog
             v-if="cleardialogshow"
-            :reciptcheckedIds="reciptcheckedIds"
-            :reciptcheckedNames="reciptcheckedNames"
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
             @clearTagsEvent="clearTags"
             @closeClearDialog="closeClearDialog">
-        </clear-recipt-dialog>
-        <!-- 删除脚本 -->
+        </clear-dataset-dialog>
+        <!-- 删除数据集 -->
         <clear-delete
             v-if="deletedialogshow"
-            :reciptcheckedIds="reciptcheckedIds"
-            :datasetcheckedNames="reciptcheckedNames"
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
+            :datasetRelaResult="datasetRelaResult"
             @deleteDatasetsEvent="deleteDataset"
             @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
         <!-- 添加tag -->
         <create-tags-dialog
             v-if="showCreateTagsDialog"
-            :reciptcheckedIds="reciptcheckedIds"
-            :datasetcheckedNames="reciptcheckedNames"
-            :datasets="allData.dcs"
+            :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames"
+            :datasets="allData.dss"
             :tagsArray="allData.tagsArray"
             :tagsColorArray="tagsColorArray"
             @addTagsEvent="addTagsEvent"
@@ -208,39 +188,37 @@
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
-        <!-- 新建脚本 -->
-        <create-scripts-dialog
-            v-if="showCreateScriptsDialog"
-            :datasets="allData.dss"
-            :runtime="runtime"
-            @createScripts="createScripts"
-            @closeCreateDialog="closeScriptDialog">
-        </create-scripts-dialog>
-    </div>
+        <!-- max1.0入口 -->
+        <fit-max-input-dialog
+            v-if="clickMax"
+            @fitMaxEvent="fitMaxEvent"
+            @closeDialog="closeDialog">
+        </fit-max-input-dialog>
+        <!-- max1.0出口 -->
+        <fit-max-output-dialog
+            v-if="clickMaxOutput"
+            @fitMaxEvent="fitMaxEvent"
+            @closeDialog="closeDialog">
+        </fit-max-output-dialog>
     </div>
 </template>
 
 <script>
-import clearReciptDialog from './clear-dataset-dialog.vue'
-import clearDelete from './delete-dialog-script.vue'
+import clearDatasetDialog from './clear-dataset-dialog.vue'
+import clearDelete from './delete-dialog.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
-import createScriptsDialog from './create-scripts-dialog.vue'
-import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import ElButton from 'element-ui/packages/option/index'
-
+import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
+import fitMaxInputDialog from './fit-max-dialog.vue'
+import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 export default {
     data() {
         return {
-            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            copy_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/copy.svg",
-            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
-            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit.svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
+            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
@@ -248,13 +226,11 @@ export default {
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg",
-            pyspark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg",
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg",
+            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
+            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
+            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
+            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
+            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -265,7 +241,6 @@ export default {
             showSelectOptionParam: false,
             closeTosts: false,
             showCreateTagsDialog: false, //添加tag弹框
-            showCreateScriptsDialog: false,
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
@@ -273,157 +248,56 @@ export default {
             ary: [],
             checked: false,
             manual: true,
+            clickMax: false,
+            clickMaxOutput: false,
             scriptValue: "名称",
             isCheckedAllDataset: false,
-            reciptcheckedIds: [], //选中项id
-            reciptcheckedNames: [], //选中项name
+            datasetcheckedIds: [], //选中项id
+            datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            options: [{
-                value: '选项1',
-                label: '黄金糕'
-            }, {
-                value: '选项2',
-                label: '双皮奶'
-            }],
-            value: '',
-            dialogVisible: false,
-            runtime: ""
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
         }
     },
     props: {
         allData: {
             type: Object,
             default: () => ({
-                "projectName": "ETL_Iterator",
-                "projectId": "JfSmQBYUpyb4jsei",
-                "dcs": [
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns/phjob.py",
-                        "jobName": "developer_FYMh8QYDX7FcUns_ETL_Iterator_ETL_Iterator_compute_weqw",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_weqw",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns",
-                        "jobId": "FYMh8QYDX7FcUns",
-                        "jobVersion": "weqw_version1",
-                        "outputs": "[{\"name\":\"weqw\", \"id\":\"6277ab179aaa405aa9dc408d5ce42a44\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    },
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE/phjob.py",
-                        "jobName": "developer_NBdN5esAxvuhFnE_ETL_Iterator_ETL_Iterator_compute_ss",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_ss",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\", \"cat\":\"input_index\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE",
-                        "jobId": "NBdN5esAxvuhFnE",
-                        "jobVersion": "ss_version1",
-                        "outputs": "[{\"name\":\"ss\", \"id\":\"cb36ad3c0f3444c3a699b546a4e077a8\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    },
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ/phjob.py",
-                        "jobName": "developer_na4WCUxbdERSeWZ_ETL_Iterator_ETL_Iterator_compute_3333",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_3333",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ",
-                        "jobId": "na4WCUxbdERSeWZ",
-                        "jobVersion": "3333_version1",
-                        "outputs": "[{\"name\":\"3333\", \"id\":\"ce8b455328604e61bd0a86d34c075e35\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    }
-                ],
-                "dss": [
+                projectName: "项目名称",
+                dss:
+                [
                     {
                         "projectId": null,
                         "schema": "[]",
                         "version": "max1.0",
-                        "name": "test01",
+                        "name": "cpa_pha_mapping",
                         "label": "",
                         "cat": "input_index",
-                        "path": "/wer/wer"
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "3333",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "weqw",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "ss",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
+                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
                     }
                 ],
-                "tagsArray": [],
-                "_isVue": true
+                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
             })
         }
     },
     components: {
-        clearReciptDialog,
+        clearDatasetDialog,
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
-        createScriptsDialog,
         bpSelectVue,
         bpOptionVue,
-        ElButton
+        fitMaxInputDialog,
+        fitMaxOutputDialog
     },
-    computed: {
-        searchData: function() {
-            let searchValue = this.searchValue
-            this.state = 'search'
-            if(searchValue) {
-                return this.allData.dcs.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            }
-            this.sort("ascending")
-            return this.allData.dcs
-        }
-    },
+    computed: { },
     mounted() {
-        let that = this
-        if(this.$refs.tagsArea) {
-            this.$refs.tagsArea.forEach((item, index) => {
-                item.style["height"] = "40px"
-            })
-        }
+        // this.$refs.tagsArea.forEach((item, index) => {
+        //     //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
+        //     // if(item.clientHeight > 30) {
+        //     //     this.$refs.moreTags[0].style["display"] = "flex"
+        //     // }
+        //     item.style["height"] = "40px"
+        // })
     },
     watch: {
         "allData.tagsArray": function() {
@@ -431,76 +305,141 @@ export default {
             this.allData.tagsArray.forEach((item, index) => {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
+        },
+        "allData.dss": function() {
+            this.searchData = this.allData.dss
+        },
+        searchValue: function() {
+            let searchValue = this.searchValue
+            this.state = 'search'
+            if(searchValue) {
+                this.searchData = this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+            } else {
+                this.searchData = this.allData.dss
+            }
+            this.sort("ascending")
         }
     },
     methods: {
-        handleClose(done) {
-            this.$confirm('确认关闭？').then(_ => {
-                done();
-            }).catch(_ => {});
+        // max1.0
+        fitMaxEvent(data) {
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            data.args.param.maxcat = this.maxcat
+            data.args.param.datasetArray = this.allData.dss
+            let creatDS = true
+            this.allData.dss.forEach(item => {
+                if(item.name === data.args.param.dsName) {
+                    creatDS = false
+                    alert("数据集已存在！")
+                }
+            })
+            if(creatDS) {
+                this.$emit('event', data)
+                this.clickMax = false
+                this.clickMaxOutput = false
+            }
         },
-        //打开script弹框
-        selectScripts(data) {
-            this.showDialog = false
-            this.runtime = data
-            this.showCreateScriptsDialog = true
+        // 关闭max1.0弹框
+        closeDialog() {
+            this.clickMaxOutput = false
+            this.clickMax = false
         },
         //增加tag
         addTagsEvent(data) {
-            data.args.param.selectedDatasets = this.reciptcheckedIds
-            data.args.param.datasetArray = this.allData.dcs
+            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
-        //清除脚本中数据
+        //清除数据集中数据
         clearTags(data) {
-            data.args.param.selectedDatasets = this.reciptcheckedIds
-            data.args.param.datasetArray = this.allData.dcs
-            data.args.param.projectName = this.allData.projectName,
+            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.datasetArray = this.allData.dss
+            data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
         //删除脚本
-        deleteDataset(data) {
-            data.args.param.selectedDatasets = this.reciptcheckedIds
-            data.args.param.datasetArray = this.allData.dcs
+        async deleteDataset(data) {
+            let that = this
+            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
+            // 是否需要删除关联关系
+            let msgArr = []
+            if(data.args.param.datasetRelaResult.length > 0) {
+                data.args.param.datasetRelaResult.forEach(async item => {
+                    msgArr.push({
+                        "actionName": item.jobShowName,
+                        "targetId": item.targetId,
+                        "jobName": item.jobName,
+                        "flowVersion": "developer"
+                    })
+                })
+                const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+                let body = {
+                    "table": "action",
+                    "item": {
+                        "projectId": that.allData.projectId,
+                        "code": 0,
+                        "comments": "delete_dataset",
+                        "jobCat": "remove_Job",
+                        "jobDesc": "running",
+                        "message": JSON.stringify(msgArr),
+                        "date": String(new Date().getTime()),
+                        "owner": this.getCookie("account_id"),
+                        "showName": decodeURI(this.getCookie('user_name_show'))
+                    }
+                }
+                let options = {
+                    method: "POST",
+                    headers: {
+                        "Authorization": accessToken,
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        "accept": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                }
+                let result = await fetch(url, options).then(res => res.json())
+            }
+            data.args.param.selectedDatasets = this.datasetcheckedIds
+            data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.deletedialogshow = false;
         },
         //点击list主体
-        clickOnlyOne(recipt, index) {
-            this.reciptcheckedIds = []
-            this.reciptcheckedNames = []
-            this.reciptcheckedIds.push(recipt.id)
-            this.reciptcheckedNames.push(recipt.name)
+        clickOnlyOne(dataset, index) {
+            this.datasetcheckedIds = []
+            this.datasetcheckedNames = []
+            this.datasetcheckedIds.push(dataset.id)
+            this.datasetcheckedNames.push(dataset.name)
         },
         //点击list多选框
-        checkedOneDataset(recipt) {
-            let idIndex = this.reciptcheckedIds.indexOf(recipt.id)
+        checkedOneDataset(dataset) {
+            let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
             if(idIndex >= 0) {
-                this.reciptcheckedIds.splice(idIndex, 1)
-                this.reciptcheckedNames.splice(idIndex, 1)
+                this.datasetcheckedIds.splice(idIndex, 1)
+                this.datasetcheckedNames.splice(idIndex, 1)
             } else {
-                this.reciptcheckedIds.push(recipt.id)
-                this.reciptcheckedNames.push(recipt.name)
+                this.datasetcheckedIds.push(dataset.id)
+                this.datasetcheckedNames.push(dataset.name)
             }
         },
         //点击dataset name
-        clickReciptName(recipt) {
+        clickDatasetName(dataset) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "codeditor",
+                    name: "analyze",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    recipt: recipt
+                    dataset: dataset
                 }
             }
             this.$emit('event', event)
@@ -508,16 +447,16 @@ export default {
         //全选list
         chechedAllDataset() {
             this.isCheckedAllDataset = true
-            if(this.reciptcheckedIds.length == this.allData.dcs.length) {
+            if(this.datasetcheckedIds.length == this.allData.dss.length) {
                 this.isCheckedAllDataset = false
             }
-            this.reciptcheckedIds = []
-            this.reciptcheckedNames = []
+            this.datasetcheckedIds = []
+            this.datasetcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
-                this.allData.dcs.forEach(item => {
-                    this.reciptcheckedIds.push(item.id)
-                    this.reciptcheckedNames.push(item.name)
+                this.allData.dss.forEach(item => {
+                    this.datasetcheckedIds.push(item.id)
+                    this.datasetcheckedNames.push(item.name)
                 })
             }
         },
@@ -534,19 +473,15 @@ export default {
             if(val == 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                // this.allData.dcs.sort()
-                this.allData.dcs.sort(
+                this.searchData.sort(
                     function compareFunction(param1, param2) {
-                        if(param1.jobName) {
-                            return param1.jobName.localeCompare(param2.name);
-                        }
-                        return
+                        return param1.name.localeCompare(param2.name);
                     }
                 )
             }else if (val == 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.allData.dcs.reverse()
+                this.searchData.reverse()
             }
         },
         //排序条件下拉框
@@ -557,23 +492,6 @@ export default {
         closeDeleteTags() {
             this.deleteTagsDia = false;
         },
-        //编辑脚本
-        edit() {
-            let tid = this.reciptcheckedIds[0]
-            let recipt = this.allData.dcs.filter(it => it.id == tid)
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "codeditor",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    recipt: recipt[0]
-                }
-            }
-            this.$emit('event', event)
-        },
         //打开tag添加弹框
         createTagsOpen() {
             this.showCreateTagsDialog = true;
@@ -582,31 +500,57 @@ export default {
         closeCreateDialog() {
             this.showCreateTagsDialog = false;
         },
-        //关闭scripts弹框
-        closeScriptDialog() {
-            this.showCreateScriptsDialog = false
-        },
-        //增加scripts
-        createScripts(data) {
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
-            data.args.param.runtime = this.runtime
-            this.$emit('event', data)
-            this.showCreateScriptsDialog = false
-        },
-        //关闭删除脚本弹框
+        //关闭删除数据集弹框
         closeDeleteDialog() {
             this.deletedialogshow = false;
         },
-        //打开删除脚本弹框
-        deletedialogopen() {
+        //打开删除数据集弹框
+        async deletedialogopen() {
+            /**
+             * 1. 先请求phcomputedeletionimpact，找到关联关系
+             * 2. 返回空数组 原来流程；不是空数组，原来流程 + 新流程
+             */
+            let that = this
+            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
+            const checkUrl = "https://apiv2.pharbers.com/phcomputedeletionimpact"
+            let query = []
+            this.datasetcheckedIds.forEach((item,index) => {
+                query.push({
+                    "id": item,
+                    "name": that.datasetcheckedNames[index],
+                    "sortVersion": "developer_"
+                })
+            })
+            let checkBody = {
+                "projectId": this.allData.projectId,
+                "type": "ds",
+                "query": query
+            }
+            let checkOptions = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(checkBody)
+            }
+            this.datasetRelaResult = await fetch(checkUrl, checkOptions).then(res => res.json())
+            //打开弹框
             this.deletedialogshow = true;
         },
-        //关闭清除脚本弹框
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
+        //关闭清除数据集弹框
         closeClearDialog() {
             this.cleardialogshow = false;
         },
-        //打开清除脚本弹框
+        //打开清除数据集弹框
         clearDialogOpen(){
             this.cleardialogshow = true
         },
@@ -618,7 +562,7 @@ export default {
         },
         //左上角选项下拉框
         dropShow() {
-            if(this.reciptcheckedIds.length < 1) {
+            if(this.datasetcheckedIds.length < 1) {
                 this.dropDialogShow = false
             } else {
                 this.dropDialogShow = !this.dropDialogShow
@@ -626,14 +570,39 @@ export default {
                 this.labelShowDialog = false
             }
         },
-        //上传文件按钮
+        // Max1.0入口
+        on_click_max_input() {
+            this.clickMax = true
+            this.maxcat = "input_index"
+        },
+        on_click_max_output() {
+            this.clickMaxOutput = true
+            this.maxcat = "output_index"
+        },
+        //本地上传文件
         upload() {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "localUpload",
+                    name: "upload",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    type: "localUpload"
+                }
+            }
+            this.$emit('event', event)
+        },
+        //s3上传文件
+        s3Upload() {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "upload",
+                    type: "s3Upload",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId
                 }
@@ -656,20 +625,16 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        selectScriptIcon(runtime) {
-            switch (runtime) {
-            case "python3":
-                return this.python_icon
-            case "pyspark":
-                return this.pyspark_icon
-            case "r":
-                return this.R_icon
-            case "sparkr":
-                return this.sparkR_icon
-            case "prepare":
-                return this.prepare_icon
+        selectDatasetIcon(cat) {
+            switch (cat) {
+            case "input_index":
+                return this.input_index_icon
+            case "output_index":
+                return this.output_index_icon
+            case "intermediate":
+                return this.intermediate_icon
             default:
-                return this.script_icon
+                return this.dataset_icon
             }
         }
     }
@@ -703,8 +668,8 @@ export default {
     top: 30px;
     right: 40px;
     width: 150px;
-    // height: 130px;
-    border: 1px solid #333;
+    // height: 65px;
+    border: 1px solid #dddddd;
     background: #fff;
     z-index: 9999;
     cursor: pointer;
@@ -718,25 +683,6 @@ export default {
             font-weight: 600;
         }
     }
-    .list {
-        display: flex;
-        padding: 5px;
-        img {
-            width: 20px;
-            height: 20px;
-        }
-    }
-    .last {
-        border-bottom: none;
-    }
-
-}
-.script-opt {
-    padding: 0 10px;
-    border-bottom: 1px solid #ccc;
-}
-.script-opt-last {
-    border-bottom: none;
 }
 .upload_dataset_container {
     width: 100vw;
@@ -888,36 +834,6 @@ export default {
                     font-weight: 600;
                     color: #7163C5;
                     margin-bottom: 16px;
-                }
-
-                .upload_btn_new {
-                    position: absolute;
-                    top: 0px;
-                    right: 40px;
-                    width: 100px;
-                    height: 26px;
-                    /deep/.el-input {
-                        height: 26px !important;
-                    }
-                    /deep/.el-input__inner {
-                        height: 26px !important;
-                        box-sizing: border-box;
-                        display: inline-block;
-                        width: 100px;
-                        background: #ffffff;
-                        border: 1px solid #eeedf7;
-                        font-family: PingFangSC-Medium;
-                        font-size: 14px;
-                        font-weight: 600;
-                        color: #7163C5;
-                        margin-bottom: 16px;
-                        color: #333333;
-                        border: 1px solid #cccccc;
-                        padding-right: 10px;
-                    }
-                    /deep/input::placeholder {
-                        color: #333;
-                    }
                 }
 
                 .tag_selected {
@@ -1204,18 +1120,16 @@ export default {
                 border-bottom: 1px solid #dddddd;
 
                 .view_func {
-                    margin-top: 20px;
+                    margin-top: 100px;
                     display: flex;
-                    flex-wrap: wrap;
                     justify-content: space-between;
-                    // padding: 0 30px;
+                    padding: 0 30px;
                     .view_list {
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
                         width: 75px;
-                        margin-bottom: 20px;
                     }
                 }
 
@@ -1234,8 +1148,8 @@ export default {
                         width: 60px;
                         height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 1px solid #979797;
-                        border-right: 1px solid #979797;
+                        border-bottom: 2px solid #979797;
+                        border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
@@ -1272,7 +1186,7 @@ export default {
                     background: #f5f5f5;
                     width: 100%;
                     height: 100%;
-                    border-bottom: 1px solid #dddddd;
+                    border-bottom: 2px solid #dddddd;
 
                     .edit_input {
                         position: absolute;
@@ -1365,8 +1279,8 @@ export default {
     }
 }
 .tags_imgs_tag {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
     margin-bottom: 5px;
 }
