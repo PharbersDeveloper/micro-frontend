@@ -2,7 +2,6 @@
 export async function phcatelogProjectListRouteModel(route, parseParams) {
 	let resources = route.store.query("resource", {
 		"filter[tenant]": route.cookies.read("company_id"),
-		// "filter[resourceType]": "project",
 		"filter[resourceType]": "standalone",
 		include: "accounts"
 	})

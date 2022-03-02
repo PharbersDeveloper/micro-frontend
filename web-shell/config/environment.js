@@ -28,8 +28,10 @@ module.exports = function (environment) {
 			apiHost: "apiv2.pharbers.com",
 			// clientId: "fjjnl2uSalHTdrppHG9u",
 			// clientName: "offweb",
+			/* general */
 			// clientId: "V5I67BHIRVR2Z59kq-a-",
 			// clientName: "platform",
+			/* deploy */
 			clientId: "rB9jOc347FswXebo",
 			clientName: "project",
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout"],

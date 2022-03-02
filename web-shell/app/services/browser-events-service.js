@@ -6,6 +6,7 @@ import { action } from '@ember/object'
 
 
 export default class BrowserEventsServiceService extends Service {
+    @service cookies
 	@tracked param
 	@tracked routeName
 	@service router
@@ -13,6 +14,10 @@ export default class BrowserEventsServiceService extends Service {
 	// 注册浏览器监听事件
 	registerListener(route) {
 		let that = this
+		let options = {
+			domain: ".pharbers.com",
+			path: "/"
+		}
 		$(function(){
 			that.param = window.location.href.split('?')[1]
 			that.routeName = `${route}?`
@@ -24,12 +29,11 @@ export default class BrowserEventsServiceService extends Service {
 			}
 			//关闭&刷新（页面有变动或距上次刷新间隔超过5s时生效）
 			window.onbeforeunload = function(e){
-               return false
+				that.cookies.write( "load", "load", options )
+               	return false
 			}
-
-			// object.addEventListener("beforeunload", that.popstateFun);
-
-			window.onload = function(){
+			if (that.cookies.read("load") === "load") {
+				that.cookies.clear( "load", options )
 				// 刷新回到指定页面
 				that.router.transitionTo( "shell", `${that.routeName}${that.param}` )
 			}
