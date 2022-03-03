@@ -73,7 +73,8 @@ export default class PhContainerDataSource {
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildQueryString(),
-            "schema": schema
+            "schema": schema,
+            "projectId": ele.datasource.projectId
         }
         let options = {
             method: "POST",
@@ -112,7 +113,8 @@ export default class PhContainerDataSource {
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildQueryCountString(),
-            "schema": ["count"]
+            "schema": ["count"],
+            "projectId": ele.datasource.projectId
         }
         let options = {
             method: "POST",
@@ -144,7 +146,8 @@ export default class PhContainerDataSource {
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildDistinctColSql(),
-            "schema": [col]
+            "schema": [col],
+            "projectId": ele.datasource.projectId
         }
         let options = {
             method: "POST",
@@ -269,14 +272,14 @@ export default class PhContainerDataSource {
             // sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
             return sql_str
         }
-        const url = "https://api.pharbers.com/phdadownload"
+        const url = "https://apiv2.pharbers.com/phdadownload"
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "sql": buildDownloadQueryString(),
             "schema": schema,
             "category": cat,
             "file_name": fileName,
-            "project": "max"
+            "project": ele.datasource.projectId
         }
         let options = {
             method: "POST",

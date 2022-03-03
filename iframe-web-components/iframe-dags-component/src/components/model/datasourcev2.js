@@ -49,14 +49,15 @@ export default class PhDagDatasource {
             else
                 sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
 
-            sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+            sql_str = sql_str + " ORDER BY " + col
 
             return sql_str
         }
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildDistinctColSql(),
-            "schema": [col]
+            "schema": [col],
+            "projectId": this.projectId
         }
         let options = {
             method: "POST",

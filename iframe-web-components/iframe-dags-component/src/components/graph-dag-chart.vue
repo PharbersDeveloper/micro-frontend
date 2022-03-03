@@ -303,14 +303,7 @@ export default {
         this.flowVersion = decodeURI(paramArr[2].split("=")[1])
         this.datasource.projectId = this.projectId
         this.initChart()
-        // this.noticeService.observer()
         window.addEventListener('message', this.handleMessage)
-        // 告诉父组件准备好接收消息了
-        // window.parent.postMessage({
-        // 	message: {
-        //     	cmd: 'ready-for-receiving'
-        // 	}
-        // }, '*')
     },
     destroyed () {
         // 注意移除监听！注意移除监听！注意移除监听！
