@@ -73,6 +73,9 @@ function PhMQTT(config, callBack, timeoutQueue) {
         timeoutId = setInterval(() => {
             const currentTime = new Date().getTime() / 1000;
             if (currentTime - (time / 1000) > timeout) {
+                const parameter = Object.assign({}, config.parameter)
+                delete parameter.callBack
+                callBack(parameter, JSON.stringify({"status": "mqtt timeout"}))
                 timeoutQueue.push(topic)
             }
         }, 1 * 1000);
@@ -81,8 +84,9 @@ function PhMQTT(config, callBack, timeoutQueue) {
     const __subscribe = () => {
         const states = {
             "failed": true,
+            "fail": true,
             "succeed": true,
-            "succss": true
+            "success": true
         }
         if (connection) {
             if (!callBack) { throw Error("CallBack Is Undefined") }
