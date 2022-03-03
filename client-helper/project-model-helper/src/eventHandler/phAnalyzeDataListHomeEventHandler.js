@@ -42,6 +42,12 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId
+			} else if (params.name == "dsahboards") {
+				uri =
+					"dashboards?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId
 			}
 			//执行列表 分页
 			route.router.transitionTo("shell", uri)

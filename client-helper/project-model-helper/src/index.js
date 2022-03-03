@@ -22,6 +22,8 @@ import { phAnalyzeExcelColumnCleanRouteModel } from "./routeModel/phAnalyzeExcel
 import { phAnalyzeExcelColumnCleanEventHandler } from "./eventHandler/phAnalyzeExcelColumnCleanEventHandler"
 import { phAnalyzeDatasetMaxEventHandler } from "./eventHandler/phAnalyzeDatasetMaxEventHandler"
 import { phAnalyzeDatasetMaxRouteModel } from "./routeModel/phAnalyzeDatasetMaxRouteModel"
+import { phAnalyzedashBoardsRouteModel } from "./routeModel/phAnalyzedashBoardsRouteModel"
+import { phAnalyzedashBoardsEventHandler } from "./eventHandler/phAnalyzedashBoardsEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -47,5 +49,7 @@ export {
 	phAnalyzeExcelColumnCleanRouteModel,
 	phAnalyzeExcelColumnCleanEventHandler,
 	phAnalyzeDatasetMaxEventHandler,
-	phAnalyzeDatasetMaxRouteModel
+	phAnalyzeDatasetMaxRouteModel,
+	phAnalyzedashBoardsRouteModel,
+	phAnalyzedashBoardsEventHandler
 }
