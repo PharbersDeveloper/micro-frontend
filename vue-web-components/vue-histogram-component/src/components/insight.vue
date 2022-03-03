@@ -116,7 +116,7 @@ export default {
             this.render()
         },
         needRefresh(n, o) {
-            if (this.policy.isReady()) {
+            if (this.policy && this.policy.isReady()) {
                 this.render()
             }
         }
@@ -126,6 +126,6 @@ export default {
 
 <style scoped lang="scss">
     .viewport {
-        overflow: auto;
+        overflow: hidden;
     }
 </style>

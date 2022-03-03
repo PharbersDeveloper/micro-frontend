@@ -16,7 +16,7 @@
     "jsonapi-datastore": "^0.4.0-beta",
     "vue": "^2.6.11",
     "vue-drag-resize": "^1.5.4",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -6,7 +6,7 @@
 </template>
 <script>
 import VueDragResize from 'vue-drag-resize'
-import Histogram from './histogram'
+import Histogram from './insight'
 
 export default {
     props: {
