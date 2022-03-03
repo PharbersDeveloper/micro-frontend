@@ -4,6 +4,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	const startUrl = "https://apiv2.pharbers.com/phresourceaction"
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
+	let inter = null
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name == "datasets") {
@@ -111,7 +112,15 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 					let results = await fetch(startUrl, options).then((res) =>
 						res.json()
 					)
+					//设置超时10分钟，十分钟后弹窗报错
 					console.log(results)
+					if (results) {
+						inter = setInterval(() => {
+							e.detail[0].args.element.dialogStartFailed = true
+							route.loadingService.loading.style.display = "flex"
+							clearInterval(inter)
+						}, 1000 * 60 * 11)
+					}
 				}
 			}
 			break
@@ -120,6 +129,10 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	}
 
 	function callback(param, payload) {
+		console.log(inter)
+		if (inter) {
+			clearInterval(inter)
+		}
 		console.log(payload)
 		const { status } = JSON.parse(payload)
 		if (status == "succeed") {
