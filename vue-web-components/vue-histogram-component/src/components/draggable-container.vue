@@ -35,7 +35,7 @@ export default {
     },
     data: () => {
         return {
-            name: "dragable",
+            name: "draggable",
             top: undefined,
             left: undefined,
             width: undefined,
@@ -83,9 +83,10 @@ export default {
             if (this.timer)
                 return
 
+            const that = this
             this.timer = setTimeout(() => {
-                this.$refs.histogram.resizeHandler(this.width, this.height)
-                this.timer = null
+                that.$refs.histogram.resizeHandler(that.width, that.height)
+                that.timer = null
             }, 100)
         },
         ondarg(newRect) {
@@ -94,6 +95,9 @@ export default {
         },
         resetPolicy(p) {
             this.$refs.histogram.resetPolicy(p)
+        },
+        refresh() {
+            this.$refs.histogram.needRefresh++
         }
     },
     watch: {
