@@ -75,10 +75,10 @@ export default {
         },
         createPolicyFactory(factoryType) {
             if (factoryType === "pie") {
-                return new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+                return new PiePolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
                     { xProperty: "标准省份名称", yProperty: "sales" })
             } else if (factoryType === "bar") {
-                return new PiePolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+                return new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
                     { xProperty: "标准省份名称", yProperty: "sales" })
             }
         }

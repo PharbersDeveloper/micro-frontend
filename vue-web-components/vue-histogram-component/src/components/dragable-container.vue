@@ -89,18 +89,8 @@ export default {
             }, 100)
         },
         ondarg(newRect) {
-            // this.width = newRect.width
-            // this.height = newRect.height
             this.top = newRect.top
             this.left = newRect.left
-
-            // if (this.timer)
-            //     return
-            //
-            // this.timer = setTimeout(() => {
-            //     this.$refs.histogram.resizeHandler(this.width, this.height)
-            //     this.timer = null
-            // }, 100)
         },
         resetPolicy(p) {
             this.$refs.histogram.resetPolicy(p)
