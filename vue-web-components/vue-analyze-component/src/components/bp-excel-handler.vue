@@ -92,7 +92,8 @@ export default {
             tmpname: '',
             sheetArr: [],
             showExcel: true,
-            typeValue: ''
+            typeValue: '',
+            projectId: ''
         }
     },
     props: {
@@ -108,7 +109,7 @@ export default {
         excelDatasource: {
             type: Object,
             default: function() {
-                return new PhExcelPreviewSource('2', this.tmpname, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
+                return new PhExcelPreviewSource('2', this.tmpname, this.projectId, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
             }
         },
         excelSchema: {
@@ -131,9 +132,13 @@ export default {
         this.dataProxy.refreshData(this.$refs.excel)
     },
     created() {
-        let uriParam = window.location.href
-        this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
+        let uriParam = window.location.href.split("?")[1].split("&")
+        let projectName = uriParam[0].split("=")[1]
+        let projectId = uriParam[1].split("=")[1]
+        this.tmpname = uriParam[5].split("=")[1]
+        // this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
         this.excelDatasource.set('tmpname', this.tmpname)
+        this.excelDatasource.set("projectId", projectId)
         this.typeValue = this.tmpname.split(".")[1]
     },
     methods: {

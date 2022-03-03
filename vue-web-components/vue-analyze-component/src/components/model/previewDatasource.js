@@ -1,9 +1,10 @@
 
 export default class PhExcelPreviewSource {
-    constructor(id, tmpname, firstSkipValue, nextSkipValue, sheet, par, adapter) {
+    constructor(id, tmpname, projectId, firstSkipValue, nextSkipValue, sheet, par, adapter) {
         this.id = id
         this.par = par
         this.tmpname = tmpname
+        this.projectId = projectId
         this.nextSkipValue = nextSkipValue
         this.firstSkipValue = firstSkipValue
         this.sheet = sheet
@@ -15,7 +16,7 @@ export default class PhExcelPreviewSource {
         // this.schema = []
         // this.cols = this.schema
         this.url = "https://apiv2.pharbers.com/schemaexplorer"
-        this.debugToken = "05d1c2fa213181d83f14ed6e6536d76a1690798b4b1ae2ba03aa8c7c93ebaa5d"
+        this.debugToken = "1c6ebbf38b3fc9474e1d256898a465151387cfb596d739bc70d967a1efe38662"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -39,8 +40,9 @@ export default class PhExcelPreviewSource {
         const accessToken = ele.getCookie("access_token") || this.debugToken
         console.log(this.tmpname)
         let body = {
-            "project":"max", //66875db6f287aaa382bd04152b092b90.xlsx
-            "tempfile": this.tmpname || "2f18101b999e2d2802d543baf21b92a6.xlsx",
+            // "project":"max", //66875db6f287aaa382bd04152b092b90.xlsx
+            project: this.projectId,
+            "tempfile": this.tmpname || "3293b014043fb901de724767c749b314.xlsx",
             "sheet": this.sheet || '',
             "out_number": 10,
             "skip_first": Number(this.firstSkipValue) || 0,

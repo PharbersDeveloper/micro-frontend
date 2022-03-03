@@ -162,7 +162,8 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		})
 		let uploadMessage = {}
 		uploadMessage.file = file
-		const API_ENDPOINT = "https://max.pharbers.com/upload"
+		let pro_name = projectName.toLowerCase().replace(/[^a-z0-9]/gi, "")
+		const API_ENDPOINT = `https://${pro_name}.pharbers.com/upload`
 		const request = new XMLHttpRequest()
 		const formData = new FormData()
 		route.loadingService.loading.style.display = "flex"
@@ -274,12 +275,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 
 		if (status != "succeed") {
 			alert("上传失败，请重新上传！" + error)
-			route.router.transitionTo(
-				"/dataset-lst?projectName=" +
-					route.tranParam.projectName +
-					"&projectId=" +
-					route.tranParam.projectId
-			)
 		} else {
 			route.noticeService.uploadStatus = true
 			const parameter = [
