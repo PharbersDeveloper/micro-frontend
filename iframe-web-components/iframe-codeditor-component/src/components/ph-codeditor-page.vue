@@ -234,6 +234,7 @@ export default {
                 border: 1px solid #57565F;
                 border-radius: 2px;
                 background: #fff;
+				cursor: pointer;
             }
             .btn-fir {
                 margin-left: 10px;

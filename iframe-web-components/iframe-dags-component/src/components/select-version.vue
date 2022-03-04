@@ -37,7 +37,6 @@ export default {
     data() {
         return{
             selColName: "version",
-            versionArr: [],
             versionArrShow: [],
             selectVersionTags: [],
             searchRow: [],
@@ -64,8 +63,7 @@ export default {
         this.datasource.projectId = this.projectId
         this.datasource.queryDlgDistinctCol(this, this.selColName).then((data) => {
             //完整的显示行列表数据
-            that.versionArr = data
-            that.versionArrShow = data
+            that.versionArrShow = data.filter(it => that.selectVersionTags.indexOf(it) === -1)
         })
     },
     watch: {},
@@ -78,7 +76,7 @@ export default {
         },
         // 搜索框
         searchRowInput(data) {
-            this.versionArrShow = this.versionArr.filter(it => it.indexOf(data) > -1)
+            this.versionArrShow = this.versionArrShow.filter(it => it.indexOf(data) > -1)
         },
         //取消选中version
         removeSelectVersionTags(data) {

@@ -100,17 +100,18 @@ function PhMQTT(config, callBack, timeoutQueue) {
 
                 const { id, projectId, date, status, jobCat } = JSON.parse(content)
 
-                if (use_cache.indexOf(`${id}_${projectId}_${date}_${status}`) === -1) {
-                    use_cache.push(`${id}_${projectId}_${date}_${status}`)
-                    // 只接受jobCat为Notification标识
-                    if (jobCat === "notification") {
-                        // UnRegister 将错误的和完成的关掉连接
-                        if (states[status] || false) {
-							timeoutQueue.push(topic);
-                        }
-                        callBack(parameter, content); 
-                    }
-                }
+                // if (use_cache.indexOf(`${id}_${projectId}_${date}_${status}`) === -1) {
+                    
+                // }
+				// use_cache.push(`${id}_${projectId}_${date}_${status}`)
+				// 只接受jobCat为Notification标识
+				if (jobCat === "notification") {
+					// UnRegister 将错误的和完成的关掉连接
+					if (states[status] || false) {
+						timeoutQueue.push(topic);
+					}
+					callBack(parameter, content); 
+				}
             })
         }
     }

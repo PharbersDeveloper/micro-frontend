@@ -344,6 +344,7 @@ export default {
                 font-weight: 600;
                 border: 0;
                 border-radius: 4px;
+				cursor: pointer;
             }
             .next {
                 position: absolute;
