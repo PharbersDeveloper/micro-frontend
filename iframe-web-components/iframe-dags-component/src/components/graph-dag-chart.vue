@@ -389,7 +389,6 @@ export default {
          */
         runDagCallback(response, ele) {
             let that = this
-            that.failedLogs = []
             let represent_id = ""
             // this.responseArr = response.message
             let payload = JSON.parse(response.payload)

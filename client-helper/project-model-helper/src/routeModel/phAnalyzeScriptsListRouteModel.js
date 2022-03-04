@@ -1,4 +1,5 @@
 export async function phAnalyzeScriptsListRouteModel(route, parseParams) {
+	route.browserEventsService.clearListener()
 	route.store.unloadAll("dagConf")
 	route.store.unloadAll("dataset")
 	const url = "https://apiv2.pharbers.com/phdydatasource/scan"
