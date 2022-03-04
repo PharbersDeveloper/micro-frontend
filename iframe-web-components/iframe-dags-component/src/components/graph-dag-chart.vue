@@ -364,7 +364,11 @@ export default {
                 body: JSON.stringify(body)
             }
             console.log(body)
-            await fetch(url, options).then(res => res.json())
+            let results = await fetch(url, options).then(res => res.json())
+			if(results.status === "failed") {
+				alert("启动出错，请重新运行！")
+				return false
+			}
             this.showProgress = true
             this.showRunJson = false
         },

@@ -14,7 +14,9 @@
                         </div>
                         <div class="right">
 							<button class="delete" 
-								@click="dialogDeleteProject = true">删除项目
+								@click="dialogDeleteProject = true" 
+								:disabled="!showStartButton"
+								:class="{disButton: !showStartButton}">删除项目
 							</button>
                             <button 
 								@click="dialogStart = true" 
@@ -598,6 +600,9 @@ export default {
 					background: #DB4D71 !important;
 					margin-right: 10px;
 				}
+				.disButton {
+					background: #bbb !important;
+				}
                 button {
                     min-width: 80px;
                     height: 32px;
@@ -611,6 +616,7 @@ export default {
 					font-size: 14px;
 					color: #7163C5;
 					font-weight: 500;
+					line-height: 32px;
 				}
             }
         }
