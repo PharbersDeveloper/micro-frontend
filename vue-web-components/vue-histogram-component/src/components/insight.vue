@@ -47,8 +47,6 @@ export default {
 
     },
     mounted () {
-        // this.policy = new BarPolicy('1', this.datasource, this.schema,
-        //     { width: this.width, height: this.height, xProperty: this.xProperty, yProperty: this.yProperty })
         this.width = this.initWidth
         this.height = this.initHeight
         if (this.initPolicy) {

@@ -1,103 +1,154 @@
 <template>
-    <!-- 这个width 是bug -->
-    <VueDragResize :isActive="active" :parentLimitation="true" :x="initLeft" :y="initTop" :h="initHeight" :w="width"  v-on:resizing="resize" v-on:dragging="resize">
-        <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
-    </VueDragResize>
+    <Histogram v-if="isMounted" class="histogram-item"
+               v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"
+               :init-width="initWidthPx" :init-height="initHeightPx"
+               :init-policy="policy" />
 </template>
+
 <script>
-import VueDragResize from 'vue-drag-resize'
-import Histogram from './insight'
+import Histogram from "./draggable-histogram"
+import BarPolicy from "../components/render-policy/bar-policy"
+import PiePolicy from "../components/render-policy/pie-policy"
+import PhHistogramDatasource from "../components/model/datasource"
+import PhHistogramSchema from "../components/model/schema"
 
 export default {
     props: {
-        initPolicy: {
-            type: Object,
-            default: function () {
-                return null
-            }
-        },
-        initWidth: {
-            type: Number,
-            default: undefined
-        },
-        initHeight: {
-            type: Number,
-            default: undefined
-        },
         initTop: {
             type: Number,
-            default: undefined
+            default: 0
+        },
+        initBottom: {
+            type: Number,
+            default: 0
         },
         initLeft: {
             type: Number,
-            default: undefined
+            default: 1
+        },
+        initRight: {
+            type: Number,
+            default: 1
         }
     },
     data: () => {
         return {
-            name: "draggable",
-            top: undefined,
-            left: undefined,
-            width: undefined,
-            height: undefined,
-            policy: null,
-            active: false
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            isMounted: 0,
+            name: "draggable-container",
+            policy: new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+                { xProperty: "标准省份名称", yProperty: "sales" })
         }
     },
     components: {
-        VueDragResize,
         Histogram
     },
     mounted () {
-        if (this.initTop > 0) {
+        if (this.initTop >= 0) {
             this.top = this.initTop
         } else  {
             this.top= 0
         }
 
-        if (this.initLeft > 0) {
+        if (this.initLeft >= 0) {
             this.left = this.initLeft
         } else {
             this.left = 0
         }
 
-        if (this.initWidth > 0) {
-            this.width = this.initWidth
+        if (this.initRight >= 0) {
+            this.right = this.initRight
         } else {
-            this.width = 300
+            this.right = 300
         }
 
-        if (this.initHeight > 0) {
-            this.height = this.initHeight
+        if (this.initBottom >= 0) {
+            this.bottom = this.initBottom
         } else {
-            this.height = 300
+            this.bottom = 300
         }
+        this.isMounted++
     },
     methods: {
-        resize(newRect) {
-            this.width = newRect.width
-            this.height = newRect.height
-            this.top = newRect.top
-            this.left = newRect.left
-
-            if (this.timer)
-                return
-
+        resizeStop(ele) {
+            const top = ele.top
+            const left = ele.left
+            const width = ele.width
+            const height = ele.height
+            const right = ele.left + ele.width
+            const bottom = ele.top + ele.height
             const that = this
-            this.timer = setTimeout(() => {
-                that.$refs.histogram.resizeHandler(that.width, that.height)
-                that.timer = null
-            }, 100)
+
+            function pointAdjust(x, y, tp) {
+                function pointInRect(x, y) {
+                    const w = that.$parent.$refs.container.offsetWidth
+                    const h = that.$parent.$refs.container.offsetHeight
+                    const margin = that.$parent.initGrids.margin
+                    const columns = that.$parent.initGrids.columns
+                    const lines = that.$parent.initGrids.lines
+                    const stepW = (w - margin) / columns - margin
+                    const stepH = (h - margin) / lines - margin
+                    const column = Math.floor(x / stepW)
+                    const line = Math.floor(y / stepH)
+                    return { x: column, y: line }
+                }
+
+                function resetSize(point, tp) {
+
+                }
+
+                pointInRect(x, y)
+            }
+            pointAdjust(left, top)
+        }
+    },
+    computed: {
+        initTopPx: function() {
+            const h = this.$parent.$refs.container.offsetHeight
+            const margin = this.$parent.initGrids.margin
+            const lines = this.$parent.initGrids.lines
+            const stepH = (h - margin) / lines - margin
+            const result = margin + this.top * stepH
+            console.log("top: ")
+            console.log(result)
+            return result
         },
-        ondarg(newRect) {
-            this.top = newRect.top
-            this.left = newRect.left
+        initLeftPx: function() {
+            const w = this.$parent.$refs.container.offsetWidth
+            const margin = this.$parent.initGrids.margin
+            const columns = this.$parent.initGrids.columns
+            const stepW = (w - margin) / columns - margin
+            const result = margin + this.left * stepW
+            console.log("left: ")
+            console.log(result)
+            return result
         },
-        resetPolicy(p) {
-            this.$refs.histogram.resetPolicy(p)
+        initWidthPx: function() {
+            const w = this.$parent.$refs.container.offsetWidth
+            const margin = this.$parent.initGrids.margin
+            const columns = this.$parent.initGrids.columns
+            const stepW = (w - margin) / columns - margin
+            const left = margin + this.left * stepW
+            const right = margin + (this.right + 1) * stepW
+            const result = right - left
+            console.log("width: ")
+            console.log(result)
+            return result
         },
-        refresh() {
-            this.$refs.histogram.needRefresh++
+        initHeightPx: function() {
+            const h = this.$parent.$refs.container.offsetHeight
+            const margin = this.$parent.initGrids.margin
+            const lines = this.$parent.initGrids.lines
+            const stepH = (h - margin) / lines - margin
+            const top = margin + this.top * stepH
+            const bottom = margin + (this.bottom + 1) * stepH
+            const result = bottom - top
+            console.log("height: ")
+            console.log(result)
+            return result
         }
     },
     watch: {
@@ -107,5 +158,57 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
 
+        .title-panel {
+            display: flex;
+            flex-direction: row;
+            background-color: grey;
+            height: 45px;
+
+            img {
+                width: 40px;
+                height: 40px;
+                margin: auto 0;
+                border: 2px solid gray;
+                padding: 1px;
+            }
+
+            h2 {
+                margin: auto 0;
+            }
+        }
+
+        .edit-container {
+            flex-grow: 1;
+
+            .mid-container {
+                position: absolute;
+                z-index: -2;
+
+
+                .grid-container {
+                    position: relative;
+                    z-index: -1;
+
+                    .grid-item {
+                        position: absolute;
+                        background-color: beige;
+                    }
+                }
+            }
+
+            .high-container {
+                position: absolute;
+
+                .histogram-container {
+                    position: relative;
+                    z-index: 99;
+                }
+            }
+        }
+    }
 </style>
