@@ -298,9 +298,9 @@ export default {
         let href = window.location.href
         console.log(href)
         let paramArr = href.split("?")[1].split("&")
-        this.projectId = decodeURI(paramArr[0].split('=')[1])
-        this.projectName = decodeURI(paramArr[1].split("=")[1])
-        this.flowVersion = decodeURI(paramArr[2].split("=")[1])
+        this.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.handleMessage)
@@ -310,6 +310,10 @@ export default {
         window.removeEventListener('message', this.handleMessage)
     },
     methods: {
+        getUrlParam(arr, value) {
+            let data = arr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         handleMessage(event) {
             let that = this
             if (event.data.message) {
@@ -365,10 +369,10 @@ export default {
             }
             console.log(body)
             let results = await fetch(url, options).then(res => res.json())
-			if(results.status === "failed") {
-				alert("启动出错，请重新运行！")
-				return false
-			}
+            if(results.status === "failed") {
+                alert("启动出错，请重新运行！")
+                return false
+            }
             this.showProgress = true
             this.showRunJson = false
         },
