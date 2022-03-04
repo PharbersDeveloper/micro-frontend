@@ -79,8 +79,10 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		case "checkStartResource":
 			if (params) {
-				console.log("checkStartResource")
-				checkStartResourceFun()
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				await checkStartResourceFun()
+				route.loadingService.loading.style.display = "none"
 			}
 			break
 		case "startResource":
