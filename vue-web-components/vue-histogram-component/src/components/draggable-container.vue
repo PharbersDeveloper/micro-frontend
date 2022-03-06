@@ -29,6 +29,12 @@ export default {
         initRight: {
             type: Number,
             default: 1
+        },
+        policy: {
+            type: Object,
+            default: function () {
+                return null
+            }
         }
     },
     data: () => {
@@ -38,9 +44,9 @@ export default {
             left: 0,
             right: 0,
             isMounted: 0,
-            name: "draggable-container",
-            policy: new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
-                { xProperty: "标准省份名称", yProperty: "sales" })
+            name: "draggable-container"
+            // policy: new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
+            //     { xProperty: "标准省份名称", yProperty: "sales" })
         }
     },
     components: {
@@ -125,7 +131,7 @@ export default {
             }
 
             else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
-                this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH)
+                this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
                 ele.height = this.adjustHeight(this.top, this.bottom)
             }
 
@@ -135,13 +141,11 @@ export default {
             }
 
             else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
-                this.right = Math.floor((left + width - 2 * margin - 1) / stepW)
+                this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
                 ele.width = this.adjustWidth(this.left, this.right)
             }
-
-
         },
-        adjustRange(l, r, s = 3) {
+        adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
         }
     },

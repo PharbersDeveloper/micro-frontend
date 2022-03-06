@@ -3,6 +3,7 @@
         <div v-if="needTitle" class="title-panel">
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
             <h2>{{dashboardTitle}}</h2>
+            <el-button class="save-button" type="primary" plain @click="saveContentPosition">Save</el-button>
         </div>
         <div class="edit-container" ref="container">
             <div class="mid-container">
@@ -16,18 +17,27 @@
             </div>
             <div v-if="isMounted" class="high-container">
                 <div class="histogram-container" :style="draggableLayout()">
-                    <Histogram />
+                    <Histogram v-for="(item, index) in contentModel.content"
+                               :key="index"
+                               :ref="item.index"
+                               :init-left="item.position[0]"
+                               :init-top="item.position[1]"
+                               :init-right="item.position[2]"
+                               :init-bottom="item.position[3]"
+                               :policy="createPolicyWithinContent(item)" />
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import ElButton from "element-ui/packages/button"
 import Histogram from "./draggable-container"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
+import PhSlideModel from "../components/slide-model/slide-model"
 
 export default {
     props: {
@@ -44,20 +54,27 @@ export default {
         dashboardTitle: {
             type: String,
             default: "alfred test"
+        },
+        contentModel: {
+            type: Object,
+            default: function() {
+                return new PhSlideModel(1)
+            }
         }
     },
     data: () => {
         return {
-            activeName: "first",
             name: "slide",
             isMounted: 0
         }
     },
     components: {
-        Histogram
+        Histogram,
+        ElButton
     },
     mounted () {
         this.isMounted++
+        this.contentModel.querySlideContent()
     },
     methods: {
         gridItemLayout(index) {
@@ -78,6 +95,31 @@ export default {
             const w = this.$refs.container.offsetWidth
             const h = this.$refs.container.offsetHeight
             return "width: " + w + "px; height: " + h + "px;"
+        },
+        createPolicyWithinContent(content) {
+            // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
+            // 不会写就多写cv次这个函数吧
+            if (content.policyName === "bar") {
+                return new BarPolicy(content.index, new PhHistogramDatasource(content.index), new PhHistogramSchema(content.index),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "pie") {
+                return new PiePolicy(content.index, new PhHistogramDatasource(content.index), new PhHistogramSchema(content.index),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else {
+                // TODO: other histogrm
+            }
+        },
+        saveContentPosition() {
+            const keys = Object.keys(this.contentModel.content)
+            for (let idx = 0; idx < keys.length; ++idx) {
+                const cur = this.$refs[this.contentModel.content[keys[idx]].index][0]
+                this.contentModel.content[keys[idx]].x = cur.policy.xProperty
+                this.contentModel.content[keys[idx]].y = cur.policy.yProperty
+                this.contentModel.content[keys[idx]].position = [cur.left, cur.top, cur.right, cur.bottom]
+            }
+            this.contentModel.save()
         }
     },
     watch: {
