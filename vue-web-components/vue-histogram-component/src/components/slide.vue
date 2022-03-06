@@ -4,6 +4,10 @@
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
             <h2>{{dashboardTitle}}</h2>
             <el-button class="save-button" type="primary" plain @click="saveContentPosition">Save</el-button>
+            <el-tabs v-model="activeName" >
+                <el-tab-pane label="View" name="first" ></el-tab-pane>
+                <el-tab-pane label="Edit" name="second" ></el-tab-pane>
+            </el-tabs>
         </div>
         <div class="edit-container" ref="container">
             <div class="mid-container">
@@ -19,7 +23,7 @@
                 <div class="histogram-container" :style="draggableLayout()">
                     <Histogram v-for="(item, index) in contentModel.content"
                                :key="index"
-                               :editable="editable"
+                               :editable="isEditable()"
                                :ref="item.index"
                                :init-left="item.position[0]"
                                :init-top="item.position[1]"
@@ -33,12 +37,15 @@
 </template>
 <script>
 import ElButton from "element-ui/packages/button"
+import ElTabs from "element-ui/packages/tabs"
+import ElTabPane from "element-ui/packages/tab-pane"
 import Histogram from "./draggable-container"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import PhSlideModel from "../components/slide-model/slide-model"
+import "element-ui/lib/theme-chalk/index.css"
 
 export default {
     props: {
@@ -61,21 +68,20 @@ export default {
             default: function() {
                 return new PhSlideModel(1)
             }
-        },
-        editable: {
-            type: Boolean,
-            default: false
         }
     },
     data: () => {
         return {
-            name: "slide-editable",
-            isMounted: 0
+            name: "slide",
+            isMounted: 0,
+            activeName: "first"
         }
     },
     components: {
         Histogram,
-        ElButton
+        ElButton,
+        ElTabs,
+        ElTabPane
     },
     mounted () {
         this.isMounted++
@@ -125,7 +131,11 @@ export default {
                 this.contentModel.content[keys[idx]].position = [cur.left, cur.top, cur.right, cur.bottom]
             }
             this.contentModel.save()
+        },
+        isEditable() {
+            return this.activeName === "second"
         }
+
     },
     watch: {
 
