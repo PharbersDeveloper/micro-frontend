@@ -298,25 +298,22 @@ export default {
         let href = window.location.href
         console.log(href)
         let paramArr = href.split("?")[1].split("&")
-        this.projectId = decodeURI(paramArr[0].split('=')[1])
-        this.projectName = decodeURI(paramArr[1].split("=")[1])
-        this.flowVersion = decodeURI(paramArr[2].split("=")[1])
+        this.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         this.datasource.projectId = this.projectId
         this.initChart()
-        // this.noticeService.observer()
         window.addEventListener('message', this.handleMessage)
-        // 告诉父组件准备好接收消息了
-        // window.parent.postMessage({
-        // 	message: {
-        //     	cmd: 'ready-for-receiving'
-        // 	}
-        // }, '*')
     },
     destroyed () {
         // 注意移除监听！注意移除监听！注意移除监听！
         window.removeEventListener('message', this.handleMessage)
     },
     methods: {
+        getUrlParam(arr, value) {
+            let data = arr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         handleMessage(event) {
             let that = this
             if (event.data.message) {
@@ -371,7 +368,11 @@ export default {
                 body: JSON.stringify(body)
             }
             console.log(body)
-            await fetch(url, options).then(res => res.json())
+            let results = await fetch(url, options).then(res => res.json())
+            if(results.status === "failed") {
+                alert("启动出错，请重新运行！")
+                return false
+            }
             this.showProgress = true
             this.showRunJson = false
         },
@@ -388,7 +389,6 @@ export default {
          */
         runDagCallback(response, ele) {
             let that = this
-            that.failedLogs = []
             let represent_id = ""
             // this.responseArr = response.message
             let payload = JSON.parse(response.payload)
@@ -508,7 +508,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
             // 发布前解注
-            // document.domain = "pharbers.com"
+            document.domain = "pharbers.com"
         },
 
         // 监听屏幕大小改变

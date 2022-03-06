@@ -11,6 +11,7 @@ export default class WcContextComponent extends Component {
 	@service downloadFile
 	// @service noticeService;
 	@service("loading") loadingService
+	@service("resource-action-service") resourceActionService
 	@service("execution-status") noticeService
 
 	@action

@@ -263,6 +263,8 @@ export default {
 
     },
     mounted() {
+        let uriParam = window.location.href.split("?")[1].split("&")
+        let projectId = uriParam[1].split("=")[1]
         //传入数据时渲染表格
         if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
             const tmpLength = this.allData.schemaArr.length

@@ -8,11 +8,17 @@ export default class PhPntLayoutComponent extends Component {
 	@service router
 	@tracked projectName
 	@tracked projectId
+	@service("resource-action-service") resourceActionService
+
 
 	get navComponent() {
 		if(this.args.navComponent) {
 			return this.args.navComponent
 		} else return "ph-analyze-bp-nav-top-max"
+	}
+
+	get checkResource() {
+		return this.resourceActionService.checkStarted()
 	}
 
 	@action
@@ -21,6 +27,10 @@ export default class PhPntLayoutComponent extends Component {
             case "linkToPage":
                 let params = e.detail[0].args.param;
                 let uri = ''
+				if(this.checkResource &&params.name !== "projects" && params.name !== "project") {
+					alert("请先启动项目资源！")
+					return false
+				}
 				if (params.name === "projects") {
 					window.open(`https://general.pharbers.com/projects`)
 				} else {
