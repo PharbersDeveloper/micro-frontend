@@ -73,82 +73,90 @@ export default {
         this.isMounted++
     },
     methods: {
+        adjustLeft(l) {
+            const w = this.$parent.$refs.container.offsetWidth
+            const margin = this.$parent.initGrids.margin
+            const columns = this.$parent.initGrids.columns
+            const stepW = (w - margin) / columns - margin
+            return margin + l * (stepW + margin)
+        },
+        adjustWidth(l, r) {
+            const w = this.$parent.$refs.container.offsetWidth
+            const margin = this.$parent.initGrids.margin
+            const columns = this.$parent.initGrids.columns
+            const stepW = (w - margin) / columns - margin
+            const left = margin + l * (stepW + margin)
+            const right = margin + (r + 1) * (stepW + margin)
+            return right - left
+        },
+        adjustTop(t) {
+            const h = this.$parent.$refs.container.offsetHeight
+            const margin = this.$parent.initGrids.margin
+            const lines = this.$parent.initGrids.lines
+            const stepH = (h - margin) / lines - margin
+            return margin + t * (stepH + margin)
+        },
+        adjustHeight(t, b) {
+            const h = this.$parent.$refs.container.offsetHeight
+            const margin = this.$parent.initGrids.margin
+            const lines = this.$parent.initGrids.lines
+            const stepH = (h - margin) / lines - margin
+            const top = margin + t * (stepH + margin)
+            const bottom = margin + (b + 1) * (stepH + margin)
+            return bottom - top
+        },
         resizeStop(ele) {
             const top = ele.top
             const left = ele.left
             const width = ele.width
             const height = ele.height
-            const right = ele.left + ele.width
-            const bottom = ele.top + ele.height
-            const that = this
 
-            function pointAdjust(x, y, tp) {
-                function pointInRect(x, y) {
-                    const w = that.$parent.$refs.container.offsetWidth
-                    const h = that.$parent.$refs.container.offsetHeight
-                    const margin = that.$parent.initGrids.margin
-                    const columns = that.$parent.initGrids.columns
-                    const lines = that.$parent.initGrids.lines
-                    const stepW = (w - margin) / columns - margin
-                    const stepH = (h - margin) / lines - margin
-                    const column = Math.floor(x / stepW)
-                    const line = Math.floor(y / stepH)
-                    return { x: column, y: line }
-                }
+            const w = this.$parent.$refs.container.offsetWidth
+            const h = this.$parent.$refs.container.offsetHeight
+            const margin = this.$parent.initGrids.margin
+            const columns = this.$parent.initGrids.columns
+            const lines = this.$parent.initGrids.lines
+            const stepW = (w - margin) / columns - margin
+            const stepH = (h - margin) / lines - margin
 
-                function resetSize(point, tp) {
-
-                }
-
-                pointInRect(x, y)
+            if (this.adjustRange(top, this.adjustTop(this.top))) {
+                this.top = Math.floor(top / stepH)
+                ele.top = this.adjustTop(this.top)
             }
-            pointAdjust(left, top)
+
+            else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
+                this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH)
+                ele.height = this.adjustHeight(this.top, this.bottom)
+            }
+
+            else if (this.adjustRange(left, this.adjustLeft(this.left))) {
+                this.left = Math.floor(left / stepW)
+                ele.left = this.adjustLeft(this.left)
+            }
+
+            else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
+                this.right = Math.floor((left + width - 2 * margin - 1) / stepW)
+                ele.width = this.adjustWidth(this.left, this.right)
+            }
+
+
+        },
+        adjustRange(l, r, s = 3) {
+            return l - r > s || r - l > s
         }
     },
     computed: {
         initTopPx: function() {
-            const h = this.$parent.$refs.container.offsetHeight
-            const margin = this.$parent.initGrids.margin
-            const lines = this.$parent.initGrids.lines
-            const stepH = (h - margin) / lines - margin
-            const result = margin + this.top * stepH
-            console.log("top: ")
-            console.log(result)
-            return result
+            return this.adjustTop(this.top)
         },
         initLeftPx: function() {
-            const w = this.$parent.$refs.container.offsetWidth
-            const margin = this.$parent.initGrids.margin
-            const columns = this.$parent.initGrids.columns
-            const stepW = (w - margin) / columns - margin
-            const result = margin + this.left * stepW
-            console.log("left: ")
-            console.log(result)
-            return result
+            return this.adjustLeft(this.left)
         },
         initWidthPx: function() {
-            const w = this.$parent.$refs.container.offsetWidth
-            const margin = this.$parent.initGrids.margin
-            const columns = this.$parent.initGrids.columns
-            const stepW = (w - margin) / columns - margin
-            const left = margin + this.left * stepW
-            const right = margin + (this.right + 1) * stepW
-            const result = right - left
-            console.log("width: ")
-            console.log(result)
-            return result
+            return this.adjustWidth(this.left, this.right)
         },
         initHeightPx: function() {
-            const h = this.$parent.$refs.container.offsetHeight
-            const margin = this.$parent.initGrids.margin
-            const lines = this.$parent.initGrids.lines
-            const stepH = (h - margin) / lines - margin
-            const top = margin + this.top * stepH
-            const bottom = margin + (this.bottom + 1) * stepH
-            const result = bottom - top
-            console.log("height: ")
-            console.log(result)
-            return result
+            return this.adjustHeight(this.top, this.bottom)
         }
     },
     watch: {
