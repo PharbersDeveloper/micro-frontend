@@ -1,5 +1,5 @@
 <template>
-    <VueDragResize v-if="isMounted" @onclick="onActive" :isActive="active"
+    <VueDragResize v-if="checkEditableShowing()" @onclick="onActive" :isActive="active"
                    :parentLimitation="true"
                    :h="height" :w="width"
                    :x="left" :y="top"
@@ -7,6 +7,9 @@
                    v-on:resizing="resize" v-on:dragging="resize">
         <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
     </VueDragResize>
+    <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
+        <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
+    </div>
 </template>
 <script>
 import VueDragResize from 'vue-drag-resize'
@@ -35,6 +38,10 @@ export default {
         initLeft: {
             type: Number,
             default: undefined
+        },
+        editable: {
+            type: Boolean,
+            default: true
         }
     },
     data: () => {
@@ -111,6 +118,15 @@ export default {
         },
         onResizstop() {
             this.$emit("resizeStop", this)
+        },
+        checkEditableShowing() {
+            return this.isMounted > 0 && this.editable
+        },
+        checkViewableShowing() {
+            return this.isMounted > 0 && !this.editable
+        },
+        resetInsightPosition() {
+            return "left: " + this.left + "px; top: " + this.top + "px; width: " + this.width + "px; height: " + this.height + "px;"
         }
     },
     watch: {
@@ -120,5 +136,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+    .view {
+        position: absolute;
+    }
 </style>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import insight from "./components/insight-container"
-import slide from "./components/slide-editable"
+import slide from "./components/slide"
 
 Vue.use(Router)
 

@@ -1,5 +1,5 @@
 <template>
-    <Histogram v-if="isMounted" class="histogram-item"
+    <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
                v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"
                :init-width="initWidthPx" :init-height="initHeightPx"
                :init-policy="policy" />
@@ -11,6 +11,7 @@ import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
+import Insight from "./insight"
 
 export default {
     props: {
@@ -35,6 +36,10 @@ export default {
             default: function () {
                 return null
             }
+        },
+        editable: {
+            type: Boolean,
+            default: true
         }
     },
     data: () => {
@@ -50,6 +55,7 @@ export default {
         }
     },
     components: {
+        Insight,
         Histogram
     },
     mounted () {

@@ -19,6 +19,7 @@
                 <div class="histogram-container" :style="draggableLayout()">
                     <Histogram v-for="(item, index) in contentModel.content"
                                :key="index"
+                               :editable="editable"
                                :ref="item.index"
                                :init-left="item.position[0]"
                                :init-top="item.position[1]"
@@ -60,11 +61,15 @@ export default {
             default: function() {
                 return new PhSlideModel(1)
             }
+        },
+        editable: {
+            type: Boolean,
+            default: false
         }
     },
     data: () => {
         return {
-            name: "slide",
+            name: "slide-editable",
             isMounted: 0
         }
     },
