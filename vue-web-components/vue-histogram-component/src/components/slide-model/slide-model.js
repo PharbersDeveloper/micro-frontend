@@ -46,6 +46,7 @@ export default class PhSlideModel {
     }
 
     save() {
+		debugger
         // TODO: 掉用接口将数据同步到dynamodb上去
         console.log(this.queryContent)
         console.log(this.content)
