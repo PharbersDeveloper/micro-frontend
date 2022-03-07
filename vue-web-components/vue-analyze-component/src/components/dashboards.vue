@@ -41,7 +41,7 @@
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="createDashboard">新建数据看板</button>
+                            <button class="upload_btn" @click="dialogCreateVisible = true">新建数据看板</button>
                         </div>
 
                         <div class="tag_selected">
@@ -138,19 +138,38 @@
                     </div>
                     <p v-if="dashboardCheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
-			</div>
+            </div>
         </div>
-		
+        <el-dialog
+            title="创建数据看板"
+            :visible.sync="dialogCreateVisible"
+            height="300px"
+            width="600px">
+
+            <div class="dlg-container">
+                <span>数据看板名称：</span>
+                <input type="text" class="db_name">
+            </div>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogCreateVisible = false">取消</el-button>
+                <el-button type="primary" @click="on_clickCreateConfirm">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElButton from 'element-ui/packages/button/index'
+import ElInput from 'element-ui/packages/input/index'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {
+            dialogCreateVisible: false,
+            searchData: [],
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
@@ -218,10 +237,23 @@ export default {
     components: {
         bpSelectVue,
         bpOptionVue,
-        ElDialog
+        ElDialog,
+        ElButton,
+        ElInput
     },
     computed: { },
-    mounted() {},
+    mounted() {
+        this.searchData = [
+            {
+                "projectId": null,
+                "schema": "[]",
+                "version": "max1.0",
+                "name": "cpa_pha_mapping",
+                "label": "",
+                "cat": "input_index",
+                "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
+            }]
+    },
     watch: {
         "allData.tagsArray": function() {
             this.tagsColorArray = []
@@ -244,6 +276,9 @@ export default {
         }
     },
     methods: {
+        on_clickCreateConfirm() {
+            debugger
+        },
         //新建dashboard
         createDashboard() {
             debugger
@@ -611,17 +646,24 @@ export default {
         }
     }
 }
+.dlg-container {
+    display: flex;
+    align-items: center;
+    .db_name {
+        padding-left: 10px;
+        width: 70%;
+        height: 24px;
+        border: 1px solid #666;
+    }
+}
 .upload_dashboard_container {
     width: 100vw;
     height: calc(100vh - 40px);
-    // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;
         width: 100%;
-        // background: rgba(0,0,0,.2);
         border-bottom: 1px solid #dddddd;
         .project_name {
-            // width: 200px;
             margin-left: 30px;
             line-height: 50px;
             font-family: SourceSansPro;
