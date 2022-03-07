@@ -1,10 +1,10 @@
 <template>
-    <div class="page">
+    <div class="grid-page">
         <div v-if="needTitle" class="title-panel">
-            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
+            <img :src="icon" />
             <h2>{{dashboardTitle}}</h2>
             <el-button class="save-button" type="primary" plain @click="saveContentPosition">Save</el-button>
-            <el-tabs v-model="activeName" >
+            <el-tabs v-model="activeName">
                 <el-tab-pane label="View" name="first" ></el-tab-pane>
                 <el-tab-pane label="Edit" name="second" ></el-tab-pane>
             </el-tabs>
@@ -14,7 +14,7 @@
                 <div v-if="isMounted" class="grid-container" ref="grid">
                     <div class="grid-item"
                          v-for="index in this.initGrids.columns * this.initGrids.lines"
-						 :key="'grid'+index"
+                         :key="'grid'+index"
                          :style="gridItemLayout(index - 1)" >
                         &nbsp
                     </div>
@@ -23,14 +23,14 @@
             <div v-if="isMounted" class="high-container">
                 <div class="histogram-container" :style="draggableLayout()">
                     <Histogram v-for="(item, index) in contentModel.content"
-                               :key="index"
-                               :editable="isEditable()"
-                               :ref="item.index"
-                               :init-left="item.position[0]"
-                               :init-top="item.position[1]"
-                               :init-right="item.position[2]"
-                               :init-bottom="item.position[3]"
-                               :policy="createPolicyWithinContent(item)" />
+                        :key="index"
+                        :editable="isEditable()"
+                        :ref="item.index"
+                        :init-left="item.position[0]"
+                        :init-top="item.position[1]"
+                        :init-right="item.position[2]"
+                        :init-bottom="item.position[3]"
+                        :policy="createPolicyWithinContent(item)" />
                 </div>
             </div>
         </div>
@@ -69,7 +69,12 @@ export default {
             default: function() {
                 return new PhSlideModel(1)
             }
-        }
+        },
+        icon: {
+            type: String,
+            default: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
+        }, 
+        isEditableValue: Boolean
     },
     data: () => {
         return {
@@ -134,6 +139,9 @@ export default {
             this.contentModel.save()
         },
         isEditable() {
+            if(this.isEditableValue !== undefined) {
+                return this.isEditableValue
+            }
             return this.activeName === "second"
         }
 
@@ -145,10 +153,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .page {
+    .grid-page {
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
+        min-height: 100%;
+        flex-grow: 1;
 
         .title-panel {
             display: flex;
@@ -198,50 +207,4 @@ export default {
             }
         }
     }
-	.vdr {
-		position: absolute;
-		box-sizing: border-box;
-	}
-	.vdr.active:before{
-		content: '';
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		box-sizing: border-box;
-		outline: 1px dashed #d6d6d6;
-	}
-	.vdr-stick {
-		box-sizing: border-box;
-		position: absolute;
-		font-size: 1px;
-		background: #ffffff;
-		border: 1px solid #6c6c6c;
-		box-shadow: 0 0 2px #bbb;
-	}
-	.inactive .vdr-stick {
-		display: none;
-	}
-	.vdr-stick-tl, .vdr-stick-br {
-		cursor: nwse-resize;
-	}
-	.vdr-stick-tm, .vdr-stick-bm {
-		left: 50%;
-		cursor: ns-resize;
-	}
-	.vdr-stick-tr, .vdr-stick-bl {
-		cursor: nesw-resize;
-	}
-	.vdr-stick-ml, .vdr-stick-mr {
-		top: 50%;
-		cursor: ew-resize;
-	}
-	.vdr-stick.not-resizable{
-		display: none;
-	}
-	.content-container{
-		display: block;
-		position: relative;
-	}
 </style>
