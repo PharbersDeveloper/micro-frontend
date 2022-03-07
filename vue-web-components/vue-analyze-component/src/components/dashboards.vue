@@ -1,9 +1,6 @@
 <template>
-    <div class="upload-dataset">
-        <div class="upload_dataset_container">
-            <!-- <div class="project_name_header">
-                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
-            </div> -->
+    <div class="upload_dashboard">
+        <div class="upload_dashboard_container">
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
@@ -91,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
-                            <div class="dataset_number">
+                            <div class="dashboard_number">
                                 <p>{{allData.dss.length}} 条数据集</p>
                             </div>
                         </div>
@@ -684,7 +681,7 @@ export default {
         }
     }
 }
-.upload_dataset_container {
+.upload_dashboard_container {
     width: 100vw;
     height: calc(100vh - 40px);
     // border: 2px solid #dddddd;
@@ -972,7 +969,7 @@ export default {
                         }
                     }
 
-                    .dataset_number {
+                    .dashboard_number {
                         position: absolute;
                         top: 0;
                         right: 45px;

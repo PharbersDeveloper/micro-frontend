@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-export async function phAnalyzedashBoardsEventHandler(e, route) {
+export async function phAnalyzeDashBoardsEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	console.log(params)
 	let uri = ""

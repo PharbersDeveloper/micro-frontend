@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let params = e.detail[0].args.param
+	console.log(params)
 	const startUrl = "https://apiv2.pharbers.com/phresourceaction"
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
@@ -53,9 +54,15 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "dsahboards") {
+			} else if (params.name == "dashboards") {
 				uri =
 					"dashboards?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId
+			} else if (params.name == "slide") {
+				uri =
+					"slide?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId

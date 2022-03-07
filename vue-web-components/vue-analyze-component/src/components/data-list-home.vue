@@ -105,7 +105,7 @@
                             <div class="flow flow_four">
                                 <p class="flow_word">维基</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell">
+                                <div class="flow_item_cell" @click="linkToPage('slide')">
                                         <a href="#">
                                             <div>
                                                 <img :src="article_icon" alt="">
