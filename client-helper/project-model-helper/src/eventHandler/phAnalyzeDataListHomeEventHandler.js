@@ -4,7 +4,18 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	const startUrl = "https://apiv2.pharbers.com/phresourceaction"
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
-	switch (e.detail[0].args.callback) {
+	//未启动项目资源时，点击按钮提示弹窗。
+	let argsCallback = e.detail[0].args.callback
+	if (
+		route.resourceActionService.checkStarted() &&
+		argsCallback !== "deleteProject" &&
+		argsCallback !== "startResource" &&
+		argsCallback !== "checkStartResource"
+	) {
+		alert("请先启动项目资源！")
+		return false
+	}
+	switch (argsCallback) {
 		case "linkToPage":
 			if (params.name == "datasets") {
 				uri =
@@ -53,7 +64,6 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			route.router.transitionTo("shell", uri)
 			break
 		case "deleteProject":
-			console.log(params)
 			if (params) {
 				let uri = `https://apiv2.pharbers.com/phcreateproject/projects/${params.projectId}`
 				let results = await fetch(uri, {
@@ -75,8 +85,10 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		case "checkStartResource":
 			if (params) {
-				console.log("checkStartResource")
-				checkStartResourceFun()
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				await checkStartResourceFun()
+				route.loadingService.loading.style.display = "none"
 			}
 			break
 		case "startResource":
@@ -114,10 +126,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 						},
 						body: JSON.stringify(body)
 					}
-					let results = await fetch(startUrl, options).then((res) =>
-						res.json()
-					)
-					console.log(results)
+					await fetch(startUrl, options).then((res) => res.json())
 				}
 			}
 			break
@@ -129,9 +138,11 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		console.log(payload)
 		const { status } = JSON.parse(payload)
 		if (status == "succeed") {
+			route.resourceActionService.boolChecked = false
 			e.detail[0].args.element.dialogStartSucceed = true //成功弹窗
 			e.detail[0].args.element.showStartButton = false //按钮disabled
-		} else if (status == "failed") {
+		} else if (status == "failed" || status == "mqtt timeout") {
+			route.resourceActionService.boolChecked = true
 			e.detail[0].args.element.dialogStartFailed = true //失败弹窗
 		}
 		route.loadingService.loading.style.display = "none"
@@ -172,13 +183,16 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 				ownerId: "*",
 				callBack: callback
 			})
+			route.resourceActionService.boolChecked = false
 			return false
 		} else if (startResults.data.resource_status === "started") {
 			e.detail[0].args.element.showStartButton = false //按钮disabled
 			route.loadingService.loading.style.display = "none"
+			route.resourceActionService.boolChecked = false
 			return false
 		}
 		console.log("closed,我要重新注册")
+		route.resourceActionService.boolChecked = true
 		return true
 	}
 }

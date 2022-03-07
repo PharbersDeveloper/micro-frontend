@@ -2,7 +2,7 @@
 export async function phAnalyzeUploadDatasetRouteModel(route, parseParams) {
 	route.browserEventsService.clearListener()
 	let debugToken =
-		"2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f"
+		"27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
 	route.store.unloadAll("dataset")
 	const url = "https://apiv2.pharbers.com/phdydatasource/scan"
 	const accessToken = route.cookies.read("access_token") || debugToken

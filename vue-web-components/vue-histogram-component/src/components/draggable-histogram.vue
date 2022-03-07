@@ -1,12 +1,19 @@
 <template>
-    <!-- 这个width 是bug -->
-    <VueDragResize :isActive="active" :parentLimitation="true" :x="initLeft" :y="initTop" :h="initHeight" :w="width"  v-on:resizing="resize" v-on:dragging="resize">
+    <VueDragResize v-if="checkEditableShowing()" @onclick="onActive" :isActive="active"
+                   :parentLimitation="true"
+                   :h="height" :w="width"
+                   :x="left" :y="top"
+                   @resizestop="onResizstop" @dragstop="onResizstop"
+                   v-on:resizing="resize" v-on:dragging="resize">
         <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
     </VueDragResize>
+    <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
+        <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
+    </div>
 </template>
 <script>
 import VueDragResize from 'vue-drag-resize'
-import Histogram from './histogram'
+import Histogram from './insight'
 
 export default {
     props: {
@@ -31,17 +38,23 @@ export default {
         initLeft: {
             type: Number,
             default: undefined
+        },
+        editable: {
+            type: Boolean,
+            default: true
         }
     },
     data: () => {
         return {
-            name: "dragable",
+            name: "draggable-histogram",
             top: undefined,
             left: undefined,
             width: undefined,
             height: undefined,
             policy: null,
-            active: false
+            active: false,
+            renderTimes: 0,
+            isMounted: 0
         }
     },
     components: {
@@ -49,29 +62,30 @@ export default {
         Histogram
     },
     mounted () {
-        if (this.initTop > 0) {
+        if (this.initTop >= 0) {
             this.top = this.initTop
         } else  {
             this.top= 0
         }
 
-        if (this.initLeft > 0) {
+        if (this.initLeft >= 0) {
             this.left = this.initLeft
         } else {
             this.left = 0
         }
 
-        if (this.initWidth > 0) {
+        if (this.initWidth >= 0) {
             this.width = this.initWidth
         } else {
             this.width = 300
         }
 
-        if (this.initHeight > 0) {
+        if (this.initHeight >= 0) {
             this.height = this.initHeight
         } else {
             this.height = 300
         }
+        this.isMounted++
     },
     methods: {
         resize(newRect) {
@@ -83,27 +97,36 @@ export default {
             if (this.timer)
                 return
 
+            const that = this
             this.timer = setTimeout(() => {
-                this.$refs.histogram.resizeHandler(this.width, this.height)
-                this.timer = null
+                that.$refs.histogram.resizeHandler(that.width, that.height)
+                that.timer = null
             }, 100)
         },
-        ondarg(newRect) {
-            // this.width = newRect.width
-            // this.height = newRect.height
-            this.top = newRect.top
-            this.left = newRect.left
-
-            // if (this.timer)
-            //     return
-            //
-            // this.timer = setTimeout(() => {
-            //     this.$refs.histogram.resizeHandler(this.width, this.height)
-            //     this.timer = null
-            // }, 100)
-        },
+        // ondarg(newRect) {
+        //     this.top = newRect.top
+        //     this.left = newRect.left
+        // },
         resetPolicy(p) {
             this.$refs.histogram.resetPolicy(p)
+        },
+        refresh() {
+            this.$refs.histogram.needRefresh++
+        },
+        onActive() {
+            this.active = !this.active
+        },
+        onResizstop() {
+            this.$emit("resizeStop", this)
+        },
+        checkEditableShowing() {
+            return this.isMounted > 0 && this.editable
+        },
+        checkViewableShowing() {
+            return this.isMounted > 0 && !this.editable
+        },
+        resetInsightPosition() {
+            return "left: " + this.left + "px; top: " + this.top + "px; width: " + this.width + "px; height: " + this.height + "px;"
         }
     },
     watch: {
@@ -113,5 +136,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+    .view {
+        position: absolute;
+    }
 </style>

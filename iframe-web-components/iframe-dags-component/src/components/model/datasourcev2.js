@@ -7,7 +7,7 @@ export default class PhDagDatasource {
         this.name = "prod_clean_v2"
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f'
+        this.debugToken = '27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
@@ -49,14 +49,15 @@ export default class PhDagDatasource {
             else
                 sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
 
-            sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+            sql_str = sql_str + " ORDER BY " + col
 
             return sql_str
         }
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildDistinctColSql(),
-            "schema": [col]
+            "schema": [col],
+            "projectId": this.projectId
         }
         let options = {
             method: "POST",

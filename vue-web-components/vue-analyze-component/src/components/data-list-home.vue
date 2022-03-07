@@ -14,7 +14,9 @@
                         </div>
                         <div class="right">
 							<button class="delete" 
-								@click="dialogDeleteProject = true">删除项目
+								@click="dialogDeleteProject = true" 
+								:disabled="!showStartButton"
+								:class="{disButton: !showStartButton}">删除项目
 							</button>
                             <button 
 								@click="dialogStart = true" 
@@ -242,7 +244,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f"
+        const accessToken = this.getCookie("access_token") || "27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
@@ -372,7 +374,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "2d07c70574299359bf00c7cb096813bb6dc1b996504334b1e0a2e298aec6e79f"
+            const accessToken = this.getCookie("access_token") || "27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",
@@ -598,6 +600,9 @@ export default {
 					background: #DB4D71 !important;
 					margin-right: 10px;
 				}
+				.disButton {
+					background: #bbb !important;
+				}
                 button {
                     min-width: 80px;
                     height: 32px;
@@ -611,6 +616,7 @@ export default {
 					font-size: 14px;
 					color: #7163C5;
 					font-weight: 500;
+					line-height: 32px;
 				}
             }
         }
