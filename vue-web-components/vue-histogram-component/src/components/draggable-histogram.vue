@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-import VueDragResize from 'vue-drag-resize'
+import VueDragResize from './drag-resize'
 import Histogram from './insight'
 
 export default {
