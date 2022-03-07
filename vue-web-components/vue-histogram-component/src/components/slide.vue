@@ -14,6 +14,7 @@
                 <div v-if="isMounted" class="grid-container" ref="grid">
                     <div class="grid-item"
                          v-for="index in this.initGrids.columns * this.initGrids.lines"
+						 :key="'grid'+index"
                          :style="gridItemLayout(index - 1)" >
                         &nbsp
                     </div>
