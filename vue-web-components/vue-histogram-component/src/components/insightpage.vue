@@ -1,6 +1,6 @@
 
 <template>
-    <div class="page">
+    <div class="insight-page">
         <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="project_info_left">
             <div class="page_header">
@@ -25,9 +25,7 @@
                         
                 </div>
             </div>
-            <div class="content">
-                <insightComponent :needTitle="false"></insightComponent>
-            </div>
+            <insightComponent v-if="isMounted" class="insight-content" :needTitle="false" ></insightComponent>
         </div>
         <div class="project_info_right">
             <div class="view_content" >
@@ -122,10 +120,12 @@ export default {
             content: "",
             dialogDeleteSlideVisible: false, //删除slide
             delSlideData: null,
-            delSlideIndex: 0
+            delSlideIndex: 0,
+			isMounted: 0
         }
     },
     mounted () {
+		this.isMounted++
     },
     methods: {
         addAlide() {
@@ -163,7 +163,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .page {
+    .insight-page {
         display: flex;
         width: 100%;
         height: calc(100vh - 60px);
@@ -211,7 +211,7 @@ export default {
                     }
                 }
             }
-            .content {
+            .insight-content {
                 height: calc(100vh - 88px);
             }
             .page_footer {

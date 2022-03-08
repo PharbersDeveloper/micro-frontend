@@ -1,4 +1,3 @@
-
 <template>
     <div class="page">
         <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
@@ -29,10 +28,10 @@
             </div>
             <div class="page_footer">
                 <div class="slide_item" 
-                    v-for="(slide,index) in slideArr" 
+                    v-for="(slide, index) in slideArr" 
                     @click="clickSlide(slide)"
                     :key="index">
-                    <div class="slide_name">{{slide.name}}</div>
+                    <div class="slide_name">{{slide.title}}</div>
                     <img class="del_icon" :src="del_icon" @click="clickDeleteSlide(slide, index)">
                 </div>
                 <img :src="add_icon"  alt="" class="add_icon" @click="addAlide">
@@ -127,18 +126,9 @@ export default {
             type: Object,
             default:() => ({
                 projectName: "项目名称",
-                dss:
-                [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "cpa_pha_mapping",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                    }
-                ]
+				projectId: "1",
+                dashboard: null,
+				slides: []
             })
         }
     },
@@ -149,16 +139,7 @@ export default {
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             datasetcheckedIds: [],
             edit: false,
-            slideArr: [{
-                name: "slide1",
-                content: "slideeee1"
-            }, {
-                name: "slide2",
-                content: "slideeee2"
-            }, {
-                name: "slide3",
-                content: "slideeee3"
-            }],
+            slideArr: [],
             add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
@@ -178,8 +159,12 @@ export default {
         slideComponent
     },
     mounted () {
+		this.slideArr = this.allData.slides
     },
     methods: {
+		createSlides() {
+
+		},
         changeHistogram(data) {
             this.$emit('event', data)
         },

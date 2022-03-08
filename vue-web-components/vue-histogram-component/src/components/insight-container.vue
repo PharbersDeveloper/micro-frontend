@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/index.css">
         <div v-if="needTitle" class="title-panel">
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
             <h2>{{dashboardTitle}}</h2>
@@ -20,13 +21,13 @@
                         暂不开放
                     </el-tab-pane>
                 </el-tabs> -->
-				<div v-for="(item, index) in lst" :key="index" class="draggable-item" draggable="true"
-					@dragstart="dragStart($event, index, item)"
-					@dragend="dragEnd">
-					<span v-if="isNum(index)" class="num"><b>#</b></span>
-					<span v-else class="text"><b>A</b></span>
-					{{item}}
-				</div>
+                <div v-for="(item, index) in lst" :key="index" class="draggable-item" draggable="true"
+                    @dragstart="dragStart($event, index, item)"
+                    @dragend="dragEnd">
+                    <span v-if="isNum(index)" class="num"><b>#</b></span>
+                    <span v-else class="text"><b>A</b></span>
+                    {{item}}
+                </div>
             </div>
 
             <!-- <div class="filter-panel">
@@ -68,17 +69,17 @@
             </div> -->
             <div class="right">
                 <div class="axis-container">
-					<div class="axis">
-						<span class="axis-title">图表类型</span>
-						<el-select v-model="policyName" class="chart-type" placeholder="图表类型">
-							<el-option
-									v-for="(item, index) in policyCandidate"
-									:key="index"
-									:label="item"
-									:value="item">
-							</el-option>
-						</el-select>
-					</div>
+                    <div class="axis">
+                        <span class="axis-title">图表类型</span>
+                        <el-select v-model="policyName" class="chart-type" placeholder="图表类型">
+                            <el-option
+                                    v-for="(item, index) in policyCandidate"
+                                    :key="index"
+                                    :label="item"
+                                    :value="item">
+                            </el-option>
+                        </el-select>
+                    </div>
                     <div class="axis">
                         <span class="axis-title">Y轴</span>
                         <div class="drop" @drop="dropContentY" @dragover.prevent>
@@ -290,7 +291,7 @@ export default {
                 width: 300px;
                 border: 2px solid grey;
                 margin-right: 5px;
-				padding-top: 20px;
+                padding-top: 20px;
                 .draggable-item {
                     margin: 5px 10px;
                     padding: 5px 10px;
@@ -327,13 +328,13 @@ export default {
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
-				padding: 20px;
-				.chart-type {
-					flex-grow: 1;
-    				margin-right: 200px;
-					height: 40px;
-					margin-bottom: 4px;
-				}
+                padding: 20px;
+                .chart-type {
+                    flex-grow: 1;
+                    margin-right: 200px;
+                    height: 40px;
+                    margin-bottom: 4px;
+                }
                 .axis-container {
                     .axis {
                         display: flex;
@@ -342,9 +343,9 @@ export default {
                         .axis-title {
                             margin: auto 0;
                             width: 100px;
-							min-width: 100px;
-							text-align: right;
-							margin-right: 20px;
+                            min-width: 100px;
+                            text-align: right;
+                            margin-right: 20px;
                         }
 
                         span {
@@ -362,9 +363,9 @@ export default {
                             padding-left: 20px;
                             border: 1px solid rgba(0, 0, 0, .12);
                             // box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-							height: 40px;
-							border-radius: 4px;
-							align-items: center;
+                            height: 40px;
+                            border-radius: 4px;
+                            align-items: center;
                             span {
                                 margin: auto 0;
                             }
@@ -379,9 +380,10 @@ export default {
 
                 .content {
                     flex-grow: 1;
-                    width: 100%;
-                    height: 100%;
+                    // width: 100%;
+                    // height: 100%;
                     position: relative;
+                    display: flex;
                     /*background-color: red;*/
                 }
             }
