@@ -96,54 +96,48 @@ function PhMQTT(config, callBack, timeoutQueue) {
 				throw Error("CallBack Is Undefined")
 			}
 			connection.subscribe(topic, qos, (_, payload) => {
-				time = new Date().getTime()
-
 				const parameter = Object.assign({}, config.parameter)
 				delete parameter.callBack
 
-    const __subscribe = () => {
-        const states = {
-            "failed": true,
-            "fail": true,
-            "succeed": true,
-            "success": true
-        }
-        if (connection) {
-            if (!callBack) { throw Error("CallBack Is Undefined") }
-            connection.subscribe(topic, qos, (_, payload) => {
+				const content = __byteToString(payload)
 
-				const { id, projectId, date, status, jobCat } =
-					JSON.parse(content)
+				const {
+					id,
+					projectId,
+					date,
+					status,
+					jobCat,
+					jobDesc,
+					message
+				} = JSON.parse(content)
 
 				// if (use_cache.indexOf(`${id}_${projectId}_${date}_${status}`) === -1) {
 
-                const { id, projectId, date, status, jobCat, jobDesc, message } = JSON.parse(content)
-
-                // if (use_cache.indexOf(`${id}_${projectId}_${date}_${status}`) === -1) {
-                    
-                // }
+				// }
 				// use_cache.push(`${id}_${projectId}_${date}_${status}`)
 
 				// 只接受jobCat为Notification标识
-                // TODO：@Alex 这部分需要重整一下
+				// TODO：@Alex 这部分需要重整一下
 				if (jobCat === "notification") {
-                    time = new Date().getTime()
+					time = new Date().getTime()
 
 					// UnRegister 将错误的和完成的关掉
-                    if (jobDesc.indexOf("runDag") !== -1) {
-                        const { cnotification: { overallStatus } } = JSON.parse(message)
-                        console.warn(overallStatus)
-                        const runDagState = states[overallStatus] || false
-                        if (runDagState) {
-                            timeoutQueue.push(topic)
-                        }
-                    } else {
-                        const state = states[status] || false
-                        if (state) {
-						    timeoutQueue.push(topic)
-					    }
-                    }
-					callBack(parameter, content); 
+					if (jobDesc.indexOf("runDag") !== -1) {
+						const {
+							cnotification: { overallStatus }
+						} = JSON.parse(message)
+						console.warn(overallStatus)
+						const runDagState = states[overallStatus] || false
+						if (runDagState) {
+							timeoutQueue.push(topic)
+						}
+					} else {
+						const state = states[status] || false
+						if (state) {
+							timeoutQueue.push(topic)
+						}
+					}
+					callBack(parameter, content)
 				}
 			})
 		}
