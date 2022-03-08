@@ -6,7 +6,7 @@
         </div>
         <div class="container" >
             <div class="left">
-                <el-tabs v-model="activeName" >
+                <!-- <el-tabs v-model="activeName" >
                     <el-tab-pane label="Columns" name="first">
                         <div v-for="(item, index) in lst" :key="index" class="draggable-item" draggable="true"
                             @dragstart="dragStart($event, index, item)"
@@ -19,10 +19,17 @@
                     <el-tab-pane label="Sampling" name="second">
                         暂不开放
                     </el-tab-pane>
-                </el-tabs>
+                </el-tabs> -->
+				<div v-for="(item, index) in lst" :key="index" class="draggable-item" draggable="true"
+					@dragstart="dragStart($event, index, item)"
+					@dragend="dragEnd">
+					<span v-if="isNum(index)" class="num"><b>#</b></span>
+					<span v-else class="text"><b>A</b></span>
+					{{item}}
+				</div>
             </div>
 
-            <div class="filter-panel">
+            <!-- <div class="filter-panel">
                 <el-select v-model="policyName" placeholder="图表类型">
                     <el-option
                             v-for="(item, index) in policyCandidate"
@@ -58,20 +65,29 @@
                         </el-collapse-item>
                     </el-collapse>
                 </div>
-            </div>
+            </div> -->
             <div class="right">
                 <div class="axis-container">
+					<div class="axis">
+						<span class="axis-title">图表类型</span>
+						<el-select v-model="policyName" class="chart-type" placeholder="图表类型">
+							<el-option
+									v-for="(item, index) in policyCandidate"
+									:key="index"
+									:label="item"
+									:value="item">
+							</el-option>
+						</el-select>
+					</div>
                     <div class="axis">
-                        <span class="axis-title">Show</span>
+                        <span class="axis-title">Y轴</span>
                         <div class="drop" @drop="dropContentY" @dragover.prevent>
-                            <span>Y :</span>
                             <p>{{yProperty}}</p>
                         </div>
                     </div>
                     <div class="axis">
-                        <span class="axis-title">By</span>
+                        <span class="axis-title">X轴</span>
                         <div class="drop" @drop="dropContentX" @dragover.prevent>
-                            <span>X :</span>
                             <p>{{xProperty}}</p>
                         </div>
                     </div>
@@ -274,7 +290,7 @@ export default {
                 width: 300px;
                 border: 2px solid grey;
                 margin-right: 5px;
-
+				padding-top: 20px;
                 .draggable-item {
                     margin: 5px 10px;
                     padding: 5px 10px;
@@ -311,9 +327,14 @@ export default {
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
-
+				padding: 20px;
+				.chart-type {
+					flex-grow: 1;
+    				margin-right: 200px;
+					height: 40px;
+					margin-bottom: 4px;
+				}
                 .axis-container {
-
                     .axis {
                         display: flex;
                         flex-direction: row;
@@ -321,6 +342,9 @@ export default {
                         .axis-title {
                             margin: auto 0;
                             width: 100px;
+							min-width: 100px;
+							text-align: right;
+							margin-right: 20px;
                         }
 
                         span {
@@ -337,7 +361,9 @@ export default {
                             margin-bottom: 5px;
                             padding-left: 20px;
                             border: 1px solid rgba(0, 0, 0, .12);
-                            box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+                            // box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+							height: 40px;
+							border-radius: 4px;
 
                             span {
                                 margin: auto 0;

@@ -18,20 +18,14 @@
                             {'borderBold': edit}
                         ]"
                         @click="edit = true">编辑模式</div>
+                    <el-button class="panl">返回数据看板</el-button>
+                    <el-button class="panl">查看源数据</el-button>
+                    <el-button class="panl">保存</el-button>
+                        
                 </div>
             </div>
             <div class="content">
-                <slideComponent :needTitle="false" :isEditableValue="edit"></slideComponent>
-            </div>
-            <div class="page_footer">
-                <div class="slide_item" 
-                    v-for="(slide,index) in slideArr" 
-                    @click="clickSlide(slide)"
-                    :key="index">
-                    <div class="slide_name">{{slide.name}}</div>
-                    <img class="del_icon" :src="del_icon" @click="clickDeleteSlide(slide, index)">
-                </div>
-                <img :src="add_icon"  alt="" class="add_icon" @click="addAlide">
+                <insightComponent :needTitle="false"></insightComponent>
             </div>
         </div>
         <div class="project_info_right">
@@ -67,47 +61,6 @@
                 </div>
             </div>
         </div>
-        <el-dialog
-            title="删除"
-            :visible.sync="dialogDeleteSlideVisible"
-            width="600px">
-            <div class="delete-slide-container">
-                确定删除该数据看板吗？
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogDeleteSlideVisible = false">取消</el-button>
-                <el-button type="primary" @click="on_clickDeleteSlideConfirm">确认</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog
-            title="新内容"
-            :visible.sync="dialogNewChartVisible"
-            width="600px">
-            <div class="create-chart-container">
-                <div class="chart-type">
-                    <img :src="logo1">
-                    <span>图表</span>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogNewChartVisible = false">取消</el-button>
-                <el-button type="primary" @click="on_clickNewChartConfirm">确认</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog
-            title="新建图表"
-            :visible.sync="dialogNewChartNameVisible"
-            width="600px">
-            <div class="create-chart-container">
-                <span>数据源：</span>
-                <input type="text" class="chartName">
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogNewChartNameVisible = false">取消</el-button>
-                <el-button type="primary" @click="on_clickNewChartNameConfirm">确认</el-button>
-            </span>
-        </el-dialog>
-        <img :src="add_chart" class="add_chart" alt="" @click="dialogNewChartVisible = true">
     </div>
 </template>
 <script>
@@ -115,7 +68,7 @@ import ElButton from "element-ui/packages/button"
 import ElTabs from "element-ui/packages/tabs"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
-import slideComponent from "./slide"
+import insightComponent from "./insight-container"
 import "element-ui/lib/theme-chalk/index.css"
 
 export default {
@@ -138,6 +91,11 @@ export default {
                 ]
             })
         }
+    },
+    components: {
+        ElDialog,
+        ElButton,
+        insightComponent
     },
     data: () => {
         return {
@@ -163,38 +121,12 @@ export default {
             content: "",
             dialogDeleteSlideVisible: false, //删除slide
             delSlideData: null,
-            delSlideIndex: 0,
-            add_chart: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
-            dialogNewChartVisible: false,
-            dialogNewChartNameVisible: false
+            delSlideIndex: 0
         }
-    },
-    components: {
-        ElDialog,
-        ElButton,
-        slideComponent
     },
     mounted () {
     },
     methods: {
-        on_clickNewChartNameConfirm(data) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "clickkNewChartName",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
-            this.dialogNewChartNameVisible = false
-        },
-        on_clickNewChartConfirm() {
-            this.dialogNewChartVisible = false
-            this.dialogNewChartNameVisible = true
-        },
         addAlide() {
             let num = this.slideArr.length + 1
             this.slideArr.push({
@@ -230,37 +162,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    * {
-        box-sizing: border-box;
-    }
     .page {
         display: flex;
         width: 100%;
         height: calc(100vh - 60px);
-        .create-chart-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .chart-type {
-            height: 60px;
-            width: 500px;
-            border: 1px solid #bbb;
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            img {
-                width: 30px;
-                margin-right: 14px;
-            }
-        }
-        .add_chart {
-            position: absolute;
-            bottom: 60px;
-            right: 510px;
-            z-index: 99;
-            cursor: pointer;
-        }
         .project_info_left {
             flex: 1;
             border-right: 1px solid #dddddd;
@@ -283,6 +188,8 @@ export default {
                 }
                 .right {
                     display: flex;
+                    align-items: center;
+                        padding-right: 20px;
                     .text {
                         margin-right: 10px;
                         font-weight: bold;
@@ -290,6 +197,13 @@ export default {
                         display: flex;
                         align-items: center;
                         cursor: pointer;
+                    }
+                    .panl {
+                        height: 32px;
+                        display: flex;
+                        align-items: center;
+                        background: #5342B3;
+                        color: #fff;
                     }
                     .borderBold {
                         border-bottom: 1px solid #666;

@@ -465,9 +465,6 @@ export default {
                 body: JSON.stringify(body)
             }
             let result = await fetch(url, options).then(res => res.json())
-            // this.noticeService.projectName = this.projectName
-            // let timeout = 60
-            // this.noticeService.register("notification", this.runId, this.runDagCallback, this, this.projectId, timeout)
             this.showProgress = true
         },
         // 点击运行整体

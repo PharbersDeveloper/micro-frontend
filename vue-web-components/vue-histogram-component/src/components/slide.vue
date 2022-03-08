@@ -206,7 +206,7 @@ export default {
 
                     .grid-item {
                         position: absolute;
-                        background-color: beige;
+                        background-color: #f2f2f2;
                     }
                 }
             }

@@ -11,47 +11,9 @@ export async function phAnalyzeDashBoardsEventHandler(e, route) {
 	const clearTagsEventName = "clearDS"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
-			if (params.name === "upload") {
-				uri = `dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
-			} else if (
-				params.name === "linkToProject" ||
-				params.name === "project"
-			) {
-				uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
-			} else if (
-				params.name === "analyze" &&
-				params.dataset.cat !== "input_index" &&
-				params.dataset.cat !== "output_index"
-			) {
-				uri = `dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
-			} else if (
-				params.name === "analyze" &&
-				params.dataset.cat !== "uploaded" &&
-				params.dataset.cat !== "intermediate"
-			) {
-				console.log(params.dataset)
-				uri = `dataset-max?projectName=${params.projectName}&projectId=${params.projectId}&path=${params.dataset.path}&datasetName=${params.dataset.name}&format=${params.dataset.format}&cat=${params.dataset.cat}`
-			} else if (params.name === "datasets") {
+			if (params.name === "clickDashboardName") {
 				uri =
-					"dataset-lst?projectName=" +
-					params.projectName +
-					"&projectId=" +
-					params.projectId
-			} else if (params.name === "scripts") {
-				uri =
-					"recipes?projectName=" +
-					params.projectName +
-					"&projectId=" +
-					params.projectId
-			} else if (params.name == "flow") {
-				uri =
-					"flow?projectName=" +
-					params.projectName +
-					"&projectId=" +
-					params.projectId
-			} else if (params.name == "airflow") {
-				uri =
-					"airflow?projectName=" +
+					"slidepage?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId

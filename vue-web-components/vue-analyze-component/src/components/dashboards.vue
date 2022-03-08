@@ -392,16 +392,16 @@ export default {
             }
         },
         //点击dataset name
-        clickDashboardName(dataset) {
+        clickDashboardName(data) {
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "analyze",
+                    name: "clickDashboardName",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    dataset: dataset
+                    dashboard: data
                 }
             }
             this.$emit('event', event)
