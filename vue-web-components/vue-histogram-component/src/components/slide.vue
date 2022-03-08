@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div v-if="isMounted" class="high-container">
-                <div class="histogram-container" :style="draggableLayout()">
+                <div class="histogram-container" v-if="contentModel" :style="draggableLayout()">
                     <Histogram v-for="(item, index) in contentModel.content"
                         :key="index"
                         :editable="isEditable()"
@@ -67,9 +67,7 @@ export default {
         },
         contentModel: {
             type: Object,
-            default: function() {
-                return new PhSlideModel(1)
-            }
+            default: null
         },
         icon: {
             type: String,
@@ -92,7 +90,12 @@ export default {
     },
     mounted () {
         this.isMounted++
-        this.contentModel.querySlideContent()
+        if (this.contentModel) {
+            this.contentModel.querySlideContent()
+        }
+    },
+    updated() {
+        debugger
     },
     methods: {
         changeHistogram(data) {

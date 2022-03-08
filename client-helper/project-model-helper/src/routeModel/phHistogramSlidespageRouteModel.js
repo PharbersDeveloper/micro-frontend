@@ -1,4 +1,4 @@
-export async function phHistogramSlidespageRouteModel(route, parseParams) {
+export async function phHistogramSlidespageRouteModel(route /*, parseParams*/) {
 	route.browserEventsService.clearListener()
 	let debugToken =
 		"27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
@@ -41,7 +41,7 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	let body_slide = {
 		table: "slide",
 		conditions: {
-			id: ["=", "1_1"]
+			pdId: ["=", "1_1"]
 		},
 		limit: 100,
 		start_key: ""
@@ -67,8 +67,10 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 		})
 	const slides = slidesQuery.filter((it) => it)
 	return {
-		projectName: parseParams.query.projectName || "alfred test",
-		projectId: parseParams.query.projectId || "1",
+		// projectName: parseParams.query.projectName || "alfred test",
+		projectName: "alfred test",
+		// projectId: parseParams.query.projectId || "1",
+		projectId: "1",
 		dashboard: dashboard,
 		slides: slides,
 		// tagsArray: tagsArray,

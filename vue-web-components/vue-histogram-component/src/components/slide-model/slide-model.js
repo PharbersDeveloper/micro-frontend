@@ -1,48 +1,21 @@
 
 export default class PhSlideModel {
-    constructor(id) {
+    constructor(id, data) {
         this.id = id
-        this.debugToken = "253e674e1f9e037982e795758a6e2f4a8bcd50af9d7b9a465d9e0f6dd430c72a"
-        this.isEdited = false
+        this.debugToken = 	"253e674e1f9e037982e795758a6e2f4a8bcd50af9d7b9a465d9e0f6dd430c72a"
+
+        if (data) {
+            this.queryContent = JSON.parse(data.content)
+            this.content = Object.assign({}, this.queryContent)
+            this.slideId = data.slideId
+            this.pdId = data.pdId
+            this.title = data.title
+            this.idx = data.idx
+        }
     }
 
-    async querySlideContent() {
-        // TODO: query content from Dynamodb
-        // 做到这个地方的时候，问我 @wodelu
-        //  this.queryContent = await {
-        this.queryContent = {
-            title: "slide test",
-            // 这个是一个JSON String 需要Adapter一下，做到的时候问我 @wodelu
-            content: [
-                {
-                    tp: "histogram", // 这里只可能是histogram 活着 table 暂时，全部写死都写histogram
-                    index: 0,
-                    histogramName: "alfred test",
-                    policyName: "bar", // bar, pie and other histogram name
-                    datasourceClass: "default",
-                    schemaClass: "default",
-                    x: "标准省份名称",
-                    y: "sales",
-                    conditions: {}, // like filter etc.
-                    position: [0, 0, 5, 5]  // 顺序是 左， 上， 右， 下
-                },
-                {
-                    tp: "histogram", // 这里只可能是histogram 活着 table 暂时，全部写死都写histogram
-                    index: 1,
-                    histogramName: "alfred test",
-                    policyName: "pie", // bar, pie and other histogram name
-                    datasourceClass: "default",
-                    schemaClass: "default",
-                    x: "year",
-                    y: "sales",
-                    conditions: {}, // like filter etc.
-                    position: [6, 0, 11, 5]  // 顺序是 左， 上， 右， 下
-                }
-            ]
-        }
-        this.title = this.queryContent.title
-        this.content = Object.assign({}, this.queryContent.content)
-        this.isEdited = false
+    querySlideContent() {
+        // do nothing ...
     }
 
     save() {

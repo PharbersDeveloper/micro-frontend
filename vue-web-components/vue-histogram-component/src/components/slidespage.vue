@@ -22,9 +22,10 @@
             </div>
             <div class="content">
                 <slideComponent 
-					:needTitle="false" 
-					:isEditableValue="edit"
-					@changeHistogram="changeHistogram"></slideComponent>
+                    :needTitle="false" 
+                    :isEditableValue="edit"
+                    :content-model="activeModel"
+                    @changeHistogram="changeHistogram"></slideComponent>
             </div>
             <div class="page_footer">
                 <div class="slide_item" 
@@ -34,7 +35,7 @@
                     <div class="slide_name">{{slide.title}}</div>
                     <img class="del_icon" :src="del_icon" @click="clickDeleteSlide(slide, index)">
                 </div>
-                <img :src="add_icon"  alt="" class="add_icon" @click="addAlide">
+                <img :src="add_icon"  alt="" class="add_icon" @click="addSlide">
             </div>
         </div>
         <div class="project_info_right">
@@ -120,15 +121,17 @@ import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import slideComponent from "./slide"
 import "element-ui/lib/theme-chalk/index.css"
+import PhSlideModel from './slide-model/slide-model'
+
 export default {
     props: {
         allData: {
             type: Object,
             default:() => ({
                 projectName: "项目名称",
-				projectId: "1",
+                projectId: "1",
                 dashboard: null,
-				slides: []
+                slides: []
             })
         }
     },
@@ -150,7 +153,8 @@ export default {
             delSlideIndex: 0,
             add_chart: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
             dialogNewChartVisible: false,
-            dialogNewChartNameVisible: false
+            dialogNewChartNameVisible: false,
+            activeModel: null
         }
     },
     components: {
@@ -159,12 +163,18 @@ export default {
         slideComponent
     },
     mounted () {
-		this.slideArr = this.allData.slides
+        
     },
     methods: {
-		createSlides() {
-
-		},
+        createSlides() {
+            const tmp = []
+            for (let index = 0; index < this.allData.slides.length; ++index) {
+                const item = new PhSlideModel(index, this.allData.slides[index])
+                tmp.push(item)
+            }
+            this.slideArr = tmp.sort((l, r) => l.idx - r.idx)
+            this.activeModel = this.slideArr[0]
+        },
         changeHistogram(data) {
             this.$emit('event', data)
         },
@@ -186,26 +196,29 @@ export default {
             this.dialogNewChartVisible = false
             this.dialogNewChartNameVisible = true
         },
-        addAlide() {
-            let num = this.slideArr.length + 1
-            this.slideArr.push({
-                name: "slide" + num,
-                content: "slideeee" + num
-            })
+        addSlide() {
+            // TODO: ...
+            // let num = this.slideArr.length + 1
+            // this.slideArr.push({
+            //     name: "slide" + num,
+            //     content: "slideeee" + num
+            // })
         },
         clickSlide(data) {
             this.content = data
         },
         on_clickDeleteSlideConfirm() {
-            this.slideArr.splice(this.delSlideIndex, 1)
-            this.dialogDeleteSlideVisible = false
-            //重置slide名称
-            this.resetSlideName()
+            // TODO: ...
+            // this.slideArr.splice(this.delSlideIndex, 1)
+            // this.dialogDeleteSlideVisible = false
+            // //重置slide名称
+            // this.resetSlideName()
         },
         clickDeleteSlide(data, index) {
-            this.delSlideData = data
-            this.delSlideIndex = index
-            this.dialogDeleteSlideVisible = true
+            // TODO: ...
+            // this.delSlideData = data
+            // this.delSlideIndex = index
+            // this.dialogDeleteSlideVisible = true
         },
         resetSlideName() {
             this.slideArr.forEach((item, index) => {
@@ -215,7 +228,9 @@ export default {
         }
     },
     watch: {
-
+        allData(n, o) {
+            this.createSlides()
+        }
     }
 }
 </script>
