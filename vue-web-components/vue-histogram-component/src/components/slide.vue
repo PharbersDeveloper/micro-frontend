@@ -30,7 +30,8 @@
                         :init-top="item.position[1]"
                         :init-right="item.position[2]"
                         :init-bottom="item.position[3]"
-                        :policy="createPolicyWithinContent(item)" />
+                        :policy="createPolicyWithinContent(item)"
+                        @dblclick.native="changeHistogram(item)" />
                 </div>
             </div>
         </div>
@@ -94,6 +95,19 @@ export default {
         this.contentModel.querySlideContent()
     },
     methods: {
+        changeHistogram(data) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    "histogramParams": data,
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId
+                }
+            }
+            this.$emit('event', event)
+        },
         gridItemLayout(index) {
             const w = this.$refs.container.offsetWidth
             const h = this.$refs.container.offsetHeight

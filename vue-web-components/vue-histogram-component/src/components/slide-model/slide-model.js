@@ -2,7 +2,7 @@
 export default class PhSlideModel {
     constructor(id) {
         this.id = id
-        this.debugToken = "bbfdccb2150e8bdd4d07aa25f3c1189c7b1943edef4fc4def202457c94670ccc"
+        this.debugToken = "253e674e1f9e037982e795758a6e2f4a8bcd50af9d7b9a465d9e0f6dd430c72a"
         this.isEdited = false
     }
 
