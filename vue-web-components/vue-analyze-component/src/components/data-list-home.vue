@@ -87,16 +87,16 @@
                                 </div>
                             </div>
                             <div class="flow flow_three">
-                                <p class="flow_word">指示面板</p>
+                                <p class="flow_word">数据看板</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell">
+                                <div class="flow_item_cell"  @click="linkToPage('dashboards')">
                                         <a href="#">
                                             <div>
                                                 <img :src="dashboard_icon" alt="">
                                             </div>
                                             <div>
                                                 <p class="number">{{allData.numShow.dashBoard}}</p>
-                                                <p class="dashboard">指示面板</p>
+                                                <p class="dashboard">数据看板</p>
                                             </div>
                                         </a>
                                 </div>
@@ -105,7 +105,7 @@
                             <div class="flow flow_four">
                                 <p class="flow_word">维基</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell">
+                                <div class="flow_item_cell" @click="linkToPage('slide')">
                                         <a href="#">
                                             <div>
                                                 <img :src="article_icon" alt="">

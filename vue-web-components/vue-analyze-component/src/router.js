@@ -11,6 +11,7 @@ import bpExcelContainer from './components/bp-excel-container'
 import bpNavMax from './components/bp-nav-top-max'
 import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
+import dashboards from './components/dashboards'
 
 Vue.use(Router)
 
@@ -77,6 +78,11 @@ export default new Router({
             path: '/eh',
             name: 'eh',
             component: eh
+        },
+        {
+            path: '/dashboards',
+            name: 'dashboards',
+            component: dashboards
         }
     ]
 })

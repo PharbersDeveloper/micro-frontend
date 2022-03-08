@@ -3,31 +3,30 @@
  */
 
 function PhHttpMQTT(config, callBack, timeoutQueue) {
-    let intervalId = null;
-    const topic = config.topic || "pharbers";
-    const endpoint = config.endpoint;
+	let intervalId = null
+	const topic = config.topic || "pharbers"
+	const endpoint = config.endpoint
 
-    const __subscribe = () => {
-        intervalId = setInterval(() => {
-            // Call Query http mqtt interface 获取的数据交给callBack
-        }, 1000 * 5) // 5秒 后续可编程参数，先实现
-    }
+	const __subscribe = () => {
+		intervalId = setInterval(() => {
+			// Call Query http mqtt interface 获取的数据交给callBack
+		}, 1000 * 5) // 5秒 后续可编程参数，先实现
+	}
 
-    const connect = async () => {
-        __subscribe();
-    }
+	const connect = async () => {
+		__subscribe()
+	}
 
-    const disconnect = () => {
-        if (intervalId) {
-            clearInterval(intervalId)
-        }
-    }
+	const disconnect = () => {
+		if (intervalId) {
+			clearInterval(intervalId)
+		}
+	}
 
-    return {
-        "connect": connect,
-        "disconnect": disconnect
-    }
-
+	return {
+		connect: connect,
+		disconnect: disconnect
+	}
 }
 
 export { PhHttpMQTT }

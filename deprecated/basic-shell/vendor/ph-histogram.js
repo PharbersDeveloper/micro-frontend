@@ -1313,12 +1313,12 @@ function normalizeComponent (
   }
 }
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"9ff4b838-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/histogram.vue?vue&type=template&id=15cd8a4c&scoped=true&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"9ff4b838-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/insight.vue?vue&type=template&id=15cd8a4c&scoped=true&shadow
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"viewport",staticClass:"viewport"},[_c('div',{ref:"chart",staticClass:"chart"})])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/histogram.vue?vue&type=template&id=15cd8a4c&scoped=true&shadow
+// CONCATENATED MODULE: ./src/components/insight.vue?vue&type=template&id=15cd8a4c&scoped=true&shadow
 
 // CONCATENATED MODULE: ./node_modules/d3-array/src/ascending.js
 function ascending(a, b) {
@@ -16721,7 +16721,7 @@ gnomonicRaw.invert = azimuthalInvert(atan);
       var t = y * ca - x * sa;
       x = x * ca + y * sa;
       y = t;
-    }    
+    }
     return [x + tx, y + ty];
   }
   projection.invert = function(p) {
@@ -19554,7 +19554,7 @@ function linearish(scale) {
       step = start, start = stop, stop = step;
       step = i0, i0 = i1, i1 = step;
     }
-    
+
     while (maxIter-- > 0) {
       step = tickIncrement(start, stop, count);
       if (step === prestep) {
@@ -25375,7 +25375,7 @@ class PhDagDatasource {
   }
 
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/histogram.vue?vue&type=script&lang=js&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-svg-inline-loader/src!./src/components/insight.vue?vue&type=script&lang=js&shadow
 //
 //
 //
@@ -25526,14 +25526,14 @@ class PhDagDatasource {
 
   }
 });
-// CONCATENATED MODULE: ./src/components/histogram.vue?vue&type=script&lang=js&shadow
- /* harmony default export */ var components_histogramvue_type_script_lang_js_shadow = (histogramvue_type_script_lang_js_shadow); 
-// CONCATENATED MODULE: ./src/components/histogram.vue?shadow
+// CONCATENATED MODULE: ./src/components/insight.vue?vue&type=script&lang=js&shadow
+ /* harmony default export */ var components_histogramvue_type_script_lang_js_shadow = (histogramvue_type_script_lang_js_shadow);
+// CONCATENATED MODULE: ./src/components/insight.vue?shadow
 
 
 
 function injectStyles (context) {
-  
+
   var style0 = __webpack_require__("ae95")
 if (style0.__inject__) style0.__inject__(context)
 
@@ -25575,14 +25575,14 @@ var testcomponentv2vue_type_template_id_9b981c76_scoped_true_shadow_staticRender
   props: {}
 });
 // CONCATENATED MODULE: ./src/components/testcomponentv2.vue?vue&type=script&lang=js&shadow
- /* harmony default export */ var components_testcomponentv2vue_type_script_lang_js_shadow = (testcomponentv2vue_type_script_lang_js_shadow); 
+ /* harmony default export */ var components_testcomponentv2vue_type_script_lang_js_shadow = (testcomponentv2vue_type_script_lang_js_shadow);
 // CONCATENATED MODULE: ./src/components/testcomponentv2.vue?shadow
 
 
 
 function testcomponentv2shadow_injectStyles (context) {
-  
-  
+
+
 }
 
 /* normalize component */
@@ -25645,7 +25645,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     if (descriptor && descriptor.get !== getCurrentScript && document.currentScript) {
       return document.currentScript
     }
-  
+
     // IE 8-10 support script readyState
     // IE 11+ & Firefox support stack trace
     try {
@@ -25663,24 +25663,24 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         inlineScriptSourceRegExp,
         inlineScriptSource,
         scripts = document.getElementsByTagName('script'); // Live NodeList collection
-  
+
       if (scriptLocation === currentLocation) {
         pageSource = document.documentElement.outerHTML;
         inlineScriptSourceRegExp = new RegExp('(?:[^\\n]+?\\n){0,' + (line - 2) + '}[^<]*<script>([\\d\\D]*?)<\\/script>[\\d\\D]*', 'i');
         inlineScriptSource = pageSource.replace(inlineScriptSourceRegExp, '$1').trim();
       }
-  
+
       for (var i = 0; i < scripts.length; i++) {
         // If ready state is interactive, return the script tag
         if (scripts[i].readyState === 'interactive') {
           return scripts[i];
         }
-  
+
         // If src matches, return the script tag
         if (scripts[i].src === scriptLocation) {
           return scripts[i];
         }
-  
+
         // If inline source matches, return the script tag
         if (
           scriptLocation === currentLocation &&
@@ -25690,7 +25690,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           return scripts[i];
         }
       }
-  
+
       // If no match, return null
       return null;
     }

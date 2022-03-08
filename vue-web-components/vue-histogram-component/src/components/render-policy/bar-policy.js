@@ -174,7 +174,7 @@ export default class PhBarChartPolicy extends policy{
     }
 
     buildBarChartQueryString() {
-        return "select " + this.yPropertyFunc + "(" + this.yProperty + ") as " + this.yProperty + ",`" + this.xProperty + "` from " + this.dataset + " group by `" + this.xProperty + "`"
+        return "select " + this.yPropertyFunc + "(`" + this.yProperty + "`) as `" + this.yProperty + "`,`" + this.xProperty + "` from " + this.dataset + " group by `" + this.xProperty + "`"
     }
 
     buildPolicySchema() {
