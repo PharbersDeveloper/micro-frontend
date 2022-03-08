@@ -113,7 +113,8 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 				return {
 					Accept: "application/vnd.api+json",
 					"Content-Type": "application/vnd.api+json",
-					Authorization: ENV.APP.debugToken
+					// Authorization: ENV.APP.debugToken
+					Authorization: this.cookies.read("access_token")
 				}
 			} else {
 				return {

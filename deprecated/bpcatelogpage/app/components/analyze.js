@@ -22,7 +22,7 @@ export default class AnalyzeComponent extends Component {
 				let uri = '/projects'
 				if(params.name === "project") {
 					//返回project
-					uri = `/projects/`+ params.projectId
+					uri = `projects/${this.projectId}?projectName=${this.projectName}&projectId=${this.projectId}`
 				} else if (params.name == "datasets") {
 					uri = '/dataset-lst?projectName=' + params.projectName +'&projectId=' + params.projectId
 				} else if(params.name === "scripts") {

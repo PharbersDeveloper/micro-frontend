@@ -1,5 +1,6 @@
 <template>
     <div class="my-data-content-container">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="header">
             <span class="header-large">
                 {{title}}
@@ -11,20 +12,13 @@
                     <div class="project-list-header">
                         <bp-text>DAG 名称</bp-text>
                         <div class="opt-icon">
-                            <bp-text v-if="toggle">更新时间</bp-text>
-                            <div class="icon">
-                                <div @click="toggleClickCard">
-                                    <bp-img :src="cardIcon"  v-if="toggle"></bp-img>
-                                </div>
-                                <div @click="toggleClickCard">
-                                    <bp-img :src="cardIconSelect" v-if="!toggle"></bp-img>
-                                </div>
-                                <div @click="toggleClickList">
-                                    <bp-img :src="listIconSelect" v-if="toggle"></bp-img>
-                                </div>
-                                <div @click="toggleClickList">
-                                    <bp-img :src="listIcon" v-if="!toggle"></bp-img>
-                                </div>
+                            <bp-text class="update_time" v-if="toggle">更新时间</bp-text>
+                            <div class="opt">
+                                <bp-select-vue class="select_opt" :src="selectIcon" choosedValue="操作" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                                    <bp-option-vue class="schema-select-item" text="新建项目" :src="addIcon" @click="dialogCreateVisible = true"></bp-option-vue>
+                                    <bp-option-vue class="schema-select-item" text="缩略图" :src="cardIcon" @click="toggleClickCard"></bp-option-vue>
+                                    <bp-option-vue class="schema-select-item" text="详细信息" :src="listIcon" @click="toggleClickList"></bp-option-vue>
+                                </bp-select-vue>
                             </div>
                         </div>
                     </div>
@@ -56,27 +50,66 @@
                 </div>
             </template>
         </div>
+        <el-dialog
+            title="新建项目"
+            :visible.sync="dialogCreateVisible"
+            width="600px">
+            <div class="dlg-create-container">
+                <div class="name">
+                    <span>项目名称：</span>
+                    <el-input v-model="projectNameValue" ref="project_name_value" @input="inputStrChecked(projectNameValue, 'project_name_value', 'projectNameValue')" class="search_row">
+                    </el-input>
+                </div>
+                <div class="deploy">
+                    <span>资源配置：</span>
+                    <div class="radio_area">
+                        <div class="radio_item" v-for="(item, index) in allData.resourcesTypesList" :key="'type'+index">
+                            <input type="radio" class="radio" name="radio" ref="radioData" :checked="item.name === '单机'" :disabled="item.name !== '单机'" >
+                            <input :value="item.name" class="el-input__inner" type="text" name="" id="" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogCreateVisible = false">取消</el-button>
+                <el-button type="primary" @click="on_clickCreateConfirm">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
-    
 </template>
 <script>
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
 import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
+import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import ElButton from 'element-ui/packages/button/index'
+import ElInput from 'element-ui/packages/input/index'
+import ElDialog from 'element-ui/packages/dialog/src/component'
 
 export default {
     components: {
         bpText,
-        bpImg
+        bpImg,
+        bpSelectVue,
+        bpOptionVue,
+        ElDialog,
+        ElButton,
+        ElInput
     },
     data() {
         return {
             title: "工作平台",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dag+list.svg",
-            cardIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_initial.svg",
-            listIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_list_initial.svg",
+            addIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0(1).svg",
+            cardIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%BC%A9%E7%95%A5%E5%9B%BE.svg",
+            listIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA.svg",
             listIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_list_slelect.svg",
+            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             cardIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_slelect.svg",
-            toggle: false
+            toggle: false,
+            closeTosts: false,
+            dialogCreateVisible: false,
+            projectNameValue: ""
         }
     },
     props: {
@@ -90,7 +123,8 @@ export default {
                             provider: "provider",
                             meta: {}
                         }}
-                    ]
+                    ],
+                    resourcesTypesList: []
                 }
             }
         }
@@ -107,6 +141,33 @@ export default {
         }
     },
     methods: {
+        on_clickCreateConfirm(data) {
+            if (!this.projectNameValue || this.projectNameValue === "") {
+                alert("请输入项目名称！")
+                return false
+            }
+            this.allData.projects.forEach(item => {
+                if (item.attributes.name === this.projectNameValue) {
+                    alert("项目名称重复！")
+                    throw Error("项目名称重复")
+                }
+            })
+            console.log(data)
+            const event = new Event("event")
+            event.args = {
+                callback: "cerateProject",
+                element: this,
+                param: {
+                    name: this.projectNameValue,
+                    id: "VSq8W2iKoU3pY0OG"
+                }
+            }
+            this.$emit('event', event)
+            this.dialogCreateVisible = false
+        },
+        showSelectOption(data) {
+            console.log(data)
+        },
         toggleClickCard() {
             this.toggle = false
         },
@@ -119,11 +180,29 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: params.name,
+                    name: params["attributes"]["name"],
                     pid: params.id
                 }
             }
             this.$emit('event', event)
+        },
+        // 验证输入字符串时候的特殊字符
+        inputStrChecked(value, ref, name) {
+            // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
+            // 只允许输入数字、字母、下划线
+            let r = /^[a-z0-9^]{1,}$/
+            if (r.test(value) || value === "") {
+                if(value.length > 30) {
+                    this[name] = ""
+                    alert("输入内容过长！")
+                    return false;
+                }
+                return value
+            } else {
+                this[name] = ""
+                alert("请勿输入特殊字符！")
+                return false;
+            }
         },
         formatDateStandard(...params) {
             if(params.length === 2) {
@@ -159,6 +238,15 @@ export default {
     * {
         box-sizing: border-box;
     }
+    /deep/.el-dialog__header {
+        border-bottom: 1px solid #ccc;
+    }
+    /deep/.el-dialog__headerbtn {
+        display: none;
+    }
+    /deep/.el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
+    }
     .my-data-content-container {
         width: 100%;
         height: 100%;
@@ -177,7 +265,44 @@ export default {
                 line-height: 28px;
             }
         }
-
+        .dlg-create-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .name {
+                display: flex;
+                span {
+                    min-width: 80px;
+                }
+                /deep/.el-input__inner {
+                    width: 240px;
+                    height: 30px;
+                }
+            }
+            .deploy {
+                display: flex;
+                flex-direction: column;
+                margin-top: 20px;
+                span {
+                    min-width: 320px;
+                }
+                .radio_area {
+                    margin-left: 60px;
+                    .radio_item {
+                        display: flex;
+                        align-items: center;
+                        margin-top: 5px;
+                        .radio {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+                /deep/.el-input__inner {
+                    width: 240px;
+                    height: 30px;
+                }
+            }
+        }
         .data-main-container {
             display: flex;
             flex-direction: column;
@@ -206,11 +331,29 @@ export default {
                         display: flex;
                         justify-content: flex-end;
                         align-items: center;
+                        .opt {
+                            width: 110px;
+                            /deep/.bp-option-group {
+                                width: 100px;
+                            }
+                        }
                         .icon {
                             display: flex;
                             cursor: pointer;
                             width: 110px;
                             justify-content: flex-end;
+                        }
+                        .select_opt {
+                            width: 79px;
+                            height: 21px;
+                            background: #FFFFFF;
+                            border: 0.5px solid rgba(0,0,0,1);
+                            float: right;
+                            /deep/ .svg-icon {
+                                width: 12px;
+                                height: 12px;
+                                margin-right: 5px;
+                            }
                         }
                     }
                 }

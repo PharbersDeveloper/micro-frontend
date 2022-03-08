@@ -1,7 +1,7 @@
 <template>
     <div v-if="showing" class="ph-excel-page" :style="offset">
         <div :style="style">
-            <ph-row v-for="(item, index) in data" :value="item" :state="state"
+            <ph-row v-for="(item, index) in data" :value="item" :rowState="rowState(item)"
                     :schema="schema" :key="index"></ph-row>
         </div>
     </div>
@@ -94,7 +94,16 @@ export default {
                 return (arr[2]);
             else
                 return null;
-        }
+        },
+	    rowState: function(value) {
+		    let result = "normal"
+		    if (this.datasource.funcChains) {
+			    if (!this.datasource.funcChains.exec(value, this.schema)) {
+				    result = "reverse"
+			    }
+		    }
+		    return result
+	    }
     },
     watch: {
         dataIsReady(n, o) {

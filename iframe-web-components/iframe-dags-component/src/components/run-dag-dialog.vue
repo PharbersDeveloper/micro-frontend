@@ -137,9 +137,16 @@ export default {
         save() {
             this.jsonValue = {}
             if(this.steps === 2) {
-                this.jsonValue["datasets"] = this.datasetsConf
-                this.jsonValue["scripts"] = JSON.parse(this.scriptsConf)
-                this.jsonValue["userConf"] = JSON.parse(this.userConf)
+                let scriptsTest = this.testJSON(this.scriptsConf)
+                let userConfTest = this.testJSON(this.userConf)
+                if(scriptsTest && userConfTest) {
+                    this.jsonValue["datasets"] = this.datasetsConf
+                    this.jsonValue["scripts"] = JSON.parse(this.scriptsConf)
+                    this.jsonValue["userConf"] = JSON.parse(this.userConf)
+                } else {
+                    alert("请输入正确的json数据")
+                    return false
+                }
             }
             let isJSON = this.isJSON_test(JSON.stringify(this.jsonValue))
             if(!isJSON) return false
@@ -157,6 +164,18 @@ export default {
         },
         close() {
             this.$emit('closeRunDagDialog');
+        },
+        testJSON (str) {
+            if (typeof str == 'string') {
+                try {
+                    var obj=JSON.parse(str);
+                    return true;
+                } catch(e) {
+                    return false;
+                }
+            } else {
+                return false
+            }
         }
     }
 }

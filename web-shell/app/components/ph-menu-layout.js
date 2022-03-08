@@ -1,17 +1,17 @@
 import Component from "@glimmer/component"
 import { inject as service } from "@ember/service"
-import { action } from '@ember/object';
+import { action } from "@ember/object"
 import ENV from "web-shell/config/environment"
 
 export default class PhMenuLayoutComponent extends Component {
 	@service router
 	@service("ph-menu") ms
 	@service oauthService
-	@service cookies;
+	@service cookies
 	@service store
 
 	accountsUri = ENV.APP.accountsUri
-	scope =  ENV.APP.scope
+	scope = ENV.APP.scope
 
 	get redirectUri() {
 		if (ENV.environment === "development") {
@@ -47,42 +47,56 @@ export default class PhMenuLayoutComponent extends Component {
 	}
 
 	@action
-    listener(e) {
-        switch(e.detail[0].args.callback) {
-            case "linkToPage":
-				let idx = e.detail[0].args.param.index
-				if(idx == 0) {
+	listener(e) {
+		switch (e.detail[0].args.callback) {
+			case "linkToPage":
+				const idx = e.detail[0].args.param.index
+				if (idx === 0) {
 					this.router.transitionTo("shell", `overview`)
-				} else if(idx == 1) {
+				} else if (idx === 1) {
 					this.router.transitionTo("shell", `download/my-data`)
-				} else if(idx == 2) {
+				} else if (idx === 2) {
 					this.router.transitionTo("shell", `projects`)
+				} else if (idx === 3) {
+					this.router.transitionTo("shell", `files`)
+				} else if (idx === 4) {
+					this.router.transitionTo("shell", `assets`)
+				} else {
+					this.router.transitionTo("shell", `overview`)
 				}
-                break
+				break
 			case "logOut":
 				this.oauthService.removeAuth()
 				window.localStorage.clear()
-				const x = JSON.stringify({"client_id": this.clientId, "redirect_uri": this.redirectUri, "time": new Date().getTime()})
+				// eslint-disable-next-line no-case-declarations
+				const x = JSON.stringify({
+					client_id: this.clientId,
+					redirect_uri: this.redirectUri,
+					time: new Date().getTime()
+				})
+				// eslint-disable-next-line no-case-declarations
 				const state = window.btoa(x)
 				window.location.href = `${this.accountsUri}/welcome?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}&scope=${this.scope}`
 				break
-            default: 
-                console.log("other click event!")
-        }
-    }
-
-    @action
-    registerListener(element) {
-        element.allData = {
-			name_show: decodeURI(this.cookies.read('user_name_show')),
-			company_name_show: decodeURI(this.cookies.read('company_name_show')),
-			_isVue: true
+			default:
+				console.log("other click event!")
 		}
-        element.addEventListener("event", this.listener)
-    }
+	}
 
 	@action
-    unregisterListener(element) {
-        element.removeEventListener("event", this.listener)
-    }
+	registerListener(element) {
+		element.allData = {
+			name_show: decodeURI(this.cookies.read("user_name_show")),
+			company_name_show: decodeURI(
+				this.cookies.read("company_name_show")
+			),
+			_isVue: true
+		}
+		element.addEventListener("event", this.listener)
+	}
+
+	@action
+	unregisterListener(element) {
+		element.removeEventListener("event", this.listener)
+	}
 }

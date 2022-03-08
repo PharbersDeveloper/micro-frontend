@@ -67,6 +67,46 @@ export default {
                 },
                 {
                     type: "item",
+                    text: "公有文件",
+                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
+                    content: this,
+                    click_event: function (data) {
+                        this.content.activeIndex = data
+                        this.content.menuType = this.type
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "linkToPage",
+                            element: this.content,
+                            param: {
+                                name: this.text,
+                                index: 3
+                            }
+                        }
+                        this.content.$emit('event', event)
+                    }
+                },
+                {
+                    type: "item",
+                    text: "新数据资产",
+                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
+                    content: this,
+                    click_event: function (data) {
+                        this.content.activeIndex = data
+                        this.content.menuType = this.type
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "linkToPage",
+                            element: this.content,
+                            param: {
+                                name: this.text,
+                                index: 4
+                            }
+                        }
+                        this.content.$emit('event', event)
+                    }
+                },
+                {
+                    type: "item",
                     text: "数据资产",
                     src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
                     content: this,
@@ -213,7 +253,7 @@ export default {
         .icon_upload {
             width: 20px;
             height: 20px;
-            background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2357565F' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important; 
+            background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2357565F' fill-rule='evenodd'%3E%3Cpath d='M14.358 7.74l-4-4.091-.048-.043-.103-.063-.094-.032-.07-.011h-.086l-.09.016-.089.034-.067.04-.069.059-4 4.09a.5.5 0 0 0 .647.758l.069-.058 3.141-3.213.001 7.772a.5.5 0 0 0 .992.09l.008-.09-.001-7.774 3.143 3.215a.5.5 0 0 0 .773-.63l-.057-.07z'/%3E%3Cpath d='M16 10.5a.5.5 0 0 1 .492.41l.008.09v5.5h-13V11a.5.5 0 0 1 .992-.09L4.5 11v4.5h11V11a.5.5 0 0 1 .41-.492L16 10.5z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/100% !important;
         }
     }
 </style>
