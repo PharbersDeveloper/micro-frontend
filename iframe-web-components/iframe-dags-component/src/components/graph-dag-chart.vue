@@ -162,7 +162,8 @@ export default {
             responseArr: [],
             showProgress: false,
             textConf: {}, //运行弹框textarea的默认值
-            progressOver: false
+            progressOver: false,
+            registerJobEventName: ""
         }
     },
     components: {
@@ -304,6 +305,7 @@ export default {
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.handleMessage)
+        this.registerJobEventName = "runDag" + new Date().getTime().toString()
     },
     destroyed () {
         // 注意移除监听！注意移除监听！注意移除监听！
@@ -350,9 +352,9 @@ export default {
             const url = `https://apiv2.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
-            confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
+            confData.ownerId = this.getCookie("account_id") || "5UBSLZvV0w9zh7-lZQap"
             confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "测试人员"
-            confData.jobDesc = "runDag"
+            confData.jobDesc = this.registerJobEventName
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
@@ -373,6 +375,16 @@ export default {
                 alert("启动出错，请重新运行！")
                 return false
             }
+            const dag_run_id = results.data.dag_run_id.split("_")
+            const time = new Date(dag_run_id.pop()).getTime()
+            const runnerId = dag_run_id.join("_") + "_" + time
+            console.info(runnerId)
+            window.parent.postMessage({
+                message: {
+                    dagRunCmd: this.registerJobEventName,
+                    dagExecutionCmd: "executionStatus" + runnerId
+                }
+            }, '*')
             this.showProgress = true
             this.showRunJson = false
         },
@@ -467,13 +479,8 @@ export default {
             let result = await fetch(url, options).then(res => res.json())
             this.showProgress = true
         },
-        // 点击运行整体
+        // 点击运行整体trigger
         on_click_runDag() {
-            window.parent.postMessage({
-                message: {
-                    cmd: 'runDag'
-                }
-            }, '*')
             let roots = []
             this.datasource.data.forEach(item => {
                 if(item.attributes.runtime === "output_index") {

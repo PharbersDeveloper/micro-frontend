@@ -28,8 +28,8 @@ export default class IframeContextComponent extends Component {
 			//dag实时
 			this.noticeService.defineAction({
 				type: "iot",
-				timeout: 1000 * 60 * 60,
-				id: event.data.message.cmd,
+				timeout: 60 * 60 * 5,
+				id: event.data.message.dagRunCmd,
 				projectId: this.args.allData.data.projectId,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.runDagCallback
@@ -37,8 +37,8 @@ export default class IframeContextComponent extends Component {
 			//dag整体
 			this.noticeService.defineAction({
 				type: "iot",
-				timeout: 1000 * 60 * 60,
-				id: "executionStatus",
+				timeout: 60 * 60 * 5,
+				id: event.data.message.dagExecutionCmd,
 				projectId: this.args.allData.data.projectId,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.executionStatusCallback
