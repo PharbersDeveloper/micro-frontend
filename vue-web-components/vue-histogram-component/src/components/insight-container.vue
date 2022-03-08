@@ -364,7 +364,7 @@ export default {
                             // box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
 							height: 40px;
 							border-radius: 4px;
-
+							align-items: center;
                             span {
                                 margin: auto 0;
                             }

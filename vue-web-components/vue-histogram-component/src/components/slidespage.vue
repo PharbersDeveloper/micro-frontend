@@ -1,6 +1,7 @@
 
 <template>
     <div class="page">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="project_info_left">
             <div class="page_header">
                 <div class="left">
@@ -21,7 +22,10 @@
                 </div>
             </div>
             <div class="content">
-                <slideComponent :needTitle="false" :isEditableValue="edit"></slideComponent>
+                <slideComponent 
+					:needTitle="false" 
+					:isEditableValue="edit"
+					@changeHistogram="changeHistogram"></slideComponent>
             </div>
             <div class="page_footer">
                 <div class="slide_item" 
@@ -117,7 +121,6 @@ import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import slideComponent from "./slide"
 import "element-ui/lib/theme-chalk/index.css"
-
 export default {
     props: {
         allData: {
@@ -177,15 +180,18 @@ export default {
     mounted () {
     },
     methods: {
+        changeHistogram(data) {
+            this.$emit('event', data)
+        },
         on_clickNewChartNameConfirm(data) {
             const event = new Event("event")
             event.args = {
-                callback: "linkToPage",
+                callback: "clickNewChartName",
                 element: this,
                 param: {
-                    name: "clickkNewChartName",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    name: "clickNewChartName"
+                    // projectName: this.allData.projectName,
+                    // projectId: this.allData.projectId
                 }
             }
             this.$emit('event', event)

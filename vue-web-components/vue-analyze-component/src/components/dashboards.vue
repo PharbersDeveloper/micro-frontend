@@ -9,7 +9,7 @@
                             <div class="selected"
                                 :class="[
                                     {'bg_disabled': dashboardCheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDsahboards()' :checked="dashboardCheckedIds.length === allData.dss.length">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDsahboards()' :checked="dashboardCheckedIds.length === allData.dashboards.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -30,7 +30,7 @@
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除数据集</p>
+                                            <p >删除数据看板</p>
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dashboard_number">
-                                <p>{{allData.dss.length}} 个图表</p>
+                                <p>{{allData.dashboards.length}} 个图表</p>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.dashboards == ''">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -206,7 +206,7 @@ export default {
             clickMax: false,
             clickMaxOutput: false,
             scriptValue: "名称",
-            isCheckedAllDataset: false,
+            isCheckedAllDashboard: false,
             dashboardCheckedIds: [], //选中项id
             dashboardcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
@@ -218,7 +218,7 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss:
+                dashboards:
                 [
                     {
                         "projectId": null,
@@ -230,7 +230,7 @@ export default {
                         "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
                     }
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
+                tagsArray: ["qqq"]
             })
         }
     },
@@ -261,36 +261,43 @@ export default {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
         },
-        "allData.dss": function() {
-            this.searchData = this.allData.dss
+        "allData.dashboards": function() {
+            this.searchData = this.allData.dashboards
         },
         searchValue: function() {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                this.searchData = this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                this.searchData = this.allData.dashboards.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             } else {
-                this.searchData = this.allData.dss
+                this.searchData = this.allData.dashboards
             }
             this.sort("ascending")
         }
     },
     methods: {
-        on_clickCreateConfirm() {
-            debugger
-        },
-        //新建dashboard
-        createDashboard() {
-            debugger
+        on_clickCreateConfirm(data) {
+            const event = new Event("event")
+            event.args = {
+                callback: "createDashboard",
+                element: this,
+                param: {
+                    name: "createDashboard",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    dashboard: data
+                }
+            }
+            this.$emit('event', event)
         },
         // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.dashboardArray = this.allData.dashboards
             let creatDS = true
-            this.allData.dss.forEach(item => {
+            this.allData.dashboards.forEach(item => {
                 if(item.name === data.args.param.dsName) {
                     creatDS = false
                     alert("数据集已存在！")
@@ -309,8 +316,8 @@ export default {
         },
         //增加tag
         addTagsEvent(data) {
-            data.args.param.selectedDatasets = this.dashboardCheckedIds
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.selectedDashboards = this.dashboardCheckedIds
+            data.args.param.dashboardArray = this.allData.dashboards
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
@@ -318,80 +325,32 @@ export default {
         },
         //清除数据集中数据
         clearTags(data) {
-            data.args.param.selectedDatasets = this.dashboardCheckedIds
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.selectedDashboards = this.dashboardCheckedIds
+            data.args.param.dashboardArray = this.allData.dashboards
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
-        //删除脚本
-        async deleteDataset(data) {
-            let that = this
-            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
-            // 是否需要删除关联关系
-            let msgArr = []
-            if(data.args.param.datasetRelaResult.length > 0) {
-                data.args.param.datasetRelaResult.forEach(async item => {
-                    msgArr.push({
-                        "actionName": item.jobShowName,
-                        "targetId": item.targetId,
-                        "jobName": item.jobName,
-                        "flowVersion": "developer"
-                    })
-                })
-                const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
-                let body = {
-                    "table": "action",
-                    "item": {
-                        "projectId": that.allData.projectId,
-                        "code": 0,
-                        "comments": "delete_dataset",
-                        "jobCat": "remove_Job",
-                        "jobDesc": "running",
-                        "message": JSON.stringify(msgArr),
-                        "date": String(new Date().getTime()),
-                        "owner": this.getCookie("account_id"),
-                        "showName": decodeURI(this.getCookie('user_name_show'))
-                    }
-                }
-                let options = {
-                    method: "POST",
-                    headers: {
-                        "Authorization": accessToken,
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                        "accept": "application/json"
-                    },
-                    body: JSON.stringify(body)
-                }
-                let result = await fetch(url, options).then(res => res.json())
-            }
-            data.args.param.selectedDatasets = this.dashboardCheckedIds
-            data.args.param.datasetArray = this.allData.dss
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
-            this.$emit('event', data)
-            this.deletedialogshow = false;
-        },
         //点击list主体
-        clickOnlyOne(dataset, index) {
+        clickOnlyOne(dashboard, index) {
             this.dashboardCheckedIds = []
             this.dashboardcheckedNames = []
-            this.dashboardCheckedIds.push(dataset.id)
-            this.dashboardcheckedNames.push(dataset.name)
+            this.dashboardCheckedIds.push(dashboard.id)
+            this.dashboardcheckedNames.push(dashboard.name)
         },
         //点击list多选框
-        checkedOneDashboard(dataset) {
-            let idIndex = this.dashboardCheckedIds.indexOf(dataset.id)
+        checkedOneDashboard(dashboard) {
+            let idIndex = this.dashboardCheckedIds.indexOf(dashboard.id)
             if(idIndex >= 0) {
                 this.dashboardCheckedIds.splice(idIndex, 1)
                 this.dashboardcheckedNames.splice(idIndex, 1)
             } else {
-                this.dashboardCheckedIds.push(dataset.id)
-                this.dashboardcheckedNames.push(dataset.name)
+                this.dashboardCheckedIds.push(dashboard.id)
+                this.dashboardcheckedNames.push(dashboard.name)
             }
         },
-        //点击dataset name
+        //点击 name
         clickDashboardName(data) {
             const event = new Event("event")
             event.args = {
@@ -408,15 +367,15 @@ export default {
         },
         //全选list
         chechedAllDsahboards() {
-            this.isCheckedAllDataset = true
-            if(this.dashboardCheckedIds.length == this.allData.dss.length) {
-                this.isCheckedAllDataset = false
+            this.isCheckedAllDashboard = true
+            if(this.dashboardCheckedIds.length == this.allData.dashboards.length) {
+                this.isCheckedAllDashboard = false
             }
             this.dashboardCheckedIds = []
             this.dashboardcheckedNames = []
             //全选状态
-            if(this.isCheckedAllDataset) {
-                this.allData.dss.forEach(item => {
+            if(this.isCheckedAllDashboard) {
+                this.allData.dashboards.forEach(item => {
                     this.dashboardCheckedIds.push(item.id)
                     this.dashboardcheckedNames.push(item.name)
                 })
@@ -497,7 +456,7 @@ export default {
                 },
                 body: JSON.stringify(checkBody)
             }
-            this.datasetRelaResult = await fetch(checkUrl, checkOptions).then(res => res.json())
+            this.dashboardRelaResult = await fetch(checkUrl, checkOptions).then(res => res.json())
             //打开弹框
             this.deletedialogshow = true;
         },

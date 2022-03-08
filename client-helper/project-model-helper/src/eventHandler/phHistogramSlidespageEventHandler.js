@@ -1,28 +1,24 @@
-// eslint-disable-next-line no-unused-vars
-export async function phAnalyzeDashboardsEventHandler(e, route) {
+export async function phHistogramSlidespageEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	console.log(params)
 	let uri = ""
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
-			if (params.name === "clickDashboardName") {
+			if (params.name == "changeHistogram") {
 				uri =
-					"slidespage?projectName=" +
+					"insightpage?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
 			}
 			route.router.transitionTo("shell", uri)
 			break
-		case "createDashboard":
+		case "clickNewChartName":
 			uri =
-				"slidespage?projectName=" +
+				"insightpage?projectName=" +
 				params.projectName +
 				"&projectId=" +
 				params.projectId
 			route.router.transitionTo("shell", uri)
-			break
-		default:
-			console.log("other click event!")
 	}
 }

@@ -101,12 +101,11 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    "histogramParams": data,
-                    "projectName": this.allData.projectName,
-                    "projectId": this.allData.projectId
+                    name: "changeHistogram",
+                    "histogramParams": data
                 }
             }
-            this.$emit('event', event)
+            this.$emit('changeHistogram', event)
         },
         gridItemLayout(index) {
             const w = this.$refs.container.offsetWidth

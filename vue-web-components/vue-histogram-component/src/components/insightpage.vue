@@ -1,6 +1,7 @@
 
 <template>
     <div class="page">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="project_info_left">
             <div class="page_header">
                 <div class="left">

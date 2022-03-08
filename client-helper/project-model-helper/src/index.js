@@ -23,9 +23,11 @@ import { phAnalyzeExcelColumnCleanEventHandler } from "./eventHandler/phAnalyzeE
 import { phAnalyzeDatasetMaxEventHandler } from "./eventHandler/phAnalyzeDatasetMaxEventHandler"
 import { phAnalyzeDatasetMaxRouteModel } from "./routeModel/phAnalyzeDatasetMaxRouteModel"
 import { phAnalyzeDashboardsRouteModel } from "./routeModel/phAnalyzeDashboardsRouteModel"
-import { phAnalyzeDashBoardsEventHandler } from "./eventHandler/phAnalyzeDashBoardsEventHandler"
-import { phHistogramSlideRouteModel } from "./routeModel/phHistogramSlideRouteModel"
-import { phHistogramSlideEventHandler } from "./eventHandler/phHistogramSlideEventHandler"
+import { phAnalyzeDashboardsEventHandler } from "./eventHandler/phAnalyzeDashboardsEventHandler"
+import { phHistogramSlidespageRouteModel } from "./routeModel/phHistogramSlidespageRouteModel"
+import { phHistogramSlidespageEventHandler } from "./eventHandler/phHistogramSlidespageEventHandler"
+import { phHistogramInsightpageEventHandler } from "./eventHandler/phHistogramInsightpageEventHandler"
+import { phHistogramInsightpageRouteModel } from "./routeModel/phHistogramInsightpageRouteModel"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -53,7 +55,9 @@ export {
 	phAnalyzeDatasetMaxEventHandler,
 	phAnalyzeDatasetMaxRouteModel,
 	phAnalyzeDashboardsRouteModel,
-	phAnalyzeDashBoardsEventHandler,
-	phHistogramSlideRouteModel,
-	phHistogramSlideEventHandler
+	phAnalyzeDashboardsEventHandler,
+	phHistogramSlidespageRouteModel,
+	phHistogramSlidespageEventHandler,
+	phHistogramInsightpageEventHandler,
+	phHistogramInsightpageRouteModel
 }
