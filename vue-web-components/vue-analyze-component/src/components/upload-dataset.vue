@@ -1,5 +1,6 @@
 <template>
     <div class="upload-dataset">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <!-- <div class="project_name_header">
                 <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
@@ -56,6 +57,9 @@
                             </div>
                             <div>
                                 <p @click="on_click_max_output">Max1.0出口</p>
+                            </div>
+                            <div>
+                                <p @click="on_click_catalog">数据目录</p>
                             </div>
                         </div>
                         </div>
@@ -200,6 +204,11 @@
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-output-dialog>
+        <select-catalog 
+            @confirmecreateCatalog="confirmecreateCatalog"
+            @closecreateCatalogDialog="closecreateCatalogDialog"
+            v-if="selectCatalogVisible">
+        </select-catalog>
     </div>
 </template>
 
@@ -212,6 +221,8 @@ import bpSelectVue from '../../node_modules/vue-components/src/components/bp-sel
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
+import selectCatalog from './select-catalog'
+
 export default {
     data() {
         return {
@@ -255,7 +266,8 @@ export default {
             datasetcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            selectCatalogVisible: false
         }
     },
     props: {
@@ -287,7 +299,8 @@ export default {
         bpSelectVue,
         bpOptionVue,
         fitMaxInputDialog,
-        fitMaxOutputDialog
+        fitMaxOutputDialog,
+        selectCatalog
     },
     computed: { },
     mounted() {
@@ -321,6 +334,32 @@ export default {
         }
     },
     methods: {
+        confirmecreateCatalog(data) {
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            data.args.param.maxcat = this.maxcat
+            data.args.param.datasetArray = this.allData.dss
+            data.args.param.tableName = data.args.param.dsName
+            data.args.param.dsName = this.checkCatelolgName(data.args.param.dsName)
+            this.$emit('event', data)
+            this.selectCatalogVisible = false
+        },
+        checkCatelolgName(data) {
+            let name = ""
+            return data
+            // this.allData.dss.forEach(item => {
+            //     if(item.indexOf(data) > -1) {
+            //         item.split()
+            //     }
+            // })
+        },
+        closecreateCatalogDialog() {
+            this.selectCatalogVisible = false
+        },
+        //select catalog
+        on_click_catalog() {
+            this.selectCatalogVisible = true
+        },
         // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
