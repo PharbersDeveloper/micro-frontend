@@ -171,7 +171,8 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						path: "",
 						partitions: 1,
 						format: "",
-						tableName: params.tableName
+						tableName: params.tableName,
+						databaseName: route.cookies.read("company_id")
 					},
 					opname: route.cookies.read("account_id"),
 					opgroup: route.cookies.read("company_id")
