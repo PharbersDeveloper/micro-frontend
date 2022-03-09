@@ -95,7 +95,6 @@ export default {
         }
     },
     updated() {
-        debugger
     },
     methods: {
         changeHistogram(data) {

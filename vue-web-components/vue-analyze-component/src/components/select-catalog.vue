@@ -87,7 +87,7 @@ export default {
             this.$emit('confirmeCreateCatalog', event)
         },
         close() {
-            this.$emit('closeCreateCatalogDialog');
+            this.$emit('closeCreateCatalogDialog')
         }
     }
 }

@@ -205,8 +205,8 @@
             @closeDialog="closeDialog">
         </fit-max-output-dialog>
         <select-catalog 
-            @confirmecreateCatalog="confirmecreateCatalog"
-            @closecreateCatalogDialog="closecreateCatalogDialog"
+            @confirmeCreateCatalog="confirmeCreateCatalog"
+            @closeCreateCatalogDialog="closeCreateCatalogDialog"
             v-if="selectCatalogVisible">
         </select-catalog>
     </div>
@@ -303,15 +303,7 @@ export default {
         selectCatalog
     },
     computed: { },
-    mounted() {
-        // this.$refs.tagsArea.forEach((item, index) => {
-        //     //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
-        //     // if(item.clientHeight > 30) {
-        //     //     this.$refs.moreTags[0].style["display"] = "flex"
-        //     // }
-        //     item.style["height"] = "40px"
-        // })
-    },
+    mounted() { },
     watch: {
         "allData.tagsArray": function() {
             this.tagsColorArray = []
@@ -334,7 +326,7 @@ export default {
         }
     },
     methods: {
-        confirmecreateCatalog(data) {
+        confirmeCreateCatalog(data) {
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
@@ -345,15 +337,22 @@ export default {
             this.selectCatalogVisible = false
         },
         checkCatelolgName(data) {
-            let name = ""
-            return data
-            // this.allData.dss.forEach(item => {
-            //     if(item.indexOf(data) > -1) {
-            //         item.split()
-            //     }
-            // })
+            let nameArr = this.allData.dss.filter(item => item.name.indexOf(data) > -1)
+            let changeNameArr = this.allData.dss.filter(item => item.name.indexOf(data + "_") > -1)
+            if(changeNameArr.length > 0) {
+                let num = 0
+                changeNameArr.forEach(item => {
+                    let itemNum = parseInt(item.name.split(data + "_")[1])
+                    num = itemNum >= num ? itemNum + 1 : num
+                })
+                return data + "_" + num
+            } else if(nameArr.length > 0) {
+                return data + "_1"
+            } else {
+                return data
+            }
         },
-        closecreateCatalogDialog() {
+        closeCreateCatalogDialog() {
             this.selectCatalogVisible = false
         },
         //select catalog

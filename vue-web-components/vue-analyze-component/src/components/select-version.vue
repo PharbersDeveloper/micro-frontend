@@ -8,16 +8,16 @@
                 <div class="prompt">
                     <div class="dlg-version-container">
                         <div class="dlg-flex-version" >
-                            <div class="dlg-flex-version-item" v-show="selectCatelogNameTag != ''">
-                                <span :title="selectCatelogNameTag">{{selectCatelogNameTag}}</span>
-                                <img :src="close_icon" class="close_icon" @click="removeselectCatelogNameTag(selectCatelogNameTag)" alt="">
+                            <div class="dlg-flex-version-item" v-show="selectCatalogNameTag != ''">
+                                <span :title="selectCatalogNameTag">{{selectCatalogNameTag}}</span>
+                                <img :src="close_icon" class="close_icon" @click="removeselectCatalogNameTag(selectCatalogNameTag)" alt="">
                             </div>
                         </div>
                         <div class="dlg-version-spliter"></div>
                         <input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row_input" />
                         <img :src="search_row" class="search_row_icon" alt="">
                         <div class="dlg-all-version-container">
-                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendselectCatelogNameTag(item, index)">
+                            <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendselectCatalogNameTag(item, index)">
                                 <span>{{item}}</span>
                             </div>
                         </div>
@@ -38,14 +38,14 @@ export default {
         return{
             selColName: "version",
             versionArrShow: [],
-            selectCatelogNameTag: "",
+            selectCatalogNameTag: "",
             searchRow: [],
             search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
             close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg"
         }
     },
     props: {
-        
+
     },
     computed: {},
     mounted() {
@@ -54,8 +54,8 @@ export default {
     },
     watch: {},
     methods: {
-        appendselectCatelogNameTag(data) {
-            this.selectCatelogNameTag = data
+        appendselectCatalogNameTag(data) {
+            this.selectCatalogNameTag = data
         },
         // 搜索框
         searchRowInput(data) {
@@ -66,8 +66,8 @@ export default {
             }
         },
         //取消选中version
-        removeselectCatelogNameTag() {
-            this.selectCatelogNameTag = ""
+        removeselectCatalogNameTag() {
+            this.selectCatalogNameTag = ""
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -77,19 +77,19 @@ export default {
                 return null;
         },
         save() {
-            if(this.selectCatelogNameTag === "") {
+            if(this.selectCatalogNameTag === "") {
                 alert("请选择数据目录")
                 return false
             }
             const event = new Event("event")
             event.args = {
-                callback: "selectCatelogName",
+                callback: "selectCatalogName",
                 element: this,
                 param: {
-                    name: this.selectCatelogNameTag
+                    name: this.selectCatalogNameTag
                 }
             }
-            this.$emit('selectCatelogNameConfirm', event)
+            this.$emit('selectCatalogNameConfirm', event)
         },
         close() {
             this.$emit('closeSelVersionDialog');
