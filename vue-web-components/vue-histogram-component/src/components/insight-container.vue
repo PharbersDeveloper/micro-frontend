@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="content" ref="content">
-                    <histogram ref="histogram" />
+                    <histogram ref="histogram" :policy="policy"/>
                 </div>
             </div>
         </div>
@@ -148,19 +148,23 @@ export default {
                     isLeaf: "leaf"
                 }
             }
+        },
+        policy: {
+            type: Object,
+            default: function() {
+                return null
+            }
         }
     },
     data: () => {
         return {
-            datasource: new PhHistogramDatasource('1'),
-            schema: new PhHistogramSchema('1'),
-            policy: null,
             xProperty: "year",
             yProperty: "sales",
             policyName: "bar",
             policyCandidate: ["bar", "pie"],
             draggingItem: null,
             needRefresh: 0,
+            schemaRefresh: 0,
             lst: [],
             activeName: "first",
             activeCandis: [],
@@ -182,29 +186,28 @@ export default {
         const h = this.$refs.content.offsetHeight
         this.$refs.histogram.resizeHandler(w, h)
 
-        const that = this
-        this.schema.requestSchema().then(_ => {
-            that.lst = that.schema.schema
-        })
-
         this.needRefresh++
+        this.schemaRefresh++
     },
     methods: {
-        refresh() {
-            if (!this.policy || this.policy.policyName() !== this.policyName) {
-                this.policy = this.createPolicyFactory(this.policyName)
-            }
-            this.policy.xProperty = this.xProperty
-            this.policy.yProperty = this.yProperty
-            this.$refs.histogram.resetPolicy(this.policy)
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         },
-        createPolicyFactory(factoryType) {
-            if (factoryType === "pie") {
-                return new PiePolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
-                    { xProperty: "标准省份名称", yProperty: "sales" })
-            } else if (factoryType === "bar") {
-                return new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
-                    { xProperty: "标准省份名称", yProperty: "sales" })
+        async refreshSchema() {
+            if (this.policy) {
+                await this.policy.schema.requestSchema(this)
+                this.lst = this.policy.schema.schema
+            }
+        },
+        refresh() {
+            if (this.policy) {
+                this.xProperty = this.policy.xProperty
+                this.yProperty = this.policy.yProperty
+                this.$refs.histogram.resetPolicy(this.policy)
             }
         },
         dragStart(event, index, item) {
@@ -227,28 +230,44 @@ export default {
             }
         },
         isNum(index) {
-            return this.schema.dtype[index] !== "Text"
+            return this.policy.schema.dtype[index] !== "Text"
         }
     },
     watch: {
         xProperty(n, o) {
             if (n !== o) {
-                this.needRefresh++
+                this.policy.xProperty = n
+                // this.needRefresh++
             }
         },
         yProperty(n, o) {
             if (n !== o) {
-                this.needRefresh++
+                this.policy.yProperty = n
+                // this.needRefresh++
             }
         },
         policyName(n, o) {
-            if (n !== o) {
-                this.policy = this.createPolicyFactory(this.policyName)
-                this.needRefresh++
-            }
+            // if (n !== o) {
+            //     this.policy = this.createPolicyFactory(this.policyName)
+            //
+            //     const that = this
+            //     this.schema.requestSchema().then(_ => {
+            //         that.lst = that.schema.schema
+            //     })
+            //
+            //     this.needRefresh++
+            // }
+            // this.needRefresh++
+            // this.schemaRefresh++
         },
         needRefresh(n, o) {
             this.refresh()
+        },
+        policy(n, o) {
+            this.needRefresh++
+        },
+        schemaRefresh(n, o) {
+            this.refreshSchema()
         }
     }
 }

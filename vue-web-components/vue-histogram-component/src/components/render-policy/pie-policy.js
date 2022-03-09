@@ -142,8 +142,8 @@ export default class PhPieChartPolicy extends policy{
             .text(d => d);
     }
 
-    refreshSchema() {
-        return this.schema.requestSchema()
+    refreshSchema(ele) {
+        return this.schema.requestSchema(ele)
     }
 
     buildPieChartQueryString() {

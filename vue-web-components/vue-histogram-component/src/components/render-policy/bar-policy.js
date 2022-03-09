@@ -169,8 +169,8 @@ export default class PhBarChartPolicy extends policy{
             .call(xAxis)
     }
 
-    refreshSchema() {
-        return this.schema.requestSchema()
+    refreshSchema(ele) {
+        return this.schema.requestSchema(ele)
     }
 
     buildBarChartQueryString() {
