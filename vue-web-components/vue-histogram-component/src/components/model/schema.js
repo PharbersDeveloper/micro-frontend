@@ -50,9 +50,9 @@ export default class PhExcelDataSchema {
         return fetch(url, options)
     }
 
-    requestSchema(ele) {
+    async requestSchema(ele) {
         if (this.schema.length === 0) {
-            ele.policy.schema.buildPolicyQuery(ele)
+            await ele.policy.schema.buildPolicyQuery(ele)
                 .then((response) => response.json())
                 .then((response) => {
                     // return new Promise((resolve, reject) => {
