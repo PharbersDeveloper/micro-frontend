@@ -2,7 +2,7 @@
 export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	route.browserEventsService.clearListener()
 	let debugToken =
-		"27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
+		"06ef2795a906c3810919d933e3bff2dde29cc4c15b164fdd6492479e31515d29"
 	let numShow = {}
 	let promiseList = []
 	// project基本信息

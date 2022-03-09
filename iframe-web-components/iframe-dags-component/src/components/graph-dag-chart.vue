@@ -198,7 +198,8 @@ export default {
                     r_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%8F%8D%E8%89%B2.svg",
                     dataset_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png",
                     job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png",
-                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg"
+                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg",
+                    catalog_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
                 }
             }
         },
@@ -286,10 +287,13 @@ export default {
                         name: 'DSInputIndex',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
                     },
-                    ,
                     {
                         name: 'DSOutputIndex',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
+                    },
+                    {
+                        name: 'DSCatalog',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon.svg'
                     }
                 ]
             }
@@ -538,6 +542,8 @@ export default {
                 ele.icon_header = ele["statusFlagsHeader"]["DSuploaded_header"]
             } else if (cat === "dataset" && runtime === "intermediate") {
                 ele.icon_header = ele["statusFlagsHeader"]["DSIntermediate_header"]
+            } else if (cat === "dataset" && runtime === "catalog") {
+                ele.icon_header = ele["statusFlagsHeader"]["catalog_header"]
             } else if (cat === "dataset" && runtime === "input_index") {
                 ele.icon_header = ele["statusFlagsHeader"]["input_index_header"]
             } else if (cat === "dataset" && runtime === "output_index") {

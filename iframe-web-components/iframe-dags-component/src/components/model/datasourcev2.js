@@ -7,7 +7,7 @@ export default class PhDagDatasource {
         this.name = "prod_clean_v2"
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5'
+        this.debugToken = '06ef2795a906c3810919d933e3bff2dde29cc4c15b164fdd6492479e31515d29'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
@@ -104,6 +104,8 @@ export default class PhDagDatasource {
                         result = "DSInputIndex"
                     } else if (cat === "dataset" && runtime === "output_index") {
                         result = "DSOutputIndex"
+                    } else if (cat === "dataset" && runtime === "catalog") {
+                        result = "DSCatalog"
                     } else if (cat === "job" && runtime === "python3") {
                         result = "Python3"
                     } else if (cat === "job" && runtime === "pyspark") {
