@@ -239,13 +239,13 @@ export default {
         xProperty(n, o) {
             if (n !== o) {
                 this.policy.xProperty = n
-                this.needRefresh++
+                this.schemaRefresh++
             }
         },
         yProperty(n, o) {
             if (n !== o) {
                 this.policy.yProperty = n
-                this.needRefresh++
+                this.schemaRefresh++
             }
         },
         policyName(n, o) {
