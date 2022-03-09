@@ -201,13 +201,15 @@ export default {
             if (this.policy) {
                 await this.policy.schema.requestSchema(this)
                 this.lst = this.policy.schema.schema
+                this.$refs.histogram.schemaIsReady++
             }
         },
         refresh() {
             if (this.policy) {
                 this.xProperty = this.policy.xProperty
                 this.yProperty = this.policy.yProperty
-                this.$refs.histogram.resetPolicy(this.policy)
+                // this.$refs.histogram.resetPolicy(this.policy)
+                this.$refs.histogram.needRefresh++
             }
         },
         dragStart(event, index, item) {
@@ -237,13 +239,13 @@ export default {
         xProperty(n, o) {
             if (n !== o) {
                 this.policy.xProperty = n
-                // this.needRefresh++
+                this.needRefresh++
             }
         },
         yProperty(n, o) {
             if (n !== o) {
                 this.policy.yProperty = n
-                // this.needRefresh++
+                this.needRefresh++
             }
         },
         policyName(n, o) {

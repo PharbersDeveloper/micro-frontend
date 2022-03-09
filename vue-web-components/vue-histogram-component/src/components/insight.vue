@@ -49,9 +49,9 @@ export default {
     mounted () {
         this.width = this.initWidth
         this.height = this.initHeight
-        if (this.initPolicy) {
-            this.resetPolicy(this.initPolicy)
-        }
+        // if (this.initPolicy) {
+        //     this.resetPolicy(this.initPolicy)
+        // }
     },
     methods: {
         getCookie(name) {
