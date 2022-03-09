@@ -72,7 +72,7 @@ export default {
         icon: {
             type: String,
             default: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
-        }, 
+        },
         isEditableValue: Boolean
     },
     data: () => {
@@ -132,15 +132,24 @@ export default {
             // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
             // 不会写就多写cv次这个函数吧
             if (content.policyName === "bar") {
-                return new BarPolicy(content.index, new PhHistogramDatasource(content.index), new PhHistogramSchema(content.index),
+                return new BarPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
             else if (content.policyName === "pie") {
-                return new PiePolicy(content.index, new PhHistogramDatasource(content.index), new PhHistogramSchema(content.index),
+                return new PiePolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        this.content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        this.content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
-            }
-            else {
-                // TODO: other histogrm
             }
         },
         saveContentPosition() {

@@ -13,7 +13,7 @@
                             {'borderBold': !edit}
                         ]"
                         @click="edit = false">浏览模式</div>
-                    <div class="text" 
+                    <div class="text"
                         :class="[
                             {'borderBold': edit}
                         ]"
@@ -21,17 +21,17 @@
                 </div>
             </div>
             <div class="content">
-                <slideComponent 
-                    :needTitle="false" 
+                <slideComponent
+                    :needTitle="false"
                     :isEditableValue="edit"
                     :content-model="activeModel"
                     @changeHistogram="changeHistogram"></slideComponent>
             </div>
             <div class="page_footer">
-                <div class="slide_item" 
-                    v-for="(slide, index) in slideArr" 
-                    @click="clickSlide(slide)"
-                    :key="index">
+                <div v-for="(slide, index) in slideArr"
+                     :class="slideItemStyle(slide)"
+                     @click="clickSlide(slide)"
+                     :key="index">
                     <div class="slide_name">{{slide.title}}</div>
                     <img class="del_icon" :src="del_icon" @click="clickDeleteSlide(slide, index)">
                 </div>
@@ -111,7 +111,7 @@
                 <el-button type="primary" @click="on_clickNewChartNameConfirm">确认</el-button>
             </span>
         </el-dialog>
-        <img :src="add_chart" class="add_chart" alt="" @click="dialogNewChartVisible = true">
+        <img v-if="edit" :src="add_chart" class="add_chart" alt="" @click="dialogNewChartVisible = true">
     </div>
 </template>
 <script>
@@ -163,7 +163,7 @@ export default {
         slideComponent
     },
     mounted () {
-        
+
     },
     methods: {
         createSlides() {
@@ -184,9 +184,12 @@ export default {
                 callback: "clickNewChartName",
                 element: this,
                 param: {
-                    name: "clickNewChartName"
-                    // projectName: this.allData.projectName,
-                    // projectId: this.allData.projectId
+                    name: "clickNewChartName",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    dashboardId: this.allData.projectId,
+                    slideId: this.allData.projectId,
+                    contentId: this.allData.projectId
                 }
             }
             this.$emit('event', event)
@@ -225,6 +228,14 @@ export default {
                 let num = index + 1
                 item.name = "slide" + num
             })
+        },
+        slideItemStyle(item) {
+            if (this.activeModel && item === this.activeModel) {
+                return "slide_item slide_item_clicked"
+            }
+            else {
+                return "slide_item"
+            }
         }
     },
     watch: {
@@ -310,6 +321,11 @@ export default {
                 padding: 0 20px;
                 height: 40px;
                 border-top: 1px solid #ccc;
+
+                .slide_item_clicked {
+                    border: 2px red solid;
+                }
+
                 .slide_item {
                     display: flex;
                     align-items: center;
@@ -323,6 +339,7 @@ export default {
                         cursor: pointer;
                     }
                 }
+
                 .add_icon {
                     width: 20px;
                     cursor: pointer;

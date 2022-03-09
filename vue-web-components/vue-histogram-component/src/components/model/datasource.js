@@ -2,17 +2,13 @@
 // import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
 
 export default class PhDataSource {
-    constructor(id, adapter) {
+    constructor(id, projectId, datasetName="phmax.data_wide", adapter=null) {
         this.id = id
         this.sort = {}
         this.filter = {}
-        // this.funcChains = (new FunctionChains()).push("filter-eq", "Index", "1")
-        this.projectId = ''
-        this.name = "phmax.data_wide"
+        this.projectId = projectId
+        this.name = datasetName
         this.batch_size = 100
-        // this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
-        // this.schema = schema
-        // this.cols = this.schema
         if (!adapter)
             this.adapter = this.defaultAdapter
         this.debugToken = "253e674e1f9e037982e795758a6e2f4a8bcd50af9d7b9a465d9e0f6dd430c72a"
@@ -100,11 +96,13 @@ export default class PhDataSource {
     }
 
     buildPolicyQuery(ele, query, schema) {
-        const url = "https://api.pharbers.com/phchproxyquery"
+        // const url = "https://api.pharbers.com/phchproxyquery"
+        const url = "https://apiv2.pharbers.com/phdadatasource"
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": query,
-            "schema": schema
+            "schema": schema,
+            "projectId": "12345"
         }
         let options = {
             method: "POST",

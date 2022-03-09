@@ -25,7 +25,7 @@ export default {
             type: Number,
             default: 600
         },
-        initPolicy: {
+        policy: {
             type: Object,
             default: function () {
                 return null
@@ -38,7 +38,7 @@ export default {
             schemaIsReady: 0,
             dataIsReady: 0,
             needRefresh: 0,
-            policy: null,
+            // policy: null,
             width: 1000,
             height: 600
         }
@@ -93,17 +93,6 @@ export default {
         render() {
             this.d3.select(this.$refs.chart).selectAll("svg").remove()
             this.policy.render(this.d3, this.policy.datasource.data, this.$refs.chart)
-        },
-
-        resetPolicy(p) {
-            if (p) {
-                this.policy = p
-                const that = this
-                this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
-                this.policy.refreshSchema(this).then(_ => {
-                    that.schemaIsReady++
-                })
-            }
         }
     },
     watch: {
@@ -117,6 +106,11 @@ export default {
             if (this.policy && this.policy.isReady()) {
                 this.render()
             }
+        },
+        async policy(n, o) {
+            this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
+            await this.policy.refreshSchema(this)
+            this.schemaIsReady++
         }
     }
 }

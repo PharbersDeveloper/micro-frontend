@@ -1,15 +1,14 @@
 
 export default class PhExcelDataSchema {
-    constructor(id) {
+    constructor(id, projectId, datasetName) {
         this.id = id
         this.schema = []
         this.cols = []
         this.dtype = []
         this.cellWidth = []
-        // this.schema = ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"]
-        // this.dtype= ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"]
-        // this.cellWidth= [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
         this.cols = this.schema
+        this.projectId = projectId
+        this.name = datasetName
     }
 
     resetSchema(schema, dtype, cellWidth) {
@@ -29,14 +28,44 @@ export default class PhExcelDataSchema {
         else return 0
     }
 
-    requestSchema(url, arr) {
-        return new Promise((resolve, reject) => {
-            this.resetSchema(
-                ["标准省份名称", "标准城市名称", "date", "quarter", "year", "month", "doi", "标准通用名", "atc", "sales", "units", "version", "provider", "owner"],
-                ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
-                [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
-            )
-            resolve(true)
-        })
+    buildPolicyQuery(ele, query, schema) {
+        // const url = "https://api.pharbers.com/phchproxyquery"
+        const url = "https://apiv2.pharbers.com/phdadatasource"
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='data_wide';", // TODO:
+            // "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='ma';",
+            "schema": ["name", "type"],
+            "projectId": "12345"
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    requestSchema(ele) {
+        if (this.schema.length === 0) {
+            ele.policy.schema.buildPolicyQuery(ele)
+                .then((response) => response.json())
+                .then((response) => {
+                    // return new Promise((resolve, reject) => {
+                    this.resetSchema(
+                        ["标准省份名称", "标准城市名称", "date", "quarter", "year", "month", "doi", "标准通用名", "atc", "sales", "units", "version", "provider", "owner"],
+                        ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
+                        [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
+                    )
+                })
+            return this.schema
+        }
+        else {
+            return this.schema
+        }
     }
 }
