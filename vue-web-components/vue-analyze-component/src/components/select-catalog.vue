@@ -35,7 +35,7 @@
             </div>
         </div>
         <select-version 
-            v-if="selectDataVersion"
+            v-show="selectDataVersion"
             @closeSelVersionDialog="closeSelVersionDialog"
             @selectCatalogNameConfirm="selectCatalogNameConfirm"
         ></select-version>

@@ -17,6 +17,7 @@ export default class ShellRoute extends Route {
 
 
 	beforeModel(transition){
+		this.browserEventsService.clearListener()
 		if (!this.oauthService.judgeAuth()) {
 			alert("登录过期，请重新登录")
 			this.oauthService.obtainAuth()
