@@ -20,9 +20,32 @@ export default class PhSlideModel {
         // do nothing ...
     }
 
-    save() {
-        // TODO: 掉用接口将数据同步到dynamodb上去
-        console.log(this.queryContent)
-        console.log(this.content)
+    async save(ele) {
+        const body = {
+            table: "slide",
+            item: {
+                id: this.pdId + "_" + this.slideId,
+                pdId: this.pdId,
+                slideId: this.slideId,
+                title: this.title,
+                content: JSON.stringify(this.queryContent),
+                idx: this.idx,
+                datasetName: this.datasetName
+            }
+        }
+
+        const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+        let headers = {
+            Authorization: ele.getCookie("access_token") || this.debugToken,
+            "Content-Type": "application/vnd.api+json",
+            Accept: "application/vnd.api+json"
+        }
+        let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }
+        const result = await fetch(url, options).then((res) => res.json())
+        console.log(result)
     }
 }

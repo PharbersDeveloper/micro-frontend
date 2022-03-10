@@ -9,14 +9,15 @@
                     <div class="name">{{allData.projectName}}</div>
                 </div>
                 <div class="right">
-                    <el-button class="panl">返回数据看板</el-button>
-                    <el-button class="panl">查看源数据</el-button>
-                    <el-button class="panl">保存</el-button>
+                    <el-button class="panl" @click="backToDashboard">返回数据看板</el-button>
+                    <el-button class="panl" @click="transToDataset">查看源数据</el-button>
+                    <el-button class="panl" @click="saveSlideContent">保存</el-button>
                 </div>
             </div>
             <insightComponent v-if="isMounted"
                               class="insight-content"
                               :policy="currentPolicy"
+                              v-on:changePolicy="changePolicy"
                               :needTitle="false" />
         </div>
 <!--        <div class="project_info_right">-->
@@ -87,6 +88,13 @@ export default {
         this.isMounted++
     },
     methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         createCurrentContent() {
             this.contentModel = new PhSlideModel(this.allData.slide.idx, this.allData.slide)
         },
@@ -117,6 +125,23 @@ export default {
             else {
                 // TODO: other histogrm
             }
+        },
+        changePolicy(param) {
+            const content = this.contentModel.content[this.allData.contentId]
+            content.policyName = param.args.name
+            content.x = param.args.xProperty
+            content.y = param.args.yProperty
+            this.currentPolicy = this.createPolicyWithinContent()
+        },
+        backToDashboard() {
+            // TODO: @wodelu 跳转到dashboard页面
+        },
+        transToDataset() {
+            // TODO: @wodelu 跳转到数据分析页面
+        },
+        saveSlideContent() {
+            this.contentModel.queryContent = this.contentModel.content
+            this.contentModel.save(this)
         }
     },
     watch: {
