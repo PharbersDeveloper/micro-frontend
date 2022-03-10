@@ -30,7 +30,9 @@
                         :init-top="item.position[1]"
                         :init-right="item.position[2]"
                         :init-bottom="item.position[3]"
+                        :active-model="item"
                         :policy="createPolicyWithinContent(item)"
+                        v-on:positionChanged="positionChanged"
                         @dblclick.native="changeHistogram(item)" />
                 </div>
             </div>
@@ -168,8 +170,10 @@ export default {
                 return this.isEditableValue
             }
             return this.activeName === "second"
-        }
+        },
+        positionChanged(param) {
 
+        }
     },
     watch: {
 

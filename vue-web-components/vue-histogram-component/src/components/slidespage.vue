@@ -18,6 +18,7 @@
                             {'borderBold': edit}
                         ]"
                         @click="edit = true">编辑模式</div>
+                    <el-button v-if="edit" class="panl" @click="saveSlideContent">Save</el-button>
                 </div>
             </div>
             <div class="content">
@@ -39,39 +40,39 @@
                 <img :src="add_icon"  alt="" class="add_icon" @click="addSlide">
             </div>
         </div>
-        <div class="project_info_right">
-            <div class="view_content" >
-                <div class="project_name_view">
-                    <span class="space">
-                        <img :src="logo2" alt="">
-                    </span>
-                    <div class="show-name" v-if="datasetcheckedIds.length == 1">
-                        <p class="project_name_info" :title="datasetcheckedNames[0]">
-                        {{datasetcheckedNames[0]}}
-                        </p>
-                    </div>
-                    <div class="show-name">
-                        <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
-                            {{datasetcheckedIds.length}} 条数据集
-                        </p>
-                    </div>
-                </div>
-                <div class="view_func">
-                    <span  class="view_list">
-                        <img class='tags_imgs_tag' :src="label_icon" alt="">
-                        <span class='tags_func'>标签</span>
-                    </span>
-                    <span  class="view_list">
-                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
-                        <span class='tags_func'>清除数据</span>
-                    </span>
-                    <span  class="view_list">
-                        <img class='tags_imgs_tag' :src="delete_icon" alt="">
-                        <span class='tags_func'>删除</span>
-                    </span>
-                </div>
-            </div>
-        </div>
+<!--        <div class="project_info_right">-->
+<!--            <div class="view_content" >-->
+<!--                <div class="project_name_view">-->
+<!--                    <span class="space">-->
+<!--                        <img :src="logo2" alt="">-->
+<!--                    </span>-->
+<!--                    <div class="show-name" v-if="datasetcheckedIds.length == 1">-->
+<!--                        <p class="project_name_info" :title="datasetcheckedNames[0]">-->
+<!--                        {{datasetcheckedNames[0]}}-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                    <div class="show-name">-->
+<!--                        <p class="project_name_info" v-if="datasetcheckedIds.length > 1">-->
+<!--                            {{datasetcheckedIds.length}} 条数据集-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="view_func">-->
+<!--                    <span  class="view_list">-->
+<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
+<!--                        <span class='tags_func'>标签</span>-->
+<!--                    </span>-->
+<!--                    <span  class="view_list">-->
+<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
+<!--                        <span class='tags_func'>清除数据</span>-->
+<!--                    </span>-->
+<!--                    <span  class="view_list">-->
+<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
+<!--                        <span class='tags_func'>删除</span>-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <el-dialog
             title="删除"
             :visible.sync="dialogDeleteSlideVisible"
@@ -143,18 +144,18 @@ export default {
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             datasetcheckedIds: [],
             edit: false,
-            slideArr: [],
             add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            content: "",
             dialogDeleteSlideVisible: false, //删除slide
             delSlideData: null,
             delSlideIndex: 0,
             add_chart: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
             dialogNewChartVisible: false,
             dialogNewChartNameVisible: false,
+
+            slideArr: [],
             activeModel: null
         }
     },
@@ -167,6 +168,13 @@ export default {
 
     },
     methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         createSlides() {
             const tmp = []
             for (let index = 0; index < this.allData.slides.length; ++index) {
@@ -209,7 +217,7 @@ export default {
             // })
         },
         clickSlide(data) {
-            this.content = data
+            this.activeModel = data
         },
         on_clickDeleteSlideConfirm() {
             // TODO: ...
@@ -237,6 +245,15 @@ export default {
             else {
                 return "slide_item"
             }
+        },
+        async saveSlideContent() {
+            for (let idx = 0; idx < this.slideArr.length; ++idx) {
+                if (this.slideArr[idx]) {
+                    this.slideArr[idx].queryContent = this.slideArr[idx].content
+                    await this.slideArr[idx].save(this)
+                }
+            }
+            this.edit = false
         }
     },
     watch: {

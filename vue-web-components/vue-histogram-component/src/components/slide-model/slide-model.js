@@ -13,6 +13,9 @@ export default class PhSlideModel {
             this.idx = data.idx
             // this.datasetId = data.datasetId
             this.datasetName = data.datasetName
+            this.isSave = true
+        } else {
+            this.isSave = false
         }
     }
 
