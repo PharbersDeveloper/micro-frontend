@@ -55,12 +55,13 @@ export default class PhExcelDataSchema {
             await ele.policy.schema.buildPolicyQuery(ele)
                 .then((response) => response.json())
                 .then((response) => {
-                    // return new Promise((resolve, reject) => {
-                    this.resetSchema(
-                        ["标准省份名称", "标准城市名称", "date", "quarter", "year", "month", "doi", "标准通用名", "atc", "sales", "units", "version", "provider", "owner"],
-                        ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
-                        [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
-                    )
+                    const s = []
+                    const dt = []
+                    for (let idx = 0; idx < response.length; ++idx) {
+                        s.push(response[idx].name)
+                        dt.push(response[idx].type)
+                    }
+                    this.resetSchema(s, dt, [])
                 })
             return this.schema
         }
