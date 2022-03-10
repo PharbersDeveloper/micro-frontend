@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
-	route.browserEventsService.clearListener()
+	
 	let debugToken =
 		"06ef2795a906c3810919d933e3bff2dde29cc4c15b164fdd6492479e31515d29"
 	let numShow = {}
