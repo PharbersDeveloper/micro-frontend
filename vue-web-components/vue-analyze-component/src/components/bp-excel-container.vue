@@ -15,7 +15,8 @@
                 </div>
             </div>
             <div class="btn-groups">
-                <button class="btn_chart" @click="dialogDownloadVisible = true">下载当前筛选数据</button>
+				<!-- @click="dialogDownloadVisible = true" 暂时禁用下载 -->
+                <button class="btn_chart" >下载当前筛选数据</button>
                 <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                     <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
                     <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
