@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let params = e.detail[0].args.param
-	console.log(params)
 	const startUrl = "https://apiv2.pharbers.com/phresourceaction"
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
@@ -54,7 +53,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "dashboards") {
+			} else if (params.name == "dashboard") {
 				uri =
 					"dashboards?projectName=" +
 					params.projectName +
@@ -91,22 +90,23 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			}
 			break
 		case "checkStartResource":
+			//进入页面时判断是否启动
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
-				await checkStartResourceFun()
+				let bool = await checkStartResourceFun()
+				if (bool) {
+					// 未启动，关闭loading
+					route.loadingService.loading.style.display = "none"
+				}
 			}
 			break
 		case "startResource":
-			console.log(params)
-			route.loadingService.loading.style.display = "flex"
-			route.loadingService.loading.style["z-index"] = 2
 			if (params) {
+				route.loadingService.loading.style.display = "flex"
 				let checked = await checkStartResourceFun()
 				if (checked) {
-					route.loadingService.loading.style.display = "flex"
-					route.loadingService.loading.style["z-index"] = 2
-					console.log("判断完了，closed，重新注册")
+					console.log("开始启动")
 					route.noticeService.defineAction({
 						type: "iot",
 						id: "resource_create",
@@ -181,9 +181,6 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		)
 		console.log("判断是否启动：", startResults)
 		if (startResults.data.resource_status === "starting") {
-			console.log("starting")
-			route.loadingService.loading.style.display = "flex"
-			route.loadingService.loading.style["z-index"] = 2
 			route.noticeService.defineAction({
 				type: "iot",
 				id: "resource_create",
@@ -192,15 +189,14 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 				callBack: callback
 			})
 			route.resourceActionService.boolChecked = false
+			route.loadingService.loading.style.display = "flex"
 			return false
 		} else if (startResults.data.resource_status === "started") {
 			e.detail[0].args.element.showStartButton = false //按钮disabled
-			route.loadingService.loading.style.display = "none"
 			route.resourceActionService.boolChecked = false
+			route.loadingService.loading.style.display = "none"
 			return false
 		}
-		console.log("closed,我要重新注册")
-		route.loadingService.loading.style.display = "none"
 		route.resourceActionService.boolChecked = true
 		return true
 	}
