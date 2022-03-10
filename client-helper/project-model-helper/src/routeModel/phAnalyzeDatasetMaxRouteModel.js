@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDatasetMaxRouteModel(route, parseParams) {
-	
 	return {
 		projectName: parseParams.query.projectName,
 		path: parseParams.query.path,
