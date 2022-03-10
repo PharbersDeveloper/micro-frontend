@@ -30,9 +30,8 @@
                         :init-top="item.position[1]"
                         :init-right="item.position[2]"
                         :init-bottom="item.position[3]"
-                        :active-model="item"
+                        :active-content="item"
                         :policy="createPolicyWithinContent(item)"
-                        v-on:positionChanged="positionChanged"
                         @dblclick.native="changeHistogram(item)" />
                 </div>
             </div>
@@ -82,7 +81,8 @@ export default {
         return {
             name: "slide",
             isMounted: 0,
-            activeName: "first"
+            activeName: "first",
+            needRefresh: 0
         }
     },
     components: {
@@ -98,6 +98,7 @@ export default {
         }
     },
     updated() {
+        this.needRefresh++
     },
     methods: {
         changeHistogram(data) {
@@ -170,9 +171,6 @@ export default {
                 return this.isEditableValue
             }
             return this.activeName === "second"
-        },
-        positionChanged(param) {
-
         }
     },
     watch: {

@@ -15,7 +15,7 @@ import Insight from "./insight"
 
 export default {
     props: {
-        activeModel: {
+        activeContent: {
             type: Object,
             default: function() {
                 return null
@@ -161,7 +161,7 @@ export default {
             return l - r > s || r - l > s
         },
         positionChanged(param) {
-            this.activeModel.position = param
+            this.activeContent.position = param
         }
     },
     computed: {

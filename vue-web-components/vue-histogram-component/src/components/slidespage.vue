@@ -32,7 +32,7 @@
             <div class="page_footer">
                 <div v-for="(slide, index) in slideArr"
                      :class="slideItemStyle(slide)"
-                     @click="clickSlide(slide)"
+                     @click="clickSlideFooterTab(index)"
                      :key="index">
                     <div class="slide_name">{{slide.title}}</div>
                     <img class="del_icon" :src="del_icon" @click="clickDeleteSlide(slide, index)">
@@ -216,8 +216,8 @@ export default {
             //     content: "slideeee" + num
             // })
         },
-        clickSlide(data) {
-            this.activeModel = data
+        clickSlideFooterTab(data) {
+            this.activeModel = this.slideArr[data]
         },
         on_clickDeleteSlideConfirm() {
             // TODO: ...
