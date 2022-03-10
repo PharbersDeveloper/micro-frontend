@@ -2,7 +2,7 @@
     <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
                v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"
                :init-width="initWidthPx" :init-height="initHeightPx"
-               :init-policy="policy" />
+               :policy="policy" />
 </template>
 
 <script>
@@ -50,8 +50,6 @@ export default {
             right: 0,
             isMounted: 0,
             name: "draggable-container"
-            // policy: new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
-            //     { xProperty: "标准省份名称", yProperty: "sales" })
         }
     },
     components: {

@@ -5,10 +5,10 @@
                    :x="left" :y="top"
                    @resizestop="onResizstop" @dragstop="onResizstop"
                    v-on:resizing="resize" v-on:dragging="resize">
-        <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
+        <histogram :init-width="width" :init-height="height" :policy="policy"  ref="histogram" />
     </VueDragResize>
     <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
-        <histogram :init-width="width" :init-height="height" :init-policy="initPolicy"  ref="histogram" />
+        <histogram :init-width="width" :init-height="height" :policy="policy"  ref="histogram" />
     </div>
 </template>
 <script>
@@ -17,7 +17,7 @@ import Histogram from './insight'
 
 export default {
     props: {
-        initPolicy: {
+        policy: {
             type: Object,
             default: function () {
                 return null
@@ -51,7 +51,7 @@ export default {
             left: undefined,
             width: undefined,
             height: undefined,
-            policy: null,
+            // policy: null,
             active: false,
             renderTimes: 0,
             isMounted: 0

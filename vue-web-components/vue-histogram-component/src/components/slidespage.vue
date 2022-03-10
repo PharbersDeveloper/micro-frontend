@@ -25,7 +25,8 @@
                     :needTitle="false"
                     :isEditableValue="edit"
                     :content-model="activeModel"
-                    @changeHistogram="changeHistogram"></slideComponent>
+                    :project-id="allData.projectId"
+                    @changeHistogram="changeHistogram" />
             </div>
             <div class="page_footer">
                 <div v-for="(slide, index) in slideArr"

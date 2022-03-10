@@ -142,6 +142,7 @@ export default {
         saveSlideContent() {
             this.contentModel.queryContent = this.contentModel.content
             this.contentModel.save(this)
+            this.transToDataset()
         }
     },
     watch: {
