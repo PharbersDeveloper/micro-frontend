@@ -45,7 +45,8 @@ export default class PhSlideModel {
             headers: headers,
             body: JSON.stringify(body)
         }
-        const result = await fetch(url, options).then((res) => res.json())
-        console.log(result)
+        // const result = await fetch(url, options).then((res) => res.json())
+        const result = await fetch(url, options) //.then((res) => res.json())
+        return result.status === 200
     }
 }

@@ -73,7 +73,8 @@ export default {
             type: String,
             default: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
         },
-        isEditableValue: Boolean
+        isEditableValue: Boolean,
+        projectId: String
     },
     data: () => {
         return {
@@ -134,21 +135,21 @@ export default {
             if (content.policyName === "bar") {
                 return new BarPolicy(content.index,
                     new PhHistogramDatasource(content.index,
-                        this.allData.projectId,
+                        this.projectId,
                         content.datasetName),
                     new PhHistogramSchema(content.index,
-                        this.allData.projectId,
+                        this.projectId,
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
             else if (content.policyName === "pie") {
                 return new PiePolicy(content.index,
                     new PhHistogramDatasource(content.index,
-                        this.allData.projectId,
-                        this.content.datasetName),
+                        this.projectId,
+                        content.datasetName),
                     new PhHistogramSchema(content.index,
-                        this.allData.projectId,
-                        this.content.datasetName),
+                        this.projectId,
+                        content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
         },

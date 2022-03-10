@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/select.css">
         <div v-if="needTitle" class="title-panel">
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
             <h2>{{dashboardTitle}}</h2>
