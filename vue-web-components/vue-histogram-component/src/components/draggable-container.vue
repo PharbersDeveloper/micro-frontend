@@ -161,7 +161,7 @@ export default {
             return l - r > s || r - l > s
         },
         positionChanged(param) {
-            this.activeModel.content.position = param
+            this.activeModel.position = param
         }
     },
     computed: {
