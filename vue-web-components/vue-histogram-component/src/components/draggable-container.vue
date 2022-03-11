@@ -158,12 +158,12 @@ export default {
                 })
             }
 
+            this.positionChanged([that.left, that.top, that.right, that.bottom])
             // if (this.stopTimer)
             //     return
             //
             // const that = this
             // this.stopTimer = setTimeout(() => {
-            //     that.positionChanged([that.left, that.top, that.right, that.bottom])
             //     // that.rect = that.computedRect
             //     // that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
             //     that.stopTimer = null
