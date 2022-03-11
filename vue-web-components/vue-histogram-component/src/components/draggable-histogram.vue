@@ -83,7 +83,7 @@ export default {
             this.active = !this.active
         },
         onResizstop() {
-            this.$emit("rectChanged", this.tempRect)
+            this.$emit("resizeStop", this)
         },
         checkEditableShowing() {
             return this.isMounted > 0 && this.editable

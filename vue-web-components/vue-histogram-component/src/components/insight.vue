@@ -51,6 +51,8 @@ export default {
         this.height = this.initHeight
         if (this.policy) {
             this.resizeHandler(this.width, this.height)
+        }
+        if (!this.policy.isReady()) {
             this.schemaIsReady++
         }
     },
@@ -108,10 +110,10 @@ export default {
                 this.render()
             }
         },
-        async policy(n, o) {
+        policy(n, o) {
             this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
-            await this.policy.refreshSchema(this)
-            this.schemaIsReady++
+            // await this.policy.refreshSchema(this)
+            // this.schemaIsReady++
         }
     }
 }

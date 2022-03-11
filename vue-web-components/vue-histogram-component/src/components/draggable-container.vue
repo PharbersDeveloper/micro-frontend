@@ -1,8 +1,4 @@
 <template>
-<!--    <Histogram v-if="isMounted" class="histogram-item" :editable="editable"-->
-<!--               v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"-->
-<!--               :init-width="initWidthPx" :init-height="initHeightPx"-->
-<!--               :policy="policy" />-->
     <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
                v-on:resizeStop="resizeStop" :left="initLeftPx" :top="initTopPx"
                :width="initWidthPx" :height="initHeightPx"
@@ -56,10 +52,11 @@ export default {
         return {
             isMounted: 0,
             name: "draggable-container",
-            initTopPx: 0,
-            initLeftPx: 0,
-            initWidthPx: 300,
-            initHeightPx: 300
+            // initTopPx: 0,
+            // initLeftPx: 0,
+            // initWidthPx: 300,
+            // initHeightPx: 300,
+            timer: null
         }
     },
     components: {
@@ -68,10 +65,9 @@ export default {
     },
     mounted () {
         this.isMounted++
-        this.resetPxRect()
     },
     updated() {
-        this.resetPxRect()
+
     },
     methods: {
         adjustLeft(l) {
@@ -107,60 +103,68 @@ export default {
             return bottom - top
         },
         resizeStop(ele) {
-            const top = ele.tempRect.top
-            const left = ele.tempRect.left
-            const width = ele.tempRect.width
-            const height = ele.tempRect.height
 
-            const w = this.$parent.$refs.container.offsetWidth
-            const h = this.$parent.$refs.container.offsetHeight
-            const margin = this.$parent.initGrids.margin
-            const columns = this.$parent.initGrids.columns
-            const lines = this.$parent.initGrids.lines
-            const stepW = (w - margin) / columns - margin
-            const stepH = (h - margin) / lines - margin
+            if (this.timer)
+                return
 
-            if (this.adjustRange(top, this.adjustTop(this.top))) {
-                this.top = Math.floor(top / stepH)
-                // ele.top = this.adjustTop(this.top)
-                this.initTopPx = this.adjustTop(this.top)
-            }
+            const that = this
+            this.timer = setTimeout(() => {
+                const top = ele.tempRect.top
+                const left = ele.tempRect.left
+                const width = ele.tempRect.width
+                const height = ele.tempRect.height
 
-            else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
-                this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                // ele.height = this.adjustHeight(this.top, this.bottom)
-                this.initHeightPx = this.adjustHeight(this.top, this.bottom)
-            }
+                const w = this.$parent.$refs.container.offsetWidth
+                const h = this.$parent.$refs.container.offsetHeight
+                const margin = this.$parent.initGrids.margin
+                const columns = this.$parent.initGrids.columns
+                const lines = this.$parent.initGrids.lines
+                const stepW = (w - margin) / columns - margin
+                const stepH = (h - margin) / lines - margin
 
-            else if (this.adjustRange(left, this.adjustLeft(this.left))) {
-                this.left = Math.floor(left / stepW)
-                // ele.left = this.adjustLeft(this.left)
-                this.initLeftPx = this.adjustLeft(this.left)
-            }
+                if (this.adjustRange(top, this.adjustTop(this.top))) {
+                    this.top = Math.floor(top / stepH)
+                }
 
-            else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
-                this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                // ele.width = this.adjustWidth(this.left, this.right)
-                this.initWidthPx = this.adjustWidth(this.left, this.right)
-            }
+                else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
+                    this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
+                }
 
-            this.positionChanged([this.left, this.top, this.right, this.bottom])
+                else if (this.adjustRange(left, this.adjustLeft(this.left))) {
+                    this.left = Math.floor(left / stepW)
+                }
+
+                else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
+                    this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
+                }
+
+                this.positionChanged([this.left, this.top, this.right, this.bottom])
+                that.timer = null
+            }, 300)
         },
         adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
         },
         positionChanged(param) {
             this.activeContent.position = param
-        },
-        resetPxRect() {
-            this.initTopPx = this.adjustTop(this.top)
-            this.initLeftPx = this.adjustLeft(this.left)
-            this.initWidthPx = this.adjustWidth(this.left, this.right)
-            this.initHeightPx = this.adjustHeight(this.top, this.bottom)
         }
     },
     watch: {
 
+    },
+    computed: {
+        initTopPx: function() {
+            return this.adjustTop(this.top)
+        },
+        initLeftPx: function() {
+            return this.adjustLeft(this.left)
+        },
+        initWidthPx: function() {
+            return this.adjustWidth(this.left, this.right)
+        },
+        initHeightPx: function() {
+            return this.adjustHeight(this.top, this.bottom)
+        }
     }
 }
 </script>
