@@ -128,7 +128,6 @@ export default {
 
             if (this.adjustRange(top, this.adjustTop(this.top))) {
                 this.top = Math.floor(top / stepH)
-                // this.rect.top = this.adjustTop(this.top)
                 this.$nextTick(() => {
                     this.rect.top = this.adjustTop(this.top)
                 })
@@ -136,7 +135,6 @@ export default {
 
             else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
                 this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                // this.rect.height = this.adjustHeight(this.top, this.bottom)
                 this.$nextTick(() => {
                     this.rect.height = this.adjustHeight(this.top, this.bottom)
                 })
@@ -144,7 +142,6 @@ export default {
 
             else if (this.adjustRange(left, this.adjustLeft(this.left))) {
                 this.left = Math.floor(left / stepW)
-                // this.rect.left = this.adjustLeft(this.left)
                 this.$nextTick(() => {
                     this.rect.left = this.adjustLeft(this.left)
                 })
@@ -152,22 +149,12 @@ export default {
 
             else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
                 this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                // this.rect.width = this.adjustWidth(this.left, this.right)
                 this.$nextTick(() => {
                     this.rect.width = this.adjustWidth(this.left, this.right)
                 })
             }
 
             this.positionChanged([this.left, this.top, this.right, this.bottom])
-            // if (this.stopTimer)
-            //     return
-            //
-            // const that = this
-            // this.stopTimer = setTimeout(() => {
-            //     // that.rect = that.computedRect
-            //     // that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
-            //     that.stopTimer = null
-            // }, 100)
         },
         adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
@@ -190,12 +177,6 @@ export default {
                 that.timer = null
             }, 100)
         },
-        // resetPolicy(p) {
-        //     this.$refs.histogram.resetPolicy(p)
-        // },
-        // refresh() {
-        //     this.$refs.histogram.needRefresh++
-        // },
         onActive() {
             this.active = !this.active
         },
