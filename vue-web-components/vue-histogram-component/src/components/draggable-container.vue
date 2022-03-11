@@ -1,7 +1,6 @@
 <template>
     <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
-               v-on:resizeStop="resizeStop" :left="initLeftPx" :top="initTopPx"
-               :width="initWidthPx" :height="initHeightPx"
+               v-on:resizeStop="resizeStop" :rect="computedRect"
                :policy="policy" />
 </template>
 
@@ -109,10 +108,10 @@ export default {
 
             const that = this
             this.timer = setTimeout(() => {
-                const top = ele.tempRect.top
-                const left = ele.tempRect.left
-                const width = ele.tempRect.width
-                const height = ele.tempRect.height
+                const top = ele.rect.top
+                const left = ele.rect.left
+                const width = ele.rect.width
+                const height = ele.rect.height
 
                 const w = this.$parent.$refs.container.offsetWidth
                 const h = this.$parent.$refs.container.offsetHeight
@@ -153,17 +152,13 @@ export default {
 
     },
     computed: {
-        initTopPx: function() {
-            return this.adjustTop(this.top)
-        },
-        initLeftPx: function() {
-            return this.adjustLeft(this.left)
-        },
-        initWidthPx: function() {
-            return this.adjustWidth(this.left, this.right)
-        },
-        initHeightPx: function() {
-            return this.adjustHeight(this.top, this.bottom)
+        computedRect: function() {
+            return {
+                top: this.adjustTop(this.top),
+                left: this.adjustLeft(this.left),
+                width: this.adjustWidth(this.left, this.right),
+                height: this.adjustHeight(this.top, this.bottom)
+            }
         }
     }
 }

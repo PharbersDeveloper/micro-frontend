@@ -1,14 +1,14 @@
 <template>
     <VueDragResize v-if="checkEditableShowing()" @onclick="onActive" :isActive="active"
                    :parentLimitation="true"
-                   :h="height" :w="width"
-                   :x="left" :y="top"
+                   :h="rect.height" :w="rect.width"
+                   :x="rect.left" :y="rect.top"
                    @resizestop="onResizstop" @dragstop="onResizstop"
                    v-on:resizing="resize" v-on:dragging="resize">
-        <histogram :init-width="width" :init-height="height" :policy="policy"  ref="histogram" />
+        <histogram :init-width="rect.width" :init-height="rect.height" :policy="policy"  ref="histogram" />
     </VueDragResize>
     <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
-        <histogram :init-width="width" :init-height="height" :policy="policy"  ref="histogram" />
+        <histogram :init-width="rect.width" :init-height="rect.height" :policy="policy"  ref="histogram" />
     </div>
 </template>
 <script>
@@ -23,10 +23,21 @@ export default {
                 return null
             }
         },
-        top: Number,
-        left: Number,
-        width: Number,
-        height: Number,
+        // top: Number,
+        // left: Number,
+        // width: Number,
+        // height: Number,
+        rect: {
+            type: Object,
+            default: function() {
+                return {
+                    top: 0,
+                    left: 0,
+                    width: 0,
+                    height: 0
+                }
+            }
+        },
         editable: {
             type: Boolean,
             default: true
@@ -37,8 +48,8 @@ export default {
             name: "draggable-histogram",
             active: false,
             renderTimes: 0,
-            isMounted: 0,
-            tempRect: {}
+            isMounted: 0
+            // tempRect: {}
         }
     },
     components: {
@@ -55,17 +66,17 @@ export default {
     },
     methods: {
         resize(newRect) {
-            this.tempRect.width = newRect.width
-            this.tempRect.height = newRect.height
-            this.tempRect.top = newRect.top
-            this.tempRect.left = newRect.left
+            this.rect.width = newRect.width
+            this.rect.height = newRect.height
+            this.rect.top = newRect.top
+            this.rect.left = newRect.left
 
             if (this.timer)
                 return
 
             const that = this
             this.timer = setTimeout(() => {
-                that.$refs.histogram.resizeHandler(that.tempRect.width, that.tempRect.height)
+                that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
                 that.timer = null
             }, 100)
         },
@@ -92,7 +103,7 @@ export default {
             return this.isMounted > 0 && !this.editable
         },
         resetInsightPosition() {
-            return "left: " + this.left + "px; top: " + this.top + "px; width: " + this.width + "px; height: " + this.height + "px;"
+            return "left: " + this.rect.left + "px; top: " + this.rect.top + "px; width: " + this.rect.width + "px; height: " + this.rect.height + "px;"
         }
     },
     watch: {
