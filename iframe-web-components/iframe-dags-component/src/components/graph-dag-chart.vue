@@ -159,9 +159,9 @@ export default {
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
             responseArr: [],
-            showProgress: false,
+            showProgress: true, //进度条弹窗是否显示
             textConf: {}, //运行弹框textarea的默认值
-            progressOver: false,
+            progressOver: false, //进度条是否停止
             registerJobEventName: ""
         }
     },
@@ -345,12 +345,28 @@ export default {
         closeProgress() {
             this.showProgress = false
         },
+        resetDagStatus() {
+            // 1.进度条状态
+            this.progressOver = true
+            this.showProgress = true
+            // 2.节点状态
+            let data = ele.datasource.data
+            data.map((it,index) => {
+                it.status = it.status.split("_")[0]
+                that.refreshNodeStatus(it)
+            })
+            // 3.log弹窗
+            this.failedLogs = []
+        },
         /**
-         * 1. 触发dag运行
-         * 2. query notification接收正确或错误消息
+         * 1. 触发整体dag运行
+         * 2. 进度条清0
+         * 3. 清除节点状态
+         * 4. 关闭log弹窗
+         * 5. 开始正常run dag流程
          */
         async confirmeRunDag(data) {
-            // this.noticeService.progress = false //重置进度条
+            this.loading = true
             this.showProgress = false
             const url = `https://apiv2.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
@@ -376,6 +392,7 @@ export default {
             let results = await fetch(url, options).then(res => res.json())
             if(results.status === "failed") {
                 alert("启动出错，请重新运行！")
+                this.loading = false
                 return false
             }
             const dag_run_id = results.data.dag_run_id.split("_")
@@ -388,8 +405,9 @@ export default {
                     dagExecutionCmd: "executionStatus" + runnerId
                 }
             }, '*')
-            this.showProgress = true
             this.showRunJson = false
+            this.loading = false
+            this.resetDagStatus()
         },
         runDagFailedCallback(response, ele) {
             let payload = JSON.parse(response.payload)
