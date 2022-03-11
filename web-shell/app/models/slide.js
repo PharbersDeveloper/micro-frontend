@@ -1,4 +1,4 @@
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from "@ember-data/model"
 
 export default class SlideModel extends Model {
 	@attr("string") pdId
@@ -6,4 +6,5 @@ export default class SlideModel extends Model {
 	@attr("string") content
 	@attr("string") title
 	@attr("number") idx
+	@attr("string") datasetName
 }

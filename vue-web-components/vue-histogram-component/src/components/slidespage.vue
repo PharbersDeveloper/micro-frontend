@@ -37,7 +37,7 @@
                     <div class="slide_name">{{slide.title}}</div>
                     <img class="del_icon" :src="del_icon" @click.stop="clickDeleteSlide(index)"/>
                 </div>
-                <img :src="add_icon"  alt="" class="add_icon" @click="addSlide">
+                <img :src="add_icon"  alt="" class="add_icon" @click.stop="addSlide">
             </div>
         </div>
 <!--        <div class="project_info_right">-->
@@ -208,13 +208,18 @@ export default {
             this.dialogNewChartVisible = false
             this.dialogNewChartNameVisible = true
         },
-        addSlide() {
-            // TODO: 添加一个新slide
-            // let num = this.slideArr.length + 1
-            // this.slideArr.push({
-            //     name: "slide" + num,
-            //     content: "slideeee" + num
-            // })
+        async addSlide() {
+            const data = {
+                content: "{}",
+                pdId: this.allData.projectId + "_" + this.allData.dashboard.dashboardId,
+                title: "new title",
+                idx: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1),
+                slideId: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1)
+            }
+
+            const item = new PhSlideModel(data.pdId + "_" + data.slideId, data)
+            this.slideArr.push(item)
+            await item.save(this)
         },
         clickSlideFooterTab(data) {
             this.edit = false

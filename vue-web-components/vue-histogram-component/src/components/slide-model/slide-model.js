@@ -11,8 +11,7 @@ export default class PhSlideModel {
             this.pdId = data.pdId
             this.title = data.title
             this.idx = data.idx
-            // this.datasetId = data.datasetId
-            this.datasetName = data.datasetName
+            this.datasetName = data.datasetName || ""
             this.isSave = true
         } else {
             this.isSave = false
