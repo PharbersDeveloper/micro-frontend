@@ -236,7 +236,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "ff9765423e02ae501c5080572cf17ae4114169a0805edf958d5262f08ffd8df4"
+        const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
@@ -366,7 +366,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "ff9765423e02ae501c5080572cf17ae4114169a0805edf958d5262f08ffd8df4"
+            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",

@@ -110,34 +110,35 @@ function PhMQTT(config, callBack, timeoutQueue) {
 					jobDesc,
 					message
 				} = JSON.parse(content)
+				
+				const b64 = window.btoa(unescape(encodeURIComponent(content)))
+				console.warn(b64)
+				console.info("Find Item ====> ", use_cache.find((item) => item === b64))
+				if (!use_cache.find((item) => item === b64)) {
+					// 只接受jobCat为Notification标识
+					// TODO：@Alex 这部分需要重整一下
+					if (jobCat === "notification") {
+						use_cache.push(b64)
+						time = new Date().getTime()
 
-				// if (use_cache.indexOf(`${id}_${projectId}_${date}_${status}`) === -1) {
-
-				// }
-				// use_cache.push(`${id}_${projectId}_${date}_${status}`)
-
-				// 只接受jobCat为Notification标识
-				// TODO：@Alex 这部分需要重整一下
-				if (jobCat === "notification") {
-					time = new Date().getTime()
-
-					// UnRegister 将错误的和完成的关掉
-					if (jobDesc.indexOf("runDag") !== -1) {
-						const {
-							cnotification: { overallStatus }
-						} = JSON.parse(message)
-						console.warn(overallStatus)
-						const runDagState = states[overallStatus] || false
-						if (runDagState) {
-							timeoutQueue.push(topic)
+						// UnRegister 将错误的和完成的关掉
+						if (jobDesc.indexOf("runDag") !== -1) {
+							const {
+								cnotification: { overallStatus }
+							} = JSON.parse(message)
+							// console.warn(overallStatus)
+							const runDagState = states[overallStatus] || false
+							if (runDagState) {
+								timeoutQueue.push(topic)
+							}
+						} else {
+							const state = states[status] || false
+							if (state) {
+								timeoutQueue.push(topic)
+							}
 						}
-					} else {
-						const state = states[status] || false
-						if (state) {
-							timeoutQueue.push(topic)
-						}
+						callBack(parameter, content)
 					}
-					callBack(parameter, content)
 				}
 			})
 		}
