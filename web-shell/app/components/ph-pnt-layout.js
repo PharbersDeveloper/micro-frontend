@@ -58,10 +58,9 @@ export default class PhPntLayoutComponent extends Component {
 
 	@action
     registerListener(element) {
-		const href = window.location.href.split("?")[1]
-		const hrefParam = href.split("&")
-		this.projectName = hrefParam[0].split("=")[1]
-		this.projectId = hrefParam[1].split("=")[1]
+		let paramArr = window.location.href.split("?")[1].split("&")
+        this.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
         element.allData = {
 			projectName: this.projectName,
 			projectId: this.projectId,
@@ -69,6 +68,12 @@ export default class PhPntLayoutComponent extends Component {
 		}
         element.addEventListener("event", this.listener)
     }
+
+	@action 
+	getUrlParam(arr, value) {
+		let data = arr.find(item => item.indexOf(value) > -1)
+		return data ? decodeURI(data).split("=")[1] : undefined
+	}
 
 	@action
     unregisterListener(element) {
