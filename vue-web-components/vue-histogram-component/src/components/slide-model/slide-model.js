@@ -52,4 +52,29 @@ export default class PhSlideModel {
         const result = await fetch(url, options) //.then((res) => res.json())
         return result.status === 200
     }
+
+    async delete(ele) {
+        const body = {
+            table: "slide",
+            conditions: {
+                pdId: this.pdId,
+                slideId: this.slideId
+            }
+        }
+
+        const url = "https://apiv2.pharbers.com/phdydatasource/delete_item"
+        let headers = {
+            Authorization: ele.getCookie("access_token") || this.debugToken,
+            "Content-Type": "application/vnd.api+json",
+            Accept: "application/vnd.api+json"
+        }
+        let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }
+        // const result = await fetch(url, options).then((res) => res.json())
+        const result = await fetch(url, options) //.then((res) => res.json())
+        return result.status === 200
+    }
 }
