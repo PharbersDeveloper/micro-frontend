@@ -1,26 +1,11 @@
 <template>
     <div class="page">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/index.css">
         <div v-if="needTitle" class="title-panel">
             <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
             <h2>{{dashboardTitle}}</h2>
         </div>
         <div class="container" >
             <div class="left">
-                <!-- <el-tabs v-model="activeName" >
-                    <el-tab-pane label="Columns" name="first">
-                        <div v-for="(item, index) in lst" :key="index" class="draggable-item" draggable="true"
-                            @dragstart="dragStart($event, index, item)"
-                            @dragend="dragEnd">
-                            <span v-if="isNum(index)" class="num"><b>#</b></span>
-                            <span v-else class="text"><b>A</b></span>
-                            {{item}}
-                        </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="Sampling" name="second">
-                        暂不开放
-                    </el-tab-pane>
-                </el-tabs> -->
                 <div v-for="(item, index) in lst" :key="index" class="draggable-item" draggable="true"
                     @dragstart="dragStart($event, index, item)"
                     @dragend="dragEnd">
@@ -71,14 +56,9 @@
                 <div class="axis-container">
                     <div class="axis">
                         <span class="axis-title">图表类型</span>
-                        <el-select v-model="policyName" class="chart-type" placeholder="图表类型">
-                            <el-option
-                                    v-for="(item, index) in policyCandidate"
-                                    :key="index"
-                                    :label="item"
-                                    :value="item">
-                            </el-option>
-                        </el-select>
+                        <select v-model="policyName" style="width:200px;height: 30px;margin-top: 5px;margin-bottom: 5px;margin-left: 10px">
+                            <option v-for="item in policyCandidate" v-bind:value="item" v-text="item" ></option>
+                        </select>
                     </div>
                     <div class="axis">
                         <span class="axis-title">Y轴</span>
@@ -94,7 +74,7 @@
                     </div>
                 </div>
                 <div class="content" ref="content">
-                    <histogram ref="histogram" />
+                    <histogram ref="histogram" :policy="policy"/>
                 </div>
             </div>
         </div>
@@ -106,14 +86,6 @@ import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
-import ElSelect from "element-ui/packages/select"
-import ElOption from "element-ui/packages/option"
-import ElTabs from "element-ui/packages/tabs"
-import ElTabPane from "element-ui/packages/tab-pane"
-import ElCollapse from "element-ui/packages/collapse"
-import ElCollapseItem from "element-ui/packages/collapse-item"
-import ElInput from "element-ui/packages/input"
-import "element-ui/lib/theme-chalk/index.css"
 
 export default {
     name: "insight-container",
@@ -139,28 +111,22 @@ export default {
                 ]
             }
         },
-        defaultProp: {
+        policy: {
             type: Object,
             default: function() {
-                return {
-                    label: "label",
-                    children: "children",
-                    isLeaf: "leaf"
-                }
+                return null
             }
         }
     },
     data: () => {
         return {
-            datasource: new PhHistogramDatasource('1'),
-            schema: new PhHistogramSchema('1'),
-            policy: null,
             xProperty: "year",
             yProperty: "sales",
             policyName: "bar",
             policyCandidate: ["bar", "pie"],
             draggingItem: null,
             needRefresh: 0,
+            schemaRefresh: 0,
             lst: [],
             activeName: "first",
             activeCandis: [],
@@ -168,43 +134,37 @@ export default {
         }
     },
     components: {
-        histogram,
-        ElSelect,
-        ElOption,
-        ElTabPane,
-        ElTabs,
-        ElCollapse,
-        ElCollapseItem,
-        ElInput
+        histogram
     },
     mounted() {
         const w = this.$refs.content.offsetWidth
         const h = this.$refs.content.offsetHeight
         this.$refs.histogram.resizeHandler(w, h)
 
-        const that = this
-        this.schema.requestSchema().then(_ => {
-            that.lst = that.schema.schema
-        })
-
         this.needRefresh++
+        this.schemaRefresh++
     },
     methods: {
-        refresh() {
-            if (!this.policy || this.policy.policyName() !== this.policyName) {
-                this.policy = this.createPolicyFactory(this.policyName)
-            }
-            this.policy.xProperty = this.xProperty
-            this.policy.yProperty = this.yProperty
-            this.$refs.histogram.resetPolicy(this.policy)
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         },
-        createPolicyFactory(factoryType) {
-            if (factoryType === "pie") {
-                return new PiePolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
-                    { xProperty: "标准省份名称", yProperty: "sales" })
-            } else if (factoryType === "bar") {
-                return new BarPolicy('1', new PhHistogramDatasource('1'), new PhHistogramSchema('1'),
-                    { xProperty: "标准省份名称", yProperty: "sales" })
+        async refreshSchema() {
+            if (this.policy) {
+                await this.policy.schema.requestSchema(this)
+                this.lst = this.policy.schema.schema
+                this.$refs.histogram.schemaIsReady++
+            }
+        },
+        refresh() {
+            if (this.policy) {
+                this.xProperty = this.policy.xProperty
+                this.yProperty = this.policy.yProperty
+                // this.$refs.histogram.resetPolicy(this.policy)
+                this.$refs.histogram.needRefresh++
             }
         },
         dragStart(event, index, item) {
@@ -227,28 +187,41 @@ export default {
             }
         },
         isNum(index) {
-            return this.schema.dtype[index] !== "Text"
+            return this.policy.schema.dtype[index] !== "String"
         }
     },
     watch: {
         xProperty(n, o) {
             if (n !== o) {
-                this.needRefresh++
+                this.policy.xProperty = n
+                this.schemaRefresh++
             }
         },
         yProperty(n, o) {
             if (n !== o) {
-                this.needRefresh++
+                this.policy.yProperty = n
+                this.schemaRefresh++
             }
         },
         policyName(n, o) {
             if (n !== o) {
-                this.policy = this.createPolicyFactory(this.policyName)
-                this.needRefresh++
+                const event = new Event("event")
+                event.args = {
+                    name: n,
+                    x: this.xProperty,
+                    y: this.yProperty
+                }
+                this.$emit("changePolicy", event)
             }
         },
         needRefresh(n, o) {
             this.refresh()
+        },
+        policy(n, o) {
+            this.needRefresh++
+        },
+        schemaRefresh(n, o) {
+            this.refreshSchema()
         }
     }
 }

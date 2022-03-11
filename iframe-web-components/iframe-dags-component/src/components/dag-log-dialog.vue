@@ -64,8 +64,9 @@ export default {
          * 2. 读log文件并展示,循环发送请求，直到读取到logs信息
          */
         this.loading = true
+        let that = this
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
+        const accessToken = this.getCookie( "access_token" ) || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
         let body = {
             "table": "logs",
             "conditions": {
@@ -87,37 +88,40 @@ export default {
         }
 
         let path = await fetch(url, options).then(res => res.json())
-        this.emrLog = path.data[0].attributes["emr-log"]
-        
-        const logsUrl = "https://api.pharbers.com/phquerylogfile"
-        let param = this.emrLog.split("//")[1]
-        let bucket = param.substring(0, param.indexOf("/"))
-        let key = param.substring(param.indexOf("/")+1, param.length)
-        console.log(bucket, key)
-        let logsBody = {
-            "bucket": bucket,
-            "key": key
-        }
-        let logsOptions = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(logsBody)
-        }
-        let result = null
-        let that = this
-        let clearInt = setInterval(async function() {
-            result = await fetch(logsUrl, logsOptions).then(res => res.json())
-            if (result.status === 1) {
-                clearInterval(clearInt);
-                that.logsValue = result.message.map((item, idx, array) => window.atob(item)).join("<br/>")
-                that.loading = false
-                console.log(that.logsValue)
+        try {
+            this.emrLog = path.data[0].attributes["emr-log"]
+            const logsUrl = "https://api.pharbers.com/phquerylogfile"
+            let param = this.emrLog.split("//")[1]
+            let bucket = param.substring(0, param.indexOf("/"))
+            let key = param.substring(param.indexOf("/")+1, param.length)
+            console.log(bucket, key)
+            let logsBody = {
+                "bucket": bucket,
+                "key": key
             }
-        }, 5 * 1000)
+            let logsOptions = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(logsBody)
+            }
+            let result = null
+            let clearInt = setInterval(async function() {
+                result = await fetch(logsUrl, logsOptions).then(res => res.json())
+                if (result.status === 1) {
+                    clearInterval(clearInt);
+                    that.logsValue = result.message.map((item, idx, array) => window.atob(item)).join("<br/>")
+                    that.loading = false
+                    console.log(that.logsValue)
+                }
+            }, 5 * 1000)
+        } catch ( e ) {
+            that.logsValue = "暂无日志"
+            that.loading = false
+        }
     },
     watch: {
     },

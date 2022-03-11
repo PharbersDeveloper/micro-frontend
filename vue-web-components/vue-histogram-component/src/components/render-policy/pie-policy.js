@@ -21,6 +21,7 @@ export default class PhPieChartPolicy extends policy{
         this.yProperty = "sales"
         this.yPropertyFunc = "max"     // avg, max, min
 
+        // this.data = null
         this.resetPolicyConstraints(option)
     }
 
@@ -142,8 +143,8 @@ export default class PhPieChartPolicy extends policy{
             .text(d => d);
     }
 
-    refreshSchema() {
-        return this.schema.requestSchema()
+    refreshSchema(ele) {
+        return this.schema.requestSchema(ele)
     }
 
     buildPieChartQueryString() {
@@ -155,10 +156,7 @@ export default class PhPieChartPolicy extends policy{
     }
 
     refreshData(ele) {
-        if (!this.xProperty || !this.yProperty) {
-            return
-        }
-        else {
+        if (this.xProperty && this.yProperty) {
             return this.datasource.refreshPolicyData(ele, this.buildPieChartQueryString(), this.buildPolicySchema())
         }
     }

@@ -1,11 +1,12 @@
-export async function phHistogramSlidespageRouteModel(route /*, parseParams*/) {
-	route.browserEventsService.clearListener()
+export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	let debugToken =
-		"27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
+		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
 	route.store.unloadAll("dashboard")
 	route.store.unloadAll("slide")
 	const url = "https://apiv2.pharbers.com/phdydatasource/query"
 	const accessToken = route.cookies.read("access_token") || debugToken
+	const projectId = parseParams.projectId || "1"
+	const projectName = parseParams.projectName || "alfred test"
 	let body = {
 		table: "dashboard",
 		conditions: {
@@ -67,13 +68,10 @@ export async function phHistogramSlidespageRouteModel(route /*, parseParams*/) {
 		})
 	const slides = slidesQuery.filter((it) => it)
 	return {
-		// projectName: parseParams.query.projectName || "alfred test",
-		projectName: "alfred test",
-		// projectId: parseParams.query.projectId || "1",
-		projectId: "1",
+		projectName: projectName,
+		projectId: projectId,
 		dashboard: dashboard,
 		slides: slides,
-		// tagsArray: tagsArray,
 		_isVue: true
 	}
 }

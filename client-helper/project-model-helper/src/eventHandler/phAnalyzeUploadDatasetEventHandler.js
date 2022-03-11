@@ -154,6 +154,66 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				await fetch(urldel, options).then((res) => res.json())
 			}
 			break
+		case "createCatalog":
+			if (params) {
+				let catauuid = guid()
+				const catalog_url =
+					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				let catamessage = {
+					actionName: params.dsName,
+					keys: "",
+					name: params.dsName,
+					version: "",
+					id: catauuid,
+					cat: "catalog",
+					format: "",
+					prop: {
+						path: "",
+						partitions: 1,
+						format: "",
+						tableName: params.tableName,
+						databaseName: route.cookies.read("company_id")
+					},
+					opname: route.cookies.read("account_id"),
+					opgroup: route.cookies.read("company_id")
+				}
+				let catalog_body = {
+					table: "action",
+					item: {
+						projectId: params.projectId,
+						code: 0,
+						comments: "",
+						jobCat: "catalog",
+						jobDesc: "catalog",
+						message: JSON.stringify(catamessage),
+						date: String(new Date().getTime()),
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					}
+				}
+				let catalog_options = {
+					method: "POST",
+					headers: {
+						Authorization: route.cookies.read("access_token"),
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(catalog_body)
+				}
+				let catalog_result = await fetch(
+					catalog_url,
+					catalog_options
+				).then((res) => res.json())
+				if (catalog_result.data) {
+					// route.noticeService.register("notification", result.data.id, delNoticeCallback, route, params.projectId)
+				}
+				alert("新建数据集成功！")
+				window.location.reload()
+			}
+			break
 		case "fitMax":
 			if (params) {
 				let uuid = guid()

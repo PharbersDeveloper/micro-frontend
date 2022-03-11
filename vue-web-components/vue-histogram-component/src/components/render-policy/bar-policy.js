@@ -26,6 +26,7 @@ export default class PhBarChartPolicy extends policy{
         this.yLabel = ""
         this.color = "currentColor"
 
+        // this.data = null
         this.resetPolicyConstraints(option)
     }
 
@@ -169,8 +170,8 @@ export default class PhBarChartPolicy extends policy{
             .call(xAxis)
     }
 
-    refreshSchema() {
-        return this.schema.requestSchema()
+    refreshSchema(ele) {
+        return this.schema.requestSchema(ele)
     }
 
     buildBarChartQueryString() {
@@ -182,10 +183,7 @@ export default class PhBarChartPolicy extends policy{
     }
 
     refreshData(ele) {
-        if (!this.xProperty || !this.yProperty) {
-            return
-        }
-        else {
+        if (this.xProperty && this.yProperty) {
             return this.datasource.refreshPolicyData(ele, this.buildBarChartQueryString(), this.buildPolicySchema())
         }
     }
