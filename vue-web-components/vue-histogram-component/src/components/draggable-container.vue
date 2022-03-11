@@ -158,7 +158,7 @@ export default {
                 })
             }
 
-            this.positionChanged([that.left, that.top, that.right, that.bottom])
+            this.positionChanged([this.left, this.top, this.right, this.bottom])
             // if (this.stopTimer)
             //     return
             //
