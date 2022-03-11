@@ -1,16 +1,24 @@
 <template>
-    <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
-               v-on:resizeStop="resizeStop" :rect="computedRect"
-               :policy="policy" />
+    <VueDragResize v-if="checkEditableShowing()" @onclick="onActive" :isActive="active"
+                   :parentLimitation="true"
+                   :h="rect.height" :w="rect.width"
+                   :x="rect.left" :y="rect.top"
+                   @resizestop="resizeStop" @dragstop="resizeStop"
+                   v-on:resizing="resize" v-on:dragging="resize">
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="policy"  ref="histogram" />
+    </VueDragResize>
+    <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="policy"  ref="histogram" />
+    </div>
 </template>
 
 <script>
-import Histogram from "./draggable-histogram"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import Insight from "./insight"
+import VueDragResize from './drag-resize'
 
 export default {
     props: {
@@ -36,6 +44,10 @@ export default {
             type: Number,
             default: 1
         },
+        editable: {
+            type: Boolean,
+            default: true
+        },
         policy: {
             type: Object,
             default: function () {
@@ -51,19 +63,17 @@ export default {
         return {
             isMounted: 0,
             name: "draggable-container",
-            // initTopPx: 0,
-            // initLeftPx: 0,
-            // initWidthPx: 300,
-            // initHeightPx: 300,
+            rect: null,
             timer: null
         }
     },
     components: {
         Insight,
-        Histogram
+        VueDragResize
     },
     mounted () {
         this.isMounted++
+        this.rect = this.computedRect
     },
     updated() {
 
@@ -102,50 +112,80 @@ export default {
             return bottom - top
         },
         resizeStop(ele) {
-
             if (this.timer)
                 return
 
             const that = this
-            this.timer = setTimeout(() => {
-                const top = ele.rect.top
-                const left = ele.rect.left
-                const width = ele.rect.width
-                const height = ele.rect.height
+            const top = that.rect.top
+            const left = that.rect.left
+            const width = that.rect.width
+            const height = that.rect.height
 
-                const w = this.$parent.$refs.container.offsetWidth
-                const h = this.$parent.$refs.container.offsetHeight
-                const margin = this.$parent.initGrids.margin
-                const columns = this.$parent.initGrids.columns
-                const lines = this.$parent.initGrids.lines
-                const stepW = (w - margin) / columns - margin
-                const stepH = (h - margin) / lines - margin
+            const w = this.$parent.$refs.container.offsetWidth
+            const h = this.$parent.$refs.container.offsetHeight
+            const margin = this.$parent.initGrids.margin
+            const columns = this.$parent.initGrids.columns
+            const lines = this.$parent.initGrids.lines
+            const stepW = (w - margin) / columns - margin
+            const stepH = (h - margin) / lines - margin
 
-                if (this.adjustRange(top, this.adjustTop(this.top))) {
-                    this.top = Math.floor(top / stepH)
-                }
+            if (this.adjustRange(top, this.adjustTop(this.top))) {
+                this.top = Math.floor(top / stepH)
+            }
 
-                else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
-                    this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                }
+            else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
+                this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
+            }
 
-                else if (this.adjustRange(left, this.adjustLeft(this.left))) {
-                    this.left = Math.floor(left / stepW)
-                }
+            else if (this.adjustRange(left, this.adjustLeft(this.left))) {
+                this.left = Math.floor(left / stepW)
+            }
 
-                else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
-                    this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                }
+            else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
+                this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
+            }
 
-                this.positionChanged([this.left, this.top, this.right, this.bottom])
-                that.timer = null
-            }, 300)
+            this.positionChanged([this.left, this.top, this.right, this.bottom])
+            that.timer = null
         },
         adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
         },
         positionChanged(param) {
             this.activeContent.position = param
+        },
+        resize(newRect) {
+            this.rect.width = newRect.width
+            this.rect.height = newRect.height
+            this.rect.top = newRect.top
+            this.rect.left = newRect.left
+
+            if (this.timer)
+                return
+
+            const that = this
+            this.timer = setTimeout(() => {
+                that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
+                that.timer = null
+            }, 100)
+        },
+        resetPolicy(p) {
+            this.$refs.histogram.resetPolicy(p)
+        },
+        refresh() {
+            this.$refs.histogram.needRefresh++
+        },
+        onActive() {
+            this.active = !this.active
+        },
+        checkEditableShowing() {
+            return this.isMounted > 0 && this.editable
+        },
+        checkViewableShowing() {
+            return this.isMounted > 0 && !this.editable
+        },
+        resetInsightPosition() {
+            return "left: " + this.rect.left + "px; top: " + this.rect.top + "px; width: " + this.rect.width + "px; height: " + this.rect.height + "px;"
         }
     },
     watch: {
@@ -165,6 +205,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    .view {
+        position: absolute;
+    }
+
     .page {
         display: flex;
         flex-direction: column;
