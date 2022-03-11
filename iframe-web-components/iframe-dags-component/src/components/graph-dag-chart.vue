@@ -150,7 +150,6 @@ export default {
             stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
             selectItem: null,
             showRunJson: false,
-            jobShowName: "",
             runId: "",
             representId: "",
             failedLogs: [],
@@ -425,11 +424,15 @@ export default {
             })
             // 2.失败时出现弹框
             if(status === "failed") {
-                that.failedLogs.push({
-                    data: payload,
-                    jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
-                    representId: represent_id
-                })
+                let showName = JSON.parse(payload.message).cnotification.jobShowName
+                let length = that.failedLogs.filter(it => it.jobShowName === showName)
+                if(length < 1) {
+                    that.failedLogs.push({
+                        data: payload,
+                        jobShowName: showName,
+                        representId: represent_id
+                    })
+                }
             }
             console.log("failedLogs", that.failedLogs)
         },
