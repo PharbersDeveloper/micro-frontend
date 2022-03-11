@@ -129,12 +129,17 @@ function PhMQTT(config, callBack, timeoutQueue) {
 							// console.warn(overallStatus)
 							const runDagState = states[overallStatus] || false
 							if (runDagState) {
-								timeoutQueue.push(topic)
+								setTimeout(() => {
+									timeoutQueue.push(topic)
+								}, 1000 * 5)
+								
 							}
 						} else {
 							const state = states[status] || false
 							if (state) {
-								timeoutQueue.push(topic)
+								setTimeout(() => {
+									timeoutQueue.push(topic)
+								}, 1000 * 5)
 							}
 						}
 						callBack(parameter, content)
