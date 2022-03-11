@@ -20,9 +20,9 @@
                     </div>
                 </div>
             </div>
-            <div v-if="isMounted" class="high-container">
-                <div class="histogram-container" v-if="contentModel" :style="draggableLayout()">
-                    <Histogram v-for="(item, index) in contentModel.content"
+            <div v-if="isMounted" class="high-container" @click="debug">
+                <div class="histogram-container" v-if="contentModel" :style="draggableLayout()" >
+                    <Histogram v-for="(item, index) in contentModel.content" :data-alfred="needRefresh"
                         :key="index"
                         :editable="isEditable()"
                         :left="item.position[0]"
@@ -77,8 +77,7 @@ export default {
             name: "slide",
             isMounted: 0,
             activeName: "first",
-            needRefresh: 0,
-            policies: []
+            needRefresh: 0
         }
     },
     components: {
@@ -89,15 +88,14 @@ export default {
     },
     mounted () {
         this.isMounted++
-        // if (this.contentModel) {
-        //     this.contentModel.querySlideContent()
-        //     this.policies = this.createAllPolicyByModel()
-        // }
     },
     updated() {
-        this.needRefresh++
+
     },
     methods: {
+        debug() {
+            console.log(this.contentModel)
+        },
         changeHistogram(data) {
             const event = new Event("event")
             event.args = {
@@ -129,35 +127,6 @@ export default {
             const h = this.$refs.container.offsetHeight
             return "width: " + w + "px; height: " + h + "px;"
         },
-        // createAllPolicyByModel() {
-        //     for (const item in this.contentModel.content) {
-        //         this.policies.push(this.createPolicyWithinContent(this.contentModel.content[item]))
-        //     }
-        // },
-        // createPolicyWithinContent(content) {
-        //     // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
-        //     // 不会写就多写cv次这个函数吧
-        //     if (content.policyName === "bar") {
-        //         return new BarPolicy(content.index,
-        //             new PhHistogramDatasource(content.index,
-        //                 this.projectId,
-        //                 content.datasetName),
-        //             new PhHistogramSchema(content.index,
-        //                 this.projectId,
-        //                 content.datasetName),
-        //             { xProperty: content.x, yProperty: content.y })
-        //     }
-        //     else if (content.policyName === "pie") {
-        //         return new PiePolicy(content.index,
-        //             new PhHistogramDatasource(content.index,
-        //                 this.projectId,
-        //                 content.datasetName),
-        //             new PhHistogramSchema(content.index,
-        //                 this.projectId,
-        //                 content.datasetName),
-        //             { xProperty: content.x, yProperty: content.y })
-        //     }
-        // },
         saveContentPosition() {
             const keys = Object.keys(this.contentModel.content)
             for (let idx = 0; idx < keys.length; ++idx) {
@@ -176,12 +145,9 @@ export default {
         }
     },
     watch: {
-        // contentModel(n, o) {
-        //     if (n) {
-        //         this.contentModel.querySlideContent()
-        //         this.policies = this.createAllPolicyByModel()
-        //     }
-        // }
+        contentModel(n, o) {
+            this.needRefresh++
+        }
     }
 }
 </script>

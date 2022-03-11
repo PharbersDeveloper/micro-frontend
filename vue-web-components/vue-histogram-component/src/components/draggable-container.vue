@@ -77,7 +77,7 @@ export default {
         this.rect = this.computedRect
     },
     updated() {
-
+        this.rect = this.computedRect
     },
     methods: {
         adjustLeft(l) {
@@ -174,12 +174,12 @@ export default {
                 that.timer = null
             }, 100)
         },
-        resetPolicy(p) {
-            this.$refs.histogram.resetPolicy(p)
-        },
-        refresh() {
-            this.$refs.histogram.needRefresh++
-        },
+        // resetPolicy(p) {
+        //     this.$refs.histogram.resetPolicy(p)
+        // },
+        // refresh() {
+        //     this.$refs.histogram.needRefresh++
+        // },
         onActive() {
             this.active = !this.active
         },

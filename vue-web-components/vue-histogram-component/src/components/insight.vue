@@ -109,6 +109,12 @@ export default {
             if (this.policy && this.policy.isReady()) {
                 this.render()
             }
+        },
+        policy(n, o) {
+            if (n) {
+                this.resizeHandler(this.width, this.height)
+                this.schemaIsReady++
+            }
         }
     }
 }
