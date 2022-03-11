@@ -124,6 +124,10 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 import slideComponent from "./slide"
 import "element-ui/lib/theme-chalk/index.css"
 import PhSlideModel from './slide-model/slide-model'
+import BarPolicy from "../components/render-policy/bar-policy"
+import PiePolicy from "../components/render-policy/pie-policy"
+import PhHistogramDatasource from "../components/model/datasource"
+import PhHistogramSchema from "../components/model/schema"
 
 export default {
     props: {
@@ -177,6 +181,7 @@ export default {
             const tmp = []
             for (let index = 0; index < this.allData.slides.length; ++index) {
                 const item = new PhSlideModel(index, this.allData.slides[index])
+                item.policies = this.createAllPolicyByModel(item)
                 tmp.push(item)
             }
             this.slideArr = tmp.sort((l, r) => l.idx - r.idx)
@@ -218,8 +223,41 @@ export default {
             }
 
             const item = new PhSlideModel(data.pdId + "_" + data.slideId, data)
+            item.policies = this.createAllPolicyByModel(item)
             this.slideArr.push(item)
             await item.save(this)
+        },
+        createAllPolicyByModel(model) {
+            let result = []
+            // TODO: maybe has some bug
+            for (const item in model.content) {
+                result.push(this.createPolicyWithinContent(model.content[item]))
+            }
+            return result
+        },
+        createPolicyWithinContent(content) {
+            // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
+            // 不会写就多写cv次这个函数吧
+            if (content.policyName === "bar") {
+                return new BarPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "pie") {
+                return new PiePolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
         },
         clickSlideFooterTab(data) {
             this.edit = false

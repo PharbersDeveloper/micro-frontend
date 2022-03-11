@@ -128,43 +128,30 @@ export default {
 
             if (this.adjustRange(top, this.adjustTop(this.top))) {
                 this.top = Math.floor(top / stepH)
-                this.$nextTick(() => {
-                    this.rect.top = this.adjustTop(this.top)
-                })
             }
 
             else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
                 this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                this.$nextTick(() => {
-                    this.rect.height = this.adjustHeight(this.top, this.bottom)
-                })
             }
 
             else if (this.adjustRange(left, this.adjustLeft(this.left))) {
                 this.left = Math.floor(left / stepW)
-                this.$nextTick(() => {
-                    this.rect.left = this.adjustLeft(this.left)
-                })
             }
 
             else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
                 this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                this.$nextTick(() => {
-                    this.rect.width = this.adjustWidth(this.left, this.right)
-                })
             }
 
-            this.positionChanged([this.left, this.top, this.right, this.bottom])
+            if (this.stopTimer)
+                return
 
-            // if (this.stopTimer)
-            //     return
-            //
-            // const that = this
-            // this.timer = setTimeout(() => {
-            //     that.rect = that.computedRect
-            //     // that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
-            //     that.stopTimer = null
-            // }, 100)
+            const that = this
+            this.timer = setTimeout(() => {
+                that.positionChanged([that.left, that.top, that.right, that.bottom])
+                // that.rect = that.computedRect
+                // that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
+                that.stopTimer = null
+            }, 100)
         },
         adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s

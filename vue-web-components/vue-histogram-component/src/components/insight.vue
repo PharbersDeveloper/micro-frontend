@@ -109,11 +109,6 @@ export default {
             if (this.policy && this.policy.isReady()) {
                 this.render()
             }
-        },
-        policy(n, o) {
-            this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
-            // await this.policy.refreshSchema(this)
-            // this.schemaIsReady++
         }
     }
 }

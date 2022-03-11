@@ -3,10 +3,12 @@ export default class PhSlideModel {
     constructor(id, data) {
         this.id = id
         this.debugToken = 	"c332c1ff0fc63558f2c987a8ac0364f8dbc1f0a60886fda6e575a1ebc68c5687"
+        this.policies = []
 
         if (data) {
             this.queryContent = JSON.parse(data.content)
-            this.content = Object.assign({}, this.queryContent)
+            this.content = this.queryContent.slice(0)
+            // this.content = Object.assign({}, this.queryContent)
             this.slideId = data.slideId
             this.pdId = data.pdId
             this.title = data.title
