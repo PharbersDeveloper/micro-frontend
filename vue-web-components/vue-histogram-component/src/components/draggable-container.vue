@@ -25,26 +25,22 @@ export default {
                 return null
             }
         },
-        // initTop: {
-        //     type: Number,
-        //     default: 0
-        // },
-        // initBottom: {
-        //     type: Number,
-        //     default: 0
-        // },
-        // initLeft: {
-        //     type: Number,
-        //     default: 1
-        // },
-        // initRight: {
-        //     type: Number,
-        //     default: 1
-        // },
-        top: Number,
-        bottom: Number,
-        left: Number,
-        right: Number,
+        top: {
+            type: Number,
+            default: 0
+        },
+        bottom: {
+            type: Number,
+            default: 1
+        },
+        left: {
+            type: Number,
+            default: 0
+        },
+        right: {
+            type: Number,
+            default: 1
+        },
         policy: {
             type: Object,
             default: function () {
@@ -58,12 +54,12 @@ export default {
     },
     data: () => {
         return {
-            // top: 0,
-            // bottom: 0,
-            // left: 0,
-            // right: 0,
             isMounted: 0,
-            name: "draggable-container"
+            name: "draggable-container",
+            initTopPx: 0,
+            initLeftPx: 0,
+            initWidthPx: 300,
+            initHeightPx: 300
         }
     },
     components: {
@@ -71,30 +67,11 @@ export default {
         Histogram
     },
     mounted () {
-        // if (this.initTop >= 0) {
-        //     this.top = this.initTop
-        // } else  {
-        //     this.top= 0
-        // }
-        //
-        // if (this.initLeft >= 0) {
-        //     this.left = this.initLeft
-        // } else {
-        //     this.left = 0
-        // }
-        //
-        // if (this.initRight >= 0) {
-        //     this.right = this.initRight
-        // } else {
-        //     this.right = 3
-        // }
-        //
-        // if (this.initBottom >= 0) {
-        //     this.bottom = this.initBottom
-        // } else {
-        //     this.bottom = 3
-        // }
         this.isMounted++
+        this.resetPxRect()
+    },
+    updated() {
+        this.resetPxRect()
     },
     methods: {
         adjustLeft(l) {
@@ -130,10 +107,6 @@ export default {
             return bottom - top
         },
         resizeStop(ele) {
-            // const top = ele.top
-            // const left = ele.left
-            // const width = ele.width
-            // const height = ele.height
             const top = ele.tempRect.top
             const left = ele.tempRect.left
             const width = ele.tempRect.width
@@ -149,22 +122,26 @@ export default {
 
             if (this.adjustRange(top, this.adjustTop(this.top))) {
                 this.top = Math.floor(top / stepH)
-                ele.top = this.adjustTop(this.top)
+                // ele.top = this.adjustTop(this.top)
+                this.initTopPx = this.adjustTop(this.top)
             }
 
             else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
                 this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                ele.height = this.adjustHeight(this.top, this.bottom)
+                // ele.height = this.adjustHeight(this.top, this.bottom)
+                this.initHeightPx = this.adjustHeight(this.top, this.bottom)
             }
 
             else if (this.adjustRange(left, this.adjustLeft(this.left))) {
                 this.left = Math.floor(left / stepW)
-                ele.left = this.adjustLeft(this.left)
+                // ele.left = this.adjustLeft(this.left)
+                this.initLeftPx = this.adjustLeft(this.left)
             }
 
             else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
                 this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                ele.width = this.adjustWidth(this.left, this.right)
+                // ele.width = this.adjustWidth(this.left, this.right)
+                this.initWidthPx = this.adjustWidth(this.left, this.right)
             }
 
             this.positionChanged([this.left, this.top, this.right, this.bottom])
@@ -174,20 +151,12 @@ export default {
         },
         positionChanged(param) {
             this.activeContent.position = param
-        }
-    },
-    computed: {
-        initTopPx: function() {
-            return this.adjustTop(this.top)
         },
-        initLeftPx: function() {
-            return this.adjustLeft(this.left)
-        },
-        initWidthPx: function() {
-            return this.adjustWidth(this.left, this.right)
-        },
-        initHeightPx: function() {
-            return this.adjustHeight(this.top, this.bottom)
+        resetPxRect() {
+            this.initTopPx = this.adjustTop(this.top)
+            this.initLeftPx = this.adjustLeft(this.left)
+            this.initWidthPx = this.adjustWidth(this.left, this.right)
+            this.initHeightPx = this.adjustHeight(this.top, this.bottom)
         }
     },
     watch: {
