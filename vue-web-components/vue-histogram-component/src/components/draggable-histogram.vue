@@ -23,22 +23,6 @@ export default {
                 return null
             }
         },
-        // initWidth: {
-        //     type: Number,
-        //     default: undefined
-        // },
-        // initHeight: {
-        //     type: Number,
-        //     default: undefined
-        // },
-        // initTop: {
-        //     type: Number,
-        //     default: undefined
-        // },
-        // initLeft: {
-        //     type: Number,
-        //     default: undefined
-        // },
         top: Number,
         left: Number,
         width: Number,
@@ -51,11 +35,6 @@ export default {
     data: () => {
         return {
             name: "draggable-histogram",
-            // top: undefined,
-            // left: undefined,
-            // width: undefined,
-            // height: undefined,
-            // policy: null,
             active: false,
             renderTimes: 0,
             isMounted: 0,
@@ -67,30 +46,12 @@ export default {
         Histogram
     },
     mounted () {
-        // if (this.initTop >= 0) {
-        //     this.top = this.initTop
-        // } else  {
-        //     this.top= 0
-        // }
-        //
-        // if (this.initLeft >= 0) {
-        //     this.left = this.initLeft
-        // } else {
-        //     this.left = 0
-        // }
-        //
-        // if (this.initWidth >= 0) {
-        //     this.width = this.initWidth
-        // } else {
-        //     this.width = 300
-        // }
-        //
-        // if (this.initHeight >= 0) {
-        //     this.height = this.initHeight
-        // } else {
-        //     this.height = 300
-        // }
         this.isMounted++
+    },
+    updated() {
+        if (this.checkViewableShowing()) {
+            this.$refs.histogram.resizeHandler(this.width, this.height)
+        }
     },
     methods: {
         resize(newRect) {
