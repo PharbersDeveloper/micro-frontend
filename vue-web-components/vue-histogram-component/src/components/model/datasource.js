@@ -11,7 +11,7 @@ export default class PhDataSource {
         this.batch_size = 100
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "253e674e1f9e037982e795758a6e2f4a8bcd50af9d7b9a465d9e0f6dd430c72a"
+        this.debugToken = "c332c1ff0fc63558f2c987a8ac0364f8dbc1f0a60886fda6e575a1ebc68c5687"
     }
 
     defaultAdapter(row, cols) {

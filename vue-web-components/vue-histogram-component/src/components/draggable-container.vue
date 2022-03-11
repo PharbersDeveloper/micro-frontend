@@ -1,7 +1,11 @@
 <template>
+<!--    <Histogram v-if="isMounted" class="histogram-item" :editable="editable"-->
+<!--               v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"-->
+<!--               :init-width="initWidthPx" :init-height="initHeightPx"-->
+<!--               :policy="policy" />-->
     <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
-               v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"
-               :init-width="initWidthPx" :init-height="initHeightPx"
+               v-on:resizeStop="resizeStop" :left="initLeftPx" :top="initTopPx"
+               :width="initWidthPx" :height="initHeightPx"
                :policy="policy" />
 </template>
 
@@ -21,22 +25,26 @@ export default {
                 return null
             }
         },
-        initTop: {
-            type: Number,
-            default: 0
-        },
-        initBottom: {
-            type: Number,
-            default: 0
-        },
-        initLeft: {
-            type: Number,
-            default: 1
-        },
-        initRight: {
-            type: Number,
-            default: 1
-        },
+        // initTop: {
+        //     type: Number,
+        //     default: 0
+        // },
+        // initBottom: {
+        //     type: Number,
+        //     default: 0
+        // },
+        // initLeft: {
+        //     type: Number,
+        //     default: 1
+        // },
+        // initRight: {
+        //     type: Number,
+        //     default: 1
+        // },
+        top: Number,
+        bottom: Number,
+        left: Number,
+        right: Number,
         policy: {
             type: Object,
             default: function () {
@@ -50,10 +58,10 @@ export default {
     },
     data: () => {
         return {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
+            // top: 0,
+            // bottom: 0,
+            // left: 0,
+            // right: 0,
             isMounted: 0,
             name: "draggable-container"
         }
@@ -63,29 +71,29 @@ export default {
         Histogram
     },
     mounted () {
-        if (this.initTop >= 0) {
-            this.top = this.initTop
-        } else  {
-            this.top= 0
-        }
-
-        if (this.initLeft >= 0) {
-            this.left = this.initLeft
-        } else {
-            this.left = 0
-        }
-
-        if (this.initRight >= 0) {
-            this.right = this.initRight
-        } else {
-            this.right = 3
-        }
-
-        if (this.initBottom >= 0) {
-            this.bottom = this.initBottom
-        } else {
-            this.bottom = 3
-        }
+        // if (this.initTop >= 0) {
+        //     this.top = this.initTop
+        // } else  {
+        //     this.top= 0
+        // }
+        //
+        // if (this.initLeft >= 0) {
+        //     this.left = this.initLeft
+        // } else {
+        //     this.left = 0
+        // }
+        //
+        // if (this.initRight >= 0) {
+        //     this.right = this.initRight
+        // } else {
+        //     this.right = 3
+        // }
+        //
+        // if (this.initBottom >= 0) {
+        //     this.bottom = this.initBottom
+        // } else {
+        //     this.bottom = 3
+        // }
         this.isMounted++
     },
     methods: {
@@ -122,10 +130,14 @@ export default {
             return bottom - top
         },
         resizeStop(ele) {
-            const top = ele.top
-            const left = ele.left
-            const width = ele.width
-            const height = ele.height
+            // const top = ele.top
+            // const left = ele.left
+            // const width = ele.width
+            // const height = ele.height
+            const top = ele.tempRect.top
+            const left = ele.tempRect.left
+            const width = ele.tempRect.width
+            const height = ele.tempRect.height
 
             const w = this.$parent.$refs.container.offsetWidth
             const h = this.$parent.$refs.container.offsetHeight

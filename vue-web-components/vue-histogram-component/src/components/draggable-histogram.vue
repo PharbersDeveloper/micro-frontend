@@ -23,22 +23,26 @@ export default {
                 return null
             }
         },
-        initWidth: {
-            type: Number,
-            default: undefined
-        },
-        initHeight: {
-            type: Number,
-            default: undefined
-        },
-        initTop: {
-            type: Number,
-            default: undefined
-        },
-        initLeft: {
-            type: Number,
-            default: undefined
-        },
+        // initWidth: {
+        //     type: Number,
+        //     default: undefined
+        // },
+        // initHeight: {
+        //     type: Number,
+        //     default: undefined
+        // },
+        // initTop: {
+        //     type: Number,
+        //     default: undefined
+        // },
+        // initLeft: {
+        //     type: Number,
+        //     default: undefined
+        // },
+        top: Number,
+        left: Number,
+        width: Number,
+        height: Number,
         editable: {
             type: Boolean,
             default: true
@@ -47,14 +51,15 @@ export default {
     data: () => {
         return {
             name: "draggable-histogram",
-            top: undefined,
-            left: undefined,
-            width: undefined,
-            height: undefined,
+            // top: undefined,
+            // left: undefined,
+            // width: undefined,
+            // height: undefined,
             // policy: null,
             active: false,
             renderTimes: 0,
-            isMounted: 0
+            isMounted: 0,
+            tempRect: {}
         }
     },
     components: {
@@ -62,44 +67,44 @@ export default {
         Histogram
     },
     mounted () {
-        if (this.initTop >= 0) {
-            this.top = this.initTop
-        } else  {
-            this.top= 0
-        }
-
-        if (this.initLeft >= 0) {
-            this.left = this.initLeft
-        } else {
-            this.left = 0
-        }
-
-        if (this.initWidth >= 0) {
-            this.width = this.initWidth
-        } else {
-            this.width = 300
-        }
-
-        if (this.initHeight >= 0) {
-            this.height = this.initHeight
-        } else {
-            this.height = 300
-        }
+        // if (this.initTop >= 0) {
+        //     this.top = this.initTop
+        // } else  {
+        //     this.top= 0
+        // }
+        //
+        // if (this.initLeft >= 0) {
+        //     this.left = this.initLeft
+        // } else {
+        //     this.left = 0
+        // }
+        //
+        // if (this.initWidth >= 0) {
+        //     this.width = this.initWidth
+        // } else {
+        //     this.width = 300
+        // }
+        //
+        // if (this.initHeight >= 0) {
+        //     this.height = this.initHeight
+        // } else {
+        //     this.height = 300
+        // }
         this.isMounted++
     },
     methods: {
         resize(newRect) {
-            this.width = newRect.width
-            this.height = newRect.height
-            this.top = newRect.top
-            this.left = newRect.left
+            this.tempRect.width = newRect.width
+            this.tempRect.height = newRect.height
+            this.tempRect.top = newRect.top
+            this.tempRect.left = newRect.left
 
             if (this.timer)
                 return
 
             const that = this
             this.timer = setTimeout(() => {
-                that.$refs.histogram.resizeHandler(that.width, that.height)
+                that.$refs.histogram.resizeHandler(that.tempRect.width, that.tempRect.height)
                 that.timer = null
             }, 100)
         },
@@ -117,7 +122,7 @@ export default {
             this.active = !this.active
         },
         onResizstop() {
-            this.$emit("resizeStop", this)
+            this.$emit("rectChanged", this.tempRect)
         },
         checkEditableShowing() {
             return this.isMounted > 0 && this.editable
