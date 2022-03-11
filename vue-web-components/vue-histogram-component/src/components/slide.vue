@@ -20,9 +20,9 @@
                     </div>
                 </div>
             </div>
-            <div v-if="isMounted" class="high-container" @click="debug">
+            <div v-if="isMounted" class="high-container" >
                 <div class="histogram-container" v-if="contentModel" :style="draggableLayout()" >
-                    <Histogram v-for="(item, index) in contentModel.content" :data-alfred="needRefresh"
+                    <Histogram v-for="(item, index) in contentModel.content"
                         :key="index"
                         :editable="isEditable()"
                         :left="item.position[0]"
@@ -93,9 +93,6 @@ export default {
 
     },
     methods: {
-        debug() {
-            console.log(this.contentModel)
-        },
         changeHistogram(data) {
             const event = new Event("event")
             event.args = {
