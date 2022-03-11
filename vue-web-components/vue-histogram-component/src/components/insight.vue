@@ -50,6 +50,7 @@ export default {
         this.width = this.initWidth
         this.height = this.initHeight
         if (this.policy) {
+            this.resizeHandler(this.width, this.height)
             this.schemaIsReady++
         }
     },

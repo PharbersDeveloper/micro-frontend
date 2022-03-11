@@ -15,6 +15,12 @@ import Insight from "./insight"
 
 export default {
     props: {
+        activeContent: {
+            type: Object,
+            default: function() {
+                return null
+            }
+        },
         initTop: {
             type: Number,
             default: 0
@@ -72,13 +78,13 @@ export default {
         if (this.initRight >= 0) {
             this.right = this.initRight
         } else {
-            this.right = 300
+            this.right = 3
         }
 
         if (this.initBottom >= 0) {
             this.bottom = this.initBottom
         } else {
-            this.bottom = 300
+            this.bottom = 3
         }
         this.isMounted++
     },
@@ -148,9 +154,14 @@ export default {
                 this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
                 ele.width = this.adjustWidth(this.left, this.right)
             }
+
+            this.positionChanged([this.left, this.top, this.right, this.bottom])
         },
         adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
+        },
+        positionChanged(param) {
+            this.activeContent.position = param
         }
     },
     computed: {

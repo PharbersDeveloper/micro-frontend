@@ -30,6 +30,7 @@
                         :init-top="item.position[1]"
                         :init-right="item.position[2]"
                         :init-bottom="item.position[3]"
+                        :active-content="item"
                         :policy="createPolicyWithinContent(item)"
                         @dblclick.native="changeHistogram(item)" />
                 </div>
@@ -80,7 +81,8 @@ export default {
         return {
             name: "slide",
             isMounted: 0,
-            activeName: "first"
+            activeName: "first",
+            needRefresh: 0
         }
     },
     components: {
@@ -96,6 +98,7 @@ export default {
         }
     },
     updated() {
+        this.needRefresh++
     },
     methods: {
         changeHistogram(data) {
@@ -169,7 +172,6 @@ export default {
             }
             return this.activeName === "second"
         }
-
     },
     watch: {
 
