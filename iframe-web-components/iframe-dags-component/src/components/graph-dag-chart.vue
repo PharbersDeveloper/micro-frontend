@@ -159,7 +159,7 @@ export default {
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
             responseArr: [],
-            showProgress: true, //进度条弹窗是否显示
+            showProgress: false, //进度条弹窗是否显示
             textConf: {}, //运行弹框textarea的默认值
             progressOver: false, //进度条是否停止
             registerJobEventName: ""
@@ -346,13 +346,15 @@ export default {
             this.showProgress = false
         },
         resetDagStatus() {
+            let that = this
             // 1.进度条状态
-            this.progressOver = true
+            this.progressOver = false
             this.showProgress = true
             // 2.节点状态
-            let data = ele.datasource.data
+            let data = this.datasource.data
+            console.log(data)
             data.map((it,index) => {
-                it.status = it.status.split("_")[0]
+                it.status = it["attributes"]["runtime"]
                 that.refreshNodeStatus(it)
             })
             // 3.log弹窗
