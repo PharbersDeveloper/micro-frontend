@@ -35,7 +35,7 @@
                      @click="clickSlideFooterTab(index)"
                      :key="index">
                     <div class="slide_name">{{slide.title}}</div>
-                    <img class="del_icon" :src="del_icon" @click="clickDeleteSlide(slide, index)">
+                    <img class="del_icon" :src="del_icon" @click.stop="clickDeleteSlide(index)"/>
                 </div>
                 <img :src="add_icon"  alt="" class="add_icon" @click="addSlide">
             </div>
@@ -149,12 +149,10 @@ export default {
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             dialogDeleteSlideVisible: false, //删除slide
-            delSlideData: null,
             delSlideIndex: 0,
             add_chart: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
             dialogNewChartVisible: false,
             dialogNewChartNameVisible: false,
-
             slideArr: [],
             activeModel: null
         }
@@ -185,31 +183,33 @@ export default {
             this.activeModel = this.slideArr[0]
         },
         changeHistogram(data) {
-            this.$emit('event', data)
+            // TODO:
+            // this.$emit('event', data)
         },
         on_clickNewChartNameConfirm(data) {
-            const event = new Event("event")
-            event.args = {
-                callback: "clickNewChartName",
-                element: this,
-                param: {
-                    name: "clickNewChartName",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    dashboardId: this.allData.projectId,
-                    slideId: this.allData.projectId,
-                    contentId: this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
-            this.dialogNewChartNameVisible = false
+            // TODO: 添加一个新图表
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "clickNewChartName",
+            //     element: this,
+            //     param: {
+            //         name: "clickNewChartName",
+            //         projectName: this.allData.projectName,
+            //         projectId: this.allData.projectId,
+            //         dashboardId: this.allData.projectId,
+            //         slideId: this.allData.projectId,
+            //         contentId: this.allData.projectId
+            //     }
+            // }
+            // this.$emit('event', event)
+            // this.dialogNewChartNameVisible = false
         },
         on_clickNewChartConfirm() {
             this.dialogNewChartVisible = false
             this.dialogNewChartNameVisible = true
         },
         addSlide() {
-            // TODO: ...
+            // TODO: 添加一个新slide
             // let num = this.slideArr.length + 1
             // this.slideArr.push({
             //     name: "slide" + num,
@@ -217,20 +217,25 @@ export default {
             // })
         },
         clickSlideFooterTab(data) {
+            this.edit = false
             this.activeModel = this.slideArr[data]
         },
-        on_clickDeleteSlideConfirm() {
-            // TODO: ...
-            // this.slideArr.splice(this.delSlideIndex, 1)
-            // this.dialogDeleteSlideVisible = false
-            // //重置slide名称
-            // this.resetSlideName()
+        async on_clickDeleteSlideConfirm() {
+            const tmp = []
+            for (let idx = 0; idx< this.slideArr.length; ++idx) {
+                if (idx !== this.delSlideIndex) {
+                    tmp.push(this.slideArr[idx])
+                } else {
+                    await this.slideArr[idx].delete(this)
+                }
+            }
+            this.slideArr = tmp
+            this.activeModel = this.slideArr[0]
+            this.dialogDeleteSlideVisible = false
         },
-        clickDeleteSlide(data, index) {
-            // TODO: ...
-            // this.delSlideData = data
-            // this.delSlideIndex = index
-            // this.dialogDeleteSlideVisible = true
+        clickDeleteSlide(index) {
+            this.delSlideIndex = index
+            this.dialogDeleteSlideVisible = true
         },
         resetSlideName() {
             this.slideArr.forEach((item, index) => {
