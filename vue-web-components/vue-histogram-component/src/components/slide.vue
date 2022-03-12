@@ -30,7 +30,7 @@
                         :right="item.position[2]"
                         :bottom="item.position[3]"
                         :active-content="item"
-                        :policy="contentModel.policies[index]"
+                        :policy="item.policy"
                         @dblclick.native="changeHistogram(item)" />
                 </div>
             </div>
