@@ -1,6 +1,6 @@
 <template>
     <div class="viewport" ref="viewport" :style="viewportStyle()">
-        <div ref="chart" class="chart" @dblclick.step="dbClicked"></div>
+        <div ref="chart" class="chart" @dblclick.stop="dbClicked"></div>
     </div>
 </template>
 <script>
@@ -98,6 +98,11 @@ export default {
             this.policy.render(this.d3, this.policy.datasource.data, this.$refs.chart)
         },
         dbClicked() {
+            const event = new Event("insightSelected")
+            const param = {
+
+            }
+            this.$emit("insightSelected", param)
             debugger
         }
     },

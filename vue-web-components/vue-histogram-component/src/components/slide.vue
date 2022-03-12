@@ -31,7 +31,7 @@
                         :bottom="item.position[3]"
                         :active-content="item"
                         :policy="item.policy"
-                        @dblclick="changeHistogram(item)" />
+                        @click="changeHistogram(item)" />
                 </div>
             </div>
         </div>
@@ -94,6 +94,7 @@ export default {
     },
     methods: {
         changeHistogram(data) {
+            debugger
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",

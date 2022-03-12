@@ -195,7 +195,7 @@ export default {
             const defaultPolicyName = "bar"
             const one_content = {
                 tp:"histogram",
-                index:0,
+                index: Math.max(...this.activeModel.content.map(_ => parseInt(_.id))) + 1,
                 histogramName: "alfredtest",
                 policyName: defaultPolicyName,
                 datasourceClass:"default",
@@ -300,7 +300,8 @@ export default {
         async saveSlideContent() {
             for (let idx = 0; idx < this.slideArr.length; ++idx) {
                 if (this.slideArr[idx]) {
-                    this.slideArr[idx].queryContent = this.slideArr[idx].content
+                    this.slideArr[idx].queryContent = [...this.slideArr[idx].content]
+                    // delete this.slideArr[idx].queryContent.map(x => {x["policy"] = null})
                     await this.slideArr[idx].save(this)
                 }
             }
