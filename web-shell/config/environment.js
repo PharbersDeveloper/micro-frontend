@@ -39,10 +39,11 @@ module.exports = function (environment) {
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
 			AWS_SECRET_KEY: "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",
-			AWS_IOT_ENDPOINT: "a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn",
+			// AWS_IOT_ENDPOINT: "a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn",
+			AWS_IOT_ENDPOINT: "https://apiv2.pharbers.com/phnotification/",
 			AWS_REGION: "cn-northwest-1",
 			AWS_IOT_DEFAULT_CLIENT_ID: "VQ4L9e4RGDZEI2Ln7fvE",
-			MQTT_TYPE: "aws-mqtt", // aws-mqtt|http-mqtt
+			MQTT_TYPE: "http-mqtt", // aws-mqtt|http-mqtt
 			OBSERVER_TIME_OUT: 600, // 600秒  10分
 			scope: "APP|*|R",
 			isNeedMenu: true
