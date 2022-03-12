@@ -188,8 +188,7 @@ export default {
             this.activeModel = this.slideArr[0]
         },
         changeHistogram(data) {
-            // TODO:
-            // this.$emit('event', data)
+            this.$emit('event', data)
         },
         on_clickNewChartNameConfirm(data) {
             // TODO: 添加一个新图表
