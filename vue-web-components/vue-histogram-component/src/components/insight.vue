@@ -1,6 +1,6 @@
 <template>
     <div class="viewport" ref="viewport" :style="viewportStyle()">
-        <div ref="chart" class="chart" ></div>
+        <div ref="chart" class="chart" @dblclick.stop="dbClicked"></div>
     </div>
 </template>
 <script>
@@ -96,6 +96,10 @@ export default {
         render() {
             this.d3.select(this.$refs.chart).selectAll("svg").remove()
             this.policy.render(this.d3, this.policy.datasource.data, this.$refs.chart)
+        },
+        dbClicked() {
+            const event = new Event("insightSelected")
+            this.$emit("insightSelected", event)
         }
     },
     watch: {
@@ -114,6 +118,20 @@ export default {
             if (n) {
                 this.resizeHandler(this.width, this.height)
                 this.schemaIsReady++
+            }
+        },
+        initWidth(n, o) {
+            if (n !== o) {
+                this.width = n
+                this.resizeHandler(this.width, this.height)
+                this.needRefresh++
+            }
+        },
+        initHeight(n, o) {
+            if (n !== o) {
+                this.height = n
+                this.resizeHandler(this.width, this.height)
+                this.needRefresh++
             }
         }
     }

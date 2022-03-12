@@ -3,11 +3,11 @@ export default class PhSlideModel {
     constructor(id, data) {
         this.id = id
         this.debugToken = 	"c332c1ff0fc63558f2c987a8ac0364f8dbc1f0a60886fda6e575a1ebc68c5687"
-        this.policies = []
+        // this.policies = []
 
         if (data) {
             this.queryContent = JSON.parse(data.content)
-            this.content = this.queryContent.slice(0)
+            this.content = [...this.queryContent]
             // this.content = Object.assign({}, this.queryContent)
             this.slideId = data.slideId
             this.pdId = data.pdId
@@ -25,6 +25,13 @@ export default class PhSlideModel {
     }
 
     async save(ele) {
+        function replacer(key, value) {
+            if (key === "policy") {
+                return undefined;
+            }
+            return value;
+        }
+
         const body = {
             table: "slide",
             item: {
@@ -32,7 +39,7 @@ export default class PhSlideModel {
                 pdId: this.pdId,
                 slideId: this.slideId,
                 title: this.title,
-                content: JSON.stringify(this.queryContent),
+                content: JSON.stringify(this.queryContent, replacer),
                 idx: this.idx,
                 datasetName: this.datasetName
             }
