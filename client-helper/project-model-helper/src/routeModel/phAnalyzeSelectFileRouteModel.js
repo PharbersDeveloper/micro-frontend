@@ -1,5 +1,4 @@
 export async function phAnalyzeSelectFileRouteModel(route, parseParams) {
-	route.browserEventsService.clearListener()
 	route.browserEventsService.registerListener("dataset-lst")
 	let datasets = await route.store.peekAll("dataset")
 	console.log(parseParams)

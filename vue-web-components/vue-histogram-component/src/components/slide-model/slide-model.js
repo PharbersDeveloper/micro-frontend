@@ -1,53 +1,81 @@
 
 export default class PhSlideModel {
-    constructor(id) {
+    constructor(id, data) {
         this.id = id
-        this.debugToken = "253e674e1f9e037982e795758a6e2f4a8bcd50af9d7b9a465d9e0f6dd430c72a"
-        this.isEdited = false
-    }
+        this.debugToken = 	"c332c1ff0fc63558f2c987a8ac0364f8dbc1f0a60886fda6e575a1ebc68c5687"
+        this.policies = []
 
-    async querySlideContent() {
-        // TODO: query content from Dynamodb
-        // 做到这个地方的时候，问我 @wodelu
-        //  this.queryContent = await {
-        this.queryContent = {
-            title: "slide test",
-            // 这个是一个JSON String 需要Adapter一下，做到的时候问我 @wodelu
-            content: [
-                {
-                    tp: "histogram", // 这里只可能是histogram 活着 table 暂时，全部写死都写histogram
-                    index: 0,
-                    histogramName: "alfred test",
-                    policyName: "bar", // bar, pie and other histogram name
-                    datasourceClass: "default",
-                    schemaClass: "default",
-                    x: "标准省份名称",
-                    y: "sales",
-                    conditions: {}, // like filter etc.
-                    position: [0, 0, 5, 5]  // 顺序是 左， 上， 右， 下
-                },
-                {
-                    tp: "histogram", // 这里只可能是histogram 活着 table 暂时，全部写死都写histogram
-                    index: 1,
-                    histogramName: "alfred test",
-                    policyName: "pie", // bar, pie and other histogram name
-                    datasourceClass: "default",
-                    schemaClass: "default",
-                    x: "year",
-                    y: "sales",
-                    conditions: {}, // like filter etc.
-                    position: [6, 0, 11, 5]  // 顺序是 左， 上， 右， 下
-                }
-            ]
+        if (data) {
+            this.queryContent = JSON.parse(data.content)
+            this.content = this.queryContent.slice(0)
+            // this.content = Object.assign({}, this.queryContent)
+            this.slideId = data.slideId
+            this.pdId = data.pdId
+            this.title = data.title
+            this.idx = data.idx
+            this.datasetName = data.datasetName || ""
+            this.isSave = true
+        } else {
+            this.isSave = false
         }
-        this.title = this.queryContent.title
-        this.content = Object.assign({}, this.queryContent.content)
-        this.isEdited = false
     }
 
-    save() {
-        // TODO: 掉用接口将数据同步到dynamodb上去
-        console.log(this.queryContent)
-        console.log(this.content)
+    querySlideContent() {
+        // do nothing ...
+    }
+
+    async save(ele) {
+        const body = {
+            table: "slide",
+            item: {
+                id: this.pdId + "_" + this.slideId,
+                pdId: this.pdId,
+                slideId: this.slideId,
+                title: this.title,
+                content: JSON.stringify(this.queryContent),
+                idx: this.idx,
+                datasetName: this.datasetName
+            }
+        }
+
+        const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+        let headers = {
+            Authorization: ele.getCookie("access_token") || this.debugToken,
+            "Content-Type": "application/vnd.api+json",
+            Accept: "application/vnd.api+json"
+        }
+        let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }
+        // const result = await fetch(url, options).then((res) => res.json())
+        const result = await fetch(url, options) //.then((res) => res.json())
+        return result.status === 200
+    }
+
+    async delete(ele) {
+        const body = {
+            table: "slide",
+            conditions: {
+                pdId: this.pdId,
+                slideId: this.slideId
+            }
+        }
+
+        const url = "https://apiv2.pharbers.com/phdydatasource/delete_item"
+        let headers = {
+            Authorization: ele.getCookie("access_token") || this.debugToken,
+            "Content-Type": "application/vnd.api+json",
+            Accept: "application/vnd.api+json"
+        }
+        let options = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }
+        // const result = await fetch(url, options).then((res) => res.json())
+        const result = await fetch(url, options) //.then((res) => res.json())
+        return result.status === 200
     }
 }

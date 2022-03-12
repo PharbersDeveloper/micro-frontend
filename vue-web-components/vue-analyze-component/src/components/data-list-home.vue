@@ -30,92 +30,84 @@
                             <div class="flow">
                                 <p class="flow_word">主流程</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell" @click="linkToPage('datasets')">
-                                        <div>
-                                            <img :src="dataset_icon" alt="">
-                                        </div>
-                                        <div>
-                                            <p class="number">{{allData.numShow.dataset}}</p>
-                                            <p class="dataset">数据集</p>
-                                        </div>
-                                </div>
-                                    <div class="flow_item_cell" @click="linkToPage('script')">
-                                        <div>
-                                            <img :src="recipes_icon" alt="">
-                                        </div>
-                                        <div>
-                                            <p class="number">{{allData.numShow.flow}}</p>
-                                            <p class="recipes">脚本</p>
-                                        </div>
-                                </div>
-                                    <div class="flow_item_cell">
-                                        <div>
-                                            <img :src="models_icon" alt="">
-                                        </div>
-                                        <div>
-                                            <p class="number">{{allData.numShow.model}}</p>
-                                            <p class="models">模型</p>
-                                        </div>
-                                </div>
+									<div class="flow_item_cell" @click="linkToPage('datasets')">
+										<div>
+											<img :src="dataset_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.dataset}}</p>
+											<p class="dataset">数据集</p>
+										</div>
+									</div>
+									<div class="flow_item_cell" @click="linkToPage('script')">
+										<div>
+											<img :src="recipes_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.flow}}</p>
+											<p class="recipes">脚本</p>
+										</div>
+									</div>
+									<div class="flow_item_cell">
+										<div>
+											<img :src="models_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.model}}</p>
+											<p class="models">模型</p>
+										</div>
+									</div>
                                 </div>
                             </div>
                             <div class="flow flow_two">
                                 <p class="flow_word">实验室</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell" >
-                                        <a href="#">
-                                            <div>
-                                                <img :src="notebook_icon" alt="">
-                                            </div>
-                                            <div>
-                                                <p class="number">{{allData.numShow.notebook}}</p>
-                                                <p class="notebooks">编译器</p>
-                                            </div>
-                                        </a>
-                                </div>
-                                    <div class="flow_item_cell">
-                                        <a href="#">
-                                            <div>
-                                                <img :src="analyses_icon" alt="">
-                                            </div>
-                                            <div>
-                                                <p class="number">{{allData.numShow.analysis}}</p>
-                                                <p class="models">分析</p>
-                                            </div>
-                                        </a>
-                                </div>
+									<div class="flow_item_cell" >
+										<div>
+											<img :src="notebook_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.notebook}}</p>
+											<p class="notebooks">编译器</p>
+										</div>
+									</div>
+									<div class="flow_item_cell">
+										<div>
+											<img :src="analyses_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.analysis}}</p>
+											<p class="models">分析</p>
+										</div>
+									</div>
                                 </div>
                             </div>
                             <div class="flow flow_three">
                                 <p class="flow_word">数据看板</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell"  @click="linkToPage('dashboards')">
-                                        <a href="#">
-                                            <div>
-                                                <img :src="dashboard_icon" alt="">
-                                            </div>
-                                            <div>
-                                                <p class="number">{{allData.numShow.dashBoard}}</p>
-                                                <p class="dashboard">数据看板</p>
-                                            </div>
-                                        </a>
-                                </div>
+									<div class="flow_item_cell" @click="linkToPage('dashboard')">
+										<div>
+											<img :src="dashboard_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.dashBoard}}</p>
+											<p class="dashboard">数据看板</p>
+										</div>
+									</div>
                                 </div>
                             </div>
                             <div class="flow flow_four">
                                 <p class="flow_word">维基</p>
                                 <div class="flow_item"> 
-                                <div class="flow_item_cell" @click="linkToPage('slide')">
-                                        <a href="#">
-                                            <div>
-                                                <img :src="article_icon" alt="">
-                                            </div>
-                                            <div>
-                                                <p class="number">{{allData.numShow.wiki}}</p>
-                                                <p class="article">详解</p>
-                                            </div>
-                                        </a>
-                                </div>
+									<div class="flow_item_cell" @click="linkToPage('slide')">
+										<div>
+											<img :src="article_icon" alt="">
+										</div>
+										<div>
+											<p class="number">{{allData.numShow.wiki}}</p>
+											<p class="article">详解</p>
+										</div>
+									</div>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +236,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
+        const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
         const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
         // href param
         const href = window.location.href.split("?")[1]
@@ -374,7 +366,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "27add8d8b6649222a167474dfffdf9bb51b051b952cec18fc6e87d2f5e79b5a5"
+            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
             const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
             let acbody = {
                 "table": "action",

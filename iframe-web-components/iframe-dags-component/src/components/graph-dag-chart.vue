@@ -150,7 +150,6 @@ export default {
             stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
             selectItem: null,
             showRunJson: false,
-            jobShowName: "",
             runId: "",
             representId: "",
             failedLogs: [],
@@ -160,9 +159,9 @@ export default {
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
             responseArr: [],
-            showProgress: false,
+            showProgress: false, //进度条弹窗是否显示
             textConf: {}, //运行弹框textarea的默认值
-            progressOver: false,
+            progressOver: false, //进度条是否停止
             registerJobEventName: ""
         }
     },
@@ -198,7 +197,8 @@ export default {
                     r_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%8F%8D%E8%89%B2.svg",
                     dataset_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png",
                     job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png",
-                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg"
+                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg",
+                    catalog_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
                 }
             }
         },
@@ -286,10 +286,13 @@ export default {
                         name: 'DSInputIndex',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
                     },
-                    ,
                     {
                         name: 'DSOutputIndex',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
+                    },
+                    {
+                        name: 'DSCatalog',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon.svg'
                     }
                 ]
             }
@@ -342,12 +345,30 @@ export default {
         closeProgress() {
             this.showProgress = false
         },
+        resetDagStatus() {
+            let that = this
+            // 1.进度条状态
+            this.progressOver = false
+            this.showProgress = true
+            // 2.节点状态
+            let data = this.datasource.data
+            console.log(data)
+            data.map((it,index) => {
+                it.status = it["attributes"]["runtime"]
+                that.refreshNodeStatus(it)
+            })
+            // 3.log弹窗
+            this.failedLogs = []
+        },
         /**
-         * 1. 触发dag运行
-         * 2. query notification接收正确或错误消息
+         * 1. 触发整体dag运行
+         * 2. 进度条清0
+         * 3. 清除节点状态
+         * 4. 关闭log弹窗
+         * 5. 开始正常run dag流程
          */
         async confirmeRunDag(data) {
-            // this.noticeService.progress = false //重置进度条
+            this.loading = true
             this.showProgress = false
             const url = `https://apiv2.pharbers.com/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
@@ -373,6 +394,7 @@ export default {
             let results = await fetch(url, options).then(res => res.json())
             if(results.status === "failed") {
                 alert("启动出错，请重新运行！")
+                this.loading = false
                 return false
             }
             const dag_run_id = results.data.dag_run_id.split("_")
@@ -385,8 +407,9 @@ export default {
                     dagExecutionCmd: "executionStatus" + runnerId
                 }
             }, '*')
-            this.showProgress = true
             this.showRunJson = false
+            this.loading = false
+            this.resetDagStatus()
         },
         runDagFailedCallback(response, ele) {
             let payload = JSON.parse(response.payload)
@@ -421,11 +444,15 @@ export default {
             })
             // 2.失败时出现弹框
             if(status === "failed") {
-                that.failedLogs.push({
-                    data: payload,
-                    jobShowName: JSON.parse(payload.message).cnotification.jobShowName,
-                    representId: represent_id
-                })
+                let showName = JSON.parse(payload.message).cnotification.jobShowName
+                let length = that.failedLogs.filter(it => it.jobShowName === showName)
+                if(length < 1) {
+                    that.failedLogs.push({
+                        data: payload,
+                        jobShowName: showName,
+                        representId: represent_id
+                    })
+                }
             }
             console.log("failedLogs", that.failedLogs)
         },
@@ -538,6 +565,8 @@ export default {
                 ele.icon_header = ele["statusFlagsHeader"]["DSuploaded_header"]
             } else if (cat === "dataset" && runtime === "intermediate") {
                 ele.icon_header = ele["statusFlagsHeader"]["DSIntermediate_header"]
+            } else if (cat === "dataset" && runtime === "catalog") {
+                ele.icon_header = ele["statusFlagsHeader"]["catalog_header"]
             } else if (cat === "dataset" && runtime === "input_index") {
                 ele.icon_header = ele["statusFlagsHeader"]["input_index_header"]
             } else if (cat === "dataset" && runtime === "output_index") {

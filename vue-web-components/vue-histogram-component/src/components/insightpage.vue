@@ -1,6 +1,6 @@
 
 <template>
-    <div class="page">
+    <div class="insight-page">
         <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="project_info_left">
             <div class="page_header">
@@ -9,59 +9,35 @@
                     <div class="name">{{allData.projectName}}</div>
                 </div>
                 <div class="right">
-                    <div class="text"
-                        :class="[
-                            {'borderBold': !edit}
-                        ]"
-                        @click="edit = false">浏览模式</div>
-                    <div class="text" 
-                        :class="[
-                            {'borderBold': edit}
-                        ]"
-                        @click="edit = true">编辑模式</div>
-                    <el-button class="panl">返回数据看板</el-button>
-                    <el-button class="panl">查看源数据</el-button>
-                    <el-button class="panl">保存</el-button>
-                        
+                    <el-button class="panl" @click="backToDashboard">返回数据看板</el-button>
+                    <el-button class="panl" @click="transToDataset">查看源数据</el-button>
+                    <el-button class="panl" @click="saveSlideContent">保存</el-button>
                 </div>
             </div>
-            <div class="content">
-                <insightComponent :needTitle="false"></insightComponent>
-            </div>
+            <insightComponent v-if="isMounted"
+                              class="insight-content"
+                              :policy="currentPolicy"
+                              v-on:changePolicy="changePolicy"
+                              :needTitle="false" />
         </div>
-        <div class="project_info_right">
-            <div class="view_content" >
-                <div class="project_name_view">
-                    <span class="space">
-                        <img :src="logo2" alt="">
-                    </span>
-                    <div class="show-name" v-if="datasetcheckedIds.length == 1">
-                        <p class="project_name_info" :title="datasetcheckedNames[0]">
-                        {{datasetcheckedNames[0]}}
-                        </p>
-                    </div>
-                    <div class="show-name">
-                        <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
-                            {{datasetcheckedIds.length}} 条数据集
-                        </p>
-                    </div>
-                </div>
-                <div class="view_func">
-                    <span  class="view_list">
-                        <img class='tags_imgs_tag' :src="label_icon" alt="">
-                        <span class='tags_func'>标签</span>
-                    </span>
-                    <span  class="view_list">
-                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
-                        <span class='tags_func'>清除数据</span>
-                    </span>
-                    <span  class="view_list">
-                        <img class='tags_imgs_tag' :src="delete_icon" alt="">
-                        <span class='tags_func'>删除</span>
-                    </span>
-                </div>
-            </div>
-        </div>
+<!--        <div class="project_info_right">-->
+<!--            <div class="view_content" >-->
+<!--                <div class="view_func">-->
+<!--                    <span  class="view_list">-->
+<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
+<!--                        <span class='tags_func'>标签</span>-->
+<!--                    </span>-->
+<!--                    <span  class="view_list">-->
+<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
+<!--                        <span class='tags_func'>清除数据</span>-->
+<!--                    </span>-->
+<!--                    <span  class="view_list">-->
+<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
+<!--                        <span class='tags_func'>删除</span>-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </template>
 <script>
@@ -70,26 +46,22 @@ import ElTabs from "element-ui/packages/tabs"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import insightComponent from "./insight-container"
+import PhSlideModel from "./slide-model/slide-model"
 import "element-ui/lib/theme-chalk/index.css"
+import PhHistogramDatasource from "../components/model/datasource"
+import PhHistogramSchema from "../components/model/schema"
+import BarPolicy from "../components/render-policy/bar-policy"
+import PiePolicy from "../components/render-policy/pie-policy"
 
 export default {
     props: {
         allData: {
             type: Object,
             default:() => ({
-                projectName: "项目名称",
-                dss:
-                [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "cpa_pha_mapping",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                    }
-                ]
+                projectName: "alfred test",
+                projectId: "1",
+                slide: null,
+                contentId: 0
             })
         }
     },
@@ -103,70 +75,91 @@ export default {
             logo1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF.svg",
             logo2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            datasetcheckedIds: [],
-            edit: false,
-            slideArr: [{
-                name: "slide1",
-                content: "slideeee1"
-            }, {
-                name: "slide2",
-                content: "slideeee2"
-            }, {
-                name: "slide3",
-                content: "slideeee3"
-            }],
             add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            content: "",
-            dialogDeleteSlideVisible: false, //删除slide
-            delSlideData: null,
-            delSlideIndex: 0
+            isMounted: 0,
+            contentModel: null,
+            currentPolicy: null
         }
     },
     mounted () {
+        this.isMounted++
     },
     methods: {
-        addAlide() {
-            let num = this.slideArr.length + 1
-            this.slideArr.push({
-                name: "slide" + num,
-                content: "slideeee" + num
-            })
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
         },
-        clickSlide(data) {
-            this.content = data
+        createCurrentContent() {
+            this.contentModel = new PhSlideModel(this.allData.slide.idx, this.allData.slide)
         },
-        on_clickDeleteSlideConfirm() {
-            this.slideArr.splice(this.delSlideIndex, 1)
-            this.dialogDeleteSlideVisible = false
-            //重置slide名称
-            this.resetSlideName()
+        createPolicyWithinContent() {
+            const content = this.contentModel.content[this.allData.contentId]
+            // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
+            // 不会写就多写cv次这个函数吧
+            if (content.policyName === "bar") {
+                return new BarPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "pie") {
+                return new PiePolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else {
+                // TODO: other histogrm
+            }
         },
-        clickDeleteSlide(data, index) {
-            this.delSlideData = data
-            this.delSlideIndex = index
-            this.dialogDeleteSlideVisible = true
+        changePolicy(param) {
+            const content = this.contentModel.content[this.allData.contentId]
+            content.policyName = param.args.name
+            content.x = param.args.xProperty
+            content.y = param.args.yProperty
+            this.currentPolicy = this.createPolicyWithinContent()
         },
-        resetSlideName() {
-            this.slideArr.forEach((item, index) => {
-                let num = index + 1
-                item.name = "slide" + num
-            })
+        backToDashboard() {
+            // TODO: @wodelu 跳转到dashboard页面
+        },
+        transToDataset() {
+            // TODO: @wodelu 跳转到数据分析页面
+        },
+        saveSlideContent() {
+            this.contentModel.queryContent = this.contentModel.content
+            this.contentModel.save(this)
+            this.transToDataset()
         }
     },
     watch: {
-
+        allData(n, o) {
+            this.createCurrentContent()
+            this.currentPolicy = this.createPolicyWithinContent()
+        }
     }
 }
 </script>
 
 <style scoped lang="scss">
-    .page {
+    .insight-page {
         display: flex;
         width: 100%;
         height: calc(100vh - 60px);
+
         .project_info_left {
             flex: 1;
             border-right: 1px solid #dddddd;
@@ -211,7 +204,7 @@ export default {
                     }
                 }
             }
-            .content {
+            .insight-content {
                 height: calc(100vh - 88px);
             }
             .page_footer {

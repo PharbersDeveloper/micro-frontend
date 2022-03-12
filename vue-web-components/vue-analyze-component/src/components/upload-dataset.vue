@@ -1,5 +1,6 @@
 <template>
     <div class="upload-dataset">
+        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <!-- <div class="project_name_header">
                 <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
@@ -56,6 +57,9 @@
                             </div>
                             <div>
                                 <p @click="on_click_max_output">Max1.0出口</p>
+                            </div>
+                            <div>
+                                <p @click="on_click_catalog">数据目录</p>
                             </div>
                         </div>
                         </div>
@@ -200,6 +204,11 @@
             @fitMaxEvent="fitMaxEvent"
             @closeDialog="closeDialog">
         </fit-max-output-dialog>
+        <select-catalog 
+            @confirmeCreateCatalog="confirmeCreateCatalog"
+            @closeCreateCatalogDialog="closeCreateCatalogDialog"
+            v-if="selectCatalogVisible">
+        </select-catalog>
     </div>
 </template>
 
@@ -212,6 +221,8 @@ import bpSelectVue from '../../node_modules/vue-components/src/components/bp-sel
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
+import selectCatalog from './select-catalog'
+
 export default {
     data() {
         return {
@@ -219,8 +230,8 @@ export default {
             search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
             dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
+            // delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
+            // clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
             selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
@@ -231,6 +242,7 @@ export default {
             output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
             intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
             database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            catalog_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -255,7 +267,8 @@ export default {
             datasetcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            selectCatalogVisible: false
         }
     },
     props: {
@@ -287,18 +300,11 @@ export default {
         bpSelectVue,
         bpOptionVue,
         fitMaxInputDialog,
-        fitMaxOutputDialog
+        fitMaxOutputDialog,
+        selectCatalog
     },
     computed: { },
-    mounted() {
-        // this.$refs.tagsArea.forEach((item, index) => {
-        //     //TODO: 临时做法，tag多于两行时候会撑开item，暂时隐藏
-        //     // if(item.clientHeight > 30) {
-        //     //     this.$refs.moreTags[0].style["display"] = "flex"
-        //     // }
-        //     item.style["height"] = "40px"
-        // })
-    },
+    mounted() { },
     watch: {
         "allData.tagsArray": function() {
             this.tagsColorArray = []
@@ -321,6 +327,39 @@ export default {
         }
     },
     methods: {
+        confirmeCreateCatalog(data) {
+            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectId = this.allData.projectId
+            data.args.param.maxcat = this.maxcat
+            data.args.param.datasetArray = this.allData.dss
+            data.args.param.tableName = data.args.param.dsName
+            data.args.param.dsName = this.checkCatelolgName(data.args.param.dsName)
+            this.$emit('event', data)
+            this.selectCatalogVisible = false
+        },
+        checkCatelolgName(data) {
+            let nameArr = this.allData.dss.filter(item => item.name.indexOf(data) > -1)
+            let changeNameArr = this.allData.dss.filter(item => item.name.indexOf(data + "_") > -1)
+            if(changeNameArr.length > 0) {
+                let num = 0
+                changeNameArr.forEach(item => {
+                    let itemNum = parseInt(item.name.split(data + "_")[1])
+                    num = itemNum >= num ? itemNum + 1 : num
+                })
+                return data + "_" + num
+            } else if(nameArr.length > 0) {
+                return data + "_1"
+            } else {
+                return data
+            }
+        },
+        closeCreateCatalogDialog() {
+            this.selectCatalogVisible = false
+        },
+        //select catalog
+        on_click_catalog() {
+            this.selectCatalogVisible = true
+        },
         // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
@@ -633,6 +672,8 @@ export default {
                 return this.output_index_icon
             case "intermediate":
                 return this.intermediate_icon
+            case "catalog":
+                return this.catalog_icon
             default:
                 return this.dataset_icon
             }
