@@ -99,11 +99,7 @@ export default {
         },
         dbClicked() {
             const event = new Event("insightSelected")
-            const param = {
-
-            }
-            this.$emit("insightSelected", param)
-            debugger
+            this.$emit("insightSelected", event)
         }
     },
     watch: {

@@ -30,8 +30,7 @@
                         :right="item.position[2]"
                         :bottom="item.position[3]"
                         :active-content="item"
-                        :policy="item.policy"
-                        @click="changeHistogram(item)" />
+                        @insightSelected="insightSelected"/>
                 </div>
             </div>
         </div>
@@ -140,6 +139,11 @@ export default {
                 return this.isEditableValue
             }
             return this.activeName === "second"
+        },
+        insightSelected(e) {
+            e.param["slideId"] = this.contentModel.slideId
+            e.param["pdId"] = this.contentModel.pdId
+            this.$emit("insightSelected", e)
         }
     },
     watch: {

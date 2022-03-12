@@ -27,7 +27,7 @@
                     :isEditableValue="edit"
                     :content-model="activeModel"
                     :project-id="allData.projectId"
-                    @changeHistogram="changeHistogram" />
+                    @insightSelected="insightSelected" />
             </div>
             <div class="page_footer">
                 <div v-for="(slide, index) in slideArr"
@@ -187,15 +187,28 @@ export default {
             this.slideArr = tmp.sort((l, r) => l.idx - r.idx)
             this.activeModel = this.slideArr[0]
         },
-        changeHistogram(data) {
-            this.$emit('event', data)
+        insightSelected(e) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "changeHistogram",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.dashboardId,
+                    slideId: e.param.slideId,
+                    contentId: e.param.contentIdx
+                }
+            }
+            this.$emit('changeHistogram', event)
         },
         on_clickNewChartNameConfirm(data) {
             // TODO: 添加一个新图表
             const defaultPolicyName = "bar"
             const one_content = {
                 tp:"histogram",
-                index: Math.max(...this.activeModel.content.map(_ => parseInt(_.id))) + 1,
+                index: Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1,
                 histogramName: "alfredtest",
                 policyName: defaultPolicyName,
                 datasourceClass:"default",
