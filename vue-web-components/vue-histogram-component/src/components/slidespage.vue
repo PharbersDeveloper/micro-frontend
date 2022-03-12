@@ -27,7 +27,7 @@
                     :isEditableValue="edit"
                     :content-model="activeModel"
                     :project-id="allData.projectId"
-                    @insightSelected="insightSelected" />
+                    @selected="insightSelected" />
             </div>
             <div class="page_footer">
                 <div v-for="(slide, index) in slideArr"
@@ -201,7 +201,7 @@ export default {
                     contentId: e.param.contentIdx
                 }
             }
-            this.$emit('changeHistogram', event)
+            this.$emit('event', event)
         },
         on_clickNewChartNameConfirm(data) {
             // TODO: 添加一个新图表

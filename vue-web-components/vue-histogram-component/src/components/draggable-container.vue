@@ -8,7 +8,7 @@
         <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  ref="histogram" />
     </VueDragResize>
     <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
-        <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  @insightSelected="insightSelected" ref="histogram" />
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  @selected="insightSelected" ref="histogram" />
     </div>
 </template>
 
@@ -179,11 +179,12 @@ export default {
         resetInsightPosition() {
             return "left: " + this.rect.left + "px; top: " + this.rect.top + "px; width: " + this.rect.width + "px; height: " + this.rect.height + "px;"
         },
-        insightSelected(e) {
-            e.param = {
-                contentIdx: this.currentContent.index
+        insightSelected() {
+            const event = new Event("event")
+            event.param = {
+                contentIdx: this.activeContent.index
             }
-            this.$emit("insightSelected", e)
+            this.$emit("selected", event)
         }
     },
     watch: {

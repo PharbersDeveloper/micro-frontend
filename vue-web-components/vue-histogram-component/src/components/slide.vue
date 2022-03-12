@@ -30,7 +30,7 @@
                         :right="item.position[2]"
                         :bottom="item.position[3]"
                         :active-content="item"
-                        @insightSelected="insightSelected"/>
+                        @selected="insightSelected"/>
                 </div>
             </div>
         </div>
@@ -143,7 +143,7 @@ export default {
         insightSelected(e) {
             e.param["slideId"] = this.contentModel.slideId
             e.param["pdId"] = this.contentModel.pdId
-            this.$emit("insightSelected", e)
+            this.$emit("selected", e)
         }
     },
     watch: {
