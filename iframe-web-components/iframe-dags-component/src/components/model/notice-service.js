@@ -11,7 +11,7 @@ export default class NoticeServiceService {
         this.statusNoticeCache = []
         this.retryButtonShow = false
         this.progress = false
-        this.debugToken = "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+        this.debugToken = "64ce8321dce6a8bf5d5a37dd01d08b52aa93fec1f44f867235f49c7f5789ba8e"
     }
 
     register(tableName, id, callback, ele, projectId, timeout) {
