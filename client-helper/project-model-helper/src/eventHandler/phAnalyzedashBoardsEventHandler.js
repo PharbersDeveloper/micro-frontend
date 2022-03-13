@@ -18,7 +18,7 @@ export async function phAnalyzeDashboardsEventHandler(e, route) {
 		case "createDashboard":
 			// eslint-disable-next-line no-case-declarations
 			const body = {
-				table: "slide",
+				table: "dashboard",
 				item: params.dashboard
 			}
 
@@ -26,7 +26,7 @@ export async function phAnalyzeDashboardsEventHandler(e, route) {
 			const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
 			// eslint-disable-next-line no-case-declarations
 			let headers = {
-				Authorization: route.cookies.read("account_id"),
+				Authorization: route.cookies.read("access_token"),
 				"Content-Type": "application/vnd.api+json",
 				Accept: "application/vnd.api+json"
 			}
@@ -45,7 +45,7 @@ export async function phAnalyzeDashboardsEventHandler(e, route) {
 					"&projectId=" +
 					params.projectId +
 					"&dashboardId=" +
-					params.dashboardId
+					params.dashboard.dashboardId
 				route.router.transitionTo("shell", next)
 			} else {
 				alert("error for create dashboard")

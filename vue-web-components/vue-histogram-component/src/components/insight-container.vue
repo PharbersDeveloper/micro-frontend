@@ -116,13 +116,13 @@ export default {
             default: function() {
                 return null
             }
-        }
+        },
+        xProperty: String,
+        yProperty: String,
+        policyName: String
     },
     data: () => {
         return {
-            xProperty: "year",
-            yProperty: "sales",
-            policyName: "bar",
             policyCandidate: ["bar", "pie"],
             draggingItem: null,
             needRefresh: 0,

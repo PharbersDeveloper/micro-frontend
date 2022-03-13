@@ -17,6 +17,9 @@
             <insightComponent v-if="isMounted"
                               class="insight-content"
                               :policy="currentPolicy"
+                              :policy-name="activeContent.policyName"
+                              :x-property="activeContent.x"
+                              :y-property="activeContent.y"
                               v-on:changePolicy="changePolicy"
                               :needTitle="false" />
         </div>
@@ -81,7 +84,8 @@ export default {
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             isMounted: 0,
             contentModel: null,
-            currentPolicy: null
+            currentPolicy: null,
+            activeContent: null
         }
     },
     mounted () {
@@ -97,9 +101,10 @@ export default {
         },
         createCurrentContent() {
             this.contentModel = new PhSlideModel(this.allData.slide.idx, this.allData.slide)
+            this.activeContent = this.contentModel.content[this.allData.contentId]
         },
         createPolicyWithinContent() {
-            const content = this.contentModel.content[this.allData.contentId]
+            const content = this.activeContent
             // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
             // 不会写就多写cv次这个函数吧
             if (content.policyName === "bar") {
