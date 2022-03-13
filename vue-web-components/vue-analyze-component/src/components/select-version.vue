@@ -50,11 +50,11 @@ export default {
     computed: {},
     mounted() {
         // this.versionArr = ["chemdata", "cn_corp_ref", "cn_mol_lkp", "cn_mol_ref", "cn_prod_ref", "cpa_pha_mapping", "ims_chpa", "market_define", "mkt_mapping", "pchc_city_tier", "pchc_universe", "prod_mapping", "product_stand", "province_city_mapping", "qcc_hospital", "raw_data", "rawdata_all", "shanghai_packid_moleinfo", "tianjin_packid_moleinfo", "universe_base", "universe_other", "universes", "yixue_hospital"]
-		const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const url = "https://apiv2.pharbers.com/phgetgluetable"
         const accessToken = this.getCookie("access_token")
         let body = {
-			"glue_database_name": this.getCookie("company_id")
-		}
+            "glue_database_name": this.getCookie("company_id")
+        }
         let options = {
             method: "POST",
             headers: {
@@ -65,10 +65,10 @@ export default {
             body: JSON.stringify(body)
         }
         let results = fetch(url, options).then(res => res.json())
-		this.versionArr = results.map((obj,index) => {
-			return obj["attributes"]["name"];
-		})
-		this.versionArrShow = this.versionArr
+        this.versionArr = results.map((obj,index) => {
+            return obj["attributes"]["name"];
+        })
+        this.versionArrShow = this.versionArr
     },
     watch: {},
     methods: {
