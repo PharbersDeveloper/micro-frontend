@@ -77,7 +77,11 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						schema: targetDataset.schema,
 						date: new Date().getTime(),
 						version: targetDataset.version,
-						name: targetDataset.name
+						name: targetDataset.name,
+						cat: targetDataset.cat,
+						path: targetDataset.path,
+						format: targetDataset.format,
+						prop: targetDataset.prop
 					}
 				}
 
