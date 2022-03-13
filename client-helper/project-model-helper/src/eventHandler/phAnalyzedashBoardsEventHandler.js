@@ -9,17 +9,47 @@ export async function phAnalyzeDashboardsEventHandler(e, route) {
 					"slidespage?projectName=" +
 					params.projectName +
 					"&projectId=" +
-					params.projectId
+					params.projectId +
+					"&dashboardId=" +
+					params.dashboardId
 			}
 			route.router.transitionTo("shell", uri)
 			break
 		case "createDashboard":
-			uri =
-				"slidespage?projectName=" +
-				params.projectName +
-				"&projectId=" +
-				params.projectId
-			route.router.transitionTo("shell", uri)
+			// eslint-disable-next-line no-case-declarations
+			const body = {
+				table: "slide",
+				item: params.dashboard
+			}
+
+			// eslint-disable-next-line no-case-declarations
+			const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+			// eslint-disable-next-line no-case-declarations
+			let headers = {
+				Authorization: route.cookies.read("account_id"),
+				"Content-Type": "application/vnd.api+json",
+				Accept: "application/vnd.api+json"
+			}
+			// eslint-disable-next-line no-case-declarations
+			let options = {
+				method: "POST",
+				headers: headers,
+				body: JSON.stringify(body)
+			}
+			// eslint-disable-next-line no-case-declarations
+			const result = await fetch(url, options) //.then((res) => res.json())
+			if (result.status === 200) {
+				const next =
+					"slidespage?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&dashboardId=" +
+					params.dashboardId
+				route.router.transitionTo("shell", next)
+			} else {
+				alert("error for create dashboard")
+			}
 			break
 		default:
 			console.log("other click event!")

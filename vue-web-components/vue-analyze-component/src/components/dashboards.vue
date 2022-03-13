@@ -148,7 +148,7 @@
 
             <div class="dlg-container">
                 <span>数据看板名称：</span>
-                <input type="text" class="db_name">
+                <input type="text" class="db_name" v-model="inputDashboardName">
             </div>
 
             <span slot="footer" class="dialog-footer">
@@ -210,7 +210,9 @@ export default {
             dashboardCheckedIds: [], //选中项id
             dashboardcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+
+            inputDashboardName: ""
         }
     },
     props: {
@@ -276,7 +278,46 @@ export default {
         }
     },
     methods: {
-        on_clickCreateConfirm(data) {
+        guid(len, radix) {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+            let uuid = [], i;
+            radix = radix || chars.length;
+
+            if (len) {
+                // Compact form
+                for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+            } else {
+                // rfc4122, version 4 form
+                let r;
+
+                // rfc4122 requires these characters
+                uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+                uuid[14] = '4';
+
+                // Fill in random data.  At i==19 set the high bits of clock sequence as
+                // per rfc4122, sec. 4.1.5
+                for (i = 0; i < 36; i++) {
+                    if (!uuid[i]) {
+                        r = 0 | Math.random()*16;
+                        uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                    }
+                }
+            }
+
+            return uuid.join('');
+        },
+
+        on_clickCreateConfirm() {
+            const data = {
+                projectId: this.allData.projectId,
+                dashboardId: this.guid(8, 16),
+                label: [],
+                title: this.inputDashboardName,
+                description: this.inputDashboardName,
+                updating: new Date().getTime()
+            }
+            data["id"] = data.projectId + "_" + data.dashboardId
+
             const event = new Event("event")
             event.args = {
                 callback: "createDashboard",
@@ -336,7 +377,7 @@ export default {
                     name: "clickDashboardName",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    dashboard: data
+                    dashboardId: data.dashboardId
                 }
             }
             this.$emit('event', event)

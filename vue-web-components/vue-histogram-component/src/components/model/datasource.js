@@ -29,7 +29,7 @@ export default class PhDataSource {
         let body = {
             "query": query,
             "schema": schema,
-            "projectId": "12345"
+            "projectId": this.projectId
         }
         let options = {
             method: "POST",
