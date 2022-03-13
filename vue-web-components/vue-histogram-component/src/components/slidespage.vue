@@ -196,7 +196,7 @@ export default {
                     name: "changeHistogram",
                     projectId: this.allData.projectId,
                     projectName: this.allData.projectName,
-                    dashboardId: this.dashboardId,
+                    dashboardId: this.allData.dashboard.dashboardId,
                     slideId: e.param.slideId,
                     contentId: e.param.contentIdx
                 }
