@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeExcelColumnCleanRouteModel(route, parseParams) {
-	route.browserEventsService.registerListener("dataset-lst")
+	// route.browserEventsService.registerListener("dataset-lst")
 	return {
 		projectName: parseParams.query.projectName,
 		tmpname: parseParams.query.tmpname,

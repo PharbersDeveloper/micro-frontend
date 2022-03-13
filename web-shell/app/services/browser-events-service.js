@@ -11,9 +11,10 @@ export default class BrowserEventsServiceService extends Service {
 	@service router
 
 	// 注册浏览器监听事件
-	registerListener(route) {
+	registerBroListener(route) {
 		let that = this
 		$(function () {
+			console.log("333")
 			that.param = window.location.href.split("?")[1]
 			that.routeName = `${route}?`
 			//回退
@@ -25,15 +26,18 @@ export default class BrowserEventsServiceService extends Service {
 			window.onbeforeunload = function (e) {
 				return false
 			}
+				
 			window.onload = function() {
+				debugger
+				console.log("22222")
 				// 刷新回到指定页面
 				that.router.transitionTo(
 					"shell",
 					`${that.routeName}${that.param}`
 				)
 			}
-				
 		})
+
 	}
 
 	@action
@@ -49,7 +53,7 @@ export default class BrowserEventsServiceService extends Service {
 	}
 
 	//清除浏览器监听事件
-	clearListener() {
+	clearBroListener() {
 		window.onbeforeunload = undefined
 		window.removeEventListener("popstate", this.popstateFun)
 	}

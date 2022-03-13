@@ -17,8 +17,8 @@ export default class ShellRoute extends Route {
 
 
 	beforeModel(transition){
-		this.browserEventsService.clearListener()
-		this.browserEventsService.registerListener()
+		this.browserEventsService.clearBroListener()
+		this.browserEventsService.registerBroListener("dataset-lst")
 		if (!this.oauthService.judgeAuth()) {
 			alert("登录过期，请重新登录")
 			this.oauthService.obtainAuth()
