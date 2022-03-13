@@ -532,8 +532,8 @@ export default {
             }
             this.showRunJson = true
         },
-		handlerJSON(str) {
-			if (typeof str == 'string') {
+        handlerJSON(str) {
+            if (typeof str == 'string') {
                 try {
                     let jsonValue = JSON.parse(str);
                     return jsonValue;
@@ -541,7 +541,7 @@ export default {
                     return str
                 }
             }
-		},
+        },
         closeRunDagDialog() {
             this.showRunJson = false
         },
