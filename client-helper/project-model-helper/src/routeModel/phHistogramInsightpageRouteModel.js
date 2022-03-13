@@ -45,6 +45,7 @@ export async function phHistogramInsightpageRouteModel(route, parseParams) {
 	return {
 		projectName: projectName,
 		projectId: projectId,
+		dashboardId: dashboardId,
 		slide: slide,
 		contentId: contentId,
 		_isVue: true
