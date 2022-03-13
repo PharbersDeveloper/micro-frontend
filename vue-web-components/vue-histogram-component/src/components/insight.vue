@@ -1,6 +1,6 @@
 <template>
     <div class="viewport" ref="viewport" :style="viewportStyle()">
-        <div ref="chart" class="chart" ></div>
+        <div ref="chart" class="chart" @dblclick.stop="$emit('selected')" />
     </div>
 </template>
 <script>
@@ -51,6 +51,8 @@ export default {
         this.height = this.initHeight
         if (this.policy) {
             this.resizeHandler(this.width, this.height)
+        }
+        if (!this.policy.isReady()) {
             this.schemaIsReady++
         }
     },
@@ -108,10 +110,25 @@ export default {
                 this.render()
             }
         },
-        async policy(n, o) {
-            this.policy.resetPolicyConstraints({ width: this.width, height: this.height })
-            await this.policy.refreshSchema(this)
-            this.schemaIsReady++
+        policy(n, o) {
+            if (n) {
+                this.resizeHandler(this.width, this.height)
+                this.schemaIsReady++
+            }
+        },
+        initWidth(n, o) {
+            if (n !== o) {
+                this.width = n
+                this.resizeHandler(this.width, this.height)
+                this.needRefresh++
+            }
+        },
+        initHeight(n, o) {
+            if (n !== o) {
+                this.height = n
+                this.resizeHandler(this.width, this.height)
+                this.needRefresh++
+            }
         }
     }
 }

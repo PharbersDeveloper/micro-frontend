@@ -27,7 +27,7 @@
                     :isEditableValue="edit"
                     :content-model="activeModel"
                     :project-id="allData.projectId"
-                    @changeHistogram="changeHistogram" />
+                    @selected="insightSelected" />
             </div>
             <div class="page_footer">
                 <div v-for="(slide, index) in slideArr"
@@ -124,6 +124,10 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 import slideComponent from "./slide"
 import "element-ui/lib/theme-chalk/index.css"
 import PhSlideModel from './slide-model/slide-model'
+import BarPolicy from "../components/render-policy/bar-policy"
+import PiePolicy from "../components/render-policy/pie-policy"
+import PhHistogramDatasource from "../components/model/datasource"
+import PhHistogramSchema from "../components/model/schema"
 
 export default {
     props: {
@@ -177,32 +181,44 @@ export default {
             const tmp = []
             for (let index = 0; index < this.allData.slides.length; ++index) {
                 const item = new PhSlideModel(index, this.allData.slides[index])
+                this.createAllPolicyByModel(item)
                 tmp.push(item)
             }
             this.slideArr = tmp.sort((l, r) => l.idx - r.idx)
             this.activeModel = this.slideArr[0]
         },
-        changeHistogram(data) {
-            // TODO:
-            // this.$emit('event', data)
+        insightSelected(e) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "changeHistogram",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboard.dashboardId,
+                    slideId: e.param.slideId,
+                    contentId: e.param.contentIdx
+                }
+            }
+            this.$emit('event', event)
         },
         on_clickNewChartNameConfirm(data) {
             // TODO: 添加一个新图表
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "clickNewChartName",
-            //     element: this,
-            //     param: {
-            //         name: "clickNewChartName",
-            //         projectName: this.allData.projectName,
-            //         projectId: this.allData.projectId,
-            //         dashboardId: this.allData.projectId,
-            //         slideId: this.allData.projectId,
-            //         contentId: this.allData.projectId
-            //     }
-            // }
-            // this.$emit('event', event)
-            // this.dialogNewChartNameVisible = false
+            const defaultPolicyName = "bar"
+            const one_content = {
+                tp:"histogram",
+                index: Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1,
+                histogramName: "alfredtest",
+                policyName: defaultPolicyName,
+                datasourceClass:"default",
+                schemaClass:"default",
+                conditions: {},
+                position: [0,0,1,1]
+            }
+            one_content["policy"] = this.createPolicyWithinContent(one_content)
+            this.activeModel.content.push(one_content)
+            this.dialogNewChartNameVisible = false
         },
         on_clickNewChartConfirm() {
             this.dialogNewChartVisible = false
@@ -210,9 +226,10 @@ export default {
         },
         async addSlide() {
             const data = {
-                content: "{}",
+                content: "[]",
                 pdId: this.allData.projectId + "_" + this.allData.dashboard.dashboardId,
                 title: "new title",
+                datasetName: "phmax.data_wide",
                 idx: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1),
                 slideId: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1)
             }
@@ -220,6 +237,43 @@ export default {
             const item = new PhSlideModel(data.pdId + "_" + data.slideId, data)
             this.slideArr.push(item)
             await item.save(this)
+            this.activeModel = item
+            this.edit = true
+        },
+        createAllPolicyByModel(model) {
+            let result = []
+            // TODO: maybe has some bug
+            // for (const item in model.content) {
+            for (let index = 0; index < model.content.length; ++index) {
+                const item = model.content[index]
+                item["policy"] = this.createPolicyWithinContent(item)
+                // result.push(this.createPolicyWithinContent(model.content[item]))
+            }
+            return result
+        },
+        createPolicyWithinContent(content) {
+            // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
+            // 不会写就多写cv次这个函数吧
+            if (content.policyName === "bar") {
+                return new BarPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "pie") {
+                return new PiePolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
         },
         clickSlideFooterTab(data) {
             this.edit = false
@@ -259,7 +313,8 @@ export default {
         async saveSlideContent() {
             for (let idx = 0; idx < this.slideArr.length; ++idx) {
                 if (this.slideArr[idx]) {
-                    this.slideArr[idx].queryContent = this.slideArr[idx].content
+                    this.slideArr[idx].queryContent = [...this.slideArr[idx].content]
+                    // delete this.slideArr[idx].queryContent.map(x => {x["policy"] = null})
                     await this.slideArr[idx].save(this)
                 }
             }

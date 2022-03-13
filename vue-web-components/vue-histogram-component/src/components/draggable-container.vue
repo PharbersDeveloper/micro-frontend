@@ -1,21 +1,20 @@
 <template>
-<!--    <Histogram v-if="isMounted" class="histogram-item" :editable="editable"-->
-<!--               v-on:resizeStop="resizeStop" :init-left="initLeftPx" :init-top="initTopPx"-->
-<!--               :init-width="initWidthPx" :init-height="initHeightPx"-->
-<!--               :policy="policy" />-->
-    <Histogram v-if="isMounted" class="histogram-item" :editable="editable"
-               v-on:resizeStop="resizeStop" :left="initLeftPx" :top="initTopPx"
-               :width="initWidthPx" :height="initHeightPx"
-               :policy="policy" />
+    <VueDragResize v-if="checkEditableShowing()" @onclick="onActive" :isActive="active"
+                   :parentLimitation="true"
+                   :h="rect.height" :w="rect.width"
+                   :x="rect.left" :y="rect.top"
+                   @resizestop="resizeStop" @dragstop="resizeStop"
+                   v-on:resizing="resize" v-on:dragging="resize">
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  ref="histogram" />
+    </VueDragResize>
+    <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  @selected="insightSelected" ref="histogram" />
+    </div>
 </template>
 
 <script>
-import Histogram from "./draggable-histogram"
-import BarPolicy from "../components/render-policy/bar-policy"
-import PiePolicy from "../components/render-policy/pie-policy"
-import PhHistogramDatasource from "../components/model/datasource"
-import PhHistogramSchema from "../components/model/schema"
 import Insight from "./insight"
+import VueDragResize from './drag-resize'
 
 export default {
     props: {
@@ -41,11 +40,9 @@ export default {
             type: Number,
             default: 1
         },
-        policy: {
-            type: Object,
-            default: function () {
-                return null
-            }
+        editable: {
+            type: Boolean,
+            default: true
         },
         editable: {
             type: Boolean,
@@ -56,22 +53,21 @@ export default {
         return {
             isMounted: 0,
             name: "draggable-container",
-            initTopPx: 0,
-            initLeftPx: 0,
-            initWidthPx: 300,
-            initHeightPx: 300
+            rect: null,
+            timer: null,
+            stopTimer: null
         }
     },
     components: {
         Insight,
-        Histogram
+        VueDragResize
     },
     mounted () {
         this.isMounted++
-        this.resetPxRect()
+        this.rect = this.computedRect
     },
     updated() {
-        this.resetPxRect()
+        this.rect = this.computedRect
     },
     methods: {
         adjustLeft(l) {
@@ -106,11 +102,11 @@ export default {
             const bottom = margin + (b + 1) * (stepH + margin)
             return bottom - top
         },
-        resizeStop(ele) {
-            const top = ele.tempRect.top
-            const left = ele.tempRect.left
-            const width = ele.tempRect.width
-            const height = ele.tempRect.height
+        resizeStop() {
+            const top = this.rect.top
+            const left = this.rect.left
+            const width = this.rect.width
+            const height = this.rect.height
 
             const w = this.$parent.$refs.container.offsetWidth
             const h = this.$parent.$refs.container.offsetHeight
@@ -122,26 +118,30 @@ export default {
 
             if (this.adjustRange(top, this.adjustTop(this.top))) {
                 this.top = Math.floor(top / stepH)
-                // ele.top = this.adjustTop(this.top)
-                this.initTopPx = this.adjustTop(this.top)
+                this.$nextTick(() => {
+                    this.rect.top = this.adjustTop(this.top)
+                })
             }
 
             else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
                 this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                // ele.height = this.adjustHeight(this.top, this.bottom)
-                this.initHeightPx = this.adjustHeight(this.top, this.bottom)
+                this.$nextTick(() => {
+                    this.rect.height = this.adjustHeight(this.top, this.bottom)
+                })
             }
 
             else if (this.adjustRange(left, this.adjustLeft(this.left))) {
                 this.left = Math.floor(left / stepW)
-                // ele.left = this.adjustLeft(this.left)
-                this.initLeftPx = this.adjustLeft(this.left)
+                this.$nextTick(() => {
+                    this.rect.left = this.adjustLeft(this.left)
+                })
             }
 
             else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
                 this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                // ele.width = this.adjustWidth(this.left, this.right)
-                this.initWidthPx = this.adjustWidth(this.left, this.right)
+                this.$nextTick(() => {
+                    this.rect.width = this.adjustWidth(this.left, this.right)
+                })
             }
 
             this.positionChanged([this.left, this.top, this.right, this.bottom])
@@ -152,20 +152,62 @@ export default {
         positionChanged(param) {
             this.activeContent.position = param
         },
-        resetPxRect() {
-            this.initTopPx = this.adjustTop(this.top)
-            this.initLeftPx = this.adjustLeft(this.left)
-            this.initWidthPx = this.adjustWidth(this.left, this.right)
-            this.initHeightPx = this.adjustHeight(this.top, this.bottom)
+        resize(newRect) {
+            this.rect.width = newRect.width
+            this.rect.height = newRect.height
+            this.rect.top = newRect.top
+            this.rect.left = newRect.left
+
+            if (this.timer)
+                return
+
+            const that = this
+            this.timer = setTimeout(() => {
+                that.$refs.histogram.resizeHandler(that.rect.width, that.rect.height)
+                that.timer = null
+            }, 100)
+        },
+        onActive() {
+            this.active = !this.active
+        },
+        checkEditableShowing() {
+            return this.isMounted > 0 && this.editable
+        },
+        checkViewableShowing() {
+            return this.isMounted > 0 && !this.editable
+        },
+        resetInsightPosition() {
+            return "left: " + this.rect.left + "px; top: " + this.rect.top + "px; width: " + this.rect.width + "px; height: " + this.rect.height + "px;"
+        },
+        insightSelected() {
+            const event = new Event("event")
+            event.param = {
+                contentIdx: this.activeContent.index
+            }
+            this.$emit("selected", event)
         }
     },
     watch: {
 
+    },
+    computed: {
+        computedRect: function() {
+            return {
+                top: this.adjustTop(this.top),
+                left: this.adjustLeft(this.left),
+                width: this.adjustWidth(this.left, this.right),
+                height: this.adjustHeight(this.top, this.bottom)
+            }
+        }
     }
 }
 </script>
 
 <style scoped lang="scss">
+    .view {
+        position: absolute;
+    }
+
     .page {
         display: flex;
         flex-direction: column;

@@ -20,19 +20,17 @@
                     </div>
                 </div>
             </div>
-            <div v-if="isMounted" class="high-container">
-                <div class="histogram-container" v-if="contentModel" :style="draggableLayout()">
+            <div v-if="isMounted" class="high-container" >
+                <div class="histogram-container" v-if="contentModel" :style="draggableLayout()" >
                     <Histogram v-for="(item, index) in contentModel.content"
                         :key="index"
                         :editable="isEditable()"
-                        :ref="item.index"
                         :left="item.position[0]"
                         :top="item.position[1]"
                         :right="item.position[2]"
                         :bottom="item.position[3]"
                         :active-content="item"
-                        :policy="createPolicyWithinContent(item)"
-                        @dblclick.native="changeHistogram(item)" />
+                        @selected="insightSelected"/>
                 </div>
             </div>
         </div>
@@ -43,10 +41,6 @@ import ElButton from "element-ui/packages/button"
 import ElTabs from "element-ui/packages/tabs"
 import ElTabPane from "element-ui/packages/tab-pane"
 import Histogram from "./draggable-container"
-import BarPolicy from "../components/render-policy/bar-policy"
-import PiePolicy from "../components/render-policy/pie-policy"
-import PhHistogramDatasource from "../components/model/datasource"
-import PhHistogramSchema from "../components/model/schema"
 import PhSlideModel from "../components/slide-model/slide-model"
 import "element-ui/lib/theme-chalk/index.css"
 
@@ -93,15 +87,13 @@ export default {
     },
     mounted () {
         this.isMounted++
-        if (this.contentModel) {
-            this.contentModel.querySlideContent()
-        }
     },
     updated() {
-        this.needRefresh++
+
     },
     methods: {
         changeHistogram(data) {
+            debugger
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -132,30 +124,6 @@ export default {
             const h = this.$refs.container.offsetHeight
             return "width: " + w + "px; height: " + h + "px;"
         },
-        createPolicyWithinContent(content) {
-            // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
-            // 不会写就多写cv次这个函数吧
-            if (content.policyName === "bar") {
-                return new BarPolicy(content.index,
-                    new PhHistogramDatasource(content.index,
-                        this.projectId,
-                        content.datasetName),
-                    new PhHistogramSchema(content.index,
-                        this.projectId,
-                        content.datasetName),
-                    { xProperty: content.x, yProperty: content.y })
-            }
-            else if (content.policyName === "pie") {
-                return new PiePolicy(content.index,
-                    new PhHistogramDatasource(content.index,
-                        this.projectId,
-                        content.datasetName),
-                    new PhHistogramSchema(content.index,
-                        this.projectId,
-                        content.datasetName),
-                    { xProperty: content.x, yProperty: content.y })
-            }
-        },
         saveContentPosition() {
             const keys = Object.keys(this.contentModel.content)
             for (let idx = 0; idx < keys.length; ++idx) {
@@ -171,10 +139,17 @@ export default {
                 return this.isEditableValue
             }
             return this.activeName === "second"
+        },
+        insightSelected(e) {
+            e.param["slideId"] = this.contentModel.slideId
+            e.param["pdId"] = this.contentModel.pdId
+            this.$emit("selected", e)
         }
     },
     watch: {
-
+        contentModel(n, o) {
+            this.needRefresh++
+        }
     }
 }
 </script>

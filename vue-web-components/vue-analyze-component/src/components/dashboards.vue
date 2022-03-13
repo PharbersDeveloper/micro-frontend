@@ -87,7 +87,7 @@
                                 <span class="script_icon">
                                     <img :src="selectDashboardsetIcon(dashboard.cat)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickDashboardName(dashboard)" :title="dashboard.name">{{dashboard.name}}</p>
+                                <p class="data_name" @click.stop="clickDashboardName(dashboard)" :title="dashboard.title">{{dashboard.title}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dashboard.label" :key="inx">
                                         <span v-if="dashboard.label !== ''">
@@ -268,7 +268,7 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                this.searchData = this.allData.dashboards.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                this.searchData = this.allData.dashboards.filter(item => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             } else {
                 this.searchData = this.allData.dashboards
             }
@@ -289,30 +289,6 @@ export default {
                 }
             }
             this.$emit('event', event)
-        },
-        // max1.0
-        fitMaxEvent(data) {
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
-            data.args.param.maxcat = this.maxcat
-            data.args.param.dashboardArray = this.allData.dashboards
-            let creatDS = true
-            this.allData.dashboards.forEach(item => {
-                if(item.name === data.args.param.dsName) {
-                    creatDS = false
-                    alert("数据集已存在！")
-                }
-            })
-            if(creatDS) {
-                this.$emit('event', data)
-                this.clickMax = false
-                this.clickMaxOutput = false
-            }
-        },
-        // 关闭max1.0弹框
-        closeDialog() {
-            this.clickMaxOutput = false
-            this.clickMax = false
         },
         //增加tag
         addTagsEvent(data) {
@@ -337,7 +313,7 @@ export default {
             this.dashboardCheckedIds = []
             this.dashboardcheckedNames = []
             this.dashboardCheckedIds.push(dashboard.id)
-            this.dashboardcheckedNames.push(dashboard.name)
+            this.dashboardcheckedNames.push(dashboard.title)
         },
         //点击list多选框
         checkedOneDashboard(dashboard) {
@@ -347,7 +323,7 @@ export default {
                 this.dashboardcheckedNames.splice(idIndex, 1)
             } else {
                 this.dashboardCheckedIds.push(dashboard.id)
-                this.dashboardcheckedNames.push(dashboard.name)
+                this.dashboardcheckedNames.push(dashboard.title)
             }
         },
         //点击 name
@@ -377,7 +353,7 @@ export default {
             if(this.isCheckedAllDashboard) {
                 this.allData.dashboards.forEach(item => {
                     this.dashboardCheckedIds.push(item.id)
-                    this.dashboardcheckedNames.push(item.name)
+                    this.dashboardcheckedNames.push(item.title)
                 })
             }
         },
@@ -396,7 +372,7 @@ export default {
                 this.ascending = false
                 this.searchData.sort(
                     function compareFunction(param1, param2) {
-                        return param1.name.localeCompare(param2.name);
+                        return param1.title.localeCompare(param2.title);
                     }
                 )
             }else if (val == 'descending') {
