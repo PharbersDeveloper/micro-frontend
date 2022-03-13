@@ -2,7 +2,7 @@
 // import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
 
 export default class PhDataSource {
-    constructor(id, projectId, datasetName="phmax.data_wide", adapter=null) {
+    constructor(id, projectId, datasetName, adapter=null) {
         this.id = id
         this.sort = {}
         this.filter = {}

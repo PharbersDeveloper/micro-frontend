@@ -106,7 +106,7 @@
             width="600px">
             <div class="create-chart-container">
                 <span>数据源：</span>
-                <input type="text" class="chartName">
+                <input type="text" class="chartName" v-model="inputDatasetName">
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogNewChartNameVisible = false">取消</el-button>
@@ -158,7 +158,8 @@ export default {
             dialogNewChartVisible: false,
             dialogNewChartNameVisible: false,
             slideArr: [],
-            activeModel: null
+            activeModel: null,
+            inputDatasetName: ""
         }
     },
     components: {
@@ -204,20 +205,24 @@ export default {
             this.$emit('event', event)
         },
         on_clickNewChartNameConfirm(data) {
-            // TODO: 添加一个新图表
-            const defaultPolicyName = "bar"
-            const one_content = {
-                tp:"histogram",
-                index: Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1,
-                histogramName: "alfredtest",
-                policyName: defaultPolicyName,
-                datasourceClass:"default",
-                schemaClass:"default",
-                conditions: {},
-                position: [0,0,1,1]
+            if (this.inputDatasetName.length > 0) {
+                const defaultPolicyName = "bar"
+                const one_content = {
+                    tp:"histogram",
+                    index: Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1,
+                    histogramName: "alfredtest",
+                    policyName: defaultPolicyName,
+                    datasourceClass:"default",
+                    schemaClass:"default",
+                    conditions: {},
+                    position: [0,0,1,1],
+                    datasetName: this.inputDatasetName,
+                    x: "",
+                    y: ""
+                }
+                one_content["policy"] = this.createPolicyWithinContent(one_content)
+                this.activeModel.content.push(one_content)
             }
-            one_content["policy"] = this.createPolicyWithinContent(one_content)
-            this.activeModel.content.push(one_content)
             this.dialogNewChartNameVisible = false
         },
         on_clickNewChartConfirm() {
@@ -257,20 +262,20 @@ export default {
             if (content.policyName === "bar") {
                 return new BarPolicy(content.index,
                     new PhHistogramDatasource(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     new PhHistogramSchema(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
             else if (content.policyName === "pie") {
                 return new PiePolicy(content.index,
                     new PhHistogramDatasource(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     new PhHistogramSchema(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }

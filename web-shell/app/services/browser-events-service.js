@@ -13,32 +13,26 @@ export default class BrowserEventsServiceService extends Service {
 	// 注册浏览器监听事件
 	registerListener(route) {
 		let that = this
-		let options = {
-			domain: ".pharbers.com",
-			path: "/"
-		}
 		$(function () {
 			that.param = window.location.href.split("?")[1]
 			that.routeName = `${route}?`
 			//回退
 			if (window.history && window.history.pushState) {
 				history.pushState(null, null, document.URL)
-
 				window.addEventListener("popstate", that.popstateFun, false)
 			}
 			//关闭&刷新（页面有变动或距上次刷新间隔超过5s时生效）
 			window.onbeforeunload = function (e) {
-				that.cookies.write("load", "load", options)
 				return false
 			}
-			if (that.cookies.read("load") === "load") {
-				that.cookies.clear("load", options)
+			window.onload = function() {
 				// 刷新回到指定页面
 				that.router.transitionTo(
 					"shell",
 					`${that.routeName}${that.param}`
 				)
 			}
+				
 		})
 	}
 
@@ -53,6 +47,7 @@ export default class BrowserEventsServiceService extends Service {
 			history.pushState(null, null, document.URL)
 		}
 	}
+
 	//清除浏览器监听事件
 	clearListener() {
 		window.onbeforeunload = undefined
