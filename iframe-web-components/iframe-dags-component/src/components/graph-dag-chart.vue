@@ -521,8 +521,8 @@ export default {
                 datasetsArr.push({
                     "name": item.attributes.name,
                     "version": [],
-                    "cat": item.status,
-                    "prop": item.attributes.prop !== "" ? JSON.parse(item.attributes.prop) : ""
+                    "cat": item["attributes"]["runtime"],
+                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
                 })
             })
             this.textConf = {
@@ -532,6 +532,16 @@ export default {
             }
             this.showRunJson = true
         },
+		handlerJSON(str) {
+			if (typeof str == 'string') {
+                try {
+                    let jsonValue = JSON.parse(str);
+                    return jsonValue;
+                } catch(e) {
+                    return str
+                }
+            }
+		},
         closeRunDagDialog() {
             this.showRunJson = false
         },
