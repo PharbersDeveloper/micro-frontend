@@ -168,20 +168,20 @@ export default {
             this.$emit('event', event)
         },
         transToDataset() {
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "linkToPage",
-            //     element: this,
-            //     param: {
-            //         name: "slidespage",
-            //         projectId: this.allData.projectId,
-            //         projectName: this.allData.projectName,
-            //         dashboardId: this.allData.dashboardId,
-            //         slideId: this.allData.slide.slideId,
-            //         contentId: this.allData.contentId
-            //     }
-            // }
-            // this.$emit('event', event)
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "dataset-lst",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboardId,
+                    slideId: this.allData.slide.slideId,
+                    contentId: this.allData.contentId
+                }
+            }
+            this.$emit('event', event)
         },
         async saveSlideContent() {
             this.contentModel.queryContent = this.contentModel.content

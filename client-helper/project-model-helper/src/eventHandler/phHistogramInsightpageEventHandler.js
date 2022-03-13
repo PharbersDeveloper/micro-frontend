@@ -12,15 +12,14 @@ export async function phHistogramInsightpageEventHandler(e, route) {
 					params.projectId +
 					"&dashboardId=" +
 					params.dashboardId
+			} else if (params.name === "dataset-lst") {
+				uri =
+					"dataset-lst?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId
 			}
 			route.router.transitionTo("shell", uri)
 			break
-		case "clickNewChartName":
-			uri =
-				"insightpage?projectName=" +
-				params.projectName +
-				"&projectId=" +
-				params.projectId
-			route.router.transitionTo("shell", uri)
 	}
 }
