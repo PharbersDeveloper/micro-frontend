@@ -3,11 +3,11 @@ export async function phHistogramInsightpageRouteModel(route, parseParams) {
 		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
 	route.store.unloadAll("dashboard")
 	route.store.unloadAll("slide")
-	const projectId = parseParams.projectId || "1"
-	const projectName = parseParams.projectName || "alfred test"
-	const dashboardId = parseParams.dashboardId || "1"
-	const slideId = parseParams.slideId || "1"
-	const contentId = parseParams.contentId || "0"
+	const projectId = parseParams.query.projectId
+	const projectName = parseParams.query.projectName
+	const dashboardId = parseParams.query.dashboardId
+	const slideId = parseParams.query.slideId
+	const contentId = parseParams.query.contentId
 
 	const url = "https://apiv2.pharbers.com/phdydatasource/query"
 	const accessToken = route.cookies.read("access_token") || debugToken

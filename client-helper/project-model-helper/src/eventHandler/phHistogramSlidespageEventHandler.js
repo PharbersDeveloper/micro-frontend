@@ -9,7 +9,13 @@ export async function phHistogramSlidespageEventHandler(e, route) {
 					"insightpage?projectName=" +
 					params.projectName +
 					"&projectId=" +
-					params.projectId
+					params.projectId +
+					"&dashboardId=" +
+					params.dashboardId +
+					"&slideId=" +
+					params.slideId +
+					"&contentId=" +
+					params.contentId
 			}
 			route.router.transitionTo("shell", uri)
 			break
