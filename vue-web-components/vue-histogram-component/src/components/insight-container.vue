@@ -56,7 +56,8 @@
                 <div class="axis-container">
                     <div class="axis">
                         <span class="axis-title">图表类型</span>
-                        <select v-model="policyName" style="width:200px;height: 30px;margin-top: 5px;margin-bottom: 5px;margin-left: 10px">
+                        <select v-model="tmpPolicyName"
+                                style="width:200px;height: 30px;margin-top: 5px;margin-bottom: 5px;margin-left: 10px">
                             <option v-for="item in policyCandidate" v-bind:value="item" v-text="item" ></option>
                         </select>
                     </div>
@@ -127,10 +128,12 @@ export default {
             draggingItem: null,
             needRefresh: 0,
             schemaRefresh: 0,
+            needRefreshData: 0,
             lst: [],
             activeName: "first",
             activeCandis: [],
-            filterString: "alfredtest"
+            filterString: "alfredtest",
+            tmpPolicyName: ""
         }
     },
     components: {
@@ -143,6 +146,9 @@ export default {
 
         this.needRefresh++
         this.schemaRefresh++
+    },
+    updated() {
+        this.tmpPolicyName = this.policyName
     },
     methods: {
         getCookie(name) {
@@ -161,9 +167,6 @@ export default {
         },
         refresh() {
             if (this.policy) {
-                this.xProperty = this.policy.xProperty
-                this.yProperty = this.policy.yProperty
-                // this.$refs.histogram.resetPolicy(this.policy)
                 this.$refs.histogram.needRefresh++
             }
         },
@@ -174,11 +177,21 @@ export default {
             this.clearDraggingStatus()
         },
         dropContentX(_) {
-            this.xProperty = this.draggingItem
+            // this.xProperty = this.draggingItem
+            const event = new Event("x-property")
+            event.args = {
+                "xProperty": this.draggingItem
+            }
+            this.$emit("x-property", event)
             this.clearDraggingStatus()
         },
         dropContentY(_) {
-            this.yProperty = this.draggingItem
+            // this.yProperty = this.draggingItem
+            const event = new Event("y-property")
+            event.args = {
+                "yProperty": this.draggingItem
+            }
+            this.$emit("y-property", event)
             this.clearDraggingStatus()
         },
         clearDraggingStatus() {
@@ -191,31 +204,34 @@ export default {
         }
     },
     watch: {
-        xProperty(n, o) {
-            if (n !== o) {
-                this.policy.xProperty = n
-                this.schemaRefresh++
-            }
-        },
-        yProperty(n, o) {
-            if (n !== o) {
-                this.policy.yProperty = n
-                this.schemaRefresh++
-            }
-        },
-        policyName(n, o) {
+        // xProperty(n, o) {
+        //     if (n !== o) {
+        //         // this.policy.xProperty = n
+        //         this.needRefresh++
+        //     }
+        // },
+        // yProperty(n, o) {
+        //     if (n !== o) {
+        //         // this.policy.yProperty = n
+        //         this.needRefresh++
+        //     }
+        // },
+        tmpPolicyName(n, o) {
             if (n !== o) {
                 const event = new Event("event")
                 event.args = {
-                    name: n,
-                    x: this.xProperty,
-                    y: this.yProperty
+                    name: n
+                    // x: this.xProperty,
+                    // y: this.yProperty
                 }
                 this.$emit("changePolicy", event)
             }
         },
         needRefresh(n, o) {
             this.refresh()
+        },
+        needRefreshData(n, o) {
+            this.$refs.histogram.schemaIsReady++
         },
         policy(n, o) {
             this.needRefresh++
