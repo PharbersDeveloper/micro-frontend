@@ -17,8 +17,8 @@ export default class PhPieChartPolicy extends policy{
         this.padAngle = this.stroke === "none" ? 1 / this.outerRadius : 0, // angular separation between wedges
 
         this.dataset = this.datasource.name
-        this.xProperty = "标准省份名称"
-        this.yProperty = "sales"
+        this.xProperty = ""
+        this.yProperty = ""
         this.yPropertyFunc = "max"     // avg, max, min
 
         // this.data = null

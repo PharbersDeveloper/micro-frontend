@@ -20,8 +20,10 @@
                               :policy-name="activeContent.policyName"
                               :x-property="activeContent.x"
                               :y-property="activeContent.y"
+                              v-on:x-property="changeXProperty"
+                              v-on:y-property="changeYProperty"
                               v-on:changePolicy="changePolicy"
-                              :needTitle="false" />
+                              :needTitle="false" ref="histogram"/>
         </div>
 <!--        <div class="project_info_right">-->
 <!--            <div class="view_content" >-->
@@ -132,11 +134,24 @@ export default {
             }
         },
         changePolicy(param) {
-            const content = this.contentModel.content[this.allData.contentId]
+            const content = this.activeContent
             content.policyName = param.args.name
-            content.x = param.args.xProperty
-            content.y = param.args.yProperty
+            // content.x = param.args.xProperty
+            // content.y = param.args.yProperty
             this.currentPolicy = this.createPolicyWithinContent()
+            this.$refs.histogram.needRefreshData++
+        },
+        changeXProperty(param) {
+            const content = this.activeContent
+            content.x = param.args.xProperty
+            this.currentPolicy.xProperty = content.x
+            this.$refs.histogram.needRefreshData++
+        },
+        changeYProperty(param) {
+            const content = this.activeContent
+            content.y = param.args.yProperty
+            this.currentPolicy.yProperty = content.y
+            this.$refs.histogram.needRefreshData++
         },
         backToDashboard() {
             // TODO: @wodelu 跳转到dashboard页面
