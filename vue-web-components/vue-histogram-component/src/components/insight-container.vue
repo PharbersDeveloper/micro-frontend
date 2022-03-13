@@ -204,25 +204,11 @@ export default {
         }
     },
     watch: {
-        // xProperty(n, o) {
-        //     if (n !== o) {
-        //         // this.policy.xProperty = n
-        //         this.needRefresh++
-        //     }
-        // },
-        // yProperty(n, o) {
-        //     if (n !== o) {
-        //         // this.policy.yProperty = n
-        //         this.needRefresh++
-        //     }
-        // },
         tmpPolicyName(n, o) {
             if (n !== o) {
                 const event = new Event("event")
                 event.args = {
                     name: n
-                    // x: this.xProperty,
-                    // y: this.yProperty
                 }
                 this.$emit("changePolicy", event)
             }

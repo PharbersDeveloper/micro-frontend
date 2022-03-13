@@ -136,8 +136,6 @@ export default {
         changePolicy(param) {
             const content = this.activeContent
             content.policyName = param.args.name
-            // content.x = param.args.xProperty
-            // content.y = param.args.yProperty
             this.currentPolicy = this.createPolicyWithinContent()
             this.$refs.histogram.needRefreshData++
         },
@@ -154,15 +152,44 @@ export default {
             this.$refs.histogram.needRefreshData++
         },
         backToDashboard() {
-            // TODO: @wodelu 跳转到dashboard页面
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "slidespage",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboardId,
+                    slideId: this.allData.slide.slideId,
+                    contentId: this.allData.contentId
+                }
+            }
+            this.$emit('event', event)
         },
         transToDataset() {
-            // TODO: @wodelu 跳转到数据分析页面
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "dataset-lst",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboardId,
+                    slideId: this.allData.slide.slideId,
+                    contentId: this.allData.contentId
+                }
+            }
+            this.$emit('event', event)
         },
-        saveSlideContent() {
+        async saveSlideContent() {
             this.contentModel.queryContent = this.contentModel.content
-            this.contentModel.save(this)
-            this.transToDataset()
+            if (await this.contentModel.save(this)) {
+                this.backToDashboard()
+            } else {
+                alert("save histogrm error")
+            }
         }
     },
     watch: {
