@@ -16,9 +16,7 @@ export default class ShellRoute extends Route {
 	@service("execution-status") noticeService
 
 
-	beforeModel(transition){
-		this.browserEventsService.clearListener()
-		this.browserEventsService.registerListener()
+	beforeModel(transition){	
 		if (!this.oauthService.judgeAuth()) {
 			alert("登录过期，请重新登录")
 			this.oauthService.obtainAuth()
@@ -26,8 +24,6 @@ export default class ShellRoute extends Route {
 	}
 
 	async model(params) {
-		// this.browserEventsService.clearListener()
-		
 		if (Object.keys(params).length === 0) {
 			params["path"] = "home"
 		}

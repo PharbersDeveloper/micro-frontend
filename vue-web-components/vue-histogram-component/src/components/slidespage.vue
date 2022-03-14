@@ -133,12 +133,9 @@ export default {
     props: {
         allData: {
             type: Object,
-            default:() => ({
-                projectName: "项目名称",
-                projectId: "1",
-                dashboard: null,
-                slides: []
-            })
+            default: function() {
+                return {}
+            }
         }
     },
     data: () => {
@@ -205,11 +202,12 @@ export default {
             this.$emit('event', event)
         },
         on_clickNewChartNameConfirm(data) {
+            const nextIdx = this.activeModel.content.length === 0 ? 0 : Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1
             if (this.inputDatasetName.length > 0) {
                 const defaultPolicyName = "bar"
                 const one_content = {
                     tp:"histogram",
-                    index: Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1,
+                    index: nextIdx,
                     histogramName: "alfredtest",
                     policyName: defaultPolicyName,
                     datasourceClass:"default",
@@ -230,13 +228,14 @@ export default {
             this.dialogNewChartNameVisible = true
         },
         async addSlide() {
+            const nextIdx = this.slideArr.length === 0 ? 0 : Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1
             const data = {
                 content: "[]",
                 pdId: this.allData.projectId + "_" + this.allData.dashboard.dashboardId,
                 title: "new title",
-                datasetName: "phmax.data_wide",
-                idx: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1),
-                slideId: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1)
+                datasetName: "does not useful just for back up",
+                idx: String(nextIdx),
+                slideId: String(nextIdx)
             }
 
             const item = new PhSlideModel(data.pdId + "_" + data.slideId, data)

@@ -311,10 +311,10 @@ export default {
             const data = {
                 projectId: this.allData.projectId,
                 dashboardId: this.guid(8, 16),
-                label: [],
+                label: "[]",
                 title: this.inputDashboardName,
                 description: this.inputDashboardName,
-                updating: new Date().getTime()
+                updating: String(new Date().getTime())
             }
             data["id"] = data.projectId + "_" + data.dashboardId
 

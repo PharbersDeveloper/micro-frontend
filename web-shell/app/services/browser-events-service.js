@@ -11,7 +11,7 @@ export default class BrowserEventsServiceService extends Service {
 	@service router
 
 	// 注册浏览器监听事件
-	registerListener(route) {
+	registerBroListener(route) {
 		let that = this
 		$(function () {
 			that.param = window.location.href.split("?")[1]
@@ -32,8 +32,8 @@ export default class BrowserEventsServiceService extends Service {
 					`${that.routeName}${that.param}`
 				)
 			}
-				
 		})
+
 	}
 
 	@action
@@ -49,8 +49,9 @@ export default class BrowserEventsServiceService extends Service {
 	}
 
 	//清除浏览器监听事件
-	clearListener() {
+	clearBroListener() {
 		window.onbeforeunload = undefined
+		history.pushState(null, null, document.URL)
 		window.removeEventListener("popstate", this.popstateFun)
 	}
 }

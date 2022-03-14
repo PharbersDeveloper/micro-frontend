@@ -17,9 +17,9 @@ export default class PhBarChartPolicy extends policy{
         this.yDomain = []           // an array of (ordinal) y-values
 
         this.dataset = this.datasource.name
-        this.xProperty = "标准省份名称"
+        this.xProperty = ""
         // this.xProperty = "doi"
-        this.yProperty = "sales"
+        this.yProperty = ""
         this.yPropertyFunc = "max"     // avg, max, min
 
         this.xLabel = ""
