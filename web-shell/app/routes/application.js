@@ -17,9 +17,9 @@ export default class ApplicationRoute extends Route {
 
 	beforeModel(param) {
 		if(this.clientName === "project") {
+			this.browserEventsService.clearBroListener()
 			let name = this.loadBroswerEvent(param)
 			if(name != "" ){
-				this.browserEventsService.clearBroListener()
 				this.browserEventsService.registerBroListener(name)	
 			}
 		}
