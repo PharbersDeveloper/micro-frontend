@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="content" ref="content">
-                    <histogram ref="histogram" :policy="policy"/>
+                    <histogram ref="histogram" :policy="policy" />
                 </div>
             </div>
         </div>
