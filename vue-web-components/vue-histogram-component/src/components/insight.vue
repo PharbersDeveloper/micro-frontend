@@ -1,6 +1,7 @@
 <template>
     <div class="viewport" ref="viewport" :style="viewportStyle()">
-        <div ref="chart" class="chart" @dblclick.stop="$emit('selected')" />
+        <div v-if="showChart" ref="chart" class="chart" @dblclick.stop="$emit('selected')" />
+        <div v-else class="placeholder" @dblclick.stop="$emit('selected')"></div>
     </div>
 </template>
 <script>
@@ -45,6 +46,11 @@ export default {
     },
     components: {
 
+    },
+    computed: {
+        showChart: function() {
+            return this.policy.xProperty.length > 0 && this.policy.yProperty.length > 0
+        }
     },
     mounted () {
         this.width = this.initWidth
@@ -137,5 +143,14 @@ export default {
 <style scoped lang="scss">
     .viewport {
         overflow: hidden;
+    }
+    .placeholder {
+        /*background-color: red;*/
+        background-repeat: no-repeat;
+        background-size: cover !important
+    ;
+        background: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/histogram-background.png');
+        width: 100%;
+        height: 100%;
     }
 </style>
