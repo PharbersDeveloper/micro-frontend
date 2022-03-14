@@ -340,7 +340,7 @@ export default {
     .page {
         display: flex;
         width: 100%;
-        height: calc(100vh - 200px);
+        height: calc(100vh - 100px);
         .create-chart-container {
             display: flex;
             align-items: center;
@@ -401,7 +401,7 @@ export default {
                 }
             }
             .content {
-                height: calc(100vh - 88px);
+                height: calc(100vh - 128px);
             }
             .page_footer {
                 display: flex;
