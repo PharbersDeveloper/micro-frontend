@@ -8,8 +8,22 @@
         <div class="data-main-container">
 
             <div class="subscribed-container">
-                <el-tabs v-model="activeName" >
-                    <el-tab-pane label="公有数据" name="first">暂时未开放</el-tab-pane>
+                <el-tabs v-model="activeName" class="tabs">
+                    <el-tab-pane label="公有数据" name="first">
+                        <div class="public">
+                            <div class="public-data" v-for="(item, index) in publicData" :key="index+'pbcdata'">
+                                <div class="left">
+                                    <img :src="public_icon" alt="" class="pbc-icon">
+                                    <div>
+                                        <div class="name">{{item["attributes"]["name"]}}</div>
+                                        <div v-if="item.attributes.description && item.attributes.description !== ''" class="subtitle">{{item["attributes"]["description"]}}</div>
+                                        <div v-else class="subtitle">暂无描述</div>
+                                    </div>
+                                </div>
+                                <div class="btn" @click="showPbcData(item)">查看元数据</div>
+                            </div>
+                        </div>
+                    </el-tab-pane>
                     <el-tab-pane label="项目数据" name="second">
                         <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
                         <tree-item tenant-id="zudIcG_17yj8CEUoCTHg"/>
@@ -17,12 +31,37 @@
                 </el-tabs>
             </div>
         </div>
+        <el-dialog
+            title="查看元数据"
+            :visible.sync="dialogPbcVisible"
+            @close="on_clickPbcCancel"
+            width="30%">
+            <div class="dlg-pbc-container">
+                <div v-for="(item, key, index1) in pbcData" :key="index1+'pbc'">
+                    <span v-if="typeof(item) == 'string'" class="pbc-dialog-item">{{key}}: {{item}}</span>
+                    <span v-if="typeof(item) == 'object'" class="pbc-dialog-item">
+                        {{key}}: 
+                        <el-tag class="pbc-tag" v-for="(it,subkey) in item" :key="subkey+'tag'">
+                            <span v-if="typeof(it) == 'object'">{{it.Name}}: {{it.Type}}</span>
+                            <span v-else>{{subkey}}: {{it}}</span>
+                        </el-tag>
+                    </span>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="on_clickPbcCancel">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
 import bpText from 'vue-components/src/components/bp-text.vue'
 import ElTabs from "element-ui/packages/tabs"
+import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElButton from 'element-ui/packages/button/index'
+
 import treeItem from '../tree-item'
 import util from '../util.vue'
 
@@ -31,7 +70,10 @@ export default {
         bpText,
         ElTabs,
         ElTabPane,
-        treeItem
+        treeItem,
+        ElDialog,
+        ElButton,
+        ElTag
     },
     data() {
         return {
@@ -39,8 +81,12 @@ export default {
             title: "数据资产",
             subscribedTitle: "文件名称",
             fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
+            public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/publicData.svg",
             goDetail: "查看详情",
-            activeName: "second"
+            activeName: "second",
+            dialogPbcVisible: false,
+            pbcData: null,
+            publicData: []
         }
     },
     props: {
@@ -55,8 +101,24 @@ export default {
             }
         }
     },
-    computed: {
-
+    async mounted() {
+        const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const accessToken = this.getCookie("access_token")
+        let body = {
+            "glue_database_name": this.getCookie("company_id")
+            // "glue_database_name": "zudIcG_17yj8CEUoCTHg"
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        let results = await fetch(url, options).then(res => res.json())
+        this.publicData = results["data"]
     },
     methods: {
         linkToPage(param) {
@@ -76,7 +138,14 @@ export default {
             if (arr = document.cookie.match(reg))
                 return (arr[2]);
             else
-                return "15920cd6809a2020f78d5121a54a9273d82b389576ecc2bd59fd9bab91a00be7";
+                return "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3";
+        },
+        showPbcData(data) {
+            this.dialogPbcVisible = true
+            this.pbcData = data["attributes"]
+        },
+        on_clickPbcCancel() {
+            this.dialogPbcVisible = false
         }
     }
 }
@@ -89,6 +158,9 @@ export default {
         cursor: not-allowed;
     }
 
+    .el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
+    }
     @mixin btn_primary-initial {
         font-family: SFProText-Medium;
         font-size: 14px;
@@ -142,7 +214,16 @@ export default {
             @include btn_primary-initial;
         }
     }
-
+    .dlg-pbc-container {
+        .pbc-tag {
+            margin-right: 14px;
+            margin-bottom: 10px;
+        }
+        .pbc-dialog-item {
+            display: block;
+            margin-bottom: 10px;
+        }
+    }
     .heading-xsmall {
         font-family: SFProText-Regular;
         font-size: 12px;
@@ -281,6 +362,68 @@ export default {
                 padding: 12px 20px 8px 20px;
                 height: 507px;
                 min-height: 0;
+                .tabs {
+                    /deep/.el-tabs__content {
+                        height: calc(100vh - 200px);
+                        overflow: auto;
+                    }
+                }
+                .public {
+                    display: flex;
+                    flex-direction: column;
+                    .public-data {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid rgba(37,35,45,.08);
+                        padding: 12px 0;
+                        .left {
+                            display: flex;
+                            align-items: center;
+                        }
+                        .pbc-icon {
+                            width: 30px;
+                            height: 30px;
+                            margin-right: 14px
+                        }
+                        .name {
+                            font-family: SFProText-Regular;
+                            font-size: 14px;
+                            color: #25232d;
+                            letter-spacing: .25px;
+                            text-align: left;
+                            line-height: 20px;
+                            font-weight: 400;
+                            margin-bottom: 3px;
+                        }
+                        .subtitle {
+                            font-family: SFProText-Light;
+                            font-size: 12px;
+                            color: #706f79;
+                            letter-spacing: .25px;
+                            line-height: 16px;
+                            font-weight: 200;
+                        }
+                        .btn {
+                                width: 80px;
+                                height: 32px;
+                                background: #f6f6f7;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: SFProText-Medium;
+                                font-size: 14px;
+                                color: #57565f;
+                                letter-spacing: 0;
+                                text-align: center;
+                                line-height: 20px;
+                                font-weight: 500;
+                                border-radius: 2px;
+                                cursor: pointer;
+                        }
+                    }
+                }
                 .subscribed-title {
                     font-family: SFProText-Regular;
                     font-size: 12px;
