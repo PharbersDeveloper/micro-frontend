@@ -163,7 +163,7 @@ export default {
             textConf: {}, //运行弹框textarea的默认值
             progressOver: false, //进度条是否停止
             registerJobEventName: "",
-            retryButtonShow: true
+            retryButtonShow: false
         }
     },
     components: {
