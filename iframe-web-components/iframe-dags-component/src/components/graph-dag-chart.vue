@@ -526,20 +526,6 @@ export default {
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
         async on_click_retry_dag(data) {
-            this.responseArr = {
-                "date": "1647246362454",
-                "owner": "c89b8123-a120-498f-963c-5be102ee9082",
-                "jobCat": "notification",
-                "code": "0",
-                "comments": "",
-                "showName": "张璐",
-                "id": "vb_vb_developer_2022-03-14T08:25:57+00:00",
-                "category": "",
-                "message": "{\"type\":\"operation\", \"opname\":\"c89b8123-a120-498f-963c-5be102ee9082\", \"projectId\":\"B5r65MmhQ-rfRA8\", \"cnotification\":{\"data\":\"{}\", \"error\":\"{}\", \"jobName\":\"vb_vb_developer_compute_a\", \"runId\":\"vb_vb_developer_2022-03-14T08:25:57+00:00\", \"jobShowName\":\"compute_a\", \"overallStatus\":\"running\"}}",
-                "jobDesc": "runDag1647246341676",
-                "projectId": "vb_vb_developer_compute_a",
-                "status": "running"
-            }
             this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
@@ -550,8 +536,9 @@ export default {
                 "project_name": this.projectName,
                 "flow_version": "developer",
                 "run_id": this.runId,
-                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
+                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName,
                 "clean_cat": data //向上还是向下
+                //  + "_" + this.selectItem["represent-id"]
             }
             let options = {
                 method: "POST",
