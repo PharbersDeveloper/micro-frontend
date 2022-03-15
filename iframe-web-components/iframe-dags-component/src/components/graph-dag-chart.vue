@@ -558,7 +558,7 @@ export default {
             window.parent.postMessage({
                 message: {
                     dagRunCmd: this.registerJobEventName,
-                    dagExecutionCmd: "executionStatus" + runId
+                    dagExecutionCmd: "executionStatus" + this.runId
                 }
             }, '*')
             this.showProgress = true

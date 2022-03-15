@@ -44,7 +44,7 @@ export default class ApplicationRoute extends Route {
 		let routeValue = ""
 		let urlName = window.location.href.split("?")[0]
 
-		if(urlName.indexOf("/dataset") > -1) {
+		if(urlName.indexOf("/dataset") > -1 && urlName.indexOf("/dataset-lst") == -1) {
 			routeValue = "dataset-lst"
 		} else if(urlName.indexOf("/flow") > -1) {
 			routeValue = "flow"

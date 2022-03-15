@@ -93,7 +93,6 @@ export default {
     },
     methods: {
         changeHistogram(data) {
-            debugger
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
