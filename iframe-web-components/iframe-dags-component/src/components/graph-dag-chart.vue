@@ -555,10 +555,14 @@ export default {
                 this.loading = false
                 return false
             }
+            const dag_run_id_retry = this.runId.split("_")
+            const time_retry = new Date(dag_run_id_retry.pop()).getTime()
+            const runnerId_retry = dag_run_id_retry.join("_") + "_" + time_retry
+            console.info(runnerId_retry)
             window.parent.postMessage({
                 message: {
                     dagRunCmd: this.registerJobEventName,
-                    dagExecutionCmd: "executionStatus" + this.runId
+                    dagExecutionCmd: "executionStatus" + this.runnerId_retry
                 }
             }, '*')
             this.showProgress = true
@@ -765,6 +769,7 @@ export default {
                     // TODO: remove tooltips
                     // d3.select(this).selectAll("circle").remove()
                 }).on('click', function (d, i) {
+                    that.selectItem = null
                     that.selectItemName = i.data.attributes.name
                     // 获取选中节点的基本信息
                     let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
