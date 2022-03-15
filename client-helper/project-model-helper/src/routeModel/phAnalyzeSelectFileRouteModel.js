@@ -6,7 +6,9 @@ export async function phAnalyzeSelectFileRouteModel(route, parseParams) {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
 		uploadType: parseParams.query.uploadType,
-		datasetArr: datasets.filter((it) => it.id != ""),
+		datasetArr: datasets.filter(
+			(it) => it.cat != "catalog" && it.cat.indexOf("index") == -1
+		),
 		_isVue: true
 	}
 }

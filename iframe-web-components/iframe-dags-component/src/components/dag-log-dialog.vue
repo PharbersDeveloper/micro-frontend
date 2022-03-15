@@ -113,9 +113,10 @@ export default {
                 result = await fetch(logsUrl, logsOptions).then(res => res.json())
                 if (result.status === 1) {
                     clearInterval(clearInt);
-                    that.logsValue = result.message.map((item, idx, array) => window.atob(item)).join("<br/>")
+                    // that.logsValue = result.message.map((item, idx, array) => item.join("<br/>"))
+                    that.logsValue = result.message
                     that.loading = false
-                    console.log(that.logsValue)
+                    console.log(that.logsValue) 
                 }
             }, 5 * 1000)
         } catch ( e ) {

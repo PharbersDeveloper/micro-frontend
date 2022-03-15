@@ -2,7 +2,7 @@
     <div class="container_nav">
         <div class="header">
             <div class="left">
-				<img @click="linkToPage('projects')" class="home" :src="home" alt="">
+				<img @click="linkToPage('project')" class="home" :src="home" alt="">
                 <span class="project_name" @click="linkToPage('project')" :title="allData.projectName">
                 {{allData.projectName}}
                 </span>

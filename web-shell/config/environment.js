@@ -21,6 +21,7 @@ module.exports = function (environment) {
 			// Here you can pass flags/options to your application instance
 			// when it is created
 			redirectUri: "https://general.pharbers.com/oauth-callback",
+			redirectClientId: "V5I67BHIRVR2Z59kq-a-",
 			pharbersUri: "https://www.pharbers.com",
 			accountsUri: "https://accounts.pharbers.com",
 			host: "https://oauth.pharbers.com",
@@ -51,6 +52,7 @@ module.exports = function (environment) {
 
 	if (environment === "development") {
 		ENV.APP.DEV = {}
+		ENV.APP.DEV.redirectClientId = "wsOelHMK2tLAVhj0"
 		// ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
 		ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
 		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
