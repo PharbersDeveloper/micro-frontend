@@ -40,39 +40,6 @@
                 <img :src="add_icon"  alt="" class="add_icon" @click.stop="addSlide">
             </div>
         </div>
-<!--        <div class="project_info_right">-->
-<!--            <div class="view_content" >-->
-<!--                <div class="project_name_view">-->
-<!--                    <span class="space">-->
-<!--                        <img :src="logo2" alt="">-->
-<!--                    </span>-->
-<!--                    <div class="show-name" v-if="datasetcheckedIds.length == 1">-->
-<!--                        <p class="project_name_info" :title="datasetcheckedNames[0]">-->
-<!--                        {{datasetcheckedNames[0]}}-->
-<!--                        </p>-->
-<!--                    </div>-->
-<!--                    <div class="show-name">-->
-<!--                        <p class="project_name_info" v-if="datasetcheckedIds.length > 1">-->
-<!--                            {{datasetcheckedIds.length}} 条数据集-->
-<!--                        </p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="view_func">-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
-<!--                        <span class='tags_func'>标签</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
-<!--                        <span class='tags_func'>清除数据</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
-<!--                        <span class='tags_func'>删除</span>-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
         <el-dialog
             title="删除"
             :visible.sync="dialogDeleteSlideVisible"
@@ -165,7 +132,7 @@ export default {
         slideComponent
     },
     mounted () {
-
+        this.edit = true
     },
     methods: {
         getCookie(name) {
@@ -297,8 +264,10 @@ export default {
             this.dialogDeleteSlideVisible = false
         },
         clickDeleteSlide(index) {
-            this.delSlideIndex = index
-            this.dialogDeleteSlideVisible = true
+            if(this.slideArr.length > 1) {
+                this.delSlideIndex = index
+                this.dialogDeleteSlideVisible = true
+            }
         },
         resetSlideName() {
             this.slideArr.forEach((item, index) => {
@@ -326,8 +295,11 @@ export default {
         }
     },
     watch: {
-        allData(n, o) {
+        allData: async function(n, o) {
             this.createSlides()
+            if(this.allData.slides.length < 1) {
+                await this.addSlide()
+            }
         }
     }
 }

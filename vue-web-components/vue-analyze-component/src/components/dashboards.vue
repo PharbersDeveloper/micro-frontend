@@ -140,7 +140,7 @@
                 </div>
             </div>
         </div>
-        <el-dialog
+		<el-dialog
             title="创建数据看板"
             :visible.sync="dialogCreateVisible"
             height="300px"
@@ -199,7 +199,7 @@ export default {
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
-            tags: ['name','description','啦啦啦'],
+            tags: [],
             ary: [],
             checked: false,
             manual: true,
@@ -211,7 +211,6 @@ export default {
             dashboardcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-
             inputDashboardName: ""
         }
     },
@@ -220,19 +219,8 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dashboards:
-                [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "cpa_pha_mapping",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                    }
-                ],
-                tagsArray: ["qqq"]
+                dashboards: [],
+                tagsArray: []
             })
         }
     },
@@ -242,19 +230,6 @@ export default {
         ElDialog,
         ElButton,
         ElInput
-    },
-    computed: { },
-    mounted() {
-        this.searchData = [
-            {
-                "projectId": null,
-                "schema": "[]",
-                "version": "max1.0",
-                "name": "cpa_pha_mapping",
-                "label": "",
-                "cat": "input_index",
-                "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-            }]
     },
     watch: {
         "allData.tagsArray": function() {
