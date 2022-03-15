@@ -558,11 +558,10 @@ export default {
             const dag_run_id_retry = this.runId.split("_")
             const time_retry = new Date(dag_run_id_retry.pop()).getTime()
             const runnerId_retry = dag_run_id_retry.join("_") + "_" + time_retry
-            console.info(runnerId_retry)
             window.parent.postMessage({
                 message: {
                     dagRunCmd: this.registerJobEventName,
-                    dagExecutionCmd: "executionStatus" + this.runnerId_retry
+                    dagExecutionCmd: "executionStatus" + runnerId_retry
                 }
             }, '*')
             this.showProgress = true

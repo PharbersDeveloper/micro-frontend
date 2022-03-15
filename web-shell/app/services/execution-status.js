@@ -54,6 +54,7 @@ export default class ExecutionStatusService extends Service {
 		timeout = this.timeout
 	} = {}) {
 		const topic = `${projectId}/${ownerId}/${id}`
+		console.warn("Topic =====> ", topic)
 		if (!this.action.find((item) => item.topic == topic)) {
 			const item = {
 				type: type,
