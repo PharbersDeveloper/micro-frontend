@@ -182,7 +182,7 @@ export default {
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
             dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF.svg",
-			dashboard_icon_reverse: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
+            dashboard_icon_reverse: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -1021,8 +1021,8 @@ export default {
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 24px;
-                            height: 24px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                     .show-name {
