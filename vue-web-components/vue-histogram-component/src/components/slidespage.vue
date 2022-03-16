@@ -5,7 +5,7 @@
             <div class="page_header">
                 <div class="left">
                     <img :src="logo2" class="logo" alt="">
-                    <div class="name">{{allData.projectName}}</div>
+                    <div class="name">{{allData.dashboard.title}}</div>
                 </div>
                 <div class="right">
                     <div class="text"
@@ -49,7 +49,10 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogDeleteSlideVisible = false">取消</el-button>
-                <el-button type="primary" @click="on_clickDeleteSlideConfirm">确认</el-button>
+                <el-button type="primary" 
+                    @click="on_clickDeleteSlideConfirm">
+                    确认
+                </el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -73,20 +76,19 @@
             width="600px">
             <div class="create-chart-container">
                 <span>数据源：</span>
-                <!-- <input type="text" class="chartName" v-model="inputDatasetName"> -->
-				<div @click="toggle" class="sel">
-					<div class="input">
-						<p ref="dataSet">{{inputDatasetName}}</p>
-					</div>
-					<div class="icon" >
-						<img :src="dropDownIcon">
-					</div>
-				</div>
-				<div class="dialog" v-if="showDialog">
-					<p class="dialog_select" v-for="(item,index) in allData.datasetArr" :key="index">
-						<span @click="select" class="dialog_select_span">{{item.name}}</span>
-					</p>
-				</div>
+                <div @click="toggle" class="sel">
+                    <div class="input">
+                        <p ref="dataSet">{{inputDatasetName}}</p>
+                    </div>
+                    <div class="icon" >
+                        <img :src="dropDownIcon">
+                    </div>
+                </div>
+                <div class="dialog" v-if="showDialog">
+                    <p class="dialog_select" v-for="(item,index) in allData.datasetArr" :key="index">
+                        <span @click="select" class="dialog_select_span">{{item.name}}</span>
+                    </p>
+                </div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogNewChartNameVisible = false">取消</el-button>
@@ -115,7 +117,7 @@ export default {
             type: Object,
             default: function() {
                 return {
-                	datasetArr: []
+                    datasetArr: []
                 }
             }
         }
@@ -140,7 +142,8 @@ export default {
             slideArr: [],
             activeModel: null,
             inputDatasetName: "",
-            showDialog: false
+            showDialog: false,
+            timeout: null
         }
     },
     components: {
@@ -267,7 +270,34 @@ export default {
             this.edit = false
             this.activeModel = this.slideArr[data]
         },
-        async on_clickDeleteSlideConfirm() {
+        /**
+         * 防抖
+         * @param {Function} func 要执行的回调函数 
+         * @param {Number} wait 延时的时间
+         * @param {Boolean} immediate 是否立即执行 
+         * @return null  
+         */
+        Debounce(func, wait=300, immediate = false) {
+        // 清除定时器
+            if (this.timeout !== null) clearTimeout(this.timeout);
+            // 立即执行，此类情况一般用不到
+            if (immediate) {
+                var callNow = !this.timeout;
+                this.timeout = setTimeout(function() {
+                    this.timeout = null;
+                }, wait);
+                if (callNow) typeof func === 'function' && func();
+            } else {
+                // 设置定时器，当最后一次操作后，timeout不会再被清除，所以在延时wait毫秒后执行func回调方法
+                this.timeout = setTimeout(function() {
+                    typeof func === 'function' && func();
+                }, wait);
+            }
+        },
+        on_clickDeleteSlideConfirm() {
+            this.Debounce(this.clickDeleteSlideConfirm)
+        },
+        async clickDeleteSlideConfirm() {
             const tmp = []
             for (let idx = 0; idx< this.slideArr.length; ++idx) {
                 if (idx !== this.delSlideIndex) {
@@ -333,87 +363,87 @@ export default {
     * {
         box-sizing: border-box;
     }
-	.el-dialog__wrapper {
-		background: rgba(0, 0, 0, 0.31);
-	}
+    .el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
+    }
     .page {
         display: flex;
         width: 100%;
         height: calc(100vh - 100px);
-		.create-container {
+        .create-container {
             display: flex;
             align-items: center;
-			justify-content: center;
-		}
+            justify-content: center;
+        }
         .create-chart-container {
             display: flex;
             align-items: center;
-			margin-left: 60px;
-			.sel {
-				cursor: pointer;
-			}
-			.input {
-				width: 200px;
-				height: 30px;
-				border: 1px solid #979797;
-				margin-left: 20px;
-				p {
-					font-family: PingFangSC-Medium;
-					font-size: 14px;
-					color: #000000;
-					font-weight: 600;
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					overflow: hidden;
-					padding: 0 10px;
-					bottom: 10px;
-    				position: relative;
-				}
-			}
-			.icon {
-				position: absolute;
-				top: 90px;
-				right: 244px;
-				height: 18px;
-				img {
-					width: 20px;
-					height: 20px;
-				}
-			}
-			.dialog {
-				position: absolute;
-				top: 114px;
-				right: 241px;
-				width: 206px;
-				height: 90px;
-				overflow-y: auto;
-				overflow-x: hidden;
-				border: 1px solid #979797;
-				background: white;
-				.dialog_select {
-					width: 200px;
-					height: 24px;
-					margin: -1px;
-					border: 1px solid #979797;
-					background: #ffffff;
-					span {
-						display: block;
-						width: 100%;
-						height: 100%;
-						font-family: PingFangSC-Medium;
-						font-size: 14px;
-						color: #000000;
-						font-weight: 600;
-						margin-left: 10px;
-					}
-					.dialog_select_span {
-						width: 200px;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-					}
-				}
-			}
+            margin-left: 60px;
+            .sel {
+                cursor: pointer;
+            }
+            .input {
+                width: 200px;
+                height: 30px;
+                border: 1px solid #979797;
+                margin-left: 20px;
+                p {
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    color: #000000;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    padding: 0 10px;
+                    bottom: 10px;
+                    position: relative;
+                }
+            }
+            .icon {
+                position: absolute;
+                top: 90px;
+                right: 244px;
+                height: 18px;
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            .dialog {
+                position: absolute;
+                top: 114px;
+                right: 241px;
+                width: 206px;
+                height: 90px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                border: 1px solid #979797;
+                background: white;
+                .dialog_select {
+                    width: 200px;
+                    height: 24px;
+                    margin: -1px;
+                    border: 1px solid #979797;
+                    background: #ffffff;
+                    span {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        font-family: PingFangSC-Medium;
+                        font-size: 14px;
+                        color: #000000;
+                        font-weight: 600;
+                        margin-left: 10px;
+                    }
+                    .dialog_select_span {
+                        width: 200px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+            }
         }
         .chart-type {
             height: 60px;
@@ -422,7 +452,7 @@ export default {
             display: flex;
             align-items: center;
             padding: 20px;
-			cursor: pointer;
+            cursor: pointer;
             img {
                 width: 30px;
                 margin-right: 14px;

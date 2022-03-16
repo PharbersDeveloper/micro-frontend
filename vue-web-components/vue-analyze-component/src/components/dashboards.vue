@@ -108,7 +108,7 @@
                     <div class="view_content" v-if="dashboardCheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="database_icon" alt="">
+                                <img :src="dashboard_icon_reverse" alt="">
                             </span>
                             <div class="show-name" v-if="dashboardCheckedIds.length == 1">
                                 <p class="project_name_info" :title="dashboardcheckedNames[0]">
@@ -181,11 +181,8 @@ export default {
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
-            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
-            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
-            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
-            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF.svg",
+			dashboard_icon_reverse: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -497,16 +494,7 @@ export default {
             this.$emit('event', event)
         },
         selectDashboardsetIcon(cat) {
-            switch (cat) {
-            case "input_index":
-                return this.input_index_icon
-            case "output_index":
-                return this.output_index_icon
-            case "intermediate":
-                return this.intermediate_icon
-            default:
-                return this.dataset_icon
-            }
+            return this.dashboard_icon
         }
     }
 }
