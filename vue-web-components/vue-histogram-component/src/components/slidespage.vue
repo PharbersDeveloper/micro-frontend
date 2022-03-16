@@ -56,7 +56,7 @@
             title="新内容"
             :visible.sync="dialogNewChartVisible"
             width="600px">
-            <div class="create-chart-container">
+            <div class="create-container">
                 <div class="chart-type">
                     <img :src="logo1">
                     <span>图表</span>
@@ -73,7 +73,20 @@
             width="600px">
             <div class="create-chart-container">
                 <span>数据源：</span>
-                <input type="text" class="chartName" v-model="inputDatasetName">
+                <!-- <input type="text" class="chartName" v-model="inputDatasetName"> -->
+				<div @click="toggle" class="sel">
+					<div class="input">
+						<p ref="dataSet">{{inputDatasetName}}</p>
+					</div>
+					<div class="icon" >
+						<img :src="dropDownIcon">
+					</div>
+				</div>
+				<div class="dialog" v-if="showDialog">
+					<p class="dialog_select" v-for="(item,index) in allData.datasetArr" :key="index">
+						<span @click="select" class="dialog_select_span">{{item.name}}</span>
+					</p>
+				</div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogNewChartNameVisible = false">取消</el-button>
@@ -101,7 +114,9 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {}
+                return {
+                	datasetArr: []
+                }
             }
         }
     },
@@ -119,11 +134,13 @@ export default {
             dialogDeleteSlideVisible: false, //删除slide
             delSlideIndex: 0,
             add_chart: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
+            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             dialogNewChartVisible: false,
             dialogNewChartNameVisible: false,
             slideArr: [],
             activeModel: null,
-            inputDatasetName: ""
+            inputDatasetName: "",
+            showDialog: false
         }
     },
     components: {
@@ -292,6 +309,13 @@ export default {
                 }
             }
             this.edit = false
+        },
+        toggle() {
+            this.showDialog = !this.showDialog
+        },
+        select(e) {
+            this.inputDatasetName = e.target.innerHTML
+            this.showDialog = false
         }
     },
     watch: {
@@ -309,14 +333,87 @@ export default {
     * {
         box-sizing: border-box;
     }
+	.el-dialog__wrapper {
+		background: rgba(0, 0, 0, 0.31);
+	}
     .page {
         display: flex;
         width: 100%;
         height: calc(100vh - 100px);
+		.create-container {
+            display: flex;
+            align-items: center;
+			justify-content: center;
+		}
         .create-chart-container {
             display: flex;
             align-items: center;
-            justify-content: center;
+			margin-left: 60px;
+			.sel {
+				cursor: pointer;
+			}
+			.input {
+				width: 200px;
+				height: 30px;
+				border: 1px solid #979797;
+				margin-left: 20px;
+				p {
+					font-family: PingFangSC-Medium;
+					font-size: 14px;
+					color: #000000;
+					font-weight: 600;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					padding: 0 10px;
+					bottom: 10px;
+    				position: relative;
+				}
+			}
+			.icon {
+				position: absolute;
+				top: 90px;
+				right: 244px;
+				height: 18px;
+				img {
+					width: 20px;
+					height: 20px;
+				}
+			}
+			.dialog {
+				position: absolute;
+				top: 114px;
+				right: 241px;
+				width: 206px;
+				height: 90px;
+				overflow-y: auto;
+				overflow-x: hidden;
+				border: 1px solid #979797;
+				background: white;
+				.dialog_select {
+					width: 200px;
+					height: 24px;
+					margin: -1px;
+					border: 1px solid #979797;
+					background: #ffffff;
+					span {
+						display: block;
+						width: 100%;
+						height: 100%;
+						font-family: PingFangSC-Medium;
+						font-size: 14px;
+						color: #000000;
+						font-weight: 600;
+						margin-left: 10px;
+					}
+					.dialog_select_span {
+						width: 200px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+				}
+			}
         }
         .chart-type {
             height: 60px;
@@ -325,6 +422,7 @@ export default {
             display: flex;
             align-items: center;
             padding: 20px;
+			cursor: pointer;
             img {
                 width: 30px;
                 margin-right: 14px;

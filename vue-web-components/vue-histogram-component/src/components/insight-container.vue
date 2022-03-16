@@ -233,8 +233,7 @@ export default {
     .page {
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
-
+        // min-height: 100vh;
         .title-panel {
             display: flex;
             flex-direction: row;

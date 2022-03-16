@@ -15,34 +15,16 @@
                 </div>
             </div>
             <insightComponent v-if="isMounted"
-                              class="insight-content"
-                              :policy="currentPolicy"
-                              :policy-name="activeContent.policyName"
-                              :x-property="activeContent.x"
-                              :y-property="activeContent.y"
-                              v-on:x-property="changeXProperty"
-                              v-on:y-property="changeYProperty"
-                              v-on:changePolicy="changePolicy"
-                              :needTitle="false" ref="histogram"/>
+				class="insight-content"
+				:policy="currentPolicy"
+				:policy-name="activeContent.policyName"
+				:x-property="activeContent.x"
+				:y-property="activeContent.y"
+				v-on:x-property="changeXProperty"
+				v-on:y-property="changeYProperty"
+				v-on:changePolicy="changePolicy"
+				:needTitle="false" ref="histogram"/>
         </div>
-<!--        <div class="project_info_right">-->
-<!--            <div class="view_content" >-->
-<!--                <div class="view_func">-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
-<!--                        <span class='tags_func'>标签</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
-<!--                        <span class='tags_func'>清除数据</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
-<!--                        <span class='tags_func'>删除</span>-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </template>
 <script>

@@ -145,11 +145,8 @@ export default {
         overflow: hidden;
     }
     .placeholder {
-        /*background-color: red;*/
-        background-repeat: no-repeat;
-        background-size: cover !important
-    ;
-        background: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/histogram-background.png');
+        background: url(https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/images/dashboard-preview.png) border-box center no-repeat;
+    	background-size: contain;
         width: 100%;
         height: 100%;
     }

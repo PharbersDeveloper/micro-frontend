@@ -483,45 +483,6 @@ export default {
                 this.labelShowDialog = false
             }
         },
-        // Max1.0入口
-        on_click_max_input() {
-            this.clickMax = true
-            this.maxcat = "input_index"
-        },
-        on_click_max_output() {
-            this.clickMaxOutput = true
-            this.maxcat = "output_index"
-        },
-        //本地上传文件
-        upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    type: "localUpload"
-                }
-            }
-            this.$emit('event', event)
-        },
-        //s3上传文件
-        s3Upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "upload",
-                    type: "s3Upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
-        },
         linkToPage() {
             const event = new Event("event")
             event.args = {
@@ -534,9 +495,6 @@ export default {
                 }
             }
             this.$emit('event', event)
-        },
-        toggle() {
-            this.showDialog = !this.showDialog
         },
         selectDashboardsetIcon(cat) {
             switch (cat) {
@@ -559,6 +517,9 @@ export default {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+.el-dialog__wrapper {
+	background: rgba(0, 0, 0, 0.31);
 }
 .bg {
     background: #dfe7ff;
