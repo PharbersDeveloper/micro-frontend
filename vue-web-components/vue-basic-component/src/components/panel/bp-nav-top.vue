@@ -233,7 +233,7 @@ export default {
                     },
                     choosed_value: "PRODUCTS",
                     aboutUs: "COMPANY",
-                    articles: "ARTICLES",
+                    articles: "Industry Insight",
                     activity: "EVENTS",
                     contactUs: "Contact Us",
                     login: "Log in",
