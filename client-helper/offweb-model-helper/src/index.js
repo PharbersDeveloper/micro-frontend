@@ -20,6 +20,9 @@ import { pharbersReportListRouteModel } from "./routeModel/pharbersReportListRou
 import { pharbersReportListEventHandler } from "./eventHandler/pharbersReportListEventHandler"
 import { pharbersDownloadReportEventHandler } from "./eventHandler/pharbersDownloadReportEventHandler"
 import { pharbersDownloadReportRouteModel } from "./routeModel/pharbersDownloadReportRouteModel"
+import { pharbersArticlesListEventHandler } from "./eventHandler/pharbersArticlesListEventHandler"
+import { pharbersArticlesListRouteModel } from "./routeModel/pharbersArticlesListRouteModel"
+import { articleIframeRouteModel } from "./routeModel/articleIframeRouteModel"
 
 export {
 	pharbersHomeRouteModel,
@@ -43,5 +46,8 @@ export {
 	pharbersAboutUsEventHandler,
 	pharbersBoyunhuiEventHandler,
 	pharbersAboveDataDetailEventHandler,
-	pharbersIndustryActivityDetailEventHandler
+	pharbersIndustryActivityDetailEventHandler,
+	pharbersArticlesListRouteModel,
+	pharbersArticlesListEventHandler,
+	articleIframeRouteModel
 }

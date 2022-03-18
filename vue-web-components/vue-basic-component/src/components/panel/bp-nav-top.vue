@@ -21,6 +21,7 @@
                     @clickEvent="clickEvent"></bpSelect>
                 <span class="bp-text" @click="toActivity">{{translation_data.activity}}</span>
                 <span class="bp-text topButton" @click="toAboutUs">{{translation_data.aboutUs}}</span>
+                <span class="bp-text topButton" @click="toArticles">{{translation_data.articles}}</span>
             </div>
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
@@ -153,6 +154,7 @@ export default {
                     },
                     choosed_value: "产品与服务",
                     aboutUs: "关于我们",
+                    articles: "行业洞察",
                     activity: "活动资讯",
                     contactUs: "联系我们",
                     login: "登录",
@@ -193,6 +195,12 @@ export default {
                             click_event: function() {
                                 this.$emit('linkToPage', 'about-us')
                             }
+                        },
+                        {
+                            text: "行业洞察",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'articles-list')
+                            }
                         }
                     ],
                     modalForm: {
@@ -225,6 +233,7 @@ export default {
                     },
                     choosed_value: "PRODUCTS",
                     aboutUs: "COMPANY",
+                    articles: "ARTICLES",
                     activity: "EVENTS",
                     contactUs: "Contact Us",
                     login: "Log in",
@@ -301,6 +310,9 @@ export default {
         },
         toAboutUs() {
             this.$emit('linkToPage', 'about-us')
+        },
+        toArticles() {
+            this.$emit('linkToPage', 'articles-list')
         },
         toActivity() {
             this.$emit('linkToPage', 'activity-list')

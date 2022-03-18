@@ -277,7 +277,7 @@ export default {
             }
         }
     }
-}
+} 
 </script>
 <style lang="scss" scoped>
     * {
@@ -365,7 +365,7 @@ export default {
             padding: 0 100px;
             height: 22px;
             display: flex;
-            justify-content: start;
+            justify-content: flex-start;
         }
 
         .download-report-main{
