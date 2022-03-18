@@ -155,7 +155,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "dataset-lst",
+                    name: "analyze",
                     projectId: this.allData.projectId,
                     projectName: this.allData.projectName,
                     dashboardId: this.allData.dashboardId,

@@ -43,8 +43,9 @@ export default class ApplicationRoute extends Route {
 	loadBroswerEvent(data) {
 		let routeValue = ""
 		let urlName = window.location.href.split("?")[0]
+		let name = urlName.split("/").pop()
 
-		if(urlName.indexOf("/dataset") > -1 && urlName.indexOf("/dataset-lst") == -1) {
+		if(name == "dataset") {
 			routeValue = "dataset-lst"
 		} else if(urlName.indexOf("/flow") > -1) {
 			routeValue = "flow"

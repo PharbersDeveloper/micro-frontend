@@ -12,12 +12,8 @@ export async function phHistogramInsightpageEventHandler(e, route) {
 					params.projectId +
 					"&dashboardId=" +
 					params.dashboardId
-			} else if (params.name === "dataset-lst") {
-				uri =
-					"dataset-lst?projectName=" +
-					params.projectName +
-					"&projectId=" +
-					params.projectId
+			} else if (params.name === "analyze") {
+				uri = `dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
 			}
 			route.router.transitionTo("shell", uri)
 			break

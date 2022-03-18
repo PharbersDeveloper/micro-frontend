@@ -78,7 +78,7 @@
                 <span>数据源：</span>
                 <div @click="toggle" class="sel">
                     <div class="input">
-                        <p ref="dataSet">{{inputDatasetName}}</p>
+                        <p ref="dataSet">{{datasourceName}}</p>
                     </div>
                     <div class="icon" >
                         <img :src="dropDownIcon">
@@ -86,7 +86,7 @@
                 </div>
                 <div class="dialog" v-if="showDialog">
                     <p class="dialog_select" v-for="(item,index) in allData.datasetArr" :key="index">
-                        <span @click="select" class="dialog_select_span">{{item.name}}</span>
+                        <span @click="select(item)" class="dialog_select_span">{{item.name}}</span>
                     </p>
                 </div>
             </div>
@@ -117,7 +117,8 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    datasetArr: []
+                    datasetArr: [],
+                    dashboard: {}
                 }
             }
         }
@@ -141,9 +142,10 @@ export default {
             dialogNewChartNameVisible: false,
             slideArr: [],
             activeModel: null,
-            inputDatasetName: "",
+            datasourceName: "",
             showDialog: false,
-            timeout: null
+            timeout: null,
+            selDataset: null
         }
     },
     components: {
@@ -188,9 +190,9 @@ export default {
             }
             this.$emit('event', event)
         },
-        on_clickNewChartNameConfirm(data) {
+        on_clickNewChartNameConfirm() {
             const nextIdx = this.activeModel.content.length === 0 ? 0 : Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1
-            if (this.inputDatasetName.length > 0) {
+            if (this.datasourceName.length > 0) {
                 const defaultPolicyName = "bar"
                 const one_content = {
                     tp:"histogram",
@@ -201,14 +203,18 @@ export default {
                     schemaClass:"default",
                     conditions: {},
                     position: [0,0,1,1],
-                    datasetName: this.inputDatasetName,
+                    datasetName: this.datasourceName,
                     x: "",
-                    y: ""
+                    y: "",
+                    selDataset: this.selDataset
                 }
                 one_content["policy"] = this.createPolicyWithinContent(one_content)
                 this.activeModel.content.push(one_content)
+                this.dialogNewChartNameVisible = false
+            } else {
+                alert("请选择数据源！")
+                return false
             }
-            this.dialogNewChartNameVisible = false
         },
         on_clickNewChartConfirm() {
             this.dialogNewChartVisible = false
@@ -343,8 +349,9 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        select(e) {
-            this.inputDatasetName = e.target.innerHTML
+        select(data) {
+            this.datasourceName = data.name
+            this.selDataset = data
             this.showDialog = false
         }
     },

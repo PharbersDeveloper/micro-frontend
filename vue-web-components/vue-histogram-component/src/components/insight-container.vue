@@ -14,7 +14,6 @@
                     {{item}}
                 </div>
             </div>
-
             <!-- <div class="filter-panel">
                 <el-select v-model="policyName" placeholder="图表类型">
                     <el-option
@@ -58,7 +57,10 @@
                         <span class="axis-title">图表类型</span>
                         <select v-model="tmpPolicyName"
                                 style="width:200px;height: 30px;margin-top: 5px;margin-bottom: 5px;margin-left: 10px">
-                            <option v-for="item in policyCandidate" v-bind:value="item" v-text="item" ></option>
+                            <option 
+								v-for="(item,index) in policyCandidate" 
+								v-bind:value="item" v-text="item"
+								:key="index+'type'" ></option>
                         </select>
                     </div>
                     <div class="axis">

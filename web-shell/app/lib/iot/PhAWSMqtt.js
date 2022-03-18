@@ -75,7 +75,9 @@ function PhMQTT(config, callBack, timeoutQueue) {
 	const __timeout = () => {
 		timeoutId = setInterval(() => {
 			const currentTime = new Date().getTime() / 1000
-			if (currentTime - time / 1000 > timeout) {
+			let time_out = currentTime - time / 1000 > timeout
+			console.log(time_out)
+			if (time_out) {
 				const parameter = Object.assign({}, config.parameter)
 				delete parameter.callBack
 				callBack(parameter, JSON.stringify({ status: "mqtt timeout" }))
