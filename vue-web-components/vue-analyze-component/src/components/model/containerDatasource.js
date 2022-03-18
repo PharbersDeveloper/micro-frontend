@@ -138,7 +138,7 @@ export default class PhContainerDataSource {
             else
                 sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
 
-            sql_str = sql_str + " ORDER BY " + col + " LIMIT 20"
+            sql_str = sql_str + " ORDER BY " + col
 
             return sql_str
         }

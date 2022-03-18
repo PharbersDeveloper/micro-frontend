@@ -17,8 +17,8 @@ export default class PhPieChartPolicy extends policy{
         this.padAngle = this.stroke === "none" ? 1 / this.outerRadius : 0, // angular separation between wedges
 
         this.dataset = this.datasource.name
-        this.xProperty = "标准省份名称"
-        this.yProperty = "sales"
+        this.xProperty = ""
+        this.yProperty = ""
         this.yPropertyFunc = "max"     // avg, max, min
 
         // this.data = null
@@ -49,6 +49,12 @@ export default class PhPieChartPolicy extends policy{
         this.datasource = option.datasource ? option.datasource : this.datasource
         this.schema = option.schema ? option.schema : this.schema
         this.dataset = this.datasource.name
+
+        this.xProperty= option.xProperty ? option.xProperty : this.xProperty
+        this.yProperty= option.yProperty ? option.yProperty : this.yProperty
+        this.yPropertyFunc = option.yPropertyFunc ? option.yPropertyFunc : this.yPropertyFunc
+
+        this.colors = option.colors ? option.colors : this.colors
     }
 
     render (d3, data, ele) {
@@ -148,7 +154,7 @@ export default class PhPieChartPolicy extends policy{
     }
 
     buildPieChartQueryString() {
-        return "select " + this.yPropertyFunc + "(" + this.yProperty + ") as " + this.yProperty + ",`" + this.xProperty + "` from " + this.dataset + " group by `" + this.xProperty + "`"
+        return "select " + this.yPropertyFunc + "(`" + this.yProperty + "`) as `" + this.yProperty + "`,`" + this.xProperty + "` from `" + this.datasource.projectId + "_" + this.dataset + "` group by `" + this.xProperty + "`"
     }
 
     buildPolicySchema() {

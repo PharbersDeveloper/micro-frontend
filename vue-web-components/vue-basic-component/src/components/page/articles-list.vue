@@ -6,87 +6,36 @@
             </span>
         </div>
         <div class="data-main-container">
-
             <div class="subscribed-container">
-                <el-tabs v-model="activeName" class="tabs">
-                    <el-tab-pane label="公有数据" name="first">
-                        <div class="public">
-                            <div class="public-data" v-for="(item, index) in publicData" :key="index+'pbcdata'">
-                                <div class="left">
-                                    <img :src="public_icon" alt="" class="pbc-icon">
-                                    <div>
-                                        <div class="name">{{item["attributes"]["name"]}}</div>
-                                        <div v-if="item.attributes.description && item.attributes.description !== ''" class="subtitle">{{item["attributes"]["description"]}}</div>
-                                        <div v-else class="subtitle">暂无描述</div>
-                                    </div>
-                                </div>
-                                <div class="btn" @click="showPbcData(item)">查看元数据</div>
+                <div class="public">
+                    <div class="public-data" v-for="(item, index) in allData.articlesList" :key="index+'pbcdata'">
+                        <div class="left">
+                            <img :src="public_icon" alt="" class="pbc-icon">
+                            <div>
+                                <div class="name">{{item["title"]}}</div>
                             </div>
                         </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="项目数据" name="second">
-                        <bpText class="subscribed-title">{{subscribedTitle}}</bpText>
-                        <tree-item tenant-id="zudIcG_17yj8CEUoCTHg"/>
-                    </el-tab-pane>
-                </el-tabs>
-            </div>
-        </div>
-        <el-dialog
-            title="查看元数据"
-            :visible.sync="dialogPbcVisible"
-            @close="on_clickPbcCancel"
-            width="30%">
-            <div class="dlg-pbc-container">
-                <div v-for="(item, key, index1) in pbcData" :key="index1+'pbc'">
-                    <span v-if="typeof(item) == 'string'" class="pbc-dialog-item">{{key}}: {{item}}</span>
-                    <span v-if="typeof(item) == 'object'" class="pbc-dialog-item">
-                        {{key}}: 
-                        <el-tag class="pbc-tag" v-for="(it,subkey) in item" :key="subkey+'tag'">
-                            <span v-if="typeof(it) == 'object'">{{it.Name}}: {{it.Type}}</span>
-                            <span v-else>{{subkey}}: {{it}}</span>
-                        </el-tag>
-                    </span>
+                        <div class="btn" @click="linkToPage(item)">查看文章</div>
+                    </div>
                 </div>
             </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="on_clickPbcCancel">确认</el-button>
-            </span>
-        </el-dialog>
+        </div>
     </div>
 </template>
 <script>
-import bpText from 'vue-components/src/components/bp-text.vue'
-import ElTabs from "element-ui/packages/tabs"
-import ElTag from "element-ui/packages/tag"
-import ElTabPane from "element-ui/packages/tab-pane"
-import ElDialog from 'element-ui/packages/dialog/src/component'
-import ElButton from 'element-ui/packages/button/index'
-
-import treeItem from '../tree-item'
-import util from '../util.vue'
 
 export default {
     components: {
-        bpText,
-        ElTabs,
-        ElTabPane,
-        treeItem,
-        ElDialog,
-        ElButton,
-        ElTag
     },
     data() {
         return {
-            userName: util.methods.getCookie('user_name'),
-            title: "数据资产",
+            title: "行业洞察",
             subscribedTitle: "文件名称",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
-            public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/publicData.svg",
+            public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/article_icon.svg",
             goDetail: "查看详情",
             activeName: "second",
             dialogPbcVisible: false,
-            pbcData: null,
-            publicData: []
+            pbcData: null
         }
     },
     props: {
@@ -94,31 +43,23 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    sort: '-created',
-                    files: [],
-                    database: []
+                    articlesList: [
+                        {
+                            "type": "articles",
+                            "id": "hSPHu5eVTk2qlejqIoImRQ==",
+                            "attributes": {
+                                "title": "www11",
+                                "data": null,
+                                "uri": "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/html/62607a61-3527-4ef8-8f0d-73abf3623b31.html"
+                            },
+                            "links": {
+                                "self": "/articles/hSPHu5eVTk2qlejqIoImRQ%3D%3D"
+                            }
+                        }
+                    ]
                 }
             }
         }
-    },
-    async mounted() {
-        const url = "https://apiv2.pharbers.com/phgetgluetable"
-        const accessToken = this.getCookie("access_token")
-        let body = {
-            "glue_database_name": this.getCookie("company_id")
-            // "glue_database_name": "zudIcG_17yj8CEUoCTHg"
-        }
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        let results = await fetch(url, options).then(res => res.json())
-        this.publicData = results["data"]
     },
     methods: {
         linkToPage(param) {
@@ -127,25 +68,12 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: 'download/data-directory-table',
-                    queryParams: `database=${param}`
+                    name: 'article',
+                    uri: param.uri,
+                    data: param.date
                 }
             }
             this.$emit('event', event)
-        },
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3";
-        },
-        showPbcData(data) {
-            this.dialogPbcVisible = true
-            this.pbcData = data["attributes"]
-        },
-        on_clickPbcCancel() {
-            this.dialogPbcVisible = false
         }
     }
 }
@@ -336,11 +264,14 @@ export default {
         height: 100%;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        padding: 80px;
         .header {
             height: 62px;
             width: 100%;
             padding: 20px 24px 0;
             border-bottom: 1px solid rgba(37,35,45,.08);
+            max-width: 1200px;
             .header-large {
                 font-family: SFProText-Regular;
                 font-size: 20px;
@@ -351,6 +282,8 @@ export default {
         }
 
         .data-main-container {
+            max-width: 1200px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             flex: 1;

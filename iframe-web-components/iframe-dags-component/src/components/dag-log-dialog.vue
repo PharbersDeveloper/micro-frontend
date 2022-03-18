@@ -66,7 +66,7 @@ export default {
         this.loading = true
         let that = this
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+        const accessToken = this.getCookie( "access_token" ) || "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3"
         let body = {
             "table": "logs",
             "conditions": {
@@ -113,9 +113,10 @@ export default {
                 result = await fetch(logsUrl, logsOptions).then(res => res.json())
                 if (result.status === 1) {
                     clearInterval(clearInt);
-                    that.logsValue = result.message.map((item, idx, array) => window.atob(item)).join("<br/>")
+                    // that.logsValue = result.message.map((item, idx, array) => item.join("<br/>"))
+                    that.logsValue = result.message
                     that.loading = false
-                    console.log(that.logsValue)
+                    console.log(that.logsValue) 
                 }
             }, 5 * 1000)
         } catch ( e ) {

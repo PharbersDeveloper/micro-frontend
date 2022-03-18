@@ -90,7 +90,8 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 				// 判断数据id是否存在
 				let opt = {
 					query: `select count(1) from \`${param.projectId}_${datasetName}\` where version = '${dataID}'`,
-					schema: ["count"]
+					schema: ["count"],
+					projectId: param.projectId
 				}
 				let url = "https://apiv2.pharbers.com/phcheckversion"
 				let headers = {

@@ -32,22 +32,22 @@
                     <img :src="hide_icon" alt=""> -->
                     <img :src="run_icon" alt=""
                         @click="on_click_runDag">
-                    <img v-if="noticeService.retryButtonShow && selectItem"
+                    <img v-if="retryButtonShow && selectItem"
                         :src="run_script" alt=""
-                        @click="on_click_run_script('self_only')">
-                    <img v-if="noticeService.retryButtonShow && selectItem"
+                        @click="on_click_retry_dag('self_only')">
+                    <img v-if="retryButtonShow && selectItem"
                         :src="run_to_script" alt=""
-                        @click="on_click_run_script('downstream')">
-                    <img v-if="noticeService.retryButtonShow  && selectItem"
+                        @click="on_click_retry_dag('downstream')">
+                    <img v-if="retryButtonShow  && selectItem"
                         :src="run_from_script" alt=""
-                        @click="on_click_run_script('upstream')">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                        @click="on_click_retry_dag('upstream')">
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="run_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="run_from_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="run_to_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="stop_icon" alt="">
                 </div>
                 <div class="sec_icon_row">
@@ -162,7 +162,8 @@ export default {
             showProgress: false, //进度条弹窗是否显示
             textConf: {}, //运行弹框textarea的默认值
             progressOver: false, //进度条是否停止
-            registerJobEventName: ""
+            registerJobEventName: "",
+            retryButtonShow: false
         }
     },
     components: {
@@ -239,6 +240,10 @@ export default {
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
+                        name: "PySpark_running",
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
+                    },
+                    {
                         name: 'SparkR',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
                     },
@@ -273,6 +278,10 @@ export default {
                     {
                         name: 'prepare_failed',
                         symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'prepare_running',
+                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
                     },
                     {
                         name: 'job',
@@ -328,7 +337,7 @@ export default {
                 }
                 if(event.data.message.cmd === "finish_dag") {
                     console.log("iframe接收的dag finish", event.data.message.cmd)
-                    that.runDagFailedCallback(event.data.message, that)
+                    that.runDagFinishCallback(event.data.message, that)
                 }
             }
         },
@@ -345,7 +354,8 @@ export default {
         closeProgress() {
             this.showProgress = false
         },
-        resetDagStatus() {
+        //二次trigger清空所有状态
+        resetDagStatus(val) {
             let that = this
             // 1.进度条状态
             this.progressOver = false
@@ -359,6 +369,32 @@ export default {
             })
             // 3.log弹窗
             this.failedLogs = []
+        },
+        // 点击trigger，弹窗选择version
+        on_click_runDag() {
+            let roots = []
+            this.datasource.data.forEach(item => {
+                if(item.attributes.runtime === "output_index") {
+                    roots.push(item)
+                } else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
+                    roots.push(item)
+                }
+            })
+            let datasetsArr = []
+            roots.forEach(item => {
+                datasetsArr.push({
+                    "name": item.attributes.name,
+                    "version": [],
+                    "cat": item["attributes"]["runtime"],
+                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
+                })
+            })
+            this.textConf = {
+                "datasets": datasetsArr,
+                "scripts": [],
+                "userConf": {}
+            }
+            this.showRunJson = true
         },
         /**
          * 1. 触发整体dag运行
@@ -409,24 +445,17 @@ export default {
             }, '*')
             this.showRunJson = false
             this.loading = false
-            this.resetDagStatus()
-        },
-        runDagFailedCallback(response, ele) {
-            let payload = JSON.parse(response.payload)
-            let status = payload["status"]
-            if(status != "running") {
-                // 更新进度条
-                this.progressOver = true
-            }
+            this.resetDagStatus("trigger")
         },
         /**
-         * 更新状态的回调函数
+         *  trigger更新实时状态
          */
         runDagCallback(response, ele) {
             let that = this
             let represent_id = ""
-            // this.responseArr = response.message
             let payload = JSON.parse(response.payload)
+            console.log(payload)
+            this.responseArr = payload
             let status = payload["status"]
             let jobName = JSON.parse(payload.message).cnotification.jobName
             let data = ele.datasource.data
@@ -438,6 +467,8 @@ export default {
                     } else if(status === "failed") {
                         it.status = "failed"
                         represent_id = it.representId
+                    } else if(status === "running") {
+                        it.status = "running"
                     }
                 }
                 that.refreshNodeStatus(it)
@@ -456,6 +487,17 @@ export default {
             }
             console.log("failedLogs", that.failedLogs)
         },
+        // trigger更新整体状态
+        runDagFinishCallback(response, ele) {
+            let payload = JSON.parse(response.payload)
+            let status = payload["status"]
+            if(status != "running") {
+                // 更新进度条
+                this.progressOver = true
+                this.retryButtonShow = true
+            }
+        },
+        //更新节点状态
         refreshNodeStatus(node) {
             const that = this
             const d3 = Object.assign({}, d3_base, d3_dag)
@@ -468,6 +510,8 @@ export default {
                             result = cat + "_succeed"
                         } else if (data.status === "failed") {
                             result = cat + "_failed"
+                        } else if (data.status === "running"){
+                            result = cat + "_running"
                         } else {
                             result = cat
                         }
@@ -477,22 +521,24 @@ export default {
             }
         },
         /**
+         * retry按钮
          * 1. 有第一次运行状态才可以点retry三个按钮
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
-        async on_click_run_script(data) {
+        async on_click_retry_dag(data) {
             this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
-            this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
-            const url = `https://api.pharbers.com/phdagtasktrigger`
+            this.runId = JSON.parse(this.responseArr.message).cnotification.runId
+            const url = `https://apiv2.pharbers.com/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
                 "run_id": this.runId,
-                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
+                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName,
                 "clean_cat": data //向上还是向下
+                //  + "_" + this.selectItem["represent-id"]
             }
             let options = {
                 method: "POST",
@@ -503,34 +549,34 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
-            let result = await fetch(url, options).then(res => res.json())
-            this.showProgress = true
-        },
-        // 点击运行整体trigger
-        on_click_runDag() {
-            let roots = []
-            this.datasource.data.forEach(item => {
-                if(item.attributes.runtime === "output_index") {
-                    roots.push(item)
-                } else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
-                    roots.push(item)
-                }
-            })
-            let datasetsArr = []
-            roots.forEach(item => {
-                datasetsArr.push({
-                    "name": item.attributes.name,
-                    "version": [],
-                    "cat": item.status,
-                    "prop": item.attributes.prop !== "" ? JSON.parse(item.attributes.prop) : ""
-                })
-            })
-            this.textConf = {
-                "datasets": datasetsArr,
-                "scripts": [],
-                "userConf": {}
+            let results = await fetch(url, options).then(res => res.json())
+            if(results.status === "failed") {
+                alert("重新运行出错，请重新运行！")
+                this.loading = false
+                return false
             }
-            this.showRunJson = true
+            const dag_run_id_retry = this.runId.split("_")
+            const time_retry = new Date(dag_run_id_retry.pop()).getTime()
+            const runnerId_retry = dag_run_id_retry.join("_") + "_" + time_retry
+            window.parent.postMessage({
+                message: {
+                    dagRunCmd: this.registerJobEventName,
+                    dagExecutionCmd: "executionStatus" + runnerId_retry
+                }
+            }, '*')
+            this.showProgress = true
+            this.progressOver = false
+        },
+        
+        handlerJSON(str) {
+            if (typeof str == 'string') {
+                try {
+                    let jsonValue = JSON.parse(str);
+                    return jsonValue;
+                } catch(e) {
+                    return str
+                }
+            }
         },
         closeRunDagDialog() {
             this.showRunJson = false
@@ -722,6 +768,7 @@ export default {
                     // TODO: remove tooltips
                     // d3.select(this).selectAll("circle").remove()
                 }).on('click', function (d, i) {
+                    that.selectItem = null
                     that.selectItemName = i.data.attributes.name
                     // 获取选中节点的基本信息
                     let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)

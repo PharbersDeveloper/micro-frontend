@@ -15,29 +15,16 @@
                 </div>
             </div>
             <insightComponent v-if="isMounted"
-                              class="insight-content"
-                              :policy="currentPolicy"
-                              v-on:changePolicy="changePolicy"
-                              :needTitle="false" />
+				class="insight-content"
+				:policy="currentPolicy"
+				:policy-name="activeContent.policyName"
+				:x-property="activeContent.x"
+				:y-property="activeContent.y"
+				v-on:x-property="changeXProperty"
+				v-on:y-property="changeYProperty"
+				v-on:changePolicy="changePolicy"
+				:needTitle="false" ref="histogram"/>
         </div>
-<!--        <div class="project_info_right">-->
-<!--            <div class="view_content" >-->
-<!--                <div class="view_func">-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
-<!--                        <span class='tags_func'>标签</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
-<!--                        <span class='tags_func'>清除数据</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
-<!--                        <span class='tags_func'>删除</span>-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </template>
 <script>
@@ -81,7 +68,8 @@ export default {
             label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
             isMounted: 0,
             contentModel: null,
-            currentPolicy: null
+            currentPolicy: null,
+            activeContent: null
         }
     },
     mounted () {
@@ -97,9 +85,10 @@ export default {
         },
         createCurrentContent() {
             this.contentModel = new PhSlideModel(this.allData.slide.idx, this.allData.slide)
+            this.activeContent = this.contentModel.content[this.allData.contentId]
         },
         createPolicyWithinContent() {
-            const content = this.contentModel.content[this.allData.contentId]
+            const content = this.activeContent
             // TODO: 这个是一个工厂类，在写的时候，可以运用外部单例，因为这个函数会被多次用到
             // 不会写就多写cv次这个函数吧
             if (content.policyName === "bar") {
@@ -127,22 +116,62 @@ export default {
             }
         },
         changePolicy(param) {
-            const content = this.contentModel.content[this.allData.contentId]
+            const content = this.activeContent
             content.policyName = param.args.name
-            content.x = param.args.xProperty
-            content.y = param.args.yProperty
             this.currentPolicy = this.createPolicyWithinContent()
+            this.$refs.histogram.needRefreshData++
+        },
+        changeXProperty(param) {
+            const content = this.activeContent
+            content.x = param.args.xProperty
+            this.currentPolicy.xProperty = content.x
+            this.$refs.histogram.needRefreshData++
+        },
+        changeYProperty(param) {
+            const content = this.activeContent
+            content.y = param.args.yProperty
+            this.currentPolicy.yProperty = content.y
+            this.$refs.histogram.needRefreshData++
         },
         backToDashboard() {
-            // TODO: @wodelu 跳转到dashboard页面
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "slidespage",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboardId,
+                    slideId: this.allData.slide.slideId,
+                    contentId: this.allData.contentId
+                }
+            }
+            this.$emit('event', event)
         },
         transToDataset() {
-            // TODO: @wodelu 跳转到数据分析页面
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "analyze",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboardId,
+                    slideId: this.allData.slide.slideId,
+                    contentId: this.allData.contentId
+                }
+            }
+            this.$emit('event', event)
         },
-        saveSlideContent() {
+        async saveSlideContent() {
             this.contentModel.queryContent = this.contentModel.content
-            this.contentModel.save(this)
-            this.transToDataset()
+            if (await this.contentModel.save(this)) {
+                this.backToDashboard()
+            } else {
+                alert("save histogrm error")
+            }
         }
     },
     watch: {

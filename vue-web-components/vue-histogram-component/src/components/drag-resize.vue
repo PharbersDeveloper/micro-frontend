@@ -8,7 +8,8 @@
             <slot></slot>
         </div>
         <div
-                v-for="stick in sticks"
+                v-for="(stick, index) in sticks"
+				:key="index"
                 class="vdr-stick"
                 :class="['vdr-stick-' + stick, isResizable ? '' : 'not-resizable']"
                 @mousedown.stop.prevent="stickDown(stick, $event)"

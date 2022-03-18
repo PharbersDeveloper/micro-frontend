@@ -34,10 +34,10 @@ export default class PhExcelDataSchema {
         const url = "https://apiv2.pharbers.com/phdadatasource"
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
-            "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='data_wide';", // TODO:
+            "query": "SELECT `name`, `type` FROM system.columns where database='default' and table='"+ this.projectId + "_" + this.name + "';", // TODO:
             // "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='ma';",
             "schema": ["name", "type"],
-            "projectId": "12345"
+            "projectId": this.projectId
         }
         let options = {
             method: "POST",

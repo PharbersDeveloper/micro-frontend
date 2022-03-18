@@ -105,27 +105,27 @@ export default {
                         this.content.$emit('event', event)
                     }
                 },
-                {
-                    type: "item",
-                    text: "数据资产",
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
-                    content: this,
-                    click_event: function (data) {
-                        this.content.activeIndex = data
-                        this.content.menuType = this.type
+                // {
+                //     type: "item",
+                //     text: "数据资产",
+                //     src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
+                //     content: this,
+                //     click_event: function (data) {
+                //         this.content.activeIndex = data
+                //         this.content.menuType = this.type
 
-                        const event = new Event("event")
-                        event.args = {
-                            callback: "linkToPage",
-                            element: this.content,
-                            param: {
-                                name: this.text,
-                                index: 1
-                            }
-                        }
-                        this.content.$emit('event', event)
-                    }
-                },
+                //         const event = new Event("event")
+                //         event.args = {
+                //             callback: "linkToPage",
+                //             element: this.content,
+                //             param: {
+                //                 name: this.text,
+                //                 index: 1
+                //             }
+                //         }
+                //         this.content.$emit('event', event)
+                //     }
+                // },
                 {
                     type: "item",
                     text: "工作平台",

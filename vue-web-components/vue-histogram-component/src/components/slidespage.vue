@@ -5,7 +5,7 @@
             <div class="page_header">
                 <div class="left">
                     <img :src="logo2" class="logo" alt="">
-                    <div class="name">{{allData.projectName}}</div>
+                    <div class="name">{{allData.dashboard.title}}</div>
                 </div>
                 <div class="right">
                     <div class="text"
@@ -27,7 +27,7 @@
                     :isEditableValue="edit"
                     :content-model="activeModel"
                     :project-id="allData.projectId"
-                    @changeHistogram="changeHistogram" />
+                    @selected="insightSelected" />
             </div>
             <div class="page_footer">
                 <div v-for="(slide, index) in slideArr"
@@ -40,39 +40,6 @@
                 <img :src="add_icon"  alt="" class="add_icon" @click.stop="addSlide">
             </div>
         </div>
-<!--        <div class="project_info_right">-->
-<!--            <div class="view_content" >-->
-<!--                <div class="project_name_view">-->
-<!--                    <span class="space">-->
-<!--                        <img :src="logo2" alt="">-->
-<!--                    </span>-->
-<!--                    <div class="show-name" v-if="datasetcheckedIds.length == 1">-->
-<!--                        <p class="project_name_info" :title="datasetcheckedNames[0]">-->
-<!--                        {{datasetcheckedNames[0]}}-->
-<!--                        </p>-->
-<!--                    </div>-->
-<!--                    <div class="show-name">-->
-<!--                        <p class="project_name_info" v-if="datasetcheckedIds.length > 1">-->
-<!--                            {{datasetcheckedIds.length}} 条数据集-->
-<!--                        </p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="view_func">-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
-<!--                        <span class='tags_func'>标签</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
-<!--                        <span class='tags_func'>清除数据</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
-<!--                        <span class='tags_func'>删除</span>-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
         <el-dialog
             title="删除"
             :visible.sync="dialogDeleteSlideVisible"
@@ -82,14 +49,17 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogDeleteSlideVisible = false">取消</el-button>
-                <el-button type="primary" @click="on_clickDeleteSlideConfirm">确认</el-button>
+                <el-button type="primary" 
+                    @click="on_clickDeleteSlideConfirm">
+                    确认
+                </el-button>
             </span>
         </el-dialog>
         <el-dialog
             title="新内容"
             :visible.sync="dialogNewChartVisible"
             width="600px">
-            <div class="create-chart-container">
+            <div class="create-container">
                 <div class="chart-type">
                     <img :src="logo1">
                     <span>图表</span>
@@ -106,7 +76,19 @@
             width="600px">
             <div class="create-chart-container">
                 <span>数据源：</span>
-                <input type="text" class="chartName">
+                <div @click="toggle" class="sel">
+                    <div class="input">
+                        <p ref="dataSet">{{datasourceName}}</p>
+                    </div>
+                    <div class="icon" >
+                        <img :src="dropDownIcon">
+                    </div>
+                </div>
+                <div class="dialog" v-if="showDialog">
+                    <p class="dialog_select" v-for="(item,index) in allData.datasetArr" :key="index">
+                        <span @click="select(item)" class="dialog_select_span">{{item.name}}</span>
+                    </p>
+                </div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogNewChartNameVisible = false">取消</el-button>
@@ -133,12 +115,12 @@ export default {
     props: {
         allData: {
             type: Object,
-            default:() => ({
-                projectName: "项目名称",
-                projectId: "1",
-                dashboard: null,
-                slides: []
-            })
+            default: function() {
+                return {
+                    datasetArr: [],
+                    dashboard: {}
+                }
+            }
         }
     },
     data: () => {
@@ -155,10 +137,15 @@ export default {
             dialogDeleteSlideVisible: false, //删除slide
             delSlideIndex: 0,
             add_chart: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
+            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
             dialogNewChartVisible: false,
             dialogNewChartNameVisible: false,
             slideArr: [],
-            activeModel: null
+            activeModel: null,
+            datasourceName: "",
+            showDialog: false,
+            timeout: null,
+            selDataset: null
         }
     },
     components: {
@@ -167,7 +154,7 @@ export default {
         slideComponent
     },
     mounted () {
-
+        this.edit = true
     },
     methods: {
         getCookie(name) {
@@ -181,57 +168,83 @@ export default {
             const tmp = []
             for (let index = 0; index < this.allData.slides.length; ++index) {
                 const item = new PhSlideModel(index, this.allData.slides[index])
-                item.policies = this.createAllPolicyByModel(item)
+                this.createAllPolicyByModel(item)
                 tmp.push(item)
             }
             this.slideArr = tmp.sort((l, r) => l.idx - r.idx)
             this.activeModel = this.slideArr[0]
         },
-        changeHistogram(data) {
-            // TODO:
-            // this.$emit('event', data)
+        insightSelected(e) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "changeHistogram",
+                    projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
+                    dashboardId: this.allData.dashboard.dashboardId,
+                    slideId: e.param.slideId,
+                    contentId: e.param.contentIdx
+                }
+            }
+            this.$emit('event', event)
         },
-        on_clickNewChartNameConfirm(data) {
-            // TODO: 添加一个新图表
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "clickNewChartName",
-            //     element: this,
-            //     param: {
-            //         name: "clickNewChartName",
-            //         projectName: this.allData.projectName,
-            //         projectId: this.allData.projectId,
-            //         dashboardId: this.allData.projectId,
-            //         slideId: this.allData.projectId,
-            //         contentId: this.allData.projectId
-            //     }
-            // }
-            // this.$emit('event', event)
-            // this.dialogNewChartNameVisible = false
+        on_clickNewChartNameConfirm() {
+            const nextIdx = this.activeModel.content.length === 0 ? 0 : Math.max(...this.activeModel.content.map(_ => parseInt(_.index))) + 1
+            if (this.datasourceName.length > 0) {
+                const defaultPolicyName = "bar"
+                const one_content = {
+                    tp:"histogram",
+                    index: nextIdx,
+                    histogramName: "alfredtest",
+                    policyName: defaultPolicyName,
+                    datasourceClass:"default",
+                    schemaClass:"default",
+                    conditions: {},
+                    position: [0,0,1,1],
+                    datasetName: this.datasourceName,
+                    x: "",
+                    y: "",
+                    selDataset: this.selDataset
+                }
+                one_content["policy"] = this.createPolicyWithinContent(one_content)
+                this.activeModel.content.push(one_content)
+                this.dialogNewChartNameVisible = false
+            } else {
+                alert("请选择数据源！")
+                return false
+            }
         },
         on_clickNewChartConfirm() {
             this.dialogNewChartVisible = false
             this.dialogNewChartNameVisible = true
         },
         async addSlide() {
+            const nextIdx = this.slideArr.length === 0 ? 0 : Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1
             const data = {
-                content: "{}",
+                content: "[]",
                 pdId: this.allData.projectId + "_" + this.allData.dashboard.dashboardId,
                 title: "new title",
-                idx: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1),
-                slideId: String(Math.max(...this.slideArr.map(_ => parseInt(_.idx))) + 1)
+                datasetName: "does not useful just for back up",
+                idx: String(nextIdx),
+                slideId: String(nextIdx)
             }
 
             const item = new PhSlideModel(data.pdId + "_" + data.slideId, data)
-            item.policies = this.createAllPolicyByModel(item)
             this.slideArr.push(item)
             await item.save(this)
+            this.activeModel = item
+            this.edit = true
         },
         createAllPolicyByModel(model) {
             let result = []
             // TODO: maybe has some bug
-            for (const item in model.content) {
-                result.push(this.createPolicyWithinContent(model.content[item]))
+            // for (const item in model.content) {
+            for (let index = 0; index < model.content.length; ++index) {
+                const item = model.content[index]
+                item["policy"] = this.createPolicyWithinContent(item)
+                // result.push(this.createPolicyWithinContent(model.content[item]))
             }
             return result
         },
@@ -241,20 +254,20 @@ export default {
             if (content.policyName === "bar") {
                 return new BarPolicy(content.index,
                     new PhHistogramDatasource(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     new PhHistogramSchema(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
             else if (content.policyName === "pie") {
                 return new PiePolicy(content.index,
                     new PhHistogramDatasource(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     new PhHistogramSchema(content.index,
-                        this.projectId,
+                        this.allData.projectId,
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
@@ -263,7 +276,34 @@ export default {
             this.edit = false
             this.activeModel = this.slideArr[data]
         },
-        async on_clickDeleteSlideConfirm() {
+        /**
+         * 防抖
+         * @param {Function} func 要执行的回调函数 
+         * @param {Number} wait 延时的时间
+         * @param {Boolean} immediate 是否立即执行 
+         * @return null  
+         */
+        Debounce(func, wait=300, immediate = false) {
+        // 清除定时器
+            if (this.timeout !== null) clearTimeout(this.timeout);
+            // 立即执行，此类情况一般用不到
+            if (immediate) {
+                var callNow = !this.timeout;
+                this.timeout = setTimeout(function() {
+                    this.timeout = null;
+                }, wait);
+                if (callNow) typeof func === 'function' && func();
+            } else {
+                // 设置定时器，当最后一次操作后，timeout不会再被清除，所以在延时wait毫秒后执行func回调方法
+                this.timeout = setTimeout(function() {
+                    typeof func === 'function' && func();
+                }, wait);
+            }
+        },
+        on_clickDeleteSlideConfirm() {
+            this.Debounce(this.clickDeleteSlideConfirm)
+        },
+        async clickDeleteSlideConfirm() {
             const tmp = []
             for (let idx = 0; idx< this.slideArr.length; ++idx) {
                 if (idx !== this.delSlideIndex) {
@@ -277,8 +317,10 @@ export default {
             this.dialogDeleteSlideVisible = false
         },
         clickDeleteSlide(index) {
-            this.delSlideIndex = index
-            this.dialogDeleteSlideVisible = true
+            if(this.slideArr.length > 1) {
+                this.delSlideIndex = index
+                this.dialogDeleteSlideVisible = true
+            }
         },
         resetSlideName() {
             this.slideArr.forEach((item, index) => {
@@ -297,16 +339,28 @@ export default {
         async saveSlideContent() {
             for (let idx = 0; idx < this.slideArr.length; ++idx) {
                 if (this.slideArr[idx]) {
-                    this.slideArr[idx].queryContent = this.slideArr[idx].content
+                    this.slideArr[idx].queryContent = [...this.slideArr[idx].content]
+                    // delete this.slideArr[idx].queryContent.map(x => {x["policy"] = null})
                     await this.slideArr[idx].save(this)
                 }
             }
             this.edit = false
+        },
+        toggle() {
+            this.showDialog = !this.showDialog
+        },
+        select(data) {
+            this.datasourceName = data.name
+            this.selDataset = data
+            this.showDialog = false
         }
     },
     watch: {
-        allData(n, o) {
+        allData: async function(n, o) {
             this.createSlides()
+            if(this.allData.slides.length < 1) {
+                await this.addSlide()
+            }
         }
     }
 }
@@ -316,14 +370,87 @@ export default {
     * {
         box-sizing: border-box;
     }
+    .el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
+    }
     .page {
         display: flex;
         width: 100%;
-        height: calc(100vh - 60px);
-        .create-chart-container {
+        height: calc(100vh - 100px);
+        .create-container {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .create-chart-container {
+            display: flex;
+            align-items: center;
+            margin-left: 60px;
+            .sel {
+                cursor: pointer;
+            }
+            .input {
+                width: 200px;
+                height: 30px;
+                border: 1px solid #979797;
+                margin-left: 20px;
+                p {
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    color: #000000;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    padding: 0 10px;
+                    bottom: 10px;
+                    position: relative;
+                }
+            }
+            .icon {
+                position: absolute;
+                top: 90px;
+                right: 244px;
+                height: 18px;
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            .dialog {
+                position: absolute;
+                top: 114px;
+                right: 241px;
+                width: 206px;
+                height: 90px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                border: 1px solid #979797;
+                background: white;
+                .dialog_select {
+                    width: 200px;
+                    height: 24px;
+                    margin: -1px;
+                    border: 1px solid #979797;
+                    background: #ffffff;
+                    span {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        font-family: PingFangSC-Medium;
+                        font-size: 14px;
+                        color: #000000;
+                        font-weight: 600;
+                        margin-left: 10px;
+                    }
+                    .dialog_select_span {
+                        width: 200px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+            }
         }
         .chart-type {
             height: 60px;
@@ -332,6 +459,7 @@ export default {
             display: flex;
             align-items: center;
             padding: 20px;
+            cursor: pointer;
             img {
                 width: 30px;
                 margin-right: 14px;
@@ -380,7 +508,7 @@ export default {
                 }
             }
             .content {
-                height: calc(100vh - 88px);
+                height: calc(100vh - 128px);
             }
             .page_footer {
                 display: flex;

@@ -23,9 +23,9 @@ export default class OauthServiceService extends Service {
 
 	get clientId() {
 		if (ENV.environment === "development") {
-			return ENV.APP.DEV.clientId
+			return ENV.APP.DEV.redirectClientId
 		} else {
-			return ENV.APP.clientId
+			return ENV.APP.redirectClientId
 		}
 	}
 

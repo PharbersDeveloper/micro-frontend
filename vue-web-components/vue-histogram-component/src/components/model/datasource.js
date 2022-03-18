@@ -2,7 +2,7 @@
 // import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
 
 export default class PhDataSource {
-    constructor(id, projectId, datasetName="phmax.data_wide", adapter=null) {
+    constructor(id, projectId, datasetName, adapter=null) {
         this.id = id
         this.sort = {}
         this.filter = {}
@@ -29,7 +29,7 @@ export default class PhDataSource {
         let body = {
             "query": query,
             "schema": schema,
-            "projectId": "12345"
+            "projectId": this.projectId
         }
         let options = {
             method: "POST",

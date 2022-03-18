@@ -5,18 +5,14 @@
                    :x="rect.left" :y="rect.top"
                    @resizestop="resizeStop" @dragstop="resizeStop"
                    v-on:resizing="resize" v-on:dragging="resize">
-        <Insight :init-width="rect.width" :init-height="rect.height" :policy="policy"  ref="histogram" />
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  ref="histogram" />
     </VueDragResize>
     <div class="view" :style="resetInsightPosition()" v-else-if="checkViewableShowing()">
-        <Insight :init-width="rect.width" :init-height="rect.height" :policy="policy"  ref="histogram" />
+        <Insight :init-width="rect.width" :init-height="rect.height" :policy="activeContent.policy"  @selected="insightSelected" ref="histogram" />
     </div>
 </template>
 
 <script>
-import BarPolicy from "../components/render-policy/bar-policy"
-import PiePolicy from "../components/render-policy/pie-policy"
-import PhHistogramDatasource from "../components/model/datasource"
-import PhHistogramSchema from "../components/model/schema"
 import Insight from "./insight"
 import VueDragResize from './drag-resize'
 
@@ -47,12 +43,6 @@ export default {
         editable: {
             type: Boolean,
             default: true
-        },
-        policy: {
-            type: Object,
-            default: function () {
-                return null
-            }
         },
         editable: {
             type: Boolean,
@@ -188,6 +178,13 @@ export default {
         },
         resetInsightPosition() {
             return "left: " + this.rect.left + "px; top: " + this.rect.top + "px; width: " + this.rect.width + "px; height: " + this.rect.height + "px;"
+        },
+        insightSelected() {
+            const event = new Event("event")
+            event.param = {
+                contentIdx: this.activeContent.index
+            }
+            this.$emit("selected", event)
         }
     },
     watch: {

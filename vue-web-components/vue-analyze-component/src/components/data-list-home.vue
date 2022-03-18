@@ -218,7 +218,8 @@ export default {
                 "remove_DS": "删除了数据集",
                 "upload": "创建了数据集",
                 "dag_create": "创建了脚本",
-                "resource_create": "启动了资源"
+                "resource_create": "启动了资源",
+                "catalog": "创建了脚本"
             },
             actions: [],
             actionsShow: [],

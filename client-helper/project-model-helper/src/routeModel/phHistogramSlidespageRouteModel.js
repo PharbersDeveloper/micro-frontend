@@ -5,13 +5,14 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	route.store.unloadAll("slide")
 	const url = "https://apiv2.pharbers.com/phdydatasource/query"
 	const accessToken = route.cookies.read("access_token") || debugToken
-	const projectId = parseParams.projectId || "1"
-	const projectName = parseParams.projectName || "alfred test"
+	const projectId = parseParams.query.projectId
+	const projectName = parseParams.query.projectName
+	const dashboardId = parseParams.query.dashboardId
 	let body = {
 		table: "dashboard",
 		conditions: {
-			projectId: ["=", "1"],
-			dashboardId: ["=", "1"]
+			projectId: ["=", projectId],
+			dashboardId: ["=", dashboardId]
 		},
 		limit: 100,
 		start_key: ""
@@ -42,7 +43,7 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	let body_slide = {
 		table: "slide",
 		conditions: {
-			pdId: ["=", "1_1"]
+			pdId: ["=", projectId + "_" + dashboardId]
 		},
 		limit: 100,
 		start_key: ""
@@ -67,10 +68,47 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 			})
 		})
 	const slides = slidesQuery.filter((it) => it)
+
+	// 请求dataset
+	route.store.unloadAll("dataset")
+	const dsurl = "https://apiv2.pharbers.com/phdydatasource/scan"
+	const dsaccessToken = route.cookies.read("access_token") || debugToken
+	let dsbody = {
+		table: "dataset",
+		conditions: {
+			projectId: ["=", projectId]
+		},
+		limit: 100,
+		start_key: ""
+	}
+
+	let dsoptions = {
+		method: "POST",
+		headers: {
+			Authorization: dsaccessToken,
+			"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+			accept: "application/json"
+		},
+		body: JSON.stringify(dsbody)
+	}
+	const ds = fetch(dsurl, dsoptions)
+	let dstmp = await ds
+		.then((response) => response.json())
+		.then((response) => {
+			that.store.pushPayload(response)
+			return new Promise((resolve) => {
+				resolve(that.store.peekAll("dataset"))
+			})
+		})
+
+	let dss = dstmp.filter(
+		(it) => it.cat != "catalog" && it.cat.indexOf("index") == -1
+	)
 	return {
 		projectName: projectName,
 		projectId: projectId,
 		dashboard: dashboard,
+		datasetArr: dss,
 		slides: slides,
 		_isVue: true
 	}

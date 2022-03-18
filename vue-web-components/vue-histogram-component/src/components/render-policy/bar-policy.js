@@ -17,9 +17,9 @@ export default class PhBarChartPolicy extends policy{
         this.yDomain = []           // an array of (ordinal) y-values
 
         this.dataset = this.datasource.name
-        this.xProperty = "标准省份名称"
+        this.xProperty = ""
         // this.xProperty = "doi"
-        this.yProperty = "sales"
+        this.yProperty = ""
         this.yPropertyFunc = "max"     // avg, max, min
 
         this.xLabel = ""
@@ -175,7 +175,7 @@ export default class PhBarChartPolicy extends policy{
     }
 
     buildBarChartQueryString() {
-        return "select " + this.yPropertyFunc + "(`" + this.yProperty + "`) as `" + this.yProperty + "`,`" + this.xProperty + "` from " + this.dataset + " group by `" + this.xProperty + "`"
+        return "select " + this.yPropertyFunc + "(`" + this.yProperty + "`) as `" + this.yProperty + "`,`" + this.xProperty + "` from `" + this.datasource.projectId + "_" + this.dataset + "` group by `" + this.xProperty + "`"
     }
 
     buildPolicySchema() {

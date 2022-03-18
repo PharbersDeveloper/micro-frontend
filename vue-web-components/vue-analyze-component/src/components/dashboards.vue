@@ -87,7 +87,7 @@
                                 <span class="script_icon">
                                     <img :src="selectDashboardsetIcon(dashboard.cat)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickDashboardName(dashboard)" :title="dashboard.name">{{dashboard.name}}</p>
+                                <p class="data_name" @click.stop="clickDashboardName(dashboard)" :title="dashboard.title">{{dashboard.title}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in dashboard.label" :key="inx">
                                         <span v-if="dashboard.label !== ''">
@@ -108,7 +108,7 @@
                     <div class="view_content" v-if="dashboardCheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="database_icon" alt="">
+                                <img :src="dashboard_icon_reverse" alt="">
                             </span>
                             <div class="show-name" v-if="dashboardCheckedIds.length == 1">
                                 <p class="project_name_info" :title="dashboardcheckedNames[0]">
@@ -140,7 +140,7 @@
                 </div>
             </div>
         </div>
-        <el-dialog
+		<el-dialog
             title="创建数据看板"
             :visible.sync="dialogCreateVisible"
             height="300px"
@@ -148,7 +148,7 @@
 
             <div class="dlg-container">
                 <span>数据看板名称：</span>
-                <input type="text" class="db_name">
+                <input type="text" class="db_name" v-model="inputDashboardName">
             </div>
 
             <span slot="footer" class="dialog-footer">
@@ -181,11 +181,8 @@ export default {
             clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
             ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
             descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
-            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
-            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
-            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
-            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF.svg",
+            dashboard_icon_reverse: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -199,7 +196,7 @@ export default {
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
-            tags: ['name','description','啦啦啦'],
+            tags: [],
             ary: [],
             checked: false,
             manual: true,
@@ -210,7 +207,8 @@ export default {
             dashboardCheckedIds: [], //选中项id
             dashboardcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            inputDashboardName: ""
         }
     },
     props: {
@@ -218,19 +216,8 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dashboards:
-                [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "cpa_pha_mapping",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                    }
-                ],
-                tagsArray: ["qqq"]
+                dashboards: [],
+                tagsArray: []
             })
         }
     },
@@ -240,19 +227,6 @@ export default {
         ElDialog,
         ElButton,
         ElInput
-    },
-    computed: { },
-    mounted() {
-        this.searchData = [
-            {
-                "projectId": null,
-                "schema": "[]",
-                "version": "max1.0",
-                "name": "cpa_pha_mapping",
-                "label": "",
-                "cat": "input_index",
-                "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-            }]
     },
     watch: {
         "allData.tagsArray": function() {
@@ -268,7 +242,7 @@ export default {
             let searchValue = this.searchValue
             this.state = 'search'
             if(searchValue) {
-                this.searchData = this.allData.dashboards.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                this.searchData = this.allData.dashboards.filter(item => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             } else {
                 this.searchData = this.allData.dashboards
             }
@@ -276,7 +250,46 @@ export default {
         }
     },
     methods: {
-        on_clickCreateConfirm(data) {
+        guid(len, radix) {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+            let uuid = [], i;
+            radix = radix || chars.length;
+
+            if (len) {
+                // Compact form
+                for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+            } else {
+                // rfc4122, version 4 form
+                let r;
+
+                // rfc4122 requires these characters
+                uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+                uuid[14] = '4';
+
+                // Fill in random data.  At i==19 set the high bits of clock sequence as
+                // per rfc4122, sec. 4.1.5
+                for (i = 0; i < 36; i++) {
+                    if (!uuid[i]) {
+                        r = 0 | Math.random()*16;
+                        uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                    }
+                }
+            }
+
+            return uuid.join('');
+        },
+
+        on_clickCreateConfirm() {
+            const data = {
+                projectId: this.allData.projectId,
+                dashboardId: this.guid(8, 16),
+                label: "[]",
+                title: this.inputDashboardName,
+                description: this.inputDashboardName,
+                updating: String(new Date().getTime())
+            }
+            data["id"] = data.projectId + "_" + data.dashboardId
+
             const event = new Event("event")
             event.args = {
                 callback: "createDashboard",
@@ -289,30 +302,6 @@ export default {
                 }
             }
             this.$emit('event', event)
-        },
-        // max1.0
-        fitMaxEvent(data) {
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
-            data.args.param.maxcat = this.maxcat
-            data.args.param.dashboardArray = this.allData.dashboards
-            let creatDS = true
-            this.allData.dashboards.forEach(item => {
-                if(item.name === data.args.param.dsName) {
-                    creatDS = false
-                    alert("数据集已存在！")
-                }
-            })
-            if(creatDS) {
-                this.$emit('event', data)
-                this.clickMax = false
-                this.clickMaxOutput = false
-            }
-        },
-        // 关闭max1.0弹框
-        closeDialog() {
-            this.clickMaxOutput = false
-            this.clickMax = false
         },
         //增加tag
         addTagsEvent(data) {
@@ -337,7 +326,7 @@ export default {
             this.dashboardCheckedIds = []
             this.dashboardcheckedNames = []
             this.dashboardCheckedIds.push(dashboard.id)
-            this.dashboardcheckedNames.push(dashboard.name)
+            this.dashboardcheckedNames.push(dashboard.title)
         },
         //点击list多选框
         checkedOneDashboard(dashboard) {
@@ -347,7 +336,7 @@ export default {
                 this.dashboardcheckedNames.splice(idIndex, 1)
             } else {
                 this.dashboardCheckedIds.push(dashboard.id)
-                this.dashboardcheckedNames.push(dashboard.name)
+                this.dashboardcheckedNames.push(dashboard.title)
             }
         },
         //点击 name
@@ -360,7 +349,7 @@ export default {
                     name: "clickDashboardName",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    dashboard: data
+                    dashboardId: data.dashboardId
                 }
             }
             this.$emit('event', event)
@@ -377,7 +366,7 @@ export default {
             if(this.isCheckedAllDashboard) {
                 this.allData.dashboards.forEach(item => {
                     this.dashboardCheckedIds.push(item.id)
-                    this.dashboardcheckedNames.push(item.name)
+                    this.dashboardcheckedNames.push(item.title)
                 })
             }
         },
@@ -396,7 +385,7 @@ export default {
                 this.ascending = false
                 this.searchData.sort(
                     function compareFunction(param1, param2) {
-                        return param1.name.localeCompare(param2.name);
+                        return param1.title.localeCompare(param2.title);
                     }
                 )
             }else if (val == 'descending') {
@@ -491,45 +480,6 @@ export default {
                 this.labelShowDialog = false
             }
         },
-        // Max1.0入口
-        on_click_max_input() {
-            this.clickMax = true
-            this.maxcat = "input_index"
-        },
-        on_click_max_output() {
-            this.clickMaxOutput = true
-            this.maxcat = "output_index"
-        },
-        //本地上传文件
-        upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    type: "localUpload"
-                }
-            }
-            this.$emit('event', event)
-        },
-        //s3上传文件
-        s3Upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "upload",
-                    type: "s3Upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
-        },
         linkToPage() {
             const event = new Event("event")
             event.args = {
@@ -543,20 +493,8 @@ export default {
             }
             this.$emit('event', event)
         },
-        toggle() {
-            this.showDialog = !this.showDialog
-        },
         selectDashboardsetIcon(cat) {
-            switch (cat) {
-            case "input_index":
-                return this.input_index_icon
-            case "output_index":
-                return this.output_index_icon
-            case "intermediate":
-                return this.intermediate_icon
-            default:
-                return this.dataset_icon
-            }
+            return this.dashboard_icon
         }
     }
 }
@@ -567,6 +505,9 @@ export default {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+.el-dialog__wrapper {
+	background: rgba(0, 0, 0, 0.31);
 }
 .bg {
     background: #dfe7ff;
@@ -1080,8 +1021,8 @@ export default {
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 24px;
-                            height: 24px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                     .show-name {

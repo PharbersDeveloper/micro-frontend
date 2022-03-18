@@ -136,7 +136,7 @@ export default {
         datasetArr: {
             type: Array,
             default: function() {
-                return ['dataset_0001','dataset_0002','dataset_0003','dataset_0004','dataset_0003','dataset_0003','dataset_0003']
+                return []
             }
         },
         fileList: {
