@@ -160,7 +160,9 @@ export default {
                     projectName: this.allData.projectName,
                     dashboardId: this.allData.dashboardId,
                     slideId: this.allData.slide.slideId,
-                    contentId: this.allData.contentId
+                    contentId: this.allData.contentId,
+                    datasetId: this.activeContent.datasetId,
+                    datasetName: this.activeContent.datasetName
                 }
             }
             this.$emit('event', event)

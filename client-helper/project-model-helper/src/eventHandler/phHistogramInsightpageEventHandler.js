@@ -13,7 +13,7 @@ export async function phHistogramInsightpageEventHandler(e, route) {
 					"&dashboardId=" +
 					params.dashboardId
 			} else if (params.name === "analyze") {
-				uri = `dataset/${params.dataset.name}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.dataset.id}&datasetName=${params.dataset.name}`
+				uri = `dataset/${params.datasetName}?projectName=${params.projectName}&projectId=${params.projectId}&datasetId=${params.datasetId}&datasetName=${params.datasetName}`
 			}
 			route.router.transitionTo("shell", uri)
 			break

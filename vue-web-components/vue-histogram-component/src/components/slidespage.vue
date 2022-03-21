@@ -204,9 +204,9 @@ export default {
                     conditions: {},
                     position: [0,0,1,1],
                     datasetName: this.datasourceName,
+                    datasetId: this.selDataset.id,
                     x: "",
-                    y: "",
-                    selDataset: this.selDataset
+                    y: ""
                 }
                 one_content["policy"] = this.createPolicyWithinContent(one_content)
                 this.activeModel.content.push(one_content)
