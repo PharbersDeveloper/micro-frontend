@@ -10,7 +10,7 @@
         <div class="content_container">
             <div class="icon_dialog">
                 <div class="dataset_img">
-                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
+                    <img src="https://components.pharbers.com/dev/general/public/Database.svg" alt="" class="database">
                 </div>
                 <div class="center-area">
                     <div class="round">
@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="input">
-                        <bp-select-vue src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="scriptValue">
+                        <bp-select-vue src="https://components.pharbers.com/dev/general/public/icon_chevron-down_12.svg" :choosedValue="scriptValue">
                             <bp-option-vue text="双源映射" @click="selectScript(0)"></bp-option-vue>
                             <bp-option-vue text="手动映射" @click="selectScript(1)"></bp-option-vue>
                         </bp-select-vue>
@@ -28,7 +28,7 @@
                     <bp-button text="添加映射" v-show="manual"></bp-button>
                 </div>
                 <div class="dataset_img">
-                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" alt="" class="database">
+                    <img src="https://components.pharbers.com/dev/general/public/Database.svg" alt="" class="database">
                 </div>
                 <!-- <div class="log">
                     <p>Job failed</p>
@@ -83,10 +83,10 @@ export default {
         return {
             showDialog: false,
             cloumnClean: '列清洗_v1',
-            oip_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/OIP.png",
-            drop_down_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
-            no_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/NO.png",
-            yes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Yes.png",
+            oip_icon: "https://components.pharbers.com/dev/general/public/OIP.png",
+            drop_down_icon: "https://components.pharbers.com/dev/general/public/drop-down-icon.png",
+            no_icon: "https://components.pharbers.com/dev/general/public/NO.png",
+            yes_icon: "https://components.pharbers.com/dev/general/public/Yes.png",
             manual: true,
             scriptValue: "手动映射"
         }

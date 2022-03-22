@@ -149,16 +149,16 @@
 export default {
     data() {
         return {
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/datasets.png",
-            recipes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/recipes.png",
-            models_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/models.png",
-            notebook_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/notebooks.png",
-            analyses_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/analyses.png",
-            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/dashboard.png",
-            article_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/articles.png",
-            num_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/num_icon.png",
-            file_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/file.png",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png",
+            dataset_icon: "https://components.pharbers.com/dev/general/public/datasets.png",
+            recipes_icon: "https://components.pharbers.com/dev/general/public/recipes.png",
+            models_icon: "https://components.pharbers.com/dev/general/public/models.png",
+            notebook_icon: "https://components.pharbers.com/dev/general/public/notebooks.png",
+            analyses_icon: "https://components.pharbers.com/dev/general/public/analyses.png",
+            dashboard_icon: "https://components.pharbers.com/dev/general/public/dashboard.png",
+            article_icon: "https://components.pharbers.com/dev/general/public/articles.png",
+            num_icon: "https://components.pharbers.com/dev/general/public/num_icon.png",
+            file_icon: "https://components.pharbers.com/dev/general/public/file.png",
+            script_icon: "https://components.pharbers.com/dev/general/public/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -317,26 +317,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg"
+                    return "https://components.pharbers.com/dev/general/public/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg"
+                    return "https://components.pharbers.com/dev/general/public/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg"
+                    return "https://components.pharbers.com/dev/general/public/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg"
+                    return "https://components.pharbers.com/dev/general/public/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg"
+                    return "https://components.pharbers.com/dev/general/public/sparkR_icon.svg"
                 } else {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                    return "https://components.pharbers.com/dev/general/public/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg"
+                return "https://components.pharbers.com/dev/general/public/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg"
+                return "https://components.pharbers.com/dev/general/public/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg"
+                return "https://components.pharbers.com/dev/general/public/output_index.svg"
             } else  {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                return "https://components.pharbers.com/dev/general/public/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

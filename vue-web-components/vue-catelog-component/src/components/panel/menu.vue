@@ -4,9 +4,9 @@
         <div class="user-name-container">
             <div class="user-name-area">
                 <bpText class="inverse-heading-medium">{{allData.name_show}}</bpText>
-                <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dropdown.svg" alt="">
+                <img src="https://components.pharbers.com/dev/general/public/icon_dropdown.svg" alt="">
             </div>
-            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_data.svg" alt="">
+            <img src="https://components.pharbers.com/dev/general/public/icon_data.svg" alt="">
             <!-- <div id="icon_notification" class="icon_notification-initial"></div> -->
         </div>
         <bpText class="body-tertiary-inverse">{{allData.company_name_show}}</bpText>
@@ -14,7 +14,7 @@
     <bpMenu :menu_data="menu_data" class="" :activeIndex="activeIndex" :activeSubIndex="activeSubIndex" :menuType="menuType"></bpMenu>
 	<div class="log-out" @click="logOut">
 		<span class="log-out-menu">
-            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sign_out.svg" alt="">
+            <img src="https://components.pharbers.com/dev/general/public/icon_sign_out.svg" alt="">
             <span class="log-out-text">退出登录</span>
         </span>
 	</div>
@@ -48,7 +48,7 @@ export default {
                 {
                     type: "item",
                     text: "开放资源",
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_projects-fill.svg",
+                    src: "https://components.pharbers.com/dev/general/public/icon_projects-fill.svg",
                     content: this,
                     click_event: function (data) {
                         this.content.activeIndex = data
@@ -68,7 +68,7 @@ export default {
                 {
                     type: "item",
                     text: "公有文件",
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
+                    src: "https://components.pharbers.com/dev/general/public/icon_my-data.svg",
                     content: this,
                     click_event: function (data) {
                         this.content.activeIndex = data
@@ -88,7 +88,7 @@ export default {
                 {
                     type: "item",
                     text: "新数据资产",
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
+                    src: "https://components.pharbers.com/dev/general/public/icon_my-data.svg",
                     content: this,
                     click_event: function (data) {
                         this.content.activeIndex = data
@@ -108,7 +108,7 @@ export default {
                 // {
                 //     type: "item",
                 //     text: "数据资产",
-                //     src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data.svg",
+                //     src: "https://components.pharbers.com/dev/general/public/icon_my-data.svg",
                 //     content: this,
                 //     click_event: function (data) {
                 //         this.content.activeIndex = data
@@ -130,7 +130,7 @@ export default {
                     type: "item",
                     text: "工作平台",
                     content: this,
-                    src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_projects-fill.svg",
+                    src: "https://components.pharbers.com/dev/general/public/icon_projects-fill.svg",
                     click_event: function (data) {
                         this.content.activeIndex = data
                         this.content.menuType = this.type

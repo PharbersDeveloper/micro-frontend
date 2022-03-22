@@ -82,10 +82,10 @@ export default {
             mineSortAscendingIcon: '',
             userName: util.methods.getCookie('user_name'),
             subscribedTitle: "文件名称",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
+            fileIconDark: "https://components.pharbers.com/dev/general/public/icon_my-data-dark.svg",
             goDetail: "查看详情",
-            iconSortAscending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
-            iconSortDescending: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg",
+            iconSortAscending: "https://components.pharbers.com/dev/general/public/icon_sorting-descending.svg",
+            iconSortDescending: "https://components.pharbers.com/dev/general/public/icon_sorting-descending.svg",
             clickIndex: 0,
             showDataDetail: false,
             showPart: false

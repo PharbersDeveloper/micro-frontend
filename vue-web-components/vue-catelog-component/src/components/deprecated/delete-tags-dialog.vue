@@ -41,9 +41,9 @@
 export default {
     data() {
         return{
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
+            label_icon: "https://components.pharbers.com/dev/general/public/tag.svg",
+            search_icon: "https://components.pharbers.com/dev/general/public/search.png",
+            delete_icon: "https://components.pharbers.com/dev/general/public/delete_r.svg",
             add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
             enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
             // tagList: ['lalalal','12345','nxjksdcjk','啦啦啦啦'],

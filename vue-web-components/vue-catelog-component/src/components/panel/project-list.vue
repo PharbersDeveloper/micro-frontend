@@ -99,13 +99,13 @@ export default {
     data() {
         return {
             title: "工作平台",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_dag+list.svg",
-            addIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E6%B7%BB%E5%8A%A0(1).svg",
-            cardIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%BC%A9%E7%95%A5%E5%9B%BE.svg",
-            listIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA.svg",
-            listIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_list_slelect.svg",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            cardIconSelect: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_card_slelect.svg",
+            fileIconDark: "https://components.pharbers.com/dev/general/public/icon_dag+list.svg",
+            addIcon: "https://components.pharbers.com/dev/general/public/icons/%E6%B7%BB%E5%8A%A0(1).svg",
+            cardIcon: "https://components.pharbers.com/dev/general/public/icons/%E7%BC%A9%E7%95%A5%E5%9B%BE.svg",
+            listIcon: "https://components.pharbers.com/dev/general/public/icons/%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA.svg",
+            listIconSelect: "https://components.pharbers.com/dev/general/public/icon_list_slelect.svg",
+            selectIcon: "https://components.pharbers.com/dev/general/public/drop_down_icon.svg",
+            cardIconSelect: "https://components.pharbers.com/dev/general/public/icon_card_slelect.svg",
             toggle: false,
             closeTosts: false,
             dialogCreateVisible: false,
@@ -367,12 +367,12 @@ export default {
                     margin-top: 12px;
                     .project-card-item:hover {
                         border: 1px solid #7163C5;
-                        background: url("https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/35531628231509_.pic.jpg");
+                        background: url("https://components.pharbers.com/dev/general/public/35531628231509_.pic.jpg");
                         box-shadow: 0 0 1px 0 rgba(37,35,45,0.12), 0 4px 8px -2px rgba(37,35,45,0.25);
                     }
                     .project-card-item:active {
                         border: 1px solid #7163C5;
-                        background: url("https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/35531628231509_.pic.jpg");
+                        background: url("https://components.pharbers.com/dev/general/public/35531628231509_.pic.jpg");
                         box-shadow: 0 0 1px 0 rgba(37,35,45,0), 0 4px 8px -2px rgba(37,35,45,0);
                     }
                     .project-card-item {
@@ -380,7 +380,7 @@ export default {
                         height: 100px;
                         border: 1px solid #f1f1f2;
                         border-radius: 2px;
-                        background: url("https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/dag_card.png");
+                        background: url("https://components.pharbers.com/dev/general/public/dag_card.png");
                         background-size: cover;
                         padding: 10px;
                         display: flex;

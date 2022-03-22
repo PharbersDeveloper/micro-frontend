@@ -44,23 +44,23 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" @click="selectScripts('python3')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
+                                    <img src="https://components.pharbers.com/dev/general/public/icons/Python.svg" alt="">
                                     <p>python</p>
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
+                                    <img src="https://components.pharbers.com/dev/general/public/icons/PySpark.svg" alt="">
                                     <p>PySpark</p>
                                 </div>
                                 <div class="list" @click="selectScripts('r')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
+                                    <img src="https://components.pharbers.com/dev/general/public/icons/R.svg" alt="">
                                     <p>R</p>
                                 </div>
                                 <div class="list" @click="selectScripts('sparkr')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
+                                    <img src="https://components.pharbers.com/dev/general/public/icons/SparkR.svg" alt="">
                                     <p>sparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
+                                    <img src="https://components.pharbers.com/dev/general/public/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
                                     <p>prepare</p>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src="https://components.pharbers.com/dev/general/public/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -233,28 +233,28 @@ import ElButton from 'element-ui/packages/option/index'
 export default {
     data() {
         return {
-            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            copy_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/copy.svg",
-            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
-            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit.svg",
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg",
-            pyspark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg",
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg",
+            hide_icon: "https://components.pharbers.com/dev/general/public/%E9%9A%90%E8%97%8F.svg",
+            copy_icon: "https://components.pharbers.com/dev/general/public/copy.svg",
+            star_icon: "https://components.pharbers.com/dev/general/public/%E6%94%B6%E8%97%8F.svg",
+            run_icon: "https://components.pharbers.com/dev/general/public/%E5%BC%80%E5%A7%8B1.svg",
+            edit_icon: "https://components.pharbers.com/dev/general/public/edit.svg",
+            label_icon: "https://components.pharbers.com/dev/general/public/tag.svg",
+            search_icon: "https://components.pharbers.com/dev/general/public/search.png",
+            dropDownIcon: "https://components.pharbers.com/dev/general/public/drop_down_icon.svg",
+            delete_icon: "https://components.pharbers.com/dev/general/public/delete.png",
+            clear_data_icon: "https://components.pharbers.com/dev/general/public/clear_data.png",
+            selectIcon: "https://components.pharbers.com/dev/general/public/drop_down_icon.svg",
+            delete_icon: "https://components.pharbers.com/dev/general/public/delete_r.svg",
+            clear_data_icon: "https://components.pharbers.com/dev/general/public/delete_b.svg",
+            ascending_order: "https://components.pharbers.com/dev/general/public/down.svg",
+            descending_order: "https://components.pharbers.com/dev/general/public/top.svg",
+            script_icon: "https://components.pharbers.com/dev/general/public/script_select.svg",
+            prepare_icon: "https://components.pharbers.com/dev/general/public/script_select.svg",
+            prepare_icon: "https://components.pharbers.com/dev/general/public/prepare_icon.svg",
+            pyspark_icon: "https://components.pharbers.com/dev/general/public/pyspark_icon.svg",
+            python_icon: "https://components.pharbers.com/dev/general/public/python_icon.svg",
+            R_icon: "https://components.pharbers.com/dev/general/public/R_icon.svg",
+            sparkR_icon: "https://components.pharbers.com/dev/general/public/sparkR_icon.svg",
             showDialog: false,
             state: '',
             editShow: false,

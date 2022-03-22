@@ -9,6 +9,11 @@
 	font-display: "auto";
 	font-style: normal
 }
+
+body {
+	background: #fff;	
+	font-weight: normal;
+}
   
 * {
 	margin: 0;

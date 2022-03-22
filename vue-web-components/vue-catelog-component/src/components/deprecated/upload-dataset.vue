@@ -115,7 +115,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src="https://components.pharbers.com/dev/general/public/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -215,22 +215,22 @@ import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 export default {
     data() {
         return {
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
-            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
-            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
-            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
-            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            label_icon: "https://components.pharbers.com/dev/general/public/tag.svg",
+            search_icon: "https://components.pharbers.com/dev/general/public/search.png",
+            dropDownIcon: "https://components.pharbers.com/dev/general/public/drop_down_icon.svg",
+            edit_icon: "https://components.pharbers.com/dev/general/public/edit_icon.png",
+            delete_icon: "https://components.pharbers.com/dev/general/public/delete.png",
+            clear_data_icon: "https://components.pharbers.com/dev/general/public/clear_data.png",
+            selectIcon: "https://components.pharbers.com/dev/general/public/drop_down_icon.svg",
+            delete_icon: "https://components.pharbers.com/dev/general/public/delete_r.svg",
+            clear_data_icon: "https://components.pharbers.com/dev/general/public/delete_b.svg",
+            ascending_order: "https://components.pharbers.com/dev/general/public/down.svg",
+            descending_order: "https://components.pharbers.com/dev/general/public/top.svg",
+            dataset_icon: "https://components.pharbers.com/dev/general/public/normal.svg",
+            input_index_icon: "https://components.pharbers.com/dev/general/public/input_index.svg",
+            output_index_icon: "https://components.pharbers.com/dev/general/public/output_index.svg",
+            intermediate_icon: "https://components.pharbers.com/dev/general/public/intermediate.svg",
+            database_icon: "https://components.pharbers.com/dev/general/public/Database.svg",
             showDialog: false,
             state: '',
             editShow: false,

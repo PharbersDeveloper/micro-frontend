@@ -45,7 +45,7 @@ export default {
             version: "max1.0",
             dsName: "",
             format: "",
-            select_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
+            select_icon: "https://components.pharbers.com/dev/general/public/drop_down_icon.svg"
         }
     },
     components: {

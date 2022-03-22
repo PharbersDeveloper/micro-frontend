@@ -46,8 +46,8 @@
 export default {
     data: ()=> {
         return {
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
-            error_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/error.svg",
+            prepare_icon: "https://components.pharbers.com/dev/general/public/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
+            error_icon: "https://components.pharbers.com/dev/general/public/icons/error.svg",
             rowParams: '[{"key": ["=", "value"]}]',
             colParams: '["col1", "col2"]',
             changeParams: "value"

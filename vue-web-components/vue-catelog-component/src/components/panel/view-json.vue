@@ -23,7 +23,7 @@ export default {
     },
     data() {
         return {
-            closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg"
+            closeIcon: "https://components.pharbers.com/dev/general/public/icon_close.svg"
         }
     },
     props: {

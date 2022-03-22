@@ -80,7 +80,7 @@ export default {
             userName: util.methods.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
+            fileIconDark: "https://components.pharbers.com/dev/general/public/icon_my-data-dark.svg",
             public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/publicData.svg",
             goDetail: "查看详情",
             activeName: "second",
