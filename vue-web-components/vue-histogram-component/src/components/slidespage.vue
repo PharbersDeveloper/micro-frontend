@@ -95,6 +95,22 @@
                 <el-button type="primary" @click="on_clickNewChartNameConfirm">确认</el-button>
             </span>
         </el-dialog>
+		 <el-dialog
+            title="操作未保存"
+            :visible.sync="saveDialog"
+            width="600px">
+            <div class="delete-slide-container">
+                您的操作尚未被保存
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="saveDialog = false">取消</el-button>
+                <el-button @click="saveDialog = false">不保存并继续</el-button>
+                <el-button type="primary" 
+                    @click="on_clickSaveDialodConfirm">
+                    保存并继续
+                </el-button>
+            </span>
+        </el-dialog>
         <img v-if="edit" :src="add_chart" class="add_chart" alt="" @click="dialogNewChartVisible = true">
     </div>
 </template>
@@ -145,7 +161,8 @@ export default {
             datasourceName: "",
             showDialog: false,
             timeout: null,
-            selDataset: null
+            selDataset: null,
+            saveDialog: false
         }
     },
     components: {
@@ -157,6 +174,16 @@ export default {
         this.edit = true
     },
     methods: {
+        // editFalse() {
+        //     if(!this.activeModel.checkSave()) {
+        //         this.saveDialog = true
+        //     } else {
+        //         this.edit = false
+        //     }
+        // },
+        // on_clickSaveDialodConfirm() {
+        //     this.saveSlideContent()
+        // },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))

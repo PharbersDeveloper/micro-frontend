@@ -24,6 +24,10 @@ export default class PhSlideModel {
     querySlideContent() {
         // do nothing ...
     }
+	
+    checkSave(ele) {
+        return JSON.stringify(this.queryContent) === JSON.stringify(this.content)
+    }
 
     async save(ele) {
         function replacer(key, value) {
