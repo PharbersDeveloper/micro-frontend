@@ -1,4 +1,4 @@
- // eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
 export async function airflowIframeRouteModel(route, parseParams, curPage) {
 	let name = parseParams.query.projectName
 		.toLowerCase()

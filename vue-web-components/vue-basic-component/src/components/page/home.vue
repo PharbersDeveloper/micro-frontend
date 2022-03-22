@@ -47,7 +47,7 @@
                     <div class="report-download-img-container">
                         
                         <bpImg 
-                            :src="'https://www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
+                            :src="report.cover.get('path')" class="report-down-img"></bpImg>
                         <div class="report-down-img-mask"></div>
                     </div>
                     <div class="report-download-info">
@@ -242,18 +242,18 @@ export default {
                     advisoryBrand: "Improve ROI"
                 }
             },
-            src: "https://www.pharbers.com/public/img_home_hero.png",
-            buttonGo: "https://www.pharbers.com/public/icon_go_yellow.svg",
-            reportLeftDown: "https://www.pharbers.com/public/img_deco_corner.svg",
-            reportRightDown: "https://www.pharbers.com/public/img_deco_corner.svg",
-            reportDownImg: "https://www.pharbers.com/public/img_paper-cover_VPB.jpg",
-            reportConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            dataShowImg: "https://www.pharbers.com/public/img_corevalue.png",
-            showMoreButtonGo: "https://www.pharbers.com/public/icon_go.svg",
-            maxRightImg: "https://www.pharbers.com/public/img_home_max.png",
-            maxRightImg_480: "https://www.pharbers.com/public/img_home_max_480.png",
-            realWorldLeftImg: "https://www.pharbers.com/public/img_home_realworld.png",
-            advisoryRightImg: "https://www.pharbers.com/public/img_home_consulting.png"
+            src: "https://components.pharbers.com/dev/offweb/public/img_home_hero.png",
+            buttonGo: "https://components.pharbers.com/dev/offweb/public/icon_go_yellow.svg",
+            reportLeftDown: "https://components.pharbers.com/dev/offweb/public/img_deco_corner.svg",
+            reportRightDown: "https://components.pharbers.com/dev/offweb/public/img_deco_corner.svg",
+            reportDownImg: "https://components.pharbers.com/dev/offweb/public/img_paper-cover_VPB.jpg",
+            reportConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
+            dataShowImg: "https://components.pharbers.com/dev/offweb/public/img_corevalue.png",
+            showMoreButtonGo: "https://components.pharbers.com/dev/offweb/public/icon_go.svg",
+            maxRightImg: "https://components.pharbers.com/dev/offweb/public/img_home_max.png",
+            maxRightImg_480: "https://components.pharbers.com/dev/offweb/public/img_home_max_480.png",
+            realWorldLeftImg: "https://components.pharbers.com/dev/offweb/public/img_home_realworld.png",
+            advisoryRightImg: "https://components.pharbers.com/dev/offweb/public/img_home_consulting.png"
         }
         
     },

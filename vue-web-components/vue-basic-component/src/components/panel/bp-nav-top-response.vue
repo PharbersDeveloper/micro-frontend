@@ -80,8 +80,8 @@ export default {
     },
     data() {
         return {
-            imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
-            imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
+            imgSrc: "https://components.pharbers.com/dev/offweb/public/img_logo_ph_theme.svg",
+            imgSrcLight: "https://components.pharbers.com/dev/offweb/public/img_logo_ph_light.svg",
             menu: false,
             borderNone: false,
             inverse: false,

@@ -20,7 +20,7 @@ export default class ShellRoute extends Route {
 	}
 
 	beforeModel(transition){	
-		if (auth && !this.oauthService.judgeAuth()) {
+		if (this.auth && !this.oauthService.judgeAuth()) {
 			alert("登录过期，请重新登录")
 			this.oauthService.obtainAuth()
 		}

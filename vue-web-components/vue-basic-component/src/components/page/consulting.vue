@@ -96,11 +96,11 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/img_detail-page_head_consulting.jpg",
-            consultConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            consultAdvantageCardImg: "https://www.pharbers.com/public/img_bg_doublehexagon.svg",
-            consultConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            maxAdvantageCardIcon: "https://www.pharbers.com/public/icon_point.svg",
+            headerImg: "https://components.pharbers.com/dev/offweb/public/img_detail-page_head_consulting.jpg",
+            consultConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
+            consultAdvantageCardImg: "https://components.pharbers.com/dev/offweb/public/img_bg_doublehexagon.svg",
+            consultConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
+            maxAdvantageCardIcon: "https://components.pharbers.com/dev/offweb/public/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

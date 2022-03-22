@@ -5,13 +5,13 @@
                 <div class="close-button" @click="closeModal"></div>
             </div>
             <div class="bp-modal-submit-content">
-                <img class="submit-success-img" src="https://www.pharbers.com/public/icon_success.svg" alt="success"/>
+                <img class="submit-success-img" src="https://components.pharbers.com/dev/offweb/public/icon_success.svg" alt="success"/>
                 <bp-text class="submit-success-text">{{translation_data.modalForm.submitSuccess}}</bp-text>
                 <bp-text class="submit-feedback-text">{{translation_data.modalForm.submitFeedback}}</bp-text>
             </div>
             <div class="form-submit-button-container" @click="closeModal">
                 <bp-button type='official-yellow-line-compact' density='compact' :text="translation_data.modalForm.ok"></bp-button>
-                <img class="button-go" src="https://www.pharbers.com/public/icon_go.svg" alt="success"/>
+                <img class="button-go" src="https://components.pharbers.com/dev/offweb/public/icon_go.svg" alt="success"/>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
 
             <div class="form-submit-button-container" @click="submit">
                 <bp-button type='official-yellow-line-compact' density='compact' :text="translation_data.modalForm.submit"></bp-button>
-                <img class="button-go" src="https://www.pharbers.com/public/icon_go.svg" alt="success"/>
+                <img class="button-go" src="https://components.pharbers.com/dev/offweb/public/icon_go.svg" alt="success"/>
             </div>
         </div>
     </div>

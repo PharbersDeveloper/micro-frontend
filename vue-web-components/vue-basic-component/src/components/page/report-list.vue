@@ -62,8 +62,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            reportListHeader: "https://www.pharbers.com/public/img_report-list_hero_bg.jpg",
-            iconGo: "https://www.pharbers.com/public/icon_go.svg",
+            reportListHeader: "https://components.pharbers.com/dev/offweb/public/img_report-list_hero_bg.jpg",
+            iconGo: "https://components.pharbers.com/dev/offweb/public/icon_go.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -177,9 +177,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         },
