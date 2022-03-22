@@ -62,8 +62,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            reportListHeader: "https://www.pharbers.com/public/img_report-list_hero_bg.jpg",
-            iconGo: "https://www.pharbers.com/public/icon_go.svg",
+            reportListHeader: "https://components.pharbers.com/dev/offweb/public/img_report-list_hero_bg.jpg",
+            iconGo: "https://components.pharbers.com/dev/offweb/public/icon_go.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

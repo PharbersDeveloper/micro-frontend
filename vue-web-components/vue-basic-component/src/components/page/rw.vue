@@ -109,12 +109,12 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            rwContentImg: "https://www.pharbers.com/public/img_detail-page_head_realwr.jpg",
-            rwConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            rwCardAImg :"https://www.pharbers.com/public/img_realwr_cover_00.png",
-            rwTextBImg: "https://www.pharbers.com/public/img_realwr_info_01.png",
-            rwAdvantageImg: "https://www.pharbers.com/public/img_bg_doublehexagon.svg",
-            rwCardIcon: "https://www.pharbers.com/public/icon_point.svg",
+            rwContentImg: "https://components.pharbers.com/dev/offweb/public/img_detail-page_head_realwr.jpg",
+            rwConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
+            rwCardAImg :"https://components.pharbers.com/dev/offweb/public/img_realwr_cover_00.png",
+            rwTextBImg: "https://components.pharbers.com/dev/offweb/public/img_realwr_info_01.png",
+            rwAdvantageImg: "https://components.pharbers.com/dev/offweb/public/img_bg_doublehexagon.svg",
+            rwCardIcon: "https://components.pharbers.com/dev/offweb/public/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

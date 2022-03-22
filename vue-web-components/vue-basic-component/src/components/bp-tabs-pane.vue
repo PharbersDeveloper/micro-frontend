@@ -60,8 +60,8 @@ export default {
         return {
             index: null,
             loaded: false,
-            activityImg: "https://www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg",
-            moreIcon: "https://www.pharbers.com/public/icon_go.svg"
+            activityImg: "https://components.pharbers.com/dev/offweb/public/photo_events_2020-06-04_boyun_00030.jpg",
+            moreIcon: "https://components.pharbers.com/dev/offweb/public/icon_go.svg"
         };
     },
 

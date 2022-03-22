@@ -104,9 +104,9 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
-            lineImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            head: "https://www.pharbers.com/public/avatar_cl.png",
+            headerImg: "https://components.pharbers.com/dev/offweb/public/photo_events_abovedata_2020-01-09_00005.jpg",
+            lineImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
+            head: "https://components.pharbers.com/dev/offweb/public/avatar_cl.png",
             translation_basedata: {
                 cn: {
                     home: "主页",

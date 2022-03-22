@@ -34,7 +34,7 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            aboveDataImg: "https://www.pharbers.com/public/img_event-list_hero_bg.jpg",
+            aboveDataImg: "https://components.pharbers.com/dev/offweb/public/img_event-list_hero_bg.jpg",
             translation_basedata: {
                 cn: {
                     home: "主页",

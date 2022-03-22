@@ -63,9 +63,9 @@ export default {
             language: '中文',
             showPhoto: false,
             n: 2,
-            more: "https://www.pharbers.com/public/icon_go.svg",
-            prev: "https://www.pharbers.com/public/icon_drop_new.svg",
-            close: "https://www.pharbers.com/public/close_icon.svg"
+            more: "https://components.pharbers.com/dev/offweb/public/icon_go.svg",
+            prev: "https://components.pharbers.com/dev/offweb/public/icon_drop_new.svg",
+            close: "https://components.pharbers.com/dev/offweb/public/close_icon.svg"
         }
     },
     created() {

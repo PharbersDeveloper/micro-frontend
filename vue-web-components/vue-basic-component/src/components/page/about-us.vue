@@ -67,8 +67,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/img_detail-page_head_about-us.jpg",
-            aboutUsConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            headerImg: "https://components.pharbers.com/dev/offweb/public/img_detail-page_head_about-us.jpg",
+            aboutUsConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

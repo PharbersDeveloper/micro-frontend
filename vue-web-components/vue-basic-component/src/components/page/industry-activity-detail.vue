@@ -88,10 +88,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
-            lineImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            headTest: "https://www.pharbers.com/public/avatar_cl.png",
-            quotataion: "https://www.pharbers.com/public/img_bg_view.svg",
+            headerImg: "https://components.pharbers.com/dev/offweb/public/photo_events_nanjing_2019-10-23_00001.jpg",
+            lineImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
+            headTest: "https://components.pharbers.com/dev/offweb/public/avatar_cl.png",
+            quotataion: "https://components.pharbers.com/dev/offweb/public/img_bg_view.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

@@ -16,24 +16,24 @@ export default {
     data() {
         return {
             imgArr: [
-                "https://www.pharbers.com/public/logo_pfizer_00.png",
-                "https://www.pharbers.com/public/logo_sanofi_01.png",
-                "https://www.pharbers.com/public/logo_novartis_02.png",
-                "https://www.pharbers.com/public/logo_astrazeneca_03.png",
-                "https://www.pharbers.com/public/logo_bayer_04.png",
-                "https://www.pharbers.com/public/logo_gilead_05.png",
-                "https://www.pharbers.com/public/logo_Jessen_08.png",
-                "https://www.pharbers.com/public/servier_07.png",
-                "https://www.pharbers.com/public/logo_novo-nordisk_10.png",
-                "https://www.pharbers.com/public/logo_mylan_11.png",
-                "https://www.pharbers.com/public/astellas_10.png",
-                "https://www.pharbers.com/public/logo_merck_13.png",
-                "https://www.pharbers.com/public/logo_msd_14.png",
-                "https://www.pharbers.com/public/logo_lilly_15.png",
-                "https://www.pharbers.com/public/Daiichi-Sankyo_14.png",
-                "https://www.pharbers.com/public/Takeda_15.png",
-                "https://www.pharbers.com/public/Salubris_16.png",
-                "https://www.pharbers.com/public/Lmdbeck_17.png"
+                "https://components.pharbers.com/dev/offweb/public/logo_pfizer_00.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_sanofi_01.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_novartis_02.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_astrazeneca_03.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_bayer_04.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_gilead_05.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_Jessen_08.png",
+                "https://components.pharbers.com/dev/offweb/public/servier_07.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_novo-nordisk_10.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_mylan_11.png",
+                "https://components.pharbers.com/dev/offweb/public/astellas_10.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_merck_13.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_msd_14.png",
+                "https://components.pharbers.com/dev/offweb/public/logo_lilly_15.png",
+                "https://components.pharbers.com/dev/offweb/public/Daiichi-Sankyo_14.png",
+                "https://components.pharbers.com/dev/offweb/public/Takeda_15.png",
+                "https://components.pharbers.com/dev/offweb/public/Salubris_16.png",
+                "https://components.pharbers.com/dev/offweb/public/Lmdbeck_17.png"
             ]
         }
     }
