@@ -14,11 +14,15 @@ export default class PhMenuService extends Service {
 	}
 
 	async queryClientPages() {
+		let clientId = ENV.APP.clientId
+		if(ENV.environment === "development") {
+			clientId = ENV.APP.clientId + "_dev"
+		}
 		let pages = this.store.peekAll("page")
 		pages = pages.filter((_) => true)
 		if (pages.length === 0) {
 			pages = await this.store.query("page", {
-				"filter[clientId]": ENV.APP.clientId
+				"filter[clientId]": clientId
 			})
 			pages = pages.filter((_) => true)
 		}

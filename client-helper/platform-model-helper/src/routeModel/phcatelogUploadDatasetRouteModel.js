@@ -1,18 +1,18 @@
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogUploadDatasetRouteModel(route, parseParams) {
-	let debugToken =
-		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-	route.store.unloadAll("dataset")
-	const url = "https://apiv2.pharbers.com/phdydatasource/scan"
-	const accessToken = route.cookies.read("access_token") || debugToken
-	let body = {
-		table: "dataset",
-		conditions: {
-			projectId: ["=", parseParams.query.projectId]
-		},
-		limit: 100,
-		start_key: ""
-	}
+    let debugToken =
+        "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+    route.store.unloadAll("dataset")
+    const url = "https://apiv2.pharbers.com/phdydatasource/scan"
+    const accessToken = route.cookies.read("access_token") || debugToken
+    let body = {
+        table: "dataset",
+        conditions: {
+            projectId: ["=", parseParams.query.projectId]
+        },
+        limit: 100,
+        start_key: ""
+    }
 
     let options = {
         method: "POST",
