@@ -67,7 +67,7 @@
         </div>
         <div class="speaker-img-container">
             <div class="speaker-img-box" v-for="(speaker,index) in allData.participantListAll" :key="index">
-                <bpImg class="speaker-img" :src="'https://www.pharbers.com'+speaker.image.path"></bpImg>
+                <bpImg class="speaker-img" :src="speaker.image.path"></bpImg>
                 <div class="speaker-img-info">
                     <bpText class="ph-H-Medium">{{speaker.participant.name}}</bpText>
                     <bpText class="ph-body-small">{{speaker.participant.occupation}}</bpText>
@@ -245,9 +245,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         }

@@ -47,7 +47,7 @@
                     <div class="report-download-img-container">
                         
                         <bpImg 
-                            :src="'https://www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
+                            :src="report.cover.get('path')" class="report-down-img"></bpImg>
                         <div class="report-down-img-mask"></div>
                     </div>
                     <div class="report-download-info">

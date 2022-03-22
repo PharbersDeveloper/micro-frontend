@@ -8,7 +8,7 @@
             <div v-for="(report,index) in allData.reports" :key="index" class="download-report-left">
                 <div class="opacity-background"></div>
                 <div class="download-report-imgcontainer">
-                    <bp-img v-if="report" :src="'https://www.pharbers.com'+report.cover.get('path')" class="download-report-img"></bp-img>
+                    <bp-img v-if="report" :src="report.cover.get('path')" class="download-report-img"></bp-img>
                     <div class="download-report-img-mask"></div>
                 </div>
                 <div v-if="report" class="ph-H-Medium download-report-name">{{report.title}}</div>

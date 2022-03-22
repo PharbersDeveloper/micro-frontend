@@ -47,7 +47,7 @@
             <div class="industry-activity-detail-speaker" v-for="(speaker, index) in allData.eventAll" :key="index" :class="[index == 0?'self-cross-flex-end':'self-cross-flex-start']">
                 <div class="speaker-info-left">
                     <div class="pharbers-speaker-bg"></div>
-                    <bpImg class="pharbers-speaker-avatar" :src="'https://www.pharbers.com'+speaker.image.path"></bpImg>
+                    <bpImg class="pharbers-speaker-avatar" :src="speaker.image.path"></bpImg>
                     <bpText class="ph-H-Medium">{{speaker.speaker}}</bpText>
                 </div>
                 <div class="speaker-info-right">
@@ -228,9 +228,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         }

@@ -5,17 +5,17 @@
         <div class="gallery-img-box" @click="showMorePhoto">
             <div class="gallery-left">
                 <div class="gallery-left-top">
-                    <bpImg :src="'https://www.pharbers.com'+galleryShow.a" class="gallery-img-a"></bpImg>
-                    <bpImg :src="'https://www.pharbers.com'+galleryShow.b" class="gallery-img-b"></bpImg>
+                    <bpImg :src="galleryShow.a" class="gallery-img-a"></bpImg>
+                    <bpImg :src="galleryShow.b" class="gallery-img-b"></bpImg>
                 </div>
-                <bpImg :src="'https://www.pharbers.com'+galleryShow.c" class="gallery-img-c"></bpImg>
+                <bpImg :src="galleryShow.c" class="gallery-img-c"></bpImg>
             </div>
             <div class="gallery-right">
                 <div class="gallery-right-top">
-                    <bpImg :src="'https://www.pharbers.com'+galleryShow.d" class="gallery-img-d"></bpImg>
-                    <bpImg :src="'https://www.pharbers.com'+galleryShow.e" class="gallery-img-e"></bpImg>
+                    <bpImg :src="galleryShow.d" class="gallery-img-d"></bpImg>
+                    <bpImg :src="galleryShow.e" class="gallery-img-e"></bpImg>
                 </div>
-                <bpImg :src="'https://www.pharbers.com'+galleryShow.f" class="gallery-img-c"></bpImg>
+                <bpImg :src="galleryShow.f" class="gallery-img-c"></bpImg>
             </div>
         </div>
         <div class="gallery-mask"></div>
@@ -36,7 +36,7 @@
                 
                 <div class="photos-content">
                     <div class="transform-list">
-                        <bpImg v-for="(item,i) in galleryList" :key="i" :src="'https://www.pharbers.com'+item.path" v-show="i==n" class="photo"></bpImg>
+                        <bpImg v-for="(item,i) in galleryList" :key="i" :src="item.path" v-show="i==n" class="photo"></bpImg>
                     </div>
                 </div>
                 <div @click="next">
