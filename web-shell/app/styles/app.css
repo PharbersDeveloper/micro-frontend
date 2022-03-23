@@ -4,7 +4,7 @@
 }
 @font-face {
 	font-family: element-icons;
-	src: url(https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff) format("woff"), url(https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf) format("truetype");
+	src: url(https://components.pharbers.com/element-ui/element-icons.woff) format("woff"), url(https://components.pharbers.com/element-ui/element-icons.ttf) format("truetype");
 	font-weight: 400;
 	font-display: "auto";
 	font-style: normal

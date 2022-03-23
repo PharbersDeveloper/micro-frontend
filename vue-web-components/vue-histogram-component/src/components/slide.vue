@@ -43,6 +43,7 @@ import ElTabPane from "element-ui/packages/tab-pane"
 import Histogram from "./draggable-container"
 import PhSlideModel from "../components/slide-model/slide-model"
 import "element-ui/lib/theme-chalk/index.css"
+import envConfig from '../config/envConfig'
 
 export default {
     props: {
@@ -66,7 +67,7 @@ export default {
         },
         icon: {
             type: String,
-            default: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
+            default: `${envConfig}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
         },
         isEditableValue: Boolean,
         projectId: String
