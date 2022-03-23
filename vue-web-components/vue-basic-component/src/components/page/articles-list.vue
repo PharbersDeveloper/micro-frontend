@@ -31,7 +31,7 @@ export default {
         return {
             title: "行业洞察",
             subscribedTitle: "文件名称",
-            public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/www.pharbers.com/public/article_icon.svg",
+            public_icon: `${envConfig}` + "/article_icon.svg",
             goDetail: "查看详情",
             activeName: "second",
             dialogPbcVisible: false,
@@ -50,7 +50,7 @@ export default {
                             "attributes": {
                                 "title": "www11",
                                 "data": null,
-                                "uri": "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/html/62607a61-3527-4ef8-8f0d-73abf3623b31.html"
+                                "uri": ""
                             },
                             "links": {
                                 "self": "/articles/hSPHu5eVTk2qlejqIoImRQ%3D%3D"

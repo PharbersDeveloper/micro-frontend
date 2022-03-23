@@ -46,8 +46,8 @@ export default {
             label_icon: `${envConfig}` + "/tag.svg",
             search_icon: `${envConfig}` + "/search.png",
             img1: `${envConfig}` + "/icon_close.svg",
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
-            enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
+            add_icon: `${envConfig}` + "/add.svg",
+            enter_icon: `${envConfig}` + "/enter.svg",
             searchValue: '',
             tagsArrayShow: [], //展示的tag数组
             selectedTags: [], //选中的tag数组

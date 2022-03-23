@@ -81,7 +81,7 @@ export default {
             title: "数据资产",
             subscribedTitle: "文件名称",
             fileIconDark: `${envConfig}` + "/icon_my-data-dark.svg",
-            public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/publicData.svg",
+            public_icon: `${envConfig}` + "/publicData.svg",
             goDetail: "查看详情",
             activeName: "second",
             dialogPbcVisible: false,

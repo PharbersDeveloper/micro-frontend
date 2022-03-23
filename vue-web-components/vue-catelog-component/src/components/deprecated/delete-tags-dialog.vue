@@ -45,8 +45,8 @@ export default {
             label_icon: `${envConfig}` + "/tag.svg",
             search_icon: `${envConfig}` + "/search.png",
             delete_icon: `${envConfig}` + "/delete_r.svg",
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
-            enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
+            add_icon: `${envConfig}` + "/add.svg",
+            enter_icon: `${envConfig}` + "/enter.svg",
             // tagList: ['lalalal','12345','nxjksdcjk','啦啦啦啦'],
             searchValue: '', 
             ent: false

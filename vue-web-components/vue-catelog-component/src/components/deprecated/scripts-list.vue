@@ -1,6 +1,6 @@
 <template>
     <div class="upload-recipt">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <div class="info">
                 <div class="project_info_left">

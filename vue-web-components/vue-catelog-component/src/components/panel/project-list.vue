@@ -1,6 +1,6 @@
 <template>
     <div class="my-data-content-container">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="header">
             <span class="header-large">
                 {{title}}

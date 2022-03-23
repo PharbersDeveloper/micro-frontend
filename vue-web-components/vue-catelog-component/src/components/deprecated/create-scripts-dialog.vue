@@ -1,6 +1,6 @@
 <template>
     <div>
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="clear_dialog_container">
             <div class="dialog_area">
                <div class="header">
@@ -135,7 +135,7 @@ import envConfig from '../../config/envConfig'
 export default {
     data() {
         return{
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
+            add_icon: `${envConfig}` + "/add.svg",
             datasetListShow: false,
             datasetOutputListShow: false, //显示选中的output
             searchInput: "",
