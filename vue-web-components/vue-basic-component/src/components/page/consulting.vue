@@ -81,6 +81,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
+import envConfig from '../../config/envConfig'
 import bpButton from '../bp-button'
 export default {
     name: "",
@@ -96,11 +97,11 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://components.pharbers.com/dev/offweb/public/img_detail-page_head_consulting.jpg",
-            consultConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
-            consultAdvantageCardImg: "https://components.pharbers.com/dev/offweb/public/img_bg_doublehexagon.svg",
-            consultConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
-            maxAdvantageCardIcon: "https://components.pharbers.com/dev/offweb/public/icon_point.svg",
+            headerImg: `${envConfig}` + "/img_detail-page_head_consulting.jpg",
+            consultConnectImg: `${envConfig}` + "/img_connect_line.svg",
+            consultAdvantageCardImg: `${envConfig}` + "/img_bg_doublehexagon.svg",
+            consultConnectImg: `${envConfig}` + "/img_connect_line.svg",
+            maxAdvantageCardIcon: `${envConfig}` + "/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

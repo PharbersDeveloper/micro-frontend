@@ -23,7 +23,7 @@
     </div>
 </template>
 <script>
-
+import envConfig from '../../config/envConfig'
 export default {
     components: {
     },

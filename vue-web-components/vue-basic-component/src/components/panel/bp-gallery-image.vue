@@ -52,6 +52,7 @@
 
 <script>
 import bpText from '../bp-text'
+import envConfig from '../../config/envConfig'
 import bpImg from '../bp-img'
 export default {
     components: {
@@ -63,9 +64,9 @@ export default {
             language: '中文',
             showPhoto: false,
             n: 2,
-            more: "https://components.pharbers.com/dev/offweb/public/icon_go.svg",
-            prev: "https://components.pharbers.com/dev/offweb/public/icon_drop_new.svg",
-            close: "https://components.pharbers.com/dev/offweb/public/close_icon.svg"
+            more: `${envConfig}` + "/icon_go.svg",
+            prev: `${envConfig}` + "/icon_drop_new.svg",
+            close: `${envConfig}` + "/close_icon.svg"
         }
     },
     created() {

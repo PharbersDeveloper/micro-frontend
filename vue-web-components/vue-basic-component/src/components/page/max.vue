@@ -107,6 +107,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
+import envConfig from '../../config/envConfig'
 import bpButton from '../bp-button'
 export default {
     name: "max",
@@ -122,10 +123,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            maxHeaderImg: "https://components.pharbers.com/dev/offweb/public/img_detail-page_head_MAX.jpg",
-            maxConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
-            maxAdvantageIcon: "https://components.pharbers.com/dev/offweb/public/icon_point.svg",
-            maxAdvantageImg: "https://components.pharbers.com/dev/offweb/public/img_bg_doublehexagon.svg",
+            maxHeaderImg: `${envConfig}` + "/img_detail-page_head_MAX.jpg",
+            maxConnectImg: `${envConfig}` + "/img_connect_line.svg",
+            maxAdvantageIcon: `${envConfig}` + "/icon_point.svg",
+            maxAdvantageImg: `${envConfig}` + "/img_bg_doublehexagon.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

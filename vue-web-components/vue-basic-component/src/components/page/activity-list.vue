@@ -18,6 +18,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import envConfig from '../../config/envConfig'
 import bpTabs from '../bp-tabs'
 export default {
     name: "",
@@ -34,7 +35,7 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            aboveDataImg: "https://components.pharbers.com/dev/offweb/public/img_event-list_hero_bg.jpg",
+            aboveDataImg: `${envConfig}` + "/img_event-list_hero_bg.jpg",
             translation_basedata: {
                 cn: {
                     home: "主页",

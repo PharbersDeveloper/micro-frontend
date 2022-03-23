@@ -39,6 +39,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
+import envConfig from '../../config/envConfig'
 import bpButton from '../bp-button'
 export default {
     name: "report-list",
@@ -62,8 +63,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            reportListHeader: "https://components.pharbers.com/dev/offweb/public/img_report-list_hero_bg.jpg",
-            iconGo: "https://components.pharbers.com/dev/offweb/public/icon_go.svg",
+            reportListHeader: `${envConfig}` + "/img_report-list_hero_bg.jpg",
+            iconGo: `${envConfig}` + "/icon_go.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

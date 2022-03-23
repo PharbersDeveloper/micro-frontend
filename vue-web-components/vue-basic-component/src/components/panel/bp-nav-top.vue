@@ -26,7 +26,7 @@
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
                 
-                <bp-select-vue v-if="isLogin" choosedValue="" src="https://components.pharbers.com/dev/offweb/public/icon_home_user.svg" iconClass="" class="home-user-select">
+                <bp-select-vue v-if="isLogin" choosedValue="" :src="isLoginSrc" iconClass="" class="home-user-select">
                     <bp-option-vue :text="translation_data.general" @click="toGeneral" ></bp-option-vue>
                     <bp-option-vue :text="translation_data.logout" @click="logout" ></bp-option-vue>
                 </bp-select-vue>
@@ -37,7 +37,7 @@
     </div>
     <div class="vue_container fixed-nav-response" 
         :class="[inverse ? 'navInverse' : 'nav']"
-		:style="bgc"
+        :style="bgc"
     >
         <div 
             :class="[
@@ -81,6 +81,7 @@ import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
+import envConfig from '../../config/envConfig'
 import bpModalForm from './bp-modal-form.vue'
 import bpText from '../bp-text.vue'
 export default {
@@ -140,10 +141,11 @@ export default {
             menu: false,
             inverse: false,
             bgc: "background: transparent",
-            imgSrc: "https://components.pharbers.com/dev/offweb/public/img_logo_ph_theme.svg",
-            imgSrcLight: "https://components.pharbers.com/dev/offweb/public/img_logo_ph_light.svg",
-            selectSrc: "https://components.pharbers.com/dev/offweb/public/icon_drop.svg",
-            selectSrcLight: "https://components.pharbers.com/dev/offweb/public/icon_drop_light.svg",
+            imgSrc: `${envConfig}` + "/img_logo_ph_theme.svg",
+            imgSrcLight: `${envConfig}` + "/img_logo_ph_light.svg",
+            selectSrc: `${envConfig}` + "/icon_drop.svg",
+            selectSrcLight: `${envConfig}` + "/icon_drop_light.svg",
+            isLoginSrc: `${envConfig}` + "/icon_home_user.svg",
             translation_basedata: {
                 cn: {
                     MAX: {

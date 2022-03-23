@@ -12,7 +12,7 @@
 
         <div class="page-bottom">
             <div class="bottom-pharbers">
-                <bp-img src="https://components.pharbers.com/dev/offweb/public/img_logo_ph_gray.svg" class="bottom-pharbers-icon"></bp-img>
+                <bp-img :src="img1" class="bottom-pharbers-icon"></bp-img>
                 <div class="bottom-row-container">
                     <div class="bottom-product-container">
                         <div class="bottom-list-a">
@@ -47,15 +47,15 @@
                 <div class="bottom-contact-left">
                     <bp-text class="ph-body-small mr-3">{{translation_data.siteMap.contactUs}}</bp-text>
                     <bp-text class="ph-body-small mr-3">{{translation_data.siteMap.privacyPolicy}}</bp-text>
-                    <bp-select-vue :choosedValue="language" src="https://components.pharbers.com/dev/offweb/public/icon_drop.svg" iconClass="select-language-icon" class="select-language">
+                    <bp-select-vue :choosedValue="language" :src="img2" iconClass="select-language-icon" class="select-language">
                         <bp-option-vue text="中文" @click="changeLanguage" :choosedValue="language"></bp-option-vue>
                         <bp-option-vue text="English" @click="changeLanguage" :choosedValue="language"></bp-option-vue>
                     </bp-select-vue>
                 </div>
 
                 <div class="bottom-contact-right">
-                    <bp-img src="https://components.pharbers.com/dev/offweb/public/icon_wechat_copy_2@3x.svg" class="bottom-contact-icon"></bp-img>
-                    <bp-img src="https://components.pharbers.com/dev/offweb/public/icon_linkdin.svg" class="bottom-contact-icon"></bp-img>
+                    <bp-img :src="img3" class="bottom-contact-icon"></bp-img>
+                    <bp-img :src="img4" class="bottom-contact-icon"></bp-img>
                 </div>
             </div>
 
@@ -63,7 +63,7 @@
                 <div class="bottom-copyright-left">
                     <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502041501">
                         <div class="online-filing">
-                            <bp-img src="https://components.pharbers.com/dev/offweb/public/presented_logo.png" class="presented-logo"></bp-img>
+                            <bp-img :src="img5" class="presented-logo"></bp-img>
                             <bp-text class="ph-body-xsmall-tertiary">京公网安备11010502041501号</bp-text>
                         </div>
                     </a>
@@ -86,6 +86,7 @@ import bpButton from '../bp-button.vue'
 import bpModalForm from './bp-modal-form.vue'
 import bpImg from '../bp-img.vue'
 import bpSelectVue from '../bp-select-vue.vue'
+import envConfig from '../../config/envConfig'
 import bpOptionVue from '../bp-option-vue.vue'
 export default {
     components: {
@@ -101,6 +102,11 @@ export default {
             contactForm: false,
             language: '中文',
             nowDate: new Date().getFullYear(),
+            img1: `${envConfig}` + "/img_logo_ph_gray.svg",
+            img2: `${envConfig}` + "/icon_drop.svg",
+            img3: `${envConfig}` + "/icon_wechat_copy_2@3x.svg",
+            img4: `${envConfig}` + "/icon_linkdin.svg",
+            img5: `${envConfig}` + "/presented_logo.png",
             translation_basedata: {
                 cn: {
                     contactUs: {
