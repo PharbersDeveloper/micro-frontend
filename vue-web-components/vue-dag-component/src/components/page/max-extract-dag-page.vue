@@ -69,6 +69,7 @@
 
 <script>
 import bpDag from '../bp-dag.vue'
+
 export default {
     components: {
         bpDag
@@ -141,7 +142,7 @@ export default {
         }
     },
     created() {
-        fetch("https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/jsonfile/Auto_extract_refactor.json").then(res => res.json())
+        fetch("https://components.pharbers.com/jsonfile/Auto_extract_refactor.json").then(res => res.json())
             .then(data => {
                 this.dag = data
             })

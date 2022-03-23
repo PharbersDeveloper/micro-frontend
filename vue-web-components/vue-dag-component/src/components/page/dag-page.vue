@@ -28,23 +28,23 @@
                                 </div>
                                 <div class="database">
                                     <div v-if="file.meta.status == 'SUCCEEDED'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_success.svg" alt="">
+                                        <img :src="img1" alt="">
                                         <span class="heading-small SUCCEEDED-text">已成功</span>
                                     </div>
                                     <div v-else-if="file.meta.status == 'RUNNING'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_running.svg" alt="">
+                                        <img :src="img2" alt="">
                                         <span class="heading-small RUNNING-text">正在运行</span>
                                     </div>
                                     <div v-else-if="file.meta.status == 'ABORTED'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_suspension.svg" alt="">
+                                        <img :src="img3" alt="">
                                         <span class="heading-small ABORTED-text">已中止</span>
                                     </div>
                                     <div v-else-if="file.meta.status == 'TIMED_OUT'" class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_timeout.svg" alt="">
+                                        <img :src="img4" alt="">
                                         <span class="heading-small ABORTED-text">已超时</span>
                                     </div>
                                     <div v-else class="status">
-                                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_fail.svg" alt="">
+                                        <img :src="img5" alt="">
                                         <span class="heading-small FAILED-text">失败</span>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
 import bpDag from '../bp-dag.vue'
 import uploadFile from '../upload-file.vue'
 import bpPagination from '../bp-pagination.vue'
-
+import envConfig from "../../config/envConfig"
 
 export default {
     components: {
@@ -149,7 +149,12 @@ export default {
             started: "",
             duration: "",
             succeed_step: [],
-            openUploadWindow: false
+            openUploadWindow: false,
+			img1: `${envConfig}` + "/icon_success.svg",
+			img2: `${envConfig}` + "/icon_running.svg",
+			img3: `${envConfig}` + "/icon_suspension.svg",
+			img4: `${envConfig}` + "/icon_timeout.svg",
+			img5: `${envConfig}` + "/icon_fail.svg"
         }
     },
     props: {

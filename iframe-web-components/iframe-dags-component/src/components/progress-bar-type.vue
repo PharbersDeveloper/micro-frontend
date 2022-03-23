@@ -11,10 +11,12 @@
     </div>
 </template>
 <script>
+import envConfig from "../config/envConfig"
+
 export default {
     data: () => {
         return {
-            close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+            close_icon: `${envConfig}` + "/icon_close.svg",
             barWidth: 0,
             percent: 0
         }
