@@ -1,10 +1,7 @@
 <template>
     <div class="upload-dataset">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
-            <!-- <div class="project_name_header">
-                <p class="project_name" @click="linkToPage">{{allData.projectName}}</p>
-            </div> -->
             <div class="info">
                 <div class="project_info_left">
                     <div class="upload_top">
@@ -119,7 +116,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src=`${envConfig}` + "%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -222,27 +219,26 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
+import envConfig from '../config/envConfig'
 
 export default {
     data() {
         return {
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
-            // delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            // clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
-            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
-            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
-            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
-            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
-            catalog_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon.svg",
+            label_icon: `${envConfig}` + "tag.svg",
+            search_icon: `${envConfig}` + "search.png",
+            dropDownIcon: `${envConfig}` + "drop_down_icon.svg",
+            edit_icon: `${envConfig}` + "edit_icon.png",
+            selectIcon: `${envConfig}` + "drop_down_icon.svg",
+            delete_icon: `${envConfig}` + "delete_r.svg",
+            clear_data_icon: `${envConfig}` + "delete_b.svg",
+            ascending_order: `${envConfig}` + "down.svg",
+            descending_order: `${envConfig}` + "top.svg",
+            dataset_icon: `${envConfig}` + "normal.svg",
+            input_index_icon: `${envConfig}` + "input_index.svg",
+            output_index_icon: `${envConfig}` + "output_index.svg",
+            intermediate_icon: `${envConfig}` + "intermediate.svg",
+            database_icon: `${envConfig}` + "Database.svg",
+            catalog_icon: `${envConfig}` + "icons/catalog_icon.svg",
             showDialog: false,
             state: '',
             editShow: false,

@@ -50,6 +50,7 @@
 import bpButton from '../../node_modules/vue-components/src/components/bp-button.vue'
 import bpInput from '../../node_modules/vue-components/src/components/bp-input.vue'
 import bpTextarea from '../../node_modules/vue-components/src/components/bp-textarea.vue'
+import envConfig from '../config/envConfig'
 
 export default {
     components: {
@@ -59,7 +60,7 @@ export default {
     },
     data() {
         return {
-            closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+            closeIcon: `${envConfig}` + "/icon_close.svg",
             middleData: '',
             middleIndex: -1,
             fileMiddleData: '',
@@ -67,7 +68,7 @@ export default {
             infoList: [],
             schemaList: [],
             targetsList:[],
-            iconMove: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_move.svg"
+            iconMove: `${envConfig}` + "/icon_move.svg"
         }
     },
     props: {

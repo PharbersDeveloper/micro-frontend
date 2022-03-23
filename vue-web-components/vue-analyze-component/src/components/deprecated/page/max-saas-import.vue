@@ -84,6 +84,7 @@ import importFileList from '../../import-file-list.vue'
 import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
 import bpText from 'vue-components/src/components/bp-text.vue'
 import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
+
 export default {
     components: {
         importFileList,
@@ -101,7 +102,7 @@ export default {
             middleList: [],
             jobLogs: null,
             proBar: 0,
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/deploy.pharbers.com/public/icon_more-horizontal.svg",
+            selectIcon: "",
             sourceData: {
                 data: [],
                 refreshData:(ele) => {

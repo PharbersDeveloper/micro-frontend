@@ -1,6 +1,6 @@
 <template>
     <div class="data-list-home">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="data-home-container">
                <div class="content">  
                 <div class="left-area">
@@ -195,19 +195,21 @@
 <script>
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
+import envConfig from '../config/envConfig'
+
 export default {
     data() {
         return {
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/datasets.png",
-            recipes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/recipes.png",
-            models_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/models.png",
-            notebook_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/notebooks.png",
-            analyses_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/analyses.png",
-            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/dashboard.png",
-            article_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/articles.png",
-            num_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/num_icon.png",
-            file_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/file.png",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png",
+            dataset_icon: `${envConfig}` + "/datasets.png",
+            recipes_icon: `${envConfig}` + "/recipes.png",
+            models_icon: `${envConfig}` + "/models.png",
+            notebook_icon: `${envConfig}` + "/notebooks.png",
+            analyses_icon: `${envConfig}` + "/analyses.png",
+            dashboard_icon: `${envConfig}` + "/dashboard.png",
+            article_icon: `${envConfig}` + "/articles.png",
+            num_icon: `${envConfig}` + "/num_icon.png",
+            file_icon: `${envConfig}` + "/file.png",
+            script_icon: `${envConfig}` + "/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -419,26 +421,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg"
+                    return `${envConfig}` + "/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg"
+                    return `${envConfig}` + "/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg"
+                    return `${envConfig}` + "/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg"
+                    return `${envConfig}` + "/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg"
+                    return `${envConfig}` + "/sparkR_icon.svg"
                 } else {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                    return `${envConfig}` + "/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg"
+                return `${envConfig}` + "/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg"
+                return `${envConfig}` + "/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg"
+                return `${envConfig}` + "/output_index.svg"
             } else  {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                return `${envConfig}` + "/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dashboard_container">
             <div class="info">
                 <div class="project_info_left">
@@ -165,24 +165,26 @@ import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import envConfig from '../config/envConfig'
+
 export default {
     data() {
         return {
             dialogCreateVisible: false,
             searchData: [],
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF.svg",
-            dashboard_icon_reverse: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
+            label_icon: `${envConfig}` + "/tag.svg",
+            search_icon: `${envConfig}` + "/search.png",
+            dropDownIcon: `${envConfig}` + "/drop_down_icon.svg",
+            edit_icon: `${envConfig}` + "/edit_icon.png",
+            delete_icon: `${envConfig}` + "/delete.png",
+            clear_data_icon: `${envConfig}` + "/clear_data.png",
+            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
+            delete_icon: `${envConfig}` + "/delete_r.svg",
+            clear_data_icon: `${envConfig}` + "/delete_b.svg",
+            ascending_order: `${envConfig}` + "/down.svg",
+            descending_order: `${envConfig}` + "/top.svg",
+            dashboard_icon: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
+            dashboard_icon_reverse: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             showDialog: false,
             state: '',
             editShow: false,

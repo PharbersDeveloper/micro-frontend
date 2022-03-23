@@ -1,6 +1,6 @@
 <template>
     <div class="upload-recipt">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <div class="info">
                 <div class="project_info_left">
@@ -44,25 +44,25 @@
                             <div class="dialog" v-show="showDialog">
 								<!-- @click="selectScripts('python3')" -->
                                 <div class="list">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
+                                    <img :src="img1" alt="">
                                     <p class="dis">Python</p>
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
+                                    <img :src="img2" alt="">
                                     <p>PySpark</p>
                                 </div>
 								<!-- @click="selectScripts('r')" -->
                                 <div class="list" >
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
+                                    <img :src="img3" alt="">
                                     <p  class="dis">R</p>
                                 </div>
 								<!-- @click="selectScripts('sparkr')" -->
                                 <div class="list" >
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
+                                    <img :src="img4" alt="">
                                     <p  class="dis">SparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
+                                    <img :src="img5" alt="">
                                     <p  class="">Prepare</p>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src=`${envConfig}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -231,32 +231,38 @@ import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
+import envConfig from '../config/envConfig'
 
 export default {
     data() {
         return {
-            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            copy_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/copy.svg",
-            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
-            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit.svg",
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg",
-            pyspark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg",
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg",
+            hide_icon: `${envConfig}` + "%E9%9A%90%E8%97%8F.svg",
+            copy_icon: `${envConfig}` + "copy.svg",
+            star_icon: `${envConfig}` + "%E6%94%B6%E8%97%8F.svg",
+            run_icon: `${envConfig}` + "%E5%BC%80%E5%A7%8B1.svg",
+            edit_icon: `${envConfig}` + "edit.svg",
+            label_icon: `${envConfig}` + "tag.svg",
+            search_icon: `${envConfig}` + "search.png",
+            dropDownIcon: `${envConfig}` + "drop_down_icon.svg",
+            delete_icon: `${envConfig}` + "delete.png",
+            clear_data_icon: `${envConfig}` + "clear_data.png",
+            selectIcon: `${envConfig}` + "drop_down_icon.svg",
+            delete_icon: `${envConfig}` + "delete_r.svg",
+            clear_data_icon: `${envConfig}` + "delete_b.svg",
+            ascending_order: `${envConfig}` + "down.svg",
+            descending_order: `${envConfig}` + "top.svg",
+            script_icon: `${envConfig}` + "script_select.svg",
+            prepare_icon: `${envConfig}` + "script_select.svg",
+            prepare_icon: `${envConfig}` + "prepare_icon.svg",
+            pyspark_icon: `${envConfig}` + "pyspark_icon.svg",
+            python_icon: `${envConfig}` + "python_icon.svg",
+            R_icon: `${envConfig}` + "R_icon.svg",
+            sparkR_icon: `${envConfig}` + "sparkR_icon.svg",
+            img1: `${envConfig}` + "/icons/Python.svg",
+            img2: `${envConfig}` + "/icons/PySpark.svg",
+            img3: `${envConfig}` + "/icons/R.svg",
+            img4: `${envConfig}` + "/icons/SparkR.svg",
+            img5: `${envConfig}` + "/icons/%E4%B8%8B%E8%BD%BD.svg",
             showDialog: false,
             state: '',
             editShow: false,
