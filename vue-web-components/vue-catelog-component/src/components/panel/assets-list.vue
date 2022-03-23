@@ -61,7 +61,7 @@ import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-
+import envConfig from '../../config/envConfig'
 import treeItem from '../tree-item'
 import util from '../util.vue'
 
@@ -80,7 +80,7 @@ export default {
             userName: util.methods.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
-            fileIconDark: "https://components.pharbers.com/dev/general/public/icon_my-data-dark.svg",
+            fileIconDark: `${envConfig}` + "/icon_my-data-dark.svg",
             public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/publicData.svg",
             goDetail: "查看详情",
             activeName: "second",

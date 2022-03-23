@@ -4,10 +4,12 @@
         </div>
 </template>
 <script>
+import envConfig from '../../config/envConfig'
+
 export default {
     data() {
         return {
-            src: "https://components.pharbers.com/dev/general/public/44681629355585_.pic.jpg"
+            src: `${envConfig}` + "/44681629355585_.pic.jpg"
         }
     }
 }

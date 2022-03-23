@@ -162,6 +162,7 @@ import bpText from '../../../node_modules/vue-components/src/components/bp-text.
 import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
 import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
 import jsonModel from '../panel/view-json.vue'
+import envConfig from '../../config/envConfig'
 
 export default {
     components: {
@@ -175,7 +176,7 @@ export default {
     },
     data() {
         return {
-            closeIcon: "https://components.pharbers.com/dev/general/public/icon_close.svg",
+            closeIcon: `${envConfig}` + "/icon_close.svg",
             lastModifyTime: "上次更新时间",
             viewPart: "查看分区",
             closePart: "关闭分区",

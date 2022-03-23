@@ -146,19 +146,20 @@
 </template>
 
 <script>
+import envConfig from '../../config/envConfig'
 export default {
     data() {
         return {
-            dataset_icon: "https://components.pharbers.com/dev/general/public/datasets.png",
-            recipes_icon: "https://components.pharbers.com/dev/general/public/recipes.png",
-            models_icon: "https://components.pharbers.com/dev/general/public/models.png",
-            notebook_icon: "https://components.pharbers.com/dev/general/public/notebooks.png",
-            analyses_icon: "https://components.pharbers.com/dev/general/public/analyses.png",
-            dashboard_icon: "https://components.pharbers.com/dev/general/public/dashboard.png",
-            article_icon: "https://components.pharbers.com/dev/general/public/articles.png",
-            num_icon: "https://components.pharbers.com/dev/general/public/num_icon.png",
-            file_icon: "https://components.pharbers.com/dev/general/public/file.png",
-            script_icon: "https://components.pharbers.com/dev/general/public/script.png",
+            dataset_icon: `${envConfig}` + "/datasets.png",
+            recipes_icon: `${envConfig}` + "/recipes.png",
+            models_icon: `${envConfig}` + "/models.png",
+            notebook_icon: `${envConfig}` + "/notebooks.png",
+            analyses_icon: `${envConfig}` + "/analyses.png",
+            dashboard_icon: `${envConfig}` + "/dashboard.png",
+            article_icon: `${envConfig}` + "/articles.png",
+            num_icon: `${envConfig}` + "/num_icon.png",
+            file_icon: `${envConfig}` + "/file.png",
+            script_icon: `${envConfig}` + "/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -317,26 +318,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return "https://components.pharbers.com/dev/general/public/prepare_icon.svg"
+                    return `${envConfig}` + "/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return "https://components.pharbers.com/dev/general/public/python_icon.svg"
+                    return `${envConfig}` + "/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return "https://components.pharbers.com/dev/general/public/pyspark_icon.svg"
+                    return `${envConfig}` + "/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return "https://components.pharbers.com/dev/general/public/R_icon.svg"
+                    return `${envConfig}` + "/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return "https://components.pharbers.com/dev/general/public/sparkR_icon.svg"
+                    return `${envConfig}` + "/sparkR_icon.svg"
                 } else {
-                    return "https://components.pharbers.com/dev/general/public/intermediate.svg"
+                    return `${envConfig}` + "/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return "https://components.pharbers.com/dev/general/public/normal.svg"
+                return `${envConfig}` + "/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return "https://components.pharbers.com/dev/general/public/input_index.svg"
+                return `${envConfig}` + "/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return "https://components.pharbers.com/dev/general/public/output_index.svg"
+                return `${envConfig}` + "/output_index.svg"
             } else  {
-                return "https://components.pharbers.com/dev/general/public/intermediate.svg"
+                return `${envConfig}` + "/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

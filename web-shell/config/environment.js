@@ -28,15 +28,15 @@ module.exports = function (environment) {
 			apiUri: "https://apiv2.pharbers.com",
 			apiHost: "apiv2.pharbers.com",
 			/* offweb */
-			clientId: "fjjnl2uSalHTdrppHG9u",
-			clientName: "offweb",
+			// clientId: "fjjnl2uSalHTdrppHG9u",
+			// clientName: "offweb",
 			/* general */
-			// clientId: "V5I67BHIRVR2Z59kq-a-",
-			// clientName: "platform",
+			clientId: "V5I67BHIRVR2Z59kq-a-",
+			clientName: "platform",
 			/* deploy */
 			// clientId: "rB9jOc347FswXebo",
 			// clientName: "project",
-			// auth: true, //需要登录（目前只有官网不需要登录）
+			auth: true, //需要登录（目前只有官网不需要登录）
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout", "article"],
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",

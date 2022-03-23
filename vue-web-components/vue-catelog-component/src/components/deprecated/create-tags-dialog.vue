@@ -8,7 +8,7 @@
                         <p v-show="datasetcheckedIds.length >= 2">为 {{datasetcheckedIds.length}} 个数据集添加标签</p>
                         <p class="dataset_name" :title="datasetcheckedNames[0]" v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
                     </div>
-                    <img src="https://components.pharbers.com/dev/general/public/icon_close.svg" alt="" class="close_icon" @click="close">
+                    <img :src="img1" alt="" class="close_icon" @click="close">
                </div>
                <div class="prompt">
                     <img :src="search_icon" class="search" alt="">
@@ -39,13 +39,15 @@
 </template>
 
 <script>
+import envConfig from '../../config/envConfig'
 export default {
     data() {
         return{
-            label_icon: "https://components.pharbers.com/dev/general/public/tag.svg",
-            search_icon: "https://components.pharbers.com/dev/general/public/search.png",
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
-            enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
+            label_icon: `${envConfig}` + "/tag.svg",
+            search_icon: `${envConfig}` + "/search.png",
+            add_icon: `${envConfig}` + "/add.svg",
+            enter_icon: `${envConfig}` + "/enter.svg",
+            img1: `${envConfig}` + "/icon_close.svg",
             searchValue: '',
             tagsArrayShow: [], //展示的tag数组
             selectedTags: [], //选中的tag数组

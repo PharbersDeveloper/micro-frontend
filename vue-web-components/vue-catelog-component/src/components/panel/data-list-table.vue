@@ -61,7 +61,7 @@ import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vu
 import editableComponent from '../editable-component.vue'
 import util from '../util.vue'
 import dataDetail from '../panel/data-list-detail.vue'
-
+import envConfig from '../../config/envConfig'
 export default {
     components: {
         bpPagination,
@@ -82,10 +82,10 @@ export default {
             mineSortAscendingIcon: '',
             userName: util.methods.getCookie('user_name'),
             subscribedTitle: "文件名称",
-            fileIconDark: "https://components.pharbers.com/dev/general/public/icon_my-data-dark.svg",
+            fileIconDark: `${envConfig}` + "/icon_my-data-dark.svg",
             goDetail: "查看详情",
-            iconSortAscending: "https://components.pharbers.com/dev/general/public/icon_sorting-descending.svg",
-            iconSortDescending: "https://components.pharbers.com/dev/general/public/icon_sorting-descending.svg",
+            iconSortAscending: `${envConfig}` + "/icon_sorting-descending.svg",
+            iconSortDescending: `${envConfig}` + "/icon_sorting-descending.svg",
             clickIndex: 0,
             showDataDetail: false,
             showPart: false

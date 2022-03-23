@@ -45,10 +45,12 @@
 </template>
 
 <script>
+import envConfig from '../../config/envConfig'
+
 export default {
     data() {
         return {
-            dropDownIcon: "https://components.pharbers.com/dev/general/public/drop-down-icon.png",
+            dropDownIcon: `${envConfig}` + "/drop-down-icon.png",
             showDialog: false,
             newData: '', 
             newDataName: '',
