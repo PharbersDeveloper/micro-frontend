@@ -1,6 +1,6 @@
 
 //dev, prod
-const env = "dev" 
+const env = "prod" 
 
 const envUrl = env === "dev" 
     ? "https://components.pharbers.com/dev/general/public"
