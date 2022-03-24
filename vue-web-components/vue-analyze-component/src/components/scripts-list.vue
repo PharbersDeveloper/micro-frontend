@@ -43,9 +43,9 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
 								<!-- @click="selectScripts('python3')" -->
-                                <div class="list">
+                                <div class="list" @click="selectScripts('python3')">
                                     <img :src="img1" alt="">
-                                    <p class="dis">Python</p>
+                                    <p class="">Python</p>
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
                                     <img :src="img2" alt="">
