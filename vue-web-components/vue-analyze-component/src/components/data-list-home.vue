@@ -195,7 +195,7 @@
 <script>
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -240,7 +240,7 @@ export default {
     async mounted() {
         //actions数据
         const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-        const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+        const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
         console.log(href)
@@ -370,7 +370,7 @@ export default {
         },
         async getActions(value) {
             const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-            const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+            const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",
                 "conditions": {

@@ -180,7 +180,7 @@ import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -443,7 +443,7 @@ export default {
             this.datasource.name = this.allData.datasetName
             this.datasource.projectId = this.allData.projectId
             if (this.datasource.projectId.length > 0)
-                this.datasource.resetUrl("https://apiv2.pharbers.com/phdadatasource")
+                this.datasource.resetUrl(`${hostName}/phdadatasource`)
         },
         // 首次加载触发，请求Excel数据
         'allData.schemaArr'(n, o) {

@@ -219,7 +219,7 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -427,7 +427,7 @@ export default {
                         "flowVersion": "developer"
                     })
                 })
-                const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+                const url = `${hostName}/phdydatasource/put_item`
                 let body = {
                     "table": "action",
                     "item": {
@@ -561,7 +561,7 @@ export default {
              */
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
-            const checkUrl = "https://apiv2.pharbers.com/phcomputedeletionimpact"
+            const checkUrl = `${hostName}/phcomputedeletionimpact`
             let query = []
             this.datasetcheckedIds.forEach((item,index) => {
                 query.push({

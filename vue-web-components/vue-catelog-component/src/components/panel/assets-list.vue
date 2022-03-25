@@ -61,7 +61,7 @@ import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath, hostName } from '../../config/staticFilePath'
 import treeItem from '../tree-item'
 import util from '../util.vue'
 
@@ -102,7 +102,7 @@ export default {
         }
     },
     async mounted() {
-        const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const url = `${hostName}/phgetgluetable`
         const accessToken = this.getCookie("access_token")
         let body = {
             "glue_database_name": this.getCookie("company_id")

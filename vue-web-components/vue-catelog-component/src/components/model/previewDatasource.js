@@ -1,4 +1,6 @@
 
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 export default class PhExcelPreviewSource {
     constructor(id, tmpname, firstSkipValue, nextSkipValue, sheet, par, adapter) {
         this.id = id
@@ -14,7 +16,7 @@ export default class PhExcelPreviewSource {
         this.batch_size = 10
         // this.schema = []
         // this.cols = this.schema
-        this.url = "https://apiv2.pharbers.com/schemaexplorer"
+        this.url = `${hostName}/schemaexplorer`
         this.debugToken = "1c6ebbf38b3fc9474e1d256898a465151387cfb596d739bc70d967a1efe38662"
         if (!adapter) {
             this.adapter = this.defaultAdapter

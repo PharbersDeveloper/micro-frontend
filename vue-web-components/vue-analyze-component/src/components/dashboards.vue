@@ -165,7 +165,7 @@ import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -424,7 +424,7 @@ export default {
              */
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
-            const checkUrl = "https://apiv2.pharbers.com/phcomputedeletionimpact"
+            const checkUrl = `${hostName}/phcomputedeletionimpact`
             let query = []
             this.dashboardCheckedIds.forEach((item,index) => {
                 query.push({

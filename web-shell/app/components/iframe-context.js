@@ -83,7 +83,8 @@ export default class IframeContextComponent extends Component {
 		window.addEventListener('message', this.iframeEvent)
 		this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
-		console.log(element.allData.data)
+		console.log(element.allData)
+		debugger
 		element.addEventListener("event", this.listener)
 		document.domain = "pharbers.com"
 	}

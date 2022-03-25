@@ -206,14 +206,14 @@ PhSigV4AWSClientFactory.newClient = function (config) {
         // parser.href = awsSigV4Client.endpoint;
         // headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn"
 
-		// if(ENV.environment === "development") {
-		// 	headers[HOST] = "apidev.pharbers.com"
-		// } else {
-		// 	headers[HOST] = "apiv2.pharbers.com"
-		// }
-		// console.log(headers[HOST])
+		if(ENV.environment === "development") {
+			headers[HOST] = "apidev.pharbers.com"
+		} else {
+			headers[HOST] = "apiv2.pharbers.com"
+		}
+		console.log(headers[HOST])
 
-		headers[HOST] = "apiv2.pharbers.com"
+		// headers[HOST] = "apiv2.pharbers.com"
 		
 		const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
         const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);

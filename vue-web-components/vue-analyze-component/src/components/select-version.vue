@@ -33,7 +33,7 @@
 </template>
 <script>
 // import PhDagDatasource from './model/datasourcev2'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -51,7 +51,7 @@ export default {
     },
     computed: {},
     async mounted() {
-        const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const url = `${hostName}/phgetgluetable`
         const accessToken = this.getCookie("access_token")
         let body = {
             "glue_database_name": this.getCookie("company_id")

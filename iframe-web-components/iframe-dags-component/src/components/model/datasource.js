@@ -1,4 +1,6 @@
 
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 export default class PhDagDatasource {
     constructor(id, adapter) {
         this.id = id
@@ -66,7 +68,7 @@ export default class PhDagDatasource {
 
 
     buildQuery(ele, isAppend=false) {
-        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         // const accessToken = this.debugToken
         let body = {

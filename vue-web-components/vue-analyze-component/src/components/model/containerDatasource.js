@@ -274,7 +274,7 @@ export default class PhContainerDataSource {
             // sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
             return sql_str
         }
-        const url = "https://apiv2.pharbers.com/phdadownload"
+        const url = `${hostName}/phdadownload`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "sql": buildDownloadQueryString(),
