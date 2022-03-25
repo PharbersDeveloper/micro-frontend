@@ -42,8 +42,8 @@ export default {
             versionArrShow: [],
             selectVersionTags: [],
             searchRow: [],
-            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
-            close_icon: `${envConfig}` + "/icon_close.svg"
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
+            close_icon: `${staticFilePath}` + "/icon_close.svg"
         }
     },
     props: {

@@ -114,26 +114,26 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            label_icon: `${envConfig}` + "/tag.svg",
-            table_icon: `${envConfig}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
-            star_icon: `${envConfig}` + "/%E6%94%B6%E8%97%8F.svg",
-            doc_icon: `${envConfig}` + "/new-document-dashboard.svg",
-            share_icon: `${envConfig}` + "/share.svg",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            del_icon_black: `${envConfig}` + "/%E5%88%A0%E9%99%A4+(1)(1).svg",
-            hide_icon: `${envConfig}` + "/%E9%9A%90%E8%97%8F.svg",
-            py_icon: `${envConfig}` + "/icons/python%E6%AD%A3%E5%B8%B8.svg",
-            pySpark_icon: `${envConfig}` + "/icons/pyspark%E6%AD%A3%E5%B8%B8.svg",
-            R_icon: `${envConfig}` + "/icons/R%E6%AD%A3%E5%B8%B8.svg",
-            sparkR_icon: `${envConfig}` + "/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
-            run_icon: `${envConfig}` + "/%E5%BC%80%E5%A7%8B1.svg",
-            run_to_script: `${envConfig}` + "/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_from_script: `${envConfig}` + "/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
-            run_script: `${envConfig}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_script_gray: `${envConfig}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
-            run_from_script_gray: `${envConfig}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            run_to_script_gray: `${envConfig}` + "/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-			py_icon_header: `${envConfig}` + "/icons/python%E5%8F%8D%E8%89%B2.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            table_icon: `${staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
+            star_icon: `${staticFilePath}` + "/%E6%94%B6%E8%97%8F.svg",
+            doc_icon: `${staticFilePath}` + "/new-document-dashboard.svg",
+            share_icon: `${staticFilePath}` + "/share.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            del_icon_black: `${staticFilePath}` + "/%E5%88%A0%E9%99%A4+(1)(1).svg",
+            hide_icon: `${staticFilePath}` + "/%E9%9A%90%E8%97%8F.svg",
+            py_icon: `${staticFilePath}` + "/icons/python%E6%AD%A3%E5%B8%B8.svg",
+            pySpark_icon: `${staticFilePath}` + "/icons/pyspark%E6%AD%A3%E5%B8%B8.svg",
+            R_icon: `${staticFilePath}` + "/icons/R%E6%AD%A3%E5%B8%B8.svg",
+            sparkR_icon: `${staticFilePath}` + "/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
+            run_icon: `${staticFilePath}` + "/%E5%BC%80%E5%A7%8B1.svg",
+            run_to_script: `${staticFilePath}` + "/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_from_script: `${staticFilePath}` + "/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
+            run_script: `${staticFilePath}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_script_gray: `${staticFilePath}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
+            run_from_script_gray: `${staticFilePath}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script_gray: `${staticFilePath}` + "/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+			py_icon_header: `${staticFilePath}` + "/icons/python%E5%8F%8D%E8%89%B2.svg",
             selectItemName: "",
             selectItem: null,
             showRunJson: false,
@@ -382,67 +382,67 @@ export default {
                         categories: [
                             {
                                 name: 'DSuploaded',
-                                symbol: 'image://' + `${envConfig}` + '/icons/DSuploaded.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/DSuploaded.svg'
                             },
                             {
                                 name: 'DSIntermediate',
-                                symbol: 'image://' + `${envConfig}` + '/icons/DSIntermediate.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/DSIntermediate.svg'
                             },
                             {
                                 name: 'Python3',
-                                symbol: 'image://' + `${envConfig}` + '/icons/python%E6%AD%A3%E5%B8%B8.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/python%E6%AD%A3%E5%B8%B8.svg'
                             },
                             {
                                 name: 'Python3_failed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/Python%E5%A4%B1%E8%B4%A5.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/Python%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'Python3_succeed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/Python%E6%88%90%E5%8A%9F.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/Python%E6%88%90%E5%8A%9F.svg'
                             },
                             {
                                 name: 'PySpark',
-                                symbol: 'image://' + `${envConfig}` + '/icons/pyspark%E6%AD%A3%E5%B8%B8.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/pyspark%E6%AD%A3%E5%B8%B8.svg'
                             },
                             {
                                 name: 'PySpark_succeed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
                             },
                             {
                                 name: 'PySpark_failed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'SparkR',
-                                symbol: 'image://' + `${envConfig}` + '/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
                             },
                             {
                                 name: 'SparkR_succeed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/SparkR%E6%88%90%E5%8A%9F.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/SparkR%E6%88%90%E5%8A%9F.svg'
                             },
                             {
                                 name: 'SparkR_failed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/SparkR%E5%A4%B1%E8%B4%A5.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/SparkR%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'R',
-                                symbol: 'image://' + `${envConfig}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
                             },
                             {
                                 name: 'R_succeed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/R%E6%88%90%E5%8A%9F.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/R%E6%88%90%E5%8A%9F.svg'
                             },
                             {
                                 name: 'R_failed',
-                                symbol: 'image://' + `${envConfig}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                                symbol: 'image://' + `${staticFilePath}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
                             },
                             {
                                 name: 'job',
-                                symbol: 'image://' + `${envConfig}` + '/WX20211019-163226.png'
+                                symbol: 'image://' + `${staticFilePath}` + '/WX20211019-163226.png'
                             },
                             {
                                 name: 'dataset',
-                                symbol: 'image://' + `${envConfig}` + '/WX20211019-173847.png'
+                                symbol: 'image://' + `${staticFilePath}` + '/WX20211019-173847.png'
                             }
                         ],
                         data: this.datasource.nodes,

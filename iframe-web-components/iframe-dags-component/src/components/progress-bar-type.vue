@@ -16,7 +16,7 @@ import { staticFilePath, hostName } from "../config/envConfig"
 export default {
     data: () => {
         return {
-            close_icon: `${envConfig}` + "/icon_close.svg",
+            close_icon: `${staticFilePath}` + "/icon_close.svg",
             barWidth: 0,
             percent: 0
         }

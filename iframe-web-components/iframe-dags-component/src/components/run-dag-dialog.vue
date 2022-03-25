@@ -78,7 +78,7 @@ export default {
             selectDataVersion: false,
             dsName: "",
             dsVersion: [],
-			img1: `${envConfig}` + "/icons/%E5%8A%A0%E5%8F%B7.svg"
+            img1: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg"
         }
     },
     props: {

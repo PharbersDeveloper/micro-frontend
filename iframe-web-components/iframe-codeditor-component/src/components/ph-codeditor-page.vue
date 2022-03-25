@@ -112,9 +112,9 @@ export default {
         return {
             codeBuffer: "",
             downloadCode: 0,
-            python_icon: `${envConfig}` + "/icons/Python.svg",
-            icon1: `${envConfig}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
-            icon2: `${envConfig}` + "/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
+            python_icon: `${staticFilePath}` + "/icons/Python.svg",
+            icon1: `${staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
+            icon2: `${staticFilePath}` + "/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
             jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",
             projectId: "JfSmQBYUpyb4jsei",
             jobPath: "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
@@ -146,7 +146,7 @@ export default {
     methods: {
         async queryData() {
             let url = `${hostName}/phdadataquery`
-            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+            const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -173,7 +173,7 @@ export default {
         },
         async saveCode() {
             let url = `${hostName}/phdadataupdata`
-            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+            const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,

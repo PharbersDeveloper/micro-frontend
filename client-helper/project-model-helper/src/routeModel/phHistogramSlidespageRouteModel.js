@@ -2,7 +2,7 @@ import { hostName } from "../config/envConfig"
 
 export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	let debugToken =
-		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+		"943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
 	route.store.unloadAll("dashboard")
 	route.store.unloadAll("slide")
 	const url = `${hostName}/phdydatasource/query`
