@@ -34,10 +34,10 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	let numsArr = results[1]
 	numShow.dataset = numsArr.dataset ? numsArr.dataset : 0
 	numShow.flow = numsArr.dagconf ? numsArr.dagconf : 0
+	numShow.dashBoard = numsArr.dashboard ? numsArr.dashboard : 0
 	numShow.analysis = numsArr.analysis ? numsArr.length : 0
 	numShow.model = numsArr.models ? numsArr.length : 0
 	numShow.notebook = numsArr.notebooks ? numsArr.length : 0
-	numShow.dashBoard = numsArr.dashBoards ? numsArr.length : 0
 	numShow.wiki = numsArr.wiki ? numsArr.length : 0
 	return {
 		projectDetail: projectDetailData,

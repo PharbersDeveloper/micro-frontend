@@ -91,6 +91,7 @@ import bpImg from '../bp-img'
 import bpButton from '../bp-button'
 import navTop from '../panel/bp-nav-top'
 import navTopRes from '../panel/bp-nav-top-response'
+import envConfig from '../../config/envConfig'
 import bpPageBottom from '../panel/bp-page-bottom'
 export default {
     name: "",
@@ -109,12 +110,12 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            rwContentImg: "https://www.pharbers.com/public/img_detail-page_head_realwr.jpg",
-            rwConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            rwCardAImg :"https://www.pharbers.com/public/img_realwr_cover_00.png",
-            rwTextBImg: "https://www.pharbers.com/public/img_realwr_info_01.png",
-            rwAdvantageImg: "https://www.pharbers.com/public/img_bg_doublehexagon.svg",
-            rwCardIcon: "https://www.pharbers.com/public/icon_point.svg",
+            rwContentImg: `${envConfig}` + "/img_detail-page_head_realwr.jpg",
+            rwConnectImg: `${envConfig}` + "/img_connect_line.svg",
+            rwCardAImg :`${envConfig}` + "/img_realwr_cover_00.png",
+            rwTextBImg: `${envConfig}` + "/img_realwr_info_01.png",
+            rwAdvantageImg: `${envConfig}` + "/img_bg_doublehexagon.svg",
+            rwCardIcon: `${envConfig}` + "/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

@@ -62,6 +62,8 @@
 import PhCodeditorDatasource from "./model/datasource"
 import phCodeditor from "./ph-codeditor"
 import AWS from "aws-sdk"
+import envConfig from "../config/envConfig"
+
 export default {
     name: 'codeditor-page',
     components: {
@@ -110,9 +112,9 @@ export default {
         return {
             codeBuffer: "",
             downloadCode: 0,
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg",
-            icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
-            icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
+            python_icon: `${envConfig}` + "/icons/Python.svg",
+            icon1: `${envConfig}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
+            icon2: `${envConfig}` + "/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
             jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",
             projectId: "JfSmQBYUpyb4jsei",
             jobPath: "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
@@ -143,7 +145,8 @@ export default {
     },
     methods: {
         async queryData() {
-            let url = "https://api.pharbers.com/phdadataquery"
+            // let url = "https://api.pharbers.com/phdadataquery"
+            let url = "https://apiv2.pharbers.com/phdadataquery"
             const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
             let body = {
                 "bucket": "ph-platform",
@@ -170,7 +173,8 @@ export default {
                 return null;
         },
         async saveCode() {
-            let url = "https://api.pharbers.com/phdadataupdata"
+            // let url = "https://api.pharbers.com/phdadataupdata"
+            let url = "https://apiv2.pharbers.com/phdadataupdata"
             const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
             let body = {
                 "bucket": "ph-platform",

@@ -12,14 +12,14 @@
                 </div>
             </div>
             <div class="activity-img-container">
-                <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="activity-list-img"></bpImg>
+                <bpImg :src="item.image.get('path')" class="activity-list-img"></bpImg>
             </div>
         </div>
     </div>
      <div class="activity-list-container" v-if="responseMini">
         <div class="activity-in-little"  v-for="(item, index) in content" :key="item.activity.title"  @click="toActivity(index)">
             <div class="activity-img-container">
-                <bpImg :src="'https://www.pharbers.com'+item.image.get('path')" class="activity-img"></bpImg>
+                <bpImg :src="item.image.get('path')" class="activity-img"></bpImg>
             </div>
             <bpText class="ph-H-Large_2">{{item.activity.title}}</bpText>
             <bpText class="ph-body-small">{{item.activity.subTitle}}</bpText>
@@ -35,6 +35,7 @@
 
 <script>
 import bpText from './bp-text'
+import envConfig from '../config/envConfig'
 import bpImg from './bp-img'
 export default {
     name: 'bpPane',
@@ -60,8 +61,8 @@ export default {
         return {
             index: null,
             loaded: false,
-            activityImg: "https://www.pharbers.com/public/photo_events_2020-06-04_boyun_00030.jpg",
-            moreIcon: "https://www.pharbers.com/public/icon_go.svg"
+            activityImg: `${envConfig}` + "/photo_events_2020-06-04_boyun_00030.jpg",
+            moreIcon: `${envConfig}` + "/icon_go.svg"
         };
     },
 

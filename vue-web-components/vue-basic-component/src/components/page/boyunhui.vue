@@ -62,7 +62,7 @@
         </div>
 
         <div ref="position-bluebook">
-            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-bluebook"></bp-img>
+            <bp-img :src="img1" id="position-bluebook"></bp-img>
         </div>
 
         <bp-text class="ph-H-Large_2">{{translation_data.blueBook}}</bp-text>
@@ -83,7 +83,7 @@
         </div>
 
         <div ref="position-meeting">
-            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-meeting"></bp-img>
+            <bp-img :src="img2" id="position-meeting"></bp-img>
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.agenda}}</bp-text>
         <div class="agenda-containers">
@@ -138,7 +138,7 @@
         </div>
 
         <div ref="position-speaker">
-            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-speaker"></bp-img>
+            <bp-img :src="img3" id="position-speaker"></bp-img>
         </div>
         <bp-text class="ph-H-Large_2">{{translation_data.speaker}}</bp-text>
         <div class="speaker-img-newcontainer">
@@ -156,7 +156,7 @@
         </div>
 
         <div ref="position-cooperation">
-            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-cooperation"></bp-img>
+            <bp-img :src="img4" id="position-cooperation"></bp-img>
         </div>
         <div class="gallery-text-container">
             <bp-text class="ph-H-Large_2">{{translation_data.partner}}</bp-text>
@@ -171,7 +171,7 @@
         </div>
 
         <div ref="position-gallery">
-            <bp-img src="https://www.pharbers.com/public/img_connect_line.svg" id="position-gallery"></bp-img>
+            <bp-img :src="img5" id="position-gallery"></bp-img>
         </div>
 
         <bp-text class="ph-H-Large_2">{{translation_data.gallery}}</bp-text>
@@ -182,6 +182,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import envConfig from '../../config/envConfig'
 import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",
@@ -206,6 +207,11 @@ export default {
             language: '中文',
             curTab: 0,
             dateTab: 0,
+            img1: `${envConfig}` + "/img_connect_line.svg",
+            img2: `${envConfig}` + "/img_connect_line.svg",
+            img3: `${envConfig}` + "/img_connect_line.svg",
+            img4: `${envConfig}` + "/img_connect_line.svg",
+            img5: `${envConfig}` + "/img_connect_line.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -377,9 +383,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         },

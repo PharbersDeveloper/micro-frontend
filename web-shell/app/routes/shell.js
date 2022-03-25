@@ -15,9 +15,12 @@ export default class ShellRoute extends Route {
 	@service('loading') loadingService
 	@service("execution-status") noticeService
 
+	get auth() {
+		return ENV.APP.auth
+	}
 
 	beforeModel(transition){	
-		if (!this.oauthService.judgeAuth()) {
+		if (this.auth && !this.oauthService.judgeAuth()) {
 			alert("登录过期，请重新登录")
 			this.oauthService.obtainAuth()
 		}

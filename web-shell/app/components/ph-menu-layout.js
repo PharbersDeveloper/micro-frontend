@@ -29,8 +29,17 @@ export default class PhMenuLayoutComponent extends Component {
 		}
 	}
 
+	// 分离测试环境
+	get queryClientId() {
+		if (ENV.environment === "development") {
+			return ENV.APP.clientId + "_dev"
+		} else {
+			return ENV.APP.clientId
+		}
+	}
+
 	get layoutCss() {
-		const layout = this.store.peekRecord("layout", ENV.APP.clientId)
+		const layout = this.store.peekRecord("layout", this.queryClientId)
 		return layout.css
 	}
 

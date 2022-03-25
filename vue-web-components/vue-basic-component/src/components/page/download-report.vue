@@ -8,7 +8,7 @@
             <div v-for="(report,index) in allData.reports" :key="index" class="download-report-left">
                 <div class="opacity-background"></div>
                 <div class="download-report-imgcontainer">
-                    <bp-img v-if="report" :src="'https://www.pharbers.com'+report.cover.get('path')" class="download-report-img"></bp-img>
+                    <bp-img v-if="report" :src="report.cover.get('path')" class="download-report-img"></bp-img>
                     <div class="download-report-img-mask"></div>
                 </div>
                 <div v-if="report" class="ph-H-Medium download-report-name">{{report.title}}</div>
@@ -20,12 +20,12 @@
             <div v-if="successSubmit" class="submit-success">
                 <div class="submit-success-inside-container">
                     <div class="submit-success-header">
-                        <bp-img src="https://www.pharbers.com/public/icon_success.svg" class="submit-success-img"></bp-img>
+                        <bp-img :src="img1" class="submit-success-img"></bp-img>
                         <bp-text class="ph-H-Large_2">{{translation_data.submitSuccess}}</bp-text>
                     </div>
                     <bp-text class="ph-body-medium mb-3 submit-success-text">{{translation_data.addWechat}}</bp-text>
                     <div class="submit-success-worker-img">
-                        <bp-img src="https://www.pharbers.com/public/img_qr_staff.jpg"></bp-img>
+                        <bp-img :src="img2"></bp-img>
                     </div>
                     <bp-text class="ph-body-medium mb-3 submit-success-text">{{translation_data.email}}</bp-text>
                     <bp-text class="ph-H-Medium mb-2 submit-success-text">contact@pharbers.com</bp-text>
@@ -74,7 +74,7 @@
 
                 <div class="form-submit-button-container" @click="submit">
                     <bp-button :type="responseMini ? 'response-contact-us': 'official-yellow-line-compact'" density='compact' :text="translation_data.submit" class="download-report-button"></bp-button>
-                    <img class="button-go" src="https://www.pharbers.com/public/icon_go.svg" alt="success"/>
+                    <img class="button-go" :src="img3" alt="success"/>
                 </div>
             </div>
         </div>
@@ -84,6 +84,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import envConfig from '../../config/envConfig'
 import bpInput from '../bp-input.vue'
 import bpTextarea from '../bp-textarea.vue'
 export default {
@@ -123,6 +124,9 @@ export default {
             tag3: false,
             intention: '',
             responseMini: false,
+            img1: `${envConfig}` + "/icon_success.svg",
+            img2: `${envConfig}` + "/img_qr_staff.jpg",
+            img3: `${envConfig}` + "/icon_go.svg",
             translation_basedata: {
                 cn: {
                     back: '返回',
@@ -277,7 +281,7 @@ export default {
             }
         }
     }
-}
+} 
 </script>
 <style lang="scss" scoped>
     * {
@@ -365,7 +369,7 @@ export default {
             padding: 0 100px;
             height: 22px;
             display: flex;
-            justify-content: start;
+            justify-content: flex-start;
         }
 
         .download-report-main{

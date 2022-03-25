@@ -13,7 +13,7 @@
                 
                 <div class="no-logs" v-if="logsValue === ''">
                     <div class="no-log-img">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/list.png" alt="">
+                        <img :src="img1" alt="">
                         <span>暂无Log数据</span>
                     </div>
                 </div>
@@ -32,13 +32,16 @@
 </template>
 
 <script>
+import envConfig from "../config/envConfig"
+
 export default {
     data() {
         return{
             emrLog: "",
             jobName: "",
             loading: false,
-            logsValue: ""
+            logsValue: "",
+			img1: `${envConfig}` + "/list.png"
         }
     },
     props: {

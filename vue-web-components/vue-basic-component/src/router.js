@@ -12,6 +12,7 @@ import activityList from './components/page/activity-list.vue'
 import aboveDataDetail from './components/page/above-data-detail.vue'
 import industryDetail from './components/page/industry-activity-detail.vue'
 import boyunhui from './components/page/boyunhui.vue'
+import articles from './components/page/articles-list.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
             path: '/home',
             name: 'home',
             component: home
+        },
+        {
+            path: '/articles',
+            name: 'articles',
+            component: articles
         },
         {
             path: '/max',

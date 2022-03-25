@@ -11,7 +11,7 @@
                     <div class="log">
                         <div class="title-area">
                             <span class="execution-table">详情日志</span>
-                            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_enlarge.svg" alt="" class="enlarge" @click="viewLogBox">
+                            <img :src="img1" alt="" class="enlarge" @click="viewLogBox">
                         </div>
                         <div class="log-area" v-if="allData.logsData && allData.logsData!=''">
                             <span class="log-option">Log more</span>
@@ -19,7 +19,7 @@
                             <span class="log-option">resume</span>
                         </div>
 						<div class="log-area no-logs" v-if="!allData.logsData || allData.logsData==''">
-							<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/list.png" alt="">
+							<img :src="img2" alt="">
 							<span>暂无Log数据</span>
 						</div>
                     </div>
@@ -84,7 +84,7 @@
             <div class="log-box-container">
                 <div class="header-area">
                     <span class="header-title">详情日志</span>
-                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="icon-close" @click="closeLogBox">
+                    <img :src="img3" alt="" class="icon-close" @click="closeLogBox">
                 </div>
                 <div class="body-area">
                     <div class="log-area">
@@ -103,7 +103,7 @@
 import bpDag from '../bp-dag.vue'
 import uploadFile from '../upload-file.vue'
 import bpPagination from '../bp-pagination.vue'
-
+import envConfig from "../../config/envConfig"
 
 export default {
     components: {
@@ -129,7 +129,10 @@ export default {
             duration: "",
             succeed_step: [],
             openUploadWindow: false,
-            logBox: false
+            logBox: false,
+			img1: `${envConfig}` + "/icon_enlarge.svg",
+			img2: `${envConfig}` + "/list.png",
+			img3: `${envConfig}` + "/icon_close.svg"
         }
     },
     props: {

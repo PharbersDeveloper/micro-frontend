@@ -33,6 +33,8 @@
 </template>
 <script>
 import PhDagDatasource from './model/datasourcev2'
+import envConfig from "../config/envConfig"
+
 export default {
     data() {
         return{
@@ -40,8 +42,8 @@ export default {
             versionArrShow: [],
             selectVersionTags: [],
             searchRow: [],
-            search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
-            close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg"
+            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
+            close_icon: `${envConfig}` + "/icon_close.svg"
         }
     },
     props: {

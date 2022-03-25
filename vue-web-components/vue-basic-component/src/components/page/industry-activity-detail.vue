@@ -47,7 +47,7 @@
             <div class="industry-activity-detail-speaker" v-for="(speaker, index) in allData.eventAll" :key="index" :class="[index == 0?'self-cross-flex-end':'self-cross-flex-start']">
                 <div class="speaker-info-left">
                     <div class="pharbers-speaker-bg"></div>
-                    <bpImg class="pharbers-speaker-avatar" :src="'https://www.pharbers.com'+speaker.image.path"></bpImg>
+                    <bpImg class="pharbers-speaker-avatar" :src="speaker.image.path"></bpImg>
                     <bpText class="ph-H-Medium">{{speaker.speaker}}</bpText>
                 </div>
                 <div class="speaker-info-right">
@@ -71,6 +71,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import envConfig from '../../config/envConfig'
 import bpPhoto from '../panel/bp-gallery-image'
 
 export default {
@@ -88,10 +89,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/photo_events_nanjing_2019-10-23_00001.jpg",
-            lineImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            headTest: "https://www.pharbers.com/public/avatar_cl.png",
-            quotataion: "https://www.pharbers.com/public/img_bg_view.svg",
+            headerImg: `${envConfig}` + "/photo_events_nanjing_2019-10-23_00001.jpg",
+            lineImg: `${envConfig}` + "/img_connect_line.svg",
+            headTest: `${envConfig}` + "/avatar_cl.png",
+            quotataion: `${envConfig}` + "/img_bg_view.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -228,9 +229,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         }

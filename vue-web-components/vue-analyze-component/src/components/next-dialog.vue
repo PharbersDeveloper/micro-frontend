@@ -45,10 +45,12 @@
 </template>
 
 <script>
+import envConfig from '../config/envConfig'
+
 export default {
     data() {
         return {
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
+            dropDownIcon: `${envConfig}` + "/drop-down-icon.png",
             showDialog: false,
             newData: '', 
             newDataName: '',
@@ -136,7 +138,7 @@ export default {
         datasetArr: {
             type: Array,
             default: function() {
-                return ['dataset_0001','dataset_0002','dataset_0003','dataset_0004','dataset_0003','dataset_0003','dataset_0003']
+                return []
             }
         },
         fileList: {

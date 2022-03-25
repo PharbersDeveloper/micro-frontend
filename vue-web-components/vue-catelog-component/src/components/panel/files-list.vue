@@ -22,7 +22,7 @@
                     <span class="heading-xsmall member-text">Owner</span>
                     <span class="subscribe-number-header"></span>
                     <span class="heading-xsmall time-text">
-                        <bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :src="iconSort" :choosedValue="mineSortText">
+                        <bp-select-vue :beforeSrc="img1" :src="iconSort" :choosedValue="mineSortText">
                             <bp-option-vue text="Updated Time" :src="mineSortUpdatedTimeIcon" @click="myDataSort('modified', 0)"></bp-option-vue>
                             <bp-option-vue text="Created Time" :src="mineSortCreatedTimeIcon" @click="myDataSort('created', 0)"></bp-option-vue>
                             <div class="option-line mt-1 mb-1"></div>
@@ -124,7 +124,7 @@ import bpText from 'vue-components/src/components/bp-text.vue'
 import bpButton from 'vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
 import util from '../util.vue'
-
+import envConfig from '../../config/envConfig'
 export default {
     components: {
         bpPagination,
@@ -143,7 +143,8 @@ export default {
             userName: util.methods.getCookie('user_name'),
             title: "我的文件",
             subscribedTitle: "文件名称",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
+            fileIconDark: `${envConfig}` + "/icon_my-data-dark.svg",
+            img1: `${envConfig}` + "/icon_chevron-down_12.svg",
             goDetail: "查看详情",
             /** 文件上传弹窗状态 */
             uploadToastBorder: "red",
@@ -190,9 +191,9 @@ export default {
         },
         iconSort() {
             if (this.allData.sort.indexOf('-') === -1) {
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-ascending.svg'
+                return `${envConfig}` + "/icon_sorting-ascending.svg"
             } else {
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_sorting-descending.svg'
+                return `${envConfig}` + "/icon_sorting-descending.svg"
             }
         },
         mineSortText() {
@@ -205,18 +206,18 @@ export default {
         mineSortCreatedTimeIcon() {
             if (this.allData.sort.indexOf('created') !== -1) {
                 this.mineSortUpdatedTimeIcon = ''
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                return `${envConfig}` + "/icon_check.svg"
             } else {
-                this.mineSortUpdatedTimeIcon = 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                this.mineSortUpdatedTimeIcon = `${envConfig}` + "/icon_check.svg"
                 return ''
             }
         },
         mineSortDescendingIcon() {
             if (this.allData.sort.indexOf('-') !== -1) {
                 this.mineSortAscendingIcon = ''
-                return 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                return `${envConfig}` + "/icon_check.svg"
             } else {
-                this.mineSortAscendingIcon = 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_check.svg'
+                this.mineSortAscendingIcon = `${envConfig}` + "/icon_check.svg"
                 return ''
             }
         },

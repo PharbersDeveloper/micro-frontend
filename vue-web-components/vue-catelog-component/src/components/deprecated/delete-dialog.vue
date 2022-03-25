@@ -24,10 +24,12 @@
 </template>
 
 <script>
+import envConfig from '../../config/envConfig'
+
 export default {
     data() {
         return {
-            model_err: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/modal+header+error.svg"
+            model_err: `${envConfig}` + "/modal+header+error.svg"
         }
     },
     props: {

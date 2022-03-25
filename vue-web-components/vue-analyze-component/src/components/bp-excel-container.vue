@@ -1,6 +1,6 @@
 <template>
     <div class="ec-container">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="dataset_header">
             <img :src="dataset_icon" class="script_icon" alt="">
             {{allData.datasetName}}
@@ -180,6 +180,8 @@ import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
+import envConfig from '../config/envConfig'
+
 export default {
     data() {
         return {
@@ -187,16 +189,16 @@ export default {
             dialogSortVisible: false, //显示排序
             dialogCollectionVisible: false, //显示列
             dialogDownloadVisible: false, //显示下载
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
+            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
             showSelectOptionParam: false,
             closeTosts: false,
             totalNum: 0,
             matchNum: 0,
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
-            close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+            dataset_icon: `${envConfig}` + "/Database.svg",
+            close_icon: `${envConfig}` + "/icon_close.svg",
             searchRow: "",
             searchList: "",
-            search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
             versionCandidatesShow: [],
             searchSort: "",
             expandPopup: false,
@@ -487,7 +489,7 @@ export default {
 <style lang="scss">
     @font-face {
         font-family: element-icons;
-        src: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff') format('woff'), url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf') format('truetype');
+        src: url('https://components.pharbers.com/element-ui/element-icons.woff') format('woff'), url('https://components.pharbers.com/element-ui/element-icons.ttf') format('truetype');
         font-weight: 400;
         font-style: normal;
     }

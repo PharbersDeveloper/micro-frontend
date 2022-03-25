@@ -21,11 +21,13 @@ module.exports = function (environment) {
 			// Here you can pass flags/options to your application instance
 			// when it is created
 			redirectUri: "https://general.pharbers.com/oauth-callback",
+			redirectClientId: "V5I67BHIRVR2Z59kq-a-",
 			pharbersUri: "https://www.pharbers.com",
 			accountsUri: "https://accounts.pharbers.com",
 			host: "https://oauth.pharbers.com",
 			apiUri: "https://apiv2.pharbers.com",
 			apiHost: "apiv2.pharbers.com",
+			/* offweb */
 			// clientId: "fjjnl2uSalHTdrppHG9u",
 			// clientName: "offweb",
 			/* general */
@@ -34,7 +36,8 @@ module.exports = function (environment) {
 			/* deploy */
 			clientId: "rB9jOc347FswXebo",
 			clientName: "project",
-			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout"],
+			auth: true, //需要登录（目前只有官网不需要登录）
+			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout", "article"],
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
@@ -52,6 +55,7 @@ module.exports = function (environment) {
 
 	if (environment === "development") {
 		ENV.APP.DEV = {}
+		ENV.APP.DEV.redirectClientId = "wsOelHMK2tLAVhj0"
 		// ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
 		ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
 		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"

@@ -32,22 +32,22 @@
                     <img :src="hide_icon" alt=""> -->
                     <img :src="run_icon" alt=""
                         @click="on_click_runDag">
-                    <img v-if="noticeService.retryButtonShow && selectItem"
+                    <img v-if="retryButtonShow && selectItem"
                         :src="run_script" alt=""
-                        @click="on_click_run_script('self_only')">
-                    <img v-if="noticeService.retryButtonShow && selectItem"
+                        @click="on_click_retry_dag('self_only')">
+                    <img v-if="retryButtonShow && selectItem"
                         :src="run_to_script" alt=""
-                        @click="on_click_run_script('downstream')">
-                    <img v-if="noticeService.retryButtonShow  && selectItem"
+                        @click="on_click_retry_dag('downstream')">
+                    <img v-if="retryButtonShow  && selectItem"
                         :src="run_from_script" alt=""
-                        @click="on_click_run_script('upstream')">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                        @click="on_click_retry_dag('upstream')">
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="run_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="run_from_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="run_to_script_gray" alt="">
-                    <img v-if="!noticeService.retryButtonShow || !selectItem"
+                    <img v-if="!retryButtonShow || !selectItem"
                         :src="stop_icon" alt="">
                 </div>
                 <div class="sec_icon_row">
@@ -119,6 +119,7 @@ import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
+import envConfig from "../config/envConfig"
 
 export default {
     data: () => {
@@ -127,27 +128,27 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            icon_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg",
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
-            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
-            doc_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/new-document-dashboard.svg",
-            share_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/share.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            del_icon_black: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1)(1).svg",
-            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            py_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg",
-            pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
-            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-            run_to_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_from_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
-            run_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
-            run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
+            icon_header: `${envConfig}` + "/icons/DSuploaded.svg",
+            label_icon: `${envConfig}` + "/tag.svg",
+            table_icon: `${envConfig}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
+            star_icon: `${envConfig}` + "/%E6%94%B6%E8%97%8F.svg",
+            doc_icon: `${envConfig}` + "/new-document-dashboard.svg",
+            share_icon: `${envConfig}` + "/share.svg",
+            delete_icon: `${envConfig}` + "/delete_r.svg",
+            del_icon_black: `${envConfig}` + "/%E5%88%A0%E9%99%A4+(1)(1).svg",
+            hide_icon: `${envConfig}` + "/%E9%9A%90%E8%97%8F.svg",
+            py_icon: `${envConfig}` + "/icons/python%E6%AD%A3%E5%B8%B8.svg",
+            pySpark_icon: `${envConfig}` + "/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg",
+            R_icon: `${envConfig}` + "/icons/R%E6%AD%A3%E5%B8%B8.svg",
+            sparkR_icon: `${envConfig}` + "/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
+            run_icon: `${envConfig}` + "/%E5%BC%80%E5%A7%8B1.svg",
+            run_to_script: `${envConfig}` + "/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_from_script: `${envConfig}` + "/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
+            run_script: `${envConfig}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_script_gray: `${envConfig}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
+            run_from_script_gray: `${envConfig}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script_gray: `${envConfig}` + "/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            stop_icon: `${envConfig}` + "/icons/%E5%81%9C%E6%AD%A2.svg",
             selectItem: null,
             showRunJson: false,
             runId: "",
@@ -162,7 +163,8 @@ export default {
             showProgress: false, //进度条弹窗是否显示
             textConf: {}, //运行弹框textarea的默认值
             progressOver: false, //进度条是否停止
-            registerJobEventName: ""
+            registerJobEventName: "",
+            retryButtonShow: false
         }
     },
     components: {
@@ -187,18 +189,18 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    DSuploaded_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded%E5%8F%8D%E8%89%B2.svg",
-                    DSIntermediate_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate%E5%8F%8D%E8%89%B2.svg",
-                    input_index_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in%E5%8F%8D%E8%89%B2.svg",
-                    output_index_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out%E5%8F%8D%E8%89%B2.svg",
-                    python3_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%8F%8D%E8%89%B2.svg",
-                    pyspark_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%8F%8D%E8%89%B2.svg",
-                    sparkr_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
-                    r_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%8F%8D%E8%89%B2.svg",
-                    dataset_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png",
-                    job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png",
-                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg",
-                    catalog_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
+                    DSuploaded_header: `${envConfig}` + "/icons/DSuploaded%E5%8F%8D%E8%89%B2.svg",
+                    DSIntermediate_header: `${envConfig}` + "/icons/DSIntermediate%E5%8F%8D%E8%89%B2.svg",
+                    input_index_header: `${envConfig}` + "/icons/max_1.0_in%E5%8F%8D%E8%89%B2.svg",
+                    output_index_header: `${envConfig}` + "/icons/max_1.0_out%E5%8F%8D%E8%89%B2.svg",
+                    python3_header: `${envConfig}` + "/icons/python%E5%8F%8D%E8%89%B2.svg",
+                    pyspark_header: `${envConfig}` + "/icons/Pyspark%E5%8F%8D%E8%89%B2.svg",
+                    sparkr_header: `${envConfig}` + "/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
+                    r_header: `${envConfig}` + "/icons/R%E5%8F%8D%E8%89%B2.svg",
+                    dataset_header: `${envConfig}` + "/WX20211019-173847.png",
+                    job_header: `${envConfig}` + "/WX20211019-163226.png",
+                    prepare_header: `${envConfig}` + "/icons/prepare%E5%8F%8D%E8%89%B2.svg",
+                    catalog_header: `${envConfig}` + "/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
                 }
             }
         },
@@ -208,91 +210,99 @@ export default {
                 return [
                     {
                         name: 'DSuploaded',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg'
+                        symbol: `${envConfig}` + '/icons/DSuploaded.svg'
                     },
                     {
                         name: 'DSIntermediate',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate.svg'
+                        symbol: `${envConfig}` + '/icons/DSIntermediate.svg'
                     },
                     {
                         name: 'Python3',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${envConfig}` + '/icons/python%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'Python3_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${envConfig}` + '/icons/python%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'Python3_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${envConfig}` + '/icons/python%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'PySpark',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${envConfig}` + '/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'PySpark_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${envConfig}` + '/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'PySpark_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${envConfig}` + '/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: "PySpark_running",
+                        symbol: `${envConfig}` + '/icons/Pyspark%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
                     },
                     {
                         name: 'SparkR',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${envConfig}` + '/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'SparkR_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${envConfig}` + '/icons/sparkR%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'SparkR_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${envConfig}` + '/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'R',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${envConfig}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'R_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${envConfig}` + '/icons/R%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'R_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${envConfig}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'prepare',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${envConfig}` + '/icons/prepare%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'prepare_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${envConfig}` + '/icons/prepare%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'prepare_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${envConfig}` + '/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'prepare_running',
+                        symbol: `${envConfig}` + '/icons/prepare%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
                     },
                     {
                         name: 'job',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
+                        symbol: `${envConfig}` + '/WX20211019-163226.png'
                     },
                     {
                         name: 'dataset',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
+                        symbol: `${envConfig}` + '/WX20211019-173847.png'
                     },
                     {
                         name: 'DSInputIndex',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
+                        symbol: `${envConfig}` + '/icons/max_1.0_in.svg'
                     },
                     {
                         name: 'DSOutputIndex',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
+                        symbol: `${envConfig}` + '/icons/max_1.0_out.svg'
                     },
                     {
                         name: 'DSCatalog',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon.svg'
+                        symbol: `${envConfig}` + '/icons/catalog_icon.svg'
                     }
                 ]
             }
@@ -328,7 +338,7 @@ export default {
                 }
                 if(event.data.message.cmd === "finish_dag") {
                     console.log("iframe接收的dag finish", event.data.message.cmd)
-                    that.runDagFailedCallback(event.data.message, that)
+                    that.runDagFinishCallback(event.data.message, that)
                 }
             }
         },
@@ -345,7 +355,8 @@ export default {
         closeProgress() {
             this.showProgress = false
         },
-        resetDagStatus() {
+        //二次trigger清空所有状态
+        resetDagStatus(val) {
             let that = this
             // 1.进度条状态
             this.progressOver = false
@@ -359,6 +370,32 @@ export default {
             })
             // 3.log弹窗
             this.failedLogs = []
+        },
+        // 点击trigger，弹窗选择version
+        on_click_runDag() {
+            let roots = []
+            this.datasource.data.forEach(item => {
+                if(item.attributes.runtime === "output_index") {
+                    roots.push(item)
+                } else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
+                    roots.push(item)
+                }
+            })
+            let datasetsArr = []
+            roots.forEach(item => {
+                datasetsArr.push({
+                    "name": item.attributes.name,
+                    "version": [],
+                    "cat": item["attributes"]["runtime"],
+                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
+                })
+            })
+            this.textConf = {
+                "datasets": datasetsArr,
+                "scripts": [],
+                "userConf": {}
+            }
+            this.showRunJson = true
         },
         /**
          * 1. 触发整体dag运行
@@ -409,24 +446,17 @@ export default {
             }, '*')
             this.showRunJson = false
             this.loading = false
-            this.resetDagStatus()
-        },
-        runDagFailedCallback(response, ele) {
-            let payload = JSON.parse(response.payload)
-            let status = payload["status"]
-            if(status != "running") {
-                // 更新进度条
-                this.progressOver = true
-            }
+            this.resetDagStatus("trigger")
         },
         /**
-         * 更新状态的回调函数
+         *  trigger更新实时状态
          */
         runDagCallback(response, ele) {
             let that = this
             let represent_id = ""
-            // this.responseArr = response.message
             let payload = JSON.parse(response.payload)
+            console.log(payload)
+            this.responseArr = payload
             let status = payload["status"]
             let jobName = JSON.parse(payload.message).cnotification.jobName
             let data = ele.datasource.data
@@ -438,6 +468,8 @@ export default {
                     } else if(status === "failed") {
                         it.status = "failed"
                         represent_id = it.representId
+                    } else if(status === "running") {
+                        it.status = "running"
                     }
                 }
                 that.refreshNodeStatus(it)
@@ -456,6 +488,17 @@ export default {
             }
             console.log("failedLogs", that.failedLogs)
         },
+        // trigger更新整体状态
+        runDagFinishCallback(response, ele) {
+            let payload = JSON.parse(response.payload)
+            let status = payload["status"]
+            if(status != "running") {
+                // 更新进度条
+                this.progressOver = true
+                this.retryButtonShow = true
+            }
+        },
+        //更新节点状态
         refreshNodeStatus(node) {
             const that = this
             const d3 = Object.assign({}, d3_base, d3_dag)
@@ -468,6 +511,8 @@ export default {
                             result = cat + "_succeed"
                         } else if (data.status === "failed") {
                             result = cat + "_failed"
+                        } else if (data.status === "running"){
+                            result = cat + "_running"
                         } else {
                             result = cat
                         }
@@ -477,22 +522,24 @@ export default {
             }
         },
         /**
+         * retry按钮
          * 1. 有第一次运行状态才可以点retry三个按钮
          * 2. 选择job之后修改名字，点运行时候出现弹窗提示
          */
-        async on_click_run_script(data) {
+        async on_click_retry_dag(data) {
             this.showProgress = false
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
-            this.runId = JSON.parse(this.responseArr[0].attributes.message).cnotification.runId
-            const url = `https://api.pharbers.com/phdagtasktrigger`
+            this.runId = JSON.parse(this.responseArr.message).cnotification.runId
+            const url = `https://apiv2.pharbers.com/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
                 "flow_version": "developer",
                 "run_id": this.runId,
-                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName + "_" + this.selectItem["represent-id"],
+                "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName,
                 "clean_cat": data //向上还是向下
+                //  + "_" + this.selectItem["represent-id"]
             }
             let options = {
                 method: "POST",
@@ -503,35 +550,25 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
-            let result = await fetch(url, options).then(res => res.json())
-            this.showProgress = true
-        },
-        // 点击运行整体trigger
-        on_click_runDag() {
-            let roots = []
-            this.datasource.data.forEach(item => {
-                if(item.attributes.runtime === "output_index") {
-                    roots.push(item)
-                } else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
-                    roots.push(item)
-                }
-            })
-            let datasetsArr = []
-            roots.forEach(item => {
-                datasetsArr.push({
-                    "name": item.attributes.name,
-                    "version": [],
-                    "cat": item["attributes"]["runtime"],
-                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
-                })
-            })
-            this.textConf = {
-                "datasets": datasetsArr,
-                "scripts": [],
-                "userConf": {}
+            let results = await fetch(url, options).then(res => res.json())
+            if(results.status === "failed") {
+                alert("重新运行出错，请重新运行！")
+                this.loading = false
+                return false
             }
-            this.showRunJson = true
+            const dag_run_id_retry = this.runId.split("_")
+            const time_retry = new Date(dag_run_id_retry.pop()).getTime()
+            const runnerId_retry = dag_run_id_retry.join("_") + "_" + time_retry
+            window.parent.postMessage({
+                message: {
+                    dagRunCmd: this.registerJobEventName,
+                    dagExecutionCmd: "executionStatus" + runnerId_retry
+                }
+            }, '*')
+            this.showProgress = true
+            this.progressOver = false
         },
+        
         handlerJSON(str) {
             if (typeof str == 'string') {
                 try {
@@ -732,6 +769,7 @@ export default {
                     // TODO: remove tooltips
                     // d3.select(this).selectAll("circle").remove()
                 }).on('click', function (d, i) {
+                    that.selectItem = null
                     that.selectItemName = i.data.attributes.name
                     // 获取选中节点的基本信息
                     let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)

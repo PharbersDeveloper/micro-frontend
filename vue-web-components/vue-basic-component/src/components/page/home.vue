@@ -47,7 +47,7 @@
                     <div class="report-download-img-container">
                         
                         <bpImg 
-                            :src="'https://www.pharbers.com'+report.cover.get('path')" class="report-down-img"></bpImg>
+                            :src="report.cover.get('path')" class="report-down-img"></bpImg>
                         <div class="report-down-img-mask"></div>
                     </div>
                     <div class="report-download-info">
@@ -161,6 +161,7 @@ import bpImg from '../bp-img'
 import bpCardActive from '../panel/bp-card-activity'
 import bpButton from '../bp-button'
 import BpText from '../bp-text.vue'
+import envConfig from '../../config/envConfig'
 export default {
     name: 'home',
     data() {
@@ -242,18 +243,18 @@ export default {
                     advisoryBrand: "Improve ROI"
                 }
             },
-            src: "https://www.pharbers.com/public/img_home_hero.png",
-            buttonGo: "https://www.pharbers.com/public/icon_go_yellow.svg",
-            reportLeftDown: "https://www.pharbers.com/public/img_deco_corner.svg",
-            reportRightDown: "https://www.pharbers.com/public/img_deco_corner.svg",
-            reportDownImg: "https://www.pharbers.com/public/img_paper-cover_VPB.jpg",
-            reportConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            dataShowImg: "https://www.pharbers.com/public/img_corevalue.png",
-            showMoreButtonGo: "https://www.pharbers.com/public/icon_go.svg",
-            maxRightImg: "https://www.pharbers.com/public/img_home_max.png",
-            maxRightImg_480: "https://www.pharbers.com/public/img_home_max_480.png",
-            realWorldLeftImg: "https://www.pharbers.com/public/img_home_realworld.png",
-            advisoryRightImg: "https://www.pharbers.com/public/img_home_consulting.png"
+            src: `${envConfig}` + "/img_home_hero.png",
+            buttonGo: `${envConfig}` + "/icon_go_yellow.svg",
+            reportLeftDown: `${envConfig}` + "/img_deco_corner.svg",
+            reportRightDown: `${envConfig}` + "/img_deco_corner.svg",
+            reportDownImg: `${envConfig}` + "/img_paper-cover_VPB.jpg",
+            reportConnectImg: `${envConfig}` + "/img_connect_line.svg",
+            dataShowImg: `${envConfig}` + "/img_corevalue.png",
+            showMoreButtonGo: `${envConfig}` + "/icon_go.svg",
+            maxRightImg: `${envConfig}` + "/img_home_max.png",
+            maxRightImg_480: `${envConfig}` + "/img_home_max_480.png",
+            realWorldLeftImg: `${envConfig}` + "/img_home_realworld.png",
+            advisoryRightImg: `${envConfig}` + "/img_home_consulting.png"
         }
         
     },
@@ -348,6 +349,7 @@ export default {
         }
     },
     created() {
+        console.log(envConfig)
         // todo
         window.addEventListener('beforeunload', e => {
             window.scrollTo(0,0)

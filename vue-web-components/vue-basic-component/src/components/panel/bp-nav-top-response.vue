@@ -34,6 +34,7 @@
 <script>
 import bpModalForm from './bp-modal-form.vue'
 import bpButton from '../bp-button.vue'
+import envConfig from '../../config/envConfig'
 import bpText from '../bp-text.vue'
 export default {
     created() {
@@ -80,8 +81,8 @@ export default {
     },
     data() {
         return {
-            imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
-            imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
+            imgSrc: `${envConfig}` + "/img_logo_ph_theme.svg",
+            imgSrcLight: `${envConfig}` + "/img_logo_ph_light.svg",
             menu: false,
             borderNone: false,
             inverse: false,

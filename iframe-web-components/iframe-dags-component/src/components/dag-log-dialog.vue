@@ -17,7 +17,7 @@
                 
                 <div class="no-logs" v-if="logsValue === ''">
                     <div class="no-log-img">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/list.png" alt="">
+                        <img :src="img1" alt="">
                         <span>暂无Log数据</span>
                     </div>
                 </div>
@@ -36,12 +36,15 @@
 </template>
 
 <script>
+import envConfig from "../config/envConfig"
+
 export default {
     data() {
         return{
             emrLog: "",
             loading: false,
-            logsValue: ""
+            logsValue: "",
+			img1: `${envConfig}` + "/list.png"
         }
     },
     props: {
@@ -66,7 +69,7 @@ export default {
         this.loading = true
         let that = this
         const url = "https://apiv2.pharbers.com/phdydatasource/query"
-        const accessToken = this.getCookie( "access_token" ) || "64ce8321dce6a8bf5d5a37dd01d08b52aa93fec1f44f867235f49c7f5789ba8e"
+        const accessToken = this.getCookie( "access_token" ) || "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3"
         let body = {
             "table": "logs",
             "conditions": {
@@ -113,9 +116,10 @@ export default {
                 result = await fetch(logsUrl, logsOptions).then(res => res.json())
                 if (result.status === 1) {
                     clearInterval(clearInt);
-                    that.logsValue = result.message.map((item, idx, array) => window.atob(item)).join("<br/>")
+                    // that.logsValue = result.message.map((item, idx, array) => item.join("<br/>"))
+                    that.logsValue = result.message
                     that.loading = false
-                    console.log(that.logsValue)
+                    console.log(that.logsValue) 
                 }
             }, 5 * 1000)
         } catch ( e ) {

@@ -21,11 +21,12 @@
                     @clickEvent="clickEvent"></bpSelect>
                 <span class="bp-text" @click="toActivity">{{translation_data.activity}}</span>
                 <span class="bp-text topButton" @click="toAboutUs">{{translation_data.aboutUs}}</span>
+                <span class="bp-text topButton" @click="toArticles">{{translation_data.articles}}</span>
             </div>
             <div class="navButton" :class="{'inverseColor': inverse}">
                 <bpButton :text="translation_data.contactUs" class="concact" @click="contactUs"></bpButton>
                 
-                <bp-select-vue v-if="isLogin" choosedValue="" src="https://www.pharbers.com/public/icon_home_user.svg" iconClass="" class="home-user-select">
+                <bp-select-vue v-if="isLogin" choosedValue="" :src="isLoginSrc" iconClass="" class="home-user-select">
                     <bp-option-vue :text="translation_data.general" @click="toGeneral" ></bp-option-vue>
                     <bp-option-vue :text="translation_data.logout" @click="logout" ></bp-option-vue>
                 </bp-select-vue>
@@ -36,7 +37,7 @@
     </div>
     <div class="vue_container fixed-nav-response" 
         :class="[inverse ? 'navInverse' : 'nav']"
-		:style="bgc"
+        :style="bgc"
     >
         <div 
             :class="[
@@ -80,6 +81,7 @@ import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
+import envConfig from '../../config/envConfig'
 import bpModalForm from './bp-modal-form.vue'
 import bpText from '../bp-text.vue'
 export default {
@@ -139,10 +141,11 @@ export default {
             menu: false,
             inverse: false,
             bgc: "background: transparent",
-            imgSrc: "https://www.pharbers.com/public/img_logo_ph_theme.svg",
-            imgSrcLight: "https://www.pharbers.com/public/img_logo_ph_light.svg",
-            selectSrc: "https://www.pharbers.com/public/icon_drop.svg",
-            selectSrcLight: "https://www.pharbers.com/public/icon_drop_light.svg",
+            imgSrc: `${envConfig}` + "/img_logo_ph_theme.svg",
+            imgSrcLight: `${envConfig}` + "/img_logo_ph_light.svg",
+            selectSrc: `${envConfig}` + "/icon_drop.svg",
+            selectSrcLight: `${envConfig}` + "/icon_drop_light.svg",
+            isLoginSrc: `${envConfig}` + "/icon_home_user.svg",
             translation_basedata: {
                 cn: {
                     MAX: {
@@ -153,6 +156,7 @@ export default {
                     },
                     choosed_value: "产品与服务",
                     aboutUs: "关于我们",
+                    articles: "行业洞察",
                     activity: "活动资讯",
                     contactUs: "联系我们",
                     login: "登录",
@@ -193,6 +197,12 @@ export default {
                             click_event: function() {
                                 this.$emit('linkToPage', 'about-us')
                             }
+                        },
+                        {
+                            text: "行业洞察",
+                            click_event: function() {
+                                this.$emit('linkToPage', 'articles-list')
+                            }
                         }
                     ],
                     modalForm: {
@@ -225,6 +235,7 @@ export default {
                     },
                     choosed_value: "PRODUCTS",
                     aboutUs: "COMPANY",
+                    articles: "Industry Insight",
                     activity: "EVENTS",
                     contactUs: "Contact Us",
                     login: "Log in",
@@ -301,6 +312,9 @@ export default {
         },
         toAboutUs() {
             this.$emit('linkToPage', 'about-us')
+        },
+        toArticles() {
+            this.$emit('linkToPage', 'articles-list')
         },
         toActivity() {
             this.$emit('linkToPage', 'activity-list')

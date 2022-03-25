@@ -1,7 +1,7 @@
 
 <template>
     <div class="insight-page">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="project_info_left">
             <div class="page_header">
                 <div class="left">
@@ -15,34 +15,16 @@
                 </div>
             </div>
             <insightComponent v-if="isMounted"
-                              class="insight-content"
-                              :policy="currentPolicy"
-                              :policy-name="activeContent.policyName"
-                              :x-property="activeContent.x"
-                              :y-property="activeContent.y"
-                              v-on:x-property="changeXProperty"
-                              v-on:y-property="changeYProperty"
-                              v-on:changePolicy="changePolicy"
-                              :needTitle="false" ref="histogram"/>
+				class="insight-content"
+				:policy="currentPolicy"
+				:policy-name="activeContent.policyName"
+				:x-property="activeContent.x"
+				:y-property="activeContent.y"
+				v-on:x-property="changeXProperty"
+				v-on:y-property="changeYProperty"
+				v-on:changePolicy="changePolicy"
+				:needTitle="false" ref="histogram"/>
         </div>
-<!--        <div class="project_info_right">-->
-<!--            <div class="view_content" >-->
-<!--                <div class="view_func">-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="label_icon" alt="">-->
-<!--                        <span class='tags_func'>标签</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
-<!--                        <span class='tags_func'>清除数据</span>-->
-<!--                    </span>-->
-<!--                    <span  class="view_list">-->
-<!--                        <img class='tags_imgs_tag' :src="delete_icon" alt="">-->
-<!--                        <span class='tags_func'>删除</span>-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </template>
 <script>
@@ -57,6 +39,7 @@ import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
+import envConfig from '../config/envConfig'
 
 export default {
     props: {
@@ -77,13 +60,13 @@ export default {
     },
     data: () => {
         return {
-            logo1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF.svg",
-            logo2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
-            del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
+            logo1: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
+            logo2: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
+            del_icon: `${envConfig}` + "/delete_r.svg",
+            add_icon: `${envConfig}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
+            clear_data_icon: `${envConfig}` + "/delete_b.svg",
+            delete_icon: `${envConfig}` + "/delete_r.svg",
+            label_icon: `${envConfig}` + "/tag.svg",
             isMounted: 0,
             contentModel: null,
             currentPolicy: null,
@@ -173,12 +156,14 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: "dataset-lst",
+                    name: "analyze",
                     projectId: this.allData.projectId,
                     projectName: this.allData.projectName,
                     dashboardId: this.allData.dashboardId,
                     slideId: this.allData.slide.slideId,
-                    contentId: this.allData.contentId
+                    contentId: this.allData.contentId,
+                    datasetId: this.activeContent.datasetId,
+                    datasetName: this.activeContent.datasetName
                 }
             }
             this.$emit('event', event)

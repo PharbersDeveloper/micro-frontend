@@ -17,9 +17,9 @@ export default class ApplicationRoute extends Route {
 
 	beforeModel(param) {
 		if(this.clientName === "project") {
+			this.browserEventsService.clearBroListener()
 			let name = this.loadBroswerEvent(param)
 			if(name != "" ){
-				this.browserEventsService.clearBroListener()
 				this.browserEventsService.registerBroListener(name)	
 			}
 		}
@@ -43,8 +43,9 @@ export default class ApplicationRoute extends Route {
 	loadBroswerEvent(data) {
 		let routeValue = ""
 		let urlName = window.location.href.split("?")[0]
+		let name = urlName.split("/").pop()
 
-		if(urlName.indexOf("/dataset") > -1) {
+		if(name == "dataset") {
 			routeValue = "dataset-lst"
 		} else if(urlName.indexOf("/flow") > -1) {
 			routeValue = "flow"

@@ -19,7 +19,7 @@
                                 <td class="input" :title="item.name">{{item.name}}</td>
                                 <td class="version" >
                                     <span :title="item.version.toString()">{{item.version.toString()}}</span>
-                                    <img v-if="item.cat === 'uploaded'" class="add_version" src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg" @click="addVersion(item.name, item.version)"/>
+                                    <img v-if="item.cat === 'uploaded'" class="add_version" :src="img1" @click="addVersion(item.name, item.version)"/>
                                 </td>
                                 <td class="cat">{{item.cat}}</td>
                             </tr>
@@ -63,6 +63,8 @@
 
 <script>
 import selectVersion from "./select-version.vue"
+import envConfig from "../config/envConfig"
+
 
 export default {
     data() {
@@ -75,7 +77,8 @@ export default {
             userConf: "",
             selectDataVersion: false,
             dsName: "",
-            dsVersion: []
+            dsVersion: [],
+			img1: `${envConfig}` + "/icons/%E5%8A%A0%E5%8F%B7.svg"
         }
     },
     props: {

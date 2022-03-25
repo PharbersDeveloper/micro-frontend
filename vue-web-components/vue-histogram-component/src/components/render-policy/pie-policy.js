@@ -154,7 +154,7 @@ export default class PhPieChartPolicy extends policy{
     }
 
     buildPieChartQueryString() {
-        return "select " + this.yPropertyFunc + "(`" + this.yProperty + "`) as `" + this.yProperty + "`,`" + this.xProperty + "` from " + this.datasource.projectId + "_" + this.dataset + " group by `" + this.xProperty + "`"
+        return "select " + this.yPropertyFunc + "(`" + this.yProperty + "`) as `" + this.yProperty + "`,`" + this.xProperty + "` from `" + this.datasource.projectId + "_" + this.dataset + "` group by `" + this.xProperty + "`"
     }
 
     buildPolicySchema() {

@@ -46,6 +46,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
+import envConfig from '../../config/envConfig'
 import bpButton from '../bp-button'
 // import navTop from '../panel/bp-nav-top'
 // import navTopRes from '../panel/bp-nav-top-response'
@@ -67,8 +68,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/img_detail-page_head_about-us.jpg",
-            aboutUsConnectImg: "https://www.pharbers.com/public/img_connect_line.svg",
+            headerImg: `${envConfig}` + "/img_detail-page_head_about-us.jpg",
+            aboutUsConnectImg: `${envConfig}` + "/img_connect_line.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

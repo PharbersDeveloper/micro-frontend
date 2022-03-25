@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <div v-if="needTitle" class="title-panel">
-            <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg" />
+            <img :src="img1" />
             <h2>{{dashboardTitle}}</h2>
         </div>
         <div class="container" >
@@ -14,7 +14,6 @@
                     {{item}}
                 </div>
             </div>
-
             <!-- <div class="filter-panel">
                 <el-select v-model="policyName" placeholder="图表类型">
                     <el-option
@@ -58,7 +57,10 @@
                         <span class="axis-title">图表类型</span>
                         <select v-model="tmpPolicyName"
                                 style="width:200px;height: 30px;margin-top: 5px;margin-bottom: 5px;margin-left: 10px">
-                            <option v-for="item in policyCandidate" v-bind:value="item" v-text="item" ></option>
+                            <option 
+								v-for="(item,index) in policyCandidate" 
+								v-bind:value="item" v-text="item"
+								:key="index+'type'" ></option>
                         </select>
                     </div>
                     <div class="axis">
@@ -75,7 +77,7 @@
                     </div>
                 </div>
                 <div class="content" ref="content">
-                    <histogram ref="histogram" :policy="policy"/>
+                    <histogram ref="histogram" :policy="policy" />
                 </div>
             </div>
         </div>
@@ -87,7 +89,7 @@ import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
-
+import envConfig from '../config/envConfig'
 export default {
     name: "insight-container",
     props: {
@@ -133,7 +135,8 @@ export default {
             activeName: "first",
             activeCandis: [],
             filterString: "alfredtest",
-            tmpPolicyName: ""
+            tmpPolicyName: "",
+            img1: `${envConfig}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
         }
     },
     components: {
@@ -233,8 +236,7 @@ export default {
     .page {
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
-
+        // min-height: 100vh;
         .title-panel {
             display: flex;
             flex-direction: row;

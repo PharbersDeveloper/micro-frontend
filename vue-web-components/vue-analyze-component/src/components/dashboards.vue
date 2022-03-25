@@ -1,6 +1,6 @@
 <template>
     <div>
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dashboard_container">
             <div class="info">
                 <div class="project_info_left">
@@ -108,7 +108,7 @@
                     <div class="view_content" v-if="dashboardCheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="database_icon" alt="">
+                                <img :src="dashboard_icon_reverse" alt="">
                             </span>
                             <div class="show-name" v-if="dashboardCheckedIds.length == 1">
                                 <p class="project_name_info" :title="dashboardcheckedNames[0]">
@@ -140,7 +140,7 @@
                 </div>
             </div>
         </div>
-        <el-dialog
+		<el-dialog
             title="创建数据看板"
             :visible.sync="dialogCreateVisible"
             height="300px"
@@ -165,27 +165,26 @@ import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import envConfig from '../config/envConfig'
+
 export default {
     data() {
         return {
             dialogCreateVisible: false,
             searchData: [],
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit_icon.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg",
-            input_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg",
-            output_index_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg",
-            intermediate_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg",
-            database_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
+            label_icon: `${envConfig}` + "/tag.svg",
+            search_icon: `${envConfig}` + "/search.png",
+            dropDownIcon: `${envConfig}` + "/drop_down_icon.svg",
+            edit_icon: `${envConfig}` + "/edit_icon.png",
+            delete_icon: `${envConfig}` + "/delete.png",
+            clear_data_icon: `${envConfig}` + "/clear_data.png",
+            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
+            delete_icon: `${envConfig}` + "/delete_r.svg",
+            clear_data_icon: `${envConfig}` + "/delete_b.svg",
+            ascending_order: `${envConfig}` + "/down.svg",
+            descending_order: `${envConfig}` + "/top.svg",
+            dashboard_icon: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
+            dashboard_icon_reverse: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -199,7 +198,7 @@ export default {
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
-            tags: ['name','description','啦啦啦'],
+            tags: [],
             ary: [],
             checked: false,
             manual: true,
@@ -211,7 +210,6 @@ export default {
             dashboardcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-
             inputDashboardName: ""
         }
     },
@@ -220,19 +218,8 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dashboards:
-                [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "cpa_pha_mapping",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                    }
-                ],
-                tagsArray: ["qqq"]
+                dashboards: [],
+                tagsArray: []
             })
         }
     },
@@ -242,19 +229,6 @@ export default {
         ElDialog,
         ElButton,
         ElInput
-    },
-    computed: { },
-    mounted() {
-        this.searchData = [
-            {
-                "projectId": null,
-                "schema": "[]",
-                "version": "max1.0",
-                "name": "cpa_pha_mapping",
-                "label": "",
-                "cat": "input_index",
-                "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-            }]
     },
     watch: {
         "allData.tagsArray": function() {
@@ -508,45 +482,6 @@ export default {
                 this.labelShowDialog = false
             }
         },
-        // Max1.0入口
-        on_click_max_input() {
-            this.clickMax = true
-            this.maxcat = "input_index"
-        },
-        on_click_max_output() {
-            this.clickMaxOutput = true
-            this.maxcat = "output_index"
-        },
-        //本地上传文件
-        upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    type: "localUpload"
-                }
-            }
-            this.$emit('event', event)
-        },
-        //s3上传文件
-        s3Upload() {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "upload",
-                    type: "s3Upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
-        },
         linkToPage() {
             const event = new Event("event")
             event.args = {
@@ -560,20 +495,8 @@ export default {
             }
             this.$emit('event', event)
         },
-        toggle() {
-            this.showDialog = !this.showDialog
-        },
         selectDashboardsetIcon(cat) {
-            switch (cat) {
-            case "input_index":
-                return this.input_index_icon
-            case "output_index":
-                return this.output_index_icon
-            case "intermediate":
-                return this.intermediate_icon
-            default:
-                return this.dataset_icon
-            }
+            return this.dashboard_icon
         }
     }
 }
@@ -584,6 +507,9 @@ export default {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+.el-dialog__wrapper {
+	background: rgba(0, 0, 0, 0.31);
 }
 .bg {
     background: #dfe7ff;
@@ -1097,8 +1023,8 @@ export default {
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 24px;
-                            height: 24px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                     .show-name {

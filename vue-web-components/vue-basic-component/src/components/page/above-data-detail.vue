@@ -67,7 +67,7 @@
         </div>
         <div class="speaker-img-container">
             <div class="speaker-img-box" v-for="(speaker,index) in allData.participantListAll" :key="index">
-                <bpImg class="speaker-img" :src="'https://www.pharbers.com'+speaker.image.path"></bpImg>
+                <bpImg class="speaker-img" :src="speaker.image.path"></bpImg>
                 <div class="speaker-img-info">
                     <bpText class="ph-H-Medium">{{speaker.participant.name}}</bpText>
                     <bpText class="ph-body-small">{{speaker.participant.occupation}}</bpText>
@@ -88,6 +88,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import envConfig from '../../config/envConfig'
 import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",
@@ -104,9 +105,9 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://www.pharbers.com/public/photo_events_abovedata_2020-01-09_00005.jpg",
-            lineImg: "https://www.pharbers.com/public/img_connect_line.svg",
-            head: "https://www.pharbers.com/public/avatar_cl.png",
+            headerImg: `${envConfig}` + "/photo_events_abovedata_2020-01-09_00005.jpg",
+            lineImg: `${envConfig}` + "/img_connect_line.svg",
+            head: `${envConfig}` + "/avatar_cl.png",
             translation_basedata: {
                 cn: {
                     home: "主页",
@@ -245,9 +246,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         }

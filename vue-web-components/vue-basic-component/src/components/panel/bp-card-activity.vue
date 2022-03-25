@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import envConfig from '../../config/envConfig'
+
 export default {
     components: {},
     data() {
@@ -65,9 +67,9 @@ export default {
             if ( params.length === 2 && params[1] === "cover") {
                 const arr = params[0]
                 const cover = arr.find(it => it.tag === "cover")
-                return "https://www.pharbers.com" + cover.path
+                return cover.path
             } else if (params[0]) {
-                const ipath =  "https://www.pharbers.com" + params[0]
+                const ipath =  params[0]
                 return ipath;
             } 
         },
