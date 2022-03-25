@@ -36,13 +36,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 			route.router.transitionTo(uri)
 			break
 		case "changeSchemaType":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: eventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: changeSchemaTypeCallback
-			})
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
 				let cstParam = e.detail[0].args.param
@@ -90,7 +83,17 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				await fetch(url, options).then((res) => res.json())
+				const result = await fetch(url, options).then((res) => res.json())
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: result.data.id,
+					eventName: eventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: changeSchemaTypeCallback
+				})
 			}
 			break
 		default:
