@@ -324,6 +324,11 @@ export default {
     },
     methods: {
         confirmeCreateCatalog(data) {
+			let bool = this.checkName(data.args.param.dsName)
+			if(!bool) {
+				alert("该数据目录已被调用")
+				return false
+			}
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
@@ -333,8 +338,9 @@ export default {
             this.$emit('event', data)
             this.selectCatalogVisible = false
         },
-		checkName() {
-
+		checkName(data) {
+			let arr = this.allData.dss.filter(it => it.name === data)
+			return arr.length === 0
 		},
         // checkCatelolgName(data) {
 		// 	//过滤出包含当前名称的ds
