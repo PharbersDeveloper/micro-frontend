@@ -44,7 +44,7 @@ module.exports = function (environment) {
 			AWS_ACCESS_KEY: "AKIAWPBDTVEAI6LUCLPX",
 			AWS_SECRET_KEY: "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",
 			// AWS_IOT_ENDPOINT: "a23ve0kwl75dll-ats.iot.cn-northwest-1.amazonaws.com.cn",
-			AWS_IOT_ENDPOINT: "https://apiv2.pharbers.com/phnotification/",
+			AWS_IOT_ENDPOINT: "https://apidev.pharbers.com/phnotification/",
 			AWS_REGION: "cn-northwest-1",
 			AWS_IOT_DEFAULT_CLIENT_ID: "VQ4L9e4RGDZEI2Ln7fvE",
 			MQTT_TYPE: "http-mqtt", // aws-mqtt|http-mqtt
