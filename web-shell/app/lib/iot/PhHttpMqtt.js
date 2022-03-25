@@ -12,6 +12,18 @@ function PhMQTT(config, callBack, destroyQueue) {
 	const timeout = config.timeout
 	const uri = endpoint // https://apiv2.pharbers.com/phnotification/ TODO:整体测试结束后提出到env.js中
 
+
+	const __getCookie = (name) => {
+		const cookies = document.cookie.split("; ");
+		const cookiesMap = cookies.map((item) => {
+			const cookie = {}
+			const [k, v] = item.split("=")
+			cookie[k] = v
+			return cookie
+		}).reduce((pre, next) => Object.assign(pre, next))
+		return cookiesMap[name]
+	}
+
 	const __subscribe = () => {
 		if (!callBack) {
 			throw Error("CallBack Is Undefined")
@@ -32,7 +44,7 @@ function PhMQTT(config, callBack, destroyQueue) {
 		
 		intervalId = setInterval(async () => {
 			const headers = {
-				Authorization: "228410225613382e7ba9abae40f25a28b30d2b6e2c69261cbb279d39036239fe",
+				Authorization: __getCookie("access_token"),
 				Accept: "application/json",
 				"Content-Type": "application/json",
 			}
@@ -78,24 +90,20 @@ function PhMQTT(config, callBack, destroyQueue) {
 							// console.warn(overallStatus)
 							const runDagState = states[overallStatus] || false
 							if (runDagState) {
-								setTimeout(() => {
-									destroyQueue.push(topic)
-								}, 1000 * 5)
+								destroyQueue.push(topic)
 								
 							}
 						} else {
 							const state = states[status] || false
 							if (state) {
-								setTimeout(() => {
-									destroyQueue.push(topic)
-								}, 1000 * 5)
+								destroyQueue.push(topic)
 							}
 						}
 						callBack(parameter, content)
 					}
 				}
 			}
-		}, 1000 * 5) // 5秒 后续可编程参数，先实现
+		}, 1000 * 1) // 5秒 后续可编程参数，先实现
 	}
 
 	const __timeout = () => {
@@ -107,7 +115,7 @@ function PhMQTT(config, callBack, destroyQueue) {
 				callBack(parameter, JSON.stringify({ status: "mqtt timeout" }))
 				destroyQueue.push(topic)
 			}
-		}, 1000 * 3)
+		}, 1000 * 2)
 	}
 
 	const connect = async () => {
