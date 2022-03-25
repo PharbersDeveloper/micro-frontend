@@ -1,4 +1,4 @@
-import { hostName } from "../config/envConfig"
+import { hostName, actionTableName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
@@ -49,7 +49,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 						: cstParam.itemValueType
 				const url = `${hostName}/phdydatasource/put_item`
 				let body = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: cstParam.projectId,
 						code: 0,

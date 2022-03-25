@@ -1,4 +1,4 @@
-import { hostName } from "../config/envConfig"
+import { hostName, actionTableName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
@@ -117,7 +117,7 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 		//直接导入数据集
 		const push_type = "put_item"
 		const project_files_body = {
-			table: "action",
+			table: actionTableName,
 			item: {
 				projectId: param.projectId,
 				code: 0,

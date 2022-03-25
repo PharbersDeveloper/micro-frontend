@@ -9,6 +9,13 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 	@service cookies
 
 	host = ENV.APP.apiUri
+	// get host() {
+	// 	if (ENV.environment === "development") {
+	// 		return ENV.APP.apiUriDev
+	// 	} else {
+	// 		return ENV.APP.apiUri
+	// 	}
+	// }
 	authType = "oauth"
 
 	pathForType(type) {
