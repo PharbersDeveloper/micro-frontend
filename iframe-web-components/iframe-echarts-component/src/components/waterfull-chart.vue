@@ -6,6 +6,8 @@
 
 <script>
 import * as echarts from 'echarts'
+import { staticFilePath, hostName } from "../config/envConfig"
+
 export default {
     name: 'waterfull',
     data: () => {
@@ -48,7 +50,7 @@ export default {
             }
         },
         async queryData() {
-            const url = "https://api.pharbers.com/phchproxyquery"
+            const url = `${hostName}/phchproxyquery`
             const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
             let body = {"query":"select provider,min(year) as min,max(year) as max from phmax.data_wide group by provider","schema":["provider","min", "max"]}
             let options = {

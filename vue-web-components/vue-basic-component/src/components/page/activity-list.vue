@@ -18,7 +18,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpTabs from '../bp-tabs'
 export default {
     name: "",
@@ -35,7 +35,7 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            aboveDataImg: `${envConfig}` + "/img_event-list_hero_bg.jpg",
+            aboveDataImg: `${staticFilePath}` + "/img_event-list_hero_bg.jpg",
             translation_basedata: {
                 cn: {
                     home: "主页",

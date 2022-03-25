@@ -107,7 +107,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpButton from '../bp-button'
 export default {
     name: "max",
@@ -123,10 +123,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            maxHeaderImg: `${envConfig}` + "/img_detail-page_head_MAX.jpg",
-            maxConnectImg: `${envConfig}` + "/img_connect_line.svg",
-            maxAdvantageIcon: `${envConfig}` + "/icon_point.svg",
-            maxAdvantageImg: `${envConfig}` + "/img_bg_doublehexagon.svg",
+            maxHeaderImg: `${staticFilePath}` + "/img_detail-page_head_MAX.jpg",
+            maxConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
+            maxAdvantageIcon: `${staticFilePath}` + "/icon_point.svg",
+            maxAdvantageImg: `${staticFilePath}` + "/img_bg_doublehexagon.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

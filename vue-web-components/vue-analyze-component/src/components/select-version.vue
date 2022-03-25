@@ -33,7 +33,7 @@
 </template>
 <script>
 // import PhDagDatasource from './model/datasourcev2'
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -42,8 +42,8 @@ export default {
             versionArrShow: [],
             selectCatalogNameTag: "",
             searchRow: [],
-            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
-            close_icon: `${envConfig}` + "/icon_close.svg"
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
+            close_icon: `${staticFilePath}` + "/icon_close.svg"
         }
     },
     props: {

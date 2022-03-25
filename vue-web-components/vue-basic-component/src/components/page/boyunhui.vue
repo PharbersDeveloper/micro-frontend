@@ -182,7 +182,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",
@@ -207,11 +207,11 @@ export default {
             language: '中文',
             curTab: 0,
             dateTab: 0,
-            img1: `${envConfig}` + "/img_connect_line.svg",
-            img2: `${envConfig}` + "/img_connect_line.svg",
-            img3: `${envConfig}` + "/img_connect_line.svg",
-            img4: `${envConfig}` + "/img_connect_line.svg",
-            img5: `${envConfig}` + "/img_connect_line.svg",
+            img1: `${staticFilePath}` + "/img_connect_line.svg",
+            img2: `${staticFilePath}` + "/img_connect_line.svg",
+            img3: `${staticFilePath}` + "/img_connect_line.svg",
+            img4: `${staticFilePath}` + "/img_connect_line.svg",
+            img5: `${staticFilePath}` + "/img_connect_line.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

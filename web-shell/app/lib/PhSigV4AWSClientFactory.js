@@ -15,6 +15,8 @@
 
 
 import PhSigV4ClientUtils from "./PhSigV4ClientUtils"
+import ENV from "web-shell/config/environment"
+
 const CryptoJS = require("crypto-js");
 // const PhSigV4ClientUtils  = require("./PhSigV4ClientUtils").default
 
@@ -203,8 +205,16 @@ PhSigV4AWSClientFactory.newClient = function (config) {
         // const parser = document.createElement('a');
         // parser.href = awsSigV4Client.endpoint;
         // headers[HOST] = "2t69b7x032.execute-api.cn-northwest-1.amazonaws.com.cn"
-		headers[HOST] = "apiv2.pharbers.com"
 
+		// if(ENV.environment === "development") {
+		// 	headers[HOST] = "apidev.pharbers.com"
+		// } else {
+		// 	headers[HOST] = "apiv2.pharbers.com"
+		// }
+		// console.log(headers[HOST])
+
+		headers[HOST] = "apiv2.pharbers.com"
+		
 		const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
         const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
         const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);

@@ -50,7 +50,7 @@
 import bpButton from '../../node_modules/vue-components/src/components/bp-button.vue'
 import bpInput from '../../node_modules/vue-components/src/components/bp-input.vue'
 import bpTextarea from '../../node_modules/vue-components/src/components/bp-textarea.vue'
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     components: {
@@ -60,7 +60,7 @@ export default {
     },
     data() {
         return {
-            closeIcon: `${envConfig}` + "/icon_close.svg",
+            closeIcon: `${staticFilePath}` + "/icon_close.svg",
             middleData: '',
             middleIndex: -1,
             fileMiddleData: '',
@@ -68,7 +68,7 @@ export default {
             infoList: [],
             schemaList: [],
             targetsList:[],
-            iconMove: `${envConfig}` + "/icon_move.svg"
+            iconMove: `${staticFilePath}` + "/icon_move.svg"
         }
     },
     props: {

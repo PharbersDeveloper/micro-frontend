@@ -52,7 +52,7 @@
 
 <script>
 import bpText from '../bp-text'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpImg from '../bp-img'
 export default {
     components: {
@@ -64,9 +64,9 @@ export default {
             language: '中文',
             showPhoto: false,
             n: 2,
-            more: `${envConfig}` + "/icon_go.svg",
-            prev: `${envConfig}` + "/icon_drop_new.svg",
-            close: `${envConfig}` + "/close_icon.svg"
+            more: `${staticFilePath}` + "/icon_go.svg",
+            prev: `${staticFilePath}` + "/icon_drop_new.svg",
+            close: `${staticFilePath}` + "/close_icon.svg"
         }
     },
     created() {

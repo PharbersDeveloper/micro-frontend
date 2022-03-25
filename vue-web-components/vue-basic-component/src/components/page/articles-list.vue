@@ -23,7 +23,7 @@
     </div>
 </template>
 <script>
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 export default {
     components: {
     },
@@ -31,7 +31,7 @@ export default {
         return {
             title: "行业洞察",
             subscribedTitle: "文件名称",
-            public_icon: `${envConfig}` + "/article_icon.svg",
+            public_icon: `${staticFilePath}` + "/article_icon.svg",
             goDetail: "查看详情",
             activeName: "second",
             dialogPbcVisible: false,

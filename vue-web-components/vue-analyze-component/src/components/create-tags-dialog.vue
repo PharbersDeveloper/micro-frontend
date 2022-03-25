@@ -39,16 +39,16 @@
 </template>
 
 <script>
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return{
-            img1: `${envConfig}` + "/icon_close.svg",
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            add_icon: `${envConfig}` + "/add.svg",
-            enter_icon: `${envConfig}` + "/enter.svg",
+            img1: `${staticFilePath}` + "/icon_close.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            search_icon: `${staticFilePath}` + "/search.png",
+            add_icon: `${staticFilePath}` + "/add.svg",
+            enter_icon: `${staticFilePath}` + "/enter.svg",
             searchValue: '',
             tagsArrayShow: [], //展示的tag数组
             selectedTags: [], //选中的tag数组

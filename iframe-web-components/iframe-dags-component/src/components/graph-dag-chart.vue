@@ -119,7 +119,7 @@ import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
-import envConfig from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     data: () => {

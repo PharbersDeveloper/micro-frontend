@@ -81,7 +81,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpButton from '../bp-button'
 export default {
     name: "",
@@ -97,11 +97,11 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: `${envConfig}` + "/img_detail-page_head_consulting.jpg",
-            consultConnectImg: `${envConfig}` + "/img_connect_line.svg",
-            consultAdvantageCardImg: `${envConfig}` + "/img_bg_doublehexagon.svg",
-            consultConnectImg: `${envConfig}` + "/img_connect_line.svg",
-            maxAdvantageCardIcon: `${envConfig}` + "/icon_point.svg",
+            headerImg: `${staticFilePath}` + "/img_detail-page_head_consulting.jpg",
+            consultConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
+            consultAdvantageCardImg: `${staticFilePath}` + "/img_bg_doublehexagon.svg",
+            consultConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
+            maxAdvantageCardIcon: `${staticFilePath}` + "/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

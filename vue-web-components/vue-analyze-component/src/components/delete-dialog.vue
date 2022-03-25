@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
-            model_err: `${envConfig}` + "/modal+header+error.svg"
+            model_err: `${staticFilePath}` + "/modal+header+error.svg"
         }
     },
     props: {

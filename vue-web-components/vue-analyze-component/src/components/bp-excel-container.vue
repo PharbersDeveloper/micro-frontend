@@ -180,7 +180,7 @@ import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -189,16 +189,16 @@ export default {
             dialogSortVisible: false, //显示排序
             dialogCollectionVisible: false, //显示列
             dialogDownloadVisible: false, //显示下载
-            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
+            selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
             showSelectOptionParam: false,
             closeTosts: false,
             totalNum: 0,
             matchNum: 0,
-            dataset_icon: `${envConfig}` + "/Database.svg",
-            close_icon: `${envConfig}` + "/icon_close.svg",
+            dataset_icon: `${staticFilePath}` + "/Database.svg",
+            close_icon: `${staticFilePath}` + "/icon_close.svg",
             searchRow: "",
             searchList: "",
-            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
             versionCandidatesShow: [],
             searchSort: "",
             expandPopup: false,

@@ -103,7 +103,8 @@
 import bpDag from '../bp-dag.vue'
 import uploadFile from '../upload-file.vue'
 import bpPagination from '../bp-pagination.vue'
-import envConfig from "../../config/envConfig"
+import staticFilePath from "../../config/staticFilePath"
+import { hostName } from '../../../../../iframe-web-components/iframe-codeditor-component/src/config/envConfig'
 
 export default {
     components: {
@@ -130,9 +131,9 @@ export default {
             succeed_step: [],
             openUploadWindow: false,
             logBox: false,
-			img1: `${envConfig}` + "/icon_enlarge.svg",
-			img2: `${envConfig}` + "/list.png",
-			img3: `${envConfig}` + "/icon_close.svg"
+			img1: `${staticFilePath}` + "/icon_enlarge.svg",
+			img2: `${staticFilePath}` + "/list.png",
+			img3: `${staticFilePath}` + "/icon_close.svg"
         }
     },
     props: {
@@ -249,7 +250,7 @@ export default {
             const accessToken = this.getCookie("access_token") || "0496838737ea3ef3227e39dcce5286065d7c90bf10cd63705cf016ebbc76898c"
             let storage = window.localStorage
             if ( storage.getItem(this.dagName+"_startReturn") ) {
-                let response = await fetch("https://api.pharbers.com/phstepstatus", {
+                let response = await fetch(`${hostName}/phstepstatus`, {
                     method: "POST",
                     mode: "cors",
                     headers: {

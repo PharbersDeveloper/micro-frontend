@@ -38,15 +38,15 @@
 </template>
 
 <script>
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 export default {
     data() {
         return{
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            add_icon: `${envConfig}` + "/add.svg",
-            enter_icon: `${envConfig}` + "/enter.svg",
+            label_icon: `${envUrl}` + "/tag.svg",
+            search_icon: `${envUrl}` + "/search.png",
+            delete_icon: `${envUrl}` + "/delete_r.svg",
+            add_icon: `${envUrl}` + "/add.svg",
+            enter_icon: `${envUrl}` + "/enter.svg",
             // tagList: ['lalalal','12345','nxjksdcjk','啦啦啦啦'],
             searchValue: '', 
             ent: false

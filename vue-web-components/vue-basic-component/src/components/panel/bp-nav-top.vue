@@ -81,7 +81,7 @@ import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpModalForm from './bp-modal-form.vue'
 import bpText from '../bp-text.vue'
 export default {
@@ -141,11 +141,11 @@ export default {
             menu: false,
             inverse: false,
             bgc: "background: transparent",
-            imgSrc: `${envConfig}` + "/img_logo_ph_theme.svg",
-            imgSrcLight: `${envConfig}` + "/img_logo_ph_light.svg",
-            selectSrc: `${envConfig}` + "/icon_drop.svg",
-            selectSrcLight: `${envConfig}` + "/icon_drop_light.svg",
-            isLoginSrc: `${envConfig}` + "/icon_home_user.svg",
+            imgSrc: `${staticFilePath}` + "/img_logo_ph_theme.svg",
+            imgSrcLight: `${staticFilePath}` + "/img_logo_ph_light.svg",
+            selectSrc: `${staticFilePath}` + "/icon_drop.svg",
+            selectSrcLight: `${staticFilePath}` + "/icon_drop_light.svg",
+            isLoginSrc: `${staticFilePath}` + "/icon_home_user.svg",
             translation_basedata: {
                 cn: {
                     MAX: {

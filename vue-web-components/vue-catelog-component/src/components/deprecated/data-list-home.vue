@@ -146,20 +146,20 @@
 </template>
 
 <script>
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 export default {
     data() {
         return {
-            dataset_icon: `${envConfig}` + "/datasets.png",
-            recipes_icon: `${envConfig}` + "/recipes.png",
-            models_icon: `${envConfig}` + "/models.png",
-            notebook_icon: `${envConfig}` + "/notebooks.png",
-            analyses_icon: `${envConfig}` + "/analyses.png",
-            dashboard_icon: `${envConfig}` + "/dashboard.png",
-            article_icon: `${envConfig}` + "/articles.png",
-            num_icon: `${envConfig}` + "/num_icon.png",
-            file_icon: `${envConfig}` + "/file.png",
-            script_icon: `${envConfig}` + "/script.png",
+            dataset_icon: `${envUrl}` + "/datasets.png",
+            recipes_icon: `${envUrl}` + "/recipes.png",
+            models_icon: `${envUrl}` + "/models.png",
+            notebook_icon: `${envUrl}` + "/notebooks.png",
+            analyses_icon: `${envUrl}` + "/analyses.png",
+            dashboard_icon: `${envUrl}` + "/dashboard.png",
+            article_icon: `${envUrl}` + "/articles.png",
+            num_icon: `${envUrl}` + "/num_icon.png",
+            file_icon: `${envUrl}` + "/file.png",
+            script_icon: `${envUrl}` + "/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -318,26 +318,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return `${envConfig}` + "/prepare_icon.svg"
+                    return `${envUrl}` + "/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return `${envConfig}` + "/python_icon.svg"
+                    return `${envUrl}` + "/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return `${envConfig}` + "/pyspark_icon.svg"
+                    return `${envUrl}` + "/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return `${envConfig}` + "/R_icon.svg"
+                    return `${envUrl}` + "/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return `${envConfig}` + "/sparkR_icon.svg"
+                    return `${envUrl}` + "/sparkR_icon.svg"
                 } else {
-                    return `${envConfig}` + "/intermediate.svg"
+                    return `${envUrl}` + "/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return `${envConfig}` + "/normal.svg"
+                return `${envUrl}` + "/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return `${envConfig}` + "/input_index.svg"
+                return `${envUrl}` + "/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return `${envConfig}` + "/output_index.svg"
+                return `${envUrl}` + "/output_index.svg"
             } else  {
-                return `${envConfig}` + "/intermediate.svg"
+                return `${envUrl}` + "/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

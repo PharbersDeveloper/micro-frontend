@@ -1,5 +1,7 @@
 
 // import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 
 export default class PhDataSource {
     constructor(id, projectId, datasetName, adapter=null) {
@@ -23,8 +25,7 @@ export default class PhDataSource {
     }
 
     buildPolicyQuery(ele, query, schema) {
-        // const url = "https://api.pharbers.com/phchproxyquery"
-        const url = "https://apiv2.pharbers.com/phdadatasource"
+        const url = `${hostName}/phdadatasource`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": query,

@@ -63,7 +63,7 @@
 
 <script>
 import selectVersion from "./select-version.vue"
-import envConfig from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 
 export default {

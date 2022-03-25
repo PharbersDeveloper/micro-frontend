@@ -39,7 +39,7 @@ import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     props: {
@@ -60,13 +60,13 @@ export default {
     },
     data: () => {
         return {
-            logo1: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
-            logo2: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
-            del_icon: `${envConfig}` + "/delete_r.svg",
-            add_icon: `${envConfig}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
-            clear_data_icon: `${envConfig}` + "/delete_b.svg",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            label_icon: `${envConfig}` + "/tag.svg",
+            logo1: `${staticFilePath}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
+            logo2: `${staticFilePath}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
+            del_icon: `${staticFilePath}` + "/delete_r.svg",
+            add_icon: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
+            clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
             isMounted: 0,
             contentModel: null,
             currentPolicy: null,

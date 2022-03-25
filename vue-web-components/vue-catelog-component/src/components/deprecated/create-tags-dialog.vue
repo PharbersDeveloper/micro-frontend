@@ -39,15 +39,15 @@
 </template>
 
 <script>
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 export default {
     data() {
         return{
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            add_icon: `${envConfig}` + "/add.svg",
-            enter_icon: `${envConfig}` + "/enter.svg",
-            img1: `${envConfig}` + "/icon_close.svg",
+            label_icon: `${envUrl}` + "/tag.svg",
+            search_icon: `${envUrl}` + "/search.png",
+            add_icon: `${envUrl}` + "/add.svg",
+            enter_icon: `${envUrl}` + "/enter.svg",
+            img1: `${envUrl}` + "/icon_close.svg",
             searchValue: '',
             tagsArrayShow: [], //展示的tag数组
             selectedTags: [], //选中的tag数组

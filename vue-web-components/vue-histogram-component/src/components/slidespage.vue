@@ -126,7 +126,7 @@ import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     props: {
@@ -142,19 +142,19 @@ export default {
     },
     data: () => {
         return {
-            logo1: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
-            logo2: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
-            del_icon: `${envConfig}` + "/delete_r.svg",
+            logo1: `${staticFilePath}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
+            logo2: `${staticFilePath}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
+            del_icon: `${staticFilePath}` + "/delete_r.svg",
             datasetcheckedIds: [],
             edit: false,
-            add_icon: `${envConfig}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
-            clear_data_icon: `${envConfig}` + "/delete_b.svg",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            label_icon: `${envConfig}` + "/tag.svg",
+            add_icon: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
+            clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
             dialogDeleteSlideVisible: false, //删除slide
             delSlideIndex: 0,
-            add_chart: `${envConfig}` + "/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
-            dropDownIcon: `${envConfig}` + "/drop_down_icon.svg",
+            add_chart: `${staticFilePath}` + "/icons/%E6%B7%BB%E5%8A%A0%E5%86%85%E5%AE%B9.svg",
+            dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
             dialogNewChartVisible: false,
             dialogNewChartNameVisible: false,
             slideArr: [],

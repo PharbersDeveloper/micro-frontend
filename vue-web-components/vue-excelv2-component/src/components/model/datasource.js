@@ -1,5 +1,7 @@
 
 import { FunctionChains, eqFilterValueFunctionStep } from "./function_chains"
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 
 export default class PhDataSource {
     constructor(id, adapter) {
@@ -64,7 +66,7 @@ export default class PhDataSource {
 
             return sql_str
         }
-        const url = "https://api.pharbers.com/phchproxyquery"
+        const url = `${hostName}/phchproxyquery`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildQueryString(),
@@ -117,7 +119,7 @@ export default class PhDataSource {
 
             return sql_str
         }
-        const url = "https://api.pharbers.com/phchproxyquery"
+        const url = `${hostName}/phchproxyquery`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": buildQueryCountString(),

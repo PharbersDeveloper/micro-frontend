@@ -20,7 +20,7 @@
 
 <script>
 import bpImg from '../bp-img'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 
 export default {
     components: {
@@ -30,32 +30,32 @@ export default {
     data() {
         return {
             imgArr1: [
-                `${envConfig}` + "/logo_pfizer_00.png",
-                `${envConfig}` + "/logo_sanofi_01.png",
-                `${envConfig}` + "/logo_novartis_02.png",
-                `${envConfig}` + "/logo_astrazeneca_03.png"
+                `${staticFilePath}` + "/logo_pfizer_00.png",
+                `${staticFilePath}` + "/logo_sanofi_01.png",
+                `${staticFilePath}` + "/logo_novartis_02.png",
+                `${staticFilePath}` + "/logo_astrazeneca_03.png"
             ],
             imgArr2: [
-                `${envConfig}` + "/logo_bayer_04.png",
-                `${envConfig}` + "/logo_gilead_05.png",
-                `${envConfig}` + "/logo_Jessen_08.png",
-                `${envConfig}` + "/servier_07.png"
+                `${staticFilePath}` + "/logo_bayer_04.png",
+                `${staticFilePath}` + "/logo_gilead_05.png",
+                `${staticFilePath}` + "/logo_Jessen_08.png",
+                `${staticFilePath}` + "/servier_07.png"
             ],
             imgArr3: [
-                `${envConfig}` + "/logo_novo-nordisk_10.png",
-                `${envConfig}` + "/logo_mylan_11.png",
-                `${envConfig}` + "/astellas_10.png",
-                `${envConfig}` + "/logo_merck_13.png"
+                `${staticFilePath}` + "/logo_novo-nordisk_10.png",
+                `${staticFilePath}` + "/logo_mylan_11.png",
+                `${staticFilePath}` + "/astellas_10.png",
+                `${staticFilePath}` + "/logo_merck_13.png"
             ],
             imgArr4: [
-                `${envConfig}` + "/logo_msd_14.png",
-                `${envConfig}` + "/logo_lilly_15.png",
-                `${envConfig}` + "/Daiichi-Sankyo_14.png"
+                `${staticFilePath}` + "/logo_msd_14.png",
+                `${staticFilePath}` + "/logo_lilly_15.png",
+                `${staticFilePath}` + "/Daiichi-Sankyo_14.png"
             ],
             imgArr5: [
-                `${envConfig}` + "/Takeda_15.png",
-                `${envConfig}` + "/Salubris_16.png",
-                `${envConfig}` + "/Lmdbeck_17.png"
+                `${staticFilePath}` + "/Takeda_15.png",
+                `${staticFilePath}` + "/Salubris_16.png",
+                `${staticFilePath}` + "/Lmdbeck_17.png"
             ]
         }
     }

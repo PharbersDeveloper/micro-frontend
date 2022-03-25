@@ -76,19 +76,19 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import PhExcelPreviewSource from "./model/previewDatasource"
 import PhExcelPreviewSchema from "./model/previewSchema"
 import PhExcelProxy from "./model/dataproxy"
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
             showDialog: false,
             cloumnClean: '列清洗_v1',
-            oip_icon: `${envConfig}` + "/OIP.png",
-            drop_down_icon: `${envConfig}` + "/drop-down-icon.png",
-            no_icon: `${envConfig}` + "/NO.png",
-            yes_icon: `${envConfig}` + "/Yes.png",
-            img1: `${envConfig}` + "/Database.svg",
-            img2: `${envConfig}` + "/icon_chevron-down_12.svg",
+            oip_icon: `${staticFilePath}` + "/OIP.png",
+            drop_down_icon: `${staticFilePath}` + "/drop-down-icon.png",
+            no_icon: `${staticFilePath}` + "/NO.png",
+            yes_icon: `${staticFilePath}` + "/Yes.png",
+            img1: `${staticFilePath}` + "/Database.svg",
+            img2: `${staticFilePath}` + "/icon_chevron-down_12.svg",
             manual: true,
             scriptValue: "手动映射"
         }

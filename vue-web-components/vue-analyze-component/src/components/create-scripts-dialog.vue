@@ -130,14 +130,14 @@ import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return{
-            img1: `${envConfig}` + "/icon_close.svg",
-            add_icon: `${envConfig}` + "/add.svg",
-            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
+            img1: `${staticFilePath}` + "/icon_close.svg",
+            add_icon: `${staticFilePath}` + "/add.svg",
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
             datasetListShow: false,
             datasetOutputListShow: false, //显示选中的output
             searchInput: "",
@@ -145,9 +145,9 @@ export default {
             addDatasetList: [], //已经选中的输入数据
             remainDatasetList: [], //剩余未选中的输入数据
             remainDatasetListOutputs: [],  //剩余未选中的输出数据
-            sel_dataset_icon: `${envConfig}` + "/%E7%BB%93%E6%9E%9CDS.svg",
-            del_icon: `${envConfig}` + "/%E5%88%A0%E9%99%A4+(1).svg",
-            select_icon: `${envConfig}` + "/drop_down_icon.svg",
+            sel_dataset_icon: `${staticFilePath}` + "/%E7%BB%93%E6%9E%9CDS.svg",
+            del_icon: `${staticFilePath}` + "/%E5%88%A0%E9%99%A4+(1).svg",
+            select_icon: `${staticFilePath}` + "/drop_down_icon.svg",
             dsName: {
                 name: "",
                 id: ""

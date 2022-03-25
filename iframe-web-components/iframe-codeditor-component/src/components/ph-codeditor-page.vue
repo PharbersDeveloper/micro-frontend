@@ -62,7 +62,7 @@
 import PhCodeditorDatasource from "./model/datasource"
 import phCodeditor from "./ph-codeditor"
 import AWS from "aws-sdk"
-import envConfig from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     name: 'codeditor-page',
@@ -145,7 +145,6 @@ export default {
     },
     methods: {
         async queryData() {
-            // let url = "https://api.pharbers.com/phdadataquery"
             let url = "https://apiv2.pharbers.com/phdadataquery"
             const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
             let body = {
@@ -173,7 +172,6 @@ export default {
                 return null;
         },
         async saveCode() {
-            // let url = "https://api.pharbers.com/phdadataupdata"
             let url = "https://apiv2.pharbers.com/phdadataupdata"
             const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
             let body = {
