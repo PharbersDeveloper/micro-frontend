@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeUploadDatasetEventHandler(e, route) {
+	//apiv2.pharbers.com
+	let hostName = "apidev.pharbers.com"
 	let params = e.detail[0].args.param
 	console.log(params)
 	let uri = ""
@@ -66,7 +68,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				let targetLabels = Array.from(
 					new Set(targetDataset.label.concat(selectedTags))
 				)
-				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const url = `https://${hostName}/phdydatasource/put_item`
 				const accessToken = route.cookies.read("access_token")
 				let body = {
 					table: "dataset",
@@ -100,7 +102,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			})
 			break
 		case "deleteDatasets":
-
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
 			if (params) {
@@ -121,8 +122,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						opgroup: route.cookies.read("company_id")
 					})
 				})
-				const urldel =
-					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				const urldel = `https://${hostName}/phdydatasource/put_item`
 				let body = {
 					table: "action",
 					item: {
@@ -149,7 +149,9 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				const result = await fetch(urldel, options).then((res) => res.json())
+				const result = await fetch(urldel, options).then((res) =>
+					res.json()
+				)
 
 				route.noticeService.defineAction({
 					type: "iot",
@@ -166,8 +168,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		case "createCatalog":
 			if (params) {
 				let catauuid = guid()
-				const catalog_url =
-					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				const catalog_url = `https://${hostName}/phdydatasource/put_item`
 				let catamessage = {
 					actionName: params.dsName,
 					keys: "",
@@ -226,8 +227,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		case "fitMax":
 			if (params) {
 				let uuid = guid()
-				const suit_max_url =
-					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				const suit_max_url = `https://${hostName}/phdydatasource/put_item`
 				let message = {
 					actionName: params.dsName,
 					keys: params.path,
@@ -282,13 +282,12 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			}
 			break
 		case "clearTags":
-
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
 			if (params) {
 				let selectedDatasetsClear = params.selectedDatasets //需要更新的dataset
 				let datasetArrayClear = params.datasetArray //发送请求的参数在这取
-				let promiseList = []
+				// let promiseList = []
 				let msg = []
 				selectedDatasetsClear.forEach(async (targetId) => {
 					let targetDataset = datasetArrayClear.filter(
@@ -304,7 +303,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					})
 				})
 
-				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const url = `https://${hostName}/phdydatasource/put_item`
 				const token = route.cookies.read("access_token")
 				let clearBody = {
 					table: "action",
@@ -349,8 +348,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 
 				// promiseList.push(clearResult)
 				// await Promise.all(promiseList)
-
-				
 			}
 			break
 		default:

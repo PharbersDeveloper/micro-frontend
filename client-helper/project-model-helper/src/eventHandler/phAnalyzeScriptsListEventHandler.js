@@ -106,13 +106,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					)}`
 					route.router.transitionTo("shell", preUrl)
 				} else {
-					route.noticeService.defineAction({
-						type: "iot",
-						id: createScriptsEventName,
-						projectId: params.projectId,
-						ownerId: route.cookies.read("account_id"),
-						callBack: createScriptNoticeCallback
-					})
 					if (params.outputs[0].id == "") {
 						//没有id要先创建dataset
 						params.outputs[0].id = uuid
@@ -198,6 +191,25 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						url,
 						scriptOptions
 					).then((res) => res.json())
+					// route.noticeService.defineAction({
+					// 	type: "iot",
+					// 	remoteResource: "notification",
+					// 	runnerId: "",
+					// 	id: result.data.id,
+					// 	eventName: deleteDatasetsEventName,
+					// 	projectId: params.projectId,
+					// 	ownerId: route.cookies.read("account_id"),
+					// 	callBack: delNoticeCallback
+					// })
+					route.noticeService.defineAction({
+						type: "iot",
+						remoteResource: "notification",
+						runnerId: "",
+						id: createScriptsEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: createScriptNoticeCallback
+					})
 				}
 			}
 			break

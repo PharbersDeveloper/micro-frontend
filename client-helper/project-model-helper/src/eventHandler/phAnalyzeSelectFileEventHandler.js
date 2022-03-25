@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeSelectFileEventHandler(e, route) {
+	let hostName = "apidev.pharbers.com"
 	let param = e.detail[0].args.param
 	let uri = ""
 	console.log("upload", route)
@@ -93,7 +94,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					schema: ["count"],
 					projectId: param.projectId
 				}
-				let url = "https://apiv2.pharbers.com/phcheckversion"
+				let url = `https://${hostName}/phcheckversion`
 				let headers = {
 					Authorization: route.cookies.read("access_token"),
 					"Content-Type": "application/vnd.api+json",
@@ -154,7 +155,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
-		
 		let uploadMessage = {}
 		uploadMessage.file = file
 		let pro_name = projectName.toLowerCase().replace(/[^a-z0-9]/gi, "")
@@ -258,7 +258,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 	}
 
 	async function postUrl(type, body) {
-		let url = "https://apiv2.pharbers.com/phdydatasource/"
+		let url = `https://${hostName}/phdydatasource/`
 		let headers = {
 			Authorization: route.cookies.read("access_token"),
 			"Content-Type": "application/vnd.api+json",
