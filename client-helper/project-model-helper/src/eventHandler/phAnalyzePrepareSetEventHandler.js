@@ -1,4 +1,4 @@
-import { hostName } from "../config/envConfig"
+import { hostName, actionTableName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzePrepareSetEventHandler(e, route) {
@@ -144,7 +144,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 					callBack: createScriptNoticeCallback
 				})
 				let scriptBody = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: scriptsParams.projectId,
 						owner: route.cookies.read("account_id"),

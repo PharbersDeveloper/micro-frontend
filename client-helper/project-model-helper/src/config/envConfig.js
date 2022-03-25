@@ -6,4 +6,6 @@ const envUrl =
 		: "https://components.pharbers.com/prod/deploy/public"
 const hostName =
 	env === "dev" ? "https://apidev.pharbers.com" : "https://apiv2.pharbers.com"
-export { envUrl, hostName }
+const actionTableName = env === "dev" ? "action_dev" : "action"
+
+export { envUrl, hostName, actionTableName }

@@ -1,4 +1,4 @@
-import { hostName } from "../config/envConfig"
+import { hostName, actionTableName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeUploadDatasetEventHandler(e, route) {
@@ -124,7 +124,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				})
 				const urldel = `${hostName}/phdydatasource/put_item`
 				let body = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: params.projectId,
 						code: 0,
@@ -188,7 +188,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					opgroup: route.cookies.read("company_id")
 				}
 				let catalog_body = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: params.projectId,
 						code: 0,
@@ -245,7 +245,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					opgroup: route.cookies.read("company_id")
 				}
 				let suit_max_body = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: params.projectId,
 						code: 0,
@@ -306,7 +306,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				const url = `${hostName}/phdydatasource/put_item`
 				const token = route.cookies.read("access_token")
 				let clearBody = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: params.projectId,
 						code: 0,

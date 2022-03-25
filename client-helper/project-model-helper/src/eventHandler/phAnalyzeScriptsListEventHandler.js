@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { hostName } from "../config/envConfig"
+import { hostName, actionTableName } from "../config/envConfig"
 
 export async function phAnalyzeScriptsListEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -163,7 +163,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						}
 					}
 					let scriptBody = {
-						table: "action",
+						table: actionTableName,
 						item: {
 							projectId: params.projectId,
 							owner: route.cookies.read("account_id"),
@@ -265,7 +265,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					})
 				})
 				let body = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: params.projectId,
 						code: 0,
