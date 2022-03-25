@@ -1,9 +1,11 @@
+import { hostName } from "../config/envConfig"
+
 export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	let debugToken =
 		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
 	route.store.unloadAll("dashboard")
 	route.store.unloadAll("slide")
-	const url = "https://apiv2.pharbers.com/phdydatasource/query"
+	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token") || debugToken
 	const projectId = parseParams.query.projectId
 	const projectName = parseParams.query.projectName
@@ -71,7 +73,7 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 
 	// 请求dataset
 	route.store.unloadAll("dataset")
-	const dsurl = "https://apiv2.pharbers.com/phdydatasource/scan"
+	const dsurl = `${hostName}/phdydatasource/scan`
 	const dsaccessToken = route.cookies.read("access_token") || debugToken
 	let dsbody = {
 		table: "dataset",
