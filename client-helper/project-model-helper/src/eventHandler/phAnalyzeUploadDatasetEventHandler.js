@@ -100,13 +100,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			})
 			break
 		case "deleteDatasets":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: deleteDatasetsEventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: delNoticeCallback
-			})
+
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
 			if (params) {
@@ -155,7 +149,18 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				await fetch(urldel, options).then((res) => res.json())
+				const result = await fetch(urldel, options).then((res) => res.json())
+
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: result.data.id,
+					eventName: deleteDatasetsEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: delNoticeCallback
+				})
 			}
 			break
 		case "createCatalog":
@@ -277,13 +282,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			}
 			break
 		case "clearTags":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: clearTagsEventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: clearTagsNoticeCallback
-			})
+
 			route.loadingService.loading.style.display = "flex"
 			route.loadingService.loading.style["z-index"] = 2
 			if (params) {
@@ -333,11 +332,25 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					},
 					body: JSON.stringify(clearBody)
 				}
-				let clearResult = fetch(url, clearOptions).then((res) =>
+				let clearResult = await fetch(url, clearOptions).then((res) =>
 					res.json()
 				)
-				promiseList.push(clearResult)
-				await Promise.all(promiseList)
+				route.noticeService.defineAction({
+					type: "iot",
+					id: clearResult.data.id,
+					remoteResource: "notification",
+					runnerId: "",
+					eventName: clearTagsEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: clearTagsNoticeCallback
+				})
+				// TODO: 暂时注释
+
+				// promiseList.push(clearResult)
+				// await Promise.all(promiseList)
+
+				
 			}
 			break
 		default:
