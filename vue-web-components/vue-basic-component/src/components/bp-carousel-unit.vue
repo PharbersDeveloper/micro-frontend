@@ -10,7 +10,7 @@
 <script>
 import bpCarousel from './bp-carousel.vue'
 import bpCarouselItem from './bp-carousel-item.vue'
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     name: 'bp-button',
@@ -23,7 +23,7 @@ export default {
             type: Array,
             default: function() {
                 return [
-                    `${envConfig}` + "/head1200_B.png",
+                    `${staticFilePath}` + "/head1200_B.png",
                     'https://dss2.bdstatic.com/5bVYsj_p_tVS5dKfpU_Y_D3/res/r/image/2021-3-4/hao123%20logo.png',
                     'https://dgss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2017-09-27/297f5edb1e984613083a2d3cc0c5bb36.png'
                 ]

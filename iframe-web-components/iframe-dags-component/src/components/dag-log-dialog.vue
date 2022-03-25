@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import envConfig from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     data() {
@@ -68,7 +68,7 @@ export default {
          */
         this.loading = true
         let that = this
-        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3"
         let body = {
             "table": "logs",
@@ -93,7 +93,7 @@ export default {
         let path = await fetch(url, options).then(res => res.json())
         try {
             this.emrLog = path.data[0].attributes["emr-log"]
-            const logsUrl = "https://api.pharbers.com/phquerylogfile"
+            const logsUrl = `${hostName}/phquerylogfile`
             let param = this.emrLog.split("//")[1]
             let bucket = param.substring(0, param.indexOf("/"))
             let key = param.substring(param.indexOf("/")+1, param.length)

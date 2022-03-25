@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
-            img1: `${envConfig}` + "/Database.svg"
+            img1: `${staticFilePath}` + "/Database.svg"
         }
     },
     props: {

@@ -125,7 +125,7 @@
 import bpDag from '../bp-dag.vue'
 import uploadFile from '../upload-file.vue'
 import bpPagination from '../bp-pagination.vue'
-import envConfig from "../../config/envConfig"
+import staticFilePath from "../../config/staticFilePath"
 
 export default {
     components: {
@@ -150,11 +150,11 @@ export default {
             duration: "",
             succeed_step: [],
             openUploadWindow: false,
-			img1: `${envConfig}` + "/icon_success.svg",
-			img2: `${envConfig}` + "/icon_running.svg",
-			img3: `${envConfig}` + "/icon_suspension.svg",
-			img4: `${envConfig}` + "/icon_timeout.svg",
-			img5: `${envConfig}` + "/icon_fail.svg"
+			img1: `${staticFilePath}` + "/icon_success.svg",
+			img2: `${staticFilePath}` + "/icon_running.svg",
+			img3: `${staticFilePath}` + "/icon_suspension.svg",
+			img4: `${staticFilePath}` + "/icon_timeout.svg",
+			img5: `${staticFilePath}` + "/icon_fail.svg"
         }
     },
     props: {

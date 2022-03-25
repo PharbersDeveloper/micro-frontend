@@ -1,4 +1,6 @@
 
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 export default class PhExcelDataSchema {
     constructor(id, projectId, datasetName) {
         this.id = id
@@ -30,8 +32,7 @@ export default class PhExcelDataSchema {
     }
 
     buildPolicyQuery(ele, query, schema) {
-        // const url = "https://api.pharbers.com/phchproxyquery"
-        const url = "https://apiv2.pharbers.com/phdadatasource"
+        const url = `${hostName}/phdadatasource`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "query": "SELECT `name`, `type` FROM system.columns where database='default' and table='"+ this.projectId + "_" + this.name + "';", // TODO:

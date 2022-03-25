@@ -91,7 +91,7 @@ import bpImg from '../bp-img'
 import bpButton from '../bp-button'
 import navTop from '../panel/bp-nav-top'
 import navTopRes from '../panel/bp-nav-top-response'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpPageBottom from '../panel/bp-page-bottom'
 export default {
     name: "",
@@ -110,12 +110,12 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            rwContentImg: `${envConfig}` + "/img_detail-page_head_realwr.jpg",
-            rwConnectImg: `${envConfig}` + "/img_connect_line.svg",
-            rwCardAImg :`${envConfig}` + "/img_realwr_cover_00.png",
-            rwTextBImg: `${envConfig}` + "/img_realwr_info_01.png",
-            rwAdvantageImg: `${envConfig}` + "/img_bg_doublehexagon.svg",
-            rwCardIcon: `${envConfig}` + "/icon_point.svg",
+            rwContentImg: `${staticFilePath}` + "/img_detail-page_head_realwr.jpg",
+            rwConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
+            rwCardAImg :`${staticFilePath}` + "/img_realwr_cover_00.png",
+            rwTextBImg: `${staticFilePath}` + "/img_realwr_info_01.png",
+            rwAdvantageImg: `${staticFilePath}` + "/img_bg_doublehexagon.svg",
+            rwCardIcon: `${staticFilePath}` + "/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-import envConfig from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     data: () => {

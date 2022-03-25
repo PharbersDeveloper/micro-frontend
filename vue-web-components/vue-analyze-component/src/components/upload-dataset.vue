@@ -116,7 +116,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src=`${envConfig}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -219,26 +219,26 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
-import envConfig from '../config/envConfig'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            dropDownIcon: `${envConfig}` + "/drop_down_icon.svg",
-            edit_icon: `${envConfig}` + "/edit_icon.png",
-            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            clear_data_icon: `${envConfig}` + "/delete_b.svg",
-            ascending_order: `${envConfig}` + "/down.svg",
-            descending_order: `${envConfig}` + "/top.svg",
-            dataset_icon: `${envConfig}` + "/normal.svg",
-            input_index_icon: `${envConfig}` + "/input_index.svg",
-            output_index_icon: `${envConfig}` + "/output_index.svg",
-            intermediate_icon: `${envConfig}` + "/intermediate.svg",
-            database_icon: `${envConfig}` + "/Database.svg",
-            catalog_icon: `${envConfig}` + "/icons/catalog_icon.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            search_icon: `${staticFilePath}` + "/search.png",
+            dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            edit_icon: `${staticFilePath}` + "/edit_icon.png",
+            selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
+            ascending_order: `${staticFilePath}` + "/down.svg",
+            descending_order: `${staticFilePath}` + "/top.svg",
+            dataset_icon: `${staticFilePath}` + "/normal.svg",
+            input_index_icon: `${staticFilePath}` + "/input_index.svg",
+            output_index_icon: `${staticFilePath}` + "/output_index.svg",
+            intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
+            database_icon: `${staticFilePath}` + "/Database.svg",
+            catalog_icon: `${staticFilePath}` + "/icons/catalog_icon.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -427,7 +427,7 @@ export default {
                         "flowVersion": "developer"
                     })
                 })
-                const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+                const url = `${hostName}/phdydatasource/put_item`
                 let body = {
                     "table": "action",
                     "item": {
@@ -561,7 +561,7 @@ export default {
              */
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
-            const checkUrl = "https://apiv2.pharbers.com/phcomputedeletionimpact"
+            const checkUrl = `${hostName}/phcomputedeletionimpact`
             let query = []
             this.datasetcheckedIds.forEach((item,index) => {
                 query.push({

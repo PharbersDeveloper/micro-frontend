@@ -4,12 +4,12 @@
         </div>
 </template>
 <script>
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 
 export default {
     data() {
         return {
-            src: `${envConfig}` + "/44681629355585_.pic.jpg"
+            src: `${staticFilePath}` + "/44681629355585_.pic.jpg"
         }
     }
 }

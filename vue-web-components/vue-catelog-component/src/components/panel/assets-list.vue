@@ -61,7 +61,7 @@ import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import envConfig from '../../config/envConfig'
+import { staticFilePath, hostName } from '../../config/staticFilePath'
 import treeItem from '../tree-item'
 import util from '../util.vue'
 
@@ -80,8 +80,8 @@ export default {
             userName: util.methods.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
-            fileIconDark: `${envConfig}` + "/icon_my-data-dark.svg",
-            public_icon: `${envConfig}` + "/publicData.svg",
+            fileIconDark: `${staticFilePath}` + "/icon_my-data-dark.svg",
+            public_icon: `${staticFilePath}` + "/publicData.svg",
             goDetail: "查看详情",
             activeName: "second",
             dialogPbcVisible: false,
@@ -102,7 +102,7 @@ export default {
         }
     },
     async mounted() {
-        const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const url = `${hostName}/phgetgluetable`
         const accessToken = this.getCookie("access_token")
         let body = {
             "glue_database_name": this.getCookie("company_id")

@@ -43,13 +43,13 @@
     </div>
 </template>
 <script>
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 
 export default {
     data: ()=> {
         return {
-            prepare_icon: `${envConfig}` + "/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
-            error_icon: `${envConfig}` + "/icons/error.svg",
+            prepare_icon: `${staticFilePath}` + "/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
+            error_icon: `${staticFilePath}` + "/icons/error.svg",
             rowParams: '[{"key": ["=", "value"]}]',
             colParams: '["col1", "col2"]',
             changeParams: "value"

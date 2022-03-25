@@ -77,7 +77,7 @@
 import bpText from '../bp-text.vue'
 import bpButton from '../bp-button.vue'
 import bpInput from '../bp-input.vue'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpTextarea from '../bp-textarea.vue'
 export default {
     components: {
@@ -103,9 +103,9 @@ export default {
             tag2: false,
             tag3: false,
             intention: '',
-            img1: `${envConfig}` + "/icon_success.svg",
-            img2: `${envConfig}` + "/icon_go.svg",
-            img3: `${envConfig}` + "/icon_go.svg"
+            img1: `${staticFilePath}` + "/icon_success.svg",
+            img2: `${staticFilePath}` + "/icon_go.svg",
+            img3: `${staticFilePath}` + "/icon_go.svg"
         }
     },
     props: {

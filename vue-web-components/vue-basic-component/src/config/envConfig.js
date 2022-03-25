@@ -1,7 +1,9 @@
 
 //dev, prod
 const env = "prod" 
-const envUrl = env === "dev" 
+const staticFilePath = env === "dev" 
     ? "https://components.pharbers.com/dev/offweb/public"
     : "https://components.pharbers.com/prod/offweb/public"
-export default envUrl
+const hostName =
+	env === "dev" ? "https://apidev.pharbers.com" : "https://apiv2.pharbers.com"
+export { staticFilePath, hostName }

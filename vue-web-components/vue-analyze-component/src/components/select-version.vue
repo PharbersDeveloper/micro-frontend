@@ -33,7 +33,7 @@
 </template>
 <script>
 // import PhDagDatasource from './model/datasourcev2'
-import envConfig from '../config/envConfig'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -42,8 +42,8 @@ export default {
             versionArrShow: [],
             selectCatalogNameTag: "",
             searchRow: [],
-            search_row: `${envConfig}` + "/%E6%90%9C%E7%B4%A2.svg",
-            close_icon: `${envConfig}` + "/icon_close.svg"
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
+            close_icon: `${staticFilePath}` + "/icon_close.svg"
         }
     },
     props: {
@@ -51,7 +51,7 @@ export default {
     },
     computed: {},
     async mounted() {
-        const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const url = `${hostName}/phgetgluetable`
         const accessToken = this.getCookie("access_token")
         let body = {
             "glue_database_name": this.getCookie("company_id")

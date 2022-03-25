@@ -45,12 +45,12 @@
 </template>
 
 <script>
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 
 export default {
     data() {
         return {
-            dropDownIcon: `${envConfig}` + "/drop-down-icon.png",
+            dropDownIcon: `${envUrl}` + "/drop-down-icon.png",
             showDialog: false,
             newData: '', 
             newDataName: '',

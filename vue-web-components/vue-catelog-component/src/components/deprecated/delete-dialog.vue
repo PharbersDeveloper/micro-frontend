@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 
 export default {
     data() {
         return {
-            model_err: `${envConfig}` + "/modal+header+error.svg"
+            model_err: `${envUrl}` + "/modal+header+error.svg"
         }
     },
     props: {

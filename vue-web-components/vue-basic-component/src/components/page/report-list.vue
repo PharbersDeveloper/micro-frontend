@@ -39,7 +39,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpButton from '../bp-button'
 export default {
     name: "report-list",
@@ -63,8 +63,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            reportListHeader: `${envConfig}` + "/img_report-list_hero_bg.jpg",
-            iconGo: `${envConfig}` + "/icon_go.svg",
+            reportListHeader: `${staticFilePath}` + "/img_report-list_hero_bg.jpg",
+            iconGo: `${staticFilePath}` + "/icon_go.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

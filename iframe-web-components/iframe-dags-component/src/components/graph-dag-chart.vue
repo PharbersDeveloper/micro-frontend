@@ -119,7 +119,7 @@ import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
-import envConfig from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     data: () => {
@@ -407,7 +407,7 @@ export default {
         async confirmeRunDag(data) {
             this.loading = true
             this.showProgress = false
-            const url = `https://apiv2.pharbers.com/phdagtrigger`
+            const url = `${hostName}/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
             confData.ownerId = this.getCookie("account_id") || "5UBSLZvV0w9zh7-lZQap"
@@ -531,7 +531,7 @@ export default {
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr.message).cnotification.runId
-            const url = `https://apiv2.pharbers.com/phdagtasktrigger`
+            const url = `${hostName}/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,

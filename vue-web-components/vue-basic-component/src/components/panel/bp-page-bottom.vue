@@ -86,7 +86,7 @@ import bpButton from '../bp-button.vue'
 import bpModalForm from './bp-modal-form.vue'
 import bpImg from '../bp-img.vue'
 import bpSelectVue from '../bp-select-vue.vue'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpOptionVue from '../bp-option-vue.vue'
 export default {
     components: {
@@ -102,11 +102,11 @@ export default {
             contactForm: false,
             language: '中文',
             nowDate: new Date().getFullYear(),
-            img1: `${envConfig}` + "/img_logo_ph_gray.svg",
-            img2: `${envConfig}` + "/icon_drop.svg",
-            img3: `${envConfig}` + "/icon_wechat_copy_2@3x.svg",
-            img4: `${envConfig}` + "/icon_linkdin.svg",
-            img5: `${envConfig}` + "/presented_logo.png",
+            img1: `${staticFilePath}` + "/img_logo_ph_gray.svg",
+            img2: `${staticFilePath}` + "/icon_drop.svg",
+            img3: `${staticFilePath}` + "/icon_wechat_copy_2@3x.svg",
+            img4: `${staticFilePath}` + "/icon_linkdin.svg",
+            img5: `${staticFilePath}` + "/presented_logo.png",
             translation_basedata: {
                 cn: {
                     contactUs: {

@@ -46,7 +46,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpButton from '../bp-button'
 // import navTop from '../panel/bp-nav-top'
 // import navTopRes from '../panel/bp-nav-top-response'
@@ -68,8 +68,8 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: `${envConfig}` + "/img_detail-page_head_about-us.jpg",
-            aboutUsConnectImg: `${envConfig}` + "/img_connect_line.svg",
+            headerImg: `${staticFilePath}` + "/img_detail-page_head_about-us.jpg",
+            aboutUsConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

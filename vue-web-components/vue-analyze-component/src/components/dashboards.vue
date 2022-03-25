@@ -165,26 +165,26 @@ import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import envConfig from '../config/envConfig'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
             dialogCreateVisible: false,
             searchData: [],
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            dropDownIcon: `${envConfig}` + "/drop_down_icon.svg",
-            edit_icon: `${envConfig}` + "/edit_icon.png",
-            delete_icon: `${envConfig}` + "/delete.png",
-            clear_data_icon: `${envConfig}` + "/clear_data.png",
-            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            clear_data_icon: `${envConfig}` + "/delete_b.svg",
-            ascending_order: `${envConfig}` + "/down.svg",
-            descending_order: `${envConfig}` + "/top.svg",
-            dashboard_icon: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
-            dashboard_icon_reverse: `${envConfig}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            search_icon: `${staticFilePath}` + "/search.png",
+            dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            edit_icon: `${staticFilePath}` + "/edit_icon.png",
+            delete_icon: `${staticFilePath}` + "/delete.png",
+            clear_data_icon: `${staticFilePath}` + "/clear_data.png",
+            selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
+            ascending_order: `${staticFilePath}` + "/down.svg",
+            descending_order: `${staticFilePath}` + "/top.svg",
+            dashboard_icon: `${staticFilePath}` + "/icons/%E7%9C%8B%E6%9D%BF.svg",
+            dashboard_icon_reverse: `${staticFilePath}` + "/icons/%E7%9C%8B%E6%9D%BF%E5%8F%8D%E8%89%B2.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -424,7 +424,7 @@ export default {
              */
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
-            const checkUrl = "https://apiv2.pharbers.com/phcomputedeletionimpact"
+            const checkUrl = `${hostName}/phcomputedeletionimpact`
             let query = []
             this.dashboardCheckedIds.forEach((item,index) => {
                 query.push({

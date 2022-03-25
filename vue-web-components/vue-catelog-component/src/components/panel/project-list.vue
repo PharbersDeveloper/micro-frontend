@@ -85,7 +85,7 @@ import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElDialog from 'element-ui/packages/dialog/src/component'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 export default {
     components: {
         bpText,
@@ -99,13 +99,13 @@ export default {
     data() {
         return {
             title: "工作平台",
-            fileIconDark: `${envConfig}` + "/icon_dag+list.svg",
-            addIcon: `${envConfig}` + "/icons/%E6%B7%BB%E5%8A%A0(1).svg",
-            cardIcon: `${envConfig}` + "/icons/%E7%BC%A9%E7%95%A5%E5%9B%BE.svg",
-            listIcon: `${envConfig}` + "/icons/%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA.svg",
-            listIconSelect: `${envConfig}` + "/icon_list_slelect.svg",
-            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
-            cardIconSelect: `${envConfig}` + "/icon_card_slelect.svg",
+            fileIconDark: `${staticFilePath}` + "/icon_dag+list.svg",
+            addIcon: `${staticFilePath}` + "/icons/%E6%B7%BB%E5%8A%A0(1).svg",
+            cardIcon: `${staticFilePath}` + "/icons/%E7%BC%A9%E7%95%A5%E5%9B%BE.svg",
+            listIcon: `${staticFilePath}` + "/icons/%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA.svg",
+            listIconSelect: `${staticFilePath}` + "/icon_list_slelect.svg",
+            selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            cardIconSelect: `${staticFilePath}` + "/icon_card_slelect.svg",
             toggle: false,
             closeTosts: false,
             dialogCreateVisible: false,

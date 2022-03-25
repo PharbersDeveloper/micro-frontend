@@ -88,7 +88,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",
@@ -105,9 +105,9 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: `${envConfig}` + "/photo_events_abovedata_2020-01-09_00005.jpg",
-            lineImg: `${envConfig}` + "/img_connect_line.svg",
-            head: `${envConfig}` + "/avatar_cl.png",
+            headerImg: `${staticFilePath}` + "/photo_events_abovedata_2020-01-09_00005.jpg",
+            lineImg: `${staticFilePath}` + "/img_connect_line.svg",
+            head: `${staticFilePath}` + "/avatar_cl.png",
             translation_basedata: {
                 cn: {
                     home: "主页",

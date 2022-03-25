@@ -23,7 +23,7 @@
 <script>
 import bpMenu from "../../../node_modules/vue-components/src/components/bp-menu.vue";
 import bpText from "../../../node_modules/vue-components/src/components/bp-text.vue";
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 export default {
     components: {
         bpMenu,
@@ -45,14 +45,14 @@ export default {
             activeIndex: 0,
             activeSubIndex: 0,
             menuType: "",
-            img1: `${envConfig}` + "/icon_dropdown.svg",
-            img2: `${envConfig}` + "/icon_data.svg",
-            img3: `${envConfig}` + "/icon_sign_out.svg",
+            img1: `${staticFilePath}` + "/icon_dropdown.svg",
+            img2: `${staticFilePath}` + "/icon_data.svg",
+            img3: `${staticFilePath}` + "/icon_sign_out.svg",
             menu_data: [
                 {
                     type: "item",
                     text: "开放资源",
-                    src: `${envConfig}` + "/icon_projects-fill.svg",
+                    src: `${staticFilePath}` + "/icon_projects-fill.svg",
                     content: this,
                     click_event: function (data) {
                         this.content.activeIndex = data
@@ -72,7 +72,7 @@ export default {
                 {
                     type: "item",
                     text: "公有文件",
-                    src: `${envConfig}` + "/icon_my-data.svg",
+                    src: `${staticFilePath}` + "/icon_my-data.svg",
                     content: this,
                     click_event: function (data) {
                         this.content.activeIndex = data
@@ -92,7 +92,7 @@ export default {
                 {
                     type: "item",
                     text: "新数据资产",
-                    src: `${envConfig}` + "/icon_my-data.svg",
+                    src: `${staticFilePath}` + "/icon_my-data.svg",
                     content: this,
                     click_event: function (data) {
                         this.content.activeIndex = data
@@ -112,7 +112,7 @@ export default {
                 // {
                 //     type: "item",
                 //     text: "数据资产",
-                //     src: `${envConfig}` + "/icon_my-data.svg",
+                //     src: `${staticFilePath}` + "/icon_my-data.svg",
                 //     content: this,
                 //     click_event: function (data) {
                 //         this.content.activeIndex = data
@@ -134,7 +134,7 @@ export default {
                     type: "item",
                     text: "工作平台",
                     content: this,
-                    src: `${envConfig}` + "/icon_projects-fill.svg",
+                    src: `${staticFilePath}` + "/icon_projects-fill.svg",
                     click_event: function (data) {
                         this.content.activeIndex = data
                         this.content.menuType = this.type

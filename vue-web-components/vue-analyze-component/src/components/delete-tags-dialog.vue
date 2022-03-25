@@ -38,16 +38,16 @@
 </template>
 
 <script>
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return{
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            add_icon: `${envConfig}` + "/add.svg",
-            enter_icon: `${envConfig}` + "/enter.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            search_icon: `${staticFilePath}` + "/search.png",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            add_icon: `${staticFilePath}` + "/add.svg",
+            enter_icon: `${staticFilePath}` + "/enter.svg",
             // tagList: ['lalalal','12345','nxjksdcjk','啦啦啦啦'],
             searchValue: '', 
             ent: false

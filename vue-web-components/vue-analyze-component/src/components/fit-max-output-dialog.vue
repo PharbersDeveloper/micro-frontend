@@ -38,7 +38,7 @@
 <script>
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
@@ -47,7 +47,7 @@ export default {
             version: "max1.0",
             dsName: "",
             format: "",
-            select_icon: `${envConfig}` + "/drop_down_icon.svg"
+            select_icon: `${staticFilePath}` + "/drop_down_icon.svg"
         }
     },
     components: {

@@ -195,21 +195,21 @@
 <script>
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import envConfig from '../config/envConfig'
+import { staticFilePath, hostName } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
-            dataset_icon: `${envConfig}` + "/datasets.png",
-            recipes_icon: `${envConfig}` + "/recipes.png",
-            models_icon: `${envConfig}` + "/models.png",
-            notebook_icon: `${envConfig}` + "/notebooks.png",
-            analyses_icon: `${envConfig}` + "/analyses.png",
-            dashboard_icon: `${envConfig}` + "/dashboard.png",
-            article_icon: `${envConfig}` + "/articles.png",
-            num_icon: `${envConfig}` + "/num_icon.png",
-            file_icon: `${envConfig}` + "/file.png",
-            script_icon: `${envConfig}` + "/script.png",
+            dataset_icon: `${staticFilePath}` + "/datasets.png",
+            recipes_icon: `${staticFilePath}` + "/recipes.png",
+            models_icon: `${staticFilePath}` + "/models.png",
+            notebook_icon: `${staticFilePath}` + "/notebooks.png",
+            analyses_icon: `${staticFilePath}` + "/analyses.png",
+            dashboard_icon: `${staticFilePath}` + "/dashboard.png",
+            article_icon: `${staticFilePath}` + "/articles.png",
+            num_icon: `${staticFilePath}` + "/num_icon.png",
+            file_icon: `${staticFilePath}` + "/file.png",
+            script_icon: `${staticFilePath}` + "/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -240,7 +240,7 @@ export default {
     async mounted() {
         //actions数据
         const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-        const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+        const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
         console.log(href)
@@ -370,7 +370,7 @@ export default {
         },
         async getActions(value) {
             const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-            const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+            const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",
                 "conditions": {
@@ -421,26 +421,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return `${envConfig}` + "/prepare_icon.svg"
+                    return `${staticFilePath}` + "/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return `${envConfig}` + "/python_icon.svg"
+                    return `${staticFilePath}` + "/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return `${envConfig}` + "/pyspark_icon.svg"
+                    return `${staticFilePath}` + "/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return `${envConfig}` + "/R_icon.svg"
+                    return `${staticFilePath}` + "/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return `${envConfig}` + "/sparkR_icon.svg"
+                    return `${staticFilePath}` + "/sparkR_icon.svg"
                 } else {
-                    return `${envConfig}` + "/intermediate.svg"
+                    return `${staticFilePath}` + "/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return `${envConfig}` + "/normal.svg"
+                return `${staticFilePath}` + "/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return `${envConfig}` + "/input_index.svg"
+                return `${staticFilePath}` + "/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return `${envConfig}` + "/output_index.svg"
+                return `${staticFilePath}` + "/output_index.svg"
             } else  {
-                return `${envConfig}` + "/intermediate.svg"
+                return `${staticFilePath}` + "/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

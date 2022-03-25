@@ -89,7 +89,7 @@ import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 export default {
     name: "insight-container",
     props: {
@@ -136,7 +136,7 @@ export default {
             activeCandis: [],
             filterString: "alfredtest",
             tmpPolicyName: "",
-            img1: `${envConfig}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
+            img1: `${staticFilePath}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg"
         }
     },
     components: {

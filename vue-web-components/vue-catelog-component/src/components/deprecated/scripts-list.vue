@@ -121,7 +121,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src=`${envConfig}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src=`${envUrl}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -229,38 +229,38 @@ import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 
 export default {
     data() {
         return {
-            hide_icon: `${envConfig}` + "/%E9%9A%90%E8%97%8F.svg",
-            copy_icon: `${envConfig}` + "/copy.svg",
-            star_icon: `${envConfig}` + "/%E6%94%B6%E8%97%8F.svg",
-            run_icon: `${envConfig}` + "/%E5%BC%80%E5%A7%8B1.svg",
-            edit_icon: `${envConfig}` + "/edit.svg",
-            label_icon: `${envConfig}` + "/tag.svg",
-            search_icon: `${envConfig}` + "/search.png",
-            dropDownIcon: `${envConfig}` + "/drop_down_icon.svg",
-            delete_icon: `${envConfig}` + "/delete.png",
-            clear_data_icon: `${envConfig}` + "/clear_data.png",
-            selectIcon: `${envConfig}` + "/drop_down_icon.svg",
-            delete_icon: `${envConfig}` + "/delete_r.svg",
-            clear_data_icon: `${envConfig}` + "/delete_b.svg",
-            ascending_order: `${envConfig}` + "/down.svg",
-            descending_order: `${envConfig}` + "/top.svg",
-            script_icon: `${envConfig}` + "/script_select.svg",
-            prepare_icon: `${envConfig}` + "/script_select.svg",
-            prepare_icon: `${envConfig}` + "/prepare_icon.svg",
-            pyspark_icon: `${envConfig}` + "/pyspark_icon.svg",
-            python_icon: `${envConfig}` + "/python_icon.svg",
-            R_icon: `${envConfig}` + "/R_icon.svg",
-            sparkR_icon: `${envConfig}` + "/sparkR_icon.svg",
-            img1: `${envConfig}` + "/icons/Python.svg",
-            img2: `${envConfig}` + "/icons/PySpark.svg",
-            img3: `${envConfig}` + "/icons/R.svg",
-            img4: `${envConfig}` + "/icons/SparkR.svg",
-            img5: `${envConfig}` + "/icons/%E4%B8%8B%E8%BD%BD.svg",
+            hide_icon: `${envUrl}` + "/%E9%9A%90%E8%97%8F.svg",
+            copy_icon: `${envUrl}` + "/copy.svg",
+            star_icon: `${envUrl}` + "/%E6%94%B6%E8%97%8F.svg",
+            run_icon: `${envUrl}` + "/%E5%BC%80%E5%A7%8B1.svg",
+            edit_icon: `${envUrl}` + "/edit.svg",
+            label_icon: `${envUrl}` + "/tag.svg",
+            search_icon: `${envUrl}` + "/search.png",
+            dropDownIcon: `${envUrl}` + "/drop_down_icon.svg",
+            delete_icon: `${envUrl}` + "/delete.png",
+            clear_data_icon: `${envUrl}` + "/clear_data.png",
+            selectIcon: `${envUrl}` + "/drop_down_icon.svg",
+            delete_icon: `${envUrl}` + "/delete_r.svg",
+            clear_data_icon: `${envUrl}` + "/delete_b.svg",
+            ascending_order: `${envUrl}` + "/down.svg",
+            descending_order: `${envUrl}` + "/top.svg",
+            script_icon: `${envUrl}` + "/script_select.svg",
+            prepare_icon: `${envUrl}` + "/script_select.svg",
+            prepare_icon: `${envUrl}` + "/prepare_icon.svg",
+            pyspark_icon: `${envUrl}` + "/pyspark_icon.svg",
+            python_icon: `${envUrl}` + "/python_icon.svg",
+            R_icon: `${envUrl}` + "/R_icon.svg",
+            sparkR_icon: `${envUrl}` + "/sparkR_icon.svg",
+            img1: `${envUrl}` + "/icons/Python.svg",
+            img2: `${envUrl}` + "/icons/PySpark.svg",
+            img3: `${envUrl}` + "/icons/R.svg",
+            img4: `${envUrl}` + "/icons/SparkR.svg",
+            img5: `${envUrl}` + "/icons/%E4%B8%8B%E8%BD%BD.svg",
             showDialog: false,
             state: '',
             editShow: false,

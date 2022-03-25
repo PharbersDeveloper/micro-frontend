@@ -1,4 +1,6 @@
 
+import { staticFilePath, hostName } from '../../config/staticFilePath'
+
 export default class PhSlideModel {
     constructor(id, data) {
         this.id = id
@@ -50,7 +52,7 @@ export default class PhSlideModel {
             }
         }
 
-        const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+        const url = `${hostName}/phdydatasource/put_item`
         let headers = {
             Authorization: ele.getCookie("access_token") || this.debugToken,
             "Content-Type": "application/vnd.api+json",
@@ -75,7 +77,7 @@ export default class PhSlideModel {
             }
         }
 
-        const url = "https://apiv2.pharbers.com/phdydatasource/delete_item"
+        const url = `${hostName}/phdydatasource/delete_item`
         let headers = {
             Authorization: ele.getCookie("access_token") || this.debugToken,
             "Content-Type": "application/vnd.api+json",

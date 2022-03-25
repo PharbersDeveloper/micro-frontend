@@ -84,7 +84,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 import bpInput from '../bp-input.vue'
 import bpTextarea from '../bp-textarea.vue'
 export default {
@@ -124,9 +124,9 @@ export default {
             tag3: false,
             intention: '',
             responseMini: false,
-            img1: `${envConfig}` + "/icon_success.svg",
-            img2: `${envConfig}` + "/img_qr_staff.jpg",
-            img3: `${envConfig}` + "/icon_go.svg",
+            img1: `${staticFilePath}` + "/icon_success.svg",
+            img2: `${staticFilePath}` + "/img_qr_staff.jpg",
+            img3: `${staticFilePath}` + "/icon_go.svg",
             translation_basedata: {
                 cn: {
                     back: '返回',

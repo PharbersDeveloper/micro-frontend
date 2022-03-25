@@ -166,7 +166,7 @@ import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 import bpText from 'vue-components/src/components/bp-text.vue'
 import bpButton from 'vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
-import envConfig from '../../config/envConfig'
+import { envUrl } from '../../config/envUrl'
 import util from '../util.vue'
 
 export default {
@@ -188,7 +188,7 @@ export default {
             userName: util.methods.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
-            fileIconDark: `${envConfig}` + "/icon_my-data-dark.svg",
+            fileIconDark: `${envUrl}` + "/icon_my-data-dark.svg",
             goDetail: "查看详情",
             /** 文件上传弹窗状态 */
             uploadToastBorder: "red",
@@ -198,7 +198,7 @@ export default {
             showProgress: "",
             uploadLoadedSize: 0,
             uploadFileSize: 0,
-            img1: `${envConfig}` + "/icon_chevron-down_12.svg"
+            img1: `${envUrl}` + "/icon_chevron-down_12.svg"
         }
     },
     props: {
@@ -236,9 +236,9 @@ export default {
         },
         iconSort() {
             if (this.allData.sort.indexOf('-') === -1) {
-                return `${envConfig}` + "/icon_sorting-ascending.svg"
+                return `${envUrl}` + "/icon_sorting-ascending.svg"
             } else {
-                return `${envConfig}` + "/icon_sorting-descending.svg"
+                return `${envUrl}` + "/icon_sorting-descending.svg"
             }
         },
         mineSortText() {
@@ -251,18 +251,18 @@ export default {
         mineSortCreatedTimeIcon() {
             if (this.allData.sort.indexOf('created') != -1) {
                 this.mineSortUpdatedTimeIcon = ''
-                return `${envConfig}` + "/icon_check.svg"
+                return `${envUrl}` + "/icon_check.svg"
             } else {
-                this.mineSortUpdatedTimeIcon = `${envConfig}` + "/icon_check.svg"
+                this.mineSortUpdatedTimeIcon = `${envUrl}` + "/icon_check.svg"
                 return ''
             }
         },
         mineSortDescendingIcon() {
             if (this.allData.sort.indexOf('-') != -1) {
                 this.mineSortAscendingIcon = ''
-                return `${envConfig}` + "/icon_check.svg"
+                return `${envUrl}` + "/icon_check.svg"
             } else {
-                this.mineSortAscendingIcon = `${envConfig}` + "/icon_check.svg"
+                this.mineSortAscendingIcon = `${envUrl}` + "/icon_check.svg"
                 return ''
             }
         },

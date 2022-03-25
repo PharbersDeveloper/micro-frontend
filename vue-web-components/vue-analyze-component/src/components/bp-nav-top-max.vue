@@ -25,15 +25,15 @@
     </div>
 </template>
 <script>
-import envConfig from '../config/envConfig'
+import { staticFilePath } from '../config/staticFilePath'
 
 export default {
     data() {
         return {
             expangPopup: false,
-            airflow: `${envConfig}` + "/icons/Airflow_switch.svg",
-            home: `${envConfig}` + "/icons/%E4%B8%BB%E9%A1%B5.svg",
-            img1: `${envConfig}` + "/%E6%8B%93%E5%B1%95.svg" 
+            airflow: `${staticFilePath}` + "/icons/Airflow_switch.svg",
+            home: `${staticFilePath}` + "/icons/%E4%B8%BB%E9%A1%B5.svg",
+            img1: `${staticFilePath}` + "/%E6%8B%93%E5%B1%95.svg" 
         }
     },
     components: {},

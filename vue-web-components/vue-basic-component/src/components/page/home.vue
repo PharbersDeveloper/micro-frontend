@@ -161,7 +161,7 @@ import bpImg from '../bp-img'
 import bpCardActive from '../panel/bp-card-activity'
 import bpButton from '../bp-button'
 import BpText from '../bp-text.vue'
-import envConfig from '../../config/envConfig'
+import { staticFilePath } from '../../config/staticFilePath'
 export default {
     name: 'home',
     data() {
@@ -243,18 +243,18 @@ export default {
                     advisoryBrand: "Improve ROI"
                 }
             },
-            src: `${envConfig}` + "/img_home_hero.png",
-            buttonGo: `${envConfig}` + "/icon_go_yellow.svg",
-            reportLeftDown: `${envConfig}` + "/img_deco_corner.svg",
-            reportRightDown: `${envConfig}` + "/img_deco_corner.svg",
-            reportDownImg: `${envConfig}` + "/img_paper-cover_VPB.jpg",
-            reportConnectImg: `${envConfig}` + "/img_connect_line.svg",
-            dataShowImg: `${envConfig}` + "/img_corevalue.png",
-            showMoreButtonGo: `${envConfig}` + "/icon_go.svg",
-            maxRightImg: `${envConfig}` + "/img_home_max.png",
-            maxRightImg_480: `${envConfig}` + "/img_home_max_480.png",
-            realWorldLeftImg: `${envConfig}` + "/img_home_realworld.png",
-            advisoryRightImg: `${envConfig}` + "/img_home_consulting.png"
+            src: `${staticFilePath}` + "/img_home_hero.png",
+            buttonGo: `${staticFilePath}` + "/icon_go_yellow.svg",
+            reportLeftDown: `${staticFilePath}` + "/img_deco_corner.svg",
+            reportRightDown: `${staticFilePath}` + "/img_deco_corner.svg",
+            reportDownImg: `${staticFilePath}` + "/img_paper-cover_VPB.jpg",
+            reportConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
+            dataShowImg: `${staticFilePath}` + "/img_corevalue.png",
+            showMoreButtonGo: `${staticFilePath}` + "/icon_go.svg",
+            maxRightImg: `${staticFilePath}` + "/img_home_max.png",
+            maxRightImg_480: `${staticFilePath}` + "/img_home_max_480.png",
+            realWorldLeftImg: `${staticFilePath}` + "/img_home_realworld.png",
+            advisoryRightImg: `${staticFilePath}` + "/img_home_consulting.png"
         }
         
     },
@@ -349,7 +349,7 @@ export default {
         }
     },
     created() {
-        console.log(envConfig)
+        console.log(staticFilePath)
         // todo
         window.addEventListener('beforeunload', e => {
             window.scrollTo(0,0)
