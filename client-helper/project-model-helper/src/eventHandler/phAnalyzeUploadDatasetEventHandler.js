@@ -1,7 +1,7 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeUploadDatasetEventHandler(e, route) {
-	//apiv2.pharbers.com
-	let hostName = "apidev.pharbers.com"
 	let params = e.detail[0].args.param
 	console.log(params)
 	let uri = ""
@@ -68,7 +68,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				let targetLabels = Array.from(
 					new Set(targetDataset.label.concat(selectedTags))
 				)
-				const url = `https://${hostName}/phdydatasource/put_item`
+				const url = `${hostName}/phdydatasource/put_item`
 				const accessToken = route.cookies.read("access_token")
 				let body = {
 					table: "dataset",
@@ -122,7 +122,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						opgroup: route.cookies.read("company_id")
 					})
 				})
-				const urldel = `https://${hostName}/phdydatasource/put_item`
+				const urldel = `${hostName}/phdydatasource/put_item`
 				let body = {
 					table: "action",
 					item: {
@@ -168,7 +168,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		case "createCatalog":
 			if (params) {
 				let catauuid = guid()
-				const catalog_url = `https://${hostName}/phdydatasource/put_item`
+				const catalog_url = `${hostName}/phdydatasource/put_item`
 				let catamessage = {
 					actionName: params.dsName,
 					keys: "",
@@ -227,7 +227,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		case "fitMax":
 			if (params) {
 				let uuid = guid()
-				const suit_max_url = `https://${hostName}/phdydatasource/put_item`
+				const suit_max_url = `${hostName}/phdydatasource/put_item`
 				let message = {
 					actionName: params.dsName,
 					keys: params.path,
@@ -303,7 +303,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					})
 				})
 
-				const url = `https://${hostName}/phdydatasource/put_item`
+				const url = `${hostName}/phdydatasource/put_item`
 				const token = route.cookies.read("access_token")
 				let clearBody = {
 					table: "action",

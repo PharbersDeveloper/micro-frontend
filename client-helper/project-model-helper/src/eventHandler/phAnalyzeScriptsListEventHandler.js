@@ -2,7 +2,6 @@
 import { hostName } from "../config/envConfig"
 
 export async function phAnalyzeScriptsListEventHandler(e, route) {
-	console.log(hostName)
 	let params = e.detail[0].args.param
 	let uri = "projects"
 	const createScriptsEventName = "createScripts"
@@ -218,8 +217,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					let targetLabels = Array.from(
 						new Set(targetDataset.label.concat(selectedTags))
 					)
-					const url =
-						`${hostName}/phdydatasource/put_item`
+					const url = `${hostName}/phdydatasource/put_item`
 					const accessToken = route.cookies.read("access_token")
 					let body = {
 						table: "dataset",
@@ -282,8 +280,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						)
 					}
 				}
-				const urldel =
-					`${hostName}/phdydatasource/put_item`
+				const urldel = `${hostName}/phdydatasource/put_item`
 				const accessTokendel = route.cookies.read("access_token")
 				let options = {
 					method: "POST",
@@ -295,8 +292,10 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				let result = await fetch(urldel, options).then((res) => res.json())
-				
+				let result = await fetch(urldel, options).then((res) =>
+					res.json()
+				)
+
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
@@ -349,25 +348,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				errorObj["message"]["zh"] !== ""
 					? errorObj["message"]["zh"]
 					: "新建脚本失败，请重新操作！"
-			alert(msg)
-		}
-		route.loadingService.loading.style.display = "none"
-	}
-
-	function clearTagsNoticeCallback(param, payload) {
-		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
-		if (status == "succeed") {
-			alert("清除数据成功！")
-			window.location.reload()
-		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "清除数据失败，请重新操作！"
 			alert(msg)
 		}
 		route.loadingService.loading.style.display = "none"

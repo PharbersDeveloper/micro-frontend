@@ -1,6 +1,7 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeSelectFileEventHandler(e, route) {
-	let hostName = "apidev.pharbers.com"
 	let param = e.detail[0].args.param
 	let uri = ""
 	console.log("upload", route)
@@ -94,7 +95,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					schema: ["count"],
 					projectId: param.projectId
 				}
-				let url = `https://${hostName}/phcheckversion`
+				let url = `${hostName}/phcheckversion`
 				let headers = {
 					Authorization: route.cookies.read("access_token"),
 					"Content-Type": "application/vnd.api+json",
@@ -258,7 +259,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 	}
 
 	async function postUrl(type, body) {
-		let url = `https://${hostName}/phdydatasource/`
+		let url = `${hostName}/phdydatasource/`
 		let headers = {
 			Authorization: route.cookies.read("access_token"),
 			"Content-Type": "application/vnd.api+json",
