@@ -4,4 +4,7 @@ const env = "dev"
 const envUrl = env === "dev" 
     ? "https://components.pharbers.com/dev/deploy/public"
     : "https://components.pharbers.com/prod/deploy/public"
-export { envUrl }
+const hostName = env === "dev" 
+    ? "https://apidev.pharbers.com"
+    : "https://apiv2.pharbers.com"
+export { envUrl, hostName }
