@@ -1,7 +1,9 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let params = e.detail[0].args.param
-	const startUrl = "https://apiv2.pharbers.com/phresourceaction"
+	const startUrl = `${hostName}/phresourceaction`
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
 	//未启动项目资源时，点击按钮提示弹窗。
@@ -71,7 +73,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		case "deleteProject":
 			if (params) {
-				let uri = `https://apiv2.pharbers.com/phcreateproject/projects/${params.projectId}`
+				let uri = `${hostName}/phcreateproject/projects/${params.projectId}`
 				let results = await fetch(uri, {
 					method: "delete",
 					headers: {
@@ -157,7 +159,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	}
 
 	async function checkStartResourceFun() {
-		const startUrl = "https://apiv2.pharbers.com/phresourceaction"
+		const startUrl = `${hostName}/phresourceaction`
 		let startBody = {
 			projectName: params.projectName,
 			projectId: params.projectId,

@@ -1,3 +1,5 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -45,7 +47,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					cstParam.itemValueType === "Number"
 						? "Double"
 						: cstParam.itemValueType
-				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const url = `${hostName}/phdydatasource/put_item`
 				let body = {
 					table: "action",
 					item: {
@@ -83,7 +85,9 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				const result = await fetch(url, options).then((res) => res.json())
+				const result = await fetch(url, options).then((res) =>
+					res.json()
+				)
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",

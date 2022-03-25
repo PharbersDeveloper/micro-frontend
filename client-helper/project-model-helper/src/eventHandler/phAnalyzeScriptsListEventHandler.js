@@ -1,10 +1,11 @@
 // eslint-disable-next-line no-unused-vars
+import { hostName } from "../config/envConfig"
+
 export async function phAnalyzeScriptsListEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = "projects"
 	const createScriptsEventName = "createScripts"
 	const deleteDatasetsEventName = "deleteDatasets"
-	const clearTagsEventName = "clearTags"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "localUpload") {
@@ -90,7 +91,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			break
 		case "createScripts":
 			if (params) {
-				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const url = `${hostName}/phdydatasource/put_item`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
@@ -106,13 +107,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					)}`
 					route.router.transitionTo("shell", preUrl)
 				} else {
-					route.noticeService.defineAction({
-						type: "iot",
-						id: createScriptsEventName,
-						projectId: params.projectId,
-						ownerId: route.cookies.read("account_id"),
-						callBack: createScriptNoticeCallback
-					})
 					if (params.outputs[0].id == "") {
 						//没有id要先创建dataset
 						params.outputs[0].id = uuid
@@ -198,6 +192,16 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						url,
 						scriptOptions
 					).then((res) => res.json())
+					route.noticeService.defineAction({
+						type: "iot",
+						remoteResource: "notification",
+						runnerId: "",
+						id: route.creatScriptsQuery.data.id,
+						eventName: createScriptsEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: createScriptNoticeCallback
+					})
 				}
 			}
 			break
@@ -213,8 +217,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					let targetLabels = Array.from(
 						new Set(targetDataset.label.concat(selectedTags))
 					)
-					const url =
-						"https://apiv2.pharbers.com/phdydatasource/put_item"
+					const url = `${hostName}/phdydatasource/put_item`
 					const accessToken = route.cookies.read("access_token")
 					let body = {
 						table: "dataset",
@@ -246,13 +249,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			break
 		//删除脚本
 		case "deleteDatasets":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: deleteDatasetsEventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: deleteDatasetsNoticeCallback
-			})
 			if (params) {
 				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = params.datasetArray //发送请求的参数在这取
@@ -284,8 +280,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						)
 					}
 				}
-				const urldel =
-					"https://apiv2.pharbers.com/phdydatasource/put_item"
+				const urldel = `${hostName}/phdydatasource/put_item`
 				const accessTokendel = route.cookies.read("access_token")
 				let options = {
 					method: "POST",
@@ -297,68 +292,20 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				await fetch(urldel, options).then((res) => res.json())
-			}
-			break
-		case "clearTags":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: clearTagsEventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: clearTagsNoticeCallback
-			})
-			if (params) {
-				route.loadingService.loading.style.display = "flex"
-				route.loadingService.loading.style["z-index"] = 2
-				let selectedDatasetsClear = params.selectedDatasets //需要更新的dataset
-				let datasetArrayClear = params.datasetArray //发送请求的参数在这取
-				let promiseList = []
-				selectedDatasetsClear.forEach(async (targetId) => {
-					let targetDataset = datasetArrayClear.filter(
-						(it) => it.id == targetId
-					)[0]
-					const url =
-						"https://apiv2.pharbers.com/phdydatasource/put_item"
-					const accessToken = route.cookies.read("access_token")
-					let msg = {
-						actionName: targetDataset.name,
-						version: "",
-						dsid: targetDataset.id,
-						destination: targetDataset.name,
-						opname: route.cookies.read("account_id"),
-						opgroup: route.cookies.read("company_id")
-					}
-					let body = {
-						table: "action",
-						item: {
-							projectId: params.projectId,
-							code: 0,
-							comments: "clear_dataset_tags",
-							jobCat: "clear_DS_data",
-							jobDesc: clearTagsEventName,
-							message: JSON.stringify(msg),
-							date: String(new Date().getTime()),
-							owner: route.cookies.read("account_id"),
-							showName: decodeURI(
-								route.cookies.read("user_name_show")
-							)
-						}
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							Authorization: accessToken,
-							"Content-Type":
-								"application/x-www-form-urlencoded; charset=UTF-8",
-							accept: "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					let result = fetch(url, options).then((res) => res.json())
-					promiseList.push(result)
+				let result = await fetch(urldel, options).then((res) =>
+					res.json()
+				)
+
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: result.data.id,
+					eventName: deleteDatasetsEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: deleteDatasetsNoticeCallback
 				})
-				await Promise.all(promiseList)
 			}
 			break
 		default:
@@ -401,25 +348,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				errorObj["message"]["zh"] !== ""
 					? errorObj["message"]["zh"]
 					: "新建脚本失败，请重新操作！"
-			alert(msg)
-		}
-		route.loadingService.loading.style.display = "none"
-	}
-
-	function clearTagsNoticeCallback(param, payload) {
-		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
-		if (status == "succeed") {
-			alert("清除数据成功！")
-			window.location.reload()
-		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "清除数据失败，请重新操作！"
 			alert(msg)
 		}
 		route.loadingService.loading.style.display = "none"

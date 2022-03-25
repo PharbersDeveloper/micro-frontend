@@ -1,3 +1,5 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDashboardsEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -23,7 +25,7 @@ export async function phAnalyzeDashboardsEventHandler(e, route) {
 			}
 
 			// eslint-disable-next-line no-case-declarations
-			const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+			const url = `${hostName}/phdydatasource/put_item`
 			// eslint-disable-next-line no-case-declarations
 			let headers = {
 				Authorization: route.cookies.read("access_token"),

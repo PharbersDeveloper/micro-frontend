@@ -1,3 +1,5 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDatasetMaxEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -47,7 +49,7 @@ export async function phAnalyzeDatasetMaxEventHandler(e, route) {
 			path: path.split("ph-platform/")[1],
 			dataset_name: datasetName
 		}
-		let url = "https://api.pharbers.com/phoutputdown"
+		let url = `${hostName}/phoutputdown`
 		let scriptOptions = {
 			method: "POST",
 			headers: {

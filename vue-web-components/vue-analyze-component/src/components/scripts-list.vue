@@ -19,12 +19,6 @@
                                             </span>
                                             <p>标签</p>
                                         </div>
-                                        <div class="label_icon border_none none" @click="clearDialogOpen">
-                                            <span>
-                                                <img :src="clear_data_icon" alt="">
-                                            </span>
-                                            <p >清除数据</p>
-                                        </div>
                                         <div class="label_icon border_none" @click="deletedialogopen">
                                             <span>
                                                 <img :src="delete_icon" alt="">
@@ -181,14 +175,6 @@
                     <p v-if="reciptcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        <!-- 清除脚本数据 -->
-        <clear-recipt-dialog
-            v-if="cleardialogshow"
-            :reciptcheckedIds="reciptcheckedIds"
-            :reciptcheckedNames="reciptcheckedNames"
-            @clearTagsEvent="clearTags"
-            @closeClearDialog="closeClearDialog">
-        </clear-recipt-dialog>
         <!-- 删除脚本 -->
         <clear-delete
             v-if="deletedialogshow"
@@ -223,7 +209,6 @@
 </template>
 
 <script>
-import clearReciptDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog-script.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
@@ -305,107 +290,14 @@ export default {
             default: () => ({
                 "projectName": "ETL_Iterator",
                 "projectId": "JfSmQBYUpyb4jsei",
-                "dcs": [
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns/phjob.py",
-                        "jobName": "developer_FYMh8QYDX7FcUns_ETL_Iterator_ETL_Iterator_compute_weqw",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_weqw",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns",
-                        "jobId": "FYMh8QYDX7FcUns",
-                        "jobVersion": "weqw_version1",
-                        "outputs": "[{\"name\":\"weqw\", \"id\":\"6277ab179aaa405aa9dc408d5ce42a44\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    },
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE/phjob.py",
-                        "jobName": "developer_NBdN5esAxvuhFnE_ETL_Iterator_ETL_Iterator_compute_ss",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_ss",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\", \"cat\":\"input_index\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE",
-                        "jobId": "NBdN5esAxvuhFnE",
-                        "jobVersion": "ss_version1",
-                        "outputs": "[{\"name\":\"ss\", \"id\":\"cb36ad3c0f3444c3a699b546a4e077a8\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    },
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ/phjob.py",
-                        "jobName": "developer_na4WCUxbdERSeWZ_ETL_Iterator_ETL_Iterator_compute_3333",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_3333",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ",
-                        "jobId": "na4WCUxbdERSeWZ",
-                        "jobVersion": "3333_version1",
-                        "outputs": "[{\"name\":\"3333\", \"id\":\"ce8b455328604e61bd0a86d34c075e35\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    }
-                ],
-                "dss": [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "test01",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "/wer/wer"
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "3333",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "weqw",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "ss",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    }
-                ],
+                "dcs": [],
+                "dss": [],
                 "tagsArray": [],
                 "_isVue": true
             })
         }
     },
     components: {
-        clearReciptDialog,
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
@@ -613,10 +505,6 @@ export default {
         //关闭清除脚本弹框
         closeClearDialog() {
             this.cleardialogshow = false;
-        },
-        //打开清除脚本弹框
-        clearDialogOpen(){
-            this.cleardialogshow = true
         },
         //标签下拉框
         labelShow() {
