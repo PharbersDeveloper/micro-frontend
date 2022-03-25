@@ -43,7 +43,7 @@ export default {
     },
     data() {
         return {
-            closeIcon: `${envConfig}` + "icon_close.svg",
+            closeIcon: `${envConfig}` + "/icon_close.svg",
             memo: "",
             classNames: false,
             sheet: ""

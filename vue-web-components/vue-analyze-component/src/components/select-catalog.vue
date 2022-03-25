@@ -50,7 +50,7 @@ export default {
     data() {
         return{
             selectDataVersion: false,
-            add_icon: `${envConfig}` + "icons/%E5%8A%A0%E5%8F%B7.svg",
+            add_icon: `${envConfig}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
             catalogName: ""
         }
     },
