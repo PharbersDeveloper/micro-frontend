@@ -154,13 +154,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
-		route.noticeService.defineAction({
-			type: "iot",
-			id: "uploadfiles",
-			projectId: projectId,
-			ownerId: route.cookies.read("account_id"),
-			callBack: noticeCallback
-		})
+		
 		let uploadMessage = {}
 		uploadMessage.file = file
 		let pro_name = projectName.toLowerCase().replace(/[^a-z0-9]/gi, "")
@@ -190,6 +184,16 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 						projectId,
 						cat
 					)
+					route.noticeService.defineAction({
+						type: "iot",
+						id: res.tmpname,
+						remoteResource: "notification",
+						runnerId: "",
+						eventName: "uploadfiles",
+						projectId: projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: noticeCallback
+					})
 				}
 			}
 		}

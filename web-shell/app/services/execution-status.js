@@ -23,8 +23,7 @@ export default class ExecutionStatusService extends Service {
 			}
 			const iotConfig = {
 				type: this.mqtt_type,
-				topic: item.topic,
-				client_id: item.ownerId,
+				topic: topic,
 				endpoint: this.endpoint,
 				aws_region: this.aws_region,
 				aws_access_id: this.aws_access_id,
@@ -47,19 +46,24 @@ export default class ExecutionStatusService extends Service {
 
 	defineAction({
 		type,
+		remoteResource,
+		runnerId,
 		id,
+		eventName,
 		projectId,
 		ownerId,
 		callBack,
 		timeout = this.timeout
 	} = {}) {
-		const topic = `${projectId}/${ownerId}/${id}`
-		console.warn("Topic =====> ", topic)
+		const topic = `${projectId}/${ownerId}/${eventName}`
 		if (!this.action.find((item) => item.topic == topic)) {
 			const item = {
 				type: type,
 				topic: topic,
+				remoteResource: remoteResource,
+				runnerId: runnerId,
 				id: id,
+				eventName: eventName,
 				projectId: projectId,
 				ownerId: ownerId,
 				timeout: timeout,
@@ -98,14 +102,5 @@ export default class ExecutionStatusService extends Service {
 	__observer() {
 		this.startOb = true
 		this.__destroyQueue()
-		// setInterval(() => {
-		//     if (this.action.length > 0) {
-		//         this.action.forEach(async (item, index) => {
-		//             this.functions[item.type](item)
-		//         })
-		//     } else {
-		//         console.log("notice observer")
-		//     }
-		// }, 500 * 1)
 	}
 }
