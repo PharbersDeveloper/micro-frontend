@@ -48,7 +48,7 @@ module.exports = function (environment) {
 			AWS_REGION: "cn-northwest-1",
 			AWS_IOT_DEFAULT_CLIENT_ID: "VQ4L9e4RGDZEI2Ln7fvE",
 			MQTT_TYPE: "http-mqtt", // aws-mqtt|http-mqtt
-			OBSERVER_TIME_OUT: 600, // 600秒  10分
+			OBSERVER_TIME_OUT: 86400, // 86400秒  1天 24小时
 			scope: "APP|*|R",
 			isNeedMenu: true
 		}

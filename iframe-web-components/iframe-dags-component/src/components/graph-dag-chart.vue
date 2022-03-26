@@ -440,8 +440,16 @@ export default {
             console.info(runnerId)
             window.parent.postMessage({
                 message: {
-                    dagRunCmd: this.registerJobEventName,
-                    dagExecutionCmd: "executionStatus" + runnerId
+                    notification: {
+                        eventName: this.registerJobEventName,
+                        projectId: results.data.dag_id, // results.data.
+                        id: results.data.run_id,
+
+                    },
+                    executionStatus: {
+                        runnerId: results.data.dag_run_id,
+                        eventName: "executionStatus" + runnerId
+                    },
                 }
             }, '*')
             this.showRunJson = false
