@@ -44,7 +44,7 @@ export default {
             emrLog: "",
             loading: false,
             logsValue: "",
-			img1: `${envConfig}` + "/list.png"
+            img1: `${staticFilePath}` + "/list.png"
         }
     },
     props: {
@@ -69,7 +69,7 @@ export default {
         this.loading = true
         let that = this
         const url = `${hostName}/phdydatasource/query`
-        const accessToken = this.getCookie( "access_token" ) || "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3"
+        const accessToken = this.getCookie( "access_token" ) || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
         let body = {
             "table": "logs",
             "conditions": {

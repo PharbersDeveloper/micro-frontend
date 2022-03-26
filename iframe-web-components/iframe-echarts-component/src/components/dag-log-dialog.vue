@@ -44,7 +44,7 @@ export default {
             emrLog: "",
             loading: false,
             logsValue: "",
-			img1: `${envConfig}` + "/list.png"
+			img1: `${staticFilePath}` + "/list.png"
         }
     },
     props: {
