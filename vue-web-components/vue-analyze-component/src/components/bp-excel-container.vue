@@ -178,12 +178,12 @@
                     <el-radio v-model="dataSampleType" label="数据量采样" class="title">数据量采样</el-radio>
                     <div class="data-collection">
                         <label for="dataCollectionMethods">样本采集方法</label>
-                        <select name="dataCollectionMethods" id="dataCollectionMethods" class="data-collection-methods">
+                        <select name="dataCollectionMethods" :disabled="dataCollectionDisabled" id="dataCollectionMethods" class="data-collection-methods">
                             <option value="顺序">顺序</option>
                             <option value="随机">随机</option>
                         </select>
                         <label for="dataCollectionNum">样本采集数量</label>
-                        <select name="dataCollectionNum" id="dataCollectionNum">
+                        <select name="dataCollectionNum" :disabled="dataCollectionDisabled" id="dataCollectionNum">
                             <option value="顺序">10000</option>
                             <option value="随机">20000</option>
                             <option value="随机">50000</option>
@@ -196,17 +196,14 @@
                     <div class="data-version">
                         <div class="dlg-col-search-bar">
                             <div class="dlg-col-search-input">
-                                <el-input placeholder="搜索" ref="dataVersionSearch" v-model="dataVersionSearchValue" class="search_list" @input="on_dataVersionSearch(dataVersionSearchValue)"></el-input>
+                                <el-input :disabled="dataVersionDisabled" placeholder="搜索" ref="dataVersionSearch" v-model="dataVersionSearchValue" class="search_list" @input="on_dataVersionSearch(dataVersionSearchValue)"></el-input>
                                 <img :src="search_row" class="search_list_icon" alt="">
                             </div>
                         </div>
                         <div class="dlg-col-cols">
-                            <el-checkbox :indeterminate="collectionsPolicy.isIndeterminate" v-model="collectionsPolicy.checkAll" @change="on_collectionCheckAllChange">选择全部</el-checkbox>
-                            <div style="margin: 15px 0;"></div>
-                            <div class="dlg-version-spliter"></div>
                             <div style="margin: 15px 0;"></div>
                             <el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
-                                <el-checkbox class="checkbox" v-for="col in dataVersionArrShow" :label="col" :key="col">{{col}}</el-checkbox>
+                                <el-checkbox class="checkbox" :disabled="dataVersionDisabled" v-for="col in dataVersionArrShow" :label="col" :key="col">{{col}}</el-checkbox>
                             </el-checkbox-group>
                         </div>
                     </div>
@@ -259,10 +256,12 @@ export default {
             expandPopup: false,
             tmpFilterRow: "version",
             needRefresh: 0,
-            dataSampleVisible: true,
+            dataSampleVisible: false,
             dataSampleType: "",
             dataVersionArr: ["col1", "col2", "col3", "col4"],
-            dataVersionArrShow: []
+            dataVersionArrShow: ["col1", "col2", "col3", "col4"],
+            dataVersionDisabled: true,
+            dataCollectionDisabled: true
         }
     },
     computed: {
@@ -349,7 +348,7 @@ export default {
         }
     },
     methods: {
-        on_clickDataSample() {
+        on_clickDataSample(n, o) {
             debugger
         },
         changeSchemaTypeEvent(data) {
@@ -510,6 +509,16 @@ export default {
         }
     },
     watch: {
+        dataSampleType(n, o) {
+            if (n === "数据量采集") {
+                this.dataVersionDisabled = true
+                this.dataCollectionDisabled = false
+
+            } else {
+                this.dataCollectionDisabled = true
+                this.dataVersionDisabled = false
+            }
+        },
         needRefresh(n, o) {
             const length = this.allData.schemaArr.length
             this.schema.resetSchema(this.allData.schemaArr, this.allData.schemaArrType, Array(length).fill(118))
