@@ -16,7 +16,7 @@ export default class PhContainerDataSource {
             this.url= `${hostName}/phchproxyquery`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "4623e7829ff4275b94f277dc8638d53eb1f67d396a3551dd6a74cc65aa0ca2d9"
+        this.debugToken = "72ec7c76e4af6be7f0498ffd480b43345861b40d44641ab3a68a68eb95ed7f1c"
     }
 
     resetUrl(url) {
