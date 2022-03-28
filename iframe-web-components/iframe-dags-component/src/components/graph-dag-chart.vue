@@ -315,6 +315,9 @@ export default {
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+		// 判断环境
+		let env = this.getUrlParam(paramArr, "environment")
+		this.checkENV(env)
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.handleMessage)
@@ -325,6 +328,15 @@ export default {
         window.removeEventListener('message', this.handleMessage)
     },
     methods: {
+		checkENV(env) {
+			if(env === "development") {
+				this.hostName = "https://apidev.pharbers.com"
+				this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
+			} else {
+				this.hostName = "https://apiv2.pharbers.com"
+				this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
+			}
+		},
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
@@ -443,13 +455,13 @@ export default {
                     notification: {
                         eventName: this.registerJobEventName,
                         projectId: results.data.dag_id, // results.data.
-                        id: results.data.run_id,
+                        id: results.data.run_id
 
                     },
                     executionStatus: {
                         runnerId: results.data.dag_run_id,
                         eventName: "executionStatus" + runnerId
-                    },
+                    }
                 }
             }, '*')
             this.showRunJson = false
