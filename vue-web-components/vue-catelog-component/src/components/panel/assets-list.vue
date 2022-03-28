@@ -61,7 +61,7 @@ import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import { staticFilePath, hostName } from '../../config/staticFilePath'
+import { staticFilePath, hostName } from '../../config/envConfig'
 import treeItem from '../tree-item'
 import util from '../util.vue'
 

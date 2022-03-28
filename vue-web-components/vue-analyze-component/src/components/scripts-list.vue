@@ -216,7 +216,7 @@ import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     data() {

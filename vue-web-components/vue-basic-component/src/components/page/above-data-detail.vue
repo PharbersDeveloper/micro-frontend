@@ -88,7 +88,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpPhoto from '../panel/bp-gallery-image'
 export default {
     name: "",

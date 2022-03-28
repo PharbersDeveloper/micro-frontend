@@ -39,7 +39,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpButton from '../bp-button'
 export default {
     name: "report-list",

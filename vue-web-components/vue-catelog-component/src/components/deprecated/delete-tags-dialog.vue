@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { envUrl } from '../../config/envUrl'
+import { envUrl } from '../../config/envConfig'
 export default {
     data() {
         return{

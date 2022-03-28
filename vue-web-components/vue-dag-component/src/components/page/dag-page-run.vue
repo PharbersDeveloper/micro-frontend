@@ -103,7 +103,7 @@
 import bpDag from '../bp-dag.vue'
 import uploadFile from '../upload-file.vue'
 import bpPagination from '../bp-pagination.vue'
-import staticFilePath from "../../config/staticFilePath"
+import staticFilePath from "../../config/envConfig"
 import { hostName } from '../../../../../iframe-web-components/iframe-codeditor-component/src/config/envConfig'
 
 export default {

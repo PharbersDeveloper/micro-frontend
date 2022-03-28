@@ -46,7 +46,7 @@
 <script>
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpButton from '../bp-button'
 // import navTop from '../panel/bp-nav-top'
 // import navTopRes from '../panel/bp-nav-top-response'

@@ -10,7 +10,7 @@
 <script>
 import bpCarousel from './bp-carousel.vue'
 import bpCarouselItem from './bp-carousel-item.vue'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     name: 'bp-button',

@@ -18,7 +18,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpTabs from '../bp-tabs'
 export default {
     name: "",

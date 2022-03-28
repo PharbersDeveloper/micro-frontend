@@ -166,7 +166,7 @@ import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 import bpText from 'vue-components/src/components/bp-text.vue'
 import bpButton from 'vue-components/src/components/bp-button.vue'
 import editableComponent from '../editable-component.vue'
-import { envUrl } from '../../config/envUrl'
+import { envUrl } from '../../config/envConfig'
 import util from '../util.vue'
 
 export default {

@@ -23,7 +23,7 @@
 <script>
 import bpMenu from "../../../node_modules/vue-components/src/components/bp-menu.vue";
 import bpText from "../../../node_modules/vue-components/src/components/bp-text.vue";
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 export default {
     components: {
         bpMenu,

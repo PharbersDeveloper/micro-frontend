@@ -76,7 +76,7 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import PhExcelPreviewSource from "./model/previewDatasource"
 import PhExcelPreviewSchema from "./model/previewSchema"
 import PhExcelProxy from "./model/dataproxy"
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     data() {

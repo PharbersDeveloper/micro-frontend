@@ -86,7 +86,7 @@ import bpButton from '../bp-button.vue'
 import bpModalForm from './bp-modal-form.vue'
 import bpImg from '../bp-img.vue'
 import bpSelectVue from '../bp-select-vue.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpOptionVue from '../bp-option-vue.vue'
 export default {
     components: {

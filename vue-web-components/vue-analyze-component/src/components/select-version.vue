@@ -33,7 +33,7 @@
 </template>
 <script>
 // import PhDagDatasource from './model/datasourcev2'
-import { staticFilePath, hostName } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/envConfig'
 
 export default {
     data() {

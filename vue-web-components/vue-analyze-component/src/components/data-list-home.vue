@@ -195,7 +195,7 @@
 <script>
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import { staticFilePath, hostName } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/envConfig'
 
 export default {
     data() {

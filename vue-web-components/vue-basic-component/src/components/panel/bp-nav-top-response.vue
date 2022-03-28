@@ -34,7 +34,7 @@
 <script>
 import bpModalForm from './bp-modal-form.vue'
 import bpButton from '../bp-button.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpText from '../bp-text.vue'
 export default {
     created() {

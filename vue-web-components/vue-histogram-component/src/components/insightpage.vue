@@ -39,7 +39,7 @@ import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     props: {

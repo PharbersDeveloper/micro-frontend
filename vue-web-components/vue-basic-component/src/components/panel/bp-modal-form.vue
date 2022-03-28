@@ -77,7 +77,7 @@
 import bpText from '../bp-text.vue'
 import bpButton from '../bp-button.vue'
 import bpInput from '../bp-input.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpTextarea from '../bp-textarea.vue'
 export default {
     components: {

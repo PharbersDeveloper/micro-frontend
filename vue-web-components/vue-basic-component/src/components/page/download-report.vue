@@ -84,7 +84,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpInput from '../bp-input.vue'
 import bpTextarea from '../bp-textarea.vue'
 export default {

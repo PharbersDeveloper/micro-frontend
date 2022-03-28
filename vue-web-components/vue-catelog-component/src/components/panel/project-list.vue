@@ -85,7 +85,7 @@ import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElDialog from 'element-ui/packages/dialog/src/component'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 export default {
     components: {
         bpText,

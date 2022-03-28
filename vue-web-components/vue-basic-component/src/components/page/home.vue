@@ -161,7 +161,7 @@ import bpImg from '../bp-img'
 import bpCardActive from '../panel/bp-card-activity'
 import bpButton from '../bp-button'
 import BpText from '../bp-text.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 export default {
     name: 'home',
     data() {

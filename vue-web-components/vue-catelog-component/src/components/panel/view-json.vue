@@ -15,7 +15,7 @@
 <script>
 import JsonViewer from 'vue-json-viewer'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 
 export default {
     components: {

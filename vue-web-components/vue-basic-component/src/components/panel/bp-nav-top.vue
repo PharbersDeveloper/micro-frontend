@@ -81,7 +81,7 @@ import bpSelect from '../bp-select.vue'
 import bpButton from '../bp-button.vue'
 import bpSelectVue from '../bp-select-vue.vue'
 import bpOptionVue from '../bp-option-vue.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpModalForm from './bp-modal-form.vue'
 import bpText from '../bp-text.vue'
 export default {

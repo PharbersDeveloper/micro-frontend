@@ -162,7 +162,7 @@ import bpText from '../../../node_modules/vue-components/src/components/bp-text.
 import bpButton from '../../../node_modules/vue-components/src/components/bp-button.vue'
 import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vue'
 import jsonModel from '../panel/view-json.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 
 export default {
     components: {

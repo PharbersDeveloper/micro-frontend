@@ -43,7 +43,7 @@ import ElTabPane from "element-ui/packages/tab-pane"
 import Histogram from "./draggable-container"
 import PhSlideModel from "../components/slide-model/slide-model"
 import "element-ui/lib/theme-chalk/index.css"
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     props: {

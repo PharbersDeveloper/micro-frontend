@@ -37,7 +37,7 @@
 
 <script>
 import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
-import { envUrl } from '../../config/envUrl'
+import { envUrl } from '../../config/envConfig'
 import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {

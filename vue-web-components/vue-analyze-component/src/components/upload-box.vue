@@ -32,7 +32,7 @@
 import bpButton from '../../node_modules/vue-components/src/components/bp-button.vue'
 import bpInput from '../../node_modules/vue-components/src/components/bp-input.vue'
 import bpTextarea from '../../node_modules/vue-components/src/components/bp-textarea.vue'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 
 
 export default {

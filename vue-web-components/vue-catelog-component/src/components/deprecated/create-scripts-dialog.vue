@@ -130,7 +130,7 @@ import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
 import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
-import { envUrl } from '../../config/envUrl'
+import { envUrl } from '../../config/envConfig'
 
 export default {
     data() {

@@ -180,7 +180,7 @@ import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
-import { staticFilePath, hostName } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/envConfig'
 
 export default {
     data() {

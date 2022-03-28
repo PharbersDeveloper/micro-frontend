@@ -229,7 +229,7 @@ import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
-import { envUrl } from '../../config/envUrl'
+import { envUrl } from '../../config/envConfig'
 
 export default {
     data() {

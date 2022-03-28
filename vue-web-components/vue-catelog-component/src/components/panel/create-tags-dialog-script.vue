@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 export default {
     data() {
         return{

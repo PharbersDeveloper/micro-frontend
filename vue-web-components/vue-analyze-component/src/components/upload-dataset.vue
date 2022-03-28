@@ -219,7 +219,7 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
-import { staticFilePath, hostName } from '../config/staticFilePath'
+import { staticFilePath, hostName } from '../config/envConfig'
 
 export default {
     data() {
@@ -324,11 +324,11 @@ export default {
     },
     methods: {
         confirmeCreateCatalog(data) {
-			let bool = this.checkName(data.args.param.dsName)
-			if(!bool) {
-				alert("该数据目录已被调用")
-				return false
-			}
+            let bool = this.checkName(data.args.param.dsName)
+            if(!bool) {
+                alert("该数据目录已被调用")
+                return false
+            }
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
@@ -338,23 +338,23 @@ export default {
             this.$emit('event', data)
             this.selectCatalogVisible = false
         },
-		checkName(data) {
-			let arr = this.allData.dss.filter(it => it.name === data)
-			return arr.length === 0
-		},
+        checkName(data) {
+            let arr = this.allData.dss.filter(it => it.name === data)
+            return arr.length === 0
+        },
         // checkCatelolgName(data) {
-		// 	//过滤出包含当前名称的ds
+        // 	//过滤出包含当前名称的ds
         //     let nameArr = this.allData.dss.filter(item => item.name.indexOf(data) > -1)
-		// 	//过滤出包含当前名称_的ds
+        // 	//过滤出包含当前名称_的ds
         //     let changeNameArr = this.allData.dss.filter(item => item.name.indexOf(data + "_") > -1)
         //     if(changeNameArr.length > 0) {
         //         let num = 0
         //         changeNameArr.forEach(item => {
-		// 			let isNum = isNaN(item.split(data + "_")[1])
-		// 			if(!isNum) {
-		// 				let itemNum = parseInt(item.name.split(data + "_")[1])
-		// 				num = itemNum >= num ? itemNum + 1 : num
-		// 			}
+        // 			let isNum = isNaN(item.split(data + "_")[1])
+        // 			if(!isNum) {
+        // 				let itemNum = parseInt(item.name.split(data + "_")[1])
+        // 				num = itemNum >= num ? itemNum + 1 : num
+        // 			}
         //         })
         //         return data + "_" + num
         //     } else if(nameArr.length > 0) {

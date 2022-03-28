@@ -61,7 +61,7 @@ import bpImg from '../../../node_modules/vue-components/src/components/bp-img.vu
 import editableComponent from '../editable-component.vue'
 import util from '../util.vue'
 import dataDetail from '../panel/data-list-detail.vue'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 export default {
     components: {
         bpPagination,

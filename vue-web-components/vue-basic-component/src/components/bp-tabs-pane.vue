@@ -35,7 +35,7 @@
 
 <script>
 import bpText from './bp-text'
-import { staticFilePath } from '../config/staticFilePath'
+import { staticFilePath } from '../config/envConfig'
 import bpImg from './bp-img'
 export default {
     name: 'bpPane',

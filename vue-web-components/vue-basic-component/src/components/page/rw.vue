@@ -91,7 +91,7 @@ import bpImg from '../bp-img'
 import bpButton from '../bp-button'
 import navTop from '../panel/bp-nav-top'
 import navTopRes from '../panel/bp-nav-top-response'
-import { staticFilePath } from '../../config/staticFilePath'
+import { staticFilePath } from '../../config/envConfig'
 import bpPageBottom from '../panel/bp-page-bottom'
 export default {
     name: "",
