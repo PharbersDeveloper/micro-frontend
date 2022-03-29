@@ -10,4 +10,5 @@ export default class DatasetModel extends Model {
 	@attr("string") path
 	@attr("string") format
 	@attr("string") prop
+	@attr("string") sample
 }

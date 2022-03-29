@@ -4,6 +4,7 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
+	let editSampleEventName = "editSampleEventName"
 	const eventName = "changeSchemaType"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
@@ -100,9 +101,71 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				})
 			}
 			break
+		case "clickSample":
+			if (params) {
+				const url = `${hostName}/phdydatasource/put_item`
+				const accessToken = route.cookies.read("access_token")
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				route.projectId = params.projectId
+				route.projectName = params.projectName
+				params.targetDataset.sample = params.sample
+				params.targetDataset.projectId = params.projectId
+				// 更新dataset表
+				let body = {
+					table: "dataset",
+					item: params.targetDataset
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(url, options)
+				//发送action
+				let message = {
+					actionName: params.targetDataset.name
+				}
+				let scriptBody = {
+					table: actionTableName,
+					item: {
+						projectId: params.projectId,
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
+						code: 0,
+						jobDesc: editSampleEventName,
+						jobCat: "edit_sample",
+						comments: "",
+						date: String(new Date().getTime()),
+						message: JSON.stringify(message)
+					}
+				}
+				let editSampleOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(scriptBody)
+				}
+				await fetch(url, editSampleOptions).then((res) => res.json())
+				route.loadingService.loading.style.display = "none"
+				alert("修改成功")
+			}
+			break
 		default:
 			console.log("other click event!")
 	}
+
 	function changeSchemaTypeCallback(param, payload) {
 		console.log("更改表名")
 

@@ -121,7 +121,8 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 								path: params.path,
 								format: params.format,
 								cat: "intermediate",
-								prop: ""
+								prop: "",
+								sample: "F_1"
 							}
 						}
 						let options = {

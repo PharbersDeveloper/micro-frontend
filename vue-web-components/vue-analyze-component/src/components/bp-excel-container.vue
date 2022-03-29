@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="title-right">
-                <el-button @click="dataSampleVisible = true" class="data-version">数据样本配置</el-button>
+                <el-button @click="dataSampleVisible = true" :disabled="allData.datasetCat != 'intermediate'" class="data-version">数据样本配置</el-button>
                 <div class="btn-groups">
                     <!-- @click="dialogDownloadVisible = true" 暂时禁用下载 -->
                     <button class="btn_chart" >下载当前筛选数据</button>
@@ -175,24 +175,41 @@
             width="600px">
             <div class="data-sample-container">
                 <div>
-                    <el-radio v-model="dataSampleType" label="数据量采样" class="title">数据量采样</el-radio>
+                    <el-radio 
+                        v-model="dataSampleType" 
+                        @change="dataSampleRadioClick"
+                        label="数据量采样" 
+                        class="title">数据量采样</el-radio>
                     <div class="data-collection">
                         <label for="dataCollectionMethods">样本采集方法</label>
-                        <select name="dataCollectionMethods" :disabled="dataCollectionDisabled" id="dataCollectionMethods" class="data-collection-methods">
-                            <option value="顺序">顺序</option>
-                            <option value="随机">随机</option>
+                        <select 
+                            name="dataCollectionMethods" v-model="dataCollectionMethods" :disabled="dataCollectionDisabled" id="dataCollectionMethods" class="data-collection-methods">
+                            <option 
+                                v-for="(data, i) in dataCollectionMethodsArr"
+                                :key="i+'methods'"
+                                :value="data.val"
+                                 >{{data.name}}</option>
                         </select>
                         <label for="dataCollectionNum">样本采集数量</label>
-                        <select name="dataCollectionNum" :disabled="dataCollectionDisabled" id="dataCollectionNum">
-                            <option value="顺序">10000</option>
-                            <option value="随机">20000</option>
-                            <option value="随机">50000</option>
-                            <option value="随机">100000</option>
+                        <select 
+                            name="dataCollectionNum" 
+                            v-model="dataCollectionNum" 
+                            :disabled="dataCollectionDisabled" 
+                            id="dataCollectionNum">
+                            <option
+                                v-for="(data, i) in dataCollectionNumArr"
+                                :key="i+'Num'"
+                                :value="data.val"
+                            >{{data.name}}</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <el-radio v-model="dataSampleType" label="数据版本采样" class="title">数据版本采样</el-radio>
+                    <el-radio 
+                        v-model="dataSampleType" 
+                        @change="dataSampleRadioClick"
+                        label="数据版本采样" 
+                        class="title">数据版本采样</el-radio>
                     <div class="data-version">
                         <div class="dlg-col-search-bar">
                             <div class="dlg-col-search-input">
@@ -202,7 +219,9 @@
                         </div>
                         <div class="dlg-col-cols">
                             <div style="margin: 15px 0;"></div>
-                            <el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
+                            <el-checkbox-group class="dlg-collection-list" 
+                                v-model="checkedDataVersion" 
+                                @change="on_handleCheckedDataVersionChange">
                                 <el-checkbox class="checkbox" :disabled="dataVersionDisabled" v-for="col in dataVersionArrShow" :label="col" :key="col">{{col}}</el-checkbox>
                             </el-checkbox-group>
                         </div>
@@ -261,7 +280,10 @@ export default {
             dataVersionArr: ["col1", "col2", "col3", "col4"],
             dataVersionArrShow: ["col1", "col2", "col3", "col4"],
             dataVersionDisabled: true,
-            dataCollectionDisabled: true
+            dataCollectionDisabled: true,
+            checkedDataVersion: [],
+            dataCollectionMethods: "",
+            dataCollectionNum: ""
         }
     },
     computed: {
@@ -281,6 +303,42 @@ export default {
         ElRadio
     },
     props: {
+        dataCollectionMethodsArr: {
+            type: Array,
+            default: function () {
+                return [{
+                    id: 1,
+                    name: "顺序",
+                    val: "f"
+                },{
+                    id: 2,
+                    name: "随机",
+                    val: "r"
+                }]
+            }
+        },
+        dataCollectionNumArr: {
+            type: Array,
+            default: function () {
+                return [{
+                    id: 1,
+                    name: "10000",
+                    val: "1"
+                },{
+                    id: 2,
+                    name: "20000",
+                    val: "2"
+                },{
+                    id: 3,
+                    name: "50000",
+                    val: "5"
+                },{
+                    id: 4,
+                    name: "100000",
+                    val: "10"
+                }]
+            }
+        }, 
         title: {
             type: String,
             default: "预览数据样本"
@@ -320,9 +378,10 @@ export default {
             default: function() {
                 return {
                     projectName: '',
-                    datasetName: 'prod_clean_v2',
+                    datasetName: '',
                     projectId: '',
-                    schemaArr: []
+                    schemaArr: [],
+                    datasetCat: "intermediate"
                 }
             }
         }
@@ -348,8 +407,64 @@ export default {
         }
     },
     methods: {
-        on_clickDataSample(n, o) {
-            debugger
+        on_handleCheckedDataVersionChange(val) {
+            // if(val.length >= 3) {
+            //     this.dataVersionDisabled = true
+            // } else {
+            //     this.dataVersionDisabled = false
+            // }
+        },
+        //sample radio
+        dataSampleRadioClick(val) {
+            if (val === "数据量采样") {
+                this.dataCollectionDisabled = false
+                this.dataVersionDisabled = true
+            } else {
+                this.dataVersionDisabled = false
+                this.dataCollectionDisabled = true
+            }
+        },
+        //sample弹窗确定按钮
+        on_clickDataSample() {
+            let sample = ""
+            switch (this.dataSampleType) {
+            case "数据量采样":
+                if (this.dataCollectionMethods.length === 0) {
+                    alert("请选择样本采集方法")
+                    return false
+                } else if(this.dataCollectionNum.length === 0) {
+                    alert("请选择样本采集数量")
+                    return false
+                } else {
+                    sample = this.dataCollectionMethods + "_" + this.dataCollectionNum
+                }
+                break
+            case "数据版本采集":
+                if (this.checkedDataVersion.length === 0) {
+                    alert("请选择version")
+                    return false
+                } else {
+                    this.checkedDataVersion.
+                        sample = ""
+                }
+                break
+            default:
+                console.log("please select radio")
+            }
+            const event = new Event("event")
+            event.args = {
+                callback: "clickSample",
+                element: this,
+                param: {
+                    "name": "clickSample",
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId,
+                    "targetDataset": this.allData.targetDataset,
+                    "sample": sample
+                }
+            }
+            this.$emit('event', event)
+            this.dataSampleVisible = false
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -509,16 +624,6 @@ export default {
         }
     },
     watch: {
-        dataSampleType(n, o) {
-            if (n === "数据量采集") {
-                this.dataVersionDisabled = true
-                this.dataCollectionDisabled = false
-
-            } else {
-                this.dataCollectionDisabled = true
-                this.dataVersionDisabled = false
-            }
-        },
         needRefresh(n, o) {
             const length = this.allData.schemaArr.length
             this.schema.resetSchema(this.allData.schemaArr, this.allData.schemaArrType, Array(length).fill(118))

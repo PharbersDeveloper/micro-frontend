@@ -31,6 +31,7 @@ export async function phAnalyzeBpExcelContainerRouteModel(route, parseParams) {
 	const query = await fetch(url, options).then((response) => response.json())
 
 	const targetDataset = query["data"][0]["attributes"]
+	const datasetCat = targetDataset.cat
 
 	let targetSchema = JSON.parse(targetDataset.schema)
 	let schemaArr = []
@@ -44,6 +45,8 @@ export async function phAnalyzeBpExcelContainerRouteModel(route, parseParams) {
 		projectId: parseParams.query.projectId,
 		datasetId: parseParams.query.datasetId,
 		schemaArr: schemaArr,
+		targetDataset: targetDataset,
+		datasetCat: datasetCat,
 		schemaArrType: schemaArrType,
 		datasetName: parseParams.query.datasetName,
 		database: "default",

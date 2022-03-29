@@ -221,7 +221,8 @@ export default {
                 "upload": "创建了数据集",
                 "dag_create": "创建了脚本",
                 "resource_create": "启动了资源",
-                "catalog": "创建了脚本"
+                "catalog": "创建了脚本",
+                "edit_sample": "编辑了sample"
             },
             actions: [],
             actionsShow: [],
@@ -239,7 +240,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
+        const accessToken = this.getCookie("access_token") || "1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0"
         const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
@@ -369,7 +370,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
+            const accessToken = this.getCookie("access_token") || "1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0"
             const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",
