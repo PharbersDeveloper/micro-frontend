@@ -3,10 +3,10 @@
 		<div class="header-option">
 			<span class="header">项目信息</span>
 			<div class="date-button">
-				<bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="choosedYear" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+				<bp-select-vue beforeSrc="" :choosedValue="choosedYear" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 					<bp-option-vue :text="item" :key="index+'year'" v-for="(item,index) in yearArr" @click="clickYear(item)"></bp-option-vue>
 				</bp-select-vue>
-				<bp-select-vue beforeSrc="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_chevron-down_12.svg" :choosedValue="choosedMonth" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+				<bp-select-vue beforeSrc="" :choosedValue="choosedMonth" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
 					<bp-option-vue :text="item" :key="index+'month'" v-for="(item, index) in monthArr" @click="clickMonth"></bp-option-vue>
 				</bp-select-vue>
 				<bp-button class="create" text="新建Max项目"></bp-button>

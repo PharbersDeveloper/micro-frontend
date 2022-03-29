@@ -4,10 +4,12 @@
         </div>
 </template>
 <script>
+import { staticFilePath } from '../../config/envConfig'
+
 export default {
     data() {
         return {
-            src: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/44681629355585_.pic.jpg"
+            src: `${staticFilePath}` + "/44681629355585_.pic.jpg"
         }
     }
 }

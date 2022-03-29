@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { staticFilePath } from '../../config/envConfig'
+
 export default {
     components: {},
     data() {

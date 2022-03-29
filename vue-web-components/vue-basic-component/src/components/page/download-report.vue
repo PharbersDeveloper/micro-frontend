@@ -20,12 +20,12 @@
             <div v-if="successSubmit" class="submit-success">
                 <div class="submit-success-inside-container">
                     <div class="submit-success-header">
-                        <bp-img src="https://components.pharbers.com/dev/offweb/public/icon_success.svg" class="submit-success-img"></bp-img>
+                        <bp-img :src="img1" class="submit-success-img"></bp-img>
                         <bp-text class="ph-H-Large_2">{{translation_data.submitSuccess}}</bp-text>
                     </div>
                     <bp-text class="ph-body-medium mb-3 submit-success-text">{{translation_data.addWechat}}</bp-text>
                     <div class="submit-success-worker-img">
-                        <bp-img src="https://components.pharbers.com/dev/offweb/public/img_qr_staff.jpg"></bp-img>
+                        <bp-img :src="img2"></bp-img>
                     </div>
                     <bp-text class="ph-body-medium mb-3 submit-success-text">{{translation_data.email}}</bp-text>
                     <bp-text class="ph-H-Medium mb-2 submit-success-text">contact@pharbers.com</bp-text>
@@ -74,7 +74,7 @@
 
                 <div class="form-submit-button-container" @click="submit">
                     <bp-button :type="responseMini ? 'response-contact-us': 'official-yellow-line-compact'" density='compact' :text="translation_data.submit" class="download-report-button"></bp-button>
-                    <img class="button-go" src="https://components.pharbers.com/dev/offweb/public/icon_go.svg" alt="success"/>
+                    <img class="button-go" :src="img3" alt="success"/>
                 </div>
             </div>
         </div>
@@ -84,6 +84,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import { staticFilePath } from '../../config/envConfig'
 import bpInput from '../bp-input.vue'
 import bpTextarea from '../bp-textarea.vue'
 export default {
@@ -123,6 +124,9 @@ export default {
             tag3: false,
             intention: '',
             responseMini: false,
+            img1: `${staticFilePath}` + "/icon_success.svg",
+            img2: `${staticFilePath}` + "/img_qr_staff.jpg",
+            img3: `${staticFilePath}` + "/icon_go.svg",
             translation_basedata: {
                 cn: {
                     back: '返回',

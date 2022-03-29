@@ -1,7 +1,7 @@
 <template>
     <div>
 		<div class="header" style="height: 48px; background: #fff;display: flex; align-items: center; padding: 0 20px;">
-			<img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg" style="width: 24px; height: 24px; margin-right: 10px" alt="">
+			<img :src="img1" style="width: 24px; height: 24px; margin-right: 10px" alt="">
 			<span class="datasetName">{{decodeURI(allData.datasetName)}}</span>
 		</div>
 		<div class="area" style="margin: 20px;">
@@ -18,9 +18,12 @@
 </template>
 
 <script>
+import { staticFilePath } from '../config/envConfig'
+
 export default {
     data() {
         return {
+            img1: `${staticFilePath}` + "/Database.svg"
         }
     },
     props: {

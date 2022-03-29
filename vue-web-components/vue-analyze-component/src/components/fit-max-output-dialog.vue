@@ -38,6 +38,8 @@
 <script>
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import { staticFilePath } from '../config/envConfig'
+
 export default {
     data() {
         return {
@@ -45,7 +47,7 @@ export default {
             version: "max1.0",
             dsName: "",
             format: "",
-            select_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
+            select_icon: `${staticFilePath}` + "/drop_down_icon.svg"
         }
     },
     components: {

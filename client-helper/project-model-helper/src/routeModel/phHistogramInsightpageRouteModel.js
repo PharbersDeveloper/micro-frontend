@@ -1,6 +1,8 @@
+import { hostName } from "../config/envConfig"
+
 export async function phHistogramInsightpageRouteModel(route, parseParams) {
 	let debugToken =
-		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+		"943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
 	route.store.unloadAll("dashboard")
 	route.store.unloadAll("slide")
 	const projectId = parseParams.query.projectId
@@ -9,7 +11,7 @@ export async function phHistogramInsightpageRouteModel(route, parseParams) {
 	const slideId = parseParams.query.slideId
 	const contentId = parseParams.query.contentId
 
-	const url = "https://apiv2.pharbers.com/phdydatasource/query"
+	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token") || debugToken
 
 	let that = route

@@ -13,7 +13,7 @@
                 
                 <div class="no-logs" v-if="logsValue === ''">
                     <div class="no-log-img">
-                        <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/list.png" alt="">
+                        <img :src="img1" alt="">
                         <span>暂无Log数据</span>
                     </div>
                 </div>
@@ -32,13 +32,16 @@
 </template>
 
 <script>
+import { staticFilePath, hostName } from "../config/envConfig"
+
 export default {
     data() {
         return{
             emrLog: "",
             jobName: "",
             loading: false,
-            logsValue: ""
+            logsValue: "",
+			img1: `${staticFilePath}` + "/list.png"
         }
     },
     props: {
@@ -63,7 +66,7 @@ export default {
         let runId = this.$route.query.runId
         let jobId = this.$route.query.jobId
         this.jobName = this.$route.query.jobName
-        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || "a084652f8933a0adce8f2cec3fe0cab7012be251aa5c5ff851bdcf105f09c884"
         let body = {
             "table": "logs",
@@ -88,7 +91,7 @@ export default {
         let path = await fetch(url, options).then(res => res.json())
         this.emrLog = path.data[0].attributes["emr-log"]
         
-        const logsUrl = "https://api.pharbers.com/phquerylogfile"
+        const logsUrl = `${hostName}/phquerylogfile`
         let param = this.emrLog.split("//")[1]
         let bucket = param.substring(0, param.indexOf("/"))
         let key = param.substring(param.indexOf("/")+1, param.length)

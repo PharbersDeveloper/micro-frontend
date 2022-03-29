@@ -11,9 +11,9 @@ const contextIot = {
 }
 
 const PhIot = {}
-PhIot.newInstance = (config, callBack, timeoutQueue) => {
+PhIot.newInstance = (config, callBack, destroyQueue) => {
 	const mqtt = config.type || "aws-mqtt"
 	const method = contextIot[mqtt].PhMQTT
-	return method(config, callBack, timeoutQueue)
+	return method(config, callBack, destroyQueue)
 }
 export { PhIot }

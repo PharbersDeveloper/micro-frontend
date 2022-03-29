@@ -1,6 +1,6 @@
 <template>
     <div class="data-list-home">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="data-home-container">
                <div class="content">  
                 <div class="left-area">
@@ -195,19 +195,21 @@
 <script>
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
+import { staticFilePath, hostName } from '../config/envConfig'
+
 export default {
     data() {
         return {
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/datasets.png",
-            recipes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/recipes.png",
-            models_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/models.png",
-            notebook_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/notebooks.png",
-            analyses_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/analyses.png",
-            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/dashboard.png",
-            article_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/articles.png",
-            num_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/num_icon.png",
-            file_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/file.png",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png",
+            dataset_icon: `${staticFilePath}` + "/datasets.png",
+            recipes_icon: `${staticFilePath}` + "/recipes.png",
+            models_icon: `${staticFilePath}` + "/models.png",
+            notebook_icon: `${staticFilePath}` + "/notebooks.png",
+            analyses_icon: `${staticFilePath}` + "/analyses.png",
+            dashboard_icon: `${staticFilePath}` + "/dashboard.png",
+            article_icon: `${staticFilePath}` + "/articles.png",
+            num_icon: `${staticFilePath}` + "/num_icon.png",
+            file_icon: `${staticFilePath}` + "/file.png",
+            script_icon: `${staticFilePath}` + "/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -237,8 +239,8 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-        const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+        const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
+        const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
         console.log(href)
@@ -367,8 +369,8 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
-            const acurl = "https://apiv2.pharbers.com/phdydatasource/query"
+            const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
+            const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",
                 "conditions": {
@@ -419,26 +421,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg"
+                    return `${staticFilePath}` + "/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg"
+                    return `${staticFilePath}` + "/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg"
+                    return `${staticFilePath}` + "/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg"
+                    return `${staticFilePath}` + "/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg"
+                    return `${staticFilePath}` + "/sparkR_icon.svg"
                 } else {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                    return `${staticFilePath}` + "/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg"
+                return `${staticFilePath}` + "/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg"
+                return `${staticFilePath}` + "/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg"
+                return `${staticFilePath}` + "/output_index.svg"
             } else  {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                return `${staticFilePath}` + "/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

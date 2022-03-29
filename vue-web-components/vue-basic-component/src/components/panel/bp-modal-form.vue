@@ -5,13 +5,13 @@
                 <div class="close-button" @click="closeModal"></div>
             </div>
             <div class="bp-modal-submit-content">
-                <img class="submit-success-img" src="https://components.pharbers.com/dev/offweb/public/icon_success.svg" alt="success"/>
+                <img class="submit-success-img" :src="img1" alt="success"/>
                 <bp-text class="submit-success-text">{{translation_data.modalForm.submitSuccess}}</bp-text>
                 <bp-text class="submit-feedback-text">{{translation_data.modalForm.submitFeedback}}</bp-text>
             </div>
             <div class="form-submit-button-container" @click="closeModal">
                 <bp-button type='official-yellow-line-compact' density='compact' :text="translation_data.modalForm.ok"></bp-button>
-                <img class="button-go" src="https://components.pharbers.com/dev/offweb/public/icon_go.svg" alt="success"/>
+                <img class="button-go" :src="img2" alt="success"/>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
 
             <div class="form-submit-button-container" @click="submit">
                 <bp-button type='official-yellow-line-compact' density='compact' :text="translation_data.modalForm.submit"></bp-button>
-                <img class="button-go" src="https://components.pharbers.com/dev/offweb/public/icon_go.svg" alt="success"/>
+                <img class="button-go" :src="img3" alt="success"/>
             </div>
         </div>
     </div>
@@ -77,6 +77,7 @@
 import bpText from '../bp-text.vue'
 import bpButton from '../bp-button.vue'
 import bpInput from '../bp-input.vue'
+import { staticFilePath } from '../../config/envConfig'
 import bpTextarea from '../bp-textarea.vue'
 export default {
     components: {
@@ -101,7 +102,10 @@ export default {
             tag1: false,
             tag2: false,
             tag3: false,
-            intention: ''
+            intention: '',
+            img1: `${staticFilePath}` + "/icon_success.svg",
+            img2: `${staticFilePath}` + "/icon_go.svg",
+            img3: `${staticFilePath}` + "/icon_go.svg"
         }
     },
     props: {

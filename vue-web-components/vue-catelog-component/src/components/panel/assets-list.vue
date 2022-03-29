@@ -61,7 +61,7 @@ import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-
+import { staticFilePath, hostName } from '../../config/envConfig'
 import treeItem from '../tree-item'
 import util from '../util.vue'
 
@@ -80,8 +80,8 @@ export default {
             userName: util.methods.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
-            fileIconDark: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_my-data-dark.svg",
-            public_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/publicData.svg",
+            fileIconDark: `${staticFilePath}` + "/icon_my-data-dark.svg",
+            public_icon: `${staticFilePath}` + "/publicData.svg",
             goDetail: "查看详情",
             activeName: "second",
             dialogPbcVisible: false,
@@ -102,7 +102,7 @@ export default {
         }
     },
     async mounted() {
-        const url = "https://apiv2.pharbers.com/phgetgluetable"
+        const url = `${hostName}/phgetgluetable`
         const accessToken = this.getCookie("access_token")
         let body = {
             "glue_database_name": this.getCookie("company_id")
@@ -138,7 +138,7 @@ export default {
             if (arr = document.cookie.match(reg))
                 return (arr[2]);
             else
-                return "4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3";
+                return "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc";
         },
         showPbcData(data) {
             this.dialogPbcVisible = true

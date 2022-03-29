@@ -43,11 +43,13 @@
     </div>
 </template>
 <script>
+import { staticFilePath } from '../../config/envConfig'
+
 export default {
     data: ()=> {
         return {
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
-            error_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/error.svg",
+            prepare_icon: `${staticFilePath}` + "/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
+            error_icon: `${staticFilePath}` + "/icons/error.svg",
             rowParams: '[{"key": ["=", "value"]}]',
             colParams: '["col1", "col2"]',
             changeParams: "value"

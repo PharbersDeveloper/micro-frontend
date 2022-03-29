@@ -7,7 +7,7 @@
                 {{allData.projectName}}
                 </span>
                 <div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
-                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%8B%93%E5%B1%95.svg" alt="" class="expand">
+                    <img :src="img1" alt="" class="expand">
                     <nav class="expand_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
                         <ul>
                             <li @click="linkToPage('flow')">数据流程</li>
@@ -25,12 +25,15 @@
     </div>
 </template>
 <script>
+import { staticFilePath } from '../config/envConfig'
+
 export default {
     data() {
         return {
             expangPopup: false,
-            airflow: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Airflow_switch.svg",
-            home: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%BB%E9%A1%B5.svg"
+            airflow: `${staticFilePath}` + "/icons/Airflow_switch.svg",
+            home: `${staticFilePath}` + "/icons/%E4%B8%BB%E9%A1%B5.svg",
+            img1: `${staticFilePath}` + "/%E6%8B%93%E5%B1%95.svg" 
         }
     },
     components: {},

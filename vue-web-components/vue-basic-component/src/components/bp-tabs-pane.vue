@@ -35,6 +35,7 @@
 
 <script>
 import bpText from './bp-text'
+import { staticFilePath } from '../config/envConfig'
 import bpImg from './bp-img'
 export default {
     name: 'bpPane',
@@ -60,8 +61,8 @@ export default {
         return {
             index: null,
             loaded: false,
-            activityImg: "https://components.pharbers.com/dev/offweb/public/photo_events_2020-06-04_boyun_00030.jpg",
-            moreIcon: "https://components.pharbers.com/dev/offweb/public/icon_go.svg"
+            activityImg: `${staticFilePath}` + "/photo_events_2020-06-04_boyun_00030.jpg",
+            moreIcon: `${staticFilePath}` + "/icon_go.svg"
         };
     },
 

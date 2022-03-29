@@ -1,3 +1,5 @@
+import { hostName, actionTableName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeSelectFileEventHandler(e, route) {
 	let param = e.detail[0].args.param
@@ -93,7 +95,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					schema: ["count"],
 					projectId: param.projectId
 				}
-				let url = "https://apiv2.pharbers.com/phcheckversion"
+				let url = `${hostName}/phcheckversion`
 				let headers = {
 					Authorization: route.cookies.read("access_token"),
 					"Content-Type": "application/vnd.api+json",
@@ -154,13 +156,6 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 		projectId,
 		cat
 	) {
-		route.noticeService.defineAction({
-			type: "iot",
-			id: "uploadfiles",
-			projectId: projectId,
-			ownerId: route.cookies.read("account_id"),
-			callBack: noticeCallback
-		})
 		let uploadMessage = {}
 		uploadMessage.file = file
 		let pro_name = projectName.toLowerCase().replace(/[^a-z0-9]/gi, "")
@@ -190,6 +185,16 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 						projectId,
 						cat
 					)
+					route.noticeService.defineAction({
+						type: "iot",
+						id: res.tmpname,
+						remoteResource: "notification",
+						runnerId: "",
+						eventName: "uploadfiles",
+						projectId: projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: noticeCallback
+					})
 				}
 			}
 		}
@@ -236,7 +241,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			})
 		}
 		let actions_body = {
-			table: "action",
+			table: actionTableName,
 			item: {
 				projectId: projectId,
 				owner: route.cookies.read("access_token"),
@@ -254,7 +259,7 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 	}
 
 	async function postUrl(type, body) {
-		let url = "https://apiv2.pharbers.com/phdydatasource/"
+		let url = `${hostName}/phdydatasource/`
 		let headers = {
 			Authorization: route.cookies.read("access_token"),
 			"Content-Type": "application/vnd.api+json",

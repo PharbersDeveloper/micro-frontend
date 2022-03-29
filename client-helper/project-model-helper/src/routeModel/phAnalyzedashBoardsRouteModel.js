@@ -1,12 +1,14 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDashboardsRouteModel(route, parseParams) {
 	const debugToken =
-		"eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+		"943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
 	route.store.unloadAll("dashboard")
 	const projectId = parseParams.query.projectId
 	const projectName = parseParams.query.projectName
 
-	const url = "https://apiv2.pharbers.com/phdydatasource/query"
+	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token") || debugToken
 
 	const body = {

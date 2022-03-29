@@ -44,12 +44,13 @@
 
 <script>
 import selectVersion from "./select-version.vue"
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     data() {
         return{
             selectDataVersion: false,
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%8A%A0%E5%8F%B7.svg",
+            add_icon: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
             catalogName: ""
         }
     },

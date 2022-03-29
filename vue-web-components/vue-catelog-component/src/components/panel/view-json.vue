@@ -15,6 +15,7 @@
 <script>
 import JsonViewer from 'vue-json-viewer'
 import bpText from '../../../node_modules/vue-components/src/components/bp-text.vue'
+import { staticFilePath } from '../../config/envConfig'
 
 export default {
     components: {
@@ -23,7 +24,7 @@ export default {
     },
     data() {
         return {
-            closeIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg"
+            closeIcon: `${staticFilePath}` + "/icon_close.svg"
         }
     },
     props: {

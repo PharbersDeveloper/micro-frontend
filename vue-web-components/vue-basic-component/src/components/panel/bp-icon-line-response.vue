@@ -8,6 +8,8 @@
 
 <script>
 import bpImg from '../bp-img'
+import { staticFilePath } from '../../config/envConfig'
+
 export default {
     components: {
         bpImg
@@ -16,24 +18,24 @@ export default {
     data() {
         return {
             imgArr: [
-                "https://components.pharbers.com/dev/offweb/public/logo_pfizer_00.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_sanofi_01.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_novartis_02.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_astrazeneca_03.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_bayer_04.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_gilead_05.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_Jessen_08.png",
-                "https://components.pharbers.com/dev/offweb/public/servier_07.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_novo-nordisk_10.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_mylan_11.png",
-                "https://components.pharbers.com/dev/offweb/public/astellas_10.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_merck_13.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_msd_14.png",
-                "https://components.pharbers.com/dev/offweb/public/logo_lilly_15.png",
-                "https://components.pharbers.com/dev/offweb/public/Daiichi-Sankyo_14.png",
-                "https://components.pharbers.com/dev/offweb/public/Takeda_15.png",
-                "https://components.pharbers.com/dev/offweb/public/Salubris_16.png",
-                "https://components.pharbers.com/dev/offweb/public/Lmdbeck_17.png"
+                `${staticFilePath}` + "/logo_pfizer_00.png",
+                `${staticFilePath}` + "/logo_sanofi_01.png",
+                `${staticFilePath}` + "/logo_novartis_02.png",
+                `${staticFilePath}` + "/logo_astrazeneca_03.png",
+                `${staticFilePath}` + "/logo_bayer_04.png",
+                `${staticFilePath}` + "/logo_gilead_05.png",
+                `${staticFilePath}` + "/logo_Jessen_08.png",
+                `${staticFilePath}` + "/servier_07.png",
+                `${staticFilePath}` + "/logo_novo-nordisk_10.png",
+                `${staticFilePath}` + "/logo_mylan_11.png",
+                `${staticFilePath}` + "/astellas_10.png",
+                `${staticFilePath}` + "/logo_merck_13.png",
+                `${staticFilePath}` + "/logo_msd_14.png",
+                `${staticFilePath}` + "/logo_lilly_15.png",
+                `${staticFilePath}` + "/Daiichi-Sankyo_14.png",
+                `${staticFilePath}` + "/Takeda_15.png",
+                `${staticFilePath}` + "/Salubris_16.png",
+                `${staticFilePath}` + "/Lmdbeck_17.png"
             ]
         }
     }

@@ -37,6 +37,7 @@
 
 <script>
 import bpSelectVue from 'vue-components/src/components/bp-select-vue.vue'
+import { envUrl } from '../../config/envConfig'
 import bpOptionVue from 'vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
@@ -45,7 +46,7 @@ export default {
             version: "max1.0",
             dsName: "",
             format: "",
-            select_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg"
+            select_icon: `${envUrl}` + "/drop_down_icon.svg"
         }
     },
     components: {

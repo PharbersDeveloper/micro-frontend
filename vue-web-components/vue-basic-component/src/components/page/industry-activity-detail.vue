@@ -71,6 +71,7 @@
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpButton from '../bp-button'
+import { staticFilePath } from '../../config/envConfig'
 import bpPhoto from '../panel/bp-gallery-image'
 
 export default {
@@ -88,10 +89,10 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            headerImg: "https://components.pharbers.com/dev/offweb/public/photo_events_nanjing_2019-10-23_00001.jpg",
-            lineImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
-            headTest: "https://components.pharbers.com/dev/offweb/public/avatar_cl.png",
-            quotataion: "https://components.pharbers.com/dev/offweb/public/img_bg_view.svg",
+            headerImg: `${staticFilePath}` + "/photo_events_nanjing_2019-10-23_00001.jpg",
+            lineImg: `${staticFilePath}` + "/img_connect_line.svg",
+            headTest: `${staticFilePath}` + "/avatar_cl.png",
+            quotataion: `${staticFilePath}` + "/img_bg_view.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

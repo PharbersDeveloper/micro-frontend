@@ -1,3 +1,5 @@
+import { hostName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phcatelogProjectListEventHandler(e, route) {
     const params = e.detail[0].args.param
@@ -11,7 +13,7 @@ export async function phcatelogProjectListEventHandler(e, route) {
         case "cerateProject":
             console.log(params)
             if (params) {
-                let uri = "https://apiv2.pharbers.com/phcreateproject/projects"
+                let uri = `${hostName}/phcreateproject/projects`
                 let body = {
                     data: {
                         type: "projects",

@@ -1,11 +1,12 @@
 
 import { JsonApiDataStore } from "jsonapi-datastore"
+import { staticFilePath, hostName } from "../../config/envConfig"
 
 export default class PhTreeNodeAdapter {
     constructor(id) {
         this.id = id
         this.store = new JsonApiDataStore()
-        this.url = "https://apiv2.pharbers.com/"
+        this.url = `${hostName}/`
         this.debugToken = "e93301fe363280d0eae4518edc6771e07559361c7848fa7f695fb86dd770e986"
     }
 

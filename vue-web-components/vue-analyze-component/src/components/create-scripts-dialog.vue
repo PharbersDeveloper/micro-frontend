@@ -1,13 +1,13 @@
 <template>
     <div>
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="clear_dialog_container">
             <div class="dialog_area">
                <div class="header">
                     <div class="left">
                         <p class="dataset_name">新建 {{runtimeShow[runtime]}} 脚本</p>
                     </div>
-                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg" alt="" class="close_icon" @click="close">
+                    <img :src="img1" alt="" class="close_icon" @click="close">
                </div>
                <div class="prompt">
                     <div class="left">
@@ -130,11 +130,14 @@ import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import { staticFilePath } from '../config/envConfig'
+
 export default {
     data() {
         return{
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
-            search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+            img1: `${staticFilePath}` + "/icon_close.svg",
+            add_icon: `${staticFilePath}` + "/add.svg",
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
             datasetListShow: false,
             datasetOutputListShow: false, //显示选中的output
             searchInput: "",
@@ -142,9 +145,9 @@ export default {
             addDatasetList: [], //已经选中的输入数据
             remainDatasetList: [], //剩余未选中的输入数据
             remainDatasetListOutputs: [],  //剩余未选中的输出数据
-            sel_dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E7%BB%93%E6%9E%9CDS.svg",
-            del_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1).svg",
-            select_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
+            sel_dataset_icon: `${staticFilePath}` + "/%E7%BB%93%E6%9E%9CDS.svg",
+            del_icon: `${staticFilePath}` + "/%E5%88%A0%E9%99%A4+(1).svg",
+            select_icon: `${staticFilePath}` + "/drop_down_icon.svg",
             dsName: {
                 name: "",
                 id: ""

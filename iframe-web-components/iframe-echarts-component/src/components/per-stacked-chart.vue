@@ -6,6 +6,8 @@
 
 <script>
 import * as echarts from 'echarts'
+import { staticFilePath, hostName } from "../config/envConfig"
+
 export default {
     name: 'bubble',
     data: () => {
@@ -72,7 +74,7 @@ export default {
             }
         },
         async queryData() {
-            const url = "https://api.pharbers.com/phchproxyquery"
+            const url = `${hostName}/phchproxyquery`
             const accessToken = this.getCookie("access_token") || "e20cf44e818d6d07b04bb93745ae9f4b0bbb5477926ef8005008c845cbe68493"
             let body = {"query":"select max(sales) as maxsalex, avg(sales) as avgsales, avg(units) as avgunits, `标准省份名称` as province from phmax.data_wide where province != 'null' group by province","schema":["maxsalex","avgsales", "avgunits", "province"]}
             let options = {

@@ -20,10 +20,12 @@
 </template>
 
 <script>
+import { staticFilePath } from '../config/envConfig'
+
 export default {
     data() {
         return {
-            model_err: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/modal+header+error.svg"
+            model_err: `${staticFilePath}` + "/modal+header+error.svg"
         }
     },
     props: {

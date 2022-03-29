@@ -1,3 +1,5 @@
+import { hostName, actionTableName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzePrepareSetEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -39,7 +41,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 				let scriptsParams = JSON.parse(
 					unescape(decodeURI(params.message))
 				)
-				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const url = `${hostName}/phdydatasource/put_item`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
@@ -142,7 +144,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 					callBack: createScriptNoticeCallback
 				})
 				let scriptBody = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: scriptsParams.projectId,
 						owner: route.cookies.read("account_id"),

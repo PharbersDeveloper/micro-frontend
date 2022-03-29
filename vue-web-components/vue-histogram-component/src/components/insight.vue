@@ -145,7 +145,7 @@ export default {
         overflow: hidden;
     }
     .placeholder {
-        background: url(https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/images/dashboard-preview.png) border-box center no-repeat;
+        background: url(https://components.pharbers.com/dev/deploy/public/images/dashboard-preview.png) border-box center no-repeat;
     	background-size: contain;
         width: 100%;
         height: 100%;

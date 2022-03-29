@@ -1,3 +1,5 @@
+import { hostName, actionTableName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -52,7 +54,7 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 	}
 
 	function postUrl(type, body) {
-		const url = "https://apiv2.pharbers.com/phdydatasource/"
+		const url = `${hostName}/phdydatasource/`
 		let headers = {
 			Authorization: route.cookies.read("access_token"),
 			"Content-Type": "application/vnd.api+json",
@@ -102,13 +104,6 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 
 	async function createDataSetIndex(param) {
 		const eventName = "importfiles"
-		route.noticeService.defineAction({
-			type: "iot",
-			id: eventName,
-			projectId: params.projectId,
-			ownerId: route.cookies.read("account_id"),
-			callBack: EHnoticeCallback
-		})
 		route.loadingService.loading.style.display = "flex"
 		route.loadingService.loading.style["z-index"] = 2
 		param.opname = route.cookies.read("account_id")
@@ -122,7 +117,7 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 		//直接导入数据集
 		const push_type = "put_item"
 		const project_files_body = {
-			table: "action",
+			table: actionTableName,
 			item: {
 				projectId: param.projectId,
 				code: 0,
@@ -135,6 +130,16 @@ export async function phAnalyzeBpExcelHandlerEventHandler(e, route) {
 				showName: decodeURI(route.cookies.read("user_name_show"))
 			}
 		}
-		await postUrl(push_type, project_files_body)
+		const result = await postUrl(push_type, project_files_body)
+		route.noticeService.defineAction({
+			type: "iot",
+			id: result.data.id,
+			remoteResource: "notification",
+			runnerId: "",
+			eventName: eventName,
+			projectId: params.projectId,
+			ownerId: route.cookies.read("account_id"),
+			callBack: EHnoticeCallback
+		})
 	}
 }

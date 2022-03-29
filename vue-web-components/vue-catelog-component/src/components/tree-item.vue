@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/index.css">
+		<link rel="stylesheet" href="https://components.pharbers.com/element-ui/index.css">
 		<el-tree :data="this.adapter.exec(this.items)"
              @node-click="handleNodeClick"
              :render-content="renderNodeContent"

@@ -62,6 +62,8 @@
 import PhCodeditorDatasource from "./model/datasource"
 import phCodeditor from "./ph-codeditor"
 import AWS from "aws-sdk"
+// import { staticFilePath, hostName } from "../config/envConfig"
+
 export default {
     name: 'codeditor-page',
     components: {
@@ -72,10 +74,6 @@ export default {
             type: String,
             default: "脚本名称"
         },
-        // projectId: {
-        //     type: String,
-        //     default: "JfSmQBYUpyb4jsei"
-        // },
         jobId: {
             type: String,
             default: "1qaz4rfv"
@@ -84,10 +82,6 @@ export default {
             type: String,
             default: "developer"
         },
-        // jobName: {
-        //     type: String,
-        //     default: ""
-        // },
         datasource: {
             type: Object,
             default: function() {
@@ -110,9 +104,9 @@ export default {
         return {
             codeBuffer: "",
             downloadCode: 0,
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg",
-            icon1: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
-            icon2: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
+            python_icon: `${this.staticFilePath}` + "/icons/Python.svg",
+            icon1: `${this.staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
+            icon2: `${this.staticFilePath}` + "/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
             jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",
             projectId: "JfSmQBYUpyb4jsei",
             jobPath: "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
@@ -122,11 +116,16 @@ export default {
         let href = window.location.href
         console.log(href)
         let paramArr = href.split("?")[1].split("&")
-        this.projectId = paramArr[0].split("=")[1]
-        this.jobName = paramArr[1].split("=")[1]
-        let jobPathParam = paramArr[2].split("=")[1]
+        this.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+        this.jobName = this.getUrlParam(paramArr, "jobName")
+        let jobPathParam = this.getUrlParam(paramArr, "jobPathParam")
         this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
         this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
+		// 判断环境
+		let env = this.getUrlParam(paramArr, "environment")
+		this.checkENV(env)
         //父组件传进来的值
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
@@ -142,10 +141,22 @@ export default {
         }
     },
     methods: {
+		checnENV(env) {
+			if(env === "development") {
+				this.hostName = "https://apidev.pharbers.com"
+				this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
+			} else {
+				this.hostName = "https://apiv2.pharbers.com"
+				this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
+			}
+		},
+        getUrlParam(arr, value) {
+            let data = arr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         async queryData() {
-            // let url = "https://api.pharbers.com/phdadataquery"
-            let url = "https://apiv2.pharbers.com/phdadataquery"
-            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+            let url = `${this.hostName}/phdadataquery`
+            const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -171,9 +182,8 @@ export default {
                 return null;
         },
         async saveCode() {
-            // let url = "https://api.pharbers.com/phdadataupdata"
-            let url = "https://apiv2.pharbers.com/phdadataupdata"
-            const accessToken = this.getCookie("access_token") || "eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06"
+            let url = `${this.hostName}/phdadataupdata`
+            const accessToken = this.getCookie("access_token") || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,

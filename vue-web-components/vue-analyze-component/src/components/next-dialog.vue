@@ -45,10 +45,12 @@
 </template>
 
 <script>
+import { staticFilePath } from '../config/envConfig'
+
 export default {
     data() {
         return {
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop-down-icon.png",
+            dropDownIcon: `${staticFilePath}` + "/xiala.svg.svg",
             showDialog: false,
             newData: '', 
             newDataName: '',
@@ -246,7 +248,7 @@ export default {
             .icon {
                 position: absolute;
                 top: 4px;
-                right: 115px;
+                right: 120px;
                 // width: 26px; 
                 height: 18px;
                 img {

@@ -1,3 +1,4 @@
+import { staticFilePath, hostName } from "../../config/envConfig"
 
 export default class PhDataSource {
     constructor(id, tmpname, adapter) {
@@ -26,7 +27,7 @@ export default class PhDataSource {
 
     async buildQuery(ele, isAppend=false) {
         let that = this
-        const url = "https://apiv2.pharbers.com/schemaexplorer"
+        const url = `${hostName}/schemaexplorer`
         const accessToken = ele.getCookie("access_token") || "07c0c42a90d628b4ddbc74c8c72531aeb6813d32402b446e2a22a360dcf88023"
         console.log(this.tmpname)
         let body = {

@@ -1,6 +1,6 @@
 <template>
     <div class="upload-recipt">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="upload_dataset_container">
             <div class="info">
                 <div class="project_info_left">
@@ -18,12 +18,6 @@
                                                 <img :src="label_icon" alt="">
                                             </span>
                                             <p>标签</p>
-                                        </div>
-                                        <div class="label_icon border_none none" @click="clearDialogOpen">
-                                            <span>
-                                                <img :src="clear_data_icon" alt="">
-                                            </span>
-                                            <p >清除数据</p>
                                         </div>
                                         <div class="label_icon border_none" @click="deletedialogopen">
                                             <span>
@@ -43,26 +37,26 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
 								<!-- @click="selectScripts('python3')" -->
-                                <div class="list">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Python.svg" alt="">
-                                    <p class="dis">Python</p>
+                                <div class="list" @click="selectScripts('python3')">
+                                    <img :src="img1" alt="">
+                                    <p class="">Python</p>
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/PySpark.svg" alt="">
+                                    <img :src="img2" alt="">
                                     <p>PySpark</p>
                                 </div>
 								<!-- @click="selectScripts('r')" -->
                                 <div class="list" >
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R.svg" alt="">
+                                    <img :src="img3" alt="">
                                     <p  class="dis">R</p>
                                 </div>
 								<!-- @click="selectScripts('sparkr')" -->
                                 <div class="list" >
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/SparkR.svg" alt="">
+                                    <img :src="img4" alt="">
                                     <p  class="dis">SparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
-                                    <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E4%B8%8B%E8%BD%BD.svg" alt="">
+                                    <img :src="img5" alt="">
                                     <p  class="">Prepare</p>
                                 </div>
                             </div>
@@ -123,7 +117,7 @@
                                         </span>
                                     </div>
                                     <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src="https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -181,14 +175,6 @@
                     <p v-if="reciptcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-        <!-- 清除脚本数据 -->
-        <clear-recipt-dialog
-            v-if="cleardialogshow"
-            :reciptcheckedIds="reciptcheckedIds"
-            :reciptcheckedNames="reciptcheckedNames"
-            @clearTagsEvent="clearTags"
-            @closeClearDialog="closeClearDialog">
-        </clear-recipt-dialog>
         <!-- 删除脚本 -->
         <clear-delete
             v-if="deletedialogshow"
@@ -223,7 +209,6 @@
 </template>
 
 <script>
-import clearReciptDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog-script.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
@@ -231,32 +216,38 @@ import createScriptsDialog from './create-scripts-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
+import { staticFilePath } from '../config/envConfig'
 
 export default {
     data() {
         return {
-            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            copy_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/copy.svg",
-            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
-            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-            edit_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/edit.svg",
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            dropDownIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete.png",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/clear_data.png",
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            clear_data_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_b.svg",
-            ascending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/down.svg",
-            descending_order: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/top.svg",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script_select.svg",
-            prepare_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg",
-            pyspark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg",
-            python_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg",
+            hide_icon: `${staticFilePath}` + "/%E9%9A%90%E8%97%8F.svg",
+            copy_icon: `${staticFilePath}` + "/copy.svg",
+            star_icon: `${staticFilePath}` + "/%E6%94%B6%E8%97%8F.svg",
+            run_icon: `${staticFilePath}` + "/%E5%BC%80%E5%A7%8B1.svg",
+            edit_icon: `${staticFilePath}` + "/edit.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            search_icon: `${staticFilePath}` + "/search.png",
+            dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            delete_icon: `${staticFilePath}` + "/delete.png",
+            clear_data_icon: `${staticFilePath}` + "/clear_data.png",
+            selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
+            ascending_order: `${staticFilePath}` + "/down.svg",
+            descending_order: `${staticFilePath}` + "/top.svg",
+            script_icon: `${staticFilePath}` + "/script_select.svg",
+            prepare_icon: `${staticFilePath}` + "/script_select.svg",
+            prepare_icon: `${staticFilePath}` + "/prepare_icon.svg",
+            pyspark_icon: `${staticFilePath}` + "/pyspark_icon.svg",
+            python_icon: `${staticFilePath}` + "/python_icon.svg",
+            R_icon: `${staticFilePath}` + "/R_icon.svg",
+            sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
+            img1: `${staticFilePath}` + "/icons/Python.svg",
+            img2: `${staticFilePath}` + "/icons/PySpark.svg",
+            img3: `${staticFilePath}` + "/icons/R.svg",
+            img4: `${staticFilePath}` + "/icons/SparkR.svg",
+            img5: `${staticFilePath}` + "/icons/%E4%B8%8B%E8%BD%BD.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -299,107 +290,14 @@ export default {
             default: () => ({
                 "projectName": "ETL_Iterator",
                 "projectId": "JfSmQBYUpyb4jsei",
-                "dcs": [
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns/phjob.py",
-                        "jobName": "developer_FYMh8QYDX7FcUns_ETL_Iterator_ETL_Iterator_compute_weqw",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_weqw",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_weqw_FYMh8QYDX7FcUns",
-                        "jobId": "FYMh8QYDX7FcUns",
-                        "jobVersion": "weqw_version1",
-                        "outputs": "[{\"name\":\"weqw\", \"id\":\"6277ab179aaa405aa9dc408d5ce42a44\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    },
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE/phjob.py",
-                        "jobName": "developer_NBdN5esAxvuhFnE_ETL_Iterator_ETL_Iterator_compute_ss",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_ss",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\", \"cat\":\"input_index\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_ss_NBdN5esAxvuhFnE",
-                        "jobId": "NBdN5esAxvuhFnE",
-                        "jobVersion": "ss_version1",
-                        "outputs": "[{\"name\":\"ss\", \"id\":\"cb36ad3c0f3444c3a699b546a4e077a8\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    },
-                    {
-                        "flowVersion": "developer",
-                        "jobPath": "2020-11-11/jobs/python/phcli/ETL_Iterator_ETL_Iterator_developer/ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ/phjob.py",
-                        "jobName": "developer_na4WCUxbdERSeWZ_ETL_Iterator_ETL_Iterator_compute_3333",
-                        "version": null,
-                        "dagName": "ETL_Iterator",
-                        "jobShowName": "compute_3333",
-                        "inputs": "[{\"name\":\"test01\", \"id\":\"0884a2df032a4e07a6fac05cf96df517\"}]",
-                        "jobDisplayName": "ETL_Iterator_ETL_Iterator_developer_compute_3333_na4WCUxbdERSeWZ",
-                        "jobId": "na4WCUxbdERSeWZ",
-                        "jobVersion": "3333_version1",
-                        "outputs": "[{\"name\":\"3333\", \"id\":\"ce8b455328604e61bd0a86d34c075e35\"}]",
-                        "owner": "张璐",
-                        "projectId": "JfSmQBYUpyb4jsei",
-                        "runtime": "python3",
-                        "targetJobId": "[]",
-                        "timeout": "1000"
-                    }
-                ],
-                "dss": [
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": "max1.0",
-                        "name": "test01",
-                        "label": "",
-                        "cat": "input_index",
-                        "path": "/wer/wer"
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "3333",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "weqw",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    },
-                    {
-                        "projectId": null,
-                        "schema": "[]",
-                        "version": null,
-                        "name": "ss",
-                        "label": "",
-                        "cat": "normal",
-                        "path": ""
-                    }
-                ],
+                "dcs": [],
+                "dss": [],
                 "tagsArray": [],
                 "_isVue": true
             })
         }
     },
     components: {
-        clearReciptDialog,
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
@@ -607,10 +505,6 @@ export default {
         //关闭清除脚本弹框
         closeClearDialog() {
             this.cleardialogshow = false;
-        },
-        //打开清除脚本弹框
-        clearDialogOpen(){
-            this.cleardialogshow = true
         },
         //标签下拉框
         labelShow() {

@@ -1,6 +1,6 @@
 <template>
     <div class="ec-container">
-        <link rel="stylesheet" href="https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-ui.css">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="dataset_header">
             <img :src="dataset_icon" class="script_icon" alt="">
             {{allData.datasetName}}
@@ -14,14 +14,17 @@
                     {{totalNum}} rows, {{totalCols}} cols
                 </div>
             </div>
-            <div class="btn-groups">
-				<!-- @click="dialogDownloadVisible = true" 暂时禁用下载 -->
-                <button class="btn_chart" >下载当前筛选数据</button>
-                <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                    <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
-                    <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
-                    <bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
-                </bp-select-vue>
+            <div class="title-right">
+                <el-button @click="dataSampleVisible = true" class="data-version">数据样本配置</el-button>
+                <div class="btn-groups">
+                    <!-- @click="dialogDownloadVisible = true" 暂时禁用下载 -->
+                    <button class="btn_chart" >下载当前筛选数据</button>
+                    <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                        <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
+                        <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
+                        <bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
+                    </bp-select-vue>
+                </div>
             </div>
         </div>
         <div class="search-container">
@@ -134,7 +137,7 @@
                 <el-button type="primary" @click="on_clickSortConfirm">确认</el-button>
             </span>
         </el-dialog>
-
+        <!-- 下载 -->
         <el-dialog
             title="下载"
             :visible.sync="dialogDownloadVisible"
@@ -165,6 +168,52 @@
                 <el-button type="primary" @click="on_clickDownloadConfirm">确认</el-button>
             </span>
         </el-dialog>
+        <!-- 数据样本配置 -->
+        <el-dialog
+            title="数据样本配置"
+            :visible.sync="dataSampleVisible"
+            width="600px">
+            <div class="data-sample-container">
+                <div>
+                    <el-radio v-model="dataSampleType" label="数据量采样" class="title">数据量采样</el-radio>
+                    <div class="data-collection">
+                        <label for="dataCollectionMethods">样本采集方法</label>
+                        <select name="dataCollectionMethods" :disabled="dataCollectionDisabled" id="dataCollectionMethods" class="data-collection-methods">
+                            <option value="顺序">顺序</option>
+                            <option value="随机">随机</option>
+                        </select>
+                        <label for="dataCollectionNum">样本采集数量</label>
+                        <select name="dataCollectionNum" :disabled="dataCollectionDisabled" id="dataCollectionNum">
+                            <option value="顺序">10000</option>
+                            <option value="随机">20000</option>
+                            <option value="随机">50000</option>
+                            <option value="随机">100000</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <el-radio v-model="dataSampleType" label="数据版本采样" class="title">数据版本采样</el-radio>
+                    <div class="data-version">
+                        <div class="dlg-col-search-bar">
+                            <div class="dlg-col-search-input">
+                                <el-input :disabled="dataVersionDisabled" placeholder="搜索" ref="dataVersionSearch" v-model="dataVersionSearchValue" class="search_list" @input="on_dataVersionSearch(dataVersionSearchValue)"></el-input>
+                                <img :src="search_row" class="search_list_icon" alt="">
+                            </div>
+                        </div>
+                        <div class="dlg-col-cols">
+                            <div style="margin: 15px 0;"></div>
+                            <el-checkbox-group class="dlg-collection-list" v-model="collectionsPolicy.selectCollections" @change="on_handleCheckedColsChange">
+                                <el-checkbox class="checkbox" :disabled="dataVersionDisabled" v-for="col in dataVersionArrShow" :label="col" :key="col">{{col}}</el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dataSampleVisible = false">取消</el-button>
+                <el-button type="primary" @click="on_clickDataSample">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -174,12 +223,16 @@ import bpSelectVue from '../../node_modules/vue-components/src/components/bp-sel
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import PhDlgVersionController from './dlgController/dlgVersionController'
 import PhDlgCollectionController from './dlgController/dlgCollectionController'
+import phDlgSampleController from './dlgController/dlgSampleController.js'
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElCheckbox from 'element-ui/packages/checkbox/src/checkbox'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
+import ElRadio from 'element-ui/packages/radio/index'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
+import { staticFilePath, hostName } from '../config/envConfig'
+
 export default {
     data() {
         return {
@@ -187,21 +240,28 @@ export default {
             dialogSortVisible: false, //显示排序
             dialogCollectionVisible: false, //显示列
             dialogDownloadVisible: false, //显示下载
-            selectIcon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/drop_down_icon.svg",
+            selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
             showSelectOptionParam: false,
             closeTosts: false,
             totalNum: 0,
             matchNum: 0,
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/Database.svg",
-            close_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icon_close.svg",
+            dataset_icon: `${staticFilePath}` + "/Database.svg",
+            close_icon: `${staticFilePath}` + "/icon_close.svg",
             searchRow: "",
             searchList: "",
-            search_row: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%90%9C%E7%B4%A2.svg",
+            dataVersionSearchValue: "",
+            search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
             versionCandidatesShow: [],
             searchSort: "",
             expandPopup: false,
             tmpFilterRow: "version",
-            needRefresh: 0
+            needRefresh: 0,
+            dataSampleVisible: false,
+            dataSampleType: "",
+            dataVersionArr: ["col1", "col2", "col3", "col4"],
+            dataVersionArrShow: ["col1", "col2", "col3", "col4"],
+            dataVersionDisabled: true,
+            dataCollectionDisabled: true
         }
     },
     computed: {
@@ -217,7 +277,8 @@ export default {
         ElCheckboxGroup,
         ElButton,
         ElInput,
-        bpExcel
+        bpExcel,
+        ElRadio
     },
     props: {
         title: {
@@ -248,6 +309,12 @@ export default {
                 return new PhDlgCollectionController('1', this.schema.schema)
             }
         },
+        samplePolicy: {
+            type: Object,
+            default: function() {
+                return new phDlgSampleController('1')
+            }
+        },
         allData: {
             type: Object,
             default: function() {
@@ -259,9 +326,6 @@ export default {
                 }
             }
         }
-    },
-    beforeMount() {
-
     },
     mounted() {
         let uriParam = window.location.href.split("?")[1].split("&")
@@ -284,6 +348,9 @@ export default {
         }
     },
     methods: {
+        on_clickDataSample(n, o) {
+            debugger
+        },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
             data.args.param.projectName = this.allData.projectName
@@ -389,6 +456,14 @@ export default {
             this.collectionsPolicy.sortCollections = []
             this.collectionsPolicy.clearShownCollectionFilter()
         },
+        //数据版本搜索
+        on_dataVersionSearch(val) {
+            if (val.length > 0)
+                this.dataVersionArrShow = this.dataVersionArr.filter(x => x.indexOf(val) > -1)
+            else {
+                this.dataVersionArrShow = this.dataVersionArr
+            }
+        },
         //sort取消
         on_clickSortCancel() {
             this.dialogSortVisible = false
@@ -434,6 +509,16 @@ export default {
         }
     },
     watch: {
+        dataSampleType(n, o) {
+            if (n === "数据量采集") {
+                this.dataVersionDisabled = true
+                this.dataCollectionDisabled = false
+
+            } else {
+                this.dataCollectionDisabled = true
+                this.dataVersionDisabled = false
+            }
+        },
         needRefresh(n, o) {
             const length = this.allData.schemaArr.length
             this.schema.resetSchema(this.allData.schemaArr, this.allData.schemaArrType, Array(length).fill(118))
@@ -441,7 +526,7 @@ export default {
             this.datasource.name = this.allData.datasetName
             this.datasource.projectId = this.allData.projectId
             if (this.datasource.projectId.length > 0)
-                this.datasource.resetUrl("https://apiv2.pharbers.com/phdadatasource")
+                this.datasource.resetUrl(`${hostName}/phdadatasource`)
         },
         // 首次加载触发，请求Excel数据
         'allData.schemaArr'(n, o) {
@@ -485,12 +570,6 @@ export default {
 };
 </script>
 <style lang="scss">
-    @font-face {
-        font-family: element-icons;
-        src: url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.woff') format('woff'), url('https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/element-ui/element-icons.ttf') format('truetype');
-        font-weight: 400;
-        font-style: normal;
-    }
     .el-dialog__wrapper {
         background: rgba(0, 0, 0, 0.31);
     }
@@ -568,6 +647,18 @@ export default {
                     letter-spacing: 0.1px;
                     font-weight: 600;
                     margin-top: 7px;
+                }
+            }
+            .title-right {
+                display: flex;
+                align-items: center;
+                .data-version {
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    background: #5342B3;
+                    color: #fff;
+                    margin-right: 20px;
                 }
             }
             .btn-groups {
@@ -789,6 +880,40 @@ export default {
             width: 70px;
             text-align: right;
             padding-right: 20px;
+        }
+    }
+    .data-sample-container {
+        display: flex;
+        flex-direction: column;
+        .title {
+            color: #303133;
+            .el-radio__label {
+                font-size: 16px;
+            }
+        }
+        .data-collection {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 100px;
+            margin-bottom: 60px;
+            .data-collection-methods {
+                margin-bottom: 40px;
+            }
+            label {
+                color: #303133;
+                margin-bottom: 6px;
+            }
+            select {
+                height: 32px;
+            }
+        }
+        .data-version {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 100px;
+            .dlg-collection-list {
+                max-height: 100px;
+            }
         }
     }
 </style>

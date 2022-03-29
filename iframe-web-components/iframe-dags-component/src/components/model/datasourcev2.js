@@ -1,3 +1,4 @@
+import { staticFilePath, hostName } from "../../config/envConfig"
 
 export default class PhDagDatasource {
     constructor(id, adapter, url) {
@@ -7,14 +8,14 @@ export default class PhDagDatasource {
         this.name = "prod_clean_v2"
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3'
+        this.debugToken = '943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
     }
 
     buildQuery(ele, isAppend=false) {
-        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "dag",
@@ -40,7 +41,7 @@ export default class PhDagDatasource {
 
     //查询version
     buildDistinctColQuery(ele, col) {
-        const url = "https://apiv2.pharbers.com/phdadatasource"
+        const url = `${hostName}/phdadatasource`
         function buildDistinctColSql() {
             let sql_str = "SELECT DISTINCT " + col
 

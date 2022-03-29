@@ -38,14 +38,15 @@
 </template>
 
 <script>
+import { envUrl } from '../../config/envConfig'
 export default {
     data() {
         return{
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            search_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/search.png",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            add_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/add.svg",
-            enter_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/components.pharbers.com/enter.svg",
+            label_icon: `${envUrl}` + "/tag.svg",
+            search_icon: `${envUrl}` + "/search.png",
+            delete_icon: `${envUrl}` + "/delete_r.svg",
+            add_icon: `${envUrl}` + "/add.svg",
+            enter_icon: `${envUrl}` + "/enter.svg",
             // tagList: ['lalalal','12345','nxjksdcjk','啦啦啦啦'],
             searchValue: '', 
             ent: false

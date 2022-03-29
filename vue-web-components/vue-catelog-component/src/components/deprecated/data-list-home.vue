@@ -146,19 +146,20 @@
 </template>
 
 <script>
+import { envUrl } from '../../config/envConfig'
 export default {
     data() {
         return {
-            dataset_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/datasets.png",
-            recipes_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/recipes.png",
-            models_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/models.png",
-            notebook_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/notebooks.png",
-            analyses_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/analyses.png",
-            dashboard_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/dashboard.png",
-            article_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/articles.png",
-            num_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/num_icon.png",
-            file_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/file.png",
-            script_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/script.png",
+            dataset_icon: `${envUrl}` + "/datasets.png",
+            recipes_icon: `${envUrl}` + "/recipes.png",
+            models_icon: `${envUrl}` + "/models.png",
+            notebook_icon: `${envUrl}` + "/notebooks.png",
+            analyses_icon: `${envUrl}` + "/analyses.png",
+            dashboard_icon: `${envUrl}` + "/dashboard.png",
+            article_icon: `${envUrl}` + "/articles.png",
+            num_icon: `${envUrl}` + "/num_icon.png",
+            file_icon: `${envUrl}` + "/file.png",
+            script_icon: `${envUrl}` + "/script.png",
             optionsMap: {
                 "intermediate": "创建了脚本",
                 "transform_schema": "编辑了数据集",
@@ -317,26 +318,26 @@ export default {
             let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/prepare_icon.svg"
+                    return `${envUrl}` + "/prepare_icon.svg"
                 } else if(msg.runtime === "python3") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/python_icon.svg"
+                    return `${envUrl}` + "/python_icon.svg"
                 } else if(msg.runtime === "pyspark") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/pyspark_icon.svg"
+                    return `${envUrl}` + "/pyspark_icon.svg"
                 } else if(msg.runtime === "r") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/R_icon.svg"
+                    return `${envUrl}` + "/R_icon.svg"
                 } else if(msg.runtime === "sparkr") {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/sparkR_icon.svg"
+                    return `${envUrl}` + "/sparkR_icon.svg"
                 } else {
-                    return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                    return `${envUrl}` + "/intermediate.svg"
                 }
             } else if(cat === "upload" || cat === "transform_schema") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/normal.svg"
+                return `${envUrl}` + "/normal.svg"
             } else if(cat === "max1.0" && msg.cat === "input_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/input_index.svg"
+                return `${envUrl}` + "/input_index.svg"
             } else if(cat === "max1.0" && msg.cat === "output_index") {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/output_index.svg"
+                return `${envUrl}` + "/output_index.svg"
             } else  {
-                return "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/intermediate.svg"
+                return `${envUrl}` + "/intermediate.svg"
             }
         },
         isSameDay(timeStampA, timeStampB) {

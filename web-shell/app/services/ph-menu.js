@@ -6,7 +6,7 @@ export default class PhMenuService extends Service {
 	@service store
 
 	// 分离测试环境
-	get clientId() {
+	get queryClientId() {
 		if (ENV.environment === "development") {
 			return ENV.APP.clientId + "_dev"
 		} else {
@@ -15,9 +15,9 @@ export default class PhMenuService extends Service {
 	}
 
 	async queryLayoutByClient() {
-		let layout = this.store.peekRecord("layout", this.clientId)
+		let layout = this.store.peekRecord("layout", this.queryClientId)
 		if (layout === null) {
-			layout = await this.store.findRecord("layout", this.clientId)
+			layout = await this.store.findRecord("layout", this.queryClientId)
 		}
 		return layout
 	}
@@ -27,7 +27,7 @@ export default class PhMenuService extends Service {
 		pages = pages.filter((_) => true)
 		if (pages.length === 0) {
 			pages = await this.store.query("page", {
-				"filter[clientId]": this.clientId
+				"filter[clientId]": this.queryClientId
 			})
 			pages = pages.filter((_) => true)
 		}

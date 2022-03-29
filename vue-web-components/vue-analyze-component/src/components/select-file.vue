@@ -65,6 +65,7 @@
 import nextDialog from './next-dialog'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import { staticFilePath, hostName } from '../config/envConfig'
 
 export default {
     data() {
@@ -128,7 +129,7 @@ export default {
                 return false
             }
             const accessToken = this.getCookie("access_token") || "eec9e7b5a49cff20a893307d8de8bd7ed29b761b82b8ecc0db0fe63aaad7efbc"
-            const url = "https://api.pharbers.com/phdatoefs"
+            const url = `${hostName}/phdatoefs`
             let body = {
                 "bucket": "ph-platform",
                 "key": key,

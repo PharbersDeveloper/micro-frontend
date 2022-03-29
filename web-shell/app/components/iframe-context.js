@@ -3,6 +3,8 @@ import { action } from "@ember/object"
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking'
 import { camelize } from "@ember/string"
+import ENV from "web-shell/config/environment"
+
 
 export default class IframeContextComponent extends Component {
 	@service router
@@ -14,6 +16,10 @@ export default class IframeContextComponent extends Component {
     @service('loading') loadingService
 	@service("execution-status") noticeService
 	@tracked allData
+
+	get environment() {
+		return ENV.environment
+	}
 
 	@action
 	async listener(e) {
@@ -28,17 +34,21 @@ export default class IframeContextComponent extends Component {
 			//dag实时
 			this.noticeService.defineAction({
 				type: "iot",
-				timeout: 60 * 60 * 5,
-				id: event.data.message.dagRunCmd,
-				projectId: this.args.allData.data.projectId,
+				remoteResource: "notification",
+				runnerId: "",
+				id: event.data.message.notification.id,
+				eventName: event.data.message.notification.eventName,
+				projectId: event.data.message.notification.projectId,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.runDagCallback
 			})
 			//dag整体
 			this.noticeService.defineAction({
 				type: "iot",
-				timeout: 60 * 60 * 5,
-				id: event.data.message.dagExecutionCmd,
+				remoteResource: "executionStatus",
+				runnerId: event.data.message.executionStatus.runnerId,
+				id: this.args.allData.data.projectId + "_" + this.cookies.read("account_id"),
+				eventName: event.data.message.executionStatus.eventName,
 				projectId: this.args.allData.data.projectId,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.executionStatusCallback
@@ -83,7 +93,7 @@ export default class IframeContextComponent extends Component {
 		window.addEventListener('message', this.iframeEvent)
 		this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
-		console.log(element.allData.data)
+		console.log(element.allData)
 		element.addEventListener("event", this.listener)
 		document.domain = "pharbers.com"
 	}

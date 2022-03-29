@@ -115,10 +115,11 @@
 import * as d3_base from "d3";
 import * as d3_dag from "d3-dag";
 import PhDagDatasource from './model/datasourcev2'
-import noticeService from './model/notice-service'
+// import noticeService from './model/notice-service'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     data: () => {
@@ -127,27 +128,27 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            icon_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg",
-            label_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/tag.svg",
-            table_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
-            star_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E6%94%B6%E8%97%8F.svg",
-            doc_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/new-document-dashboard.svg",
-            share_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/share.svg",
-            delete_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/delete_r.svg",
-            del_icon_black: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%88%A0%E9%99%A4+(1)(1).svg",
-            hide_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E9%9A%90%E8%97%8F.svg",
-            py_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg",
-            pySpark_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg",
-            R_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg",
-            sparkR_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
-            run_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/%E5%BC%80%E5%A7%8B1.svg",
-            run_to_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_from_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
-            run_script: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
-            run_from_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            run_to_script_gray: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            stop_icon: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/%E5%81%9C%E6%AD%A2.svg",
+            icon_header: `${staticFilePath}` + "/icons/DSuploaded.svg",
+            label_icon: `${staticFilePath}` + "/tag.svg",
+            table_icon: `${staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
+            star_icon: `${staticFilePath}` + "/%E6%94%B6%E8%97%8F.svg",
+            doc_icon: `${staticFilePath}` + "/new-document-dashboard.svg",
+            share_icon: `${staticFilePath}` + "/share.svg",
+            delete_icon: `${staticFilePath}` + "/delete_r.svg",
+            del_icon_black: `${staticFilePath}` + "/%E5%88%A0%E9%99%A4+(1)(1).svg",
+            hide_icon: `${staticFilePath}` + "/%E9%9A%90%E8%97%8F.svg",
+            py_icon: `${staticFilePath}` + "/icons/python%E6%AD%A3%E5%B8%B8.svg",
+            pySpark_icon: `${staticFilePath}` + "/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg",
+            R_icon: `${staticFilePath}` + "/icons/R%E6%AD%A3%E5%B8%B8.svg",
+            sparkR_icon: `${staticFilePath}` + "/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
+            run_icon: `${staticFilePath}` + "/%E5%BC%80%E5%A7%8B1.svg",
+            run_to_script: `${staticFilePath}` + "/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_from_script: `${staticFilePath}` + "/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
+            run_script: `${staticFilePath}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
+            run_script_gray: `${staticFilePath}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
+            run_from_script_gray: `${staticFilePath}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            run_to_script_gray: `${staticFilePath}` + "/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
+            stop_icon: `${staticFilePath}` + "/icons/%E5%81%9C%E6%AD%A2.svg",
             selectItem: null,
             showRunJson: false,
             runId: "",
@@ -178,28 +179,28 @@ export default {
                 return new PhDagDatasource('1')
             }
         },
-        noticeService: {
-            type: Object,
-            default: function() {
-                return new noticeService('1')
-            }
-        },
+        // noticeService: {
+        //     type: Object,
+        //     default: function() {
+        //         return new noticeService('1')
+        //     }
+        // },
         statusFlagsHeader: {
             type: Object,
             default: function() {
                 return {
-                    DSuploaded_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded%E5%8F%8D%E8%89%B2.svg",
-                    DSIntermediate_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate%E5%8F%8D%E8%89%B2.svg",
-                    input_index_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in%E5%8F%8D%E8%89%B2.svg",
-                    output_index_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out%E5%8F%8D%E8%89%B2.svg",
-                    python3_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%8F%8D%E8%89%B2.svg",
-                    pyspark_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%8F%8D%E8%89%B2.svg",
-                    sparkr_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
-                    r_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%8F%8D%E8%89%B2.svg",
-                    dataset_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png",
-                    job_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png",
-                    prepare_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%8F%8D%E8%89%B2.svg",
-                    catalog_header: "https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
+                    DSuploaded_header: `${staticFilePath}` + "/icons/DSuploaded%E5%8F%8D%E8%89%B2.svg",
+                    DSIntermediate_header: `${staticFilePath}` + "/icons/DSIntermediate%E5%8F%8D%E8%89%B2.svg",
+                    input_index_header: `${staticFilePath}` + "/icons/max_1.0_in%E5%8F%8D%E8%89%B2.svg",
+                    output_index_header: `${staticFilePath}` + "/icons/max_1.0_out%E5%8F%8D%E8%89%B2.svg",
+                    python3_header: `${staticFilePath}` + "/icons/python%E5%8F%8D%E8%89%B2.svg",
+                    pyspark_header: `${staticFilePath}` + "/icons/Pyspark%E5%8F%8D%E8%89%B2.svg",
+                    sparkr_header: `${staticFilePath}` + "/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
+                    r_header: `${staticFilePath}` + "/icons/R%E5%8F%8D%E8%89%B2.svg",
+                    dataset_header: `${staticFilePath}` + "/WX20211019-173847.png",
+                    job_header: `${staticFilePath}` + "/WX20211019-163226.png",
+                    prepare_header: `${staticFilePath}` + "/icons/prepare%E5%8F%8D%E8%89%B2.svg",
+                    catalog_header: `${staticFilePath}` + "/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
                 }
             }
         },
@@ -209,99 +210,99 @@ export default {
                 return [
                     {
                         name: 'DSuploaded',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSuploaded.svg'
+                        symbol: `${staticFilePath}` + '/icons/DSuploaded.svg'
                     },
                     {
                         name: 'DSIntermediate',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/DSIntermediate.svg'
+                        symbol: `${staticFilePath}` + '/icons/DSIntermediate.svg'
                     },
                     {
                         name: 'Python3',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${staticFilePath}` + '/icons/python%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'Python3_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${staticFilePath}` + '/icons/python%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'Python3_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/python%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${staticFilePath}` + '/icons/python%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'PySpark',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${staticFilePath}` + '/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'PySpark_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${staticFilePath}` + '/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'PySpark_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${staticFilePath}` + '/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: "PySpark_running",
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/Pyspark%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
+                        symbol: `${staticFilePath}` + '/icons/Pyspark%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
                     },
                     {
                         name: 'SparkR',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${staticFilePath}` + '/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'SparkR_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${staticFilePath}` + '/icons/sparkR%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'SparkR_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${staticFilePath}` + '/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'R',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${staticFilePath}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'R_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${staticFilePath}` + '/icons/R%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'R_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${staticFilePath}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'prepare',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%B8%B8.svg'
+                        symbol: `${staticFilePath}` + '/icons/prepare%E6%AD%A3%E5%B8%B8.svg'
                     },
                     {
                         name: 'prepare_succeed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%88%90%E5%8A%9F.svg'
+                        symbol: `${staticFilePath}` + '/icons/prepare%E6%88%90%E5%8A%9F.svg'
                     },
                     {
                         name: 'prepare_failed',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
+                        symbol: `${staticFilePath}` + '/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
                         name: 'prepare_running',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/prepare%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
+                        symbol: `${staticFilePath}` + '/icons/prepare%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
                     },
                     {
                         name: 'job',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-163226.png'
+                        symbol: `${staticFilePath}` + '/WX20211019-163226.png'
                     },
                     {
                         name: 'dataset',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/WX20211019-173847.png'
+                        symbol: `${staticFilePath}` + '/WX20211019-173847.png'
                     },
                     {
                         name: 'DSInputIndex',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_in.svg'
+                        symbol: `${staticFilePath}` + '/icons/max_1.0_in.svg'
                     },
                     {
                         name: 'DSOutputIndex',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/max_1.0_out.svg'
+                        symbol: `${staticFilePath}` + '/icons/max_1.0_out.svg'
                     },
                     {
                         name: 'DSCatalog',
-                        symbol: 'https://s3.cn-northwest-1.amazonaws.com.cn/general.pharbers.com/icons/catalog_icon.svg'
+                        symbol: `${staticFilePath}` + '/icons/catalog_icon.svg'
                     }
                 ]
             }
@@ -314,6 +315,9 @@ export default {
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+		// 判断环境
+		let env = this.getUrlParam(paramArr, "environment")
+		this.checkENV(env)
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.handleMessage)
@@ -324,6 +328,15 @@ export default {
         window.removeEventListener('message', this.handleMessage)
     },
     methods: {
+		checkENV(env) {
+			if(env === "development") {
+				this.hostName = "https://apidev.pharbers.com"
+				this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
+			} else {
+				this.hostName = "https://apiv2.pharbers.com"
+				this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
+			}
+		},
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
@@ -406,7 +419,7 @@ export default {
         async confirmeRunDag(data) {
             this.loading = true
             this.showProgress = false
-            const url = `https://apiv2.pharbers.com/phdagtrigger`
+            const url = `${hostName}/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
             confData.ownerId = this.getCookie("account_id") || "5UBSLZvV0w9zh7-lZQap"
@@ -439,8 +452,16 @@ export default {
             console.info(runnerId)
             window.parent.postMessage({
                 message: {
-                    dagRunCmd: this.registerJobEventName,
-                    dagExecutionCmd: "executionStatus" + runnerId
+                    notification: {
+                        eventName: this.registerJobEventName,
+                        projectId: results.data.dag_id, // results.data.
+                        id: results.data.run_id
+
+                    },
+                    executionStatus: {
+                        runnerId: results.data.dag_run_id,
+                        eventName: "executionStatus" + runnerId
+                    }
                 }
             }, '*')
             this.showRunJson = false
@@ -530,7 +551,7 @@ export default {
             console.log("responseArr", this.responseArr)
             console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr.message).cnotification.runId
-            const url = `https://apiv2.pharbers.com/phdagtasktrigger`
+            const url = `${hostName}/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,

@@ -1,3 +1,5 @@
+import { hostName, actionTableName } from "../config/envConfig"
+
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
@@ -36,13 +38,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 			route.router.transitionTo(uri)
 			break
 		case "changeSchemaType":
-			route.noticeService.defineAction({
-				type: "iot",
-				id: eventName,
-				projectId: params.projectId,
-				ownerId: route.cookies.read("account_id"),
-				callBack: changeSchemaTypeCallback
-			})
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
 				let cstParam = e.detail[0].args.param
@@ -52,9 +47,9 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					cstParam.itemValueType === "Number"
 						? "Double"
 						: cstParam.itemValueType
-				const url = "https://apiv2.pharbers.com/phdydatasource/put_item"
+				const url = `${hostName}/phdydatasource/put_item`
 				let body = {
-					table: "action",
+					table: actionTableName,
 					item: {
 						projectId: cstParam.projectId,
 						code: 0,
@@ -90,7 +85,19 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				await fetch(url, options).then((res) => res.json())
+				const result = await fetch(url, options).then((res) =>
+					res.json()
+				)
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: result.data.id,
+					eventName: eventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: changeSchemaTypeCallback
+				})
 			}
 			break
 		default:

@@ -91,6 +91,7 @@ import bpImg from '../bp-img'
 import bpButton from '../bp-button'
 import navTop from '../panel/bp-nav-top'
 import navTopRes from '../panel/bp-nav-top-response'
+import { staticFilePath } from '../../config/envConfig'
 import bpPageBottom from '../panel/bp-page-bottom'
 export default {
     name: "",
@@ -109,12 +110,12 @@ export default {
             windowHeight: document.documentElement.clientHeight,
             response: false,
             responseMini: false,
-            rwContentImg: "https://components.pharbers.com/dev/offweb/public/img_detail-page_head_realwr.jpg",
-            rwConnectImg: "https://components.pharbers.com/dev/offweb/public/img_connect_line.svg",
-            rwCardAImg :"https://components.pharbers.com/dev/offweb/public/img_realwr_cover_00.png",
-            rwTextBImg: "https://components.pharbers.com/dev/offweb/public/img_realwr_info_01.png",
-            rwAdvantageImg: "https://components.pharbers.com/dev/offweb/public/img_bg_doublehexagon.svg",
-            rwCardIcon: "https://components.pharbers.com/dev/offweb/public/icon_point.svg",
+            rwContentImg: `${staticFilePath}` + "/img_detail-page_head_realwr.jpg",
+            rwConnectImg: `${staticFilePath}` + "/img_connect_line.svg",
+            rwCardAImg :`${staticFilePath}` + "/img_realwr_cover_00.png",
+            rwTextBImg: `${staticFilePath}` + "/img_realwr_info_01.png",
+            rwAdvantageImg: `${staticFilePath}` + "/img_bg_doublehexagon.svg",
+            rwCardIcon: `${staticFilePath}` + "/icon_point.svg",
             translation_basedata: {
                 cn: {
                     home: "主页",

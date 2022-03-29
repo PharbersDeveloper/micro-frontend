@@ -1,4 +1,6 @@
 
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 export default class PhDagDatasource {
     constructor(id, adapter) {
         this.id = id
@@ -8,7 +10,7 @@ export default class PhDagDatasource {
         this.jobArr = []
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '4a97adc2cbcdf0257a8c86979dcdf1c77d50bb3eec883698063e5d4bbcbef9a3'
+        this.debugToken = '943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc'
 
         if (!adapter)
             this.adapter = this.defaultAdapter
@@ -66,7 +68,7 @@ export default class PhDagDatasource {
 
 
     buildQuery(ele, isAppend=false) {
-        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         // const accessToken = this.debugToken
         let body = {

@@ -1,4 +1,6 @@
 
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 export default class PhContainerDataSource {
     constructor(id, adapter, url) {
         this.id = id
@@ -11,10 +13,10 @@ export default class PhContainerDataSource {
         // this.schema = []
         // this.cols = this.schema
         if (!url)
-            this.url= "https://api.pharbers.com/phchproxyquery"
+            this.url= `${hostName}/phchproxyquery`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "4623e7829ff4275b94f277dc8638d53eb1f67d396a3551dd6a74cc65aa0ca2d9"
+        this.debugToken = "72ec7c76e4af6be7f0498ffd480b43345861b40d44641ab3a68a68eb95ed7f1c"
     }
 
     resetUrl(url) {
@@ -272,7 +274,7 @@ export default class PhContainerDataSource {
             // sql_str = sql_str + " OFFSET " + (page * ele.datasource.batch_size).toString()
             return sql_str
         }
-        const url = "https://apiv2.pharbers.com/phdadownload"
+        const url = `${hostName}/phdadownload`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "sql": buildDownloadQueryString(),

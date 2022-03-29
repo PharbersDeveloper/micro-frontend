@@ -1,8 +1,10 @@
 
+import { staticFilePath, hostName } from "../../config/envConfig"
+
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, flowVersion, jobName) {
         this.id = id
-        this.debugToken = 'eada79ed5c7cc86b2008345886689f47db798c29a53c550753d0fd60bc729a06'
+        this.debugToken = '943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -27,7 +29,7 @@ export default class PhCodeditorDatasource {
     }
 
     buildQuery(ele, isAppend=false) {
-        const url = "https://apiv2.pharbers.com/phdydatasource/query"
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             "table": "dagconf",
