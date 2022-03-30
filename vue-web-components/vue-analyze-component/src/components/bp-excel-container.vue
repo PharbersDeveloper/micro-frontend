@@ -17,8 +17,7 @@
             <div class="title-right">
                 <el-button @click="dataSampleVisible = true" :disabled="allData.datasetCat != 'intermediate'" class="data-version">数据样本配置</el-button>
                 <div class="btn-groups">
-                    <!-- @click="dialogDownloadVisible = true" 暂时禁用下载 -->
-                    <button class="btn_chart" >下载当前筛选数据</button>
+                    <button class="btn_chart" @click="dialogDownloadVisible = true" disabled>下载当前筛选数据</button>
                     <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                         <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
                         <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
@@ -460,7 +459,8 @@ export default {
                     "projectName": this.allData.projectName,
                     "projectId": this.allData.projectId,
                     "targetDataset": this.allData.targetDataset,
-                    "sample": sample
+                    "sample": sample,
+					"datasetVersion": this.versionFilterPolicy.versionCandidates[0]["version"]
                 }
             }
             this.$emit('event', event)
@@ -637,15 +637,25 @@ export default {
         'allData.schemaArr'(n, o) {
             this.needRefresh++
         },
+		//sample请求数据
+		dataSampleVisible(n, o) {
+			let that = this
+            if (this.versionCandidatesShow.length === 0) {
+                that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
+                    //完整的显示行列表数据
+                    that.versionCandidatesShow = data
+                    that.versionFilterPolicy.versionCandidates = data
+                })
+            }
+		},
         //显示行请求接口
         dialogVersionFilterVisible(n, o) {
             let that = this
             if (this.versionCandidatesShow.length === 0) {
-                // that.datasource.queryDlgDistinctCol(this, "`version`").then((provinces) => {
-                that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((provinces) => {
+                that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
                     //完整的显示行列表数据
-                    that.versionCandidatesShow = provinces
-                    that.versionFilterPolicy.versionCandidates = provinces
+                    that.versionCandidatesShow = data
+                    that.versionFilterPolicy.versionCandidates = data
                 })
             }
         },

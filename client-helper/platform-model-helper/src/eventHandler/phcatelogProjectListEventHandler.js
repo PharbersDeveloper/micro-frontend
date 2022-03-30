@@ -23,7 +23,7 @@ export async function phcatelogProjectListEventHandler(e, route) {
                             type: "paas"
                         },
                         relationships: {
-                            owner: {
+                            project: {
                                 data: {
                                     type: "resources",
                                     id: params.id

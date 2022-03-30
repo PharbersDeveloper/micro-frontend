@@ -27,23 +27,25 @@
                             <div class="left-text">
                                 <img :src="fileIconDark" class="file-icon-dark" alt="">
                                 <div class="text-area" >
-                                    <bp-text class="title">{{file.attributes.name}}</bp-text>
+                                    <bp-text class="title">{{file.name}}</bp-text>
                                     <bp-text class="subtitle">{{file.provider}}</bp-text>
                                 </div>
                             </div>
-                            <!-- <bp-text class="subtitle right-text">{{formatDateStandard(file.attributes.created,0)}}</bp-text> -->
-                            <bp-text class="subtitle right-text">{{file.attributes.created}}</bp-text>
+                            <bp-text class="subtitle right-text">{{formatDateStandard(file.created,0)}}</bp-text>
+                            <!-- <bp-text class="subtitle right-text">{{file.created}}</bp-text> -->
                         </div>
                     </template>
                     <div v-if="!toggle" class="project-card">
                         <div class="project-card-item" v-for="(file,index) in allData.projects" :key="index+'card'" @click="linkToPage(file)">
                             <div class="text-area" >
-                                <bp-text class="title">{{file.attributes.name}}</bp-text>
-                                <bp-text class="subtitle">{{file.attributes.provider}}</bp-text>
+                                <bp-text class="title">{{file.name}}</bp-text>
+                                <bp-text class="subtitle">{{file.provider}}</bp-text>
                             </div>
                             <div class="last-date">
-                                <!-- <bp-text class="subtitle bottom-text">{{formatDateStandard(file.attributes.created,0)}}</bp-text> -->
-                                <bp-text class="subtitle right-text">{{file.attributes.created}}</bp-text>
+                                <bp-text class="subtitle right-text">
+									{{formatDateStandard(file.created,0)}}
+								</bp-text>
+                                <!-- <bp-text class="subtitle right-text">{{file.created}}</bp-text> -->
                             </div>
                         </div>
                     </div>
@@ -63,7 +65,7 @@
                 <div class="deploy">
                     <span>资源配置：</span>
                     <div class="radio_area">
-                        <div class="radio_item" v-for="(item, index) in allData.resourcesTypesList" :key="'type'+index">
+                        <div class="radio_item" v-for="(item, index) in resourcesTypesList" :key="'type'+index">
                             <input type="radio" class="radio" name="radio" ref="radioData" :checked="item.name === '单机'" :disabled="item.name !== '单机'" >
                             <input :value="item.name" class="el-input__inner" type="text" name="" id="" disabled>
                         </div>
@@ -117,15 +119,24 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projects: [ 
-                        {attributes:{
-                            name: "name",
-                            provider: "provider",
-                            meta: {}
-                        }}
-                    ],
-                    resourcesTypesList: []
+                    projects: [{	
+                        name: "name",
+                        provider: "provider",
+                        meta: {}
+                    }]
                 }
+            }
+        },
+        resourcesTypesList: {
+            type: Array,
+            default: function() {
+                return [{
+                    id: 1,
+                    name: "单机"
+                }, {
+                    id: 2,
+                    name: "集群"
+                }]
             }
         }
     },
@@ -147,23 +158,30 @@ export default {
                 return false
             }
             this.allData.projects.forEach(item => {
-                if (item.attributes.name === this.projectNameValue) {
+                if (item.name === this.projectNameValue) {
                     alert("项目名称重复！")
                     throw Error("项目名称重复")
                 }
             })
-            console.log(data)
             const event = new Event("event")
             event.args = {
                 callback: "cerateProject",
                 element: this,
                 param: {
                     name: this.projectNameValue,
-                    id: "VSq8W2iKoU3pY0OG"
+                    id: this.getCookie("company_id")
                 }
             }
+            console.log(event)
             this.$emit('event', event)
             this.dialogCreateVisible = false
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return "a7a2c65be73561582553d62de756806cdc0a360bec40cf40a5971be345ed0360";
         },
         showSelectOption(data) {
             console.log(data)
@@ -180,7 +198,7 @@ export default {
                 callback: "linkToPage",
                 element: this,
                 param: {
-                    name: params["attributes"]["name"],
+                    name: params["name"],
                     pid: params.id
                 }
             }
