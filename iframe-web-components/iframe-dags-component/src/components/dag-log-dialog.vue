@@ -69,7 +69,7 @@ export default {
         this.loading = true
         let that = this
         const url = `${hostName}/phdydatasource/query`
-        const accessToken = this.getCookie( "access_token" ) || "943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
+        const accessToken = this.getCookie( "access_token" ) || "1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0"
         let body = {
             "table": "logs",
             "conditions": {
