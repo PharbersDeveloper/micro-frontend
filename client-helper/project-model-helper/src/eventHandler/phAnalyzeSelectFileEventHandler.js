@@ -67,13 +67,13 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					message: resMessage,
 					projectId: param.projectId
 				}
-				route.noticeService.defineAction({
-					type: "iot",
-					id: "uploadfiles",
-					projectId: param.projectId,
-					ownerId: route.cookies.read("account_id"),
-					callBack: noticeCallback
-				})
+				// route.noticeService.defineAction({
+				// 	type: "iot",
+				// 	id: "uploadfiles",
+				// 	projectId: param.projectId,
+				// 	ownerId: route.cookies.read("account_id"),
+				// 	callBack: noticeCallback
+				// })
 				//请求接口
 				updateDataset(
 					file,
