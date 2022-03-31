@@ -107,8 +107,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				const accessToken = route.cookies.read("access_token")
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
-				// route.projectId = params.projectId
-				// route.projectName = params.projectName
 				params.targetDataset.sample = params.sample
 				params.targetDataset.projectId = params.projectId
 				params.targetDataset.id = params.datasetId

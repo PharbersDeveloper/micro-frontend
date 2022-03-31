@@ -11,6 +11,7 @@ export default class ProjectModel extends Model {
 	@hasMany("dataset") datasets;
 	@belongsTo("flow") flow;
 	@belongsTo("analysis") analysis;
+	@belongsTo("resource") resource;
 	@hasMany("notebook") notebooks;
 	@hasMany("dash-board") dashBoards;
 	@hasMany("wiki") wikis;

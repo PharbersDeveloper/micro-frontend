@@ -26,7 +26,7 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 			accept: "application/json"
 		},
 		body: JSON.stringify(body)
-	}
+	} 
 
 	//数量
 	const nums = fetch(url, options).then((res) => res.json())
