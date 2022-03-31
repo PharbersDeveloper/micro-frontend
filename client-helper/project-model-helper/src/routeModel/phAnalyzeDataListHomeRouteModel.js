@@ -34,8 +34,8 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	promiseList.push(projectDetail, nums)
 	let results = await Promise.all(promiseList)
 	let projectDetailData = results[0]
-	let resource = projectDetailData.belongsTo("resources").id()
-	console.log(resource)
+	// let resource = projectDetailData.hasMany("resources").id()
+	// console.log(resource)
 	let numsArr = results[1]
 	numShow.dataset = numsArr.dataset ? numsArr.dataset : 0
 	numShow.flow = numsArr.dagconf ? numsArr.dagconf : 0
@@ -48,7 +48,7 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 		projectDetail: projectDetailData,
 		projectName: projectDetailData.name,
 		projectId: projectDetailData.id,
-		resource: resource,
+		// resource: resource,
 		numShow: numShow,
 		_isVue: true
 	}
