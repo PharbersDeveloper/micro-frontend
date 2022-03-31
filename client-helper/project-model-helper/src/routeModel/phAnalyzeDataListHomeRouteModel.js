@@ -9,7 +9,8 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	// project基本信息
 	let projectDetail = route.store.findRecord(
 		"project",
-		parseParams.param.project_id
+		parseParams.param.project_id,
+		{ include: "resources" }
 	)
 	// 目前只有数据集和脚本的num
 	const url = `${hostName}/phgetnumber`
@@ -26,13 +27,15 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 			accept: "application/json"
 		},
 		body: JSON.stringify(body)
-	} 
+	}
 
 	//数量
 	const nums = fetch(url, options).then((res) => res.json())
 	promiseList.push(projectDetail, nums)
 	let results = await Promise.all(promiseList)
 	let projectDetailData = results[0]
+	let resource = projectDetailData.belongsTo("resources").id()
+	console.log(resource)
 	let numsArr = results[1]
 	numShow.dataset = numsArr.dataset ? numsArr.dataset : 0
 	numShow.flow = numsArr.dagconf ? numsArr.dagconf : 0
@@ -45,6 +48,7 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 		projectDetail: projectDetailData,
 		projectName: projectDetailData.name,
 		projectId: projectDetailData.id,
+		resource: resource,
 		numShow: numShow,
 		_isVue: true
 	}
