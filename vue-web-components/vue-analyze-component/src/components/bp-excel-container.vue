@@ -308,11 +308,11 @@ export default {
                 return [{
                     id: 1,
                     name: "顺序",
-                    val: "f"
+                    val: "F"
                 },{
                     id: 2,
                     name: "随机",
-                    val: "r"
+                    val: "R"
                 }]
             }
         },
@@ -460,9 +460,11 @@ export default {
                     "projectId": this.allData.projectId,
                     "targetDataset": this.allData.targetDataset,
                     "sample": sample,
-					"datasetVersion": this.versionFilterPolicy.versionCandidates[0]["version"]
+                    "datasetVersion": this.datasetVersion[0],
+                    "datasetId": this.allData.datasetId
                 }
             }
+            console.log(event)
             this.$emit('event', event)
             this.dataSampleVisible = false
         },
@@ -637,17 +639,17 @@ export default {
         'allData.schemaArr'(n, o) {
             this.needRefresh++
         },
-		//sample请求数据
-		dataSampleVisible(n, o) {
-			let that = this
+        //sample请求数据
+        dataSampleVisible(n, o) {
+            let that = this
             if (this.versionCandidatesShow.length === 0) {
                 that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
-                    //完整的显示行列表数据
-                    that.versionCandidatesShow = data
-                    that.versionFilterPolicy.versionCandidates = data
+                    // sample的version
+                    this.datasetVersion = data
+                    console.log(this.datasetVersion)
                 })
             }
-		},
+        },
         //显示行请求接口
         dialogVersionFilterVisible(n, o) {
             let that = this

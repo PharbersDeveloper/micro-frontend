@@ -111,6 +111,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				// route.projectName = params.projectName
 				params.targetDataset.sample = params.sample
 				params.targetDataset.projectId = params.projectId
+				params.targetDataset.id = params.datasetId
 				// 更新dataset表
 				let body = {
 					table: "dataset",
@@ -133,12 +134,10 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					projectName: params.projectName,
 					datasetName: params.targetDataset.name,
-					datasetVersion: params.datasetVersion, 
+					datasetVersion: params.datasetVersion,
 					sample: params.sample,
 					owner: route.cookies.read("account_id"),
-					showName: decodeURI(
-						route.cookies.read("user_name_show")
-					)
+					showName: decodeURI(route.cookies.read("user_name_show"))
 				}
 				let scriptBody = {
 					table: actionTableName,
@@ -166,7 +165,9 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					},
 					body: JSON.stringify(scriptBody)
 				}
-				let results = await fetch(url, editSampleOptions).then((res) => res.json())
+				let results = await fetch(url, editSampleOptions).then((res) =>
+					res.json()
+				)
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
