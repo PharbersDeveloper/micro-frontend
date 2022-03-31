@@ -73,21 +73,38 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		case "deleteProject":
 			if (params) {
-				let uri = `${hostName}/phcreateproject/projects/${params.projectId}`
-				let results = await fetch(uri, {
-					method: "delete",
-					headers: {
-						Authorization: accessToken,
-						"Content-Type": "application/vnd.api+json",
-						Accept: "application/vnd.api+json"
+				/**
+				 * 1.判断是否正在启动
+				 * 2.删除resource
+				 * 3.删除project
+				 */
+				let bool = await checkStartResourceFun("del")
+				if (bool) {
+					let delResourceUri = `${hostName}/phcreateproject/resources/${params.resourceId}`
+					await fetch(delResourceUri, {
+						method: "delete",
+						headers: {
+							Authorization: accessToken,
+							"Content-Type": "application/vnd.api+json",
+							Accept: "application/vnd.api+json"
+						}
+					})
+					let uri = `${hostName}/phcreateproject/projects/${params.projectId}`
+					let results = await fetch(uri, {
+						method: "delete",
+						headers: {
+							Authorization: accessToken,
+							"Content-Type": "application/vnd.api+json",
+							Accept: "application/vnd.api+json"
+						}
+					})
+					if (results.status === 204) {
+						alert("删除项目成功！")
+						window.location.href =
+							"https://general.pharbers.com/projects"
+					} else {
+						alert("删除失败！")
 					}
-				})
-				if (results.status === 204) {
-					alert("删除项目成功！")
-					window.location.href =
-						"https://general.pharbers.com/projects"
-				} else {
-					alert("删除失败！")
 				}
 			}
 			break
@@ -158,7 +175,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		route.loadingService.loading.style.display = "none"
 	}
 
-	async function checkStartResourceFun() {
+	async function checkStartResourceFun(startMsg) {
 		const startUrl = `${hostName}/phresourceaction`
 		let startBody = {
 			projectName: params.projectName,
@@ -192,6 +209,9 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			})
 			route.resourceActionService.boolChecked = false
 			route.loadingService.loading.style.display = "flex"
+			if (startMsg === "del") {
+				alert("正在启动，不能删除项目")
+			}
 			return false
 		} else if (startResults.data.resource_status === "started") {
 			e.detail[0].args.element.showStartButton = false //按钮disabled
