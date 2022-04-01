@@ -3,6 +3,7 @@ import { hostName } from "../config/envConfig"
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let params = e.detail[0].args.param
+	const createResourceEventName = "resource_create"
 	const startUrl = `${hostName}/phresourceaction`
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
@@ -126,11 +127,21 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 				let checked = await checkStartResourceFun()
 				if (checked) {
 					console.log("开始启动")
+					// route.noticeService.defineAction({
+					// 	type: "iot",
+					// 	id: "resource_create",
+					// 	projectId: params.projectId,
+					// 	ownerId: "*",
+					// 	callBack: callback
+					// })
 					route.noticeService.defineAction({
 						type: "iot",
-						id: "resource_create",
+						remoteResource: "notification",
+						runnerId: "",
+						id: result.data.id,
+						eventName: createResourceEventName,
 						projectId: params.projectId,
-						ownerId: "*",
+						ownerId: route.cookies.read("account_id"),
 						callBack: callback
 					})
 					let body = {
@@ -200,11 +211,21 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		)
 		console.log("判断是否启动：", startResults)
 		if (startResults.data.resource_status === "starting") {
+			// route.noticeService.defineAction({
+			// 	type: "iot",
+			// 	id: "resource_create",
+			// 	projectId: params.projectId,
+			// 	ownerId: "*",
+			// 	callBack: callback
+			// })
 			route.noticeService.defineAction({
 				type: "iot",
-				id: "resource_create",
+				remoteResource: "notification",
+				runnerId: "",
+				id: result.data.id,
+				eventName: createResourceEventName,
 				projectId: params.projectId,
-				ownerId: "*",
+				ownerId: route.cookies.read("account_id"),
 				callBack: callback
 			})
 			route.resourceActionService.boolChecked = false
