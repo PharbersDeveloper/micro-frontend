@@ -261,6 +261,10 @@ export default {
                         symbol: `${staticFilePath}` + '/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
+                        name: 'SparkR_running',
+                        symbol: `${staticFilePath}` + '/icons/sparkR_running.svg'
+                    },
+                    {
                         name: 'R',
                         symbol: `${staticFilePath}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
                     },
@@ -271,6 +275,10 @@ export default {
                     {
                         name: 'R_failed',
                         symbol: `${staticFilePath}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'R_running',
+                        symbol: `${staticFilePath}` + '/icons/R_running.svg'
                     },
                     {
                         name: 'prepare',
@@ -379,7 +387,6 @@ export default {
             this.showProgress = true
             // 2.节点状态
             let data = this.datasource.data
-            console.log(data)
             data.map((it,index) => {
                 it.status = it["attributes"]["runtime"]
                 that.refreshNodeStatus(it)
@@ -443,7 +450,6 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
-            console.log(body)
             let results = await fetch(url, options).then(res => res.json())
             if(results.status === "failed") {
                 alert("启动出错，请重新运行！")
@@ -528,8 +534,6 @@ export default {
         },
         //更新节点状态
         refreshNodeStatus(node) {
-            console.log("要渲染的节点")
-            console.log(node)
             const that = this
             const d3 = Object.assign({}, d3_base, d3_dag)
             if (node["attributes"]["cat"] === "job") {
@@ -559,7 +563,6 @@ export default {
         async on_click_retry_dag(data) {
             this.showProgress = false
             console.log("responseArr", this.responseArr)
-            console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr.message).cnotification.runId
             const url = `${hostName}/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
@@ -808,7 +811,6 @@ export default {
                     }
                     that.changeHeaderIcon(i.data.attributes.cat, i.data.attributes.runtime, that)
                     console.log("selectItem", that.selectItem)
-                    // that.$emit('itemClicked', params)
                 })
 
                 that.$refs.viewport.scroll({
