@@ -464,7 +464,8 @@ export default {
                     },
                     executionStatus: {
                         // runnerId: results.data.dag_run_id,
-                        projectId: dag_run_id.pop(),
+                        id: results.data.run_id,
+                        // projectId: dag_run_id.pop(),
                         eventName: "executionStatus" //+ runnerId
                     }
                 }
