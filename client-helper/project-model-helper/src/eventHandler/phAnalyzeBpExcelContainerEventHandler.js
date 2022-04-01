@@ -4,6 +4,7 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
+	const editSampleEventName = "editSampleEventName"
 	const eventName = "changeSchemaType"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
@@ -100,9 +101,87 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				})
 			}
 			break
+		case "clickSample":
+			if (params) {
+				const url = `${hostName}/phdydatasource/put_item`
+				const accessToken = route.cookies.read("access_token")
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				params.targetDataset.sample = params.sample
+				params.targetDataset.projectId = params.projectId
+				params.targetDataset.id = params.datasetId
+				// 更新dataset表
+				let body = {
+					table: "dataset",
+					item: params.targetDataset
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(url, options)
+				//发送action
+				let message = {
+					actionName: params.targetDataset.name,
+					projectId: params.projectId,
+					projectName: params.projectName,
+					datasetName: params.targetDataset.name,
+					datasetVersion: params.datasetVersion,
+					sample: params.sample,
+					owner: route.cookies.read("account_id"),
+					showName: decodeURI(route.cookies.read("user_name_show"))
+				}
+				let scriptBody = {
+					table: actionTableName,
+					item: {
+						projectId: params.projectId,
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
+						code: 0,
+						jobDesc: editSampleEventName,
+						jobCat: "edit_sample",
+						comments: "",
+						date: String(new Date().getTime()),
+						message: JSON.stringify(message)
+					}
+				}
+				let editSampleOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(scriptBody)
+				}
+				let results = await fetch(url, editSampleOptions).then((res) =>
+					res.json()
+				)
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: results.data.id,
+					eventName: editSampleEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: editSampleCallback
+				})
+			}
+			break
 		default:
 			console.log("other click event!")
 	}
+
 	function changeSchemaTypeCallback(param, payload) {
 		console.log("更改表名")
 
@@ -126,6 +205,28 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 			} else {
 				route.vueComponentEnv.itemValueType = "Number"
 			}
+		}
+		route.loadingService.loading.style.display = "none"
+	}
+
+	function editSampleCallback(param, payload) {
+		console.log("更改表名")
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+
+		if (status == "succeed") {
+			alert("数据样本配置成功")
+			window.location.reload()
+		} else if (status == "failed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
+			let msg =
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
+					: "数据样本配置失败，请重新操作！"
+			alert(msg)
+			// TODO:刷新页面数据
 		}
 		route.loadingService.loading.style.display = "none"
 	}

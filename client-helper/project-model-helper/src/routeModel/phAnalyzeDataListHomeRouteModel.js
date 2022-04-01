@@ -3,13 +3,14 @@ import { hostName } from "../config/envConfig"
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	let debugToken =
-		"943af58af208151fa035f4910d7fb302a6623c73b52a9519a719219eb5d5d9cc"
+		"1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0"
 	let numShow = {}
 	let promiseList = []
 	// project基本信息
 	let projectDetail = route.store.findRecord(
 		"project",
-		parseParams.param.project_id
+		parseParams.param.project_id,
+		{ include: "resources" }
 	)
 	// 目前只有数据集和脚本的num
 	const url = `${hostName}/phgetnumber`
@@ -33,6 +34,8 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 	promiseList.push(projectDetail, nums)
 	let results = await Promise.all(promiseList)
 	let projectDetailData = results[0]
+	let resource = await projectDetailData.hasMany("resources")
+	let resourceId = resource.ids()[0]
 	let numsArr = results[1]
 	numShow.dataset = numsArr.dataset ? numsArr.dataset : 0
 	numShow.flow = numsArr.dagconf ? numsArr.dagconf : 0
@@ -45,6 +48,7 @@ export async function phAnalyzeDataListHomeRouteModel(route, parseParams) {
 		projectDetail: projectDetailData,
 		projectName: projectDetailData.name,
 		projectId: projectDetailData.id,
+		resourceId: resourceId,
 		numShow: numShow,
 		_isVue: true
 	}
