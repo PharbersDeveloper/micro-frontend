@@ -225,6 +225,10 @@ export default {
                         symbol: `${staticFilePath}` + '/icons/python%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
+                        name: 'Python3_running',
+                        symbol: `${staticFilePath}` + '/icons/python3_running.svg'
+                    },
+                    {
                         name: 'Python3_succeed',
                         symbol: `${staticFilePath}` + '/icons/python%E6%88%90%E5%8A%9F.svg'
                     },
@@ -422,7 +426,7 @@ export default {
             const url = `${hostName}/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
-            confData.ownerId = this.getCookie("account_id") || "5UBSLZvV0w9zh7-lZQap"
+            confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
             confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "测试人员"
             confData.jobDesc = this.registerJobEventName
             let body = {
@@ -474,39 +478,41 @@ export default {
         runDagCallback(response, ele) {
             let that = this
             let represent_id = ""
-            let payload = JSON.parse(response.payload)
-            console.log(payload)
-            this.responseArr = payload
-            let status = payload["status"]
-            let jobName = JSON.parse(payload.message).cnotification.jobName
+            let payloadArr = JSON.parse(response.payload)
+            console.log("payloadArr", payloadArr)
+            this.responseArr = payloadArr
             let data = ele.datasource.data
-            // 1.找到对应job节点并更新状态
-            data.map((it,index) => {
-                if(jobName.indexOf(it.attributes.name) != -1) {
-                    if(status === "success") {
-                        it.status = "succeed"
-                    } else if(status === "failed") {
-                        it.status = "failed"
-                        represent_id = it.representId
-                    } else if(status === "running") {
-                        it.status = "running"
+            payloadArr.forEach(payload => {
+                let status = payload["status"]
+                let jobName = JSON.parse(payload.message).cnotification.jobName
+                // 1.找到对应job节点并更新状态
+                data.forEach((it,index) => {
+                    if(jobName.indexOf(it.attributes.name) != -1) {
+                        if(status === "success") {
+                            it.status = "succeed"
+                        } else if(status === "failed") {
+                            it.status = "failed"
+                            represent_id = it.representId
+                        } else if(status === "running") {
+                            it.status = "running"
+                        }
+                    }
+                    that.refreshNodeStatus(it)
+                })
+                // 2.失败时出现弹框
+                if(status === "failed") {
+                    let showName = JSON.parse(payload.message).cnotification.jobShowName
+                    let length = that.failedLogs.filter(it => it.jobShowName === showName)
+                    if(length < 1) {
+                        that.failedLogs.push({
+                            data: payload,
+                            jobShowName: showName,
+                            representId: represent_id
+                        })
                     }
                 }
-                that.refreshNodeStatus(it)
+                console.log("failedLogs", that.failedLogs)
             })
-            // 2.失败时出现弹框
-            if(status === "failed") {
-                let showName = JSON.parse(payload.message).cnotification.jobShowName
-                let length = that.failedLogs.filter(it => it.jobShowName === showName)
-                if(length < 1) {
-                    that.failedLogs.push({
-                        data: payload,
-                        jobShowName: showName,
-                        representId: represent_id
-                    })
-                }
-            }
-            console.log("failedLogs", that.failedLogs)
         },
         // trigger更新整体状态
         runDagFinishCallback(response, ele) {
@@ -520,6 +526,8 @@ export default {
         },
         //更新节点状态
         refreshNodeStatus(node) {
+            console.log("要渲染的节点")
+            console.log(node)
             const that = this
             const d3 = Object.assign({}, d3_base, d3_dag)
             if (node["attributes"]["cat"] === "job") {

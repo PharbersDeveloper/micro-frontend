@@ -99,8 +99,8 @@ function PhMQTT(config, callBack, destroyQueue) {
 
 			const content = JSON.stringify(payload)
 			const b64 = window.btoa(unescape(encodeURIComponent(content)))
-			console.info("Find Local Cache Item ====> ",
-				use_cache.find((item) => item === b64))
+			// console.info("Find Local Cache Item ====> ",
+			// 	use_cache.find((item) => item === b64))
 			
 			if (!use_cache.find((item) => item === b64)) {
 				use_cache.push(b64)
