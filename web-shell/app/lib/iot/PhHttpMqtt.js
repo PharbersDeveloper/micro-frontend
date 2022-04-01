@@ -47,10 +47,7 @@ function PhMQTT(config, callBack, destroyQueue) {
 			if (contents.length > 0) {
 				time = new Date().getTime()
 				const flag = contents.map((item) => { 
-					const {
-						cnotification: { overallStatus }
-					} = JSON.parse(item.message)
-					return states[overallStatus] || false
+					return states[item.status] || false
 				}).reduce((pre, next) => pre && next)
 				if (flag) {
 					destroyQueue.push(topic)

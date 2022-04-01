@@ -451,9 +451,9 @@ export default {
                 return false
             }
             const dag_run_id = results.data.dag_run_id.split("_")
-            const time = new Date(dag_run_id.pop()).getTime()
-            const runnerId = dag_run_id.join("_") + "_" + time
-            console.info(runnerId)
+            // const time = new Date(dag_run_id.pop()).getTime()
+            // const runnerId = dag_run_id.join("_") + "_" + time
+            // console.info(runnerId)
             window.parent.postMessage({
                 message: {
                     notification: {
@@ -463,8 +463,9 @@ export default {
 
                     },
                     executionStatus: {
-                        runnerId: results.data.dag_run_id,
-                        eventName: "executionStatus" + runnerId
+                        // runnerId: results.data.dag_run_id,
+                        projectId: dag_run_id.pop(),
+                        eventName: "executionStatus" //+ runnerId
                     }
                 }
             }, '*')

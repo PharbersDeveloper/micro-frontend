@@ -42,17 +42,29 @@ export default class IframeContextComponent extends Component {
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.runDagCallback
 			})
+
 			//dag整体
 			this.noticeService.defineAction({
 				type: "iot",
-				remoteResource: "executionStatus",
-				runnerId: event.data.message.executionStatus.runnerId,
+				remoteResource: "notification",
+				runnerId: "",
 				id: this.args.allData.data.projectId + "_" + this.cookies.read("account_id"),
 				eventName: event.data.message.executionStatus.eventName,
-				projectId: this.args.allData.data.projectId,
+				projectId: event.data.message.executionStatus.projectId,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.executionStatusCallback
 			})
+			//dag整体
+			// this.noticeService.defineAction({
+			// 	type: "iot",
+			// 	remoteResource: "executionStatus",
+			// 	runnerId: event.data.message.executionStatus.runnerId,
+			// 	id: this.args.allData.data.projectId + "_" + this.cookies.read("account_id"),
+			// 	eventName: event.data.message.executionStatus.eventName,
+			// 	projectId: this.args.allData.data.projectId,
+			// 	ownerId: this.cookies.read("account_id"),
+			// 	callBack: this.executionStatusCallback
+			// })
 		}
 	}
 
