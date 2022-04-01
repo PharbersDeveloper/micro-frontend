@@ -108,12 +108,8 @@
                 <div class="dlg-sort-nav">
                     <div class="dlg-sort-nav-left">
                         <span class="title">可选列</span>
-                        <el-input placeholder="搜索" v-model="searchSort" class="search_list" @input="search(searchSort)"></el-input>
+                        <el-input placeholder="搜索" v-model="searchSort" class="search_list" @input="on_clickSearchSort(searchSort)"></el-input>
                         <img :src="search_row" class="search_list_icon" alt="">
-                        <!-- <div class="dlg-sort-filter">
-                            <input type="search" ref="colFilter">
-                            <button class="search-submit" @click="search">Search</button>
-                        </div> -->
                     </div>
                     <div class="dlg-sort-nav-right">
                         <span>已选列</span>
@@ -271,7 +267,7 @@ export default {
             search_row: `${staticFilePath}` + "/%E6%90%9C%E7%B4%A2.svg",
             versionCandidatesShow: [],
             searchSort: "",
-            expandPopup: false,
+            // expandPopup: false,
             tmpFilterRow: "version",
             needRefresh: 0,
             dataSampleVisible: false,
@@ -385,26 +381,7 @@ export default {
             }
         }
     },
-    mounted() {
-        let uriParam = window.location.href.split("?")[1].split("&")
-        let projectId = uriParam[1].split("=")[1]
-        //传入数据时渲染表格
-        if(this.allData.schemaArr && this.allData.schemaArr.length > 0) {
-            const tmpLength = this.allData.schemaArr.length
-            this.schema.resetSchema(
-                this.allData.schemaArr,
-                this.allData.schemaArrType,
-                // Array(tmpLength).fill("Text"),
-                Array(tmpLength).fill(118)
-            )
-        } else {
-            this.schema.resetSchema(
-                ["Index", "Id", "Hospname", "Province", "City", "lHospname", "lHospalias", "lDistrict", "lLevel", "lCat", "lOffweb"],
-                ["Double", "Double", "Double", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],
-                [118, 118, 118, 118, 118, 118, 118, 118, 118, 118, 118]
-            )
-        }
-    },
+    mounted() {},
     methods: {
         on_handleCheckedDataVersionChange(val) {
             // if(val.length >= 3) {
@@ -491,13 +468,14 @@ export default {
                 this.$emit('event', event)
             }
         },
-        focusOutExpand() {
-            this.expandPopup = false
-        },
-        focusExpand() {
-            this.expandPopup = true
-        },
-        search(data) {
+        // focusOutExpand() {
+        //     this.expandPopup = false
+        // },
+        // focusExpand() {
+        //     this.expandPopup = true
+        // },
+        //排序列弹窗-搜索
+        on_clickSearchSort(data) {
             console.log(data)
         },
         getCookie(name) {
@@ -672,6 +650,7 @@ export default {
                 this.collectionsPolicy.clearShownCollectionFilter()
             }
         },
+        // 排序列请求接口
         dialogSortVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
                 this.collectionsPolicy.resetCollections(this.schema.schema)
