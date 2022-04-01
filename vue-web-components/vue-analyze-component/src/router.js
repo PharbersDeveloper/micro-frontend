@@ -4,6 +4,7 @@ import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
 import nav from './components/bp-nav-top-max.vue'
 import bpExcelContainer from './components/bp-excel-container'
+import bpExcelHandler from './components/bp-excel-handler'
 import bpNavMax from './components/bp-nav-top-max'
 import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
@@ -42,9 +43,9 @@ export default new Router({
             component: customMapping
         },
         {
-            path: '/bp-container',
-            name: 'bpExcelContainer',
-            component: bpExcelContainer
+            path: '/bp-handler',
+            name: 'bpExcelHandler',
+            component: bpExcelHandler
         },
         {
             path: '/nav',

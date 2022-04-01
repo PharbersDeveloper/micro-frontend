@@ -96,18 +96,18 @@ export default {
             })
         },
         random: Number,
-		formatArray: {
+        formatArray: {
             type: Array,
             default: () => [{
-				id: 1,
-				name: "xlsx"
-			},{
-				id: 2,
-				name: "parquet"
-			},{
-				id: 3,
-				name: "csv"
-			}]
+                id: 1,
+                name: "xlsx"
+            },{
+                id: 2,
+                name: "parquet"
+            },{
+                id: 3,
+                name: "csv"
+            }]
         }
     },
     watch: {
