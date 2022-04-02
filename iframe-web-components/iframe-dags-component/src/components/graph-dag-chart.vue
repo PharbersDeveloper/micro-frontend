@@ -434,7 +434,7 @@ export default {
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
             confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
-            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "测试人员"
+            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "dev环境"
             confData.jobDesc = this.registerJobEventName
             let body = {
                 "project_name": this.projectName,

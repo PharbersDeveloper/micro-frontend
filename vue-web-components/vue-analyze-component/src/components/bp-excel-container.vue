@@ -19,7 +19,7 @@
                 <div class="btn-groups">
                     <button class="btn_chart" @click="dialogDownloadVisible = true" disabled>下载当前筛选数据</button>
                     <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                        <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue>
+                        <!-- <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue> -->
                         <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
                         <bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
                     </bp-select-vue>
@@ -42,7 +42,7 @@
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>
-        <el-dialog
+        <!-- <el-dialog
                 title="显示行"
                 :visible.sync="dialogVersionFilterVisible"
                 width="450px"
@@ -69,7 +69,7 @@
                 <el-button @click="on_clickVersionFilterCancel">取消</el-button>
                 <el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
             </span>
-        </el-dialog>
+        </el-dialog> -->
         <el-dialog
                 title="显示列"
                 :visible.sync="dialogCollectionVisible"
@@ -250,7 +250,7 @@ import { staticFilePath, hostName } from '../config/envConfig'
 export default {
     data() {
         return {
-            dialogVersionFilterVisible: false, //显示行
+            // dialogVersionFilterVisible: false, //显示行
             dialogSortVisible: false, //显示排序
             dialogCollectionVisible: false, //显示列
             dialogDownloadVisible: false, //显示下载
@@ -492,34 +492,34 @@ export default {
             this.showSelectOptionParam = true
         },
         // 显示行取消
-        on_clickVersionFilterCancel() {
-            this.dialogVersionFilterVisible = false
-            this.searchRow = ""
-            // this.versionFilterPolicy.selectVersionTags = []
-        },
+        // on_clickVersionFilterCancel() {
+        //     this.dialogVersionFilterVisible = false
+        //     this.searchRow = ""
+        //     // this.versionFilterPolicy.selectVersionTags = []
+        // },
         // 显示行确认
-        on_clickVersionFilterConfirm() {
-            this.searchRow = ""
-            this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates
-            this.dialogVersionFilterVisible = false
-            const condi = this.versionFilterPolicy.selectVersionTags
-            if(condi.length > 0) {
-                let condi_str = "`" + this.tmpFilterRow +"` in ["
-                for (var idx in condi) {
-                    if (idx > 0) {
-                        condi_str = condi_str + ","
-                    }
-                    if(typeof(condi[idx]) === 'string') {
-                        condi_str = condi_str + "'" + condi[idx] + "'"
-                    }
-                }
-                condi_str = condi_str + "]"
-                this.datasource.pushFilterCondition(this.tmpFilterRow, condi_str)
-            } else {
-                this.datasource.filter = {}
-            }
-            this.$refs.excel.dataRefresh++
-        },
+        // on_clickVersionFilterConfirm() {
+        //     this.searchRow = ""
+        //     this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates
+        //     this.dialogVersionFilterVisible = false
+        //     const condi = this.versionFilterPolicy.selectVersionTags
+        //     if(condi.length > 0) {
+        //         let condi_str = "`" + this.tmpFilterRow +"` in ["
+        //         for (var idx in condi) {
+        //             if (idx > 0) {
+        //                 condi_str = condi_str + ","
+        //             }
+        //             if(typeof(condi[idx]) === 'string') {
+        //                 condi_str = condi_str + "'" + condi[idx] + "'"
+        //             }
+        //         }
+        //         condi_str = condi_str + "]"
+        //         this.datasource.pushFilterCondition(this.tmpFilterRow, condi_str)
+        //     } else {
+        //         this.datasource.filter = {}
+        //     }
+        //     this.$refs.excel.dataRefresh++
+        // },
         //选择列确认
         on_clickCollectionConfirm() {
             this.dialogCollectionVisible = false
@@ -629,16 +629,16 @@ export default {
             }
         },
         //显示行请求接口
-        dialogVersionFilterVisible(n, o) {
-            let that = this
-            if (this.versionCandidatesShow.length === 0) {
-                that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
-                    //完整的显示行列表数据
-                    that.versionCandidatesShow = data
-                    that.versionFilterPolicy.versionCandidates = data
-                })
-            }
-        },
+        // dialogVersionFilterVisible(n, o) {
+        //     let that = this
+        //     if (this.versionCandidatesShow.length === 0) {
+        //         that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
+        //             //完整的显示行列表数据
+        //             that.versionCandidatesShow = data
+        //             that.versionFilterPolicy.versionCandidates = data
+        //         })
+        //     }
+        // },
         // 显示列请求接口
         dialogCollectionVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
