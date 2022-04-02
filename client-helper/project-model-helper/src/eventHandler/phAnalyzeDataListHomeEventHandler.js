@@ -212,7 +212,10 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			res.json()
 		)
 		console.log("判断是否启动：", startResults)
-		if(startMsg === "startResource" && startResults.data.started_number === route.maxResourceNumber) {
+		if (
+			startMsg === "startResource" &&
+			startResults.data.started_number === route.maxResourceNumber
+		) {
 			alert("已启动项目达到上限，请联系管理员！")
 			return false
 		}

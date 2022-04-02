@@ -1,5 +1,5 @@
 //dev, prod
-const env = "dev"
+const env = "prod"
 const staticFilePath =
     env === "dev"
         ? "https://components.pharbers.com/dev/deploy/public"

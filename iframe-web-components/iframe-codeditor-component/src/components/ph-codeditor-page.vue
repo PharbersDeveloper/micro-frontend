@@ -123,9 +123,9 @@ export default {
         let jobPathParam = this.getUrlParam(paramArr, "jobPathParam")
         this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
         this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
-		// 判断环境
-		let env = this.getUrlParam(paramArr, "environment")
-		this.checkENV(env)
+        // 判断环境
+        let env = this.getUrlParam(paramArr, "environment")
+        this.checkENV(env)
         //父组件传进来的值
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
@@ -141,15 +141,15 @@ export default {
         }
     },
     methods: {
-		checnENV(env) {
-			if(env === "development") {
-				this.hostName = "https://apidev.pharbers.com"
-				this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
-			} else {
-				this.hostName = "https://apiv2.pharbers.com"
-				this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
-			}
-		},
+        checnENV(env) {
+            if(env === "development") {
+                this.hostName = "https://apidev.pharbers.com"
+                this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
+            } else {
+                this.hostName = "https://apiv2.pharbers.com"
+                this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
+            }
+        },
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
