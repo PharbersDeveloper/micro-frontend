@@ -50,7 +50,8 @@ module.exports = function (environment) {
 			MQTT_TYPE: "http-mqtt", // aws-mqtt|http-mqtt
 			OBSERVER_TIME_OUT: 86400, // 86400秒  1天 24小时
 			scope: "APP|*|R",
-			isNeedMenu: true
+			isNeedMenu: true,
+			maxResourceNumber: 6
 		}
 	}
 

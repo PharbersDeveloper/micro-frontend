@@ -167,7 +167,7 @@
         <el-dialog
             title="数据样本配置"
             :visible.sync="dataSampleVisible"
-            width="600px">
+            width="800px">
             <div class="data-sample-container">
                 <div>
                     <el-radio 
@@ -272,8 +272,8 @@ export default {
             needRefresh: 0,
             dataSampleVisible: false,
             dataSampleType: "",
-            dataVersionArr: ["col1", "col2", "col3", "col4"],
-            dataVersionArrShow: ["col1", "col2", "col3", "col4"],
+            dataVersionArr: [],
+            dataVersionArrShow: [],
             dataVersionDisabled: true,
             dataCollectionDisabled: true,
             checkedDataVersion: [],
@@ -620,13 +620,21 @@ export default {
         //sample请求数据
         dataSampleVisible(n, o) {
             let that = this
+
             if (this.versionCandidatesShow.length === 0) {
                 that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
-                    // sample的version
                     this.datasetVersion = data
                     console.log(this.datasetVersion)
                 })
             }
+
+            if (this.dataVersionArrShow.length === 0) {
+                that.datasource.resetUrl(`${hostName}/phdydatasource/query`)
+                that.datasource.queryVersion(this).then((data) => {
+                    this.dataVersionArrShow = data
+                })
+            }
+
         },
         //显示行请求接口
         // dialogVersionFilterVisible(n, o) {

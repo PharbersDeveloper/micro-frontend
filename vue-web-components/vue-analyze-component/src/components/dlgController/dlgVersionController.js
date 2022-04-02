@@ -16,4 +16,5 @@ export default class PhDlgVersionController {
             return item !== tag
         });
     }
+	
 }

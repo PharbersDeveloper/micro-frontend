@@ -294,4 +294,40 @@ export default class PhContainerDataSource {
         }
         return fetch(url, options)
     }
+
+    // 请求version list
+    buildVersionQuery(ele) {
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let id = ele.datasource.projectId + "_" + ele.allData.datasetId
+        let body = {
+            "table": "version",
+            "conditions": {
+                "id": [
+                    "=",
+                    id
+                ]
+            },
+            "limit": 100,
+            "start_key": ""
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    queryVersion(ele) {
+        return ele.datasource.buildVersionQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.data.map(x => x["attributes"]["name"])
+            })
+    }
 }
