@@ -132,7 +132,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					projectName: params.projectName,
 					datasetName: params.targetDataset.name,
-					datasetVersion: params.datasetVersion,
+					// datasetVersion: params.datasetVersion,
 					sample: params.sample,
 					owner: route.cookies.read("account_id"),
 					showName: decodeURI(route.cookies.read("user_name_show"))

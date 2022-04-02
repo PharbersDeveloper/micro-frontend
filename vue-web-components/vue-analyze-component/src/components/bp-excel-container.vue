@@ -19,7 +19,6 @@
                 <div class="btn-groups">
                     <button class="btn_chart" @click="dialogDownloadVisible = true" disabled>下载当前筛选数据</button>
                     <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
-                        <!-- <bp-option-vue class="schema-select-item" text="选择显示行" @click="dialogVersionFilterVisible = true"></bp-option-vue> -->
                         <bp-option-vue class="schema-select-item" text="选择显示列" @click="dialogCollectionVisible = true"></bp-option-vue>
                         <bp-option-vue class="schema-select-item" text="选择排序列" @click="dialogSortVisible = true"></bp-option-vue>
                     </bp-select-vue>
@@ -42,34 +41,6 @@
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>
-        <!-- <el-dialog
-                title="显示行"
-                :visible.sync="dialogVersionFilterVisible"
-                width="450px"
-                height="600px"
-                @close="on_clickVersionFilterCancel">
-
-            <div class="dlg-version-container">
-                <div class="dlg-flex-version" >
-                    <div class="dlg-flex-version-item" v-for="(item, index) in versionFilterPolicy.selectVersionTags" :key="item+index">
-                        <span>{{item}}</span>
-                        <img :src="close_icon" class="close_icon" @click="versionFilterPolicy.removeSelectVersionTags(item)" alt="">
-                    </div>
-                </div>
-                <div class="dlg-version-spliter"></div>
-                <el-input placeholder="搜索" v-model="searchRow" @input="searchRowInput(searchRow)" class="search_row"></el-input>
-                <img :src="search_row" class="search_row_icon" alt="">
-                <div class="dlg-all-version-container">
-                    <div class="dlg-flex-version-item" v-for="(item, index) in versionCandidatesShow" :key="item+index" @click="versionFilterPolicy.appendSelectVersionTags(item)">
-                        <span>{{item}}</span>
-                    </div>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="on_clickVersionFilterCancel">取消</el-button>
-                <el-button type="primary" @click="on_clickVersionFilterConfirm">确认</el-button>
-            </span>
-        </el-dialog> -->
         <el-dialog
                 title="显示列"
                 :visible.sync="dialogCollectionVisible"
@@ -437,7 +408,7 @@ export default {
                     "projectId": this.allData.projectId,
                     "targetDataset": this.allData.targetDataset,
                     "sample": sample,
-                    "datasetVersion": this.datasetVersion[0],
+                    // "datasetVersion": this.datasetVersion[0],
                     "datasetId": this.allData.datasetId
                 }
             }
@@ -468,12 +439,6 @@ export default {
                 this.$emit('event', event)
             }
         },
-        // focusOutExpand() {
-        //     this.expandPopup = false
-        // },
-        // focusExpand() {
-        //     this.expandPopup = true
-        // },
         //排序列弹窗-搜索
         on_clickSearchSort(data) {
             console.log(data)
@@ -491,35 +456,6 @@ export default {
         showSelectOption() {
             this.showSelectOptionParam = true
         },
-        // 显示行取消
-        // on_clickVersionFilterCancel() {
-        //     this.dialogVersionFilterVisible = false
-        //     this.searchRow = ""
-        //     // this.versionFilterPolicy.selectVersionTags = []
-        // },
-        // 显示行确认
-        // on_clickVersionFilterConfirm() {
-        //     this.searchRow = ""
-        //     this.versionCandidatesShow = this.versionFilterPolicy.versionCandidates
-        //     this.dialogVersionFilterVisible = false
-        //     const condi = this.versionFilterPolicy.selectVersionTags
-        //     if(condi.length > 0) {
-        //         let condi_str = "`" + this.tmpFilterRow +"` in ["
-        //         for (var idx in condi) {
-        //             if (idx > 0) {
-        //                 condi_str = condi_str + ","
-        //             }
-        //             if(typeof(condi[idx]) === 'string') {
-        //                 condi_str = condi_str + "'" + condi[idx] + "'"
-        //             }
-        //         }
-        //         condi_str = condi_str + "]"
-        //         this.datasource.pushFilterCondition(this.tmpFilterRow, condi_str)
-        //     } else {
-        //         this.datasource.filter = {}
-        //     }
-        //     this.$refs.excel.dataRefresh++
-        // },
         //选择列确认
         on_clickCollectionConfirm() {
             this.dialogCollectionVisible = false
@@ -620,14 +556,6 @@ export default {
         //sample请求数据
         dataSampleVisible(n, o) {
             let that = this
-
-            if (this.versionCandidatesShow.length === 0) {
-                that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
-                    this.datasetVersion = data
-                    console.log(this.datasetVersion)
-                })
-            }
-
             if (this.dataVersionArrShow.length === 0) {
                 that.datasource.resetUrl(`${hostName}/phdydatasource/query`)
                 that.datasource.queryVersion(this).then((data) => {
@@ -636,17 +564,6 @@ export default {
             }
 
         },
-        //显示行请求接口
-        // dialogVersionFilterVisible(n, o) {
-        //     let that = this
-        //     if (this.versionCandidatesShow.length === 0) {
-        //         that.datasource.queryDlgDistinctCol(this, this.tmpFilterRow).then((data) => {
-        //             //完整的显示行列表数据
-        //             that.versionCandidatesShow = data
-        //             that.versionFilterPolicy.versionCandidates = data
-        //         })
-        //     }
-        // },
         // 显示列请求接口
         dialogCollectionVisible(n, o) {
             if (this.collectionsPolicy.collections.length === 0)
