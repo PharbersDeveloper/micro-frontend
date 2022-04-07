@@ -6,10 +6,9 @@ export async function pharbersArticlesListRouteModel(route) {
 	} else {
 		lang = 0
 	}
-
-	const articlesList = await route.store.query("article", {})
+	const articlesList = await route.store.query("article", { sort: "-date" })
 	console.log(articlesList)
 	return {
-		articlesList: articlesList.filter((it) => it)
+		articlesList: articlesList.filter((it) => it.avatar && it.avatar !== "")
 	}
 }

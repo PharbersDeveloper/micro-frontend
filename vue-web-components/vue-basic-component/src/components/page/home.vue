@@ -1,5 +1,6 @@
 <template>
     <div class="home-container">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="bp-home">
             <!-- truth -->
             <div class="truth-content-area">
@@ -8,6 +9,32 @@
                     <bpText class="ph-body-medium">{{translation_data.truthDes}}</bpText>
                 </div>
                 <bpImg :src="src" class="home-header-img"></bpImg>
+            </div>
+            <!-- Industry Insight -->
+            <div class="content-active-area content-industry-area">
+                <div class="active-line">
+                    <div class="active-yellow-line"></div>
+                </div>
+                <bpText class="active-text">{{translation_data.IndustryInsightEvents}}</bpText>
+                <bpCardArticle 
+                    v-for="card in allData.articles"
+                    :key="card.title"
+                    @toArticlePage="linkToArticlePage"
+                    :bgImgs="card.avatar"
+                    :title="card.title"
+                    :date="card.date"
+                    :uri="card.uri"
+                    :id="card.id"
+                    :curIndex="card.curIndex"
+                ></bpCardArticle>
+                <div class="content-active-review-more-button">
+                    <div class="show-more-button-container" @click="linkToPage('articles-list')">
+                        <bpButton :text="translation_data.moreIndustryInsight" class="button-official-gray-line"></bpButton>
+                        <bpImg class="active-button-go" :src="buttonGo"></bpImg>
+                    </div>
+                </div>
+                <div class="content-active-bg-yellow"></div>
+                <div class="content-active-bg-line-right"></div>
             </div>
             <!-- activity -->
             <div class="content-active-area">
@@ -159,9 +186,13 @@ import navTop from '../panel/bp-nav-top'
 import bpText from '../bp-text'
 import bpImg from '../bp-img'
 import bpCardActive from '../panel/bp-card-activity'
+import bpCardArticle from '../panel/bp-card-article'
 import bpButton from '../bp-button'
 import BpText from '../bp-text.vue'
 import { staticFilePath } from '../../config/envConfig'
+import ElCard from 'element-ui/packages/card/src/main.vue'
+import ElButton from 'element-ui/packages/button/index'
+
 export default {
     name: 'home',
     data() {
@@ -176,6 +207,9 @@ export default {
                     //truth
                     truthTitle: "还原真实 可见未来",
                     truthDes: "医药数据融合与洞见者",
+                    // Industry Insight
+                    IndustryInsightEvents: "Industry Insight",
+                    moreIndustryInsight: "更多内容",
                     //active
                     activeEvents: "EVENTS",
                     moreActivity: "更多活动",
@@ -211,6 +245,9 @@ export default {
                     //truth
                     truthTitle: "See The Truth \nSee The Future",
                     truthDes: "Leading Fusion and Insight in Medical Data",
+                    // Industry Insight
+                    IndustryInsightEvents: "Industry Insight",
+                    moreIndustryInsight: "MORE",
                     //active
                     activeEvents: "Events",
                     moreActivity: "MORE",
@@ -274,7 +311,10 @@ export default {
         BpText,
         iconLine,
         iconLineRes,
-        navTop
+        navTop,
+        ElCard,
+        ElButton,
+        bpCardArticle
     },
     methods: {
         linkToPage(value, idx) {
@@ -289,8 +329,17 @@ export default {
             }
             this.$emit('event', event)
         },
-        toActivityPage(curType, id) {
-            this.$emit('toActivityPage', curType, id)
+        linkToArticlePage(data) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToArticlePage",
+                element: this,
+                param: {
+                    name: "article",
+                    uri: data
+                }
+            }
+            this.$emit('event', event)
         },
         returnToTop() {
             document.documentElement.scrollTop = 0
@@ -479,6 +528,9 @@ export default {
             }
         }
         // truth end
+        .content-industry-area {
+            margin-bottom: 180px;
+        }
         // active
         .content-active-area {
             height: 421px;

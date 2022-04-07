@@ -144,7 +144,6 @@ export default {
     },
     methods: {
         checkENV(env) {
-            debugger
             if(env === "development") {
                 this.hostName = "https://apidev.pharbers.com"
                 this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"

@@ -21,15 +21,20 @@ export async function pharbersHomeRouteModel(route) {
 		include: "cover"
 	})
 
-	this.afterModel = function () {
-		if (this.loadingService.afterLoading) {
-			this.loadingService.loading.style.display = "none"
-		}
-	}
-	// eslint-disable-next-line no-undef
-	let results = await Promise.all([activityList, reportsList])
+	const articlesList = route.store.query("article", {
+		sort: "-date"
+	})
+
+	const homeArticles = [
+		"第五轮VBP，内外资企业不同之伤！",
+		"4+7城市药品集中采购政策影响回顾",
+		"看国谈已执行品种是否获益，新版医保谈判目录如何变化"
+	]
+
+	let results = await Promise.all([activityList, reportsList, articlesList])
 	return {
 		activities: results[0].filter((it) => it.language === lang),
-		reports: results[1].filter((it) => it.language === lang)
+		reports: results[1].filter((it) => it.language === lang),
+		articles: results[2].filter((it) => homeArticles.indexOf(it.title) > -1)
 	}
 }

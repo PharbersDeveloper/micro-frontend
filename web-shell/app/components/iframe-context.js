@@ -91,7 +91,6 @@ export default class IframeContextComponent extends Component {
 
 	@action
 	async registerListener(element) {
-		debugger
 		window.addEventListener('message', this.iframeEvent)
 		this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
