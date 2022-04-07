@@ -242,7 +242,7 @@ export default {
             tmpFilterRow: "version",
             needRefresh: 0,
             dataSampleVisible: false,
-            dataSampleType: "",
+            dataSampleType: "数据量采样",
             dataVersionArr: [],
             dataVersionArrShow: [],
             dataVersionDisabled: true,
