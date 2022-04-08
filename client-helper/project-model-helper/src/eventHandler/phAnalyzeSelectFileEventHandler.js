@@ -83,6 +83,16 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					param.projectId,
 					"uploaded"
 				)
+				route.noticeService.defineAction({
+					type: "iot",
+					id: param.s3UploadMessage.message.refer_name,
+					remoteResource: "notification",
+					runnerId: "",
+					eventName: "uploadfiles",
+					projectId: param.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: noticeCallback
+				})
 			}
 			break
 		case "uploadFiles":
