@@ -15,7 +15,8 @@
                 </div>
             </div>
             <div class="title-right">
-                <el-button @click="dataSampleVisible = true" :disabled="allData.datasetCat != 'intermediate'" class="data-version">数据样本配置</el-button>
+				<!-- :disabled="allData.datasetCat != 'intermediate'" -->
+                <el-button @click="dataSampleVisible = true" class="data-version">数据样本配置</el-button>
                 <div class="btn-groups">
                     <button class="btn_chart" @click="dialogDownloadVisible = true" disabled>下载当前筛选数据</button>
                     <bp-select-vue class="btn_select" :src="selectIcon" choosedValue="显示菜单" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
@@ -246,7 +247,7 @@ export default {
             dataVersionArr: [],
             dataVersionArrShow: [],
             dataVersionDisabled: true,
-            dataCollectionDisabled: true,
+            dataCollectionDisabled: false,
             checkedDataVersion: [],
             dataCollectionMethods: "",
             dataCollectionNum: ""
@@ -408,7 +409,6 @@ export default {
                     "projectId": this.allData.projectId,
                     "targetDataset": this.allData.targetDataset,
                     "sample": sample,
-                    // "datasetVersion": this.datasetVersion[0],
                     "datasetId": this.allData.datasetId
                 }
             }
