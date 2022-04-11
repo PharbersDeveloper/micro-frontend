@@ -140,7 +140,7 @@ function PhMQTT(config, callBack, destroyQueue) {
 			// 		}
 			// 	}
 			// }
-		}, 1000 * 1) // 5秒 后续可编程参数，先实现
+		}, 3000 * 1) // 5秒 后续可编程参数，先实现
 	}
 
 	const __timeout = () => {
