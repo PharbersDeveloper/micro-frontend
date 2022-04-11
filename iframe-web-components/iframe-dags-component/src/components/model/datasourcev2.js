@@ -100,7 +100,7 @@ export default class PhDagDatasource {
         return ele.datasource.buildDistinctColQuery(ele, row)
             .then((response) => response.json())
             .then((response) => {
-                return response.map(x => x["name"])
+                return response.data.map(x => x["attributes"]["name"])
             })
     }
 

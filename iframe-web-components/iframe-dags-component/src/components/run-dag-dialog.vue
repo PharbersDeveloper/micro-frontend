@@ -19,7 +19,7 @@
                                 <td class="input" :title="item.name">{{item.name}}</td>
                                 <td class="version" >
                                     <span :title="item.version.toString()">{{item.version.toString()}}</span>
-                                    <img v-if="item.cat === 'uploaded'" class="add_version" :src="img1" @click="addVersion(item.name, item.version, item.representId)"/>
+                                    <img v-if="item.cat === 'uploaded' || item.cat === 'catalog'" class="add_version" :src="img1" @click="addVersion(item.name, item.version, item.representId)"/>
                                 </td>
                                 <td class="cat">{{item.cat}}</td>
                             </tr>
