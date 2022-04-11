@@ -38,7 +38,6 @@ import { staticFilePath, hostName } from "../config/envConfig"
 export default {
     data() {
         return{
-            selColName: "version",
             versionArrShow: [],
             selectVersionTags: [],
             searchRow: [],
@@ -55,7 +54,8 @@ export default {
         },
         datasetName: String,
         projectId: String,
-        dsVersion: Array
+        dsVersion: Array,
+        representId: String
     },
     computed: {},
     mounted() {
@@ -63,10 +63,10 @@ export default {
         this.selectVersionTags = this.dsVersion
         this.datasource.name = this.datasetName
         this.datasource.projectId = this.projectId
-        // this.datasource.queryDlgDistinctCol(this, this.selColName).then((data) => {
-        //     //完整的显示行列表数据
-        //     that.versionArrShow = data.filter(it => that.selectVersionTags.indexOf(it) === -1)
-        // })
+        this.datasource.queryDlgDistinctCol(this, this.representId).then((data) => {
+            //完整的显示行列表数据
+            that.versionArrShow = data.filter(it => that.selectVersionTags.indexOf(it) === -1)
+        })
     },
     watch: {},
     methods: {

@@ -41,24 +41,19 @@ export default class PhDagDatasource {
 
     //查询version
     buildDistinctColQuery(ele, col) {
-        const url = `${hostName}/phdadatasource`
-        function buildDistinctColSql() {
-            let sql_str = "SELECT DISTINCT " + col
-
-            if (ele.datasource.projectId.length === 0)
-                sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
-            else
-                sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
-
-            sql_str = sql_str + " ORDER BY " + col
-
-            return sql_str
-        }
+        const uri = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        let id = ele.projectId + "_" + ele.representId
         let body = {
-            "query": buildDistinctColSql(),
-            "schema": [col],
-            "projectId": this.projectId
+            "table": "version",
+            "conditions": {
+                "id": [
+                    "=",
+                    id
+                ]
+            },
+            "limit": 100,
+            "start_key": ""
         }
         let options = {
             method: "POST",
@@ -69,14 +64,43 @@ export default class PhDagDatasource {
             },
             body: JSON.stringify(body)
         }
-        return fetch(url, options)
+        return fetch(uri, options)
+        // const url = `${hostName}/phdadatasource`
+        // function buildDistinctColSql() {
+        //     let sql_str = "SELECT DISTINCT " + col
+
+        //     if (ele.datasource.projectId.length === 0)
+        //         sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+        //     else
+        //         sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+
+        //     sql_str = sql_str + " ORDER BY " + col
+
+        //     return sql_str
+        // }
+        // const accessToken = ele.getCookie("access_token") || this.debugToken
+        // let body = {
+        //     "query": buildDistinctColSql(),
+        //     "schema": [col],
+        //     "projectId": this.projectId
+        // }
+        // let options = {
+        //     method: "POST",
+        //     headers: {
+        //         "Authorization": accessToken,
+        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        //         "accept": "application/json"
+        //     },
+        //     body: JSON.stringify(body)
+        // }
+        // return fetch(url, options)
     }
 
     queryDlgDistinctCol(ele, row) {
         return ele.datasource.buildDistinctColQuery(ele, row)
             .then((response) => response.json())
             .then((response) => {
-                return response.map(x => x[row])
+                return response.map(x => x["name"])
             })
     }
 

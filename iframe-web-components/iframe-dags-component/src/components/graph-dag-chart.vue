@@ -408,6 +408,7 @@ export default {
             roots.forEach(item => {
                 datasetsArr.push({
                     "name": item.attributes.name,
+                    "representId": item.representId,
                     "version": [],
                     "cat": item["attributes"]["runtime"],
                     "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
