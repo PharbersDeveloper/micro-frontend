@@ -112,6 +112,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				params.targetDataset.id = params.datasetId
 				let sourceProjectIdValue = ""
 				if (params.targetDataset.cat === "catalog") {
+					// 与后端沟通,catalog类型的projectId都是一个，暂时写死
 					sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
 				} else {
 					sourceProjectIdValue = params.projectId
