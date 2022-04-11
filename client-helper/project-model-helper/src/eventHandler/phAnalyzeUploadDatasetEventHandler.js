@@ -378,8 +378,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	async function createCatalogSample() {
 		let { catalog_result, projectId, projectName } =
 			route.create_catalog_result
-		let { attributes } = catalog_result.data
-		let message = JSON.parse(attributes.message)
+		let message = JSON.parse(catalog_result)
 		const url = `${hostName}/phdydatasource/put_item`
 		let sample = "F_1"
 		let sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
@@ -440,7 +439,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed") {
-			// alert("新建数据集成功！")
+			alert("新建数据集成功！")
 			window.location.reload()
 		} else if (status == "failed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
@@ -460,8 +459,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			createCatalogSample()
-			// alert("新建数据集成功！")
-			// window.location.reload()
 		} else if (status == "failed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
