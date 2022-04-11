@@ -16,7 +16,7 @@ export default class PhContainerDataSource {
             this.url= `${hostName}/phchproxyquery`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "548333c2afa7b2a966c4141a7c8c60e7d83d6523599bf48c4069487fffe58432"
+        this.debugToken = "6a4fa4486f48222eca088ff46a4c0b89360f6f1c0bad992797581b30f15da568"
     }
 
     resetUrl(url) {
@@ -322,12 +322,44 @@ export default class PhContainerDataSource {
         }
         return fetch(url, options)
     }
+    //请求sample
+    buildSampleQuery(ele) {
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        const body = {
+            table: "dataset",
+            conditions: {
+                projectId: ["=",ele.datasource.projectId],
+                id: ["=", ele.allData.datasetId]
+            },
+            limit: 100,
+            start_key: ""
+        }
+        const options = {
+            method: "POST",
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
 
     queryVersion(ele) {
         return ele.datasource.buildVersionQuery(ele)
             .then((response) => response.json())
             .then((response) => {
                 return response.data.map(x => x["attributes"]["name"])
+            })
+    }
+
+    querySample(ele) {
+        return ele.datasource.buildSampleQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.data.map(x => x["attributes"]["sample"])
             })
     }
 }

@@ -159,7 +159,7 @@ export default {
         },
         async queryData() {
             let url = `${this.hostName}/phdadataquery`
-            const accessToken = this.getCookie("access_token") || "548333c2afa7b2a966c4141a7c8c60e7d83d6523599bf48c4069487fffe58432"
+            const accessToken = this.getCookie("access_token") || "6a4fa4486f48222eca088ff46a4c0b89360f6f1c0bad992797581b30f15da568"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -186,7 +186,7 @@ export default {
         },
         async saveCode() {
             let url = `${this.hostName}/phdadataupdata`
-            const accessToken = this.getCookie("access_token") || "548333c2afa7b2a966c4141a7c8c60e7d83d6523599bf48c4069487fffe58432"
+            const accessToken = this.getCookie("access_token") || "6a4fa4486f48222eca088ff46a4c0b89360f6f1c0bad992797581b30f15da568"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,

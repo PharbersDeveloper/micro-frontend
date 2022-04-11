@@ -240,7 +240,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "548333c2afa7b2a966c4141a7c8c60e7d83d6523599bf48c4069487fffe58432"
+        const accessToken = this.getCookie("access_token") || "6a4fa4486f48222eca088ff46a4c0b89360f6f1c0bad992797581b30f15da568"
         const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
@@ -371,7 +371,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "548333c2afa7b2a966c4141a7c8c60e7d83d6523599bf48c4069487fffe58432"
+            const accessToken = this.getCookie("access_token") || "6a4fa4486f48222eca088ff46a4c0b89360f6f1c0bad992797581b30f15da568"
             const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",
