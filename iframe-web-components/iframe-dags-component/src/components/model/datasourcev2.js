@@ -40,10 +40,16 @@ export default class PhDagDatasource {
     }
 
     //查询version
-    buildDistinctColQuery(ele, col) {
+    buildDistinctColQuery(ele, col, cat, dsName) {
         const uri = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie("access_token") || this.debugToken
-        let id = ele.projectId + "_" + ele.representId
+        const companyId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+        let id = ""
+        if (cat === "catalog") {
+            id = (companyId + "_" + dsName).toLowerCase()
+        } else {
+            id = ele.projectId + "_" + ele.representId
+        }
         let body = {
             "table": "version",
             "conditions": {
@@ -96,8 +102,8 @@ export default class PhDagDatasource {
         // return fetch(url, options)
     }
 
-    queryDlgDistinctCol(ele, row) {
-        return ele.datasource.buildDistinctColQuery(ele, row)
+    queryDlgDistinctCol(ele, row, cat, dsName) {
+        return ele.datasource.buildDistinctColQuery(ele, row, cat, dsName)
             .then((response) => response.json())
             .then((response) => {
                 return response.data.map(x => x["attributes"]["name"])

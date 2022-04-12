@@ -19,7 +19,7 @@
                                 <td class="input" :title="item.name">{{item.name}}</td>
                                 <td class="version" >
                                     <span :title="item.version.toString()">{{item.version.toString()}}</span>
-                                    <img v-if="item.cat === 'uploaded' || item.cat === 'catalog'" class="add_version" :src="img1" @click="addVersion(item.name, item.version, item.representId)"/>
+                                    <img v-if="item.cat === 'uploaded' || item.cat === 'catalog'" class="add_version" :src="img1" @click="addVersion(item.name, item.version, item.representId, item.cat)"/>
                                 </td>
                                 <td class="cat">{{item.cat}}</td>
                             </tr>
@@ -58,6 +58,7 @@
             :dsVersion="dsVersion"
             :datasetName="dsName"
             :representId="representId"
+            :cat="cat"
         ></select-version>
     </div>
 </template>
@@ -80,7 +81,8 @@ export default {
             dsName: "",
             representId: "",
             dsVersion: [],
-            img1: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg"
+            img1: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
+            cat: ""
         }
     },
     props: {
@@ -113,11 +115,12 @@ export default {
         closeSelVersionDialog() {
             this.selectDataVersion = false
         },
-        addVersion(dsName, dsVersion, representId) {
+        addVersion(dsName, dsVersion, representId, cat) {
             this.dsName = dsName
             this.dsVersion = dsVersion
             this.selectDataVersion = true
             this.representId = representId
+            this.cat = cat
         },
         isJSON_test(str) {
             if (typeof str == 'string') {
