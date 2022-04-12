@@ -3,7 +3,7 @@ import { hostName } from "../config/envConfig"
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDashboardsRouteModel(route, parseParams) {
 	const debugToken =
-		"4e0feeb1d5de7e5a3f4e17b0bfb110bef8b17f1d102e747b80843fe12adf62ee"
+		"5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
 	route.store.unloadAll("dashboard")
 	const projectId = parseParams.query.projectId
 	const projectName = parseParams.query.projectName

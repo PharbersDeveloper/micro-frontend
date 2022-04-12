@@ -2,7 +2,7 @@ import { hostName } from "../config/envConfig"
 
 export async function phHistogramInsightpageRouteModel(route, parseParams) {
 	let debugToken =
-		"4e0feeb1d5de7e5a3f4e17b0bfb110bef8b17f1d102e747b80843fe12adf62ee"
+		"5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
 	route.store.unloadAll("dashboard")
 	route.store.unloadAll("slide")
 	const projectId = parseParams.query.projectId

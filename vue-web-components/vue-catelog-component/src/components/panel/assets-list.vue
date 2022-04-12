@@ -138,7 +138,7 @@ export default {
             if (arr = document.cookie.match(reg))
                 return (arr[2]);
             else
-                return "4e0feeb1d5de7e5a3f4e17b0bfb110bef8b17f1d102e747b80843fe12adf62ee";
+                return "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f";
         },
         showPbcData(data) {
             this.dialogPbcVisible = true
