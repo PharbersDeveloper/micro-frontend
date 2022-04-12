@@ -38,7 +38,7 @@
         </div>
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
-                v-on:countIsReady="totalCountIsReady"
+                @countIsReady="totalCountIsReady"
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>

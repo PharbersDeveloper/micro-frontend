@@ -10,6 +10,7 @@ import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
+import prepare from './components/bp-prepare-container'
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ export default new Router({
             path: '/datasets',
             name: 'datasets',
             component: datasets
+        },
+        {
+            path: '/prepare',
+            name: 'prepare',
+            component: prepare
         },
         {
             path: '/data-list',
