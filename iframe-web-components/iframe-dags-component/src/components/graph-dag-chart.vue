@@ -117,7 +117,8 @@ import PhRenderPolicy from './policy/render/dag-render-policy'
 import PhDagDefinitions from './policy/definitions/definitions'
 import PhLogsPolicy from './policy/logs/log-policy'
 import PhStatusPolicy from './policy/handler/dagstatushandler'
-import PhDagTriggerPolicy from './policy/trigger/airflow-trigger-policy'
+import PhAirflowPolicy from './policy/trigger/airflow-trigger-policy'
+import PhAlfredPolicy from './policy/trigger/airflow-trigger-policy'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
@@ -154,6 +155,10 @@ export default {
         progressBar
     },
     props: {
+        schedulerPolicyName: {
+            type: String,
+            default: "airflow"
+        },
         datasource: {
             type: Object,
             default: function() {
@@ -187,7 +192,11 @@ export default {
         triggerPolicy: {
             type: Object,
             default: function() {
-                return new PhDagTriggerPolicy('1', this)
+                if (this.schedulerPolicyName === "airflow") {
+                    return new PhAirflowPolicy('1', this)
+                } else {
+                    return new PhAlfredPolicy('1', this)
+                }
             }
         }
         // noticeService: {
