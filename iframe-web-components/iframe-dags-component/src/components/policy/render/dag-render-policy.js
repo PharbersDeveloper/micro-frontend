@@ -98,17 +98,11 @@ export default class PhDagRenderPolicy {
             nodes.append('image')
                 .attr("xlink:href", ({data}) => {
                     let cat = data.category
-                    if (data.status === "succeed") {
-                        cat = cat + "_succeed"
-                    } else if (data.status === "failed") {
-                        cat = cat + "_failed"
+                    let status = data.status
+                    if (status === "succeed") {
+                        status = "success"
                     }
-                    const reVal = that.statusFlags.find(x => {
-                        if (x) {
-                            return x.name === cat
-                        }
-                    })
-                    return reVal.symbol
+                    return that.defs.iconsByName(cat, status)
                 })
                 .attr("width", "50")
                 .attr("height", "50")
@@ -152,7 +146,8 @@ export default class PhDagRenderPolicy {
                 if (scriptArr.length > 0) {
                     that.selectItem = scriptArr[0].attributes
                 }
-                that.changeHeaderIcon(i.data.attributes.cat, i.data.attributes.runtime, that)
+                // that.changeHeaderIcon(i.data.attributes.cat, i.data.attributes.runtime, that)
+                that.icon_header = that.defs.iconsByName(i.data.category, i.data.status)
                 console.log("selectItem", that.selectItem)
                 // that.$emit('itemClicked', params)
             })

@@ -24,44 +24,44 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <img :src="label_icon" alt="">
-                    <img :src="table_icon" alt="">
-                    <!-- <img :src="star_icon" alt="">
-                    <img :src="doc_icon" alt="">
-                    <img :src="share_icon" alt="">
-                    <img :src="hide_icon" alt=""> -->
-                    <img :src="run_icon" alt=""
+                    <img :src="this.defs.iconsByName('tag')" alt="">
+                    <img :src="this.defs.iconsByName('table')" alt="">
+                    <!-- <img :src="this.defs.iconsByName('star')" alt="">
+                    <img :src="this.defs.iconsByName('new-document-dashboard')" alt="">
+                    <img :src="this.defs.iconsByName('share')" alt="">
+                    <img :src="this.defs.iconsByName('hide')" alt=""> -->
+                    <img :src="this.defs.iconsByName('run')" alt=""
                         @click="on_click_runDag">
                     <img v-if="retryButtonShow && selectItem"
-                        :src="run_script" alt=""
+                        :src="this.defs.iconsByName('run', 'current')" alt=""
                         @click="on_click_retry_dag('self_only')">
                     <img v-if="retryButtonShow && selectItem"
-                        :src="run_to_script" alt=""
+                        :src="this.defs.iconsByName('run', 'to')" alt=""
                         @click="on_click_retry_dag('downstream')">
                     <img v-if="retryButtonShow  && selectItem"
-                        :src="run_from_script" alt=""
+                        :src="this.defs.iconsByName('run', 'from')" alt=""
                         @click="on_click_retry_dag('upstream')">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="run_script_gray" alt="">
+                        :src="this.defs.iconsByName('run', 'current-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="run_from_script_gray" alt="">
+                        :src="this.defs.iconsByName('run', 'from-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="run_to_script_gray" alt="">
+                        :src="this.defs.iconsByName('run', 'to-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="stop_icon" alt="">
+                        :src="this.defs.iconsByName('stop')" alt="">
                 </div>
                 <div class="sec_icon_row">
-                    <img :src="delete_icon" alt="">
-                    <img :src="del_icon_black" alt="">
+                    <img :src="this.defs.iconsByName('delete_r')" alt="">
+                    <img :src="this.defs.iconsByName('del_icon_black')" alt="">
                 </div>
             </div>
             <div class="scripts_area">
                 <div class="script_title">脚本</div>
                 <div class="scripts">
-                    <img :src="py_icon" alt="">
-                    <img :src="pySpark_icon" alt="">
-                    <img :src="R_icon" alt="">
-                    <img :src="sparkR_icon" alt="">
+                    <img :src="this.defs.iconsByName('python')" alt="">
+                    <img :src="this.defs.iconsByName('pyspark')" alt="">
+                    <img :src="this.defs.iconsByName('r')" alt="">
+                    <img :src="this.defs.iconsByName('sparkr')" alt="">
                 </div>
             </div>
         </div>
@@ -75,12 +75,12 @@
         ></run-dag-dialog>
 
         <dag-logs-dialog
-            v-if="showDagLogs"
+            v-if="this.logsPolicy.showDagLogs"
             :runId="runId"
             :jobShowName="jobShowName"
             :projectName="projectName"
             :representId="representId"
-            @closeLogDialog="closeLogDialog"
+            @closeLogDialog="this.logsPolicy.closeLogDialog"
         ></dag-logs-dialog>
 
         <div class="job_status_area">
@@ -112,14 +112,16 @@
     </div>
 </template>
 <script>
-import * as d3_base from "d3";
-import * as d3_dag from "d3-dag";
+// import * as d3_base from "d3";
+// import * as d3_dag from "d3-dag";
 import PhDagDatasource from './model/datasourcev2'
 import PhRenderPolicy from './policy/render/dag-render-policy'
+import PhDagDefinitions from './definitions/definitions'
+import PhLogsPolicy from './policy/logs/log-policy'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
-import { staticFilePath, hostName } from "../config/envConfig"
+import { hostName } from "../config/envConfig"
 // import noticeService from './model/notice-service'
 
 export default {
@@ -129,27 +131,7 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            icon_header: `${staticFilePath}` + "/icons/DSuploaded.svg",
-            label_icon: `${staticFilePath}` + "/tag.svg",
-            table_icon: `${staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC(1).svg",
-            star_icon: `${staticFilePath}` + "/%E6%94%B6%E8%97%8F.svg",
-            doc_icon: `${staticFilePath}` + "/new-document-dashboard.svg",
-            share_icon: `${staticFilePath}` + "/share.svg",
-            delete_icon: `${staticFilePath}` + "/delete_r.svg",
-            del_icon_black: `${staticFilePath}` + "/%E5%88%A0%E9%99%A4+(1)(1).svg",
-            hide_icon: `${staticFilePath}` + "/%E9%9A%90%E8%97%8F.svg",
-            py_icon: `${staticFilePath}` + "/icons/python%E6%AD%A3%E5%B8%B8.svg",
-            pySpark_icon: `${staticFilePath}` + "/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg",
-            R_icon: `${staticFilePath}` + "/icons/R%E6%AD%A3%E5%B8%B8.svg",
-            sparkR_icon: `${staticFilePath}` + "/icons/sparkR%E6%AD%A3%E5%B8%B8.svg",
-            run_icon: `${staticFilePath}` + "/%E5%BC%80%E5%A7%8B1.svg",
-            run_to_script: `${staticFilePath}` + "/icons/%E8%BF%90%E8%A1%8C%E8%87%B3%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_from_script: `${staticFilePath}` + "/icons/%E7%94%B1%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC%E5%BC%80%E5%A7%8B%E8%BF%90%E8%A1%8C.svg",
-            run_script: `${staticFilePath}` + "/icons/%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%BD%93%E5%89%8D%E8%84%9A%E6%9C%AC.svg",
-            run_script_gray: `${staticFilePath}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2%E5%8D%95%E4%B8%AA.svg",
-            run_from_script_gray: `${staticFilePath}` + "/icons/%E9%A1%BA%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            run_to_script_gray: `${staticFilePath}` + "/icons/%E9%80%86%E6%97%B6%E9%92%88%E7%81%B0%E8%89%B2.svg",
-            stop_icon: `${staticFilePath}` + "/icons/%E5%81%9C%E6%AD%A2.svg",
+            icon_header: "", //this.defs.iconsByName('DSuploaded'),
             selectItem: null,
             showRunJson: false,
             runId: "",
@@ -157,7 +139,6 @@ export default {
             failedLogs: [],
             projectName: "ETL_Iterator",
             loading: false,
-            showDagLogs:false,
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
             responseArr: [],
@@ -186,146 +167,24 @@ export default {
                 return new PhRenderPolicy('1', this)
             }
         },
+        defs: {
+            type: Object,
+            default: function() {
+                return new PhDagDefinitions('1')
+            }
+        },
+        logsPolicy: {
+            type: Object,
+            default: function() {
+                return new PhLogsPolicy('1', this)
+            }
+        }
         // noticeService: {
         //     type: Object,
         //     default: function() {
         //         return new noticeService('1')
         //     }
         // },
-        statusFlagsHeader: {
-            type: Object,
-            default: function() {
-                return {
-                    DSuploaded_header: `${staticFilePath}` + "/icons/DSuploaded%E5%8F%8D%E8%89%B2.svg",
-                    DSIntermediate_header: `${staticFilePath}` + "/icons/DSIntermediate%E5%8F%8D%E8%89%B2.svg",
-                    input_index_header: `${staticFilePath}` + "/icons/max_1.0_in%E5%8F%8D%E8%89%B2.svg",
-                    output_index_header: `${staticFilePath}` + "/icons/max_1.0_out%E5%8F%8D%E8%89%B2.svg",
-                    python3_header: `${staticFilePath}` + "/icons/python%E5%8F%8D%E8%89%B2.svg",
-                    pyspark_header: `${staticFilePath}` + "/icons/Pyspark%E5%8F%8D%E8%89%B2.svg",
-                    sparkr_header: `${staticFilePath}` + "/icons/sparkR%E5%8F%8D%E8%89%B2.svg",
-                    r_header: `${staticFilePath}` + "/icons/R%E5%8F%8D%E8%89%B2.svg",
-                    dataset_header: `${staticFilePath}` + "/WX20211019-173847.png",
-                    job_header: `${staticFilePath}` + "/WX20211019-163226.png",
-                    prepare_header: `${staticFilePath}` + "/icons/prepare%E5%8F%8D%E8%89%B2.svg",
-                    catalog_header: `${staticFilePath}` + "/icons/catalog_icon%E5%8F%8D%E8%89%B2.svg"
-                }
-            }
-        },
-        statusFlags: {
-            type: Array,
-            default: function() {
-                return [
-                    {
-                        name: 'DSuploaded',
-                        symbol: `${staticFilePath}` + '/icons/DSuploaded.svg'
-                    },
-                    {
-                        name: 'DSIntermediate',
-                        symbol: `${staticFilePath}` + '/icons/DSIntermediate.svg'
-                    },
-                    {
-                        name: 'Python3',
-                        symbol: `${staticFilePath}` + '/icons/python%E6%AD%A3%E5%B8%B8.svg'
-                    },
-                    {
-                        name: 'Python3_failed',
-                        symbol: `${staticFilePath}` + '/icons/python%E5%A4%B1%E8%B4%A5.svg'
-                    },
-                    {
-                        name: 'Python3_running',
-                        symbol: `${staticFilePath}` + '/icons/python3_running.svg'
-                    },
-                    {
-                        name: 'Python3_succeed',
-                        symbol: `${staticFilePath}` + '/icons/python%E6%88%90%E5%8A%9F.svg'
-                    },
-                    {
-                        name: 'PySpark',
-                        symbol: `${staticFilePath}` + '/icons/Pyspark%E6%AD%A3%E5%B8%B8.svg'
-                    },
-                    {
-                        name: 'PySpark_succeed',
-                        symbol: `${staticFilePath}` + '/icons/Pyspark%E6%88%90%E5%8A%9F.svg'
-                    },
-                    {
-                        name: 'PySpark_failed',
-                        symbol: `${staticFilePath}` + '/icons/Pyspark%E5%A4%B1%E8%B4%A5.svg'
-                    },
-                    {
-                        name: "PySpark_running",
-                        symbol: `${staticFilePath}` + '/icons/Pyspark%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
-                    },
-                    {
-                        name: 'SparkR',
-                        symbol: `${staticFilePath}` + '/icons/sparkR%E6%AD%A3%E5%B8%B8.svg'
-                    },
-                    {
-                        name: 'SparkR_succeed',
-                        symbol: `${staticFilePath}` + '/icons/sparkR%E6%88%90%E5%8A%9F.svg'
-                    },
-                    {
-                        name: 'SparkR_failed',
-                        symbol: `${staticFilePath}` + '/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
-                    },
-                    {
-                        name: 'SparkR_running',
-                        symbol: `${staticFilePath}` + '/icons/sparkR_running.svg'
-                    },
-                    {
-                        name: 'R',
-                        symbol: `${staticFilePath}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
-                    },
-                    {
-                        name: 'R_succeed',
-                        symbol: `${staticFilePath}` + '/icons/R%E6%88%90%E5%8A%9F.svg'
-                    },
-                    {
-                        name: 'R_failed',
-                        symbol: `${staticFilePath}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
-                    },
-                    {
-                        name: 'R_running',
-                        symbol: `${staticFilePath}` + '/icons/R_running.svg'
-                    },
-                    {
-                        name: 'prepare',
-                        symbol: `${staticFilePath}` + '/icons/prepare%E6%AD%A3%E5%B8%B8.svg'
-                    },
-                    {
-                        name: 'prepare_succeed',
-                        symbol: `${staticFilePath}` + '/icons/prepare%E6%88%90%E5%8A%9F.svg'
-                    },
-                    {
-                        name: 'prepare_failed',
-                        symbol: `${staticFilePath}` + '/icons/prepare%E5%A4%B1%E8%B4%A5.svg'
-                    },
-                    {
-                        name: 'prepare_running',
-                        symbol: `${staticFilePath}` + '/icons/prepare%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C.svg'
-                    },
-                    {
-                        name: 'job',
-                        symbol: `${staticFilePath}` + '/WX20211019-163226.png'
-                    },
-                    {
-                        name: 'dataset',
-                        symbol: `${staticFilePath}` + '/WX20211019-173847.png'
-                    },
-                    {
-                        name: 'DSInputIndex',
-                        symbol: `${staticFilePath}` + '/icons/max_1.0_in.svg'
-                    },
-                    {
-                        name: 'DSOutputIndex',
-                        symbol: `${staticFilePath}` + '/icons/max_1.0_out.svg'
-                    },
-                    {
-                        name: 'DSCatalog',
-                        symbol: `${staticFilePath}` + '/icons/catalog_icon.svg'
-                    }
-                ]
-            }
-        }
     },
     mounted () {
         let href = window.location.href
@@ -336,7 +195,6 @@ export default {
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         // 判断环境
         let env = this.getUrlParam(paramArr, "environment")
-        this.checkENV(env)
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.handleMessage)
@@ -347,15 +205,6 @@ export default {
         window.removeEventListener('message', this.handleMessage)
     },
     methods: {
-        checkENV(env) {
-            if(env === "development") {
-                this.hostName = "https://apidev.pharbers.com"
-                this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
-            } else {
-                this.hostName = "https://apiv2.pharbers.com"
-                this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
-            }
-        },
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
@@ -373,15 +222,6 @@ export default {
                 }
             }
         },
-        closeLogDialog() {
-            this.showDagLogs = false
-        },
-        showLogs(data, representId) {
-            this.runId = JSON.parse(data.message).cnotification.runId
-            this.jobShowName = JSON.parse(data.message).cnotification.jobShowName
-            this.representId = representId
-            this.showDagLogs = true
-        },
         //关闭进度条
         closeProgress() {
             this.showProgress = false
@@ -394,7 +234,7 @@ export default {
             this.showProgress = true
             // 2.节点状态
             let data = this.datasource.data
-            data.map((it,index) => {
+            data.map((it, index) => {
                 it.status = it["attributes"]["runtime"]
                 that.refreshNodeStatus(it)
             })
@@ -558,8 +398,9 @@ export default {
                         } else {
                             result = cat
                         }
-                        const reVal = that.statusFlags.find(x => x.name === result)
-                        return reVal.symbol
+                        // const reVal = that.statusFlags.find(x => x.name === result)
+                        // return reVal.symbol
+                        return ""
                     })
             }
         },
@@ -629,7 +470,6 @@ export default {
             // 发布前解注
             // document.domain = "pharbers.com"
         },
-
         // 监听屏幕大小改变
         bindChangeWindow () {
             window.onresize = () => {
@@ -648,36 +488,9 @@ export default {
             else
                 return null;
         },
-        changeHeaderIcon(cat, runtime, ele) {
-            if (cat === "dataset" && runtime === "uploaded") {
-                ele.icon_header = ele["statusFlagsHeader"]["DSuploaded_header"]
-            } else if (cat === "dataset" && runtime === "intermediate") {
-                ele.icon_header = ele["statusFlagsHeader"]["DSIntermediate_header"]
-            } else if (cat === "dataset" && runtime === "catalog") {
-                ele.icon_header = ele["statusFlagsHeader"]["catalog_header"]
-            } else if (cat === "dataset" && runtime === "input_index") {
-                ele.icon_header = ele["statusFlagsHeader"]["input_index_header"]
-            } else if (cat === "dataset" && runtime === "output_index") {
-                ele.icon_header = ele["statusFlagsHeader"]["output_index_header"]
-            } else if (cat === "job" && runtime === "python3") {
-                ele.icon_header = ele["statusFlagsHeader"]["python3_header"]
-            } else if (cat === "job" && runtime === "pyspark") {
-                ele.icon_header = ele["statusFlagsHeader"]["pyspark_header"]
-            } else if (cat === "job" && runtime === "sparkr") {
-                ele.icon_header = ele["statusFlagsHeader"]["sparkr_header"]
-            } else if (cat === "job" && runtime === "prepare") {
-                ele.icon_header = ele["statusFlagsHeader"]["prepare_header"]
-            } else if (cat === "job" && runtime === "r") {
-                ele.icon_header = ele["statusFlagsHeader"]["r_header"]
-            } else if (cat === "dataset") {
-                ele.icon_header = ele["statusFlagsHeader"]["dataset_header"]
-            } else if (cat === "job") {
-                ele.icon_header = ele["statusFlagsHeader"]["job_header"]
-            }
-        },
         renderDag (data) {
             this.renderPolicy.renderDag(data, () => {
-                const windowHeight = that.$refs.chart.offsetHeight
+                const windowHeight = this.$refs.chart.offsetHeight
                 this.$refs.viewport.scroll({
                     top: windowHeight / 2,
                     left: 0,
