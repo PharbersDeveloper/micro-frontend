@@ -153,4 +153,38 @@ export default class PhDagRenderPolicy {
             postRenderHook()
         }
     }
+
+    //二次trigger清空所有状态
+    resetDagStatus(val) {
+        let that = this
+        // 1.进度条状态
+        this.parent.progressOver = false
+        this.parent.showProgress = true
+        // 2.节点状态
+        let data = this.parent.datasource.data
+        data.map((it, index) => {
+            it.status = it["attributes"]["runtime"]
+            that.parent.refreshNodeStatus(it)
+        })
+        // 3.log弹窗
+        this.failedLogs = []
+    }
+
+    //更新节点状态
+    refreshNodeStatus(node) {
+        // const that = this
+        const d3 = Object.assign({}, d3_base, d3_dag)
+        if (node["attributes"]["cat"] === "job") {
+            d3.select("#" + node["attributes"]["name"]).selectAll("image")
+                .attr("xlink:href", ({data}) => {
+                    const cat = data.category
+                    let status = data.status
+                    if (status === "succeed") {
+                        status = "success"
+                    }
+                    return that.defs.iconsByName(cat, status)
+                })
+        }
+    }
+
 }

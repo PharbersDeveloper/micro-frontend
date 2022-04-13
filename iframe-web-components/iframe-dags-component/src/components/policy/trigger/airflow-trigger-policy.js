@@ -93,7 +93,7 @@ export default class PhDagTriggerPolicy {
         this.parent.eventPolicy.forwardMessageToParent(tmpMsg)
         this.parent.showRunJson = false
         this.parent.loading = false
-        this.parent.resetDagStatus("trigger")
+        this.parent.renderPolicy.resetDagStatus("trigger")
     }
 
     /**
@@ -143,5 +143,16 @@ export default class PhDagTriggerPolicy {
         this.parent.eventPolicy.forwardMessageToParent(tmpMsg)
         this.parent.showProgress = true
         this.parent.progressOver = false
+    }
+
+    handlerJSON(str) {
+        if (typeof str == 'string') {
+            try {
+                let jsonValue = JSON.parse(str);
+                return jsonValue;
+            } catch (e) {
+                return str
+            }
+        }
     }
 }
