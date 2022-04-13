@@ -31,16 +31,16 @@
                     <img :src="this.defs.iconsByName('share')" alt="">
                     <img :src="this.defs.iconsByName('hide')" alt=""> -->
                     <img :src="this.defs.iconsByName('run')" alt=""
-                        @click="on_click_runDag">
+                        @click="this.triggerPolicy.dagRunPreparing">
                     <img v-if="retryButtonShow && selectItem"
                         :src="this.defs.iconsByName('run', 'current')" alt=""
-                        @click="on_click_retry_dag('self_only')">
+                        @click="this.triggerPolicy.retryDag('self_only')">
                     <img v-if="retryButtonShow && selectItem"
                         :src="this.defs.iconsByName('run', 'to')" alt=""
-                        @click="on_click_retry_dag('downstream')">
+                        @click="this.triggerPolicy.retryDag('downstream')">
                     <img v-if="retryButtonShow  && selectItem"
                         :src="this.defs.iconsByName('run', 'from')" alt=""
-                        @click="on_click_retry_dag('upstream')">
+                        @click="this.triggerPolicy.retryDag('upstream')">
                     <img v-if="!retryButtonShow || !selectItem"
                         :src="this.defs.iconsByName('run', 'current-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
@@ -70,7 +70,7 @@
             v-if="showRunJson"
             :textConf="textConf"
             :projectId="projectId"
-            @confirmeRunDag="confirmeRunDag"
+            @confirmeRunDag="this.triggerPolicy.runDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
 
@@ -117,6 +117,7 @@ import PhRenderPolicy from './policy/render/dag-render-policy'
 import PhDagDefinitions from './policy/definitions/definitions'
 import PhLogsPolicy from './policy/logs/log-policy'
 import PhStatusPolicy from './policy/handler/dagstatushandler'
+import PhDagTriggerPolicy from './policy/trigger/airflow-trigger-policy'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
@@ -182,6 +183,12 @@ export default {
             default: function() {
                 return new PhStatusPolicy('1', this)
             }
+        },
+        triggerPolicy: {
+            type: Object,
+            default: function() {
+                return new PhDagTriggerPolicy('1', this)
+            }
         }
         // noticeService: {
         //     type: Object,
@@ -198,7 +205,7 @@ export default {
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         // 判断环境
-        let env = this.getUrlParam(paramArr, "environment")
+        // let env = this.getUrlParam(paramArr, "environment")
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.eventPolicy.handleForwardMessage)
@@ -231,94 +238,6 @@ export default {
             })
             // 3.log弹窗
             this.failedLogs = []
-        },
-        // 点击trigger，弹窗选择version
-        on_click_runDag() {
-            let roots = []
-            this.datasource.data.forEach(item => {
-                if(item.attributes.runtime === "output_index") {
-                    roots.push(item)
-                } else if(item.attributes.ctype === "node" && item.parentIds.length === 0) {
-                    roots.push(item)
-                }
-            })
-            let datasetsArr = []
-            roots.forEach(item => {
-                datasetsArr.push({
-                    "name": item.attributes.name,
-                    "representId": item.representId,
-                    "version": [],
-                    "cat": item["attributes"]["runtime"],
-                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
-                })
-            })
-            this.textConf = {
-                "datasets": datasetsArr,
-                "scripts": [],
-                "userConf": {}
-            }
-            this.showRunJson = true
-        },
-        /**
-         * 1. 触发整体dag运行
-         * 2. 进度条清0
-         * 3. 清除节点状态
-         * 4. 关闭log弹窗
-         * 5. 开始正常run dag流程
-         */
-        async confirmeRunDag(data) {
-            this.loading = true
-            this.showProgress = false
-            const url = `${hostName}/phdagtrigger`
-            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
-            let confData = data.args.param.jsonValue
-            confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
-            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "dev环境"
-            confData.jobDesc = this.registerJobEventName
-            let body = {
-                "project_name": this.projectName,
-                "flow_version": "developer",
-                "conf": confData
-            }
-            let options = {
-                method: "POST",
-                headers: {
-                    "Authorization": accessToken,
-                    "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
-                    "accept": "application/json"
-                },
-                body: JSON.stringify(body)
-            }
-            let results = await fetch(url, options).then(res => res.json())
-            if(results.status === "failed") {
-                alert("启动出错，请重新运行！")
-                this.loading = false
-                return false
-            }
-            const dag_run_id = results.data.dag_run_id.split("_")
-            // const time = new Date(dag_run_id.pop()).getTime()
-            // const runnerId = dag_run_id.join("_") + "_" + time
-            // console.info(runnerId)
-            const tmpMsg = {
-                message: {
-                    notification: {
-                        eventName: this.registerJobEventName,
-                        projectId: results.data.dag_id, // results.data.
-                        id: results.data.run_id
-
-                    },
-                    executionStatus: {
-                        // runnerId: results.data.dag_run_id,
-                        id: results.data.run_id,
-                        // projectId: dag_run_id.pop(),
-                        eventName: "executionStatus" //+ runnerId
-                    }
-                }
-            }
-            this.eventPolicy.forwardMessageToParent(message)
-            this.showRunJson = false
-            this.loading = false
-            this.resetDagStatus("trigger")
         },
         //更新节点状态
         refreshNodeStatus(node) {
