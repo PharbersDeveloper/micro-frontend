@@ -51,23 +51,30 @@
             class="operator"
             :visible.sync="drawer"
             :direction="direction">
-            <div class="operator_content" v-for="item in operatorArr" :key="item.opt_name">
+            <div class="operator_content">
                 <div class="operator_con">
-                    <div class="opt" 
-                        @click="operator_opt_click(item)"
-                        :class="[{selected_bg: item.id == selected}]">
-                        <div class="name">{{item.opt_name}}</div>
-                        <div class="num">{{item.opt_condition_num}}</div>
+                    <div class="opt" >
+                        <div class="opt_item"
+                         v-for="item in operatorArr" 
+                         :key="item.id"
+                         @click="operator_opt_click(item)"
+                        :class="[{selected_bg: item.id == selectedOpt}]">
+                            <div class="name">{{item.opt_name}}</div>
+                            <div class="num">{{item.opt_condition_num}}</div>
+                        </div>
                     </div>
                     <div class="opt_condition">
-                        <div class="opt_condition_item" v-for="data in item.opt_condition"
-                        :key="data.name">{{data.name}}</div>
+                        <div class="opt_condition_item" 
+                            :class="[{selected_bg: data.id == selectedOptCondition}]"
+                            v-for="data in opt_condition"
+                            @mouseover="operator_opt_condition_mouseover(data)"
+                            @click="operator_opt_condition_click(data)"
+                            :key="data.id+'condition'">{{data.name}}</div>
                     </div>
                     <div class="opt_desc">
-                        <div class="opt_condition_desc" 
-                            v-for="data in item.opt_condition"
-                            :key="data.name+'desc'">
-                            <vue-markdown>{{opt_condition_desc}}</vue-markdown>
+                        <div class="opt_condition_desc">
+                            {{opt_condition_desc}}
+                            <vue-markdown >{{opt_condition_desc}}</vue-markdown>
                         </div>
                     </div>
                 </div>
@@ -90,25 +97,21 @@ export default {
         return {
             drawer: true,
             direction: "btt",
-            opt_condition_desc: "",
-            selected: -1,
-            opt_condition_array: [
-                [{   
-                    name: "Filter on Value",
-                    id: 1
-                },{
-                    name: "Filter on Numerical Range",
-                    id: 2
-                }],
-                [{   
-                    name: "Filter1",
-                    id: 1
-                },{
-                    name: "Filter2",
-                    id: 2
-                }]
+            selectedOpt: 1,
+            selectedOptCondition: -1,
+            opt_condition: [
+                {	
+                    id: 1,
+                    name: "1111",
+                    desc: "5555"
+                },
+                {	
+                    id: 2,
+                    name: "2222",
+                    desc: "Eqweqw"
+                }
             ],
-            opt_condition: []
+            opt_condition_desc: ""
         }
     },
     components: {
@@ -156,32 +159,38 @@ export default {
             default: function () {
                 return [{
                     id: 1,
-                    opt_name: "Filter data",
+                    opt_name: "Filter data1",
                     opt_condition_num: 1,
-                    opt_condition: [
-                        {   
-                            name: "Filter on Value",
-                            desc: md,
-                            id: 1
-                        },{
-                            name: "Filter on Numerical Range",
-                            desc: "111",
-                            id: 2
+                    opt_condition_data: [
+                        {	
+                            id: 1,
+                            name: "1111",
+                            type: "filter1",
+                            desc: "5555"
+                        },
+                        {	
+                            id: 2,
+                            name: "2222",
+                            type: "filter2",
+                            desc: "Eqweqw"
                         }
                     ]
                 },{
                     id: 2,
-                    opt_name: "Filter data",
+                    opt_name: "clear data2",
                     opt_condition_num: 2,
-                    opt_condition: [
-                        {   
-                            name: "Filter on Value",
-                            desc: md,
-                            id: 1
-                        },{
-                            name: "Filter on Numerical Range",
-                            desc: "111",
-                            id: 2
+                    opt_condition_data: [
+                        {	
+                            id: 1,
+                            name: "3333",
+                            type: "clear1",
+                            desc: "eqwe"
+                        },
+                        {	
+                            id: 2,
+                            name: "4444",
+                            type: "clear2",
+                            desc: "eqweq"
                         }
                     ]
                 }]
@@ -195,8 +204,18 @@ export default {
         save() {
 
         },
-        operator_opt_click(item) {
-            this.selected = item.id
+        operator_opt_click(data) {
+            this.selectedOpt = data.id
+            this.opt_condition = this.operatorArr.filter(it => it.id === data.id)[0]["opt_condition_data"]
+            this.opt_condition_desc = ""
+        },
+        operator_opt_condition_mouseover(data) {
+            this.selectedOptCondition = data.id
+            this.opt_condition_desc = this.opt_condition.filter(it => it.id === data.id)[0]["desc"]
+            // this.$forceUpdate()
+        },
+        operator_opt_condition_click(data) {
+            let type = data.type
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -227,30 +246,34 @@ export default {
             .operator_content {
                 display: flex;
                 flex-direction: column;
-                // height: 100%;
+                height: 100%;
                 .operator_con {
                     display: flex;
                     height: 100%;
                 }
                 .opt {
                     width: 220px;
+                    overflow: auto;
                     border-right: 1px solid #ccc;
                     display: flex;
-                    justify-content: space-between;
-                    padding: 8px;
-                    display: flex;
-                    align-items: center;
+                    flex-direction: column;
+                    // padding: 8px;
+                    .opt_item {
+                        display: flex;
+                        justify-content: space-between;
+                        cursor: pointer;
+                        padding: 4px;
+                    }
                 }
                 .selected_bg {
-                    background: #ccc;
+                    background: #dddddd !important;
                 }
                 .opt_condition {
                     width: 220px;
                     border-right: 1px solid #ccc;
                     .opt_condition_item {
-                        height: 24px;
-                        line-height: 24px;
-                        padding: 0 5px;
+                        padding: 4px;
+                        cursor: pointer;
                     }
                     .opt_condition_item:nth-child(2n+1) {
                         background: #f0f0f0;
