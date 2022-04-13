@@ -42,14 +42,15 @@ export default class IframeContextComponent extends Component {
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.runDagCallback
 			})
+
 			//dag整体
 			this.noticeService.defineAction({
 				type: "iot",
-				remoteResource: "executionStatus",
-				runnerId: event.data.message.executionStatus.runnerId,
-				id: this.args.allData.data.projectId + "_" + this.cookies.read("account_id"),
+				remoteResource: "notification",
+				runnerId: "",
+				id: event.data.message.executionStatus.id,
 				eventName: event.data.message.executionStatus.eventName,
-				projectId: this.args.allData.data.projectId,
+				projectId: this.args.allData.data.projectId + "_" + this.cookies.read("account_id"), // event.data.message.executionStatus.projectId
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.executionStatusCallback
 			})

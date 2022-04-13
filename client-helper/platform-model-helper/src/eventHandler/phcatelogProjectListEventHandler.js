@@ -11,8 +11,53 @@ export async function phcatelogProjectListEventHandler(e, route) {
             )
             break
         case "cerateProject":
-            console.log(params)
+            /**
+             * 1. 创建resource
+             * 2. 创建project，将rsource作为关联关系传入
+             */
             if (params) {
+                let resourceBody = {
+                    created: new Date(),
+                    name: "project",
+                    resourceType: "standalone",
+                    tenant: "zudIcG_17yj8CEUoCTHg",
+                    concrets: [
+                        JSON.stringify({
+                            hardware: [
+                                {
+                                    type: "ec2",
+                                    count: 1,
+                                    attribute: {
+                                        vcores: 4,
+                                        memeory: 32
+                                    }
+                                }
+                            ],
+                            applications: [
+                                {
+                                    name: "airflow",
+                                    uri: "/airflow"
+                                },
+                                {
+                                    name: "file-upload",
+                                    uri: "/upload"
+                                },
+                                {
+                                    name: "jupyter",
+                                    uri: "/jupyter"
+                                },
+                                {
+                                    name: "clickhouse",
+                                    uri: "/ch"
+                                }
+                            ]
+                        })
+                    ]
+                }
+                let resource = await route.store
+                    .createRecord("resource", resourceBody)
+                    .save()
+                console.log(resource)
                 let uri = `${hostName}/phcreateproject/projects`
                 let body = {
                     data: {
@@ -20,13 +65,14 @@ export async function phcatelogProjectListEventHandler(e, route) {
                         attributes: {
                             provider: "pharbers",
                             name: params.name,
-                            type: "paas"
+                            type: "paas",
+                            owner: params.id
                         },
                         relationships: {
-                            owner: {
+                            resources: {
                                 data: {
                                     type: "resources",
-                                    id: params.id
+                                    id: resource.id
                                 }
                             }
                         }

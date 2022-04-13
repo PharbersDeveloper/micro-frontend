@@ -2,6 +2,8 @@ import Component from "@glimmer/component"
 import { action } from "@ember/object"
 import { inject as service } from "@ember/service"
 import { camelize } from "@ember/string"
+import ENV from "web-shell/config/environment"
+
 
 export default class WcContextComponent extends Component {
 	@service router
@@ -13,6 +15,10 @@ export default class WcContextComponent extends Component {
 	@service("loading") loadingService
 	@service("resource-action-service") resourceActionService
 	@service("execution-status") noticeService
+
+	get maxResourceNumber() {
+		return ENV.APP.maxResourceNumber
+	}
 
 	@action
 	async listener(e) {

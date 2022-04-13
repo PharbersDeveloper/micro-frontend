@@ -19,6 +19,10 @@ export default class ShellRoute extends Route {
 		return ENV.APP.auth
 	}
 
+	get environment() {
+		return ENV.environment
+	}
+
 	beforeModel(transition){	
 		if (this.auth && !this.oauthService.judgeAuth()) {
 			alert("登录过期，请重新登录")

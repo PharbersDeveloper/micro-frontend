@@ -50,7 +50,7 @@ import { staticFilePath } from '../config/envConfig'
 export default {
     data() {
         return {
-            dropDownIcon: `${staticFilePath}` + "/xiala.svg.svg",
+            dropDownIcon: `${staticFilePath}` + "/xiala.svg",
             showDialog: false,
             newData: '', 
             newDataName: '',

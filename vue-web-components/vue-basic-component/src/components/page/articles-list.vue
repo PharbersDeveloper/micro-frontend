@@ -1,5 +1,6 @@
 <template>
     <div class="my-data-content-container">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="header">
             <span class="header-large">
                 {{title}}
@@ -9,13 +10,18 @@
             <div class="subscribed-container">
                 <div class="public">
                     <div class="public-data" v-for="(item, index) in allData.articlesList" :key="index+'pbcdata'">
-                        <div class="left">
-                            <img :src="public_icon" alt="" class="pbc-icon">
-                            <div>
-                                <div class="name">{{item["title"]}}</div>
-                            </div>
+                        <div class="card_item" @click="linkToPage(item)">
+                            <el-card :body-style="{ padding: '0px' }">
+                                <img :src="item.avatar" class="image">
+                                <div style="padding: 14px;">
+                                    <div class="title" :title="item.title">{{item.title}}</div>
+                                    <div class="bottom clearfix">
+                                        <div class="time-title">发布时间：</div>
+                                        <time class="time">{{ formatDateStandard(item.date, 2) }}</time>
+                                    </div>
+                                </div>
+                            </el-card>
                         </div>
-                        <div class="btn" @click="linkToPage(item)">查看文章</div>
                     </div>
                 </div>
             </div>
@@ -24,8 +30,12 @@
 </template>
 <script>
 import { staticFilePath } from '../../config/envConfig'
+import ElCard from 'element-ui/packages/card/src/main.vue'
+import ElButton from 'element-ui/packages/button/index'
 export default {
     components: {
+        ElCard,
+        ElButton
     },
     data() {
         return {
@@ -43,20 +53,7 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    articlesList: [
-                        {
-                            "type": "articles",
-                            "id": "hSPHu5eVTk2qlejqIoImRQ==",
-                            "attributes": {
-                                "title": "www11",
-                                "data": null,
-                                "uri": ""
-                            },
-                            "links": {
-                                "self": "/articles/hSPHu5eVTk2qlejqIoImRQ%3D%3D"
-                            }
-                        }
-                    ]
+                    "articlesList": []
                 }
             }
         }
@@ -74,6 +71,37 @@ export default {
                 }
             }
             this.$emit('event', event)
+        },
+        formatDateStandard(...params) {
+            if(params.length === 2) {
+                let date = new Date( Number(params[0]) ),
+                    Y = date.getFullYear(),
+                    M =
+                        ( date.getMonth() + 1 < 10 ?
+                            `0${date.getMonth() + 1}` :
+                            date.getMonth() + 1 ),
+                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+
+                    h =
+                        ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
+                    m =
+                        ( date.getMinutes() < 10 ?
+                            `0${date.getMinutes()}` :
+                            date.getMinutes() ) ,
+                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+
+                // 输出结果：yyyy/mm/dd hh:mm
+                if(params[1] === 0){
+                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                } else if(params[1] === 1) {
+                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                } else if(params[1] === 2) {
+                    return Y + "-" + M + "-" + D0
+                } else if(params[1] === 3) {
+                    return h + ":" + m
+                }
+            }
         }
     }
 }
@@ -303,7 +331,9 @@ export default {
                 }
                 .public {
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    // justify-content: center;
                     .public-data {
                         display: flex;
                         flex-direction: row;
@@ -311,49 +341,35 @@ export default {
                         align-items: center;
                         border-bottom: 1px solid rgba(37,35,45,.08);
                         padding: 12px 0;
-                        .left {
-                            display: flex;
-                            align-items: center;
-                        }
-                        .pbc-icon {
-                            width: 30px;
-                            height: 30px;
-                            margin-right: 14px
-                        }
-                        .name {
-                            font-family: SFProText-Regular;
-                            font-size: 14px;
-                            color: #25232d;
-                            letter-spacing: .25px;
-                            text-align: left;
-                            line-height: 20px;
-                            font-weight: 400;
-                            margin-bottom: 3px;
-                        }
-                        .subtitle {
-                            font-family: SFProText-Light;
-                            font-size: 12px;
-                            color: #706f79;
-                            letter-spacing: .25px;
-                            line-height: 16px;
-                            font-weight: 200;
-                        }
-                        .btn {
-                                width: 80px;
-                                height: 32px;
-                                background: #f6f6f7;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-family: SFProText-Medium;
-                                font-size: 14px;
-                                color: #57565f;
-                                letter-spacing: 0;
-                                text-align: center;
-                                line-height: 20px;
+                        padding: 10px;
+                        .card_item {
+                            width: 250px;
+                            // height: 320px;
+                            .title {
+                                font-size: 16px;
                                 font-weight: 500;
-                                border-radius: 2px;
+                                line-height: 24px;
+                                color: #101322;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 2;  // 控制多行的行数
+                                -webkit-box-orient: vertical;
                                 cursor: pointer;
+                                height: 48px;
+                            }
+                            .image {
+                                width: 250px;
+                                height: 170px;
+                                // object-fit: cover;
+                            }
+                            .clearfix {
+                                margin-top: 10px;
+                                display: flex;
+                                align-items: center;
+                                font-size: 12px;
+                                color: #98a2ae;
+                            }
                         }
                     }
                 }

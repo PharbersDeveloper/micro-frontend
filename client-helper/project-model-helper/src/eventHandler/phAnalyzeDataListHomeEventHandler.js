@@ -3,6 +3,7 @@ import { hostName } from "../config/envConfig"
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let params = e.detail[0].args.param
+	const createResourceEventName = "resource_create"
 	const startUrl = `${hostName}/phresourceaction`
 	const accessToken = route.cookies.read("access_token")
 	let uri = "/projects"
@@ -73,21 +74,38 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		case "deleteProject":
 			if (params) {
-				let uri = `${hostName}/phcreateproject/projects/${params.projectId}`
-				let results = await fetch(uri, {
-					method: "delete",
-					headers: {
-						Authorization: accessToken,
-						"Content-Type": "application/vnd.api+json",
-						Accept: "application/vnd.api+json"
+				/**
+				 * 1.判断是否正在启动
+				 * 2.删除resource
+				 * 3.删除project
+				 */
+				let bool = await checkStartResourceFun("del")
+				if (bool) {
+					let delResourceUri = `${hostName}/phcreateproject/resources/${params.resourceId}`
+					await fetch(delResourceUri, {
+						method: "delete",
+						headers: {
+							Authorization: accessToken,
+							"Content-Type": "application/vnd.api+json",
+							Accept: "application/vnd.api+json"
+						}
+					})
+					let uri = `${hostName}/phcreateproject/projects/${params.projectId}`
+					let results = await fetch(uri, {
+						method: "delete",
+						headers: {
+							Authorization: accessToken,
+							"Content-Type": "application/vnd.api+json",
+							Accept: "application/vnd.api+json"
+						}
+					})
+					if (results.status === 204) {
+						alert("删除项目成功！")
+						window.location.href =
+							"https://general.pharbers.com/projects"
+					} else {
+						alert("删除失败！")
 					}
-				})
-				if (results.status === 204) {
-					alert("删除项目成功！")
-					window.location.href =
-						"https://general.pharbers.com/projects"
-				} else {
-					alert("删除失败！")
 				}
 			}
 			break
@@ -106,16 +124,16 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		case "startResource":
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
-				let checked = await checkStartResourceFun()
+				let checked = await checkStartResourceFun("startResource")
 				if (checked) {
 					console.log("开始启动")
-					route.noticeService.defineAction({
-						type: "iot",
-						id: "resource_create",
-						projectId: params.projectId,
-						ownerId: "*",
-						callBack: callback
-					})
+					// route.noticeService.defineAction({
+					// 	type: "iot",
+					// 	id: "resource_create",
+					// 	projectId: params.projectId,
+					// 	ownerId: "*",
+					// 	callBack: callback
+					// })
 					let body = {
 						projectName: params.projectName,
 						projectId: params.projectId,
@@ -136,7 +154,20 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 						},
 						body: JSON.stringify(body)
 					}
-					await fetch(startUrl, options).then((res) => res.json())
+					let startProResult = await fetch(startUrl, options).then(
+						(res) => res.json()
+					)
+
+					route.noticeService.defineAction({
+						type: "iot",
+						remoteResource: "notification",
+						runnerId: "",
+						id: startProResult.data.action_id,
+						eventName: createResourceEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: callback
+					})
 				}
 			}
 			break
@@ -158,8 +189,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		route.loadingService.loading.style.display = "none"
 	}
 
-	async function checkStartResourceFun() {
-		const startUrl = `${hostName}/phresourceaction`
+	async function checkStartResourceFun(startMsg) {
 		let startBody = {
 			projectName: params.projectName,
 			projectId: params.projectId,
@@ -182,16 +212,37 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			res.json()
 		)
 		console.log("判断是否启动：", startResults)
+		if (
+			startMsg === "startResource" &&
+			startResults.data.started_number === route.maxResourceNumber
+		) {
+			alert("已启动项目达到上限，请联系管理员！")
+			route.loadingService.loading.style.display = "none"
+			return false
+		}
 		if (startResults.data.resource_status === "starting") {
+			// route.noticeService.defineAction({
+			// 	type: "iot",
+			// 	id: "resource_create",
+			// 	projectId: params.projectId,
+			// 	ownerId: "*",
+			// 	callBack: callback
+			// })
 			route.noticeService.defineAction({
 				type: "iot",
-				id: "resource_create",
+				remoteResource: "notification",
+				runnerId: "",
+				id: startResults.data.action_id,
+				eventName: createResourceEventName,
 				projectId: params.projectId,
-				ownerId: "*",
+				ownerId: route.cookies.read("account_id"),
 				callBack: callback
 			})
 			route.resourceActionService.boolChecked = false
 			route.loadingService.loading.style.display = "flex"
+			if (startMsg === "del") {
+				alert("正在启动，不能删除项目")
+			}
 			return false
 		} else if (startResults.data.resource_status === "started") {
 			e.detail[0].args.element.showStartButton = false //按钮disabled

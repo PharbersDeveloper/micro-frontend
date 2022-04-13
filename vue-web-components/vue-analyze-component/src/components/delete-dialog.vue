@@ -8,11 +8,11 @@
                </div>
                 <div class="prompt">
                    	<p class="tip">删除这些项将会有以下影响:</p>
-				   	<div class="item" v-for="(item,index) in datasetRelaResult" :key="index+'dataset'">
+					<div class="item" v-for="(item,index) in datasetRelaResult" :key="index+'dataset'">
 						<span>删除脚本 </span>
 						<span class="jobname"> {{item.jobShowName}}</span>
 						<span class="jobtype"> ({{item.type}})</span>
-				   	</div>
+					</div>
                </div>
                <div class="btn">
                    <button class="clear" @click="deleteDatasets">删除</button>
@@ -114,6 +114,8 @@ export default {
     margin-top: 20px;
 	text-align: left;
     padding-left: 20px;
+	max-height: 200px;
+	overflow: auto;	
     .tip {
         // text-align: center;
         font-weight: 500;
@@ -142,9 +144,6 @@ export default {
     
 }
 .btn {
-    // position: absolute;
-    // right: 0;
-    // bottom: 0;
     margin-left: 280px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -164,16 +163,4 @@ export default {
         color: #8377cc;
     }
 }
-// button {
-    
-//     position: absolute;
-//     right: 0;
-// 	bottom: 0;
-//     border: 0;
-// }
-// .clear {
-//     margin-right: 30px;
-//     background-color:#DB4D71;
-//     color: #fff;
-// }
 </style>

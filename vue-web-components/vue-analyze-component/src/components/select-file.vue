@@ -45,8 +45,10 @@
                         <div class="item">
                             <span class="title">格式:</span>
                             <select name="format" id="" v-model="formatValue">
-                                <option value="xlsx">xlsx</option>
-                                <option value="parquet">parquet</option>
+                                <option 
+									:value="format.name" 
+									v-for="(format,i) in formatArray"
+									:key="i+'format'">{{format.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -93,7 +95,20 @@ export default {
                 datasetArr: []
             })
         },
-        random: Number
+        random: Number,
+        formatArray: {
+            type: Array,
+            default: () => [{
+                id: 1,
+                name: "xlsx"
+            },{
+                id: 2,
+                name: "parquet"
+            },{
+                id: 3,
+                name: "csv"
+            }]
+        }
     },
     watch: {
         random: function() {

@@ -1,15 +1,22 @@
 // eslint-disable-next-line no-unused-vars
 export async function pharbersHomeEventHandler(e, route) {
+	let params = e.detail[0].args.param
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
-			if (e.detail[0].args.param.index != undefined) {
+			if (params.index != undefined) {
 				route.router.transitionTo(
 					"shell",
-					`${e.detail[0].args.param.name}/${e.detail[0].args.param.index}`
+					`${params.name}/${params.index}`
 				)
 			} else {
-				route.router.transitionTo("shell", e.detail[0].args.param.name)
+				route.router.transitionTo("shell", params.name)
 			}
+			break
+		case "linkToArticlePage":
+			route.router.transitionTo(
+				"shell",
+				`${params.name}?uri=${params.uri}`
+			)
 			break
 		default:
 			console.log("submit event to parent")

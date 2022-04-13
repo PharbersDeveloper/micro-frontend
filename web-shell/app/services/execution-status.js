@@ -3,7 +3,14 @@ import ENV from "web-shell/config/environment"
 import Iot from "../lib/iot/PhIot"
 
 export default class ExecutionStatusService extends Service {
-	endpoint = ENV.APP.AWS_IOT_ENDPOINT
+	// endpoint = ENV.APP.AWS_IOT_ENDPOINT
+	get endpoint() {
+		if (ENV.environment === "development") {
+			return ENV.APP.apiUriDev + ENV.APP.AWS_IOT_ENDPOINT
+		} else {
+			return ENV.APP.apiUri + ENV.APP.AWS_IOT_ENDPOINT
+		}
+	}
 	aws_region = ENV.APP.AWS_REGION
 	aws_access_id = ENV.APP.AWS_ACCESS_KEY
 	aws_secret_key = ENV.APP.AWS_SECRET_KEY
