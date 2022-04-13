@@ -2,11 +2,11 @@
  * pqian@pharbers.com 2022.2.10
  */
 
-import PhAWSMQTT from "./PhAWSMqtt"
+// import PhAWSMQTT from "./PhAWSMqtt"
 import PhHttpMQTT from "./PhHttpMqtt"
 
 const contextIot = {
-	"aws-mqtt": PhAWSMQTT,
+	// "aws-mqtt": PhAWSMQTT,
 	"http-mqtt": PhHttpMQTT
 }
 

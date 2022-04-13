@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "prod_clean_v2"
         this.projectId = "JfSmQBYUpyb4jsei"
         this.title = "need a title"
-        this.debugToken = '2fd52c3b55464a85512a217b613020fde195ff3264b88fe8e2f82427a6fdaaa4'
+        this.debugToken = '5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
@@ -40,25 +40,26 @@ export default class PhDagDatasource {
     }
 
     //查询version
-    buildDistinctColQuery(ele, col) {
-        const url = `${hostName}/phdadatasource`
-        function buildDistinctColSql() {
-            let sql_str = "SELECT DISTINCT " + col
-
-            if (ele.datasource.projectId.length === 0)
-                sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
-            else
-                sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
-
-            sql_str = sql_str + " ORDER BY " + col
-
-            return sql_str
-        }
+    buildDistinctColQuery(ele, col, cat, dsName) {
+        const uri = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        const companyId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+        let id = ""
+        if (cat === "catalog") {
+            id = (companyId + "_" + dsName).toLowerCase()
+        } else {
+            id = ele.projectId + "_" + ele.representId
+        }
         let body = {
-            "query": buildDistinctColSql(),
-            "schema": [col],
-            "projectId": this.projectId
+            "table": "version",
+            "conditions": {
+                "id": [
+                    "=",
+                    id
+                ]
+            },
+            "limit": 100,
+            "start_key": ""
         }
         let options = {
             method: "POST",
@@ -69,14 +70,43 @@ export default class PhDagDatasource {
             },
             body: JSON.stringify(body)
         }
-        return fetch(url, options)
+        return fetch(uri, options)
+        // const url = `${hostName}/phdadatasource`
+        // function buildDistinctColSql() {
+        //     let sql_str = "SELECT DISTINCT " + col
+
+        //     if (ele.datasource.projectId.length === 0)
+        //         sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
+        //     else
+        //         sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+
+        //     sql_str = sql_str + " ORDER BY " + col
+
+        //     return sql_str
+        // }
+        // const accessToken = ele.getCookie("access_token") || this.debugToken
+        // let body = {
+        //     "query": buildDistinctColSql(),
+        //     "schema": [col],
+        //     "projectId": this.projectId
+        // }
+        // let options = {
+        //     method: "POST",
+        //     headers: {
+        //         "Authorization": accessToken,
+        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        //         "accept": "application/json"
+        //     },
+        //     body: JSON.stringify(body)
+        // }
+        // return fetch(url, options)
     }
 
-    queryDlgDistinctCol(ele, row) {
-        return ele.datasource.buildDistinctColQuery(ele, row)
+    queryDlgDistinctCol(ele, row, cat, dsName) {
+        return ele.datasource.buildDistinctColQuery(ele, row, cat, dsName)
             .then((response) => response.json())
             .then((response) => {
-                return response.map(x => x[row])
+                return response.data.map(x => x["attributes"]["name"])
             })
     }
 

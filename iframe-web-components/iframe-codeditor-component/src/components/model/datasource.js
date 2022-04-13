@@ -4,7 +4,7 @@ import { staticFilePath, hostName } from "../../config/envConfig"
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, flowVersion, jobName) {
         this.id = id
-        this.debugToken = '1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0'
+        this.debugToken = '5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId

@@ -6,7 +6,7 @@
                 <span class="name">computed_{{datasource.outputs[0] ? datasource.outputs[0].name : "test"}}</span>
             </div>
             <div class="coding-title">
-				<button class="button btn-fir">运行</button>
+                <button class="button btn-fir">运行</button>
                 <button class="button btn-fir">操作</button>
                 <button class="button" @click="saveCode">保存</button>
             </div>
@@ -62,7 +62,7 @@
 import PhCodeditorDatasource from "./model/datasource"
 import phCodeditor from "./ph-codeditor"
 import AWS from "aws-sdk"
-// import { staticFilePath, hostName } from "../config/envConfig"
+import { staticFilePath, hostName } from "../config/envConfig"
 
 export default {
     name: 'codeditor-page',
@@ -104,9 +104,9 @@ export default {
         return {
             codeBuffer: "",
             downloadCode: 0,
-            python_icon: `${this.staticFilePath}` + "/icons/Python.svg",
-            icon1: `${this.staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
-            icon2: `${this.staticFilePath}` + "/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
+            python_icon: `${staticFilePath}` + "/icons/Python.svg",
+            icon1: `${staticFilePath}` + "/%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6-%E8%A1%A8%E6%A0%BC.svg",
+            icon2: `${staticFilePath}` + "/%E8%AE%BE%E7%BD%AE_%E5%A1%AB%E5%85%85.svg",
             jobName: "developer_5Tz_f5ro0hOQejU_max_test_dag_test_job_b1",
             projectId: "JfSmQBYUpyb4jsei",
             jobPath: "2020-11-11/jobs/python/phcli/test_dag_developer/test_dag_developer_test_job_a/"
@@ -120,12 +120,14 @@ export default {
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         this.jobName = this.getUrlParam(paramArr, "jobName")
-        let jobPathParam = this.getUrlParam(paramArr, "jobPathParam")
-        this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
-        this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
-		// 判断环境
-		let env = this.getUrlParam(paramArr, "environment")
-		this.checkENV(env)
+        let jobPathParam = this.getUrlParam(paramArr, "jobPath")
+        if (jobPathParam) {
+            this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
+            this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
+        }
+        // 判断环境
+        let env = this.getUrlParam(paramArr, "environment")
+        this.checkENV(env)
         //父组件传进来的值
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
@@ -141,22 +143,23 @@ export default {
         }
     },
     methods: {
-		checnENV(env) {
-			if(env === "development") {
-				this.hostName = "https://apidev.pharbers.com"
-				this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
-			} else {
-				this.hostName = "https://apiv2.pharbers.com"
-				this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
-			}
-		},
+        checkENV(env) {
+            if(env === "development") {
+                this.hostName = "https://apidev.pharbers.com"
+                this.staticFilePath = "https://components.pharbers.com/dev/deploy/public"
+            } else {
+                this.hostName = "https://apiv2.pharbers.com"
+                this.staticFilePath = "https://components.pharbers.com/prod/deploy/public"
+            }
+            console.log(this.staticFilePath, this.hostName)
+        },
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
         },
         async queryData() {
             let url = `${this.hostName}/phdadataquery`
-            const accessToken = this.getCookie("access_token") || "1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0"
+            const accessToken = this.getCookie("access_token") || "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -183,7 +186,7 @@ export default {
         },
         async saveCode() {
             let url = `${this.hostName}/phdadataupdata`
-            const accessToken = this.getCookie("access_token") || "1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0"
+            const accessToken = this.getCookie("access_token") || "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -246,7 +249,7 @@ export default {
                 border: 1px solid #57565F;
                 border-radius: 2px;
                 background: #fff;
-				cursor: pointer;
+                cursor: pointer;
             }
             .btn-fir {
                 margin-left: 10px;

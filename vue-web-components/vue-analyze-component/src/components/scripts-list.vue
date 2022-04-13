@@ -36,24 +36,22 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-								<!-- @click="selectScripts('python3')" -->
                                 <div class="list" @click="selectScripts('python3')">
                                     <img :src="img1" alt="">
                                     <p class="">Python</p>
+									<!-- class=dis 灰掉某一项 -->
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
                                     <img :src="img2" alt="">
                                     <p>PySpark</p>
                                 </div>
-								<!-- @click="selectScripts('r')" -->
-                                <div class="list" >
+                                <div class="list" @click="selectScripts('r')">
                                     <img :src="img3" alt="">
-                                    <p  class="dis">R</p>
+                                    <p  class="">R</p>
                                 </div>
-								<!-- @click="selectScripts('sparkr')" -->
-                                <div class="list" >
+                                <div class="list" @click="selectScripts('sparkr')">
                                     <img :src="img4" alt="">
-                                    <p  class="dis">SparkR</p>
+                                    <p  class="">SparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
                                     <img :src="img5" alt="">

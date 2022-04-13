@@ -16,7 +16,7 @@ export default class PhContainerDataSource {
             this.url= `${hostName}/phchproxyquery`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "72ec7c76e4af6be7f0498ffd480b43345861b40d44641ab3a68a68eb95ed7f1c"
+        this.debugToken = "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
     }
 
     resetUrl(url) {
@@ -293,5 +293,73 @@ export default class PhContainerDataSource {
             body: JSON.stringify(body)
         }
         return fetch(url, options)
+    }
+
+    // 请求version list
+    buildVersionQuery(ele) {
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let id = ele.datasource.projectId + "_" + ele.allData.datasetId
+        let body = {
+            "table": "version",
+            "conditions": {
+                "id": [
+                    "=",
+                    id
+                ]
+            },
+            "limit": 100,
+            "start_key": ""
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+    //请求sample
+    buildSampleQuery(ele) {
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        const body = {
+            table: "dataset",
+            conditions: {
+                projectId: ["=",ele.datasource.projectId],
+                id: ["=", ele.allData.datasetId]
+            },
+            limit: 100,
+            start_key: ""
+        }
+        const options = {
+            method: "POST",
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    queryVersion(ele) {
+        return ele.datasource.buildVersionQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.data.map(x => x["attributes"]["name"])
+            })
+    }
+
+    querySample(ele) {
+        return ele.datasource.buildSampleQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.data.map(x => x["attributes"]["sample"])
+            })
     }
 }

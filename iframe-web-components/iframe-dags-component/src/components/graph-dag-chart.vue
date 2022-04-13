@@ -225,6 +225,10 @@ export default {
                         symbol: `${staticFilePath}` + '/icons/python%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
+                        name: 'Python3_running',
+                        symbol: `${staticFilePath}` + '/icons/python3_running.svg'
+                    },
+                    {
                         name: 'Python3_succeed',
                         symbol: `${staticFilePath}` + '/icons/python%E6%88%90%E5%8A%9F.svg'
                     },
@@ -257,6 +261,10 @@ export default {
                         symbol: `${staticFilePath}` + '/icons/sparkR%E5%A4%B1%E8%B4%A5.svg'
                     },
                     {
+                        name: 'SparkR_running',
+                        symbol: `${staticFilePath}` + '/icons/sparkR_running.svg'
+                    },
+                    {
                         name: 'R',
                         symbol: `${staticFilePath}` + '/icons/R%E6%AD%A3%E5%B8%B8.svg'
                     },
@@ -267,6 +275,10 @@ export default {
                     {
                         name: 'R_failed',
                         symbol: `${staticFilePath}` + '/icons/R%E5%A4%B1%E8%B4%A5.svg'
+                    },
+                    {
+                        name: 'R_running',
+                        symbol: `${staticFilePath}` + '/icons/R_running.svg'
                     },
                     {
                         name: 'prepare',
@@ -375,7 +387,6 @@ export default {
             this.showProgress = true
             // 2.节点状态
             let data = this.datasource.data
-            console.log(data)
             data.map((it,index) => {
                 it.status = it["attributes"]["runtime"]
                 that.refreshNodeStatus(it)
@@ -397,6 +408,7 @@ export default {
             roots.forEach(item => {
                 datasetsArr.push({
                     "name": item.attributes.name,
+                    "representId": item.representId,
                     "version": [],
                     "cat": item["attributes"]["runtime"],
                     "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
@@ -422,8 +434,8 @@ export default {
             const url = `${hostName}/phdagtrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let confData = data.args.param.jsonValue
-            confData.ownerId = this.getCookie("account_id") || "5UBSLZvV0w9zh7-lZQap"
-            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "测试人员"
+            confData.ownerId = this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
+            confData.showName = this.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "dev环境"
             confData.jobDesc = this.registerJobEventName
             let body = {
                 "project_name": this.projectName,
@@ -439,7 +451,6 @@ export default {
                 },
                 body: JSON.stringify(body)
             }
-            console.log(body)
             let results = await fetch(url, options).then(res => res.json())
             if(results.status === "failed") {
                 alert("启动出错，请重新运行！")
@@ -447,9 +458,9 @@ export default {
                 return false
             }
             const dag_run_id = results.data.dag_run_id.split("_")
-            const time = new Date(dag_run_id.pop()).getTime()
-            const runnerId = dag_run_id.join("_") + "_" + time
-            console.info(runnerId)
+            // const time = new Date(dag_run_id.pop()).getTime()
+            // const runnerId = dag_run_id.join("_") + "_" + time
+            // console.info(runnerId)
             window.parent.postMessage({
                 message: {
                     notification: {
@@ -459,8 +470,10 @@ export default {
 
                     },
                     executionStatus: {
-                        runnerId: results.data.dag_run_id,
-                        eventName: "executionStatus" + runnerId
+                        // runnerId: results.data.dag_run_id,
+                        id: results.data.run_id,
+                        // projectId: dag_run_id.pop(),
+                        eventName: "executionStatus" //+ runnerId
                     }
                 }
             }, '*')
@@ -474,39 +487,41 @@ export default {
         runDagCallback(response, ele) {
             let that = this
             let represent_id = ""
-            let payload = JSON.parse(response.payload)
-            console.log(payload)
-            this.responseArr = payload
-            let status = payload["status"]
-            let jobName = JSON.parse(payload.message).cnotification.jobName
+            let payloadArr = JSON.parse(response.payload)
+            console.log("payloadArr", payloadArr)
+            this.responseArr = payloadArr
             let data = ele.datasource.data
-            // 1.找到对应job节点并更新状态
-            data.map((it,index) => {
-                if(jobName.indexOf(it.attributes.name) != -1) {
-                    if(status === "success") {
-                        it.status = "succeed"
-                    } else if(status === "failed") {
-                        it.status = "failed"
-                        represent_id = it.representId
-                    } else if(status === "running") {
-                        it.status = "running"
+            payloadArr.forEach(payload => {
+                let status = payload["status"]
+                let jobName = JSON.parse(payload.message).cnotification.jobName
+                // 1.找到对应job节点并更新状态
+                data.forEach((it,index) => {
+                    if(jobName.indexOf(it.attributes.name) != -1) {
+                        if(status === "success") {
+                            it.status = "succeed"
+                        } else if(status === "failed") {
+                            it.status = "failed"
+                            represent_id = it.representId
+                        } else if(status === "running") {
+                            it.status = "running"
+                        }
+                    }
+                    that.refreshNodeStatus(it)
+                })
+                // 2.失败时出现弹框
+                if(status === "failed") {
+                    let showName = JSON.parse(payload.message).cnotification.jobShowName
+                    let length = that.failedLogs.filter(it => it.jobShowName === showName)
+                    if(length < 1) {
+                        that.failedLogs.push({
+                            data: payload,
+                            jobShowName: showName,
+                            representId: represent_id
+                        })
                     }
                 }
-                that.refreshNodeStatus(it)
+                console.log("failedLogs", that.failedLogs)
             })
-            // 2.失败时出现弹框
-            if(status === "failed") {
-                let showName = JSON.parse(payload.message).cnotification.jobShowName
-                let length = that.failedLogs.filter(it => it.jobShowName === showName)
-                if(length < 1) {
-                    that.failedLogs.push({
-                        data: payload,
-                        jobShowName: showName,
-                        representId: represent_id
-                    })
-                }
-            }
-            console.log("failedLogs", that.failedLogs)
         },
         // trigger更新整体状态
         runDagFinishCallback(response, ele) {
@@ -549,7 +564,6 @@ export default {
         async on_click_retry_dag(data) {
             this.showProgress = false
             console.log("responseArr", this.responseArr)
-            console.log("selectItem", this.selectItem)
             this.runId = JSON.parse(this.responseArr.message).cnotification.runId
             const url = `${hostName}/phdagtasktrigger`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
@@ -798,7 +812,6 @@ export default {
                     }
                     that.changeHeaderIcon(i.data.attributes.cat, i.data.attributes.runtime, that)
                     console.log("selectItem", that.selectItem)
-                    // that.$emit('itemClicked', params)
                 })
 
                 that.$refs.viewport.scroll({

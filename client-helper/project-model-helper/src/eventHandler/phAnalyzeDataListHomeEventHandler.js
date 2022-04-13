@@ -124,7 +124,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		case "startResource":
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
-				let checked = await checkStartResourceFun()
+				let checked = await checkStartResourceFun("startResource")
 				if (checked) {
 					console.log("开始启动")
 					// route.noticeService.defineAction({
@@ -134,16 +134,6 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 					// 	ownerId: "*",
 					// 	callBack: callback
 					// })
-					route.noticeService.defineAction({
-						type: "iot",
-						remoteResource: "notification",
-						runnerId: "",
-						id: result.data.id,
-						eventName: createResourceEventName,
-						projectId: params.projectId,
-						ownerId: route.cookies.read("account_id"),
-						callBack: callback
-					})
 					let body = {
 						projectName: params.projectName,
 						projectId: params.projectId,
@@ -164,7 +154,20 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 						},
 						body: JSON.stringify(body)
 					}
-					await fetch(startUrl, options).then((res) => res.json())
+					let startProResult = await fetch(startUrl, options).then(
+						(res) => res.json()
+					)
+
+					route.noticeService.defineAction({
+						type: "iot",
+						remoteResource: "notification",
+						runnerId: "",
+						id: startProResult.data.action_id,
+						eventName: createResourceEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: callback
+					})
 				}
 			}
 			break
@@ -187,7 +190,6 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	}
 
 	async function checkStartResourceFun(startMsg) {
-		const startUrl = `${hostName}/phresourceaction`
 		let startBody = {
 			projectName: params.projectName,
 			projectId: params.projectId,
@@ -210,6 +212,14 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			res.json()
 		)
 		console.log("判断是否启动：", startResults)
+		if (
+			startMsg === "startResource" &&
+			startResults.data.started_number === route.maxResourceNumber
+		) {
+			alert("已启动项目达到上限，请联系管理员！")
+			route.loadingService.loading.style.display = "none"
+			return false
+		}
 		if (startResults.data.resource_status === "starting") {
 			// route.noticeService.defineAction({
 			// 	type: "iot",
@@ -222,7 +232,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 				type: "iot",
 				remoteResource: "notification",
 				runnerId: "",
-				id: result.data.id,
+				id: startResults.data.action_id,
 				eventName: createResourceEventName,
 				projectId: params.projectId,
 				ownerId: route.cookies.read("account_id"),

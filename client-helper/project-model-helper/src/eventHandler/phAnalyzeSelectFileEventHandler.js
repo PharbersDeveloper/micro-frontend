@@ -43,6 +43,44 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 			route.router.transitionTo("shell", uri)
 			break
 		case "s3UploadFiles":
+			if (param.property.type == "selectDataset") {
+				// 判断数据id是否存在
+				let opt = {
+					query: `select count(1) from \`${param.projectId}_${datasetName}\` where version = '${dataID}'`,
+					schema: ["count"],
+					projectId: param.projectId
+				}
+				let url = `${hostName}/phcheckversion`
+				let headers = {
+					Authorization: route.cookies.read("access_token"),
+					"Content-Type": "application/vnd.api+json",
+					Accept: "application/vnd.api+json"
+				}
+				let options = {
+					method: "POST",
+					headers: headers,
+					body: JSON.stringify(opt)
+				}
+				let versionResult = await fetch(url, options).then((res) =>
+					res.json()
+				)
+				let NUMResult = Number(versionResult[0].count)
+				if (NUMResult != 0) {
+					uploadParam = false
+					alert("数据ID重复，请重新输入！")
+					throw new Error("数据集已存在")
+				}
+			}
+			// 如果数据集是新创建，判断数据集是否存在
+			else if (param.property.type == "createDataset") {
+				datasetArray.forEach((item) => {
+					if (item.name === datasetName) {
+						uploadParam = false
+						alert("数据集已存在，请在下拉框选择数据集！")
+						throw new Error("数据集已存在")
+					}
+				})
+			}
 			if (param.s3UploadMessage.message) {
 				let resMessage = {
 					tmpname: param.s3UploadMessage.message.refer_name,
@@ -83,6 +121,16 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 					param.projectId,
 					"uploaded"
 				)
+				route.noticeService.defineAction({
+					type: "iot",
+					id: param.s3UploadMessage.message.refer_name,
+					remoteResource: "notification",
+					runnerId: "",
+					eventName: "uploadfiles",
+					projectId: param.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: noticeCallback
+				})
 			}
 			break
 		case "uploadFiles":

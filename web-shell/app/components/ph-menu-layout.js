@@ -63,7 +63,7 @@ export default class PhMenuLayoutComponent extends Component {
 				if (idx === 0) {
 					this.router.transitionTo("shell", `overview`)
 				} else if (idx === 1) {
-					this.router.transitionTo("shell", `download/my-data`)
+					this.router.transitionTo("shell", `projects`)
 				} else if (idx === 2) {
 					this.router.transitionTo("shell", `projects`)
 				} else if (idx === 3) {

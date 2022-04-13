@@ -40,7 +40,40 @@ function PhMQTT(config, callBack, destroyQueue) {
 		}
 		
 		const url = `${uri}${parameter.projectId}/${parameter.ownerId}/${parameter.eventName}`
+
+
+		const __to_array = (payload, content) => {
+			const contents = payload.filter((item) => item.jobCat === "notification")
+			if (contents.length > 0) {
+				time = new Date().getTime()
+				const flag = contents.map((item) => { 
+					return states[item.status] || false
+				}).reduce((pre, next) => pre && next)
+				if (flag) {
+					destroyQueue.push(topic)
+				}
+				callBack(parameter, content)
+			}
+		}
+	
+		const __to_normal = (payload, content) => {
+			if (Object.keys(payload).length > 0) {
+				const { status, jobCat} = payload
+				if (jobCat === "notification") {
+					time = new Date().getTime()
+					const state = states[status] || false
+					if (state) {
+						destroyQueue.push(topic)
+					}
+					callBack(parameter, content)
+				}
+			}
+		}
 		
+		const choose_func = {
+			true: __to_array,
+			false: __to_normal
+		}
 		
 		intervalId = setInterval(async () => {
 			const headers = {
@@ -60,50 +93,54 @@ function PhMQTT(config, callBack, destroyQueue) {
 			}
 			const result = await fetch(url, options)
 			const payload = await result.json()
-			if (Object.keys(payload).length > 0) {
-				const content = JSON.stringify(payload)
-				const {
-					status,
-					jobCat,
-					jobDesc,
-					message
-				} = payload
-				
 
-				const b64 = window.btoa(unescape(encodeURIComponent(content)))
-				console.info("Find Local Cache Item ====> ",
-					use_cache.find((item) => item === b64))
-				
-
-				if (!use_cache.find((item) => item === b64)) {
-					// 只接受jobCat为Notification标识
-					// TODO：@Alex 这部分需要重整一下
-					if (jobCat === "notification") {
-						use_cache.push(b64)
-						time = new Date().getTime()
-
-						// UnRegister 将错误的和完成的关掉
-						if (jobDesc.indexOf("runDag") !== -1) {
-							const {
-								cnotification: { overallStatus }
-							} = JSON.parse(message)
-							// console.warn(overallStatus)
-							const runDagState = states[overallStatus] || false
-							if (runDagState) {
-								destroyQueue.push(topic)
-								
-							}
-						} else {
-							const state = states[status] || false
-							if (state) {
-								destroyQueue.push(topic)
-							}
-						}
-						callBack(parameter, content)
-					}
-				}
+			const content = JSON.stringify(payload)
+			const b64 = window.btoa(unescape(encodeURIComponent(content)))
+			// console.info("Find Local Cache Item ====> ",
+			// 	use_cache.find((item) => item === b64))
+			
+			if (!use_cache.find((item) => item === b64)) {
+				use_cache.push(b64)
+				choose_func[payload instanceof Array](payload, content)
 			}
-		}, 1000 * 1) // 5秒 后续可编程参数，先实现
+
+			// if (Object.keys(payload).length > 0) {
+			// 	const {
+			// 		status,
+			// 		jobCat,
+			// 		jobDesc,
+			// 		message
+			// 	} = payload
+				
+			// 	if (!use_cache.find((item) => item === b64)) {
+			// 		// 只接受jobCat为Notification标识
+			// 		// TODO：@Alex 这部分需要重整一下
+			// 		if (jobCat === "notification") {
+			// 			use_cache.push(b64)
+			// 			time = new Date().getTime()
+
+			// 			// UnRegister 将错误的和完成的关掉
+			// 			if (jobDesc.indexOf("runDag") !== -1) {
+			// 				const {
+			// 					cnotification: { overallStatus }
+			// 				} = JSON.parse(message)
+			// 				// console.warn(overallStatus)
+			// 				const runDagState = states[overallStatus] || false
+			// 				if (runDagState) {
+			// 					destroyQueue.push(topic)
+								
+			// 				}
+			// 			} else {
+			// 				const state = states[status] || false
+			// 				if (state) {
+			// 					destroyQueue.push(topic)
+			// 				}
+			// 			}
+			// 			callBack(parameter, content)
+			// 		}
+			// 	}
+			// }
+		}, 3000 * 1) // 5秒 后续可编程参数，先实现
 	}
 
 	const __timeout = () => {

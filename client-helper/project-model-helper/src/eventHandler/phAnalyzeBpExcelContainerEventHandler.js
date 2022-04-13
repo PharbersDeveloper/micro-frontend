@@ -110,6 +110,13 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				params.targetDataset.sample = params.sample
 				params.targetDataset.projectId = params.projectId
 				params.targetDataset.id = params.datasetId
+				let sourceProjectIdValue = ""
+				if (params.targetDataset.cat === "catalog") {
+					// 与后端沟通,catalog类型的projectId都是一个，暂时写死
+					sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
+				} else {
+					sourceProjectIdValue = params.projectId
+				}
 				// 更新dataset表
 				let body = {
 					table: "dataset",
@@ -129,10 +136,11 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				//发送action
 				let message = {
 					actionName: params.targetDataset.name,
-					projectId: params.projectId,
+					sourceProjectId: sourceProjectIdValue,
+					targetProjectId: params.projectId,
 					projectName: params.projectName,
 					datasetName: params.targetDataset.name,
-					datasetVersion: params.datasetVersion,
+					datasetId: params.targetDataset.id,
 					sample: params.sample,
 					owner: route.cookies.read("account_id"),
 					showName: decodeURI(route.cookies.read("user_name_show"))
