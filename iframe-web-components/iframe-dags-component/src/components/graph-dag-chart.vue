@@ -112,17 +112,15 @@
     </div>
 </template>
 <script>
-// import * as d3_base from "d3";
-// import * as d3_dag from "d3-dag";
 import PhDagDatasource from './model/datasourcev2'
 import PhRenderPolicy from './policy/render/dag-render-policy'
-import PhDagDefinitions from './definitions/definitions'
+import PhDagDefinitions from './policy/definitions/definitions'
 import PhLogsPolicy from './policy/logs/log-policy'
+import PhStatusPolicy from './policy/handler/dagstatushandler'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
 import { hostName } from "../config/envConfig"
-// import noticeService from './model/notice-service'
 
 export default {
     data: () => {
@@ -131,7 +129,7 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            icon_header: "", //this.defs.iconsByName('DSuploaded'),
+            icon_header: null, //this.defs.iconsByName('DSuploaded'),
             selectItem: null,
             showRunJson: false,
             runId: "",
@@ -178,6 +176,12 @@ export default {
             default: function() {
                 return new PhLogsPolicy('1', this)
             }
+        },
+        eventPolicy: {
+            type: Object,
+            default: function() {
+                return new PhStatusPolicy('1', this)
+            }
         }
         // noticeService: {
         //     type: Object,
@@ -197,30 +201,17 @@ export default {
         let env = this.getUrlParam(paramArr, "environment")
         this.datasource.projectId = this.projectId
         this.initChart()
-        window.addEventListener('message', this.handleMessage)
+        window.addEventListener('message', this.eventPolicy.handleForwardMessage)
         this.registerJobEventName = "runDag" + new Date().getTime().toString()
     },
     destroyed () {
         // 注意移除监听！注意移除监听！注意移除监听！
-        window.removeEventListener('message', this.handleMessage)
+        window.removeEventListener('message', this.eventPolicy.handleForwardMessage)
     },
     methods: {
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
-        },
-        handleMessage(event) {
-            let that = this
-            if (event.data.message) {
-                if (event.data.message.cmd === "render_dag") {
-                    console.log("iframe接收的", event.data.message.cmd)
-                    that.runDagCallback(event.data.message, that)
-                }
-                if(event.data.message.cmd === "finish_dag") {
-                    console.log("iframe接收的dag finish", event.data.message.cmd)
-                    that.runDagFinishCallback(event.data.message, that)
-                }
-            }
         },
         //关闭进度条
         closeProgress() {
@@ -308,7 +299,7 @@ export default {
             // const time = new Date(dag_run_id.pop()).getTime()
             // const runnerId = dag_run_id.join("_") + "_" + time
             // console.info(runnerId)
-            window.parent.postMessage({
+            const tmpMsg = {
                 message: {
                     notification: {
                         eventName: this.registerJobEventName,
@@ -323,62 +314,11 @@ export default {
                         eventName: "executionStatus" //+ runnerId
                     }
                 }
-            }, '*')
+            }
+            this.eventPolicy.forwardMessageToParent(message)
             this.showRunJson = false
             this.loading = false
             this.resetDagStatus("trigger")
-        },
-        /**
-         *  trigger更新实时状态
-         */
-        runDagCallback(response, ele) {
-            let that = this
-            let represent_id = ""
-            let payloadArr = JSON.parse(response.payload)
-            console.log("payloadArr", payloadArr)
-            this.responseArr = payloadArr
-            let data = ele.datasource.data
-            payloadArr.forEach(payload => {
-                let status = payload["status"]
-                let jobName = JSON.parse(payload.message).cnotification.jobName
-                // 1.找到对应job节点并更新状态
-                data.forEach((it,index) => {
-                    if(jobName.indexOf(it.attributes.name) != -1) {
-                        if(status === "success") {
-                            it.status = "succeed"
-                        } else if(status === "failed") {
-                            it.status = "failed"
-                            represent_id = it.representId
-                        } else if(status === "running") {
-                            it.status = "running"
-                        }
-                    }
-                    that.refreshNodeStatus(it)
-                })
-                // 2.失败时出现弹框
-                if(status === "failed") {
-                    let showName = JSON.parse(payload.message).cnotification.jobShowName
-                    let length = that.failedLogs.filter(it => it.jobShowName === showName)
-                    if(length < 1) {
-                        that.failedLogs.push({
-                            data: payload,
-                            jobShowName: showName,
-                            representId: represent_id
-                        })
-                    }
-                }
-                console.log("failedLogs", that.failedLogs)
-            })
-        },
-        // trigger更新整体状态
-        runDagFinishCallback(response, ele) {
-            let payload = JSON.parse(response.payload)
-            let status = payload["status"]
-            if(status != "running") {
-                // 更新进度条
-                this.progressOver = true
-                this.retryButtonShow = true
-            }
         },
         //更新节点状态
         refreshNodeStatus(node) {

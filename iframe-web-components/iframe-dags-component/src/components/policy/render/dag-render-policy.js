@@ -22,8 +22,6 @@ export default class PhDagRenderPolicy {
 
         const width = Math.max(that.datasource.sizeHit[1], windowWidth)
         const height = Math.max(that.datasource.sizeHit[0], windowHeight)
-        // const width = Math.max(this.datasource.sizeHit[1], windowWidth)
-        // const height = Math.max(this.datasource.sizeHit[0], windowHeight)
 
         const viewportWidth = width
         const viewportHeight = height

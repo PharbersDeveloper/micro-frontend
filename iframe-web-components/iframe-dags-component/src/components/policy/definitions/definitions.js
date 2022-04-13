@@ -1,4 +1,4 @@
-import { staticFilePath } from "../../config/envConfig"
+import { staticFilePath } from "../../../config/envConfig"
 
 export default class PhDagDefinitions {
     constructor(id) {
