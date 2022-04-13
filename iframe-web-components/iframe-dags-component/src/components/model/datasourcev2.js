@@ -5,10 +5,10 @@ export default class PhDagDatasource {
         this.id = id
         this.data = []
         this.jobArr = []
-        this.name = "prod_clean_v2"
-        this.projectId = "JfSmQBYUpyb4jsei"
+        this.name = "demo"
+        this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '1a441cdc88503a4812aa48cb4586c2acd65c3117756ce8c5d0ea9afb767511d0'
+        this.debugToken = '2f6f97c9df7244ae2405ff673596db041e33ceb6465e752cf948fefacefb3ace'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
@@ -143,7 +143,7 @@ export default class PhDagDatasource {
                                 maxHeight = tmp["parentIds"].length
                             }
                         }
-                        
+
                     }
                 }
                 that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]
