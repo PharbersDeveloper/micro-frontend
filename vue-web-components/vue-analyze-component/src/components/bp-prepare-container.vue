@@ -29,10 +29,29 @@
                         当前脚本无算子
                     </div>
                     <div v-if="operatorArray.length > 0" class="operator_area">
+                        <div class="actions">
+                            <div class="select_all">
+                                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
+                                <img :src="icons.icon_dropdown" @click="showActionCard = !showActionCard" alt="">
+                                <div class="action_card" v-show="showActionCard">
+                                    <div class="action_item">删除</div>
+                                </div>
+                            </div>
+                            <el-input
+                                placeholder="搜索"
+                                prefix-icon="el-icon-search"
+                                v-model="input2">
+                            </el-input>
+                        </div>
+                        <!-- <div style="margin: 15px 0;"></div>
+                        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                            <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+                        </el-checkbox-group> -->
                         <div class="operator_item" 
                             v-for="(item, index) in operatorArray"
                             :key="index+'operator'">
-                            {{item.type}}
+                            <bpOperatorCard 
+                                :type="item.type"></bpOperatorCard>
                         </div>
                     </div>
                     <el-button 
@@ -92,6 +111,7 @@
 <script>
 import { staticFilePath, hostName } from '../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
+import ElInput from 'element-ui/packages/input/index'
 import ElDrawer from 'element-ui/packages/drawer/index'
 import PhContainerDataSource from './model/containerDatasource'
 import PhContainerSchema from './model/containerSchema'
@@ -99,11 +119,12 @@ import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-cont
 import VueMarkdown from 'vue-markdown' 
 import md from "./model/test.md"
 import bpOperatorCard from './bp-operator-card'
-
+import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
+import ElCheckbox from 'element-ui/packages/checkbox/index'
 export default {
     data() {
         return {
-            drawer: true,
+            drawer: false,
             direction: "btt",
             selectedOpt: 1,
             selectedOptCondition: -1,
@@ -127,14 +148,24 @@ export default {
                 {
                     type: 2
                 }
-            ]
+            ],
+            showActionCard: false,
+            input2: "",
+            checkAll: false,
+            checkedCities: ['上海', '北京'],
+            cities: ['上海1', '北京1', '广州1', '深圳1'],
+            isIndeterminate: true
         }
     },
     components: {
         ElButton,
         bpExcel,
         ElDrawer,
-        VueMarkdown
+        VueMarkdown,
+        bpOperatorCard,
+        ElCheckboxGroup,
+        ElCheckbox,
+        ElInput
     },
     props: {
         icons: {
@@ -143,7 +174,8 @@ export default {
                 return {
                     prepare_icon: `${staticFilePath}` + "/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
                     add_icon: `${staticFilePath}` + "/icons/add_operator_icon.svg",
-                    close_icon: `${staticFilePath}` + "/icon_close.svg"
+                    close_icon: `${staticFilePath}` + "/icon_close.svg",
+                    icon_dropdown: "https://components.pharbers.com/prod/general/public/icon_dropdown.svg"
                 }
             }
         },
@@ -214,6 +246,17 @@ export default {
         }
     },
     methods: {
+        handleCheckAllChange(val) {
+            this.checkedCities = val ? cityOptions : [];
+            this.isIndeterminate = false;
+        },
+        handleCheckedCitiesChange(value) {
+            let checkedCount = value.length;
+            this.checkAll = checkedCount === this.cities.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+        },
+
+
         totalCountIsReady(val) {
             this.totalNum = val
         },
@@ -250,6 +293,11 @@ export default {
         font-weight: 400;
         font-display: "auto";
         font-style: normal
+    }
+    * {
+        letter-spacing: .4px;
+        line-height: 1.6;
+        box-sizing: border-box;
     }
     .prepare {
         box-sizing: border-box;
@@ -378,6 +426,57 @@ export default {
                     align-items: center;
                     .no_operator {
                         padding: 30px 0;
+                    }
+                    .operator_area {
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        .actions {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            width: 100%;
+                            padding: 4px;
+                            border-bottom: 1px solid #ccc;
+                            .select_all {
+                                display: flex;
+                                align-items: center;
+                                border: 1px solid #ccc;
+                                height: 24px;
+                                padding: 4px;
+                                img {
+                                    cursor: pointer;
+                                }
+                                .action_card {
+                                    position: absolute;
+                                    top: 20px;
+                                    left: 26px;
+                                    border: 1px solid #ccc;
+                                    width: 100px;
+                                    z-index: 2;
+                                    background: #fff;
+                                    padding: 10px;
+                                    cursor: pointer;
+                                }
+                            }
+                            /deep/.el-input {
+                                height: 24px;
+                                width: 240px;
+                            }
+                            /deep/.el-input__inner {
+                                height: 24px;
+                                display: flex;
+                                align-items: center;
+                            }
+                            /deep/.el-input__icon {
+                                line-height: 24px;
+                            }
+                        }
+                        .operator_item {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                        }
                     }
                     .add_new_step {
                         margin-top: 30px;
