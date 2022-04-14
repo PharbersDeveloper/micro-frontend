@@ -2,18 +2,72 @@
     <div class="bp_operator_card">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="card" v-if="type === 1">
-            <div class="card_header">
+            <div class="card_header" @click="handleCloseContent">
                 <el-checkbox></el-checkbox>
                 <div class="card_header_content">
                     <div class="card_header_desc">保留 列名01，值等于10的行</div>
                     <div class="card_header_del">
                         <div class="num">- 378</div>
-                        <img :src="icons.del_icon" alt="">
+                        <img :src="icons.del_icon" class="del_icon" alt="">
                     </div>
                 </div>
             </div>
-            <div class="card_content">
-
+            <div class="card_content" v-show="showContent">
+                <div class="mb_1">
+                    <div class="title">操作</div>
+                    <select name="opt" id="" class="sel">
+                        <option value="">保留匹配行</option>
+                    </select>
+                </div>
+                <div class="mb_1">
+                    <div class="title">多列筛选关系</div>
+                    <select name="opt" id="" class="sel">
+                        <option value="">AND</option>
+                    </select>
+                </div>
+                <div class="mb_1 filter_col">
+                    <div class="title title_space">
+                        <div>列</div>
+                        <div class="right_title">
+                            <div 
+                                class="mr_1"
+                                @click="clickColType(1)"
+                                :class="[{
+                                    active: colType === 1
+                                }]">单列</div>
+                            <div 
+                                @click="clickColType(2)"
+                                :class="[{
+                                    active: colType === 2
+                                }]">多列</div>
+                        </div>
+                    </div>
+                    <div class="sel_item" 
+                        v-for="(cols,i) in selColArray"
+                        :key="i+'cols'">
+                        <select name="opt" id="" class="sel">
+                            <option value="">列名1</option>
+                        </select>
+                        <img :src="icons.del_icon" v-if="i !== 0"  class="del_icon" alt="">
+                    </div>
+                    <el-button type="text" v-show="colType === 2">+ 增加列</el-button>
+                </div>
+                <div class="mb_1 filter_value">
+                    <div class="title_space">
+                        <div class="title">has value</div>
+                    </div>
+                    <div class="sel_item">
+                        <el-input class="input"  v-model="input" placeholder="请输入内容"></el-input>
+                        <img :src="icons.del_icon"  class="del_icon" alt="">
+                    </div>
+                    <el-button type="text">+ 增加值</el-button>
+                </div>
+                <div class="mb_1">
+                    <div class="title">筛选模式</div>
+                    <select name="opt" id="" class="sel">
+                        <option value="">AND</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -21,7 +75,10 @@
 <script>
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
+import ElInput from 'element-ui/packages/input/index'
 import { staticFilePath, hostName } from '../config/envConfig'
+import ElButton from 'element-ui/packages/button/index'
+
 
 export default {
     data() {
@@ -29,7 +86,9 @@ export default {
             checkAll: false,
             checkedCities: ['上海', '北京'],
             cities: ['上海', '北京', '广州', '深圳'],
-            isIndeterminate: true
+            isIndeterminate: true,
+            showContent: true,
+            colType: 1
         }
     },
     props: {
@@ -41,13 +100,31 @@ export default {
                     del_icon: `${staticFilePath}/delete_r.svg`
                 }
             }
+        },
+        selColArray: {
+            type: Array,
+            default: () => {
+                return [{
+                    id: 1
+                },{
+                    id: 2
+                }]
+            }
         }
     },
     components: {
         ElCheckboxGroup,
-        ElCheckbox
+        ElCheckbox,
+        ElButton,
+        ElInput
     },
     methods: {
+        clickColType(num) {
+            this.colType = num
+        },
+        handleCloseContent() {
+            this.showContent = !this.showContent
+        },
         handleCheckAllChange(val) {
             this.checkedCities = val ? cityOptions : [];
             this.isIndeterminate = false;
@@ -74,12 +151,22 @@ export default {
         .card {
             width: 100%;
             border: 1px solid #ccc;
-            padding: 4px 10px;
+            background: #F4F8FF;
+            .del_icon {
+                width: 16px;
+                height: 16px;
+            }
+            .active {
+                color: #409EFF;
+            }
             .card_header {
+                padding: 4px 10px;
                 display: flex;
                 align-items: center;
                 height: 60px;
-                border-bottom: 1px solid #ccc;
+                border: 1px solid #76787d;
+                box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
+                cursor: pointer;
                 .el-checkbox {
                     margin-right: 10px;
                 }
@@ -93,16 +180,68 @@ export default {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        img {
-                            width: 16px;
-                            height: 16px;
+                        font-size: 10px;
+                        .num {
+                            color: #F50000;
                         }
                     }
                 }
             }
             .card_content {
-                border-top: 1px solid rgba(151,151,151,0.5);
-                box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+                height: auto;
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                // align-items: center;
+                padding-left: 30px;
+                .mb_1 {
+                    margin-bottom: 20px;
+                }
+                .mr_1 {
+                    margin-right: 10px;
+                }
+                .title {
+                    font-size: 10px;
+                    color: #000000;
+                }
+                .title_space {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 206px;
+                    .right_title {
+                        display: flex;
+                        cursor: pointer;
+                    }
+                }
+                .sel_item {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 6px;
+                    select, .input {
+                        margin-right: 4px;
+                    }
+                }
+                .filter_col {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .filter_value {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .sel {
+                    width: 206px;
+                    height: 20px;
+                }
+                .input {
+                    width: 206px;
+                    height: 20px;
+                }
+                /deep/.el-input__inner {
+                    height: 20px;
+                }
             }
         }
     }
