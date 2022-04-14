@@ -53,7 +53,7 @@ export default class PhDagTriggerPolicy {
         confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "dev环境"
         confData.jobDesc = this.parent.registerJobEventName
 
-        const runnerId = "alfredtest"
+        const runnerId = this.genRunnerId(this.parent.projectName)
         const body = {
             common: {
                 runnerId: runnerId,
@@ -168,5 +168,12 @@ export default class PhDagTriggerPolicy {
                 return str
             }
         }
+    }
+
+    genRunnerId(projectName, flowVersion='developer') {
+        let d = new Date().toISOString()
+        const i = d.indexOf(".")
+        d = d.substring(0, i) + "+00:00"
+        return [projectName, projectName, flowVersion, d].join("_")
     }
 }
