@@ -61,6 +61,8 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 							actionName: cstParam.datasetName,
 							dsid: cstParam.datasetId,
 							destination: cstParam.datasetName,
+							projectName: cstParam.projectName,
+							opname: route.cookies.read("account_id"),
 							schema: [
 								{
 									src: cstParam.title,
