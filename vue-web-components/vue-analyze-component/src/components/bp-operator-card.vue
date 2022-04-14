@@ -43,6 +43,7 @@
                         </div>
                     </div>
                     <div class="sel_item" 
+                        v-show="colType === 2"
                         v-for="(cols,i) in selColArray"
                         :key="i+'cols'">
                         <select name="opt" id="" class="sel">
@@ -50,7 +51,16 @@
                         </select>
                         <img :src="icons.del_icon" v-if="i !== 0"  class="del_icon" alt="">
                     </div>
-                    <el-button type="text" v-show="colType === 2">+ 增加列</el-button>
+                     <div class="sel_item" 
+                        v-show="colType === 1"
+                        v-for="(cols,i) in selSingleColArray"
+                        :key="i+'cols'">
+                        <select name="opt" id="" class="sel">
+                            <option value="">列名1</option>
+                        </select>
+                        <img :src="icons.del_icon" v-if="i !== 0"  class="del_icon" alt="">
+                    </div>
+                    <el-button @click="addSelCol" type="text" v-show="colType === 2">+ 增加列</el-button>
                 </div>
                 <div class="mb_1 filter_value">
                     <div class="title_space">
@@ -110,6 +120,14 @@ export default {
                     id: 2
                 }]
             }
+        },
+        selSingleColArray: {
+            type: Array,
+            default: () => {
+                return [{
+                    id: 1
+                }]
+            }
         }
     },
     components: {
@@ -119,9 +137,15 @@ export default {
         ElInput
     },
     methods: {
+        // 增加行
+        addSelCol() {
+            this.selColArray.push({})
+        },
+        // 选择单列多列
         clickColType(num) {
             this.colType = num
         },
+        // 收起内容
         handleCloseContent() {
             this.showContent = !this.showContent
         },

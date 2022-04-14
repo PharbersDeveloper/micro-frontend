@@ -476,6 +476,8 @@ export default {
                             width: 100%;
                             display: flex;
                             flex-direction: column;
+							max-height: calc(100vh - 256px);
+							overflow: auto;
                         }
                     }
                     .add_new_step {
