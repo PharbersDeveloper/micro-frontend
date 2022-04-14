@@ -24,44 +24,44 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <img :src="this.defs.iconsByName('tag')" alt="">
-                    <img :src="this.defs.iconsByName('table')" alt="">
+                    <img :src="defs.iconsByName('tag')" alt="">
+                    <img :src="defs.iconsByName('table')" alt="">
                     <!-- <img :src="this.defs.iconsByName('star')" alt="">
                     <img :src="this.defs.iconsByName('new-document-dashboard')" alt="">
                     <img :src="this.defs.iconsByName('share')" alt="">
                     <img :src="this.defs.iconsByName('hide')" alt=""> -->
-                    <img :src="this.defs.iconsByName('run')" alt=""
-                        @click="this.triggerPolicy.dagRunPreparing">
+                    <img :src="defs.iconsByName('run')" alt=""
+                        @click="triggerPolicy.dagRunPreparing()">
                     <img v-if="retryButtonShow && selectItem"
-                        :src="this.defs.iconsByName('run', 'current')" alt=""
-                        @click="this.triggerPolicy.retryDag('self_only')">
+                        :src="defs.iconsByName('run', 'current')" alt=""
+                        @click="triggerPolicy.retryDag('self_only')">
                     <img v-if="retryButtonShow && selectItem"
-                        :src="this.defs.iconsByName('run', 'to')" alt=""
-                        @click="this.triggerPolicy.retryDag('downstream')">
+                        :src="iconsByName('run', 'to')" alt=""
+                        @click="triggerPolicy.retryDag('downstream')">
                     <img v-if="retryButtonShow  && selectItem"
-                        :src="this.defs.iconsByName('run', 'from')" alt=""
-                        @click="this.triggerPolicy.retryDag('upstream')">
+                        :src="defs.iconsByName('run', 'from')" alt=""
+                        @click="triggerPolicy.retryDag('upstream')">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="this.defs.iconsByName('run', 'current-reverse')" alt="">
+                        :src="defs.iconsByName('run', 'current-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="this.defs.iconsByName('run', 'from-reverse')" alt="">
+                        :src="defs.iconsByName('run', 'from-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="this.defs.iconsByName('run', 'to-reverse')" alt="">
+                        :src="defs.iconsByName('run', 'to-reverse')" alt="">
                     <img v-if="!retryButtonShow || !selectItem"
-                        :src="this.defs.iconsByName('stop')" alt="">
+                        :src="defs.iconsByName('stop')" alt="">
                 </div>
                 <div class="sec_icon_row">
-                    <img :src="this.defs.iconsByName('delete_r')" alt="">
-                    <img :src="this.defs.iconsByName('del_icon_black')" alt="">
+                    <img :src="defs.iconsByName('delete_r')" alt="">
+                    <img :src="defs.iconsByName('del_icon_black')" alt="">
                 </div>
             </div>
             <div class="scripts_area">
                 <div class="script_title">脚本</div>
                 <div class="scripts">
-                    <img :src="this.defs.iconsByName('python')" alt="">
-                    <img :src="this.defs.iconsByName('pyspark')" alt="">
-                    <img :src="this.defs.iconsByName('r')" alt="">
-                    <img :src="this.defs.iconsByName('sparkr')" alt="">
+                    <img :src="defs.iconsByName('python')" alt="">
+                    <img :src="defs.iconsByName('pyspark')" alt="">
+                    <img :src="defs.iconsByName('r')" alt="">
+                    <img :src="defs.iconsByName('sparkr')" alt="">
                 </div>
             </div>
         </div>
@@ -70,17 +70,17 @@
             v-if="showRunJson"
             :textConf="textConf"
             :projectId="projectId"
-            @confirmeRunDag="this.triggerPolicy.runDag"
+            @confirmeRunDag="confirmeRunDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
 
         <dag-logs-dialog
-            v-if="this.logsPolicy.showDagLogs"
+            v-if="logsPolicy.showDagLogs"
             :runId="runId"
             :jobShowName="jobShowName"
             :projectName="projectName"
             :representId="representId"
-            @closeLogDialog="this.logsPolicy.closeLogDialog"
+            @closeLogDialog="logsPolicy.closeLogDialog"
         ></dag-logs-dialog>
 
         <div class="job_status_area">
@@ -118,7 +118,7 @@ import PhDagDefinitions from './policy/definitions/definitions'
 import PhLogsPolicy from './policy/logs/log-policy'
 import PhStatusPolicy from './policy/handler/dagstatushandler'
 import PhAirflowPolicy from './policy/trigger/airflow-trigger-policy'
-import PhAlfredPolicy from './policy/trigger/airflow-trigger-policy'
+import PhAlfredPolicy from './policy/trigger/sm-trigger-policy'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
@@ -157,7 +157,7 @@ export default {
     props: {
         schedulerPolicyName: {
             type: String,
-            default: "airflow"
+            default: "sm"
         },
         datasource: {
             type: Object,
@@ -269,11 +269,19 @@ export default {
                     behavior: 'smooth'
                 });
             })
+        },
+        confirmeRunDag(data) {
+            this.triggerPolicy.runDag(data)
         }
     },
     watch: {
         needRefresh(n, o) {
             this.renderDag()
+        },
+        selectItem(n, o) {
+            this.selectItemName = n.attributes.name
+            this.icon_header = this.defs.iconsByName(n.category)
+            this.$nextTick(this.datasource.selectOneElement(this))
         }
     }
 }

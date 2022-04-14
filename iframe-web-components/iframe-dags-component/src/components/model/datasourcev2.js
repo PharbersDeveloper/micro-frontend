@@ -8,10 +8,11 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '2f6f97c9df7244ae2405ff673596db041e33ceb6465e752cf948fefacefb3ace'
+        this.debugToken = 'f87e23b164e955cd2dbeff445025839a5be5b828967ea405ba26142434a24b1c'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
+        this.cal = { calculate: {}, selected: [] }
     }
 
     buildQuery(ele, isAppend=false) {
@@ -132,6 +133,7 @@ export default class PhDagDatasource {
                         result = "job"
                     }
                     x["category"] = result
+                    x["selected"] = false
                     const tmp = parseInt(x["attributes"]["level"])
                     if (tmp > maxLevel) {
                         maxLevel = tmp
@@ -156,6 +158,58 @@ export default class PhDagDatasource {
                     }
                 }
                 that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]
+                ele.needRefresh++
+            })
+    }
+
+    //查询 select
+    buildSelectItemsQuery(ele) {
+        const uri = `${hostName}/phstatemachineselect`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+
+        const tmp = {}
+        if (ele.selectItem.attributes.cat === "job") {
+            tmp['job'] = {
+                "name": ele.selectItem.attributes.name,
+                "represent-id": ele.selectItem.attributes['represent-id']
+            }
+        } else {
+            tmp['dataset'] = {
+                "name": ele.selectItem.attributes.name,
+                "represent-id": ele.selectItem.attributes['represent-id']
+            }
+        }
+
+        let body = {
+            "projectId": ele.projectId,
+            "projectName": ele.projectName,
+            "element": tmp
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        // return null
+        return fetch(uri, options)
+    }
+
+    selectOneElement(ele) {
+        console.log('select and change the data')
+        if (!ele.selectItem) {
+            return
+        }
+
+        let that = this
+        ele.datasource.buildSelectItemsQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                that.cal = response
                 ele.needRefresh++
             })
     }

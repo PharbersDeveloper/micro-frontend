@@ -1,4 +1,3 @@
-// import { staticFilePath, hostName } from "../../config/envConfig"
 import * as d3_base from "d3"
 import * as d3_dag from "d3-dag"
 
@@ -15,6 +14,7 @@ export default class PhDagRenderPolicy {
             data = that.datasource.data
         }
         const d3 = Object.assign({}, d3_base, d3_dag);
+        d3.select('svg').remove()
         const dag = d3.dagStratify()(data);
 
         const windowWidth = that.$refs.chart.offsetWidth
@@ -81,7 +81,8 @@ export default class PhDagRenderPolicy {
                     grad.append('stop').attr('offset', '0%').attr('stop-color', colorMap[source.data.id]);
                     grad.append('stop').attr('offset', '100%').attr('stop-color', colorMap[target.data.id]);
                     return `url(#${gradId})`;
-                });
+                })
+                .attr('filter', 'opacity(0.3)')
 
             // Select nodes
             const nodes = svgSelection.append('g')
@@ -105,6 +106,10 @@ export default class PhDagRenderPolicy {
                 .attr("width", "50")
                 .attr("height", "50")
                 .attr('transform', 'translate(-25, -25)')
+                .attr('filter', ({data}) => {
+                    if (that.datasource.cal.selected.includes(data.id)) return "none"
+                    else return 'opacity(0.5)'
+                })
 
 
             // Add text to nodes
@@ -116,6 +121,11 @@ export default class PhDagRenderPolicy {
                 .attr('alignment-baseline', 'middle')
                 .attr('fill', 'black')
                 .attr('transform', 'translate(0, 30)')
+                .attr('filter', ({data}) => {
+                    if (that.datasource.cal.selected.includes(data.id)) return "none"
+                    else return 'opacity(0.5)'
+                })
+
 
 
             //Our new hover effects
@@ -137,17 +147,12 @@ export default class PhDagRenderPolicy {
                 // TODO: remove tooltips
                 // d3.select(this).selectAll("circle").remove()
             }).on('click', function (d, i) {
-                that.selectItem = null
-                that.selectItemName = i.data.attributes.name
-                // 获取选中节点的基本信息
-                let scriptArr = that.datasource.jobArr.filter(it => it.attributes.cat === "job" && it.attributes.name === that.selectItemName)
-                if (scriptArr.length > 0) {
-                    that.selectItem = scriptArr[0].attributes
+                if (!that.loading) {
+                    const select = that.datasource.data.filter(it => it.attributes.name === i.data.attributes.name)
+                    if (select.length > 0) {
+                        that.selectItem = select[0]
+                    }
                 }
-                // that.changeHeaderIcon(i.data.attributes.cat, i.data.attributes.runtime, that)
-                that.icon_header = that.defs.iconsByName(i.data.category, i.data.status)
-                console.log("selectItem", that.selectItem)
-                // that.$emit('itemClicked', params)
             })
 
             postRenderHook()
@@ -186,5 +191,4 @@ export default class PhDagRenderPolicy {
                 })
         }
     }
-
 }
