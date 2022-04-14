@@ -25,8 +25,15 @@
                     脚本
                 </div>
                 <div class="tab_content">
-                    <div class="no_script">
+                    <div class="no_operator" v-if="operatorArray.length < 1">
                         当前脚本无算子
+                    </div>
+                    <div v-if="operatorArray.length > 0" class="operator_area">
+                        <div class="operator_item" 
+                            v-for="(item, index) in operatorArray"
+                            :key="index+'operator'">
+                            {{item.type}}
+                        </div>
                     </div>
                     <el-button 
                         class="add_new_step"
@@ -91,6 +98,7 @@ import PhContainerSchema from './model/containerSchema'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 import VueMarkdown from 'vue-markdown' 
 import md from "./model/test.md"
+// import bpOperatorCard from './bp-operator-card'
 
 export default {
     data() {
@@ -111,7 +119,15 @@ export default {
                     desc: "Eqweqw"
                 }
             ],
-            opt_condition_desc: ""
+            opt_condition_desc: "",
+            operatorArray: [
+                {
+                    type: 1
+                },
+                {
+                    type: 2
+                }
+            ]
         }
     },
     components: {
@@ -360,10 +376,11 @@ export default {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    .no_script {
-                        padding: 60px 0;
+                    .no_operator {
+                        padding: 30px 0;
                     }
                     .add_new_step {
+                        margin-top: 30px;
                         width: 216px;
                         height: 25px;
                         background: #F8D634;
