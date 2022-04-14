@@ -439,6 +439,7 @@ export default {
             confData.jobDesc = this.registerJobEventName
             let body = {
                 "project_name": this.projectName,
+                "project_id": this.projectId,
                 "flow_version": "developer",
                 "conf": confData
             }
@@ -569,6 +570,7 @@ export default {
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "project_name": this.projectName,
+                "project_id": this.projectId,
                 "flow_version": "developer",
                 "run_id": this.runId,
                 "task_id": this.projectName + "_" + this.projectName + "_developer_" + this.selectItemName,
