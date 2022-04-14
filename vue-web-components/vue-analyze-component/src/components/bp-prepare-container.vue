@@ -98,7 +98,7 @@ import PhContainerSchema from './model/containerSchema'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 import VueMarkdown from 'vue-markdown' 
 import md from "./model/test.md"
-// import bpOperatorCard from './bp-operator-card'
+import bpOperatorCard from './bp-operator-card'
 
 export default {
     data() {
