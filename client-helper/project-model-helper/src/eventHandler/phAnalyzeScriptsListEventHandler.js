@@ -157,7 +157,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						targetJobId: "",
 						projectName: params.projectName,
 						labels: [],
-						operatorParameters: ["script", ""],
+						operatorParameters: [{ type: "Script" }],
 						prop: {
 							path: params.path,
 							partitions: 1
@@ -260,6 +260,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					)[0]
 					msgArr.push({
 						actionName: targetDataset.jobShowName,
+						projectName: params.projectName,
 						targetId: targetDataset.jobId,
 						jobName: targetDataset.jobName,
 						flowVersion: "developer"

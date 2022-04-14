@@ -116,6 +116,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					)[0]
 					msgArr.push({
 						actionName: targetDataset.name,
+						projectName: params.projectName,
 						version: "",
 						dsid: targetDataset.id,
 						destination: targetDataset.name,

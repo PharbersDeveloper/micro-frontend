@@ -219,7 +219,7 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
-import { staticFilePath, hostName } from '../config/envConfig'
+import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
 
 export default {
     data() {
@@ -429,7 +429,7 @@ export default {
                 })
                 const url = `${hostName}/phdydatasource/put_item`
                 let body = {
-                    "table": "action",
+                    "table": actionTableName,
                     "item": {
                         "projectId": that.allData.projectId,
                         "code": 0,
