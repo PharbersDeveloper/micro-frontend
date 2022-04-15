@@ -260,6 +260,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					)[0]
 					msgArr.push({
 						actionName: targetDataset.jobShowName,
+						projectName: params.projectName,
 						targetId: targetDataset.jobId,
 						jobName: targetDataset.jobName,
 						flowVersion: "developer"
