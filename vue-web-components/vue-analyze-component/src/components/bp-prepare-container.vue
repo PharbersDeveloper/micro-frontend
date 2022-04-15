@@ -139,11 +139,13 @@ export default {
                 {	
                     id: 1,
                     name: "1111",
+                    type: 1,
                     desc: "5555"
                 },
                 {	
                     id: 2,
                     name: "2222",
+                    type: 1,
                     desc: "Eqweqw"
                 }
             ],
@@ -152,22 +154,7 @@ export default {
                 {
                     type: 1,
                     index: 1,
-                    title: "我是似一个"
-                },
-                {
-                    type: 1,
-                    index: 2,
-                    title: "我是第二个"
-                },
-                {
-                    type: 1,
-                    index: 2,
-                    title: "我是第3个"
-                },
-                {
-                    type: 1,
-                    index: 2,
-                    title: "我是第4个"
+                    title: "我是第一个"
                 }
             ],
             showActionCard: false,
@@ -250,13 +237,13 @@ export default {
                         {	
                             id: 1,
                             name: "1111",
-                            type: "filter1",
+                            type: "1",
                             desc: "5555"
                         },
                         {	
                             id: 2,
                             name: "2222",
-                            type: "filter2",
+                            type: "1",
                             desc: "Eqweqw"
                         }
                     ]
@@ -268,13 +255,13 @@ export default {
                         {	
                             id: 1,
                             name: "3333",
-                            type: "clear1",
+                            type: "1",
                             desc: "eqwe"
                         },
                         {	
                             id: 2,
                             name: "4444",
-                            type: "clear2",
+                            type: "1",
                             desc: "eqweq"
                         }
                     ]
@@ -338,12 +325,13 @@ export default {
         },
         operator_opt_condition_click(data) {
             let type = data.type
-            let num = this.operatorArray.length
+            let num = this.operatorArray.length + 1
             this.operatorArray.push({
                 type: type,
                 index: num,
                 title: `我是第${num}个`
             })
+            this.drawer = false
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -543,7 +531,7 @@ export default {
                         }
                         .operator_item_area {
                             overflow: auto;
-                            height: calc(100vh - 240px);
+                            height: calc(100vh - 280px);
                             width: 100%;
                             padding: 0;
                         }

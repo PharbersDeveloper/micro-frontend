@@ -123,7 +123,7 @@ export default {
         return {
             checkAll: false,
             isIndeterminate: true,
-            showContent: false,
+            showContent: true,
             colType: 1, 
             selColArrayNew: [],
             hasValueArrayNew: []
