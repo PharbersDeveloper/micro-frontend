@@ -3,6 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="card" v-if="type === 1">
             <div class="card_header" @click="handleCloseContent">
+                <img :src="icons.drag_prepare_card" class="drag_prepare_card" alt="">
                 <el-checkbox></el-checkbox>
                 <div class="card_header_content">
                     <div class="card_header_desc">保留 列名01，值等于10的行</div>
@@ -151,7 +152,8 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    del_icon: `${staticFilePath}/delete_r.svg`
+                    del_icon: `${staticFilePath}/delete_r.svg`,
+                    drag_prepare_card: `${staticFilePath}/drag_prepare_card.svg`
                 }
             }
         },
@@ -245,26 +247,34 @@ export default {
         padding: 4px;
         .card {
             width: 100%;
-            // border: 1px solid #ccc;
-            // background: #F4F8FF;
-            background: #fff8f8;
-            border: 1px solid #fb9292;
+            border: 1px solid #ccc;
+            background: #F4F8FF;
             .del_icon {
                 width: 16px;
                 height: 16px;
+            }
+            .error_border {
+                border-color: #fb9292 !important;
+            }
+            .error_background {
+                background: #fff8f8 !important;
             }
             .active {
                 color: #409EFF;
             }
             .card_header {
-                padding: 4px 10px;
+                padding: 4px;
                 display: flex;
                 align-items: center;
                 height: 60px;
-                // border: 1px solid #76787d;
-                border: 1px solid #fb9292;
+                border: 1px solid #76787d;
                 box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
                 cursor: pointer;
+                .drag_prepare_card {
+                    height: 18px;
+                    margin-right: 4px;
+                    cursor: move;
+                }
                 .el-checkbox {
                     margin-right: 10px;
                 }

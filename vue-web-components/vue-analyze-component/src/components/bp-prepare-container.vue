@@ -47,14 +47,17 @@
                         <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
                             <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
                         </el-checkbox-group> -->
-                        <div class="operator_item" 
-                            v-for="(item, index) in operatorArray"
-                            :key="index+'operator'">
-                            <bpOperatorCard 
-                                :schemaArray="schema"
-                                :selColArray="selColArray"
-                                :hasValueArray="hasValueArray"
-                                :type="item.type"></bpOperatorCard>
+                        <div class="operator_item_area">
+                            <div class="operator_item" 
+                                v-for="(item, index) in operatorArray"
+                                :key="index+'operator'">
+                                <bpOperatorCard
+                                    :key="i+'opreator'"
+                                    :schemaArray="schema"
+                                    :selColArray="selColArray"
+                                    :hasValueArray="hasValueArray"
+                                    :type="item.type"></bpOperatorCard>
+                            </div>
                         </div>
                     </div>
                     <el-button 
@@ -149,7 +152,7 @@ export default {
                     type: 1
                 },
                 {
-                    type: 2
+                    type: 1
                 }
             ],
             showActionCard: false,
@@ -491,11 +494,15 @@ export default {
                                 line-height: 24px;
                             }
                         }
+                        .operator_item_area {
+                            overflow: auto;
+                            height: calc(100vh - 240px);
+                            width: 100%;
+                        }
                         .operator_item {
                             width: 100%;
                             display: flex;
                             flex-direction: column;
-                            max-height: calc(100vh - 256px);
                             overflow: auto;
                         }
                     }
