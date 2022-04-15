@@ -11,6 +11,7 @@ import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
 import prepare from './components/bp-prepare-container'
+import executionHistory from './components/bp-executions-history'
 
 Vue.use(Router)
 
@@ -72,6 +73,11 @@ export default new Router({
             path: '/dashboards',
             name: 'dashboards',
             component: dashboards
+        },
+        {
+            path: '/executions',
+            name: 'executions',
+            component: executionHistory
         }
     ]
 })
