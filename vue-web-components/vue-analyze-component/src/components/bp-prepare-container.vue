@@ -31,7 +31,8 @@
                     <div v-if="operatorArray.length > 0" class="operator_area">
                         <div class="actions">
                             <div class="select_all">
-                                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
+                                <el-checkbox 
+                                    :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
                                 <img :src="icons.icon_dropdown" @click="showActionCard = !showActionCard" alt="">
                                 <div class="action_card" v-show="showActionCard">
                                     <div class="action_item">删除</div>
@@ -43,22 +44,22 @@
                                 v-model="input2">
                             </el-input>
                         </div>
-                        <!-- <div style="margin: 15px 0;"></div>
-                        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                            <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-                        </el-checkbox-group> -->
-                        <div class="operator_item_area">
-                            <div class="operator_item" 
-                                v-for="(item, index) in operatorArray"
+                        <ul class="operator_item_area">
+                            <li class="operator_item" 
+                                draggable="true" 
+                                @dragstart="dragStart($event, index, field)" @dragover="allowDrop"
+                                @drop="drop($event, index,field)"
+                                v-for="(field, index) in operatorArray"
                                 :key="index+'operator'">
                                 <bpOperatorCard
-                                    :key="i+'opreator'"
+                                    :key="index+'opreator'"
+                                    :title="field.title"
                                     :schemaArray="schema"
                                     :selColArray="selColArray"
                                     :hasValueArray="hasValueArray"
-                                    :type="item.type"></bpOperatorCard>
-                            </div>
-                        </div>
+                                    :type="field.type"></bpOperatorCard>
+                            </li>
+                        </ul>
                     </div>
                     <el-button 
                         class="add_new_step"
@@ -149,10 +150,24 @@ export default {
             opt_condition_desc: "",
             operatorArray: [
                 {
-                    type: 1
+                    type: 1,
+                    index: 1,
+                    title: "我是似一个"
                 },
                 {
-                    type: 1
+                    type: 1,
+                    index: 2,
+                    title: "我是第二个"
+                },
+                {
+                    type: 1,
+                    index: 2,
+                    title: "我是第3个"
+                },
+                {
+                    type: 1,
+                    index: 2,
+                    title: "我是第4个"
                 }
             ],
             showActionCard: false,
@@ -268,6 +283,32 @@ export default {
         }
     },
     methods: {
+        // 目标文件表拖动
+        dragStart(e, index, field){
+            this.clearBakData() // 清空上一次拖动时保存的数据
+            // e.dataTransfer.setData('Text', index);
+            this.fileMiddleData= field // 设置此次拖动时保存的数据
+            this.fileMddleIndex = index //设置此次拖动时保存的数据Index
+        },
+        allowDrop(e){
+            e.preventDefault()
+        },
+        clearBakData(){
+            // 此处写清除各列表的操作
+            this.fileMiddleData=''
+            this.fileMddleIndex=-1
+        },
+        drop(e, index,field){
+            // 取消默认行为
+            this.allowDrop(e);
+            let arr = this.operatorArray.concat([])
+            let temp = arr[index];
+            arr[index] = arr[this.fileMddleIndex];
+            arr[this.fileMddleIndex] = temp;
+
+            this.operatorArray = arr;
+            this.clearBakData()
+        },
         handleCheckAllChange(val) {
             this.checkedCities = val ? cityOptions : [];
             this.isIndeterminate = false;
@@ -297,6 +338,12 @@ export default {
         },
         operator_opt_condition_click(data) {
             let type = data.type
+            let num = this.operatorArray.length
+            this.operatorArray.push({
+                type: type,
+                index: num,
+                title: `我是第${num}个`
+            })
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -498,6 +545,7 @@ export default {
                             overflow: auto;
                             height: calc(100vh - 240px);
                             width: 100%;
+                            padding: 0;
                         }
                         .operator_item {
                             width: 100%;
