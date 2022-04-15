@@ -15,14 +15,20 @@
             <div class="card_content" v-show="showContent">
                 <div class="mb_1">
                     <div class="title">操作</div>
-                    <select name="opt" id="" class="sel">
-                        <option value="">保留匹配行</option>
+                    <select id="" class="sel">
+                        <option 
+                            v-for="(item,i) in filterOnValue.option"
+                            :key="i+'filterOnValue_options'"
+                            :value="item">{{item}}</option>
                     </select>
                 </div>
                 <div class="mb_1">
                     <div class="title">多列筛选关系</div>
-                    <select name="opt" id="" class="sel">
-                        <option value="">AND</option>
+                     <select id="" class="sel">
+                        <option 
+                            v-for="(item,i) in filterOnValue.multiColumnFilter"
+                            :key="i+'filterOnValue_options'"
+                            :value="item">{{item}}</option>
                     </select>
                 </div>
                 <div class="mb_1 filter_col">
@@ -42,40 +48,62 @@
                                 }]">多列</div>
                         </div>
                     </div>
+                    <!-- 多列 -->
                     <div class="sel_item" 
                         v-show="colType === 2"
-                        v-for="(cols,i) in selColArray"
+                        v-for="(cols,i) in selColArrayNew"
                         :key="i+'cols'">
-                        <select name="opt" id="" class="sel">
-                            <option value="">列名1</option>
+                        <select id="" class="sel">
+                            <option 
+                                v-for="(item,i) in schemaArray.schema"
+                                :key="i+'schema'"
+                                :value="item">{{item}}</option>
                         </select>
-                        <img :src="icons.del_icon" v-if="i !== 0"  class="del_icon" alt="">
+                        <img 
+                            :src="icons.del_icon" 
+                            @click="delCol(cols, i)" 
+                            v-if="i !== 0"  
+                            class="del_icon" alt=""/>
                     </div>
-                     <div class="sel_item" 
-                        v-show="colType === 1"
-                        v-for="(cols,i) in selSingleColArray"
-                        :key="i+'cols'">
-                        <select name="opt" id="" class="sel">
-                            <option value="">列名1</option>
+                    <!-- 单列 -->
+                    <div class="sel_item" v-show="colType === 1">
+                        <select id="" class="sel">
+                            <option 
+                                v-for="(item,i) in schemaArray.schema"
+                                :key="i+'schema'"
+                                :value="item">{{item}}</option>
                         </select>
-                        <img :src="icons.del_icon" v-if="i !== 0"  class="del_icon" alt="">
                     </div>
-                    <el-button @click="addSelCol" type="text" v-show="colType === 2">+ 增加列</el-button>
+                    <el-button 
+                        @click="addSelCol" 
+                        type="text" 
+                        v-show="colType === 2">+ 增加列</el-button>
                 </div>
                 <div class="mb_1 filter_value">
                     <div class="title_space">
-                        <div class="title">has value</div>
+                        <div class="title">值</div>
                     </div>
-                    <div class="sel_item">
-                        <el-input class="input"  v-model="input" placeholder="请输入内容"></el-input>
-                        <img :src="icons.del_icon"  class="del_icon" alt="">
+                    <div class="sel_item"
+                        v-for="(val,i) in hasValueArrayNew"
+                        :key="i+'val'">
+                        <el-input class="input"  placeholder="请输入内容"></el-input>
+                        <img 
+                            :src="icons.del_icon" 
+                            @click="delSelVal(val, i)"
+                            v-if="i != 0"
+                            class="del_icon" alt="">
                     </div>
-                    <el-button type="text">+ 增加值</el-button>
+                    <el-button 
+                        @click="addSelVal"
+                        type="text">+ 增加值</el-button>
                 </div>
                 <div class="mb_1">
                     <div class="title">筛选模式</div>
-                    <select name="opt" id="" class="sel">
-                        <option value="">AND</option>
+                    <select id="" class="sel">
+                       <option 
+                            v-for="(item,i) in filterOnValue.filterPattern"
+                            :key="i+'filterPattern'"
+                            :value="item">{{item}}</option>
                     </select>
                 </div>
             </div>
@@ -89,16 +117,32 @@ import ElInput from 'element-ui/packages/input/index'
 import { staticFilePath, hostName } from '../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 
-
 export default {
     data() {
         return {
             checkAll: false,
-            checkedCities: ['上海', '北京'],
-            cities: ['上海', '北京', '广州', '深圳'],
             isIndeterminate: true,
             showContent: true,
-            colType: 1
+            colType: 1,
+            filterOnValue: {
+                option: [
+                    "只保留匹配行",
+                    "去除匹配行",
+                    "清除匹配单元格",
+                    "清除不匹配单元格"
+                ],
+                multiColumnFilter: [
+                    "All match（AND）",
+                    "Any match（OR）"
+                ],
+                filterPattern: [
+                    "完全匹配",
+                    "不完全匹配",
+                    "正则表达式"
+                ]
+            },
+            selColArrayNew: [],
+            hasValueArrayNew: []
         }
     },
     props: {
@@ -111,21 +155,31 @@ export default {
                 }
             }
         },
+        schemaArray: {
+            type: Object,
+            default: () => {
+                return {
+                    schema: []
+                }
+            }
+        },
         selColArray: {
             type: Array,
             default: () => {
                 return [{
-                    id: 1
-                },{
-                    id: 2
+                    name: 1
                 }]
             }
         },
-        selSingleColArray: {
+        selSingleCol: {
+            type: String,
+            default: "通用名称"
+        },
+        hasValueArray: {
             type: Array,
             default: () => {
                 return [{
-                    id: 1
+                    name: 1
                 }]
             }
         }
@@ -136,10 +190,26 @@ export default {
         ElButton,
         ElInput
     },
+    mounted() {
+        this.selColArrayNew = this.selColArray
+        this.hasValueArrayNew = this.hasValueArray
+    },
     methods: {
+        //删除值
+        delSelVal(data, i) {
+            this.hasValueArrayNew.splice(i, 1)
+        },
+        //增加值
+        addSelVal() {
+            this.hasValueArrayNew.push({})
+        },
+        //删除行
+        delCol(data, i) {
+            this.selColArrayNew.splice(i, 1)
+        },
         // 增加行
         addSelCol() {
-            this.selColArray.push({})
+            this.selColArrayNew.push({})
         },
         // 选择单列多列
         clickColType(num) {
@@ -148,16 +218,17 @@ export default {
         // 收起内容
         handleCloseContent() {
             this.showContent = !this.showContent
-        },
-        handleCheckAllChange(val) {
-            this.checkedCities = val ? cityOptions : [];
-            this.isIndeterminate = false;
-        },
-        handleCheckedCitiesChange(value) {
-            let checkedCount = value.length;
-            this.checkAll = checkedCount === this.cities.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
         }
+    },
+    watch: {
+        // selColArray(n, w) {
+        //     debugger
+        //     this.selColArrayNew = n
+        // },
+        // "schemaArray.schema"(n, o) {
+        //     debugger
+        //     this.needRefresh++
+        // }
     }
 }
 </script>
@@ -174,8 +245,10 @@ export default {
         padding: 4px;
         .card {
             width: 100%;
-            border: 1px solid #ccc;
-            background: #F4F8FF;
+            // border: 1px solid #ccc;
+            // background: #F4F8FF;
+            background: #fff8f8;
+            border: 1px solid #fb9292;
             .del_icon {
                 width: 16px;
                 height: 16px;
@@ -188,7 +261,8 @@ export default {
                 display: flex;
                 align-items: center;
                 height: 60px;
-                border: 1px solid #76787d;
+                // border: 1px solid #76787d;
+                border: 1px solid #fb9292;
                 box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
                 cursor: pointer;
                 .el-checkbox {

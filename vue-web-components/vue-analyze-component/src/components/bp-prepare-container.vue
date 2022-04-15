@@ -51,6 +51,9 @@
                             v-for="(item, index) in operatorArray"
                             :key="index+'operator'">
                             <bpOperatorCard 
+                                :schemaArray="schema"
+                                :selColArray="selColArray"
+                                :hasValueArray="hasValueArray"
                                 :type="item.type"></bpOperatorCard>
                         </div>
                     </div>
@@ -154,7 +157,23 @@ export default {
             checkAll: false,
             checkedCities: ['上海', '北京'],
             cities: ['上海1', '北京1', '广州1', '深圳1'],
-            isIndeterminate: true
+            isIndeterminate: true,
+            selColArray: [
+                {
+                    name: "通用名称"
+                },
+                {
+                    name: "商品名称"
+                }
+            ],
+            hasValueArray: [
+                {
+                    name: "通用名称"
+                },
+                {
+                    name: "商品名称"
+                }
+            ]
         }
     },
     components: {
@@ -476,8 +495,8 @@ export default {
                             width: 100%;
                             display: flex;
                             flex-direction: column;
-							max-height: calc(100vh - 256px);
-							overflow: auto;
+                            max-height: calc(100vh - 256px);
+                            overflow: auto;
                         }
                     }
                     .add_new_step {
