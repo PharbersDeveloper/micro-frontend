@@ -13,6 +13,11 @@ export default class PhDagRenderPolicy {
         if (data === null || data === undefined) {
             data = that.datasource.data
         }
+
+        if (data === null && data.length === 0) {
+            return
+        }
+
         const d3 = Object.assign({}, d3_base, d3_dag);
         d3.select('svg').remove()
         const dag = d3.dagStratify()(data);
