@@ -138,13 +138,13 @@ export default {
             opt_condition: [
                 {	
                     id: 1,
-                    name: "1111",
+                    name: "Filter on Value",
                     type: 1,
                     desc: "5555"
                 },
                 {	
                     id: 2,
-                    name: "2222",
+                    name: "Filter on Numerical Range",
                     type: 1,
                     desc: "Eqweqw"
                 }
@@ -236,13 +236,13 @@ export default {
                     opt_condition_data: [
                         {	
                             id: 1,
-                            name: "1111",
+                            name: "Filter on Value",
                             type: "1",
                             desc: "5555"
                         },
                         {	
                             id: 2,
-                            name: "2222",
+                            name: "Filter on Numerical Range",
                             type: "1",
                             desc: "Eqweqw"
                         }
