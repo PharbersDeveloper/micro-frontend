@@ -157,7 +157,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						targetJobId: "",
 						projectName: params.projectName,
 						labels: [],
-						operatorParameters: ["script", ""],
+						operatorParameters: [{ type: "Script" }],
 						prop: {
 							path: params.path,
 							partitions: 1
