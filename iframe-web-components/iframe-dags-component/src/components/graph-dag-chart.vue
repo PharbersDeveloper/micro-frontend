@@ -214,7 +214,6 @@ export default {
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         // 判断环境
-        // let env = this.getUrlParam(paramArr, "environment")
         this.datasource.projectId = this.projectId
         this.initChart()
         window.addEventListener('message', this.eventPolicy.handleForwardMessage)
