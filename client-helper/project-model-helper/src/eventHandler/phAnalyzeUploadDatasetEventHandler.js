@@ -120,7 +120,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						version: "",
 						dsid: targetDataset.id,
 						destination: targetDataset.name,
-						projectName: params.projectName,
 						opname: route.cookies.read("account_id"),
 						opgroup: route.cookies.read("company_id")
 					})

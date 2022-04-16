@@ -122,7 +122,6 @@ import PhAlfredPolicy from './policy/trigger/sm-trigger-policy'
 import runDagDialog from './run-dag-dialog.vue'
 import dagLogsDialog from './dag-log-dialog.vue'
 import progressBar from './progress-bar-type.vue'
-import { hostName } from "../config/envConfig"
 
 export default {
     data: () => {
@@ -220,7 +219,7 @@ export default {
         this.registerJobEventName = "runDag" + new Date().getTime().toString()
     },
     destroyed () {
-        // 注意移除监听！注意移除监听！注意移除监听！
+        // 移除监听
         window.removeEventListener('message', this.eventPolicy.handleForwardMessage)
     },
     methods: {
