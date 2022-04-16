@@ -131,8 +131,6 @@ export default class PhDagRenderPolicy {
                     else return 'opacity(0.5)'
                 })
 
-
-
             //Our new hover effects
             nodes.on('mouseover', function (d, i) {
                 d3.select(this).transition()
@@ -171,18 +169,20 @@ export default class PhDagRenderPolicy {
         this.parent.progressOver = false
         this.parent.showProgress = true
         // 2.节点状态
-        let data = this.parent.datasource.data
-        data.map((it, index) => {
-            it.status = it["attributes"]["runtime"]
-            that.parent.refreshNodeStatus(it)
-        })
+        // let data = this.parent.datasource.data
+        // data.map((it, index) => {
+        //     it.status = it["attributes"]["runtime"]
+        //     // that.parent.refreshNodeStatus(it)
+        //     that.refreshNodeStatus(it)
+        // })
         // 3.log弹窗
         this.failedLogs = []
     }
 
     //更新节点状态
     refreshNodeStatus(node) {
-        // const that = this
+        const that = this
+        debugger
         const d3 = Object.assign({}, d3_base, d3_dag)
         if (node["attributes"]["cat"] === "job") {
             d3.select("#" + node["attributes"]["name"]).selectAll("image")
@@ -192,7 +192,7 @@ export default class PhDagRenderPolicy {
                     if (status === "succeed") {
                         status = "success"
                     }
-                    return that.defs.iconsByName(cat, status)
+                    return that.parent.defs.iconsByName(cat, status)
                 })
         }
     }

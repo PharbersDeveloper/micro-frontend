@@ -7,14 +7,15 @@ export default class PhDagHandler {
     }
 
     handleForwardMessage(event) {
+        const that = this
         if (event.data.message) {
             if (event.data.message.cmd === "render_dag") {
                 console.log("iframe接收的", event.data.message.cmd)
-                this.runDagCallback(event.data.message)
+                that.runDagCallback(event.data.message)
             }
             if(event.data.message.cmd === "finish_dag") {
                 console.log("iframe接收的dag finish", event.data.message.cmd)
-                this.runDagFinishCallback(event.data.message)
+                that.runDagFinishCallback(event.data.message)
             }
         }
     }
@@ -27,6 +28,7 @@ export default class PhDagHandler {
      *  trigger更新实时状态
      */
     runDagCallback(response) {
+        debugger
         let that = this.parent
         let represent_id = ""
         let payloadArr = JSON.parse(response.payload)

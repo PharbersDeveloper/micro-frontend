@@ -198,12 +198,6 @@ export default {
                 }
             }
         }
-        // noticeService: {
-        //     type: Object,
-        //     default: function() {
-        //         return new noticeService('1')
-        //     }
-        // },
     },
     mounted () {
         let href = window.location.href
