@@ -99,7 +99,7 @@
         ></run-dag-dialog>
 
         <dag-logs-dialog
-            v-if="logsPolicy.showDagLogs"
+            v-if="showDagLogs"
             :runId="runId"
             :jobShowName="jobShowName"
             :projectName="projectName"
@@ -119,7 +119,7 @@
                         {{ item.jobShowName }}
                     </div>
                 </div>
-                <button @click="showLogs(item.data, item.representId)">
+                <button @click="logsPolicy.showLogs(item.data, item.representId)">
                     Logs
                 </button>
             </div>
@@ -178,7 +178,8 @@ export default {
             textConf: {}, //运行弹框textarea的默认值
             progressOver: false, //进度条是否停止
             registerJobEventName: "",
-            retryButtonShow: false
+            retryButtonShow: false,
+            showDagLogs: false
         };
     },
     components: {

@@ -102,9 +102,13 @@ export default class PhDagRenderPolicy {
             nodes.append('image')
                 .attr("xlink:href", ({data}) => {
                     let cat = data.category
+                    let catType = data["attributes"]["cat"]
                     let status = data.status
                     if (status === "succeed") {
                         status = "success"
+                    }
+                    if (catType === "dataset") {
+                        status = "normal"
                     }
                     return that.defs.iconsByName(cat, status)
                 })
@@ -182,7 +186,6 @@ export default class PhDagRenderPolicy {
     //更新节点状态
     refreshNodeStatus(node) {
         const that = this
-        debugger
         const d3 = Object.assign({}, d3_base, d3_dag)
         if (node["attributes"]["cat"] === "job") {
             d3.select("#" + node["attributes"]["name"]).selectAll("image")
