@@ -3,7 +3,7 @@
         <div class="show_area">
             <div class="show_header">
                 <div class="show_header_left">
-                    <input type="text">
+                    <input type="text" />
                     <select name="" id=""></select>
                 </div>
                 <div class="show_header_right">
@@ -19,49 +19,73 @@
 
         <div class="opt_area">
             <div class="opt_header">
-                <img :src="icon_header" alt="">
-                <div class="dataset_name">{{selectItemName}}</div>
+                <img :src="icon_header" alt="" />
+                <div class="dataset_name">{{ selectItemName }}</div>
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <img :src="defs.iconsByName('tag')" alt="">
-                    <img :src="defs.iconsByName('table')" alt="">
+                    <img :src="defs.iconsByName('tag')" alt="" />
+                    <img :src="defs.iconsByName('table')" alt="" />
                     <!-- <img :src="this.defs.iconsByName('star')" alt="">
                     <img :src="this.defs.iconsByName('new-document-dashboard')" alt="">
                     <img :src="this.defs.iconsByName('share')" alt="">
                     <img :src="this.defs.iconsByName('hide')" alt=""> -->
-                    <img :src="defs.iconsByName('run')" alt=""
-                        @click="triggerPolicy.dagRunPreparing()">
-                    <img v-if="retryButtonShow && selectItem"
-                        :src="defs.iconsByName('run', 'current')" alt=""
-                        @click="triggerPolicy.retryDag('self_only')">
-                    <img v-if="retryButtonShow && selectItem"
-                        :src="iconsByName('run', 'to')" alt=""
-                        @click="triggerPolicy.retryDag('downstream')">
-                    <img v-if="retryButtonShow  && selectItem"
-                        :src="defs.iconsByName('run', 'from')" alt=""
-                        @click="triggerPolicy.retryDag('upstream')">
-                    <img v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('run', 'current-reverse')" alt="">
-                    <img v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('run', 'from-reverse')" alt="">
-                    <img v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('run', 'to-reverse')" alt="">
-                    <img v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('stop')" alt="">
+                    <img
+                        :src="defs.iconsByName('run')"
+                        alt=""
+                        @click="triggerPolicy.dagRunPreparing()"
+                    />
+                    <img
+                        v-if="retryButtonShow && selectItem"
+                        :src="defs.iconsByName('run', 'current')"
+                        alt=""
+                        @click="triggerPolicy.retryDag('self_only')"
+                    />
+                    <img
+                        v-if="retryButtonShow && selectItem"
+                        :src="defs.iconsByName('run', 'to')"
+                        alt=""
+                        @click="triggerPolicy.retryDag('downstream')"
+                    />
+                    <img
+                        v-if="retryButtonShow && selectItem"
+                        :src="defs.iconsByName('run', 'from')"
+                        alt=""
+                        @click="triggerPolicy.retryDag('upstream')"
+                    />
+                    <img
+                        v-if="!retryButtonShow || !selectItem"
+                        :src="defs.iconsByName('run', 'current-reverse')"
+                        alt=""
+                    />
+                    <img
+                        v-if="!retryButtonShow || !selectItem"
+                        :src="defs.iconsByName('run', 'from-reverse')"
+                        alt=""
+                    />
+                    <img
+                        v-if="!retryButtonShow || !selectItem"
+                        :src="defs.iconsByName('run', 'to-reverse')"
+                        alt=""
+                    />
+                    <img
+                        v-if="!retryButtonShow || !selectItem"
+                        :src="defs.iconsByName('stop')"
+                        alt=""
+                    />
                 </div>
                 <div class="sec_icon_row">
-                    <img :src="defs.iconsByName('delete_r')" alt="">
-                    <img :src="defs.iconsByName('del_icon_black')" alt="">
+                    <img :src="defs.iconsByName('delete_r')" alt="" />
+                    <img :src="defs.iconsByName('del_icon_black')" alt="" />
                 </div>
             </div>
             <div class="scripts_area">
                 <div class="script_title">脚本</div>
                 <div class="scripts">
-                    <img :src="defs.iconsByName('python')" alt="">
-                    <img :src="defs.iconsByName('pyspark')" alt="">
-                    <img :src="defs.iconsByName('r')" alt="">
-                    <img :src="defs.iconsByName('sparkr')" alt="">
+                    <img :src="defs.iconsByName('python')" alt="" />
+                    <img :src="defs.iconsByName('pyspark')" alt="" />
+                    <img :src="defs.iconsByName('r')" alt="" />
+                    <img :src="defs.iconsByName('sparkr')" alt="" />
                 </div>
             </div>
         </div>
@@ -84,19 +108,28 @@
         ></dag-logs-dialog>
 
         <div class="job_status_area">
-            <div class="job_status" v-for="(item, index) in failedLogs" :key="index">
+            <div
+                class="job_status"
+                v-for="(item, index) in failedLogs"
+                :key="index"
+            >
                 <div class="job_notice">
                     <div class="item title">Job failed</div>
-                    <div class="item" :title="jobShowName">{{item.jobShowName}}</div>
+                    <div class="item" :title="jobShowName">
+                        {{ item.jobShowName }}
+                    </div>
                 </div>
-                <button @click="showLogs(item.data, item.representId)">Logs</button>
+                <button @click="showLogs(item.data, item.representId)">
+                    Logs
+                </button>
             </div>
         </div>
 
         <div v-if="loading">
             <div id="loadingio-spinner-double-ring-ho1zizxmctu">
                 <div class="ldio-400lpppmiue">
-                    <div></div><div></div>
+                    <div></div>
+                    <div></div>
                     <div><div></div></div>
                     <div><div></div></div>
                 </div>
@@ -106,27 +139,27 @@
         <progress-bar
             v-if="showProgress"
             @closeProgress="closeProgress"
-            :progressOver="progressOver">
+            :progressOver="progressOver"
+        >
         </progress-bar>
-
     </div>
 </template>
 <script>
-import PhDagDatasource from './model/datasourcev2'
-import PhRenderPolicy from './policy/render/dag-render-policy'
-import PhDagDefinitions from './policy/definitions/definitions'
-import PhLogsPolicy from './policy/logs/log-policy'
-import PhStatusPolicy from './policy/handler/dagstatushandler'
-import PhAirflowPolicy from './policy/trigger/airflow-trigger-policy'
-import PhAlfredPolicy from './policy/trigger/sm-trigger-policy'
-import runDagDialog from './run-dag-dialog.vue'
-import dagLogsDialog from './dag-log-dialog.vue'
-import progressBar from './progress-bar-type.vue'
+import PhDagDatasource from "./model/datasourcev2";
+import PhRenderPolicy from "./policy/render/dag-render-policy";
+import PhDagDefinitions from "./policy/definitions/definitions";
+import PhLogsPolicy from "./policy/logs/log-policy";
+import PhStatusPolicy from "./policy/handler/dagstatushandler";
+import PhAirflowPolicy from "./policy/trigger/airflow-trigger-policy";
+import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
+import runDagDialog from "./run-dag-dialog.vue";
+import dagLogsDialog from "./dag-log-dialog.vue";
+import progressBar from "./progress-bar-type.vue";
 
 export default {
     data: () => {
         return {
-            name: 'dag',
+            name: "dag",
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
@@ -146,7 +179,7 @@ export default {
             progressOver: false, //进度条是否停止
             registerJobEventName: "",
             retryButtonShow: false
-        }
+        };
     },
     components: {
         runDagDialog,
@@ -160,123 +193,140 @@ export default {
         },
         datasource: {
             type: Object,
-            default: function() {
-                return new PhDagDatasource('1')
+            default: function () {
+                return new PhDagDatasource("1");
             }
         },
         renderPolicy: {
             type: Object,
-            default: function() {
-                return new PhRenderPolicy('1', this)
+            default: function () {
+                return new PhRenderPolicy("1", this);
             }
         },
         defs: {
             type: Object,
-            default: function() {
-                return new PhDagDefinitions('1')
+            default: function () {
+                return new PhDagDefinitions("1");
             }
         },
         logsPolicy: {
             type: Object,
-            default: function() {
-                return new PhLogsPolicy('1', this)
+            default: function () {
+                return new PhLogsPolicy("1", this);
             }
         },
         eventPolicy: {
             type: Object,
-            default: function() {
-                return new PhStatusPolicy('1', this)
+            default: function () {
+                return new PhStatusPolicy("1", this);
             }
         },
         triggerPolicy: {
             type: Object,
-            default: function() {
+            default: function () {
                 if (this.schedulerPolicyName === "airflow") {
-                    return new PhAirflowPolicy('1', this)
+                    return new PhAirflowPolicy("1", this);
                 } else {
-                    return new PhAlfredPolicy('1', this)
+                    return new PhAlfredPolicy("1", this);
                 }
             }
         }
     },
-    mounted () {
-        let href = window.location.href
-        console.log(href)
-        let paramArr = href.split("?")[1].split("&")
-        this.projectId = this.getUrlParam(paramArr, "projectId")
-        this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+    mounted() {
+        let href = window.location.href;
+        console.log(href);
+        let paramArr = href.split("?")[1].split("&");
+        this.projectId = this.getUrlParam(paramArr, "projectId");
+        this.projectName = this.getUrlParam(paramArr, "projectName");
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion");
         // 判断环境
-        this.datasource.projectId = this.projectId
-        this.initChart()
-        window.addEventListener('message', this.eventPolicy.handleForwardMessage)
-        this.registerJobEventName = "runDag" + new Date().getTime().toString()
+        this.datasource.projectId = this.projectId;
+        this.initChart();
+        // window.addEventListener('message', this.eventPolicy.handleForwardMessage)
+        window.addEventListener("message", this.handleForwardMessage);
+        this.registerJobEventName = "runDag" + new Date().getTime().toString();
     },
-    destroyed () {
+    destroyed() {
         // 移除监听
-        window.removeEventListener('message', this.eventPolicy.handleForwardMessage)
+        // window.removeEventListener('message', this.eventPolicy.handleForwardMessage)
+        window.removeEventListener("message", this.handleForwardMessage);
     },
     methods: {
+        handleForwardMessage(event) {
+            const that = this;
+            if (event.data.message) {
+                if (event.data.message.cmd === "render_dag") {
+                    console.log("iframe接收的", event.data.message.cmd);
+                    that.eventPolicy.runDagCallback(event.data.message);
+                }
+                if (event.data.message.cmd === "finish_dag") {
+                    console.log(
+                        "iframe接收的dag finish",
+                        event.data.message.cmd
+                    );
+                    that.eventPolicy.runDagFinishCallback(event.data.message);
+                }
+            }
+        },
         getUrlParam(arr, value) {
-            let data = arr.find(item => item.indexOf(value) > -1)
-            return data ? decodeURI(data).split("=")[1] : undefined
+            let data = arr.find((item) => item.indexOf(value) > -1);
+            return data ? decodeURI(data).split("=")[1] : undefined;
         },
         //关闭进度条
         closeProgress() {
-            this.showProgress = false
+            this.showProgress = false;
         },
         closeRunDagDialog() {
-            this.showRunJson = false
+            this.showRunJson = false;
         },
-        async initChart () {
+        async initChart() {
             // 初始化echarts实例
-            await this.datasource.refreshData(this)
+            await this.datasource.refreshData(this);
             // 发布前解注
             // document.domain = "pharbers.com"
         },
         // 监听屏幕大小改变
-        bindChangeWindow () {
+        bindChangeWindow() {
             window.onresize = () => {
-                if (this.timer) return
+                if (this.timer) return;
 
                 this.timer = setTimeout(() => {
-                    this.dag.resize()
-                    this.timer = null
-                }, 100)
-            }
+                    this.dag.resize();
+                    this.timer = null;
+                }, 100);
+            };
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
+            let arr,
+                reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if ((arr = document.cookie.match(reg))) return arr[2];
+            else return null;
         },
-        renderDag (data) {
+        renderDag(data) {
             this.renderPolicy.renderDag(data, () => {
-                const windowHeight = this.$refs.chart.offsetHeight
+                const windowHeight = this.$refs.chart.offsetHeight;
                 this.$refs.viewport.scroll({
                     top: windowHeight / 2,
                     left: 0,
-                    behavior: 'smooth'
-                });
-            })
+                    behavior: "smooth"
+                })
+            });
         },
         confirmeRunDag(data) {
-            this.triggerPolicy.runDag(data)
+            this.triggerPolicy.runDag(data);
         }
     },
     watch: {
         needRefresh(n, o) {
-            this.renderDag()
+            this.renderDag();
         },
         selectItem(n, o) {
-            this.selectItemName = n.attributes.name
-            this.icon_header = this.defs.iconsByName(n.category)
-            this.$nextTick(this.datasource.selectOneElement(this))
+            this.selectItemName = n.attributes.name;
+            this.icon_header = this.defs.iconsByName(n.category);
+            this.$nextTick(this.datasource.selectOneElement(this));
         }
     }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -300,7 +350,7 @@ export default {
             box-sizing: border-box;
             width: 240px;
             height: 70px;
-            background: #FFFFFF;
+            background: #ffffff;
             border: 1px solid #979797;
             display: flex;
             align-items: center;
@@ -321,10 +371,10 @@ export default {
             button {
                 width: 59px;
                 height: 32px;
-                border: 1px solid #EEEDF7;
+                border: 1px solid #eeedf7;
                 border-radius: 2px;
                 font-size: 14px;
-                color: #7163C5;
+                color: #7163c5;
                 letter-spacing: 0;
                 text-align: center;
                 line-height: 20px;
@@ -342,7 +392,8 @@ export default {
             display: flex;
             justify-content: space-between;
             padding: 20px 10px;
-            input, button {
+            input,
+            button {
                 margin: 0 10px;
             }
         }
@@ -415,7 +466,7 @@ export default {
                     background: #ececed;
                     border-radius: 2px;
                     border: none;
-                    color: #BCBAC4;
+                    color: #bcbac4;
                 }
             }
         }
@@ -443,19 +494,19 @@ export default {
 //界面未加载loading
 @keyframes ldio-400lpppmiue {
     0% {
-        transform: rotate(0)
+        transform: rotate(0);
     }
 
     100% {
-        transform: rotate(360deg)
+        transform: rotate(360deg);
     }
 }
 
 .ldio-400lpppmiue div {
-    box-sizing: border-box !important
+    box-sizing: border-box !important;
 }
 
-.ldio-400lpppmiue>div {
+.ldio-400lpppmiue > div {
     position: absolute;
     width: 68px;
     height: 68px;
@@ -467,8 +518,8 @@ export default {
     animation: ldio-400lpppmiue 1s linear infinite;
 }
 
-.ldio-400lpppmiue>div:nth-child(2),
-.ldio-400lpppmiue>div:nth-child(4) {
+.ldio-400lpppmiue > div:nth-child(2),
+.ldio-400lpppmiue > div:nth-child(4) {
     width: 58px;
     height: 58px;
     top: 21px;
@@ -476,23 +527,23 @@ export default {
     animation: ldio-400lpppmiue 1s linear infinite reverse;
 }
 
-.ldio-400lpppmiue>div:nth-child(2) {
-    border-color: transparent #747789 transparent #747789
+.ldio-400lpppmiue > div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789;
 }
 
-.ldio-400lpppmiue>div:nth-child(3) {
-    border-color: transparent
+.ldio-400lpppmiue > div:nth-child(3) {
+    border-color: transparent;
 }
 
-.ldio-400lpppmiue>div:nth-child(3) div {
+.ldio-400lpppmiue > div:nth-child(3) div {
     position: absolute;
     width: 100%;
     height: 100%;
     transform: rotate(45deg);
 }
 
-.ldio-400lpppmiue>div:nth-child(3) div:before,
-.ldio-400lpppmiue>div:nth-child(3) div:after {
+.ldio-400lpppmiue > div:nth-child(3) div:before,
+.ldio-400lpppmiue > div:nth-child(3) div:after {
     content: "";
     display: block;
     position: absolute;
@@ -505,25 +556,25 @@ export default {
     box-shadow: 0 64px 0 0 #f5c924;
 }
 
-.ldio-400lpppmiue>div:nth-child(3) div:after {
+.ldio-400lpppmiue > div:nth-child(3) div:after {
     left: -4px;
     top: 28px;
     box-shadow: 64px 0 0 0 #f5c924;
 }
 
-.ldio-400lpppmiue>div:nth-child(4) {
+.ldio-400lpppmiue > div:nth-child(4) {
     border-color: transparent;
 }
 
-.ldio-400lpppmiue>div:nth-child(4) div {
+.ldio-400lpppmiue > div:nth-child(4) div {
     position: absolute;
     width: 100%;
     height: 100%;
     transform: rotate(45deg);
 }
 
-.ldio-400lpppmiue>div:nth-child(4) div:before,
-.ldio-400lpppmiue>div:nth-child(4) div:after {
+.ldio-400lpppmiue > div:nth-child(4) div:before,
+.ldio-400lpppmiue > div:nth-child(4) div:after {
     content: "";
     display: block;
     position: absolute;
@@ -536,7 +587,7 @@ export default {
     box-shadow: 0 54px 0 0 #747789;
 }
 
-.ldio-400lpppmiue>div:nth-child(4) div:after {
+.ldio-400lpppmiue > div:nth-child(4) div:after {
     left: -4px;
     top: 23px;
     box-shadow: 54px 0 0 0 #747789;
@@ -544,7 +595,7 @@ export default {
 
 #loadingio-spinner-double-ring-ho1zizxmctu {
     backdrop-filter: blur(1px);
-    background: rgba(200, 0,0, 0.05);
+    background: rgba(200, 0, 0, 0.05);
     justify-content: center;
     align-items: center;
     width: 100vw;

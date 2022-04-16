@@ -31,6 +31,9 @@ export default class IframeContextComponent extends Component {
 	iframeEvent(event) {
 		console.log("ember接受iframe消息", event)
 		if(event.data.message) {
+			let jobNamePre = event.data.message.notification.id.split("_")
+			jobNamePre.pop()
+			jobNamePre = jobNamePre.join("_")
 			//dag实时
 			this.noticeService.defineAction({
 				type: "iot",
@@ -38,7 +41,7 @@ export default class IframeContextComponent extends Component {
 				runnerId: "",
 				id: event.data.message.notification.id,
 				eventName: event.data.message.notification.eventName,
-				projectId: event.data.message.notification.projectId,
+				projectId: jobNamePre,
 				ownerId: this.cookies.read("account_id"),
 				callBack: this.runDagCallback
 			})
