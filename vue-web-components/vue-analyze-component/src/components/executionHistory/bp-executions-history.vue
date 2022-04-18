@@ -24,32 +24,40 @@
                 </select>
             </div>
 
-            <div class="infinite-list-wrapper" style="overflow: auto">
-                <ul class="list"
-                    v-infinite-scroll="load"
-                    infinite-scroll-disabled="disabled"
-                >
-                    <li v-for="i in count" class="list-item">
-                        {{ i }}
-                    </li>
-                </ul>
-                <p v-if="loading">Loading...</p>
-                <p v-if="noMore">No more</p>
-                <p v-else>More</p>
+            <div class="execution-history-list-panel" >
+                <div class="execution-history-list" >
+                    <div v-for="(item, index) in datasource.data" class="execution-history-item" >
+                        <p v-if="item.status==='success'" class="el-icon-success" />
+                        <p v-else class="el-icon-error" />
+                        <div class="execution-history-detail">
+                            <span><b>item.jobName</b></span>
+                            <div class="execution-history-time">
+                                <span>{{item.startAt}}</span>
+                                <span>{{item.endAt}}</span>
+                            </div>
+                        </div>
+                        <button v-if="item.status==='failed'" >View Logs</button>
+                    </div>
+                </div>
+                <p v-if="hasMore" class="execution-history-loading" @click="loadMoreExecutionHistory">More</p>
+            </div>
+
+        </div>
+
+        <div class="execution-history-detail-panel" >
+            <div class="execution-history-definition-panel" >
+            </div>
+            <div class="execution-history-logs-panel" >
             </div>
         </div>
     </div>
-    <!--                el-icon-success-->
 </template>
 
 <script>
 import Vue from 'vue'
 import ElAutocomplete from "element-ui/packages/autocomplete"
-import infiniteScroll from 'vue-infinite-scroll'
 import PhExecutionHistory from "./datasource"
-import "element-ui/lib/theme-chalk/infiniteScroll.css"
 
-Vue.use(infiniteScroll)
 
 export default {
     data() {
@@ -60,7 +68,8 @@ export default {
             sortCandidate: ["Newest"],
             curStatus: "Any status",
             statusCandidate: ["Any status", "success", "failed", "canceled", "queued"],
-            searchString: ''
+            searchString: '',
+            hasMore: true
         }
     },
     props: {
@@ -84,7 +93,7 @@ export default {
         ElAutocomplete
     },
     mounted() {
-
+        // this.datasource.appendExecutionHistory(this)
     },
     methods: {
         linkToPage(name) {
@@ -124,6 +133,9 @@ export default {
         },
         handleSelect(item) {
             console.log(item)
+        },
+        loadMoreExecutionHistory() {
+            this.datasource.appendExecutionHistory(this)
         }
     }
 }
@@ -133,6 +145,7 @@ export default {
     .execution-container {
         display: flex;
         flex-direction: row;
+        min-height: 100%;
 
         .execution-search-sort-panel {
             display: flex;
@@ -141,6 +154,66 @@ export default {
             .execution-sort-btn-lst {
                 display: flex;
                 flex-direction: row;
+            }
+
+            .execution-history-list-panel {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                justify-content: space-between;
+
+
+                .execution-history-list {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+
+                    border: 1px solid red;
+
+                    .execution-history-item {
+                        display: flex;
+                        flex-direction: row;
+
+                        .execution-history-detail {
+                            display: flex;
+                            flex-direction: column;
+
+                            .execution-history-time {
+                                display: flex;
+                                flex-direction: row;
+
+                                .stat-time {
+
+                                }
+
+                                .duration {
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .execution-history-loading {
+                    text-align: center;
+                }
+            }
+        }
+
+        .execution-history-detail-panel {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            border: 1px solid green;
+
+            .execution-history-definition-panel {
+                flex-grow: 1;
+                border: 1px solid green;
+
+            }
+            .execution-history-logs-panel {
+                flex-grow: 1;
+                border: 1px solid green;
             }
         }
 
