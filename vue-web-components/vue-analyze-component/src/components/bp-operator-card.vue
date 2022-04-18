@@ -6,7 +6,7 @@
                 <img :src="icons.drag_prepare_card" class="drag_prepare_card" alt="">
                 <el-checkbox></el-checkbox>
                 <div class="card_header_content">
-                    <div class="card_header_desc">保留 列名01，值等于10的行</div>
+                    <div class="card_header_desc">{{title}}</div>
                     <div class="card_header_del">
                         <div class="num">- 378</div>
                         <img :src="icons.del_icon" class="del_icon" alt="">
@@ -124,24 +124,7 @@ export default {
             checkAll: false,
             isIndeterminate: true,
             showContent: true,
-            colType: 1,
-            filterOnValue: {
-                option: [
-                    "只保留匹配行",
-                    "去除匹配行",
-                    "清除匹配单元格",
-                    "清除不匹配单元格"
-                ],
-                multiColumnFilter: [
-                    "All match（AND）",
-                    "Any match（OR）"
-                ],
-                filterPattern: [
-                    "完全匹配",
-                    "不完全匹配",
-                    "正则表达式"
-                ]
-            },
+            colType: 1, 
             selColArrayNew: [],
             hasValueArrayNew: []
         }
@@ -165,6 +148,28 @@ export default {
                 }
             }
         },
+        filterOnValue: {
+            type: Object,
+            default: () => {
+                return {
+                    option: [
+                        "只保留匹配行",
+                        "去除匹配行",
+                        "清除匹配单元格",
+                        "清除不匹配单元格"
+                    ],
+                    multiColumnFilter: [
+                        "All match（AND）",
+                        "Any match（OR）"
+                    ],
+                    filterPattern: [
+                        "完全匹配",
+                        "不完全匹配",
+                        "正则表达式"
+                    ]
+                }
+            }
+        },
         selColArray: {
             type: Array,
             default: () => {
@@ -184,7 +189,8 @@ export default {
                     name: 1
                 }]
             }
-        }
+        },
+        title: String
     },
     components: {
         ElCheckboxGroup,
@@ -245,19 +251,25 @@ export default {
         display: flex;
         width: 100%;
         padding: 4px;
+        .selected_border {
+            border-color: #3b99fc !important;
+        }
+        .selected_background {
+            background: #e7f3ff !important;
+        }
+        .error_border {
+            border-color: #fb9292 !important;
+        }
+        .error_background {
+            background: #fff8f8 !important;
+        }
         .card {
             width: 100%;
             border: 1px solid #ccc;
-            background: #F4F8FF;
+            // background: #F4F8FF;
             .del_icon {
                 width: 16px;
                 height: 16px;
-            }
-            .error_border {
-                border-color: #fb9292 !important;
-            }
-            .error_background {
-                background: #fff8f8 !important;
             }
             .active {
                 color: #409EFF;
@@ -267,7 +279,7 @@ export default {
                 display: flex;
                 align-items: center;
                 height: 60px;
-                border: 1px solid #76787d;
+                border-bottom: 1px solid #ccc;
                 box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
                 cursor: pointer;
                 .drag_prepare_card {
