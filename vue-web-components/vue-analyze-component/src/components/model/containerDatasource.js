@@ -322,12 +322,44 @@ export default class PhContainerDataSource {
         }
         return fetch(url, options)
     }
+    //请求sample
+    buildSampleQuery(ele) {
+        const url = this.url
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        const body = {
+            table: "dataset",
+            conditions: {
+                projectId: ["=",ele.datasource.projectId],
+                id: ["=", ele.allData.datasetId]
+            },
+            limit: 100,
+            start_key: ""
+        }
+        const options = {
+            method: "POST",
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
 
     queryVersion(ele) {
         return ele.datasource.buildVersionQuery(ele)
             .then((response) => response.json())
             .then((response) => {
                 return response.data.map(x => x["attributes"]["name"])
+            })
+    }
+
+    querySample(ele) {
+        return ele.datasource.buildSampleQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                return response.data.map(x => x["attributes"]["sample"])
             })
     }
 }

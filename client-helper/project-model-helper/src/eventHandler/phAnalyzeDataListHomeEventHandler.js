@@ -217,6 +217,7 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			startResults.data.started_number === route.maxResourceNumber
 		) {
 			alert("已启动项目达到上限，请联系管理员！")
+			route.loadingService.loading.style.display = "none"
 			return false
 		}
 		if (startResults.data.resource_status === "starting") {

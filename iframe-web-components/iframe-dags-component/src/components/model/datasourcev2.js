@@ -5,13 +5,14 @@ export default class PhDagDatasource {
         this.id = id
         this.data = []
         this.jobArr = []
-        this.name = "prod_clean_v2"
-        this.projectId = "JfSmQBYUpyb4jsei"
+        this.name = "demo"
+        this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f'
+        this.debugToken = '4e6a3c66131071774b63d1ffff686087802a9a5cb590c3ae2a163a44bb51ff7b'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
+        this.cal = { calculate: {}, selected: [] }
     }
 
     buildQuery(ele, isAppend=false) {
@@ -40,25 +41,26 @@ export default class PhDagDatasource {
     }
 
     //查询version
-    buildDistinctColQuery(ele, col) {
-        const url = `${hostName}/phdadatasource`
-        function buildDistinctColSql() {
-            let sql_str = "SELECT DISTINCT " + col
-
-            if (ele.datasource.projectId.length === 0)
-                sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
-            else
-                sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
-
-            sql_str = sql_str + " ORDER BY " + col
-
-            return sql_str
-        }
+    buildDistinctColQuery(ele, col, cat, dsName) {
+        const uri = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        const companyId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+        let id = ""
+        if (cat === "catalog") {
+            id = (companyId + "_" + dsName).toLowerCase()
+        } else {
+            id = ele.projectId + "_" + ele.representId
+        }
         let body = {
-            "query": buildDistinctColSql(),
-            "schema": [col],
-            "projectId": this.projectId
+            "table": "version",
+            "conditions": {
+                "id": [
+                    "=",
+                    id
+                ]
+            },
+            "limit": 100,
+            "start_key": ""
         }
         let options = {
             method: "POST",
@@ -69,14 +71,14 @@ export default class PhDagDatasource {
             },
             body: JSON.stringify(body)
         }
-        return fetch(url, options)
+        return fetch(uri, options)
     }
 
-    queryDlgDistinctCol(ele, row) {
-        return ele.datasource.buildDistinctColQuery(ele, row)
+    queryDlgDistinctCol(ele, row, cat, dsName) {
+        return ele.datasource.buildDistinctColQuery(ele, row, cat, dsName)
             .then((response) => response.json())
             .then((response) => {
-                return response.map(x => x[row])
+                return response.data.map(x => x["attributes"]["name"])
             })
     }
 
@@ -92,7 +94,8 @@ export default class PhDagDatasource {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
                     x["representId"] = x["attributes"]["represent-id"]
-                    x["status"] = x["attributes"]["runtime"]
+                    // x["status"] = x["attributes"]["runtime"]
+                    x["status"] = "normal"
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
                     const name = x["attributes"]["name"]
@@ -102,19 +105,26 @@ export default class PhDagDatasource {
                     } else if (cat === "dataset" && runtime === "intermediate") {
                         result = "DSIntermediate"
                     } else if (cat === "dataset" && runtime === "input_index") {
-                        result = "DSInputIndex"
+                        // result = "DSInputIndex"
+                        result = "max-in"
                     } else if (cat === "dataset" && runtime === "output_index") {
-                        result = "DSOutputIndex"
+                        // result = "DSOutputIndex"
+                        result = "max-out"
                     } else if (cat === "dataset" && runtime === "catalog") {
-                        result = "DSCatalog"
+                        // result = "DSCatalog"
+                        result = "catalog"
                     } else if (cat === "job" && runtime === "python3") {
-                        result = "Python3"
+                        // result = "Python3"
+                        result = "python"
                     } else if (cat === "job" && runtime === "pyspark") {
-                        result = "PySpark"
+                        // result = "PySpark"
+                        result = "pyspark"
                     } else if (cat === "job" && runtime === "sparkr") {
-                        result = "SparkR"
+                        // result = "SparkR"
+                        result = "sparkr"
                     } else if (cat === "job" && runtime === "r") {
-                        result = "R"
+                        // result = "R"
+                        result = "r"
                     } else if (cat === "job" && runtime === "prepare") {
                         result = "prepare"
                     } else if (cat === "dataset") {
@@ -123,6 +133,7 @@ export default class PhDagDatasource {
                         result = "job"
                     }
                     x["category"] = result
+                    x["selected"] = false
                     const tmp = parseInt(x["attributes"]["level"])
                     if (tmp > maxLevel) {
                         maxLevel = tmp
@@ -143,10 +154,62 @@ export default class PhDagDatasource {
                                 maxHeight = tmp["parentIds"].length
                             }
                         }
-                        
+
                     }
                 }
                 that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]
+                ele.needRefresh++
+            })
+    }
+
+    //查询 select
+    buildSelectItemsQuery(ele) {
+        const uri = `${hostName}/phstatemachineselect`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+
+        const tmp = {}
+        if (ele.selectItem.attributes.cat === "job") {
+            tmp['job'] = {
+                "name": ele.selectItem.attributes.name,
+                "represent-id": ele.selectItem.attributes['represent-id']
+            }
+        } else {
+            tmp['dataset'] = {
+                "name": ele.selectItem.attributes.name,
+                "represent-id": ele.selectItem.attributes['represent-id']
+            }
+        }
+
+        let body = {
+            "projectId": ele.projectId,
+            "projectName": ele.projectName,
+            "element": tmp
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        // return null
+        return fetch(uri, options)
+    }
+
+    selectOneElement(ele) {
+        console.log('select and change the data')
+        if (!ele.selectItem) {
+            return
+        }
+
+        let that = this
+        ele.datasource.buildSelectItemsQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                that.cal = response
                 ele.needRefresh++
             })
     }

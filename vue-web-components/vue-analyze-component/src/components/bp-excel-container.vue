@@ -243,7 +243,7 @@ export default {
             tmpFilterRow: "version",
             needRefresh: 0,
             dataSampleVisible: false,
-            dataSampleType: "数据量采样",
+            dataSampleType: "",
             dataVersionArr: [],
             dataVersionArrShow: [],
             dataVersionDisabled: true,
@@ -556,13 +556,25 @@ export default {
         //sample请求数据
         dataSampleVisible(n, o) {
             let that = this
-            if (this.dataVersionArrShow.length === 0) {
+            let sample = ""
+            if (n) {
                 that.datasource.resetUrl(`${hostName}/phdydatasource/query`)
-                that.datasource.queryVersion(this).then((data) => {
-                    this.dataVersionArrShow = data
+                if (this.dataVersionArrShow.length === 0) {
+                    that.datasource.queryVersion(this).then((data) => {
+                        this.dataVersionArrShow = data
+                    })       
+                }
+                that.datasource.querySample(this).then((data) => {
+                    sample = data[0]
+                    if (sample.indexOf("version") === -1) {
+                        this.dataSampleType = "数据量采样"
+                    } else {
+                        this.dataSampleType = "数据版本采样"
+                    }
+                    this.dataCollectionMethods = sample.split("_")[0]
+                    this.dataCollectionNum = sample.split("_")[1]
                 })
             }
-
         },
         // 显示列请求接口
         dialogCollectionVisible(n, o) {
