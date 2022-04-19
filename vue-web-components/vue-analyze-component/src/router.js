@@ -10,7 +10,7 @@ import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
-import prepare from './components/bp-prepare-container'
+import prepare from './components/prepareCal/bp-prepare-container'
 import executionHistory from './components/executionHistory/bp-executions-history'
 import test from './components/test'
 

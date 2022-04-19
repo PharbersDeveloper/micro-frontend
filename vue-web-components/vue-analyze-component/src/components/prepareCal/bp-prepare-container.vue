@@ -25,13 +25,13 @@
                     脚本
                 </div>
                 <div class="tab_content">
-                    <div class="no_operator" v-if="operatorArray.length < 1">
+                    <div class="no_operator" v-if="steps.data.length === 0">
                         当前脚本无算子
                     </div>
-                    <div v-if="operatorArray.length > 0" class="operator_area">
+                    <div v-if="steps.data.length > 0" class="operator_area">
                         <div class="actions">
                             <div class="select_all">
-                                <el-checkbox 
+                                <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
                                 <img :src="icons.icon_dropdown" @click="showActionCard = !showActionCard" alt="">
                                 <div class="action_card" v-show="showActionCard">
@@ -45,23 +45,23 @@
                             </el-input>
                         </div>
                         <ul class="operator_item_area">
-                            <li class="operator_item" 
-                                draggable="true" 
+                            <li class="operator_item"
+                                v-for="(field, index) in steps.data"
+                                draggable="true"
                                 @dragstart="dragStart($event, index, field)" @dragover="allowDrop"
-                                @drop="drop($event, index,field)"
-                                v-for="(field, index) in operatorArray"
+                                @drop="drop($event, index, field)"
                                 :key="index+'operator'">
                                 <bpOperatorCard
                                     :key="index+'opreator'"
-                                    :title="field.title"
+                                    :title="field['step-name']"
                                     :schemaArray="schema"
                                     :selColArray="selColArray"
                                     :hasValueArray="hasValueArray"
-                                    :type="field.type"></bpOperatorCard>
+                                    :type="field['ctype']"></bpOperatorCard>
                             </li>
                         </ul>
                     </div>
-                    <el-button 
+                    <el-button
                         class="add_new_step"
                         @click="drawer = true">
                         <img :src="icons.add_icon" alt="">
@@ -88,7 +88,7 @@
                 <div class="operator_con">
                     <div class="opt" >
                         <div class="opt_item"
-                         v-for="item in operatorArr" 
+                         v-for="item in operatorArr"
                          :key="item.id"
                          @click="operator_opt_click(item)"
                         :class="[{selected_bg: item.id == selectedOpt}]">
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="opt_condition">
-                        <div class="opt_condition_item" 
+                        <div class="opt_condition_item"
                             :class="[{selected_bg: data.id == selectedOptCondition}]"
                             v-for="data in opt_condition"
                             @mouseover="operator_opt_condition_mouseover(data)"
@@ -116,18 +116,20 @@
     </div>
 </template>
 <script>
-import { staticFilePath, hostName } from '../config/envConfig'
+import { staticFilePath, hostName } from '../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElDrawer from 'element-ui/packages/drawer/index'
-import PhContainerDataSource from './model/containerDatasource'
-import PhContainerSchema from './model/containerSchema'
-import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
-import VueMarkdown from 'vue-markdown' 
-import md from "./model/test.md"
+import PhStepDataSource from './model/stepDatasource'
+import PhStepSchema from './model/stepSchema'
+import PhStepModel from './model/stepsModel'
+import bpExcel from '../../../../vue-excelv2-component/src/components/ph-excel-container'
+import VueMarkdown from 'vue-markdown'
+import md from "../model/test.md"
 import bpOperatorCard from './bp-operator-card'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
+
 export default {
     data() {
         return {
@@ -136,13 +138,13 @@ export default {
             selectedOpt: 1,
             selectedOptCondition: -1,
             opt_condition: [
-                {	
+                {
                     id: 1,
                     name: "Filter on Value",
                     type: 1,
                     desc: "5555"
                 },
-                {	
+                {
                     id: 2,
                     name: "Filter on Numerical Range",
                     type: 1,
@@ -150,13 +152,13 @@ export default {
                 }
             ],
             opt_condition_desc: "",
-            operatorArray: [
-                {
-                    type: 1,
-                    index: 1,
-                    title: "我是第一个"
-                }
-            ],
+            // operatorArray: [
+            //     {
+            //         type: 1,
+            //         index: 1,
+            //         title: "我是第一个"
+            //     }
+            // ],
             showActionCard: false,
             input2: "",
             checkAll: false,
@@ -217,13 +219,19 @@ export default {
         datasource: {
             type: Object,
             default: function () {
-                return new PhContainerDataSource('1')
+                return new PhStepDataSource('1')
             }
         },
         schema: {
             type: Object,
             default: function () {
-                return new PhContainerSchema('1')
+                return new PhStepSchema('1')
+            }
+        },
+        steps: {
+            type: Object,
+            default: function() {
+                return new PhStepModel('1')
             }
         },
         operatorArr: {
@@ -234,13 +242,13 @@ export default {
                     opt_name: "Filter data1",
                     opt_condition_num: 1,
                     opt_condition_data: [
-                        {	
+                        {
                             id: 1,
                             name: "Filter on Value",
                             type: "1",
                             desc: "5555"
                         },
-                        {	
+                        {
                             id: 2,
                             name: "Filter on Numerical Range",
                             type: "1",
@@ -252,13 +260,13 @@ export default {
                     opt_name: "clear data2",
                     opt_condition_num: 2,
                     opt_condition_data: [
-                        {	
+                        {
                             id: 1,
                             name: "3333",
                             type: "1",
                             desc: "eqwe"
                         },
-                        {	
+                        {
                             id: 2,
                             name: "4444",
                             type: "1",
@@ -268,6 +276,9 @@ export default {
                 }]
             }
         }
+    },
+    mounted() {
+        this.steps.refreshData()
     },
     methods: {
         // 目标文件表拖动
@@ -326,11 +337,11 @@ export default {
         operator_opt_condition_click(data) {
             let type = data.type
             let num = this.operatorArray.length + 1
-            this.operatorArray.push({
-                type: type,
-                index: num,
-                title: `我是第${num}个`
-            })
+            // this.operatorArray.push({
+            //     type: type,
+            //     index: num,
+            //     title: `我是第${num}个`
+            // })
             this.drawer = false
         },
         changeSchemaTypeEvent(data) {

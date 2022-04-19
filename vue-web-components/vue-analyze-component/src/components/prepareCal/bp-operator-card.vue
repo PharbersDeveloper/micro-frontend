@@ -1,7 +1,7 @@
 <template>
     <div class="bp_operator_card">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="card" v-if="type === 1">
+        <div class="card" v-if="type === 'filter'">
             <div class="card_header" @click="handleCloseContent">
                 <img :src="icons.drag_prepare_card" class="drag_prepare_card" alt="">
                 <el-checkbox></el-checkbox>
@@ -17,7 +17,7 @@
                 <div class="mb_1">
                     <div class="title">操作</div>
                     <select id="" class="sel">
-                        <option 
+                        <option
                             v-for="(item,i) in filterOnValue.option"
                             :key="i+'filterOnValue_options'"
                             :value="item">{{item}}</option>
@@ -26,7 +26,7 @@
                 <div class="mb_1">
                     <div class="title">多列筛选关系</div>
                      <select id="" class="sel">
-                        <option 
+                        <option
                             v-for="(item,i) in filterOnValue.multiColumnFilter"
                             :key="i+'filterOnValue_options'"
                             :value="item">{{item}}</option>
@@ -36,13 +36,13 @@
                     <div class="title title_space">
                         <div>列</div>
                         <div class="right_title">
-                            <div 
+                            <div
                                 class="mr_1"
                                 @click="clickColType(1)"
                                 :class="[{
                                     active: colType === 1
                                 }]">单列</div>
-                            <div 
+                            <div
                                 @click="clickColType(2)"
                                 :class="[{
                                     active: colType === 2
@@ -50,34 +50,34 @@
                         </div>
                     </div>
                     <!-- 多列 -->
-                    <div class="sel_item" 
+                    <div class="sel_item"
                         v-show="colType === 2"
                         v-for="(cols,i) in selColArrayNew"
                         :key="i+'cols'">
                         <select id="" class="sel">
-                            <option 
+                            <option
                                 v-for="(item,i) in schemaArray.schema"
                                 :key="i+'schema'"
                                 :value="item">{{item}}</option>
                         </select>
-                        <img 
-                            :src="icons.del_icon" 
-                            @click="delCol(cols, i)" 
-                            v-if="i !== 0"  
+                        <img
+                            :src="icons.del_icon"
+                            @click="delCol(cols, i)"
+                            v-if="i !== 0"
                             class="del_icon" alt=""/>
                     </div>
                     <!-- 单列 -->
                     <div class="sel_item" v-show="colType === 1">
                         <select id="" class="sel">
-                            <option 
+                            <option
                                 v-for="(item,i) in schemaArray.schema"
                                 :key="i+'schema'"
                                 :value="item">{{item}}</option>
                         </select>
                     </div>
-                    <el-button 
-                        @click="addSelCol" 
-                        type="text" 
+                    <el-button
+                        @click="addSelCol"
+                        type="text"
                         v-show="colType === 2">+ 增加列</el-button>
                 </div>
                 <div class="mb_1 filter_value">
@@ -88,20 +88,20 @@
                         v-for="(val,i) in hasValueArrayNew"
                         :key="i+'val'">
                         <el-input class="input"  placeholder="请输入内容"></el-input>
-                        <img 
-                            :src="icons.del_icon" 
+                        <img
+                            :src="icons.del_icon"
                             @click="delSelVal(val, i)"
                             v-if="i != 0"
                             class="del_icon" alt="">
                     </div>
-                    <el-button 
+                    <el-button
                         @click="addSelVal"
                         type="text">+ 增加值</el-button>
                 </div>
                 <div class="mb_1">
                     <div class="title">筛选模式</div>
                     <select id="" class="sel">
-                       <option 
+                       <option
                             v-for="(item,i) in filterOnValue.filterPattern"
                             :key="i+'filterPattern'"
                             :value="item">{{item}}</option>
@@ -115,8 +115,9 @@
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElInput from 'element-ui/packages/input/index'
-import { staticFilePath, hostName } from '../config/envConfig'
+import { staticFilePath, hostName } from '../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
+import PhStepDefsFactory from "./defs/defs-factory"
 
 export default {
     data() {
@@ -124,13 +125,20 @@ export default {
             checkAll: false,
             isIndeterminate: true,
             showContent: true,
-            colType: 1, 
+            colType: 1,
             selColArrayNew: [],
-            hasValueArrayNew: []
+            hasValueArrayNew: [],
+            concretDefs: null
         }
     },
     props: {
-        type: Number,
+        type: String,
+        defFactory: {
+            type: Object,
+            default: () => {
+                return new PhStepDefsFactory('1')
+            }
+        },
         icons: {
             type: Object,
             default: () => {
@@ -201,6 +209,7 @@ export default {
     mounted() {
         this.selColArrayNew = this.selColArray
         this.hasValueArrayNew = this.hasValueArray
+        this.concretDefs = this.defFactory.instance(this.type)
     },
     methods: {
         //删除值
