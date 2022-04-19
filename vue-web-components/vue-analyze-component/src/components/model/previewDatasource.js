@@ -18,7 +18,7 @@ export default class PhExcelPreviewSource {
         // this.schema = []
         // this.cols = this.schema
         this.url = `${hostName}/schemaexplorer`
-        this.debugToken = "259f327ae7af315e3b234b834321546c4c3973db79f4153dd0352dd2f6b02a84"
+        this.debugToken = "113c407aa539686fa2737a99a05e37ee7bda129ef5bfa8b455f4d44e5ed72151"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }

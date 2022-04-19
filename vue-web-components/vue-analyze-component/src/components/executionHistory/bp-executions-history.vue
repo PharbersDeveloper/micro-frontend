@@ -2,12 +2,6 @@
     <div class="execution-container">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/index.css">
         <div class="execution-search-sort-panel ">
-            <!-- <el-autocomplete
-                    v-model="searchString"
-                    :fetch-suggestions="querySearchAsync"
-                    placeholder="Search jobs ..."
-                    @select="handleSelect"
-            ></el-autocomplete> -->
             <div class="execution-sort-btn-lst-search">
                 <el-input v-model="searchString" class="search" placeholder="搜索"></el-input>
                 <div class="execution-sort-btn-lst">
@@ -36,6 +30,7 @@
                         class="execution-history-item" >
                         <div class="left">
                             <p v-if="item.status==='success'" class="el-icon-success status-icon" />
+                            <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" />
                             <p v-else class="el-icon-error status-icon" />
                             <div class="execution-history-detail">
                                 <span class="name"><b>{{item["job-show-name"]}}</b></span>
@@ -50,7 +45,10 @@
                                 </div>
                             </div>
                         </div>
-                        <el-button type="text" v-if="item.status==='failed'" >View Logs</el-button>
+                        <el-button type="text" 
+                            @click="viewLogs(item)"
+                            v-if="executionItem && item.status==='failed' && executionItem['id']===item['id']" >
+                            View Logs</el-button>
                     </div>
                 </div>
                 <p v-if="hasMore" class="execution-history-loading" @click="loadMoreExecutionHistory">More</p>
@@ -64,11 +62,20 @@
                 <div class="execution-history-definition-panel" >
                 </div>
                 <div class="execution-history-logs-panel" >
+                    <div class="title">Activity</div>
+                    <div class="execution-history-logs-panel-item">
+                        <div class="execution-history-logs-panel-item-title">
+                            <p v-if="executionItem.status==='success'" class="el-icon-success status-icon" />
+                            <p v-else-if="executionItem.status==='running'" class="el-icon-loading status-icon" />
+                            <p v-else class="el-icon-error status-icon" />
+                            <span class="name"><b>{{executionItem["job-show-name"]}}</b></span>
+                        </div>
+                        <div class="execution-history-logs-panel-item-time">{{getTimes(executionItem)}}</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--                el-icon-success-->
 </template>
 
 <script>
@@ -123,7 +130,11 @@ export default {
     },
     methods: {
         clickExecutionItem(data) {
+            console.log('item', data)
             this.executionItem = data
+        },
+        viewLogs(data) {
+            this.datasource.buildLogsQuery(this)
         },
         linkToPage (name) {
             const event = new Event("event")
@@ -229,7 +240,17 @@ export default {
         display: flex;
         flex-direction: row;
         min-height: 100%;
+        .status-icon {
+            margin-right: 24px;
+        }
 
+        .el-icon-error {
+            color: red;
+        }
+
+        .el-icon-success {
+            color: green;
+        }
         .execution-search-sort-panel {
             display: flex;
             flex-direction: column;
@@ -286,18 +307,6 @@ export default {
                         .left {
                             display: flex;
                             align-items: center;
-
-                            .status-icon {
-                                margin-right: 24px;
-                            }
-
-                            .el-icon-error {
-                                color: red;
-                            }
-
-                            .el-icon-success {
-                                color: green;
-                            }
                         }
 
                         .execution-history-detail {
@@ -358,6 +367,23 @@ export default {
                 .execution-history-logs-panel {
                     flex-grow: 1;
                     border: 1px solid #dddddd;
+                    .title {
+                        height: 40px;
+                        background: #f2f2f2;
+                        padding-left: 10px;
+                        border-bottom: 1px solid #dddddd;
+                        display: flex;
+                        align-items: center;
+                        font-weight: bold;
+                    }
+                    .execution-history-logs-panel-item {
+                        height: 52px;
+                        padding: 0 24px;
+                        border-bottom: 1px solid #f2f2f2;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
                 }
             }
         }
