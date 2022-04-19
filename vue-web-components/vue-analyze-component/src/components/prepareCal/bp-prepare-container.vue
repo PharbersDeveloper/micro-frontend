@@ -53,11 +53,9 @@
                                 :key="index+'operator'">
                                 <bpOperatorCard
                                     :key="index+'opreator'"
-                                    :title="field['step-name']"
-                                    :schemaArray="schema"
-                                    :selColArray="selColArray"
-                                    :hasValueArray="hasValueArray"
-                                    :type="field['ctype']"></bpOperatorCard>
+                                    :step="field"
+                                    :schema="schema.schema"
+                                    :type="field['ctype']" />
                             </li>
                         </ul>
                     </div>

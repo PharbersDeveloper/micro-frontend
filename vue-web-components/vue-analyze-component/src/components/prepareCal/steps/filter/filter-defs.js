@@ -1,9 +1,8 @@
 
-import { staticFilePath, hostName } from "../../config/envConfig"
+// import { staticFilePath, hostName } from "../../config/envConfig"
 
 export default class PhFilterStepDefs {
-    constructor(id=null) {
-        this.stepId = id
+    constructor() {
         this.defs = {
             actions: [
                 {

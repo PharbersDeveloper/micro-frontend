@@ -1,5 +1,5 @@
 
-import { staticFilePath, hostName } from "../../config/envConfig"
+import { staticFilePath, hostName } from "../../../../config/envConfig"
 
 export default class PhFilterStep {
     constructor(dbstep) {
