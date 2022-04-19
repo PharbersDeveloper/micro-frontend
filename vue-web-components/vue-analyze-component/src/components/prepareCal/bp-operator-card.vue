@@ -6,7 +6,6 @@
     </div>
 </template>
 <script>
-// import PhStepDefsFactory from "./defs/defs-factory"
 import BpFilterCard from "./steps/filter/bp-filter-card"
 
 export default {

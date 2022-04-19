@@ -155,28 +155,6 @@ export default {
                 return []
             }
         },
-        // filterOnValue: {
-        //     type: Object,
-        //     default: () => {
-        //         return {
-        //             option: [
-        //                 "只保留匹配行",
-        //                 "去除匹配行",
-        //                 "清除匹配单元格",
-        //                 "清除不匹配单元格"
-        //             ],
-        //             multiColumnFilter: [
-        //                 "All match（AND）",
-        //                 "Any match（OR）"
-        //             ],
-        //             filterPattern: [
-        //                 "完全匹配",
-        //                 "不完全匹配",
-        //                 "正则表达式"
-        //             ]
-        //         }
-        //     }
-        // },
         selColArray: {
             type: Array,
             default: () => {
