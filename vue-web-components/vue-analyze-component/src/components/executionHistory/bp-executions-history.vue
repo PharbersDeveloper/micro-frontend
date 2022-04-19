@@ -26,7 +26,10 @@
 
             <div class="execution-history-list-panel" >
                 <div class="execution-history-list" >
-                    <div v-for="(item, index) in datasource.data" class="execution-history-item" >
+                    <div 
+						v-for="(item, index) in datasource.data" 
+						:key="index"
+						class="execution-history-item" >
                         <p v-if="item.status==='success'" class="el-icon-success" />
                         <p v-else class="el-icon-error" />
                         <div class="execution-history-detail">
