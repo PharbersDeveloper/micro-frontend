@@ -19,7 +19,7 @@ export default class PhFilterOnValueCmd {
     }
 
     validations() {
-
+        return true
     }
 
     revert2Defs() {
