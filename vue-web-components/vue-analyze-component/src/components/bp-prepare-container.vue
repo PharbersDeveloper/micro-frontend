@@ -31,7 +31,7 @@
                     <div v-if="operatorArray.length > 0" class="operator_area">
                         <div class="actions">
                             <div class="select_all">
-                                <el-checkbox 
+                                <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
                                 <img :src="icons.icon_dropdown" @click="showActionCard = !showActionCard" alt="">
                                 <div class="action_card" v-show="showActionCard">
@@ -45,8 +45,8 @@
                             </el-input>
                         </div>
                         <ul class="operator_item_area">
-                            <li class="operator_item" 
-                                draggable="true" 
+                            <li class="operator_item"
+                                draggable="true"
                                 @dragstart="dragStart($event, index, field)" @dragover="allowDrop"
                                 @drop="drop($event, index,field)"
                                 v-for="(field, index) in operatorArray"
@@ -61,7 +61,7 @@
                             </li>
                         </ul>
                     </div>
-                    <el-button 
+                    <el-button
                         class="add_new_step"
                         @click="drawer = true">
                         <img :src="icons.add_icon" alt="">
@@ -88,7 +88,7 @@
                 <div class="operator_con">
                     <div class="opt" >
                         <div class="opt_item"
-                         v-for="item in operatorArr" 
+                         v-for="item in operatorArr"
                          :key="item.id"
                          @click="operator_opt_click(item)"
                         :class="[{selected_bg: item.id == selectedOpt}]">
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="opt_condition">
-                        <div class="opt_condition_item" 
+                        <div class="opt_condition_item"
                             :class="[{selected_bg: data.id == selectedOptCondition}]"
                             v-for="data in opt_condition"
                             @mouseover="operator_opt_condition_mouseover(data)"
@@ -123,7 +123,7 @@ import ElDrawer from 'element-ui/packages/drawer/index'
 import PhContainerDataSource from './model/containerDatasource'
 import PhContainerSchema from './model/containerSchema'
 import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
-import VueMarkdown from 'vue-markdown' 
+import VueMarkdown from 'vue-markdown'
 import md from "./model/test.md"
 import bpOperatorCard from './bp-operator-card'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
@@ -136,13 +136,13 @@ export default {
             selectedOpt: 1,
             selectedOptCondition: -1,
             opt_condition: [
-                {	
+                {
                     id: 1,
                     name: "Filter on Value",
                     type: 1,
                     desc: "5555"
                 },
-                {	
+                {
                     id: 2,
                     name: "Filter on Numerical Range",
                     type: 1,
@@ -234,13 +234,13 @@ export default {
                     opt_name: "Filter data1",
                     opt_condition_num: 1,
                     opt_condition_data: [
-                        {	
+                        {
                             id: 1,
                             name: "Filter on Value",
                             type: "1",
                             desc: "5555"
                         },
-                        {	
+                        {
                             id: 2,
                             name: "Filter on Numerical Range",
                             type: "1",
@@ -252,13 +252,13 @@ export default {
                     opt_name: "clear data2",
                     opt_condition_num: 2,
                     opt_condition_data: [
-                        {	
+                        {
                             id: 1,
                             name: "3333",
                             type: "1",
                             desc: "eqwe"
                         },
-                        {	
+                        {
                             id: 2,
                             name: "4444",
                             type: "1",
@@ -539,6 +539,7 @@ export default {
                             width: 100%;
                             display: flex;
                             flex-direction: column;
+                            max-height: calc(100vh - 256px);
                             overflow: auto;
                         }
                     }

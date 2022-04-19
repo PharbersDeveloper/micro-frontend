@@ -44,10 +44,12 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				let cstParam = e.detail[0].args.param
 				route.vueComponentEnv = e.detail[0].args.element
 				route.vueComponentEnvType = cstParam.itemValueType
+				// let type =
+				// 	cstParam.itemValueType === "Number"
+				// 		? "Double"
+				// 		: cstParam.itemValueType
 				let type =
-					cstParam.itemValueType === "Number"
-						? "Double"
-						: cstParam.itemValueType
+					cstParam.itemValueType === "Number" ? "Double" : "String"
 				const url = `${hostName}/phdydatasource/put_item`
 				let body = {
 					table: actionTableName,

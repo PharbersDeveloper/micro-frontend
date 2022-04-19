@@ -4,7 +4,6 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeSelectFileEventHandler(e, route) {
 	let param = e.detail[0].args.param
 	let uri = ""
-	console.log("upload", route)
 	/** localUpload */
 	let uploadParam = true
 	let datasetName = param.property.dataset
@@ -206,8 +205,8 @@ export async function phAnalyzeSelectFileEventHandler(e, route) {
 	) {
 		let uploadMessage = {}
 		uploadMessage.file = file
-		let pro_name = projectName.toLowerCase().replace(/[^a-z0-9]/gi, "")
-		const API_ENDPOINT = `https://${pro_name}.pharbers.com/upload`
+		// let pro_name = projectName.toLowerCase().replace(/[^a-z0-9]/gi, "")
+		const API_ENDPOINT = `https://${projectId}.pharbers.com/upload`
 		const request = new XMLHttpRequest()
 		const formData = new FormData()
 		route.loadingService.loading.style.display = "flex"

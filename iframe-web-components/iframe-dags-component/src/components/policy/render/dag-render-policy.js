@@ -102,9 +102,13 @@ export default class PhDagRenderPolicy {
             nodes.append('image')
                 .attr("xlink:href", ({data}) => {
                     let cat = data.category
+                    let catType = data["attributes"]["cat"]
                     let status = data.status
                     if (status === "succeed") {
                         status = "success"
+                    }
+                    if (catType === "dataset") {
+                        status = "normal"
                     }
                     return that.defs.iconsByName(cat, status)
                 })
@@ -130,8 +134,6 @@ export default class PhDagRenderPolicy {
                     if (that.datasource.cal.selected.includes(data.id)) return "none"
                     else return 'opacity(0.5)'
                 })
-
-
 
             //Our new hover effects
             nodes.on('mouseover', function (d, i) {
@@ -171,18 +173,19 @@ export default class PhDagRenderPolicy {
         this.parent.progressOver = false
         this.parent.showProgress = true
         // 2.节点状态
-        let data = this.parent.datasource.data
-        data.map((it, index) => {
-            it.status = it["attributes"]["runtime"]
-            that.parent.refreshNodeStatus(it)
-        })
+        // let data = this.parent.datasource.data
+        // data.map((it, index) => {
+        //     it.status = it["attributes"]["runtime"]
+        //     // that.parent.refreshNodeStatus(it)
+        //     that.refreshNodeStatus(it)
+        // })
         // 3.log弹窗
         this.failedLogs = []
     }
 
     //更新节点状态
     refreshNodeStatus(node) {
-        // const that = this
+        const that = this
         const d3 = Object.assign({}, d3_base, d3_dag)
         if (node["attributes"]["cat"] === "job") {
             d3.select("#" + node["attributes"]["name"]).selectAll("image")
@@ -192,7 +195,7 @@ export default class PhDagRenderPolicy {
                     if (status === "succeed") {
                         status = "success"
                     }
-                    return that.defs.iconsByName(cat, status)
+                    return that.parent.defs.iconsByName(cat, status)
                 })
         }
     }
