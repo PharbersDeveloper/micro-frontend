@@ -16,7 +16,6 @@
         "jsonapi-datastore": "^0.4.0-beta",
         "text-loader": "0.0.1",
         "vue": "^2.6.11",
-        "vue-infinite-scroll": "^2.0.2",
         "vue-markdown": "^2.2.4",
         "vue-property-decorator": "^8.5.1",
         "vue-router": "^3.5.1"
