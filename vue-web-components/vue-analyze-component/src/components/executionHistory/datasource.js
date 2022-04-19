@@ -1,5 +1,6 @@
 
 import { staticFilePath, hostName } from "../../config/envConfig"
+import { JsonApiDataStore } from "jsonapi-datastore"
 
 export default class PhContainerDataSource {
     constructor(id) {
@@ -20,7 +21,27 @@ export default class PhContainerDataSource {
     }
 
     buildQuery(ele) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "execution",
+            "conditions": {
+                "projectId": ["=", this.projectId]
+            },
+            "limit": this.stepsCount,
+            "start_key": {}
+        }
 
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
     }
 
     appendExecutionHistory(ele) {

@@ -79,6 +79,10 @@ export default new Router({
             path: '/dashboards',
             name: 'dashboards',
             component: dashboards
+        },{
+            path: '/executions',
+            name: 'executionHistory',
+            component: executionHistory
         }
     ]
 })

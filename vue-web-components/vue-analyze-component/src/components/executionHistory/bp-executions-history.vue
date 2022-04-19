@@ -79,8 +79,6 @@ import ElButton from "element-ui/packages/button"
 import PhExecutionHistory from "./datasource"
 import "element-ui/lib/theme-chalk/infiniteScroll.css"
 
-Vue.use(infiniteScroll)
-
 export default {
     data() {
         return {
@@ -230,12 +228,12 @@ export default {
     .execution-container {
         display: flex;
         flex-direction: row;
+        min-height: 100%;
 
         .execution-search-sort-panel {
             display: flex;
             flex-direction: column;
             width: 700px;
-            
             
             .execution-sort-btn-lst-search {
                 display: flex;
