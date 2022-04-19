@@ -118,6 +118,7 @@ import ElInput from 'element-ui/packages/input/index'
 import { staticFilePath, hostName } from '../../../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 import PhFilterStepDefs from "./filter-defs"
+import PhFilterStep from "./filter-steps"
 
 export default {
     data() {
@@ -127,7 +128,8 @@ export default {
             showContent: true,
             colType: 1,
             selColArrayNew: [],
-            hasValueArrayNew: []
+            hasValueArrayNew: [],
+            datasource: null
         }
     },
     props: {
@@ -174,8 +176,7 @@ export default {
                     name: 1
                 }]
             }
-        },
-        title: String
+        }
     },
     components: {
         ElCheckboxGroup,
@@ -186,6 +187,7 @@ export default {
     mounted() {
         this.selColArrayNew = this.selColArray
         this.hasValueArrayNew = this.hasValueArray
+        this.datasource = new PhFilterStep(this.step)
     },
     methods: {
         //删除值

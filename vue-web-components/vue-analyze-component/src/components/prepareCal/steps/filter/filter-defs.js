@@ -7,13 +7,11 @@ export default class PhFilterStepDefs {
             actions: [
                 {
                     desc: "只保留匹配行",
-                    cal: "match",
-                    func: this.match
+                    cal: "KEEP_ROW"
                 },
                 {
                     desc: "去除匹配行",
-                    cal: "not match",
-                    func: this.match
+                    cal: "not match"
                 }
                 // ,
                 // {
@@ -26,52 +24,27 @@ export default class PhFilterStepDefs {
             relations: [
                 {
                     desc: "交集（AND）",
-                    cal: "and",
-                    func: this.and
-
+                    cal: "AND"
                 },
                 {
                     desc: "并集（OR）",
-                    cal: "or"
+                    cal: "OR"
                 }
             ],
             pattern: [
                 {
                     desc: "完全匹配",
-                    cal: "match",
-                    func: this.match
+                    cal: "FULL_STRING"
                 },
                 {
                     desc: "不完全匹配",
-                    cal: "contains",
-                    func: this.contains
+                    cal: "CONTAINS"
                 },
                 {
                     desc: "正则表达式",
-                    cal: "regx",
-                    func: this.regx
+                    cal: "REGX"
                 }
             ]
         }
-    }
-
-    match(l, r) {
-        return l === r
-    }
-
-    contains(l, r) {
-        return l.includes(r)
-    }
-
-    and(actions) {
-
-    }
-
-    or(actions) {
-
-    }
-
-    getBindStep() {
-        return this.stepId
     }
 }
