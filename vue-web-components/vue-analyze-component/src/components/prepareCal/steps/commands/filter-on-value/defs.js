@@ -59,16 +59,16 @@ const PhInitialFOVExpressions = {
 
 export const PhInitialFOVStepDefs = {
     attributes: {
-        pjName: "",
-        stepId: "",
+        "pj-name": "",
+        "step-id": "",
         index: 0,
         ctype: "filter",
         expressions: JSON.stringify(PhInitialFOVExpressions),
         runtime: "prepare",
-        groupName: "",
-        groupIndex: 0,
-        expressionsValue: "JSON",
-        stepName: "Initial Filter On Value"
+        "group-name": "",
+        "group-index": 0,
+        "expressions-value": "JSON",
+        "step-name": "Initial Filter On Value"
     },
 
     id: "",
