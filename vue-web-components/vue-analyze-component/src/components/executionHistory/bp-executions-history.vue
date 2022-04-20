@@ -47,7 +47,7 @@
                         </div>
                         <el-button type="text" 
                             @click="viewLogs(item)"
-                            v-if="executionItem && item.status==='failed' && executionItem['id']===item['id']" >
+                            v-if="executionItem && executionItem['id']===item['id']" >
                             View Logs</el-button>
                     </div>
                 </div>
@@ -60,6 +60,7 @@
             </div>
             <div class="execution-history-detail-panel-show" v-if="executionItem">
                 <div class="execution-history-definition-panel" >
+                    <viewJson :JsonData="jsonMessage"></viewJson>
                 </div>
                 <div class="execution-history-logs-panel" >
                     <div class="title">Activity</div>
@@ -85,6 +86,7 @@ import ElInput from "element-ui/packages/input"
 import ElButton from "element-ui/packages/button"
 import PhExecutionHistory from "./datasource"
 import "element-ui/lib/theme-chalk/infiniteScroll.css"
+import viewJson from "./bp-view-json.vue"
 
 export default {
     data() {
@@ -97,13 +99,16 @@ export default {
             statusCandidate: ["Any status", "success", "failed", "canceled", "queued"],
             searchString: '',
             hasMore: true,
-            executionItem: null
+            executionItem: null,
+            jsonMessage: null,
+            jobIndex: "",
+            executionTemplate: ""
         }
     },
     components: {
-        // ElAutocomplete,
         ElInput,
-        ElButton
+        ElButton,
+        viewJson
     },
     props: {
         allData: {
@@ -129,9 +134,35 @@ export default {
         this.datasource.appendExecutionHistory(this)
     },
     methods: {
+        dealBuildLogsQuery(response) {
+            if(response.status === 1) {
+                alert("数据暂未生成，请刷新重试！")
+            } else if (response.status === 0) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "linkToPage",
+                    element: this,
+                    param: {
+                        "name": "executions-logs",
+                        "projectName": this.allData.projectName,
+                        "projectId": this.allData.projectId,
+                        "executionItem": this.executionItem
+                    }
+                }
+                this.$emit('event', event)
+            }
+        },
         clickExecutionItem(data) {
             console.log('item', data)
             this.executionItem = data
+            this.jobIndex = data["job-index"]
+            this.executionTemplate = data["execution-template"]
+            this.datasource.buildFlowQuery(this)    
+        },
+        dealBuildFlowQuery(response) {
+            if (response.status === 0) {
+                this.jsonMessage = response.message
+            }
         },
         viewLogs(data) {
             this.datasource.buildLogsQuery(this)
@@ -240,6 +271,7 @@ export default {
         display: flex;
         flex-direction: row;
         height: calc(100vh - 40px);
+        overflow: hidden;
         .status-icon {
             margin-right: 24px;
         }
@@ -254,8 +286,8 @@ export default {
         .execution-search-sort-panel {
             display: flex;
             flex-direction: column;
-            width: 700px;
-            
+            width: 500px;
+            min-width: 500px;
             .execution-sort-btn-lst-search {
                 display: flex;
                 flex-direction: column;
@@ -342,9 +374,9 @@ export default {
 
         .execution-history-detail-panel {
             display: flex;
-            flex-grow: 1;
             flex-direction: column;
             border-left: 1px solid #dddddd;
+            width: calc(100vw - 500px);
             .empty {
                 height: 100%;
                 display: flex;
@@ -362,11 +394,13 @@ export default {
                 .execution-history-definition-panel {
                     flex-grow: 1;
                     border: 1px solid #dddddd;
-
+                    overflow: auto;
+                    height: 500px;
                 }
                 .execution-history-logs-panel {
                     flex-grow: 1;
                     border: 1px solid #dddddd;
+                    min-height: 30%;
                     .title {
                         height: 40px;
                         background: #f2f2f2;

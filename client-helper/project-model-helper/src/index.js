@@ -30,6 +30,8 @@ import { phHistogramInsightpageEventHandler } from "./eventHandler/phHistogramIn
 import { phHistogramInsightpageRouteModel } from "./routeModel/phHistogramInsightpageRouteModel"
 import { phAnalyzeBpExecutionsHistoryEventHandler } from "./eventHandler/phAnalyzeBpExecutionsHistoryEventHandler"
 import { phAnalyzeBpExecutionsHistoryRouteModel } from "./routeModel/phAnalyzeBpExecutionsHistoryRouteModel"
+import { phAnalyzeBpExecutionsLogsRouteModel } from "./routeModel/phAnalyzeBpExecutionsLogsRouteModel"
+import { phAnalyzeBpExecutionsLogsEventHandler } from "./eventHandler/phAnalyzeBpExecutionsLogsEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -63,5 +65,7 @@ export {
 	phHistogramInsightpageEventHandler,
 	phHistogramInsightpageRouteModel,
 	phAnalyzeBpExecutionsHistoryRouteModel,
-	phAnalyzeBpExecutionsHistoryEventHandler
+	phAnalyzeBpExecutionsHistoryEventHandler,
+	phAnalyzeBpExecutionsLogsRouteModel,
+	phAnalyzeBpExecutionsLogsEventHandler
 }

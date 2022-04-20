@@ -53,7 +53,7 @@ export default class PhContainerDataSource {
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let logsBody = {
             "projectId": this.projectId,
-            "jobIndex": ele["executionItem"]["job-index"]
+            "jobIndex": ele.jobIndex
         }
         let logsOptions = {
             method: "POST",
@@ -72,11 +72,34 @@ export default class PhContainerDataSource {
         ele.datasource.queryLogs(ele)
             .then((response) => response.json())
             .then((response) => {
-                if(response.status === 1) {
-                    alert("数据暂未生成，请刷新重试！")
-                } else if (response.status === 0) {
-                    window.location.open("http://localhost:8080/executions?projectId=ggjpDje0HUC2JW")
-                }
+                ele.dealBuildLogsQuery(response)
+            })
+    }
+
+    queryFlow(ele) {
+        const logsUrl = `${hostName}/phreadjsonfile`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let phreadjsonfileBody = {
+            "path": ele.executionTemplate
+        }
+        let logsOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(phreadjsonfileBody)
+        }
+        return fetch(logsUrl, logsOptions)
+    }
+
+    buildFlowQuery(ele) {
+        const that = this
+        ele.datasource.queryFlow(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildFlowQuery(response)
             })
     }
 }

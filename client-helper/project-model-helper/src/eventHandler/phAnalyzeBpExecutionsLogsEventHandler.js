@@ -1,4 +1,4 @@
-export async function phAnalyzeBpExecutionsHistoryEventHandler(e, route) {
+export async function phAnalyzeBpExecutionsLogsEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	console.log(params)
 	let uri = ""
@@ -12,6 +12,8 @@ export async function phAnalyzeBpExecutionsHistoryEventHandler(e, route) {
 					params.projectId +
 					"&jobIndex=" +
 					params["executionItem"]["job-index"] +
+					"&jobShowName=" +
+					params["executionItem"]["job-show-name"] +
 					"&jobShowName=" +
 					params["executionItem"]["job-show-name"]
 			}
