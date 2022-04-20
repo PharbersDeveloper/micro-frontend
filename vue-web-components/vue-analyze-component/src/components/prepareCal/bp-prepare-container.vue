@@ -92,7 +92,7 @@ import bpOperatorCard from './bp-card-dispatch'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import OpFactories from "./processors/factory"
-import { PhInitialFOVStepDefs } from "./steps/commands/filter-on-value/defs"
+import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-value/defs"
 
 export default {
     data() {
@@ -102,6 +102,7 @@ export default {
             projectName: "demo",
             flowVersion: "developer",
             jobName: "compute_q_out",
+            debugToken: "f174ef253af937a9d3340c99ad8fa843ac60fc8ed77ed561d496a0603f953107",
 
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
@@ -165,6 +166,13 @@ export default {
         this.steps.refreshData()
     },
     methods: {
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
         // 目标文件表拖动
         dragStart(e, index, field){
             this.clearBakData() // 清空上一次拖动时保存的数据
@@ -177,8 +185,8 @@ export default {
         },
         clearBakData(){
             // 此处写清除各列表的操作
-            this.fileMiddleData=''
-            this.fileMddleIndex=-1
+            this.fileMiddleData = ''
+            this.fileMddleIndex = -1
         },
         drop(e, index,field){
             // 取消默认行为
@@ -198,8 +206,32 @@ export default {
         totalCountIsReady(val) {
             this.totalNum = val
         },
-        save() {
+        async save() {
+            // for (const item in this.steps.data) {
+            for (let index = 0; index < this.steps.data.length; ++index) {
+                const item = this.steps.data[index]
+                item.expressions = JSON.stringify(item.callback.command.revert2Defs())
 
+                const body = {
+                    table: "step",
+                    item: step2SaveObj(item)
+                }
+
+                const url = `${hostName}/phdydatasource/put_item`
+                let headers = {
+                    Authorization: this.getCookie("access_token") || this.debugToken,
+                    "Content-Type": "application/vnd.api+json",
+                    Accept: "application/vnd.api+json"
+                }
+                let options = {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(body)
+                }
+                // const result = await fetch(url, options).then((res) => res.json())
+                const result = await fetch(url, options) //.then((res) => res.json())
+                return result.status === 200
+            }
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId

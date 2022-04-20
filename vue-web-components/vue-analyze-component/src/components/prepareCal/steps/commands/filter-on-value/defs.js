@@ -70,7 +70,22 @@ export const PhInitialFOVStepDefs = {
         "expressions-value": "JSON",
         "step-name": "Initial Filter On Value"
     },
-
     id: "",
     type: "steps"
+}
+
+export function step2SaveObj(step) {
+    return {
+        pjName: step['pj-name'],
+        stepId: step['step-id'],
+        index: step['index'],
+        ctype: step['ctype'],
+        expressions: step['expressions'],
+        runtime: step['runtime'],
+        groupName: step['group-name'],
+        groupIndex: step['group-index'],
+        expressionsValue: step['expressions-value'],
+        stepName: step['step-name'],
+        id: step['id']
+    }
 }

@@ -8,6 +8,7 @@ export default class PhFilterStep {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
         this.command = new PhFilterOnValueCmd(this.expressions)
+        dbstep.callback = this
         // this.groupName = dbstep["group-name"]
         // this.groupId = dbstep["group-id"]
         // this.isGrouped = len(this.groupName) > 0
