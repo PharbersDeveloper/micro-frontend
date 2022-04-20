@@ -7,14 +7,15 @@ export const PhFilterStepDefs = {
         {
             desc: "去除匹配行",
             cal: "EXACT_ROW"
+        },
+        {
+            desc: "清除匹配单元格",
+            cal: "EXACT_CELL"
+        },
+        {
+            desc: "清除不匹配单元格",
+            cal: "EXACT_NOT_CELL"
         }
-        // ,
-        // {
-        //     desc: "清除匹配单元格"
-        // },
-        // {
-        //     desc: "清除不匹配单元格"
-        // }
     ],
     relations: [
         {

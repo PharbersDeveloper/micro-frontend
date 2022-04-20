@@ -1,12 +1,12 @@
 <template>
     <div class="bp_operator_card">
         <div class="card" v-if="type === 'filter'">
-            <bp-filter-card :step="step" :schema="schema"/>
+            <filter-on-value-card :step="step" :schema="schema"/>
         </div>
     </div>
 </template>
 <script>
-import BpFilterCard from "./steps/filter/bp-filter-card"
+import FilterOnValueCard from "./steps/filter-on-value/card"
 
 export default {
     data() {
@@ -20,7 +20,7 @@ export default {
         schema: Array
     },
     components: {
-        BpFilterCard
+        FilterOnValueCard
     },
     methods: {
 

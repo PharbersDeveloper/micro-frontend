@@ -111,8 +111,8 @@ import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElInput from 'element-ui/packages/input/index'
 import { staticFilePath, hostName } from '../../../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
-import { PhFilterStepDefs } from "./filter-defs"
-import PhFilterStep from "./filter-steps"
+import { PhFilterStepDefs } from "./defs"
+import PhFilterStep from "./step"
 
 export default {
     data() {
