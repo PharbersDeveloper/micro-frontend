@@ -9,7 +9,7 @@ export default class PhStepSchema {
         this.dtype = []
         this.cellWidth = []
         this.cols = this.schema
-        this.debugToken = "d6086afc54dadb7e67181ed1613addba6af8069bbd0f60845c156cf1daecd92e"
+        this.debugToken = "f174ef253af937a9d3340c99ad8fa843ac60fc8ed77ed561d496a0603f953107"
     }
 
     resetSchema(schema, dtype, cellWidth) {

@@ -9,7 +9,7 @@ export default class PhStepsDyModel {
         this.jobName = jobName
         this.stepsCount = 100
         this.currentPageToken = ""
-        this.debugToken = "d6086afc54dadb7e67181ed1613addba6af8069bbd0f60845c156cf1daecd92e"
+        this.debugToken = "f174ef253af937a9d3340c99ad8fa843ac60fc8ed77ed561d496a0603f953107"
         this.data = []
         this.store = new JsonApiDataStore()
         this.isEdited = false
@@ -54,7 +54,7 @@ export default class PhStepsDyModel {
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
                 that.store.sync(response)
-                that.data = that.store.findAll("steps")
+                that.data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
             })
     }
 

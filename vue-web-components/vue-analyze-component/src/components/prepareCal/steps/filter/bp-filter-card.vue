@@ -16,23 +16,23 @@
             <div class="card_content" v-show="showContent">
                 <div class="mb_1">
                     <div class="title">操作</div>
-                    <select class="sel">
+                    <select class="sel" v-model="datasource.command.action" v-if="datasource">
                         <option
-                                v-for="(item,i) in concretDefs.defs.actions"
+                                v-for="(item, i) in concretDefs.actions"
                                 :key="i+'filterOnValue_options'"
-                                :value="item">{{item.desc}}</option>
+                                :value="item.cal">{{item.desc}}</option>
                     </select>
                 </div>
                 <div class="mb_1">
                     <div class="title">多列筛选关系</div>
-                         <select class="sel">
+                         <select class="sel" v-model="datasource.command.booleanMode" v-if="datasource">
                             <option
-                                v-for="(item,i) in concretDefs.defs.relations"
+                                v-for="(item,i) in concretDefs.relations"
                                 :key="i+'filterOnValue_options'"
-                                :value="item">{{item.desc}}</option>
+                                :value="item.cal">{{item.desc}}</option>
                         </select>
                 </div>
-                <div class="mb_1 filter_col">
+                <div class="mb_1 filter_col" v-if="datasource">
                     <div class="title title_space">
                         <div>列</div>
                         <div class="right_title">
@@ -49,62 +49,56 @@
                                 }]">多列</div>
                         </div>
                     </div>
-                    <!-- 多列 -->
                     <div class="sel_item"
-                         v-show="colType === 2"
-                         v-for="(cols,i) in selColArrayNew"
-                         :key="i+'cols'">
-                        <select id="" class="sel">
+                         v-for="(col,index) in datasource.command.columns"
+                         :key="index + 'col'">
+                        <select class="sel" v-if="datasource" v-model="datasource.command.columns[index]">
                             <option
-                                    v-for="(item,i) in schema"
-                                    :key="i+'schema'"
-                                    :value="item">{{item}}</option>
+                                v-for="(item,i) in schema"
+                                :key="i+'schema'"
+                                :value="item">
+                                {{item}}
+                            </option>
                         </select>
-                        <img
-                                :src="icons.del_icon"
-                                @click="delCol(cols, i)"
-                                v-if="i !== 0"
-                                class="del_icon" alt=""/>
-                    </div>
-                    <!-- 单列 -->
-                    <div class="sel_item" v-show="colType === 1">
-                        <select class="sel">
-                            <option
-                                    v-for="(item,i) in schema"
-                                    :key="i+'schema'"
-                                    :value="item">{{item}}</option>
-                        </select>
+                        <img :src="icons.del_icon"
+                            @click="delCol(col, index)"
+                            v-if="index !== 0"
+                            class="del_icon" alt=""/>
                     </div>
                     <el-button
-                            @click="addSelCol"
-                            type="text"
-                            v-show="colType === 2">+ 增加列</el-button>
+                        @click="addSelCol"
+                        type="text"
+                        v-show="colType === 2">
+                        + 增加列
+                    </el-button>
                 </div>
-                <div class="mb_1 filter_value">
+                <div class="mb_1 filter_value" v-if="datasource">
                     <div class="title_space">
                         <div class="title">值</div>
                     </div>
                     <div class="sel_item"
-                         v-for="(val,i) in hasValueArrayNew"
+                         v-for="(val,i) in datasource.command.values"
                          :key="i+'val'">
-                        <el-input class="input"  placeholder="请输入内容"></el-input>
+                        <el-input class="input"  placeholder="请输入内容" :value="datasource.command.values[i]" />
                         <img
-                                :src="icons.del_icon"
-                                @click="delSelVal(val, i)"
-                                v-if="i != 0"
-                                class="del_icon" alt="">
+                            :src="icons.del_icon"
+                            @click="delSelVal(val, i)"
+                            v-if="i !== 0"
+                            class="del_icon" alt="">
                     </div>
                     <el-button
                             @click="addSelVal"
-                            type="text">+ 增加值</el-button>
+                            type="text">
+                        + 增加值
+                    </el-button>
                 </div>
                 <div class="mb_1">
                     <div class="title">筛选模式</div>
-                        <select class="sel">
+                        <select class="sel" v-if="datasource" v-model="datasource.command.matchingMode">
                            <option
-                                v-for="(item,i) in concretDefs.defs.pattern"
+                                v-for="(item,i) in concretDefs.pattern"
                                 :key="i+'filterPattern'"
-                                :value="item">{{item.desc}}</option>
+                                :value="item.cal">{{item.desc}}</option>
                         </select>
                 </div>
             </div>
@@ -117,7 +111,7 @@ import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElInput from 'element-ui/packages/input/index'
 import { staticFilePath, hostName } from '../../../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
-import PhFilterStepDefs from "./filter-defs"
+import { PhFilterStepDefs } from "./filter-defs"
 import PhFilterStep from "./filter-steps"
 
 export default {
@@ -129,18 +123,13 @@ export default {
             colType: 1,
             selColArrayNew: [],
             hasValueArrayNew: [],
-            datasource: null
+            datasource: null,
+            concretDefs: PhFilterStepDefs
         }
     },
     props: {
         step: {
             type: Object
-        },
-        concretDefs: {
-            type: Object,
-            default: () => {
-                return new PhFilterStepDefs('1')
-            }
         },
         icons: {
             type: Object,
@@ -155,26 +144,6 @@ export default {
             type: Array,
             default: () => {
                 return []
-            }
-        },
-        selColArray: {
-            type: Array,
-            default: () => {
-                return [{
-                    name: 1
-                }]
-            }
-        },
-        selSingleCol: {
-            type: String,
-            default: "通用名称"
-        },
-        hasValueArray: {
-            type: Array,
-            default: () => {
-                return [{
-                    name: 1
-                }]
             }
         }
     },
