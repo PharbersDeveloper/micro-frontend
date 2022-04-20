@@ -80,7 +80,7 @@
 
 <script>
 import Vue from 'vue'
-import ElAutocomplete from "element-ui/packages/autocomplete"
+// import ElAutocomplete from "element-ui/packages/autocomplete"
 import ElInput from "element-ui/packages/input"
 import ElButton from "element-ui/packages/button"
 import PhExecutionHistory from "./datasource"
@@ -101,7 +101,7 @@ export default {
         }
     },
     components: {
-        ElAutocomplete,
+        // ElAutocomplete,
         ElInput,
         ElButton
     },
@@ -239,7 +239,7 @@ export default {
     .execution-container {
         display: flex;
         flex-direction: row;
-        min-height: 100%;
+        height: calc(100vh - 40px);
         .status-icon {
             margin-right: 24px;
         }

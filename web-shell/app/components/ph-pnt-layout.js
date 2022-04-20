@@ -47,6 +47,8 @@ export default class PhPntLayoutComponent extends Component {
 						uri = 'airflow?projectName=' + this.projectName + '&projectId=' + this.projectId
 					}  else if (params.name == "dashboards") {
 						uri = "dashboards?projectName=" + params.projectName + "&projectId=" + params.projectId
+					} else if(params.name == "executions") {
+						uri = "executions?projectName=" + params.projectName + "&projectId=" + params.projectId
 					}
                 	this.router.transitionTo( "shell", uri )
 				}
