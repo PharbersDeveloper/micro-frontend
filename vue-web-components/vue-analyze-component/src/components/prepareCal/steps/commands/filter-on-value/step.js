@@ -1,5 +1,3 @@
-
-import { staticFilePath, hostName } from "../../../../config/envConfig"
 import PhFilterOnValueCmd from "./cmd"
 
 /**

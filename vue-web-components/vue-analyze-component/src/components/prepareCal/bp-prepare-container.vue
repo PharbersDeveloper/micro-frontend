@@ -33,15 +33,15 @@
                             <div class="select_all">
                                 <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
-                                <img :src="icons.icon_dropdown" @click="showActionCard = !showActionCard" alt="">
-                                <div class="action_card" v-show="showActionCard">
+                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="">
+                                <div class="action_card" v-show="showMultiSelectActionMenu">
                                     <div class="action_item">删除</div>
                                 </div>
                             </div>
                             <el-input
                                 placeholder="搜索"
                                 prefix-icon="el-icon-search"
-                                v-model="input2">
+                                v-model="searchKeyword">
                             </el-input>
                         </div>
                         <ul class="operator_item_area">
@@ -77,119 +77,47 @@
                 </div>
             </div>
         </div>
-        <el-drawer
-            title="算子库"
-            class="operator"
-            :visible.sync="drawer"
-            :direction="direction">
-            <div class="operator_content">
-                <div class="operator_con">
-                    <div class="opt" >
-                        <div class="opt_item"
-                         v-for="item in operatorArr"
-                         :key="item.id"
-                         @click="operator_opt_click(item)"
-                        :class="[{selected_bg: item.id == selectedOpt}]">
-                            <div class="name">{{item.opt_name}}</div>
-                            <div class="num">{{item.opt_condition_num}}</div>
-                        </div>
-                    </div>
-                    <div class="opt_condition">
-                        <div class="opt_condition_item"
-                            :class="[{selected_bg: data.id == selectedOptCondition}]"
-                            v-for="data in opt_condition"
-                            @mouseover="operator_opt_condition_mouseover(data)"
-                            @click="operator_opt_condition_click(data)"
-                            :key="data.id+'condition'">{{data.name}}</div>
-                    </div>
-                    <div class="opt_desc">
-                        <div class="opt_condition_desc">
-                            {{opt_condition_desc}}
-                            <vue-markdown >{{opt_condition_desc}}</vue-markdown>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </el-drawer>
+        <op-factories :visible="drawer" @newStep="newStep"/>
     </div>
 </template>
 <script>
 import { staticFilePath, hostName } from '../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
-import ElDrawer from 'element-ui/packages/drawer/index'
 import PhStepDataSource from './model/stepDatasource'
 import PhStepSchema from './model/stepSchema'
 import PhStepModel from './model/stepsModel'
 import bpExcel from '../../../../vue-excelv2-component/src/components/ph-excel-container'
-import VueMarkdown from 'vue-markdown'
-import md from "../model/test.md"
-import bpOperatorCard from './bp-operator-card'
+import bpOperatorCard from './bp-card-dispatch'
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
+import OpFactories from "./processors/factory"
+import { PhInitialFOVStepDefs } from "./steps/commands/filter-on-value/defs"
 
 export default {
     data() {
         return {
             drawer: false,
-            direction: "btt",
-            selectedOpt: 1,
-            selectedOptCondition: -1,
-            opt_condition: [
-                {
-                    id: 1,
-                    name: "Filter on Value",
-                    type: 1,
-                    desc: "5555"
-                },
-                {
-                    id: 2,
-                    name: "Filter on Numerical Range",
-                    type: 1,
-                    desc: "Eqweqw"
-                }
-            ],
-            opt_condition_desc: "",
-            // operatorArray: [
-            //     {
-            //         type: 1,
-            //         index: 1,
-            //         title: "我是第一个"
-            //     }
-            // ],
-            showActionCard: false,
-            input2: "",
+            projectId: "ggjpDje0HUC2JW",
+            projectName: "demo",
+            flowVersion: "developer",
+            jobName: "compute_q_out",
+
+            // ********* 上部功能区 *************
+            showMultiSelectActionMenu: false,
+            searchKeyword: "",
             checkAll: false,
-            checkedCities: ['上海', '北京'],
-            cities: ['上海1', '北京1', '广州1', '深圳1'],
-            isIndeterminate: true,
-            selColArray: [
-                {
-                    name: "通用名称"
-                },
-                {
-                    name: "商品名称"
-                }
-            ],
-            hasValueArray: [
-                {
-                    name: "通用名称"
-                },
-                {
-                    name: "商品名称"
-                }
-            ]
+            isIndeterminate: true
         }
     },
     components: {
         ElButton,
         bpExcel,
-        ElDrawer,
-        VueMarkdown,
         bpOperatorCard,
         ElCheckboxGroup,
         ElCheckbox,
-        ElInput
+        ElInput,
+        OpFactories
     },
     props: {
         icons: {
@@ -231,48 +159,6 @@ export default {
             default: function() {
                 return new PhStepModel('1')
             }
-        },
-        operatorArr: {
-            type: Array,
-            default: function () {
-                return [{
-                    id: 1,
-                    opt_name: "Filter data1",
-                    opt_condition_num: 1,
-                    opt_condition_data: [
-                        {
-                            id: 1,
-                            name: "Filter on Value",
-                            type: "1",
-                            desc: "5555"
-                        },
-                        {
-                            id: 2,
-                            name: "Filter on Numerical Range",
-                            type: "1",
-                            desc: "Eqweqw"
-                        }
-                    ]
-                },{
-                    id: 2,
-                    opt_name: "clear data2",
-                    opt_condition_num: 2,
-                    opt_condition_data: [
-                        {
-                            id: 1,
-                            name: "3333",
-                            type: "1",
-                            desc: "eqwe"
-                        },
-                        {
-                            id: 2,
-                            name: "4444",
-                            type: "1",
-                            desc: "eqweq"
-                        }
-                    ]
-                }]
-            }
         }
     },
     mounted() {
@@ -306,41 +192,14 @@ export default {
             this.clearBakData()
         },
         handleCheckAllChange(val) {
-            this.checkedCities = val ? cityOptions : [];
+            // this.checkedCities = val ? cityOptions : [];
             this.isIndeterminate = false;
         },
-        handleCheckedCitiesChange(value) {
-            let checkedCount = value.length;
-            this.checkAll = checkedCount === this.cities.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-        },
-
-
         totalCountIsReady(val) {
             this.totalNum = val
         },
         save() {
 
-        },
-        operator_opt_click(data) {
-            this.selectedOpt = data.id
-            this.opt_condition = this.operatorArr.filter(it => it.id === data.id)[0]["opt_condition_data"]
-            this.opt_condition_desc = ""
-        },
-        operator_opt_condition_mouseover(data) {
-            this.selectedOptCondition = data.id
-            this.opt_condition_desc = this.opt_condition.filter(it => it.id === data.id)[0]["desc"]
-            // this.$forceUpdate()
-        },
-        operator_opt_condition_click(data) {
-            let type = data.type
-            let num = this.operatorArray.length + 1
-            // this.operatorArray.push({
-            //     type: type,
-            //     index: num,
-            //     title: `我是第${num}个`
-            // })
-            this.drawer = false
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -348,6 +207,23 @@ export default {
             data.args.param.datasetName = this.allData.datasetName
             data.args.param.datasetId = this.allData.datasetId
             this.$emit('event',  data)
+        },
+        newStep(stepType) {
+            switch (stepType) {
+            case "FilterOnValue":
+                let ns = Object.assign({}, PhInitialFOVStepDefs)
+                ns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
+                ns["attributes"].pjName = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                ns["attributes"].stepId = (ns["attributes"].index).toString()
+                ns.id = ns.pjName + ns.stepId
+                this.steps.store.syncRecord(ns)
+                break
+            default:
+                alert("step type is not implemented")
+                break
+            }
+            this.steps.data = this.steps.store.findAll("steps")
+            this.drawer = false
         }
     }
 }
@@ -367,50 +243,7 @@ export default {
     }
     .prepare {
         box-sizing: border-box;
-        .operator {
-            /deep/.el-drawer__header {
-                border-bottom: 1px solid #ccc;
-                padding-bottom: 10px;
-                margin-bottom: 0;
-            }
-            .operator_content {
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                .operator_con {
-                    display: flex;
-                    height: 100%;
-                }
-                .opt {
-                    width: 220px;
-                    overflow: auto;
-                    border-right: 1px solid #ccc;
-                    display: flex;
-                    flex-direction: column;
-                    // padding: 8px;
-                    .opt_item {
-                        display: flex;
-                        justify-content: space-between;
-                        cursor: pointer;
-                        padding: 4px;
-                    }
-                }
-                .selected_bg {
-                    background: #dddddd !important;
-                }
-                .opt_condition {
-                    width: 220px;
-                    border-right: 1px solid #ccc;
-                    .opt_condition_item {
-                        padding: 4px;
-                        cursor: pointer;
-                    }
-                    .opt_condition_item:nth-child(2n+1) {
-                        background: #f0f0f0;
-                    }
-                }
-            }
-        }
+
         .prepare_header {
             height: 48px;
             padding: 0 15px;

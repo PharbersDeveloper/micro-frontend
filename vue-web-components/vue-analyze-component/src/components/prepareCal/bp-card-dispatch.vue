@@ -6,7 +6,7 @@
     </div>
 </template>
 <script>
-import FilterOnValueCard from "./steps/filter-on-value/card"
+import FilterOnValueCard from "./steps/commands/filter-on-value/card"
 
 export default {
     data() {

@@ -109,7 +109,7 @@
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElInput from 'element-ui/packages/input/index'
-import { staticFilePath, hostName } from '../../../../config/envConfig'
+import { staticFilePath, hostName } from '../../../../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 import { PhFilterStepDefs } from "./defs"
 import PhFilterStep from "./step"
@@ -159,6 +159,7 @@ export default {
         this.datasource = new PhFilterStep(this.step)
     },
     methods: {
+        // *********************************** 全部调用cmd中函数 ***************************
         //删除值
         delSelVal(data, i) {
             this.hasValueArrayNew.splice(i, 1)
@@ -175,6 +176,7 @@ export default {
         addSelCol() {
             this.selColArrayNew.push({})
         },
+        // *********************************** 全部调用cmd中函数 ***************************
         // 选择单列多列
         clickColType(num) {
             this.colType = num

@@ -42,3 +42,35 @@ export const PhFilterStepDefs = {
         }
     ]
 }
+
+const PhInitialFOVExpressions = {
+    type: "FilterOnValue",
+    code: "pyspark",
+    params: {
+        values: [""],
+        matchingMode: "FULL_STRING",
+        normalizationMode: "EXACT",
+        action: "EXACT_ROW",
+        booleanMode: "AND",
+        appliesTo: "COLUMNS",
+        columns: [""]
+    }
+}
+
+export const PhInitialFOVStepDefs = {
+    attributes: {
+        pjName: "",
+        stepId: "",
+        index: 0,
+        ctype: "filter",
+        expressions: JSON.stringify(PhInitialFOVExpressions),
+        runtime: "prepare",
+        groupName: "",
+        groupIndex: 0,
+        expressionsValue: "JSON",
+        stepName: "Initial Filter On Value"
+    },
+
+    id: "",
+    type: "steps"
+}
