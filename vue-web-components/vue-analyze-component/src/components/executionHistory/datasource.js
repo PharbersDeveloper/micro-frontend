@@ -10,6 +10,8 @@ export default class PhContainerDataSource {
         this.stepsCount = 20
         this.data = []
         this.store = new JsonApiDataStore()
+        this.projectId = ""
+        this.jobIndex = ''
     }
 
     buildQuery(ele) {
@@ -53,7 +55,7 @@ export default class PhContainerDataSource {
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let logsBody = {
             "projectId": this.projectId,
-            "jobIndex": ele.jobIndex
+            "jobIndex": this.jobIndex
         }
         let logsOptions = {
             method: "POST",
@@ -100,6 +102,44 @@ export default class PhContainerDataSource {
             .then((response) => response.json())
             .then((response) => {
                 ele.dealBuildFlowQuery(response)
+            })
+    }
+
+    queryExecution(ele) {
+        const logsUrl = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let queryExeBody = {
+            "table": "execution",
+            "conditions": {
+                "projectId": [
+                    "=",
+                    this.projectId
+                ],
+                "jobIndex": [
+                    "=",
+                    this.jobIndex
+                ]
+            },
+            "start_key": {}
+        }
+        let queryExeOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(queryExeBody)
+        }
+        return fetch(logsUrl, queryExeOptions)
+    }
+
+    buildExecutionQuery(ele) {
+        const that = this
+        ele.datasource.queryExecution(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildExecutionQuery(response)
             })
     }
 }

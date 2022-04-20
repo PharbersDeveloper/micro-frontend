@@ -46,8 +46,8 @@
                             </div>
                         </div>
                         <el-button type="text" 
-                            @click="viewLogs(item)"
-                            v-if="executionItem && executionItem['id']===item['id']" >
+                            @click.stop="viewLogs(item)"
+                            v-if="executionItem && executionItem.status !== 'running' && executionItem['id']===item['id']" >
                             View Logs</el-button>
                     </div>
                 </div>
@@ -60,7 +60,8 @@
             </div>
             <div class="execution-history-detail-panel-show" v-if="executionItem">
                 <div class="execution-history-definition-panel" >
-                    <viewJson :JsonData="jsonMessage"></viewJson>
+                    <div v-if="!jsonMessage">暂无数据</div>
+                    <viewJson v-else :JsonData="jsonMessage"></viewJson>
                 </div>
                 <div class="execution-history-logs-panel" >
                     <div class="title">Activity</div>
@@ -135,9 +136,9 @@ export default {
     },
     methods: {
         dealBuildLogsQuery(response) {
-            if(response.status === 1) {
+            if(response.status !== 0) {
                 alert("数据暂未生成，请刷新重试！")
-            } else if (response.status === 0) {
+            } else if(response.status === 0) {
                 const event = new Event("event")
                 event.args = {
                     callback: "linkToPage",
@@ -156,6 +157,7 @@ export default {
             console.log('item', data)
             this.executionItem = data
             this.jobIndex = data["job-index"]
+            this.datasource.jobIndex = data["job-index"]
             this.executionTemplate = data["execution-template"]
             this.datasource.buildFlowQuery(this)    
         },
@@ -181,6 +183,9 @@ export default {
             this.$emit('event', event)
         },
         getTimes (data) {
+            if(data["end-at"] === "") {
+                return "0" + " s"
+            }
             let timeDiff = (data["end-at"] - data["start-at"]) / 1000
             if(timeDiff > 60) {
                 let min = Math.floor(timeDiff / 60)

@@ -1,15 +1,17 @@
 <template>
     <div class="executions-logs">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/index.css">
         <div class="job-state-change">
             <div class="title-img">
                 <img :src="job_img" alt="" class="">
             </div>
             <span class="job-name">
-                {{jobShowName}}
+                {{executionItem["job-show-name"]}}
             </span>
         </div>
         <div class="job-flow">
-            <viewJson :JsonData="jsonMessage"></viewJson>
+            <div v-if="!jsonMessage">暂无数据</div>
+            <viewJson v-else :JsonData="jsonMessage"></viewJson>
         </div>
         <div class="job-activities-logs">
             <div class="job-activities">
@@ -18,9 +20,13 @@
                 </div>
                 <div class="activity-item">
                     <span class="job-name">
-                        {{jobShowName}}
+                        <p 
+                            v-if="executionItem.status==='success'" 
+                            class="el-icon-success status-icon" />
+                        <p v-else class="el-icon-error status-icon" />
+                        {{executionItem["job-show-name"]}}
                     </span>
-                    <span>{{jobRunTime}}</span>
+                    <span>{{getTimes(executionItem)}}</span>
                 </div>
             </div>
             <div class="activity-logs">
@@ -46,7 +52,7 @@ export default {
             jobIndex: "",
             logsMessage: null,
             jsonMessage: null,
-            jobShowName: ""
+            executionItem: null
         }
     },
     components: {
@@ -56,9 +62,7 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {
-                    jobShowName: ""
-                }
+                return { }
             }
         },
         datasource: {
@@ -72,10 +76,8 @@ export default {
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
-        this.jobIndex = this.getUrlParam(paramArr, "jobIndex")
-        this.jobShowName = this.getUrlParam(paramArr, "jobShowName")
-        this.datasource.buildLogsQuery(this)
-        this.datasource.buildFlowQuery(this)
+        this.datasource.jobIndex = this.getUrlParam(paramArr, "jobIndex")
+        this.datasource.buildExecutionQuery(this)
     },
     methods: {
         getUrlParam (arr, value) {
@@ -98,6 +100,26 @@ export default {
             if (response.status === 0) {
                 this.jsonMessage = response.message
             }
+        },
+        dealBuildExecutionQuery(response) {
+            if (response.data.length > 0) {
+                this.executionItem = response.data[0]["attributes"]
+                this.executionTemplate = this["executionItem"]["execution-template"]
+                this.datasource.buildLogsQuery(this)
+                this.datasource.buildFlowQuery(this)
+            }
+        },
+        getTimes (data) {
+            if(data["end-at"] === "") {
+                return "0" + " s"
+            }
+            let timeDiff = (data["end-at"] - data["start-at"]) / 1000
+            if(timeDiff > 60) {
+                let min = Math.floor(timeDiff / 60)
+                let s = Math.floor(timeDiff % 60)
+                return String(min) + " min " + s + " s "
+            }
+            return String(timeDiff) + " s"
         }
     }
 }
@@ -131,15 +153,15 @@ export default {
             }
         }
         .job-flow {
-            display: flex;
-            flex-grow: 1;
-            min-height: 350px;
             height: 350px;
+            max-height: 350px;
+            min-height: 350px;
             overflow: auto;
         }
         .job-activities-logs {
             display: flex;
             border-top: 1px solid #ddd;
+            height: 100%;
             .title {
                 height: 60px;
                 padding: 20px;
@@ -156,11 +178,22 @@ export default {
                 }
                 .activity-item {
                     height: 48px;
-                    padding-left: 10px;
+                    padding: 0 20px;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     border-bottom: 1px solid #f2f2f2;
+                    .status-icon {
+                        margin-right: 24px;
+                    }
+
+                    .el-icon-error {
+                        color: red;
+                    }
+
+                    .el-icon-success {
+                        color: green;
+                    }
                 }
             }
             .activity-logs {
@@ -179,7 +212,6 @@ export default {
                     font-weight: 200;
                     white-space: pre-wrap;
                     padding: 20px 40px;
-                    margin-bottom: 100px;
                 }
             }
         }
