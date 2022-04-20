@@ -6,15 +6,15 @@ export const PhFilterStepDefs = {
         },
         {
             desc: "去除匹配行",
-            cal: "EXACT_ROW"
+            cal: "REMOVE_ROW"
         },
         {
             desc: "清除匹配单元格",
-            cal: "EXACT_CELL"
+            cal: "CLEAR_CELL"
         },
         {
             desc: "清除不匹配单元格",
-            cal: "EXACT_NOT_CELL"
+            cal: "DONTCLEAR_CELL"
         }
     ],
     relations: [
@@ -34,7 +34,7 @@ export const PhFilterStepDefs = {
         },
         {
             desc: "不完全匹配",
-            cal: "CONTAINS"
+            cal: "SUBSTRING"
         },
         {
             desc: "正则表达式",

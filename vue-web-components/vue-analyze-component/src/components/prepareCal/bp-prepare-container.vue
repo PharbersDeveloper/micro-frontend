@@ -228,9 +228,7 @@ export default {
                     headers: headers,
                     body: JSON.stringify(body)
                 }
-                // const result = await fetch(url, options).then((res) => res.json())
-                const result = await fetch(url, options) //.then((res) => res.json())
-                return result.status === 200
+                await fetch(url, options) //.then((res) => res.json())
             }
         },
         changeSchemaTypeEvent(data) {
