@@ -63,13 +63,18 @@ export default class PhDagHandler {
             })
             // 2.失败时出现弹框
             if(status === "failed") {
-                let showName = JSON.parse(payload.message).cnotification.jobShowName
+				let cnotification = JSON.parse(payload.message).cnotification
+                let showName = cnotification.jobShowName
+                let jobName = cnotification.jobName
+                let runnerId = cnotification.runId
                 let length = that.failedLogs.filter(it => it.jobShowName === showName)
                 if(length < 1) {
                     that.failedLogs.push({
                         data: payload,
                         jobShowName: showName,
-                        representId: represent_id
+                        representId: represent_id,
+						jobName: jobName,
+						runnerId: runnerId
                     })
                 }
             }

@@ -98,14 +98,14 @@
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
 
-        <dag-logs-dialog
+        <!-- <dag-logs-dialog
             v-if="showDagLogs"
             :runId="runId"
             :jobShowName="jobShowName"
             :projectName="projectName"
             :representId="representId"
             @closeLogDialog="logsPolicy.closeLogDialog"
-        ></dag-logs-dialog>
+        ></dag-logs-dialog> -->
 
         <div class="job_status_area">
             <div
@@ -119,7 +119,7 @@
                         {{ item.jobShowName }}
                     </div>
                 </div>
-                <button @click="logsPolicy.showLogs(item.data, item.representId)">
+                <button @click="logsPolicy.showLogs(item)">
                     Logs
                 </button>
             </div>
@@ -153,7 +153,7 @@ import PhStatusPolicy from "./policy/handler/dagstatushandler";
 import PhAirflowPolicy from "./policy/trigger/airflow-trigger-policy";
 import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
 import runDagDialog from "./run-dag-dialog.vue";
-import dagLogsDialog from "./dag-log-dialog.vue";
+// import dagLogsDialog from "./dag-log-dialog.vue";
 import progressBar from "./progress-bar-type.vue";
 
 export default {
@@ -184,7 +184,7 @@ export default {
     },
     components: {
         runDagDialog,
-        dagLogsDialog,
+        // dagLogsDialog,
         progressBar
     },
     props: {

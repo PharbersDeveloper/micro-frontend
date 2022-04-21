@@ -6,14 +6,7 @@ export default class PhLogsPolicy {
         this.parent = parent
     }
 
-    closeLogDialog() {
-        this.parent.showDagLogs = false
-    }
-
-    showLogs(data, representId) {
-        this.parent.runId = JSON.parse(data.message).cnotification.runId
-        this.parent.jobShowName = JSON.parse(data.message).cnotification.jobShowName
-        this.parent.representId = representId
-        this.parent.showDagLogs = true
+    showLogs(data) {
+		window.open(`http://deploy.pharbers.com:4200/executions-logs?projectName=${this.parent.projectName}&projectId=${this.parent.projectId}&jobName=${data.jobName}&runnerId=${data.runnerId}`)
     }
 }

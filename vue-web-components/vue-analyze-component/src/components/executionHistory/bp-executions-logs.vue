@@ -52,7 +52,7 @@ export default {
             jobIndex: "",
             logsMessage: null,
             jsonMessage: null,
-            executionItem: null
+            executionItem: {}
         }
     },
     components: {
@@ -77,6 +77,8 @@ export default {
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
         this.datasource.jobIndex = this.getUrlParam(paramArr, "jobIndex")
+        this.datasource.jobName = this.getUrlParam(paramArr, "jobName")
+        this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.datasource.buildExecutionQuery(this)
     },
     methods: {
@@ -93,7 +95,7 @@ export default {
         },
         dealBuildLogsQuery(response) {
             if (response.status === 0) {
-                this.logsMessage = response.message[0]
+                this.logsMessage = response.message
             }
         },
         dealBuildFlowQuery(response) {
@@ -105,6 +107,7 @@ export default {
             if (response.data.length > 0) {
                 this.executionItem = response.data[0]["attributes"]
                 this.executionTemplate = this["executionItem"]["execution-template"]
+                this.datasource.jobIndex = this["executionItem"]["job-index"]
                 this.datasource.buildLogsQuery(this)
                 this.datasource.buildFlowQuery(this)
             }

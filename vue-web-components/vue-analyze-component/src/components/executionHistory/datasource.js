@@ -5,13 +5,15 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 export default class PhContainerDataSource {
     constructor(id) {
         this.id = id
-        this.debugToken = "2ea1a2816a10a26bfa44272ba4240ae493d89be1b72e6a8f49c89c5acd5cf619"
+        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
         this.currentPageToken = ""
         this.stepsCount = 20
         this.data = []
         this.store = new JsonApiDataStore()
         this.projectId = ""
         this.jobIndex = ''
+        this.jobName = ''
+        this.runnerId = ''
     }
 
     buildQuery(ele) {
@@ -108,19 +110,38 @@ export default class PhContainerDataSource {
     queryExecution(ele) {
         const logsUrl = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
-        let queryExeBody = {
-            "table": "execution",
-            "conditions": {
-                "projectId": [
-                    "=",
-                    this.projectId
-                ],
-                "jobIndex": [
-                    "=",
-                    this.jobIndex
-                ]
-            },
-            "start_key": {}
+        let queryExeBody = {}
+        if(this.jobIndex) {
+            queryExeBody = {
+                "table": "execution",
+                "conditions": {
+                    "projectId": [
+                        "=",
+                        this.projectId
+                    ],
+                    "jobIndex": [
+                        "=",
+                        this.jobIndex
+                    ]
+                },
+                "start_key": {}
+            }
+        } else {
+            queryExeBody = {
+                "table": "execution",
+                "conditions": {
+                    "runnerId": [
+                        "=",
+                        this.runnerId
+                    ],
+                    "jobName": [
+                        "=",
+                        this.jobName
+                    ]
+                },
+                "index_name": "runnerId-jobName-index",
+                "start_key": {}
+            }
         }
         let queryExeOptions = {
             method: "POST",
