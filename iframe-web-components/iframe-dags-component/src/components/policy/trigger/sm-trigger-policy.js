@@ -6,6 +6,32 @@ export default class PhDagTriggerPolicy {
         this.parent = parent
     }
 
+	// 停止运行
+	async stopDag() {
+		const stopUri = `${hostName}/phstatemachinestop`
+        const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
+		const runnerId = this.genRunnerId(this.parent.projectName)
+        const body = {
+			"runnerId": runnerId
+		}
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        let results = await fetch(stopUri, options).then(res => res.json())
+		// if(results.status === "") {
+        //     alert("启动出错，请重新运行！")
+        //     this.parent.loading = false
+        //     return false
+        // }
+	}
+
     // 点击trigger，弹窗选择version
     dagRunPreparing() {
         let roots = []

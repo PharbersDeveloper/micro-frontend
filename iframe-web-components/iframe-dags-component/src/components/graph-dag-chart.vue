@@ -71,7 +71,7 @@
                     <img
                         v-if="!retryButtonShow || !selectItem"
                         :src="defs.iconsByName('stop')"
-                        alt=""
+                        @click="triggerPolicy.stopDag"
                     />
                 </div>
                 <div class="sec_icon_row">
