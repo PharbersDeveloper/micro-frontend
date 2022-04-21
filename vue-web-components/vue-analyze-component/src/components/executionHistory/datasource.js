@@ -5,19 +5,15 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 export default class PhContainerDataSource {
     constructor(id) {
         this.id = id
-        this.debugToken = "259f327ae7af315e3b234b834321546c4c3973db79f4153dd0352dd2f6b02a84"
+        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
         this.currentPageToken = ""
         this.stepsCount = 20
-        this.data = [{
-            "project-id": "abcde",
-            "jobindex": "alfred",
-            "job-name": "alfredtest",
-            "job-show-name": "jobShowName",
-            "status": "failed",
-            "start-at": 1650346033091,
-            "end-at": 1650346096091
-        }]
+        this.data = []
         this.store = new JsonApiDataStore()
+        this.projectId = ""
+        this.jobIndex = ''
+        this.jobName = ''
+        this.runnerId = ''
     }
 
     buildQuery(ele) {
@@ -53,6 +49,118 @@ export default class PhContainerDataSource {
                 that.store.sync(response)
                 // ele.needRefresh++
                 that.data = that.store.findAll("executions")
+            })
+    }
+
+    queryLogs(ele) {
+        const logsUrl = `${hostName}/phquerylogfile`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let logsBody = {
+            "projectId": this.projectId,
+            "jobIndex": this.jobIndex
+        }
+        let logsOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(logsBody)
+        }
+        return fetch(logsUrl, logsOptions)
+    }
+
+    buildLogsQuery(ele) {
+        const that = this
+        ele.datasource.queryLogs(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildLogsQuery(response)
+            })
+    }
+
+    queryFlow(ele) {
+        const logsUrl = `${hostName}/phreadjsonfile`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let phreadjsonfileBody = {
+            "path": ele.executionTemplate
+        }
+        let logsOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(phreadjsonfileBody)
+        }
+        return fetch(logsUrl, logsOptions)
+    }
+
+    buildFlowQuery(ele) {
+        const that = this
+        ele.datasource.queryFlow(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildFlowQuery(response)
+            })
+    }
+
+    queryExecution(ele) {
+        const logsUrl = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let queryExeBody = {}
+        if(this.jobIndex) {
+            queryExeBody = {
+                "table": "execution",
+                "conditions": {
+                    "projectId": [
+                        "=",
+                        this.projectId
+                    ],
+                    "jobIndex": [
+                        "=",
+                        this.jobIndex
+                    ]
+                },
+                "start_key": {}
+            }
+        } else {
+            queryExeBody = {
+                "table": "execution",
+                "conditions": {
+                    "runnerId": [
+                        "=",
+                        this.runnerId
+                    ],
+                    "jobName": [
+                        "=",
+                        this.jobName
+                    ]
+                },
+                "index_name": "runnerId-jobName-index",
+                "start_key": {}
+            }
+        }
+        let queryExeOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(queryExeBody)
+        }
+        return fetch(logsUrl, queryExeOptions)
+    }
+
+    buildExecutionQuery(ele) {
+        const that = this
+        ele.datasource.queryExecution(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildExecutionQuery(response)
             })
     }
 }

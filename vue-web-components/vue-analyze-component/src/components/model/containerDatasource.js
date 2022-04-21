@@ -16,7 +16,7 @@ export default class PhContainerDataSource {
             this.url= `${hostName}/phdadatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "259f327ae7af315e3b234b834321546c4c3973db79f4153dd0352dd2f6b02a84"
+        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
     }
 
     resetUrl(url) {

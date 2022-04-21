@@ -140,21 +140,6 @@ export default {
             else
                 return null;
         }
-        // save() {
-        //     const event = new Event("event")
-        //     event.args = {
-        //         callback: "addTags",
-        //         element: this,
-        //         param: {
-        //             name: "addTags",
-        //             selectedTags: this.selectedTags
-        //         }
-        //     }
-        //     this.$emit('confirmeRunDag', event)
-        // },
-        // close() {
-        //     this.$emit('closeRunDagDialog');
-        // }
     }
 }
 </script>
