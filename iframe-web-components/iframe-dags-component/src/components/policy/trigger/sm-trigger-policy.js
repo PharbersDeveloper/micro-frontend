@@ -65,7 +65,8 @@ export default class PhDagTriggerPolicy {
             calculate: {
                 type: "dataset",
                 name: this.parent.datasource.cal.calculate.name,
-                conf: confData
+                conf: confData,
+                recursive: true
             }
         }
 

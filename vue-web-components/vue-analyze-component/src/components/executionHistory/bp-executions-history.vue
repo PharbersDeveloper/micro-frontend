@@ -51,7 +51,8 @@
                             View Logs</el-button>
                     </div>
                 </div>
-                <p v-if="hasMore" class="execution-history-loading" @click="loadMoreExecutionHistory">More</p>
+                <p v-if="hasMore" class="execution-history-loading" @click="loadMoreExecutionHistory">更多</p>
+                <p v-if="!hasMore" class="execution-history-loading">暂无更多</p>
             </div>
         </div>
         <div class="execution-history-detail-panel" >
@@ -102,7 +103,8 @@ export default {
             executionItem: null,
             jsonMessage: null,
             jobIndex: "",
-            executionTemplate: ""
+            executionTemplate: "",
+            projectName: ""
         }
     },
     components: {
@@ -115,8 +117,6 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    fileName: "filename",
-                    projectName: "projectName"
                 }
             }
         },
@@ -131,6 +131,7 @@ export default {
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
         this.datasource.appendExecutionHistory(this)
     },
     methods: {
@@ -144,8 +145,8 @@ export default {
                     element: this,
                     param: {
                         "name": "executions-logs",
-                        "projectName": this.allData.projectName,
-                        "projectId": this.allData.projectId,
+                        "projectName": this.projectName,
+                        "projectId": this.datasource.projectId,
                         "executionItem": this.executionItem
                     }
                 }
@@ -324,6 +325,7 @@ export default {
                 flex-direction: column;
                 flex-grow: 1;
                 justify-content: space-between;
+				overflow: auto;
 
                 .execution-history-list {
                     display: flex;
@@ -372,6 +374,7 @@ export default {
 
                 .execution-history-loading {
                     text-align: center;
+					cursor: pointer;
                 }
             }
         }

@@ -25,7 +25,7 @@ export default class PhContainerDataSource {
                 "projectId": ["=", this.projectId]
             },
             "limit": this.stepsCount,
-            "start_key": {}
+            "start_key": this.currentPageToken !== "" ? this.currentPageToken : {}
         }
 
         let options = {
@@ -46,6 +46,9 @@ export default class PhContainerDataSource {
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
+                if(that.currentPageToken === "") {
+                    ele.hasMore = false
+                }
                 that.store.sync(response)
                 // ele.needRefresh++
                 that.data = that.store.findAll("executions")

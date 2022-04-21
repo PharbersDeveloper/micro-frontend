@@ -206,7 +206,6 @@ export default {
     }
     .bp_operator_card {
         margin-top: 4px;
-        display: flex;
         width: 100%;
         padding: 4px;
         .selected_border {
