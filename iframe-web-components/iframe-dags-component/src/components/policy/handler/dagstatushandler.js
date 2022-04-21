@@ -63,7 +63,7 @@ export default class PhDagHandler {
             })
             // 2.失败时出现弹框
             if(status === "failed") {
-				let cnotification = JSON.parse(payload.message).cnotification
+                let cnotification = JSON.parse(payload.message).cnotification
                 let showName = cnotification.jobShowName
                 let jobName = cnotification.jobName
                 let runnerId = cnotification.runId
@@ -73,8 +73,8 @@ export default class PhDagHandler {
                         data: payload,
                         jobShowName: showName,
                         representId: represent_id,
-						jobName: jobName,
-						runnerId: runnerId
+                        jobName: jobName,
+                        runnerId: runnerId
                     })
                 }
             }

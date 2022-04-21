@@ -7,6 +7,6 @@ export default class PhLogsPolicy {
     }
 
     showLogs(data) {
-		window.open(`http://deploy.pharbers.com:4200/executions-logs?projectName=${this.parent.projectName}&projectId=${this.parent.projectId}&jobName=${data.jobName}&runnerId=${data.runnerId}`)
+        window.open(`http://deploy.pharbers.com:4200/executions-logs?projectName=${this.parent.projectName}&projectId=${this.parent.projectId}&jobName=${data.jobName}&runnerId=${data.runnerId}`)
     }
 }
