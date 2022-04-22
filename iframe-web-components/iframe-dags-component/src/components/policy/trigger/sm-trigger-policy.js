@@ -8,6 +8,7 @@ export default class PhDagTriggerPolicy {
 
 	// 停止运行
 	async stopDag() {
+		debugger
 		const stopUri = `${hostName}/phstatemachinestop`
         const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
 		const runnerId = this.genRunnerId(this.parent.projectName)

@@ -24,59 +24,16 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <img :src="defs.iconsByName('tag')" alt="" />
-                    <img :src="defs.iconsByName('table')" alt="" />
-                    <!-- <img :src="this.defs.iconsByName('star')" alt="">
-                    <img :src="this.defs.iconsByName('new-document-dashboard')" alt="">
-                    <img :src="this.defs.iconsByName('share')" alt="">
-                    <img :src="this.defs.iconsByName('hide')" alt=""> -->
                     <img
                         :src="defs.iconsByName('run')"
                         alt=""
                         @click="triggerPolicy.dagRunPreparing()"
                     />
                     <img
-                        v-if="retryButtonShow && selectItem"
-                        :src="defs.iconsByName('run', 'current')"
-                        alt=""
-                        @click="triggerPolicy.retryDag('self_only')"
-                    />
-                    <img
-                        v-if="retryButtonShow && selectItem"
-                        :src="defs.iconsByName('run', 'to')"
-                        alt=""
-                        @click="triggerPolicy.retryDag('downstream')"
-                    />
-                    <img
-                        v-if="retryButtonShow && selectItem"
-                        :src="defs.iconsByName('run', 'from')"
-                        alt=""
-                        @click="triggerPolicy.retryDag('upstream')"
-                    />
-                    <img
-                        v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('run', 'current-reverse')"
-                        alt=""
-                    />
-                    <img
-                        v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('run', 'from-reverse')"
-                        alt=""
-                    />
-                    <img
-                        v-if="!retryButtonShow || !selectItem"
-                        :src="defs.iconsByName('run', 'to-reverse')"
-                        alt=""
-                    />
-                    <img
                         v-if="!retryButtonShow || !selectItem"
                         :src="defs.iconsByName('stop')"
-                        @click="triggerPolicy.stopDag"
+                        @click="triggerPolicy.stopDag()"
                     />
-                </div>
-                <div class="sec_icon_row">
-                    <img :src="defs.iconsByName('delete_r')" alt="" />
-                    <img :src="defs.iconsByName('del_icon_black')" alt="" />
                 </div>
             </div>
             <div class="scripts_area">
