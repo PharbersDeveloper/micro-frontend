@@ -26,11 +26,11 @@
                                             </span>
                                             <p >清除数据</p>
                                         </div>
-                                        <div class="label_icon border_none" @click="deleteDialogOpen">
+                                        <div class="label_icon border_none" @click="deleteCurrentScenario">
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除数据集</p>
+                                            <p >删除Scenario</p>
                                         </div>
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@
                                 </div>
                                 <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="toggle">New Scenario</button>
+                            <button class="upload_btn" @click="openCreateScenarioDialog">New Scenario</button>
                         </div>
 
                         <div class="tag_selected">
@@ -52,7 +52,7 @@
                                 <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
                             <div class="down_sel" >
-                                <bp-select-vue :src="selectIcon" :choosedValue="scenarioValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                                <bp-select-vue :src="selectIcon" :choosedValue="scenarioSortedBy" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue text="名称" @click="selectScenario(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
@@ -82,19 +82,18 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(scenario,index) in searchData" :key="index" ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}" @click="clickOnlyOne(scenario, index)">
-                            <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)">
+                            <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
                             <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="label_icon" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickScenarioName(scenario)" :title="scenario.name">{{scenario.name}}</p>
+                                <p class="data_name" @click.stop="clickScenarioName(scenario)" :title="scenario.scenarioName">{{scenario.scenarioName}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in scenario.label" :key="inx">
                                         <span v-if="scenario.label !== ''">
-                                            <p
-                                                    :title="tag"
-                                                    class="tag_bg"
-                                                    :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                            <p :title="tag" class="tag_bg"
+                                               :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">
+                                               {{tag}}
                                             </p>
                                         </span>
                                     </div>
@@ -103,7 +102,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.scenarios == ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.scenarios === ''">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -112,14 +111,14 @@
                             <span class="space">
                                 <img :src="database_icon" alt="">
                             </span>
-                            <div class="show-name" v-if="scenarioCheckedIds.length == 1">
+                            <div class="show-name" v-if="scenarioCheckedIds.length === 1">
                                 <p class="project_name_info" :title="scenarioCheckedNames[0]">
                                     {{scenarioCheckedNames[0]}}
                                 </p>
                             </div>
                             <div class="show-name">
                                 <p class="project_name_info" v-if="scenarioCheckedIds.length > 1">
-                                    {{scenarioCheckedIds.length}} 条数据集
+                                    {{scenarioCheckedIds.length}} 条 Scenario
                                 </p>
                             </div>
                         </div>
@@ -130,23 +129,23 @@
                             </span>
                             <span @click="clearDialogOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
-                                <span class='tags_func'>清除数据</span>
+                                <span class='tags_func'>清除Scenario</span>
                             </span>
-                            <span @click='deleteDialogOpen' class="view_list">
+                            <span @click='deleteCurrentScenario' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
                             </span>
                         </div>
                     </div>
-                    <p v-if="scenarioCheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
+                    <p v-if="scenarioCheckedIds.length === 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
         </div>
         <!-- 添加tag -->
         <create-tags-dialog
                 v-if="showCreateTagsDialog"
-                :scenariocheckedIds="scenarioCheckedIds"
-                :scenariocheckedNames="scenarioCheckedNames"
+                :scenarioCheckedIds="scenarioCheckedIds"
+                :scenarioCheckedNames="scenarioCheckedNames"
                 :scenarios="allData.scenarios"
                 :tagsArray="allData.tagsArray"
                 :tagsColorArray="tagsColorArray"
@@ -154,12 +153,7 @@
                 @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
-        <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
-        <select-catalog
-                @confirmeCreateCatalog="confirmeCreateCatalog"
-                @closeCreateCatalogDialog="closeCreateCatalogDialog"
-                v-if="selectCatalogVisible">
-        </select-catalog>
+        <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
     </div>
 </template>
 
@@ -173,6 +167,7 @@ import { staticFilePath } from '../../config/envConfig'
 export default {
     data() {
         return {
+            // icons
             label_icon: `${staticFilePath}` + "/tag.svg",
             search_icon: `${staticFilePath}` + "/search.png",
             dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
@@ -188,53 +183,38 @@ export default {
             intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
             database_icon: `${staticFilePath}` + "/Database.svg",
             catalog_icon: `${staticFilePath}` + "/icons/catalog/normal.svg",
-            showDialog: false,
-            state: '',
-            editShow: false,
+            // about select
+            ascending: false,
+            state: "",
+            searchValue: "",
+            scenarioSortedBy: "名称",
+            scenarioCheckedIds: [], //选中项id
+            scenarioCheckedNames: [], //选中项name
+            isCheckedAllScenario: false,
+            // Dialog shows controller
+            showCreateScenarioDialog: false,
             dropDialogShow: false,
             labelShowDialog: false,
-            // // cleardialogshow: false,
-            // deletedialogshow: false,
             showSelectOptionParam: false,
             closeTosts: false,
             showCreateTagsDialog: false, //添加tag弹框
-            deleteTagsDia: false,
-            searchValue: '',
-            ascending: false,
-            tags: ['name','description','啦啦啦'],
-            ary: [],
-            checked: false,
-            manual: true,
-            clickMax: false,
-            clickMaxOutput: false,
-            scenarioValue: "名称",
-            isCheckedAllScenario: false,
-            scenarioCheckedIds: [], //选中项id
-            scenarioCheckedNames: [], //选中项name
+            deleteTagsDialog: false,
+            // about render
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            selectCatalogVisible: false
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
         }
     },
     props: {
         allData: {
             type: Object,
-            default: () => ({
-                projectName: "项目名称",
-                scenarios:
-                        [
-                            {
-                                "projectId": null,
-                                "schema": "[]",
-                                "version": "max1.0",
-                                "name": "cpa_pha_mapping",
-                                "label": "",
-                                "cat": "input_index",
-                                "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
-                            }
-                        ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
-            })
+            default: () => {
+                return {
+                    projectName: "",
+                    projectId: "",
+                    scenarios: [],
+                    tagsArray: []
+                }
+            }
         }
     },
     components: {
@@ -267,37 +247,14 @@ export default {
         }
     },
     methods: {
-        confirmeCreateCatalog(data) {
-            let bool = this.checkName(data.args.param.dsName)
-            if(!bool) {
-                alert("该数据目录已被调用")
-                return false
-            }
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
-            data.args.param.maxcat = this.maxcat
-            data.args.param.scenarioArray = this.allData.scenarios
-            data.args.param.tableName = data.args.param.dsName
-            // data.args.param.dsName = this.checkName(data.args.param.dsName)
-            this.$emit('event', data)
-            this.selectCatalogVisible = false
-        },
         checkName(data) {
             let arr = this.allData.scenarios.filter(it => it.name === data)
             return arr.length === 0
         },
-        closeCreateCatalogDialog() {
-            this.selectCatalogVisible = false
-        },
-        //select catalog
-        on_click_catalog() {
-            this.selectCatalogVisible = true
-        },
-        //增加tag
         addTagsEvent(data) {
             data.args.param.selectedscenarios = this.scenarioCheckedIds
             data.args.param.scenarioArray = this.allData.scenarios
-            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
@@ -316,7 +273,7 @@ export default {
             this.scenarioCheckedIds = []
             this.scenarioCheckedNames = []
             this.scenarioCheckedIds.push(scenario.id)
-            this.scenarioCheckedNames.push(scenario.name)
+            this.scenarioCheckedNames.push(scenario.scenarioName)
         },
         //点击list多选框
         checkedOneScenario(scenario) {
@@ -326,30 +283,28 @@ export default {
                 this.scenarioCheckedNames.splice(idIndex, 1)
             } else {
                 this.scenarioCheckedIds.push(scenario.id)
-                this.scenarioCheckedNames.push(scenario.name)
+                this.scenarioCheckedNames.push(scenario.scenarioName)
             }
         },
         //点击scenario name
-        clickScenarioName(scenario) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: "analyze",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    scenario: scenario
-                }
-            }
-            this.$emit('event', event)
+        clickScenarioName() {
+            // TODO: 跳转到 trigger
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "linkToPage",
+            //     element: this,
+            //     param: {
+            //         name: "analyze",
+            //         projectName: this.allData.projectName,
+            //         projectId: this.allData.projectId,
+            //         scenario: scenario
+            //     }
+            // }
+            // this.$emit('event', event)
         },
         //全选list
         chechedAllScenario() {
-            this.isCheckedAllScenario = true
-            if (this.scenarioCheckedIds.length === this.allData.scenarios.length) {
-                this.isCheckedAllScenario = false
-            }
+            this.isCheckedAllScenario = this.scenarioCheckedIds.length !== this.allData.scenarios.length;
             this.scenarioCheckedIds = []
             this.scenarioCheckedNames = []
             //全选状态
@@ -386,11 +341,11 @@ export default {
         },
         //排序条件下拉框
         selectScenario() {
-            this.scenarioValue = "名称"
+            this.scenarioSortedBy = "名称"
         },
         //关闭tag删除弹框
         closeDeleteTags() {
-            this.deleteTagsDia = false;
+            this.deleteTagsDialog = false;
         },
         //打开tag添加弹框
         createTagsOpen() {
@@ -449,12 +404,11 @@ export default {
             this.$emit('event', event)
         },
         //打开删除数据集弹框
-        deleteDialogOpen() {
-            //打开弹框
-            this.deleteDialogShow = true;
+        deleteCurrentScenario() {
+            // TODO: 删除
         },
-        toggle() {
-            this.showDialog = !this.showDialog
+        openCreateScenarioDialog() {
+            this.showCreateScenarioDialog = !this.showCreateScenarioDialog
         }
     }
 }

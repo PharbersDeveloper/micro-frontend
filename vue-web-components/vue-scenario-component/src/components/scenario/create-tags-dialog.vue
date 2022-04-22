@@ -5,8 +5,9 @@
                <div class="header">
                     <div class="left">
                         <img :src="label_icon" class="label" alt="">
-                        <p v-show="datasetcheckedIds.length >= 2">为 {{datasetcheckedIds.length}} 个数据集添加标签</p>
-                        <p class="dataset_name" :title="datasetcheckedNames[0]" v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
+                        <p v-show="scenarioCheckedIds.length >= 2">为 {{scenarioCheckedIds.length}} 个数据集添加标签</p>
+                        <p class="dataset_name" :title="scenarioCheckedNames[0]" v-show="scenarioCheckedIds.length < 2">为
+                            {{scenarioCheckedNames[0]}} 添加标签</p>
                     </div>
                     <img :src="img1" alt="" class="close_icon" @click="close">
                </div>
@@ -56,18 +57,18 @@ export default {
         }
     },
     props: {
-        datasetcheckedIds: Array,
-        datasetcheckedNames: Array,
-        datasets: Array,
+        scenarioCheckedIds: Array,
+        scenarioCheckedNames: Array,
+        scenarios: Array,
         tagsArray: Array, //后端返回的tag数组
         tagsColorArray: Array
     },
     computed: {},
     mounted() {
-        this.tagsArrayShow = this.tagsArray.filter(it => it != '')
-        if(this.datasetcheckedIds.length == 1) {
-            let selDatasetId = this.datasetcheckedIds[0]
-            let selDataset = this.datasets.filter(item => item.id == selDatasetId)[0]
+        this.tagsArrayShow = this.tagsArray.filter(it => it !== '')
+        if(this.scenarioCheckedIds.length === 1) {
+            let selDatasetId = this.scenarioCheckedIds[0]
+            let selDataset = this.scenarios.filter(item => item.id === selDatasetId)[0]
             this.selectedTags = selDataset.label
         }
     },
