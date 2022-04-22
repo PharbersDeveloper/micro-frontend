@@ -32,6 +32,8 @@ import { phAnalyzeBpExecutionsHistoryEventHandler } from "./eventHandler/phAnaly
 import { phAnalyzeBpExecutionsHistoryRouteModel } from "./routeModel/phAnalyzeBpExecutionsHistoryRouteModel"
 import { phAnalyzeBpExecutionsLogsRouteModel } from "./routeModel/phAnalyzeBpExecutionsLogsRouteModel"
 import { phAnalyzeBpExecutionsLogsEventHandler } from "./eventHandler/phAnalyzeBpExecutionsLogsEventHandler"
+import { phScenarioScenarioLstRouteModel } from "./routeModel/phScenarioScenarioLstRouteModel"
+import { phScenarioScenarioLstEventHandler } from "./eventHandler/phScenarioScenarioLstEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -67,5 +69,7 @@ export {
 	phAnalyzeBpExecutionsHistoryRouteModel,
 	phAnalyzeBpExecutionsHistoryEventHandler,
 	phAnalyzeBpExecutionsLogsRouteModel,
-	phAnalyzeBpExecutionsLogsEventHandler
+	phAnalyzeBpExecutionsLogsEventHandler,
+	phScenarioScenarioLstRouteModel,
+	phScenarioScenarioLstEventHandler
 }
