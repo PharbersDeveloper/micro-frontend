@@ -55,7 +55,7 @@
                                     :key="index+'opreator'"
                                     :step="field"
                                     :schema="schema.schema"
-                                    :type="field['ctype']" />
+                                    :type="field['ctype']"/>
                             </li>
                         </ul>
                     </div>
