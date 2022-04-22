@@ -251,6 +251,8 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 		//删除脚本
 		case "deleteDatasets":
 			if (params) {
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
 				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = params.datasetArray //发送请求的参数在这取
 				let msgArr = []

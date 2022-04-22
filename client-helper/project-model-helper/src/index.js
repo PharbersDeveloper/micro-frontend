@@ -28,6 +28,12 @@ import { phHistogramSlidespageRouteModel } from "./routeModel/phHistogramSlidesp
 import { phHistogramSlidespageEventHandler } from "./eventHandler/phHistogramSlidespageEventHandler"
 import { phHistogramInsightpageEventHandler } from "./eventHandler/phHistogramInsightpageEventHandler"
 import { phHistogramInsightpageRouteModel } from "./routeModel/phHistogramInsightpageRouteModel"
+import { phAnalyzeBpExecutionsHistoryEventHandler } from "./eventHandler/phAnalyzeBpExecutionsHistoryEventHandler"
+import { phAnalyzeBpExecutionsHistoryRouteModel } from "./routeModel/phAnalyzeBpExecutionsHistoryRouteModel"
+import { phAnalyzeBpExecutionsLogsRouteModel } from "./routeModel/phAnalyzeBpExecutionsLogsRouteModel"
+import { phAnalyzeBpExecutionsLogsEventHandler } from "./eventHandler/phAnalyzeBpExecutionsLogsEventHandler"
+import { phScenarioScenarioLstRouteModel } from "./routeModel/phScenarioScenarioLstRouteModel"
+import { phScenarioScenarioLstEventHandler } from "./eventHandler/phScenarioScenarioLstEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -59,5 +65,11 @@ export {
 	phHistogramSlidespageRouteModel,
 	phHistogramSlidespageEventHandler,
 	phHistogramInsightpageEventHandler,
-	phHistogramInsightpageRouteModel
+	phHistogramInsightpageRouteModel,
+	phAnalyzeBpExecutionsHistoryRouteModel,
+	phAnalyzeBpExecutionsHistoryEventHandler,
+	phAnalyzeBpExecutionsLogsRouteModel,
+	phAnalyzeBpExecutionsLogsEventHandler,
+	phScenarioScenarioLstRouteModel,
+	phScenarioScenarioLstEventHandler
 }

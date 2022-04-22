@@ -5,13 +5,14 @@ export default class PhDagDatasource {
         this.id = id
         this.data = []
         this.jobArr = []
-        this.name = "prod_clean_v2"
-        this.projectId = "JfSmQBYUpyb4jsei"
+        this.name = "demo"
+        this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '2f6f97c9df7244ae2405ff673596db041e33ceb6465e752cf948fefacefb3ace'
+        this.debugToken = 'f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 100
         this.hitHeightStep = 500
+        this.cal = { calculate: {}, selected: [] }
     }
 
     buildQuery(ele, isAppend=false) {
@@ -71,35 +72,6 @@ export default class PhDagDatasource {
             body: JSON.stringify(body)
         }
         return fetch(uri, options)
-        // const url = `${hostName}/phdadatasource`
-        // function buildDistinctColSql() {
-        //     let sql_str = "SELECT DISTINCT " + col
-
-        //     if (ele.datasource.projectId.length === 0)
-        //         sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
-        //     else
-        //         sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
-
-        //     sql_str = sql_str + " ORDER BY " + col
-
-        //     return sql_str
-        // }
-        // const accessToken = ele.getCookie("access_token") || this.debugToken
-        // let body = {
-        //     "query": buildDistinctColSql(),
-        //     "schema": [col],
-        //     "projectId": this.projectId
-        // }
-        // let options = {
-        //     method: "POST",
-        //     headers: {
-        //         "Authorization": accessToken,
-        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         "accept": "application/json"
-        //     },
-        //     body: JSON.stringify(body)
-        // }
-        // return fetch(url, options)
     }
 
     queryDlgDistinctCol(ele, row, cat, dsName) {
@@ -122,7 +94,8 @@ export default class PhDagDatasource {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
                     x["representId"] = x["attributes"]["represent-id"]
-                    x["status"] = x["attributes"]["runtime"]
+                    // x["status"] = x["attributes"]["runtime"]
+                    x["status"] = "normal"
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
                     const name = x["attributes"]["name"]
@@ -132,19 +105,26 @@ export default class PhDagDatasource {
                     } else if (cat === "dataset" && runtime === "intermediate") {
                         result = "DSIntermediate"
                     } else if (cat === "dataset" && runtime === "input_index") {
-                        result = "DSInputIndex"
+                        // result = "DSInputIndex"
+                        result = "max-in"
                     } else if (cat === "dataset" && runtime === "output_index") {
-                        result = "DSOutputIndex"
+                        // result = "DSOutputIndex"
+                        result = "max-out"
                     } else if (cat === "dataset" && runtime === "catalog") {
-                        result = "DSCatalog"
+                        // result = "DSCatalog"
+                        result = "catalog"
                     } else if (cat === "job" && runtime === "python3") {
-                        result = "Python3"
+                        // result = "Python3"
+                        result = "python"
                     } else if (cat === "job" && runtime === "pyspark") {
-                        result = "PySpark"
+                        // result = "PySpark"
+                        result = "pyspark"
                     } else if (cat === "job" && runtime === "sparkr") {
-                        result = "SparkR"
+                        // result = "SparkR"
+                        result = "sparkr"
                     } else if (cat === "job" && runtime === "r") {
-                        result = "R"
+                        // result = "R"
+                        result = "r"
                     } else if (cat === "job" && runtime === "prepare") {
                         result = "prepare"
                     } else if (cat === "dataset") {
@@ -153,6 +133,7 @@ export default class PhDagDatasource {
                         result = "job"
                     }
                     x["category"] = result
+                    x["selected"] = false
                     const tmp = parseInt(x["attributes"]["level"])
                     if (tmp > maxLevel) {
                         maxLevel = tmp
@@ -173,10 +154,62 @@ export default class PhDagDatasource {
                                 maxHeight = tmp["parentIds"].length
                             }
                         }
-                        
+
                     }
                 }
                 that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]
+                ele.needRefresh++
+            })
+    }
+
+    //查询 select
+    buildSelectItemsQuery(ele) {
+        const uri = `${hostName}/phstatemachineselect`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+
+        const tmp = {}
+        if (ele.selectItem.attributes.cat === "job") {
+            tmp['job'] = {
+                "name": ele.selectItem.attributes.name,
+                "represent-id": ele.selectItem.attributes['represent-id']
+            }
+        } else {
+            tmp['dataset'] = {
+                "name": ele.selectItem.attributes.name,
+                "represent-id": ele.selectItem.attributes['represent-id']
+            }
+        }
+
+        let body = {
+            "projectId": ele.projectId,
+            "projectName": ele.projectName,
+            "element": tmp
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        // return null
+        return fetch(uri, options)
+    }
+
+    selectOneElement(ele) {
+        console.log('select and change the data')
+        if (!ele.selectItem) {
+            return
+        }
+
+        let that = this
+        ele.datasource.buildSelectItemsQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                that.cal = response
                 ele.needRefresh++
             })
     }

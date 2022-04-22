@@ -14,7 +14,7 @@
                     <!-- <div class="log-content">{{emrLog}}</div> -->
                     <div class="log-content">{{logsValue}}</div>
                 </div>
-                
+
                 <div class="no-logs" v-if="logsValue === ''">
                     <div class="no-log-img">
                         <img :src="img1" alt="">
@@ -119,7 +119,7 @@ export default {
                     // that.logsValue = result.message.map((item, idx, array) => item.join("<br/>"))
                     that.logsValue = result.message
                     that.loading = false
-                    console.log(that.logsValue) 
+                    console.log(that.logsValue)
                 }
             }, 5 * 1000)
         } catch ( e ) {
@@ -140,21 +140,6 @@ export default {
             else
                 return null;
         }
-        // save() {
-        //     const event = new Event("event")
-        //     event.args = {
-        //         callback: "addTags",
-        //         element: this,
-        //         param: {
-        //             name: "addTags",
-        //             selectedTags: this.selectedTags
-        //         }
-        //     }
-        //     this.$emit('confirmeRunDag', event)
-        // },
-        // close() {
-        //     this.$emit('closeRunDagDialog');
-        // }
     }
 }
 </script>

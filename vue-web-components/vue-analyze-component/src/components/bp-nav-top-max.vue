@@ -4,11 +4,11 @@
             <div class="left">
 				<img @click="linkToPage('project')" class="home" :src="home" alt="">
                 <span class="project_name" @click="linkToPage('project')" :title="allData.projectName">
-                {{allData.projectName}}
+                {{projectName}}
                 </span>
-                <div class="expand_bg" @mouseover="focusExpand" @mouseout="focusOutExpand">
+                <div class="expand_bg bg_blue" @mouseover="focusExpand" @mouseout="focusOutExpand">
                     <img :src="img1" alt="" class="expand">
-                    <nav class="expand_popup" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
+                    <nav class="expand_popup popup_position_l1" v-show="expangPopup" @mouseover="focusExpand" @mouseout="focusOutExpand">
                         <ul>
                             <li @click="linkToPage('flow')">数据流程</li>
                             <li @click="linkToPage('datasets')">数据集</li>
@@ -17,7 +17,15 @@
                         </ul>
                     </nav>
                 </div>
-                <img @click="linkToPage('airflow')" class="airflow icon" :src="airflow" alt="">
+				<div class="expand_bg bg_purple" @mouseover="focusExpandL2" @mouseout="focusOutExpandL2">
+                    <img :src="img2" alt="" class="expand">
+                    <nav class="expand_popup popup_position_l2" v-show="expangPopupL2" @mouseover="focusExpandL2" @mouseout="focusOutExpandL2">
+                        <ul>
+                            <li @click="linkToPage('executions')">运行记录</li>
+							<li @click="linkToPage('scenarios')">Scenarios</li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
             <div class="right">
             </div>
@@ -31,9 +39,12 @@ export default {
     data() {
         return {
             expangPopup: false,
+            expangPopupL2: false,
             airflow: `${staticFilePath}` + "/icons/Airflow_switch.svg",
             home: `${staticFilePath}` + "/icons/%E4%B8%BB%E9%A1%B5.svg",
-            img1: `${staticFilePath}` + "/%E6%8B%93%E5%B1%95.svg" 
+            img1: `${staticFilePath}` + "/%E6%8B%93%E5%B1%95.svg",
+            img2: `${staticFilePath}` + "/job_button.svg",
+            projectName: ""
         }
     },
     components: {},
@@ -42,15 +53,23 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projectName: "test",
+                    projectName: "",
                     popupBack: false
                 }
             }		
         }
     },
     beforeMount() {},
-    mounted() {},
+    mounted() {
+        let href = window.location.href
+        let paramArr = href.split("?")[1].split("&")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
+    },
     methods: {
+        getUrlParam (arr, value) {
+            let data = arr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         linkToPage(name) {
             // 弹框询问跳转
             if(this.allData.popupBack) {
@@ -88,6 +107,12 @@ export default {
         },
         focusExpand() {
             this.expangPopup = true
+        },
+        focusExpandL2() {
+            this.expangPopupL2 = true
+        },
+        focusOutExpandL2() {
+            this.expangPopupL2 = false
         }
     }
 };
@@ -128,14 +153,20 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
         }
+		.bg_blue {
+            background: #28a9dd;
+		}
+		.bg_purple {
+            background: #8541aa;
+		}
         .expand_bg {
             width: 40px;
             height: 40px;
-            background: #28a9dd;
             margin-left: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
+			cursor: pointer;
             .expand {
                 width: 20px;
                 height: 20px;
@@ -144,16 +175,20 @@ export default {
             }
         }
     }
+	.popup_position_l1 {
+        left: 166px;
+        top: 40px;
+	}
+	.popup_position_l2 {
+        left: 220px;
+        top: 40px;
+	}
     .expand_popup {
         background-color: #333333;
         box-shadow: 0 5px 5px -3px rgba(34, 34, 34, 0.2), 0 3px 14px 2px rgba(34, 34, 34, 0.12), 0 8px 10px 1px rgba(34, 34, 34, 0.14);
         width: 200px;
         height: auto;
         position: absolute;
-        left: 166px;
-        top: 40px;
-        // transition: height 150ms ease-out;
-        // display: none;
         z-index: 3001;
         font-size: 14px;
         font-weight: 400px;

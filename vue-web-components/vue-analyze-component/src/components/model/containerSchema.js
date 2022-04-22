@@ -2,10 +2,54 @@
 export default class PhContainerSchema {
     constructor(id) {
         this.id = id
-        this.schema = []
-        this.cols = []
-        this.dtype = []
-        this.cellWidth = []
+        this.schema = [
+            "通用名称",
+            "商品名称",
+            "生产企业",
+            "剂型",
+            "规格",
+            "包装数量",
+            "包装单位",
+            "PACKCODE",
+            "项目",
+            "version"
+        ]
+        this.cols = [
+            "通用名称",
+            "商品名称",
+            "生产企业",
+            "剂型",
+            "规格",
+            "包装数量",
+            "包装单位",
+            "PACKCODE",
+            "项目",
+            "version"
+        ]
+        this.dtype = [
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "String"
+        ]
+        this.cellWidth = [
+            118,
+            118,
+            118,
+            118,
+            118,
+            118,
+            118,
+            118,
+            118,
+            118
+        ]
         this.cols = this.schema
     }
 

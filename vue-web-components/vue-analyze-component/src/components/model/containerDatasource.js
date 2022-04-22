@@ -6,17 +6,17 @@ export default class PhContainerDataSource {
         this.id = id
         this.data = []
         this.sort = {}
-        this.projectId = ''
+        this.projectId = 'YZYijD17N9L6LXx'
         this.filter = {}
-        this.name = "prod_clean_v2"
+        this.name = "wodeluTest_勿删"
         this.batch_size = 100
         // this.schema = []
         // this.cols = this.schema
         if (!url)
-            this.url= `${hostName}/phchproxyquery`
+            this.url= `${hostName}/phdadatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
+        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
     }
 
     resetUrl(url) {

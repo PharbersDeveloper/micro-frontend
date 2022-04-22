@@ -10,6 +10,10 @@ import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
+import prepare from './components/prepareCal/bp-prepare-container'
+import executionHistory from './components/executionHistory/bp-executions-history'
+import executionsLogs from './components/executionHistory/bp-executions-logs'
+import test from './components/test'
 
 Vue.use(Router)
 
@@ -23,9 +27,19 @@ export default new Router({
             component: bpExcelContainer
         },
         {
+            path: '/test',
+            name: 'test',
+            component: test
+        },
+        {
             path: '/datasets',
             name: 'datasets',
             component: datasets
+        },
+        {
+            path: '/prepare',
+            name: 'prepare',
+            component: prepare
         },
         {
             path: '/data-list',
@@ -66,6 +80,14 @@ export default new Router({
             path: '/dashboards',
             name: 'dashboards',
             component: dashboards
+        },{
+            path: '/executions',
+            name: 'executionHistory',
+            component: executionHistory
+        },{
+            path: '/executions-logs',
+            name: 'executionsLogs',
+            component: executionsLogs
         }
     ]
 })

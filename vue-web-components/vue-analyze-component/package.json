@@ -9,11 +9,14 @@
         "build:component": "vue-cli-service build --target wc --name ph-analyze 'src/components/**/*.vue'"
     },
     "dependencies": {
-        "@handsontable/vue": "^9.0.2",
         "@vue/web-component-wrapper": "^1.3.0",
         "core-js": "^3.6.5",
         "element-ui": "^2.15.6",
+        "jsonapi-datastore": "^0.4.0-beta",
+        "mavon-editor": "^2.10.4",
+        "text-loader": "0.0.1",
         "vue": "^2.6.11",
+        "vue-json-viewer": "^2.2.22",
         "vue-property-decorator": "^8.5.1",
         "vue-router": "^3.5.1"
     },

@@ -238,7 +238,7 @@ export default {
             output_index_icon: `${staticFilePath}` + "/output_index.svg",
             intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
             database_icon: `${staticFilePath}` + "/Database.svg",
-            catalog_icon: `${staticFilePath}` + "/icons/catalog_icon.svg",
+            catalog_icon: `${staticFilePath}` + "/icons/catalog/normal.svg",
             showDialog: false,
             state: '',
             editShow: false,

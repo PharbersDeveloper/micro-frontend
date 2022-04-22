@@ -97,7 +97,7 @@ export default {
         }
     },
     mounted() {
-        if (this.schema.schema.length == 0) {
+        if (this.schema.schema.length === 0) {
             this.schema.requestSchema().then((result) => {
                 if (result) {
                     this.schemaIsReady++

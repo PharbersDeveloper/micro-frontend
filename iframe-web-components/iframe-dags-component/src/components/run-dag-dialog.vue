@@ -99,8 +99,7 @@ export default {
         this.scriptsConf = JSON.stringify(this.textConf.scripts)
         this.userConf = JSON.stringify(this.textConf.userConf)
     },
-    watch: {
-    },
+    watch: {},
     methods: {
         selectVersionConfirm(data) {
             let version = data.args.param.versionArr

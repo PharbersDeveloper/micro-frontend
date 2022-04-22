@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="dataset_header">
             <img :src="dataset_icon" class="script_icon" alt="">
-            {{allData.datasetName}}
+            {{decodeURI(allData.datasetName)}}
         </div>
         <div class="title-container">
             <div class="title-left">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="title-right">
-				<!-- :disabled="allData.datasetCat != 'intermediate'" -->
+                <!-- :disabled="allData.datasetCat != 'intermediate'" -->
                 <el-button @click="dataSampleVisible = true" class="data-version">数据样本配置</el-button>
                 <div class="btn-groups">
                     <button class="btn_chart" @click="dialogDownloadVisible = true" disabled>下载当前筛选数据</button>
@@ -38,7 +38,7 @@
         </div>
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
-                v-on:countIsReady="totalCountIsReady"
+                @countIsReady="totalCountIsReady"
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>
@@ -419,7 +419,7 @@ export default {
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
             data.args.param.projectName = this.allData.projectName
-            data.args.param.datasetName = this.allData.datasetName
+            data.args.param.datasetName = decodeURI(this.allData.datasetName)
             data.args.param.datasetId = this.allData.datasetId
             this.$emit('event',  data)
         },
@@ -544,7 +544,7 @@ export default {
             const length = this.allData.schemaArr.length
             this.schema.resetSchema(this.allData.schemaArr, this.allData.schemaArrType, Array(length).fill(118))
             // this.$refs.excel.schemaIsReady++
-            this.datasource.name = this.allData.datasetName
+            this.datasource.name = decodeURI(this.allData.datasetName)
             this.datasource.projectId = this.allData.projectId
             if (this.datasource.projectId.length > 0)
                 this.datasource.resetUrl(`${hostName}/phdadatasource`)
