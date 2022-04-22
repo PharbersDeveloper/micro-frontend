@@ -16,7 +16,7 @@ export default class PhStepDataSource {
             this.url= `${hostName}/phdadatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
+        this.debugToken = "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566"
     }
 
     resetUrl(url) {

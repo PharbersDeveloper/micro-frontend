@@ -51,7 +51,7 @@
                                 @dragstart="dragStart($event, index, field)" @dragover="allowDrop"
                                 @drop="drop($event, index, field)"
                                 :key="index+'operator'">
-                                <bpOperatorCard
+                                <bp-operator-card
                                     :key="index+'opreator'"
                                     :step="field"
                                     :schema="schema.schema"
@@ -61,7 +61,7 @@
                     </div>
                     <el-button
                         class="add_new_step"
-                        @click="drawer = true">
+                        @click="showOpFactories">
                         <img :src="icons.add_icon" alt="">
                         添加一个新算子
                     </el-button>
@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-        <op-factories :visible="drawer" @newStep="newStep"/>
+        <op-factories ref="opFactories" class="op-factories" :visible="drawer" @newStep="newStep"/>
     </div>
 </template>
 <script>
@@ -102,7 +102,7 @@ export default {
             projectName: "demo",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185",
+            debugToken: "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566",
 
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
@@ -166,6 +166,10 @@ export default {
         this.steps.refreshData()
     },
     methods: {
+        showOpFactories() {
+            this.drawer = true
+            this.$refs.opFactories.visibleSync = true
+        },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
@@ -191,12 +195,12 @@ export default {
         drop(e, index,field){
             // 取消默认行为
             this.allowDrop(e);
-            let arr = this.operatorArray.concat([])
+            let arr = this.steps.data.concat([])
             let temp = arr[index];
             arr[index] = arr[this.fileMddleIndex];
             arr[this.fileMddleIndex] = temp;
 
-            this.operatorArray = arr;
+            this.steps.data = arr;
             this.clearBakData()
         },
         handleCheckAllChange(val) {
@@ -245,7 +249,7 @@ export default {
                 ns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
                 ns["attributes"].pjName = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
                 ns["attributes"].stepId = (ns["attributes"].index).toString()
-                ns.id = ns.pjName + ns.stepId
+                ns.id = ns["attributes"].pjName + ns["attributes"].stepId
                 this.steps.store.syncRecord(ns)
                 break
             default:
@@ -273,7 +277,9 @@ export default {
     }
     .prepare {
         box-sizing: border-box;
-
+        .op-factories {
+            // background: red;
+        }
         .prepare_header {
             height: 48px;
             padding: 0 15px;
@@ -412,6 +418,9 @@ export default {
                             display: flex;
                             flex-direction: column;
                             overflow: auto;
+                            .card {
+                                border: 1px solid #ddd;
+                            }
                         }
                     }
                     .add_new_step {

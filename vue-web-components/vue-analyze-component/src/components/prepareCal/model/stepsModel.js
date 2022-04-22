@@ -9,7 +9,7 @@ export default class PhStepsDyModel {
         this.jobName = jobName
         this.stepsCount = 100
         this.currentPageToken = ""
-        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
+        this.debugToken = "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566"
         this.data = []
         this.store = new JsonApiDataStore()
         this.isEdited = false

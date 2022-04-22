@@ -1,7 +1,7 @@
 <template>
     <div class="bp_operator_card">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div v-if="concretDefs">
+        <div v-if="concretDefs" class="card">
             <div class="card_header" @click="handleCloseContent">
                 <img :src="icons.drag_prepare_card" class="drag_prepare_card" alt="">
                 <el-checkbox></el-checkbox>

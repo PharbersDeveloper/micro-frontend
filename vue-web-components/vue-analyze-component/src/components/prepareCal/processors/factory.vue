@@ -1,7 +1,7 @@
 <template>
     <el-drawer title="算子库"
                 class="operator"
-                :visible.sync="visible"
+                :visible.sync="visibleSync"
                 direction="btt">
         <div class="operator_content">
             <div class="operator_con">
@@ -25,8 +25,21 @@
                 </div>
                 <div class="opt_desc">
                     <div class="opt_condition_desc">
-                        {{opt_condition_desc}}
-                        <vue-markdown >{{opt_condition_desc}}</vue-markdown>
+                        <!-- {{opt_condition_desc}} -->
+                        <!-- <vue-markdown >{{opt_condition_desc}}</vue-markdown> -->
+                        <!--字段解释：
+                            subfield：双栏or单栏
+                            defaultOpen：preview  展示区域，预览区域
+                            toolbarsFlag：false，工具栏展示
+                        -->
+                        <mavon-editor class="markdown"
+                            :value="opt_condition_desc"
+                            :subfield = "false"    
+                            :defaultOpen = "prop.defaultOpen"
+                            :toolbarsFlag = "prop.toolbarsFlag"
+                            :editable="prop.editable"
+                            :scrollStyle="prop.scrollStyle"
+                        ></mavon-editor>
                     </div>
                 </div>
             </div>
@@ -37,8 +50,16 @@
 <script>
 import { staticFilePath, hostName } from '../../../config/envConfig'
 import ElDrawer from 'element-ui/packages/drawer/index'
-import VueMarkdown from 'vue-markdown'
+// import VueMarkdown from 'vue-markdown'
 import { PhProcessorsDefs } from "./factory-defs"
+import FilterOnValueDesc from "../md/filterOnValue.md"
+/*在script中引入mavonEditor相关，来展示Markdown*/
+import Vue from "vue";
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+
+// Vue.component("mavon-editor", mavonEditor);
+
 
 export default {
     data() {
@@ -46,7 +67,9 @@ export default {
             selectedOpt: 1,
             selectedOptCondition: -1,
             opt_condition: [],
-            opt_condition_desc: ""
+            opt_condition_desc: "",
+            aaa: FilterOnValueDesc,
+            visibleSync: false
         }
     },
     props: {
@@ -65,11 +88,27 @@ export default {
             default: function () {
                 return PhProcessorsDefs
             }
+        },
+        prop: {
+            type: Object,
+            default: () => {
+                return {
+                    subfield: false,// 单双栏模式
+                    defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
+                    editable: false,
+                    toolbarsFlag: false,
+                    scrollStyle: true
+                }
+            }
         }
     },
     components: {
         ElDrawer,
-        VueMarkdown
+        mavonEditor
+        // VueMarkdown
+    },
+    computed: {
+        
     },
     mounted() {
 
@@ -83,14 +122,15 @@ export default {
         operator_opt_condition_mouseover(data) {
             this.selectedOptCondition = data.id
             this.opt_condition_desc = this.opt_condition.filter(it => it.id === data.id)[0]["desc"]
-            // this.$forceUpdate()
         },
         operator_opt_condition_click(data) {
             this.$emit("newStep", data.type)
         }
     },
     watch: {
-
+        visible(n, o) {
+            this.visibleSync = n
+        }
     }
 }
 </script>
@@ -116,6 +156,7 @@ export default {
             }
             .opt {
                 width: 220px;
+                min-width: 220px;
                 overflow: auto;
                 border-right: 1px solid #ccc;
                 display: flex;
@@ -133,6 +174,7 @@ export default {
             }
             .opt_condition {
                 width: 220px;
+                min-width: 220px;
                 border-right: 1px solid #ccc;
                 .opt_condition_item {
                     padding: 4px;
@@ -141,6 +183,9 @@ export default {
                 .opt_condition_item:nth-child(2n+1) {
                     background: #f0f0f0;
                 }
+            }
+            .opt_desc {
+                width: 100%;
             }
         }
     }
