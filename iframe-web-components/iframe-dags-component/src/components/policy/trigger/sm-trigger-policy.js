@@ -6,32 +6,32 @@ export default class PhDagTriggerPolicy {
         this.parent = parent
     }
 
-	// 停止运行
-	async stopDag() {
-		debugger
-		const stopUri = `${hostName}/phstatemachinestop`
-        const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
-		const runnerId = this.genRunnerId(this.parent.projectName)
-        const body = {
-			"runnerId": runnerId
-		}
+    // 停止运行
+    async stopDag() {
+        let sel = confirm("确认停止当前dag？")
+        if(sel) {
+            const stopUri = `${hostName}/phstatemachinestop`
+            const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
+            const runnerId = this.parent.runId
+            const body = {
+                "runnerId": runnerId
+            }
 
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            let results = await fetch(stopUri, options).then(res => res.json())
+            if(results.status === "error") {
+			    alert("停止dag失败，请重新操作！")
+            }
         }
-        let results = await fetch(stopUri, options).then(res => res.json())
-		// if(results.status === "") {
-        //     alert("启动出错，请重新运行！")
-        //     this.parent.loading = false
-        //     return false
-        // }
-	}
+    }
 
     // 点击trigger，弹窗选择version
     dagRunPreparing() {
@@ -59,6 +59,10 @@ export default class PhDagTriggerPolicy {
             "datasets": datasetsArr,
             "scripts": [],
             "userConf": {}
+        }
+        if(datasetsArr.length < 1) {
+            alert( "请先选择一条dag!" )
+            return false
         }
         this.parent.showRunJson = true
     }
@@ -136,55 +140,6 @@ export default class PhDagTriggerPolicy {
         this.parent.showRunJson = false
         this.parent.loading = false
         this.parent.renderPolicy.resetDagStatus("trigger")
-    }
-
-    /**
-     * retry按钮
-     * 1. 有第一次运行状态才可以点retry三个按钮
-     * 2. 选择job之后修改名字，点运行时候出现弹窗提示
-     */
-    async retryDag(data) {
-        this.parent.showProgress = false
-        console.log("responseArr", this.parent.responseArr)
-        this.runId = JSON.parse(this.parent.responseArr.message).cnotification.runId
-        const url = `${hostName}/phdagtasktrigger`
-        const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
-        let body = {
-            "project_name": this.parent.projectName,
-            "flow_version": "developer",
-            "run_id": this.parent.runId,
-            "task_id": this.parent.projectName + "_" + this.parent.projectName + "_developer_" + this.parent.selectItemName,
-            "clean_cat": data //向上还是向下
-            //  + "_" + this.selectItem["represent-id"]
-        }
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        let results = await fetch(url, options).then(res => res.json())
-        if(results.status === "failed") {
-            alert("重新运行出错，请重新运行！")
-            this.parent.loading = false
-            return false
-        }
-        const dag_run_id_retry = this.parent.runId.split("_")
-        const time_retry = new Date(dag_run_id_retry.pop()).getTime()
-        const runnerId_retry = dag_run_id_retry.join("_") + "_" + time_retry
-
-        const tmpMsg = {
-            message: {
-                dagRunCmd: this.parent.registerJobEventName,
-                dagExecutionCmd: "executionStatus" + runnerId_retry
-            }
-        }
-        this.parent.eventPolicy.forwardMessageToParent(tmpMsg)
-        this.parent.showProgress = true
-        this.parent.progressOver = false
     }
 
     handlerJSON(str) {

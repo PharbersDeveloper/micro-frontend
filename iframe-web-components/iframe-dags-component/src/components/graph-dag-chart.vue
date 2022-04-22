@@ -25,14 +25,24 @@
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
                     <img
+                        v-if="!isRunning"
                         :src="defs.iconsByName('run')"
                         alt=""
                         @click="triggerPolicy.dagRunPreparing()"
                     />
+					<img
+                        v-if="isRunning"
+                        :src="defs.iconsByName('run', 'disabled')"
+                        alt=""
+                    />
                     <img
-                        v-if="!retryButtonShow || !selectItem"
+                        v-if="isRunning"
                         :src="defs.iconsByName('stop')"
                         @click="triggerPolicy.stopDag()"
+                    />
+					<img
+                        v-if="!isRunning"
+                        :src="defs.iconsByName('stop', 'disabled')"
                     />
                 </div>
             </div>
@@ -54,15 +64,6 @@
             @confirmeRunDag="confirmeRunDag"
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
-
-        <!-- <dag-logs-dialog
-            v-if="showDagLogs"
-            :runId="runId"
-            :jobShowName="jobShowName"
-            :projectName="projectName"
-            :representId="representId"
-            @closeLogDialog="logsPolicy.closeLogDialog"
-        ></dag-logs-dialog> -->
 
         <div class="job_status_area">
             <div
@@ -136,7 +137,8 @@ export default {
             progressOver: false, //进度条是否停止
             registerJobEventName: "",
             retryButtonShow: false,
-            showDagLogs: false
+            showDagLogs: false,
+            isRunning: false //stop按钮是否可以点击
         };
     },
     components: {

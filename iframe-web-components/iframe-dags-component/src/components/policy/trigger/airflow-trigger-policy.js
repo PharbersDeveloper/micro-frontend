@@ -113,7 +113,6 @@ export default class PhDagTriggerPolicy {
             "run_id": this.parent.runId,
             "task_id": this.parent.projectName + "_" + this.parent.projectName + "_developer_" + this.parent.selectItemName,
             "clean_cat": data //向上还是向下
-            //  + "_" + this.selectItem["represent-id"]
         }
         let options = {
             method: "POST",

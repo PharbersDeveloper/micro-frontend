@@ -43,10 +43,6 @@ export default class PhDagHandler {
             }
             let jobShowName = JSON.parse(payload.message).cnotification.jobShowName
             console.log("status", status, jobShowName)
-
-            // let jobName = JSON.parse(payload.message).cnotification.jobName
-            // let jobNameArr = jobName.split("_")
-            // let name = jobNameArr.slice(2, jobNameArr.length).join("_")
             // 1.找到对应job节点并更新状态
             data.forEach((it,index) => {
                 if (jobShowName === it.attributes.name) {
@@ -77,6 +73,13 @@ export default class PhDagHandler {
                         runnerId: runnerId
                     })
                 }
+            }
+            if (status === "running") {
+                let cnotification = JSON.parse(payload.message).cnotification
+                that.runId = cnotification.runId
+                that.isRunning = true
+            } else {
+                that.isRunning = false
             }
             console.log("failedLogs", that.failedLogs)
         })
