@@ -97,10 +97,20 @@
                                             </p>
                                         </span>
                                     </div>
+
                                     <!-- tag的更多按钮，暂时隐藏 -->
                                     <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
+                            <div class="scenario-active-switch" >
+                                <span>自动运行</span>
+                                <el-switch @change="scenarioActiveChange(scenario)"
+                                           v-model="scenario.active"
+                                           active-color="#13ce66"
+                                           inactive-color="#ff4949">
+                                </el-switch>
+                            </div>
+
                         </div>
                         <div class="word" v-if="allData.scenarios === ''">当前项目无数据</div>
                     </div>
@@ -127,10 +137,10 @@
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span @click="clearDialogOpen" class="view_list">
-                                <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
-                                <span class='tags_func'>清除Scenario</span>
-                            </span>
+<!--                            <span @click="clearDialogOpen" class="view_list">-->
+<!--                                <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
+<!--                                <span class='tags_func'>清除Scenario</span>-->
+<!--                            </span>-->
                             <span @click='deleteCurrentScenario' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
@@ -154,7 +164,10 @@
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
+        <create-scenario-dlg :dialog-visible="showCreateScenarioDialog" :project-id="allData.projectId" :index="nextIndexValue" owner="alfred"
+                             @cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
     </div>
+
 </template>
 
 <script>
@@ -163,6 +176,8 @@ import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import { staticFilePath } from '../../config/envConfig'
+import ElSwitch from "element-ui/packages/switch/index"
+import CreateScenarioDlg from "./create-scenario-dlg"
 
 export default {
     data() {
@@ -221,9 +236,16 @@ export default {
         createTagsDialog,
         deleteTagsDialog,
         bpSelectVue,
-        bpOptionVue
+        bpOptionVue,
+        ElSwitch,
+        CreateScenarioDlg
     },
-    computed: { },
+    computed: {
+        nextIndexValue() {
+            const ids = this.allData.scenarios.map(x => parseInt(x.index))
+            return 1 + Math.max(...ids)
+        }
+    },
     mounted() { },
     watch: {
         "allData.tagsArray": function() {
@@ -409,6 +431,30 @@ export default {
         },
         openCreateScenarioDialog() {
             this.showCreateScenarioDialog = !this.showCreateScenarioDialog
+        },
+        scenarioActiveChange(scenario) {
+            const event = new Event("event")
+            event.args = {
+                callback: "resetScenario",
+                element: this,
+                param: {
+                    projectId: this.allData.projectId,
+                    scenario: scenario
+                }
+            }
+            this.$emit('event', event)
+        },
+        createNewScenario(scenario) {
+            const event = new Event("event")
+            event.args = {
+                callback: "createScenario",
+                element: this,
+                param: {
+                    projectId: this.allData.projectId,
+                    scenario: scenario
+                }
+            }
+            this.$emit('event', event)
         }
     }
 }
@@ -779,6 +825,7 @@ export default {
                     }
 
                     .data_content {
+                        flex-grow: 1;
                         display: flex;
                         width: 100%;
                         box-sizing: border-box;
@@ -822,6 +869,7 @@ export default {
                         }
                         .item_list {
                             display: flex;
+                            flex-grow: 1;
                         }
                         .script_icon {
                             margin-left: 27px;
@@ -862,6 +910,9 @@ export default {
                                 top: -8px;
                                 margin-left: 10px;
                             }
+                        }
+                        .scenario-active-switch {
+                            justify-content: space-between;
                         }
                     }
 
