@@ -26,7 +26,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						item: {
 							id: targetscenario.id,
 							projectId: params.projectId,
-							scenarioName: params.scenarioName,
+							scenarioName: targetscenario.scenarioName,
 							label: JSON.stringify(targetLabels),
 							args: targetscenario.args,
 							owner: targetscenario.owner,
@@ -48,8 +48,8 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						body: JSON.stringify(body)
 					}
 					await fetch(url, options)
-					window.location.reload()
 				})
+				window.location.reload()
 			}
 			break
 		//删除脚本
