@@ -117,6 +117,40 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 			// 	})
 			// }
 			break
+		case "resetScenario":
+			if (params) {
+				const targetscenario = params.scenario //需要更新的scenario
+				const url = `${hostName}/phdydatasource/put_item`
+				const accessToken = route.cookies.read("access_token")
+				let body = {
+					table: "scenario",
+					item: {
+						id: targetscenario.id,
+						projectId: params.projectId,
+						scenarioName: targetscenario.scenarioName,
+						label: targetscenario.label,
+						args: targetscenario.args,
+						owner: targetscenario.owner,
+						active: targetscenario.active,
+						index: targetscenario.index,
+						name: targetscenario.name,
+						traceId: targetscenario.traceId
+					}
+				}
+
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(url, options)
+			}
+			break
 		default:
 			console.log("other click event!")
 	}
