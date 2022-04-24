@@ -103,9 +103,8 @@
                                 </div>
                             </div>
                             <div class="scenario-active-switch" >
-<!--                                <span>自动运行</span>-->
+                                <span>自动运行</span>
                                 <el-switch @change="scenarioActiveChange(scenario)"
-                                           name="自动运行"
                                            v-model="scenario.active"
                                            active-color="#13ce66"
                                            inactive-color="#ff4949">
@@ -165,7 +164,10 @@
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
+        <create-scenario-dlg :dialog-visible="showCreateScenarioDialog" :project-id="allData.projectId" :index="nextIndexValue" owner="alfred"
+                             @cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
     </div>
+
 </template>
 
 <script>
@@ -175,6 +177,7 @@ import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-
 import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import { staticFilePath } from '../../config/envConfig'
 import ElSwitch from "element-ui/packages/switch/index"
+import CreateScenarioDlg from "./create-scenario-dlg"
 
 export default {
     data() {
@@ -234,9 +237,15 @@ export default {
         deleteTagsDialog,
         bpSelectVue,
         bpOptionVue,
-        ElSwitch
+        ElSwitch,
+        CreateScenarioDlg
     },
-    computed: { },
+    computed: {
+        nextIndexValue() {
+            const ids = this.allData.scenarios.map(x => parseInt(x.index))
+            return 1 + Math.max(...ids)
+        }
+    },
     mounted() { },
     watch: {
         "allData.tagsArray": function() {
@@ -427,6 +436,18 @@ export default {
             const event = new Event("event")
             event.args = {
                 callback: "resetScenario",
+                element: this,
+                param: {
+                    projectId: this.allData.projectId,
+                    scenario: scenario
+                }
+            }
+            this.$emit('event', event)
+        },
+        createNewScenario(scenario) {
+            const event = new Event("event")
+            event.args = {
+                callback: "createScenario",
                 element: this,
                 param: {
                     projectId: this.allData.projectId,
