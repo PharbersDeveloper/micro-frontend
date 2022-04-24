@@ -212,9 +212,11 @@ export default {
         async save() {
             // 保存算子
             let itemArr = []
-            for (let index = 0; index < this.steps.data.length; ++index) {
+            let expressionsArr = []
+            for (let index = 0; index < 2; ++index) {
                 const item = this.steps.data[index]
                 item.expressions = JSON.stringify(item.callback.command.revert2Defs())
+                expressionsArr.push(JSON.parse(item.expressions))
                 itemArr.push(step2SaveObj(item))
             }
             const body = {
@@ -233,9 +235,24 @@ export default {
                 headers: headers,
                 body: JSON.stringify(body)
             }
-            await fetch(url, options) //.then((res) => res.json())
-
-            // 新建脚本
+            await fetch(url, options)
+            
+            // 保存脚本
+            const event = new Event("event")
+            event.args = {
+                callback: "prepare",
+                element: this,
+                param: {
+                    name: "prepare",
+                    changeParams: this.changeParams,
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    itemArr: expressionsArr,
+                    message: this.allData.message
+                }
+            }
+            console.log(event)
+            this.$emit('event', event)
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -414,7 +431,7 @@ export default {
                         }
                         .operator_item_area {
                             overflow: auto;
-                            height: calc(100vh - 280px);
+                            height: calc(100vh - 330px);
                             width: 100%;
                             padding: 0;
                         }
@@ -444,7 +461,7 @@ export default {
             }
             .prepare_area_right {
                 padding: 20px;
-				// width: calc(100vw - 300px);
+                // width: calc(100vw - 300px);
                 .main_container {
                     display: flex;
                     justify-content: center;

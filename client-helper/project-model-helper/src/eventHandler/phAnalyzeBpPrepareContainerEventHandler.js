@@ -48,15 +48,15 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = scriptsParams.projectId
 				route.projectName = scriptsParams.projectName
-				let operatorParameters = []
-				operatorParameters.push(
-					"filter",
-					params.rowParams,
-					"select",
-					params.colParams,
-					"operation_null",
-					params.changeParams
-				)
+				let operatorParameters = params.itemArr
+				// operatorParameters.push(
+				// 	"filter",
+				// 	params.rowParams,
+				// 	"select",
+				// 	params.colParams,
+				// 	"operation_null",
+				// 	params.changeParams
+				// )
 				//需要新建dataset
 				if (scriptsParams.outputs[0].id == "") {
 					scriptsParams.outputs[0].id = uuid
@@ -136,13 +136,13 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 					}
 					job_cat_name = "dag_create"
 				}
-				route.noticeService.defineAction({
-					type: "iot",
-					id: job_cat_name,
-					projectId: params.projectId,
-					ownerId: route.cookies.read("account_id"),
-					callBack: createScriptNoticeCallback
-				})
+				// route.noticeService.defineAction({
+				// 	type: "iot",
+				// 	id: job_cat_name,
+				// 	projectId: params.projectId,
+				// 	ownerId: route.cookies.read("account_id"),
+				// 	callBack: createScriptNoticeCallback
+				// })
 				let scriptBody = {
 					table: actionTableName,
 					item: {
@@ -172,6 +172,17 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				route.creatScriptsQuery = await fetch(url, scriptOptions).then(
 					(res) => res.json()
 				)
+
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: route.creatScriptsQuery.data.id,
+					eventName: job_cat_name,
+					projectId: scriptsParams.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: createScriptNoticeCallback
+				})
 			}
 			break
 		default:
