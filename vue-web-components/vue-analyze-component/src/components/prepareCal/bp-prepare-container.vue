@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="prepare_header">
             <div class="header_left">
-                <img :src="icons.prepare_icon" alt="">
+                <img :src="icons.prepare_icon" alt="" />
                 <span>Prepare</span>
             </div>
             <div class="header_right">
@@ -33,7 +33,7 @@
                             <div class="select_all">
                                 <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
-                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="">
+                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="" />
                                 <div class="action_card" v-show="showMultiSelectActionMenu">
                                     <div class="action_item">删除</div>
                                 </div>
@@ -62,7 +62,7 @@
                     <el-button
                         class="add_new_step"
                         @click="showOpFactories">
-                        <img :src="icons.add_icon" alt="">
+                        <img :src="icons.add_icon" alt="" />
                         添加一个新算子
                     </el-button>
                 </div>
@@ -102,8 +102,7 @@ export default {
             projectName: "demo",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566",
-
+            debugToken: "778b1a0da979130bbaa4d62017a4562e84f8f05541a819658e070d9277ac1570",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
@@ -211,29 +210,32 @@ export default {
             this.totalNum = val
         },
         async save() {
-            // for (const item in this.steps.data) {
+            // 保存算子
+            let itemArr = []
             for (let index = 0; index < this.steps.data.length; ++index) {
                 const item = this.steps.data[index]
                 item.expressions = JSON.stringify(item.callback.command.revert2Defs())
-
-                const body = {
-                    table: "step",
-                    item: step2SaveObj(item)
-                }
-
-                const url = `${hostName}/phdydatasource/put_item`
-                let headers = {
-                    Authorization: this.getCookie("access_token") || this.debugToken,
-                    "Content-Type": "application/vnd.api+json",
-                    Accept: "application/vnd.api+json"
-                }
-                let options = {
-                    method: "POST",
-                    headers: headers,
-                    body: JSON.stringify(body)
-                }
-                await fetch(url, options) //.then((res) => res.json())
+                itemArr.push(step2SaveObj(item))
             }
+            const body = {
+                table: "step",
+                item: itemArr
+            }
+
+            const url = `${hostName}/phdydatasource/put_item`
+            let headers = {
+                Authorization: this.getCookie("access_token") || this.debugToken,
+                "Content-Type": "application/vnd.api+json",
+                Accept: "application/vnd.api+json"
+            }
+            let options = {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(body)
+            }
+            await fetch(url, options) //.then((res) => res.json())
+
+            // 新建脚本
         },
         changeSchemaTypeEvent(data) {
             data.args.param.projectId = this.allData.projectId
@@ -242,16 +244,19 @@ export default {
             data.args.param.datasetId = this.allData.datasetId
             this.$emit('event',  data)
         },
+        // 新建一个算子
         newStep(stepType) {
             switch (stepType) {
             case "FilterOnValue":
                 let ns = Object.assign({}, PhInitialFOVStepDefs)
                 ns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
-                ns["attributes"].pjName = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
-                ns["attributes"].stepId = (ns["attributes"].index).toString()
+                ns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
                 ns.id = ns["attributes"].pjName + ns["attributes"].stepId
                 this.steps.store.syncRecord(ns)
                 break
+            case "FilterOnNumericalRange":
+
             default:
                 alert("step type is not implemented")
                 break
