@@ -164,9 +164,9 @@ export default {
     methods: {
         // *********************************** 全部调用cmd中函数 ***************************
         delCardItem() {
-			debugger
-		},
-		//删除值
+            debugger
+        },
+        //删除值
         delSelVal(data, i) {
             this.hasValueArrayNew.splice(i, 1)
         },
