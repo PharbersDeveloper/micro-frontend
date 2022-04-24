@@ -267,7 +267,7 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     @font-face {
         font-family: element-icons;
         src: url(https://components.pharbers.com/element-ui/element-icons.woff) format("woff"),url(https://components.pharbers.com/element-ui/element-icons.woff) format("truetype");
@@ -336,7 +336,7 @@ export default {
         .prepare_area {
             display: flex;
             position: absolute !important;
-            top: 82px;
+            top: 123px;
             bottom: 0;
             left: 0;
             right: 0;
@@ -444,6 +444,7 @@ export default {
             }
             .prepare_area_right {
                 padding: 20px;
+				// width: calc(100vw - 300px);
                 .main_container {
                     display: flex;
                     justify-content: center;

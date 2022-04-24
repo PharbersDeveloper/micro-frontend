@@ -1,7 +1,7 @@
 import { hostName, actionTableName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
-export async function phAnalyzePrepareSetEventHandler(e, route) {
+export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
 	route.msg = "新建"

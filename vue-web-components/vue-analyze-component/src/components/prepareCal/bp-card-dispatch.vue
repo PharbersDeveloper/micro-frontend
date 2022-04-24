@@ -3,14 +3,14 @@
         <div class="card" v-if="type === 'filter'">
             <filter-on-value-card :step="step" :schema="schema"/>
         </div>
-		<div class="card" v-if="type === 'filter'">
+		<!-- <div class="card" v-if="type === 'filter'">
             <filter-on-value-card :step="step" :schema="schema"/>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
 import FilterOnValueCard from "./steps/commands/filter-on-value/card"
-import FilterOnNumericalRangeCard from "./steps/commands/filter-on-value/card"
+// import FilterOnNumericalRangeCard from "./steps/commands/filter-on-value/card"
 
 export default {
     data() {

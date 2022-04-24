@@ -242,7 +242,7 @@ export default {
         }
     },
     components: {
-        clearscenarioDialog,
+        // clearscenarioDialog,
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
