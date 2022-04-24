@@ -13,7 +13,6 @@ import datasets from './components/upload-dataset'
 import prepare from './components/prepareCal/bp-prepare-container'
 import executionHistory from './components/executionHistory/bp-executions-history'
 import executionsLogs from './components/executionHistory/bp-executions-logs'
-import test from './components/test'
 
 Vue.use(Router)
 
@@ -25,11 +24,6 @@ export default new Router({
             path: '/',
             name: 'bpExcelContainer',
             component: bpExcelContainer
-        },
-        {
-            path: '/test',
-            name: 'test',
-            component: test
         },
         {
             path: '/datasets',
