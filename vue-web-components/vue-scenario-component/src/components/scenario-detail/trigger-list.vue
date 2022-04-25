@@ -127,7 +127,8 @@ export default {
         }
     },
     props: {
-        triggers: Array
+        triggers: Array,
+        scenarioId: String
     },
     components: {
         ElCollapse,
@@ -160,7 +161,7 @@ export default {
             result["timezone"] = "中国北京"
             result["mode"] = "timer"
             result["active"] = true
-            result["scenarioId"] = ""
+            result["scenarioId"] = this.scenarioId
             result["index"] = 1 + Math.max(...this.triggers.map(x => x.index))
             result["resourceArn"] = ""
             result["traceId"] = "123456"

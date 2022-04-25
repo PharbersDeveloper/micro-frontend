@@ -5,11 +5,11 @@
             <scenario-nav :scenario="datasource.scenario" @active="activeChange" @save="saveAll"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
-                <trigger-lst :triggers="triggerDisplay"></trigger-lst>
+                <trigger-lst :triggers="triggerDisplay" :scenario-id="datasource.scenario.id"></trigger-lst>
                 <report-lst :triggers="[]"></report-lst>
             </div>
             <div v-else class="scenario-container">
-                <scenario-steps :steps="stepDisplay"></scenario-steps>
+                <scenario-steps :steps="stepDisplay" :scenario-id="datasource.scenario.id"></scenario-steps>
             </div>
         </div>
     </div>

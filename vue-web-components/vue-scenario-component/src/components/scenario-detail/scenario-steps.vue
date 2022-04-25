@@ -98,7 +98,8 @@ export default {
         }
     },
     props: {
-        steps: Array
+        steps: Array,
+        scenarioId: String
     },
     components: {
         ElButton,
@@ -151,7 +152,7 @@ export default {
             result["ds"] = ""
             result["mode"] = "dataset"
             result["name"] = "change me"
-            result["scenarioId"] = "ggjpDje0HUC2JW_alfredtest_0"
+            result["scenarioId"] = this.scenarioId
             result["index"] = 1 + Math.max(...this.steps.map(x => x.index))
             result["traceId"] = "alfred"
             result["edited"] = true
