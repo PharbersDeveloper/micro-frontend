@@ -87,7 +87,13 @@ export default class PhDagRenderPolicy {
                     grad.append('stop').attr('offset', '100%').attr('stop-color', colorMap[target.data.id]);
                     return `url(#${gradId})`;
                 })
-                .attr('filter', 'opacity(0.3)')
+                .attr('filter', ({source, target}) => {
+                    if (that.datasource.cal.selected.includes(source.data.id) &&
+                        that.datasource.cal.selected.includes(target.data.id)) {
+                        return "none"
+                    } else return 'opacity(0.5)'
+                })
+                // .attr('filter', 'opacity(0.3)')
 
             // Select nodes
             const nodes = svgSelection.append('g')

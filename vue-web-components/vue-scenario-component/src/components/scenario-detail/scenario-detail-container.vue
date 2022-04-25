@@ -5,11 +5,11 @@
             <scenario-nav :scenario="datasource.scenario" @active="activeChange" @save="saveAll"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
-                <trigger-lst :triggers="triggerDisplay"></trigger-lst>
+                <trigger-lst :triggers="triggerDisplay" :scenario-id="datasource.scenario.id"></trigger-lst>
                 <report-lst :triggers="[]"></report-lst>
             </div>
             <div v-else class="scenario-container">
-                <scenario-steps :steps="stepDisplay"></scenario-steps>
+                <scenario-steps :steps="stepDisplay" :scenario-id="datasource.scenario.id"></scenario-steps>
             </div>
         </div>
     </div>
@@ -107,7 +107,6 @@ export default {
                 result["timezone"] = tmp["timezone"]
                 result["mode"] = x["mode"]
                 result["active"] = x["active"]
-                result["edited"] = false
                 result["scenarioId"] = x["scenario-id"]
                 result["index"] = x["index"]
                 result["resourceArn"] = x["resource-arn"]
@@ -119,10 +118,17 @@ export default {
         },
         saveAll() {
             let result = true
+
+            if (result) {
+                result = this.deleteTriggers()
+            }
             if (result) {
                 result = this.saveEditedTriggers()
             }
 
+            if (result) {
+                result = this.deleteSteps()
+            }
             if (result) {
                 result = this.saveEditedSteps()
             }
@@ -151,6 +157,28 @@ export default {
                 const tmp = this.stepDisplay[idx]
                 if (tmp.edited) {
                     if (!this.stepPolicy.createOrUpdateStepIndex(tmp)) break
+                }
+                result = true
+            }
+            return result
+        },
+        deleteTriggers() {
+            let result = false
+            for (let idx = 0; idx < this.triggerDisplay.length; ++idx) {
+                const tmp = this.triggerDisplay[idx]
+                if (tmp.deleted) {
+                    if (!this.triggerPolicy.deleteTriggerIndex(tmp)) break
+                }
+                result = true
+            }
+            return result
+        },
+        deleteSteps() {
+            let result = false
+            for (let idx = 0; idx < this.stepDisplay.length; ++idx) {
+                const tmp = this.stepDisplay[idx]
+                if (tmp.deleted) {
+                    if (!this.stepPolicy.deleteStepIndex(tmp)) break
                 }
                 result = true
             }

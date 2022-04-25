@@ -57,7 +57,7 @@ export default {
                     index: this.index,
                     active: true,
                     args: "",
-                    label: [],
+                    label: "[]",
                     owner: this.owner,
                     traceId: "123456"
                 }

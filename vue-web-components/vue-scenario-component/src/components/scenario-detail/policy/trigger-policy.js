@@ -28,6 +28,13 @@ export default class PhScenarioTriggerPolicy {
         return !Object.keys(trigger).includes("error");
     }
 
+    async deleteTriggerIndex(trigger) {
+        const response = await this.buildDeleteTriggerResourceIndex(trigger)
+        const res = await response.json()
+        console.log(res)
+        return !Object.keys(trigger).includes("error");
+    }
+
     buildPushTriggersQuery(trigger) {
         const url = `${hostName}/phdydatasource/put_item`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
@@ -93,5 +100,54 @@ export default class PhScenarioTriggerPolicy {
             body: JSON.stringify(body)
         }
         return fetch(url, options)
+    }
+
+    buildDeleteTriggerResourceIndex(trigger) {
+        const url = `${hostName}/phdydatasource/delete_item`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+
+        let body = {
+            "table": "scenario_trigger",
+            "conditions": {
+                scenarioId: trigger.scenarioId,
+                index: trigger.index
+            }
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildDeleteTriggerResourceQuery() {
+        // const url = `${hostName}/phdydatasource/query`
+        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        // let body = {
+        //     "table": "scenario",
+        //     "conditions": {
+        //         "projectId": ["=", this.projectId],
+        //         "scenarioName": ["=", this.scenarioName]
+        //     },
+        //     "limit": 100,
+        //     "start_key": {}
+        // }
+        //
+        // let options = {
+        //     method: "POST",
+        //     headers: {
+        //         "Authorization": accessToken,
+        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        //         "accept": "application/json"
+        //     },
+        //     body: JSON.stringify(body)
+        // }
+        // return fetch(url, options)
     }
 }
