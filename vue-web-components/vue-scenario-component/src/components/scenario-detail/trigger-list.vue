@@ -34,7 +34,7 @@
                     </el-form-item>
                     <el-form-item label="重复时间间隔">
                         <el-col :span="11">
-                            <el-input :value="item.value" @change="item.edited = true"></el-input>
+                            <el-input v-model="item.value" @change="item.edited = true"></el-input>
                         </el-col>
                         <el-col class="line" :span="2">-</el-col>
                         <el-col :span="11">
