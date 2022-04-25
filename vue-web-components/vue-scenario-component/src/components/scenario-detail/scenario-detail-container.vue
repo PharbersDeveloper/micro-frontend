@@ -1,14 +1,16 @@
 <template>
     <div>
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <scenario-nav :scenario="datasource.scenario" @active="activeChange"></scenario-nav>
-        <div class="scenario-container" v-if="activeName === 'Setting'">
-            <detail-form :scenario="datasource.scenario"></detail-form>
-            <trigger-lst :triggers="datasource.triggers"></trigger-lst>
-            <report-lst :triggers="[]"></report-lst>
-        </div>
-        <div v-else >
-            <h2>steps</h2>
+        <div class="scenario">
+            <scenario-nav :scenario="datasource.scenario" @active="activeChange"></scenario-nav>
+            <div class="scenario-container" v-if="activeName === 'Setting'">
+                <detail-form :scenario="datasource.scenario"></detail-form>
+                <trigger-lst :triggers="datasource.triggers"></trigger-lst>
+                <report-lst :triggers="[]"></report-lst>
+            </div>
+            <div v-else class="scenario-container">
+                <scenario-steps :steps="datasource.steps"></scenario-steps>
+            </div>
         </div>
     </div>
 </template>
@@ -19,6 +21,7 @@ import DetailForm from "./detail-form"
 import ScenarioNav from "./scenario-nav"
 import TriggerLst from "./trigger-list"
 import ReportLst from "./report-lst"
+import ScenarioSteps from "./scenario-steps"
 import datasource from "./model/datasource"
 
 export default {
@@ -39,7 +42,8 @@ export default {
         DetailForm,
         ScenarioNav,
         TriggerLst,
-        ReportLst
+        ReportLst,
+        ScenarioSteps
     },
     computed: {
 
@@ -65,9 +69,15 @@ export default {
         box-sizing: border-box;
     }
 
+    .scenario {
+        display: flex;
+        flex-direction: column;
+    }
+
     .scenario-container {
         display: flex;
         flex-direction: column;
         overflow: auto;
+        flex-grow: 1;
     }
 </style>
