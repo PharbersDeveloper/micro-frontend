@@ -77,7 +77,7 @@ export default class PhScenarioStepPolicy {
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "scenario_step",
-            "condition": {
+            "conditions": {
                 scenarioId: step.scenarioId,
                 index: step.index
             }

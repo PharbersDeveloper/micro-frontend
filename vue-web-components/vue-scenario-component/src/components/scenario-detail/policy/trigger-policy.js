@@ -108,7 +108,7 @@ export default class PhScenarioTriggerPolicy {
 
         let body = {
             "table": "scenario_trigger",
-            "condition": {
+            "conditions": {
                 scenarioId: trigger.scenarioId,
                 index: trigger.index
             }
