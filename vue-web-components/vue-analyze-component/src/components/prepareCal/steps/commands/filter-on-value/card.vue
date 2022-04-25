@@ -6,9 +6,12 @@
                 <img :src="icons.drag_prepare_card" class="drag_prepare_card" alt="">
                 <el-checkbox></el-checkbox>
                 <div class="card_header_content">
-                    <div class="card_header_desc">{{step["step-name"]}}</div>
+                    <div class="card_header_desc">
+                        <!-- {{step["step-name"]}} -->
+                        {{stepDesc}}
+                    </div>
                     <div class="card_header_del">
-                        <div class="num">- 378</div>
+                        <div class="num"></div>
                         <img 
                             :src="icons.del_icon"
                             @click="delCardItem"
@@ -64,12 +67,12 @@
                             </option>
                         </select>
                         <img :src="icons.del_icon"
-                            @click="delCol(col, index)"
+                            @click="datasource.command.delCol(index)"
                             v-if="index !== 0"
                             class="del_icon" alt=""/>
                     </div>
                     <el-button
-                        @click="addSelCol"
+                        @click="datasource.command.addSelCol(this)"
                         type="text"
                         v-show="colType === 2">
                         + 增加列
@@ -82,15 +85,15 @@
                     <div class="sel_item"
                          v-for="(val,i) in datasource.command.values"
                          :key="i+'val'">
-                        <el-input class="input" placeholder="请输入内容" :value="datasource.command.values[i]" />
+                        <el-input class="input" placeholder="请输入内容" v-model="datasource.command.values[i]" />
                         <img
                             :src="icons.del_icon"
-                            @click="delSelVal(val, i)"
+                            @click="datasource.command.delSelVal(i)"
                             v-if="i !== 0"
                             class="del_icon" alt="">
                     </div>
                     <el-button
-                            @click="addSelVal"
+                            @click="datasource.command.addSelVal()"
                             type="text">
                         + 增加值
                     </el-button>
@@ -122,12 +125,11 @@ export default {
         return {
             checkAll: false,
             isIndeterminate: true,
-            showContent: true,
+            showContent: false,
             colType: 1,
             selColArrayNew: [],
             hasValueArrayNew: [],
-            datasource: null,
-            concretDefs: PhFilterStepDefs
+            datasource: null
         }
     },
     props: {
@@ -148,6 +150,12 @@ export default {
             default: () => {
                 return []
             }
+        },
+        concretDefs: {
+            type: Object,
+            default: () => {
+                return PhFilterStepDefs
+            }
         }
     },
     components: {
@@ -157,9 +165,10 @@ export default {
         ElInput
     },
     mounted() {
-        this.selColArrayNew = this.selColArray
-        this.hasValueArrayNew = this.hasValueArray
+        // this.selColArrayNew = this.selColArray
+        // this.hasValueArrayNew = this.hasValueArray
         this.datasource = new PhFilterStep(this.step)
+        console.log(this.datasource)
     },
     methods: {
         // *********************************** 全部调用cmd中函数 ***************************
@@ -175,22 +184,6 @@ export default {
             }
             this.$emit("delCardItem", event)
         },
-        //删除值
-        delSelVal(data, i) {
-            this.hasValueArrayNew.splice(i, 1)
-        },
-        //增加值
-        addSelVal() {
-            this.hasValueArrayNew.push({})
-        },
-        //删除行
-        delCol(data, i) {
-            this.selColArrayNew.splice(i, 1)
-        },
-        // 增加行
-        addSelCol() {
-            this.selColArrayNew.push({})
-        },
         // *********************************** 全部调用cmd中函数 ***************************
         // 选择单列多列
         clickColType(num) {
@@ -199,6 +192,11 @@ export default {
         // 收起内容
         handleCloseContent() {
             this.showContent = !this.showContent
+        }
+    },
+    computed: {
+        stepDesc: function() {
+            return this.datasource ? this.datasource.command.stepDesc(this.concretDefs) : ""
         }
     },
     watch: {
@@ -250,7 +248,7 @@ export default {
                 padding: 4px;
                 display: flex;
                 align-items: center;
-                height: 60px;
+                min-height: 60px;
                 border-bottom: 1px solid #ccc;
                 box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
                 cursor: pointer;

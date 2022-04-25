@@ -40,7 +40,24 @@ export const PhFilterStepDefs = {
             desc: "正则表达式",
             cal: "REGX"
         }
-    ]
+    ],
+    stepNameDesc: {
+        actionsDesc: {
+            "KEEP_ROW": "保留",
+            "REMOVE_ROW": "去除",
+            "CLEAR_CELL": "清除",
+            "DONTCLEAR_CELL": "清楚"
+        },
+        relationsDesc: {
+            "AND": "和",
+            "OR": "或"
+        },
+        patternDesc: {
+            "FULL_STRING": "等于",
+            "SUBSTRING": "包含",
+            "REGX": "符合"
+        }
+    }
 }
 
 const PhInitialFOVExpressions = {
@@ -50,7 +67,7 @@ const PhInitialFOVExpressions = {
         values: [""],
         matchingMode: "FULL_STRING",
         normalizationMode: "EXACT",
-        action: "EXACT_ROW",
+        action: "KEEP_ROW",
         booleanMode: "AND",
         appliesTo: "COLUMNS",
         columns: [""]

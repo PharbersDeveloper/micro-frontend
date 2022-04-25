@@ -304,18 +304,17 @@ export default {
                 ns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
                 ns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
                 ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
-                ns.id = ns["attributes"].pjName + ns["attributes"].stepId
+                ns.id = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
                 this.steps.store.syncRecord(ns)
+                debugger
                 break
             case "FilterOnNumericalRange":
-                debugger
                 break
             default:
                 alert("step type is not implemented")
                 break
             }
             this.steps.data = this.steps.store.findAll("steps")
-            debugger
             this.drawer = false
         }
     }
@@ -437,14 +436,14 @@ export default {
                                 display: flex;
                                 align-items: center;
                                 border: 1px solid #ccc;
-                                height: 24px;
+                                height: 40px;
                                 padding: 4px;
                                 img {
                                     cursor: pointer;
                                 }
                                 .action_card {
                                     position: absolute;
-                                    top: 20px;
+                                    top: 36px;
                                     left: 26px;
                                     border: 1px solid #ccc;
                                     width: 100px;
