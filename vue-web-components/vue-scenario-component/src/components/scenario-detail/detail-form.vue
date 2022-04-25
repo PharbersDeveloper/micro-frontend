@@ -25,6 +25,7 @@ import ElFormItem from "element-ui/packages/form-item/index"
 import ElSwitch from "element-ui/packages/switch/index"
 import ElInput from "element-ui/packages/input/index"
 import ElButton from "element-ui/packages/button/index"
+import ScenarioPolicy from "./policy/scenario-policy"
 
 export default {
     components: {
@@ -40,7 +41,13 @@ export default {
         }
     },
     props: {
-        scenario: Object
+        scenario: Object,
+        policy: {
+            type: Object,
+            default: () => {
+                return new ScenarioPolicy('1')
+            }
+        }
     },
     computed: {
 
@@ -51,7 +58,12 @@ export default {
     },
     methods: {
         saveScenario() {
-
+            const result = this.policy.createOrUpdateScenarioIndex(this.scenario)
+            if (result) {
+                alert("save scenario success")
+            } else {
+                alert("save scenario error")
+            }
         }
     }
 }
