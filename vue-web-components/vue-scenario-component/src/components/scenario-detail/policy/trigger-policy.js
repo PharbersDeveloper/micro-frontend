@@ -22,7 +22,8 @@ export default class PhScenarioTriggerPolicy {
     }
 
     async createOrUpdateTriggerIndex(trigger) {
-        const res = await this.buildPushTriggersQuery(trigger).then((response) => response.json())
+        const response = await this.buildPushTriggersQuery(trigger)
+        const res = await response.json()
         console.log(res)
         return !Object.keys(trigger).includes("error");
     }
@@ -47,7 +48,8 @@ export default class PhScenarioTriggerPolicy {
                     index: trigger.index,
                     active: trigger.active,
                     detail: JSON.stringify(detail),
-                    mode: trigger.mode
+                    mode: trigger.mode,
+                    traceId: trigger.traceId
                 },
                 "limit": 100,
                 "start_key": {}

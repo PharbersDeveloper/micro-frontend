@@ -13,10 +13,10 @@
             </el-select>
         </div>
         <el-collapse >
-            <el-collapse-item v-for="(item, index) in triggers" :key="index">
+            <el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false">
                 <template slot="title">
                     <div class="scenario-trigger-item-title">
-                        <el-select v-model="item.mode" @change="item.edited = true">
+                        <el-select v-model="item.mode" @change="item.edited = true" >
                             <el-option
                                     v-for="iter in options"
                                     :key="iter.index"
@@ -25,6 +25,7 @@
                                     :disabled="iter.disable">
                             </el-option>
                         </el-select>
+                        <el-button class="el-icon-close scenario-trigger-item-delbtn" @click="item.deleted = true"></el-button>
                     </div>
                 </template>
                 <el-form :model="item" label-width="120px">
@@ -77,6 +78,7 @@ import ElFormItem from "element-ui/packages/form-item/index"
 import ElInput from "element-ui/packages/input/index"
 import ElCol from "element-ui/packages/col/index"
 import ElDatePicker from "element-ui/packages/date-picker/index"
+import ElButton from "element-ui/packages/button/index"
 
 export default {
     data() {
@@ -136,7 +138,8 @@ export default {
         ElFormItem,
         ElInput,
         ElCol,
-        ElDatePicker
+        ElDatePicker,
+        ElButton
     },
     computed: {
 
@@ -187,6 +190,11 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            flex-grow: 1;
+
+            .scenario-trigger-item-delbtn {
+                border: none !important;
+            }
         }
 
         .scenario-trigger-item-switch {

@@ -2,25 +2,31 @@
     <div class="scenario-steps-container">
         <div class="scenario-step-lst">
             <ul>
-                <li v-for="(item, index) in steps" :key="index" class="scenario-step-lst-item">
+                <li v-for="(item, index) in steps" :key="index" class="scenario-step-lst-item" v-show="item.deleted === false">
                     <p class="el-icon-s-operation" />
                     <span><b>运行</b></span>
                     <span style="flex-grow: 1"><b>{{item.name}}</b></span>
-                    <el-button class="el-icon-delete-solid" @click="deleteStep(item)" />
+                    <el-button class="el-icon-delete-solid" @click="deleteStep" ></el-button>
                 </li>
             </ul>
         </div>
         <el-divider direction="vertical" class="divider"></el-divider>
-        <div class="scenario-step-detail">
+        <div class="scenario-step-detail" v-if="selectStep.deleted === false">
             <el-form label-width="120px">
                 <el-form-item label="重命名">
-                    <el-input v-model="selectStep.name" placeholder="step name"></el-input>
+                    <el-input v-model="selectStep.name" placeholder="step name" @change="selectStep.edited = true"></el-input>
+                </el-form-item>
+                <el-form-item label="数据集">
+                    <div class="scenario-step-ds-item">
+                        <span><b>{{selectStep.ds}}</b></span>
+                        <el-button class="el-icon-delete-solid" @click="deleteStepDatasetName" />
+                    </div>
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button type="primary">添加目标数据集</el-button>
+                    <el-button type="primary" @click="dialogVisible = true">添加目标数据集</el-button>
                 </el-form-item>
                 <el-form-item label="运行模式">
-                    <el-select value="" placeholder="">
+                    <el-select v-model="selectStep.recursive" placeholder="" @change="selectStep.edited = true">
                         <el-option
                                 v-for="iter in options"
                                 :key="iter.index"
@@ -30,10 +36,24 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="忽略失败">
-                    <el-checkbox v-model="selectStep.checked">失败的脚本不会标记Scenario 运行失败</el-checkbox>
+                    <el-checkbox v-model="selectStep['ignore-error']" @change="selectStep.edited = true">失败的脚本不会标记Scenario 运行失败</el-checkbox>
                 </el-form-item>
             </el-form>
         </div>
+        <el-dialog
+                title="输入数据集名称"
+                :visible.sync="dialogVisible"
+                width="30%">
+            <el-form label-width="120px">
+                <el-form-item label="数据集名称">
+                    <el-input v-model="dsName" ></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="changeDataset">Confirm</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -46,20 +66,24 @@ import ElDivider from "element-ui/packages/divider/index"
 import ElSelect from "element-ui/packages/select/index"
 import ElOption from "element-ui/packages/option/index"
 import ElCheckbox from "element-ui/packages/checkbox/index"
+import ElDialog from "element-ui/packages/dialog/index"
 
 export default {
     data() {
         return {
+            dialogVisible: false,
+            dsName: '',
             selectStep: {},
+            selectIndex: -1,
             options: [
                 {
                     index: 0,
-                    cat: "non-recursive",
+                    cat: false,
                     desc: "单步运行"
                 },
                 {
                     index: 1,
-                    cat: "recursive",
+                    cat: true,
                     desc: "递归运行"
                 }
             ]
@@ -76,20 +100,40 @@ export default {
         ElDivider,
         ElSelect,
         ElOption,
-        ElCheckbox
+        ElCheckbox,
+        ElDialog
     },
     computed: {
 
     },
     mounted() {
-
+        if (this.steps.length > 0) {
+            this.selectStep = this.steps[0]
+            this.selectIndex = 0
+        }
     },
     watch: {
 
     },
     methods: {
-        deleteStep(item) {
-            console.log(item)
+        deleteStep() {
+            if (this.selectStep) {
+                this.selectStep.deleted = true
+                this.selectStep = {}
+            }
+        },
+        deleteStepDatasetName() {
+            if (this.selectStep) {
+                this.selectStep.ds = ""
+                this.edited = true
+            }
+        },
+        changeDataset() {
+            if (this.selectStep && this.dsName) {
+                this.selectStep.ds = this.dsName
+                this.selectStep.edited = true
+            }
+            this.dialogVisible = false
         }
     }
 }
@@ -134,6 +178,16 @@ export default {
             /*margin: 1px auto;*/
             padding: 14px 36px;
             max-width: 800px;
+
+            .scenario-step-ds-item {
+                display: flex;
+                flex-direction: row;
+                border: 1px solid grey;
+
+                span {
+                    flex-grow: 1;
+                }
+            }
         }
     }
 
