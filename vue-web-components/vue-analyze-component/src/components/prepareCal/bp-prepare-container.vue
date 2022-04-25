@@ -94,6 +94,7 @@ import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import OpFactories from "./processors/factory"
 import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-value/defs"
+import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
 
 export default {
     data() {
@@ -306,15 +307,21 @@ export default {
                 ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
                 ns.id = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
                 this.steps.store.syncRecord(ns)
-                debugger
                 break
             case "FilterOnNumericalRange":
+                let FONRns = Object.assign({}, PhInitialFONRStepDefs)
+                FONRns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
+                FONRns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                FONRns["attributes"]["step-id"] = (FONRns["attributes"].index).toString()
+                FONRns.id = FONRns["attributes"][["pj-name"]] + FONRns["attributes"]["step-id"]
+                this.steps.store.syncRecord(FONRns)
                 break
             default:
                 alert("step type is not implemented")
                 break
             }
             this.steps.data = this.steps.store.findAll("steps")
+            console.log(this.steps.data)
             this.drawer = false
         }
     }

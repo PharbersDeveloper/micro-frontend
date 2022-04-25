@@ -123,12 +123,8 @@ import PhFilterStep from "./step"
 export default {
     data() {
         return {
-            checkAll: false,
-            isIndeterminate: true,
             showContent: false,
             colType: 1,
-            selColArrayNew: [],
-            hasValueArrayNew: [],
             datasource: null
         }
     },
@@ -165,13 +161,9 @@ export default {
         ElInput
     },
     mounted() {
-        // this.selColArrayNew = this.selColArray
-        // this.hasValueArrayNew = this.hasValueArray
         this.datasource = new PhFilterStep(this.step)
-        console.log(this.datasource)
     },
     methods: {
-        // *********************************** 全部调用cmd中函数 ***************************
         delCardItem() {
             const event = new Event("event")
             event.args = {
@@ -184,7 +176,6 @@ export default {
             }
             this.$emit("delCardItem", event)
         },
-        // *********************************** 全部调用cmd中函数 ***************************
         // 选择单列多列
         clickColType(num) {
             this.colType = num
@@ -198,16 +189,6 @@ export default {
         stepDesc: function() {
             return this.datasource ? this.datasource.command.stepDesc(this.concretDefs) : ""
         }
-    },
-    watch: {
-        // selColArray(n, w) {
-        //     debugger
-        //     this.selColArrayNew = n
-        // },
-        // "schemaArray.schema"(n, o) {
-        //     debugger
-        //     this.needRefresh++
-        // }
     }
 }
 </script>

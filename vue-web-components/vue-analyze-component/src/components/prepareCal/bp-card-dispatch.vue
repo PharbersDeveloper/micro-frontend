@@ -4,14 +4,14 @@
             <filter-on-value-card 
                 @delCardItem="delCardItem" :step="step" :schema="schema"/>
         </div>
-        <!-- <div class="card" v-if="type === 'filter'">
-            <filter-on-value-card :step="step" :schema="schema"/>
-        </div> -->
+        <div class="card" v-else>
+            <FilterOnNumericalRangeCard :step="step" :schema="schema"/>
+        </div>
     </div>
 </template>
 <script>
-import FilterOnValueCard from "./steps/commands/filter-on-value/card"
-// import FilterOnNumericalRangeCard from "./steps/commands/filter-on-value/card"
+import FilterOnValueCard from "./steps/commands/filter-on-value/FOVcard"
+import FilterOnNumericalRangeCard from "./steps/commands/filter-on-numerical-range/FONRcard"
 
 export default {
     data() {
@@ -25,7 +25,8 @@ export default {
         schema: Array
     },
     components: {
-        FilterOnValueCard
+        FilterOnValueCard,
+        FilterOnNumericalRangeCard
     },
     methods: {
         delCardItem(data) {
