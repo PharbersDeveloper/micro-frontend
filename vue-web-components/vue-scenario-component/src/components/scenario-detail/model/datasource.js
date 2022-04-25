@@ -11,6 +11,7 @@ export default class PhScenarioDetailDatasource {
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
+        this.steps = []
     }
 
 
@@ -29,8 +30,11 @@ export default class PhScenarioDetailDatasource {
         this.scenario = this.store.findAll("scenarios")[0]
         const triggers = await this.buildTriggersQuery(this.scenario.id).then((response) => response.json())
         this.store.sync(triggers)
-        // TODO: reports const reports = this.buildTriggersQuery(scenario.id).then((response) => response.json())
         this.triggers = this.store.findAll("scenario-triggers")
+        const steps = await this.buildStepsQuery(this.scenario.id).then((response) => response.json())
+        this.store.sync(steps)
+        this.steps = this.store.findAll("scenario-steps")
+        // TODO: reports const reports = this.buildTriggersQuery(scenario.id).then((response) => response.json())
     }
 
     buildTriggersQuery(scenarioId) {
@@ -65,6 +69,30 @@ export default class PhScenarioDetailDatasource {
             "conditions": {
                 "projectId": ["=", this.projectId],
                 "scenarioName": ["=", this.scenarioName]
+            },
+            "limit": 100,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildStepsQuery(scenarioId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "scenario_step",
+            "conditions": {
+                "scenarioId": ["=", scenarioId]
             },
             "limit": 100,
             "start_key": {}
