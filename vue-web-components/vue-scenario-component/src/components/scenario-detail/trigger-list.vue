@@ -2,7 +2,7 @@
     <div class="scenario-triggers">
         <div class="scenario-trigger-create">
             <h2>Triggers</h2>
-            <el-select placeholder="ADD Trigger" value="ADD Trigger" @change="change">
+            <el-select placeholder="ADD Trigger" value="ADD Trigger" @change="addNewTrigger">
                 <el-option
                         v-for="item in options"
                         :key="item.index"
@@ -79,6 +79,7 @@ import ElInput from "element-ui/packages/input/index"
 import ElCol from "element-ui/packages/col/index"
 import ElDatePicker from "element-ui/packages/date-picker/index"
 import ElButton from "element-ui/packages/button/index"
+import moment from 'moment'
 
 export default {
     data() {
@@ -151,13 +152,21 @@ export default {
 
     },
     methods: {
-        change(d) {
-            console.log(d)
-        },
-        triggerTitle(mode) {
-            if (mode === "timer") {
-                return "Time-Based"
-            } else return "Not Implemented"
+        addNewTrigger() {
+            const result = {}
+            result["start"] = moment().format('YYYY-MM-DD HH:m:s')
+            result["period"] = "minute"
+            result["value"] = 1
+            result["timezone"] = "中国北京"
+            result["mode"] = "timer"
+            result["active"] = true
+            result["scenarioId"] = ""
+            result["index"] = 1 + Math.max(...this.triggers.map(x => x.index))
+            result["resourceArn"] = ""
+            result["traceId"] = "123456"
+            result["edited"] = true
+            result["deleted"] = false
+            this.triggers.push(result)
         }
     }
 }

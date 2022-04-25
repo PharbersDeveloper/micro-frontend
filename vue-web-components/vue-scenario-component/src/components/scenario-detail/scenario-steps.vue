@@ -2,13 +2,19 @@
     <div class="scenario-steps-container">
         <div class="scenario-step-lst">
             <ul>
-                <li v-for="(item, index) in steps" :key="index" class="scenario-step-lst-item" v-show="item.deleted === false">
-                    <p class="el-icon-s-operation" />
+                <li v-for="(item, index) in steps" :key="index" class="scenario-step-lst-item" v-show="item.deleted === false" @click="selectStep = item">
+                    <p class="el-icon-s-operation" >{{index}}</p>
                     <span><b>运行</b></span>
                     <span style="flex-grow: 1"><b>{{item.name}}</b></span>
                     <el-button class="el-icon-delete-solid" @click="deleteStep" ></el-button>
                 </li>
             </ul>
+            <el-button
+                    class="add_new_step"
+                    @click="addNewStep">
+                <img :src="add_icon" alt="" />
+                添加一个新算子
+            </el-button>
         </div>
         <el-divider direction="vertical" class="divider"></el-divider>
         <div class="scenario-step-detail" v-if="selectStep.deleted === false">
@@ -58,6 +64,7 @@
 </template>
 
 <script>
+import { staticFilePath } from '../../config/envConfig'
 import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
 import ElForm from "element-ui/packages/form/index"
@@ -71,6 +78,7 @@ import ElDialog from "element-ui/packages/dialog/index"
 export default {
     data() {
         return {
+            add_icon: `${staticFilePath}` + "/icons/add_operator_icon.svg",
             dialogVisible: false,
             dsName: '',
             selectStep: {},
@@ -134,6 +142,21 @@ export default {
                 this.selectStep.edited = true
             }
             this.dialogVisible = false
+        },
+        addNewStep() {
+            const result = {}
+            result["recursive"] = false
+            result["ignore-error"] = false
+            result["type"] = "dataset"
+            result["ds"] = ""
+            result["mode"] = "dataset"
+            result["name"] = "change me"
+            result["scenarioId"] = "ggjpDje0HUC2JW_alfredtest_0"
+            result["index"] = 1 + Math.max(...this.steps.map(x => x.index))
+            result["traceId"] = "alfred"
+            result["edited"] = true
+            result["deleted"] = false
+            this.steps.push(result)
         }
     }
 }
@@ -144,6 +167,19 @@ export default {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+    }
+
+    .add_new_step {
+        margin-top: 30px;
+        width: 216px;
+        height: 25px;
+        background: #F8D634;
+        box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #000000;
     }
 
     .scenario-steps-container {

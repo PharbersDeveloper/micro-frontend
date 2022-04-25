@@ -107,7 +107,6 @@ export default {
                 result["timezone"] = tmp["timezone"]
                 result["mode"] = x["mode"]
                 result["active"] = x["active"]
-                result["edited"] = false
                 result["scenarioId"] = x["scenario-id"]
                 result["index"] = x["index"]
                 result["resourceArn"] = x["resource-arn"]
@@ -119,10 +118,17 @@ export default {
         },
         saveAll() {
             let result = true
+
+            if (result) {
+                result = this.deleteTriggers()
+            }
             if (result) {
                 result = this.saveEditedTriggers()
             }
 
+            if (result) {
+                result = this.deleteSteps()
+            }
             if (result) {
                 result = this.saveEditedSteps()
             }
@@ -151,6 +157,28 @@ export default {
                 const tmp = this.stepDisplay[idx]
                 if (tmp.edited) {
                     if (!this.stepPolicy.createOrUpdateStepIndex(tmp)) break
+                }
+                result = true
+            }
+            return result
+        },
+        deleteTriggers() {
+            let result = false
+            for (let idx = 0; idx < this.triggerDisplay.length; ++idx) {
+                const tmp = this.triggerDisplay[idx]
+                if (tmp.deleted) {
+                    if (!this.triggerPolicy.deleteTriggerIndex(tmp)) break
+                }
+                result = true
+            }
+            return result
+        },
+        deleteSteps() {
+            let result = false
+            for (let idx = 0; idx < this.stepDisplay.length; ++idx) {
+                const tmp = this.stepDisplay[idx]
+                if (tmp.deleted) {
+                    if (!this.stepPolicy.deleteStepIndex(tmp)) break
                 }
                 result = true
             }

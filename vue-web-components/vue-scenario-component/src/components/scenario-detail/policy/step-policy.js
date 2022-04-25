@@ -24,6 +24,13 @@ export default class PhScenarioStepPolicy {
         return !Object.keys(step).includes("error");
     }
 
+    async deleteStepIndex(step) {
+        const response = await this.buildDeleteStepQuery(step)
+        const res = await response.json()
+        console.log(res)
+        return !Object.keys(step).includes("error");
+    }
+
     buildPushStepQuery(step) {
         const url = `${hostName}/phdydatasource/put_item`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
@@ -43,7 +50,8 @@ export default class PhScenarioStepPolicy {
                     index: step.index,
                     detail: JSON.stringify(detail),
                     tranceId: step.traceId,
-                    mode: step.mode
+                    mode: step.mode,
+                    name: step.name
                 },
                 "limit": 100,
                 "start_key": {}
@@ -62,5 +70,28 @@ export default class PhScenarioStepPolicy {
         } else {
             alert("not implemented")
         }
+    }
+
+    buildDeleteStepQuery(step) {
+        const url = `${hostName}/phdydatasource/delete_item`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "scenario_step",
+            "condition": {
+                scenarioId: step.scenarioId,
+                index: step.index
+            }
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
     }
 }
