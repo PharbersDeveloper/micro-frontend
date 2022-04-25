@@ -388,6 +388,7 @@ export default {
                         display: flex;
                         align-items: center;
                         flex-direction: column;
+						width: 100%;
                         .actions {
                             display: flex;
                             align-items: center;

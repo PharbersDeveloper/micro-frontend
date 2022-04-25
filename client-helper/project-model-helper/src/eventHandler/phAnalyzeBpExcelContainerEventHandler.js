@@ -4,7 +4,7 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
-	const editSampleEventName = "editSampleEventName"
+	// const editSampleEventName = "editSampleEventName"
 	const eventName = "changeSchemaType"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
@@ -108,7 +108,9 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 		case "clickSample":
 			if (params) {
 				const url = `${hostName}/phdydatasource/put_item`
+				const sampleUrl = `${hostName}/statemachinetrigger`
 				const accessToken = route.cookies.read("access_token")
+				const runnerId = genRunnerId("sample")
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
 				params.targetDataset.sample = params.sample
@@ -138,31 +140,51 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				}
 				await fetch(url, options)
 				//发送action
-				let message = {
-					actionName: params.targetDataset.name,
-					sourceProjectId: sourceProjectIdValue,
-					targetProjectId: params.projectId,
-					projectName: params.projectName,
-					datasetName: params.targetDataset.name,
-					datasetId: params.targetDataset.id,
-					sample: params.sample,
-					owner: route.cookies.read("account_id"),
-					showName: decodeURI(route.cookies.read("user_name_show"))
-				}
-				let scriptBody = {
-					table: actionTableName,
-					item: {
+				// let message = {
+				// 	actionName: params.targetDataset.name,
+				// 	sourceProjectId: sourceProjectIdValue,
+				// 	targetProjectId: params.projectId,
+				// 	projectName: params.projectName,
+				// 	datasetName: params.targetDataset.name,
+				// 	datasetId: params.targetDataset.id,
+				// 	sample: params.sample,
+				// 	owner: route.cookies.read("account_id"),
+				// 	showName: decodeURI(route.cookies.read("user_name_show"))
+				// }
+				// let scriptBody = {
+				// 	table: actionTableName,
+				// 	item: {
+				// 		projectId: params.projectId,
+				// 		owner: route.cookies.read("account_id"),
+				// 		showName: decodeURI(
+				// 			route.cookies.read("user_name_show")
+				// 		),
+				// 		code: 0,
+				// 		jobDesc: editSampleEventName,
+				// 		jobCat: "edit_sample",
+				// 		comments: "",
+				// 		date: String(new Date().getTime()),
+				// 		message: JSON.stringify(message)
+				// 	}
+				// }
+				let sampleBody = {
+					common: {
+						runnerId: runnerId,
 						projectId: params.projectId,
+						projectName: "sample",
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						),
-						code: 0,
-						jobDesc: editSampleEventName,
-						jobCat: "edit_sample",
-						comments: "",
-						date: String(new Date().getTime()),
-						message: JSON.stringify(message)
+						)
+					},
+					calculate: {
+						type: "sample",
+						sourceProjectId: sourceProjectIdValue,
+						targetProjectId: params.projectId,
+						datasetId: params.targetDataset.id,
+						datasetName: params.targetDataset.name,
+						sample: params.sample,
+						recursive: true
 					}
 				}
 				let editSampleOptions = {
@@ -173,17 +195,32 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 							"application/x-www-form-urlencoded; charset=UTF-8",
 						accept: "application/json"
 					},
-					body: JSON.stringify(scriptBody)
+					body: JSON.stringify(sampleBody)
 				}
-				let results = await fetch(url, editSampleOptions).then((res) =>
-					res.json()
+				let results = await fetch(sampleUrl, editSampleOptions).then(
+					(res) => res.json()
 				)
+				if (results.status === "failed") {
+					alert("启动出错，请重新运行！")
+					route.loadingService.loading.style.display = "none"
+					return false
+				}
+				// route.noticeService.defineAction({
+				// 	type: "iot",
+				// 	remoteResource: "notification",
+				// 	runnerId: "",
+				// 	id: results.data.id,
+				// 	eventName: editSampleEventName,
+				// 	projectId: params.projectId,
+				// 	ownerId: route.cookies.read("account_id"),
+				// 	callBack: editSampleCallback
+				// })
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
 					runnerId: "",
-					id: results.data.id,
-					eventName: editSampleEventName,
+					id: runnerId,
+					eventName: "sampleEdit",
 					projectId: params.projectId,
 					ownerId: route.cookies.read("account_id"),
 					callBack: editSampleCallback
@@ -194,9 +231,14 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 			console.log("other click event!")
 	}
 
-	function changeSchemaTypeCallback(param, payload) {
-		console.log("更改表名")
+	function genRunnerId(projectName, flowVersion = "developer") {
+		let d = new Date().toISOString()
+		const i = d.indexOf(".")
+		d = d.substring(0, i) + "+00:00"
+		return [projectName, projectName, flowVersion, d].join("_")
+	}
 
+	function changeSchemaTypeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
@@ -222,13 +264,12 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	}
 
 	function editSampleCallback(param, payload) {
-		console.log("更改表名")
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
 
-		if (status == "succeed") {
+		if (status == "succeed" || status == "success") {
 			alert("数据样本配置成功")
 			window.location.reload()
 		} else if (status == "failed") {
@@ -237,9 +278,9 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				errorObj["message"]["zh"] !== ""
 					? errorObj["message"]["zh"]
 					: "数据样本配置失败，请重新操作！"
+			route.loadingService.loading.style.display = "none"
 			alert(msg)
 			// TODO:刷新页面数据
 		}
-		route.loadingService.loading.style.display = "none"
 	}
 }
