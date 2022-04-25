@@ -9,7 +9,7 @@
                 <el-radio-button label="Setting"></el-radio-button>
                 <el-radio-button label="Steps"></el-radio-button>
             </el-radio-group>
-            <el-button type="primary">Save</el-button>
+            <el-button type="primary" @click="$emit('save')">Save</el-button>
             <el-button type="primary" disabled >运行</el-button>
         </div>
     </div>

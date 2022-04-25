@@ -7,49 +7,57 @@
                         v-for="item in options"
                         :key="item.index"
                         :label="item.desc"
-                        :value="item.cat">
+                        :value="item.cat"
+                        :disabled="item.disable">
                 </el-option>
             </el-select>
         </div>
         <el-collapse >
-            <el-collapse-item v-for="(item, index) in triggerDisplay" :key="index">
+            <el-collapse-item v-for="(item, index) in triggers" :key="index">
                 <template slot="title">
                     <div class="scenario-trigger-item-title">
-                        <el-select v-model="item.mode" @change="change">
+                        <el-select v-model="item.mode" @change="item.edited = true">
                             <el-option
                                     v-for="iter in options"
                                     :key="iter.index"
                                     :label="iter.desc"
-                                    :value="iter.cat">
+                                    :value="iter.cat"
+                                    :disabled="iter.disable">
                             </el-option>
                         </el-select>
                     </div>
                 </template>
                 <el-form :model="item" label-width="120px">
                     <el-form-item label="自动触发">
-                        <el-switch v-model="item.active"></el-switch>
+                        <el-switch v-model="item.active" @change="item.edited = true"></el-switch>
                     </el-form-item>
                     <el-form-item label="重复时间间隔">
                         <el-col :span="11">
-                            <el-input ></el-input>
+                            <el-input :value="item.value" @change="item.edited = true"></el-input>
                         </el-col>
                         <el-col class="line" :span="2">-</el-col>
                         <el-col :span="11">
-                            <el-select value="" placeholder="时间间隔">
+                            <el-select v-model="item.period" placeholder="时间间隔" @change="item.edited = true">
                                 <el-option
                                         v-for="iter in period"
-                                        :key="iter"
-                                        :label="iter"
-                                        :value="iter">
+                                        :key="iter.desc"
+                                        :label="iter.desc"
+                                        :value="iter.cat">
                                 </el-option>
                             </el-select>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="开始时间">
-                        <el-input ></el-input>
+                        <el-date-picker
+                                v-model="item.start"
+                                type="datetime"
+                                placeholder="Select date and time"
+                                default-time="12:00:00"
+                                @change="item.edited = true">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="时区">
-                        <el-input disabled value="UTC"></el-input>
+                        <el-input disabled value="北京时间"></el-input>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
@@ -68,6 +76,7 @@ import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import ElInput from "element-ui/packages/input/index"
 import ElCol from "element-ui/packages/col/index"
+import ElDatePicker from "element-ui/packages/date-picker/index"
 
 export default {
     data() {
@@ -76,17 +85,41 @@ export default {
                 {
                     index: 0,
                     cat: "timer",
-                    desc: "基于时间自动运行"
+                    desc: "基于时间自动运行",
+                    disable: false
                 },
                 {
                     index: 1,
                     cat: "dataset",
-                    desc: "基于数据集更新的自动运行"
+                    desc: "基于数据集更新的自动运行",
+                    disable: true
                 }
             ],
-            triggerDisplay: [],
             period: [
-                "秒", "分钟", "小时", "天", "周", "月"
+                {
+                    cat: "second",
+                    desc: "秒"
+                },
+                {
+                    cat: "minute",
+                    desc: "分钟"
+                },
+                {
+                    cat: "hour",
+                    desc: "小时"
+                },
+                {
+                    cat: "day",
+                    desc: "天"
+                },
+                {
+                    cat: "week",
+                    desc: "周"
+                },
+                {
+                    cat: "month",
+                    desc: "月"
+                }
             ]
         }
     },
@@ -102,18 +135,17 @@ export default {
         ElForm,
         ElFormItem,
         ElInput,
-        ElCol
+        ElCol,
+        ElDatePicker
     },
     computed: {
 
     },
     mounted() {
-        this.triggerDisplay = this.triggers
+
     },
     watch: {
-        triggers(n) {
-            this.triggerDisplay = n
-        }
+
     },
     methods: {
         change(d) {
