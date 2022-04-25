@@ -1,9 +1,10 @@
 <template>
     <div class="bp_operator_card">
         <div class="card" v-if="type === 'filter'">
-            <filter-on-value-card :step="step" :schema="schema"/>
+            <filter-on-value-card 
+                @delCardItem="delCardItem" :step="step" :schema="schema"/>
         </div>
-		<!-- <div class="card" v-if="type === 'filter'">
+        <!-- <div class="card" v-if="type === 'filter'">
             <filter-on-value-card :step="step" :schema="schema"/>
         </div> -->
     </div>
@@ -27,7 +28,9 @@ export default {
         FilterOnValueCard
     },
     methods: {
-
+        delCardItem(data) {
+            this.$emit("delCardItem", data)
+        }
     },
     watch: {
 

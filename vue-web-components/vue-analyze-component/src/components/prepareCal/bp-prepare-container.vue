@@ -55,6 +55,7 @@
                                     :key="index+'opreator'"
                                     :step="field"
                                     :schema="schema.schema"
+                                    @delCardItem="delCardItem"
                                     :type="field['ctype']"/>
                             </li>
                         </ul>
@@ -107,7 +108,8 @@ export default {
             showMultiSelectActionMenu: false,
             searchKeyword: "",
             checkAll: false,
-            isIndeterminate: true
+            isIndeterminate: true,
+            deleteStepsArray: []
         }
     },
     components: {
@@ -165,6 +167,12 @@ export default {
         this.steps.refreshData()
     },
     methods: {
+        delCardItem(datas) {
+            let model = datas.args.param.data
+            this.deleteStepsArray.push(model)
+            this.steps.store.destroy(model)
+            this.steps.data = this.steps.store.findAll("steps")
+        },
         showOpFactories() {
             this.drawer = true
             this.$refs.opFactories.visibleSync = true
@@ -209,11 +217,39 @@ export default {
         totalCountIsReady(val) {
             this.totalNum = val
         },
+        async deleteStep(ele) {
+            const body = {
+                table: "step",
+                conditions: {
+                    pjName: ele["pj-name"],
+                    stepId: ele["step-id"]
+                }
+            }
+
+            const url = `${hostName}/phdydatasource/delete_item`
+            let headers = {
+                Authorization: this.getCookie("access_token") || this.debugToken,
+                "Content-Type": "application/vnd.api+json",
+                Accept: "application/vnd.api+json"
+            }
+            let options = {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(body)
+            }
+            const result = await fetch(url, options)
+            return result.status === 200
+        },
         async save() {
+            //删除算子
+            for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
+                // await this.deleteStepsArray[idx].delete(this)
+                await this.deleteStep(this.deleteStepsArray[idx])
+            }
             // 保存算子
             let itemArr = []
             let expressionsArr = []
-            for (let index = 0; index < 2; ++index) {
+            for (let index = 0; index < this.steps.data.length; ++index) {
                 const item = this.steps.data[index]
                 item.expressions = JSON.stringify(item.callback.command.revert2Defs())
                 expressionsArr.push(JSON.parse(item.expressions))
@@ -251,7 +287,6 @@ export default {
                     message: this.allData.message
                 }
             }
-            console.log(event)
             this.$emit('event', event)
         },
         changeSchemaTypeEvent(data) {
@@ -273,12 +308,14 @@ export default {
                 this.steps.store.syncRecord(ns)
                 break
             case "FilterOnNumericalRange":
-
+                debugger
+                break
             default:
                 alert("step type is not implemented")
                 break
             }
             this.steps.data = this.steps.store.findAll("steps")
+            debugger
             this.drawer = false
         }
     }
@@ -388,7 +425,7 @@ export default {
                         display: flex;
                         align-items: center;
                         flex-direction: column;
-						width: 100%;
+                        width: 100%;
                         .actions {
                             display: flex;
                             align-items: center;

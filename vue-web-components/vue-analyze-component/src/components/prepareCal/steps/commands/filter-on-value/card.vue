@@ -10,9 +10,9 @@
                     <div class="card_header_del">
                         <div class="num">- 378</div>
                         <img 
-							:src="icons.del_icon"
-							@click="delCardItem"
-							class="del_icon" />
+                            :src="icons.del_icon"
+                            @click="delCardItem"
+                            class="del_icon" />
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                     <div class="sel_item"
                          v-for="(val,i) in datasource.command.values"
                          :key="i+'val'">
-                        <el-input class="input"  placeholder="请输入内容" :value="datasource.command.values[i]" />
+                        <el-input class="input" placeholder="请输入内容" :value="datasource.command.values[i]" />
                         <img
                             :src="icons.del_icon"
                             @click="delSelVal(val, i)"
@@ -164,7 +164,16 @@ export default {
     methods: {
         // *********************************** 全部调用cmd中函数 ***************************
         delCardItem() {
-            debugger
+            const event = new Event("event")
+            event.args = {
+                callback: "addTags",
+                element: this,
+                param: {
+                    name: "addTags",
+                    data: this.step
+                }
+            }
+            this.$emit("delCardItem", event)
         },
         //删除值
         delSelVal(data, i) {
