@@ -5,7 +5,8 @@
                 @delCardItem="delCardItem" :step="step" :schema="schema"/>
         </div>
         <div class="card" v-else>
-            <FilterOnNumericalRangeCard :step="step" :schema="schema"/>
+            <FilterOnNumericalRangeCard
+                @delCardItem="delCardItem" :step="step" :schema="schema"/>
         </div>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-    <div class="bp_operator_card">
+    <div class="bp_FONR_card">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div v-if="concretDefs" class="card">
             <div class="card_header" @click="handleCloseContent">
@@ -78,27 +78,7 @@
                         + 增加列
                     </el-button>
                 </div>
-                <div class="mb_1 filter_value" v-if="datasource">
-                    <div class="title_space">
-                        <div class="title">值</div>
-                    </div>
-                    <div class="sel_item"
-                         v-for="(val,i) in datasource.command.values"
-                         :key="i+'val'">
-                        <el-input class="input" placeholder="请输入内容" v-model="datasource.command.values[i]" />
-                        <img
-                            :src="icons.del_icon"
-                            @click="datasource.command.delSelVal(i)"
-                            v-if="i !== 0"
-                            class="del_icon" alt="">
-                    </div>
-                    <el-button
-                            @click="datasource.command.addSelVal()"
-                            type="text">
-                        + 增加值
-                    </el-button>
-                </div>
-                <div class="mb_1">
+                <div class="mb_1"  v-if="datasource">
                     <div class="title">取值范围</div>
                     <div class="range_item">
                         <span>大于</span>
@@ -169,10 +149,10 @@ export default {
         delCardItem() {
             const event = new Event("event")
             event.args = {
-                callback: "addTags",
+                callback: "delCardItem",
                 element: this,
                 param: {
-                    name: "addTags",
+                    name: "delCardItem",
                     data: this.step
                 }
             }
@@ -200,7 +180,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .bp_operator_card {
+    .bp_FONR_card {
         margin-top: 4px;
         width: 100%;
         padding: 4px;
@@ -223,6 +203,7 @@ export default {
             .del_icon {
                 width: 16px;
                 height: 16px;
+				cursor: pointer;
             }
             .active {
                 color: #409EFF;

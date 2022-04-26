@@ -188,7 +188,6 @@ export default {
         // 目标文件表拖动
         dragStart(e, index, field){
             this.clearBakData() // 清空上一次拖动时保存的数据
-            // e.dataTransfer.setData('Text', index);
             this.fileMiddleData= field // 设置此次拖动时保存的数据
             this.fileMddleIndex = index //设置此次拖动时保存的数据Index
         },
@@ -299,10 +298,11 @@ export default {
         },
         // 新建一个算子
         newStep(stepType) {
+            let indexNum = this.steps.data.length > 0 ? Math.max(...this.steps.data.map(x => x.index)) + 1 : 1
             switch (stepType) {
             case "FilterOnValue":
                 let ns = Object.assign({}, PhInitialFOVStepDefs)
-                ns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
+                ns["attributes"].index = indexNum
                 ns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
                 ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
                 ns.id = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
@@ -310,7 +310,7 @@ export default {
                 break
             case "FilterOnNumericalRange":
                 let FONRns = Object.assign({}, PhInitialFONRStepDefs)
-                FONRns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
+                FONRns["attributes"].index = indexNum
                 FONRns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
                 FONRns["attributes"]["step-id"] = (FONRns["attributes"].index).toString()
                 FONRns.id = FONRns["attributes"][["pj-name"]] + FONRns["attributes"]["step-id"]

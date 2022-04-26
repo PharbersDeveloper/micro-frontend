@@ -167,10 +167,10 @@ export default {
         delCardItem() {
             const event = new Event("event")
             event.args = {
-                callback: "addTags",
+                callback: "delCardItem",
                 element: this,
                 param: {
-                    name: "addTags",
+                    name: "delCardItem",
                     data: this.step
                 }
             }
