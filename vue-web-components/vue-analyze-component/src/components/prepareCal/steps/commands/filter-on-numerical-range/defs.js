@@ -84,7 +84,7 @@ export const PhInitialFONRStepDefs = {
         "group-name": "",
         "group-index": 0,
         "expressions-value": "JSON",
-        "step-name": "Initial Filter On Value"
+        "step-name": "Initial Filter on Numerical Range"
     },
     id: "",
     type: "steps"

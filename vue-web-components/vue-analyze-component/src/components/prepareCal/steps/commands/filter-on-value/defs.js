@@ -79,7 +79,7 @@ export const PhInitialFOVStepDefs = {
         "pj-name": "",
         "step-id": "",
         index: 0,
-        ctype: "filter",
+        ctype: "FilterOnValue",
         expressions: JSON.stringify(PhInitialFOVExpressions),
         runtime: "prepare",
         "group-name": "",

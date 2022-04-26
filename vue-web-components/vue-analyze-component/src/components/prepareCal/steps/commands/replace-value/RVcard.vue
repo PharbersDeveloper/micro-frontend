@@ -7,7 +7,6 @@
                 <el-checkbox></el-checkbox>
                 <div class="card_header_content">
                     <div class="card_header_desc">
-                        <!-- {{step["step-name"]}} -->
                         {{stepDesc}}
                     </div>
                     <div class="card_header_del">
@@ -20,41 +19,8 @@
                 </div>
             </div>
             <div class="card_content" v-show="showContent">
-                <div class="mb_1">
-                    <div class="title">操作</div>
-                    <select class="sel" v-model="datasource.command.action" v-if="datasource">
-                        <option
-                                v-for="(item, i) in concretDefs.actions"
-                                :key="i+'filterOnValue_options'"
-                                :value="item.cal">{{item.desc}}</option>
-                    </select>
-                </div>
-                <div class="mb_1">
-                    <div class="title">多列筛选关系</div>
-                         <select class="sel" v-model="datasource.command.booleanMode" v-if="datasource">
-                            <option
-                                v-for="(item,i) in concretDefs.relations"
-                                :key="i+'filterOnValue_options'"
-                                :value="item.cal">{{item.desc}}</option>
-                        </select>
-                </div>
                 <div class="mb_1 filter_col" v-if="datasource">
-                    <div class="title title_space">
-                        <div>列</div>
-                        <div class="right_title">
-                            <div
-                                    class="mr_1"
-                                    @click="clickColType(1)"
-                                    :class="[{
-                                    active: colType === 1
-                                }]">单列</div>
-                            <div
-                                    @click="clickColType(2)"
-                                    :class="[{
-                                    active: colType === 2
-                                }]">多列</div>
-                        </div>
-                    </div>
+                    <span>原始列</span>
                     <div class="sel_item"
                          v-for="(col,index) in datasource.command.columns"
                          :key="index + 'col'">
@@ -71,23 +37,28 @@
                             v-if="index !== 0"
                             class="del_icon" alt=""/>
                     </div>
-                    <el-button
-                        @click="datasource.command.addSelCol(this)"
-                        type="text"
-                        v-show="colType === 2">
-                        + 增加列
-                    </el-button>
                 </div>
                 <div class="mb_1"  v-if="datasource">
-                    <div class="title">取值范围</div>
                     <div class="range_item">
-                        <span>大于</span>
-                        <el-input class="input" placeholder="请输入最大值" v-model="datasource.command.min" />
+                        <span>目标值</span>
+                        <el-input class="input" placeholder="请输入目标值" v-model="datasource.command.mapping[0].from" />
                     </div>
+                </div>
+                
+                <div class="mb_1"  v-if="datasource">
                     <div class="range_item">
-                        <span>小于</span>
-                        <el-input class="input" placeholder="请输入最小值" v-model="datasource.command.max" />
+                        <span>替换值</span>
+                        <el-input class="input" placeholder="请输入替换值" v-model="datasource.command.mapping[0].to" />
                     </div>
+                </div>
+                 <div class="mb_1">
+                    <div class="title">筛选模式</div>
+                        <select class="sel" v-if="datasource" v-model="datasource.command.matchingMode">
+                           <option
+                                v-for="(item,i) in concretDefs.pattern"
+                                :key="i+'filterPattern'"
+                                :value="item.cal">{{item.desc}}</option>
+                        </select>
                 </div>
             </div>
         </div>
@@ -203,7 +174,7 @@ export default {
             .del_icon {
                 width: 16px;
                 height: 16px;
-				cursor: pointer;
+                cursor: pointer;
             }
             .active {
                 color: #409EFF;

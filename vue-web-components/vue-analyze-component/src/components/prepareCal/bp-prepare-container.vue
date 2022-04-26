@@ -95,6 +95,7 @@ import ElCheckbox from 'element-ui/packages/checkbox/index'
 import OpFactories from "./processors/factory"
 import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-value/defs"
 import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
+import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
 
 export default {
     data() {
@@ -315,6 +316,14 @@ export default {
                 FONRns["attributes"]["step-id"] = (FONRns["attributes"].index).toString()
                 FONRns.id = FONRns["attributes"][["pj-name"]] + FONRns["attributes"]["step-id"]
                 this.steps.store.syncRecord(FONRns)
+                break
+            case "ReplaceValue":
+                let RVns = Object.assign({}, PhInitialRVStepDefs)
+                RVns["attributes"].index = indexNum
+                RVns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                RVns["attributes"]["step-id"] = (RVns["attributes"].index).toString()
+                RVns.id = RVns["attributes"][["pj-name"]] + RVns["attributes"]["step-id"]
+                this.steps.store.syncRecord(RVns)
                 break
             default:
                 alert("step type is not implemented")
