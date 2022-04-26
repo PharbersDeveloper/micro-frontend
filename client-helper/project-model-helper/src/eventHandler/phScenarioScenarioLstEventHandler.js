@@ -158,7 +158,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 				let body = {
 					table: "scenario",
 					item: {
-						id: targetscenario.id,
+						// id: targetscenario.id,
 						projectId: params.projectId,
 						scenarioName: targetscenario.scenarioName,
 						label: targetscenario.label,

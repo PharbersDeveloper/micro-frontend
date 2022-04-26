@@ -5,11 +5,13 @@
             <scenario-nav :scenario="datasource.scenario" @active="activeChange" @save="saveAll"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
-                <trigger-lst :triggers="triggerDisplay" :scenario-id="datasource.scenario.id"></trigger-lst>
+                <trigger-lst :triggers="triggerDisplay"
+                             :scenario-id="[datasource.scenario['project-id'], datasource.scenario.id].join('_')" />
                 <report-lst :triggers="[]"></report-lst>
             </div>
             <div v-else class="scenario-container">
-                <scenario-steps :steps="stepDisplay" :scenario-id="datasource.scenario.id"></scenario-steps>
+                <scenario-steps :steps="stepDisplay"
+                                :scenario-id="[datasource.scenario['project-id'], datasource.scenario.id].join('_')" />
             </div>
         </div>
     </div>
@@ -90,6 +92,7 @@ export default {
                 result["mode"] = x["mode"]
                 result["name"] = x["name"]
                 result["scenarioId"] = x["scenario-id"]
+                result["id"] = x["id"]
                 result["index"] = x["index"]
                 result["traceId"] = x["trace-id"]
                 result["edited"] = false
@@ -108,6 +111,7 @@ export default {
                 result["mode"] = x["mode"]
                 result["active"] = x["active"]
                 result["scenarioId"] = x["scenario-id"]
+                result["id"] = x["id"]
                 result["index"] = x["index"]
                 result["resourceArn"] = x["resource-arn"]
                 result["traceId"] = x["trace-id"]
