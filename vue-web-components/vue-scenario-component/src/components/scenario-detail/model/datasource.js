@@ -3,11 +3,11 @@ import { hostName } from "../../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
 export default class PhScenarioDetailDatasource {
-    constructor(id, projectId='ggjpDje0HUC2JW', scenarioName='alfredtest') {
+    constructor(id, projectId='ggjpDje0HUC2JW', scenarioId='alfredtest') {
         this.id = id
         this.projectId = projectId
-        this.scenarioName = scenarioName
-        this.debugToken = "b5ac2bb399bfe662fe26c5d425f1d588be94f38dcae0f60b7ee49b9ddb29d828"
+        this.scenarioId = scenarioId
+        this.debugToken = "9dc3241f06aa649fbad9e03873c64f9951fdb78657cbf4b93ba266bdbc2c5d8d"
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
@@ -28,10 +28,12 @@ export default class PhScenarioDetailDatasource {
         const scenarios = await this.buildScenarioQuery().then((response) => response.json())
         this.store.sync(scenarios)
         this.scenario = this.store.findAll("scenarios")[0]
-        const triggers = await this.buildTriggersQuery(this.scenario.id).then((response) => response.json())
+        const triggers = await this.buildTriggersQuery([this.projectId, this.scenarioId].join("_"))
+            .then((response) => response.json())
         this.store.sync(triggers)
         this.triggers = this.store.findAll("scenario-triggers")
-        const steps = await this.buildStepsQuery(this.scenario.id).then((response) => response.json())
+        const steps = await this.buildStepsQuery([this.projectId, this.scenarioId].join("_"))
+            .then((response) => response.json())
         this.store.sync(steps)
         this.steps = this.store.findAll("scenario-steps")
         // TODO: reports const reports = this.buildTriggersQuery(scenario.id).then((response) => response.json())
@@ -68,7 +70,7 @@ export default class PhScenarioDetailDatasource {
             "table": "scenario",
             "conditions": {
                 "projectId": ["=", this.projectId],
-                "scenarioName": ["=", this.scenarioName]
+                "id": ["=", this.scenarioId]
             },
             "limit": 100,
             "start_key": {}

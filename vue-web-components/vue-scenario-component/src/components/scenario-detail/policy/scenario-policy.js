@@ -6,7 +6,7 @@ export default class PhScenarioDetailPolicy {
         this.id = id
         this.projectId = projectId
         this.scenarioName = scenarioName
-        this.debugToken = "fc982df534704f2d87ee4519f60f6f7366f25b41c3b83dcdb19ec2cada866948"
+        this.debugToken = "9dc3241f06aa649fbad9e03873c64f9951fdb78657cbf4b93ba266bdbc2c5d8d"
     }
 
     getCookie(name) {
