@@ -214,30 +214,35 @@ export default {
             else
                 return null;
         },
+        
         // 目标文件表拖动
         dragStart(e, index, field){
             this.clearBakData() // 清空上一次拖动时保存的数据
             this.fileMiddleData= field // 设置此次拖动时保存的数据
-            this.fileMddleIndex = index //设置此次拖动时保存的数据Index
-        },
-        allowDrop(e){
-            e.preventDefault()
+            this.fileMiddleIndex = index //设置此次拖动时保存的数据Index
         },
         clearBakData(){
             // 此处写清除各列表的操作
             this.fileMiddleData = ''
-            this.fileMddleIndex = -1
+            this.fileMiddleIndex = -1
+        },
+        allowDrop(e){
+            e.preventDefault()
         },
         drop(e, index,field){
             // 取消默认行为
             this.allowDrop(e);
-            let arr = this.steps.data.concat([])
-            let temp = arr[index];
-            arr[index] = arr[this.fileMddleIndex];
-            arr[this.fileMddleIndex] = temp;
-
-            this.steps.data = arr;
-            this.clearBakData()
+            //更改index值
+            let idx = this.fileMiddleData.index
+            let arr = this.steps.data.slice(0)
+            arr[this.fileMiddleIndex]["index"] = arr[index]["index"]
+            arr[index]["index"] = idx
+            //更改数组顺序
+            let temp = arr[index]
+            arr[index] = arr[this.fileMiddleIndex]
+            arr[this.fileMiddleIndex] = temp
+            this.steps.data = arr
+            console.log(this.steps.data)
         },
         handleCheckAllChange(val) {
             // this.checkedCities = val ? cityOptions : [];
@@ -284,6 +289,7 @@ export default {
                 expressionsArr.push(JSON.parse(item.expressions))
                 itemArr.push(step2SaveObj(item))
             }
+            itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
             const body = {
                 table: "step",
                 item: itemArr
