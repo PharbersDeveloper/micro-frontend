@@ -104,7 +104,7 @@ export default {
             projectName: "demo",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "1b1a30df30fcaf0075fa7745b308cbcc97df92ee0ee46d3e2db60bc4deb5fd3a",
+            debugToken: "b5ac2bb399bfe662fe26c5d425f1d588be94f38dcae0f60b7ee49b9ddb29d828",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
