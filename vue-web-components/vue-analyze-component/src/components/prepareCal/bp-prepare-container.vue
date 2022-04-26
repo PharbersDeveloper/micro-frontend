@@ -71,9 +71,9 @@
             <div class="prepare_area_right">
                 <div class="main_container">
                     <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
+                        :isNeedPopmenu="false"
                         v-on:countIsReady="totalCountIsReady"
                         @countIsReady="totalCountIsReady"
-                        @changeSchemaTypeEvent="changeSchemaTypeEvent"
                         :datasource="datasource" :schema="schema" class="excel" />
                 </div>
             </div>
@@ -101,8 +101,8 @@ export default {
     data() {
         return {
             drawer: false,
-            projectId: "ggjpDje0HUC2JW",
-            projectName: "demo",
+            projectId: "",
+            projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
             debugToken: "b5ac2bb399bfe662fe26c5d425f1d588be94f38dcae0f60b7ee49b9ddb29d828",
@@ -111,7 +111,8 @@ export default {
             searchKeyword: "",
             checkAll: false,
             isIndeterminate: true,
-            deleteStepsArray: []
+            deleteStepsArray: [],
+            uriMessage: null
         }
     },
     components: {
@@ -155,7 +156,7 @@ export default {
         schema: {
             type: Object,
             default: function () {
-                return new PhStepSchema('1')
+                return new PhStepSchema('1', this)
             }
         },
         steps: {
@@ -166,9 +167,35 @@ export default {
         }
     },
     mounted() {
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
+        this.uriMessage = JSON.parse(
+            unescape(this.getUrlParam("message"))
+        )
+        this.jobName = this.getJobName()
         this.steps.refreshData()
     },
     methods: {
+        getJobName() {
+            let uriMessage = JSON.parse(
+                unescape(this.getUrlParam("message"))
+            )
+            let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
+            return this.projectName + "_" + this.projectName + "_" + this.flowVersion + "_" + jobShowName + "_out"
+        },
+        getUrlParam( value) {
+            let href = window.location.href
+            console.log(href)
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
+        getUriInputName() {
+            let uriMessage = JSON.parse(
+                unescape(this.getUrlParam(paramArr, "message"))
+            )
+            return uriMessage["inputs"][0]["name"]
+        },
         delCardItem(datas) {
             let model = datas.args.param.data
             this.deleteStepsArray.push(model)
@@ -290,13 +317,6 @@ export default {
             }
             this.$emit('event', event)
         },
-        changeSchemaTypeEvent(data) {
-            data.args.param.projectId = this.allData.projectId
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.datasetName = this.allData.datasetName
-            data.args.param.datasetId = this.allData.datasetId
-            this.$emit('event',  data)
-        },
         // 新建一个算子
         newStep(stepType) {
             let indexNum = this.steps.data.length > 0 ? Math.max(...this.steps.data.map(x => x.index)) + 1 : 1
@@ -304,7 +324,7 @@ export default {
             case "FilterOnValue":
                 let ns = Object.assign({}, PhInitialFOVStepDefs)
                 ns["attributes"].index = indexNum
-                ns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
                 ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
                 ns.id = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
                 this.steps.store.syncRecord(ns)
@@ -312,7 +332,7 @@ export default {
             case "FilterOnNumericalRange":
                 let FONRns = Object.assign({}, PhInitialFONRStepDefs)
                 FONRns["attributes"].index = indexNum
-                FONRns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                FONRns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
                 FONRns["attributes"]["step-id"] = (FONRns["attributes"].index).toString()
                 FONRns.id = FONRns["attributes"][["pj-name"]] + FONRns["attributes"]["step-id"]
                 this.steps.store.syncRecord(FONRns)
@@ -320,7 +340,7 @@ export default {
             case "ReplaceValue":
                 let RVns = Object.assign({}, PhInitialRVStepDefs)
                 RVns["attributes"].index = indexNum
-                RVns["attributes"]["pj-name"] = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
+                RVns["attributes"]["pj-name"] = [this.projectId,this.jobName].join("_")
                 RVns["attributes"]["step-id"] = (RVns["attributes"].index).toString()
                 RVns.id = RVns["attributes"][["pj-name"]] + RVns["attributes"]["step-id"]
                 this.steps.store.syncRecord(RVns)
@@ -411,6 +431,7 @@ export default {
             right: 0;
             .prepare_area_left {
                 width: 300px;
+                min-width: 300px;
                 height: 100%;
                 border-right: 1px solid #cccccc;
                 display: flex;
