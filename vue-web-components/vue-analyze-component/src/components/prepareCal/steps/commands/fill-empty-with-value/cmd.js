@@ -4,9 +4,8 @@
 export default class PhFilterOnValueCmd {
     constructor(defs) {
         this.name = defs["type"]
-        this.mapping = defs["params"]["mapping"]
+        this.value = defs["params"]["value"]
         this.columns = defs["params"]["columns"]
-        this.matchingMode = defs["params"]["matchingMode"]
         this.isEdit = false
         this.isDelete = false
     }
@@ -19,11 +18,20 @@ export default class PhFilterOnValueCmd {
         return true
     }
 
+    //删除列
+    delCol(i) {
+        this.columns.splice(i, 1)
+    }
+    
+    // 增加列
+    addSelCol() {
+        this.columns.push("")
+    }
+
     revert2Defs() {
         const params = {
-            mapping: this.mapping,
             columns: this.columns,
-            matchingMode: this.matchingMode
+            value: this.value
         }
 
         return {
@@ -36,12 +44,10 @@ export default class PhFilterOnValueCmd {
     stepDesc(ele) {
         const stepNameDesc = ele.stepNameDesc
         let desc = 
-            "替换 将列 " +
+            "填充 将列 " +
             this.columns.join(",")+
-            " 中 " +
-            stepNameDesc["patternDesc"][this.matchingMode] +        
-            this.mapping[0]["from"] + " 的值替换为 " + 
-            this.mapping[0]["to"]
+            " 中的空值替换为 " +
+            this.value
         return desc
     }
 }

@@ -1,48 +1,21 @@
 export const PhFilterStepDefs = {
-    pattern: [
-        {
-            desc: "完全匹配",
-            cal: "FULL_STRING"
-        },
-        {
-            desc: "不完全匹配",
-            cal: "SUBSTRING"
-        },
-        {
-            desc: "正则表达式",
-            cal: "REGX"
-        }
-    ],
-    stepNameDesc: {
-        patternDesc: {
-            "FULL_STRING": "等于",
-            "SUBSTRING": "包含",
-            "REGX": "符合"
-        }
-    }
 }
 
-const PhInitialRVExpressions = {
-    type: "ValueReplace",
+const PhInitialFEWVExpressions = {
+    type: "FillEmptyWithValue",
     params: {
-        mapping: [
-            {
-                from: "",
-                to: ""
-            }
-        ],
-        columns: [""],
-        matchingMode: "FULL_STRING"
+        "columns": [""],
+        "value": ""
     }
 }
 
-export const PhInitialRVStepDefs = {
+export const PhInitialFEWVEStepDefs = {
     attributes: {
         "pj-name": "",
         "step-id": "",
         index: 0,
-        ctype: "ReplaceValue",
-        expressions: JSON.stringify(PhInitialRVExpressions),
+        ctype: "FillEmptyWithValue",
+        expressions: JSON.stringify(PhInitialFEWVExpressions),
         runtime: "prepare",
         "group-name": "",
         "group-index": 0,

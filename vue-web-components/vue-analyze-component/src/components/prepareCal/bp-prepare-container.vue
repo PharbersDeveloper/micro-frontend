@@ -96,6 +96,7 @@ import OpFactories from "./processors/factory"
 import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-value/defs"
 import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
 import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
+import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/defs"
 
 export default {
     data() {
@@ -344,6 +345,14 @@ export default {
                 RVns["attributes"]["step-id"] = (RVns["attributes"].index).toString()
                 RVns.id = RVns["attributes"][["pj-name"]] + RVns["attributes"]["step-id"]
                 this.steps.store.syncRecord(RVns)
+                break
+            case "FillEmptyWithValue":
+                let FEWVns = Object.assign({}, PhInitialFEWVEStepDefs)
+                FEWVns["attributes"].index = indexNum
+                FEWVns["attributes"]["pj-name"] = [this.projectId,this.jobName].join("_")
+                FEWVns["attributes"]["step-id"] = (FEWVns["attributes"].index).toString()
+                FEWVns.id = FEWVns["attributes"][["pj-name"]] + FEWVns["attributes"]["step-id"]
+                this.steps.store.syncRecord(FEWVns)
                 break
             default:
                 alert("step type is not implemented")

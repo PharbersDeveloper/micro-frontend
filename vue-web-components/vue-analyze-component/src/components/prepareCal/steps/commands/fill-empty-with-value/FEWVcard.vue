@@ -20,7 +20,22 @@
             </div>
             <div class="card_content" v-show="showContent">
                 <div class="mb_1 filter_col" v-if="datasource">
-                    <span>原始列</span>
+                    <div class="title title_space">
+                        <div>列</div>
+                        <div class="right_title">
+                            <div
+                                    class="mr_1"
+                                    @click="clickColType(1)"
+                                    :class="[{
+                                    active: colType === 1
+                                }]">单列</div>
+                            <div
+                                    @click="clickColType(2)"
+                                    :class="[{
+                                    active: colType === 2
+                                }]">多列</div>
+                        </div>
+                    </div>
                     <div class="sel_item"
                          v-for="(col,index) in datasource.command.columns"
                          :key="index + 'col'">
@@ -37,28 +52,18 @@
                             v-if="index !== 0"
                             class="del_icon" alt=""/>
                     </div>
+                    <el-button
+                        @click="datasource.command.addSelCol(this)"
+                        type="text"
+                        v-show="colType === 2">
+                        + 增加列
+                    </el-button>
                 </div>
-                <div class="mb_1"  v-if="datasource">
-                    <div class="range_item">
-                        <span>目标值</span>
-                        <el-input class="input" placeholder="请输入目标值" v-model="datasource.command.mapping[0].from" />
-                    </div>
-                </div>
-                
                 <div class="mb_1"  v-if="datasource">
                     <div class="range_item">
                         <span>替换值</span>
-                        <el-input class="input" placeholder="请输入替换值" v-model="datasource.command.mapping[0].to" />
+                        <el-input class="input" placeholder="请输入替换值" v-model="datasource.command.value" />
                     </div>
-                </div>
-                 <div class="mb_1">
-                    <div class="title">筛选模式</div>
-                        <select class="sel" v-if="datasource" v-model="datasource.command.matchingMode">
-                           <option
-                                v-for="(item,i) in concretDefs.pattern"
-                                :key="i+'filterPattern'"
-                                :value="item.cal">{{item.desc}}</option>
-                        </select>
                 </div>
             </div>
         </div>
