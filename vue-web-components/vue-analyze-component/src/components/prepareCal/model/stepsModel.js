@@ -26,7 +26,6 @@ export default class PhStepsDyModel {
     }
 
     getJobName() {
-		debugger
         let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
         return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
     }

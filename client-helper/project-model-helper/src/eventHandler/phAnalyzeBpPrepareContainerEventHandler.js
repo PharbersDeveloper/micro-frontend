@@ -47,14 +47,10 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 					"editPrepare"
 				)
 				let scriptsParams = {}
-				let operatorParameters = []
 				if (editPrepareData) {
 					scriptsParams = editPrepareData.jsondata.scripts
-					operatorParameters =
-						editPrepareData.jsondata.operatorParameters
 				} else if (createPrepareData) {
 					scriptsParams = createPrepareData.jsondata
-					operatorParameters = params.itemArr
 				} else {
 					route.router.transitionTo(
 						"shell",
@@ -69,6 +65,7 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
+				let operatorParameters = params.itemArr
 				//需要新建dataset
 				if (scriptsParams.outputs[0].id == "") {
 					scriptsParams.outputs[0].id = uuid
