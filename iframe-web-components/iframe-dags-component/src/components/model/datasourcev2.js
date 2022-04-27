@@ -10,7 +10,7 @@ export default class PhDagDatasource {
         this.title = "need a title"
         this.debugToken = '50d581afd4147919a140f23ccf6f8cb0a998294ceaf10f4fc9fa09c278f6b115'
         this.sizeHit = [0, 0]
-        this.hitWidthStep = 100
+        this.hitWidthStep = 300
         this.hitHeightStep = 500
         this.cal = { calculate: {}, selected: [] }
     }
