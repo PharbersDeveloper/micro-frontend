@@ -25,8 +25,8 @@ export default class PhDagRenderPolicy {
         const windowWidth = that.$refs.chart.offsetWidth
         const windowHeight = that.$refs.chart.offsetHeight
 
-        const width = Math.max(that.datasource.sizeHit[1], windowWidth)
-        const height = Math.max(that.datasource.sizeHit[0], windowHeight)
+        const width = Math.max(that.datasource.sizeHit[0], windowWidth)
+        const height = Math.max(that.datasource.sizeHit[1], windowHeight)
 
         const viewportWidth = width
         const viewportHeight = height
