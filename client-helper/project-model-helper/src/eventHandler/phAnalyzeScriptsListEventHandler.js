@@ -67,6 +67,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					jobCat: "prepare_edit"
 				}
 				let operatorParameters = recipt.operatorParameters
+				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
 						{
@@ -75,7 +76,8 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 							attributes: {
 								jsondata: {
 									scripts: scripts,
-									operatorParameters: operatorParameters
+									operatorParameters:
+										JSON.parse(operatorParameters)
 								}
 							}
 						}
@@ -122,7 +124,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				//需要新建dataset
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-
+				route.store.unloadAll("tempdata")
 				if (params.runtime === "prepare") {
 					route.store.pushPayload({
 						data: [

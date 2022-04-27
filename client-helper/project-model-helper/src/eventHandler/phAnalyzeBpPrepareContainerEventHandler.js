@@ -38,24 +38,28 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 			break
 		case "prepare":
 			if (params) {
-				let createPrepareData = await route.store.Record(
+				let createPrepareData = await route.store.peekRecord(
 					"tempdata",
 					"createPrepare"
 				)
-				let editPrepareData = await route.store.Record(
+				let editPrepareData = await route.store.peekRecord(
 					"tempdata",
 					"editPrepare"
 				)
 				let scriptsParams = {}
 				let operatorParameters = []
-				if (createPrepareData) {
-					scriptsParams = createPrepareData.jsondata
-					operatorParameters = params.itemArr
-				}
 				if (editPrepareData) {
 					scriptsParams = editPrepareData.jsondata.scripts
 					operatorParameters =
 						editPrepareData.jsondata.operatorParameters
+				} else if (createPrepareData) {
+					scriptsParams = createPrepareData.jsondata
+					operatorParameters = params.itemArr
+				} else {
+					route.router.transitionTo(
+						"shell",
+						`recipes?projectId=${params.projectId}&projectName=${params.projectName}`
+					)
 				}
 				console.log(createPrepareData, editPrepareData)
 				const url = `${hostName}/phdydatasource/put_item`
