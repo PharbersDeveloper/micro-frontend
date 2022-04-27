@@ -18,7 +18,10 @@ export default class PhScenarioTriggerPolicy {
     }
 
     async createOrUpdateTriggerResource() {
-
+        const response = await this.buildPushTriggersResource(trigger)
+        const res = await response.json()
+        console.log(res)
+        return res['status'] === 'ok'
     }
 
     async createOrUpdateTriggerIndex(trigger) {
@@ -33,6 +36,68 @@ export default class PhScenarioTriggerPolicy {
         const res = await response.json()
         console.log(res)
         return !Object.keys(trigger).includes("error");
+    }
+
+    async deleteTriggerResource(trigger) {
+        const response = await this.buildDeleteTriggerResource(trigger)
+        const res = await response.json()
+        console.log(res)
+        return res['status'] === 'ok'
+    }
+
+    buildDeleteTriggerResource(trigger) {
+        const url = `${hostName}/scenarioresource`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        if (trigger.mode === "timer") {
+            let body = {
+                "tenant-id": "pharbers",  // TODO: ...
+                "project-id": this.projectId,
+                "scenario-id": trigger.scenarioId,
+                "trigger-id": trigger.id,
+                "cron": "cron(* * * * ? *)",
+                "deletion": true
+            }
+
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            return fetch(url, options)
+        } else {
+            alert("not implemented")
+        }
+    }
+
+    buildPushTriggersResource(trigger) {
+        const url = `${hostName}/scenarioresource`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        if (trigger.mode === "timer") {
+            let body = {
+                "tenant-id": "pharbers",  // TODO: ...
+                "project-id": this.projectId,
+                "scenario-id": trigger.scenarioId,
+                "trigger-id": trigger.id,
+                "cron": "cron(* * * * ? *)"
+            }
+
+            let options = {
+                method: "POST",
+                headers: {
+                    "Authorization": accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    "accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            return fetch(url, options)
+        } else {
+            alert("not implemented")
+        }
     }
 
     buildPushTriggersQuery(trigger) {

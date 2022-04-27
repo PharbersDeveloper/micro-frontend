@@ -149,6 +149,7 @@ export default {
             for (let idx = 0; idx < this.triggerDisplay.length; ++idx) {
                 const tmp = this.triggerDisplay[idx]
                 if (tmp.edited) {
+                    if (!this.triggerPolicy.createOrUpdateTriggerResource(tmp)) break
                     if (!this.triggerPolicy.createOrUpdateTriggerIndex(tmp)) break
                 }
                 result = true
@@ -171,6 +172,7 @@ export default {
             for (let idx = 0; idx < this.triggerDisplay.length; ++idx) {
                 const tmp = this.triggerDisplay[idx]
                 if (tmp.deleted) {
+                    if (!this.triggerPolicy.deleteTriggerResource(tmp)) break
                     if (!this.triggerPolicy.deleteTriggerIndex(tmp)) break
                 }
                 result = true
