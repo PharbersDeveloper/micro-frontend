@@ -69,7 +69,7 @@ export default class PhFilterOnValueCmd {
             stepNameDesc["actionsDesc"][this.action] + " 列: "+
             this.columns.join(stepNameDesc["relationsDesc"][this.booleanMode])+
             " 中值大于 " +        
-            this.max + " 小于 " + this.min +
+            this.min + " 小于 " + this.max +
             "的行"
         return desc
     }

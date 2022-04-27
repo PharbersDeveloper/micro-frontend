@@ -5,7 +5,7 @@ export default class PhStepSchema {
         this.id = id
         this.parent = parent
         this.projectId = this.getUrlParam("projectId")
-        this.name = this.getUriInputName()
+        this.name = this.getUrlParam("inputName")
         this.schema = []
         this.dtype = []
         this.cellWidth = []
@@ -20,14 +20,6 @@ export default class PhStepSchema {
         let data = paramArr.find(item => item.indexOf(value) > -1)
         return data ? decodeURI(data).split("=")[1] : undefined
     }
-
-    getUriInputName() {
-        let uriMessage = JSON.parse(
-            unescape(this.getUrlParam("message"))
-        )
-        return uriMessage["inputs"][0]["name"]
-    }
-
     resetSchema(schema, dtype, cellWidth) {
         this.schema = schema
         this.dtype = dtype

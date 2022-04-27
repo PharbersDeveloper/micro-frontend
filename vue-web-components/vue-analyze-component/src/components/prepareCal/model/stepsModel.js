@@ -3,8 +3,9 @@ import { staticFilePath, hostName } from "../../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
 export default class PhStepsDyModel {
-    constructor(id) {
+    constructor(id, ele) {
         this.id = id
+        this.flowVersion = "developer"
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
@@ -25,11 +26,9 @@ export default class PhStepsDyModel {
     }
 
     getJobName() {
-        let uriMessage = JSON.parse(
-            unescape(this.getUrlParam("message"))
-        )
-        let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
-        return [this.projectName, this.projectName, "developer", jobShowName].join("_")
+		debugger
+        let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+        return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
     }
 
     getCookie(name) {

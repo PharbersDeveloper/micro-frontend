@@ -7,7 +7,7 @@ export default class PhStepDataSource {
         this.data = []
         this.sort = {}
         this.projectId = this.getUrlParam("projectId")
-        this.name = this.getUriInputName()
+        this.name = this.getUrlParam("inputName")
         this.filter = {}
         this.batch_size = 100
         // this.schema = []
@@ -25,13 +25,6 @@ export default class PhStepDataSource {
         let paramArr = href.split("?")[1].split("&")
         let data = paramArr.find(item => item.indexOf(value) > -1)
         return data ? decodeURI(data).split("=")[1] : undefined
-    }
-
-    getUriInputName() {
-        let uriMessage = JSON.parse(
-            unescape(this.getUrlParam("message"))
-        )
-        return uriMessage["inputs"][0]["name"]
     }
 
     resetUrl(url) {

@@ -51,6 +51,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				params.recipt.runtime === "prepare"
 			) {
 				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]["name"]
 				let scripts = {
 					name: "editScripts",
 					jobName: recipt.jobName,
@@ -70,6 +71,12 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
 					"&operatorParameters=" +
 					escape(recipt.operatorParameters) +
 					"&message=" +
@@ -100,11 +107,22 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				route.projectId = params.projectId
 				route.projectName = params.projectName
 				if (params.runtime === "prepare") {
-					let preUrl = `prepare-set?projectName=${
-						params.projectName
-					}&projectId=${params.projectId}&message=${encodeURI(
-						JSON.stringify(params)
-					)}`
+					// let preUrl = `prepare-set?projectName=${
+					// 	params.projectName
+					// }&projectId=${params.projectId}&message=${encodeURI(
+					// 	JSON.stringify(params)
+					// )}`
+					let preUrl =
+						"prepare-set?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&inputName=" +
+						params.inputs[0]["name"] +
+						"&message=" +
+						encodeURI(JSON.stringify(params))
 					route.router.transitionTo("shell", preUrl)
 				} else {
 					if (params.outputs[0].id == "") {

@@ -167,25 +167,19 @@ export default {
         steps: {
             type: Object,
             default: function() {
-                return new PhStepModel('1')
+                return new PhStepModel('1', this)
             }
         }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.uriMessage = JSON.parse(
-            unescape(this.getUrlParam("message"))
-        )
         this.jobName = this.getJobName()
         this.steps.refreshData()
     },
     methods: {
         getJobName() {
-            let uriMessage = JSON.parse(
-                unescape(this.getUrlParam("message"))
-            )
-            let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
+            let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         getUrlParam( value) {
@@ -194,12 +188,6 @@ export default {
             let paramArr = href.split("?")[1].split("&")
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
-        },
-        getUriInputName() {
-            let uriMessage = JSON.parse(
-                unescape(this.getUrlParam(paramArr, "message"))
-            )
-            return uriMessage["inputs"][0]["name"]
         },
         delCardItem(datas) {
             let model = datas.args.param.data
@@ -318,7 +306,6 @@ export default {
                 element: this,
                 param: {
                     name: "prepare",
-                    changeParams: this.changeParams,
                     projectId: this.projectId,
                     projectName: this.projectName,
                     itemArr: expressionsArr,
@@ -332,21 +319,21 @@ export default {
             let indexNum = this.steps.data.length > 0 ? Math.max(...this.steps.data.map(x => x.index)) + 1 : 1
             let ns = null
             switch (stepType) {
-                case "FilterOnValue":
-                    ns = Object.assign({}, PhInitialFOVStepDefs)
-                    break
-                case "FilterOnNumericalRange":
-                    ns = Object.assign({}, PhInitialFONRStepDefs)
-                    break
-                case "ReplaceValue":
-                    ns = Object.assign({}, PhInitialRVStepDefs)
-                    break
-                case "FillEmptyWithValue":
-                    ns = Object.assign({}, PhInitialFEWVEStepDefs)
-                    break
-                default:
-                    alert("step type is not implemented")
-                    break
+            case "FilterOnValue":
+                ns = Object.assign({}, PhInitialFOVStepDefs)
+                break
+            case "FilterOnNumericalRange":
+                ns = Object.assign({}, PhInitialFONRStepDefs)
+                break
+            case "ReplaceValue":
+                ns = Object.assign({}, PhInitialRVStepDefs)
+                break
+            case "FillEmptyWithValue":
+                ns = Object.assign({}, PhInitialFEWVEStepDefs)
+                break
+            default:
+                alert("step type is not implemented")
+                break
             }
             ns["attributes"].index = indexNum
             ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")

@@ -46,8 +46,8 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
-				route.projectId = scriptsParams.projectId
-				route.projectName = scriptsParams.projectName
+				route.projectId = params.projectId
+				route.projectName = params.projectName
 				let operatorParameters = params.itemArr
 				// operatorParameters.push(
 				// 	"filter",
@@ -63,7 +63,7 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 					let body = {
 						table: "dataset",
 						item: {
-							projectId: scriptsParams.projectId,
+							projectId: params.projectId,
 							id: uuid,
 							label: JSON.stringify([]),
 							name: scriptsParams.outputs[0].name,
@@ -99,7 +99,7 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 						flowVersion: "developer",
 						jobCat: "prepare_edit",
 						jobDisplayName: scriptsParams.jobDisplayName,
-						projectName: scriptsParams.projectName,
+						projectName: params.projectName,
 						jobName: scriptsParams.jobName,
 						operatorParameters: operatorParameters,
 						runtime: "prepare"
@@ -110,14 +110,14 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 					// 创建
 					message = {
 						actionName: scriptsParams.jobName,
-						dagName: scriptsParams.projectName,
+						dagName: params.projectName,
 						flowVersion: "developer",
 						jobName: scriptsParams.jobName,
 						jobId: "",
 						inputs: scriptsParams.inputs,
 						outputs: scriptsParams.outputs,
 						jobVersion: scriptsParams.jobVersion,
-						projectId: scriptsParams.projectId,
+						projectId: params.projectId,
 						timeout: "1000",
 						runtime: "prepare",
 						// owner: decodeURI(route.cookies.read("user_name_show")),
@@ -126,7 +126,7 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 							route.cookies.read("user_name_show")
 						),
 						targetJobId: "",
-						projectName: scriptsParams.projectName,
+						projectName: params.projectName,
 						labels: [],
 						operatorParameters: operatorParameters,
 						prop: {
