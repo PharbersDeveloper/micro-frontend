@@ -10,7 +10,7 @@ export default class PhStepSchema {
         this.dtype = []
         this.cellWidth = []
         this.cols = this.schema
-        this.debugToken = "b5ac2bb399bfe662fe26c5d425f1d588be94f38dcae0f60b7ee49b9ddb29d828"
+        this.debugToken = "50d581afd4147919a140f23ccf6f8cb0a998294ceaf10f4fc9fa09c278f6b115"
     }
 
     getUrlParam( value) {

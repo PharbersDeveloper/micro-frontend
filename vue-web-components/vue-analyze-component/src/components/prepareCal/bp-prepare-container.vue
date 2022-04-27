@@ -46,17 +46,19 @@
                         </div>
                         <ul class="operator_item_area">
                             <li class="operator_item"
-                                v-for="(field, index) in steps.data"
+                                v-for="(item, index) in steps.data"
                                 draggable="true"
-                                @dragstart="dragStart($event, index, field)" @dragover="allowDrop"
-                                @drop="drop($event, index, field)"
+                                @dragstart="handleDragStart($event, item)"
+                                @dragover.prevent="handleDragOver($event, item)"
+                                @dragenter="handleDragEnter($event, item)"
+                                @dragend="handleDragEnd($event, item)"
                                 :key="index+'operator'">
                                 <bp-operator-card
                                     :key="index+'opreator'"
-                                    :step="field"
+                                    :step="item"
                                     :schema="schema.schema"
                                     @delCardItem="delCardItem"
-                                    :type="field['ctype']"/>
+                                    :type="item['ctype']"/>
                             </li>
                         </ul>
                     </div>
@@ -106,14 +108,15 @@ export default {
             projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "b5ac2bb399bfe662fe26c5d425f1d588be94f38dcae0f60b7ee49b9ddb29d828",
+            debugToken: "50d581afd4147919a140f23ccf6f8cb0a998294ceaf10f4fc9fa09c278f6b115",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
             checkAll: false,
             isIndeterminate: true,
             deleteStepsArray: [],
-            uriMessage: null
+            uriMessage: null,
+            dragging: null //正在拖拽的 元素
         }
     },
     components: {
@@ -182,7 +185,7 @@ export default {
                 unescape(this.getUrlParam("message"))
             )
             let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
-            return this.projectName + "_" + this.projectName + "_" + this.flowVersion + "_" + jobShowName + "_out"
+            return [this.projectName, this.projectName, this.flowVersion, jobShowName, "out"].join("_")
         },
         getUrlParam( value) {
             let href = window.location.href
@@ -215,35 +218,33 @@ export default {
                 return null;
         },
         
-        // 目标文件表拖动
-        dragStart(e, index, field){
-            this.clearBakData() // 清空上一次拖动时保存的数据
-            this.fileMiddleData= field // 设置此次拖动时保存的数据
-            this.fileMiddleIndex = index //设置此次拖动时保存的数据Index
+        /** 拖拽 **/
+
+        // 进行拖拽的元素
+        handleDragStart(e,item){
+            this.dragging = item;
         },
-        clearBakData(){
-            // 此处写清除各列表的操作
-            this.fileMiddleData = ''
-            this.fileMiddleIndex = -1
+        handleDragEnter(e,item){
+            //为需要移动的元素设置dragstart事件
+            e.dataTransfer.effectAllowed = "move"
+            if(item === this.dragging) {
+                return
+            }
+            const newItems = [...this.steps.data]
+            const src = newItems.indexOf(this.dragging)
+            const dst = newItems.indexOf(item)
+            newItems.splice(dst, 0, ...newItems.splice(src, 1))
+            this.steps.data = newItems;
         },
-        allowDrop(e){
-            e.preventDefault()
+        //首先把div变成可以放置的元素，即重写dragenter/dragover
+        handleDragOver(e) {
+            e.dataTransfer.dropEffect = 'move'// e.dataTransfer.dropEffect="move";//在dragenter中针对放置目标来设置!
         },
-        drop(e, index,field){
-            // 取消默认行为
-            this.allowDrop(e);
-            //更改index值
-            let idx = this.fileMiddleData.index
-            let arr = this.steps.data.slice(0)
-            arr[this.fileMiddleIndex]["index"] = arr[index]["index"]
-            arr[index]["index"] = idx
-            //更改数组顺序
-            let temp = arr[index]
-            arr[index] = arr[this.fileMiddleIndex]
-            arr[this.fileMiddleIndex] = temp
-            this.steps.data = arr
-            console.log(this.steps.data)
+        handleDragEnd(e,item){
+            this.dragging = null
         },
+        /** 拖拽 **/
+        
         handleCheckAllChange(val) {
             // this.checkedCities = val ? cityOptions : [];
             this.isIndeterminate = false;
@@ -529,6 +530,7 @@ export default {
                             display: flex;
                             flex-direction: column;
                             overflow: auto;
+                            background: white;
                             .card {
                                 border: 1px solid #ddd;
                             }

@@ -10,7 +10,7 @@ export default class PhStepsDyModel {
         this.jobName = this.getJobName()
         this.stepsCount = 100
         this.currentPageToken = ""
-        this.debugToken = "b5ac2bb399bfe662fe26c5d425f1d588be94f38dcae0f60b7ee49b9ddb29d828"
+        this.debugToken = "50d581afd4147919a140f23ccf6f8cb0a998294ceaf10f4fc9fa09c278f6b115"
         this.data = []
         this.store = new JsonApiDataStore()
         this.isEdited = false
@@ -29,7 +29,7 @@ export default class PhStepsDyModel {
             unescape(this.getUrlParam("message"))
         )
         let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
-        return this.projectName + "_" + this.projectName + "_developer" + "_" + jobShowName + "_out"
+        return [this.projectName, this.projectName, "developer", jobShowName, "out"].join("_")
     }
 
     getCookie(name) {
