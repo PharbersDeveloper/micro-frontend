@@ -66,6 +66,21 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "prepare_edit"
 				}
+				let operatorParameters = recipt.operatorParameters
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "editPrepare",
+							attributes: {
+								jsondata: {
+									scripts: scripts,
+									operatorParameters: operatorParameters
+								}
+							}
+						}
+					]
+				})
 				uri =
 					"prepare-set?projectName=" +
 					params.projectName +
@@ -76,11 +91,12 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					"&jobShowName=" +
 					recipt.jobShowName +
 					"&inputName=" +
-					inputName +
-					"&operatorParameters=" +
-					escape(recipt.operatorParameters) +
-					"&message=" +
-					encodeURI(JSON.stringify(scripts))
+					inputName
+				// +
+				// "&operatorParameters=" +
+				// escape(recipt.operatorParameters) +
+				// "&message=" +
+				// encodeURI(JSON.stringify(scripts))
 			} else if (params.name == "flow") {
 				uri =
 					"flow?projectName=" +
