@@ -164,7 +164,10 @@
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
-        <create-scenario-dlg :dialog-visible="showCreateScenarioDialog" :project-id="allData.projectId" :index="nextIndexValue" owner="alfred"
+        <create-scenario-dlg :dialog-visible="showCreateScenarioDialog"
+                             :project-id="allData.projectId"
+                             :project-name="allData.projectNam"
+                             :index="nextIndexValue" owner="alfred"
                              @cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
     </div>
 

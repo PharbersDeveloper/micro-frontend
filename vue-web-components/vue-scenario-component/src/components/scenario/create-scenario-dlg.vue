@@ -38,6 +38,7 @@ export default {
     props: {
         dialogVisible: Boolean,
         projectId: String,
+        projectName: String,
         index: Number,
         owner: String
     },
@@ -53,6 +54,7 @@ export default {
                     "id": [this.projectId, this.scenarioName, this.index.toString()].join("_"),
                     type: "scenario",
                     projectId: this.projectId,
+                    projectName: this.projectName,
                     scenarioName: this.scenarioName,
                     index: this.index,
                     active: true,

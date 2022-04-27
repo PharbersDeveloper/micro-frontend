@@ -26,6 +26,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						item: {
 							id: targetscenario.id,
 							projectId: params.projectId,
+							projectName: params.projectName,
 							scenarioName: targetscenario.scenarioName,
 							label: JSON.stringify(targetLabels),
 							args: targetscenario.args,
@@ -127,6 +128,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 					item: {
 						id: targetscenario.id,
 						projectId: params.projectId,
+						projectName: params.projectName,
 						scenarioName: targetscenario.scenarioName,
 						label: targetscenario.label,
 						args: targetscenario.args,
@@ -160,6 +162,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 					item: {
 						// id: targetscenario.id,
 						projectId: params.projectId,
+						projectName: params.projectName,
 						scenarioName: targetscenario.scenarioName,
 						label: targetscenario.label,
 						args: targetscenario.args,
