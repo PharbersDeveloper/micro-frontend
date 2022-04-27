@@ -264,11 +264,14 @@ export default {
         },
         renderDag(data) {
             this.renderPolicy.renderDag(data, () => {
-                const windowHeight = this.$refs.chart.offsetHeight;
+                const windowHeight = this.$refs.chart.offsetHeight
+                const height = Math.max(this.datasource.sizeHit[0], windowHeight)
+                const step = Math.round(height / windowHeight)
+                const adjust = height / step / 2
                 this.$refs.viewport.scroll({
-                    top: windowHeight / 2,
+                    top: height / 2 - adjust,
                     left: 0,
-                    behavior: "smooth"
+                    behavior: "instant"
                 })
             });
         },
