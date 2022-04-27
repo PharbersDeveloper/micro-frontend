@@ -15,7 +15,7 @@
                     <img :src="search_icon" class="search" alt="">
                     <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter="submit">
                     <p class="tags_name">标签名</p>
-                    <div class="tags_list" v-if="tagsArrayShow.length != 0 ">
+                    <div class="tags_list" v-if="tagsArrayShow.length !== 0 ">
                         <div class="tags" @click.stop="checkedOneTag(tag)" v-for="(tag,index) in tagsArrayShow" :key="index+'tag'">
                             <input type="checkbox" class="checkout" :checked="selectedTags.indexOf(tag) > -1">
                             <span class="round" :style="{background: tagsColorArray[tagsArray.indexOf(tag)]}"></span>
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="create" v-if="tagsArrayShow.length == 0 " @click="submit" >
+                    <div class="create" v-if="tagsArrayShow.length === 0 " @click="submit" >
                         <img :src="add_icon" alt="" class="add">
                         <p>Create《{{searchValue}}》</p>
                         <img :src="enter_icon" alt="" class="enter">
@@ -75,7 +75,7 @@ export default {
     watch: {
         searchValue: function() {
             let that = this
-            if(this.searchValue.trim() == '') {
+            if(this.searchValue.trim() === '') {
                 if(this.tagsArrayShow.length < this.tagsArray.length) {
                     this.tagsArrayShow = this.tagsArray
                 }
@@ -84,7 +84,7 @@ export default {
                 let allArray = this.tagsArray.concat(this.newTagsArray)
                 allArray.forEach(item => {
                     let idx = item.indexOf(that.searchValue)
-                    if(idx == 0) {
+                    if(idx === 0) {
                         this.tagsArrayShow.push(item)
                     }
                 })
