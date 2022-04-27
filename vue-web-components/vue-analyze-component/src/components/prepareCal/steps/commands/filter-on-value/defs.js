@@ -90,7 +90,7 @@ export const PhInitialFOVStepDefs = {
     id: "",
     type: "steps"
 }
-
+ 
 export function step2SaveObj(step) {
     return {
         pjName: step['pj-name'],

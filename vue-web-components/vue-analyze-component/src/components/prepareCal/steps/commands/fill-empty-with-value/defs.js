@@ -3,6 +3,7 @@ export const PhFilterStepDefs = {
 
 const PhInitialFEWVExpressions = {
     type: "FillEmptyWithValue",
+    code: "pyspark",
     params: {
         "columns": [""],
         "value": ""

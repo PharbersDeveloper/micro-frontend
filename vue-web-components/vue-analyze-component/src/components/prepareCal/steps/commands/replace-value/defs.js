@@ -24,6 +24,7 @@ export const PhFilterStepDefs = {
 
 const PhInitialRVExpressions = {
     type: "ValueReplace",
+    code: "pyspark",
     params: {
         mapping: [
             {

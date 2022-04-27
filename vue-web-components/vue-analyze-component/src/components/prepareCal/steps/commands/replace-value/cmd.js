@@ -4,6 +4,7 @@
 export default class PhFilterOnValueCmd {
     constructor(defs) {
         this.name = defs["type"]
+        this.code = defs["code"]
         this.mapping = defs["params"]["mapping"]
         this.columns = defs["params"]["columns"]
         this.matchingMode = defs["params"]["matchingMode"]
@@ -28,6 +29,7 @@ export default class PhFilterOnValueCmd {
 
         return {
             type: this.name,
+            code: this.code,
             params: params
         }
     }
