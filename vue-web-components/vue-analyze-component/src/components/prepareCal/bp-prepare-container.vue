@@ -53,6 +53,7 @@
                                 @dragenter="handleDragEnter($event, item)"
                                 @dragend="handleDragEnd($event, item)"
                                 :key="index+'operator'">
+                                {{item.index}} - {{index}}
                                 <bp-operator-card
                                     :key="index+'opreator'"
                                     :step="item"
@@ -185,7 +186,7 @@ export default {
                 unescape(this.getUrlParam("message"))
             )
             let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
-            return [this.projectName, this.projectName, this.flowVersion, jobShowName, "out"].join("_")
+            return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         getUrlParam( value) {
             let href = window.location.href
@@ -235,6 +236,7 @@ export default {
             const dst = newItems.indexOf(item)
             newItems.splice(dst, 0, ...newItems.splice(src, 1))
             this.steps.data = newItems;
+            console.log(this.steps.data)
         },
         //首先把div变成可以放置的元素，即重写dragenter/dragover
         handleDragOver(e) {
@@ -325,46 +327,32 @@ export default {
             }
             this.$emit('event', event)
         },
-        // 新建一个算子
+        // 新建算子
         newStep(stepType) {
             let indexNum = this.steps.data.length > 0 ? Math.max(...this.steps.data.map(x => x.index)) + 1 : 1
+            let ns = null
             switch (stepType) {
-            case "FilterOnValue":
-                let ns = Object.assign({}, PhInitialFOVStepDefs)
-                ns["attributes"].index = indexNum
-                ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
-                ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
-                ns.id = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
-                this.steps.store.syncRecord(ns)
-                break
-            case "FilterOnNumericalRange":
-                let FONRns = Object.assign({}, PhInitialFONRStepDefs)
-                FONRns["attributes"].index = indexNum
-                FONRns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
-                FONRns["attributes"]["step-id"] = (FONRns["attributes"].index).toString()
-                FONRns.id = FONRns["attributes"][["pj-name"]] + FONRns["attributes"]["step-id"]
-                this.steps.store.syncRecord(FONRns)
-                break
-            case "ReplaceValue":
-                let RVns = Object.assign({}, PhInitialRVStepDefs)
-                RVns["attributes"].index = indexNum
-                RVns["attributes"]["pj-name"] = [this.projectId,this.jobName].join("_")
-                RVns["attributes"]["step-id"] = (RVns["attributes"].index).toString()
-                RVns.id = RVns["attributes"][["pj-name"]] + RVns["attributes"]["step-id"]
-                this.steps.store.syncRecord(RVns)
-                break
-            case "FillEmptyWithValue":
-                let FEWVns = Object.assign({}, PhInitialFEWVEStepDefs)
-                FEWVns["attributes"].index = indexNum
-                FEWVns["attributes"]["pj-name"] = [this.projectId,this.jobName].join("_")
-                FEWVns["attributes"]["step-id"] = (FEWVns["attributes"].index).toString()
-                FEWVns.id = FEWVns["attributes"][["pj-name"]] + FEWVns["attributes"]["step-id"]
-                this.steps.store.syncRecord(FEWVns)
-                break
-            default:
-                alert("step type is not implemented")
-                break
+                case "FilterOnValue":
+                    ns = Object.assign({}, PhInitialFOVStepDefs)
+                    break
+                case "FilterOnNumericalRange":
+                    ns = Object.assign({}, PhInitialFONRStepDefs)
+                    break
+                case "ReplaceValue":
+                    ns = Object.assign({}, PhInitialRVStepDefs)
+                    break
+                case "FillEmptyWithValue":
+                    ns = Object.assign({}, PhInitialFEWVEStepDefs)
+                    break
+                default:
+                    alert("step type is not implemented")
+                    break
             }
+            ns["attributes"].index = indexNum
+            ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
+            ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
+            ns["id"] = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
+            this.steps.store.syncRecord(ns)
             this.steps.data = this.steps.store.findAll("steps")
             console.log(this.steps.data)
             this.drawer = false

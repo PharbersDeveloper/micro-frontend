@@ -29,7 +29,7 @@ export default class PhStepsDyModel {
             unescape(this.getUrlParam("message"))
         )
         let jobShowName = uriMessage.jobShowName ? uriMessage.jobShowName : uriMessage.jobName
-        return [this.projectName, this.projectName, "developer", jobShowName, "out"].join("_")
+        return [this.projectName, this.projectName, "developer", jobShowName].join("_")
     }
 
     getCookie(name) {
