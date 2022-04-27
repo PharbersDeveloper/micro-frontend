@@ -38,9 +38,12 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 			break
 		case "prepare":
 			if (params) {
-				let scriptsParams = JSON.parse(
-					unescape(decodeURI(params.message))
+				let tempData = await route.store.peekRecord(
+					"tempdata",
+					"createPrepare"
 				)
+				let scriptsParams = tempData.jsondata
+				console.log(scriptsParams)
 				const url = `${hostName}/phdydatasource/put_item`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
@@ -49,14 +52,6 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				route.projectId = params.projectId
 				route.projectName = params.projectName
 				let operatorParameters = params.itemArr
-				// operatorParameters.push(
-				// 	"filter",
-				// 	params.rowParams,
-				// 	"select",
-				// 	params.colParams,
-				// 	"operation_null",
-				// 	params.changeParams
-				// )
 				//需要新建dataset
 				if (scriptsParams.outputs[0].id == "") {
 					scriptsParams.outputs[0].id = uuid

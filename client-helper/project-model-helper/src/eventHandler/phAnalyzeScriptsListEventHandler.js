@@ -106,23 +106,19 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				//需要新建dataset
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				route.store.pushPayload({
-					data: [
-						{
-							type: "tempdata",
-							id: "d8fa20cb20ed43cc9ea1993b6a03a2c1",
-							attributes: {
-								jsondata: "[]"
-							}
-						}
-					]
-				})
+
 				if (params.runtime === "prepare") {
-					// let preUrl = `prepare-set?projectName=${
-					// 	params.projectName
-					// }&projectId=${params.projectId}&message=${encodeURI(
-					// 	JSON.stringify(params)
-					// )}`
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "createPrepare",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
 					let preUrl =
 						"prepare-set?projectName=" +
 						params.projectName +
@@ -131,9 +127,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&inputName=" +
-						params.inputs[0]["name"] +
-						"&message=" +
-						encodeURI(JSON.stringify(params))
+						params.inputs[0]["name"]
 					route.router.transitionTo("shell", preUrl)
 				} else {
 					if (params.outputs[0].id == "") {
@@ -178,7 +172,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						projectId: params.projectId,
 						timeout: "1000",
 						runtime: params.runtime,
-						// owner: decodeURI(route.cookies.read("user_name_show")),
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")

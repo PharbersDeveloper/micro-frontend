@@ -30,6 +30,7 @@ export async function phAnalyzeUploadDatasetRouteModel(route, parseParams) {
 	let tmp = await ds
 		.then((response) => response.json())
 		.then((response) => {
+			console.log(response)
 			that.store.pushPayload(response)
 			return new Promise((resolve) => {
 				resolve(that.store.peekAll("dataset"))
