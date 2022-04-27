@@ -138,7 +138,10 @@ export default {
             registerJobEventName: "",
             retryButtonShow: false,
             showDagLogs: false,
-            isRunning: false //stop按钮是否可以点击
+            isRunning: false, //stop按钮是否可以点击
+            isFirstRendering: true,
+            offsetLeft: 0,
+            offsetTop: 0
         };
     },
     components: {
@@ -263,14 +266,20 @@ export default {
             else return null;
         },
         renderDag(data) {
+            const that = this
             this.renderPolicy.renderDag(data, () => {
-                const windowHeight = this.$refs.chart.offsetHeight
-                const height = Math.max(this.datasource.sizeHit[0], windowHeight)
-                const step = Math.round(height / windowHeight)
-                const adjust = height / step / 2
-                this.$refs.viewport.scroll({
-                    top: height / 2 - adjust,
-                    left: 0,
+                if (that.isFirstRendering) {
+                    that.isFirstRendering = false
+                    const windowHeight = that.$refs.chart.offsetHeight
+                    const height = Math.max(that.datasource.sizeHit[0], windowHeight)
+                    const step = Math.round(height / windowHeight)
+                    const adjust = height / step / 2
+                    that.offsetLeft = 0
+                    that.offsetTop = height / 2 - adjust
+                }
+                that.$refs.viewport.scroll({
+                    top: that.offsetTop,
+                    left: that.offsetLeft,
                     behavior: "instant"
                 })
             });
@@ -286,6 +295,9 @@ export default {
         selectItem(n, o) {
             this.selectItemName = n.attributes.name;
             this.icon_header = this.defs.iconsByName(n.category);
+            this.offsetLeft = this.$refs.viewport.scrollLeft
+            this.offsetTop = this.$refs.viewport.scrollTop
+            this.isFirstRendering = false
             this.$nextTick(this.datasource.selectOneElement(this));
         }
     }
