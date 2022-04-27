@@ -106,6 +106,17 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				//需要新建dataset
 				route.projectId = params.projectId
 				route.projectName = params.projectName
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdata",
+							id: "d8fa20cb20ed43cc9ea1993b6a03a2c1",
+							attributes: {
+								jsondata: "[]"
+							}
+						}
+					]
+				})
 				if (params.runtime === "prepare") {
 					// let preUrl = `prepare-set?projectName=${
 					// 	params.projectName
