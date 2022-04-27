@@ -53,7 +53,6 @@
                                 @dragenter="handleDragEnter($event, item)"
                                 @dragend="handleDragEnd($event, item)"
                                 :key="index+'operator'">
-                                {{item.index}} - {{index}}
                                 <bp-operator-card
                                     :key="index+'opreator'"
                                     :step="item"
@@ -109,7 +108,7 @@ export default {
             projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "50d581afd4147919a140f23ccf6f8cb0a998294ceaf10f4fc9fa09c278f6b115",
+            debugToken: "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
@@ -117,7 +116,8 @@ export default {
             isIndeterminate: true,
             deleteStepsArray: [],
             uriMessage: null,
-            dragging: null //正在拖拽的 元素
+            dragging: null, //正在拖拽的 元素
+            handleDragNewItemsDst: 0
         }
     },
     components: {
@@ -184,7 +184,6 @@ export default {
         },
         getUrlParam( value) {
             let href = window.location.href
-            console.log(href)
             let paramArr = href.split("?")[1].split("&")
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
@@ -219,18 +218,28 @@ export default {
             if(item === this.dragging) {
                 return
             }
-            const newItems = [...this.steps.data]
-            const src = newItems.indexOf(this.dragging)
-            const dst = newItems.indexOf(item)
+            let newItems = [...this.steps.data]
+            console.log(newItems)
+            const src = newItems.indexOf(this.dragging) //被拖拽元素的index
+            const dst = newItems.indexOf(item) //被挤开元素的index
+            this.handleDragNewItemsDst = dst
             newItems.splice(dst, 0, ...newItems.splice(src, 1))
             this.steps.data = newItems;
-            console.log(this.steps.data)
         },
         //首先把div变成可以放置的元素，即重写dragenter/dragover
         handleDragOver(e) {
-            e.dataTransfer.dropEffect = 'move'// e.dataTransfer.dropEffect="move";//在dragenter中针对放置目标来设置!
+            //在dragenter中针对放置目标来设置
+            e.dataTransfer.dropEffect = 'move'
         },
         handleDragEnd(e,item){
+            let that = this
+            //更改index流程
+            this.steps.data.forEach((item, index) => {
+                if(index >= that.handleDragNewItemsDst) {
+                    if(index < 1) index = 1
+                    item["index"] = parseFloat(that.steps.data[index - 1]["index"]) + 1
+                }
+            })
             this.dragging = null
         },
         /** 拖拽 **/
@@ -336,6 +345,7 @@ export default {
                 break
             }
             ns["attributes"].index = indexNum
+            console.log(indexNum)
             ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
             ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
             ns["id"] = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
