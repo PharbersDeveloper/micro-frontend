@@ -246,7 +246,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this);
             // 发布前解注
-            // document.domain = "pharbers.com"
+            document.domain = "pharbers.com"
         },
         // 监听屏幕大小改变
         bindChangeWindow() {
