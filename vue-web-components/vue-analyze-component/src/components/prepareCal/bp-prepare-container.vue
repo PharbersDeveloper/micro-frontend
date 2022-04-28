@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="prepare_header">
             <div class="header_left">
-                <img :src="icons.prepare_icon" alt="" />
+                <img :src="defs.iconsByName('prepare')" alt="" />
                 <span>Prepare</span>
             </div>
             <div class="header_right">
@@ -33,7 +33,7 @@
                             <div class="select_all">
                                 <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
-                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="" />
+                                <img :src="defs.iconsByName('dropdown')" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="" />
                                 <div class="action_card" v-show="showMultiSelectActionMenu">
                                     <div class="action_item">删除</div>
                                 </div>
@@ -65,7 +65,7 @@
                     <el-button
                         class="add_new_step"
                         @click="showOpFactories">
-                        <img :src="icons.add_icon" alt="" />
+                        <img :src="defs.iconsByName('add')" alt="" />
                         添加一个新算子
                     </el-button>
                 </div>
@@ -99,6 +99,8 @@ import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-v
 import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
 import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
 import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/defs"
+import PhDagDefinitions from "../policy/definitions/definitions";
+
 
 export default {
     data() {
@@ -130,17 +132,6 @@ export default {
         OpFactories
     },
     props: {
-        icons: {
-            type: Object,
-            default: () => {
-                return {
-                    prepare_icon: `${staticFilePath}` + "/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
-                    add_icon: `${staticFilePath}` + "/icons/add_operator_icon.svg",
-                    close_icon: `${staticFilePath}` + "/icon_close.svg",
-                    icon_dropdown: "https://components.pharbers.com/prod/general/public/icon_dropdown.svg"
-                }
-            }
-        },
         allData: {
             type: Object,
             default: function() {
@@ -168,6 +159,12 @@ export default {
             type: Object,
             default: function() {
                 return new PhStepModel('1', this)
+            }
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
             }
         }
     },
