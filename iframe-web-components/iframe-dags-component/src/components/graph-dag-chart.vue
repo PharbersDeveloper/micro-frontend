@@ -211,7 +211,6 @@ export default {
     },
     destroyed() {
         // 移除监听
-        // window.removeEventListener('message', this.eventPolicy.handleForwardMessage)
         window.removeEventListener("message", this.handleForwardMessage);
     },
     methods: {
@@ -219,7 +218,10 @@ export default {
             const that = this;
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
-                    console.log("iframe接收的", event.data.message.cmd);
+                    console.log(
+						"iframe接收的", 
+						event.data.message.cmd
+					);
                     that.eventPolicy.runDagCallback(event.data.message);
                 }
                 if (event.data.message.cmd === "finish_dag") {
