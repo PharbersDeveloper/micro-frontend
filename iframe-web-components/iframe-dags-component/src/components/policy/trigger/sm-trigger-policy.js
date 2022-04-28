@@ -60,7 +60,7 @@ export default class PhDagTriggerPolicy {
             "scripts": [],
             "userConf": {}
         }
-        if(datasetsArr.length < 1) {
+        if(datasetsArr.length < 1 || this.parent.datasource.cal.selected.length <=1) {
             alert( "请先选择一条dag!" )
             return false
         }

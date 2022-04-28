@@ -121,7 +121,7 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            icon_header: null, //this.defs.iconsByName('DSuploaded'),
+            icon_header: null,
             selectItem: null,
             showRunJson: false,
             runId: "",

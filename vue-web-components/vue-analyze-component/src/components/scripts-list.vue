@@ -37,24 +37,24 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" @click="selectScripts('python3')">
-                                    <img :src="img1" alt="">
+                                    <img :src="defs.iconsByName('python')" alt="">
                                     <p class="">Python</p>
 									<!-- class=dis 灰掉某一项 -->
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
-                                    <img :src="img2" alt="">
+                                    <img :src="defs.iconsByName('pyspark')" alt="">
                                     <p>PySpark</p>
                                 </div>
                                 <div class="list" @click="selectScripts('r')">
-                                    <img :src="img3" alt="">
+                                    <img :src="defs.iconsByName('r')" alt="">
                                     <p  class="">R</p>
                                 </div>
                                 <div class="list" @click="selectScripts('sparkr')">
-                                    <img :src="img4" alt="">
+                                    <img :src="defs.iconsByName('sparkr')" alt="">
                                     <p  class="">SparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
-                                    <img :src="img5" alt="">
+                                    <img :src="defs.iconsByName('prepare')" alt="">
                                     <p  class="">Prepare</p>
                                 </div>
                             </div>
@@ -215,6 +215,7 @@ import bpSelectVue from '../../node_modules/vue-components/src/components/bp-sel
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
 import { staticFilePath } from '../config/envConfig'
+import PhDagDefinitions from "./policy/definitions/definitions";
 
 export default {
     data() {
@@ -241,11 +242,6 @@ export default {
             python_icon: `${staticFilePath}` + "/python_icon.svg",
             R_icon: `${staticFilePath}` + "/R_icon.svg",
             sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
-            img1: `${staticFilePath}` + "/icons/Python.svg",
-            img2: `${staticFilePath}` + "/icons/PySpark.svg",
-            img3: `${staticFilePath}` + "/icons/R.svg",
-            img4: `${staticFilePath}` + "/icons/SparkR.svg",
-            img5: `${staticFilePath}` + "/icons/%E4%B8%8B%E8%BD%BD.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -286,6 +282,12 @@ export default {
                 "tagsArray": [],
                 "_isVue": true
             })
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
+            }
         }
     },
     components: {

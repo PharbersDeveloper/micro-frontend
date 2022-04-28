@@ -5,6 +5,14 @@ export default class PhDagHandler {
     constructor(id, parent) {
         this.id = id
         this.parent = parent
+        this.statesArr = {
+            failed: true,
+            fail: true,
+            succeed: true,
+            success: true,
+            canceled: true,
+            running: true
+        }
     }
 
     // handleForwardMessage(event) {
@@ -33,16 +41,14 @@ export default class PhDagHandler {
         let _this = this
         let represent_id = ""
         let payloadArr = JSON.parse(response.payload)
-        console.log("payloadArr", payloadArr)
         this.responseArr = payloadArr
         let data = that.datasource.data
         payloadArr.forEach(payload => {
+            let cnotification = JSON.parse(payload.message).cnotification
             let status = payload["status"]
-            if(status !== "running" && status !== "success" && status !== "failed") {
-                return false
-            }
-            let jobShowName = JSON.parse(payload.message).cnotification.jobShowName
-            console.log("status", status, jobShowName)
+            let state = this.statesArr[status] || false
+            if (!state) return false
+            let jobShowName = cnotification.jobShowName
             // 1.找到对应job节点并更新状态
             data.forEach((it,index) => {
                 if (jobShowName === it.attributes.name) {
@@ -59,11 +65,9 @@ export default class PhDagHandler {
             })
             // 2.失败时出现弹框
             if(status === "failed") {
-                let cnotification = JSON.parse(payload.message).cnotification
-                let showName = cnotification.jobShowName
                 let jobName = cnotification.jobName
                 let runnerId = cnotification.runId
-                let length = that.failedLogs.filter(it => it.jobShowName === showName)
+                let length = that.failedLogs.filter(it => it.jobShowName === jobShowName) //去重
                 if(length < 1) {
                     that.failedLogs.push({
                         data: payload,
@@ -74,25 +78,27 @@ export default class PhDagHandler {
                     })
                 }
             }
-            if (status === "running") {
-                let cnotification = JSON.parse(payload.message).cnotification
-                that.runId = cnotification.runId
-                that.isRunning = true
-            } else {
-                that.isRunning = false
-            }
             console.log("failedLogs", that.failedLogs)
         })
     }
 
     // trigger更新整体状态
     runDagFinishCallback(response) {
+        let that = this.parent
         let payload = JSON.parse(response.payload)
         let status = payload["status"]
-        if(status == "success" || status == "failed") {
-            // 更新进度条
-            this.parent.progressOver = true
-            this.parent.retryButtonShow = true
+        const state = this.statesArr[status] || false
+        if (!state) return false
+        if (status === "running") {
+            //停止按钮
+            let cnotification = JSON.parse(payload.message).cnotification
+            that.runId = cnotification.runId
+            that.isRunning = true
+        } else if(status == "success" || status == "failed") {
+            // 更新进度条,去掉停止按钮
+            that.progressOver = true
+            that.retryButtonShow = true
+            that.isRunning = false
         }
     }
 
