@@ -108,7 +108,7 @@ export default {
             projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0",
+            debugToken: "1fd2fc989c6bdbce8cebdf54bfc01dcb00e94c85d52e2916e2fd63fc2b0587f9",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
@@ -213,6 +213,10 @@ export default {
             this.dragging = item;
         },
         handleDragEnter(e,item){
+            for (let index = 0; index < this.steps.data.length; ++index) {
+                const item = this.steps.data[index]
+                item.expressions = JSON.stringify(item.callback.command.revert2Defs())
+            }
             //为需要移动的元素设置dragstart事件
             e.dataTransfer.effectAllowed = "move"
             if(item === this.dragging) {
@@ -275,6 +279,7 @@ export default {
             return result.status === 200
         },
         async save() {
+            console.log(this.steps.data)
             //删除算子
             for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
                 // await this.deleteStepsArray[idx].delete(this)
