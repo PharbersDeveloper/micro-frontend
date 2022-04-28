@@ -1,5 +1,8 @@
 // eslint-disable-next-line no-unused-vars
-export async function phAnalyzePrepareSetRouteModel(route, parseParams) {
+export async function phAnalyzeBpPrepareContainerRouteModel(
+	route,
+	parseParams
+) {
 	// route.browserEventsService.registerListener("recipes")
 	console.log(parseParams)
 	return {

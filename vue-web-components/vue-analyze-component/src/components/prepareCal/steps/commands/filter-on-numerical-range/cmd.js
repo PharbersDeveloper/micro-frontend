@@ -5,13 +5,12 @@ export default class PhFilterOnValueCmd {
     constructor(defs) {
         this.name = defs["type"]
         this.code = defs["code"]
-        this.values = defs["params"]["values"]
-        this.matchingMode = defs["params"]["matchingMode"]
-        this.normalizationMode = defs["params"]["normalizationMode"]
         this.action = defs["params"]["action"]
         this.booleanMode = defs["params"]["booleanMode"]
         this.appliesTo = defs["params"]["appliesTo"]
         this.columns = defs["params"]["columns"]
+        this.max = defs["params"]["max"]
+        this.min = defs["params"]["min"]
         this.stepNameDesc = defs["stepNameDesc"]
         this.isEdit = false
         this.isDelete = false
@@ -27,13 +26,13 @@ export default class PhFilterOnValueCmd {
 
     revert2Defs() {
         const params = {
-            values: this.values,
             matchingMode: this.matchingMode,
-            normalizationMode: this.normalizationMode,
             action: this.action,
             booleanMode: this.booleanMode,
             appliesTo: this.appliesTo,
-            columns: this.columns
+            columns: this.columns,
+            max: this.max,
+            min: this.min
         }
 
         return {
@@ -69,9 +68,8 @@ export default class PhFilterOnValueCmd {
         let desc = 
             stepNameDesc["actionsDesc"][this.action] + " 列: "+
             this.columns.join(stepNameDesc["relationsDesc"][this.booleanMode])+
-            " 中值 " +        
-            stepNameDesc["patternDesc"][this.matchingMode] + 
-            this.values.join(",") + 
+            " 中值大于 " +        
+            this.min + " 小于 " + this.max +
             "的行"
         return desc
     }

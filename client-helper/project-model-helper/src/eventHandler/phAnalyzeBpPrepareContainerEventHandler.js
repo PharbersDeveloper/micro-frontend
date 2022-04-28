@@ -1,7 +1,7 @@
 import { hostName, actionTableName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
-export async function phAnalyzePrepareSetEventHandler(e, route) {
+export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
 	route.msg = "新建"
@@ -38,32 +38,41 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 			break
 		case "prepare":
 			if (params) {
-				let scriptsParams = JSON.parse(
-					unescape(decodeURI(params.message))
+				let createPrepareData = await route.store.peekRecord(
+					"tempdata",
+					"createPrepare"
 				)
+				let editPrepareData = await route.store.peekRecord(
+					"tempdata",
+					"editPrepare"
+				)
+				let scriptsParams = {}
+				if (editPrepareData) {
+					scriptsParams = editPrepareData.jsondata.scripts
+				} else if (createPrepareData) {
+					scriptsParams = createPrepareData.jsondata
+				} else {
+					route.router.transitionTo(
+						"shell",
+						`recipes?projectId=${params.projectId}&projectName=${params.projectName}`
+					)
+				}
+				console.log(createPrepareData, editPrepareData)
 				const url = `${hostName}/phdydatasource/put_item`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
-				route.projectId = scriptsParams.projectId
-				route.projectName = scriptsParams.projectName
-				let operatorParameters = []
-				operatorParameters.push(
-					"filter",
-					params.rowParams,
-					"select",
-					params.colParams,
-					"operation_null",
-					params.changeParams
-				)
+				route.projectId = params.projectId
+				route.projectName = params.projectName
+				let operatorParameters = params.itemArr
 				//需要新建dataset
 				if (scriptsParams.outputs[0].id == "") {
 					scriptsParams.outputs[0].id = uuid
 					let body = {
 						table: "dataset",
 						item: {
-							projectId: scriptsParams.projectId,
+							projectId: params.projectId,
 							id: uuid,
 							label: JSON.stringify([]),
 							name: scriptsParams.outputs[0].name,
@@ -99,7 +108,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 						flowVersion: "developer",
 						jobCat: "prepare_edit",
 						jobDisplayName: scriptsParams.jobDisplayName,
-						projectName: scriptsParams.projectName,
+						projectName: params.projectName,
 						jobName: scriptsParams.jobName,
 						operatorParameters: operatorParameters,
 						runtime: "prepare"
@@ -110,14 +119,14 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 					// 创建
 					message = {
 						actionName: scriptsParams.jobName,
-						dagName: scriptsParams.projectName,
+						dagName: params.projectName,
 						flowVersion: "developer",
 						jobName: scriptsParams.jobName,
 						jobId: "",
 						inputs: scriptsParams.inputs,
 						outputs: scriptsParams.outputs,
 						jobVersion: scriptsParams.jobVersion,
-						projectId: scriptsParams.projectId,
+						projectId: params.projectId,
 						timeout: "1000",
 						runtime: "prepare",
 						// owner: decodeURI(route.cookies.read("user_name_show")),
@@ -126,7 +135,7 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 							route.cookies.read("user_name_show")
 						),
 						targetJobId: "",
-						projectName: scriptsParams.projectName,
+						projectName: params.projectName,
 						labels: [],
 						operatorParameters: operatorParameters,
 						prop: {
@@ -136,13 +145,13 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 					}
 					job_cat_name = "dag_create"
 				}
-				route.noticeService.defineAction({
-					type: "iot",
-					id: job_cat_name,
-					projectId: params.projectId,
-					ownerId: route.cookies.read("account_id"),
-					callBack: createScriptNoticeCallback
-				})
+				// route.noticeService.defineAction({
+				// 	type: "iot",
+				// 	id: job_cat_name,
+				// 	projectId: params.projectId,
+				// 	ownerId: route.cookies.read("account_id"),
+				// 	callBack: createScriptNoticeCallback
+				// })
 				let scriptBody = {
 					table: actionTableName,
 					item: {
@@ -172,6 +181,17 @@ export async function phAnalyzePrepareSetEventHandler(e, route) {
 				route.creatScriptsQuery = await fetch(url, scriptOptions).then(
 					(res) => res.json()
 				)
+
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: route.creatScriptsQuery.data.id,
+					eventName: job_cat_name,
+					projectId: scriptsParams.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: createScriptNoticeCallback
+				})
 			}
 			break
 		default:

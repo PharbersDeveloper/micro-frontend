@@ -25,21 +25,21 @@
                 </div>
                 <div class="opt_desc">
                     <div class="opt_condition_desc">
-                        <!-- {{opt_condition_desc}} -->
+                        {{opt_condition_desc}}
                         <!-- <vue-markdown >{{opt_condition_desc}}</vue-markdown> -->
                         <!--字段解释：
                             subfield：双栏or单栏
                             defaultOpen：preview  展示区域，预览区域
                             toolbarsFlag：false，工具栏展示
                         -->
-                        <mavon-editor class="markdown"
+                        <!-- <mavon-editor class="markdown"
                             :value="opt_condition_desc"
                             :subfield = "false"    
                             :defaultOpen = "prop.defaultOpen"
                             :toolbarsFlag = "prop.toolbarsFlag"
                             :editable="prop.editable"
                             :scrollStyle="prop.scrollStyle"
-                        ></mavon-editor>
+                        ></mavon-editor> -->
                     </div>
                 </div>
             </div>
@@ -50,15 +50,9 @@
 <script>
 import { staticFilePath, hostName } from '../../../config/envConfig'
 import ElDrawer from 'element-ui/packages/drawer/index'
-// import VueMarkdown from 'vue-markdown'
 import { PhProcessorsDefs } from "./factory-defs"
 import FilterOnValueDesc from "../md/filterOnValue.md"
-/*在script中引入mavonEditor相关，来展示Markdown*/
-import Vue from "vue";
-import { mavonEditor } from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
-
-// Vue.component("mavon-editor", mavonEditor);
+// import { mavonEditor } from "mavon-editor";
 
 
 export default {
@@ -103,8 +97,8 @@ export default {
         }
     },
     components: {
-        ElDrawer,
-        mavonEditor
+        ElDrawer
+        // mavonEditor
         // VueMarkdown
     },
     computed: {

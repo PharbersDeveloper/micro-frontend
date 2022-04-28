@@ -8,9 +8,9 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566'
+        this.debugToken = '4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0'
         this.sizeHit = [0, 0]
-        this.hitWidthStep = 100
+        this.hitWidthStep = 300
         this.hitHeightStep = 500
         this.cal = { calculate: {}, selected: [] }
     }
@@ -93,6 +93,7 @@ export default class PhDagDatasource {
                 ele.datasource.data = ele.datasource.data.map(x => {
                     x["id"] = x["attributes"]["represent-id"]
                     x["parentIds"] = []
+                    x["childrenIds"] = []
                     x["representId"] = x["attributes"]["represent-id"]
                     // x["status"] = x["attributes"]["runtime"]
                     x["status"] = "normal"
@@ -142,6 +143,7 @@ export default class PhDagDatasource {
                 })
                 const links = response.data.filter(x => x["attributes"]["ctype"] === "link")
                 let maxHeight = -999
+                let maxHeightV2 = -999
                 for (let idx = 0; idx < links.length; ++idx) {
                     const cmessage = JSON.parse(links[idx]["attributes"]["cmessage"])
                     const targetId = cmessage["targetId"]
@@ -154,10 +156,19 @@ export default class PhDagDatasource {
                                 maxHeight = tmp["parentIds"].length
                             }
                         }
+                    }
 
+                    if (targetId && targetId.length > 0) {
+                        const tmp = ele.datasource.data.find(x => x["id"] === sourceId)
+                        if(tmp) {
+                            tmp["childrenIds"].push(targetId)
+                            if (maxHeightV2 < tmp["childrenIds"].length) {
+                                maxHeightV2 = tmp["childrenIds"].length
+                            }
+                        }
                     }
                 }
-                that.sizeHit = [maxLevel * that.hitWidthStep, maxHeight * that.hitHeightStep]
+                that.sizeHit = [maxLevel * that.hitWidthStep, Math.max(maxHeight, maxHeightV2) * that.hitHeightStep]
                 ele.needRefresh++
             })
     }

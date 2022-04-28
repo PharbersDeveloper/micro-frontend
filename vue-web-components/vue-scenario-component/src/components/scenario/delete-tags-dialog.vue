@@ -59,7 +59,7 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss: [
+                scenarios: [
                     // {projectId:1,name:'Data_0001',label: ['lalalla','lll']},
                     // {projectId:2,name:'Data_0002',label: ['bbbbbbb','aaaaaaaa']}
                 ]
@@ -70,13 +70,13 @@ export default {
         searchData: function() {
             let searchValue = this.searchValue
             if(searchValue) {
-                return this.allData.dss.filter(function(pro) {
+                return this.allData.scenarios.filter(function(pro) {
                     // return Object.keys(pro).some(function(key) {
                     return String(pro).toLowerCase().indexOf(searchValue) > -1
                     // })
                 })
             }
-            return this.allData.dss
+            return this.allData.scenarios
         }
     },
     methods: {

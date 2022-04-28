@@ -1,15 +1,21 @@
 <template>
-    <div class="bp_operator_card">
+    <div class="bp_FONR_card">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div v-if="concretDefs" class="card">
             <div class="card_header" @click="handleCloseContent">
                 <img :src="icons.drag_prepare_card" class="drag_prepare_card" alt="">
                 <el-checkbox></el-checkbox>
                 <div class="card_header_content">
-                    <div class="card_header_desc">{{step["step-name"]}}</div>
+                    <div class="card_header_desc">
+                        <!-- {{step["step-name"]}} -->
+                        {{stepDesc}}
+                    </div>
                     <div class="card_header_del">
-                        <div class="num">- 378</div>
-                        <img :src="icons.del_icon" class="del_icon" alt="">
+                        <div class="num"></div>
+                        <img 
+                            :src="icons.del_icon"
+                            @click="delCardItem"
+                            class="del_icon" />
                     </div>
                 </div>
             </div>
@@ -61,45 +67,27 @@
                             </option>
                         </select>
                         <img :src="icons.del_icon"
-                            @click="delCol(col, index)"
+                            @click="datasource.command.delCol(index)"
                             v-if="index !== 0"
                             class="del_icon" alt=""/>
                     </div>
                     <el-button
-                        @click="addSelCol"
+                        @click="datasource.command.addSelCol(this)"
                         type="text"
                         v-show="colType === 2">
                         + 增加列
                     </el-button>
                 </div>
-                <div class="mb_1 filter_value" v-if="datasource">
-                    <div class="title_space">
-                        <div class="title">值</div>
+                <div class="mb_1"  v-if="datasource">
+                    <div class="title">取值范围</div>
+                    <div class="range_item">
+                        <span>大于</span>
+                        <el-input class="input" placeholder="请输入最大值" v-model="datasource.command.min" />
                     </div>
-                    <div class="sel_item"
-                         v-for="(val,i) in datasource.command.values"
-                         :key="i+'val'">
-                        <el-input class="input"  placeholder="请输入内容" :value="datasource.command.values[i]" />
-                        <img
-                            :src="icons.del_icon"
-                            @click="delSelVal(val, i)"
-                            v-if="i !== 0"
-                            class="del_icon" alt="">
+                    <div class="range_item">
+                        <span>小于</span>
+                        <el-input class="input" placeholder="请输入最小值" v-model="datasource.command.max" />
                     </div>
-                    <el-button
-                            @click="addSelVal"
-                            type="text">
-                        + 增加值
-                    </el-button>
-                </div>
-                <div class="mb_1">
-                    <div class="title">筛选模式</div>
-                        <select class="sel" v-if="datasource" v-model="datasource.command.matchingMode">
-                           <option
-                                v-for="(item,i) in concretDefs.pattern"
-                                :key="i+'filterPattern'"
-                                :value="item.cal">{{item.desc}}</option>
-                        </select>
                 </div>
             </div>
         </div>
@@ -117,14 +105,9 @@ import PhFilterStep from "./step"
 export default {
     data() {
         return {
-            checkAll: false,
-            isIndeterminate: true,
-            showContent: true,
+            showContent: false,
             colType: 1,
-            selColArrayNew: [],
-            hasValueArrayNew: [],
-            datasource: null,
-            concretDefs: PhFilterStepDefs
+            datasource: null
         }
     },
     props: {
@@ -145,6 +128,12 @@ export default {
             default: () => {
                 return []
             }
+        },
+        concretDefs: {
+            type: Object,
+            default: () => {
+                return PhFilterStepDefs
+            }
         }
     },
     components: {
@@ -154,29 +143,21 @@ export default {
         ElInput
     },
     mounted() {
-        this.selColArrayNew = this.selColArray
-        this.hasValueArrayNew = this.hasValueArray
         this.datasource = new PhFilterStep(this.step)
     },
     methods: {
-        // *********************************** 全部调用cmd中函数 ***************************
-        //删除值
-        delSelVal(data, i) {
-            this.hasValueArrayNew.splice(i, 1)
+        delCardItem() {
+            const event = new Event("event")
+            event.args = {
+                callback: "delCardItem",
+                element: this,
+                param: {
+                    name: "delCardItem",
+                    data: this.step
+                }
+            }
+            this.$emit("delCardItem", event)
         },
-        //增加值
-        addSelVal() {
-            this.hasValueArrayNew.push({})
-        },
-        //删除行
-        delCol(data, i) {
-            this.selColArrayNew.splice(i, 1)
-        },
-        // 增加行
-        addSelCol() {
-            this.selColArrayNew.push({})
-        },
-        // *********************************** 全部调用cmd中函数 ***************************
         // 选择单列多列
         clickColType(num) {
             this.colType = num
@@ -186,15 +167,10 @@ export default {
             this.showContent = !this.showContent
         }
     },
-    watch: {
-        // selColArray(n, w) {
-        //     debugger
-        //     this.selColArrayNew = n
-        // },
-        // "schemaArray.schema"(n, o) {
-        //     debugger
-        //     this.needRefresh++
-        // }
+    computed: {
+        stepDesc: function() {
+            return this.datasource ? this.datasource.command.stepDesc(this.concretDefs) : ""
+        }
     }
 }
 </script>
@@ -204,7 +180,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .bp_operator_card {
+    .bp_FONR_card {
         margin-top: 4px;
         width: 100%;
         padding: 4px;
@@ -227,6 +203,7 @@ export default {
             .del_icon {
                 width: 16px;
                 height: 16px;
+				cursor: pointer;
             }
             .active {
                 color: #409EFF;
@@ -235,7 +212,7 @@ export default {
                 padding: 4px;
                 display: flex;
                 align-items: center;
-                height: 60px;
+                min-height: 60px;
                 border-bottom: 1px solid #ccc;
                 box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
                 cursor: pointer;
@@ -281,6 +258,10 @@ export default {
                     font-size: 10px;
                     color: #000000;
                 }
+				.range_item {
+					display: flex;
+    				flex-direction: column;
+				}
                 .title_space {
                     display: flex;
                     justify-content: space-between;

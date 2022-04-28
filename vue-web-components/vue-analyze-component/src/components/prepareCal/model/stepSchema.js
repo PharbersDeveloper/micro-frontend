@@ -1,17 +1,25 @@
 import {hostName} from "../../../../../vue-histogram-component/src/config/envConfig"
 
 export default class PhStepSchema {
-    constructor(id, projectId = 'ggjpDje0HUC2JW', tableName='q') {
-        this.projectId = projectId
-        this.name = tableName
+    constructor(id, parent) {
         this.id = id
+        this.parent = parent
+        this.projectId = this.getUrlParam("projectId")
+        this.name = this.getUrlParam("inputName")
         this.schema = []
         this.dtype = []
         this.cellWidth = []
         this.cols = this.schema
-        this.debugToken = "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566"
+        this.debugToken = "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0"
     }
 
+    getUrlParam( value) {
+        let href = window.location.href
+        console.log(href)
+        let paramArr = href.split("?")[1].split("&")
+        let data = paramArr.find(item => item.indexOf(value) > -1)
+        return data ? decodeURI(data).split("=")[1] : undefined
+    }
     resetSchema(schema, dtype, cellWidth) {
         this.schema = schema
         this.dtype = dtype

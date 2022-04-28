@@ -60,37 +60,36 @@ export const PhFilterStepDefs = {
     }
 }
 
-const PhInitialFOVExpressions = {
-    type: "FilterOnValue",
+const PhInitialFONRExpressions = {
+    type: "FilterOnNumericalRange",
     code: "pyspark",
     params: {
-        values: [""],
-        matchingMode: "FULL_STRING",
-        normalizationMode: "EXACT",
         action: "KEEP_ROW",
         booleanMode: "AND",
         appliesTo: "COLUMNS",
-        columns: [""]
+        columns: [""],
+        min: 1,
+        max: 2
     }
 }
 
-export const PhInitialFOVStepDefs = {
+export const PhInitialFONRStepDefs = {
     attributes: {
         "pj-name": "",
         "step-id": "",
         index: 0,
-        ctype: "FilterOnValue",
-        expressions: JSON.stringify(PhInitialFOVExpressions),
+        ctype: "FilterOnNumericalRange",
+        expressions: JSON.stringify(PhInitialFONRExpressions),
         runtime: "prepare",
         "group-name": "",
         "group-index": 0,
         "expressions-value": "JSON",
-        "step-name": "Initial Filter On Value"
+        "step-name": "Initial Filter on Numerical Range"
     },
     id: "",
     type: "steps"
 }
- 
+
 export function step2SaveObj(step) {
     return {
         pjName: step['pj-name'],

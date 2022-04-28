@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="prepare_header">
             <div class="header_left">
-                <img :src="icons.prepare_icon" alt="">
+                <img :src="icons.prepare_icon" alt="" />
                 <span>Prepare</span>
             </div>
             <div class="header_right">
@@ -33,7 +33,7 @@
                             <div class="select_all">
                                 <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
-                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="">
+                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="" />
                                 <div class="action_card" v-show="showMultiSelectActionMenu">
                                     <div class="action_item">删除</div>
                                 </div>
@@ -46,23 +46,26 @@
                         </div>
                         <ul class="operator_item_area">
                             <li class="operator_item"
-                                v-for="(field, index) in steps.data"
+                                v-for="(item, index) in steps.data"
                                 draggable="true"
-                                @dragstart="dragStart($event, index, field)" @dragover="allowDrop"
-                                @drop="drop($event, index, field)"
+                                @dragstart="handleDragStart($event, item)"
+                                @dragover.prevent="handleDragOver($event, item)"
+                                @dragenter="handleDragEnter($event, item)"
+                                @dragend="handleDragEnd($event, item)"
                                 :key="index+'operator'">
                                 <bp-operator-card
                                     :key="index+'opreator'"
-                                    :step="field"
+                                    :step="item"
                                     :schema="schema.schema"
-                                    :type="field['ctype']"/>
+                                    @delCardItem="delCardItem"
+                                    :type="item['ctype']"/>
                             </li>
                         </ul>
                     </div>
                     <el-button
                         class="add_new_step"
                         @click="showOpFactories">
-                        <img :src="icons.add_icon" alt="">
+                        <img :src="icons.add_icon" alt="" />
                         添加一个新算子
                     </el-button>
                 </div>
@@ -70,9 +73,9 @@
             <div class="prepare_area_right">
                 <div class="main_container">
                     <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
+                        :isNeedPopmenu="false"
                         v-on:countIsReady="totalCountIsReady"
                         @countIsReady="totalCountIsReady"
-                        @changeSchemaTypeEvent="changeSchemaTypeEvent"
                         :datasource="datasource" :schema="schema" class="excel" />
                 </div>
             </div>
@@ -93,22 +96,28 @@ import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import OpFactories from "./processors/factory"
 import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-value/defs"
+import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
+import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
+import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/defs"
 
 export default {
     data() {
         return {
             drawer: false,
-            projectId: "ggjpDje0HUC2JW",
-            projectName: "demo",
+            projectId: "",
+            projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566",
-
+            debugToken: "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
             checkAll: false,
-            isIndeterminate: true
+            isIndeterminate: true,
+            deleteStepsArray: [],
+            uriMessage: null,
+            dragging: null, //正在拖拽的 元素
+            handleDragNewItemsDst: 0
         }
     },
     components: {
@@ -152,20 +161,39 @@ export default {
         schema: {
             type: Object,
             default: function () {
-                return new PhStepSchema('1')
+                return new PhStepSchema('1', this)
             }
         },
         steps: {
             type: Object,
             default: function() {
-                return new PhStepModel('1')
+                return new PhStepModel('1', this)
             }
         }
     },
     mounted() {
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
+        this.jobName = this.getJobName()
         this.steps.refreshData()
     },
     methods: {
+        getJobName() {
+            let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+            return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
+        },
+        getUrlParam( value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
+        delCardItem(datas) {
+            let model = datas.args.param.data
+            this.deleteStepsArray.push(model)
+            this.steps.store.destroy(model)
+            this.steps.data = this.steps.store.findAll("steps")
+        },
         showOpFactories() {
             this.drawer = true
             this.$refs.opFactories.visibleSync = true
@@ -177,32 +205,45 @@ export default {
             else
                 return null;
         },
-        // 目标文件表拖动
-        dragStart(e, index, field){
-            this.clearBakData() // 清空上一次拖动时保存的数据
-            // e.dataTransfer.setData('Text', index);
-            this.fileMiddleData= field // 设置此次拖动时保存的数据
-            this.fileMddleIndex = index //设置此次拖动时保存的数据Index
-        },
-        allowDrop(e){
-            e.preventDefault()
-        },
-        clearBakData(){
-            // 此处写清除各列表的操作
-            this.fileMiddleData = ''
-            this.fileMddleIndex = -1
-        },
-        drop(e, index,field){
-            // 取消默认行为
-            this.allowDrop(e);
-            let arr = this.steps.data.concat([])
-            let temp = arr[index];
-            arr[index] = arr[this.fileMddleIndex];
-            arr[this.fileMddleIndex] = temp;
+        
+        /** 拖拽 **/
 
-            this.steps.data = arr;
-            this.clearBakData()
+        // 进行拖拽的元素
+        handleDragStart(e,item){
+            this.dragging = item;
         },
+        handleDragEnter(e,item){
+            //为需要移动的元素设置dragstart事件
+            e.dataTransfer.effectAllowed = "move"
+            if(item === this.dragging) {
+                return
+            }
+            let newItems = [...this.steps.data]
+            console.log(newItems)
+            const src = newItems.indexOf(this.dragging) //被拖拽元素的index
+            const dst = newItems.indexOf(item) //被挤开元素的index
+            this.handleDragNewItemsDst = dst
+            newItems.splice(dst, 0, ...newItems.splice(src, 1))
+            this.steps.data = newItems;
+        },
+        //首先把div变成可以放置的元素，即重写dragenter/dragover
+        handleDragOver(e) {
+            //在dragenter中针对放置目标来设置
+            e.dataTransfer.dropEffect = 'move'
+        },
+        handleDragEnd(e,item){
+            let that = this
+            //更改index流程
+            this.steps.data.forEach((item, index) => {
+                if(index >= that.handleDragNewItemsDst) {
+                    if(index < 1) index = 1
+                    item["index"] = parseFloat(that.steps.data[index - 1]["index"]) + 1
+                }
+            })
+            this.dragging = null
+        },
+        /** 拖拽 **/
+        
         handleCheckAllChange(val) {
             // this.checkedCities = val ? cityOptions : [];
             this.isIndeterminate = false;
@@ -210,59 +251,113 @@ export default {
         totalCountIsReady(val) {
             this.totalNum = val
         },
+        async deleteStep(ele) {
+            const body = {
+                table: "step",
+                conditions: {
+                    pjName: ele["pj-name"],
+                    stepId: ele["step-id"]
+                }
+            }
+
+            const url = `${hostName}/phdydatasource/delete_item`
+            let headers = {
+                Authorization: this.getCookie("access_token") || this.debugToken,
+                "Content-Type": "application/vnd.api+json",
+                Accept: "application/vnd.api+json"
+            }
+            let options = {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(body)
+            }
+            const result = await fetch(url, options)
+            return result.status === 200
+        },
         async save() {
-            // for (const item in this.steps.data) {
+            //删除算子
+            for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
+                // await this.deleteStepsArray[idx].delete(this)
+                await this.deleteStep(this.deleteStepsArray[idx])
+            }
+            // 保存算子
+            let itemArr = []
+            let expressionsArr = []
             for (let index = 0; index < this.steps.data.length; ++index) {
                 const item = this.steps.data[index]
                 item.expressions = JSON.stringify(item.callback.command.revert2Defs())
-
-                const body = {
-                    table: "step",
-                    item: step2SaveObj(item)
-                }
-
-                const url = `${hostName}/phdydatasource/put_item`
-                let headers = {
-                    Authorization: this.getCookie("access_token") || this.debugToken,
-                    "Content-Type": "application/vnd.api+json",
-                    Accept: "application/vnd.api+json"
-                }
-                let options = {
-                    method: "POST",
-                    headers: headers,
-                    body: JSON.stringify(body)
-                }
-                await fetch(url, options) //.then((res) => res.json())
+                expressionsArr.push(JSON.parse(item.expressions))
+                itemArr.push(step2SaveObj(item))
             }
+            itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
+            const body = {
+                table: "step",
+                item: itemArr
+            }
+
+            const url = `${hostName}/phdydatasource/put_item`
+            let headers = {
+                Authorization: this.getCookie("access_token") || this.debugToken,
+                "Content-Type": "application/vnd.api+json",
+                Accept: "application/vnd.api+json"
+            }
+            let options = {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(body)
+            }
+            await fetch(url, options)
+            
+            // 保存脚本
+            const event = new Event("event")
+            event.args = {
+                callback: "prepare",
+                element: this,
+                param: {
+                    name: "prepare",
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    itemArr: expressionsArr,
+                    message: this.allData.message
+                }
+            }
+            this.$emit('event', event)
         },
-        changeSchemaTypeEvent(data) {
-            data.args.param.projectId = this.allData.projectId
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.datasetName = this.allData.datasetName
-            data.args.param.datasetId = this.allData.datasetId
-            this.$emit('event',  data)
-        },
+        // 新建算子
         newStep(stepType) {
+            let indexNum = this.steps.data.length > 0 ? Math.max(...this.steps.data.map(x => x.index)) + 1 : 1
+            let ns = null
             switch (stepType) {
             case "FilterOnValue":
-                let ns = Object.assign({}, PhInitialFOVStepDefs)
-                ns["attributes"].index = Math.max(...this.steps.data.map(x => x.index)) + 1
-                ns["attributes"].pjName = [this.projectId, this.projectName, this.projectName, this.flowVersion, this.jobName].join("_")
-                ns["attributes"].stepId = (ns["attributes"].index).toString()
-                ns.id = ns["attributes"].pjName + ns["attributes"].stepId
-                this.steps.store.syncRecord(ns)
+                ns = Object.assign({}, PhInitialFOVStepDefs)
+                break
+            case "FilterOnNumericalRange":
+                ns = Object.assign({}, PhInitialFONRStepDefs)
+                break
+            case "ReplaceValue":
+                ns = Object.assign({}, PhInitialRVStepDefs)
+                break
+            case "FillEmptyWithValue":
+                ns = Object.assign({}, PhInitialFEWVEStepDefs)
                 break
             default:
                 alert("step type is not implemented")
                 break
             }
+            ns["attributes"].index = indexNum
+            console.log(indexNum)
+            ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
+            ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
+            ns["id"] = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
+            this.steps.store.syncRecord(ns)
             this.steps.data = this.steps.store.findAll("steps")
+            console.log(this.steps.data)
             this.drawer = false
         }
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     @font-face {
         font-family: element-icons;
         src: url(https://components.pharbers.com/element-ui/element-icons.woff) format("woff"),url(https://components.pharbers.com/element-ui/element-icons.woff) format("truetype");
@@ -331,12 +426,13 @@ export default {
         .prepare_area {
             display: flex;
             position: absolute !important;
-            top: 82px;
+            top: 123px;
             bottom: 0;
             left: 0;
             right: 0;
             .prepare_area_left {
                 width: 300px;
+                min-width: 300px;
                 height: 100%;
                 border-right: 1px solid #cccccc;
                 display: flex;
@@ -366,6 +462,7 @@ export default {
                         display: flex;
                         align-items: center;
                         flex-direction: column;
+                        width: 100%;
                         .actions {
                             display: flex;
                             align-items: center;
@@ -377,14 +474,14 @@ export default {
                                 display: flex;
                                 align-items: center;
                                 border: 1px solid #ccc;
-                                height: 24px;
+                                height: 40px;
                                 padding: 4px;
                                 img {
                                     cursor: pointer;
                                 }
                                 .action_card {
                                     position: absolute;
-                                    top: 20px;
+                                    top: 36px;
                                     left: 26px;
                                     border: 1px solid #ccc;
                                     width: 100px;
@@ -409,7 +506,7 @@ export default {
                         }
                         .operator_item_area {
                             overflow: auto;
-                            height: calc(100vh - 280px);
+                            height: calc(100vh - 330px);
                             width: 100%;
                             padding: 0;
                         }
@@ -418,6 +515,7 @@ export default {
                             display: flex;
                             flex-direction: column;
                             overflow: auto;
+                            background: white;
                             .card {
                                 border: 1px solid #ddd;
                             }
@@ -439,6 +537,7 @@ export default {
             }
             .prepare_area_right {
                 padding: 20px;
+                // width: calc(100vw - 300px);
                 .main_container {
                     display: flex;
                     justify-content: center;

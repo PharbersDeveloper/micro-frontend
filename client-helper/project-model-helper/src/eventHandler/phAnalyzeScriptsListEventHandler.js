@@ -51,6 +51,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				params.recipt.runtime === "prepare"
 			) {
 				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]["name"]
 				let scripts = {
 					name: "editScripts",
 					jobName: recipt.jobName,
@@ -65,15 +66,39 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "prepare_edit"
 				}
+				let operatorParameters = recipt.operatorParameters
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "editPrepare",
+							attributes: {
+								jsondata: {
+									scripts: scripts,
+									operatorParameters:
+										JSON.parse(operatorParameters)
+								}
+							}
+						}
+					]
+				})
 				uri =
 					"prepare-set?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId +
-					"&operatorParameters=" +
-					escape(recipt.operatorParameters) +
-					"&message=" +
-					encodeURI(JSON.stringify(scripts))
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName
+				// +
+				// "&operatorParameters=" +
+				// escape(recipt.operatorParameters) +
+				// "&message=" +
+				// encodeURI(JSON.stringify(scripts))
 			} else if (params.name == "flow") {
 				uri =
 					"flow?projectName=" +
@@ -99,12 +124,28 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				//需要新建dataset
 				route.projectId = params.projectId
 				route.projectName = params.projectName
+				route.store.unloadAll("tempdata")
 				if (params.runtime === "prepare") {
-					let preUrl = `prepare-set?projectName=${
-						params.projectName
-					}&projectId=${params.projectId}&message=${encodeURI(
-						JSON.stringify(params)
-					)}`
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "createPrepare",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					let preUrl =
+						"prepare-set?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&inputName=" +
+						params.inputs[0]["name"]
 					route.router.transitionTo("shell", preUrl)
 				} else {
 					if (params.outputs[0].id == "") {
@@ -149,7 +190,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						projectId: params.projectId,
 						timeout: "1000",
 						runtime: params.runtime,
-						// owner: decodeURI(route.cookies.read("user_name_show")),
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")

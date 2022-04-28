@@ -3,16 +3,31 @@ import { staticFilePath, hostName } from "../../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
 export default class PhStepsDyModel {
-    constructor(id, projectId='ggjpDje0HUC2JW', jobName='demo_demo_developer_compute_q_out') {
+    constructor(id, ele) {
         this.id = id
-        this.projectId = projectId
-        this.jobName = jobName
+        this.flowVersion = "developer"
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
+        this.jobName = this.getJobName()
         this.stepsCount = 100
         this.currentPageToken = ""
-        this.debugToken = "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566"
+        this.debugToken = "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0"
         this.data = []
         this.store = new JsonApiDataStore()
         this.isEdited = false
+    }
+
+    getUrlParam( value) {
+        let href = window.location.href
+        console.log(href)
+        let paramArr = href.split("?")[1].split("&")
+        let data = paramArr.find(item => item.indexOf(value) > -1)
+        return data ? decodeURI(data).split("=")[1] : undefined
+    }
+
+    getJobName() {
+        let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+        return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
     }
 
     getCookie(name) {

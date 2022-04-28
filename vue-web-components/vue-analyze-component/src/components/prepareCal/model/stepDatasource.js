@@ -6,9 +6,9 @@ export default class PhStepDataSource {
         this.id = id
         this.data = []
         this.sort = {}
-        this.projectId = 'ggjpDje0HUC2JW'
+        this.projectId = this.getUrlParam("projectId")
+        this.name = this.getUrlParam("inputName")
         this.filter = {}
-        this.name = "q"
         this.batch_size = 100
         // this.schema = []
         // this.cols = this.schema
@@ -16,7 +16,15 @@ export default class PhStepDataSource {
             this.url= `${hostName}/phdadatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "f8c7a5f3946651f3ffc04d8f7e37f74e48db90b43efdbba94dad57dc3297b566"
+        this.debugToken = "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0"
+    }
+
+    getUrlParam( value) {
+        let href = window.location.href
+        console.log(href)
+        let paramArr = href.split("?")[1].split("&")
+        let data = paramArr.find(item => item.indexOf(value) > -1)
+        return data ? decodeURI(data).split("=")[1] : undefined
     }
 
     resetUrl(url) {

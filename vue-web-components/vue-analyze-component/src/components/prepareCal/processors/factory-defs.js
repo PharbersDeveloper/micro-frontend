@@ -2,7 +2,7 @@ import FilterOnValueDesc from "../md/filterOnValue.md"
 import FilterOnNumericalRangeDesc from  "../md/FilterOnNumericalRange.md"
 import replaceValueDesc from  "../md/replaceValue.md"
 import replaceColumnDesc from "../md/replaceColumn.md"
-import FillEmptyCellWithValueDesc from "../md/FillEmptyCellWithValue.md"
+import FillEmptyWithValueDesc from "../md/FillEmptyWithValue.md"
 
 export const PhProcessorsDefs = [
     {
@@ -49,8 +49,8 @@ export const PhProcessorsDefs = [
             {
                 id: 1,
                 name: "Fill empty cell with value",
-                type: "FillEmptyCellWithValue",
-                desc: FillEmptyCellWithValueDesc
+                type: "FillEmptyWithValue",
+                desc: FillEmptyWithValueDesc
             }
         ]
     }

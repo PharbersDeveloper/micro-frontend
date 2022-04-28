@@ -13,7 +13,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	const deleteDatasetsEventName = "deleteDatasets"
 	const clearTagsEventName = "clearDS"
 	const createCatalogEventName = "catalog"
-	const createCatalogSampleEventName = "createCatalogSampleEventName"
+	// const createCatalogSampleEventName = "createCatalogSampleEventName"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "upload") {
@@ -376,39 +376,67 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		)
 	}
 
+	function genRunnerId(projectName, flowVersion = "developer") {
+		let d = new Date().toISOString()
+		const i = d.indexOf(".")
+		d = d.substring(0, i) + "+00:00"
+		return [projectName, projectName, flowVersion, d].join("_")
+	}
+
 	async function createCatalogSample() {
 		let { catalog_result, projectId, projectName } =
 			route.create_catalog_result
 		let message = JSON.parse(catalog_result)
-		const url = `${hostName}/phdydatasource/put_item`
-		let sample = "F_1"
-		let sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
-		//发送action
-		let messages = {
-			actionName: message.name,
-			sourceProjectId: sourceProjectIdValue,
-			targetProjectId: projectId,
-			projectName: projectName,
-			datasetName: message.name,
-			datasetId: message.id,
-			sample: sample,
-			owner: route.cookies.read("account_id"),
-			showName: decodeURI(route.cookies.read("user_name_show"))
-		}
-		let scriptBody = {
-			table: actionTableName,
-			item: {
+		console.log(projectName)
+		// const url = `${hostName}/phdydatasource/put_item`
+		const url = `${hostName}/statemachinetrigger`
+		const runnerId = genRunnerId("sample")
+		const sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
+		const sample = "F_1"
+		let sampleBody = {
+			common: {
+				runnerId: runnerId,
 				projectId: projectId,
+				projectName: "sample",
 				owner: route.cookies.read("account_id"),
-				showName: decodeURI(route.cookies.read("user_name_show")),
-				code: 0,
-				jobDesc: createCatalogSampleEventName,
-				jobCat: "edit_sample",
-				comments: "",
-				date: String(new Date().getTime()),
-				message: JSON.stringify(messages)
+				showName: decodeURI(route.cookies.read("user_name_show"))
+			},
+			calculate: {
+				type: "sample",
+				sourceProjectId: sourceProjectIdValue,
+				targetProjectId: projectId,
+				datasetId: message.id,
+				datasetName: message.name,
+				sample: sample,
+				recursive: true
 			}
 		}
+		//发送action
+		// let messages = {
+		// 	actionName: message.name,
+		// 	sourceProjectId: sourceProjectIdValue,
+		// 	targetProjectId: projectId,
+		// 	projectName: projectName,
+		// 	datasetName: message.name,
+		// 	datasetId: message.id,
+		// 	sample: sample,
+		// 	owner: route.cookies.read("account_id"),
+		// 	showName: decodeURI(route.cookies.read("user_name_show"))
+		// }
+		// let scriptBody = {
+		// 	table: actionTableName,
+		// 	item: {
+		// 		projectId: projectId,
+		// 		owner: route.cookies.read("account_id"),
+		// 		showName: decodeURI(route.cookies.read("user_name_show")),
+		// 		code: 0,
+		// 		jobDesc: createCatalogSampleEventName,
+		// 		jobCat: "edit_sample",
+		// 		comments: "",
+		// 		date: String(new Date().getTime()),
+		// 		message: JSON.stringify(messages)
+		// 	}
+		// }
 		let editSampleOptions = {
 			method: "POST",
 			headers: {
@@ -417,17 +445,32 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					"application/x-www-form-urlencoded; charset=UTF-8",
 				accept: "application/json"
 			},
-			body: JSON.stringify(scriptBody)
+			body: JSON.stringify(sampleBody)
 		}
 		let results = await fetch(url, editSampleOptions).then((res) =>
 			res.json()
 		)
+		if (results.status === "failed") {
+			alert("启动出错，请重新运行！")
+			route.loadingService.loading.style.display = "none"
+			return false
+		}
+		// this.noticeService.defineAction({
+		// 	type: "iot",
+		// 	remoteResource: "notification",
+		// 	runnerId: "",
+		// 	id: event.data.message.notification.id,
+		// 	eventName: event.data.message.notification.eventName,
+		// 	projectId: jobNamePre,
+		// 	ownerId: this.cookies.read("account_id"),
+		// 	callBack: this.runDagCallback
+		// })
 		route.noticeService.defineAction({
 			type: "iot",
 			remoteResource: "notification",
 			runnerId: "",
-			id: results.data.id,
-			eventName: createCatalogSampleEventName,
+			id: runnerId,
+			eventName: "sampleTrigger",
 			projectId: projectId,
 			ownerId: route.cookies.read("account_id"),
 			callBack: createCatalogSampleNoticeCallback
@@ -439,7 +482,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (status == "success" || status == "succeed") {
 			alert("新建数据集成功！")
 			window.location.reload()
 		} else if (status == "failed") {
@@ -448,9 +491,9 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				errorObj["message"]["zh"] !== ""
 					? errorObj["message"]["zh"]
 					: "新建数据集失败！"
+			route.loadingService.loading.style.display = "none"
 			alert(msg)
 		}
-		route.loadingService.loading.style.display = "none"
 	}
 
 	function createCatalogNoticeCallback(param, payload) {
