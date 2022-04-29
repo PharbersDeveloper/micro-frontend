@@ -52,7 +52,7 @@
                                 @dragover.prevent="handleDragOver($event, item)"
                                 @dragenter="handleDragEnter($event, item)"
                                 @dragend="handleDragEnd($event, item)"
-                                :key="index+'operator'">
+                                :key="item.index+'operator'">
                                 <bp-operator-card
                                     :key="index+'opreator'"
                                     :step="item"
@@ -110,7 +110,7 @@ export default {
             projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "1fd2fc989c6bdbce8cebdf54bfc01dcb00e94c85d52e2916e2fd63fc2b0587f9",
+            debugToken: "8eade362b221e1f7c4da38e70cd432771c4d392791b5d9822656634c50b4a0d9",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
@@ -220,12 +220,13 @@ export default {
                 return
             }
             let newItems = [...this.steps.data]
-            console.log(newItems)
             const src = newItems.indexOf(this.dragging) //被拖拽元素的index
             const dst = newItems.indexOf(item) //被挤开元素的index
             this.handleDragNewItemsDst = dst
             newItems.splice(dst, 0, ...newItems.splice(src, 1))
-            this.steps.data = newItems;
+            this.steps.data = newItems
+            console.log(this.steps.data)
+
         },
         //首先把div变成可以放置的元素，即重写dragenter/dragover
         handleDragOver(e) {
