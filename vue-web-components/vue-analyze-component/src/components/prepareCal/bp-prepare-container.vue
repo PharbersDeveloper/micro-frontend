@@ -52,7 +52,7 @@
                                 @dragover.prevent="handleDragOver($event, item)"
                                 @dragenter="handleDragEnter($event, item)"
                                 @dragend="handleDragEnd($event, item)"
-                                :key="item.index+'operator'">
+                                :key="item.index + item['step-id'] +'operator'">
                                 <bp-operator-card
                                     :key="index+'opreator'"
                                     :step="item"
@@ -225,7 +225,6 @@ export default {
             this.handleDragNewItemsDst = dst
             newItems.splice(dst, 0, ...newItems.splice(src, 1))
             this.steps.data = newItems
-            console.log(this.steps.data)
 
         },
         //首先把div变成可以放置的元素，即重写dragenter/dragover
@@ -277,7 +276,6 @@ export default {
             return result.status === 200
         },
         async save() {
-            console.log(this.steps.data)
             //删除算子
             for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
                 // await this.deleteStepsArray[idx].delete(this)
@@ -348,13 +346,11 @@ export default {
                 break
             }
             ns["attributes"].index = indexNum
-            console.log(indexNum)
             ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
             ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
             ns["id"] = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
             this.steps.store.syncRecord(ns)
             this.steps.data = this.steps.store.findAll("steps")
-            console.log(this.steps.data)
             this.drawer = false
         }
     }
