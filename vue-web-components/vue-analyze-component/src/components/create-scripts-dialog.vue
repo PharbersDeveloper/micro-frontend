@@ -29,10 +29,16 @@
                             </div>
                             <!-- 未选的input -->
                             <div class="addInput" v-show="datasetListShow">
-                                <el-input placeholder="搜索" v-model="searchInput"  class="search_row"></el-input>
-                                <img :src="search_row" class="search_row_icon" alt="">
+                                <div class="search_area">
+                                    <div class="search_input">
+                                        <el-input placeholder="搜索" v-model="searchInput"  class="search_row"></el-input>
+                                        <img :src="search_row" class="search_row_icon" alt="">
+                                    </div>
+                                    <img class="close" 
+                                        @click="closeAddDs()" 
+                                        :src="defs.iconsByName('close', 'red')" alt="">
+                                </div>
                                 <div class="dataset_list">
-                                    <!-- <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetList" :key="item+index"> -->
                                     <div @click="addDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListSearch" :key="item+index">
                                         <img :src="add_icon" alt="" class="add_icon">
                                         <span class="name" :title="item.name">{{item.name}}</span>
@@ -131,6 +137,7 @@ import ElInput from "element-ui/packages/input/index"
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import { staticFilePath } from '../config/envConfig'
+import PhDagDefinitions from "./policy/definitions/definitions";
 
 export default {
     data() {
@@ -173,7 +180,13 @@ export default {
     },
     props: {
         datasets: Array,
-        runtime: String
+        runtime: String,
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
+            }
+        }
     },
     computed: {
         remainDatasetListSearch: function() {
@@ -214,6 +227,9 @@ export default {
         })
     },
     methods: {
+        closeAddDs() {
+            this.datasetListShow = false
+        },
         changeFormat(data) {
             this.format = data
         },
@@ -386,6 +402,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #fff;
+    color: #000;
     .left {
         display: flex;
         align-items: center;
@@ -432,11 +450,25 @@ export default {
     }
     .content_area {
         padding: 20px;
+        .search_area {
+            display: flex;
+            align-items: center;
+            .search_input {
+                height: 40px;
+            }
+            .close {
+                cursor: pointer;
+                margin-left: 10px;
+            }
+        }
         button {
             width: 100%;
             height: 40px;
             min-height: 40px;
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .select_dataset_list {
             display: flex;

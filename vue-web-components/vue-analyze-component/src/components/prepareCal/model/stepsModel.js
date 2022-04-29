@@ -19,7 +19,6 @@ export default class PhStepsDyModel {
 
     getUrlParam( value) {
         let href = window.location.href
-        console.log(href)
         let paramArr = href.split("?")[1].split("&")
         let data = paramArr.find(item => item.indexOf(value) > -1)
         return data ? decodeURI(data).split("=")[1] : undefined
