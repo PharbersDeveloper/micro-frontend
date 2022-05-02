@@ -84,11 +84,11 @@
                             <div class="btn_area">
                                 <el-button class="add_input" :disabled="dsName.length  == 0" type="primary" @click="on_clickAddOutput">增加</el-button>
                             </div>
-                            <div class="tab">
+                            <!-- <div class="tab">
                                 <div class="new_data" @click="satasetTab('new')">新数据集</div>
                                  ｜ 
                                 <div class="old_data" @click="satasetTab('old')">现有数据集</div>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- 已选中output -->
                         <div class="change" v-show="datasetOutputListShow && showOldDataset">
@@ -104,11 +104,10 @@
                             </div>
                         </div>
                         <!-- 选择现有output -->
-                        <div class="oldDatasetList" v-show="!showOldDataset">
+                        <!-- <div class="oldDatasetList" v-show="!showOldDataset">
                              <el-input placeholder="搜索" v-model="searchOutput"  class="search_row"></el-input>
                             <img :src="search_row" class="search_row_icon" alt="">
                             <div class="dataset_list">
-                                <!-- <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputs" :key="item+index"> -->
                                 <div @click="addOldDataset(item)" class="dataset" v-for="(item,index) in remainDatasetListOutputsSearch" :key="item+index">
                                     <img :src="add_icon" alt="" class="add_icon">
                                     <span class="name" :title="item.name">{{item.name}}</span>
@@ -119,7 +118,7 @@
                                  ｜ 
                                 <div class="old_data" @click="satasetTab('old')">现有数据集</div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                </div>
               <div class="btn">
@@ -453,6 +452,7 @@ export default {
         .search_area {
             display: flex;
             align-items: center;
+            padding-bottom: 20px;
             .search_input {
                 height: 40px;
             }
