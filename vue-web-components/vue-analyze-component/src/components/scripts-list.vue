@@ -126,7 +126,7 @@
                     <div class="view_content" v-if="reciptcheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="script_icon" alt="">
+                                <img :src="script_icon_show" alt="">
                             </span>
                             <div class="show-name" v-if="reciptcheckedIds.length == 1">
                                 <p class="project_name_info" :title="reciptcheckedNames[0]">
@@ -242,6 +242,7 @@ export default {
             python_icon: `${staticFilePath}` + "/python_icon.svg",
             R_icon: `${staticFilePath}` + "/R_icon.svg",
             sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
+            script_icon_show: "",
             showDialog: false,
             state: '',
             editShow: false,
@@ -366,11 +367,12 @@ export default {
             this.deletedialogshow = false;
         },
         //点击list主体
-        clickOnlyOne(recipt, index) {
+        clickOnlyOne(recipt) {
+            this.script_icon_show = this.selectScriptIcon(recipt.runtime)
             this.reciptcheckedIds = []
             this.reciptcheckedNames = []
             this.reciptcheckedIds.push(recipt.id)
-            this.reciptcheckedNames.push(recipt.name)
+            this.reciptcheckedNames.push(recipt.jobShowName)
         },
         //点击list多选框
         checkedOneDataset(recipt) {
@@ -1126,16 +1128,16 @@ export default {
                         width: 60px;
                         height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 1px solid #979797;
-                        border-right: 1px solid #979797;
+                        // border-bottom: 1px solid #979797;
+                        // border-right: 1px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 24px;
-                            height: 24px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                     .show-name {
