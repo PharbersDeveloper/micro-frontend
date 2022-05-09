@@ -116,7 +116,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			break
 		case "createScripts":
 			if (params) {
-				const url = `${hostName}/phdydatasource/put_item`
+				const url = `${hostName}/phresourcecreationtrigger`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
@@ -125,6 +125,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				route.projectId = params.projectId
 				route.projectName = params.projectName
 				route.store.unloadAll("tempdata")
+
 				if (params.runtime === "prepare") {
 					route.store.pushPayload({
 						data: [
@@ -148,77 +149,98 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						params.inputs[0]["name"]
 					route.router.transitionTo("shell", preUrl)
 				} else {
-					if (params.outputs[0].id == "") {
-						//没有id要先创建dataset
-						params.outputs[0].id = uuid
-						let body = {
-							table: "dataset",
-							item: {
-								projectId: params.projectId,
-								id: uuid,
-								label: JSON.stringify([]),
-								name: params.outputs[0].name,
-								schema: JSON.stringify([]),
-								path: params.path,
-								format: params.format,
-								cat: "intermediate",
-								prop: "",
-								sample: "F_1"
-							}
-						}
-						let options = {
-							method: "POST",
-							headers: {
-								Authorization: accessToken,
-								"Content-Type":
-									"application/x-www-form-urlencoded; charset=UTF-8",
-								accept: "application/json"
-							},
-							body: JSON.stringify(body)
-						}
-						await fetch(url, options)
-					}
+					let datasets = []
+					let dsNames = []
+					params.inputs.forEach((item) => {
+						datasets.push({
+							name: item.name,
+							cat: item.cat,
+							format: "parquet"
+						})
+						dsNames.push(item.name)
+					})
+					datasets.push({
+						name: params.outputs[0].name,
+						cat: "intermediate",
+						format: "parquet"
+					})
 					let message = {
-						actionName: params.jobName,
-						dagName: params.projectName,
-						flowVersion: "developer",
-						jobName: params.jobName,
-						jobId: "",
-						inputs: params.inputs,
-						outputs: params.outputs,
-						jobVersion: params.jobVersion,
-						projectId: params.projectId,
-						timeout: "1000",
-						runtime: params.runtime,
-						owner: route.cookies.read("account_id"),
-						showName: decodeURI(
-							route.cookies.read("user_name_show")
-						),
-						targetJobId: "",
-						projectName: params.projectName,
-						labels: [],
-						operatorParameters: [{ type: "Script" }],
-						prop: {
-							path: params.path,
-							partitions: 1
-						}
-					}
-					let scriptBody = {
-						table: actionTableName,
-						item: {
+						common: {
+							traceId: uuid,
 							projectId: params.projectId,
+							projectName: params.projectName,
+							flowVersion: "developer",
+							dagName: params.projectName,
 							owner: route.cookies.read("account_id"),
 							showName: decodeURI(
 								route.cookies.read("user_name_show")
-							),
-							code: 0,
-							jobDesc: createScriptsEventName,
-							jobCat: "dag_create",
-							comments: "",
-							date: String(new Date().getTime()),
-							message: JSON.stringify(message)
+							)
+						},
+						action: {
+							cat: "createScript",
+							desc: "create script",
+							comments: "something need to say",
+							message: "something need to say",
+							required: true
+						},
+						datasets: datasets,
+						script: {
+							name: params.jobName,
+							flowVersion: "developer",
+							runtime: params.runtime,
+							inputs: JSON.stringify(dsNames),
+							output: params.outputs[0].name
+						},
+						notification: {
+							required: true
+						},
+						result: {
+							datasets: [""],
+							scripts: [""],
+							links: [""]
 						}
 					}
+					// let message = {
+					// 	actionName: params.jobName,
+					// 	dagName: params.projectName,
+					// 	flowVersion: "developer",
+					// 	jobName: params.jobName,
+					// 	jobId: "",
+					// 	inputs: params.inputs,
+					// 	outputs: params.outputs,
+					// 	jobVersion: params.jobVersion,
+					// 	projectId: params.projectId,
+					// 	timeout: "1000",
+					// 	runtime: params.runtime,
+					// 	owner: route.cookies.read("account_id"),
+					// 	showName: decodeURI(
+					// 		route.cookies.read("user_name_show")
+					// 	),
+					// 	targetJobId: "",
+					// 	projectName: params.projectName,
+					// 	labels: [],
+					// 	operatorParameters: [{ type: "Script" }],
+					// 	prop: {
+					// 		path: params.path,
+					// 		partitions: 1
+					// 	}
+					// }
+					// let scriptBody = {
+					// 	table: actionTableName,
+					// 	item: {
+					// 		projectId: params.projectId,
+					// 		owner: route.cookies.read("account_id"),
+					// 		showName: decodeURI(
+					// 			route.cookies.read("user_name_show")
+					// 		),
+					// 		code: 0,
+					// 		jobDesc: createScriptsEventName,
+					// 		jobCat: "dag_create",
+					// 		comments: "",
+					// 		date: String(new Date().getTime()),
+					// 		message: JSON.stringify(message)
+					// 	}
+					// }
 					let scriptOptions = {
 						method: "POST",
 						headers: {
@@ -227,7 +249,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 								"application/x-www-form-urlencoded; charset=UTF-8",
 							accept: "application/json"
 						},
-						body: JSON.stringify(scriptBody)
+						body: JSON.stringify(message)
 					}
 					route.creatScriptsQuery = await fetch(
 						url,
@@ -237,7 +259,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						type: "iot",
 						remoteResource: "notification",
 						runnerId: "",
-						id: route.creatScriptsQuery.data.id,
+						id: uuid,
 						eventName: createScriptsEventName,
 						projectId: params.projectId,
 						ownerId: route.cookies.read("account_id"),
@@ -376,15 +398,19 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 	}
 
 	function createScriptNoticeCallback(param, payload) {
+		console.log(payload)
 		const { message, status } = JSON.parse(payload)
 		const {
-			cnotification: { error, jobName, jobPath }
+			cnotification: {
+				data: { jobName },
+				error
+			}
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			alert("新建脚本成功！")
 			route.router.transitionTo(
 				"shell",
-				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&jobPath=${jobPath}`
+				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}`
 			)
 		} else if (status == "failed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""

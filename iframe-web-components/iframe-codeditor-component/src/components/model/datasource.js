@@ -1,10 +1,10 @@
 
-import { staticFilePath, hostName } from "../../config/envConfig"
+import { hostName } from "../../config/envConfig"
 
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, flowVersion, jobName) {
         this.id = id
-        this.debugToken = '5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f'
+        this.debugToken = '0fa192ba642b0f63dbd6d457268030b39751190d8a10c9e1f667ef6adea8bb19'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -14,14 +14,14 @@ export default class PhCodeditorDatasource {
 
         this.data = []
         this.inputs = []
-        this.outputs = []
+        this.outputs = ""
         this.codePath = []
     }
 
     defaultAdapter(row) {
         const attr = row["attributes"]
         this.inputs = JSON.parse(attr["inputs"])
-        this.outputs = JSON.parse(attr["outputs"])
+        this.outputs = attr["outputs"]
         this.bucket = "ph-platform"
         let jobPath = attr["job-path"]
         this.file_name = jobPath.slice(jobPath.lastIndexOf("/")+1) //文件名称
