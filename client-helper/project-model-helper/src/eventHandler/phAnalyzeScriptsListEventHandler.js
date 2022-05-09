@@ -4,6 +4,7 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeScriptsListEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = "projects"
+	let preUrl = ""
 	const createScriptsEventName = "createScripts"
 	const deleteDatasetsEventName = "deleteDatasets"
 	switch (e.detail[0].args.callback) {
@@ -138,7 +139,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 							}
 						]
 					})
-					let preUrl =
+					preUrl =
 						"prepare-set?projectName=" +
 						params.projectName +
 						"&projectId=" +
@@ -147,125 +148,122 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						params.jobName +
 						"&inputName=" +
 						params.inputs[0]["name"]
-					route.router.transitionTo("shell", preUrl)
-				} else {
-					let datasets = []
-					let dsNames = []
-					params.inputs.forEach((item) => {
-						datasets.push({
-							name: item.name,
-							cat: item.cat,
-							format: "parquet"
-						})
-						dsNames.push(item.name)
-					})
+				}
+				let datasets = []
+				let dsNames = []
+				params.inputs.forEach((item) => {
 					datasets.push({
-						name: params.outputs[0].name,
-						cat: "intermediate",
+						name: item.name,
+						cat: item.cat,
 						format: "parquet"
 					})
-					let message = {
-						common: {
-							traceId: uuid,
-							projectId: params.projectId,
-							projectName: params.projectName,
-							flowVersion: "developer",
-							dagName: params.projectName,
-							owner: route.cookies.read("account_id"),
-							showName: decodeURI(
-								route.cookies.read("user_name_show")
-							)
-						},
-						action: {
-							cat: "createScript",
-							desc: "create script",
-							comments: "something need to say",
-							message: "something need to say",
-							required: true
-						},
-						datasets: datasets,
-						script: {
-							name: params.jobName,
-							flowVersion: "developer",
-							runtime: params.runtime,
-							inputs: JSON.stringify(dsNames),
-							output: params.outputs[0].name
-						},
-						notification: {
-							required: true
-						},
-						result: {
-							datasets: [""],
-							scripts: [""],
-							links: [""]
-						}
-					}
-					// let message = {
-					// 	actionName: params.jobName,
-					// 	dagName: params.projectName,
-					// 	flowVersion: "developer",
-					// 	jobName: params.jobName,
-					// 	jobId: "",
-					// 	inputs: params.inputs,
-					// 	outputs: params.outputs,
-					// 	jobVersion: params.jobVersion,
-					// 	projectId: params.projectId,
-					// 	timeout: "1000",
-					// 	runtime: params.runtime,
-					// 	owner: route.cookies.read("account_id"),
-					// 	showName: decodeURI(
-					// 		route.cookies.read("user_name_show")
-					// 	),
-					// 	targetJobId: "",
-					// 	projectName: params.projectName,
-					// 	labels: [],
-					// 	operatorParameters: [{ type: "Script" }],
-					// 	prop: {
-					// 		path: params.path,
-					// 		partitions: 1
-					// 	}
-					// }
-					// let scriptBody = {
-					// 	table: actionTableName,
-					// 	item: {
-					// 		projectId: params.projectId,
-					// 		owner: route.cookies.read("account_id"),
-					// 		showName: decodeURI(
-					// 			route.cookies.read("user_name_show")
-					// 		),
-					// 		code: 0,
-					// 		jobDesc: createScriptsEventName,
-					// 		jobCat: "dag_create",
-					// 		comments: "",
-					// 		date: String(new Date().getTime()),
-					// 		message: JSON.stringify(message)
-					// 	}
-					// }
-					let scriptOptions = {
-						method: "POST",
-						headers: {
-							Authorization: accessToken,
-							"Content-Type":
-								"application/x-www-form-urlencoded; charset=UTF-8",
-							accept: "application/json"
-						},
-						body: JSON.stringify(message)
-					}
-					route.creatScriptsQuery = await fetch(
-						url,
-						scriptOptions
-					).then((res) => res.json())
-					route.noticeService.defineAction({
-						type: "iot",
-						remoteResource: "notification",
-						runnerId: "",
-						id: uuid,
-						eventName: createScriptsEventName,
+					dsNames.push(item.name)
+				})
+				datasets.push({
+					name: params.outputs[0].name,
+					cat: "intermediate",
+					format: "parquet"
+				})
+				let message = {
+					common: {
+						traceId: uuid,
 						projectId: params.projectId,
-						ownerId: route.cookies.read("account_id"),
-						callBack: createScriptNoticeCallback
-					})
+						projectName: params.projectName,
+						flowVersion: "developer",
+						dagName: params.projectName,
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					},
+					action: {
+						cat: "createScript",
+						desc: "create script",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					datasets: datasets,
+					script: {
+						name: params.jobName,
+						flowVersion: "developer",
+						runtime: params.runtime,
+						inputs: JSON.stringify(dsNames),
+						output: params.outputs[0].name
+					},
+					notification: {
+						required: true
+					},
+					result: {
+						datasets: [""],
+						scripts: [""],
+						links: [""]
+					}
 				}
+				// let message = {
+				// 	actionName: params.jobName,
+				// 	dagName: params.projectName,
+				// 	flowVersion: "developer",
+				// 	jobName: params.jobName,
+				// 	jobId: "",
+				// 	inputs: params.inputs,
+				// 	outputs: params.outputs,
+				// 	jobVersion: params.jobVersion,
+				// 	projectId: params.projectId,
+				// 	timeout: "1000",
+				// 	runtime: params.runtime,
+				// 	owner: route.cookies.read("account_id"),
+				// 	showName: decodeURI(
+				// 		route.cookies.read("user_name_show")
+				// 	),
+				// 	targetJobId: "",
+				// 	projectName: params.projectName,
+				// 	labels: [],
+				// 	operatorParameters: [{ type: "Script" }],
+				// 	prop: {
+				// 		path: params.path,
+				// 		partitions: 1
+				// 	}
+				// }
+				// let scriptBody = {
+				// 	table: actionTableName,
+				// 	item: {
+				// 		projectId: params.projectId,
+				// 		owner: route.cookies.read("account_id"),
+				// 		showName: decodeURI(
+				// 			route.cookies.read("user_name_show")
+				// 		),
+				// 		code: 0,
+				// 		jobDesc: createScriptsEventName,
+				// 		jobCat: "dag_create",
+				// 		comments: "",
+				// 		date: String(new Date().getTime()),
+				// 		message: JSON.stringify(message)
+				// 	}
+				// }
+				let scriptOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(message)
+				}
+				route.creatScriptsQuery = await fetch(url, scriptOptions).then(
+					(res) => res.json()
+				)
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: uuid,
+					eventName: createScriptsEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: createScriptNoticeCallback
+				})
 			}
 			break
 		case "addTags":
@@ -402,11 +400,13 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: {
-				data: { jobName },
+				data: { jobName, runtime },
 				error
 			}
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (runtime === "prepare") {
+			route.router.transitionTo("shell", preUrl)
+		} else if (status == "succeed") {
 			alert("新建脚本成功！")
 			route.router.transitionTo(
 				"shell",
