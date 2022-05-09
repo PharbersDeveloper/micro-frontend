@@ -9,15 +9,15 @@
         </div>
         <div class="content">
             <div class="eh-title">
-                <span>{{allData.fileName}}</span>
+                <span>{{fileName}}</span>
             </div>
             <div class="eh-preview">
-                <bp-excel ref="excel" viewHeight="25vh"
-                    :isNeedPopmenu="false"
-                    v-on:countIsReady="totalCountIsReady"
-                    :datasource="excelDatasource"
-                    :schema="excelSchema"
-                    class="excel" />
+<!--                <bp-excel ref="excel" viewHeight="25vh"-->
+<!--                    :isNeedPopmenu="false"-->
+<!--                    v-on:countIsReady="totalCountIsReady"-->
+<!--                    :datasource="dataProxy.getDatasource()"-->
+<!--                    :schema="dataProxy.getSchema()"-->
+<!--                    class="excel" />-->
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -26,7 +26,7 @@
                             <table border="0">
                                 <tr>
                                     <td class="left"><span>Type</span></td>
-                                    <td><input disabled v-model="typeValue"/></td>
+                                    <td><input disabled v-model="dataProxy.suffixType"/></td>
                                 </tr>
                             </table>
                         </div>
@@ -62,8 +62,8 @@
                     <div class="eh-sheet-panel">
                         <span class="radio-title">Select Sheet</span>
                         <div class="radio_arr">
-                            <div class="eh-sheet-radio" v-for="(item,index) in sheetArr" :key="index">
-                                <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="sheet">
+                            <div class="eh-sheet-radio" v-for="(item,index) in dataProxy.sheets" :key="index">
+                                <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="dataProxy.currentSheet">
                                 <label >{{item}}</label>
                             </div>
                         </div>
@@ -75,90 +75,43 @@
 </template>
 
 <script>
-import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
-import PhExcelPreviewSource from "./model/previewDatasource"
-import PhExcelPreviewSchema from "./model/previewSchema"
+// import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
+// import PhExcelPreviewSource from "./model/previewDatasource"
+// import PhExcelPreviewSchema from "./model/previewSchema"
 import PhExcelProxy from "./model/dataproxy"
 
 export default {
     data() {
         return {
+            fileName: 'alfred test',
             firstSkipValue: 0,
             nextSkipValue: 0,
-            sheet: '',
-            tmpname: '',
-            sheetArr: [],
-            showExcel: true,
-            typeValue: '',
+            // sheet: '',
+            // tmpname: '',
+            // sheetArr: [],
+            // showExcel: true,
+            // typeValue: '',
             projectId: ''
         }
     },
     props: {
-        allData: {
-            type: Object,
-            default: function() {
-                return {
-                    localFile: "",
-                    projectName: "demo",
-                    projectId: "ggjpDje0HUC2JW",
-                }
-            }
-        },
-        selectedFileName: {
-            type: String,
-            default: "/Users/alfredyang/Desktop/README.md"
-        },
-        excelDatasource: {
-            type: Object,
-            default: function() {
-                return new PhExcelPreviewSource('2', this.tmpname, this.projectId, this.firstSkipValue, this.nextSkipValue, this.sheet, this)
-            }
-        },
-        excelSchema: {
-            type: Object,
-            default: function() {
-                return new PhExcelPreviewSchema('1')
-            }
-        },
+        fileList: Array,
+        filePath: String,
+        activePane: String,
         dataProxy: {
             type: Object,
             default: function() {
-                return new PhExcelProxy('3', this.excelDatasource, this.excelSchema)
+                return new PhExcelProxy('3', this.activePane)
             }
         }
     },
     components: {
-        bpExcel
+        // bpExcel
     },
     mounted() {
-        // this.dataProxy.refreshData(this.$refs.excel)
-        // const tmp = window.open("file://"+ this.selectedFileName)
-        // console.log(tmp)
-    },
-    created() {
-        // let uriParam = window.location.href.split("?")[1].split("&")
-        // let projectName = uriParam[0].split("=")[1]
-        // let projectId = uriParam[1].split("=")[1]
-        // this.tmpname = uriParam[5].split("=")[1]
-        // this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
-        // this.excelDatasource.set('tmpname', this.tmpname)
-        // this.excelDatasource.set("projectId", projectId)
-        // this.typeValue = this.tmpname.split(".")[1]
+
     },
     methods: {
-        linkToPage(name) {
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    "name": name,
-                    "projectName": this.allData.projectName,
-                    "projectId": this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
-        },
         createDataSetIndex() {
             // const event = new Event("event")
             // event.args = {

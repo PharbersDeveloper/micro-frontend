@@ -21,7 +21,11 @@
                      @destinationConfirm="destinationConfirm" />
     </div>
     <div v-else-if="stage === 2">
-        <bp-excel-handler></bp-excel-handler>
+        <bp-excel-handler
+                :active="activePane"
+                :file-path="filePath"
+                :file-list="s3path"
+        />
     </div>
 
 </template>
@@ -37,7 +41,7 @@ export default {
     data() {
         return {
             // s3
-            s3path: '',
+            s3path: "",
             formatValue: "csv",
             // local
             fileList: [],
