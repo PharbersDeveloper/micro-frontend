@@ -1,6 +1,7 @@
 <template>
     <el-drawer title="算子库"
                 class="operator"
+                size="300px"
                 :visible.sync="visibleSync"
                 direction="btt">
         <div class="operator_content">
@@ -24,7 +25,7 @@
                          :key="data.id+'condition'">{{data.name}}</div>
                 </div>
                 <div class="opt_desc">
-                    <div class="opt_condition_desc">
+                    <div class="opt_condition_desc" v-html="opt_condition_desc">
                         {{opt_condition_desc}}
                         <!-- <vue-markdown >{{opt_condition_desc}}</vue-markdown> -->
                         <!--字段解释：
@@ -53,7 +54,7 @@ import ElDrawer from 'element-ui/packages/drawer/index'
 import { PhProcessorsDefs } from "./factory-defs"
 import FilterOnValueDesc from "../md/filterOnValue.md"
 // import { mavonEditor } from "mavon-editor";
-
+import { marked } from 'marked'
 
 export default {
     data() {
@@ -115,7 +116,7 @@ export default {
         },
         operator_opt_condition_mouseover(data) {
             this.selectedOptCondition = data.id
-            this.opt_condition_desc = this.opt_condition.filter(it => it.id === data.id)[0]["desc"]
+            this.opt_condition_desc = marked(this.opt_condition.filter(it => it.id === data.id)[0]["desc"])
         },
         operator_opt_condition_click(data) {
             this.$emit("newStep", data.type)
@@ -167,8 +168,8 @@ export default {
                 background: #dddddd !important;
             }
             .opt_condition {
-                width: 220px;
-                min-width: 220px;
+                width: 250px;
+                min-width: 250px;
                 border-right: 1px solid #ccc;
                 .opt_condition_item {
                     padding: 4px;
@@ -180,6 +181,9 @@ export default {
             }
             .opt_desc {
                 width: 100%;
+                height: 235px;
+                overflow: auto;
+                padding: 0 40px;
             }
         }
     }

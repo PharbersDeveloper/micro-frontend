@@ -11,7 +11,7 @@ export default class PhStepsDyModel {
         this.jobName = this.getJobName()
         this.stepsCount = 100
         this.currentPageToken = ""
-        this.debugToken = "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0"
+        this.debugToken = "8eade362b221e1f7c4da38e70cd432771c4d392791b5d9822656634c50b4a0d9"
         this.data = []
         this.store = new JsonApiDataStore()
         this.isEdited = false
@@ -19,7 +19,6 @@ export default class PhStepsDyModel {
 
     getUrlParam( value) {
         let href = window.location.href
-        console.log(href)
         let paramArr = href.split("?")[1].split("&")
         let data = paramArr.find(item => item.indexOf(value) > -1)
         return data ? decodeURI(data).split("=")[1] : undefined

@@ -25,7 +25,7 @@
                     <template v-if="toggle">
                         <div class="project-list-item" v-for="(file,index) in allData.projects" :key="index+'list'" @click="linkToPage(file)">
                             <div class="left-text">
-                                <img :src="fileIconDark" class="file-icon-dark" alt="">
+                                <img :src="defs.iconsByName('project', 'list')" class="file-icon-dark" alt="">
                                 <div class="text-area" >
                                     <bp-text class="title">{{file.name}}</bp-text>
                                     <bp-text class="subtitle">{{file.provider}}</bp-text>
@@ -87,6 +87,7 @@ import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElDialog from 'element-ui/packages/dialog/src/component'
+import PhDagDefinitions from "../policy/definitions/definitions";
 import { staticFilePath } from '../../config/envConfig'
 export default {
     components: {
@@ -137,6 +138,12 @@ export default {
                     id: 2,
                     name: "集群"
                 }]
+            }
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
             }
         }
     },

@@ -219,6 +219,7 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
+import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
 
 export default {
@@ -237,7 +238,7 @@ export default {
             input_index_icon: `${staticFilePath}` + "/input_index.svg",
             output_index_icon: `${staticFilePath}` + "/output_index.svg",
             intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
-            database_icon: `${staticFilePath}` + "/Database.svg",
+            database_icon: "",
             catalog_icon: `${staticFilePath}` + "/icons/catalog/normal.svg",
             showDialog: false,
             state: '',
@@ -275,17 +276,23 @@ export default {
                 dss:
                 [
                     {
-                        "projectId": null,
+                        "projectId": "",
                         "schema": "[]",
-                        "version": "max1.0",
-                        "name": "cpa_pha_mapping",
+                        "version": "",
+                        "name": "",
                         "label": "",
-                        "cat": "input_index",
-                        "path": "s3://ph-max-auto/v0.0.1-2020-06-08/Takeda/cpa_pha_mapping/"
+                        "cat": "",
+                        "path": ""
                     }
                 ],
-                tagsArray: ["qqqqqqqqqqqqqqqqqqqqqqqq", "aaaaaaaaaaaaaaaaaaaaaaaa", "zzz", "sss", "eee", 'sdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasddasdasdas']
+                tagsArray: []
             })
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
+            }
         }
     },
     components: {
@@ -342,27 +349,6 @@ export default {
             let arr = this.allData.dss.filter(it => it.name === data)
             return arr.length === 0
         },
-        // checkCatelolgName(data) {
-        // 	//过滤出包含当前名称的ds
-        //     let nameArr = this.allData.dss.filter(item => item.name.indexOf(data) > -1)
-        // 	//过滤出包含当前名称_的ds
-        //     let changeNameArr = this.allData.dss.filter(item => item.name.indexOf(data + "_") > -1)
-        //     if(changeNameArr.length > 0) {
-        //         let num = 0
-        //         changeNameArr.forEach(item => {
-        // 			let isNum = isNaN(item.split(data + "_")[1])
-        // 			if(!isNum) {
-        // 				let itemNum = parseInt(item.name.split(data + "_")[1])
-        // 				num = itemNum >= num ? itemNum + 1 : num
-        // 			}
-        //         })
-        //         return data + "_" + num
-        //     } else if(nameArr.length > 0) {
-        //         return data + "_1"
-        //     } else {
-        //         return data
-        //     }
-        // },
         closeCreateCatalogDialog() {
             this.selectCatalogVisible = false
         },
@@ -412,7 +398,7 @@ export default {
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
-        //删除脚本
+        //删除ds
         async deleteDataset(data) {
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
@@ -461,7 +447,8 @@ export default {
             this.deletedialogshow = false;
         },
         //点击list主体
-        clickOnlyOne(dataset, index) {
+        clickOnlyOne(dataset) {
+            this.database_icon = this.selectDatasetIcon(dataset.cat)
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
             this.datasetcheckedIds.push(dataset.id)
@@ -1199,16 +1186,16 @@ export default {
                         width: 60px;
                         height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 2px solid #979797;
-                        border-right: 2px solid #979797;
+                        // border-bottom: 2px solid #979797;
+                        // border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 24px;
-                            height: 24px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                     .show-name {

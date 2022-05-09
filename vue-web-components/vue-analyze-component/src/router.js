@@ -10,6 +10,7 @@ import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
+import scripts from './components/scripts-list'
 import prepare from './components/prepareCal/bp-prepare-container'
 import executionHistory from './components/executionHistory/bp-executions-history'
 import executionsLogs from './components/executionHistory/bp-executions-logs'
@@ -24,6 +25,11 @@ export default new Router({
             path: '/',
             name: 'bpExcelContainer',
             component: bpExcelContainer
+        },
+        {
+            path: '/scripts',
+            name: 'scripts',
+            component: scripts
         },
         {
             path: '/datasets',

@@ -558,7 +558,6 @@ export default {
             let that = this
             let sample = ""
             if (n) {
-                that.datasource.resetUrl(`${hostName}/phdydatasource/query`)
                 if (this.dataVersionArrShow.length === 0) {
                     that.datasource.queryVersion(this).then((data) => {
                         this.dataVersionArrShow = data

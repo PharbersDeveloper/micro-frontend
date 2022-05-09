@@ -16,7 +16,7 @@ export default class PhContainerDataSource {
             this.url= `${hostName}/phdadatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
+        this.debugToken = "531b7999f8c1ec0739de4574d810168db08d2090c1695226efa2682cff080bb9"
     }
 
     resetUrl(url) {
@@ -324,7 +324,7 @@ export default class PhContainerDataSource {
     }
     //请求sample
     buildSampleQuery(ele) {
-        const url = this.url
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         const body = {
             table: "dataset",

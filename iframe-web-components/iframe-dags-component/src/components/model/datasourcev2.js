@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0'
+        this.debugToken = '8eade362b221e1f7c4da38e70cd432771c4d392791b5d9822656634c50b4a0d9'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 300
         this.hitHeightStep = 500
@@ -95,7 +95,6 @@ export default class PhDagDatasource {
                     x["parentIds"] = []
                     x["childrenIds"] = []
                     x["representId"] = x["attributes"]["represent-id"]
-                    // x["status"] = x["attributes"]["runtime"]
                     x["status"] = "normal"
                     const cat = x["attributes"]["cat"]
                     const runtime = x["attributes"]["runtime"]
@@ -106,25 +105,18 @@ export default class PhDagDatasource {
                     } else if (cat === "dataset" && runtime === "intermediate") {
                         result = "DSIntermediate"
                     } else if (cat === "dataset" && runtime === "input_index") {
-                        // result = "DSInputIndex"
                         result = "max-in"
                     } else if (cat === "dataset" && runtime === "output_index") {
-                        // result = "DSOutputIndex"
                         result = "max-out"
                     } else if (cat === "dataset" && runtime === "catalog") {
-                        // result = "DSCatalog"
                         result = "catalog"
                     } else if (cat === "job" && runtime === "python3") {
-                        // result = "Python3"
                         result = "python"
                     } else if (cat === "job" && runtime === "pyspark") {
-                        // result = "PySpark"
                         result = "pyspark"
                     } else if (cat === "job" && runtime === "sparkr") {
-                        // result = "SparkR"
                         result = "sparkr"
                     } else if (cat === "job" && runtime === "r") {
-                        // result = "R"
                         result = "r"
                     } else if (cat === "job" && runtime === "prepare") {
                         result = "prepare"

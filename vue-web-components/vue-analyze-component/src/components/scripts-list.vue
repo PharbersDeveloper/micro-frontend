@@ -37,24 +37,24 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" @click="selectScripts('python3')">
-                                    <img :src="img1" alt="">
+                                    <img :src="defs.iconsByName('python')" alt="">
                                     <p class="">Python</p>
 									<!-- class=dis 灰掉某一项 -->
                                 </div>
                                 <div class="list" @click="selectScripts('pyspark')">
-                                    <img :src="img2" alt="">
+                                    <img :src="defs.iconsByName('pyspark')" alt="">
                                     <p>PySpark</p>
                                 </div>
                                 <div class="list" @click="selectScripts('r')">
-                                    <img :src="img3" alt="">
+                                    <img :src="defs.iconsByName('r')" alt="">
                                     <p  class="">R</p>
                                 </div>
                                 <div class="list" @click="selectScripts('sparkr')">
-                                    <img :src="img4" alt="">
+                                    <img :src="defs.iconsByName('sparkr')" alt="">
                                     <p  class="">SparkR</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('prepare')">
-                                    <img :src="img5" alt="">
+                                    <img :src="defs.iconsByName('prepare')" alt="">
                                     <p  class="">Prepare</p>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                     <div class="view_content" v-if="reciptcheckedIds.length > 0" >
                         <div class="project_name_view">
                             <span class="space">
-                                <img :src="script_icon" alt="">
+                                <img :src="script_icon_show" alt="">
                             </span>
                             <div class="show-name" v-if="reciptcheckedIds.length == 1">
                                 <p class="project_name_info" :title="reciptcheckedNames[0]">
@@ -215,6 +215,7 @@ import bpSelectVue from '../../node_modules/vue-components/src/components/bp-sel
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/option/index'
 import { staticFilePath } from '../config/envConfig'
+import PhDagDefinitions from "./policy/definitions/definitions";
 
 export default {
     data() {
@@ -241,11 +242,7 @@ export default {
             python_icon: `${staticFilePath}` + "/python_icon.svg",
             R_icon: `${staticFilePath}` + "/R_icon.svg",
             sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
-            img1: `${staticFilePath}` + "/icons/Python.svg",
-            img2: `${staticFilePath}` + "/icons/PySpark.svg",
-            img3: `${staticFilePath}` + "/icons/R.svg",
-            img4: `${staticFilePath}` + "/icons/SparkR.svg",
-            img5: `${staticFilePath}` + "/icons/%E4%B8%8B%E8%BD%BD.svg",
+            script_icon_show: "",
             showDialog: false,
             state: '',
             editShow: false,
@@ -286,6 +283,12 @@ export default {
                 "tagsArray": [],
                 "_isVue": true
             })
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
+            }
         }
     },
     components: {
@@ -364,11 +367,12 @@ export default {
             this.deletedialogshow = false;
         },
         //点击list主体
-        clickOnlyOne(recipt, index) {
+        clickOnlyOne(recipt) {
+            this.script_icon_show = this.selectScriptIcon(recipt.runtime)
             this.reciptcheckedIds = []
             this.reciptcheckedNames = []
             this.reciptcheckedIds.push(recipt.id)
-            this.reciptcheckedNames.push(recipt.name)
+            this.reciptcheckedNames.push(recipt.jobShowName)
         },
         //点击list多选框
         checkedOneDataset(recipt) {
@@ -1124,16 +1128,16 @@ export default {
                         width: 60px;
                         height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 1px solid #979797;
-                        border-right: 1px solid #979797;
+                        // border-bottom: 1px solid #979797;
+                        // border-right: 1px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 24px;
-                            height: 24px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                     .show-name {

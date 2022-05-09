@@ -78,7 +78,7 @@ import ElDialog from "element-ui/packages/dialog/index"
 export default {
     data() {
         return {
-            add_icon: `${staticFilePath}` + "/icons/add_operator_icon.svg",
+			add_icon: `${staticFilePath}` + "/add.svg",
             dialogVisible: false,
             dsName: '',
             selectStep: {},

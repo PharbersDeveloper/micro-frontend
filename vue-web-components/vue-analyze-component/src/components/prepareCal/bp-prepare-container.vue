@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="prepare_header">
             <div class="header_left">
-                <img :src="icons.prepare_icon" alt="" />
+                <img :src="defs.iconsByName('prepare')" alt="" />
                 <span>Prepare</span>
             </div>
             <div class="header_right">
@@ -33,7 +33,7 @@
                             <div class="select_all">
                                 <el-checkbox
                                     :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
-                                <img :src="icons.icon_dropdown" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="" />
+                                <img :src="defs.iconsByName('dropdown')" @click="showMultiSelectActionMenu = !showMultiSelectActionMenu" alt="" />
                                 <div class="action_card" v-show="showMultiSelectActionMenu">
                                     <div class="action_item">删除</div>
                                 </div>
@@ -52,7 +52,7 @@
                                 @dragover.prevent="handleDragOver($event, item)"
                                 @dragenter="handleDragEnter($event, item)"
                                 @dragend="handleDragEnd($event, item)"
-                                :key="index+'operator'">
+                                :key="item.index + item['step-id'] +'operator'">
                                 <bp-operator-card
                                     :key="index+'opreator'"
                                     :step="item"
@@ -65,7 +65,7 @@
                     <el-button
                         class="add_new_step"
                         @click="showOpFactories">
-                        <img :src="icons.add_icon" alt="" />
+                        <img :src="defs.iconsByName('add')" alt="" />
                         添加一个新算子
                     </el-button>
                 </div>
@@ -99,6 +99,8 @@ import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-v
 import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
 import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
 import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/defs"
+import PhDagDefinitions from "../policy/definitions/definitions";
+
 
 export default {
     data() {
@@ -108,7 +110,7 @@ export default {
             projectName: "",
             flowVersion: "developer",
             jobName: "compute_q_out",
-            debugToken: "4363d8202ba51a68d3724f2f7734a05a3224af5f95fad612cf9e718779e37eb0",
+            debugToken: "8eade362b221e1f7c4da38e70cd432771c4d392791b5d9822656634c50b4a0d9",
             // ********* 上部功能区 *************
             showMultiSelectActionMenu: false,
             searchKeyword: "",
@@ -130,17 +132,6 @@ export default {
         OpFactories
     },
     props: {
-        icons: {
-            type: Object,
-            default: () => {
-                return {
-                    prepare_icon: `${staticFilePath}` + "/icons/prepare%E6%AD%A3%E5%B8%B8.svg",
-                    add_icon: `${staticFilePath}` + "/icons/add_operator_icon.svg",
-                    close_icon: `${staticFilePath}` + "/icon_close.svg",
-                    icon_dropdown: "https://components.pharbers.com/prod/general/public/icon_dropdown.svg"
-                }
-            }
-        },
         allData: {
             type: Object,
             default: function() {
@@ -168,6 +159,12 @@ export default {
             type: Object,
             default: function() {
                 return new PhStepModel('1', this)
+            }
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
             }
         }
     },
@@ -213,18 +210,22 @@ export default {
             this.dragging = item;
         },
         handleDragEnter(e,item){
+            for (let index = 0; index < this.steps.data.length; ++index) {
+                const item = this.steps.data[index]
+                item.expressions = JSON.stringify(item.callback.command.revert2Defs())
+            }
             //为需要移动的元素设置dragstart事件
             e.dataTransfer.effectAllowed = "move"
             if(item === this.dragging) {
                 return
             }
             let newItems = [...this.steps.data]
-            console.log(newItems)
             const src = newItems.indexOf(this.dragging) //被拖拽元素的index
             const dst = newItems.indexOf(item) //被挤开元素的index
             this.handleDragNewItemsDst = dst
             newItems.splice(dst, 0, ...newItems.splice(src, 1))
-            this.steps.data = newItems;
+            this.steps.data = newItems
+
         },
         //首先把div变成可以放置的元素，即重写dragenter/dragover
         handleDragOver(e) {
@@ -345,13 +346,11 @@ export default {
                 break
             }
             ns["attributes"].index = indexNum
-            console.log(indexNum)
             ns["attributes"]["pj-name"] = [this.projectId, this.jobName].join("_")
             ns["attributes"]["step-id"] = (ns["attributes"].index).toString()
             ns["id"] = ns["attributes"][["pj-name"]] + ns["attributes"]["step-id"]
             this.steps.store.syncRecord(ns)
             this.steps.data = this.steps.store.findAll("steps")
-            console.log(this.steps.data)
             this.drawer = false
         }
     }

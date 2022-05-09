@@ -121,7 +121,7 @@ export default {
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
-            icon_header: null, //this.defs.iconsByName('DSuploaded'),
+            icon_header: null,
             selectItem: null,
             showRunJson: false,
             runId: "",
@@ -211,7 +211,6 @@ export default {
     },
     destroyed() {
         // 移除监听
-        // window.removeEventListener('message', this.eventPolicy.handleForwardMessage)
         window.removeEventListener("message", this.handleForwardMessage);
     },
     methods: {
@@ -219,7 +218,10 @@ export default {
             const that = this;
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
-                    console.log("iframe接收的", event.data.message.cmd);
+                    console.log(
+						"iframe接收的", 
+						event.data.message.cmd
+					);
                     that.eventPolicy.runDagCallback(event.data.message);
                 }
                 if (event.data.message.cmd === "finish_dag") {
@@ -246,7 +248,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this);
             // 发布前解注
-            // document.domain = "pharbers.com"
+            document.domain = "pharbers.com"
         },
         // 监听屏幕大小改变
         bindChangeWindow() {

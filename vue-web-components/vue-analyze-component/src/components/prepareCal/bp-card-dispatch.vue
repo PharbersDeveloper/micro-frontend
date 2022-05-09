@@ -45,9 +45,6 @@ export default {
         delCardItem(data) {
             this.$emit("delCardItem", data)
         }
-    },
-    watch: {
-
     }
 }
 </script>

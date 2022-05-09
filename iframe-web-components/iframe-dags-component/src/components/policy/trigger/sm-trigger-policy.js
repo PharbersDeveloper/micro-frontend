@@ -60,7 +60,7 @@ export default class PhDagTriggerPolicy {
             "scripts": [],
             "userConf": {}
         }
-        if(datasetsArr.length < 1) {
+        if(datasetsArr.length < 1 || this.parent.datasource.cal.selected.length <=1) {
             alert( "请先选择一条dag!" )
             return false
         }
@@ -81,7 +81,7 @@ export default class PhDagTriggerPolicy {
         const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
         let confData = data.args.param.jsonValue
         confData.ownerId = this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
-        confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.getCookie("user_name_show"))) : "dev环境"
+        confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境"
         confData.jobDesc = this.parent.registerJobEventName
 
         const runnerId = this.genRunnerId(this.parent.projectName)
