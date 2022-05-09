@@ -41,7 +41,7 @@ export default class PhExcelPreviewSchema {
     }
 
     requestSchema(url, arr) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.resetSchema(
                 arr,
                 ["Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text", "Text"],

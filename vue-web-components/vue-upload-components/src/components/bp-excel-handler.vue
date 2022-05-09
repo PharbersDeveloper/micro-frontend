@@ -98,10 +98,15 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    fileName: "filename",
-                    projectName: "projectName"
+                    localFile: "",
+                    projectName: "demo",
+                    projectId: "ggjpDje0HUC2JW",
                 }
             }
+        },
+        selectedFileName: {
+            type: String,
+            default: "/Users/alfredyang/Desktop/README.md"
         },
         excelDatasource: {
             type: Object,
@@ -126,17 +131,19 @@ export default {
         bpExcel
     },
     mounted() {
-        this.dataProxy.refreshData(this.$refs.excel)
+        // this.dataProxy.refreshData(this.$refs.excel)
+        // const tmp = window.open("file://"+ this.selectedFileName)
+        // console.log(tmp)
     },
     created() {
-        let uriParam = window.location.href.split("?")[1].split("&")
-        let projectName = uriParam[0].split("=")[1]
-        let projectId = uriParam[1].split("=")[1]
-        this.tmpname = uriParam[5].split("=")[1]
+        // let uriParam = window.location.href.split("?")[1].split("&")
+        // let projectName = uriParam[0].split("=")[1]
+        // let projectId = uriParam[1].split("=")[1]
+        // this.tmpname = uriParam[5].split("=")[1]
         // this.tmpname = uriParam.split("tmpname=")[1].split("&")[0]
-        this.excelDatasource.set('tmpname', this.tmpname)
-        this.excelDatasource.set("projectId", projectId)
-        this.typeValue = this.tmpname.split(".")[1]
+        // this.excelDatasource.set('tmpname', this.tmpname)
+        // this.excelDatasource.set("projectId", projectId)
+        // this.typeValue = this.tmpname.split(".")[1]
     },
     methods: {
         linkToPage(name) {
@@ -153,56 +160,58 @@ export default {
             this.$emit('event', event)
         },
         createDataSetIndex() {
-            const event = new Event("event")
-            event.args = {
-                callback: "createDataSetIndex",
-                element: this,
-                param: {
-                    "fileId": this.allData.tmpname,
-                    "skipValue": Number(this.firstSkipValue),
-                    "jumpValue": Number(this.nextSkipValue),
-                    "fileType": this.allData.tmpname.split('.')[1],
-                    "fileSheet": this.sheet,
-                    // "fileSheet": 'Sheet1',
-                    "fileName": this.allData.filename,
-                    "isAppend": false,
-                    "destination": this.allData.dataset,
-                    "version": this.allData.version, // 需要自己加上
-                    "projectName": this.allData.projectName,
-                    "projectId": this.allData.projectId
-                }
-            }
-            this.$emit('event', event)
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "createDataSetIndex",
+            //     element: this,
+            //     param: {
+            //         "fileId": this.allData.tmpname,
+            //         "skipValue": Number(this.firstSkipValue),
+            //         "jumpValue": Number(this.nextSkipValue),
+            //         "fileType": this.allData.tmpname.split('.')[1],
+            //         "fileSheet": this.sheet,
+            //         // "fileSheet": 'Sheet1',
+            //         "fileName": this.allData.filename,
+            //         "isAppend": false,
+            //         "destination": this.allData.dataset,
+            //         "version": this.allData.version, // 需要自己加上
+            //         "projectName": this.allData.projectName,
+            //         "projectId": this.allData.projectId
+            //     }
+            // }
+            // this.$emit('event', event)
         },
         skipFirstLine(data) {
-            if(this.firstSkipValue == '') {
-                this.firstSkipValue = 0
-            }
-            let legalInput = this.inputNumInteger(this.firstSkipValue)
-            if(legalInput || this.firstSkipValue === 0) {
-                this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
-                this.excelDatasource.sheet = this.sheet
-                this.dataProxy.refreshData(this.$refs.excel)
-                // this.excelDatasource.refreshData(this.$refs.excel)
-            } else {
-                this.$refs.firstLine.value = 0
-                this.firstSkipValue = 0
-            }
+            console.log(data)
+            // if(this.firstSkipValue === '') {
+            //     this.firstSkipValue = 0
+            // }
+            // let legalInput = this.inputNumInteger(this.firstSkipValue)
+            // if(legalInput || this.firstSkipValue === 0) {
+            //     this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
+            //     this.excelDatasource.sheet = this.sheet
+            //     this.dataProxy.refreshData(this.$refs.excel)
+            //     // this.excelDatasource.refreshData(this.$refs.excel)
+            // } else {
+            //     this.$refs.firstLine.value = 0
+            //     this.firstSkipValue = 0
+            // }
         },
         skipNextLine(data) {
-            if(this.nextSkipValue == '') {
-                this.nextSkipValue = 0
-            }
-            let legalInput = this.inputNumInteger(this.nextSkipValue)
-            if(legalInput || this.nextSkipValue === 0) {
-                this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
-                this.excelDatasource.sheet = this.sheet
-                // this.excelDatasource.refreshData(this.$refs.excel)
-                this.dataProxy.refreshData(this.$refs.excel)
-            } else {
-                this.$refs.nextLine.value = 0
-                this.nextSkipValue = 0
-            }
+            console.log(data)
+            // if(this.nextSkipValue === '') {
+            //     this.nextSkipValue = 0
+            // }
+            // let legalInput = this.inputNumInteger(this.nextSkipValue)
+            // if(legalInput || this.nextSkipValue === 0) {
+            //     this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
+            //     this.excelDatasource.sheet = this.sheet
+            //     // this.excelDatasource.refreshData(this.$refs.excel)
+            //     this.dataProxy.refreshData(this.$refs.excel)
+            // } else {
+            //     this.$refs.nextLine.value = 0
+            //     this.nextSkipValue = 0
+            // }
         },
         sheetRadio(data) {
             this.sheet = data.target.defaultValue

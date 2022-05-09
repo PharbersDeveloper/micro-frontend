@@ -22,7 +22,6 @@
                     </bp-select-vue>
                 </div>
             </div>
-
         </div>
         <div class="upload_dataset_container" v-if="allData.uploadType == 's3Upload'">
             <div class="project_name_header">
@@ -45,8 +44,8 @@
                         <div class="item">
                             <span class="title">格式:</span>
                             <select name="format" id="" v-model="formatValue">
-                                <option 
-									:value="format.name" 
+                                <option
+									:value="format.name"
 									v-for="(format,i) in formatArray"
 									:key="i+'format'">{{format.name}}</option>
                             </select>
