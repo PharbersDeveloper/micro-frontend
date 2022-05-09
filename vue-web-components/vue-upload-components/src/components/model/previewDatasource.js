@@ -1,28 +1,23 @@
 
 // import { hostName } from "../../config/envConfig"
+// import
 
 export default class PhExcelPreviewSource {
-    constructor(id, projectId, firstSkipValue, nextSkipValue, sheet, adapter) {
+    constructor(id) {
         this.id = id
-        this.projectId = projectId
-        this.nextSkipValue = nextSkipValue
-        this.firstSkipValue = firstSkipValue
-        this.sheet = sheet
         this.data = []
-        this.name = "not Implemented"
         this.batch_size = 10
-        // this.debugToken = "0fa192ba642b0f63dbd6d457268030b39751190d8a10c9e1f667ef6adea8bb19"
-        if (!adapter) {
-            this.adapter = this.defaultAdapter
-        }
+        this.name = "not Implemented"
+        // this.datasource = new
     }
 
-    defaultAdapter(row, cols) {
-        let result = []
-        for (var idx in cols) {
-            result.push(row[cols[idx]])
-        }
-        return result
+    resetData(data) {
+        this.data = data
+        this.batch_size = data.length
+    }
+
+    resetSchema(data) {
+
     }
 
     refreshData(ele) {

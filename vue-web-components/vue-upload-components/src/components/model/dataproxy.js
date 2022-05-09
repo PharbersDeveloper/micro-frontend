@@ -3,17 +3,14 @@ import PhCsvSource from "./csv-source"
 
 
 export default class PhExcelPreviewProxy {
-    constructor(id, fileList) {
+    constructor(id, fileList, currentFile=0) {
         this.id = id
         this.files = []
-        // this.sheets = []
         this.currentSheet = ""
         this.ready = false
         this.suffixType = ""
         this.fileList = fileList
-        // this.prepareDatasource(activePane)
-        // console.log(fileList)
-        // console.log(filePath)
+        console.log(currentFile)
     }
 
     prepareDatasource(activePane) {
