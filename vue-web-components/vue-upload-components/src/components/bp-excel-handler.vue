@@ -85,13 +85,7 @@ export default {
         return {
             fileName: 'alfred test',
             firstSkipValue: 0,
-            nextSkipValue: 0,
-            // sheet: '',
-            // tmpname: '',
-            // sheetArr: [],
-            // showExcel: true,
-            // typeValue: '',
-            projectId: ''
+            nextSkipValue: 0
         }
     },
     props: {
@@ -101,7 +95,7 @@ export default {
         dataProxy: {
             type: Object,
             default: function() {
-                return new PhExcelProxy('3', this.activePane)
+                return new PhExcelProxy('3', this.fileList)
             }
         }
     },
@@ -109,7 +103,8 @@ export default {
         // bpExcel
     },
     mounted() {
-
+        // eslint-disable-next-line no-debugger
+        this.dataProxy.prepareDatasource(this.activePane, this.fileList)
     },
     methods: {
         createDataSetIndex() {
