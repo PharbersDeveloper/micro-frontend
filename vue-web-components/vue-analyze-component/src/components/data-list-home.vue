@@ -557,7 +557,7 @@ export default {
 		width: 75%;
         .projectInfo {
             display: flex;
-            // width: 1400px;
+            min-width: 880px;
             height: 220px;
             background: #ffffff;
             border: 1px solid #ddd;
@@ -624,6 +624,7 @@ export default {
         border: 1px solid #ddd;
         margin-left: 20px;
         margin-top: 25px;
+		min-width: 880px;
         .go_flow {
             display: flex;
             justify-content: center;
