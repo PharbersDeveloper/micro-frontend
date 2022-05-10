@@ -1,6 +1,4 @@
 
-// import { hostName } from "../../config/envConfig"
-// import
 
 export default class PhExcelPreviewSource {
     constructor(id) {
@@ -8,7 +6,6 @@ export default class PhExcelPreviewSource {
         this.data = []
         this.batch_size = 10
         this.name = "not Implemented"
-        // this.datasource = new
     }
 
     resetData(data) {
@@ -17,7 +14,7 @@ export default class PhExcelPreviewSource {
     }
 
     refreshData(ele) {
-        ele.data = this.data.slice(0, this.batch_size)
+        ele.data = this.data
         ele.dataIsReady++
     }
 
