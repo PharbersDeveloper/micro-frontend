@@ -93,7 +93,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{allData.dss.length}} 条数据集</p>
+                                <p>{{searchData.length}} 条数据集</p>
                             </div>
                         </div>
                     </div>
@@ -265,7 +265,8 @@ export default {
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            selectCatalogVisible: false
+            selectCatalogVisible: false,
+            searchData: []
         }
     },
     props: {
