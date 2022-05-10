@@ -16,12 +16,8 @@ export default class PhExcelPreviewSource {
         this.batch_size = data.length
     }
 
-    resetSchema(data) {
-
-    }
-
     refreshData(ele) {
-        // ele.data = this.data
+        ele.data = this.data.slice(0, this.batch_size)
         ele.dataIsReady++
     }
 

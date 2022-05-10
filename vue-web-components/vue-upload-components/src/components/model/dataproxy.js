@@ -3,14 +3,16 @@ import PhCsvSource from "./csv-source"
 
 
 export default class PhExcelPreviewProxy {
-    constructor(id, fileList, currentFile=0) {
+    constructor(id, activePane, fileList, currentFile=0) {
         this.id = id
         this.files = []
-        this.currentSheet = ""
-        this.ready = false
+        this.readyList = []
         this.suffixType = ""
         this.fileList = fileList
-        console.log(currentFile)
+        this.currentFile = currentFile
+
+        this.prepareDatasource(activePane)
+        this.isCurrentReady = false
     }
 
     prepareDatasource(activePane) {
@@ -21,21 +23,25 @@ export default class PhExcelPreviewProxy {
         }
     }
 
+    readyCallback(idx) {
+        this.readyList[idx] = true
+        this.isCurrentReady = this.readyList[this.currentFile]
+    }
+
     prepareLocalDatasource() {
         for (let index = 0; index  < this.fileList.length; ++index) {
             const item = this.fileList[index]
             const fname = item.name
             const suffix = fname.split('.')[1]
             if (suffix === "xlsx") {
-                this.files.push(new PhExcelSource(1, item))
+                this.files.push(new PhExcelSource(index, item, this))
             } else if (suffix === "csv") {
-                this.files.push(new PhCsvSource(1, item))
+                this.files.push(new PhCsvSource(index, item, this))
             } else {
                 alert("not implemented")
             }
+            this.readyList.push(false)
         }
-        // eslint-disable-next-line no-debugger
-        debugger
     }
 
     prepareS3Datasource() {
@@ -45,18 +51,20 @@ export default class PhExcelPreviewProxy {
     }
 
     isReady() {
-        return true
+        // return this.readyList[this.currentFile]
+        // TODO: ...
+        return false
     }
 
+    // isCurrentReady() {
+    //     return this.readyList[this.currentFile]
+    // }
+
     getDatasource() {
-        return this.sheets[this.currentSheet].datasource
+        return this.files[this.currentFile].getDatasource()
     }
 
     getSchema() {
-        return this.sheets[this.currentSheet].schema
-    }
-
-    refreshData(ele) {
-        this.datasource.proxyRefreshData(ele)
+        return this.files[this.currentFile].getSchema()
     }
 }

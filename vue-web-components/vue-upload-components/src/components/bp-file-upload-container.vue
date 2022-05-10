@@ -40,6 +40,7 @@ import nextDialog from './next-dialog'
 export default {
     data() {
         return {
+            // currentFileIdx: 0,
             // s3
             s3path: "",
             formatValue: "csv",

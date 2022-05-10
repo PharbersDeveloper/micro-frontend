@@ -11,13 +11,13 @@
             <div class="eh-title">
                 <span>{{fileName}}</span>
             </div>
-            <div class="eh-preview">
-<!--                <bp-excel ref="excel" viewHeight="25vh"-->
-<!--                    :isNeedPopmenu="false"-->
-<!--                    v-on:countIsReady="totalCountIsReady"-->
-<!--                    :datasource="dataProxy.getDatasource()"-->
-<!--                    :schema="dataProxy.getSchema()"-->
-<!--                    class="excel" />-->
+            <div class="eh-preview" v-if="dataProxy.isCurrentReady">
+                <bp-excel ref="excel" viewHeight="25vh"
+                    :isNeedPopmenu="false"
+                    v-on:countIsReady="totalCountIsReady"
+                    :datasource="dataProxy.getDatasource()"
+                    :schema="dataProxy.getSchema()"
+                    class="excel" />
             </div>
             <div class="eh-control-panel">
                 <div class="eh-file-btns">
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-// import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
+import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 // import PhExcelPreviewSource from "./model/previewDatasource"
 // import PhExcelPreviewSchema from "./model/previewSchema"
 import PhExcelProxy from "./model/dataproxy"
@@ -83,6 +83,7 @@ import PhExcelProxy from "./model/dataproxy"
 export default {
     data() {
         return {
+            currentFileIdx: 0,
             fileName: 'alfred test',
             firstSkipValue: 0,
             nextSkipValue: 0
@@ -95,16 +96,15 @@ export default {
         dataProxy: {
             type: Object,
             default: function() {
-                return new PhExcelProxy('3', this.fileList)
+                return new PhExcelProxy('3', this.activePane, this.fileList)
             }
         }
     },
     components: {
-        // bpExcel
+        bpExcel
     },
     mounted() {
-        // eslint-disable-next-line no-debugger
-        this.dataProxy.prepareDatasource(this.activePane, this.fileList)
+
     },
     methods: {
         createDataSetIndex() {
