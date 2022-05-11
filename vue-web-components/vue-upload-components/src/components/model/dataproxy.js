@@ -1,5 +1,5 @@
-import PhExcelSource from "./excel-source"
-import PhCsvSource from "./csv-source"
+import PhExcelFormat from "./formats/excel"
+import PhCsvFormat from "./formats/csv"
 import PhDestination from "./s3-destination"
 
 
@@ -20,6 +20,7 @@ export default class PhExcelPreviewProxy {
         this.dataRefresh = 0
         this.currentSheet = ""
 
+        this.progress = ""
         this.destination = new PhDestination(this.id)
     }
 
@@ -51,9 +52,9 @@ export default class PhExcelPreviewProxy {
             const fname = item.name
             const suffix = fname.split('.')[1]
             if (suffix === "xlsx") {
-                this.files.push(new PhExcelSource(index, item, this))
+                this.files.push(new PhExcelFormat(index, item, this))
             } else if (suffix === "csv") {
-                this.files.push(new PhCsvSource(index, item, this))
+                this.files.push(new PhCsvFormat(index, item, this))
             } else {
                 alert("not implemented")
             }
@@ -106,5 +107,13 @@ export default class PhExcelPreviewProxy {
     setCurrentSheet(v) {
         this.files[this.currentFile].setCurrentSheet(v)
         this.viewNeedRefresh()
+    }
+
+    uploadCurrentData() {
+        this.files[this.currentFile].uploadCurrentData(this.destination)
+    }
+
+    uploadProgress(progress) {
+        this.progress = progress
     }
 }

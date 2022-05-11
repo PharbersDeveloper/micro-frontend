@@ -1,18 +1,20 @@
 
-import PhExcelPreviewSource from "./previewDatasource"
-import PhExcelPreviewSchema from "./previewSchema"
+import PhExcelPreviewSource from "../previewDatasource"
+import PhExcelPreviewSchema from "../previewSchema"
 
-export default class PhCsvSource {
+export default class PhCsvFormat {
     constructor(id, file, proxy, delimiter=",") {
         this.id = id
-        this.batchSize = 10
-        this.bufferSize = 100
+        this.batchSize = 10     // 显示条目
+        this.bufferSize = 100   // 缓存条目
+        this.destinationBufferSize = 50000      // 一次性上传的最大条目
+        this.file = file
         this.data = []
         this.delimiter = delimiter
         this.left = ""
         this.proxy = proxy
 
-        this.reader = file.stream().getReader()
+        this.reader = this.file.stream().getReader()
         this.reader.read().then(value => this.resetDataEvent(value))
 
         this.datasource = new PhExcelPreviewSource(id)
@@ -106,5 +108,45 @@ export default class PhCsvSource {
     setCurrentSheet(v) {
         // Do nothing ...
         console.log(v)
+    }
+
+    uploadCurrentData(destination) {
+        // TODO: @wodelu 加入skip lines 的逻辑
+        const that = this
+        const reader = this.file.stream().getReader()
+        let left = ""
+        let stepData = []
+
+        function text2Data(t, d) {
+            const lastIndex = t.lastIndexOf("\n")
+            left = t.substring(lastIndex + 1)
+            const lines = t.substring(0, lastIndex).split(/\r\n|\n/)
+            for (let idx = 0; idx < lines.length; ++idx) {
+                const tmp = lines[idx].split(that.delimiter)
+                d.push(tmp)
+            }
+        }
+
+        async function stepDataProcessor(v) {
+            const text = left + new TextDecoder("utf-8").decode(v.value)
+            text2Data(text, stepData)
+
+            if (stepData.length > that.destinationBufferSize) {
+                await destination.upload(stepData, that.file.name, new Date().getTime())
+                stepData = []
+            }
+
+            if (!v.done) {
+                that.proxy.uploadProgress("uploading")
+                reader.read().then(x => stepDataProcessor(x))
+            } else {
+                text2Data(left, stepData)
+                await destination.upload(stepData, that.file.name, new Date().getTime())
+                that.proxy.uploadProgress("uploading ended")
+            }
+        }
+
+        that.proxy.uploadProgress("uploading started")
+        reader.read().then(x => stepDataProcessor(x))
     }
 }

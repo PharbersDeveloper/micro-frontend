@@ -1,5 +1,4 @@
 
-// import { S3 }  from "@aws-sdk/client-s3"
 import * as AWS from "aws-sdk"
 
 export default class PhS3Destination {
@@ -14,16 +13,26 @@ export default class PhS3Destination {
                 region: "cn-northwest-1"
             }
         )
-        const params = {
-            Bucket: "ph-max-auto"
-        }
-        this.client.listObjects(params, function (err, data) {
-            if (err) console.log(err, err.stack) // an error occurred
-            else console.log(data)           // successful response
-        })
     }
 
-    upload(data) {
-        console.log(data)
+    async upload(data, to, timestamp) {
+        const lines = data.map(x => x.join(","))
+        const body = lines.join("\n")
+        const params = {
+            Body: body,
+            Bucket: "ph-max-auto",
+            Key: `2020-08-11/${to}/pharbers_lake_` + timestamp.toString()
+        }
+
+        const that = this
+        return await new Promise((resolve, reject) => {
+            that.client.putObject(params, function(err, data) {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(data)
+                }
+            })
+       })
     }
 }

@@ -12,6 +12,7 @@
             <div class="eh-title">
                 <span>{{fileName}}</span>
             </div>
+            <p>{{dataProxy.progress}}</p>
             <div class="eh-preview" v-if="dataProxy.isCurrentReady">
                 <bp-excel ref="excel" viewHeight="25vh"
                     :isNeedPopmenu="false"
@@ -120,7 +121,9 @@ export default {
              * 1. 将数据分块上传到s3上，这个我来搞定，剩下的就交给你了
              * 2. 将添加数据的所以
              */
-
+            this.dataProxy.uploadCurrentData()
+            // TODO: @wodelu
+            // 添加index的过程调用新的dag逻辑
         },
         sheetRadio() {
             this.dataProxy.setCurrentSheet(this.dataProxy.currentSheet)

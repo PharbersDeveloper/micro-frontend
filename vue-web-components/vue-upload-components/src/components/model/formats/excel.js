@@ -1,12 +1,13 @@
 
 import * as XLSX from 'xlsx/xlsx.mjs'
-import PhExcelPreviewSource from "./previewDatasource"
-import PhExcelPreviewSchema from "./previewSchema"
+import PhExcelPreviewSource from "../previewDatasource"
+import PhExcelPreviewSchema from "../previewSchema"
 
 
-export default class PhExcelSource {
+export default class PhExcelFormat {
     constructor(id, file, proxy) {
         this.id = id
+        this.file = file
         this.batchSize = 20
         this.bufferSize= 100
 
@@ -115,5 +116,23 @@ export default class PhExcelSource {
 
     setCurrentSheet(v) {
         this.currentSheet = v
+        this.__headerRefresh(this.data[this.currentSheet])
+        this.__dataRefresh(this.data[this.currentSheet])
+    }
+
+    uploadCurrentData(destination) {
+        // const data = this.data[this.currentSheet]
+        // TODO: @wodelu 加入skip lines 的逻辑
+        const reader = new FileReader()
+        const that = this
+        reader.onload = async function(e) {
+            const workbook = XLSX.read(e.target.result, {type: "binary"})
+            const worksheet = workbook.Sheets[that.currentSheet]
+            let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+            await destination.upload(data, that.file.name, new Date().getTime())
+            that.proxy.uploadProgress("uploading ended")
+        }
+        reader.readAsArrayBuffer(this.file)
+        that.proxy.uploadProgress("uploading started")
     }
 }
