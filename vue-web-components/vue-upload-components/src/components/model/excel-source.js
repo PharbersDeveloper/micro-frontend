@@ -10,6 +10,7 @@ export default class PhExcelSource {
     constructor(id, file, proxy) {
         this.id = id
         this.batchSize = 20
+        this.bufferSize= 100
 
         this.proxy = proxy
         this.sheets = []
@@ -49,6 +50,10 @@ export default class PhExcelSource {
         return this.currentSheet
     }
 
+    getType() {
+        return "xlsx"
+    }
+
     resetDataEvent(e, s) {
         const workbook = XLSX.read(e.target.result, {type: "binary"})
         s.sheets = workbook.SheetNames
@@ -56,9 +61,10 @@ export default class PhExcelSource {
 
         for (let idx = 0; idx < this.sheets.length; ++idx) {
             const worksheet = workbook.Sheets[workbook.SheetNames[idx]]
-            let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, this.batchSize)
+            let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, this.bufferSize)
+            data = data.map(x => x.map(x => x.toString()))
             const tmp = {}
-            // tmp["data"] = data.slice(0, this.batchSize)
+            tmp.data = data
             tmp.skipFirstLines = 0
             tmp.skipNextLines = 0
             tmp.headerLine = 0
@@ -66,24 +72,50 @@ export default class PhExcelSource {
             tmp.datasource = new PhExcelPreviewSource(this.id)
             tmp.schema = new PhExcelPreviewSchema(this.id)
 
-            tmp.datasource.resetData(data)
-            const colsLength = Math.max(...data.map(x => x.length))
-            const header = new Array(colsLength).fill("col") // this.data[tmp.headerLine]
-            const ht = data[tmp.headerLine]
-            for (let htIdx = 0; htIdx < header.length; ++htIdx) {
-                if (htIdx < ht.length) {
-                    header[htIdx] = ht[htIdx]
-                } else {
-                    header[htIdx] = "col_" + (htIdx - ht.length).toString()
-                }
-            }
-
-            const dtype = new Array(colsLength).fill("Text")
-            const colsWidth = new Array(colsLength).fill(118)
-            tmp.schema.resetSchema(header, dtype, colsWidth)
-
+            this.__headerRefresh(tmp)
+            this.__dataRefresh(tmp)
             s.data[workbook.SheetNames[idx]] = tmp
         }
         s.proxy.readyCallback(this.id)
+    }
+
+    __headerRefresh(tmp) {
+        const colsLength = Math.max(...tmp.data.map(x => x.length))
+        const header = new Array(colsLength).fill("col") // this.data[tmp.headerLine]
+        const ht = [...tmp.data[tmp.headerLine]]
+        for (let htIdx = 0; htIdx < header.length; ++htIdx) {
+            if (htIdx < ht.length) {
+                header[htIdx] = ht[htIdx]
+            } else {
+                header[htIdx] = "col_" + (htIdx - ht.length).toString()
+            }
+        }
+
+        const dtype = new Array(colsLength).fill("Text")
+        const colsWidth = new Array(colsLength).fill(118)
+        tmp.schema.resetSchema(header, dtype, colsWidth)
+    }
+
+    __dataRefresh(tmp) {
+        const startPos = tmp.skipFirstLines + 1 + tmp.skipNextLines
+        const endPos = tmp.skipFirstLines + 1 + tmp.skipNextLines + this.batchSize
+        tmp.datasource.resetData(tmp.data.slice(startPos, endPos))
+    }
+
+    setSkipFirstLines(v) {
+        this.data[this.currentSheet].skipFirstLines = v
+        this.data[this.currentSheet].headerLine = v
+        this.__headerRefresh(this.data[this.currentSheet])
+        this.__dataRefresh(this.data[this.currentSheet])
+    }
+
+    setSkipNextLines(v) {
+        this.data[this.currentSheet].skipNextLines = v
+        this.__headerRefresh(this.data[this.currentSheet])
+        this.__dataRefresh(this.data[this.currentSheet])
+    }
+
+    setCurrentSheet(v) {
+        this.currentSheet = v
     }
 }

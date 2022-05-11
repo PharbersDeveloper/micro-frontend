@@ -13,6 +13,20 @@ export default class PhExcelPreviewProxy {
 
         this.prepareDatasource(activePane)
         this.isCurrentReady = false
+
+        this.skipFirstLines = 0
+        this.skipNextLines = 0
+        this.dataRefresh = 0
+        this.currentSheet = ""
+    }
+
+    viewNeedRefresh() {
+        this.isCurrentReady = this.readyList[this.currentFile]
+        this.suffixType = this.files[this.currentFile].getType()
+        this.skipFirstLines = this.files[this.currentFile].getSkipFirstLines()
+        this.skipNextLines = this.files[this.currentFile].getSkipNextLines()
+        this.currentSheet = this.files[this.currentFile].getCurrentSheetName()
+        this.dataRefresh++
     }
 
     prepareDatasource(activePane) {
@@ -25,7 +39,7 @@ export default class PhExcelPreviewProxy {
 
     readyCallback(idx) {
         this.readyList[idx] = true
-        this.isCurrentReady = this.readyList[this.currentFile]
+        this.viewNeedRefresh()
     }
 
     prepareLocalDatasource() {
@@ -56,15 +70,38 @@ export default class PhExcelPreviewProxy {
         return false
     }
 
-    // isCurrentReady() {
-    //     return this.readyList[this.currentFile]
-    // }
-
     getDatasource() {
         return this.files[this.currentFile].getDatasource()
     }
 
     getSchema() {
         return this.files[this.currentFile].getSchema()
+    }
+
+    getSheetNames() {
+        return this.files[this.currentFile].getSheetNames()
+    }
+
+    getCurrentSheetName() {
+        return this.files[this.currentFile].getCurrentSheetName()
+    }
+
+    setSkipFirstLines(v) {
+        if (this.skipFirstLines !== v) {
+            this.files[this.currentFile].setSkipFirstLines(v)
+            this.viewNeedRefresh()
+        }
+    }
+
+    setSkipNextLines(v) {
+        if (this.skipNextLines !== v) {
+            this.files[this.currentFile].setSkipNextLines(v)
+            this.viewNeedRefresh()
+        }
+    }
+
+    setCurrentSheet(v) {
+        this.files[this.currentFile].setCurrentSheet(v)
+        this.viewNeedRefresh()
     }
 }

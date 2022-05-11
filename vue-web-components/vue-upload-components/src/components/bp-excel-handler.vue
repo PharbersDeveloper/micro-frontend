@@ -4,7 +4,8 @@
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">
                 <button text="运行" class="run" @click="createDataSetIndex">直接导入数据集</button>
-                <button text="运行" class="run" @click="linkToPage('advancedMapping')">使用高级映射</button>
+<!--                <button text="运行" class="run" @click="linkToPage('advancedMapping')">使用高级映射</button>-->
+                <button text="运行" class="run" >使用高级映射</button>
             </div>
         </div>
         <div class="content">
@@ -32,8 +33,8 @@
                         </div>
                     </div>
                     <div class="eh-refresh-btns">
-                        <button @click="skipFirstLine">Update</button>
-                        <button @click="skipFirstLine">ReDetect</button>
+<!--                        <button @click="skipFirstLine">Update</button>-->
+<!--                        <button @click="skipFirstLine">ReDetect</button>-->
                     </div>
                 </div>
 
@@ -43,7 +44,7 @@
                             <tr>
                                 <td class="left">Skip First Lines</td>
                                 <td>
-                                    <input type="number" v-model="firstSkipValue" min="0" @blur="skipFirstLine" ref="firstLine"/>
+                                    <input type="number" :value="dataProxy.skipFirstLines" @change="skipFirstLinesChanges" min="0" ref="firstLine"/>
                                 </td>
                             </tr>
                             <tr>
@@ -55,14 +56,14 @@
                             </tr>
                             <tr class="skip-next">
                                 <td class="left">Skip Next Lines</td>
-                                <td><input type="number" v-model="nextSkipValue" @blur="skipNextLine" ref="nextLine"/></td>
+                                <td><input type="number" :value="dataProxy.skipNextLines" @change="skipNextLinesChanges" min="0" ref="nextLine"/></td>
                             </tr>
                         </table>
                     </div>
                     <div class="eh-sheet-panel">
                         <span class="radio-title">Select Sheet</span>
                         <div class="radio_arr">
-                            <div class="eh-sheet-radio" v-for="(item,index) in dataProxy.sheets" :key="index">
+                            <div class="eh-sheet-radio" v-for="(item,index) in dataProxy.getSheetNames()" :key="index">
                                 <input type="radio" name="sheet" :value="item" @change="sheetRadio" v-model="dataProxy.currentSheet">
                                 <label >{{item}}</label>
                             </div>
@@ -84,9 +85,7 @@ export default {
     data() {
         return {
             currentFileIdx: 0,
-            fileName: 'alfred test',
-            firstSkipValue: 0,
-            nextSkipValue: 0
+            fileName: 'alfred test'
         }
     },
     props: {
@@ -107,6 +106,14 @@ export default {
 
     },
     methods: {
+        skipFirstLinesChanges() {
+            const value = this.$refs.firstLine.value
+            this.dataProxy.setSkipFirstLines(parseInt(value))
+        },
+        skipNextLinesChanges() {
+            const value = this.$refs.nextLine.value
+            this.dataProxy.setSkipNextLines(parseInt(value))
+        },
         createDataSetIndex() {
             // const event = new Event("event")
             // event.args = {
@@ -129,45 +136,8 @@ export default {
             // }
             // this.$emit('event', event)
         },
-        skipFirstLine(data) {
-            console.log(data)
-            // if(this.firstSkipValue === '') {
-            //     this.firstSkipValue = 0
-            // }
-            // let legalInput = this.inputNumInteger(this.firstSkipValue)
-            // if(legalInput || this.firstSkipValue === 0) {
-            //     this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
-            //     this.excelDatasource.sheet = this.sheet
-            //     this.dataProxy.refreshData(this.$refs.excel)
-            //     // this.excelDatasource.refreshData(this.$refs.excel)
-            // } else {
-            //     this.$refs.firstLine.value = 0
-            //     this.firstSkipValue = 0
-            // }
-        },
-        skipNextLine(data) {
-            console.log(data)
-            // if(this.nextSkipValue === '') {
-            //     this.nextSkipValue = 0
-            // }
-            // let legalInput = this.inputNumInteger(this.nextSkipValue)
-            // if(legalInput || this.nextSkipValue === 0) {
-            //     this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
-            //     this.excelDatasource.sheet = this.sheet
-            //     // this.excelDatasource.refreshData(this.$refs.excel)
-            //     this.dataProxy.refreshData(this.$refs.excel)
-            // } else {
-            //     this.$refs.nextLine.value = 0
-            //     this.nextSkipValue = 0
-            // }
-        },
-        sheetRadio(data) {
-            this.sheet = data.target.defaultValue
-            this.excelDatasource.firstSkipValue = Number(this.firstSkipValue)
-            this.excelDatasource.nextSkipValue = Number(this.nextSkipValue)
-            this.excelDatasource.sheet = this.sheet
-            // this.excelDatasource.refreshData(this.$refs.excel)
-            this.dataProxy.refreshData(this.$refs.excel)
+        sheetRadio() {
+            this.dataProxy.setCurrentSheet(this.dataProxy.currentSheet)
         },
         //正整数判断
         inputNumInteger(value) {
@@ -182,6 +152,13 @@ export default {
         },
         totalCountIsReady(val) {
             console.log(val)
+        }
+    },
+    watch: {
+        "dataProxy.dataRefresh": function () {
+            if (this.$refs.excel) {
+                this.$refs.excel.dataRefresh++
+            }
         }
     }
 }
