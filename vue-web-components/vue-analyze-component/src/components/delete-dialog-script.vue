@@ -11,7 +11,7 @@
                    <p class="name" v-for="(item,index) in datasetcheckedNames" :key="index+'dataset'">{{item}}</p>
                </div>
                <div class="btn">
-                   <button class="clear" @click="deleteDatasets">删除</button>
+                   <button class="clear" @click="deleteScripts">删除</button>
                       <button @click="close" class="cancel">取消</button>
                </div>
             </div>
@@ -36,17 +36,17 @@ export default {
         close() {
             this.$emit('closeDeleteDialog');
         },
-        deleteDatasets() {
+        deleteScripts() {
             const event = new Event("event")
             event.args = {
-                callback: "deleteDatasets",
+                callback: "deleteScripts",
                 element: this,
                 param: {
-                    name: "deleteDatasets",
+                    name: "deleteScripts",
                     selectedTags: this.selectedTags
                 }
             }
-            this.$emit('deleteDatasetsEvent', event)
+            this.$emit('deleteScriptsEvent', event)
         }
     }
 }
