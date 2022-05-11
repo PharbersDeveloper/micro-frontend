@@ -120,8 +120,11 @@ export default class PhExcelFormat {
         this.__dataRefresh(this.data[this.currentSheet])
     }
 
-    uploadCurrentData(destination) {
+    uploadCurrentData(destination, to) {
         // const data = this.data[this.currentSheet]
+        if (!to) {
+            to = this.file.name
+        }
         // TODO: @wodelu 加入skip lines 的逻辑
         const reader = new FileReader()
         const that = this
@@ -129,7 +132,7 @@ export default class PhExcelFormat {
             const workbook = XLSX.read(e.target.result, {type: "binary"})
             const worksheet = workbook.Sheets[that.currentSheet]
             let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-            await destination.upload(data, that.file.name, new Date().getTime())
+            await destination.upload(data, to, new Date().getTime())
             that.proxy.uploadProgress("uploading ended")
         }
         reader.readAsArrayBuffer(this.file)

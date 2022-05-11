@@ -109,8 +109,9 @@ export default class PhExcelPreviewProxy {
         this.viewNeedRefresh()
     }
 
-    uploadCurrentData() {
-        this.files[this.currentFile].uploadCurrentData(this.destination)
+    // TODO: @wodelu 这里需要添加一个参数，表示上传创建的Dataset的位置
+    uploadCurrentData(to) {
+        this.files[this.currentFile].uploadCurrentData(this.destination, to)
     }
 
     uploadProgress(progress) {

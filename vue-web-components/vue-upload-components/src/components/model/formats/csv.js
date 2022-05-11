@@ -110,7 +110,10 @@ export default class PhCsvFormat {
         console.log(v)
     }
 
-    uploadCurrentData(destination) {
+    uploadCurrentData(destination, to) {
+        if (!to) {
+            to = this.file.name
+        }
         // TODO: @wodelu 加入skip lines 的逻辑
         const that = this
         const reader = this.file.stream().getReader()
@@ -132,7 +135,7 @@ export default class PhCsvFormat {
             text2Data(text, stepData)
 
             if (stepData.length > that.destinationBufferSize) {
-                await destination.upload(stepData, that.file.name, new Date().getTime())
+                await destination.upload(stepData, to, new Date().getTime())
                 stepData = []
             }
 
@@ -141,7 +144,7 @@ export default class PhCsvFormat {
                 reader.read().then(x => stepDataProcessor(x))
             } else {
                 text2Data(left, stepData)
-                await destination.upload(stepData, that.file.name, new Date().getTime())
+                await destination.upload(stepData, to, new Date().getTime())
                 that.proxy.uploadProgress("uploading ended")
             }
         }
