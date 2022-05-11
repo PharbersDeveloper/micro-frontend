@@ -1,5 +1,6 @@
 import PhExcelSource from "./excel-source"
 import PhCsvSource from "./csv-source"
+import PhDestination from "./s3-destination"
 
 
 export default class PhExcelPreviewProxy {
@@ -18,6 +19,8 @@ export default class PhExcelPreviewProxy {
         this.skipNextLines = 0
         this.dataRefresh = 0
         this.currentSheet = ""
+
+        this.destination = new PhDestination(this.id)
     }
 
     viewNeedRefresh() {
