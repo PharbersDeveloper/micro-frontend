@@ -119,7 +119,7 @@ export default {
             /**
              * TODO: @wodelu
              * 1. 将数据分块上传到s3上，这个我来搞定，剩下的就交给你了
-             * 2. 将添加数据的所以
+             * 2. 将添加数据的索引
              */
             this.dataProxy.uploadCurrentData()
             // TODO: @wodelu
