@@ -22,6 +22,7 @@
     </div>
     <div v-else-if="stage === 2">
         <bp-excel-handler
+				:dsName="dataset"
                 :active-pane="activePane"
                 :file-path="s3path"
                 :file-list="fileList"

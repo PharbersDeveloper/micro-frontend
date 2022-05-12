@@ -22,6 +22,8 @@ export default class PhExcelPreviewProxy {
 
         this.progress = ""
         this.destination = new PhDestination(this.id)
+
+		this.company_id = "zudIcG_17yj8CEUoCTHg"
     }
 
     viewNeedRefresh() {
@@ -117,4 +119,16 @@ export default class PhExcelPreviewProxy {
     uploadProgress(progress) {
         this.progress = progress
     }
+
+
+	getCookie(name) {
+		let arr,
+			reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+		if ((arr = document.cookie.match(reg))) return arr[2];
+		else return null;
+	}
+
+	importCurrentDataToDS() {
+		
+	}
 }

@@ -20,8 +20,8 @@ export default class PhS3Destination {
         const body = lines.join("\n")
         const params = {
             Body: body,
-            Bucket: "ph-max-auto",
-            Key: `2020-08-11/${to}/pharbers_lake_` + timestamp.toString()
+            Bucket: "ph-platform",
+            Key: `2020-11-11/lake/${to}/pharbers_lake_` + timestamp.toString()
         }
 
         const that = this

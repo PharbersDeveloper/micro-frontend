@@ -86,13 +86,15 @@ export default {
     data() {
         return {
             currentFileIdx: 0,
-            fileName: 'alfred test'
+            fileName: 'alfred test',
+			projectId: ""
         }
     },
     props: {
         fileList: Array,
         filePath: String,
         activePane: String,
+		dsName: String,
         dataProxy: {
             type: Object,
             default: function() {
@@ -104,7 +106,7 @@ export default {
         bpExcel
     },
     mounted() {
-
+		this.projectId = this.getUrlParam("projectId")
     },
     methods: {
         skipFirstLinesChanges() {
@@ -117,13 +119,26 @@ export default {
         },
         createDataSetIndex() {
             /**
-             * TODO: @wodelu
              * 1. 将数据分块上传到s3上，这个我来搞定，剩下的就交给你了
              * 2. 将添加数据的索引
              */
-            this.dataProxy.uploadCurrentData()
+			const uuid = this.guid()
+			const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
+
+			// to表示上传dataset的路径
+			const to = `${company_id}/${this.projectId}/${this.dsName}/version=${uuid}`
+            this.dataProxy.uploadCurrentData(to)
+
             // TODO: @wodelu
             // 添加index的过程调用新的dag逻辑
+			this.dataProxy.importCurrentDataToDS()
+        },
+		guid() {
+            return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace(/[xy]/g, function (c) {
+                var r = (Math.random() * 16) | 0,
+                    v = c === "x" ? r : (r & 0x3) | 0x8
+                return v.toString(16)
+            })
         },
         sheetRadio() {
             this.dataProxy.setCurrentSheet(this.dataProxy.currentSheet)
@@ -141,7 +156,22 @@ export default {
         },
         totalCountIsReady(val) {
             console.log(val)
-        }
+        },
+
+        getUrlParam( value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
+
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return (arr[2]);
+            else
+                return null;
+        },
     },
     watch: {
         "dataProxy.dataRefresh": function () {
