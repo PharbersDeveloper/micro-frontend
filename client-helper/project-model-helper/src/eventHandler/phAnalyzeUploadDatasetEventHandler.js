@@ -109,36 +109,56 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			if (params) {
 				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = params.datasetArray //发送请求的参数
+				let scriptArrayDel = params.scriptsArray
 				let msgArr = []
 				selectedDatasetsDel.forEach(async (targetId) => {
 					let targetDataset = datasetArrayDel.filter(
 						(it) => it.id == targetId
 					)[0]
 					msgArr.push({
-						actionName: targetDataset.name,
-						projectName: params.projectName,
-						version: "",
-						dsid: targetDataset.id,
-						destination: targetDataset.name,
-						opname: route.cookies.read("account_id"),
-						opgroup: route.cookies.read("company_id")
+						name: targetDataset.name
 					})
 				})
-				const urldel = `${hostName}/phdydatasource/put_item`
+				const urldel = `${hostName}/phresdeletiontrigger`
+				// let body = {
+				// 	table: actionTableName,
+				// 	item: {
+				// 		projectId: params.projectId,
+				// 		code: 0,
+				// 		comments: "delete_dataset",
+				// 		jobCat: "remove_DS",
+				// 		jobDesc: deleteDatasetsEventName,
+				// 		message: JSON.stringify(msgArr),
+				// 		date: String(new Date().getTime()),
+				// 		owner: route.cookies.read("account_id"),
+				// 		showName: decodeURI(
+				// 			route.cookies.read("user_name_show")
+				// 		)
+				// 	}
+				// }
+				const deluuid = guid()
 				let body = {
-					table: actionTableName,
-					item: {
+					common: {
+						traceId: deluuid,
 						projectId: params.projectId,
-						code: 0,
-						comments: "delete_dataset",
-						jobCat: "remove_DS",
-						jobDesc: deleteDatasetsEventName,
-						message: JSON.stringify(msgArr),
-						date: String(new Date().getTime()),
+						projectName: "demo",
+						flowVersion: "developer",
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
 						)
+					},
+					action: {
+						cat: "deleteResource",
+						desc: "delete dataset",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					datasets: msgArr,
+					scripts: scriptArrayDel,
+					notification: {
+						required: true
 					}
 				}
 				let options = {
@@ -151,15 +171,13 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				const result = await fetch(urldel, options).then((res) =>
-					res.json()
-				)
+				await fetch(urldel, options).then((res) => res.json())
 
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
 					runnerId: "",
-					id: result.data.id,
+					id: deluuid,
 					eventName: deleteDatasetsEventName,
 					projectId: params.projectId,
 					ownerId: route.cookies.read("account_id"),
@@ -384,6 +402,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	}
 
 	async function createCatalogSample() {
+		console.log("statemachinetrigger")
 		let { catalog_result, projectId, projectName } =
 			route.create_catalog_result
 		let message = JSON.parse(catalog_result)

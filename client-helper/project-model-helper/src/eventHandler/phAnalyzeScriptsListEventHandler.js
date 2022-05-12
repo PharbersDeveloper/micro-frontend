@@ -4,8 +4,10 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeScriptsListEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = "projects"
+	let preUrl = ""
 	const createScriptsEventName = "createScripts"
-	const deleteDatasetsEventName = "deleteDatasets"
+	// const deleteDatasetsEventName = "deleteDatasets"
+	const deleteScriptsEventName = "deleteResource"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "localUpload") {
@@ -116,7 +118,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			break
 		case "createScripts":
 			if (params) {
-				const url = `${hostName}/phdydatasource/put_item`
+				const url = `${hostName}/phresourcecreationtrigger`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
@@ -125,6 +127,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				route.projectId = params.projectId
 				route.projectName = params.projectName
 				route.store.unloadAll("tempdata")
+
 				if (params.runtime === "prepare") {
 					route.store.pushPayload({
 						data: [
@@ -137,7 +140,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 							}
 						]
 					})
-					let preUrl =
+					preUrl =
 						"prepare-set?projectName=" +
 						params.projectName +
 						"&projectId=" +
@@ -146,104 +149,81 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						params.jobName +
 						"&inputName=" +
 						params.inputs[0]["name"]
-					route.router.transitionTo("shell", preUrl)
-				} else {
-					if (params.outputs[0].id == "") {
-						//没有id要先创建dataset
-						params.outputs[0].id = uuid
-						let body = {
-							table: "dataset",
-							item: {
-								projectId: params.projectId,
-								id: uuid,
-								label: JSON.stringify([]),
-								name: params.outputs[0].name,
-								schema: JSON.stringify([]),
-								path: params.path,
-								format: params.format,
-								cat: "intermediate",
-								prop: "",
-								sample: "F_1"
-							}
-						}
-						let options = {
-							method: "POST",
-							headers: {
-								Authorization: accessToken,
-								"Content-Type":
-									"application/x-www-form-urlencoded; charset=UTF-8",
-								accept: "application/json"
-							},
-							body: JSON.stringify(body)
-						}
-						await fetch(url, options)
-					}
-					let message = {
-						actionName: params.jobName,
-						dagName: params.projectName,
-						flowVersion: "developer",
-						jobName: params.jobName,
-						jobId: "",
-						inputs: params.inputs,
-						outputs: params.outputs,
-						jobVersion: params.jobVersion,
+				}
+				let datasets = []
+				let dsNames = []
+				params.inputs.forEach((item) => {
+					datasets.push({
+						name: item.name,
+						cat: item.cat,
+						format: "parquet"
+					})
+					dsNames.push(item.name)
+				})
+				datasets.push({
+					name: params.outputs[0].name,
+					cat: "intermediate",
+					format: "parquet"
+				})
+				let message = {
+					common: {
+						traceId: uuid,
 						projectId: params.projectId,
-						timeout: "1000",
-						runtime: params.runtime,
+						projectName: params.projectName,
+						flowVersion: "developer",
+						dagName: params.projectName,
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						),
-						targetJobId: "",
-						projectName: params.projectName,
-						labels: [],
-						operatorParameters: [{ type: "Script" }],
-						prop: {
-							path: params.path,
-							partitions: 1
-						}
+						)
+					},
+					action: {
+						cat: "createScript",
+						desc: "create script",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					datasets: datasets,
+					script: {
+						name: params.jobName,
+						flowVersion: "developer",
+						runtime: params.runtime,
+						inputs: JSON.stringify(dsNames),
+						output: params.outputs[0].name
+					},
+					notification: {
+						required: true
+					},
+					result: {
+						datasets: [""],
+						scripts: [""],
+						links: [""]
 					}
-					let scriptBody = {
-						table: actionTableName,
-						item: {
-							projectId: params.projectId,
-							owner: route.cookies.read("account_id"),
-							showName: decodeURI(
-								route.cookies.read("user_name_show")
-							),
-							code: 0,
-							jobDesc: createScriptsEventName,
-							jobCat: "dag_create",
-							comments: "",
-							date: String(new Date().getTime()),
-							message: JSON.stringify(message)
-						}
-					}
-					let scriptOptions = {
-						method: "POST",
-						headers: {
-							Authorization: accessToken,
-							"Content-Type":
-								"application/x-www-form-urlencoded; charset=UTF-8",
-							accept: "application/json"
-						},
-						body: JSON.stringify(scriptBody)
-					}
-					route.creatScriptsQuery = await fetch(
-						url,
-						scriptOptions
-					).then((res) => res.json())
-					route.noticeService.defineAction({
-						type: "iot",
-						remoteResource: "notification",
-						runnerId: "",
-						id: route.creatScriptsQuery.data.id,
-						eventName: createScriptsEventName,
-						projectId: params.projectId,
-						ownerId: route.cookies.read("account_id"),
-						callBack: createScriptNoticeCallback
-					})
 				}
+				let scriptOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(message)
+				}
+				route.creatScriptsQuery = await fetch(url, scriptOptions).then(
+					(res) => res.json()
+				)
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: uuid,
+					eventName: createScriptsEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: createScriptNoticeCallback
+				})
 			}
 			break
 		case "addTags":
@@ -289,42 +269,48 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 			}
 			break
 		//删除脚本
-		case "deleteDatasets":
+		case "deleteScripts":
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
-				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
-				let datasetArrayDel = params.datasetArray //发送请求的参数在这取
+				let selectedScriptsDel = params.selectedScripts //需要更新的dataset
+				let scriptArrayDel = params.scriptArray //发送请求的参数在这取
 				let msgArr = []
-				selectedDatasetsDel.forEach(async (targetId) => {
-					let targetDataset = datasetArrayDel.filter(
+				selectedScriptsDel.forEach(async (targetId) => {
+					let targetDataset = scriptArrayDel.filter(
 						(it) => it.id == targetId
 					)[0]
 					msgArr.push({
 						actionName: targetDataset.jobShowName,
-						projectName: params.projectName,
-						targetId: targetDataset.jobId,
-						jobName: targetDataset.jobName,
-						flowVersion: "developer"
+						jobName: targetDataset.jobName
 					})
 				})
+				const deluuid = guid()
 				let body = {
-					table: actionTableName,
-					item: {
+					common: {
+						traceId: deluuid,
 						projectId: params.projectId,
-						code: 0,
-						comments: "delete_dataset",
-						jobCat: "remove_Job",
-						jobDesc: deleteDatasetsEventName,
-						message: JSON.stringify(msgArr),
-						date: String(new Date().getTime()),
+						projectName: params.projectName,
+						flowVersion: "developer",
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
 						)
+					},
+					action: {
+						cat: "deleteResource",
+						desc: "delete script",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					datasets: [],
+					scripts: msgArr,
+					notification: {
+						required: true
 					}
 				}
-				const urldel = `${hostName}/phdydatasource/put_item`
+				const urldel = `${hostName}/phresdeletiontrigger`
 				const accessTokendel = route.cookies.read("access_token")
 				let options = {
 					method: "POST",
@@ -336,16 +322,13 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				let result = await fetch(urldel, options).then((res) =>
-					res.json()
-				)
-
+				await fetch(urldel, options).then((res) => res.json())
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
 					runnerId: "",
-					id: result.data.id,
-					eventName: deleteDatasetsEventName,
+					id: deluuid,
+					eventName: deleteScriptsEventName,
 					projectId: params.projectId,
 					ownerId: route.cookies.read("account_id"),
 					callBack: deleteDatasetsNoticeCallback
@@ -376,15 +359,21 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 	}
 
 	function createScriptNoticeCallback(param, payload) {
+		console.log(payload)
 		const { message, status } = JSON.parse(payload)
 		const {
-			cnotification: { error, jobName, jobPath }
+			cnotification: {
+				data: { jobName, runtime },
+				error
+			}
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (runtime === "prepare") {
+			route.router.transitionTo("shell", preUrl)
+		} else if (status == "succeed") {
 			alert("新建脚本成功！")
 			route.router.transitionTo(
 				"shell",
-				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&jobPath=${jobPath}`
+				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}`
 			)
 		} else if (status == "failed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""

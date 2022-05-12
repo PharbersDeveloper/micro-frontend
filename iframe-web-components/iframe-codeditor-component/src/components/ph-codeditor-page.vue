@@ -3,7 +3,7 @@
         <div class="header">
              <div class="title">
                 <img :src="defs.iconsByName('python')" class="title_icon" alt="">
-                <span class="name">computed_{{datasource.outputs[0] ? datasource.outputs[0].name : ""}}</span>
+                <span class="name">computed_{{datasource.outputs}}</span>
             </div>
             <div class="coding-title">
                 <button class="button btn-fir">运行</button>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="ds-lst">
                         <div class="ds-item" v-for="(item, index) in datasource.inputs" :key="index">
-                            <span >{{item.name}}</span>
+                            <span >{{item}}</span>
                             <div>
                                 <img :src="defs.iconsByName('codeditor', 'table')" alt="">
                                 <img :src="defs.iconsByName('codeditor', 'setting')" alt="">
@@ -35,8 +35,8 @@
                         <span class="line"></span>
                     </div>
                     <div class="ds-lst">
-                        <div class="ds-item"  v-for="(item, index) in datasource.outputs" :key="index">
-                            <span >{{item.name}}</span>
+                        <div class="ds-item">
+                            <span >{{datasource.outputs}}</span>
                             <div>
                                  <img :src="defs.iconsByName('codeditor', 'table')" alt="">
                                 <img :src="defs.iconsByName('codeditor', 'setting')" alt="">
@@ -119,18 +119,10 @@ export default {
         let paramArr = href.split("?")[1].split("&")
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
         this.jobName = this.getUrlParam(paramArr, "jobName")
-        let jobPathParam = this.getUrlParam(paramArr, "jobPath")
-        if (jobPathParam) {
-            this.jobPath = jobPathParam.slice(0, jobPathParam.lastIndexOf("/")+1)
-            this.file_name = jobPathParam.slice(jobPathParam.lastIndexOf("/")+1)
-        }
         //父组件传进来的值
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
-        this.datasource.codeKey = this.jobPath
-        this.datasource.file_name = this.file_name
         this.datasource.refreshData(this)
     },
     watch: {
@@ -146,7 +138,7 @@ export default {
         },
         async queryData() {
             let url = `${hostName}/phdadataquery`
-            const accessToken = this.getCookie("access_token") || "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
@@ -173,7 +165,7 @@ export default {
         },
         async saveCode() {
             let url = `${hostName}/phdadataupdata`
-            const accessToken = this.getCookie("access_token") || "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
+            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "bucket": "ph-platform",
                 "key": this.datasource.codeKey,
