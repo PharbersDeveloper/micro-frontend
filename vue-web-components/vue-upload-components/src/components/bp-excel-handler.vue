@@ -86,15 +86,14 @@ export default {
     data() {
         return {
             currentFileIdx: 0,
-            fileName: 'alfred test',
-			projectId: ""
+            fileName: ''
         }
     },
     props: {
         fileList: Array,
         filePath: String,
         activePane: String,
-		dsName: String,
+        dsName: String,
         dataProxy: {
             type: Object,
             default: function() {
@@ -106,7 +105,8 @@ export default {
         bpExcel
     },
     mounted() {
-		this.projectId = this.getUrlParam("projectId")
+        this.dataProxy.projectId = this.getUrlParam("projectId")
+        this.dataProxy.projectName = this.getUrlParam("projectName")
     },
     methods: {
         skipFirstLinesChanges() {
@@ -122,23 +122,39 @@ export default {
              * 1. 将数据分块上传到s3上，这个我来搞定，剩下的就交给你了
              * 2. 将添加数据的索引
              */
-			const uuid = this.guid()
-			const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
+            const uuid = this.guid()
+            const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
 
-			// to表示上传dataset的路径
-			const to = `${company_id}/${this.projectId}/${this.dsName}/version=${uuid}`
+            // to表示上传dataset的路径
+            const to = `${company_id}/${this.dataProxy.projectId}/${this.dsName}/version=${uuid}`
             this.dataProxy.uploadCurrentData(to)
 
             // TODO: @wodelu
             // 添加index的过程调用新的dag逻辑
-			this.dataProxy.importCurrentDataToDS()
+            // this.dataProxy.importCurrentDataToDS(uuid, this.dsName)
+            const event = new Event("event")
+            event.args = {
+                callback: "importCurrentDataToDS",
+                element: this,
+                param: {
+                    name: "importCurrentDataToDS",
+                    projectId: this.dataProxy.projectId,
+                    projectName: this.dataProxy.projectName,
+                    dsName: this.dsName,
+                    uuid: uuid
+                }
+            }
+            this.$emit('importCurrentDataToDS', event)
         },
-		guid() {
-            return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace(/[xy]/g, function (c) {
-                var r = (Math.random() * 16) | 0,
-                    v = c === "x" ? r : (r & 0x3) | 0x8
-                return v.toString(16)
-            })
+        guid() {
+            return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
+                /[xy]/g,
+                function (c) {
+                    var r = (Math.random() * 16) | 0,
+                        v = c == "x" ? r : (r & 0x3) | 0x8
+                    return v.toString(16)
+                }
+            )
         },
         sheetRadio() {
             this.dataProxy.setCurrentSheet(this.dataProxy.currentSheet)
@@ -171,7 +187,7 @@ export default {
                 return (arr[2]);
             else
                 return null;
-        },
+        }
     },
     watch: {
         "dataProxy.dataRefresh": function () {

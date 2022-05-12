@@ -33,6 +33,6 @@ export default class PhS3Destination {
                     resolve(data)
                 }
             })
-       })
+        })
     }
 }

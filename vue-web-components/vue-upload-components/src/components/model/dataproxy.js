@@ -1,6 +1,7 @@
 import PhExcelFormat from "./formats/excel"
 import PhCsvFormat from "./formats/csv"
 import PhDestination from "./s3-destination"
+// import { hostName } from "../../config/envConfig"
 
 
 export default class PhExcelPreviewProxy {
@@ -23,7 +24,7 @@ export default class PhExcelPreviewProxy {
         this.progress = ""
         this.destination = new PhDestination(this.id)
 
-		this.company_id = "zudIcG_17yj8CEUoCTHg"
+        this.company_id = "zudIcG_17yj8CEUoCTHg"
     }
 
     viewNeedRefresh() {
@@ -121,14 +122,60 @@ export default class PhExcelPreviewProxy {
     }
 
 
-	getCookie(name) {
-		let arr,
-			reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-		if ((arr = document.cookie.match(reg))) return arr[2];
-		else return null;
-	}
+    getCookie(name) {
+        let arr,
+            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if ((arr = document.cookie.match(reg))) return arr[2];
+        else return null;
+    }
 
-	importCurrentDataToDS() {
-		
-	}
+    importCurrentDataToDS(uuid, dsName) {
+        // let that = this
+        // const url = `${hostName}/phresourcecreationtrigger`
+        // let message = {
+        // 	common: {
+        // 		traceId: uuid,
+        // 		projectId: this.projectId,
+        // 		projectName: this.projectName,
+        // 		flowVersion: "developer",
+        // 		dagName: this.projectName,
+        // 		owner: this.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082",
+        // 		showName: decodeURI(
+        // 			this.getCookie("user_name_show") || "测试人员"
+        // 		)
+        // 	},
+        // 	action: {
+        // 		cat: "createDS",
+        // 		desc: "create DS",
+        // 		comments: "something need to say",
+        // 		message: "something need to say",
+        // 		required: true
+        // 	},
+        // 	datasets: [{
+        // 		"name": dsName,
+        // 		"cat": "uploaded",
+        // 		"format": "csv"
+        // 	}],
+        // 	script: {},
+        // 	notification: {
+        // 		required: true
+        // 	},
+        // 	result: {
+        // 		datasets: [""],
+        // 		scripts: [""],
+        // 		links: [""]
+        // 	}
+        // }
+        // let options = {
+        // 	method: "POST",
+        // 	headers: {
+        // 		Authorization: accessToken,
+        // 		"Content-Type":
+        // 			"application/x-www-form-urlencoded; charset=UTF-8",
+        // 		accept: "application/json"
+        // 	},
+        // 	body: JSON.stringify(message)
+        // }
+        // return fetch(url, options)
+    }
 }

@@ -17,7 +17,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "upload") {
-				uri = `dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
+				uri = `index-input?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
 			} else if (
 				params.name === "linkToProject" ||
 				params.name === "project"

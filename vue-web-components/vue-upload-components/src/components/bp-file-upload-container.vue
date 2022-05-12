@@ -22,6 +22,7 @@
     </div>
     <div v-else-if="stage === 2">
         <bp-excel-handler
+				@importCurrentDataToDS="importCurrentDataToDS"
 				:dsName="dataset"
                 :active-pane="activePane"
                 :file-path="s3path"
@@ -82,9 +83,8 @@ export default {
 
     },
     methods: {
-        test() {
-            // eslint-disable-next-line no-debugger
-            debugger
+        importCurrentDataToDS(data) {
+            this.$emit('event', data)
         },
         uploadFileSelected(f) {
             this.fileList.push(f)
@@ -110,7 +110,7 @@ export default {
             if (this.validation()) {
                 this.stage = 2
             }
-        },
+        }
     }
 }
 </script>

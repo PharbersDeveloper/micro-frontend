@@ -12,7 +12,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 		case "linkToPage":
 			if (params.name === "localUpload") {
 				uri =
-					"dataset?projectName=" +
+					"index-input?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
@@ -194,11 +194,6 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					},
 					notification: {
 						required: true
-					},
-					result: {
-						datasets: [""],
-						scripts: [""],
-						links: [""]
 					}
 				}
 				let scriptOptions = {
