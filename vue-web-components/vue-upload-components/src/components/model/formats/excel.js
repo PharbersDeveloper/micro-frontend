@@ -132,6 +132,10 @@ export default class PhExcelFormat {
             const workbook = XLSX.read(e.target.result, {type: "binary"})
             const worksheet = workbook.Sheets[that.currentSheet]
             let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+            const tmp = that.data[that.currentSheet]
+            const startPos = tmp.skipFirstLines + 1 + tmp.skipNextLines
+            const endPos = tmp.skipFirstLines + 1 + tmp.skipNextLines + that.batchSize
+            data = data.slice(startPos, endPos)
             await destination.upload(data, to, new Date().getTime())
             that.proxy.uploadProgress("uploading ended")
         }
