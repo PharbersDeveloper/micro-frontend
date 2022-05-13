@@ -121,7 +121,8 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 			},
 			notification: {
 				required: true
-			}
+			},
+			result: {}
 		}
 		let options = {
 			method: "POST",

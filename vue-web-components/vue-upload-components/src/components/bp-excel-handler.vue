@@ -123,13 +123,14 @@ export default {
              * 2. 将添加数据的索引
              */
             const uuid = this.guid()
-            const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
+            // TODO: @wodelu 
+            // 与后端沟通，company_id暂时用pharbers代替
+            // const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
 
             // to表示上传dataset的路径
-            const to = `${company_id}/${this.dataProxy.projectId}/${this.dsName}/version=${uuid}`
+            const to = `pharbers/${this.dataProxy.projectId}/${this.dsName}/version=${uuid}`
             this.dataProxy.uploadCurrentData(to)
 
-            // TODO: @wodelu
             // 添加index的过程调用新的dag逻辑
             // this.dataProxy.importCurrentDataToDS(uuid, this.dsName)
             const event = new Event("event")

@@ -194,7 +194,8 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					},
 					notification: {
 						required: true
-					}
+					},
+					result: {}
 				}
 				let scriptOptions = {
 					method: "POST",
@@ -303,7 +304,8 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					scripts: msgArr,
 					notification: {
 						required: true
-					}
+					},
+					result: {}
 				}
 				const urldel = `${hostName}/phresdeletiontrigger`
 				const accessTokendel = route.cookies.read("access_token")
@@ -371,12 +373,12 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}`
 			)
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "新建脚本失败，请重新操作！"
-			alert(msg)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "新建脚本失败，请重新操作！"
+			alert(error)
 		}
 		route.loadingService.loading.style.display = "none"
 	}

@@ -159,7 +159,8 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					scripts: scriptArrayDel,
 					notification: {
 						required: true
-					}
+					},
+					result: {}
 				}
 				let options = {
 					method: "POST",
