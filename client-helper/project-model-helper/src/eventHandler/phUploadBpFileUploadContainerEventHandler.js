@@ -73,12 +73,13 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 			)
 			route.loadingService.loading.style.display = "none"
 		} else if (status == "failed") {
-			const errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "导入失败，请重新上传！"
-			alert(msg)
+			// const errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// : "导入失败，请重新上传！"
+			console.log(error)
+			alert("导入失败，请重新上传！")
 			route.loadingService.loading.style.display = "none"
 		} else if (status == "running") {
 			console.info(data)
@@ -113,7 +114,8 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 				{
 					name: param.dsName,
 					cat: "uploaded",
-					format: "csv"
+					format: "csv",
+					schema: param.schemaArray
 				}
 			],
 			script: {

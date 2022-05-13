@@ -23,6 +23,8 @@ export default class PhExcelFormat {
         this.reader.readAsArrayBuffer(file)
 
         this.data = {}
+
+        this.schemaArray = []
     }
 
     getDatasource() {
@@ -92,6 +94,19 @@ export default class PhExcelFormat {
 
         const dtype = new Array(colsLength).fill("Text")
         const colsWidth = new Array(colsLength).fill(118)
+        this.schemaArray = []
+        header.forEach(item => {
+            this.schemaArray.push({
+                src: item,
+                des: item,
+                type: "String"
+            })
+        })
+        this.schemaArray.push({
+            src: "version",
+            des: "version",
+            type: "String"
+        })
         tmp.schema.resetSchema(header, dtype, colsWidth)
     }
 

@@ -156,14 +156,16 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					datasets.push({
 						name: item.name,
 						cat: item.cat,
-						format: "parquet"
+						format: "parquet",
+						schema: []
 					})
 					dsNames.push(item.name)
 				})
 				datasets.push({
 					name: params.outputs[0].name,
 					cat: "intermediate",
-					format: "parquet"
+					format: "parquet",
+					schema: []
 				})
 				let message = {
 					common: {

@@ -65,10 +65,15 @@ export default class PhExcelPreviewProxy {
         }
     }
 
+    getLocalDatasourceSchema() {
+        // TODO @wodelu
+        // 暂时实现上传一条数据
+        return this.files[0].schemaArray
+    }
+
     prepareS3Datasource() {
         // TODO: s3 的 以后再调试
         // eslint-disable-next-line no-debugger
-        debugger
     }
 
     isReady() {

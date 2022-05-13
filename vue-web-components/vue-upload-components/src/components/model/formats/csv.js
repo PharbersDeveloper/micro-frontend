@@ -22,6 +22,8 @@ export default class PhCsvFormat {
         this.skipFirstLines = 0
         this.skipNextLines = 0
         this.headerLine = 0
+
+        this.schemaArray = []
     }
 
     getDatasource() {
@@ -83,6 +85,19 @@ export default class PhCsvFormat {
 
         const dtype = new Array(colsLength).fill("Text")
         const colsWidth = new Array(colsLength).fill(118)
+        this.schemaArray = []
+        header.forEach(item => {
+            this.schemaArray.push({
+                src: item,
+                des: item,
+                type: "String"
+            })
+        })
+        this.schemaArray.push({
+            src: "version",
+            des: "version",
+            type: "String"
+        })
         this.schema.resetSchema(header, dtype, colsWidth)
     }
 

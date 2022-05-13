@@ -1,5 +1,5 @@
 <template>
-    <div class="eh-container">
+    <div class="eh-container-upload">
         <div class="project_name_header heaber_opt">
             <p class="project_name new_upload">New Uploaded File Dataset</p>
             <div class="project-actions">
@@ -21,7 +21,7 @@
                     :schema="dataProxy.getSchema()"
                     class="excel" />
             </div>
-            <div class="eh-control-panel">
+            <div class="eh-control-panel_new">
                 <div class="eh-file-btns">
                     <div class="eh-justify-type">
                         <div class="eh-file-type">
@@ -142,7 +142,8 @@ export default {
                     projectId: this.dataProxy.projectId,
                     projectName: this.dataProxy.projectName,
                     dsName: this.dsName,
-                    uuid: uuid
+                    uuid: uuid,
+                    schemaArray: this.dataProxy.getLocalDatasourceSchema()
                 }
             }
             this.$emit('importCurrentDataToDS', event)
@@ -200,8 +201,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-    .eh-container {
+<style lang="scss">
+    .eh-container-upload {
         display: flex;
         flex-direction: column;
         .heaber_opt {
@@ -311,7 +312,7 @@ export default {
                 width: 98%;
             }
         }
-        .eh-control-panel {
+        .eh-control-panel_new {
             display: flex;
             flex-direction: column;
             height: 300px;
