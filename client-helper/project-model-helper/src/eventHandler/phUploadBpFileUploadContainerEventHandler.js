@@ -47,6 +47,8 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 			route.router.transitionTo("shell", uri)
 			break
 		case "importCurrentDataToDS":
+			route.projectId = params.projectId
+			route.projectName = params.projectName
 			createDataSetIndex(params)
 			break
 		default:
@@ -62,8 +64,8 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 		if (status == "succeed") {
 			//跳转下一页面
 			const params = [
-				`projectName=${route.tranParam.projectName}`,
-				`projectId=${route.tranParam.projectId}`
+				`projectName=${route.projectName}`,
+				`projectId=${route.projectId}`
 			]
 			route.router.transitionTo(
 				"shell",
@@ -114,7 +116,9 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 					format: "csv"
 				}
 			],
-			script: {},
+			script: {
+				runtime: "dataset"
+			},
 			notification: {
 				required: true
 			}
@@ -130,32 +134,6 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 			body: JSON.stringify(message)
 		}
 		await fetch(url, options).then((res) => res.json())
-
-		// param.opname = route.cookies.read("account_id")
-		// param.opgroup = route.cookies.read("company_id")
-		// param.cat = "uploaded"
-		// param.actionName = param.destination // actions列表展示的名称
-		// param.prop = JSON.stringify({
-		// 	path: "",
-		// 	partitions: 1
-		// })
-		// //直接导入数据集
-		// const push_type = "put_item"
-		// const project_files_body = {
-		// 	table: actionTableName,
-		// 	item: {
-		// 		projectId: param.projectId,
-		// 		code: 0,
-		// 		comments: "project file to Data set",
-		// 		jobCat: "project_file_to_DS",
-		// 		jobDesc: eventName,
-		// 		message: JSON.stringify(param),
-		// 		date: String(new Date().getTime()),
-		// 		owner: route.cookies.read("account_id"),
-		// 		showName: decodeURI(route.cookies.read("user_name_show"))
-		// 	}
-		// }
-		// await postUrl(push_type, project_files_body)
 		route.noticeService.defineAction({
 			type: "iot",
 			id: param.uuid,
