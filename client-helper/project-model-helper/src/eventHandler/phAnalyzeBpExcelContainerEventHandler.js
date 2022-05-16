@@ -183,6 +183,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 						targetProjectId: params.projectId,
 						datasetId: params.targetDataset.id,
 						datasetName: params.targetDataset.name,
+						datasetType: params.datasetType,
 						sample: params.sample,
 						recursive: true
 					}

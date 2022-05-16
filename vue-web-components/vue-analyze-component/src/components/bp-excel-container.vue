@@ -409,7 +409,8 @@ export default {
                     "projectId": this.allData.projectId,
                     "targetDataset": this.allData.targetDataset,
                     "sample": sample,
-                    "datasetId": this.allData.datasetId
+                    "datasetId": this.allData.datasetId,
+                    "datasetType": this.allData.datasetCat
                 }
             }
             console.log(event)
