@@ -158,9 +158,11 @@ export default class PhCsvFormat {
                 that.proxy.uploadProgress("uploading")
                 reader.read().then(x => stepDataProcessor(x))
             } else {
+				debugger
                 text2Data(left, stepData)
                 const startPos = that.skipFirstLines + 1 + that.skipNextLines
-                const endPos = that.skipFirstLines + 1 + that.skipNextLines + that.batchSize
+                // const endPos = that.skipFirstLines + 1 + that.skipNextLines + that.batchSize
+				const endPos = stepData.length
                 stepData = stepData.slice(startPos, endPos)
                 await destination.upload(stepData, to, new Date().getTime())
                 that.proxy.uploadProgress("uploading ended")
