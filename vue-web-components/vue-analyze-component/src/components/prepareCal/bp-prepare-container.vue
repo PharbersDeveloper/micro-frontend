@@ -286,28 +286,27 @@ export default {
             let expressionsArr = []
             for (let index = 0; index < this.steps.data.length; ++index) {
                 const item = this.steps.data[index]
-                item.expressions = JSON.stringify(item.callback.command.revert2Defs())
-                expressionsArr.push(JSON.parse(item.expressions))
+                item.expressions = item.callback.command.revert2Defs()
+                expressionsArr.push(item.expressions)
                 itemArr.push(step2SaveObj(item))
             }
             itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
-            const body = {
-                table: "step",
-                item: itemArr
-            }
-
-            const url = `${hostName}/phdydatasource/put_item`
-            let headers = {
-                Authorization: this.getCookie("access_token") || this.debugToken,
-                "Content-Type": "application/vnd.api+json",
-                Accept: "application/vnd.api+json"
-            }
-            let options = {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(body)
-            }
-            await fetch(url, options)
+            // const body = {
+            //     table: "step",
+            //     item: itemArr
+            // }
+            // const url = `${hostName}/phdydatasource/put_item`
+            // let headers = {
+            //     Authorization: this.getCookie("access_token") || this.debugToken,
+            //     "Content-Type": "application/vnd.api+json",
+            //     Accept: "application/vnd.api+json"
+            // }
+            // let options = {
+            //     method: "POST",
+            //     headers: headers,
+            //     body: JSON.stringify(body)
+            // }
+            // await fetch(url, options)
             
             // 保存脚本
             const event = new Event("event")
@@ -319,6 +318,7 @@ export default {
                     projectId: this.projectId,
                     projectName: this.projectName,
                     itemArr: expressionsArr,
+                    stepsArr: itemArr,
                     message: this.allData.message
                 }
             }

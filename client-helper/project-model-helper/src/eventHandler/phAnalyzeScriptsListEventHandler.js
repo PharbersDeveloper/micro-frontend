@@ -53,14 +53,14 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				params.recipt.runtime === "prepare"
 			) {
 				let recipt = params.recipt
-				let inputName = JSON.parse(recipt.inputs)[0]["name"]
+				let inputName = JSON.parse(recipt.inputs)[0]
 				let scripts = {
 					name: "editScripts",
 					jobName: recipt.jobName,
 					jobId: recipt.jobId,
 					targetJobId: recipt.targetJobId,
 					inputs: JSON.parse(recipt.inputs),
-					outputs: JSON.parse(recipt.outputs),
+					outputs: recipt.outputs,
 					jobVersion: recipt.jobVersion,
 					projectName: params.projectName,
 					jobDisplayName: recipt.jobDisplayName,
@@ -68,7 +68,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "prepare_edit"
 				}
-				let operatorParameters = recipt.operatorParameters
+				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
@@ -78,8 +78,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 							attributes: {
 								jsondata: {
 									scripts: scripts,
-									operatorParameters:
-										JSON.parse(operatorParameters)
+									operatorParameters: {}
 								}
 							}
 						}

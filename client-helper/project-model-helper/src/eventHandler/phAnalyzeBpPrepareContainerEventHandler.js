@@ -1,4 +1,4 @@
-import { hostName, actionTableName } from "../config/envConfig"
+import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
@@ -58,115 +58,114 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 					)
 				}
 				console.log(createPrepareData, editPrepareData)
-				const url = `${hostName}/phdydatasource/put_item`
+				const url = `${hostName}/phresourcecodegentrigger`
 				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				let operatorParameters = params.itemArr
-				//需要新建dataset
-				if (scriptsParams.outputs[0].id == "") {
-					scriptsParams.outputs[0].id = uuid
-					let body = {
-						table: "dataset",
-						item: {
-							projectId: params.projectId,
-							id: uuid,
-							label: JSON.stringify([]),
-							name: scriptsParams.outputs[0].name,
-							schema: JSON.stringify([]),
-							path: scriptsParams.path,
-							format: scriptsParams.format,
-							cat: "intermediate",
-							prop: ""
-						}
-					}
-					let options = {
-						method: "POST",
-						headers: {
-							Authorization: accessToken,
-							"Content-Type":
-								"application/x-www-form-urlencoded; charset=UTF-8",
-							accept: "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					await fetch(url, options)
-				}
-				let message = {}
-				let job_cat_name = ""
-				if (
-					scriptsParams.jobCat &&
-					scriptsParams.jobCat === "prepare_edit"
-				) {
-					//用于配置页面数据回显
-					message = {
-						actionName: scriptsParams.jobShowName,
-						projectId: scriptsParams.projectId,
-						flowVersion: "developer",
-						jobCat: "prepare_edit",
-						jobDisplayName: scriptsParams.jobDisplayName,
-						projectName: params.projectName,
-						jobName: scriptsParams.jobName,
-						operatorParameters: operatorParameters,
-						runtime: "prepare"
-					}
-					job_cat_name = "prepare_edit"
-					route.msg = "编辑"
-				} else {
-					// 创建
-					message = {
-						actionName: scriptsParams.jobName,
-						dagName: params.projectName,
-						flowVersion: "developer",
-						jobName: scriptsParams.jobName,
-						jobId: "",
-						inputs: scriptsParams.inputs,
-						outputs: scriptsParams.outputs,
-						jobVersion: scriptsParams.jobVersion,
-						projectId: params.projectId,
-						timeout: "1000",
-						runtime: "prepare",
-						// owner: decodeURI(route.cookies.read("user_name_show")),
-						owner: route.cookies.read("account_id"),
-						showName: decodeURI(
-							route.cookies.read("user_name_show")
-						),
-						targetJobId: "",
-						projectName: params.projectName,
-						labels: [],
-						operatorParameters: operatorParameters,
-						prop: {
-							path: scriptsParams.path,
-							partitions: 1
-						}
-					}
-					job_cat_name = "dag_create"
-				}
-				// route.noticeService.defineAction({
-				// 	type: "iot",
-				// 	id: job_cat_name,
-				// 	projectId: params.projectId,
-				// 	ownerId: route.cookies.read("account_id"),
-				// 	callBack: createScriptNoticeCallback
-				// })
+				// let operatorParameters = params.itemArr
+				// let message = {}
+				let job_cat_name = "prepare_edit"
+				// if (
+				// 	scriptsParams.jobCat &&
+				// 	scriptsParams.jobCat === "prepare_edit"
+				// ) {
+				// 	//用于配置页面数据回显
+				// 	message = {
+				// 		actionName: scriptsParams.jobShowName,
+				// 		projectId: scriptsParams.projectId,
+				// 		flowVersion: "developer",
+				// 		jobCat: "prepare_edit",
+				// 		jobDisplayName: scriptsParams.jobDisplayName,
+				// 		projectName: params.projectName,
+				// 		jobName: scriptsParams.jobName,
+				// 		operatorParameters: operatorParameters,
+				// 		runtime: "prepare"
+				// 	}
+				// 	job_cat_name = "prepare_edit"
+				// 	route.msg = "编辑"
+				// } else {
+				// 	// 创建
+				// 	message = {
+				// 		actionName: scriptsParams.jobName,
+				// 		dagName: params.projectName,
+				// 		flowVersion: "developer",
+				// 		jobName: scriptsParams.jobName,
+				// 		jobId: "",
+				// 		inputs: scriptsParams.inputs,
+				// 		outputs: scriptsParams.outputs,
+				// 		jobVersion: scriptsParams.jobVersion,
+				// 		projectId: params.projectId,
+				// 		timeout: "1000",
+				// 		runtime: "prepare",
+				// 		// owner: decodeURI(route.cookies.read("user_name_show")),
+				// 		owner: route.cookies.read("account_id"),
+				// 		showName: decodeURI(
+				// 			route.cookies.read("user_name_show")
+				// 		),
+				// 		targetJobId: "",
+				// 		projectName: params.projectName,
+				// 		labels: [],
+				// 		operatorParameters: operatorParameters,
+				// 		prop: {
+				// 			path: scriptsParams.path,
+				// 			partitions: 1
+				// 		}
+				// 	}
+				// 	job_cat_name = "dag_create"
+				// }
+				// let scriptBody = {
+				// 	table: actionTableName,
+				// 	item: {
+				// 		projectId: scriptsParams.projectId,
+				// 		owner: route.cookies.read("account_id"),
+				// 		showName: decodeURI(
+				// 			route.cookies.read("user_name_show")
+				// 		),
+				// 		code: 0,
+				// 		jobDesc: job_cat_name,
+				// 		jobCat: job_cat_name,
+				// 		comments: "",
+				// 		date: String(new Date().getTime()),
+				// 		message: JSON.stringify(message)
+				// 	}
+				// }
 				let scriptBody = {
-					table: actionTableName,
-					item: {
-						projectId: scriptsParams.projectId,
+					common: {
+						traceId: uuid,
+						projectId: params.projectId,
+						projectName: params.projectName,
+						flowVersion: "developer",
+						dagName: params.projectName,
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						),
-						code: 0,
-						jobDesc: job_cat_name,
-						jobCat: job_cat_name,
-						comments: "",
-						date: String(new Date().getTime()),
-						message: JSON.stringify(message)
-					}
+						)
+					},
+					action: {
+						cat: "createSteps",
+						desc: "create prepare steps",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					script: {
+						id: "",
+						jobName: scriptsParams.jobShowName
+							? scriptsParams.jobShowName
+							: scriptsParams.jobName,
+						jobPath: "",
+						inputs: [],
+						outputs: [],
+						runtime: "prepare"
+					},
+					steps: params.stepsArr,
+					notification: {
+						required: true
+					},
+					oldImage: []
 				}
 				let scriptOptions = {
 					method: "POST",
@@ -178,15 +177,13 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 					},
 					body: JSON.stringify(scriptBody)
 				}
-				route.creatScriptsQuery = await fetch(url, scriptOptions).then(
-					(res) => res.json()
-				)
+				await fetch(url, scriptOptions).then((res) => res.json())
 
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
 					runnerId: "",
-					id: route.creatScriptsQuery.data.id,
+					id: uuid,
 					eventName: job_cat_name,
 					projectId: scriptsParams.projectId,
 					ownerId: route.cookies.read("account_id"),
