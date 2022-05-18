@@ -62,7 +62,6 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status == "succeed") {
-			//更新version表
 			//跳转下一页面
 			const params = [
 				`projectName=${route.projectName}`,
@@ -116,6 +115,7 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 					name: param.dsName,
 					cat: "uploaded",
 					format: "csv",
+					version: param.dataID,
 					schema: param.schemaArray
 				}
 			],

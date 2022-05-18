@@ -6,9 +6,9 @@ export default class PhContainerDataSource {
         this.id = id
         this.data = []
         this.sort = {}
-        this.projectId = 'YZYijD17N9L6LXx'
+        this.projectId = ''
         this.filter = {}
-        this.name = "wodeluTest_勿删"
+        this.name = ""
         this.batch_size = 100
         // this.schema = []
         // this.cols = this.schema

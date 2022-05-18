@@ -79,6 +79,7 @@ export default class PhDagTriggerPolicy {
         this.parent.showProgress = false
         const url = `${hostName}/statemachinetrigger`
         const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
+        const tenantId = this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let confData = data.args.param.jsonValue
         confData.ownerId = this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
         confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境"
@@ -91,7 +92,8 @@ export default class PhDagTriggerPolicy {
                 projectId: this.parent.projectId,
                 projectName: this.parent.projectName,
                 owner: confData.ownerId,
-                showName: confData.showName
+                showName: confData.showName,
+                tenantId: tenantId
             },
             calculate: {
                 type: "dataset",

@@ -119,22 +119,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					})
 				})
 				const urldel = `${hostName}/phresdeletiontrigger`
-				// let body = {
-				// 	table: actionTableName,
-				// 	item: {
-				// 		projectId: params.projectId,
-				// 		code: 0,
-				// 		comments: "delete_dataset",
-				// 		jobCat: "remove_DS",
-				// 		jobDesc: deleteDatasetsEventName,
-				// 		message: JSON.stringify(msgArr),
-				// 		date: String(new Date().getTime()),
-				// 		owner: route.cookies.read("account_id"),
-				// 		showName: decodeURI(
-				// 			route.cookies.read("user_name_show")
-				// 		)
-				// 	}
-				// }
 				const deluuid = guid()
 				let body = {
 					common: {
@@ -145,7 +129,8 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						)
+						),
+						tenantId: route.cookies.read("company_id")
 					},
 					action: {
 						cat: "deleteResource",
@@ -236,54 +221,9 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					},
 					body: JSON.stringify(catamessage)
 				}
-				// let catamessage = {
-				// 	actionName: params.dsName,
-				// 	keys: "",
-				// 	name: params.dsName,
-				// 	version: "",
-				// 	id: catauuid,
-				// 	cat: "catalog",
-				// 	format: "",
-				// 	prop: {
-				// 		path: "",
-				// 		partitions: 1,
-				// 		format: "",
-				// 		tableName: params.tableName,
-				// 		databaseName: route.cookies.read("company_id")
-				// 	},
-				// 	opname: route.cookies.read("account_id"),
-				// 	opgroup: route.cookies.read("company_id")
-				// }
-				// let catalog_body = {
-				// 	table: actionTableName,
-				// 	item: {
-				// 		projectId: params.projectId,
-				// 		code: 0,
-				// 		comments: "",
-				// 		jobCat: "catalog",
-				// 		jobDesc: createCatalogEventName,
-				// 		message: JSON.stringify(catamessage),
-				// 		date: String(new Date().getTime()),
-				// 		owner: route.cookies.read("account_id"),
-				// 		showName: decodeURI(
-				// 			route.cookies.read("user_name_show")
-				// 		)
-				// 	}
-				// }
-				// let catalog_options = {
-				// 	method: "POST",
-				// 	headers: {
-				// 		Authorization: route.cookies.read("access_token"),
-				// 		"Content-Type":
-				// 			"application/x-www-form-urlencoded; charset=UTF-8",
-				// 		accept: "application/json"
-				// 	},
-				// 	body: JSON.stringify(catalog_body)
-				// }
 				await fetch(catalog_url, catalog_options).then((res) =>
 					res.json()
 				)
-				// params.catalog_result = catalog_result.data.attributes.message
 				route.create_catalog_result = params
 				route.noticeService.defineAction({
 					type: "iot",
@@ -476,31 +416,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			}
 		}
 		//发送action
-		// let messages = {
-		// 	actionName: message.name,
-		// 	sourceProjectId: sourceProjectIdValue,
-		// 	targetProjectId: projectId,
-		// 	projectName: projectName,
-		// 	datasetName: message.name,
-		// 	datasetId: message.id,
-		// 	sample: sample,
-		// 	owner: route.cookies.read("account_id"),
-		// 	showName: decodeURI(route.cookies.read("user_name_show"))
-		// }
-		// let scriptBody = {
-		// 	table: actionTableName,
-		// 	item: {
-		// 		projectId: projectId,
-		// 		owner: route.cookies.read("account_id"),
-		// 		showName: decodeURI(route.cookies.read("user_name_show")),
-		// 		code: 0,
-		// 		jobDesc: createCatalogSampleEventName,
-		// 		jobCat: "edit_sample",
-		// 		comments: "",
-		// 		date: String(new Date().getTime()),
-		// 		message: JSON.stringify(messages)
-		// 	}
-		// }
 		let editSampleOptions = {
 			method: "POST",
 			headers: {
@@ -519,16 +434,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			route.loadingService.loading.style.display = "none"
 			return false
 		}
-		// this.noticeService.defineAction({
-		// 	type: "iot",
-		// 	remoteResource: "notification",
-		// 	runnerId: "",
-		// 	id: event.data.message.notification.id,
-		// 	eventName: event.data.message.notification.eventName,
-		// 	projectId: jobNamePre,
-		// 	ownerId: this.cookies.read("account_id"),
-		// 	callBack: this.runDagCallback
-		// })
 		route.noticeService.defineAction({
 			type: "iot",
 			remoteResource: "notification",
@@ -562,18 +467,10 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 
 	function createCatalogNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
-		// const {
-		// 	cnotification: { error }
-		// } = JSON.parse(message)
 		if (status == "succeed") {
 			console.log(message)
 			createCatalogSample()
 		} else if (status == "failed") {
-			// let errorObj = error !== "" ? JSON.parse(error) : ""
-			// let msg =
-			// 	errorObj["message"]["zh"] !== ""
-			// 		? errorObj["message"]["zh"]
-			// 		: "新建数据集失败！"
 			alert("新建数据集失败！")
 			route.loadingService.loading.style.display = "none"
 		}
