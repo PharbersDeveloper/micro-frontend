@@ -27,6 +27,7 @@
                 :active-pane="activePane"
                 :file-path="s3path"
                 :file-list="fileList"
+				:dataID="dataID"
         />
     </div>
 

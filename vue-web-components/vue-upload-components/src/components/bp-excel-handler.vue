@@ -94,6 +94,7 @@ export default {
         filePath: String,
         activePane: String,
         dsName: String,
+		dataID: String,
         dataProxy: {
             type: Object,
             default: function() {
@@ -143,6 +144,7 @@ export default {
                     projectName: this.dataProxy.projectName,
                     dsName: this.dsName,
                     uuid: uuid,
+					dataID: this.dataID,
                     schemaArray: this.dataProxy.getLocalDatasourceSchema()
                 }
             }

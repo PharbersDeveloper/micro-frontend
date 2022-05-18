@@ -4,8 +4,6 @@ export async function phUploadBpFileUploadContainerRouteModel(
 	route,
 	parseParams
 ) {
-	// route.browserEventsService.registerListener("dataset-lst")
-	// let datasets = await route.store.query("dataset")
 	route.store.unloadAll("dataset")
 	const url = `${hostName}/phdydatasource/scan`
 	const accessToken = route.cookies.read("access_token")
