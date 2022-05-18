@@ -175,7 +175,8 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						)
+						),
+						tenantId: route.cookies.read("company_id")
 					},
 					calculate: {
 						type: "sample",

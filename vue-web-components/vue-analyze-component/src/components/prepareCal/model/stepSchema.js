@@ -59,11 +59,13 @@ export default class PhStepSchema {
     buildSchemaQuery() {
         const url = `${hostName}/phdadatasource`
         const accessToken = this.getCookie("access_token") || this.debugToken
+        const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let body = {
             "query": "SELECT `name`, `type` FROM system.columns where database='default' and table='"+ this.projectId + "_" + this.name + "';", // TODO:
             // "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='ma';",
             "schema": ["name", "type"],
-            "projectId": this.projectId
+            "projectId": this.projectId,
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",

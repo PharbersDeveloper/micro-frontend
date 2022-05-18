@@ -129,7 +129,7 @@ export default {
             // const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
 
             // to表示上传dataset的路径
-            const to = `pharbers/${this.dataProxy.projectId}/${this.dsName}/version=${uuid}`
+            const to = `pharbers/${this.dataProxy.projectId}/${this.dsName}/version=${this.dataID}`
             this.dataProxy.uploadCurrentData(to)
 
             // 添加index的过程调用新的dag逻辑

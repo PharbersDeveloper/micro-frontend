@@ -73,10 +73,13 @@ export default class PhContainerDataSource {
         }
         const url = this.url
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+
         let body = {
             "query": buildQueryString(),
             "schema": schema,
-            "projectId": ele.datasource.projectId
+            "projectId": ele.datasource.projectId,
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",
@@ -113,10 +116,12 @@ export default class PhContainerDataSource {
         }
         const url = this.url
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let body = {
             "query": buildQueryCountString(),
             "schema": ["count"],
-            "projectId": ele.datasource.projectId
+            "projectId": ele.datasource.projectId,
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",
@@ -146,10 +151,13 @@ export default class PhContainerDataSource {
         }
         const url = this.url
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+
         let body = {
             "query": buildDistinctColSql(),
             "schema": [col],
-            "projectId": ele.datasource.projectId
+            "projectId": ele.datasource.projectId,
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",

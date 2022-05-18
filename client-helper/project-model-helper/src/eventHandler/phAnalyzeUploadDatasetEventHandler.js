@@ -386,7 +386,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	}
 
 	async function createCatalogSample() {
-		console.log("statemachinetrigger")
 		console.log(route.create_catalog_result)
 
 		let { dsName, projectId, projectName } = route.create_catalog_result
@@ -402,7 +401,8 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				projectId: projectId,
 				projectName: "sample",
 				owner: route.cookies.read("account_id"),
-				showName: decodeURI(route.cookies.read("user_name_show"))
+				showName: decodeURI(route.cookies.read("user_name_show")),
+				tenantId: route.cookies.read("company_id")
 			},
 			calculate: {
 				type: "sample",

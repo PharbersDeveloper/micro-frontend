@@ -27,10 +27,12 @@ export default class PhDataSource {
     buildPolicyQuery(ele, query, schema) {
         const url = `${hostName}/phdadatasource`
         const accessToken = ele.getCookie("access_token") || this.debugToken
+        const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let body = {
             "query": query,
             "schema": schema,
-            "projectId": this.projectId
+            "projectId": this.projectId,
+			"tenantId": tenantId
         }
         let options = {
             method: "POST",

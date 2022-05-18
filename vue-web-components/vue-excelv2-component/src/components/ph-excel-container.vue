@@ -135,6 +135,12 @@ export default {
             let that = this
             this.datasource.queryTotalCount(this).then(count => {
                 that.dataCount = parseInt(count)
+				// if(that.dataCount === NaN && count.indexOf("doesn't exist") !== -1) {
+				// 	let confirm = confirm("是否进行数据样本配置？")
+				// 	if (confirm) {
+
+				// 	}
+				// }
                 that.$emit("countIsReady", that.dataCount);
                 that.countIsReady++
             })
