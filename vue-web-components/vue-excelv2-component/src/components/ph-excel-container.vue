@@ -139,7 +139,7 @@ export default {
             let that = this
             this.datasource.queryTotalCount(this).then(count => {
                 that.dataCount = parseInt(count)
-				if(count.indexOf("doesn't exist") !== -1) {
+				if(typeof(count) === "string" && count.indexOf("doesn't exist") !== -1) {
 					this.$emit("sample")
 				}
                 that.$emit("countIsReady", that.dataCount);
