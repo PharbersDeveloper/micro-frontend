@@ -12,7 +12,7 @@ export async function phAnalyzeUploadDatasetRouteModel(route, parseParams) {
 		conditions: {
 			projectId: ["=", parseParams.query.projectId]
 		},
-		"index_name": "dataset-projectId-name-index",
+		index_name: "dataset-projectId-name-index",
 		limit: 100,
 		start_key: ""
 	}

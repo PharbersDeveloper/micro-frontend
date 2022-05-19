@@ -39,6 +39,7 @@ export async function phAnalyzeScriptsListRouteModel(route, parseParams) {
 			projectId: ["=", parseParams.query.projectId]
 			// "sortVersion": ["begins_with", "developer_"]
 		},
+		index_name: "dataset-projectId-name-index",
 		limit: 100,
 		start_key: {}
 	}

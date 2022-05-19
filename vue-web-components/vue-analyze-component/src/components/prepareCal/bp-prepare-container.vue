@@ -82,6 +82,15 @@
             </div>
         </div>
         <op-factories ref="opFactories" class="op-factories" :visible="drawer" @newStep="newStep"/>
+		<el-dialog
+            title="数据样本配置"
+            :visible.sync="sampleVisible"
+            width="800px">
+			<div>请先进行数据样本配置</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="sampleVisible = false">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -101,6 +110,7 @@ import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-rang
 import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
 import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/defs"
 import PhDagDefinitions from "../policy/definitions/definitions";
+import ElDialog from 'element-ui/packages/dialog/src/component'
 
 
 export default {
@@ -120,7 +130,8 @@ export default {
             deleteStepsArray: [],
             uriMessage: null,
             dragging: null, //正在拖拽的 元素
-            handleDragNewItemsDst: 0
+            handleDragNewItemsDst: 0,
+            sampleVisible: false
         }
     },
     components: {
@@ -130,7 +141,8 @@ export default {
         ElCheckboxGroup,
         ElCheckbox,
         ElInput,
-        OpFactories
+        OpFactories,
+        ElDialog
     },
     props: {
         allData: {
@@ -176,27 +188,27 @@ export default {
         this.steps.refreshData()
     },
     methods: {
-
         sample() {
-            let sel = confirm("是否进行数据样本配置？")
-            if (sel) {
-                const event = new Event("event")
-                event.args = {
-                    callback: "clickSample",
-                    element: this,
-                    param: {
-                        "name": "clickSample",
-                        "projectName": this.allData.projectName,
-                        "projectId": this.allData.projectId,
-                        "targetDataset": this.allData.targetDataset,
-                        "sample": "F_1",
-                        "datasetId": this.allData.datasetId,
-                        "datasetType": this.allData.datasetCat
-                    }
-                }
-                console.log(event)
-                this.$emit('event', event)
-            }
+            this.sampleVisible = true
+            // let sel = confirm("是否进行数据样本配置？")
+            // if (sel) {
+            //     const event = new Event("event")
+            //     event.args = {
+            //         callback: "clickSample",
+            //         element: this,
+            //         param: {
+            //             "name": "clickSample",
+            //             "projectName": this.allData.projectName,
+            //             "projectId": this.allData.projectId,
+            //             "targetDataset": this.allData.targetDataset,
+            //             "sample": "F_1",
+            //             "datasetId": this.allData.datasetId,
+            //             "datasetType": this.allData.datasetCat
+            //         }
+            //     }
+            //     console.log(event)
+            //     this.$emit('event', event)
+            // }
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
@@ -387,10 +399,8 @@ export default {
         font-display: "auto";
         font-style: normal
     }
-    * {
-        letter-spacing: .4px;
-        line-height: 1.6;
-        box-sizing: border-box;
+	.el-dialog__wrapper {
+        background: rgba(0, 0, 0, 0.31);
     }
     .prepare {
         box-sizing: border-box;

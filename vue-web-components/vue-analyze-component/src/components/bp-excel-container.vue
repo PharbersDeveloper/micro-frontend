@@ -375,6 +375,7 @@ export default {
             // }
         },
         on_clickSample() {
+            this.sampleVisible = false
             const event = new Event("event")
             event.args = {
                 callback: "clickSample",
@@ -389,7 +390,6 @@ export default {
                     "datasetType": this.allData.datasetCat
                 }
             }
-            console.log(event)
             this.$emit('event', event)
         },
         sample() {
