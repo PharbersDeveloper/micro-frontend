@@ -147,7 +147,9 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&inputName=" +
-						params.inputs[0]["name"]
+						params.inputs[0]["name"] +
+						"&datasetId=" +
+						params.inputs[0]["id"]
 				}
 				let datasets = []
 				let dsNames = []

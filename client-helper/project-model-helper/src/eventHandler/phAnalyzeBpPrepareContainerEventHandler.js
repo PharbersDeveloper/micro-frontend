@@ -65,73 +65,7 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				// let operatorParameters = params.itemArr
-				// let message = {}
 				let job_cat_name = "prepare_edit"
-				// if (
-				// 	scriptsParams.jobCat &&
-				// 	scriptsParams.jobCat === "prepare_edit"
-				// ) {
-				// 	//用于配置页面数据回显
-				// 	message = {
-				// 		actionName: scriptsParams.jobShowName,
-				// 		projectId: scriptsParams.projectId,
-				// 		flowVersion: "developer",
-				// 		jobCat: "prepare_edit",
-				// 		jobDisplayName: scriptsParams.jobDisplayName,
-				// 		projectName: params.projectName,
-				// 		jobName: scriptsParams.jobName,
-				// 		operatorParameters: operatorParameters,
-				// 		runtime: "prepare"
-				// 	}
-				// 	job_cat_name = "prepare_edit"
-				// 	route.msg = "编辑"
-				// } else {
-				// 	// 创建
-				// 	message = {
-				// 		actionName: scriptsParams.jobName,
-				// 		dagName: params.projectName,
-				// 		flowVersion: "developer",
-				// 		jobName: scriptsParams.jobName,
-				// 		jobId: "",
-				// 		inputs: scriptsParams.inputs,
-				// 		outputs: scriptsParams.outputs,
-				// 		jobVersion: scriptsParams.jobVersion,
-				// 		projectId: params.projectId,
-				// 		timeout: "1000",
-				// 		runtime: "prepare",
-				// 		// owner: decodeURI(route.cookies.read("user_name_show")),
-				// 		owner: route.cookies.read("account_id"),
-				// 		showName: decodeURI(
-				// 			route.cookies.read("user_name_show")
-				// 		),
-				// 		targetJobId: "",
-				// 		projectName: params.projectName,
-				// 		labels: [],
-				// 		operatorParameters: operatorParameters,
-				// 		prop: {
-				// 			path: scriptsParams.path,
-				// 			partitions: 1
-				// 		}
-				// 	}
-				// 	job_cat_name = "dag_create"
-				// }
-				// let scriptBody = {
-				// 	table: actionTableName,
-				// 	item: {
-				// 		projectId: scriptsParams.projectId,
-				// 		owner: route.cookies.read("account_id"),
-				// 		showName: decodeURI(
-				// 			route.cookies.read("user_name_show")
-				// 		),
-				// 		code: 0,
-				// 		jobDesc: job_cat_name,
-				// 		jobCat: job_cat_name,
-				// 		comments: "",
-				// 		date: String(new Date().getTime()),
-				// 		message: JSON.stringify(message)
-				// 	}
-				// }
 				let scriptBody = {
 					common: {
 						traceId: uuid,
@@ -191,6 +125,92 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				})
 			}
 			break
+		case "clickSample":
+			if (params) {
+				const url = `${hostName}/phdydatasource/put_item`
+				const sampleUrl = `${hostName}/statemachinetrigger`
+				const accessToken = route.cookies.read("access_token")
+				const runnerId = genRunnerId("sample")
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				params.targetDataset.sample = params.sample
+				params.targetDataset.projectId = params.projectId
+				params.targetDataset.id = params.datasetId
+				let sourceProjectIdValue = ""
+				if (params.targetDataset.cat === "catalog") {
+					// 与后端沟通,catalog类型的projectId都是一个，暂时写死
+					sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
+				} else {
+					sourceProjectIdValue = params.projectId
+				}
+				// 更新dataset表
+				let body = {
+					table: "dataset",
+					item: params.targetDataset
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(url, options)
+				let sampleBody = {
+					common: {
+						runnerId: runnerId,
+						projectId: params.projectId,
+						projectName: "sample",
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
+						tenantId: route.cookies.read("company_id")
+					},
+					calculate: {
+						type: "sample",
+						sourceProjectId: sourceProjectIdValue,
+						targetProjectId: params.projectId,
+						datasetId: params.targetDataset.id,
+						datasetName: params.targetDataset.name,
+						datasetType: params.datasetType,
+						sample: params.sample,
+						recursive: true
+					}
+				}
+				let editSampleOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(sampleBody)
+				}
+				let results = await fetch(sampleUrl, editSampleOptions).then(
+					(res) => res.json()
+				)
+				if (results.status === "failed") {
+					alert("启动出错，请重新运行！")
+					route.loadingService.loading.style.display = "none"
+					return false
+				}
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: runnerId,
+					eventName: "sampleEdit",
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: editSampleCallback
+				})
+			}
+			break
 		default:
 			console.log("submit event to parent")
 	}
@@ -204,6 +224,13 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 				return v.toString(16)
 			}
 		)
+	}
+
+	function genRunnerId(projectName, flowVersion = "developer") {
+		let d = new Date().toISOString()
+		const i = d.indexOf(".")
+		d = d.substring(0, i) + "+00:00"
+		return [projectName, projectName, flowVersion, d].join("_")
 	}
 
 	function createScriptNoticeCallback(param, payload) {
@@ -226,5 +253,26 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 			alert(msg)
 		}
 		route.loadingService.loading.style.display = "none"
+	}
+
+	function editSampleCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+
+		if (status == "succeed" || status == "success") {
+			alert("数据样本配置成功")
+			window.location.reload()
+		} else if (status == "failed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
+			let msg =
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
+					: "数据样本配置失败，请重新操作！"
+			route.loadingService.loading.style.display = "none"
+			alert(msg)
+			// TODO:刷新页面数据
+		}
 	}
 }

@@ -11,28 +11,32 @@
         <div v-if="countIsReady === 0" :style="{height: '100%', width: '100%'}">&nbsp;</div>
         <div ref="viewport" class="viewport" :style="style" @scroll="scrollGet($event)">
             <div class="body" :style="{height: totalHeight +'px'}">
-                <ph-lazy-excel-page v-if="isLazyRendering" v-for="(item, index) in pageRange"
-                    :page="index" :curPage="curPage"
-                    :datasource="datasource"
-                    :schema="schema"
-                    :rowHeight="rowHeight"
-                    :page-height="pageHeight"
-                    :last-page-height="lastPageHeight"
-                    :page-width="schema.totalWidth()"
-                    :needRefresh="item"
-                    :totalPageCount="pageRange.length - 1"
-                    :key="index"/>
-                <ph-excel-page v-else v-for="(item, index) in pageRange"
-                   :page="index" :curPage="curPage"
-                   :datasource="datasource"
-                   :schema="schema"
-                   :rowHeight="rowHeight"
-                   :page-height="pageHeight"
-                   :last-page-height="lastPageHeight"
-                   :page-width="schema.totalWidth()"
-                   :needRefresh="item"
-                   :totalPageCount="pageRange.length - 1"
-                   :key="index"/>
+				<div v-if="isLazyRendering">
+					<ph-lazy-excel-page  v-for="(item, index) in pageRange"
+						:page="index" :curPage="curPage"
+						:datasource="datasource"
+						:schema="schema"
+						:rowHeight="rowHeight"
+						:page-height="pageHeight"
+						:last-page-height="lastPageHeight"
+						:page-width="schema.totalWidth()"
+						:needRefresh="item"
+						:totalPageCount="pageRange.length - 1"
+						:key="index"/>
+				</div>
+                <div v-else>
+					<ph-excel-page v-for="(item, index) in pageRange"
+						:page="index" :curPage="curPage"
+						:datasource="datasource"
+						:schema="schema"
+						:rowHeight="rowHeight"
+						:page-height="pageHeight"
+						:last-page-height="lastPageHeight"
+						:page-width="schema.totalWidth()"
+						:needRefresh="item"
+						:totalPageCount="pageRange.length - 1"
+						:key="index"/>
+				</div>
 
             </div>
         </div>
@@ -135,12 +139,9 @@ export default {
             let that = this
             this.datasource.queryTotalCount(this).then(count => {
                 that.dataCount = parseInt(count)
-				// if(that.dataCount === NaN && count.indexOf("doesn't exist") !== -1) {
-				// 	let confirm = confirm("是否进行数据样本配置？")
-				// 	if (confirm) {
-
-				// 	}
-				// }
+				if(count.indexOf("doesn't exist") !== -1) {
+					this.$emit("sample")
+				}
                 that.$emit("countIsReady", that.dataCount);
                 that.countIsReady++
             })

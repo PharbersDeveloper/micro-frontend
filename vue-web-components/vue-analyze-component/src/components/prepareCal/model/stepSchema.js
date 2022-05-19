@@ -1,4 +1,4 @@
-import {hostName} from "../../../../../vue-histogram-component/src/config/envConfig"
+import {hostName} from "../../../config/envConfig"
 
 export default class PhStepSchema {
     constructor(id, parent) {
@@ -59,7 +59,7 @@ export default class PhStepSchema {
     buildSchemaQuery() {
         const url = `${hostName}/phdadatasource`
         const accessToken = this.getCookie("access_token") || this.debugToken
-        const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+        const tenantId = this.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let body = {
             "query": "SELECT `name`, `type` FROM system.columns where database='default' and table='"+ this.projectId + "_" + this.name + "';", // TODO:
             // "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='ma';",
@@ -87,6 +87,7 @@ export default class PhStepSchema {
                 .then((response) => {
                     const s = []
                     const dt = []
+					
                     for (let idx = 0; idx < response.length; ++idx) {
                         s.push(response[idx].name)
                         dt.push(response[idx].type)

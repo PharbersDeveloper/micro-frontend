@@ -39,6 +39,7 @@
         <div class="main_container">
             <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
                 @countIsReady="totalCountIsReady"
+				@sample="sample"
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>
@@ -361,6 +362,27 @@ export default {
             // } else {
             //     this.dataVersionDisabled = false
             // }
+        },
+        sample() {
+            let sel = confirm("是否进行数据样本配置？")
+            if (sel) {
+                const event = new Event("event")
+                event.args = {
+                    callback: "clickSample",
+                    element: this,
+                    param: {
+                        "name": "clickSample",
+                        "projectName": this.allData.projectName,
+                        "projectId": this.allData.projectId,
+                        "targetDataset": this.allData.targetDataset,
+                        "sample": "F_1",
+                        "datasetId": this.allData.datasetId,
+                        "datasetType": this.allData.datasetCat
+                    }
+                }
+                console.log(event)
+                this.$emit('event', event)
+            }
         },
         //sample radio
         dataSampleRadioClick(val) {
