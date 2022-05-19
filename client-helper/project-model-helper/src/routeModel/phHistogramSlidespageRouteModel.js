@@ -73,7 +73,7 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 
 	// 请求dataset
 	route.store.unloadAll("dataset")
-	const dsurl = `${hostName}/phdydatasource/scan`
+	const dsurl = `${hostName}/phdydatasource/query`
 	const dsaccessToken = route.cookies.read("access_token") || debugToken
 	let dsbody = {
 		table: "dataset",

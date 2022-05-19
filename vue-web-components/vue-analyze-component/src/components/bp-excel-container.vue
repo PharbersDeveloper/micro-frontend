@@ -201,6 +201,16 @@
                 <el-button type="primary" @click="on_clickDataSample">确认</el-button>
             </span>
         </el-dialog>
+		<el-dialog
+            title="数据样本配置"
+            :visible.sync="sampleVisible"
+            width="800px">
+			<div>是否进行数据样本配置？</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="sampleVisible = false">取消</el-button>
+                <el-button type="primary" @click="on_clickSample">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -251,7 +261,8 @@ export default {
             dataCollectionDisabled: false,
             checkedDataVersion: [],
             dataCollectionMethods: "",
-            dataCollectionNum: ""
+            dataCollectionNum: "",
+            sampleVisible: false
         }
     },
     computed: {
@@ -363,26 +374,27 @@ export default {
             //     this.dataVersionDisabled = false
             // }
         },
-        sample() {
-            let sel = confirm("是否进行数据样本配置？")
-            if (sel) {
-                const event = new Event("event")
-                event.args = {
-                    callback: "clickSample",
-                    element: this,
-                    param: {
-                        "name": "clickSample",
-                        "projectName": this.allData.projectName,
-                        "projectId": this.allData.projectId,
-                        "targetDataset": this.allData.targetDataset,
-                        "sample": "F_1",
-                        "datasetId": this.allData.datasetId,
-                        "datasetType": this.allData.datasetCat
-                    }
+        on_clickSample() {
+            const event = new Event("event")
+            event.args = {
+                callback: "clickSample",
+                element: this,
+                param: {
+                    "name": "clickSample",
+                    "projectName": this.allData.projectName,
+                    "projectId": this.allData.projectId,
+                    "targetDataset": this.allData.targetDataset,
+                    "sample": "F_1",
+                    "datasetId": this.allData.datasetId,
+                    "datasetType": this.allData.datasetCat
                 }
-                console.log(event)
-                this.$emit('event', event)
             }
+            console.log(event)
+            this.$emit('event', event)
+        },
+        sample() {
+            if(this.allData.datasetCat === "uploaded")
+                this.sampleVisible = true
         },
         //sample radio
         dataSampleRadioClick(val) {

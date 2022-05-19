@@ -3,7 +3,7 @@ import { hostName } from "../config/envConfig"
 export async function phAnalyzeScriptsListRouteModel(route, parseParams) {
 	route.store.unloadAll("dagConf")
 	route.store.unloadAll("dataset")
-	const url = `${hostName}/phdydatasource/scan`
+	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token")
 	let body = {
 		table: "dagconf",

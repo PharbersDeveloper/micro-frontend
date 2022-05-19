@@ -5,13 +5,14 @@ export async function phAnalyzeUploadDatasetRouteModel(route, parseParams) {
 	let debugToken =
 		"5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
 	route.store.unloadAll("dataset")
-	const url = `${hostName}/phdydatasource/scan`
+	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token") || debugToken
 	let body = {
 		table: "dataset",
 		conditions: {
 			projectId: ["=", parseParams.query.projectId]
 		},
+		"index_name": "dataset-projectId-name-index",
 		limit: 100,
 		start_key: ""
 	}

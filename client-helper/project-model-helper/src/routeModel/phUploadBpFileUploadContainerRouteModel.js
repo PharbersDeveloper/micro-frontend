@@ -5,13 +5,14 @@ export async function phUploadBpFileUploadContainerRouteModel(
 	parseParams
 ) {
 	route.store.unloadAll("dataset")
-	const url = `${hostName}/phdydatasource/scan`
+	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token")
 	let body = {
 		table: "dataset",
 		conditions: {
 			projectId: ["=", parseParams.query.projectId]
 		},
+		"index_name": "dataset-projectId-name-index",
 		limit: 100,
 		start_key: ""
 	}
