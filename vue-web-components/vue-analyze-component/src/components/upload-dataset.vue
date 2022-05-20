@@ -274,9 +274,7 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss:
-                [
-                    {
+                dss:[{
                         "projectId": "",
                         "schema": "[]",
                         "version": "",
@@ -284,8 +282,7 @@ export default {
                         "label": "",
                         "cat": "",
                         "path": ""
-                    }
-                ],
+				}],
                 tagsArray: []
             })
         },

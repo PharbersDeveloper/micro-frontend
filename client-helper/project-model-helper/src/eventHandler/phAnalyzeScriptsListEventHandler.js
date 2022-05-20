@@ -184,7 +184,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						cat: "createScript",
 						desc: "create script",
 						comments: "something need to say",
-						message: "something need to say",
+						message: "create_script",
 						required: true
 					},
 					datasets: datasets,
@@ -301,7 +301,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						cat: "deleteResource",
 						desc: "delete script",
 						comments: "something need to say",
-						message: "something need to say",
+						message: "delete_script",
 						required: true
 					},
 					datasets: [],
