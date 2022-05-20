@@ -264,7 +264,7 @@ export default {
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
                     console.log(
-                        "iframe接收的", 
+                        "iframe接收的",
                         event.data.message.cmd
                     );
                     that.eventPolicy.runDagCallback(event.data.message);
@@ -314,11 +314,11 @@ export default {
         },
         renderDag(data) {
             const that = this
-            this.renderPolicy.renderDag(data, () => {
+            this.renderPolicy.renderDag(data, (width, height) => {
                 if (that.isFirstRendering) {
                     that.isFirstRendering = false
                     const windowHeight = that.$refs.chart.offsetHeight
-                    const height = Math.max(that.datasource.sizeHit[0], windowHeight)
+                    // const height = Math.max(that.datasource.sizeHit[0], windowHeight)
                     const step = Math.round(height / windowHeight)
                     const adjust = height / step / 2
                     that.offsetLeft = 0
