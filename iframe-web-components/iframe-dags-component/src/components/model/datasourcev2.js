@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'e652fd5c83b71dfac811d60e56bc4e825c2d2aa3a1603ed87c2fdf56f4af83d3'
+        this.debugToken = 'b5f0866e5c0dc419be494464bc66dc6274a8f250b6d7e1d3c9785d8b2c816f1a'
         this.sizeHit = [0, 0]
         this.hitWidthStep = 300
         this.hitHeightStep = 500
@@ -133,6 +133,7 @@ export default class PhDagDatasource {
                     }
                     return x
                 })
+                console.log(JSON.stringify(ele.datasource.data))
                 const links = response.data.filter(x => x["attributes"]["ctype"] === "link")
                 let maxHeight = -999
                 let maxHeightV2 = -999
