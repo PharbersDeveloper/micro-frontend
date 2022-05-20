@@ -1,18 +1,25 @@
 
 export default class PhCodeEditorModel {
     constructor(dict) {
-        const property = JSON.parse(dict["properties"])
         this.role = dict["role"]
         this.ctype = dict["ctype"]
         this.owner = dict["owner"]
         this.ownership = dict["ownership"]
         this.platform = dict["platform"]
 
-        this.applicationType = property["type"]
-        this.applicationVersion = property["version"]
-        this.applicationLabels = property["label"]
+        this.metadata = JSON.parse(dict["properties"])[0]
+        this.applicationType = this.metadata["type"]
+        this.applicationVersion = this.metadata["version"]
+        this.applicationLabels = this.parseLabels(this.metadata["label"])
+    }
 
-        this.metadata = property["parameters"]
-        console.log(this.metadata)
+    parseLabels(dict) {
+        const result = []
+        for (let idx = 0; idx < Object.keys(dict).length; ++idx) {
+            const k = Object.keys(dict)[idx]
+            const v = dict[k]
+            result.push([k, v].join(" : "))
+        }
+        return result
     }
 }

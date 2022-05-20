@@ -18,7 +18,7 @@
                     <ph-resource-olap-pane :olap="model.olap"></ph-resource-olap-pane>
                 </el-tab-pane>
                 <el-tab-pane label="集成编译器" name="4">
-                    <ph-resource-codeeditor-pane :olap="model.olap"></ph-resource-codeeditor-pane>
+                    <ph-resource-codeeditor-pane :codeeditors="model.codeeditors"></ph-resource-codeeditor-pane>
                 </el-tab-pane>
             </el-tabs>
         </div>
