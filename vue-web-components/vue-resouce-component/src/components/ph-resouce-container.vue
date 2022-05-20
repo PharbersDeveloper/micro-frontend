@@ -7,11 +7,19 @@
             </span>
         </div>
         <div class="resource-container">
-            <el-tabs type="border-card" class="resource-category-tabs">
-                <el-tab-pane label="User">User</el-tab-pane>
-                <el-tab-pane label="Config">Config</el-tab-pane>
-                <el-tab-pane label="Role">Role</el-tab-pane>
-                <el-tab-pane label="Task">Task</el-tab-pane>
+            <el-tabs type="border-card" class="resource-category-tabs" v-model="activeName">
+                <el-tab-pane label="存储" name="1">
+                    <ph-resource-storage-pane :storage="model.storage"></ph-resource-storage-pane>
+                </el-tab-pane>
+                <el-tab-pane label="计算引擎" name="2">
+                    <ph-resource-engine-pane :engine="model.engine"></ph-resource-engine-pane>
+                </el-tab-pane>
+                <el-tab-pane label="数据缓存" name="3">
+                    <ph-resource-olap-pane :olap="model.olap"></ph-resource-olap-pane>
+                </el-tab-pane>
+                <el-tab-pane label="集成编译器" name="4">
+                    <ph-resource-codeeditor-pane :olap="model.olap"></ph-resource-codeeditor-pane>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -20,42 +28,46 @@
 // import { staticFilePath } from '../config/envConfig'
 import ElTabs from 'element-ui/packages/tabs/index'
 import ElTabPane from 'element-ui/packages/tab-pane/index'
+import PhResourceModel from "./model/ph-resource-model"
+import PhResourceStoragePane from './ph-resource-storage-pane'
+import PhResourceEnginePane from './ph-resource-engine-pane'
+import PhResourceOlapPane from './ph-resource-olap-pane'
+import PhResourceCodeeditorPane from './ph-resource-codeeditor-pane'
 
 export default {
     components: {
         ElTabs,
-        ElTabPane
+        ElTabPane,
+        PhResourceStoragePane,
+        PhResourceEnginePane,
+        PhResourceOlapPane,
+        PhResourceCodeeditorPane
     },
     data() {
         return {
-            title: "资源管理"
+            title: "资源管理",
+            activeName: "1"
         }
     },
     props: {
-        allData: {
+        tenantId: {
+            type: String,
+            default: "zudIcG_17yj8CEUoCTHg"
+        },
+        model: {
             type: Object,
             default: function() {
-                return {
-                    projects: [{
-                        name: "name",
-                        provider: "provider",
-                        meta: {}
-                    }]
-                }
+                return new PhResourceModel(1, this.tenantId)
             }
         }
     },
     computed: {
 
     },
+    mounted() {
+        this.model.model()
+    },
     methods: {
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr === document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return "a7a2c65be73561582553d62de756806cdc0a360bec40cf40a5971be345ed0360";
-        },
         linkToPage(params) {
             const event = new Event("event")
             event.args = {
