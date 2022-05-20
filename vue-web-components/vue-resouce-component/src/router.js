@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '../src/components/HelloWorld'
+import ResourceContainer from '../src/components/ph-resouce-container'
 
 Vue.use(Router)
 
@@ -10,8 +10,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'HelloWorld',
-            component: HelloWorld
+            name: 'ResourceContainer',
+            component: ResourceContainer
         }
     ]
 })
