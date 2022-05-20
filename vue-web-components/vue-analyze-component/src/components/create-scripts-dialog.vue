@@ -239,14 +239,15 @@ export default {
                  * 2. 若新增，生成一个id,创建一个dataset，否则直接3
                  * 3. 调用赵的接口，往action里面插数据
                 */
-                let inputsArr = []
-                this.addDatasetList.forEach(item => {
-                    inputsArr.push({
-                        "name": item.name,
-                        "id": item.id
-                    })
-                })
-                console.log(inputsArr)
+                // let inputsArr = []
+                // this.addDatasetList.forEach(item => {
+                //     inputsArr.push({
+                //         "name": item.name,
+                // 		"cat": item.cat,
+                //         "id": item.id
+                //     })
+                // })
+                // console.log(inputsArr)
                 const event = new Event("event")
                 event.args = {
                     callback: "createScripts",
@@ -256,7 +257,7 @@ export default {
                         jobName: "compute_" + this.dsName.name,
                         jobId: "",
                         targetJobId: "",
-                        inputs: inputsArr,
+                        inputs: this.addDatasetList,
                         outputs: [{
                             "name": this.dsName.name,
                             "id": this.dsName.id

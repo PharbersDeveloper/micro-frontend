@@ -139,34 +139,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					body: JSON.stringify(body)
 				}
 				await fetch(url, options)
-				//发送action
-				// let message = {
-				// 	actionName: params.targetDataset.name,
-				// 	sourceProjectId: sourceProjectIdValue,
-				// 	targetProjectId: params.projectId,
-				// 	projectName: params.projectName,
-				// 	datasetName: params.targetDataset.name,
-				// 	datasetId: params.targetDataset.id,
-				// 	sample: params.sample,
-				// 	owner: route.cookies.read("account_id"),
-				// 	showName: decodeURI(route.cookies.read("user_name_show"))
-				// }
-				// let scriptBody = {
-				// 	table: actionTableName,
-				// 	item: {
-				// 		projectId: params.projectId,
-				// 		owner: route.cookies.read("account_id"),
-				// 		showName: decodeURI(
-				// 			route.cookies.read("user_name_show")
-				// 		),
-				// 		code: 0,
-				// 		jobDesc: editSampleEventName,
-				// 		jobCat: "edit_sample",
-				// 		comments: "",
-				// 		date: String(new Date().getTime()),
-				// 		message: JSON.stringify(message)
-				// 	}
-				// }
 				let sampleBody = {
 					common: {
 						runnerId: runnerId,
@@ -175,7 +147,8 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						)
+						),
+						tenantId: route.cookies.read("company_id")
 					},
 					calculate: {
 						type: "sample",
@@ -183,6 +156,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 						targetProjectId: params.projectId,
 						datasetId: params.targetDataset.id,
 						datasetName: params.targetDataset.name,
+						datasetType: params.datasetType,
 						sample: params.sample,
 						recursive: true
 					}
@@ -205,16 +179,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					route.loadingService.loading.style.display = "none"
 					return false
 				}
-				// route.noticeService.defineAction({
-				// 	type: "iot",
-				// 	remoteResource: "notification",
-				// 	runnerId: "",
-				// 	id: results.data.id,
-				// 	eventName: editSampleEventName,
-				// 	projectId: params.projectId,
-				// 	ownerId: route.cookies.read("account_id"),
-				// 	callBack: editSampleCallback
-				// })
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",

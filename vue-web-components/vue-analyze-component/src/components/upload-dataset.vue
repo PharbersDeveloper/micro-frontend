@@ -93,7 +93,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{allData.dss.length}} 条数据集</p>
+                                <p>{{searchData.length}} 条数据集</p>
                             </div>
                         </div>
                     </div>
@@ -265,7 +265,8 @@ export default {
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            selectCatalogVisible: false
+            selectCatalogVisible: false,
+            searchData: []
         }
     },
     props: {
@@ -400,45 +401,43 @@ export default {
         },
         //删除ds
         async deleteDataset(data) {
-            let that = this
-            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
             // 是否需要删除关联关系
             let msgArr = []
             if(data.args.param.datasetRelaResult.length > 0) {
                 data.args.param.datasetRelaResult.forEach(async item => {
                     msgArr.push({
                         "actionName": item.jobShowName,
-                        "targetId": item.targetId,
-                        "jobName": item.jobName,
-                        "flowVersion": "developer"
+                        "jobName": item.jobName
                     })
                 })
-                const url = `${hostName}/phdydatasource/put_item`
-                let body = {
-                    "table": actionTableName,
-                    "item": {
-                        "projectId": that.allData.projectId,
-                        "code": 0,
-                        "comments": "delete_dataset",
-                        "jobCat": "remove_Job",
-                        "jobDesc": "running",
-                        "message": JSON.stringify(msgArr),
-                        "date": String(new Date().getTime()),
-                        "owner": this.getCookie("account_id"),
-                        "showName": decodeURI(this.getCookie('user_name_show'))
-                    }
-                }
-                let options = {
-                    method: "POST",
-                    headers: {
-                        "Authorization": accessToken,
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                        "accept": "application/json"
-                    },
-                    body: JSON.stringify(body)
-                }
-                let result = await fetch(url, options).then(res => res.json())
             }
+            // const url = `${hostName}/phdydatasource/put_item`
+            // let body = {
+            //     "table": actionTableName,
+            //     "item": {
+            //         "projectId": that.allData.projectId,
+            //         "code": 0,
+            //         "comments": "delete_dataset",
+            //         "jobCat": "remove_Job",
+            //         "jobDesc": "running",
+            //         "message": JSON.stringify(msgArr),
+            //         "date": String(new Date().getTime()),
+            //         "owner": this.getCookie("account_id"),
+            //         "showName": decodeURI(this.getCookie('user_name_show'))
+            //     }
+            // }
+            // let options = {
+            //     method: "POST",
+            //     headers: {
+            //         "Authorization": accessToken,
+            //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            //         "accept": "application/json"
+            //     },
+            //     body: JSON.stringify(body)
+            // }
+            // let result = await fetch(url, options).then(res => res.json())
+            // }
+            data.args.param.scriptsArray = msgArr
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,

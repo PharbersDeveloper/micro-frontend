@@ -3,7 +3,6 @@ import { hostName, actionTableName } from "../config/envConfig"
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	let params = e.detail[0].args.param
-	console.log(params)
 	let uri = ""
 	// addTags
 	let selectedDatasets = params.selectedDatasets //需要更新的dataset
@@ -17,7 +16,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "upload") {
-				uri = `dataset?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
+				uri = `index-input?projectName=${params.projectName}&projectId=${params.projectId}&uploadType=${params.type}`
 			} else if (
 				params.name === "linkToProject" ||
 				params.name === "project"
@@ -109,37 +108,43 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			if (params) {
 				let selectedDatasetsDel = params.selectedDatasets //需要更新的dataset
 				let datasetArrayDel = params.datasetArray //发送请求的参数
+				let scriptArrayDel = params.scriptsArray
 				let msgArr = []
 				selectedDatasetsDel.forEach(async (targetId) => {
 					let targetDataset = datasetArrayDel.filter(
 						(it) => it.id == targetId
 					)[0]
 					msgArr.push({
-						actionName: targetDataset.name,
-						projectName: params.projectName,
-						version: "",
-						dsid: targetDataset.id,
-						destination: targetDataset.name,
-						opname: route.cookies.read("account_id"),
-						opgroup: route.cookies.read("company_id")
+						name: targetDataset.name
 					})
 				})
-				const urldel = `${hostName}/phdydatasource/put_item`
+				const urldel = `${hostName}/phresdeletiontrigger`
+				const deluuid = guid()
 				let body = {
-					table: actionTableName,
-					item: {
+					common: {
+						traceId: deluuid,
 						projectId: params.projectId,
-						code: 0,
-						comments: "delete_dataset",
-						jobCat: "remove_DS",
-						jobDesc: deleteDatasetsEventName,
-						message: JSON.stringify(msgArr),
-						date: String(new Date().getTime()),
+						projectName: "demo",
+						flowVersion: "developer",
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						)
-					}
+						),
+						tenantId: route.cookies.read("company_id")
+					},
+					action: {
+						cat: "deleteResource",
+						desc: "delete dataset",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					datasets: msgArr,
+					scripts: scriptArrayDel,
+					notification: {
+						required: true
+					},
+					result: {}
 				}
 				let options = {
 					method: "POST",
@@ -151,15 +156,13 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				const result = await fetch(urldel, options).then((res) =>
-					res.json()
-				)
+				await fetch(urldel, options).then((res) => res.json())
 
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
 					runnerId: "",
-					id: result.data.id,
+					id: deluuid,
 					eventName: deleteDatasetsEventName,
 					projectId: params.projectId,
 					ownerId: route.cookies.read("account_id"),
@@ -171,63 +174,62 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
-				let catauuid = guid()
-				const catalog_url = `${hostName}/phdydatasource/put_item`
+				const catalog_url = `${hostName}/phresourcecreationtrigger`
+				const cataloguuid = guid()
 				let catamessage = {
-					actionName: params.dsName,
-					keys: "",
-					name: params.dsName,
-					version: "",
-					id: catauuid,
-					cat: "catalog",
-					format: "",
-					prop: {
-						path: "",
-						partitions: 1,
-						format: "",
-						tableName: params.tableName,
-						databaseName: route.cookies.read("company_id")
-					},
-					opname: route.cookies.read("account_id"),
-					opgroup: route.cookies.read("company_id")
-				}
-				let catalog_body = {
-					table: actionTableName,
-					item: {
+					common: {
+						traceId: cataloguuid,
 						projectId: params.projectId,
-						code: 0,
-						comments: "",
-						jobCat: "catalog",
-						jobDesc: createCatalogEventName,
-						message: JSON.stringify(catamessage),
-						date: String(new Date().getTime()),
+						projectName: params.projectName,
+						flowVersion: "developer",
+						dagName: params.projectName,
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
 						)
-					}
+					},
+					action: {
+						cat: "createCatalog",
+						desc: "create catalog",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					datasets: [
+						{
+							name: params.dsName,
+							cat: "catalog",
+							format: "",
+							schema: []
+						}
+					],
+					script: {
+						runtime: "dataset"
+					},
+					notification: {
+						required: true
+					},
+					result: {}
 				}
 				let catalog_options = {
 					method: "POST",
 					headers: {
-						Authorization: route.cookies.read("access_token"),
+						Authorization: accessToken,
 						"Content-Type":
 							"application/x-www-form-urlencoded; charset=UTF-8",
 						accept: "application/json"
 					},
-					body: JSON.stringify(catalog_body)
+					body: JSON.stringify(catamessage)
 				}
-				let catalog_result = await fetch(
-					catalog_url,
-					catalog_options
-				).then((res) => res.json())
-				params.catalog_result = catalog_result.data.attributes.message
+				await fetch(catalog_url, catalog_options).then((res) =>
+					res.json()
+				)
 				route.create_catalog_result = params
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
 					runnerId: "",
-					id: catalog_result.data.id,
+					id: cataloguuid,
 					eventName: createCatalogEventName,
 					projectId: params.projectId,
 					ownerId: route.cookies.read("account_id"),
@@ -384,11 +386,11 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 	}
 
 	async function createCatalogSample() {
-		let { catalog_result, projectId, projectName } =
-			route.create_catalog_result
-		let message = JSON.parse(catalog_result)
+		console.log(route.create_catalog_result)
+
+		let { dsName, projectId, projectName } = route.create_catalog_result
+		// let message = JSON.parse(catalog_result)
 		console.log(projectName)
-		// const url = `${hostName}/phdydatasource/put_item`
 		const url = `${hostName}/statemachinetrigger`
 		const runnerId = genRunnerId("sample")
 		const sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
@@ -399,44 +401,21 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				projectId: projectId,
 				projectName: "sample",
 				owner: route.cookies.read("account_id"),
-				showName: decodeURI(route.cookies.read("user_name_show"))
+				showName: decodeURI(route.cookies.read("user_name_show")),
+				tenantId: route.cookies.read("company_id")
 			},
 			calculate: {
 				type: "sample",
 				sourceProjectId: sourceProjectIdValue,
 				targetProjectId: projectId,
-				datasetId: message.id,
-				datasetName: message.name,
+				// datasetId: message.id,
+				datasetName: dsName,
+				datasetType: "catalog",
 				sample: sample,
 				recursive: true
 			}
 		}
 		//发送action
-		// let messages = {
-		// 	actionName: message.name,
-		// 	sourceProjectId: sourceProjectIdValue,
-		// 	targetProjectId: projectId,
-		// 	projectName: projectName,
-		// 	datasetName: message.name,
-		// 	datasetId: message.id,
-		// 	sample: sample,
-		// 	owner: route.cookies.read("account_id"),
-		// 	showName: decodeURI(route.cookies.read("user_name_show"))
-		// }
-		// let scriptBody = {
-		// 	table: actionTableName,
-		// 	item: {
-		// 		projectId: projectId,
-		// 		owner: route.cookies.read("account_id"),
-		// 		showName: decodeURI(route.cookies.read("user_name_show")),
-		// 		code: 0,
-		// 		jobDesc: createCatalogSampleEventName,
-		// 		jobCat: "edit_sample",
-		// 		comments: "",
-		// 		date: String(new Date().getTime()),
-		// 		message: JSON.stringify(messages)
-		// 	}
-		// }
 		let editSampleOptions = {
 			method: "POST",
 			headers: {
@@ -455,16 +434,6 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			route.loadingService.loading.style.display = "none"
 			return false
 		}
-		// this.noticeService.defineAction({
-		// 	type: "iot",
-		// 	remoteResource: "notification",
-		// 	runnerId: "",
-		// 	id: event.data.message.notification.id,
-		// 	eventName: event.data.message.notification.eventName,
-		// 	projectId: jobNamePre,
-		// 	ownerId: this.cookies.read("account_id"),
-		// 	callBack: this.runDagCallback
-		// })
 		route.noticeService.defineAction({
 			type: "iot",
 			remoteResource: "notification",
@@ -498,18 +467,11 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 
 	function createCatalogNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
 		if (status == "succeed") {
+			console.log(message)
 			createCatalogSample()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "新建数据集失败！"
-			alert(msg)
+			alert("新建数据集失败！")
 			route.loadingService.loading.style.display = "none"
 		}
 	}

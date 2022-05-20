@@ -2,11 +2,6 @@ import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelContainerRouteModel(route, parseParams) {
-	// route.browserEventsService.registerListener("dataset-lst")
-	// let targetDataset = await route.store.peekRecord(
-	// 	"dataset",
-	// 	parseParams.query.datasetId
-	// )
 	const url = `${hostName}/phdydatasource/query`
 	const accessToken = route.cookies.read("access_token")
 	const body = {

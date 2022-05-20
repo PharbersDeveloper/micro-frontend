@@ -219,9 +219,9 @@ export default {
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
                     console.log(
-						"iframe接收的", 
-						event.data.message.cmd
-					);
+                        "iframe接收的", 
+                        event.data.message.cmd
+                    );
                     that.eventPolicy.runDagCallback(event.data.message);
                 }
                 if (event.data.message.cmd === "finish_dag") {

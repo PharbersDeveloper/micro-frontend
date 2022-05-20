@@ -67,7 +67,7 @@ export default class PhTreeNodeAdapter {
 
         function loadDatasetLevel() {
             const accessToken = ele.getCookie("access_token") || that.debugToken
-            const requestArgs = "phdydatasource/scan"
+            const requestArgs = "phdydatasource/query"
             const url = that.url + requestArgs
             const body = {
                 table: "dataset",

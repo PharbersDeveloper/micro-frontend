@@ -18,11 +18,6 @@
 								:disabled="!showStartButton"
 								:class="{disButton: !showStartButton}">删除项目
 							</button>
-                            <button 
-								@click="dialogStart = true" 
-								v-if="showStartButton">启动资源
-							</button>
-							<span v-if="!showStartButton">已启动</span>
                         </div>
                     </div>
                     <div class="items">
@@ -159,36 +154,6 @@
                 <el-button type="primary" @click="deleteProject">确认</el-button>
             </span>
         </el-dialog>
-        <el-dialog
-                title="启动资源"
-                :visible.sync="dialogStart"
-                width="460px">
-            <span>是否确认启动资源？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogStart = false">取消</el-button>
-                <el-button type="primary" @click="on_clickStartConfirm">确认</el-button>
-            </span>
-        </el-dialog>
-		<el-dialog
-                title="启动成功"
-                :visible.sync="dialogStartSucceed"
-                width="460px">
-            <span>资源启动成功</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogStartSucceed = false">取消</el-button>
-                <el-button type="primary" @click="dialogStartSucceed = false">确认</el-button>
-            </span>
-        </el-dialog>
-		<el-dialog
-                title="启动失败"
-                :visible.sync="dialogStartFailed"
-                width="460px">
-            <span>资源启动异常，请联系管理员。</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogStartFailed = false">取消</el-button>
-                <el-button type="primary" @click="dialogStartFailed = false">确认</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -220,17 +185,13 @@ export default {
                 "remove_DS": "删除了数据集",
                 "upload": "创建了数据集",
                 "dag_create": "创建了脚本",
-                "resource_create": "启动了资源",
                 "catalog": "创建了脚本",
                 "edit_sample": "编辑了sample"
             },
             actions: [],
             actionsShow: [],
             actionsKey: "",
-            dialogStart: false,
             showStartButton: true,
-            dialogStartSucceed: false,
-            dialogStartFailed: false,
             dialogDeleteProject: false
         }
     },
@@ -268,18 +229,6 @@ export default {
         this.actions = await fetch(acurl, acoptions).then(res=>res.json())
         this.actionsKey = this.actions.meta.start_key
         this.dealActions() //处理actions数据
-
-        // 判断启动资源
-        const event = new Event("event")
-        event.args = {
-            callback: "checkStartResource",
-            element: this,
-            param: {
-                projectName: projectName,
-                projectId: projectId
-            }
-        }
-        this.$emit('event', event)
     },
     props: {
         allData: {
@@ -308,19 +257,6 @@ export default {
             }
             this.$emit('event', event)
             this.dialogDeleteProject = false
-        },
-        on_clickStartConfirm() {
-            const event = new Event("event")
-            event.args = {
-                callback: "startResource",
-                element: this,
-                param: {
-                    projectName: this.allData.projectDetail.name,
-                    projectId: this.allData.projectDetail.id
-                }
-            }
-            this.$emit('event', event)
-            this.dialogStart = false
         },
         dealActions() {
             this.actions.data.map(mapItem => {
@@ -397,7 +333,8 @@ export default {
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
-            let msg = JSON.parse(data["message"])
+            // let msg = JSON.parse(data["message"])
+            let msg = data["message"]
             if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
                 return "编辑了脚本"
             } else {
@@ -420,7 +357,8 @@ export default {
         //操作对象的icon
         showActionIcon(data) {
             let cat = data["job-cat"]
-            let msg = JSON.parse(data["message"])
+            let msg = data["message"]
+            // let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
                     return `${staticFilePath}` + "/prepare_icon.svg"
@@ -557,7 +495,7 @@ export default {
 		width: 75%;
         .projectInfo {
             display: flex;
-            // width: 1400px;
+            min-width: 880px;
             height: 220px;
             background: #ffffff;
             border: 1px solid #ddd;
@@ -624,6 +562,7 @@ export default {
         border: 1px solid #ddd;
         margin-left: 20px;
         margin-top: 25px;
+		min-width: 880px;
         .go_flow {
             display: flex;
             justify-content: center;

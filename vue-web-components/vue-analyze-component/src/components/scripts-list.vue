@@ -178,7 +178,7 @@
             v-if="deletedialogshow"
             :reciptcheckedIds="reciptcheckedIds"
             :datasetcheckedNames="reciptcheckedNames"
-            @deleteDatasetsEvent="deleteDataset"
+            @deleteScriptsEvent="deleteScript"
             @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
         <!-- 添加tag -->
@@ -358,9 +358,9 @@ export default {
             this.cleardialogshow = false;
         },
         //删除脚本
-        deleteDataset(data) {
-            data.args.param.selectedDatasets = this.reciptcheckedIds
-            data.args.param.datasetArray = this.allData.dcs
+        deleteScript(data) {
+            data.args.param.selectedScripts = this.reciptcheckedIds
+            data.args.param.scriptArray = this.allData.dcs
             data.args.param.projectName = this.allData.projectName,
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)

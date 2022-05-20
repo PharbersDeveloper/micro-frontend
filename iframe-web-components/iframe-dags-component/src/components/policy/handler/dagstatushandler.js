@@ -71,7 +71,7 @@ export default class PhDagHandler {
                 if(length < 1) {
                     that.failedLogs.push({
                         data: payload,
-                        jobShowName: showName,
+                        jobShowName: jobShowName,
                         representId: represent_id,
                         jobName: jobName,
                         runnerId: runnerId
