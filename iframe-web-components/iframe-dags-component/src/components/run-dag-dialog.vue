@@ -101,8 +101,12 @@ export default {
         if(!recursive) {
             let data = this.$parent.datasource.data
             let selectItemId = this.$parent.selectItem.id
-            let preScript = data.filter(it => it.childrenIds.includes(selectItemId))
-            preDSArray = data.filter(it => it.childrenIds.includes(preScript[0]["id"]))
+            if(this.$parent.selectItem.attributes.cat === "dataset") {
+                let preScript = data.filter(it => it.childrenIds.includes(selectItemId))
+                preDSArray = data.filter(it => it.childrenIds.includes(preScript[0]["id"]))
+            } else if(this.$parent.selectItem.attributes.cat === "job") {
+                preDSArray = data.filter(it => it.childrenIds.includes(selectItemId))
+            }
         }
         let arr = []
         preDSArray.forEach(item => {
