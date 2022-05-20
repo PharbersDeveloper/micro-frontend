@@ -19,7 +19,8 @@
                                 <td class="input" :title="item.name">{{item.name}}</td>
                                 <td class="version" >
                                     <span :title="item.version.toString()">{{item.version.toString()}}</span>
-                                    <img v-if="item.cat === 'uploaded' || item.cat === 'catalog'" class="add_version" :src="img1" @click="addVersion(item.name, item.version, item.representId, item.cat)"/>
+                                    <!-- v-if="item.cat === 'uploaded' || item.cat === 'catalog'" -->
+                                    <img class="add_version" :src="img1" @click="addVersion(item.name, item.version, item.representId, item.cat)"/>
                                 </td>
                                 <td class="cat">{{item.cat}}</td>
                             </tr>
@@ -87,20 +88,56 @@ export default {
     },
     props: {
         textConf: Object,
-        projectId: String
+        projectId: String,
+        selectRecursive: String
     },
     components: {
         selectVersion
     },
     computed: {},
     mounted() {
-        this.jsonValue = JSON.stringify(this.textConf)
-        this.datasetsConf = this.textConf.datasets
-        this.scriptsConf = JSON.stringify(this.textConf.scripts)
-        this.userConf = JSON.stringify(this.textConf.userConf)
+        const recursive = this.$parent.selectRecursive === "recursive"
+        let preDSArray = []
+        let textConfCopy = this.textConf
+        if(!recursive) {
+            let data = this.$parent.datasource.data
+            let selectItemId = this.$parent.selectItem.id
+            if(this.$parent.selectItem.attributes.cat === "dataset") {
+                let preScript = data.filter(it => it.childrenIds.includes(selectItemId))
+                preDSArray = data.filter(it => it.childrenIds.includes(preScript[0]["id"]))
+            } else if(this.$parent.selectItem.attributes.cat === "job") {
+                preDSArray = data.filter(it => it.childrenIds.includes(selectItemId))
+            }
+            let arr = []
+            preDSArray.forEach(item => {
+                arr.push({
+                    "name": item.attributes.name,
+                    "representId": item.representId,
+                    "version": [],
+                    "cat": item["attributes"]["runtime"],
+                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
+                })
+            })
+            textConfCopy.datasets = arr
+        }
+        
+        this.jsonValue = JSON.stringify(textConfCopy)
+        this.datasetsConf = textConfCopy.datasets
+        this.scriptsConf = JSON.stringify(textConfCopy.scripts)
+        this.userConf = JSON.stringify(textConfCopy.userConf)
     },
     watch: {},
     methods: {
+        handlerJSON(str) {
+            if (typeof str == 'string') {
+                try {
+                    let jsonValue = JSON.parse(str);
+                    return jsonValue;
+                } catch (e) {
+                    return str
+                }
+            }
+        },
         selectVersionConfirm(data) {
             let version = data.args.param.versionArr
             let name = data.args.param.datasetName

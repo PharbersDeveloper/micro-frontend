@@ -136,7 +136,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						cat: "deleteResource",
 						desc: "delete dataset",
 						comments: "something need to say",
-						message: "something need to say",
+						message: "delete_dataset",
 						required: true
 					},
 					datasets: msgArr,
@@ -192,7 +192,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						cat: "createCatalog",
 						desc: "create catalog",
 						comments: "something need to say",
-						message: "something need to say",
+						message: "create_script",
 						required: true
 					},
 					datasets: [

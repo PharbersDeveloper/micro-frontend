@@ -1,5 +1,6 @@
 <template>
     <div class="graphWrap">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="show_area">
             <div class="show_header">
                 <div class="show_header_left">
@@ -28,7 +29,7 @@
                         v-if="!isRunning"
                         :src="defs.iconsByName('run')"
                         alt=""
-                        @click="triggerPolicy.dagRunPreparing()"
+						@click="triggerPolicy.runDagSelect()"
                     />
 					<img
                         v-if="isRunning"
@@ -59,6 +60,7 @@
 
         <run-dag-dialog
             v-if="showRunJson"
+			:selectRecursive="selectRecursive"
             :textConf="textConf"
             :projectId="projectId"
             @confirmeRunDag="confirmeRunDag"
@@ -100,6 +102,40 @@
             :progressOver="progressOver"
         >
         </progress-bar>
+
+		<el-dialog
+            :title="getSelectItemName()"
+            :visible.sync="runDagSelectVisible"
+            width="800px">
+			<div class="run-dag-select-dialog">
+				<div class="select-area">
+					<div class="select-item"
+						@click="selectRecursive = 'nonRecursive'"
+						:class="[{'run-dag-active': selectRecursive === 'nonRecursive'}]">
+						<div class="title">Non recursive</div>
+						<div class="desc">只运行当前脚本</div>
+					</div>
+					<div class="select-item"
+						@click="selectRecursive = 'recursive'"
+						:class="[{'run-dag-active': selectRecursive === 'recursive'}]">
+						<div class="title">Recursive</div>
+						<div class="desc">运行上游所有脚本</div>
+					</div>
+				</div>
+				<div class="img">
+					<img 
+						v-if="selectRecursive === 'nonRecursive'" 
+						:src="defs.iconsByName('runDag', 'nonRecursive')" alt="">
+					<img 
+						v-if="selectRecursive === 'recursive'"
+						:src="defs.iconsByName('runDag', 'recursive')" alt="">
+				</div>
+			</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="runDagSelectVisible = false">取消</el-button>
+                <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -113,6 +149,8 @@ import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
 import runDagDialog from "./run-dag-dialog.vue";
 // import dagLogsDialog from "./dag-log-dialog.vue";
 import progressBar from "./progress-bar-type.vue";
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElButton from 'element-ui/packages/button/index'
 
 export default {
     data: () => {
@@ -141,13 +179,17 @@ export default {
             isRunning: false, //stop按钮是否可以点击
             isFirstRendering: true,
             offsetLeft: 0,
-            offsetTop: 0
+            offsetTop: 0,
+            runDagSelectVisible: false,
+            selectRecursive: "recursive"
         };
     },
     components: {
         runDagDialog,
         // dagLogsDialog,
-        progressBar
+        progressBar,
+        ElDialog,
+        ElButton
     },
     props: {
         schedulerPolicyName: {
@@ -214,6 +256,9 @@ export default {
         window.removeEventListener("message", this.handleForwardMessage);
     },
     methods: {
+        getSelectItemName() {
+            return "构建" + this.selectItemName
+        },	
         handleForwardMessage(event) {
             const that = this;
             if (event.data.message) {
@@ -307,6 +352,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .viewport {
     overflow: auto;
 }
@@ -319,6 +365,42 @@ export default {
     // height: calc(100vh - 40px);
     background: #f7f7f7;
     box-sizing: border-box;
+	.run-dag-select-dialog {
+		display: flex;
+		flex-direction: column;
+		.select-area {
+			display: flex;
+			width: 100%;
+    		justify-content: center;
+			.run-dag-active {
+				border: 1px solid #7163C5 !important;
+			}
+			.select-item {
+				width: 260px;
+				height: 65px;
+				border: 1px solid #eee;
+				margin: 0 5px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				.title {
+					font-size: 16px;
+					margin-bottom: 5px;
+					color: #000;
+				}
+				.desc {
+					font-size: 12px;
+				}
+			}
+		}
+		.img {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 20px;
+		}
+	}
     .job_status_area {
         position: absolute;
         bottom: 60px;

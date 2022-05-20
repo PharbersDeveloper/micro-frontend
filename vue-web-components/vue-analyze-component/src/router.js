@@ -4,9 +4,7 @@ import importFileList from './components/import-file-list.vue'
 import customMapping from './components/custom-mapping.vue'
 import nav from './components/bp-nav-top-max.vue'
 import bpExcelContainer from './components/bp-excel-container'
-import bpExcelHandler from './components/bp-excel-handler'
 import bpNavMax from './components/bp-nav-top-max'
-import eh from './components/bp-excel-handler'
 import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
@@ -57,11 +55,6 @@ export default new Router({
             component: customMapping
         },
         {
-            path: '/bp-handler',
-            name: 'bpExcelHandler',
-            component: bpExcelHandler
-        },
-        {
             path: '/nav',
             name: 'nav',
             component: nav
@@ -70,11 +63,6 @@ export default new Router({
             path: '/bp-nav-max',
             name: 'bp-nav-max',
             component: bpNavMax
-        },
-        {
-            path: '/eh',
-            name: 'eh',
-            component: eh
         },
         {
             path: '/dashboards',

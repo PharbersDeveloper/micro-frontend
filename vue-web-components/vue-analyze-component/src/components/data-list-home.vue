@@ -180,13 +180,18 @@ export default {
                 "transform_schema": "编辑了数据集",
                 "clear_DS_data": "编辑了数据集",
                 "remove_Job": "删除了脚本",
-                "project_file_to_DS": "导入了数据",
                 "max1.0": "创建了数据集",
                 "remove_DS": "删除了数据集",
                 "upload": "创建了数据集",
                 "dag_create": "创建了脚本",
                 "catalog": "创建了脚本",
-                "edit_sample": "编辑了sample"
+                "edit_sample": "编辑了sample",
+
+                "create_steps": "编辑了脚本",
+                "create_script": "创建了脚本",
+                "delete_script": "删除了脚本",
+                "delete_dataset": "删除了dataset",
+                "project_file_to_DS": "导入了数据"
             },
             actions: [],
             actionsShow: [],
@@ -333,8 +338,8 @@ export default {
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
-            // let msg = JSON.parse(data["message"])
-            let msg = data["message"]
+            let msg = JSON.parse(data["message"])
+            // let msg = data["message"]
             if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
                 return "编辑了脚本"
             } else {
@@ -343,16 +348,21 @@ export default {
         },
         //操作对象的名称
         showActionName(data) {
-            let msg = JSON.parse(data)
-            if (Array.isArray(msg)) {
-                return msg[0].actionName
-            } else if (msg.actionName) {
-                return msg.actionName
-            } else if (!msg.actionName) {
-                return msg.projectName
+            let msg = data
+            if (msg && msg !== "") {
+                return msg
             } else {
                 return "undefined"
             }
+            // if (Array.isArray(msg)) {
+            //     return msg[0].actionName
+            // } else if (msg.actionName) {
+            //     return msg.actionName
+            // } else if (!msg.actionName) {
+            //     return msg.projectName
+            // } else {
+            //     return "undefined"
+            // }
         },
         //操作对象的icon
         showActionIcon(data) {

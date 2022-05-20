@@ -28,13 +28,13 @@ export default class PhDagTriggerPolicy {
             }
             let results = await fetch(stopUri, options).then(res => res.json())
             if(results.status === "error") {
-			    alert("停止dag失败，请重新操作！")
+                alert("停止dag失败，请重新操作！")
             }
         }
     }
 
-    // 点击trigger，弹窗选择version
-    dagRunPreparing() {
+    //选择运行当前或全部脚本
+    runDagSelect() {
         let roots = []
         this.parent.datasource.data.forEach(item => {
             if(item.attributes.runtime === "output_index") {
@@ -64,6 +64,12 @@ export default class PhDagTriggerPolicy {
             alert( "请先选择一条dag!" )
             return false
         }
+        this.parent.runDagSelectVisible = true
+    }
+
+    // 点击trigger，弹窗选择version
+    dagRunPreparing() {
+        this.parent.runDagSelectVisible = false
         this.parent.showRunJson = true
     }
 
@@ -77,6 +83,7 @@ export default class PhDagTriggerPolicy {
     async runDag(data) {
         this.parent.loading = true
         this.parent.showProgress = false
+        const recursive = this.parent.selectRecursive === "recursive"
         const url = `${hostName}/statemachinetrigger`
         const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
         const tenantId = this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
@@ -99,7 +106,7 @@ export default class PhDagTriggerPolicy {
                 type: "dataset",
                 name: this.parent.datasource.cal.calculate.name,
                 conf: confData,
-                recursive: true
+                recursive: recursive
             }
         }
 
