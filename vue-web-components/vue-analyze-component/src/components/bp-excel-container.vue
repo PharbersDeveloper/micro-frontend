@@ -37,9 +37,11 @@
             </div>
         </div>
         <div class="main_container">
-            <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
+            <bp-excel ref="excel" 
+                viewHeight="calc(100vh - 300px)"
+                :isNeedPopmenu="false"
                 @countIsReady="totalCountIsReady"
-				@sample="sample"
+                @sample="sample"
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
                 :datasource="datasource" :schema="schema" class="excel" />
         </div>
@@ -201,11 +203,11 @@
                 <el-button type="primary" @click="on_clickDataSample">确认</el-button>
             </span>
         </el-dialog>
-		<el-dialog
+        <el-dialog
             title="数据样本配置"
             :visible.sync="sampleVisible"
             width="800px">
-			<div>是否进行数据样本配置？</div>
+            <div>是否进行数据样本配置？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="sampleVisible = false">取消</el-button>
                 <el-button type="primary" @click="on_clickSample">确认</el-button>
