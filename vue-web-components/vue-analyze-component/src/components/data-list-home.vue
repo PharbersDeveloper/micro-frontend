@@ -333,7 +333,8 @@ export default {
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
-            let msg = JSON.parse(data["message"])
+            // let msg = JSON.parse(data["message"])
+            let msg = data["message"]
             if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
                 return "编辑了脚本"
             } else {
@@ -356,7 +357,8 @@ export default {
         //操作对象的icon
         showActionIcon(data) {
             let cat = data["job-cat"]
-            let msg = JSON.parse(data["message"])
+            let msg = data["message"]
+            // let msg = JSON.parse(data["message"])
             if(cat === "intermediate") {
                 if(msg.runtime === "prepare") {
                     return `${staticFilePath}` + "/prepare_icon.svg"
