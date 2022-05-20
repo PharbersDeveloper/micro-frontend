@@ -98,6 +98,7 @@ export default {
     mounted() {
         const recursive = this.$parent.selectRecursive === "recursive"
         let preDSArray = []
+        let textConfCopy = this.textConf
         if(!recursive) {
             let data = this.$parent.datasource.data
             let selectItemId = this.$parent.selectItem.id
@@ -107,19 +108,19 @@ export default {
             } else if(this.$parent.selectItem.attributes.cat === "job") {
                 preDSArray = data.filter(it => it.childrenIds.includes(selectItemId))
             }
-        }
-        let arr = []
-        preDSArray.forEach(item => {
-            arr.push({
-                "name": item.attributes.name,
-                "representId": item.representId,
-                "version": [],
-                "cat": item["attributes"]["runtime"],
-                "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
+            let arr = []
+            preDSArray.forEach(item => {
+                arr.push({
+                    "name": item.attributes.name,
+                    "representId": item.representId,
+                    "version": [],
+                    "cat": item["attributes"]["runtime"],
+                    "prop": item.attributes.prop !== "" ? this.handlerJSON(item.attributes.prop) : ""
+                })
             })
-        })
-        let textConfCopy = this.textConf
-        textConfCopy.datasets = arr
+            textConfCopy.datasets = arr
+        }
+        
         this.jsonValue = JSON.stringify(textConfCopy)
         this.datasetsConf = textConfCopy.datasets
         this.scriptsConf = JSON.stringify(textConfCopy.scripts)
