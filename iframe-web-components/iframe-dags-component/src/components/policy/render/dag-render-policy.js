@@ -5,6 +5,9 @@ export default class PhDagRenderPolicy {
     constructor(id, parent) {
         this.id = id
         this.parent = parent
+
+        this.hitWidthStep = 300
+        this.hitHeightStep = 500
     }
 
     renderDag(data, postRenderHook) {
@@ -22,11 +25,13 @@ export default class PhDagRenderPolicy {
         d3.select('svg').remove()
         const dag = d3.dagStratify()(data);
 
+        let [hitWidth, hitHeight] = this.computeGraphMaxLevel(dag)
+
         const windowWidth = that.$refs.chart.offsetWidth
         const windowHeight = that.$refs.chart.offsetHeight
 
-        const width = Math.max(that.datasource.sizeHit[1], windowWidth)
-        const height = Math.max(that.datasource.sizeHit[0], windowHeight)
+        const width = Math.max(this.hitWidthStep * hitWidth, windowWidth)
+        const height = Math.max(this.hitHeightStep * hitHeight, windowHeight)
 
         const viewportWidth = width
         const viewportHeight = height
@@ -168,7 +173,7 @@ export default class PhDagRenderPolicy {
                 }
             })
 
-            postRenderHook()
+            postRenderHook(width, height)
         }
     }
 
@@ -204,5 +209,22 @@ export default class PhDagRenderPolicy {
                     return that.parent.defs.iconsByName(cat, status)
                 })
         }
+    }
+
+    computeGraphMaxLevel(dag) {
+        const tmp = dag.height().descendants()
+        const arr = tmp.map(x => x.value)
+        const maxLevel = Math.max(...arr)
+        let result = new Array(maxLevel + 1).fill(0)
+
+        function accResult(total, v) {
+            const tmp = total[v]
+            total[v] = tmp + 1
+            return total
+        }
+
+        result = arr.reduce(accResult, result)
+        const maxNodeInSameLevel = Math.max(...result)
+        return [maxLevel, maxNodeInSameLevel]
     }
 }

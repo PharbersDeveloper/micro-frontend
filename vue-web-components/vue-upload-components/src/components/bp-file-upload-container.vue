@@ -1,12 +1,12 @@
 <template>
     <div v-if="stage === 1" >
-        <div v-if="activePane === 'local'">
+        <div v-if="allData.uploadType === 'localUpload'">
             <bp-select-file :file-list="fileList"
                             @fileSelected="uploadFileSelected"
                             @fileDeleted="uploadFileDeleted"
                             @confirm="showDestinationDlg = true" />
         </div>
-        <div v-else-if="activePane === 's3'">
+        <div v-else-if="allData.uploadType === 's3Upload'">
             <bp-s3-file
                     :format-value="formatValue"
                     @formatValueChange="formatValueChange"
@@ -24,7 +24,7 @@
         <bp-excel-handler
 				@importCurrentDataToDS="importCurrentDataToDS"
 				:dsName="dataset"
-                :active-pane="activePane"
+                :active-pane="allData.uploadType"
                 :file-path="s3path"
                 :file-list="fileList"
 				:dataID="dataID"
@@ -55,9 +55,7 @@ export default {
             dataset: "",
             destinationType: "String",
             // stages
-            stage: 1,
-            // activePane: "s3"
-            activePane: "local"
+            stage: 1
         }
     },
     props: {

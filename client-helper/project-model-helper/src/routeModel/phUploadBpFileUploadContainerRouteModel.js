@@ -44,6 +44,7 @@ export async function phUploadBpFileUploadContainerRouteModel(
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
+		uploadType: parseParams.query.uploadType,
 		datasetArr: datasets,
 		_isVue: true
 	}

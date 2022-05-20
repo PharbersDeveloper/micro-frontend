@@ -274,18 +274,15 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss:
-                [
-                    {
-                        "projectId": "",
-                        "schema": "[]",
-                        "version": "",
-                        "name": "",
-                        "label": "",
-                        "cat": "",
-                        "path": ""
-                    }
-                ],
+                dss:[{
+                    "projectId": "",
+                    "schema": "[]",
+                    "version": "",
+                    "name": "",
+                    "label": "",
+                    "cat": "",
+                    "path": ""
+                }],
                 tagsArray: []
             })
         },
