@@ -133,7 +133,6 @@ export default class PhDagDatasource {
                     }
                     return x
                 })
-                console.log(JSON.stringify(ele.datasource.data))
                 const links = response.data.filter(x => x["attributes"]["ctype"] === "link")
                 let maxHeight = -999
                 let maxHeightV2 = -999
