@@ -275,14 +275,14 @@ export default {
             default: () => ({
                 projectName: "项目名称",
                 dss:[{
-                        "projectId": "",
-                        "schema": "[]",
-                        "version": "",
-                        "name": "",
-                        "label": "",
-                        "cat": "",
-                        "path": ""
-				}],
+                    "projectId": "",
+                    "schema": "[]",
+                    "version": "",
+                    "name": "",
+                    "label": "",
+                    "cat": "",
+                    "path": ""
+                }],
                 tagsArray: []
             })
         },

@@ -37,9 +37,9 @@ export default class PhExcelPreviewProxy {
     }
 
     prepareDatasource(activePane) {
-        if (activePane === "local") {
+        if (activePane === "localUpload") {
             return this.prepareLocalDatasource()
-        } else if (activePane === "s3") {
+        } else if (activePane === "s3Upload") {
             return this.prepareS3Datasource()
         }
     }
