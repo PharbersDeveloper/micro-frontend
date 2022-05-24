@@ -24,10 +24,12 @@
         <bp-excel-handler
 				@importCurrentDataToDS="importCurrentDataToDS"
 				:dsName="dataset"
+				:dsId="dsId"
                 :active-pane="allData.uploadType"
                 :file-path="s3path"
                 :file-list="fileList"
 				:dataID="dataID"
+				:destinationType="destinationType"
         />
     </div>
 
@@ -39,6 +41,7 @@ import BpSelectFile from './select-file'
 import BpS3File from './s3-file'
 import BpExcelHandler from './bp-excel-handler'
 import nextDialog from './next-dialog'
+import { hostName } from "../config/envConfig"
 
 export default {
     data() {
@@ -53,9 +56,10 @@ export default {
             showDestinationDlg: false,
             dataID: "",
             dataset: "",
-            destinationType: "String",
+            destinationType: "",
             // stages
-            stage: 1
+            stage: 1,
+            dsId: ""
         }
     },
     props: {
@@ -101,12 +105,61 @@ export default {
             // TODO: 检验各种参数的正确性
             return true
         },
-        destinationConfirm(data) {
+        getCookie(name) {
+            let arr,
+                reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if ((arr = document.cookie.match(reg))) return arr[2];
+            else return null;
+        },
+        async destinationConfirm(data) {
             this.dataID = data.dataID
             this.dataset = data.dataset
             this.destinationType = data.type
-
-            if (this.validation()) {
+            let uploadParam = true
+            if (this.destinationType === "selectDataset") {
+                //选择已有数据集，判断version重复
+        		const tenantId = this.getCookie("company_id") || 	"zudIcG_17yj8CEUoCTHg"
+                const url = `${hostName}/phdydatasource/query`
+                const accessToken = this.getCookie("access_token")
+                const dsData = this.allData.datasetArr.filter(it => it.name === this.dataset)
+                this.dsId = dsData[0].id
+                let body = {
+                    table: "version",
+                    conditions: {
+                        id: ["=", `${this.allData.projectId}_${this.dsId}`],
+                        name: ["=", `${this.dataID}`]
+                    },
+                    limit: 100,
+                    start_key: ""
+                }
+                let options = {
+                    method: "POST",
+                    headers: {
+                        Authorization: accessToken,
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        accept: "application/json"
+                    },
+                    body: JSON.stringify(body)
+                }
+                let versionResult = await fetch(url, options).then((res) =>
+                    res.json()
+                )
+                if (versionResult.data && versionResult.data.length > 0) {
+                    uploadParam = false
+                    alert("数据ID重复，请重新输入！")
+                    throw new Error("数据集已存在")
+                }
+            } else {
+                // 新建数据集判断数据集是否已经存在
+                this.allData.datasetArr.forEach((item) => {
+                    if (item.name === this.dataset) {
+                        uploadParam = false
+                        alert("数据集已存在，请在下拉框选择数据集！")
+                        throw new Error("数据集已存在")
+                    }
+                })
+            }
+            if (uploadParam && this.validation()) {
                 this.stage = 2
             }
         }

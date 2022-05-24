@@ -93,60 +93,92 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 		route.loadingService.loading.style.display = "flex"
 		route.loadingService.loading.style["z-index"] = 2
 		const url = `${hostName}/phresourcecreationtrigger`
-		let message = {
-			common: {
-				traceId: param.uuid,
+		if (param.destinationType === "createDataset") {
+			let message = {
+				common: {
+					traceId: param.uuid,
+					projectId: param.projectId,
+					projectName: param.projectName,
+					flowVersion: "developer",
+					dagName: param.projectName,
+					owner: route.cookies.read("account_id"),
+					showName: decodeURI(route.cookies.read("user_name_show"))
+				},
+				action: {
+					cat: "createDS",
+					desc: "create DS",
+					comments: "something need to say",
+					message: "project_file_to_DS",
+					required: true
+				},
+				datasets: [
+					{
+						name: param.dsName,
+						cat: "uploaded",
+						format: "csv",
+						version: param.dataID,
+						schema: param.schemaArray
+					}
+				],
+				script: {
+					runtime: "dataset"
+				},
+				notification: {
+					required: true
+				},
+				result: {}
+			}
+			let options = {
+				method: "POST",
+				headers: {
+					Authorization: accessToken,
+					"Content-Type":
+						"application/x-www-form-urlencoded; charset=UTF-8",
+					accept: "application/json"
+				},
+				body: JSON.stringify(message)
+			}
+			await fetch(url, options).then((res) => res.json())
+			route.noticeService.defineAction({
+				type: "iot",
+				id: param.uuid,
+				remoteResource: "notification",
+				runnerId: "",
+				eventName: eventName,
 				projectId: param.projectId,
-				projectName: param.projectName,
-				flowVersion: "developer",
-				dagName: param.projectName,
-				owner: route.cookies.read("account_id"),
-				showName: decodeURI(route.cookies.read("user_name_show"))
-			},
-			action: {
-				cat: "createDS",
-				desc: "create DS",
-				comments: "something need to say",
-				message: "project_file_to_DS",
-				required: true
-			},
-			datasets: [
-				{
-					name: param.dsName,
-					cat: "uploaded",
-					format: "csv",
-					version: param.dataID,
-					schema: param.schemaArray
+				ownerId: route.cookies.read("account_id"),
+				callBack: EHnoticeCallback
+			})
+		} else {
+			const url = `${hostName}/phdydatasource/put_item`
+			let body = {
+				table: "version",
+				item: {
+					id: `${param.projectId}_${param.dsId}`,
+					name: param.dataID
 				}
-			],
-			script: {
-				runtime: "dataset"
-			},
-			notification: {
-				required: true
-			},
-			result: {}
+			}
+
+			let options = {
+				method: "POST",
+				headers: {
+					Authorization: accessToken,
+					"Content-Type":
+						"application/x-www-form-urlencoded; charset=UTF-8",
+					accept: "application/json"
+				},
+				body: JSON.stringify(body)
+			}
+			await fetch(url, options)
+			const paramsUri = [
+				`projectName=${param.projectName}`,
+				`projectId=${param.projectId}`
+			]
+			route.router.transitionTo(
+				"shell",
+				`dataset-lst?${paramsUri.join("&")}`
+			)
+			route.loadingService.loading.style.display = "none"
 		}
-		let options = {
-			method: "POST",
-			headers: {
-				Authorization: accessToken,
-				"Content-Type":
-					"application/x-www-form-urlencoded; charset=UTF-8",
-				accept: "application/json"
-			},
-			body: JSON.stringify(message)
-		}
-		await fetch(url, options).then((res) => res.json())
-		route.noticeService.defineAction({
-			type: "iot",
-			id: param.uuid,
-			remoteResource: "notification",
-			runnerId: "",
-			eventName: eventName,
-			projectId: params.projectId,
-			ownerId: route.cookies.read("account_id"),
-			callBack: EHnoticeCallback
-		})
 	}
 }
