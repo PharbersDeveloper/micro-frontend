@@ -137,10 +137,6 @@
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-<!--                            <span @click="clearDialogOpen" class="view_list">-->
-<!--                                <img class='tags_imgs_tag' :src="clear_data_icon" alt="">-->
-<!--                                <span class='tags_func'>清除Scenario</span>-->
-<!--                            </span>-->
                             <span @click='deleteCurrentScenario' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
@@ -219,7 +215,8 @@ export default {
             deleteTagsDialog: false,
             // about render
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666']
+            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+			searchData: []
         }
     },
     props: {
