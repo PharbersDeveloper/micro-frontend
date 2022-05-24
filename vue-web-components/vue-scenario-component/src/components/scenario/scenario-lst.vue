@@ -309,20 +309,20 @@ export default {
             }
         },
         //点击scenario name
-        clickScenarioName() {
+        clickScenarioName(data) {
             // TODO: 跳转到 trigger
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "linkToPage",
-            //     element: this,
-            //     param: {
-            //         name: "analyze",
-            //         projectName: this.allData.projectName,
-            //         projectId: this.allData.projectId,
-            //         scenario: scenario
-            //     }
-            // }
-            // this.$emit('event', event)
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "scenario-detail",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    scenario: data
+                }
+            }
+            this.$emit('event', event)
         },
         //全选list
         chechedAllScenario() {

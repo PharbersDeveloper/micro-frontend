@@ -2,7 +2,10 @@
     <div>
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="scenario">
-            <scenario-nav :scenario="datasource.scenario" @active="activeChange" @save="saveAll"></scenario-nav>
+            <scenario-nav 
+				:scenario="datasource.scenario" 
+				@active="activeChange" 
+				@save="saveAll"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"

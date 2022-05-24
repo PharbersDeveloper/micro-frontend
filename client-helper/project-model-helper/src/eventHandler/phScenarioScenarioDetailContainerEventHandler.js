@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { hostName, actionTableName } from "../config/envConfig"
 
-export async function phScenarioScenarioLstEventHandler(e, route) {
+export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
 	switch (e.detail[0].args.callback) {
