@@ -338,12 +338,12 @@ export default {
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
-			let msg = null
-			if(isJSON(data["message"])) {
+            let msg = null
+            if(isJSON(data["message"])) {
             	msg = JSON.parse(data["message"])
-			} else {
-				return msg
-			}
+            } else {
+                return "进行了操作"
+            }
             // let msg = data["message"]
             if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
                 return "编辑了脚本"
@@ -351,7 +351,7 @@ export default {
                 return this.optionsMap[cat]
             }
         },
-		isJSON(str) {
+        isJSON(str) {
             if (typeof str == 'string') {
                 try {
                     var obj=JSON.parse(str);
