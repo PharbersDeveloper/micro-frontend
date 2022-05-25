@@ -12,7 +12,9 @@
                 </el-option>
             </el-select> -->
 			<select 
+				ref="addNewTriggerSelect"
 				@change="addNewTrigger"
+				@click="addNewTriggerClick"
 				placeholder="ADD Trigger" 
 				value="ADD Trigger" name="" id="">
 				<option 
@@ -63,14 +65,24 @@
                         </el-col>
                         <el-col class="line" :span="2">-</el-col>
                         <el-col :span="11">
-                            <el-select v-model="item.period" placeholder="时间间隔" @change="item.edited = true">
+                            <!-- <el-select v-model="item.period" placeholder="时间间隔" @change="item.edited = true">
                                 <el-option
                                         v-for="iter in period"
                                         :key="iter.desc"
                                         :label="iter.desc"
                                         :value="iter.cat">
                                 </el-option>
-                            </el-select>
+                            </el-select> -->
+							<select 
+								v-model="item.period" 
+								placeholder="时间间隔" 
+								@change="item.edited = true">
+								<option 
+									v-for="iter in period"
+									:key="iter.desc"
+									:label="iter.desc"
+									:value="iter.cat">></option>
+							</select>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="开始时间">
@@ -178,6 +190,9 @@ export default {
 
     },
     methods: {
+		addNewTriggerClick() {
+			this.$refs.addNewTriggerSelect.value = "ADD Trigger"
+		},
         addNewTrigger() {
             const result = {}
             result["start"] = moment().format('YYYY-MM-DD HH:m:s')
@@ -194,6 +209,7 @@ export default {
             result["edited"] = true
             result["deleted"] = false
             this.triggers.push(result)
+			this.$refs.addNewTriggerSelect.value = "ADD Trigger"
         },
         genId(len=16, radix=16) {
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -243,6 +259,11 @@ export default {
         display: flex;
         flex-direction: column;
 
+		.line {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
         .scenario-trigger-create {
             display: flex;
