@@ -5,7 +5,7 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 export default class PhContainerDataSource {
     constructor(id) {
         this.id = id
-        this.debugToken = "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
+        this.debugToken = "b7604b151b7afbd62548270f6a9076573bdf8524b97cc9a4be2fae367d3f8f25"
         this.currentPageToken = ""
         this.stepsCount = 20
         this.data = []
@@ -87,7 +87,7 @@ export default class PhContainerDataSource {
         const logsUrl = `${hostName}/phreadjsonfile`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let phreadjsonfileBody = {
-            "path": ele.executionTemplate
+            "path": ele.executionTemplate.substring(0, ele.executionTemplate.length - 5)
         }
         let logsOptions = {
             method: "POST",
