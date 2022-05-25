@@ -86,13 +86,15 @@
                         </el-col>
                     </el-form-item>
                     <el-form-item label="开始时间">
-                        <el-date-picker
+                        <!-- <el-date-picker
                                 v-model="item.start"
                                 type="datetime"
                                 placeholder="Select date and time"
                                 default-time="12:00:00"
                                 @change="item.edited = true">
-                        </el-date-picker>
+                        </el-date-picker> -->
+						<datepicker></datepicker>
+						<vue-timepicker format="HH:mm:ss"></vue-timepicker>
                     </el-form-item>
                     <el-form-item label="时区">
                         <el-input disabled value="北京时间"></el-input>
@@ -107,16 +109,23 @@
 // import CreateScenarioDlg from "./create-scenario-dlg"
 import ElCollapse from "element-ui/packages/collapse/index"
 import ElCollapseItem from "element-ui/packages/collapse-item/index"
-import ElSelect from "element-ui/packages/select/index"
-import ElOption from "element-ui/packages/option/index"
+// import ElSelect from "element-ui/packages/select/index"
+// import ElOption from "element-ui/packages/option/index"
 import ElSwitch from "element-ui/packages/switch/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import ElInput from "element-ui/packages/input/index"
 import ElCol from "element-ui/packages/col/index"
-import ElDatePicker from "element-ui/packages/date-picker/index"
+// import ElDatePicker from "element-ui/packages/date-picker/index"
 import ElButton from "element-ui/packages/button/index"
 import moment from 'moment'
+// Main JS (in UMD format)
+import VueTimepicker from 'vue2-timepicker'
+
+// CSS
+import 'vue2-timepicker/dist/VueTimepicker.css'
+
+import Datepicker from 'vuejs-datepicker';
 
 export default {
     data() {
@@ -170,15 +179,17 @@ export default {
     components: {
         ElCollapse,
         ElCollapseItem,
-        ElSelect,
-        ElOption,
+        // ElSelect,
+        // ElOption,
         ElSwitch,
         ElForm,
         ElFormItem,
         ElInput,
         ElCol,
-        ElDatePicker,
-        ElButton
+        // ElDatePicker,
+        ElButton,
+		VueTimepicker,
+		Datepicker
     },
     computed: {
 
@@ -243,12 +254,140 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
+
+	.rtl {
+		direction: rtl;
+	}
+	.vdp-datepicker {
+		position: relative;
+		text-align: left;
+	}
+	// .vdp-datepicker * {
+	// 	box-sizing: border-box;
+	// }
+	.vdp-datepicker__calendar {
+		position: absolute;
+		z-index: 100;
+		background: #fff;
+		width: 300px;
+		border: 1px solid #ccc;
+	}
+	.vdp-datepicker__calendar header {
+		display: block;
+		line-height: 40px;
+	}
+	.vdp-datepicker__calendar header span {
+		display: inline-block;
+		text-align: center;
+		width: 71.42857142857143%;
+		float: left;
+	}
+	.vdp-datepicker__calendar header .prev, .vdp-datepicker__calendar header .next {
+		width: 14.285714285714286%;
+		float: left;
+		text-indent: -10000px;
+		position: relative;
+	}
+	.vdp-datepicker__calendar header .prev:after, .vdp-datepicker__calendar header .next:after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translateX(-50%) translateY(-50%);
+		border: 6px solid transparent;
+	}
+	.vdp-datepicker__calendar header .prev:after {
+		border-right: 10px solid #000;
+		margin-left: -5px;
+	}
+	.vdp-datepicker__calendar header .prev.disabled:after {
+		border-right: 10px solid #ddd;
+	}
+	.vdp-datepicker__calendar header .next:after {
+		border-left: 10px solid #000;
+		margin-left: 5px;
+	}
+	.vdp-datepicker__calendar header .next.disabled:after {
+		border-left: 10px solid #ddd;
+	}
+	.vdp-datepicker__calendar header .prev:not(.disabled), .vdp-datepicker__calendar header .next:not(.disabled), .vdp-datepicker__calendar header .up:not(.disabled) {
+		cursor: pointer;
+	}
+	.vdp-datepicker__calendar header .prev:not(.disabled):hover, .vdp-datepicker__calendar header .next:not(.disabled):hover, .vdp-datepicker__calendar header .up:not(.disabled):hover {
+		background: #eee;
+	}
+	.vdp-datepicker__calendar .disabled {
+		color: #ddd;
+		cursor: default;
+	}
+	.vdp-datepicker__calendar .flex-rtl {
+		display: flex;
+		width: inherit;
+		flex-wrap: wrap;
+	}
+	.vdp-datepicker__calendar .cell {
+		display: inline-block;
+		padding: 0 5px;
+		width: 14.285714285714286%;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		vertical-align: middle;
+		border: 1px solid transparent;
+	}
+	.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year {
+		cursor: pointer;
+	}
+	.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover {
+		border: 1px solid #4bd;
+	}
+	.vdp-datepicker__calendar .cell.selected {
+		background: #4bd;
+	}
+	.vdp-datepicker__calendar .cell.selected:hover {
+		background: #4bd;
+	}
+	.vdp-datepicker__calendar .cell.selected.highlighted {
+		background: #4bd;
+	}
+	.vdp-datepicker__calendar .cell.highlighted {
+		background: #cae5ed;
+	}
+	.vdp-datepicker__calendar .cell.highlighted.disabled {
+		color: #a3a3a3;
+	}
+	.vdp-datepicker__calendar .cell.grey {
+		color: #888;
+	}
+	.vdp-datepicker__calendar .cell.grey:hover {
+		background: inherit;
+	}
+	.vdp-datepicker__calendar .cell.day-header {
+		font-size: 75%;
+		white-space: nowrap;
+		cursor: inherit;
+	}
+	.vdp-datepicker__calendar .cell.day-header:hover {
+		background: inherit;
+	}
+	.vdp-datepicker__calendar .month, .vdp-datepicker__calendar .year {
+		width: 33.333%;
+	}
+	.vdp-datepicker__clear-button, .vdp-datepicker__calendar-button {
+		cursor: pointer;
+		font-style: normal;
+	}
+	.vdp-datepicker__clear-button.disabled, .vdp-datepicker__calendar-button.disabled {
+		color: #999;
+		cursor: default;
+	}
+	
 
     .scenario-triggers {
 		border: 1px solid #666;
