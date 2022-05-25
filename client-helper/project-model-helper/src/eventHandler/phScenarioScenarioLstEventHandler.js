@@ -7,7 +7,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "scenario-detail") {
-				uri = `scenario-detail?projectId=${params.projectId}?projectName=${params.projectName}&scenarioName=${params.scenario.name}&scenarioId=${params.scenario.id}`
+				uri = `scenario-detail?projectId=${params.projectId}?projectName=${params.projectName}&scenarioName=${params.scenario.scenarioName}&scenarioId=${params.scenario.id}`
 			}
 			route.router.transitionTo("shell", uri)
 			break
@@ -159,7 +159,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 		case "createScenario":
 			if (params) {
 				const targetscenario = params.scenario //需要更新的scenario
-				let scenarioDetailUri = `scenario-detail?projectId=${params.projectId}?projectName=${params.projectName}&scenarioName=${targetscenario}`
+				let scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}`
 				route.router.transitionTo("shell", scenarioDetailUri)
 				// const url = `${hostName}/phdydatasource/put_item`
 				// const accessToken = route.cookies.read("access_token")

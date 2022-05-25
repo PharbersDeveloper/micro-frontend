@@ -57,6 +57,15 @@ export default {
             default: () => {
                 return new StepPolicy('1')
             }
+        },
+		allData: {
+            type: Object,
+            default: () => {
+                return {
+                    projectName: "",
+                    projectId: ""
+                }
+            }
         }
     },
     components: {
@@ -125,20 +134,32 @@ export default {
         },
         saveAll() {
             let result = true
+			const event = new Event("event")
+            event.args = {
+                callback: "saveScenario",
+                element: this,
+                param: {
+                    name: "saveScenario",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    scenarioName: this.allData.scenarioName,
+                    scenarioId: this.allData.scenarioId
+                }
+            }
+            this.$emit('event', event)
+            // if (result) {
+            //     result = this.deleteTriggers()
+            // }
+            // if (result) {
+            //     result = this.saveEditedTriggers()
+            // }
 
-            if (result) {
-                result = this.deleteTriggers()
-            }
-            if (result) {
-                result = this.saveEditedTriggers()
-            }
-
-            if (result) {
-                result = this.deleteSteps()
-            }
-            if (result) {
-                result = this.saveEditedSteps()
-            }
+            // if (result) {
+            //     result = this.deleteSteps()
+            // }
+            // if (result) {
+            //     result = this.saveEditedSteps()
+            // }
 
             if (result) {
                 alert("save success")
