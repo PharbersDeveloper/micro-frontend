@@ -7,10 +7,11 @@
             </span>
         </div>
         <div class="data-main-container">
+            <ph-status-pane></ph-status-pane>
             <template >
                 <div class="project-list-container">
                     <div class="project-list-header">
-                        <bp-text>DAG 名称</bp-text>
+                        <bp-text>项目名称</bp-text>
                         <div class="opt-icon">
                             <bp-text class="update_time" v-if="toggle">更新时间</bp-text>
                             <div class="opt">
@@ -81,7 +82,6 @@
 </template>
 <script>
 import bpText from '../../node_modules/vue-components/src/components/bp-text.vue'
-// import bpImg from '../../node_modules/vue-components/src/components/bp-img.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import ElButton from 'element-ui/packages/button/index'
@@ -89,15 +89,18 @@ import ElInput from 'element-ui/packages/input/index'
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath } from '../config/envConfig'
+import PhStatusPane from './status-pane'
+
+
 export default {
     components: {
         bpText,
-        // bpImg,
         bpSelectVue,
         bpOptionVue,
         ElDialog,
         ElButton,
-        ElInput
+        ElInput,
+        PhStatusPane
     },
     data() {
         return {
@@ -112,7 +115,7 @@ export default {
             toggle: false,
             closeTosts: false,
             dialogCreateVisible: false,
-            projectNameValue: ""
+            projectNameValue: "",
         }
     },
     props: {
@@ -272,6 +275,7 @@ export default {
     /deep/.el-dialog__wrapper {
         background: rgba(0, 0, 0, 0.31);
     }
+
     .my-data-content-container {
         width: 100%;
         height: 100%;
