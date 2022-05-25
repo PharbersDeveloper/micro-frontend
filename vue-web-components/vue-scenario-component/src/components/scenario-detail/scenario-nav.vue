@@ -59,7 +59,11 @@ export default {
     .scenario-nav {
         display: flex;
         flex-direction: row;
+		align-items: center;
         justify-content: space-between;
+		border-bottom: 1px solid #666;
+		margin-bottom: 60px;
+		height: 40px;
 
         .scenario-nav-tabs {
             display: flex;

@@ -16,6 +16,10 @@
 				placeholder="ADD Trigger" 
 				value="ADD Trigger" name="" id="">
 				<option 
+					value="ADD Trigger" 
+					label="ADD Trigger"
+					style="display: none"></option>
+				<option 
 					v-for="item in options"
 					:key="item.index"
 					:label="item.desc"
@@ -38,6 +42,7 @@
                         </el-select> -->
 						<select 
 							v-model="item.mode" @change="item.edited = true">
+
 							<option 
 								v-for="iter in options"
 								:key="iter.index"
@@ -174,7 +179,6 @@ export default {
     },
     methods: {
         addNewTrigger() {
-			debugger
             const result = {}
             result["start"] = moment().format('YYYY-MM-DD HH:m:s')
             result["period"] = "minute"
@@ -231,11 +235,11 @@ export default {
     }
 
     .scenario-triggers {
-         border: 1px solid red;
-         margin: 1px auto;
-         padding: 14px 36px;
-         width: 800px;
-
+		border: 1px solid #666;
+		margin: 1px auto;
+		padding: 14px 36px;
+		width: 800px;
+		margin-bottom: 40px;
         display: flex;
         flex-direction: column;
 
@@ -244,6 +248,7 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+			margin-bottom: 10px;
         }
 
         .scenario-trigger-item-title {
@@ -251,6 +256,7 @@ export default {
             flex-direction: row;
             justify-content: space-between;
             flex-grow: 1;
+			height: 30px;
 
             .scenario-trigger-item-delbtn {
                 border: none !important;
