@@ -12,7 +12,7 @@
             <el-button
                     class="add_new_step"
                     @click="addNewStep">
-                <img :src="add_icon" alt="" />
+                <img class="add" :src="add_icon" alt="" />
                 添加一个新算子
             </el-button>
         </div>
@@ -181,6 +181,9 @@ export default {
         justify-content: center;
         font-size: 12px;
         color: #000000;
+		.add {
+			height: 12px;
+		}
     }
 
     .scenario-steps-container {

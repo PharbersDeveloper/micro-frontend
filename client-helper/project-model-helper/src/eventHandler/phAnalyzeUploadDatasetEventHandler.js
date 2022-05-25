@@ -191,8 +191,10 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					action: {
 						cat: "createCatalog",
 						desc: "create catalog",
-						comments: "something need to say",
-						message: "create_script",
+						comments: "create catalog",
+						message: JSON.stringify({
+							actionName: ""
+						}),
 						required: true
 					},
 					datasets: [
@@ -391,7 +393,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 		let { dsName, projectId, projectName } = route.create_catalog_result
 		// let message = JSON.parse(catalog_result)
 		console.log(projectName)
-		const url = `${hostName}/statemachinetrigger`
+		const url = `${hostName}/phsampletrigger`
 		const runnerId = genRunnerId("sample")
 		const sourceProjectIdValue = "zudIcG_17yj8CEUoCTHg"
 		const sample = "F_1"

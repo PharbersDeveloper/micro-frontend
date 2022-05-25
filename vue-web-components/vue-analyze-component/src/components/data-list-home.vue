@@ -206,7 +206,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
+        const accessToken = this.getCookie("access_token") || "b7604b151b7afbd62548270f6a9076573bdf8524b97cc9a4be2fae367d3f8f25"
         const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
@@ -312,7 +312,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "f7f3df820491edaf91346668c4d7978c0543ff9d00a6355dfeb2c61352c21185"
+            const accessToken = this.getCookie("access_token") || "b7604b151b7afbd62548270f6a9076573bdf8524b97cc9a4be2fae367d3f8f25"
             const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",
@@ -338,12 +338,33 @@ export default {
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
-            let msg = JSON.parse(data["message"])
+            let msg = null
+            if(isJSON(data["message"])) {
+            	msg = JSON.parse(data["message"])
+            } else {
+                return "进行了操作"
+            }
             // let msg = data["message"]
             if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
                 return "编辑了脚本"
             } else {
                 return this.optionsMap[cat]
+            }
+        },
+        isJSON(str) {
+            if (typeof str == 'string') {
+                try {
+                    var obj=JSON.parse(str);
+                    if(typeof obj == 'object' && obj ){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                } catch(e) {
+                    // console.log('error：'+str+'!!!'+e);
+                    return false;
+                }
             }
         },
         //操作对象的名称
