@@ -35,14 +35,14 @@ export async function phScenarioScenarioLstRouteModel(route, parseParams) {
 	//tags
 	let scenarios = pss.filter((it) => it)
 	let tags = new Set()
-	scenarios.forEach((iter) => {
-		if (typeof iter.label == "string") {
-			iter.label = JSON.parse(iter.label)
-			iter.label.map((it) => {
-				tags.add(it)
-			})
-		}
-	})
+	// scenarios.forEach((iter) => {
+	// 	if (typeof iter.label == "string") {
+	// 		iter.label = JSON.parse(iter.label)
+	// 		iter.label.map((it) => {
+	// 			tags.add(it)
+	// 		})
+	// 	}
+	// })
 	let tagsArray = Array.from(tags)
 	return {
 		projectName: parseParams.query.projectName,

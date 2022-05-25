@@ -61,7 +61,7 @@
             </div>
             <div class="execution-history-detail-panel-show" v-if="executionItem">
                 <div class="execution-history-definition-panel" >
-                    <div v-if="!jsonMessage">暂无数据</div>
+                    <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
                     <viewJson v-else :JsonData="jsonMessage"></viewJson>
                 </div>
                 <div class="execution-history-logs-panel" >

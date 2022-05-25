@@ -2,7 +2,10 @@
     <div>
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="scenario">
-            <scenario-nav :scenario="datasource.scenario" @active="activeChange" @save="saveAll"></scenario-nav>
+            <scenario-nav 
+				:scenario="datasource.scenario" 
+				@active="activeChange" 
+				@save="saveAll"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
@@ -53,6 +56,15 @@ export default {
             type: Object,
             default: () => {
                 return new StepPolicy('1')
+            }
+        },
+		allData: {
+            type: Object,
+            default: () => {
+                return {
+                    projectName: "",
+                    projectId: ""
+                }
             }
         }
     },
@@ -122,20 +134,32 @@ export default {
         },
         saveAll() {
             let result = true
+			const event = new Event("event")
+            event.args = {
+                callback: "saveScenario",
+                element: this,
+                param: {
+                    name: "saveScenario",
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId,
+                    scenarioName: this.allData.scenarioName,
+                    scenarioId: this.allData.scenarioId
+                }
+            }
+            this.$emit('event', event)
+            // if (result) {
+            //     result = this.deleteTriggers()
+            // }
+            // if (result) {
+            //     result = this.saveEditedTriggers()
+            // }
 
-            if (result) {
-                result = this.deleteTriggers()
-            }
-            if (result) {
-                result = this.saveEditedTriggers()
-            }
-
-            if (result) {
-                result = this.deleteSteps()
-            }
-            if (result) {
-                result = this.saveEditedSteps()
-            }
+            // if (result) {
+            //     result = this.deleteSteps()
+            // }
+            // if (result) {
+            //     result = this.saveEditedSteps()
+            // }
 
             if (result) {
                 alert("save success")

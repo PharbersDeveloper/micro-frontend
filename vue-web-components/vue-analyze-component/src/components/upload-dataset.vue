@@ -43,22 +43,24 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建数据集</button>
                             <div class="dialog" v-show="showDialog">
-                            <div>
-                                <p @click="upload">本地上传</p>
-                            </div>
-                            <div>
-                                <p @click="s3Upload">s3上传</p>
-                            </div>
-                            <div>
-                                <p @click="on_click_max_input">Max1.0入口</p>
-                            </div>
-                            <div>
-                                <p @click="on_click_max_output">Max1.0出口</p>
-                            </div>
-                            <div>
-                                <p @click="on_click_catalog">数据目录</p>
-                            </div>
-                        </div>
+								<div>
+									<p @click="upload">本地上传</p>
+								</div>
+								<div>
+									<p @click="s3Upload">s3上传</p>
+								</div>
+								<div>
+									<!-- @click="on_click_max_input" -->
+									<p class="disabled">Max1.0入口</p>
+								</div>
+								<div>
+									<!-- @click="on_click_max_output" -->
+									<p class="disabled">Max1.0出口</p>
+								</div>
+								<div>
+									<p @click="on_click_catalog">数据目录</p>
+								</div>
+							</div>
                         </div>
 
                         <div class="tag_selected">
@@ -313,8 +315,9 @@ export default {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
         },
-        "allData.dss": function() {
-            this.searchData = this.allData.dss
+        "allData.dss": function(n, o) {
+            console.log(n)
+            this.searchData = Array.from(n)
         },
         searchValue: function() {
             let searchValue = this.searchValue
@@ -408,32 +411,6 @@ export default {
                     })
                 })
             }
-            // const url = `${hostName}/phdydatasource/put_item`
-            // let body = {
-            //     "table": actionTableName,
-            //     "item": {
-            //         "projectId": that.allData.projectId,
-            //         "code": 0,
-            //         "comments": "delete_dataset",
-            //         "jobCat": "remove_Job",
-            //         "jobDesc": "running",
-            //         "message": JSON.stringify(msgArr),
-            //         "date": String(new Date().getTime()),
-            //         "owner": this.getCookie("account_id"),
-            //         "showName": decodeURI(this.getCookie('user_name_show'))
-            //     }
-            // }
-            // let options = {
-            //     method: "POST",
-            //     headers: {
-            //         "Authorization": accessToken,
-            //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            //         "accept": "application/json"
-            //     },
-            //     body: JSON.stringify(body)
-            // }
-            // let result = await fetch(url, options).then(res => res.json())
-            // }
             data.args.param.scriptsArray = msgArr
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
@@ -716,6 +693,9 @@ export default {
             color: #000000;
             font-weight: 600;
         }
+		p.disabled {
+			color: #ccc;
+		}
     }
 }
 .upload_dataset_container {

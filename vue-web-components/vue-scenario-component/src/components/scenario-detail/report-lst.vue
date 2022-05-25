@@ -80,7 +80,7 @@ export default {
     }
 
     .scenario-reports {
-        border: 1px solid red;
+        border: 1px solid #666;
         margin: 1px auto;
         padding: 14px 36px;
         width: 800px;

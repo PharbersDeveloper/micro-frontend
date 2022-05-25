@@ -95,6 +95,8 @@ export default {
         activePane: String,
         dsName: String,
         dataID: String,
+        destinationType: String,
+        dsId: String,
         dataProxy: {
             type: Object,
             default: function() {
@@ -131,7 +133,7 @@ export default {
             // to表示上传dataset的路径
             const to = `pharbers/${this.dataProxy.projectId}/${this.dsName}/version=${this.dataID}`
             this.dataProxy.uploadCurrentData(to)
-
+            // if (this.destinationType === "createDataset") {
             // 添加index的过程调用新的dag逻辑
             // this.dataProxy.importCurrentDataToDS(uuid, this.dsName)
             const event = new Event("event")
@@ -140,15 +142,18 @@ export default {
                 element: this,
                 param: {
                     name: "importCurrentDataToDS",
+                    destinationType: this.destinationType,
                     projectId: this.dataProxy.projectId,
                     projectName: this.dataProxy.projectName,
                     dsName: this.dsName,
                     uuid: uuid,
+                    dsId: this.dsId,
                     dataID: this.dataID,
                     schemaArray: this.dataProxy.getLocalDatasourceSchema()
                 }
             }
             this.$emit('importCurrentDataToDS', event)
+            // }
         },
         guid() {
             return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(

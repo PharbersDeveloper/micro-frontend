@@ -2,7 +2,7 @@
     <div class="scenario-triggers">
         <div class="scenario-trigger-create">
             <h2>Triggers</h2>
-            <el-select placeholder="ADD Trigger" value="ADD Trigger" @change="addNewTrigger">
+            <!-- <el-select placeholder="ADD Trigger" value="ADD Trigger" @change="addNewTrigger">
                 <el-option
                         v-for="item in options"
                         :key="item.index"
@@ -10,13 +10,28 @@
                         :value="item.cat"
                         :disabled="item.disable">
                 </el-option>
-            </el-select>
+            </el-select> -->
+			<select 
+				@change="addNewTrigger"
+				placeholder="ADD Trigger" 
+				value="ADD Trigger" name="" id="">
+				<option 
+					value="ADD Trigger" 
+					label="ADD Trigger"
+					style="display: none"></option>
+				<option 
+					v-for="item in options"
+					:key="item.index"
+					:label="item.desc"
+					:disabled="item.disable"
+					:value="item.cat">{{item.desc}}</option>
+			</select>
         </div>
         <el-collapse >
             <el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false">
                 <template slot="title">
                     <div class="scenario-trigger-item-title">
-                        <el-select v-model="item.mode" @change="item.edited = true" >
+                        <!-- <el-select v-model="item.mode" @change="item.edited = true" >
                             <el-option
                                     v-for="iter in options"
                                     :key="iter.index"
@@ -24,7 +39,17 @@
                                     :value="iter.cat"
                                     :disabled="iter.disable">
                             </el-option>
-                        </el-select>
+                        </el-select> -->
+						<select 
+							v-model="item.mode" @change="item.edited = true">
+
+							<option 
+								v-for="iter in options"
+								:key="iter.index"
+								:label="iter.desc"
+								:value="iter.cat"
+								:disabled="iter.disable">{{item.desc}}</option>
+						</select>
                         <el-button class="el-icon-close scenario-trigger-item-delbtn" @click="item.deleted = true"></el-button>
                     </div>
                 </template>
@@ -210,11 +235,11 @@ export default {
     }
 
     .scenario-triggers {
-         border: 1px solid red;
-         margin: 1px auto;
-         padding: 14px 36px;
-         width: 800px;
-
+		border: 1px solid #666;
+		margin: 1px auto;
+		padding: 14px 36px;
+		width: 800px;
+		margin-bottom: 40px;
         display: flex;
         flex-direction: column;
 
@@ -223,6 +248,7 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+			margin-bottom: 10px;
         }
 
         .scenario-trigger-item-title {
@@ -230,6 +256,7 @@ export default {
             flex-direction: row;
             justify-content: space-between;
             flex-grow: 1;
+			height: 30px;
 
             .scenario-trigger-item-delbtn {
                 border: none !important;

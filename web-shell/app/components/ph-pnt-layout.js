@@ -49,6 +49,8 @@ export default class PhPntLayoutComponent extends Component {
 						uri = "dashboards?projectName=" + params.projectName + "&projectId=" + params.projectId
 					} else if(params.name == "executions") {
 						uri = "executions?projectName=" + params.projectName + "&projectId=" + params.projectId
+					} else if(params.name == "scenarios") {
+						uri = "scenarios?projectName=" + params.projectName + "&projectId=" + params.projectId
 					}
                 	this.router.transitionTo( "shell", uri )
 				}

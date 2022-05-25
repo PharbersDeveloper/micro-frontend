@@ -3,9 +3,13 @@ import { hostName, actionTableName } from "../config/envConfig"
 
 export async function phScenarioScenarioLstEventHandler(e, route) {
 	let params = e.detail[0].args.param
+	let uri = ""
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
-			// route.router.transitionTo("shell", encodeURI(uri))
+			if (params.name === "scenario-detail") {
+				uri = `scenario-detail?projectId=${params.projectId}?projectName=${params.projectName}&scenarioName=${params.scenario.scenarioName}&scenarioId=${params.scenario.id}`
+			}
+			route.router.transitionTo("shell", uri)
 			break
 		case "addTags":
 			if (params) {
@@ -155,37 +159,39 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 		case "createScenario":
 			if (params) {
 				const targetscenario = params.scenario //需要更新的scenario
-				const url = `${hostName}/phdydatasource/put_item`
-				const accessToken = route.cookies.read("access_token")
-				let body = {
-					table: "scenario",
-					item: {
-						// id: targetscenario.id,
-						projectId: params.projectId,
-						projectName: params.projectName,
-						scenarioName: targetscenario.scenarioName,
-						label: targetscenario.label,
-						args: targetscenario.args,
-						owner: targetscenario.owner,
-						active: targetscenario.active,
-						index: targetscenario.index,
-						traceId: targetscenario.traceId
-					}
-				}
+				let scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}`
+				route.router.transitionTo("shell", scenarioDetailUri)
+				// const url = `${hostName}/phdydatasource/put_item`
+				// const accessToken = route.cookies.read("access_token")
+				// let body = {
+				// 	table: "scenario",
+				// 	item: {
+				// 		// id: targetscenario.id,
+				// 		projectId: params.projectId,
+				// 		projectName: params.projectName,
+				// 		scenarioName: targetscenario.scenarioName,
+				// 		label: targetscenario.label,
+				// 		args: targetscenario.args,
+				// 		owner: targetscenario.owner,
+				// 		active: targetscenario.active,
+				// 		index: targetscenario.index,
+				// 		traceId: targetscenario.traceId
+				// 	}
+				// }
 
-				let options = {
-					method: "POST",
-					headers: {
-						Authorization: accessToken,
-						"Content-Type":
-							"application/x-www-form-urlencoded; charset=UTF-8",
-						accept: "application/json"
-					},
-					body: JSON.stringify(body)
-				}
-				await fetch(url, options)
+				// let options = {
+				// 	method: "POST",
+				// 	headers: {
+				// 		Authorization: accessToken,
+				// 		"Content-Type":
+				// 			"application/x-www-form-urlencoded; charset=UTF-8",
+				// 		accept: "application/json"
+				// 	},
+				// 	body: JSON.stringify(body)
+				// }
+				// await fetch(url, options)
 			}
-			window.location.reload()
+			// window.location.reload()
 			break
 		default:
 			console.log("other click event!")
