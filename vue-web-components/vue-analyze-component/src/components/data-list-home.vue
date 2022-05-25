@@ -338,12 +338,33 @@ export default {
         //操作叙述
         showActionDesc(data) {
             let cat = data["job-cat"]
-            let msg = JSON.parse(data["message"])
+			let msg = null
+			if(isJSON(data["message"])) {
+            	msg = JSON.parse(data["message"])
+			} else {
+				return msg
+			}
             // let msg = data["message"]
             if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
                 return "编辑了脚本"
             } else {
                 return this.optionsMap[cat]
+            }
+        },
+		isJSON(str) {
+            if (typeof str == 'string') {
+                try {
+                    var obj=JSON.parse(str);
+                    if(typeof obj == 'object' && obj ){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                } catch(e) {
+                    // console.log('error：'+str+'!!!'+e);
+                    return false;
+                }
             }
         },
         //操作对象的名称
