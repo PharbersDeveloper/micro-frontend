@@ -3,7 +3,15 @@ import { hostName } from '../../config/envConfig'
 export default class PhProjectDatasource {
     constructor(id) {
         this.id = id
-        this.debugToken = 'b7604b151b7afbd62548270f6a9076573bdf8524b97cc9a4be2fae367d3f8f25'
+        this.debugToken = '6445aa0d7c3cc866c8501dc0df4b9ca1a181de0d0fa0015a99bdaf5588d79bc2'
+        this.traceId = ""
+        this.statusCode = 0
+        this.status = "stoped"
+        this.resetSwitch()
+    }
+
+    resetSwitch() {
+        this.switch = this.statusCode === 1 || this.statusCode === 2
     }
 
     getCookie(name) {
@@ -14,11 +22,11 @@ export default class PhProjectDatasource {
             return this.debugToken
     }
 
-    buildQuery() {
+    buildQuery(tenantId) {
         const url = `${hostName}/tenantstatus`
         const accessToken = this.getCookie("access_token") || this.debugToken
         let body = {
-            "tenantId": "12345",
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",
@@ -32,7 +40,15 @@ export default class PhProjectDatasource {
         return fetch(url, options)
     }
 
-    refreshStatus() {
-
+    refreshStatus(tenantId) {
+        const that = this
+        this.buildQuery(tenantId)
+            .then((response) => response.json())
+            .then((response) => {
+                that.traceId = response.traceId
+                that.statusCode = response.status
+                that.status = response.message
+                that.resetSwitch()
+            })
     }
 }

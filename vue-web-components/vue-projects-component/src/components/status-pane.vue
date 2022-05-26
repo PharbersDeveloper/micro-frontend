@@ -3,22 +3,34 @@
         <span class="tenant-title">资源启动</span>
         <el-divider></el-divider>
         <div class="tenant-status-row">
-            <span class="tenant-status-name">{{tenant}}</span>
-            <div class="tenant-status-content" v-if="status">
+            <span class="tenant-status-name">{{tenantName}}</span>
+            <div class="tenant-status-content" v-if="datasource.statusCode === 2">
                 <div>
                     <i class="el-icon-user"></i>
                     已启动
                 </div>
             </div>
-            <div class="tenant-status-content">
+            <div class="tenant-status-content" v-if="datasource.statusCode === 0">
                 <div>
                     <i class="el-icon-user"></i>
                     已停止
                 </div>
             </div>
+            <div class="tenant-status-content" v-if="datasource.statusCode === 4">
+                <div>
+                    <i class="el-icon-user"></i>
+                    关闭中
+                </div>
+            </div>
+            <div class="tenant-status-content" v-if="datasource.statusCode === 1">
+                <div>
+                    <i class="el-icon-user"></i>
+                    启动中
+                </div>
+            </div>
             <div class="tenant-status-operator">
                 <el-switch
-                        v-model="status"
+                        v-model="datasource.switch"
                         active-color="#13ce66">
                 </el-switch>
             </div>
@@ -37,13 +49,9 @@ export default {
         ElDivider,
         ElSwitch
     },
-    data() {
-        return {
-            tenant: "Pharbers",
-            status: false
-        }
-    },
     props: {
+        tenantName: String,
+        tenantId: String,
         datasource: {
             type: Object,
             default: function() {
@@ -56,6 +64,9 @@ export default {
     },
     methods: {
 
+    },
+    mounted() {
+        this.datasource.refreshStatus(this.tenantId)
     }
 }
 </script>

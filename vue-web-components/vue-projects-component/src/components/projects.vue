@@ -7,7 +7,7 @@
             </span>
         </div>
         <div class="data-main-container">
-            <ph-status-pane></ph-status-pane>
+            <ph-status-pane v-if="tenant" tenant-name="Pharbers" :tenant-id="tenant"></ph-status-pane>
             <template >
                 <div class="project-list-container">
                     <div class="project-list-header">
@@ -116,6 +116,7 @@ export default {
             closeTosts: false,
             dialogCreateVisible: false,
             projectNameValue: "",
+            tenant: null
         }
     },
     props: {
@@ -160,6 +161,11 @@ export default {
             // }
             return true
         }
+    },
+    mounted() {
+        // TODO: @wodelu get tenantId
+        this.tenant = "zudIcG_17yj8CEUoCTHg"
+
     },
     methods: {
         on_clickCreateConfirm() {
