@@ -9,12 +9,12 @@
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
-                             :scenario-id="[datasource.scenario['project-id'], datasource.scenario.id].join('_')" />
+                             :scenario-id="datasource.scenario.id" />
                 <report-lst :triggers="[]"></report-lst>
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-                                :scenario-id="[datasource.scenario['project-id'], datasource.scenario.id].join('_')" />
+                                :scenario-id=" datasource.scenario.id" />
             </div>
         </div>
     </div>

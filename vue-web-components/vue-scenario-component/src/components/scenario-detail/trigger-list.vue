@@ -86,7 +86,7 @@
 							</select>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="开始时间">
+                    <el-form-item class="time" label="开始时间">
                         <!-- <el-date-picker
                                 v-model="item.start"
                                 type="datetime"
@@ -256,7 +256,243 @@ export default {
 </script>
 
 <style lang="scss">
+	.vue__time-picker {
+	display: inline-block;
+	position: relative;
+	font-size: 1em;
+	width: 10em;
+	font-family: sans-serif;
+	vertical-align: middle;
+	}
 
+	.vue__time-picker * {
+	box-sizing: border-box;
+	}
+
+	.vue__time-picker input.display-time {
+		// border: 1px solid #d2d2d2;
+		border: 1px solid #767676;
+		width: 10em;
+		height: 2.2em;
+		padding: 0.3em 0.5em;
+		font-size: 1em;
+		height: 23px;
+		margin-left: 5px;
+	}
+
+	.vue__time-picker input.has-custom-icon {
+	padding-left: 1.8em;
+	}
+
+	.vue__time-picker input.display-time.invalid:not(.skip-error-style) {
+	border-color: #cc0033;
+	outline-color: #cc0033;
+	}
+
+	.vue__time-picker input.display-time:disabled,
+	.vue__time-picker input.display-time.disabled {
+	color: #d2d2d2;
+	}
+
+	.vue__time-picker .controls {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 3;
+
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-end;
+	align-items: stretch;
+
+	/* Prevent browser focusing on the controls layer */
+	pointer-events: none;
+	}
+
+	.vue__time-picker .controls > * {
+	cursor: pointer;
+	
+	width: auto;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+
+	padding: 0 0.35em;
+
+	color: #d2d2d2;
+	line-height: 100%;
+	font-style: normal;
+
+	/* Resume pointer-events on children components */
+	pointer-events: initial;
+
+	transition: color .2s, opacity .2s;
+	}
+
+	.vue__time-picker .controls > *:hover {
+	color: #797979;
+	}
+
+	.vue__time-picker .controls > *:focus,
+	.vue__time-picker .controls > *:active {
+	outline: 0;
+	}
+
+	.vue__time-picker .controls .char {
+	font-size: 1.1em;
+	line-height: 100%;
+
+	/* Vertical align fixes for webkit browsers only */
+	-webkit-margin-before: -0.15em;
+	}
+
+	.vue__time-picker .custom-icon {
+	z-index: 2;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 1.8em;
+
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+
+	/* pass down mouse events to the <input> underneath */
+	pointer-events: none;
+	}
+
+	.vue__time-picker .custom-icon img,
+	.vue__time-picker .custom-icon svg,
+	.vue__time-picker .controls img,
+	.vue__time-picker .controls svg {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	border: 0;
+	outline: 0;
+	max-width: 1em;
+	height: auto;
+	}
+
+	.vue__time-picker .time-picker-overlay {
+	z-index: 4;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	}
+
+	.vue__time-picker .dropdown,
+	.vue__time-picker-dropdown {
+	position: absolute;
+	z-index: 5;
+	top: calc(2.2em + 2px);
+	left: 0;
+	background: #fff;
+	box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+	width: 10em;
+	height: 10em;
+	font-weight: normal;
+	}
+
+	/* Dropdown class when "append-to-body" is on */
+	.vue__time-picker-dropdown {
+	position: fixed;
+	z-index: 100;
+	}
+
+	.vue__time-picker .dropdown.drop-up,
+	.vue__time-picker-dropdown.drop-up {
+	top: auto;
+	bottom: calc(2.2em + 1px);
+	}
+
+	.vue__time-picker .dropdown .select-list,
+	.vue__time-picker-dropdown .select-list {
+	width: 10em;
+	height: 10em;
+	overflow: hidden;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
+	justify-content: space-between;
+	}
+
+	.vue__time-picker .dropdown .select-list:focus,
+	.vue__time-picker .dropdown .select-list:active,
+	.vue__time-picker-dropdown .select-list:focus,
+	.vue__time-picker-dropdown .select-list:active {
+	outline: 0;
+	}
+
+	.vue__time-picker .dropdown ul,
+	.vue__time-picker-dropdown ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	outline: 0;
+
+	flex: 1 1 0.00001px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	}
+
+	.vue__time-picker .dropdown ul.minutes,
+	.vue__time-picker .dropdown ul.seconds,
+	.vue__time-picker .dropdown ul.apms,
+	.vue__time-picker-dropdown ul.minutes,
+	.vue__time-picker-dropdown ul.seconds,
+	.vue__time-picker-dropdown ul.apms {
+	border-left: 1px solid #fff;
+	}
+
+	.vue__time-picker .dropdown ul li,
+	.vue__time-picker-dropdown ul li {
+	list-style: none;
+	text-align: center;
+	padding: 0.3em 0;
+	color: #161616;
+	}
+
+	.vue__time-picker .dropdown ul li:not(.hint):not([disabled]):hover,
+	.vue__time-picker .dropdown ul li:not(.hint):not([disabled]):focus,
+	.vue__time-picker-dropdown ul li:not(.hint):not([disabled]):hover,
+	.vue__time-picker-dropdown ul li:not(.hint):not([disabled]):focus  {
+	background: rgba(0,0,0,.08);
+	color: #161616;
+	cursor: pointer;
+	}
+
+	.vue__time-picker .dropdown ul li:not([disabled]).active,
+	.vue__time-picker .dropdown ul li:not([disabled]).active:hover,
+	.vue__time-picker .dropdown ul li:not([disabled]).active:focus,
+	.vue__time-picker-dropdown ul li:not([disabled]).active,
+	.vue__time-picker-dropdown ul li:not([disabled]).active:hover,
+	.vue__time-picker-dropdown ul li:not([disabled]).active:focus {
+	background: #41B883;
+	color: #fff;
+	}
+
+	.vue__time-picker .dropdown ul li[disabled],
+	.vue__time-picker .dropdown ul li[disabled]:hover,
+	.vue__time-picker-dropdown ul li[disabled],
+	.vue__time-picker-dropdown ul li[disabled]:hover {
+	background: transparent;
+	opacity: 0.3;
+	cursor: not-allowed;
+	}
+
+	.vue__time-picker .dropdown .hint,
+	.vue__time-picker-dropdown .hint {
+	color: #a5a5a5;
+	cursor: default;
+	font-size: 0.8em;
+	}
 	.rtl {
 		direction: rtl;
 	}
@@ -268,7 +504,7 @@ export default {
 		box-sizing: border-box;
 	}
 	.vdp-datepicker__calendar {
-		position: absolute;
+		// position: absolute;
 		z-index: 100;
 		background: #fff;
 		width: 300px;
@@ -410,6 +646,12 @@ export default {
 				height: 24px;
 			}
         }
+		
+		.time {
+			.el-form-item__content {
+				display: flex;
+			}
+		}
 
         .scenario-trigger-item-title {
             display: flex;
