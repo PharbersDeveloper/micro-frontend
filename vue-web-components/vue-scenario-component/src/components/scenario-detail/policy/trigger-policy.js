@@ -18,6 +18,7 @@ export default class PhScenarioTriggerPolicy {
     }
 
     async createOrUpdateTriggerResource(trigger) {
+		console.log("111")
         const response = await this.buildPushTriggersResource(trigger)
         const res = await response.json()
         console.log(res)
@@ -25,6 +26,7 @@ export default class PhScenarioTriggerPolicy {
     }
 
     async createOrUpdateTriggerIndex(trigger) {
+		console.log("222")
         const response = await this.buildPushTriggersQuery(trigger)
         const res = await response.json()
         console.log(res)

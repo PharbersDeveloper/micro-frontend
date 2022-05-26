@@ -34,15 +34,6 @@
             <el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false">
                 <template slot="title">
                     <div class="scenario-trigger-item-title">
-                        <!-- <el-select v-model="item.mode" @change="item.edited = true" >
-                            <el-option
-                                    v-for="iter in options"
-                                    :key="iter.index"
-                                    :label="iter.desc"
-                                    :value="iter.cat"
-                                    :disabled="iter.disable">
-                            </el-option>
-                        </el-select> -->
 						<select 
 							v-model="item.mode" @change="item.edited = true">
 
@@ -66,15 +57,8 @@
                         </el-col>
                         <el-col class="line" :span="2">-</el-col>
                         <el-col :span="11">
-                            <!-- <el-select v-model="item.period" placeholder="时间间隔" @change="item.edited = true">
-                                <el-option
-                                        v-for="iter in period"
-                                        :key="iter.desc"
-                                        :label="iter.desc"
-                                        :value="iter.cat">
-                                </el-option>
-                            </el-select> -->
 							<select 
+								class="time-space"
 								v-model="item.period" 
 								placeholder="时间间隔" 
 								@change="item.edited = true">
@@ -87,15 +71,9 @@
                         </el-col>
                     </el-form-item>
                     <el-form-item class="time" label="开始时间">
-                        <!-- <el-date-picker
-                                v-model="item.start"
-                                type="datetime"
-                                placeholder="Select date and time"
-                                default-time="12:00:00"
-                                @change="item.edited = true">
-                        </el-date-picker> -->
-						<datepicker></datepicker>
-						<vue-timepicker format="HH:mm:ss"></vue-timepicker>
+						<!-- <datepicker v-model="item.start" format="yyyy-MM-dd HH:mm:ss"></datepicker> -->
+						<!-- <vue-timepicker v-model="item.start" format="HH:mm:ss"></vue-timepicker> -->
+						<datetime @change="item.edited = true" format="YYYY-MM-DD H:i:s" width="300px" v-model="item.start"></datetime>
                     </el-form-item>
                     <el-form-item label="时区">
                         <el-input disabled value="北京时间"></el-input>
@@ -120,17 +98,20 @@ import ElCol from "element-ui/packages/col/index"
 // import ElDatePicker from "element-ui/packages/date-picker/index"
 import ElButton from "element-ui/packages/button/index"
 import moment from 'moment'
-// Main JS (in UMD format)
-import VueTimepicker from 'vue2-timepicker'
+// // Main JS (in UMD format)
+// import VueTimepicker from 'vue2-timepicker'
 
-// CSS
-import 'vue2-timepicker/dist/VueTimepicker.css'
+// // CSS
+// import 'vue2-timepicker/dist/VueTimepicker.css'
 
-import Datepicker from 'vuejs-datepicker';
+// import Datepicker from 'vuejs-datepicker';
+
+import datetime from 'vuejs-datetimepicker';
 
 export default {
     data() {
         return {
+			val: "",
             options: [
                 {
                     index: 0,
@@ -189,8 +170,9 @@ export default {
         ElCol,
         // ElDatePicker,
         ElButton,
-		VueTimepicker,
-		Datepicker
+		datetime
+		// VueTimepicker,
+		// Datepicker
     },
     computed: {
 
@@ -256,370 +238,531 @@ export default {
 </script>
 
 <style lang="scss">
-	.vue__time-picker {
-	display: inline-block;
-	position: relative;
-	font-size: 1em;
-	width: 10em;
-	font-family: sans-serif;
-	vertical-align: middle;
-	}
+	// .vue__time-picker {
+	// display: inline-block;
+	// position: relative;
+	// font-size: 1em;
+	// width: 10em;
+	// font-family: sans-serif;
+	// vertical-align: middle;
+	// }
 
-	.vue__time-picker * {
-	box-sizing: border-box;
-	}
+	// .vue__time-picker * {
+	// box-sizing: border-box;
+	// }
 
-	.vue__time-picker input.display-time {
-		// border: 1px solid #d2d2d2;
-		border: 1px solid #767676;
-		width: 10em;
-		height: 2.2em;
-		padding: 0.3em 0.5em;
-		font-size: 1em;
-		height: 23px;
-		margin-left: 5px;
-	}
+	// .vue__time-picker input.display-time {
+	// 	// border: 1px solid #d2d2d2;
+	// 	border: 1px solid #767676;
+	// 	width: 10em;
+	// 	height: 2.2em;
+	// 	padding: 0.3em 0.5em;
+	// 	font-size: 1em;
+	// 	height: 23px;
+	// 	margin-left: 5px;
+	// }
 
-	.vue__time-picker input.has-custom-icon {
-	padding-left: 1.8em;
-	}
+	// .vue__time-picker input.has-custom-icon {
+	// padding-left: 1.8em;
+	// }
 
-	.vue__time-picker input.display-time.invalid:not(.skip-error-style) {
-	border-color: #cc0033;
-	outline-color: #cc0033;
-	}
+	// .vue__time-picker input.display-time.invalid:not(.skip-error-style) {
+	// border-color: #cc0033;
+	// outline-color: #cc0033;
+	// }
 
-	.vue__time-picker input.display-time:disabled,
-	.vue__time-picker input.display-time.disabled {
-	color: #d2d2d2;
-	}
+	// .vue__time-picker input.display-time:disabled,
+	// .vue__time-picker input.display-time.disabled {
+	// color: #d2d2d2;
+	// }
 
-	.vue__time-picker .controls {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	z-index: 3;
+	// .vue__time-picker .controls {
+	// position: absolute;
+	// top: 0;
+	// bottom: 0;
+	// right: 0;
+	// z-index: 3;
 
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: flex-end;
-	align-items: stretch;
+	// display: flex;
+	// flex-flow: row nowrap;
+	// justify-content: flex-end;
+	// align-items: stretch;
 
-	/* Prevent browser focusing on the controls layer */
-	pointer-events: none;
-	}
+	// /* Prevent browser focusing on the controls layer */
+	// pointer-events: none;
+	// }
 
-	.vue__time-picker .controls > * {
-	cursor: pointer;
+	// .vue__time-picker .controls > * {
+	// cursor: pointer;
 	
-	width: auto;
-	display: flex;
-	flex-flow: column nowrap;
-	justify-content: center;
-	align-items: center;
+	// width: auto;
+	// display: flex;
+	// flex-flow: column nowrap;
+	// justify-content: center;
+	// align-items: center;
 
-	padding: 0 0.35em;
+	// padding: 0 0.35em;
 
-	color: #d2d2d2;
-	line-height: 100%;
-	font-style: normal;
+	// color: #d2d2d2;
+	// line-height: 100%;
+	// font-style: normal;
 
-	/* Resume pointer-events on children components */
-	pointer-events: initial;
+	// /* Resume pointer-events on children components */
+	// pointer-events: initial;
 
-	transition: color .2s, opacity .2s;
+	// transition: color .2s, opacity .2s;
+	// }
+
+	// .vue__time-picker .controls > *:hover {
+	// color: #797979;
+	// }
+
+	// .vue__time-picker .controls > *:focus,
+	// .vue__time-picker .controls > *:active {
+	// outline: 0;
+	// }
+
+	// .vue__time-picker .controls .char {
+	// font-size: 1.1em;
+	// line-height: 100%;
+
+	// /* Vertical align fixes for webkit browsers only */
+	// -webkit-margin-before: -0.15em;
+	// }
+
+	// .vue__time-picker .custom-icon {
+	// z-index: 2;
+	// position: absolute;
+	// left: 0;
+	// top: 0;
+	// bottom: 0;
+	// width: 1.8em;
+
+	// display: flex;
+	// flex-flow: column nowrap;
+	// justify-content: center;
+	// align-items: center;
+
+	// /* pass down mouse events to the <input> underneath */
+	// pointer-events: none;
+	// }
+
+	// .vue__time-picker .custom-icon img,
+	// .vue__time-picker .custom-icon svg,
+	// .vue__time-picker .controls img,
+	// .vue__time-picker .controls svg {
+	// display: inline-block;
+	// vertical-align: middle;
+	// margin: 0;
+	// border: 0;
+	// outline: 0;
+	// max-width: 1em;
+	// height: auto;
+	// }
+
+	// .vue__time-picker .time-picker-overlay {
+	// z-index: 4;
+	// position: fixed;
+	// top: 0;
+	// left: 0;
+	// right: 0;
+	// bottom: 0;
+	// }
+
+	// .vue__time-picker .dropdown,
+	// .vue__time-picker-dropdown {
+	// position: absolute;
+	// z-index: 5;
+	// top: calc(2.2em + 2px);
+	// left: 0;
+	// background: #fff;
+	// box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+	// width: 10em;
+	// height: 10em;
+	// font-weight: normal;
+	// }
+
+	// /* Dropdown class when "append-to-body" is on */
+	// .vue__time-picker-dropdown {
+	// position: fixed;
+	// z-index: 100;
+	// }
+
+	// .vue__time-picker .dropdown.drop-up,
+	// .vue__time-picker-dropdown.drop-up {
+	// top: auto;
+	// bottom: calc(2.2em + 1px);
+	// }
+
+	// .vue__time-picker .dropdown .select-list,
+	// .vue__time-picker-dropdown .select-list {
+	// width: 10em;
+	// height: 10em;
+	// overflow: hidden;
+	// display: flex;
+	// flex-flow: row nowrap;
+	// align-items: stretch;
+	// justify-content: space-between;
+	// }
+
+	// .vue__time-picker .dropdown .select-list:focus,
+	// .vue__time-picker .dropdown .select-list:active,
+	// .vue__time-picker-dropdown .select-list:focus,
+	// .vue__time-picker-dropdown .select-list:active {
+	// outline: 0;
+	// }
+
+	// .vue__time-picker .dropdown ul,
+	// .vue__time-picker-dropdown ul {
+	// padding: 0;
+	// margin: 0;
+	// list-style: none;
+	// outline: 0;
+
+	// flex: 1 1 0.00001px;
+	// overflow-x: hidden;
+	// overflow-y: auto;
+	// }
+
+	// .vue__time-picker .dropdown ul.minutes,
+	// .vue__time-picker .dropdown ul.seconds,
+	// .vue__time-picker .dropdown ul.apms,
+	// .vue__time-picker-dropdown ul.minutes,
+	// .vue__time-picker-dropdown ul.seconds,
+	// .vue__time-picker-dropdown ul.apms {
+	// border-left: 1px solid #fff;
+	// }
+
+	// .vue__time-picker .dropdown ul li,
+	// .vue__time-picker-dropdown ul li {
+	// list-style: none;
+	// text-align: center;
+	// padding: 0.3em 0;
+	// color: #161616;
+	// }
+
+	// .vue__time-picker .dropdown ul li:not(.hint):not([disabled]):hover,
+	// .vue__time-picker .dropdown ul li:not(.hint):not([disabled]):focus,
+	// .vue__time-picker-dropdown ul li:not(.hint):not([disabled]):hover,
+	// .vue__time-picker-dropdown ul li:not(.hint):not([disabled]):focus  {
+	// background: rgba(0,0,0,.08);
+	// color: #161616;
+	// cursor: pointer;
+	// }
+
+	// .vue__time-picker .dropdown ul li:not([disabled]).active,
+	// .vue__time-picker .dropdown ul li:not([disabled]).active:hover,
+	// .vue__time-picker .dropdown ul li:not([disabled]).active:focus,
+	// .vue__time-picker-dropdown ul li:not([disabled]).active,
+	// .vue__time-picker-dropdown ul li:not([disabled]).active:hover,
+	// .vue__time-picker-dropdown ul li:not([disabled]).active:focus {
+	// background: #41B883;
+	// color: #fff;
+	// }
+
+	// .vue__time-picker .dropdown ul li[disabled],
+	// .vue__time-picker .dropdown ul li[disabled]:hover,
+	// .vue__time-picker-dropdown ul li[disabled],
+	// .vue__time-picker-dropdown ul li[disabled]:hover {
+	// background: transparent;
+	// opacity: 0.3;
+	// cursor: not-allowed;
+	// }
+
+	// .vue__time-picker .dropdown .hint,
+	// .vue__time-picker-dropdown .hint {
+	// color: #a5a5a5;
+	// cursor: default;
+	// font-size: 0.8em;
+	// }
+	// .rtl {
+	// 	direction: rtl;
+	// }
+	// .vdp-datepicker {
+	// 	position: relative;
+	// 	text-align: left;
+	// }
+	// .vdp-datepicker * {
+	// 	box-sizing: border-box;
+	// }
+	// .vdp-datepicker__calendar {
+	// 	// position: absolute;
+	// 	z-index: 100;
+	// 	background: #fff;
+	// 	width: 300px;
+	// 	border: 1px solid #ccc;
+	// }
+	// .vdp-datepicker__calendar header {
+	// 	display: block;
+	// 	line-height: 40px;
+	// }
+	// .vdp-datepicker__calendar header span {
+	// 	display: inline-block;
+	// 	text-align: center;
+	// 	width: 71.42857142857143%;
+	// 	float: left;
+	// }
+	// .vdp-datepicker__calendar header .prev, .vdp-datepicker__calendar header .next {
+	// 	width: 14.285714285714286%;
+	// 	float: left;
+	// 	text-indent: -10000px;
+	// 	position: relative;
+	// }
+	// .vdp-datepicker__calendar header .prev:after, .vdp-datepicker__calendar header .next:after {
+	// 	content: '';
+	// 	position: absolute;
+	// 	left: 50%;
+	// 	top: 50%;
+	// 	transform: translateX(-50%) translateY(-50%);
+	// 	border: 6px solid transparent;
+	// }
+	// .vdp-datepicker__calendar header .prev:after {
+	// 	border-right: 10px solid #000;
+	// 	margin-left: -5px;
+	// }
+	// .vdp-datepicker__calendar header .prev.disabled:after {
+	// 	border-right: 10px solid #ddd;
+	// }
+	// .vdp-datepicker__calendar header .next:after {
+	// 	border-left: 10px solid #000;
+	// 	margin-left: 5px;
+	// }
+	// .vdp-datepicker__calendar header .next.disabled:after {
+	// 	border-left: 10px solid #ddd;
+	// }
+	// .vdp-datepicker__calendar header .prev:not(.disabled), .vdp-datepicker__calendar header .next:not(.disabled), .vdp-datepicker__calendar header .up:not(.disabled) {
+	// 	cursor: pointer;
+	// }
+	// .vdp-datepicker__calendar header .prev:not(.disabled):hover, .vdp-datepicker__calendar header .next:not(.disabled):hover, .vdp-datepicker__calendar header .up:not(.disabled):hover {
+	// 	background: #eee;
+	// }
+	// .vdp-datepicker__calendar .disabled {
+	// 	color: #ddd;
+	// 	cursor: default;
+	// }
+	// .vdp-datepicker__calendar .flex-rtl {
+	// 	display: flex;
+	// 	width: inherit;
+	// 	flex-wrap: wrap;
+	// }
+	// .vdp-datepicker__calendar .cell {
+	// 	display: inline-block;
+	// 	padding: 0 5px;
+	// 	width: 14.285714285714286%;
+	// 	height: 40px;
+	// 	line-height: 40px;
+	// 	text-align: center;
+	// 	vertical-align: middle;
+	// 	border: 1px solid transparent;
+	// }
+	// .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year {
+	// 	cursor: pointer;
+	// }
+	// .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover {
+	// 	border: 1px solid #4bd;
+	// }
+	// .vdp-datepicker__calendar .cell.selected {
+	// 	background: #4bd;
+	// }
+	// .vdp-datepicker__calendar .cell.selected:hover {
+	// 	background: #4bd;
+	// }
+	// .vdp-datepicker__calendar .cell.selected.highlighted {
+	// 	background: #4bd;
+	// }
+	// .vdp-datepicker__calendar .cell.highlighted {
+	// 	background: #cae5ed;
+	// }
+	// .vdp-datepicker__calendar .cell.highlighted.disabled {
+	// 	color: #a3a3a3;
+	// }
+	// .vdp-datepicker__calendar .cell.grey {
+	// 	color: #888;
+	// }
+	// .vdp-datepicker__calendar .cell.grey:hover {
+	// 	background: inherit;
+	// }
+	// .vdp-datepicker__calendar .cell.day-header {
+	// 	font-size: 75%;
+	// 	white-space: nowrap;
+	// 	cursor: inherit;
+	// }
+	// .vdp-datepicker__calendar .cell.day-header:hover {
+	// 	background: inherit;
+	// }
+	// .vdp-datepicker__calendar .month, .vdp-datepicker__calendar .year {
+	// 	width: 33.333%;
+	// }
+	// .vdp-datepicker__clear-button, .vdp-datepicker__calendar-button {
+	// 	cursor: pointer;
+	// 	font-style: normal;
+	// }
+	// .vdp-datepicker__clear-button.disabled, .vdp-datepicker__calendar-button.disabled {
+	// 	color: #999;
+	// 	cursor: default;
+	// }
+	
+	.year-month-wrapper{
+		background-color: #ed4d00;
 	}
 
-	.vue__time-picker .controls > *:hover {
-	color: #797979;
+	input{
+		min-width: 226px;
+		width:100%;
+		height: 30px;
+		padding: 3px;
+		border: 1px solid #ddd;
 	}
-
-	.vue__time-picker .controls > *:focus,
-	.vue__time-picker .controls > *:active {
-	outline: 0;
-	}
-
-	.vue__time-picker .controls .char {
-	font-size: 1.1em;
-	line-height: 100%;
-
-	/* Vertical align fixes for webkit browsers only */
-	-webkit-margin-before: -0.15em;
-	}
-
-	.vue__time-picker .custom-icon {
-	z-index: 2;
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	width: 1.8em;
-
-	display: flex;
-	flex-flow: column nowrap;
-	justify-content: center;
-	align-items: center;
-
-	/* pass down mouse events to the <input> underneath */
-	pointer-events: none;
-	}
-
-	.vue__time-picker .custom-icon img,
-	.vue__time-picker .custom-icon svg,
-	.vue__time-picker .controls img,
-	.vue__time-picker .controls svg {
-	display: inline-block;
-	vertical-align: middle;
-	margin: 0;
-	border: 0;
-	outline: 0;
-	max-width: 1em;
-	height: auto;
-	}
-
-	.vue__time-picker .time-picker-overlay {
-	z-index: 4;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	}
-
-	.vue__time-picker .dropdown,
-	.vue__time-picker-dropdown {
-	position: absolute;
-	z-index: 5;
-	top: calc(2.2em + 2px);
-	left: 0;
-	background: #fff;
-	box-shadow: 0 1px 6px rgba(0,0,0,0.15);
-	width: 10em;
-	height: 10em;
-	font-weight: normal;
-	}
-
-	/* Dropdown class when "append-to-body" is on */
-	.vue__time-picker-dropdown {
-	position: fixed;
-	z-index: 100;
-	}
-
-	.vue__time-picker .dropdown.drop-up,
-	.vue__time-picker-dropdown.drop-up {
-	top: auto;
-	bottom: calc(2.2em + 1px);
-	}
-
-	.vue__time-picker .dropdown .select-list,
-	.vue__time-picker-dropdown .select-list {
-	width: 10em;
-	height: 10em;
-	overflow: hidden;
-	display: flex;
-	flex-flow: row nowrap;
-	align-items: stretch;
-	justify-content: space-between;
-	}
-
-	.vue__time-picker .dropdown .select-list:focus,
-	.vue__time-picker .dropdown .select-list:active,
-	.vue__time-picker-dropdown .select-list:focus,
-	.vue__time-picker-dropdown .select-list:active {
-	outline: 0;
-	}
-
-	.vue__time-picker .dropdown ul,
-	.vue__time-picker-dropdown ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
-	outline: 0;
-
-	flex: 1 1 0.00001px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	}
-
-	.vue__time-picker .dropdown ul.minutes,
-	.vue__time-picker .dropdown ul.seconds,
-	.vue__time-picker .dropdown ul.apms,
-	.vue__time-picker-dropdown ul.minutes,
-	.vue__time-picker-dropdown ul.seconds,
-	.vue__time-picker-dropdown ul.apms {
-	border-left: 1px solid #fff;
-	}
-
-	.vue__time-picker .dropdown ul li,
-	.vue__time-picker-dropdown ul li {
-	list-style: none;
-	text-align: center;
-	padding: 0.3em 0;
-	color: #161616;
-	}
-
-	.vue__time-picker .dropdown ul li:not(.hint):not([disabled]):hover,
-	.vue__time-picker .dropdown ul li:not(.hint):not([disabled]):focus,
-	.vue__time-picker-dropdown ul li:not(.hint):not([disabled]):hover,
-	.vue__time-picker-dropdown ul li:not(.hint):not([disabled]):focus  {
-	background: rgba(0,0,0,.08);
-	color: #161616;
-	cursor: pointer;
-	}
-
-	.vue__time-picker .dropdown ul li:not([disabled]).active,
-	.vue__time-picker .dropdown ul li:not([disabled]).active:hover,
-	.vue__time-picker .dropdown ul li:not([disabled]).active:focus,
-	.vue__time-picker-dropdown ul li:not([disabled]).active,
-	.vue__time-picker-dropdown ul li:not([disabled]).active:hover,
-	.vue__time-picker-dropdown ul li:not([disabled]).active:focus {
-	background: #41B883;
-	color: #fff;
-	}
-
-	.vue__time-picker .dropdown ul li[disabled],
-	.vue__time-picker .dropdown ul li[disabled]:hover,
-	.vue__time-picker-dropdown ul li[disabled],
-	.vue__time-picker-dropdown ul li[disabled]:hover {
-	background: transparent;
-	opacity: 0.3;
-	cursor: not-allowed;
-	}
-
-	.vue__time-picker .dropdown .hint,
-	.vue__time-picker-dropdown .hint {
-	color: #a5a5a5;
-	cursor: default;
-	font-size: 0.8em;
-	}
-	.rtl {
-		direction: rtl;
-	}
-	.vdp-datepicker {
+	.datetime-picker{
 		position: relative;
-		text-align: left;
 	}
-	.vdp-datepicker * {
-		box-sizing: border-box;
-	}
-	.vdp-datepicker__calendar {
-		// position: absolute;
+	.calender-div{
+		min-width: 270px;
+		box-shadow: 1px 2px 5px #ccc;
+		background: #FFF;
+		position: relative !important;
+		display: inline-block;
+		left: 0;
+		top: 35px;
+		color: #444;
+		font-size: 14px;
+		padding-bottom: 10px;
 		z-index: 100;
-		background: #fff;
-		width: 300px;
-		border: 1px solid #ccc;
 	}
-	.vdp-datepicker__calendar header {
-		display: block;
-		line-height: 40px;
+	.port, .days{
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		padding: 5px 3px;
+		margin: 2px;
+		border-radius: 2px;
+		text-align: center;
+		vertical-align: top;
+		cursor: pointer;
 	}
-	.vdp-datepicker__calendar header span {
+	.days{
+		color: #ed4d00;
+		font-weight: bold;
+	}
+	.port:hover{
+		color: #ed4d00;
+		font-weight: bold;
+	}
+	.activePort, .activePort:hover {
+		background-color: #ed4d00;
+		color: white;
+	}
+	.month-setter, .year-setter{
+		margin: 0 1px;
+		width: 48.2%;
+		color: white;
+		font-weight: 900;
+		display: inline-block;
+	}
+	.nav-l:hover, .nav-r:hover {
+		background-color: #dc3c00;
+	}
+	.nav-l, .nav-r {
+		display: inline-block;
+		width: 25px;
+		background-color: #ed4d00;
+		color: white;
+		font-size: 16px;
+		cursor: pointer;
+		border: 0;
+		padding: 7px;
+		margin:0;
+	}
+	.nav-l:focus, .nav-r:focus{
+		outline: none;
+	}
+	.nav-l{
+		float: left;
+	}
+	.nav-r{
+		float: right;
+	}
+	.month, .year{
+		width: 40px;
+		text-align: right;
+		display: inline-block;
+		color: white;
+		padding: 7px 0;
+	}
+	/* .headers>span{
+
+	} */
+	.hour-selector, .minute-selector{
+		width: 30px;
 		display: inline-block;
 		text-align: center;
-		width: 71.42857142857143%;
-		float: left;
-	}
-	.vdp-datepicker__calendar header .prev, .vdp-datepicker__calendar header .next {
-		width: 14.285714285714286%;
-		float: left;
-		text-indent: -10000px;
+		font-weight: bold;
 		position: relative;
-	}
-	.vdp-datepicker__calendar header .prev:after, .vdp-datepicker__calendar header .next:after {
-		content: '';
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translateX(-50%) translateY(-50%);
-		border: 6px solid transparent;
-	}
-	.vdp-datepicker__calendar header .prev:after {
-		border-right: 10px solid #000;
-		margin-left: -5px;
-	}
-	.vdp-datepicker__calendar header .prev.disabled:after {
-		border-right: 10px solid #ddd;
-	}
-	.vdp-datepicker__calendar header .next:after {
-		border-left: 10px solid #000;
-		margin-left: 5px;
-	}
-	.vdp-datepicker__calendar header .next.disabled:after {
-		border-left: 10px solid #ddd;
-	}
-	.vdp-datepicker__calendar header .prev:not(.disabled), .vdp-datepicker__calendar header .next:not(.disabled), .vdp-datepicker__calendar header .up:not(.disabled) {
 		cursor: pointer;
 	}
-	.vdp-datepicker__calendar header .prev:not(.disabled):hover, .vdp-datepicker__calendar header .next:not(.disabled):hover, .vdp-datepicker__calendar header .up:not(.disabled):hover {
-		background: #eee;
-	}
-	.vdp-datepicker__calendar .disabled {
-		color: #ddd;
-		cursor: default;
-	}
-	.vdp-datepicker__calendar .flex-rtl {
-		display: flex;
-		width: inherit;
-		flex-wrap: wrap;
-	}
-	.vdp-datepicker__calendar .cell {
+	.time-separator{
 		display: inline-block;
-		padding: 0 5px;
-		width: 14.285714285714286%;
-		height: 40px;
-		line-height: 40px;
-		text-align: center;
-		vertical-align: middle;
-		border: 1px solid transparent;
+		font-weight: bold;
 	}
-	.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year {
+	.time-picker{
+		margin: 10px
+	}
+	.nav-t, .nav-d{
+		font-weight: bold;
 		cursor: pointer;
 	}
-	.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover {
-		border: 1px solid #4bd;
+	.scroll-hider {
+		display: none;
+		vertical-align:top;
+		overflow:hidden;
+		border:0;
+		position: absolute;
+		top: -40px;
+		left: 0;
+		box-shadow: 0 0 3px #333;
+		background-color: white;
 	}
-	.vdp-datepicker__calendar .cell.selected {
-		background: #4bd;
-	}
-	.vdp-datepicker__calendar .cell.selected:hover {
-		background: #4bd;
-	}
-	.vdp-datepicker__calendar .cell.selected.highlighted {
-		background: #4bd;
-	}
-	.vdp-datepicker__calendar .cell.highlighted {
-		background: #cae5ed;
-	}
-	.vdp-datepicker__calendar .cell.highlighted.disabled {
-		color: #a3a3a3;
-	}
-	.vdp-datepicker__calendar .cell.grey {
-		color: #888;
-	}
-	.vdp-datepicker__calendar .cell.grey:hover {
-		background: inherit;
-	}
-	.vdp-datepicker__calendar .cell.day-header {
-		font-size: 75%;
-		white-space: nowrap;
-		cursor: inherit;
-	}
-	.vdp-datepicker__calendar .cell.day-header:hover {
-		background: inherit;
-	}
-	.vdp-datepicker__calendar .month, .vdp-datepicker__calendar .year {
-		width: 33.333%;
-	}
-	.vdp-datepicker__clear-button, .vdp-datepicker__calendar-button {
-		cursor: pointer;
-		font-style: normal;
-	}
-	.vdp-datepicker__clear-button.disabled, .vdp-datepicker__calendar-button.disabled {
+	.scroll-hider ul {
+		padding:5px;
+		margin:-5px -13px -5px -5px;
+		list-style-type: none;
+		height: 100px;
+		overflow: auto;
+		width:55px;
 		color: #999;
-		cursor: default;
+		overflow-x: hidden;
 	}
-	
+	.showSelector{
+		display:inline-block;
+	}
+	li.active{
+		background-color: #ed4d00;
+		color: white;
+	}
+	li{
+		padding: 4px;
+		font-size: 16px;
+		width: 100%;
+		cursor: pointer;
+	}
+	.time-picker{
+		display: inline-block;
+	}
+	.noDisplay{
+		display: none;
+	}
+	.okButton{
+		color: #ed4d00;
+		font-size: 15px;
+		font-weight: bold;
+		padding: 0;
+		float: right;
+		border: 0;
+		margin-right: 10px;
+		margin-top: 10px;
+		cursor: pointer;
+		background: transparent;
+	}
 
     .scenario-triggers {
 		border: 1px solid #666;
@@ -634,6 +777,13 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.time-space {
+			width: 60px;
+			height: 40px;
+			border: 1px solid #DCDFE6;
+			color: #666;
 		}
 
         .scenario-trigger-create {
