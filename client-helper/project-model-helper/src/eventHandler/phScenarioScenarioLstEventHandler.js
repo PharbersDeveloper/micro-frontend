@@ -7,7 +7,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "scenario-detail") {
-				uri = `scenario-detail?projectId=${params.projectId}?projectName=${params.projectName}&scenarioName=${params.scenario.scenarioName}&scenarioId=${params.scenario.id}`
+				uri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${params.scenario.scenarioName}&scenarioId=${params.scenario.id}`
 			}
 			route.router.transitionTo("shell", uri)
 			break

@@ -12,6 +12,7 @@
                 </el-option>
             </el-select> -->
 			<select 
+				class="add-trigger-select"
 				ref="addNewTriggerSelect"
 				@change="addNewTrigger"
 				@click="addNewTriggerClick"
@@ -255,11 +256,6 @@ export default {
 </script>
 
 <style lang="scss">
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
 
 	.rtl {
 		direction: rtl;
@@ -268,9 +264,9 @@ export default {
 		position: relative;
 		text-align: left;
 	}
-	// .vdp-datepicker * {
-	// 	box-sizing: border-box;
-	// }
+	.vdp-datepicker * {
+		box-sizing: border-box;
+	}
 	.vdp-datepicker__calendar {
 		position: absolute;
 		z-index: 100;
@@ -391,10 +387,10 @@ export default {
 
     .scenario-triggers {
 		border: 1px solid #666;
-		margin: 1px auto;
-		padding: 14px 36px;
+		margin: 1px auto !important;
+		padding: 14px 36px !important;
 		width: 800px;
-		margin-bottom: 40px;
+		margin-bottom: 40px !important;
         display: flex;
         flex-direction: column;
 
@@ -409,6 +405,10 @@ export default {
             flex-direction: row;
             justify-content: space-between;
 			margin-bottom: 10px;
+			align-items: center;
+			.add-trigger-select {
+				height: 24px;
+			}
         }
 
         .scenario-trigger-item-title {

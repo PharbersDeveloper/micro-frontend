@@ -79,6 +79,8 @@ export default {
 
     },
     mounted() {
+		this.datasource.projectId = this.getUrlParam("projectId")
+		this.datasource.scenarioId = this.getUrlParam("scenarioId")
         this.datasource.model()
     },
     watch: {
@@ -90,6 +92,12 @@ export default {
         }
     },
     methods: {
+        getUrlParam( value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         activeChange(n) {
             this.activeName = n
         },

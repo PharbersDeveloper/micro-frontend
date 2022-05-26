@@ -6,7 +6,7 @@ export default class PhScenarioTriggerPolicy {
         this.id = id
         this.projectId = projectId
         this.scenarioName = scenarioName
-        this.debugToken = "f70bc939f017529ee978cb3b1577fe5b526921bdae649266ab0508382925b491"
+        this.debugToken = "6445aa0d7c3cc866c8501dc0df4b9ca1a181de0d0fa0015a99bdaf5588d79bc2"
     }
 
     getCookie(name) {
