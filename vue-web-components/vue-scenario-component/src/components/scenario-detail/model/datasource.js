@@ -7,7 +7,7 @@ export default class PhScenarioDetailDatasource {
         this.id = id
         this.projectId = projectId
         this.scenarioId = scenarioId
-        this.debugToken = "f70bc939f017529ee978cb3b1577fe5b526921bdae649266ab0508382925b491"
+        this.debugToken = "6445aa0d7c3cc866c8501dc0df4b9ca1a181de0d0fa0015a99bdaf5588d79bc2"
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
@@ -28,11 +28,13 @@ export default class PhScenarioDetailDatasource {
         const scenarios = await this.buildScenarioQuery().then((response) => response.json())
         this.store.sync(scenarios)
         this.scenario = this.store.findAll("scenarios")[0]
-        const triggers = await this.buildTriggersQuery([this.projectId, this.scenarioId].join("_"))
+        // const triggers = await this.buildTriggersQuery([this.projectId, this.scenarioId].join("_"))
+        const triggers = await this.buildTriggersQuery(this.scenarioId)
             .then((response) => response.json())
         this.store.sync(triggers)
         this.triggers = this.store.findAll("scenario-triggers")
-        const steps = await this.buildStepsQuery([this.projectId, this.scenarioId].join("_"))
+        // const steps = await this.buildStepsQuery([this.projectId, this.scenarioId].join("_"))
+        const steps = await this.buildStepsQuery(this.scenarioId)
             .then((response) => response.json())
         this.store.sync(steps)
         this.steps = this.store.findAll("scenario-steps")

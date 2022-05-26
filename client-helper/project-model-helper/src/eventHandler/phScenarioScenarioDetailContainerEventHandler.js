@@ -14,14 +14,14 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 		case "saveScenario":
 			if (params) {
 				// const targetscenario = params.scenario //需要更新的scenario
-				const uuid = guid()
+				const traceId = guid()
+				const scenarioId = guid()
 				const url = `${hostName}/phscenariostrigger`
 				const accessToken = route.cookies.read("access_token")
 				const tenantId = route.cookies.read("company_id")
-
 				let body = {
 					common: {
-						traceId: uuid,
+						traceId: traceId,
 						projectId: params.projectId,
 						projectName: params.projectName,
 						owner: route.cookies.read("account_id"),
@@ -41,7 +41,9 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 						required: true
 					},
 					scenario: {
-						id: params.scenarioId || guid(),
+						id:
+							params.scenarioId ||
+							`${params.projectId}_${scenarioId}`,
 						active: true,
 						scenarioName: params.scenarioName,
 						deletion: false,
@@ -52,7 +54,7 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 							active: true,
 							detail: {
 								timezone: "中国北京",
-								start: "2022-05-26 16:10:14",
+								start: "2022-05-27 16:10:14",
 								period: "minute",
 								value: 1
 							},

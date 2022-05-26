@@ -9,12 +9,12 @@
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
-                             :scenario-id="[datasource.scenario['project-id'], datasource.scenario.id].join('_')" />
+                             :scenario-id="datasource.scenario.id" />
                 <report-lst :triggers="[]"></report-lst>
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-                                :scenario-id="[datasource.scenario['project-id'], datasource.scenario.id].join('_')" />
+                                :scenario-id=" datasource.scenario.id" />
             </div>
         </div>
     </div>
@@ -79,6 +79,8 @@ export default {
 
     },
     mounted() {
+		this.datasource.projectId = this.getUrlParam("projectId")
+		this.datasource.scenarioId = this.getUrlParam("scenarioId")
         this.datasource.model()
     },
     watch: {
@@ -90,6 +92,12 @@ export default {
         }
     },
     methods: {
+        getUrlParam( value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         activeChange(n) {
             this.activeName = n
         },
@@ -117,6 +125,8 @@ export default {
                 const result = {}
                 const tmp = JSON.parse(x["detail"])
                 result["start"] = tmp["start"]
+				// result["startData"] = 
+				// result["startTime"] = 
                 result["period"] = tmp["period"]
                 result["value"] = tmp["value"]
                 result["timezone"] = tmp["timezone"]
@@ -129,6 +139,7 @@ export default {
                 result["traceId"] = x["trace-id"]
                 result["edited"] = false
                 result["deleted"] = false
+				console.log(result)
                 return result
             })
         },
@@ -143,9 +154,12 @@ export default {
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
                     scenarioName: this.allData.scenarioName,
-                    scenarioId: this.allData.scenarioId
+                    scenarioId: this.allData.scenarioId,
+					triggerDisplay: this.triggerDisplay,
+					stepDisplay: this.stepDisplay
                 }
             }
+			console.log(event)
             this.$emit('event', event)
             // if (result) {
             //     result = this.deleteTriggers()
@@ -161,11 +175,11 @@ export default {
             //     result = this.saveEditedSteps()
             // }
 
-            if (result) {
-                alert("save success")
-            } else {
-                alert("save error")
-            }
+            // if (result) {
+            //     alert("save success")
+            // } else {
+            //     alert("save error")
+            // }
             return result
         },
         saveEditedTriggers() {

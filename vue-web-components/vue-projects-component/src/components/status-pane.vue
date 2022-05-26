@@ -30,7 +30,8 @@
             </div>
             <div class="tenant-status-operator">
                 <el-switch
-                        v-model="datasource.switch"
+                        :value="datasource.switch"
+                        @change="switchChanged"
                         active-color="#13ce66">
                 </el-switch>
             </div>
@@ -41,6 +42,7 @@
 <script>
 import ElDivider from 'element-ui/packages/divider/index'
 import ElSwitch from 'element-ui/packages/switch/index'
+import { MessageBox, Message } from 'element-ui'
 import PhProjectDatasource from './model/datasource'
 
 
@@ -63,7 +65,51 @@ export default {
 
     },
     methods: {
+        switchChanged() {
+            if (this.datasource.switch) {
+                MessageBox.confirm('关闭当前资源会影响其他用户使用！ 是否继续?', '警告', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    // 调用启动前，强制更新一下状态，以免竞争机制
+                    this.datasource.refreshStatus(this.tenantId)
+                    if (this.datasource.data.switch) {
+                        // TODO: 调用关闭资源接口
+                        console.log("wodelu")
+                        MessageBox.alert("现在不支持自动删除，请联系管理员")
 
+                    } else {
+                        // 通过新的 trace ID 持续访问状态
+                        Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
+                    }
+                }).catch(() => {
+                    // do nothing ...
+                })
+            }
+            else if (!this.datasource.switch) {
+                MessageBox.confirm('是否确认开始资源并开始计费！ 是否继续?', '警告', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    // 调用启动前，强制更新一下状态，以免竞争机制
+                    this.datasource.refreshStatus(this.tenantId)
+                    if (!this.datasource.data.switch) {
+                        // TODO: 调用启动资源接口
+                        console.log("wodelu")
+                        MessageBox.alert("现在不支持自动创建，请联系管理员")
+
+                    } else {
+                        // 通过新的 trace ID 持续访问状态
+                        Message.error("平台已经被另一进程启动，请等待！！", { duration: 3000} )
+                    }
+                }).catch(() => {
+                    // do nothing ...
+                })
+            }
+
+        }
     },
     mounted() {
         this.datasource.refreshStatus(this.tenantId)
