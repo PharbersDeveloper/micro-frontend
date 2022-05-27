@@ -7,7 +7,7 @@
             </span>
         </div>
         <div class="data-main-container">
-            <ph-status-pane v-if="tenant" tenant-name="Pharbers" :tenant-id="tenant"></ph-status-pane>
+            <ph-status-pane v-if="allData.tenantId" :tenant-name="allData.company_name_show" :tenant-id="allData.tenantId"></ph-status-pane>
             <template >
                 <div class="project-list-container">
                     <div class="project-list-header">
@@ -115,8 +115,7 @@ export default {
             toggle: false,
             closeTosts: false,
             dialogCreateVisible: false,
-            projectNameValue: "",
-            tenant: null
+            projectNameValue: ""
         }
     },
     props: {
@@ -124,11 +123,8 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projects: [{
-                        name: "name",
-                        provider: "provider",
-                        meta: {}
-                    }]
+                    tenantId: null,
+                    projects: []
                 }
             }
         },
@@ -163,8 +159,6 @@ export default {
         }
     },
     mounted() {
-        // TODO: @wodelu get tenantId
-        this.tenant = "zudIcG_17yj8CEUoCTHg"
 
     },
     methods: {

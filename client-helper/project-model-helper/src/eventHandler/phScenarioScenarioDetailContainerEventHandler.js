@@ -19,6 +19,7 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 				const url = `${hostName}/phscenariostrigger`
 				const accessToken = route.cookies.read("access_token")
 				const tenantId = route.cookies.read("company_id")
+
 				let body = {
 					common: {
 						traceId: traceId,
@@ -49,35 +50,37 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 						deletion: false,
 						index: 0
 					},
-					triggers: [
-						{
-							active: true,
-							detail: {
-								timezone: "中国北京",
-								start: "2022-05-27 16:10:14",
-								period: "minute",
-								value: 1
-							},
-							index: 0,
-							mode: "timer",
-							id: guid()
-						}
-					],
-					steps: [
-						{
-							confData: {},
-							detail: {
-								type: "dataset",
-								recursive: false,
-								"ignore-error": false,
-								name: "1235"
-							},
-							index: 0,
-							mode: "dataset",
-							name: "alfred",
-							id: guid()
-						}
-					],
+					triggers: params.triggerDisplay,
+					steps: params.stepDisplay,
+					// triggers: [
+					// 	{
+					// 		active: true,
+					// 		detail: {
+					// 			timezone: "中国北京",
+					// 			start: "2022-05-27 16:10:14",
+					// 			period: "minute",
+					// 			value: 1
+					// 		},
+					// 		index: 0,
+					// 		mode: "timer",
+					// 		id: guid()
+					// 	}
+					// ],
+					// steps: [
+					// 	{
+					// 		confData: {},
+					// 		detail: {
+					// 			type: "dataset",
+					// 			recursive: false,
+					// 			"ignore-error": false,
+					// 			name: "1235"
+					// 		},
+					// 		index: 0,
+					// 		mode: "dataset",
+					// 		name: "alfred",
+					// 		id: guid()
+					// 	}
+					// ],
 					result: {}
 				}
 

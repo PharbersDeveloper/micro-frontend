@@ -35,8 +35,8 @@ module.exports = function (environment) {
 			// clientId: "V5I67BHIRVR2Z59kq-a-",
 			// clientName: "platform",
 			/* deploy */
-			clientId: "rB9jOc347FswXebo",
-			clientName: "project",
+			clientId: "V5I67BHIRVR2Z59kq-a-", // "rB9jOc347FswXebo",
+			clientName: "platform", //"project",
 			auth: true, //需要登录（目前只有官网不需要登录）
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout", "article"],
 			clientSecret:
@@ -61,7 +61,7 @@ module.exports = function (environment) {
 
 		// ENV.APP.DEV.clientId = "wsOelHMK2tLAVhj0" //general
 		ENV.APP.DEV.clientId = "fxXKqdI26bZEBywu" //deploy
-		
+
 		ENV.APP.DEV.redirectUri = "http://general.pharbers.com:4200/oauth-callback"
 		ENV.APP.debugToken =
 			"cf6d8ec882da07ca6a4579ffb474d5669a5509e3508b800b1f26ee3556d169da"

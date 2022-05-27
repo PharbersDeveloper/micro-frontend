@@ -11,6 +11,8 @@ import { phcatelogDataListTableEventHandler } from "./eventHandler/phcatelogData
 import { phcatelogDataListTableRouteModel } from "./routeModel/phcatelogDataListTableRouteModel"
 import { phcatelogAssetsListRouteModel } from "./routeModel/phcatelogAssetsListRouteModel"
 import { phcatelogFilesListRouteModel } from "./routeModel/phcatelogFilesListRouteModel"
+import { phProjectsProjectsRouteModel } from "./routeModel/phProjectsProjectsRouteModel"
+import { phProjectsProjectsEventHandler } from "./eventHandler/phProjectsProjectsEventHandler"
 export {
     phcatelogProjectListRouteModel,
     phcatelogProjectListEventHandler,
@@ -24,5 +26,7 @@ export {
     phcatelogDataListTableEventHandler,
     phcatelogDataListTableRouteModel,
     phcatelogAssetsListRouteModel,
-    phcatelogFilesListRouteModel
+    phcatelogFilesListRouteModel,
+    phProjectsProjectsRouteModel,
+    phProjectsProjectsEventHandler
 }
