@@ -176,10 +176,10 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						tenantId: tenantId
 					},
 					action: {
-						cat: "createOrUpdateScenario",
-						desc: "create or update scenario",
-						comments: "something need to say",
-						message: "createOrUpdateScenario",
+						cat: "createScenario",
+						desc: "create scenario",
+						comments: "create scenario",
+						message: "createScenario",
 						required: true
 					},
 					notification: {
@@ -207,17 +207,47 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				let result = await fetch(url, options)
-				if (result.status === "succeed") {
-					const scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}&scenarioId=${params.projectId}_${scenarioId}`
-					route.router.transitionTo("shell", scenarioDetailUri)
-				} else {
-					alert("创建失败！")
-				}
+				let createScenarioResult = await fetch(url, options).then(
+					(res) => res.json()
+				)
+				console.log(createScenarioResult)
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: createScenarioResult.trace_id,
+					eventName: "createScenario",
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: createScenarioCallback
+				})
+				route.scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}&scenarioId=${params.projectId}_${scenarioId}`
+				// if (result.status === "failed") {
+				// 	alert("创建失败！")
+				// } else {
+				// 	const scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}&scenarioId=${params.projectId}_${scenarioId}`
+				// 	route.router.transitionTo("shell", scenarioDetailUri)
+				// }
 			}
 			break
 		default:
 			console.log("other click event!")
+	}
+
+	function createScenarioCallback(param, payload) {
+		console.log(payload)
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "succeed") {
+			alert("新建scenario成功！")
+			route.router.transitionTo("shell", route.scenarioDetailUri)
+		} else if (status == "failed") {
+			alert("新建失败")
+			console.log(error)
+		}
+		route.loadingService.loading.style.display = "none"
 	}
 
 	function guid() {

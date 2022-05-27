@@ -463,6 +463,7 @@ export default {
                 }
             }
             this.$emit('event', event)
+			this.showCreateScenarioDialog = false
         }
     }
 }
