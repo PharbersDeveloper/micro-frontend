@@ -6,7 +6,7 @@ export default class PhScenarioTriggerPolicy {
         this.id = id
         this.projectId = projectId
         this.scenarioName = scenarioName
-        this.debugToken = "6445aa0d7c3cc866c8501dc0df4b9ca1a181de0d0fa0015a99bdaf5588d79bc2"
+        this.debugToken = "86f6201ce0092eb920d2c5472d2addc1dabee0cb10d547596a6a67399ed92217"
     }
 
     getCookie(name) {
@@ -46,6 +46,30 @@ export default class PhScenarioTriggerPolicy {
         console.log(res)
         return res['status'] === 'ok'
     }
+
+	dealTriggerDisplay(triggerArray) {
+		let arr = []
+		triggerArray.forEach(trigger => {
+			let detail = {}
+			detail = {
+                "timezone": trigger.timezone,
+                "cron": trigger.cron,
+                "start": trigger.start,
+                "period": trigger.period,
+                "value": trigger.value
+            }
+			arr.push({
+				scenarioId: trigger.scenarioId,
+				id: trigger.id,
+				index: trigger.index,
+				active: trigger.active,
+				detail: JSON.stringify(detail),
+				mode: trigger.mode,
+				traceId: trigger.traceId
+			})
+		})
+		return arr
+	}
 
     buildDeleteTriggerResource(trigger) {
         const url = `${hostName}/scenarioresource`

@@ -145,6 +145,10 @@ export default {
         },
         saveAll() {
             let result = true
+			let stepDisplay = []
+			let triggerDisplay = []
+			triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay)
+			stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay)
 			const event = new Event("event")
             event.args = {
                 callback: "saveScenario",
@@ -155,8 +159,8 @@ export default {
                     projectId: this.allData.projectId,
                     scenarioName: this.allData.scenarioName,
                     scenarioId: this.allData.scenarioId,
-					triggerDisplay: this.triggerDisplay,
-					stepDisplay: this.stepDisplay
+					triggerDisplay: triggerDisplay,
+					stepDisplay: stepDisplay
                 }
             }
 			console.log(event)
