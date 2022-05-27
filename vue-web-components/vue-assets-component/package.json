@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build:component": "vue-cli-service build --target wc --name ph-projects 'src/components/**/*.vue'"
+    "build:component": "vue-cli-service build --target wc --name ph-assets 'src/components/**/*.vue'"
   },
   "dependencies": {
     "core-js": "^3.6.5",
