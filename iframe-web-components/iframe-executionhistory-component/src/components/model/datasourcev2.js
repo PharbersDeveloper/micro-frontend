@@ -83,6 +83,9 @@ export default class PhDagDatasource {
     refreshRenderData(isOnlyShowRunJobs=false) {
         this.data2Node()
         console.log(isOnlyShowRunJobs)
+        if (isOnlyShowRunJobs) {
+            this.data = this.data.filter(x => this.cal.selected.includes(x["id"]))
+        }
         this.node2links()
     }
 
@@ -166,8 +169,8 @@ export default class PhDagDatasource {
         const uri = `${hostName}/phstatemachineselect`
         const accessToken = ele.getCookie("access_token") || this.debugToken
 
-        const job = this.data.find(x => x.attributes['name'] === name)
-        if (!job) {
+        let job = this.originData.filter(x => x.attributes['name'] === name)
+        if (job.length === 0) {
             this.isChanged = true
             return
         }
@@ -175,7 +178,7 @@ export default class PhDagDatasource {
         const tmp = {}
         tmp['job'] = {
             "name": name,
-            "represent-id": job.attributes['represent-id']
+            "represent-id": job[0].attributes['represent-id']
         }
 
         let body = {
@@ -204,6 +207,11 @@ export default class PhDagDatasource {
             await p.then((response) => response.json())
                 .then((response) => {
                     that.cal = response
+                    for (let idx = 0; idx < that.cal.selected.length; ++idx) {
+                        if (that.originData.filter(x => x.attributes['represent-id'] === that.cal.selected[idx]).length === 0) {
+                            that.isChanged = true
+                        }
+                    }
                     ele.needRefresh++
                 })
         }

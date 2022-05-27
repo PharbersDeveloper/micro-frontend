@@ -2,8 +2,15 @@
     <div class="graphWrap">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="show_area">
-            <div class="viewport" ref="viewport">
+            <el-switch
+                    v-model="isOnlyShowRunJobs"
+                    @change="needRefresh++"
+                    active-color="#13ce66" />
+            <div class="viewport" ref="viewport" v-show="!datasource.isChanged">
                 <div ref="chart" class="chart"></div>
+            </div>
+            <div v-if="datasource.isChanged">
+                <!-- 把你的Json 移动到这里 -->
             </div>
         </div>
 
@@ -20,11 +27,12 @@
     </div>
 </template>
 <script>
-import PhDagDatasource from "./model/datasourcev2";
-import PhRenderPolicy from "./policy/render/dag-render-policy";
-import PhDagDefinitions from "./policy/definitions/definitions";
-import PhStatusPolicy from "./policy/handler/dagstatushandler";
-import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
+import PhDagDatasource from "./model/datasourcev2"
+import PhRenderPolicy from "./policy/render/dag-render-policy"
+import PhDagDefinitions from "./policy/definitions/definitions"
+import PhStatusPolicy from "./policy/handler/dagstatushandler"
+import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy"
+import ElSwitch from "element-ui/packages/switch/index"
 
 export default {
     data: () => {
@@ -39,11 +47,12 @@ export default {
             loading: false,
             isFirstRendering: true,
             offsetLeft: 0,
-            offsetTop: 0
+            offsetTop: 0,
+            isOnlyShowRunJobs: true
         };
     },
     components: {
-
+        ElSwitch
     },
     props: {
         datasource: {
@@ -146,8 +155,11 @@ export default {
     },
     watch: {
         needRefresh(n, o) {
-            if (this.datasource.originData.length > 0) {
-                this.datasource.refreshRenderData()
+            if (this.datasource.originData.length > 0
+                && this.datasource.runJobName.length > 0
+                && this.datasource.cal.selected.length > 0) {
+                this.datasource.refreshRenderData(this.isOnlyShowRunJobs)
+                // this.datasource.refreshRenderData(false)
                 this.renderDag();
             }
         }
