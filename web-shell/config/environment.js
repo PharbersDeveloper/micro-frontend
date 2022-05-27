@@ -35,8 +35,8 @@ module.exports = function (environment) {
 			// clientId: "V5I67BHIRVR2Z59kq-a-",
 			// clientName: "platform",
 			/* deploy */
-			clientId: "V5I67BHIRVR2Z59kq-a-", // "rB9jOc347FswXebo",
-			clientName: "platform", //"project",
+			clientId: "rB9jOc347FswXebo",
+			clientName: "project",
 			auth: true, //需要登录（目前只有官网不需要登录）
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout", "article"],
 			clientSecret:
