@@ -108,7 +108,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 		case "clickSample":
 			if (params) {
 				const url = `${hostName}/phdydatasource/put_item`
-				const sampleUrl = `${hostName}/statemachinetrigger`
+				const sampleUrl = `${hostName}/phsampletrigger`
 				const accessToken = route.cookies.read("access_token")
 				const runnerId = genRunnerId("sample")
 				route.loadingService.loading.style.display = "flex"
