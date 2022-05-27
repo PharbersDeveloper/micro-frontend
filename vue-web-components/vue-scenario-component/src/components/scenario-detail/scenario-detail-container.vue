@@ -14,7 +14,7 @@
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-                                :scenario-id=" datasource.scenario.id" />
+                                :scenario-id="datasource.scenario.id" />
             </div>
         </div>
     </div>

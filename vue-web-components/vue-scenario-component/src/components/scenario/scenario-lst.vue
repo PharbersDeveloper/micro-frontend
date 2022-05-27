@@ -85,7 +85,7 @@
                             <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
                             <div class="item_list">
                                 <span class="script_icon">
-                                    <img :src="label_icon" alt="">
+                                    <img :src="defs.iconsByName('scenario')" alt="">
                                 </span>
                                 <p class="data_name" @click.stop="clickScenarioName(scenario)" :title="scenario.scenarioName">{{scenario.scenarioName}}</p>
                                 <div class="tag_area" ref="tagsArea">
@@ -177,6 +177,7 @@ import bpOptionVue from '../../../node_modules/vue-components/src/components/bp-
 import { staticFilePath } from '../../config/envConfig'
 import ElSwitch from "element-ui/packages/switch/index"
 import CreateScenarioDlg from "./create-scenario-dlg"
+import PhDagDefinitions from "../policy/definitions/definitions";
 
 export default {
     data() {
@@ -229,6 +230,12 @@ export default {
                     scenarios: [],
                     tagsArray: []
                 }
+            }
+        },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
             }
         }
     },
@@ -871,16 +878,16 @@ export default {
                         .item_list {
                             display: flex;
                             flex-grow: 1;
+							align-items: center;
                         }
                         .script_icon {
                             margin-left: 27px;
                             width: 30px;
                             max-width: 30px;
-                            height: 30px;
 
                             img {
-                                width: 30px;
-                                height: 30px;
+                                width: 24px;
+                                height: 24px;
                             }
                         }
                         .data_name {
@@ -913,7 +920,13 @@ export default {
                             }
                         }
                         .scenario-active-switch {
-                            justify-content: space-between;
+							display: flex;
+							align-items: center;
+							padding-right: 20px;
+							font-size: 16px;
+							span {
+								padding-right: 10px;
+							}
                         }
                     }
 
