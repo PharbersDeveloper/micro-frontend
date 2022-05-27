@@ -246,6 +246,7 @@ export default {
     .scenario {
         display: flex;
         flex-direction: column;
+		height: calc(100vh - 40px);
     }
 
     .scenario-container {
