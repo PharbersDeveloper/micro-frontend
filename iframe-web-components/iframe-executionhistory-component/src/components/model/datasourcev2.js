@@ -4,15 +4,53 @@ export default class PhDagDatasource {
     constructor(id, adapter, url) {
         this.id = id
         this.data = []
-        this.jobArr = []
+        this.rundata = []
+        this.runJobNames = []
+        // this.jobArr = []
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
+        this.runnerId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'b5f0866e5c0dc419be494464bc66dc6274a8f250b6d7e1d3c9785d8b2c816f1a'
-        this.sizeHit = [0, 0]
+        this.debugToken = 'b1cf714c0847173cea20f1a111797677aa9cdd0ac2fc6223fcf0d0078ea93667'
+        // this.sizeHit = [0, 0]
         // this.hitWidthStep = 300
         // this.hitHeightStep = 500
         this.cal = { calculate: {}, selected: [] }
+    }
+
+    buildRunJobsNameQuery(ele) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "execution",
+            "conditions": {
+                "runnerId": ["=", this.runnerId]
+            },
+            "index_name": "runnerId-jobName-index",
+            "limit": 200,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    refreshRunJobsData(ele) {
+        let that = this
+        ele.datasource.buildRunJobsNameQuery(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                that.runJobNames = response["data"].map(x => x.jobShowName)
+                ele.needRefresh++
+            })
     }
 
     buildQuery(ele, isAppend=false) {
@@ -40,54 +78,12 @@ export default class PhDagDatasource {
         return fetch(url, options)
     }
 
-    //查询version
-    buildDistinctColQuery(ele, col, cat, dsName) {
-        const uri = `${hostName}/phdydatasource/query`
-        const accessToken = ele.getCookie("access_token") || this.debugToken
-        const companyId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
-        let id = ""
-        if (cat === "catalog") {
-            id = (companyId + "_" + dsName).toLowerCase()
-        } else {
-            id = ele.projectId + "_" + ele.representId
-        }
-        let body = {
-            "table": "version",
-            "conditions": {
-                "id": [
-                    "=",
-                    id
-                ]
-            },
-            "limit": 100,
-            "start_key": ""
-        }
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        return fetch(uri, options)
-    }
-
-    queryDlgDistinctCol(ele, row, cat, dsName) {
-        return ele.datasource.buildDistinctColQuery(ele, row, cat, dsName)
-            .then((response) => response.json())
-            .then((response) => {
-                return response.data.map(x => x["attributes"]["name"])
-            })
-    }
-
     refreshData(ele) {
         let that = this
         ele.datasource.buildQuery(ele)
             .then((response) => response.json())
             .then((response) => {
-                that.jobArr = response.data.filter(it => it.attributes.cat === "job" && it.attributes.ctype === "node")
+                const jobArr = response.data.filter(it => it.attributes.cat === "job" && it.attributes.ctype === "node")
                 ele.datasource.data = response.data.filter(x => x["attributes"]["ctype"] === "node")
                 let maxLevel = -999
                 ele.datasource.data = ele.datasource.data.map(x => {
@@ -170,58 +166,6 @@ export default class PhDagDatasource {
                 // }
 
                 // that.sizeHit = [maxLevel * that.hitWidthStep, Math.max(maxHeight, maxHeightV2) * that.hitHeightStep]
-                ele.needRefresh++
-            })
-    }
-
-    //查询 select
-    buildSelectItemsQuery(ele) {
-        const uri = `${hostName}/phstatemachineselect`
-        const accessToken = ele.getCookie("access_token") || this.debugToken
-
-        const tmp = {}
-        if (ele.selectItem.attributes.cat === "job") {
-            tmp['job'] = {
-                "name": ele.selectItem.attributes.name,
-                "represent-id": ele.selectItem.attributes['represent-id']
-            }
-        } else {
-            tmp['dataset'] = {
-                "name": ele.selectItem.attributes.name,
-                "represent-id": ele.selectItem.attributes['represent-id']
-            }
-        }
-
-        let body = {
-            "projectId": ele.projectId,
-            "projectName": ele.projectName,
-            "element": tmp
-        }
-
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        // return null
-        return fetch(uri, options)
-    }
-
-    selectOneElement(ele) {
-        console.log('select and change the data')
-        if (!ele.selectItem) {
-            return
-        }
-
-        let that = this
-        ele.datasource.buildSelectItemsQuery(ele)
-            .then((response) => response.json())
-            .then((response) => {
-                that.cal = response
                 ele.needRefresh++
             })
     }

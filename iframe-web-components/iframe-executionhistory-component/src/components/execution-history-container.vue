@@ -32,40 +32,20 @@ export default {
             name: "dag",
             needRefresh: 0,
             projectId: "",
-            flowVersion: "",
-            icon_header: null,
-            selectItem: null,
-            showRunJson: false,
-            runId: "",
-            representId: "",
-            failedLogs: [],
             projectName: "ETL_Iterator",
+            flowVersion: "",
+            runnerId: "",
+            icon_header: null,
             loading: false,
-            jobShowName: "",
-            selectItemName: "", //单击的dag的名字
-            responseArr: [],
-            showProgress: false, //进度条弹窗是否显示
-            textConf: {}, //运行弹框textarea的默认值
-            progressOver: false, //进度条是否停止
-            registerJobEventName: "",
-            retryButtonShow: false,
-            showDagLogs: false,
-            isRunning: false, //stop按钮是否可以点击
             isFirstRendering: true,
             offsetLeft: 0,
-            offsetTop: 0,
-            runDagSelectVisible: false,
-            selectRecursive: "recursive"
+            offsetTop: 0
         };
     },
     components: {
 
     },
     props: {
-        schedulerPolicyName: {
-            type: String,
-            default: "sm"
-        },
         datasource: {
             type: Object,
             default: function () {
@@ -98,56 +78,30 @@ export default {
         }
     },
     mounted() {
-        let href = window.location.href;
-        console.log(href);
-        let paramArr = href.split("?")[1].split("&");
-        this.projectId = this.getUrlParam(paramArr, "projectId");
-        this.projectName = this.getUrlParam(paramArr, "projectName");
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion");
+        let href = window.location.href
+        console.log(href)
+        let paramArr = href.split("?")[1].split("&")
+        this.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+        this.runnerId = decodeURIComponent(this.getUrlParam(paramArr, "runnerId")).replace(" ", "+")
         // 判断环境
-        this.datasource.projectId = this.projectId;
+        this.datasource.projectId = this.projectId
+        this.datasource.runnerId = this.runnerId
         this.initChart()
     },
     destroyed() {
 
     },
     methods: {
-        getSelectItemName() {
-            return "构建" + this.selectItemName
-        },
-        handleForwardMessage(event) {
-            const that = this;
-            if (event.data.message) {
-                if (event.data.message.cmd === "render_dag") {
-                    console.log(
-                        "iframe接收的",
-                        event.data.message.cmd
-                    );
-                    that.eventPolicy.runDagCallback(event.data.message);
-                }
-                if (event.data.message.cmd === "finish_dag") {
-                    console.log(
-                        "iframe接收的dag finish",
-                        event.data.message.cmd
-                    );
-                    that.eventPolicy.runDagFinishCallback(event.data.message);
-                }
-            }
-        },
         getUrlParam(arr, value) {
             let data = arr.find((item) => item.indexOf(value) > -1);
             return data ? decodeURI(data).split("=")[1] : undefined;
         },
-        //关闭进度条
-        closeProgress() {
-            this.showProgress = false;
-        },
-        closeRunDagDialog() {
-            this.showRunJson = false;
-        },
         async initChart() {
             // 初始化echarts实例
-            await this.datasource.refreshData(this);
+            await this.datasource.refreshData(this)
+            await this.datasource.refreshRunJobsData(this)
             // 发布前解注
             document.domain = "pharbers.com"
         },
@@ -186,22 +140,12 @@ export default {
                     behavior: "instant"
                 })
             });
-        },
-        confirmeRunDag(data) {
-            this.triggerPolicy.runDag(data);
         }
     },
     watch: {
         needRefresh(n, o) {
-            this.renderDag();
-        },
-        selectItem(n, o) {
-            this.selectItemName = n.attributes.name;
-            this.icon_header = this.defs.iconsByName(n.category);
-            this.offsetLeft = this.$refs.viewport.scrollLeft
-            this.offsetTop = this.$refs.viewport.scrollTop
-            this.isFirstRendering = false
-            this.$nextTick(this.datasource.selectOneElement(this));
+            if (this.datasource.data.length > 0)
+                this.renderDag();
         }
     }
 };
