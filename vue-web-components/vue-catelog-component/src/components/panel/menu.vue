@@ -150,6 +150,27 @@ export default {
                         }
                         this.content.$emit('event', event)
                     }
+                },
+                {
+                    type: "item",
+                    text: "平台资源",
+                    content: this,
+                    src: `${staticFilePath}` + "/icon_projects-fill.svg",
+                    click_event: function (data) {
+                        this.content.activeIndex = data
+                        this.content.menuType = this.type
+
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "linkToPage",
+                            element: this.content,
+                            param: {
+                                name: this.text,
+                                index: 5
+                            }
+                        }
+                        this.content.$emit('event', event)
+                    }
                 }
             ]
         }
