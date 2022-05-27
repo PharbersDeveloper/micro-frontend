@@ -16,15 +16,14 @@ export default class PhProjectDatasource {
 
     getCookie(name) {
         let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr === document.cookie.match(reg))
-            return (arr[2]);
-        else
-            return this.debugToken
+        arr = document.cookie.match(reg)
+        if (arr) return (arr[2])
+        else return this.debugToken
     }
 
     buildQuery(tenantId) {
         const url = `${hostName}/tenantstatus`
-        const accessToken = this.getCookie("access_token") || this.debugToken
+        const accessToken = this.getCookie("access_token")
         let body = {
             "tenantId": tenantId
         }

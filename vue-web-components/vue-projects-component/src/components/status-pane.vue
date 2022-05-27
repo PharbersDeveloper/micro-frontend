@@ -74,7 +74,7 @@ export default {
                 }).then(() => {
                     // 调用启动前，强制更新一下状态，以免竞争机制
                     this.datasource.refreshStatus(this.tenantId)
-                    if (this.datasource.data.switch) {
+                    if (this.datasource.switch) {
                         // TODO: 调用关闭资源接口
                         console.log("wodelu")
                         MessageBox.alert("现在不支持自动删除，请联系管理员")
@@ -95,7 +95,7 @@ export default {
                 }).then(() => {
                     // 调用启动前，强制更新一下状态，以免竞争机制
                     this.datasource.refreshStatus(this.tenantId)
-                    if (!this.datasource.data.switch) {
+                    if (!this.datasource.switch) {
                         // TODO: 调用启动资源接口
                         console.log("wodelu")
                         MessageBox.alert("现在不支持自动创建，请联系管理员")
