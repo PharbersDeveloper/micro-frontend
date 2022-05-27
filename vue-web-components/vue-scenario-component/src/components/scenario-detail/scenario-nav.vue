@@ -1,11 +1,11 @@
 <template>
     <div class="scenario-nav">
         <div class="scenario-nav-title">
-            <p class="el-icon-s-operation"></p>
+            <img :src="defs.iconsByName('scenario')" class="header-img" alt="">
             <p>{{scenario["scenario-name"]}}</p>
         </div>
         <div class="scenario-nav-btns">
-            <el-radio-group v-model="activeName">
+            <el-radio-group v-model="activeName" class="content">
                 <el-radio-button label="Setting"></el-radio-button>
                 <el-radio-button label="Steps"></el-radio-button>
             </el-radio-group>
@@ -19,6 +19,7 @@
 import ElButton from "element-ui/packages/button/index"
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
+import PhDagDefinitions from "../policy/definitions/definitions";
 
 export default {
     components: {
@@ -33,6 +34,12 @@ export default {
     },
     props: {
         scenario: Object,
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
+            }
+        }
     },
     computed: {
 
@@ -58,12 +65,23 @@ export default {
 
     .scenario-nav {
         display: flex;
+		align-items: center;
         flex-direction: row;
 		align-items: center;
         justify-content: space-between;
 		border-bottom: 1px solid #666;
 		margin-bottom: 60px;
 		height: 40px;
+
+		.scenario-nav-title {
+			padding: 0 10px;
+			.header-img {
+				width: 30px;
+				padding-right: 10px;
+			}
+		}
+
+		
 
         .scenario-nav-tabs {
             display: flex;
@@ -76,7 +94,10 @@ export default {
         }
 
         .scenario-nav-btns {
-
+			margin: 0 10px;
+			.content {
+				margin-right: 10px;
+			}
         }
     }
 </style>

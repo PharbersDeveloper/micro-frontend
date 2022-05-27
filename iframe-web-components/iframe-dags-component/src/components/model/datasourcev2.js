@@ -212,11 +212,6 @@ export default class PhDagDatasource {
     }
 
     selectOneElement(ele) {
-        console.log('select and change the data')
-        if (!ele.selectItem) {
-            return
-        }
-
         let that = this
         ele.datasource.buildSelectItemsQuery(ele)
             .then((response) => response.json())

@@ -339,7 +339,7 @@ export default {
         showActionDesc(data) {
             let cat = data["job-cat"]
             let msg = null
-            if(isJSON(data["message"])) {
+            if(this.isJSON(data["message"])) {
             	msg = JSON.parse(data["message"])
             } else {
                 return "进行了操作"
