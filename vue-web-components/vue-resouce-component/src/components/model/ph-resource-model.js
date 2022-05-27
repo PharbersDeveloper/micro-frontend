@@ -21,18 +21,17 @@ export default class PhResourceModel {
     }
 
     getCookie(name) {
-        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr === document.cookie.match(reg))
-            return (arr[2]);
-        else
-            return null;
+        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+        arr = document.cookie.match(reg)
+        if (arr) return (arr[2])
+        else return null
     }
 
     async model() {
         if (this.data.length === 0) {
             this.store.reset()
-            const scenarios = await this.buildResourceQuery(this.tenantId).then((response) => response.json())
-            this.store.sync(scenarios)
+            const resources = await this.buildResourceQuery(this.tenantId).then((response) => response.json())
+            this.store.sync(resources)
             this.data = this.store.findAll("resources")
 
             for (let idx = 0; idx < this.data.length; ++idx) {
