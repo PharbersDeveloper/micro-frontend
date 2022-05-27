@@ -159,41 +159,75 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 		case "createScenario":
 			if (params) {
 				const targetscenario = params.scenario //需要更新的scenario
-				let scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}`
-				route.router.transitionTo("shell", scenarioDetailUri)
-				// const url = `${hostName}/phdydatasource/put_item`
-				// const accessToken = route.cookies.read("access_token")
-				// let body = {
-				// 	table: "scenario",
-				// 	item: {
-				// 		// id: targetscenario.id,
-				// 		projectId: params.projectId,
-				// 		projectName: params.projectName,
-				// 		scenarioName: targetscenario.scenarioName,
-				// 		label: targetscenario.label,
-				// 		args: targetscenario.args,
-				// 		owner: targetscenario.owner,
-				// 		active: targetscenario.active,
-				// 		index: targetscenario.index,
-				// 		traceId: targetscenario.traceId
-				// 	}
-				// }
+				const url = `${hostName}/phscenariostrigger`
+				const accessToken = route.cookies.read("access_token")
+				const tenantId = route.cookies.read("company_id")
+				const traceId = guid()
+				const scenarioId = guid()
+				let body = {
+					common: {
+						traceId: traceId,
+						projectId: params.projectId,
+						projectName: params.projectName,
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
+						tenantId: tenantId
+					},
+					action: {
+						cat: "createOrUpdateScenario",
+						desc: "create or update scenario",
+						comments: "something need to say",
+						message: "createOrUpdateScenario",
+						required: true
+					},
+					notification: {
+						required: true
+					},
+					scenario: {
+						id: `${params.projectId}_${scenarioId}`,
+						active: true,
+						scenarioName: targetscenario.scenarioName,
+						deletion: false,
+						index: 0
+					},
+					triggers: [],
+					steps: [],
+					result: {}
+				}
 
-				// let options = {
-				// 	method: "POST",
-				// 	headers: {
-				// 		Authorization: accessToken,
-				// 		"Content-Type":
-				// 			"application/x-www-form-urlencoded; charset=UTF-8",
-				// 		accept: "application/json"
-				// 	},
-				// 	body: JSON.stringify(body)
-				// }
-				// await fetch(url, options)
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				let result = await fetch(url, options)
+				if (result.status === "succeed") {
+					const scenarioDetailUri = `scenario-detail?projectId=${params.projectId}&projectName=${params.projectName}&scenarioName=${targetscenario.scenarioName}&scenarioId=${params.projectId}_${scenarioId}`
+					route.router.transitionTo("shell", scenarioDetailUri)
+				} else {
+					alert("创建失败！")
+				}
 			}
-			// window.location.reload()
 			break
 		default:
 			console.log("other click event!")
+	}
+
+	function guid() {
+		return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
+			/[xy]/g,
+			function (c) {
+				var r = (Math.random() * 16) | 0,
+					v = c == "x" ? r : (r & 0x3) | 0x8
+				return v.toString(16)
+			}
+		)
 	}
 }
