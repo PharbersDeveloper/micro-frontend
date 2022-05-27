@@ -15,7 +15,7 @@ export default class PhTreeNodeAdapter {
     }
 
 
-    render(h, { node, data, store }) {
+    render(h, { node, data }) {
         function detailBtnClicked(data, event) {
             alert("this some project detail")
             console.log(data)
@@ -72,6 +72,7 @@ export default class PhTreeNodeAdapter {
             const url = that.url + requestArgs
             const body = {
                 table: "dataset",
+                index_name: "dataset-projectId-name-index",
                 conditions: {
                     projectId: ["=", projectId]
                 },
@@ -130,7 +131,7 @@ export default class PhTreeNodeAdapter {
         }
     }
 
-    exec(data) {
+    exec() {
         return []
     }
 }

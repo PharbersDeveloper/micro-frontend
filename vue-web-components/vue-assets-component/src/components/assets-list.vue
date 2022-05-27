@@ -40,7 +40,7 @@
                 <div v-for="(item, key, index1) in pbcData" :key="index1+'pbc'">
                     <span v-if="typeof(item) == 'string'" class="pbc-dialog-item">{{key}}: {{item}}</span>
                     <span v-if="typeof(item) == 'object'" class="pbc-dialog-item">
-                        {{key}}: 
+                        {{key}}:
                         <el-tag class="pbc-tag" v-for="(it,subkey) in item" :key="subkey+'tag'">
                             <span v-if="typeof(it) == 'object'">{{it.Name}}: {{it.Type}}</span>
                             <span v-else>{{subkey}}: {{it}}</span>
@@ -61,9 +61,8 @@ import ElTag from "element-ui/packages/tag"
 import ElTabPane from "element-ui/packages/tab-pane"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import { staticFilePath, hostName } from '../../config/envConfig'
-import treeItem from '../tree-item'
-import util from '../util.vue'
+import { staticFilePath, hostName } from '../config/envConfig'
+import treeItem from './tree-item'
 
 export default {
     components: {
@@ -77,7 +76,7 @@ export default {
     },
     data() {
         return {
-            userName: util.methods.getCookie('user_name'),
+            userName: this.getCookie('user_name'),
             title: "数据资产",
             subscribedTitle: "文件名称",
             fileIconDark: `${staticFilePath}` + "/icon_my-data-dark.svg",
@@ -134,11 +133,10 @@ export default {
             this.$emit('event', event)
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f";
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return "5f674a1058c5c0d8ee6b049f07d7d1832dc97ddac7cfe0c9fb6a2dd5430f155f"
         },
         showPbcData(data) {
             this.dialogPbcVisible = true

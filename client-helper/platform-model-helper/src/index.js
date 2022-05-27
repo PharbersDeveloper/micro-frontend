@@ -1,5 +1,5 @@
-import { phcatelogProjectListRouteModel } from "./routeModel/phcatelogProjectListRouteModel"
-import { phcatelogProjectListEventHandler } from "./eventHandler/phcatelogProjectListEventHandler"
+// import { phcatelogProjectListRouteModel } from "./routeModel/phcatelogProjectListRouteModel"
+// import { phcatelogProjectListEventHandler } from "./eventHandler/phcatelogProjectListEventHandler"
 import { phcatelogDataListHomeEventHandler } from "./eventHandler/phcatelogDataListHomeEventHandler"
 import { phcatelogDataListHomeRouteModel } from "./routeModel/phcatelogDataListHomeRouteModel"
 import { phcatelogUploadDatasetEventHandler } from "./eventHandler/phcatelogUploadDatasetEventHandler"
@@ -9,13 +9,14 @@ import { phcatelogMyDataTableRouteModel } from "./routeModel/phcatelogMyDataTabl
 import { phcatelogOverviewRouteModel } from "./routeModel/phcatelogOverviewRouteModel"
 import { phcatelogDataListTableEventHandler } from "./eventHandler/phcatelogDataListTableEventHandler"
 import { phcatelogDataListTableRouteModel } from "./routeModel/phcatelogDataListTableRouteModel"
-import { phcatelogAssetsListRouteModel } from "./routeModel/phcatelogAssetsListRouteModel"
+// import { phcatelogAssetsListRouteModel } from "./routeModel/phcatelogAssetsListRouteModel"
 import { phcatelogFilesListRouteModel } from "./routeModel/phcatelogFilesListRouteModel"
 import { phProjectsProjectsRouteModel } from "./routeModel/phProjectsProjectsRouteModel"
 import { phProjectsProjectsEventHandler } from "./eventHandler/phProjectsProjectsEventHandler"
+import { phAssetsAssetsListRouteModel } from "./routeModel/phAssetsAssetsListRouteModel"
 export {
-    phcatelogProjectListRouteModel,
-    phcatelogProjectListEventHandler,
+    // phcatelogProjectListRouteModel,
+    // phcatelogProjectListEventHandler,
     phcatelogDataListHomeEventHandler,
     phcatelogDataListHomeRouteModel,
     phcatelogUploadDatasetRouteModel,
@@ -25,8 +26,9 @@ export {
     phcatelogOverviewRouteModel,
     phcatelogDataListTableEventHandler,
     phcatelogDataListTableRouteModel,
-    phcatelogAssetsListRouteModel,
+    // phcatelogAssetsListRouteModel,
     phcatelogFilesListRouteModel,
     phProjectsProjectsRouteModel,
-    phProjectsProjectsEventHandler
+    phProjectsProjectsEventHandler,
+    phAssetsAssetsListRouteModel
 }
