@@ -119,11 +119,19 @@ export default {
 <style lang="scss" scoped>
     .tenant-status {
         /*height: 200px;*/
-        margin: 10px 50px;
+        margin: 10px 20px;
+
+		.tenant-title {
+			font-size: 12px;
+		}
 
         .tenant-label {
             background-color: transparent;
         }
+
+		.el-divider--horizontal {
+			margin: 5px 0 24px !important;
+		}
 
         .tenant-status-row {
             display: flex;

@@ -145,6 +145,10 @@ export default {
             this.dialogVisible = false
         },
         addNewStep() {
+			let stepsArr = this.steps.filter(it => it.deleted === false)
+			if(stepsArr.length > 0) {
+				return false
+			}
             const result = {}
             result["recursive"] = false
             result["ignore-error"] = false
@@ -171,7 +175,7 @@ export default {
     }
 
     .add_new_step {
-        margin-top: 30px;
+        margin-top: 30px zuto;
         width: 216px;
         height: 25px;
         background: #F8D634;
@@ -200,11 +204,11 @@ export default {
             flex-grow: 1;
             min-width: 200px;
             max-width: 600px;
-
             padding: 30px;
 
             .scenario-step-lst-item {
                 display: flex;
+				align-items: center;
                 flex-direction: row;
                 border: 1px solid grey;
             }
