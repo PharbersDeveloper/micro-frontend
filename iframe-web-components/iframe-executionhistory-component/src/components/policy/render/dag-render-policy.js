@@ -92,12 +92,12 @@ export default class PhDagRenderPolicy {
                     grad.append('stop').attr('offset', '100%').attr('stop-color', colorMap[target.data.id]);
                     return `url(#${gradId})`;
                 })
-                .attr('filter', ({source, target}) => {
-                    if (that.datasource.cal.selected.includes(source.data.id) &&
-                        that.datasource.cal.selected.includes(target.data.id)) {
-                        return "none"
-                    } else return 'opacity(0.5)'
-                })
+                // .attr('filter', ({source, target}) => {
+                //     if (that.datasource.cal.selected.includes(source.data.id) &&
+                //         that.datasource.cal.selected.includes(target.data.id)) {
+                //         return "none"
+                //     } else return 'opacity(0.5)'
+                // })
                 // .attr('filter', 'opacity(0.3)')
 
             // Select nodes
@@ -126,10 +126,10 @@ export default class PhDagRenderPolicy {
                 .attr("width", "50")
                 .attr("height", "50")
                 .attr('transform', 'translate(-25, -25)')
-                .attr('filter', ({data}) => {
-                    if (that.datasource.cal.selected.includes(data.id)) return "none"
-                    else return 'opacity(0.5)'
-                })
+                // .attr('filter', ({data}) => {
+                //     if (that.datasource.cal.selected.includes(data.id)) return "none"
+                //     else return 'opacity(0.5)'
+                // })
 
 
             // Add text to nodes
@@ -141,37 +141,37 @@ export default class PhDagRenderPolicy {
                 .attr('alignment-baseline', 'middle')
                 .attr('fill', 'black')
                 .attr('transform', 'translate(0, 30)')
-                .attr('filter', ({data}) => {
-                    if (that.datasource.cal.selected.includes(data.id)) return "none"
-                    else return 'opacity(0.5)'
-                })
+                // .attr('filter', ({data}) => {
+                //     if (that.datasource.cal.selected.includes(data.id)) return "none"
+                //     else return 'opacity(0.5)'
+                // })
 
             //Our new hover effects
-            nodes.on('mouseover', function (d, i) {
-                d3.select(this).transition()
-                    .duration('50')
-                    .attr('opacity', '.85')
-
-                // TODO: tooltips
-                // d3.select(this).append("circle")
-                //     .attr("r", 20)
-                //     .attr("fill", "black")
-                //     .attr('transform', `translate(30, 30)`)
-            }).on('mouseout', function (d, i) {
-                d3.select(this).transition()
-                    .duration('50')
-                    .attr('opacity', '1');
-
-                // TODO: remove tooltips
-                // d3.select(this).selectAll("circle").remove()
-            }).on('click', function (d, i) {
-                if (!that.loading) {
-                    const select = that.datasource.data.filter(it => it.attributes.name === i.data.attributes.name)
-                    if (select.length > 0) {
-                        that.selectItem = select[0]
-                    }
-                }
-            })
+            // nodes.on('mouseover', function (d, i) {
+            //     d3.select(this).transition()
+            //         .duration('50')
+            //         .attr('opacity', '.85')
+            //
+            //     // TODO: tooltips
+            //     // d3.select(this).append("circle")
+            //     //     .attr("r", 20)
+            //     //     .attr("fill", "black")
+            //     //     .attr('transform', `translate(30, 30)`)
+            // }).on('mouseout', function (d, i) {
+            //     d3.select(this).transition()
+            //         .duration('50')
+            //         .attr('opacity', '1');
+            //
+            //     // TODO: remove tooltips
+            //     // d3.select(this).selectAll("circle").remove()
+            // }).on('click', function (d, i) {
+            //     if (!that.loading) {
+            //         const select = that.datasource.data.filter(it => it.attributes.name === i.data.attributes.name)
+            //         if (select.length > 0) {
+            //             that.selectItem = select[0]
+            //         }
+            //     }
+            // })
 
             postRenderHook(width, height)
         }

@@ -88,6 +88,7 @@ export default {
         // 判断环境
         this.datasource.projectId = this.projectId
         this.datasource.runnerId = this.runnerId
+        this.datasource.name = this.projectName
         this.initChart()
     },
     destroyed() {
@@ -102,6 +103,7 @@ export default {
             // 初始化echarts实例
             await this.datasource.refreshData(this)
             await this.datasource.refreshRunJobsData(this)
+            await this.datasource.selectOneElement(this)
             // 发布前解注
             document.domain = "pharbers.com"
         },
@@ -144,8 +146,10 @@ export default {
     },
     watch: {
         needRefresh(n, o) {
-            if (this.datasource.data.length > 0)
+            if (this.datasource.originData.length > 0) {
+                this.datasource.refreshRenderData()
                 this.renderDag();
+            }
         }
     }
 };
