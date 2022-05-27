@@ -1,6 +1,6 @@
 
 import { JsonApiDataStore } from "jsonapi-datastore"
-import { staticFilePath, hostName } from "../../config/envConfig"
+import { hostName } from "../../config/envConfig"
 
 export default class PhTreeNodeAdapter {
     constructor(id) {
@@ -45,7 +45,8 @@ export default class PhTreeNodeAdapter {
         that.store.reset()
         function loadProjectLevel() {
             const accessToken = ele.getCookie("access_token") || that.debugToken
-            const requestArgs = "phplatform/resources?filter%5BresourceType%5D=standalone&filter%5Btenant%5D=" + that.tenantId + "&include=accounts"
+            // const requestArgs = "phplatform/resources?filter%5BresourceType%5D=standalone&filter%5Btenant%5D=" + that.tenantId + "&include=accounts"
+            const requestArgs = "phplatform/projects?filter%5Bowner%5D=" + that.tenantId
             const url = that.url + requestArgs
             let options = {
                 method: "GET",
