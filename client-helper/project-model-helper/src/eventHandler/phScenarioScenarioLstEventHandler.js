@@ -158,6 +158,8 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 			break
 		case "createScenario":
 			if (params) {
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
 				const targetscenario = params.scenario //需要更新的scenario
 				const url = `${hostName}/phscenariostrigger`
 				const accessToken = route.cookies.read("access_token")
@@ -240,7 +242,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (status == "success") {
 			alert("新建scenario成功！")
 			route.router.transitionTo("shell", route.scenarioDetailUri)
 		} else if (status == "failed") {
