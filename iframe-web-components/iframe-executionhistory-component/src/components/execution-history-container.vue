@@ -3,6 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="show_area">
             <el-switch
+                    v-show="!datasource.isChanged"
                     v-model="isOnlyShowRunJobs"
                     @change="needRefresh++"
                     active-color="#13ce66" />
@@ -10,8 +11,7 @@
                 <div ref="chart" class="chart"></div>
             </div>
             <div v-if="datasource.isChanged">
-                <!-- 把你的Json 移动到这里 -->
-                {{datasource.isChanged}}
+                <JsonViewer :value="jsonMessage" copyable :expand-depth=5 :expanded="true"></JsonViewer>
             </div>
         </div>
 
@@ -34,6 +34,8 @@ import PhDagDefinitions from "./policy/definitions/definitions"
 import PhStatusPolicy from "./policy/handler/dagstatushandler"
 import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy"
 import ElSwitch from "element-ui/packages/switch/index"
+import JsonViewer from 'vue-json-viewer'
+
 
 export default {
     data: () => {
@@ -50,11 +52,13 @@ export default {
             isFirstRendering: true,
             offsetLeft: 0,
             offsetTop: 0,
-            isOnlyShowRunJobs: true
+            isOnlyShowRunJobs: true,
+            jsonMessage: {}
         };
     },
     components: {
-        ElSwitch
+        ElSwitch,
+        JsonViewer
     },
     props: {
         datasource: {
@@ -96,6 +100,11 @@ export default {
 
     },
     methods: {
+        dealBuildFlowQuery(response) {
+            if (response.status === 0) {
+                this.jsonMessage = response.message
+            }
+        },
         dealUrlParam() {
             let href = window.location.href
             console.log(href)
@@ -104,6 +113,7 @@ export default {
             this.projectName = this.getUrlParam(paramArr, "projectName")
             this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
             this.runnerId = decodeURIComponent(this.getUrlParam(paramArr, "runnerId")).replace(" ", "+")
+            this.executionTemplate = decodeURIComponent(this.getUrlParam(paramArr, "executionTemplate")).replace(" ", "+")
             // 判断环境
             this.datasource.projectId = this.projectId
             this.datasource.runnerId = this.runnerId
@@ -176,6 +186,7 @@ export default {
             handler(){
                 this.dealUrlParam()
                 this.refreshData()
+                this.datasource.buildFlowQuery(this)    
             }
         }
     }

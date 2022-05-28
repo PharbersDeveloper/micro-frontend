@@ -63,7 +63,6 @@
                 <div class="execution-history-definition-panel" >
                     <!-- <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
                     <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
-                    {{iframeUrl}}
                     <iframe 
                         class="executions-iframe"  
                         :src="iframeUrl"
@@ -92,7 +91,7 @@ import ElInput from "element-ui/packages/input"
 import ElButton from "element-ui/packages/button"
 import PhExecutionHistory from "./datasource"
 import "element-ui/lib/theme-chalk/infiniteScroll.css"
-import viewJson from "./bp-view-json.vue"
+// import viewJson from "./bp-view-json.vue"
 
 export default {
     data() {
@@ -106,7 +105,7 @@ export default {
             searchString: '',
             hasMore: true,
             executionItem: null,
-            jsonMessage: null,
+            // jsonMessage: null,
             jobIndex: "",
             executionTemplate: "",
             projectName: "",
@@ -117,8 +116,8 @@ export default {
     },
     components: {
         ElInput,
-        ElButton,
-        viewJson
+        ElButton
+        // viewJson
     },
     props: {
         allData: {
@@ -169,14 +168,14 @@ export default {
             this.jobIndex = data["job-index"]
             this.datasource.jobIndex = data["job-index"]
             this.executionTemplate = data["execution-template"]
-            this.iframeUrl = `http://localhost:8080/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}`
-            this.datasource.buildFlowQuery(this)    
+            this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}`
+            // this.datasource.buildFlowQuery(this)    
         },
-        dealBuildFlowQuery(response) {
-            if (response.status === 0) {
-                this.jsonMessage = response.message
-            }
-        },
+        // dealBuildFlowQuery(response) {
+        //     if (response.status === 0) {
+        //         this.jsonMessage = response.message
+        //     }
+        // },
         viewLogs(data) {
             this.datasource.buildLogsQuery(this)
         },

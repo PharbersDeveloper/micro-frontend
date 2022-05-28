@@ -216,4 +216,30 @@ export default class PhDagDatasource {
                 })
         }
     }
+
+    queryFlow(ele) {
+        const logsUrl = `${hostName}/phreadjsonfile`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let phreadjsonfileBody = {
+            "path": ele.executionTemplate.substring(0, ele.executionTemplate.length - 5)
+        }
+        let logsOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(phreadjsonfileBody)
+        }
+        return fetch(logsUrl, logsOptions)
+    }
+
+    buildFlowQuery(ele) {
+        ele.datasource.queryFlow(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildFlowQuery(response)
+            })
+    }
 }
