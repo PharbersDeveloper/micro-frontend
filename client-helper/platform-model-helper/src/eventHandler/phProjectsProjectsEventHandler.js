@@ -4,6 +4,7 @@ import { hostName } from "../config/envConfig"
 export async function phProjectsProjectsEventHandler(e, route) {
     const params = e.detail[0].args.param
     const accessToken = route.cookies.read("access_token")
+    const tenantId = route.cookies.read("company_id")
     switch (e.detail[0].args.callback) {
         case "linkToPage":
             window.open(
@@ -20,7 +21,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
                     created: new Date(),
                     name: "project",
                     resourceType: "standalone",
-                    tenant: "zudIcG_17yj8CEUoCTHg",
+                    tenant: tenantId,
                     concrets: [
                         JSON.stringify({
                             hardware: [
@@ -54,10 +55,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
                         })
                     ]
                 }
-                let resource = await route.store
-                    .createRecord("resource", resourceBody)
-                    .save()
-                console.log(resource)
+                await route.store.createRecord("resource", resourceBody).save()
                 let uri = `${hostName}/phcreateproject/projects`
                 let body = {
                     data: {
@@ -66,15 +64,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
                             provider: "pharbers",
                             name: params.name,
                             type: "paas",
-                            owner: params.id
-                        },
-                        relationships: {
-                            resources: {
-                                data: {
-                                    type: "resources",
-                                    id: resource.id
-                                }
-                            }
+                            owner: tenantId
                         }
                     }
                 }

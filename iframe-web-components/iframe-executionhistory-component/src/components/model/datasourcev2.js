@@ -10,7 +10,7 @@ export default class PhDagDatasource {
         this.projectId = "ggjpDje0HUC2JW"
         this.runnerId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'b1cf714c0847173cea20f1a111797677aa9cdd0ac2fc6223fcf0d0078ea93667'
+        this.debugToken = '118d038fddcc70ed5bb66365e7d0335022cf4e9dfab0c0cc1fe1f3e4310c82e1'
         this.cal = { calculate: {}, selected: [] }
         this.isChanged = false
     }
@@ -215,5 +215,31 @@ export default class PhDagDatasource {
                     ele.needRefresh++
                 })
         }
+    }
+
+    queryFlow(ele) {
+        const logsUrl = `${hostName}/phreadjsonfile`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let phreadjsonfileBody = {
+            "path": ele.executionTemplate.substring(0, ele.executionTemplate.length - 5)
+        }
+        let logsOptions = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(phreadjsonfileBody)
+        }
+        return fetch(logsUrl, logsOptions)
+    }
+
+    buildFlowQuery(ele) {
+        ele.datasource.queryFlow(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                ele.dealBuildFlowQuery(response)
+            })
     }
 }

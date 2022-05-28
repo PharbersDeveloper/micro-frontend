@@ -3,6 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="show_area">
             <el-switch
+                    v-show="!datasource.isChanged"
                     v-model="isOnlyShowRunJobs"
                     @change="needRefresh++"
                     active-color="#13ce66" />
@@ -10,10 +11,9 @@
                 <div ref="chart" class="chart"></div>
             </div>
             <div v-if="datasource.isChanged">
-                <!-- 把你的Json 移动到这里 -->
+                <JsonViewer :value="jsonMessage" copyable :expand-depth=5 :expanded="true"></JsonViewer>
             </div>
         </div>
-
         <div v-if="loading">
             <div id="loadingio-spinner-double-ring-ho1zizxmctu">
                 <div class="ldio-400lpppmiue">
@@ -33,12 +33,15 @@ import PhDagDefinitions from "./policy/definitions/definitions"
 import PhStatusPolicy from "./policy/handler/dagstatushandler"
 import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy"
 import ElSwitch from "element-ui/packages/switch/index"
+import JsonViewer from 'vue-json-viewer'
+
 
 export default {
     data: () => {
         return {
             name: "dag",
             needRefresh: 0,
+            dataRefresh: 0,
             projectId: "",
             projectName: "ETL_Iterator",
             flowVersion: "",
@@ -48,11 +51,13 @@ export default {
             isFirstRendering: true,
             offsetLeft: 0,
             offsetTop: 0,
-            isOnlyShowRunJobs: true
+            isOnlyShowRunJobs: true,
+            jsonMessage: {}
         };
     },
     components: {
-        ElSwitch
+        ElSwitch,
+        JsonViewer
     },
     props: {
         datasource: {
@@ -87,23 +92,32 @@ export default {
         }
     },
     mounted() {
-        let href = window.location.href
-        console.log(href)
-        let paramArr = href.split("?")[1].split("&")
-        this.projectId = this.getUrlParam(paramArr, "projectId")
-        this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
-        this.runnerId = decodeURIComponent(this.getUrlParam(paramArr, "runnerId")).replace(" ", "+")
-        // 判断环境
-        this.datasource.projectId = this.projectId
-        this.datasource.runnerId = this.runnerId
-        this.datasource.name = this.projectName
+        this.dealUrlParam()
         this.initChart()
     },
     destroyed() {
 
     },
     methods: {
+        dealBuildFlowQuery(response) {
+            if (response.status === 0) {
+                this.jsonMessage = response.message
+            }
+        },
+        dealUrlParam() {
+            let href = window.location.href
+            console.log(href)
+            let paramArr = href.split("?")[1].split("&")
+            this.projectId = this.getUrlParam(paramArr, "projectId")
+            this.projectName = this.getUrlParam(paramArr, "projectName")
+            this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+            this.runnerId = decodeURIComponent(this.getUrlParam(paramArr, "runnerId")).replace(" ", "+")
+            this.executionTemplate = decodeURIComponent(this.getUrlParam(paramArr, "executionTemplate")).replace(" ", "+")
+            // 判断环境
+            this.datasource.projectId = this.projectId
+            this.datasource.runnerId = this.runnerId
+            this.datasource.name = this.projectName
+        },
         getUrlParam(arr, value) {
             let data = arr.find((item) => item.indexOf(value) > -1);
             return data ? decodeURI(data).split("=")[1] : undefined;
@@ -151,6 +165,9 @@ export default {
                     behavior: "instant"
                 })
             });
+        },
+        refreshData() {
+            this.initChart()
         }
     },
     watch: {
@@ -161,6 +178,15 @@ export default {
                 this.datasource.refreshRenderData(this.isOnlyShowRunJobs)
                 // this.datasource.refreshRenderData(false)
                 this.renderDag();
+            }
+        },
+        $route: {
+            immediate:true,
+            handler(){
+                this.datasource.isChanged = false
+                this.dealUrlParam()
+                this.refreshData()
+                this.datasource.buildFlowQuery(this)    
             }
         }
     }
@@ -179,7 +205,7 @@ export default {
         align-items: center;
         width: 100vw;
         // height: calc(100vh - 40px);
-        background: #f7f7f7;
+        // background: #f7f7f7;
         box-sizing: border-box;
         .run-dag-select-dialog {
             display: flex;

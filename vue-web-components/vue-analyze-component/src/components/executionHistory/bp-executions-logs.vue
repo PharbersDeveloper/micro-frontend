@@ -10,8 +10,12 @@
             </span>
         </div>
         <div class="job-flow">
-            <div v-if="!jsonMessage">暂无数据</div>
-            <viewJson v-else :JsonData="jsonMessage"></viewJson>
+            <!-- <div v-if="!jsonMessage">暂无数据</div>
+            <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
+            <iframe 
+                class="executions-iframe"  
+                :src="iframeUrl"
+                frameborder="0"></iframe>
         </div>
         <div class="job-activities-logs">
             <div class="job-activities">
@@ -52,7 +56,9 @@ export default {
             jobIndex: "",
             logsMessage: null,
             jsonMessage: null,
-            executionItem: {}
+            executionItem: {},
+            iframeUrl: "",
+            projectName: ""
         }
     },
     components: {
@@ -79,6 +85,7 @@ export default {
         this.datasource.jobIndex = this.getUrlParam(paramArr, "jobIndex")
         this.datasource.jobName = this.getUrlParam(paramArr, "jobName")
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
         this.datasource.buildExecutionQuery(this)
     },
     methods: {
@@ -108,6 +115,7 @@ export default {
                 this.executionItem = response.data[0]["attributes"]
                 this.executionTemplate = this["executionItem"]["execution-template"]
                 this.datasource.jobIndex = this["executionItem"]["job-index"]
+                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.executionItem["job-name"]}&runnerId=${this.executionItem["runner-id"]}&executionTemplate=${this.executionItem["execution-template"]}`
                 this.datasource.buildLogsQuery(this)
                 this.datasource.buildFlowQuery(this)
             }
@@ -156,10 +164,15 @@ export default {
             }
         }
         .job-flow {
-            height: 350px;
+            height: 600px;
             max-height: 350px;
             min-height: 350px;
             overflow: auto;
+            .executions-iframe {
+                width: 100vw;
+                // height: 500px;
+                height: 100%;
+            }
         }
         .job-activities-logs {
             display: flex;

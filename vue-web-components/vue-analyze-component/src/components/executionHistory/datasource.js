@@ -5,7 +5,7 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 export default class PhContainerDataSource {
     constructor(id) {
         this.id = id
-        this.debugToken = "b7604b151b7afbd62548270f6a9076573bdf8524b97cc9a4be2fae367d3f8f25"
+        this.debugToken = "118d038fddcc70ed5bb66365e7d0335022cf4e9dfab0c0cc1fe1f3e4310c82e1"
         this.currentPageToken = ""
         this.stepsCount = 20
         this.data = []
