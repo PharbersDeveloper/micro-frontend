@@ -61,8 +61,13 @@
             </div>
             <div class="execution-history-detail-panel-show" v-if="executionItem">
                 <div class="execution-history-definition-panel" >
-                    <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
-                    <viewJson v-else :JsonData="jsonMessage"></viewJson>
+                    <!-- <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
+                    <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
+                    {{iframeUrl}}
+                    <iframe 
+                        class="executions-iframe"  
+                        :src="iframeUrl"
+                        frameborder="0"></iframe>
                 </div>
                 <div class="execution-history-logs-panel" >
                     <div class="title">Activity</div>
@@ -104,7 +109,10 @@ export default {
             jsonMessage: null,
             jobIndex: "",
             executionTemplate: "",
-            projectName: ""
+            projectName: "",
+            runnerId: "",
+            iframeUrl: "",
+            jobName: ""
         }
     },
     components: {
@@ -156,9 +164,12 @@ export default {
         clickExecutionItem(data) {
             console.log('item', data)
             this.executionItem = data
+            this.runnerId = data["runner-id"]
+            this.jobName = data["job-name"]
             this.jobIndex = data["job-index"]
             this.datasource.jobIndex = data["job-index"]
             this.executionTemplate = data["execution-template"]
+            this.iframeUrl = `http://localhost:8080/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}`
             this.datasource.buildFlowQuery(this)    
         },
         dealBuildFlowQuery(response) {
@@ -325,7 +336,7 @@ export default {
                 flex-direction: column;
                 flex-grow: 1;
                 justify-content: space-between;
-				overflow: auto;
+                overflow: auto;
 
                 .execution-history-list {
                     display: flex;
@@ -374,7 +385,7 @@ export default {
 
                 .execution-history-loading {
                     text-align: center;
-					cursor: pointer;
+                    cursor: pointer;
                 }
             }
         }
@@ -403,6 +414,11 @@ export default {
                     border: 1px solid #dddddd;
                     overflow: auto;
                     height: 500px;
+                    .executions-iframe {
+                        width: 100vw;
+                        // height: 500px;
+                        height: 100%;
+                    }
                 }
                 .execution-history-logs-panel {
                     flex-grow: 1;

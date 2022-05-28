@@ -11,6 +11,7 @@
             </div>
             <div v-if="datasource.isChanged">
                 <!-- 把你的Json 移动到这里 -->
+                {{datasource.isChanged}}
             </div>
         </div>
 
@@ -39,6 +40,7 @@ export default {
         return {
             name: "dag",
             needRefresh: 0,
+            dataRefresh: 0,
             projectId: "",
             projectName: "ETL_Iterator",
             flowVersion: "",
@@ -87,23 +89,26 @@ export default {
         }
     },
     mounted() {
-        let href = window.location.href
-        console.log(href)
-        let paramArr = href.split("?")[1].split("&")
-        this.projectId = this.getUrlParam(paramArr, "projectId")
-        this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
-        this.runnerId = decodeURIComponent(this.getUrlParam(paramArr, "runnerId")).replace(" ", "+")
-        // 判断环境
-        this.datasource.projectId = this.projectId
-        this.datasource.runnerId = this.runnerId
-        this.datasource.name = this.projectName
+        this.dealUrlParam()
         this.initChart()
     },
     destroyed() {
 
     },
     methods: {
+        dealUrlParam() {
+            let href = window.location.href
+            console.log(href)
+            let paramArr = href.split("?")[1].split("&")
+            this.projectId = this.getUrlParam(paramArr, "projectId")
+            this.projectName = this.getUrlParam(paramArr, "projectName")
+            this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+            this.runnerId = decodeURIComponent(this.getUrlParam(paramArr, "runnerId")).replace(" ", "+")
+            // 判断环境
+            this.datasource.projectId = this.projectId
+            this.datasource.runnerId = this.runnerId
+            this.datasource.name = this.projectName
+        },
         getUrlParam(arr, value) {
             let data = arr.find((item) => item.indexOf(value) > -1);
             return data ? decodeURI(data).split("=")[1] : undefined;
@@ -151,6 +156,9 @@ export default {
                     behavior: "instant"
                 })
             });
+        },
+        refreshData() {
+            this.initChart()
         }
     },
     watch: {
@@ -161,6 +169,13 @@ export default {
                 this.datasource.refreshRenderData(this.isOnlyShowRunJobs)
                 // this.datasource.refreshRenderData(false)
                 this.renderDag();
+            }
+        },
+        $route: {
+            immediate:true,
+            handler(){
+                this.dealUrlParam()
+                this.refreshData()
             }
         }
     }
@@ -179,7 +194,7 @@ export default {
         align-items: center;
         width: 100vw;
         // height: calc(100vh - 40px);
-        background: #f7f7f7;
+        // background: #f7f7f7;
         box-sizing: border-box;
         .run-dag-select-dialog {
             display: flex;
