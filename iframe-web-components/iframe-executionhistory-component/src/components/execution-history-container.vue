@@ -14,7 +14,6 @@
                 <JsonViewer :value="jsonMessage" copyable :expand-depth=5 :expanded="true"></JsonViewer>
             </div>
         </div>
-
         <div v-if="loading">
             <div id="loadingio-spinner-double-ring-ho1zizxmctu">
                 <div class="ldio-400lpppmiue">
@@ -184,6 +183,7 @@ export default {
         $route: {
             immediate:true,
             handler(){
+                this.datasource.isChanged = false
                 this.dealUrlParam()
                 this.refreshData()
                 this.datasource.buildFlowQuery(this)    

@@ -168,6 +168,7 @@ export default {
             this.jobIndex = data["job-index"]
             this.datasource.jobIndex = data["job-index"]
             this.executionTemplate = data["execution-template"]
+            // https://executions.pharbers.com
             this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}`
             // this.datasource.buildFlowQuery(this)    
         },
