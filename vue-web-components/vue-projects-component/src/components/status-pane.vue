@@ -4,30 +4,36 @@
         <el-divider></el-divider>
         <div class="tenant-status-row">
             <span class="tenant-status-name">{{tenantName}}</span>
-            <div class="tenant-status-content" v-if="datasource.statusCode === 2">
-                <div>
-                    <i class="el-icon-user"></i>
-                    已启动
+            <div class="tenant-status-content">
+                <div class="status-area-content">
+                    <div class="status-area" v-if="datasource.statusCode === 2">
+                        <div class="status">
+                            <img class="success-img" :src="defs.iconsByName('resource', 'success')" alt="">
+                            <span class="success">已启动</span> 
+                        </div>
+                    </div>
+                    <div class="status-area" v-if="datasource.statusCode === 0">
+                        <div class="status">
+                            <img :src="defs.iconsByName('resource', 'stop')" alt="">
+                            <span class="stop">已停止</span>
+                        </div>
+                    </div>
+                    <div class="status-area" v-if="datasource.statusCode === 4">
+                        <div class="status">
+                            <img  class="loading-img" :src="defs.iconsByName('resource', 'loading')" alt="">
+                            <span class="loading">关闭中</span> 
+                        </div>
+                    </div>
+                    <div class="status-area" v-if="datasource.statusCode === 1">
+                        <div class="status">
+                            <img class="loading-img" :src="defs.iconsByName('resource', 'loading')" alt="">
+                            <span class="loading">启动中</span>
+                        </div>
+                    </div>
+                    <div class="time" v-if="datasource.statusCode === 1">启动将于10-15分钟内完成</div>
                 </div>
             </div>
-            <div class="tenant-status-content" v-if="datasource.statusCode === 0">
-                <div>
-                    <i class="el-icon-user"></i>
-                    已停止
-                </div>
-            </div>
-            <div class="tenant-status-content" v-if="datasource.statusCode === 4">
-                <div>
-                    <i class="el-icon-user"></i>
-                    关闭中
-                </div>
-            </div>
-            <div class="tenant-status-content" v-if="datasource.statusCode === 1">
-                <div>
-                    <i class="el-icon-user"></i>
-                    启动中
-                </div>
-            </div>
+            
             <div class="tenant-status-operator">
                 <el-switch
                         :value="datasource.switch"
@@ -44,7 +50,7 @@ import ElDivider from 'element-ui/packages/divider/index'
 import ElSwitch from 'element-ui/packages/switch/index'
 import { MessageBox, Message } from 'element-ui'
 import PhProjectDatasource from './model/datasource'
-
+import PhDagDefinitions from "./policy/definitions/definitions";
 
 export default {
     components: {
@@ -60,6 +66,12 @@ export default {
                 return new PhProjectDatasource(1)
             }
         },
+        defs: {
+            type: Object,
+            default: function () {
+                return new PhDagDefinitions("1");
+            }
+        }
     },
     computed: {
 
@@ -117,23 +129,31 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    @keyframes rotate{
+        0%{
+            transform: rotateZ(0deg);/*从0度开始*/
+        }
+        100%{
+            transform: rotateZ(360deg);/*360度结束*/
+        }
+    }
     .tenant-status {
         /*height: 200px;*/
         margin: 10px 20px;
 
-		.tenant-title {
-			font-size: 12px;
-		}
+        .tenant-title {
+            font-size: 12px;
+        }
 
         .tenant-label {
             background-color: transparent;
         }
 
-		.el-divider--horizontal {
-			margin: 5px 0 24px !important;
-		}
+        .el-divider--horizontal {
+            margin: 5px 0 24px !important;
+        }
 
-        .tenant-status-row {
+       .tenant-status-row {
             display: flex;
             flex-direction: row;
             /*align-content: space-between;*/
@@ -145,8 +165,42 @@ export default {
             .tenant-status-content {
                 flex-grow: 1;
                 display: flex;
-                flex-direction: row;
                 justify-content: space-around;
+                .status-area-content {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    .time {
+                        color: #7a8cff;
+                        font-size: 14px;
+                        margin-top: 16px;
+                    }
+                    
+                }
+                .status-area {
+                }
+                
+                .success {
+                    color: #00e158;
+                }
+                .loading {
+                    color: #7a8cff;
+                }
+                .stop {
+                    color: #696969;
+                }
+                .status {
+                    display: flex;
+                    align-items: center;
+                    .loading-img {
+                        display: block;
+                        animation: rotate 1s linear infinite;
+                    }
+                    img {
+                        margin-right: 5px;
+                    }
+                }
             }
 
             .tenant-status-operator {
