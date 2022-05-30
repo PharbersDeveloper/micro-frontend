@@ -22,14 +22,15 @@
     </div>
     <div v-else-if="stage === 2">
         <bp-excel-handler
-				@importCurrentDataToDS="importCurrentDataToDS"
-				:dsName="dataset"
-				:dsId="dsId"
+                @importCurrentDataToDS="importCurrentDataToDS"
+                :dsName="dataset"
+                :dsId="dsId"
                 :active-pane="allData.uploadType"
                 :file-path="s3path"
                 :file-list="fileList"
-				:dataID="dataID"
-				:destinationType="destinationType"
+                :dataID="dataID"
+                :destinationType="destinationType"
+                :dsSchema="dsSchema"
         />
     </div>
 
@@ -59,7 +60,8 @@ export default {
             destinationType: "",
             // stages
             stage: 1,
-            dsId: ""
+            dsId: "",
+            dsSchema: []
         }
     },
     props: {
@@ -116,13 +118,13 @@ export default {
             this.dataset = data.dataset
             this.destinationType = data.type
             let uploadParam = true
+            const url = `${hostName}/phdydatasource/query`
+            const accessToken = this.getCookie("access_token")
             if (this.destinationType === "selectDataset") {
                 //选择已有数据集，判断version重复
-        		const tenantId = this.getCookie("company_id") || 	"zudIcG_17yj8CEUoCTHg"
-                const url = `${hostName}/phdydatasource/query`
-                const accessToken = this.getCookie("access_token")
                 const dsData = this.allData.datasetArr.filter(it => it.name === this.dataset)
                 this.dsId = dsData[0].id
+                this.dsSchema = JSON.parse(dsData[0].schema)
                 let body = {
                     table: "version",
                     conditions: {
@@ -147,7 +149,7 @@ export default {
                 if (versionResult.data && versionResult.data.length > 0) {
                     uploadParam = false
                     alert("数据ID重复，请重新输入！")
-                    throw new Error("数据集已存在")
+                    return false
                 }
             } else {
                 // 新建数据集判断数据集是否已经存在

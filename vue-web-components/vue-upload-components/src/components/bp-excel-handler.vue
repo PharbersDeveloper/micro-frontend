@@ -97,6 +97,7 @@ export default {
         dataID: String,
         destinationType: String,
         dsId: String,
+        dsSchema: Array,
         dataProxy: {
             type: Object,
             default: function() {
@@ -122,20 +123,18 @@ export default {
         },
         createDataSetIndex() {
             /**
-             * 1. 将数据分块上传到s3上，这个我来搞定，剩下的就交给你了
+             * 1. 将数据分块上传到s3上
              * 2. 将添加数据的索引
              */
             const uuid = this.guid()
-            // TODO: @wodelu 
-            // 与后端沟通，company_id暂时用pharbers代替
-            // const company_id = this.dataProxy.getCookie("company_id") || this.dataProxy.company_id
-
+            const schemaArray = this.dataProxy.getLocalDatasourceSchema()
+            if (this.destinationType === "selectDataset" && JSON.stringify(this.dsSchema) !== JSON.stringify(schemaArray)) {
+                alert("schema不匹配！")
+                return false
+            }
             // to表示上传dataset的路径
             const to = `pharbers/${this.dataProxy.projectId}/${this.dsName}/version=${this.dataID}`
             this.dataProxy.uploadCurrentData(to)
-            // if (this.destinationType === "createDataset") {
-            // 添加index的过程调用新的dag逻辑
-            // this.dataProxy.importCurrentDataToDS(uuid, this.dsName)
             const event = new Event("event")
             event.args = {
                 callback: "importCurrentDataToDS",
@@ -149,11 +148,10 @@ export default {
                     uuid: uuid,
                     dsId: this.dsId,
                     dataID: this.dataID,
-                    schemaArray: this.dataProxy.getLocalDatasourceSchema()
+                    schemaArray: schemaArray
                 }
             }
             this.$emit('importCurrentDataToDS', event)
-            // }
         },
         guid() {
             return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
