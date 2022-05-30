@@ -181,7 +181,11 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						cat: "createScenario",
 						desc: "create scenario",
 						comments: "create scenario",
-						message: "createScenario",
+						message: JSON.stringify({
+							optionName: "create_scenario",
+							cat: "scenario",
+							actionName: targetscenario.scenarioName
+						}),
 						required: true
 					},
 					notification: {

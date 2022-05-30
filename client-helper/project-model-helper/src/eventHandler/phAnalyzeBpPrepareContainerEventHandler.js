@@ -82,7 +82,14 @@ export async function phAnalyzeBpPrepareContainerEventHandler(e, route) {
 						cat: "createSteps",
 						desc: "create prepare steps",
 						comments: "something need to say",
-						message: "create_steps",
+						message: JSON.stringify({
+							optionName: "prepare_edit",
+							cat: "intermediate",
+							runtime: "prepare",
+							actionName: scriptsParams.jobShowName
+								? scriptsParams.jobShowName
+								: scriptsParams.jobName
+						}),
 						required: true
 					},
 					script: {
