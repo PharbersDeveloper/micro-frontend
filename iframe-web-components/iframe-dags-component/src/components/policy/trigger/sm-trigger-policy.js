@@ -11,16 +11,34 @@ export default class PhDagTriggerPolicy {
         let sel = confirm("确认停止当前dag？")
         if(sel) {
             const stopUri = `${hostName}/phstatemachinestop`
-            const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
             const runnerId = this.parent.runId
             const body = {
-                "runnerId": runnerId
+                common: {
+                    traceId: runnerId,
+                    runnerId: runnerId,
+                    projectId: this.parent.projectId,
+                    projectName: this.parent.projectName,
+                    owner: this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082",
+                    showName: this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境",
+                    tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+                },
+                action: {
+                    cat: "stopDag",
+                    desc: "stopDag",
+                    comments: "something need to say",
+                    message: JSON.stringify({
+                        optionName: "stop_dag",
+                        cat: "intermediate",
+                        actionName: this.parent.datasource.cal.calculate.name + ` (${runnerId})`
+                    }),
+                    required: true
+                }
             }
 
             let options = {
                 method: "POST",
                 headers: {
-                    "Authorization": accessToken,
+                    "Authorization": this.parent.getCookie("access_token") || this.parent.datasource.debugToken,
                     "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
                     "accept": "application/json"
                 },
@@ -85,22 +103,31 @@ export default class PhDagTriggerPolicy {
         this.parent.showProgress = false
         const recursive = this.parent.selectRecursive === "recursive"
         const url = `${hostName}/statemachinetrigger`
-        const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
-        const tenantId = this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let confData = data.args.param.jsonValue
         confData.ownerId = this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
         confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境"
         confData.jobDesc = this.parent.registerJobEventName
-
         const runnerId = this.genRunnerId(this.parent.projectName)
         const body = {
             common: {
+                traceId: runnerId,
                 runnerId: runnerId,
                 projectId: this.parent.projectId,
                 projectName: this.parent.projectName,
                 owner: confData.ownerId,
                 showName: confData.showName,
-                tenantId: tenantId
+                tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+            },
+            action: {
+                cat: "runDag",
+                desc: "runDag",
+                comments: "something need to say",
+                message: JSON.stringify({
+                    optionName: "run_dag",
+                    cat: "intermediate",
+                    actionName: this.parent.datasource.cal.calculate.name + ` (${runnerId})`
+                }),
+                required: true
             },
             calculate: {
                 type: "dataset",
@@ -113,7 +140,7 @@ export default class PhDagTriggerPolicy {
         let options = {
             method: "POST",
             headers: {
-                "Authorization": accessToken,
+                "Authorization": this.parent.getCookie("access_token") || this.parent.datasource.debugToken,
                 "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
                 "accept": "application/json"
             },
@@ -125,23 +152,17 @@ export default class PhDagTriggerPolicy {
             this.parent.loading = false
             return false
         }
-        // const dag_run_id = results.data.dag_run_id.split("_")
-        // const time = new Date(dag_run_id.pop()).getTime()
-        // const runnerId = dag_run_id.join("_") + "_" + time
-        // console.info(runnerId)
         const tmpMsg = {
             message: {
                 notification: {
                     eventName: this.parent.registerJobEventName,
-                    projectId: this.parent.projectId, //results.data.dag_id, // results.data.
+                    projectId: this.parent.projectId,
                     id: runnerId
 
                 },
                 executionStatus: {
-                    // runnerId: results.data.dag_run_id,
                     id: runnerId,
-                    // projectId: dag_run_id.pop(),
-                    eventName: "executionStatus" //+ runnerId
+                    eventName: "executionStatus"
                 }
             }
         }

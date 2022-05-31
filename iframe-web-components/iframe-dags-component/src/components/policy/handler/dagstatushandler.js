@@ -15,20 +15,6 @@ export default class PhDagHandler {
         }
     }
 
-    // handleForwardMessage(event) {
-    //     const that = this
-    //     if (event.data.message) {
-    //         if (event.data.message.cmd === "render_dag") {
-    //             console.log("iframe接收的", event.data.message.cmd)
-    //             this.runDagCallback(event.data.message)
-    //         }
-    //         if(event.data.message.cmd === "finish_dag") {
-    //             console.log("iframe接收的dag finish", event.data.message.cmd)
-    //             this.runDagFinishCallback(event.data.message)
-    //         }
-    //     }
-    // }
-
     forwardMessageToParent(message) {
         window.parent.postMessage(message, '*')
     }
@@ -89,16 +75,16 @@ export default class PhDagHandler {
         let status = payload["status"]
         const state = this.statesArr[status] || false
         if (!state) return false
-        if (status === "running") {
-            //停止按钮
-            let cnotification = JSON.parse(payload.message).cnotification
-            that.runId = cnotification.runId
-            that.isRunning = true
-        } else if(status == "success" || status == "failed") {
+        if(status == "success" || status == "failed") {
             // 更新进度条,去掉停止按钮
             that.progressOver = true
             that.retryButtonShow = true
             that.isRunning = false
+        } else {
+            //停止按钮
+            let cnotification = JSON.parse(payload.message).cnotification
+            that.runId = cnotification.runId
+            that.isRunning = true
         }
     }
 

@@ -263,17 +263,9 @@ export default {
             const that = this;
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
-                    console.log(
-                        "iframe接收的",
-                        event.data.message.cmd
-                    );
                     that.eventPolicy.runDagCallback(event.data.message);
                 }
                 if (event.data.message.cmd === "finish_dag") {
-                    console.log(
-                        "iframe接收的dag finish",
-                        event.data.message.cmd
-                    );
                     that.eventPolicy.runDagFinishCallback(event.data.message);
                 }
             }
