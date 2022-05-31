@@ -67,21 +67,21 @@ export default class PhExcelPreviewProxy {
 
     getLocalDatasourceSchema() {
         const schemas = this.files[this.currentFile].getSchema()
-		console.log(schemas)
-		let schemaArray = []
-		schemas.schema.forEach(item => {
-			schemaArray.push({
-				src: item,
-				des: item,
-				type: "String"
-			})
-		})
-		schemaArray.push({
+        console.log(schemas)
+        let schemaArray = []
+        schemas.schema.forEach(item => {
+            schemaArray.push({
+                src: item,
+                des: item,
+                type: "String"
+            })
+        })
+        schemaArray.push({
             src: "version",
             des: "version",
             type: "String"
         })
-		return schemaArray
+        return schemaArray
     }
 
     prepareS3Datasource() {

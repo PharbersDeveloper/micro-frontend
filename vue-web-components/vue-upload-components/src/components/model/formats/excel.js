@@ -78,7 +78,7 @@ export default class PhExcelFormat {
         s.proxy.readyCallback(this.id)
     }
 
-	// 读取所有sheet
+    // 读取所有sheet
     __headerRefresh(tmp) {
         const colsLength = Math.max(...tmp.data.map(x => x.length))
         const header = new Array(colsLength).fill("col") // this.data[tmp.headerLine]
