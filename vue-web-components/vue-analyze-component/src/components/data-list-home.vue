@@ -221,7 +221,7 @@ export default {
             "conditions": {
                 "projectId": ["=", projectId]
             },
-            "limit": 10,
+            "limit": 20,
             "start_key": ""
         }
         let acoptions = {
@@ -321,7 +321,7 @@ export default {
                 "conditions": {
                     "projectId": ["=", this.allData.projectId]
                 },
-                "limit": 10,
+                "limit": 20,
                 "start_key": value
             }
             let acoptions = {
