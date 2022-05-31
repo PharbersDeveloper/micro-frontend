@@ -35,7 +35,11 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 						cat: "createOrUpdateScenario",
 						desc: "create or update scenario",
 						comments: "something need to say",
-						message: "createOrUpdateScenario",
+						message: JSON.stringify({
+							optionName: "create_scenario",
+							cat: "scenario",
+							actionName: params.scenarioName
+						}),
 						required: true
 					},
 					notification: {

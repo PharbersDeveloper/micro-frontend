@@ -136,7 +136,11 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						cat: "deleteResource",
 						desc: "delete dataset",
 						comments: "something need to say",
-						message: "delete_dataset",
+						message: JSON.stringify({
+							optionName: "delete_dataset",
+							cat: "upload",
+							actionName: msgArr[0].name
+						}),
 						required: true
 					},
 					datasets: msgArr,
@@ -193,7 +197,9 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 						desc: "create catalog",
 						comments: "create catalog",
 						message: JSON.stringify({
-							actionName: ""
+							optionName: "create_catalog",
+							cat: "catalog",
+							actionName: params.dsName
 						}),
 						required: true
 					},

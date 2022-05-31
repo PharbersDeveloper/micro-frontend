@@ -121,7 +121,7 @@ export default class PhDagDatasource {
             .then((response) => {
                 const jobs = response["data"].map(x => x.attributes["job-show-name"])
                 if (jobs.length > 0) {
-                    that.runJobName = jobs[jobs.length - 1]
+                    that.runJobName = jobs[0]
                     ele.needRefresh++
                 } else {
                     that.isChanged = true

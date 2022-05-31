@@ -191,7 +191,11 @@ export default {
                 "create_script": "创建了脚本",
                 "delete_script": "删除了脚本",
                 "delete_dataset": "删除了dataset",
-                "project_file_to_DS": "导入了数据"
+                "project_file_to_DS": "导入了数据",
+                "create_scenario": "创建了scenario",
+                "create_catalog": "创建了caatalog",
+                "run_dag": "运行了dag",
+                "stop_dag": "停止了dag"
             },
             actions: [],
             actionsShow: [],
@@ -219,7 +223,7 @@ export default {
             "conditions": {
                 "projectId": ["=", projectId]
             },
-            "limit": 10,
+            "limit": 20,
             "start_key": ""
         }
         let acoptions = {
@@ -319,7 +323,7 @@ export default {
                 "conditions": {
                     "projectId": ["=", this.allData.projectId]
                 },
-                "limit": 10,
+                "limit": 20,
                 "start_key": value
             }
             let acoptions = {
@@ -341,15 +345,16 @@ export default {
             let msg = null
             if(this.isJSON(data["message"])) {
             	msg = JSON.parse(data["message"])
+                return this.optionsMap[msg.optionName]
             } else {
                 return "进行了操作"
             }
             // let msg = data["message"]
-            if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
-                return "编辑了脚本"
-            } else {
-                return this.optionsMap[cat]
-            }
+            // if(cat === "intermediate" && msg.jobCat === "prepare_edit") {
+            //     return "编辑了脚本"
+            // } else {
+            //     return this.optionsMap[msg.actionName]
+            // }
         },
         isJSON(str) {
             if (typeof str == 'string') {
@@ -369,21 +374,12 @@ export default {
         },
         //操作对象的名称
         showActionName(data) {
-            let msg = data
-            if (msg && msg !== "") {
-                return msg
+            if(this.isJSON(data)) { 
+            	let msg = JSON.parse(data)
+                return msg["actionName"]
             } else {
-                return "undefined"
+                return ""
             }
-            // if (Array.isArray(msg)) {
-            //     return msg[0].actionName
-            // } else if (msg.actionName) {
-            //     return msg.actionName
-            // } else if (!msg.actionName) {
-            //     return msg.projectName
-            // } else {
-            //     return "undefined"
-            // }
         },
         //操作对象的icon
         showActionIcon(data) {

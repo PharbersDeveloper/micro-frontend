@@ -184,7 +184,12 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						cat: "createScript",
 						desc: "create script",
 						comments: "something need to say",
-						message: "create_script",
+						message: JSON.stringify({
+							optionName: "create_script",
+							cat: "intermediate",
+							runtime: "python3",
+							actionName: params.jobName
+						}),
 						required: true
 					},
 					datasets: datasets,
@@ -301,7 +306,12 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 						cat: "deleteResource",
 						desc: "delete script",
 						comments: "something need to say",
-						message: "delete_script",
+						message: JSON.stringify({
+							optionName: "delete_script",
+							cat: "intermediate",
+							runtime: "python3",
+							actionName: msgArr[0].actionName
+						}),
 						required: true
 					},
 					datasets: [],
