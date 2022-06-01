@@ -14,6 +14,7 @@
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
+								:datasets="datasetsDisplay"
                                 :scenario-id="datasource.scenario.id" />
             </div>
         </div>
@@ -36,7 +37,8 @@ export default {
         return {
             activeName: "Setting",
             triggerDisplay: [],
-            stepDisplay: []
+            stepDisplay: [],
+			datasetsDisplay: []
         }
     },
     props: {
@@ -89,7 +91,10 @@ export default {
         },
         "datasource.steps": function() {
             this.stepAdapter()
-        }
+        },
+		"datasource.datasets": function() {
+			this.datasetsAdapter()
+		}
     },
     methods: {
         getUrlParam( value) {
@@ -101,6 +106,9 @@ export default {
         activeChange(n) {
             this.activeName = n
         },
+		datasetsAdapter() {
+			this.datasetsDisplay = this.datasource.datasets.map(x => x)
+		},
         stepAdapter() {
             this.stepDisplay = this.datasource.steps.map((x) => {
                 const result = {}

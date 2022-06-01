@@ -19,7 +19,8 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 				const url = `${hostName}/phscenariostrigger`
 				const accessToken = route.cookies.read("access_token")
 				const tenantId = route.cookies.read("company_id")
-
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
 				let body = {
 					common: {
 						traceId: traceId,
@@ -56,35 +57,6 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 					},
 					triggers: params.triggerDisplay,
 					steps: params.stepDisplay,
-					// triggers: [
-					// 	{
-					// 		active: true,
-					// 		detail: {
-					// 			timezone: "中国北京",
-					// 			start: "2022-05-27 16:10:14",
-					// 			period: "minute",
-					// 			value: 1
-					// 		},
-					// 		index: 0,
-					// 		mode: "timer",
-					// 		id: guid()
-					// 	}
-					// ],
-					// steps: [
-					// 	{
-					// 		confData: {},
-					// 		detail: {
-					// 			type: "dataset",
-					// 			recursive: false,
-					// 			"ignore-error": false,
-					// 			name: "1235"
-					// 		},
-					// 		index: 0,
-					// 		mode: "dataset",
-					// 		name: "alfred",
-					// 		id: guid()
-					// 	}
-					// ],
 					result: {}
 				}
 
@@ -98,12 +70,42 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 					},
 					body: JSON.stringify(body)
 				}
-				await fetch(url, options)
+				let updateScenarioResult = await fetch(url, options).then(
+					(res) => res.json()
+				)
+				console.log(updateScenarioResult)
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: updateScenarioResult.trace_id,
+					eventName: "updateScenario",
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: updateScenarioCallback
+				})
+				route.scenarioListUri = `scenarios?projectId=${params.projectId}&projectName=${params.projectName}`
 			}
 			break
 
 		default:
 			console.log("other click event!")
+	}
+
+	function updateScenarioCallback(param, payload) {
+		console.log(payload)
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "success") {
+			alert("更新scenario成功！")
+			route.router.transitionTo("shell", route.scenarioListUri)
+		} else if (status == "failed") {
+			alert("更新失败")
+			console.log(error)
+		}
+		route.loadingService.loading.style.display = "none"
 	}
 
 	function guid() {
