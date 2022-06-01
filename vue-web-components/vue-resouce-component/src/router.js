@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import ResourceContainer from '../src/components/ph-resouce-container'
+import ResourceContainer from '../src/components/container'
 
 Vue.use(Router)
 
