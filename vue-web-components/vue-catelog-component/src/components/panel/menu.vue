@@ -7,7 +7,6 @@
                 <img :src="img1" alt="">
             </div>
             <img :src="img2" alt="">
-            <!-- <div id="icon_notification" class="icon_notification-initial"></div> -->
         </div>
         <bpText class="body-tertiary-inverse">{{allData.company_name_show}}</bpText>
     </div>
@@ -99,7 +98,7 @@ export default {
                 },
                 {
                     type: "item",
-                    text: "新数据资产",
+                    text: "数据资产",
                     src: this.defs.iconsByName('menuIcons', 'assets'),
                     content: this,
                     click_event: function (data) {
@@ -117,27 +116,6 @@ export default {
                         this.content.$emit('event', event)
                     }
                 },
-                // {
-                //     type: "item",
-                //     text: "数据资产",
-                //     src: `${staticFilePath}` + "/icon_my-data.svg",
-                //     content: this,
-                //     click_event: function (data) {
-                //         this.content.activeIndex = data
-                //         this.content.menuType = this.type
-
-                //         const event = new Event("event")
-                //         event.args = {
-                //             callback: "linkToPage",
-                //             element: this.content,
-                //             param: {
-                //                 name: this.text,
-                //                 index: 1
-                //             }
-                //         }
-                //         this.content.$emit('event', event)
-                //     }
-                // },
                 {
                     type: "item",
                     text: "工作平台",
