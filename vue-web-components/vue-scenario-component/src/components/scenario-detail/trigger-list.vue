@@ -189,6 +189,7 @@ export default {
 		},
         addNewTrigger() {
             const result = {}
+			const idx = this.triggers.length > 0 ? 1 + Math.max(...this.triggers.map(x => x.index)) : 0
             result["start"] = moment().format('YYYY-MM-DD HH:m:s')
             result["period"] = "minute"
             result["value"] = 1
@@ -197,9 +198,9 @@ export default {
             result["active"] = true
             result["scenarioId"] = this.scenarioId
             result["id"] = this.genId()
-            result["index"] = 1 + Math.max(...this.triggers.map(x => x.index))
+            result["index"] = idx
             result["resourceArn"] = ""
-            result["traceId"] = "123456"
+            result["traceId"] = this.genId()
             result["edited"] = true
             result["deleted"] = false
             this.triggers.push(result)

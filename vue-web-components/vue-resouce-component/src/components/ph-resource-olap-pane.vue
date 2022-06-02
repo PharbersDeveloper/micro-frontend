@@ -11,31 +11,31 @@
             </template>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-user"></i>依赖平台
+                    <i class="fa fa-amazon blue"></i>依赖平台
                 </template>
                 {{olap.platform}}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-user"></i>使用工具
+                    <i class="fa fa-wrench blue"></i>使用工具
                 </template>
                 {{olap.ctype}}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-user"></i>承担角色
+                    <i class="fa fa-vcard blue"></i>承担角色
                 </template>
                 {{olap.role}}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-user"></i>使用版本
+                    <i class="fa fa-list blue"></i>使用版本
                 </template>
                 {{olap.applicationVersion}}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-user"></i>依赖版本
+                    <i class="fa fa-list blue"></i>依赖版本
                 </template>
                 <el-tag v-for="(item, index) in olap.applicationLabels" :key="index" class="engine-detail-tags">{{item}}</el-tag>
             </el-descriptions-item>
@@ -99,5 +99,10 @@ export default {
         .engine-detail-tags {
             margin-right: 20px;
         }
+
+		.blue {
+			color: #409EFF;
+			margin-right: 4px;
+		}
     }
 </style>

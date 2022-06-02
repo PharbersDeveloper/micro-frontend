@@ -6,7 +6,7 @@ export default class PhScenarioTriggerPolicy {
         this.id = id
         this.projectId = projectId
         this.scenarioName = scenarioName
-        this.debugToken = "118d038fddcc70ed5bb66365e7d0335022cf4e9dfab0c0cc1fe1f3e4310c82e1"
+        this.debugToken = "e7462a20745975a04d47a1e6c10513472b1ef29d4cc528f9056d68e74286d020"
     }
 
     getCookie(name) {
@@ -63,7 +63,8 @@ export default class PhScenarioTriggerPolicy {
 				id: trigger.id,
 				index: trigger.index,
 				active: trigger.active,
-				detail: JSON.stringify(detail),
+				// detail: JSON.stringify(detail),
+				detail: detail,
 				mode: trigger.mode,
 				traceId: trigger.traceId
 			})
@@ -146,7 +147,8 @@ export default class PhScenarioTriggerPolicy {
                     id: trigger.id,
                     index: trigger.index,
                     active: trigger.active,
-                    detail: JSON.stringify(detail),
+                    // detail: JSON.stringify(detail),
+					detail: detail,
                     mode: trigger.mode,
                     traceId: trigger.traceId
                 },

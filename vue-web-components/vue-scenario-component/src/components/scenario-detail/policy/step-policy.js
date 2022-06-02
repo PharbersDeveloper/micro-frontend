@@ -42,12 +42,15 @@ export default class PhScenarioStepPolicy {
                 "name": step.ds
             }
 			arr.push({
+				"confData": {},
 				scenarioId: step.scenarioId,
 				index: step.index,
-				detail: JSON.stringify(detail),
+				// detail: JSON.stringify(detail),
+				detail: detail,
 				traceId: step.traceId,
 				mode: step.mode,
-				name: step.name
+				name: step.name,
+				id: step.id
 			})
 		})
 		return arr

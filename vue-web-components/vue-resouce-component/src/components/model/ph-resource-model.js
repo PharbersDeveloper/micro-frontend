@@ -10,7 +10,7 @@ export default class PhResourceModel {
     constructor(id, tenantId='zudIcG_17yj8CEUoCTHg') {
         this.id = id
         this.tenantId = tenantId
-        this.debugToken = "b5f0866e5c0dc419be494464bc66dc6274a8f250b6d7e1d3c9785d8b2c816f1a"
+        this.debugToken = "c14c48799300292a82001fe6ce6582afdd33650eed34d14e58c3a033d6e1eac8"
         this.store = new JsonApiDataStore()
         this.data = []
 
