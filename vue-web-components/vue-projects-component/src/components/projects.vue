@@ -342,8 +342,10 @@ export default {
                 display: flex;
                 flex-direction: column;
                 padding: 27px 20px 8px 20px;
-                height: 507px;
+				max-height: calc(100vh - 200px);
+				overflow: auto;
                 min-height: 0;
+				
                 .project-list-header {
                     display: flex;
                     justify-content: space-between;
