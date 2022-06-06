@@ -16,8 +16,8 @@ import { airflowIframeRouteModel } from "./routeModel/airflowIframeRouteModel"
 import { flowIframeEventHandler } from "./eventHandler/flowIframeEventHandler"
 import { codeditorIframeEventHandler } from "./eventHandler/codeditorIframeEventHandler"
 import { airflowIframeEventHandler } from "./eventHandler/airflowIframeEventHandler"
-import { phAnalyzeBpPrepareContainerEventHandler } from "./eventHandler/phAnalyzeBpPrepareContainerEventHandler"
-import { phAnalyzeBpPrepareContainerRouteModel } from "./routeModel/phAnalyzeBpPrepareContainerRouteModel"
+import { phPrepareContainerEventHandler } from "./eventHandler/phPrepareContainerEventHandler"
+import { phPrepareContainerRouteModel } from "./routeModel/phPrepareContainerRouteModel"
 import { phAnalyzeExcelColumnCleanRouteModel } from "./routeModel/phAnalyzeExcelColumnCleanRouteModel"
 import { phAnalyzeExcelColumnCleanEventHandler } from "./eventHandler/phAnalyzeExcelColumnCleanEventHandler"
 import { phAnalyzeDatasetMaxEventHandler } from "./eventHandler/phAnalyzeDatasetMaxEventHandler"
@@ -38,6 +38,8 @@ import { phUploadBpFileUploadContainerRouteModel } from "./routeModel/phUploadBp
 import { phUploadBpFileUploadContainerEventHandler } from "./eventHandler/phUploadBpFileUploadContainerEventHandler"
 import { phScenarioScenarioDetailContainerRouteModel } from "./routeModel/phScenarioScenarioDetailContainerRouteModel"
 import { phScenarioScenarioDetailContainerEventHandler } from "./eventHandler/phScenarioScenarioDetailContainerEventHandler"
+import { phSyncContainerRouteModel } from "./routeModel/phSyncContainerRouteModel"
+import { phSyncContainerEventHandler } from "./eventHandler/phSyncContainerEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -58,8 +60,8 @@ export {
 	flowIframeEventHandler,
 	codeditorIframeEventHandler,
 	airflowIframeEventHandler,
-	phAnalyzeBpPrepareContainerEventHandler,
-	phAnalyzeBpPrepareContainerRouteModel,
+	phPrepareContainerEventHandler,
+	phPrepareContainerRouteModel,
 	phAnalyzeExcelColumnCleanRouteModel,
 	phAnalyzeExcelColumnCleanEventHandler,
 	phAnalyzeDatasetMaxEventHandler,
@@ -79,5 +81,7 @@ export {
 	phUploadBpFileUploadContainerEventHandler,
 	phUploadBpFileUploadContainerRouteModel,
 	phScenarioScenarioDetailContainerEventHandler,
-	phScenarioScenarioDetailContainerRouteModel
+	phScenarioScenarioDetailContainerRouteModel,
+	phSyncContainerRouteModel,
+	phSyncContainerEventHandler
 }

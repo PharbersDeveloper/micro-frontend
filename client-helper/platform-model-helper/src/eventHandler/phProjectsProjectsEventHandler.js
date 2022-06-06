@@ -7,6 +7,10 @@ export async function phProjectsProjectsEventHandler(e, route) {
     const tenantId = route.cookies.read("company_id")
     const dealResourceStartEventName = "dealResourceStart"
     const dealResourceStopEventName = "dealResourceStart"
+    const cookiesOptions = {
+        domain: ".pharbers.com",
+        path: "/"
+    }
     switch (e.detail[0].args.callback) {
         case "linkToPage":
             window.open(
@@ -51,25 +55,29 @@ export async function phProjectsProjectsEventHandler(e, route) {
             }
             break
         case "dealResourceStart":
+			route.element = e.detail[0].args.element
+            route.cookies.write("tenantTraceId", params.traceId, cookiesOptions)
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
                 runnerId: "",
                 id: params.traceId,
                 eventName: dealResourceStartEventName,
-                projectId: "",
+                projectId: "projectid",
                 ownerId: route.cookies.read("account_id"),
                 callBack: dealResourceStartCallback
             })
             break
         case "dealResourceStop":
+			route.element = e.detail[0].args.element
+            route.cookies.write("tenantTraceId", params.traceId, cookiesOptions)
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
                 runnerId: "",
                 id: params.traceId,
                 eventName: dealResourceStopEventName,
-                projectId: "",
+                projectId: "projectid",
                 ownerId: route.cookies.read("account_id"),
                 callBack: dealResourceStopCallback
             })
@@ -79,11 +87,15 @@ export async function phProjectsProjectsEventHandler(e, route) {
     }
     function dealResourceStartCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
+        console.log(message, status)
+		console.log(route.element)
+		route.element.datasource.statusCode = 1
         const {
             cnotification: { error }
         } = JSON.parse(message)
 
         if (status == "succeed") {
+			route.element.datasource.statusCode = 2
             alert("启动资源成功")
         } else if (status == "failed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
@@ -97,11 +109,15 @@ export async function phProjectsProjectsEventHandler(e, route) {
     }
     function dealResourceStopCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
+        console.log(message, status)
+		console.log(route.element)
+		route.element.datasource.statusCode = 4
         const {
             cnotification: { error }
         } = JSON.parse(message)
 
         if (status == "succeed") {
+			route.element.datasource.statusCode = 0
             alert("关闭资源成功")
         } else if (status == "failed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
