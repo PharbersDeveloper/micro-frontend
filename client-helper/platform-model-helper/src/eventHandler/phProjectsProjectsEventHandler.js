@@ -57,7 +57,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
                 runnerId: "",
                 id: params.traceId,
                 eventName: dealResourceStartEventName,
-                projectId: "resourcestart",
+                projectId: "projectid",
                 ownerId: route.cookies.read("account_id"),
                 callBack: dealResourceStartCallback
             })
@@ -69,7 +69,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
                 runnerId: "",
                 id: params.traceId,
                 eventName: dealResourceStopEventName,
-                projectId: "",
+                projectId: "projectid",
                 ownerId: route.cookies.read("account_id"),
                 callBack: dealResourceStopCallback
             })

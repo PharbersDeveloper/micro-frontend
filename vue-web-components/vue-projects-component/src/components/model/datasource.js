@@ -55,7 +55,7 @@ export default class PhProjectDatasource {
     }
 
 	buildStartQuery(tenantId) {
-        const url = `${hostName}/phtenantstoptrigger`
+        const url = `${hostName}/phtenantboottrigger`
         const accessToken = this.getCookie("access_token")
 		const traceId = this.guid()
 		console.log(tenantId)
