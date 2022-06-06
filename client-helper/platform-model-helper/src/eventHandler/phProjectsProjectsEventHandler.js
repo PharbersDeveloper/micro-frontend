@@ -5,6 +5,8 @@ export async function phProjectsProjectsEventHandler(e, route) {
     const params = e.detail[0].args.param
     const accessToken = route.cookies.read("access_token")
     const tenantId = route.cookies.read("company_id")
+    const dealResourceStartEventName = "dealResourceStart"
+    const dealResourceStopEventName = "dealResourceStart"
     switch (e.detail[0].args.callback) {
         case "linkToPage":
             window.open(
@@ -12,51 +14,8 @@ export async function phProjectsProjectsEventHandler(e, route) {
             )
             break
         case "cerateProject":
-            /**
-             * 1. 创建resource
-             * 2. 创建project，将rsource作为关联关系传入
-             */
             if (params) {
-                let resourceBody = {
-                    created: new Date(),
-                    name: "project",
-                    resourceType: "standalone",
-                    tenant: tenantId,
-                    concrets: [
-                        JSON.stringify({
-                            hardware: [
-                                {
-                                    type: "ec2",
-                                    count: 1,
-                                    attribute: {
-                                        vcores: 4,
-                                        memeory: 32
-                                    }
-                                }
-                            ],
-                            applications: [
-                                {
-                                    name: "airflow",
-                                    uri: "/airflow"
-                                },
-                                {
-                                    name: "file-upload",
-                                    uri: "/upload"
-                                },
-                                {
-                                    name: "jupyter",
-                                    uri: "/jupyter"
-                                },
-                                {
-                                    name: "clickhouse",
-                                    uri: "/ch"
-                                }
-                            ]
-                        })
-                    ]
-                }
-                await route.store.createRecord("resource", resourceBody).save()
-                let uri = `${hostName}/phcreateproject/projects`
+                let uri = `${hostName}/phplatform/projects`
                 let body = {
                     data: {
                         type: "projects",
@@ -91,7 +50,67 @@ export async function phProjectsProjectsEventHandler(e, route) {
                 route.loadingService.loading.style.display = "none"
             }
             break
+        case "dealResourceStart":
+            route.noticeService.defineAction({
+                type: "iot",
+                remoteResource: "notification",
+                runnerId: "",
+                id: params.traceId,
+                eventName: dealResourceStartEventName,
+                projectId: "",
+                ownerId: route.cookies.read("account_id"),
+                callBack: dealResourceStartCallback
+            })
+            break
+        case "dealResourceStop":
+            route.noticeService.defineAction({
+                type: "iot",
+                remoteResource: "notification",
+                runnerId: "",
+                id: params.traceId,
+                eventName: dealResourceStopEventName,
+                projectId: "",
+                ownerId: route.cookies.read("account_id"),
+                callBack: dealResourceStopCallback
+            })
+            break
         default:
             console.log("submit event to parent")
+    }
+    function dealResourceStartCallback(param, payload) {
+        const { message, status } = JSON.parse(payload)
+        const {
+            cnotification: { error }
+        } = JSON.parse(message)
+
+        if (status == "succeed") {
+            alert("启动资源成功")
+        } else if (status == "failed") {
+            let errorObj = error !== "" ? JSON.parse(error) : ""
+            let msg =
+                errorObj["message"]["zh"] !== ""
+                    ? errorObj["message"]["zh"]
+                    : "启动资源失败，请重新操作！"
+            alert(msg)
+        }
+        route.loadingService.loading.style.display = "none"
+    }
+    function dealResourceStopCallback(param, payload) {
+        const { message, status } = JSON.parse(payload)
+        const {
+            cnotification: { error }
+        } = JSON.parse(message)
+
+        if (status == "succeed") {
+            alert("关闭资源成功")
+        } else if (status == "failed") {
+            let errorObj = error !== "" ? JSON.parse(error) : ""
+            let msg =
+                errorObj["message"]["zh"] !== ""
+                    ? errorObj["message"]["zh"]
+                    : "关闭资源失败，请重新操作！"
+            alert(msg)
+        }
+        route.loadingService.loading.style.display = "none"
     }
 }
