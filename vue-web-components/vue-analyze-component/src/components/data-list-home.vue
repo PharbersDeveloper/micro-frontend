@@ -260,8 +260,7 @@ export default {
                 element: this,
                 param: {
                     projectName: this.allData.projectDetail.name,
-                    projectId: this.allData.projectDetail.id,
-                    resourceId: this.allData.resourceId
+                    projectId: this.allData.projectDetail.id
                 }
             }
             this.$emit('event', event)

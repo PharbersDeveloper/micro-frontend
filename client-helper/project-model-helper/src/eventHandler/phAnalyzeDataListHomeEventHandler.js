@@ -4,6 +4,7 @@ import { hostName } from "../config/envConfig"
 export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	const accessToken = route.cookies.read("access_token")
+	const tenantId = route.cookies.read("company_id")
 	let uri = "/projects"
 	let argsCallback = e.detail[0].args.callback
 	switch (argsCallback) {
@@ -63,20 +64,44 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 		case "deleteProject":
 			if (params) {
 				/**
-				 * 1.判断是否正在启动
-				 * 2.删除resource
+				 * 1.调删除接口，不等返回消息
 				 * 3.删除project
 				 */
-				let delResourceUri = `${hostName}/phcreateproject/resources/${params.resourceId}`
-				await fetch(delResourceUri, {
-					method: "delete",
+				let deleteUrl = `${hostName}/phprojectdeletiontrigger`
+				let opt = {
+					common: {
+						traceId: guid(),
+						tenantId: tenantId,
+						projectId: params.projectId,
+						projectName: params.projectName,
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					},
+					action: {
+						cat: "tenantStop",
+						desc: "terminate project",
+						comments: "something need to say",
+						message: "something need to say",
+						required: true
+					},
+					notification: {
+						required: true
+					}
+				}
+				let options = {
+					method: "POST",
 					headers: {
 						Authorization: accessToken,
-						"Content-Type": "application/vnd.api+json",
-						Accept: "application/vnd.api+json"
-					}
-				})
-				let uri = `${hostName}/phcreateproject/projects/${params.projectId}`
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(opt)
+				}
+				await fetch(deleteUrl, options)
+				let uri = `${hostName}/phplatform/projects/${params.projectId}`
 				let results = await fetch(uri, {
 					method: "delete",
 					headers: {
@@ -96,5 +121,14 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 			break
 		default:
 			console.log("submit event to parent")
+	}
+
+	function guid() {
+		return "xxxxx-xxxx-4xxx-yxxx-xxxxx".replace(/[xy]/g, function (c) {
+			var r = (Math.random() * 16) | 0,
+				v = c === "x" ? r : (r & 0x3) | 0x8
+
+			return v.toString(16)
+		})
 	}
 }
