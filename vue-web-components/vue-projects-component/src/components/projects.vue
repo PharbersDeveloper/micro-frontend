@@ -11,6 +11,7 @@
 				v-if="allData.tenantId" 
 				:tenant-name="allData.company_name_show" 
 				:tenant-id="allData.tenantId"
+				@dealResourceStop="dealResourceStop"
 				@dealResourceStart="dealResourceStart"></ph-status-pane>
             <template >
                 <div class="project-list-container">

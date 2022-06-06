@@ -94,7 +94,7 @@ export default class PhProjectDatasource {
 	buildStopQuery(tenantId) {
         const url = `${hostName}/phtenantstoptrigger`
         const accessToken = this.getCookie("access_token")
-		const traceId = this.guid()
+		const traceId = this.getCookie("tenantTraceId")
 		console.log(tenantId)
         let body = {
             // "tenantId": tenantId

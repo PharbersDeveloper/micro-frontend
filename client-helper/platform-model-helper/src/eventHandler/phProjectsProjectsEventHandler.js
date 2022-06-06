@@ -55,8 +55,9 @@ export async function phProjectsProjectsEventHandler(e, route) {
             }
             break
         case "dealResourceStart":
-			route.element = e.detail[0].args.element
+            route.element = e.detail[0].args.element
             route.cookies.write("tenantTraceId", params.traceId, cookiesOptions)
+            route.element.datasource.statusCode = 1
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
@@ -69,8 +70,8 @@ export async function phProjectsProjectsEventHandler(e, route) {
             })
             break
         case "dealResourceStop":
-			route.element = e.detail[0].args.element
-            route.cookies.write("tenantTraceId", params.traceId, cookiesOptions)
+            route.element = e.detail[0].args.element
+            route.element.datasource.statusCode = 4
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
@@ -88,14 +89,14 @@ export async function phProjectsProjectsEventHandler(e, route) {
     function dealResourceStartCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
         console.log(message, status)
-		console.log(route.element)
-		route.element.datasource.statusCode = 1
+        console.log(route.element)
+        route.element.datasource.statusCode = 1
         const {
             cnotification: { error }
         } = JSON.parse(message)
 
         if (status == "succeed") {
-			route.element.datasource.statusCode = 2
+            route.element.datasource.statusCode = 2
             alert("启动资源成功")
         } else if (status == "failed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
@@ -110,14 +111,14 @@ export async function phProjectsProjectsEventHandler(e, route) {
     function dealResourceStopCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
         console.log(message, status)
-		console.log(route.element)
-		route.element.datasource.statusCode = 4
+        console.log(route.element)
+        route.element.datasource.statusCode = 4
         const {
             cnotification: { error }
         } = JSON.parse(message)
 
         if (status == "succeed") {
-			route.element.datasource.statusCode = 0
+            route.element.datasource.statusCode = 0
             alert("关闭资源成功")
         } else if (status == "failed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
