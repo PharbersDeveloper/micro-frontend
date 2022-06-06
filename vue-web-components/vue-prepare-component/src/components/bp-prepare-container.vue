@@ -94,22 +94,21 @@
     </div>
 </template>
 <script>
-import { staticFilePath, hostName } from '../../config/envConfig'
+import { hostName } from '../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
 import PhStepDataSource from './model/stepDatasource'
 import PhStepSchema from './model/stepSchema'
 import PhStepModel from './model/stepsModel'
-import bpExcel from '../../../../vue-excelv2-component/src/components/ph-excel-container'
+import bpExcel from '../../../vue-excelv2-component/src/components/ph-excel-container'
 import bpOperatorCard from './bp-card-dispatch'
-import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import OpFactories from "./processors/factory"
 import { PhInitialFOVStepDefs, step2SaveObj } from "./steps/commands/filter-on-value/defs"
 import { PhInitialFONRStepDefs } from "./steps/commands/filter-on-numerical-range/defs"
 import { PhInitialRVStepDefs } from "./steps/commands/replace-value/defs"
 import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/defs"
-import PhDagDefinitions from "../policy/definitions/definitions";
+import PhDagDefinitions from "./policy/definitions/definitions";
 import ElDialog from 'element-ui/packages/dialog/src/component'
 
 
@@ -138,7 +137,6 @@ export default {
         ElButton,
         bpExcel,
         bpOperatorCard,
-        ElCheckboxGroup,
         ElCheckbox,
         ElInput,
         OpFactories,
@@ -231,13 +229,12 @@ export default {
             this.$refs.opFactories.visibleSync = true
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return null
         },
-        
+
         /** 拖拽 **/
 
         // 进行拖拽的元素
@@ -267,7 +264,8 @@ export default {
             //在dragenter中针对放置目标来设置
             e.dataTransfer.dropEffect = 'move'
         },
-        handleDragEnd(e,item){
+        handleDragEnd(){
+        // handleDragEnd(e, item){
             let that = this
             //更改index流程
             this.steps.data.forEach((item, index) => {
@@ -279,8 +277,9 @@ export default {
             this.dragging = null
         },
         /** 拖拽 **/
-        
-        handleCheckAllChange(val) {
+
+        // handleCheckAllChange(val) {
+        handleCheckAllChange() {
             // this.checkedCities = val ? cityOptions : [];
             this.isIndeterminate = false;
         },
@@ -342,7 +341,7 @@ export default {
             //     body: JSON.stringify(body)
             // }
             // await fetch(url, options)
-            
+
             // 保存脚本
             const event = new Event("event")
             event.args = {

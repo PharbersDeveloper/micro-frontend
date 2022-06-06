@@ -23,7 +23,7 @@ export default class PhFilterOnValueCmd {
     delCol(i) {
         this.columns.splice(i, 1)
     }
-    
+
     // 增加列
     addSelCol() {
         this.columns.push("")
@@ -43,9 +43,10 @@ export default class PhFilterOnValueCmd {
     }
 
     // 生成描述
-    stepDesc(ele) {
-        const stepNameDesc = ele.stepNameDesc
-        let desc = 
+    // stepDesc(ele) {
+    stepDesc() {
+        // const stepNameDesc = ele.stepNameDesc
+        let desc =
             "填充 将列 " +
             this.columns.join(",")+
             " 中的空值替换为 " +

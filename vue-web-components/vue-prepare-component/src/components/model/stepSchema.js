@@ -1,4 +1,4 @@
-import {hostName} from "../../../config/envConfig"
+import { hostName } from "../../config/envConfig"
 
 export default class PhStepSchema {
     constructor(id, parent) {
@@ -49,11 +49,10 @@ export default class PhStepSchema {
     }
 
     getCookie(name) {
-        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return (arr[2]);
-        else
-            return null;
+        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+        arr = document.cookie.match(reg)
+        if (arr) return (arr[2])
+        else return null
     }
 
     buildSchemaQuery() {
@@ -87,7 +86,7 @@ export default class PhStepSchema {
                 .then((response) => {
                     const s = []
                     const dt = []
-					
+
                     for (let idx = 0; idx < response.length; ++idx) {
                         s.push(response[idx].name)
                         dt.push(response[idx].type)
@@ -97,7 +96,7 @@ export default class PhStepSchema {
             return that.schema
         }
         else {
-            return that.schema
+            return this.schema
         }
     }
 }

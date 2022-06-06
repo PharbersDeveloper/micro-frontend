@@ -1,5 +1,5 @@
 
-import { staticFilePath, hostName } from "../../../config/envConfig"
+import { hostName } from "../../config/envConfig"
 
 export default class PhStepDataSource {
     constructor(id, adapter, url) {

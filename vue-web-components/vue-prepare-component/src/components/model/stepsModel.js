@@ -1,9 +1,9 @@
 
-import { staticFilePath, hostName } from "../../../config/envConfig"
+import { hostName } from "../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
 export default class PhStepsDyModel {
-    constructor(id, ele) {
+    constructor(id) {
         this.id = id
         this.flowVersion = "developer"
         this.projectId = this.getUrlParam("projectId")
@@ -30,11 +30,10 @@ export default class PhStepsDyModel {
     }
 
     getCookie(name) {
-        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return (arr[2]);
-        else
-            return null;
+        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+        arr = document.cookie.match(reg)
+        if (arr) return (arr[2])
+        else return null
     }
 
     buildQuery() {

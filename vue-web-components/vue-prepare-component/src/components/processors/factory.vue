@@ -35,7 +35,7 @@
                         -->
                         <!-- <mavon-editor class="markdown"
                             :value="opt_condition_desc"
-                            :subfield = "false"    
+                            :subfield = "false"
                             :defaultOpen = "prop.defaultOpen"
                             :toolbarsFlag = "prop.toolbarsFlag"
                             :editable="prop.editable"
@@ -49,12 +49,12 @@
 </template>
 
 <script>
-import { staticFilePath, hostName } from '../../../config/envConfig'
+import { staticFilePath } from '../../config/envConfig'
 import ElDrawer from 'element-ui/packages/drawer/index'
 import { PhProcessorsDefs } from "./factory-defs"
 import FilterOnValueDesc from "../md/filterOnValue.md"
 // import { mavonEditor } from "mavon-editor";
-import { marked } from 'marked'
+import { marked } from 'marked'
 
 export default {
     data() {
@@ -89,7 +89,7 @@ export default {
             default: () => {
                 return {
                     subfield: false,// 单双栏模式
-                    defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
+                    defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
                     editable: false,
                     toolbarsFlag: false,
                     scrollStyle: true
@@ -103,7 +103,7 @@ export default {
         // VueMarkdown
     },
     computed: {
-        
+
     },
     mounted() {
 
@@ -123,7 +123,8 @@ export default {
         }
     },
     watch: {
-        visible(n, o) {
+        // visible(n, o) {
+        visible(n) {
             this.visibleSync = n
         }
     }

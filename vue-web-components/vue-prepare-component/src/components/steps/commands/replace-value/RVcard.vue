@@ -11,7 +11,7 @@
                     </div>
                     <div class="card_header_del">
                         <div class="num"></div>
-                        <img 
+                        <img
                             :src="icons.del_icon"
                             @click="delCardItem"
                             class="del_icon" />
@@ -44,7 +44,7 @@
                         <el-input class="input" placeholder="请输入目标值" v-model="datasource.command.mapping[0].from" />
                     </div>
                 </div>
-                
+
                 <div class="mb_1"  v-if="datasource">
                     <div class="range_item">
                         <span>替换值</span>
@@ -65,11 +65,9 @@
     </div>
 </template>
 <script>
-import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElInput from 'element-ui/packages/input/index'
-import { staticFilePath, hostName } from '../../../../../config/envConfig'
-import ElButton from 'element-ui/packages/button/index'
+import { staticFilePath } from '../../../../config/envConfig'
 import { PhFilterStepDefs } from "./defs"
 import PhFilterStep from "./step"
 
@@ -108,9 +106,7 @@ export default {
         }
     },
     components: {
-        ElCheckboxGroup,
         ElCheckbox,
-        ElButton,
         ElInput
     },
     mounted() {
@@ -231,7 +227,7 @@ export default {
                 }
 				.range_item {
 					display: flex;
-    				flex-direction: column;
+                    flex-direction: column;
 				}
                 .title_space {
                     display: flex;

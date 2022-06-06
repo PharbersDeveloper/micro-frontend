@@ -12,7 +12,7 @@
                     </div>
                     <div class="card_header_del">
                         <div class="num"></div>
-                        <img 
+                        <img
                             :src="icons.del_icon"
                             @click="delCardItem"
                             class="del_icon" />
@@ -112,10 +112,9 @@
     </div>
 </template>
 <script>
-import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElInput from 'element-ui/packages/input/index'
-import { staticFilePath, hostName } from '../../../../../config/envConfig'
+import { staticFilePath } from '../../../../config/envConfig'
 import ElButton from 'element-ui/packages/button/index'
 import { PhFilterStepDefs } from "./defs"
 import PhFilterStep from "./step"
@@ -155,7 +154,6 @@ export default {
         }
     },
     components: {
-        ElCheckboxGroup,
         ElCheckbox,
         ElButton,
         ElInput
