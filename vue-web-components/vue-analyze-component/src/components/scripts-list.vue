@@ -57,6 +57,10 @@
                                     <img :src="defs.iconsByName('prepare')" alt="">
                                     <p  class="">Prepare</p>
                                 </div>
+                                <div class="list last" @click="selectScripts('sync')">
+                                    <img :src="defs.iconsByName('prepare')" alt="">
+                                    <p  class="">Sync</p>
+                                </div>
                             </div>
                         </div>
 

@@ -37,17 +37,56 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					params.projectId
 			} else if (
 				params.name === "codeditor" &&
-				params.recipt.runtime !== "prepare"
+				params.recipt.runtime === "sync"
 			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "prepare_edit"
+				}
+				// let operatorParameters = recipt.operatorParameters
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "editPrepare",
+							attributes: {
+								jsondata: {
+									scripts: scripts,
+									operatorParameters: {}
+								}
+							}
+						}
+					]
+				})
 				uri =
-					"codeditor?projectName=" +
+					"sync?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId +
 					"&jobName=" +
-					params.recipt.jobName +
-					"&jobPath=" +
-					params.recipt.jobPath
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName
+				// +
+				// "&operatorParameters=" +
+				// escape(recipt.operatorParameters) +
+				// "&message=" +
+				// encodeURI(JSON.stringify(scripts))
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "prepare"
@@ -100,13 +139,26 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				// escape(recipt.operatorParameters) +
 				// "&message=" +
 				// encodeURI(JSON.stringify(scripts))
-			} else if (params.name == "flow") {
+			} else if (
+				params.name === "codeditor" &&
+				params.recipt.runtime !== "prepare"
+			) {
+				uri =
+					"codeditor?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					params.recipt.jobName +
+					"&jobPath=" +
+					params.recipt.jobPath
+			} else if (params.name === "flow") {
 				uri =
 					"flow?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "airflow") {
+			} else if (params.name === "airflow") {
 				uri =
 					"airflow?projectName=" +
 					params.projectName +

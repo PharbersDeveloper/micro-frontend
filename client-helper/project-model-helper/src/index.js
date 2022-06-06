@@ -38,6 +38,8 @@ import { phUploadBpFileUploadContainerRouteModel } from "./routeModel/phUploadBp
 import { phUploadBpFileUploadContainerEventHandler } from "./eventHandler/phUploadBpFileUploadContainerEventHandler"
 import { phScenarioScenarioDetailContainerRouteModel } from "./routeModel/phScenarioScenarioDetailContainerRouteModel"
 import { phScenarioScenarioDetailContainerEventHandler } from "./eventHandler/phScenarioScenarioDetailContainerEventHandler"
+import { phSyncContainerRouteModel } from "./routeModel/phSyncContainerRouteModel"
+import { phSyncContainerEventHandler } from "./eventHandler/phSyncContainerEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -79,5 +81,7 @@ export {
 	phUploadBpFileUploadContainerEventHandler,
 	phUploadBpFileUploadContainerRouteModel,
 	phScenarioScenarioDetailContainerEventHandler,
-	phScenarioScenarioDetailContainerRouteModel
+	phScenarioScenarioDetailContainerRouteModel,
+	phSyncContainerRouteModel,
+	phSyncContainerEventHandler
 }

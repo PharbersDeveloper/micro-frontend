@@ -212,7 +212,7 @@ export default {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        getUrlParam( value) {
+        getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
             let data = paramArr.find(item => item.indexOf(value) > -1)
