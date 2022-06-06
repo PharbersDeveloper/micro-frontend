@@ -7,7 +7,11 @@
             </span>
         </div>
         <div class="data-main-container">
-            <ph-status-pane v-if="allData.tenantId" :tenant-name="allData.company_name_show" :tenant-id="allData.tenantId"></ph-status-pane>
+            <ph-status-pane 
+				v-if="allData.tenantId" 
+				:tenant-name="allData.company_name_show" 
+				:tenant-id="allData.tenantId"
+				@dealResourceStart="dealResourceStart"></ph-status-pane>
             <template >
                 <div class="project-list-container">
                     <div class="project-list-header">
@@ -33,7 +37,6 @@
                                 </div>
                             </div>
                             <bp-text class="subtitle right-text">{{formatDateStandard(file.created,0)}}</bp-text>
-                            <!-- <bp-text class="subtitle right-text">{{file.created}}</bp-text> -->
                         </div>
                     </template>
                     <div v-if="!toggle" class="project-card">
@@ -46,7 +49,6 @@
                                 <bp-text class="subtitle right-text">
 									{{formatDateStandard(file.created,0)}}
 								</bp-text>
-                                <!-- <bp-text class="subtitle right-text">{{file.created}}</bp-text> -->
                             </div>
                         </div>
                     </div>
@@ -90,7 +92,8 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath } from '../config/envConfig'
 import PhStatusPane from './status-pane'
-
+import PhProjectDatasource from './model/datasource'
+import { Message } from 'element-ui'
 
 export default {
     components: {
@@ -145,23 +148,21 @@ export default {
             default: function () {
                 return new PhDagDefinitions("1");
             }
-        }
-    },
-    computed: {
-        haveData() {
-            if (!this.allData.count) {
-                return false
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhProjectDatasource(1)
             }
-            // if(this.allData.curTab == 1) {
-            //     this.myDataTab = 1
-            // }
-            return true
         }
-    },
-    mounted() {
-
     },
     methods: {
+		dealResourceStart(data) {
+			this.$emit('event', data)
+		},
+		dealResourceStop(data) {
+			this.$emit('event', data)
+		},
         on_clickCreateConfirm() {
             if (!this.projectNameValue || this.projectNameValue === "") {
                 alert("请输入项目名称！")
@@ -203,6 +204,10 @@ export default {
             this.toggle = true
         },
         linkToPage(params) {
+			if(this.datasource.status !== "started") {
+				Message.error("请先启动项目资源！", { duration: 3000} )
+				return false
+			}
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",

@@ -36,6 +36,7 @@
             
             <div class="tenant-status-operator">
                 <el-switch
+						:disabled="datasource.statusCode === 1 || datasource.statusCode === 4"
                         :value="datasource.switch"
                         @change="switchChanged"
                         active-color="#13ce66">
@@ -63,7 +64,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhProjectDatasource(1)
+                return new PhProjectDatasource(1, this)
             }
         },
         defs: {
@@ -77,6 +78,36 @@ export default {
 
     },
     methods: {
+		dealResourceStart(res) {
+			if (res.status === "failed") {
+				Message.error("启动资源失败，请重新操作！！", { duration: 0, showClose: true} )
+			} else {
+				const event = new Event("event")
+				event.args = {
+					callback: "dealResourceStart",
+					element: this,
+					param: {
+						traceId: res.trace_id
+					}
+				}
+				this.$emit('dealResourceStart', event)
+			}
+		},
+		dealResourceStop(res) {
+			if (res.status === "failed") {
+				Message.error("关闭资源失败，请重新操作！！", { duration: 0, showClose: true} )
+			} else {
+				const event = new Event("event")
+				event.args = {
+					callback: "dealResourceStop",
+					element: this,
+					param: {
+						traceId: res.trace_id
+					}
+				}
+				this.$emit('dealResourceStop', event)
+			}
+		},
         switchChanged() {
             if (this.datasource.switch) {
                 MessageBox.confirm('关闭当前资源会影响其他用户使用！ 是否继续?', '警告', {
@@ -87,10 +118,8 @@ export default {
                     // 调用启动前，强制更新一下状态，以免竞争机制
                     this.datasource.refreshStatus(this.tenantId)
                     if (this.datasource.switch) {
-                        // TODO: 调用关闭资源接口
-                        console.log("wodelu")
-                        MessageBox.alert("现在不支持自动删除，请联系管理员")
-
+                        // MessageBox.alert("现在不支持自动删除，请联系管理员")
+						this.datasource.resourceStop(this.tenantId)
                     } else {
                         // 通过新的 trace ID 持续访问状态
                         Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
@@ -108,9 +137,7 @@ export default {
                     // 调用启动前，强制更新一下状态，以免竞争机制
                     this.datasource.refreshStatus(this.tenantId)
                     if (!this.datasource.switch) {
-                        // TODO: 调用启动资源接口
-                        console.log("wodelu")
-                        MessageBox.alert("现在不支持自动创建，请联系管理员")
+						this.datasource.resourceStart(this.tenantId)
 
                     } else {
                         // 通过新的 trace ID 持续访问状态
