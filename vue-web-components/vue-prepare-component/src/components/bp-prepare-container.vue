@@ -72,7 +72,7 @@
             </div>
             <div class="prepare_area_right">
                 <div class="main_container">
-                    <bp-excel ref="excel" viewHeight="calc(100vh - 300px)"
+                    <bp-excel v-if="steps.isReady" ref="excel" viewHeight="calc(100vh - 300px)"
                         :isNeedPopmenu="false"
 						@sample="sample"
                         v-on:countIsReady="totalCountIsReady"
@@ -169,7 +169,7 @@ export default {
         steps: {
             type: Object,
             default: function() {
-                return new PhStepModel('1', this)
+                return new PhStepModel('1', this.datasource, this.schema, this)
             }
         },
         defs: {

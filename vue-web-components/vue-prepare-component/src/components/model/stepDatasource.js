@@ -1,5 +1,6 @@
 
 import { hostName } from "../../config/envConfig"
+import { FunctionChains } from "./stepFuncChains"
 
 export default class PhStepDataSource {
     constructor(id, adapter, url) {
@@ -10,13 +11,14 @@ export default class PhStepDataSource {
         this.name = this.getUrlParam("inputName")
         this.filter = {}
         this.batch_size = 100
+        this.funcChains = (new FunctionChains()).push("filter-eq", "__match", "1")
         // this.schema = []
         // this.cols = this.schema
         if (!url)
             this.url= `${hostName}/phdadatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "8eade362b221e1f7c4da38e70cd432771c4d392791b5d9822656634c50b4a0d9"
+        this.debugToken = "77c1f97198f5fdbd218e0b8adf48bbfaabb2c261733a992aa07267e2fed5a1ea"
     }
 
     getUrlParam( value) {
@@ -45,13 +47,14 @@ export default class PhStepDataSource {
             if (ele.datasource.projectId.length === 0)
                 sql_str = sql_str + selectParam + " FROM " + ele.datasource.name
             else
-                sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+                // sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+                sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name +'`'
 
             // filter
             let firstFilter = Object.keys(ele.datasource.filter)[0]
             let filterParam = " WHERE "
             for (const key in ele.datasource.filter) {
-                if(key != firstFilter) {
+                if(key !== firstFilter) {
                     filterParam = " AND "
                 }
                 sql_str = sql_str + filterParam + ele.datasource.filter[key]
@@ -106,7 +109,8 @@ export default class PhStepDataSource {
             if (ele.datasource.projectId.length === 0)
                 sql_str = sql_str + " FROM `"  + ele.datasource.name + "`"
             else
-                sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
+                // sql_str = sql_str + " FROM `"  + ele.datasource.projectId + '_' + ele.datasource.name + "`"
+                sql_str = sql_str + " FROM `"  + ele.datasource.name + "`"
 
             // filter
             let firstFilter = Object.keys(ele.datasource.filter)[0]
@@ -151,7 +155,8 @@ export default class PhStepDataSource {
             if (ele.datasource.projectId.length === 0)
                 sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
             else
-                sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+                // sql_str = sql_str + " FROM `" + ele.datasource.projectId + '_'  + ele.datasource.name + "`"
+                sql_str = sql_str + " FROM `" + ele.datasource.name + "`"
 
             sql_str = sql_str + " ORDER BY " + col
 
@@ -255,13 +260,14 @@ export default class PhStepDataSource {
             if (ele.datasource.projectId.length === 0)
                 sql_str = sql_str + selectParam + " FROM " + ele.datasource.name
             else
-                sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+                // sql_str = sql_str + selectParam + " FROM `" + ele.datasource.projectId + '_' +ele.datasource.name +'`'
+                sql_str = sql_str + selectParam + " FROM `" + ele.datasource.name +'`'
 
             // filter
             let firstFilter = Object.keys(ele.datasource.filter)[0]
             let filterParam = " WHERE "
             for (const key in ele.datasource.filter) {
-                if(key != firstFilter) {
+                if(key !== firstFilter) {
                     filterParam = " AND "
                 }
                 sql_str = sql_str + filterParam + ele.datasource.filter[key]
@@ -272,7 +278,7 @@ export default class PhStepDataSource {
                 sql_str = sql_str + " ORDER BY `"
                 let lastSort = Object.keys(ele.datasource.sort)[Object.keys(ele.datasource.sort).length - 1]
                 for (const key in ele.datasource.sort) {
-                    if(lastSort == key) {
+                    if (lastSort === key) {
                         sql_str = sql_str + key +'`'
                     } else {
                         sql_str = sql_str + key +'`,`'
