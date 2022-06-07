@@ -1,30 +1,54 @@
-export const PhFilterStepDefs = {
+export const PhPreFilterDefs = {
     actions: [
         {
-            desc: "只保留匹配行",
-            cal: "KEEP_ROW"
-        },
-        {
-            desc: "去除匹配行",
-            cal: "REMOVE_ROW"
-        },
-        {
-            desc: "清除匹配单元格",
-            cal: "CLEAR_CELL"
-        },
-        {
-            desc: "清除不匹配单元格",
-            cal: "DONTCLEAR_CELL"
-        }
-    ],
-    relations: [
-        {
-            desc: "交集（AND）",
+            desc: "符合左右条件的列",
             cal: "AND"
         },
         {
-            desc: "并集（OR）",
+            desc: "符合至少一个条件",
             cal: "OR"
+        },
+        {
+            desc: "公式",
+            cal: "FORMULA"
+        },
+        {
+            desc: "SQL表达式",
+            cal: "SQL"
+        }
+    ],
+    includes: [
+        {
+            desc: "包含",
+            cal: "CONTAINS"
+        },
+        {
+            desc: "等于",
+            cal: "EQUALS"
+        },
+        {
+            desc: "等于（不区分大小写）",
+            cal: "INSENSITIVE-EQUALS"
+        },
+        {
+            desc: "不等于",
+            cal: "NOT-EQUALS"
+        },
+        {
+            desc: "与某列相同",
+            cal: "COL-EQUALS"
+        },
+        {
+            desc: "与某列不相同",
+            cal: "COL-EQUALS"
+        },
+        {
+            desc: "有值",
+            cal: "EXISTS"
+        },
+        {
+            desc: "无值",
+            cal: "NOT-EXISTS"
         }
     ],
     pattern: [
@@ -40,24 +64,7 @@ export const PhFilterStepDefs = {
             desc: "正则表达式",
             cal: "REGX"
         }
-    ],
-    stepNameDesc: {
-        actionsDesc: {
-            "KEEP_ROW": "保留",
-            "REMOVE_ROW": "去除",
-            "CLEAR_CELL": "清除",
-            "DONTCLEAR_CELL": "清楚"
-        },
-        relationsDesc: {
-            "AND": "和",
-            "OR": "或"
-        },
-        patternDesc: {
-            "FULL_STRING": "等于",
-            "SUBSTRING": "包含",
-            "REGX": "符合"
-        }
-    }
+    ]
 }
 
 const PhInitialFOVExpressions = {
@@ -90,7 +97,7 @@ export const PhInitialFOVStepDefs = {
     id: "",
     type: "steps"
 }
- 
+
 export function step2SaveObj(step) {
     return {
         pjName: step['pj-name'],

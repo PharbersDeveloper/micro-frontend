@@ -12,23 +12,58 @@
             </div>
         </div>
         <div class="topn_area">
-
+            <div class="topn_left">
+                <el-steps direction="vertical" :active="active" align-center>
+                    <el-step >
+                        <template slot="title">
+                            <el-button type="text" @click="active = 1">Pre-Filter</el-button>
+                        </template>
+                    </el-step>
+                    <el-step >
+                        <template slot="title">
+                            <el-button type="text" @click="active = 2">Computed Columns</el-button>
+                        </template>
+                    </el-step>
+                    <el-step >
+                        <template slot="title">
+                            <el-button type="text" @click="active = 3">Top N</el-button>
+                        </template>
+                    </el-step>
+                    <el-step >
+                        <template slot="title">
+                            <el-button type="text" @click="active = 4">Retrieved Columns</el-button>
+                        </template>
+                    </el-step>
+                    <el-step >
+                        <template slot="title">
+                            <el-button type="text" @click="active = 5">Outputs</el-button>
+                        </template>
+                    </el-step>
+                </el-steps>
+            </div>
+            <div class="topn_right">
+                <pre-filter></pre-filter>
+            </div>
         </div>
     </div>
 </template>
 <script>
 import PhDagDefinitions from './policy/definitions/definitions'
-// import ElButton from 'element-ui/packages/button/index'
-// import ElInput from 'element-ui/packages/input/index'
+import ElSteps from 'element-ui/packages/steps/index'
+import ElStep from 'element-ui/packages/step/index'
+import ElButton from 'element-ui/packages/button/index'
+import PreFilter from './steps/commands/pre-filter/view'
 
 export default {
     components: {
-        // ElButton,
-        // ElInput,
+        ElSteps,
+        ElStep,
+        ElButton,
+        PreFilter
     },
     data() {
         return {
-
+            active: 1
         }
     },
     props: {
@@ -134,19 +169,15 @@ export default {
             flex-direction: row;
 
             .topn_left {
-                flex-grow: 1;
                 display: flex;
                 flex-direction: row;
+                margin-left: 80px;
                 justify-content: space-around;
             }
 
-            .topn_divider {
-                border: 1px solid grey;
-            }
-
             .topn_right {
-                flex-grow: 1;
                 display: flex;
+                flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
 
