@@ -11,17 +11,16 @@ export async function phResourcesContainerEventHandler(e, route) {
         domain: ".pharbers.com",
         path: "/"
     }
+    const element = e.detail[0].args.element
     switch (e.detail[0].args.callback) {
         case "linkToPage":
             break
         case "dealResourceStart":
-            route.element = e.detail[0].args.element
             route.cookies.write(
                 "jupyterTraceId",
                 params.traceId,
                 cookiesOptions
             )
-            route.element.datasource.statusCode = 1
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
@@ -35,8 +34,6 @@ export async function phResourcesContainerEventHandler(e, route) {
             break
         case "dealResourceStop":
             route.cookies.clear("jupyterTraceId", cookiesOptions)
-            route.element = e.detail[0].args.element
-            route.element.datasource.statusCode = 4
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
@@ -53,15 +50,15 @@ export async function phResourcesContainerEventHandler(e, route) {
     }
     function dealResourceStartCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
-        route.element.datasource.statusCode = 1
         const {
             cnotification: { error }
         } = JSON.parse(message)
 
         if (status == "started") {
-            route.element.datasource.statusCode = 2
+            element.codeeditors[0]["switch"] = true
+            element.codeeditors[0]["status"] = 2
             alert("启动资源成功")
-        } else if (status == "stopped") {
+        } else if (status == "startfailed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""
@@ -73,15 +70,15 @@ export async function phResourcesContainerEventHandler(e, route) {
     }
     function dealResourceStopCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
-        route.element.datasource.statusCode = 4
         const {
             cnotification: { error }
         } = JSON.parse(message)
 
-        if (status == "started") {
-            route.element.datasource.statusCode = 0
+        if (status == "stopped") {
+            element.codeeditors[0]["switch"] = false
+            element.codeeditors[0]["status"] = 0
             alert("关闭资源成功")
-        } else if (status == "stopped") {
+        } else if (status == "stopfailed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""

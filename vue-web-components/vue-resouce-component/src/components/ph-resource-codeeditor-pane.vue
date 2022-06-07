@@ -45,7 +45,6 @@ export default {
     },
     data() {
         return {
-            isCodeOn: false
         }
     },
     props: {
@@ -81,8 +80,7 @@ export default {
                     //     // 通过新的 trace ID 持续访问状态
                     //     Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
                     // }
-					console.log(row)
-                    this.datasource.resourceStart(this.tenantId, row)
+                    this.datasource.resourceStop(this.tenantId, row)
                 }).catch(() => {
                 })
             }

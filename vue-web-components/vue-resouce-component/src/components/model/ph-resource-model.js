@@ -115,7 +115,7 @@ export default class PhResourceModel {
 	buildStopQuery(tenantId, row) {
         const url = `${hostName}/phjupyterstoptrigger`
         const accessToken = this.getCookie("access_token")
-		const traceId = this.getCookie("tenantTraceId")
+		const traceId = this.getCookie("jupyterTraceId")
 		console.log(tenantId)
         let body = {
             // "tenantId": tenantId
