@@ -9,10 +9,13 @@
                 <el-table-column prop="ownership" label="所绑定项目" width="120"></el-table-column>
                 <el-table-column prop="metadata.version" label="版本" width="300"></el-table-column>
                 <el-table-column label="Operations" width="120">
-                    <el-switch 
-						v-model="isCodeOn" 
-                        @change="switchChanged"
-						active-color="#13ce66"></el-switch>
+                    <template slot-scope="scope">
+                        <el-switch 
+                            v-model="scope.row.status" 
+                            @change="switchChanged(scope.row)"
+                            active-color="#13ce66">
+                        </el-switch>
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -23,6 +26,7 @@ import ElSwitch from 'element-ui/packages/switch/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import { MessageBox, Message } from 'element-ui'
+import PhResourceModel from "./model/ph-resource-model"
 
 export default {
     components: {
@@ -36,7 +40,14 @@ export default {
         }
     },
     props: {
-        codeeditors: Array
+        codeeditors: Array,
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhResourceModel(1, this.tenantId)
+            }
+        },
+        tenantId: String
     },
     mounted() {
     },
@@ -44,47 +55,79 @@ export default {
 
     },
     methods: {
-		switchChanged() {
-            if (this.datasource.switch) {
+		switchChanged(data) {
+            if (!data.status) {
                 MessageBox.confirm('关闭当前资源会影响其他用户使用！ 是否继续?', '警告', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
                     // 调用启动前，强制更新一下状态，以免竞争机制
-                    this.datasource.refreshStatus(this.tenantId)
-                    if (this.datasource.switch) {
-                        // MessageBox.alert("现在不支持自动删除，请联系管理员")
-						this.datasource.resourceStop(this.tenantId)
-                    } else {
-                        // 通过新的 trace ID 持续访问状态
-                        Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
-                    }
+                    // this.datasource.refreshStatus(this.tenantId)
+                    // if (this.datasource.switch) {
+                    //     // MessageBox.alert("现在不支持自动删除，请联系管理员")
+					// 	this.datasource.resourceStop(this.tenantId)
+                    // } else {
+                    //     // 通过新的 trace ID 持续访问状态
+                    //     Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
+                    // }
+                    this.datasource.resourceStop(this.tenantId)
                 }).catch(() => {
-                    // do nothing ...
+                    Message.error("操作失败", { duration: 3000} )
                 })
             }
-            else if (!this.datasource.switch) {
+            else if (data.status) {
                 MessageBox.confirm('是否确认开始资源并开始计费！ 是否继续?', '警告', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
                     // 调用启动前，强制更新一下状态，以免竞争机制
-                    this.datasource.refreshStatus(this.tenantId)
-                    if (!this.datasource.switch) {
-						this.datasource.resourceStart(this.tenantId)
+                    // this.datasource.refreshStatus(this.tenantId)
+                    // if (!this.datasource.switch) {
+					// 	this.datasource.resourceStart(this.tenantId)
 
-                    } else {
-                        // 通过新的 trace ID 持续访问状态
-                        Message.error("平台已经被另一进程启动，请等待！！", { duration: 3000} )
-                    }
+                    // } else {
+                    //     // 通过新的 trace ID 持续访问状态
+                    //     Message.error("平台已经被另一进程启动，请等待！！", { duration: 3000} )
+                    // }
+                    this.datasource.resourceStart(this.tenantId)
                 }).catch(() => {
-                    // do nothing ...
+                    Message.error("操作失败", { duration: 3000} )
                 })
             }
 
-        }
+        },
+        dealResourceStart(res) {
+			if (res.status === "failed") {
+				Message.error("启动资源失败，请重新操作！！", { duration: 0, showClose: true} )
+			} else {
+				const event = new Event("event")
+				event.args = {
+					callback: "dealResourceStart",
+					element: this,
+					param: {
+						traceId: res.trace_id
+					}
+				}
+				this.$emit('dealResourceStart', event)
+			}
+		},
+		dealResourceStop(res) {
+			if (res.status === "failed") {
+				Message.error("关闭资源失败，请重新操作！！", { duration: 0, showClose: true} )
+			} else {
+				const event = new Event("event")
+				event.args = {
+					callback: "dealResourceStop",
+					element: this,
+					param: {
+						traceId: res.trace_id
+					}
+				}
+				this.$emit('dealResourceStop', event)
+			}
+		},
     }
 }
 </script>
