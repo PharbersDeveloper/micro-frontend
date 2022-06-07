@@ -6,6 +6,7 @@ export default class PhCodeEditorModel {
         this.owner = dict["owner"]
         this.ownership = dict["ownership"]
         this.platform = dict["platform"]
+		this.status = false
 
         this.metadata = JSON.parse(dict["properties"])[0]
         this.applicationType = this.metadata["type"]
