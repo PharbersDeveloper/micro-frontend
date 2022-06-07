@@ -3,7 +3,6 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="topn_header">
             <div class="header_left">
-                <!-- 需要一个sync 的icon @wodelu -->
                 <img :src="defs.iconsByName('topn')" alt="" />
                 <span>Top N</span>
             </div>
@@ -42,7 +41,7 @@
                 </el-steps>
             </div>
             <div class="topn_right" v-if="datasource.isReady">
-                <pre-filter :step="datasource.step"></pre-filter>
+                <pre-filter v-if="active === 1" :step="datasource.step"></pre-filter>
             </div>
         </div>
     </div>

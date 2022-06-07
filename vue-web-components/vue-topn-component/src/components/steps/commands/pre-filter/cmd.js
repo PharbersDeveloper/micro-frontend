@@ -24,13 +24,14 @@ export default class PhPreFilterCmd {
     cloases2Struct() {
         const strArr = this.cloases
         const result = []
+
         for (let idx = 0; idx < strArr.length; ++idx) {
             try {
                 this.tryContainsCloases(strArr[idx])
                 this.tryEqualsCloases(strArr[idx])
                 this.tryNotEqualsCloases(strArr[idx])
-                this.tryExistsCloases(strArr[idx])
                 this.tryNotExistsCloases(strArr[idx])
+                this.tryExistsCloases(strArr[idx])
                 this.tryColEqualsCloases(strArr[idx])
                 this.tryColNotEqualsCloases(strArr[idx])
 
@@ -130,6 +131,10 @@ export default class PhPreFilterCmd {
             }
             throw tmp;
         }
+    }
+
+    delcloases(idx) {
+        console.log(idx)
     }
 
     exec() {

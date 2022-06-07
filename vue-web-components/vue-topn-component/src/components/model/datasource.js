@@ -10,7 +10,7 @@ export default class PhDataSource {
         this.currentPageToken = ""
         this.isReady = false
         this.step = null
-        this.debugToken = "6dbc1697b62d10241ef0f132ea61b13c0f47d2fad34d99e0be33ccc5d7547946"
+        this.debugToken = "0da50f4dfa6b4b61689bc0d8064c9b66a4f150384a059ee67cdbb364097eaa04"
     }
 
     getCookie(name) {
