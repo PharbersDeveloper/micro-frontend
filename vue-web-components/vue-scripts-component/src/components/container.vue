@@ -434,7 +434,7 @@ export default {
         },
         //排序
         sort(val) {
-            if(val == 'ascending') {
+            if(val === 'ascending') {
                 // 升序->降序
                 this.ascending = false
                 // this.allData.dcs.sort()
@@ -446,7 +446,7 @@ export default {
                         return
                     }
                 )
-            }else if (val == 'descending') {
+            }else if (val === 'descending') {
                 // 降序->升序
                 this.ascending = true
                 this.allData.dcs.reverse()
@@ -568,9 +568,9 @@ export default {
             case "prepare":
                 return this.prepare_icon
             case "sync":
-                return this.prepare_icon
+                return this.defs.iconsByName("sync")
             case "topn":
-                return this.prepare_icon
+                return this.defs.iconsByName("topn")
             default:
                 return this.script_icon
             }

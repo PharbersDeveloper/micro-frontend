@@ -66,6 +66,7 @@ export default {
                 return {
                     projectId: "YZYijD17N9L6LXx",
                     projectName: "autorawdata2021",
+                    scriptsParams: null,
                     dss: []
                 }
             }
@@ -88,6 +89,7 @@ export default {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
+
         save() {
 
         },
@@ -103,6 +105,9 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
         this.inputDsName = this.getUrlParam("inputName")
+    },
+    updated() {
+        this.outputDsName = this.allData.scriptsParams.outputs
     }
 }
 </script>
