@@ -1,13 +1,21 @@
 <template>
     <div class="pre-filter">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <el-form v-if="datasource">
-            <el-form-item label="保留符合条件的列">
-                <select v-model="datasource.command.action">
-                    <option v-for="(item, index) in concretDefs.actions" :value="item.cal" :key="index" :label="item.desc" />
-                </select>
-            </el-form-item>
-        </el-form>
+        <div class="condition-title">
+            <div class="condition-title-p">
+                <h2>Pre Filter</h2>
+                <div class="ver-center">
+                    <el-switch v-if="datasource" v-model="datasource.enabled"></el-switch>
+                </div>
+            </div>
+            <el-form v-if="datasource">
+                <el-form-item label="保留符合条件的列">
+                    <select v-model="datasource.command.action">
+                        <option v-for="(item, index) in concretDefs.actions" :value="item.cal" :key="index" :label="item.desc" />
+                    </select>
+                </el-form-item>
+            </el-form>
+        </div>
         <div class="condition-selection" v-if="datasource">
             <div class="condition-selection-item" v-for="(cur, index) in datasource.command.cloases" :key="index">
                 <div class="condition-selection-content">
@@ -32,6 +40,7 @@ import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
+import ElSwitch from 'element-ui/packages/switch/index'
 import PhFilterStep from "./step"
 
 export default {
@@ -55,7 +64,8 @@ export default {
         ElFormItem,
         ElForm,
         ElInput,
-        ElButton
+        ElButton,
+        ElSwitch
     },
     mounted() {
         this.datasource = new PhFilterStep(this.step)
@@ -77,10 +87,27 @@ export default {
     .pre-filter {
         margin-top: 4px;
         /*width: 100%;*/
-        min-width: 300px;
+        min-width: 800px;
         padding: 4px;
         display: flex;
         flex-direction: column;
+
+        .condition-title {
+            display: flex;
+            flex-direction: column;
+
+            .condition-title-p {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .ver-center {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                }
+            }
+        }
 
         .condition-selection {
             margin-top: 30px;

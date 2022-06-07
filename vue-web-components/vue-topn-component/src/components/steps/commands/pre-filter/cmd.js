@@ -3,9 +3,9 @@
  */
 export default class PhPreFilterCmd {
     constructor(preFilterExpression) {
-        if (preFilterExpression.length > 0) {
-            this.enabled = true
-        }
+        // if (preFilterExpression.length > 0) {
+        //     this.enabled = true
+        // }
 
         if (preFilterExpression.includes(" and ")) {
             this.action = "AND"
