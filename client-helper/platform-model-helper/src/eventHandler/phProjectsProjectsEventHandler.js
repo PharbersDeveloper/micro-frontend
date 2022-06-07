@@ -97,8 +97,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
 
         if (status == "started") {
             route.element.datasource.statusCode = 2
-            alert("启动资源成功")
-        } else if (status == "stopped") {
+        } else if (status == "failed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""
@@ -117,10 +116,9 @@ export async function phProjectsProjectsEventHandler(e, route) {
             cnotification: { error }
         } = JSON.parse(message)
 
-        if (status == "started") {
+        if (status == "stopped") {
             route.element.datasource.statusCode = 0
-            alert("关闭资源成功")
-        } else if (status == "stopped") {
+        } else if (status == "failed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""
