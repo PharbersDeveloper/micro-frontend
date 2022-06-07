@@ -1,6 +1,6 @@
 import { hostName } from "../config/envConfig"
 
-export async function phAnalyzeScriptsListRouteModel(route, parseParams) {
+export async function phScriptsLstContainerRouteModel(route, parseParams) {
 	route.store.unloadAll("dagConf")
 	route.store.unloadAll("dataset")
 	const url = `${hostName}/phdydatasource/query`
