@@ -55,10 +55,10 @@ export default class PhProjectDatasource {
     }
 
 	buildStartQuery(tenantId) {
+		console.log(tenantId)
         const url = `${hostName}/phtenantboottrigger`
         const accessToken = this.getCookie("access_token")
 		const traceId = this.guid()
-		console.log(tenantId)
         let body = {
             // "tenantId": tenantId
             "tenantId": "alfredtest",
@@ -92,10 +92,10 @@ export default class PhProjectDatasource {
     }
 
 	buildStopQuery(tenantId) {
+		console.log(tenantId)
         const url = `${hostName}/phtenantstoptrigger`
         const accessToken = this.getCookie("access_token")
-		const traceId = this.getCookie("tenantTraceId")
-		console.log(tenantId)
+		const traceId = this.traceId
         let body = {
             // "tenantId": tenantId
             "tenantId": "alfredtest",

@@ -7,8 +7,9 @@ import PhStorageModel from "./res/static-storage"
 import PhOlapModel from './res/olap'
 
 export default class PhResourceModel {
-    constructor(id, tenantId='zudIcG_17yj8CEUoCTHg') {
+    constructor(id, tenantId='zudIcG_17yj8CEUoCTHg', parent) {
         this.id = id
+		this.parent = parent
         this.tenantId = tenantId
         this.debugToken = "6dbc1697b62d10241ef0f132ea61b13c0f47d2fad34d99e0be33ccc5d7547946"
         this.store = new JsonApiDataStore()
@@ -34,7 +35,6 @@ export default class PhResourceModel {
             const resources = await this.buildResourceQuery(this.tenantId).then((response) => response.json())
             this.store.sync(resources)
             this.data = this.store.findAll("resources")
-
             for (let idx = 0; idx < this.data.length; ++idx) {
                 const tmp = this.data[idx]
                 if (tmp["role"] === "engine") {
@@ -74,8 +74,8 @@ export default class PhResourceModel {
         return fetch(url, options)
     }
 
-	buildStartQuery(tenantId) {
-        const url = `${hostName}/phtenantboottrigger`
+	buildStartQuery(tenantId, row) {
+        const url = `${hostName}/phjupyterboottrigger`
         const accessToken = this.getCookie("access_token")
 		const traceId = this.guid()
 		console.log(tenantId)
@@ -88,7 +88,8 @@ export default class PhResourceModel {
 				decodeURI(
 					this.getCookie("user_name_show")
 				)
-			)
+			),
+			"resourceId": row.codeeditorsResourceId
         }
         let options = {
             method: "POST",
@@ -102,17 +103,17 @@ export default class PhResourceModel {
         return fetch(url, options)
     }
 
-    resourceStart(tenantId) {
+    resourceStart(tenantId, row) {
         const that = this
-        this.buildStartQuery(tenantId)
+        this.buildStartQuery(tenantId, row)
             .then((response) => response.json())
             .then((response) => {
-				that.parent.dealResourceStart(response)
+				that.parent.dealResourceStart(response, row)
             })
     }
 
-	buildStopQuery(tenantId) {
-        const url = `${hostName}/phtenantstoptrigger`
+	buildStopQuery(tenantId, row) {
+        const url = `${hostName}/phjupyterstoptrigger`
         const accessToken = this.getCookie("access_token")
 		const traceId = this.getCookie("tenantTraceId")
 		console.log(tenantId)
@@ -125,7 +126,8 @@ export default class PhResourceModel {
 				decodeURI(
 					this.getCookie("user_name_show")
 				)
-			)
+			),
+			"resourceId": row.codeeditorsResourceId
         }
         let options = {
             method: "POST",
@@ -139,12 +141,12 @@ export default class PhResourceModel {
         return fetch(url, options)
     }
 
-    resourceStop(tenantId) {
+    resourceStop(tenantId, row) {
         const that = this
-        this.buildStopQuery(tenantId)
+        this.buildStopQuery(tenantId, row)
             .then((response) => response.json())
             .then((response) => {
-				that.parent.dealResourceStop(response)
+				that.parent.dealResourceStop(response, row)
             })
     }
 

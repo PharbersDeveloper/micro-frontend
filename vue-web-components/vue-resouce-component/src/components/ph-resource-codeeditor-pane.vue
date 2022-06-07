@@ -3,17 +3,26 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="editor-container">
             <el-table :data="codeeditors" style="width: 100%" class="editor-table">
-                <el-table-column fixed prop="ctype" label="程序" width="150"></el-table-column>
+                <el-table-column prop="ctype" label="程序" width="150"></el-table-column>
                 <el-table-column prop="platform" label="依赖平台" width="120"></el-table-column>
                 <el-table-column prop="owner" label="所有人" width="120"></el-table-column>
                 <el-table-column prop="ownership" label="所绑定项目" width="120"></el-table-column>
                 <el-table-column prop="metadata.version" label="版本" width="300"></el-table-column>
+                <el-table-column prop="status" label="状态" width="300">
+					<template slot-scope="scope">
+						<div v-if="scope.row.status === 2">已启动</div>
+						<div v-if="scope.row.status === 0">已停止</div>
+						<div v-if="scope.row.status === 4">关闭中</div>
+						<div v-if="scope.row.status === 1">启动中</div>
+					</template>
+				</el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template slot-scope="scope">
                         <el-switch 
-                            v-model="scope.row.status" 
-                            @change="switchChanged(scope.row)"
-                            active-color="#13ce66">
+							:disabled="scope.row.status === 1 || scope.row.status === 4"
+							v-model="scope.row.switch"
+							@change="switchChanged(scope.row)"
+							active-color="#13ce66">
                         </el-switch>
                     </template>
                 </el-table-column>
@@ -44,7 +53,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhResourceModel(1, this.tenantId)
+                return new PhResourceModel(1, this.tenantId, this)
             }
         },
         tenantId: String
@@ -55,8 +64,9 @@ export default {
 
     },
     methods: {
-		switchChanged(data) {
-            if (!data.status) {
+		switchChanged(row) {
+			row.switch = !row.switch
+            if (row.switch) {
                 MessageBox.confirm('关闭当前资源会影响其他用户使用！ 是否继续?', '警告', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
@@ -71,12 +81,12 @@ export default {
                     //     // 通过新的 trace ID 持续访问状态
                     //     Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
                     // }
-                    this.datasource.resourceStop(this.tenantId)
+					console.log(row)
+                    this.datasource.resourceStart(this.tenantId, row)
                 }).catch(() => {
-                    Message.error("操作失败", { duration: 3000} )
                 })
             }
-            else if (data.status) {
+            else if (!row.switch) {
                 MessageBox.confirm('是否确认开始资源并开始计费！ 是否继续?', '警告', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
@@ -91,17 +101,17 @@ export default {
                     //     // 通过新的 trace ID 持续访问状态
                     //     Message.error("平台已经被另一进程启动，请等待！！", { duration: 3000} )
                     // }
-                    this.datasource.resourceStart(this.tenantId)
+                    this.datasource.resourceStart(this.tenantId, row)
                 }).catch(() => {
-                    Message.error("操作失败", { duration: 3000} )
                 })
             }
 
         },
-        dealResourceStart(res) {
+        dealResourceStart(res, row) {
 			if (res.status === "failed") {
 				Message.error("启动资源失败，请重新操作！！", { duration: 0, showClose: true} )
 			} else {
+				row.status = 1
 				const event = new Event("event")
 				event.args = {
 					callback: "dealResourceStart",
@@ -113,10 +123,11 @@ export default {
 				this.$emit('dealResourceStart', event)
 			}
 		},
-		dealResourceStop(res) {
+		dealResourceStop(res, row) {
 			if (res.status === "failed") {
 				Message.error("关闭资源失败，请重新操作！！", { duration: 0, showClose: true} )
 			} else {
+				row.status = 4
 				const event = new Event("event")
 				event.args = {
 					callback: "dealResourceStop",

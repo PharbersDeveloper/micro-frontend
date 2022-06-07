@@ -88,8 +88,6 @@ export async function phProjectsProjectsEventHandler(e, route) {
     }
     function dealResourceStartCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
-        console.log(message, status)
-        console.log(route.element)
         route.element.datasource.statusCode = 1
         const {
             cnotification: { error }
@@ -97,20 +95,19 @@ export async function phProjectsProjectsEventHandler(e, route) {
 
         if (status == "started") {
             route.element.datasource.statusCode = 2
-        } else if (status == "failed") {
+        } else if (status == "startfailed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""
                     ? errorObj["message"]["zh"]
                     : "启动资源失败，请重新操作！"
+
             alert(msg)
         }
         route.loadingService.loading.style.display = "none"
     }
     function dealResourceStopCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
-        console.log(message, status)
-        console.log(route.element)
         route.element.datasource.statusCode = 4
         const {
             cnotification: { error }
@@ -118,7 +115,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
 
         if (status == "stopped") {
             route.element.datasource.statusCode = 0
-        } else if (status == "failed") {
+        } else if (status == "stopfailed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""

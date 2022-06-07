@@ -3,21 +3,24 @@ import { hostName } from "../config/envConfig"
 
 export async function phResourcesContainerEventHandler(e, route) {
     const params = e.detail[0].args.param
-    const accessToken = route.cookies.read("access_token")
-    const tenantId = route.cookies.read("company_id")
-    const dealResourceStartEventName = "dealJuptyerStart"
-    const dealResourceStopEventName = "dealJuptyerStop"
+    // const accessToken = route.cookies.read("access_token")
+    // const tenantId = route.cookies.read("company_id")
+    const dealResourceStartEventName = "dealJupyterStart"
+    const dealResourceStopEventName = "dealJupyterStop"
     const cookiesOptions = {
         domain: ".pharbers.com",
         path: "/"
     }
     switch (e.detail[0].args.callback) {
         case "linkToPage":
-            
             break
         case "dealResourceStart":
             route.element = e.detail[0].args.element
-            route.cookies.write("tenantTraceId", params.traceId, cookiesOptions)
+            route.cookies.write(
+                "jupyterTraceId",
+                params.traceId,
+                cookiesOptions
+            )
             route.element.datasource.statusCode = 1
             route.noticeService.defineAction({
                 type: "iot",
@@ -31,6 +34,7 @@ export async function phResourcesContainerEventHandler(e, route) {
             })
             break
         case "dealResourceStop":
+            route.cookies.clear("jupyterTraceId", cookiesOptions)
             route.element = e.detail[0].args.element
             route.element.datasource.statusCode = 4
             route.noticeService.defineAction({
@@ -49,8 +53,6 @@ export async function phResourcesContainerEventHandler(e, route) {
     }
     function dealResourceStartCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
-        console.log(message, status)
-        console.log(route.element)
         route.element.datasource.statusCode = 1
         const {
             cnotification: { error }
@@ -71,8 +73,6 @@ export async function phResourcesContainerEventHandler(e, route) {
     }
     function dealResourceStopCallback(param, payload) {
         const { message, status } = JSON.parse(payload)
-        console.log(message, status)
-        console.log(route.element)
         route.element.datasource.statusCode = 4
         const {
             cnotification: { error }

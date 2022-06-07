@@ -39,7 +39,9 @@ function PhMQTT(config, callBack, destroyQueue) {
 			success: true,
 			canceled: true,
 			started: true,
-			stopped: true
+			stopped: true,
+			stopfailed: true,
+			startfailed: true
 		}
 		
 		const url = `${uri}${parameter.projectId}/${parameter.ownerId}/${parameter.eventName}`

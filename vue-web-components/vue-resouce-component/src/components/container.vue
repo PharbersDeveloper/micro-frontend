@@ -19,6 +19,8 @@
                 </el-tab-pane>
                 <el-tab-pane label="集成编译器" name="4">
                     <ph-resource-codeeditor-pane 
+						@dealResourceStart="dealResourceStart"
+						@dealResourceStop="dealResourceStop"
 						:codeeditors="model.codeeditors"
 						:tenantId="tenantId"></ph-resource-codeeditor-pane>
                 </el-tab-pane>
@@ -59,7 +61,7 @@ export default {
         model: {
             type: Object,
             default: function() {
-                return new PhResourceModel(1, this.tenantId)
+                return new PhResourceModel(1, this.tenantId, this)
             }
         }
     },
@@ -82,6 +84,12 @@ export default {
             }
             this.$emit('event', event)
         },
+		dealResourceStart(data) {
+			this.$emit('event', data)
+		},
+		dealResourceStop(data) {
+			this.$emit('event', data)
+		}
     }
 }
 </script>
