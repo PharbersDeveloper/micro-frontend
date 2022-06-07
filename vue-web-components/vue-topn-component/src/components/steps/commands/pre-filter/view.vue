@@ -8,8 +8,8 @@
                 </select>
             </el-form-item>
         </el-form>
-        <div class="condition-selection">
-            <div class="condition-selection-item" v-for="(item, index) in step.command.cloases" :key="index">
+        <div class="condition-selection" v-if="datasource">
+            <div class="condition-selection-item" v-for="(item, index) in datasource.command.cloases" :key="index">
                 {{item}}
             </div>
         </div>
@@ -19,12 +19,13 @@
 import { PhPreFilterDefs } from "./defs"
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
-// import PhFilterStep from "./step"
+import PhFilterStep from "./step"
 
 export default {
     data() {
         return {
-            showContent: "b"
+            showContent: "b",
+            datasource: null
         }
     },
     props: {
@@ -43,7 +44,7 @@ export default {
         ElForm
     },
     mounted() {
-        // this.datasource = new PhFilterStep(this.step)
+        this.datasource = new PhFilterStep(this.step)
     },
     methods: {
 

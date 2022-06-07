@@ -40,7 +40,7 @@ export const PhPreFilterDefs = {
         },
         {
             desc: "与某列不相同",
-            cal: "COL-EQUALS"
+            cal: "COL-NOT-EQUALS"
         },
         {
             desc: "有值",

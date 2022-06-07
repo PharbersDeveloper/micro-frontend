@@ -41,8 +41,8 @@
                     </el-step>
                 </el-steps>
             </div>
-            <div class="topn_right">
-                <pre-filter></pre-filter>
+            <div class="topn_right" v-if="datasource.isReady">
+                <pre-filter :step="datasource.step"></pre-filter>
             </div>
         </div>
     </div>
@@ -52,6 +52,7 @@ import PhDagDefinitions from './policy/definitions/definitions'
 import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
+import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
 
 export default {
@@ -83,6 +84,12 @@ export default {
             default: function() {
                 return new PhDagDefinitions(1)
             }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource(1)
+            }
         }
     },
     methods: {
@@ -105,8 +112,12 @@ export default {
     mounted() {
         // this.projectId = this.getUrlParam("projectId")
         // this.projectName = this.getUrlParam("projectName")
+        this.projectId = "alfredtest"
+        this.projectName = this.getUrlParam("projectName")
         // this.jobName = this.getJobName()
+        this.jobName = "alfredtest"
         // this.inputDsName = this.getUrlParam("inputName")
+        this.datasource.refreshData(this.projectId, this.jobName)
     },
     updated() {
 
