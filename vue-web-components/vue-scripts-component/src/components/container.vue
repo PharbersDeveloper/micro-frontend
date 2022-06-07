@@ -53,16 +53,16 @@
                                     <img :src="defs.iconsByName('sparkr')" alt="">
                                     <p  class="">SparkR</p>
                                 </div>
-                                <div class="list last" @click="selectScripts('prepare')">
+                                <div class="list" @click="selectScripts('prepare')">
                                     <img :src="defs.iconsByName('prepare')" alt="">
                                     <p  class="">Prepare</p>
                                 </div>
-                                <div class="list last" @click="selectScripts('sync')">
-                                    <img :src="defs.iconsByName('prepare')" alt="">
+                                <div class="list" @click="selectScripts('sync')">
+                                    <img :src="defs.iconsByName('sync')" alt="">
                                     <p  class="">Sync</p>
                                 </div>
                                 <div class="list last" @click="selectScripts('topn')">
-                                    <img :src="defs.iconsByName('prepare')" alt="">
+                                    <img :src="defs.iconsByName('topn')" alt="">
                                     <p  class="">TopN</p>
                                 </div>
                             </div>

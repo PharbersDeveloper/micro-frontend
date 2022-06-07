@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { hostName, actionTableName } from "../config/envConfig"
 
-export async function phAnalyzeScriptsListEventHandler(e, route) {
+export async function phScriptsLstContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = "projects"
 	let preUrl = ""
@@ -37,6 +37,58 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					params.projectId
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "topn"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "topn_edit"
+				}
+				// let operatorParameters = recipt.operatorParameters
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "editTopN",
+							attributes: {
+								jsondata: {
+									scripts: scripts,
+									operatorParameters: {}
+								}
+							}
+						}
+					]
+				})
+				uri =
+					"topn?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName
+				// +
+				// "&operatorParameters=" +
+				// escape(recipt.operatorParameters) +
+				// "&message=" +
+				// encodeURI(JSON.stringify(scripts))
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "sync"
 			) {
 				let recipt = params.recipt
@@ -53,7 +105,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					jobDisplayName: recipt.jobDisplayName,
 					jobShowName: recipt.jobShowName,
 					projectId: params.projectId,
-					jobCat: "prepare_edit"
+					jobCat: "sync_edit"
 				}
 				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
@@ -61,7 +113,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 					data: [
 						{
 							type: "tempdatas",
-							id: "editPrepare",
+							id: "editSync",
 							attributes: {
 								jsondata: {
 									scripts: scripts,
@@ -139,10 +191,7 @@ export async function phAnalyzeScriptsListEventHandler(e, route) {
 				// escape(recipt.operatorParameters) +
 				// "&message=" +
 				// encodeURI(JSON.stringify(scripts))
-			} else if (
-				params.name === "codeditor" &&
-				params.recipt.runtime !== "prepare"
-			) {
+			} else if (params.name === "codeditor") {
 				uri =
 					"codeditor?projectName=" +
 					params.projectName +
