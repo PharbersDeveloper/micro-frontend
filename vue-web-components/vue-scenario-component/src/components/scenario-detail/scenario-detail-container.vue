@@ -84,6 +84,7 @@ export default {
     mounted() {
 		this.datasource.projectId = this.getUrlParam("projectId")
 		this.datasource.scenarioId = this.getUrlParam("scenarioId")
+		this.datasource.scenarioName = this.getUrlParam("scenarioName")
         this.datasource.model()
     },
     watch: {
@@ -124,6 +125,7 @@ export default {
                 result["id"] = x["id"]
                 result["index"] = x["index"]
                 result["traceId"] = x["trace-id"]
+                result["confData"] = x["conf-data"]
                 result["edited"] = false
                 result["deleted"] = false
                 return result
@@ -134,8 +136,6 @@ export default {
                 const result = {}
                 const tmp = JSON.parse(x["detail"])
                 result["start"] = tmp["start"]
-				// result["startData"] = 
-				// result["startTime"] = 
                 result["period"] = tmp["period"]
                 result["value"] = tmp["value"]
                 result["timezone"] = tmp["timezone"]
@@ -169,8 +169,8 @@ export default {
                     name: "saveScenario",
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
-                    scenarioName: this.allData.scenarioName,
-                    scenarioId: this.allData.scenarioId,
+                    scenarioName: this.datasource.scenarioName,
+                    scenarioId: this.datasource.scenarioId,
 					triggerDisplay: triggerDisplay,
 					stepDisplay: stepDisplay,
 					type: type
@@ -178,71 +178,6 @@ export default {
             }
 			console.log(event)
             this.$emit('event', event)
-            // if (result) {
-            //     result = this.deleteTriggers()
-            // }
-            // if (result) {
-            //     result = this.saveEditedTriggers()
-            // }
-
-            // if (result) {
-            //     result = this.deleteSteps()
-            // }
-            // if (result) {
-            //     result = this.saveEditedSteps()
-            // }
-
-            // if (result) {
-            //     alert("save success")
-            // } else {
-            //     alert("save error")
-            // }
-            return result
-        },
-        saveEditedTriggers() {
-            let result = false
-            for (let idx = 0; idx < this.triggerDisplay.length; ++idx) {
-                const tmp = this.triggerDisplay[idx]
-                if (tmp.edited) {
-                    if (!this.triggerPolicy.createOrUpdateTriggerResource(tmp)) break
-                    if (!this.triggerPolicy.createOrUpdateTriggerIndex(tmp)) break
-                }
-                result = true
-            }
-            return result
-        },
-        saveEditedSteps() {
-            let result = false
-            for (let idx = 0; idx < this.stepDisplay.length; ++idx) {
-                const tmp = this.stepDisplay[idx]
-                if (tmp.edited) {
-                    if (!this.stepPolicy.createOrUpdateStepIndex(tmp)) break
-                }
-                result = true
-            }
-            return result
-        },
-        deleteTriggers() {
-            let result = false
-            for (let idx = 0; idx < this.triggerDisplay.length; ++idx) {
-                const tmp = this.triggerDisplay[idx]
-                if (tmp.deleted) {
-                    if (!this.triggerPolicy.deleteTriggerResource(tmp)) break
-                    if (!this.triggerPolicy.deleteTriggerIndex(tmp)) break
-                }
-                result = true
-            }
-            return result
-        },
-        deleteSteps() {
-            let result = false
-            for (let idx = 0; idx < this.stepDisplay.length; ++idx) {
-                const tmp = this.stepDisplay[idx]
-                if (tmp.deleted) {
-                    if (!this.stepPolicy.deleteStepIndex(tmp)) break
-                }
-                result = true
-            }
             return result
         }
     }

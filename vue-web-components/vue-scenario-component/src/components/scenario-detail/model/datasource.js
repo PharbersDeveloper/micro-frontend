@@ -7,6 +7,7 @@ export default class PhScenarioDetailDatasource {
         this.id = id
         this.projectId = projectId
         this.scenarioId = scenarioId
+		this.scenarioName = ""
         this.debugToken = "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20"
         this.store = new JsonApiDataStore()
         this.scenario = {}
@@ -43,7 +44,6 @@ export default class PhScenarioDetailDatasource {
             .then((response) => response.json())
         this.store.sync(steps)
         this.steps = this.store.findAll("scenario-steps")
-        // TODO: reports const reports = this.buildTriggersQuery(scenario.id).then((response) => response.json())
     }
 
     buildTriggersQuery(scenarioId) {

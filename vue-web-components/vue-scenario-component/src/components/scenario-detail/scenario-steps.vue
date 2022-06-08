@@ -10,8 +10,8 @@
                 </li>
             </ul>
             <el-button
-                    class="add_new_step"
-                    @click="addNewStep">
+				class="add_new_step"
+				@click="addNewStep">
                 <img class="add" :src="add_icon" alt="" />
                 添加一个新算子
             </el-button>
@@ -31,15 +31,14 @@
                 <el-form-item label="">
                     <el-button class="add-ds" type="primary" @click="dialogVisible = true">添加目标数据集</el-button>
                 </el-form-item>
+				<el-form-item label="配置参数">
+					<el-input 
+						type="textarea"
+						:rows="4"
+						placeholder="请输入配置参数"
+						v-model="selectStep.confData"></el-input>
+				</el-form-item>
                 <el-form-item label="运行模式">
-                    <!-- <el-select v-model="selectStep.recursive" placeholder="" @change="selectStep.edited = true">
-                        <el-option
-                                v-for="iter in options"
-                                :key="iter.index"
-                                :label="iter.desc"
-                                :value="iter.cat">
-                        </el-option>
-                    </el-select> -->
                     <select 
                         class="select-pattern"
                         v-model="selectStep.recursive"
@@ -66,8 +65,8 @@
                     <select 
                         class="select-pattern"
                         v-model="dsName">
-                        <option v-for="iter in datasets"
-                            :key="iter.name"
+                        <option v-for="(iter,index) in datasets"
+                            :key="iter.name + index"
                             :label="iter.name"
                             :value="iter.name">
                         </option>
@@ -89,8 +88,6 @@ import ElInput from "element-ui/packages/input/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import ElDivider from "element-ui/packages/divider/index"
-// import ElSelect from "element-ui/packages/select/index"
-// import ElOption from "element-ui/packages/option/index"
 import ElCheckbox from "element-ui/packages/checkbox/index"
 import ElDialog from "element-ui/packages/dialog/index"
 
@@ -127,8 +124,6 @@ export default {
         ElFormItem,
         ElInput,
         ElDivider,
-        // ElSelect,
-        // ElOption,
         ElCheckbox,
         ElDialog
     },
@@ -245,6 +240,12 @@ export default {
         display: flex;
         flex-direction: row;
 
+		.select-pattern {
+			width: 120px;
+			height: 40px;
+			border: 1px solid #dcdfe6;
+		}
+
         .border-none {
             border: none;
         }
@@ -280,12 +281,6 @@ export default {
 
             .el-form-item {
                 margin-top: 20px;
-            }
-
-            .select-pattern {
-                width: 120px;
-                height: 40px;
-                border: 1px solid #dcdfe6;
             }
 
             .add-ds {

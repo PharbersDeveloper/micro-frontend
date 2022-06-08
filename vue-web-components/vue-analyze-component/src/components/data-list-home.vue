@@ -192,7 +192,7 @@ export default {
                 "delete_script": "删除了脚本",
                 "delete_dataset": "删除了dataset",
                 "project_file_to_DS": "导入了数据",
-                "create_scenario": "创建了scenario",
+                "create_scenario": "更新了scenario",
                 "create_catalog": "创建了caatalog",
                 "run_dag": "运行了dag",
                 "stop_dag": "停止了dag"

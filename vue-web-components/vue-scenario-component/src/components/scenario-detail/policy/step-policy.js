@@ -1,5 +1,6 @@
 
-import { hostName } from "../../../config/envConfig"
+// import { hostName } from "../../../config/envConfig"
+import { Message } from 'element-ui'
 
 export default class PhScenarioStepPolicy {
     constructor(id, projectId='ggjpDje0HUC2JW', scenarioName='alfredtest') {
@@ -17,106 +18,49 @@ export default class PhScenarioStepPolicy {
             return null;
     }
 
-    async createOrUpdateStepIndex(step) {
-        const response = await this.buildPushStepQuery(step)
-        const res = await response.json()
-        console.log(res)
-        return !Object.keys(step).includes("error");
-    }
 
-    async deleteStepIndex(step) {
-        const response = await this.buildDeleteStepQuery(step)
-        const res = await response.json()
-        console.log(res)
-        return !Object.keys(step).includes("error");
-    }
-
-	dealStepDisplay(stepArray) {
-		let arr = []
-		stepArray.forEach(step => {
-			let detail = {}
-			detail = {
-                "type": step.type,
-                "recursive": step.recursive,
-                "ignore-error": step["ignore-error"],
-                "name": step.ds
+    isJSON_test(str, errorStr="json字符串") {
+        if (typeof str == 'string') {
+            try {
+                this.jsonValue = JSON.parse(str);
+                return true;
+            } catch(e) {
+                if(str != "") {
+                    Message.error( `请输入正确的${errorStr}！`, { duration: 0, showClose: true} )
+                    return false;
+                } else {
+                    return true
+                }
             }
-			arr.push({
-				"confData": {},
-				scenarioId: step.scenarioId,
-				index: step.index,
-				// detail: JSON.stringify(detail),
-				detail: detail,
-				traceId: step.traceId,
-				mode: step.mode,
-				name: step.name,
-				id: step.id
-			})
-		})
-		return arr
-	}
+        }
+    }
 
-    buildPushStepQuery(step) {
-        const url = `${hostName}/phdydatasource/put_item`
-        const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        let detail = {}
-        if (step.mode === "dataset") {
+    dealStepDisplay(stepArray) {
+        let arr = []
+        stepArray.forEach(step => {
+            let detail = {}
             detail = {
                 "type": step.type,
                 "recursive": step.recursive,
                 "ignore-error": step["ignore-error"],
                 "name": step.ds
             }
-
-            let body = {
-                "table": "scenario_step",
-                "item": {
-                    scenarioId: step.scenarioId,
-                    index: step.index,
-                    detail: JSON.stringify(detail),
-                    traceId: step.traceId,
-                    mode: step.mode,
-                    name: step.name
-                },
-                "limit": 100,
-                "start_key": {}
+            step.confData = step.confData ? step.confData : "{}"
+            let isJSON = this.isJSON_test(step.confData, "配置参数")
+            if(!isJSON) {
+                throw new Error("配置参数错误")
             }
-
-            let options = {
-                method: "POST",
-                headers: {
-                    "Authorization": accessToken,
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    "accept": "application/json"
-                },
-                body: JSON.stringify(body)
-            }
-            return fetch(url, options)
-        } else {
-            alert("not implemented")
-        }
-    }
-
-    buildDeleteStepQuery(step) {
-        const url = `${hostName}/phdydatasource/delete_item`
-        const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        let body = {
-            "table": "scenario_step",
-            "conditions": {
+            arr.push({
+                confData: JSON.stringify(JSON.parse(step.confData)),
                 scenarioId: step.scenarioId,
-                index: step.index
-            }
-        }
-
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        return fetch(url, options)
+                index: step.index,
+                detail: detail,
+                traceId: step.traceId,
+                mode: step.mode,
+                name: step.name,
+                id: step.id
+            })
+        })
+        return arr
     }
 }
