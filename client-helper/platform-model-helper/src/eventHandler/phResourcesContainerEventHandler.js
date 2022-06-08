@@ -1,12 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import { hostName } from "../config/envConfig"
 
-// eslint-disable-next-line no-unused-vars
-export async function phProjectsProjectsEventHandler(e, route) {
+export async function phResourcesContainerEventHandler(e, route) {
     const params = e.detail[0].args.param
-    const accessToken = route.cookies.read("access_token")
-    const tenantId = route.cookies.read("company_id")
-    const dealResourceStartEventName = "dealResourceStart"
-    const dealResourceStopEventName = "dealResourceStop"
+    // const accessToken = route.cookies.read("access_token")
+    // const tenantId = route.cookies.read("company_id")
+    const dealResourceStartEventName = "dealJupyterStart"
+    const dealResourceStopEventName = "dealJupyterStop"
     const cookiesOptions = {
         domain: ".pharbers.com",
         path: "/"
@@ -14,50 +14,13 @@ export async function phProjectsProjectsEventHandler(e, route) {
     const element = e.detail[0].args.element
     switch (e.detail[0].args.callback) {
         case "linkToPage":
-            window.open(
-                `https://deploy.pharbers.com/projects/${params.pid}?projectName=${params.name}&projectId=${params.pid}`
-            )
-            break
-        case "cerateProject":
-            if (params) {
-                let uri = `${hostName}/phplatform/projects`
-                let body = {
-                    data: {
-                        type: "projects",
-                        attributes: {
-                            provider: "pharbers",
-                            name: params.name,
-                            type: "paas",
-                            owner: tenantId
-                        }
-                    }
-                }
-                let options = {
-                    method: "POST",
-                    headers: {
-                        Authorization: accessToken,
-                        "Content-Type": "application/vnd.api+json",
-                        accept: "application/vnd.api+json"
-                    },
-                    body: JSON.stringify(body)
-                }
-
-                route.loadingService.loading.style.display = "flex"
-                route.loadingService.loading.style["z-index"] = 2
-
-                let results = await fetch(uri, options).then((res) =>
-                    res.json()
-                )
-                if (results.data.id) {
-                    alert("创建项目成功！")
-                    window.location.reload()
-                }
-                route.loadingService.loading.style.display = "none"
-            }
             break
         case "dealResourceStart":
-            route.cookies.write("tenantTraceId", params.traceId, cookiesOptions)
-            element.datasource.statusCode = 1
+            route.cookies.write(
+                "jupyterTraceId",
+                params.traceId,
+                cookiesOptions
+            )
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
@@ -70,7 +33,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
             })
             break
         case "dealResourceStop":
-            element.datasource.statusCode = 4
+            route.cookies.clear("jupyterTraceId", cookiesOptions)
             route.noticeService.defineAction({
                 type: "iot",
                 remoteResource: "notification",
@@ -92,17 +55,15 @@ export async function phProjectsProjectsEventHandler(e, route) {
         } = JSON.parse(message)
 
         if (status == "started") {
-            element.datasource.statusCode = 2
-            element.datasource.switch = true
+            element.codeeditors[0]["switch"] = true
+            element.codeeditors[0]["status"] = 2
+            alert("启动资源成功")
         } else if (status == "startfailed") {
-            element.datasource.statusCode = 0
-            element.datasource.switch = false
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""
                     ? errorObj["message"]["zh"]
                     : "启动资源失败，请重新操作！"
-
             alert(msg)
         }
         route.loadingService.loading.style.display = "none"
@@ -114,11 +75,10 @@ export async function phProjectsProjectsEventHandler(e, route) {
         } = JSON.parse(message)
 
         if (status == "stopped") {
-            element.datasource.statusCode = 0
-            element.datasource.switch = false
+            element.codeeditors[0]["switch"] = false
+            element.codeeditors[0]["status"] = 0
+            alert("关闭资源成功")
         } else if (status == "stopfailed") {
-            element.datasource.statusCode = 2
-            element.datasource.switch = true
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""

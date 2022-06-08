@@ -22,6 +22,21 @@ export default class PhProjectDatasource {
         else return this.debugToken
     }
 
+	setCookie (c_name, value, expiredays) {
+		let exdate = new Date();
+		exdate.setDate(exdate.getDate() + expiredays);
+		document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+	}
+
+
+	delCookie(name) {
+		let exp = new Date();
+		exp.setTime(exp.getTime() - 1);
+		let cval = this.getCookie(name);
+		if (cval != null)
+			document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+	}
+
     buildQuery(tenantId) {
         const url = `${hostName}/tenantstatus`
         const accessToken = this.getCookie("access_token")
@@ -44,21 +59,30 @@ export default class PhProjectDatasource {
 
     refreshStatus(tenantId) {
         const that = this
+		// const traceId = this.getCookie("tenantTraceId")
         this.buildQuery(tenantId)
             .then((response) => response.json())
             .then((response) => {
                 that.traceId = response.traceId
                 that.statusCode = response.status
                 that.status = response.message
+				// if (response.traceId !== "" && response.traceId !== traceId) {
+				// 	const cookiesOptions = {
+				// 		domain: ".pharbers.com",
+				// 		path: "/"
+				// 	}
+				// 	that.delCookie("tenantTraceId")
+				// 	that.setCookie("tenantTraceId", response.traceId, cookiesOptions)
+				// }
                 that.resetSwitch()
             })
     }
 
 	buildStartQuery(tenantId) {
+		console.log(tenantId)
         const url = `${hostName}/phtenantboottrigger`
         const accessToken = this.getCookie("access_token")
 		const traceId = this.guid()
-		console.log(tenantId)
         let body = {
             // "tenantId": tenantId
             "tenantId": "alfredtest",
@@ -92,10 +116,10 @@ export default class PhProjectDatasource {
     }
 
 	buildStopQuery(tenantId) {
+		console.log(tenantId)
         const url = `${hostName}/phtenantstoptrigger`
         const accessToken = this.getCookie("access_token")
 		const traceId = this.getCookie("tenantTraceId")
-		console.log(tenantId)
         let body = {
             // "tenantId": tenantId
             "tenantId": "alfredtest",

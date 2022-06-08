@@ -15,6 +15,8 @@ import { phProjectsProjectsRouteModel } from "./routeModel/phProjectsProjectsRou
 import { phProjectsProjectsEventHandler } from "./eventHandler/phProjectsProjectsEventHandler"
 import { phAssetsAssetsListRouteModel } from "./routeModel/phAssetsAssetsListRouteModel"
 import { phResourcesContainerRouteModel } from "./routeModel/phResourcesContainerRouteModel"
+import { phResourcesContainerEventHandler } from "./eventHandler/phResourcesContainerEventHandler"
+
 export {
     // phcatelogProjectListRouteModel,
     // phcatelogProjectListEventHandler,
@@ -32,5 +34,6 @@ export {
     phProjectsProjectsRouteModel,
     phProjectsProjectsEventHandler,
     phAssetsAssetsListRouteModel,
-    phResourcesContainerRouteModel
+    phResourcesContainerRouteModel,
+    phResourcesContainerEventHandler
 }

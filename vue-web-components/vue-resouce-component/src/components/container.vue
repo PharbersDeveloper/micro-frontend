@@ -1,6 +1,6 @@
 <template>
     <div class="resource-main-container">
-        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
+		<link href="https://components.pharbers.com/font-awesome/font-awesome.min.css" 	rel="stylesheet">
         <div class="header">
             <span class="header-large">
                 {{title}}
@@ -18,7 +18,11 @@
                     <ph-resource-olap-pane :olap="model.olap"></ph-resource-olap-pane>
                 </el-tab-pane>
                 <el-tab-pane label="集成编译器" name="4">
-                    <ph-resource-codeeditor-pane :codeeditors="model.codeeditors"></ph-resource-codeeditor-pane>
+                    <ph-resource-codeeditor-pane 
+						@dealResourceStart="dealResourceStart"
+						@dealResourceStop="dealResourceStop"
+						:codeeditors="model.codeeditors"
+						:tenantId="tenantId"></ph-resource-codeeditor-pane>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -57,7 +61,7 @@ export default {
         model: {
             type: Object,
             default: function() {
-                return new PhResourceModel(1, this.tenantId)
+                return new PhResourceModel(1, this.tenantId, this)
             }
         }
     },
@@ -80,6 +84,12 @@ export default {
             }
             this.$emit('event', event)
         },
+		dealResourceStart(data) {
+			this.$emit('event', data)
+		},
+		dealResourceStop(data) {
+			this.$emit('event', data)
+		}
     }
 }
 </script>
