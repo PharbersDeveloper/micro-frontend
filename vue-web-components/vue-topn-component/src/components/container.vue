@@ -12,36 +12,19 @@
         </div>
         <div class="topn_area">
             <div class="topn_left">
-                <el-steps direction="vertical" :active="active" align-center>
-                    <el-step >
+                <el-steps direction="vertical" :active="active" align-center >
+                    <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
-                            <el-button type="text" @click="active = 1">Pre-Filter</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 2">Computed Columns</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 3">Top N</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 4">Retrieved Columns</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 5">Outputs</el-button>
+                            <el-button type="text" @click="active = item.index" >item.title</el-button>
                         </template>
                     </el-step>
                 </el-steps>
             </div>
             <div class="topn_right" v-if="datasource.isReady">
-                <pre-filter v-if="active === 1" :step="datasource.step"></pre-filter>
+                <pre-filter v-if="active === 1"
+                            ref="filter"
+                            :step="datasource.step"
+                            @statusChange="preFilterStatus"></pre-filter>
             </div>
         </div>
     </div>
@@ -63,7 +46,34 @@ export default {
     },
     data() {
         return {
-            active: 1
+            active: 1,
+            stepsDefs: [
+                {
+                    title: "Pre-Filter",
+                    index: 1,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Computed Columns",
+                    index: 2,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Top N",
+                    index: 3,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Retrieved Columns",
+                    index: 4,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Outputs",
+                    index: 5,
+                    status: "wait"  // wait / process / finish / error / success
+                }
+            ]
         }
     },
     props: {
@@ -102,11 +112,17 @@ export default {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-
-        save() {
-
+        preFilterStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[0].status = "success"
+            } else {
+                this.stepsDefs[0].status = "error"
+            }
         },
-
+        save() {
+            this.$refs.filter.revertsCloases()
+        },
     },
     mounted() {
         // this.projectId = this.getUrlParam("projectId")

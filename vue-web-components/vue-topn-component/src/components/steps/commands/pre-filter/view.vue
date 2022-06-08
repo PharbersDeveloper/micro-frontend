@@ -4,8 +4,8 @@
         <div class="condition-title">
             <div class="condition-title-p">
                 <h2>Pre Filter</h2>
-                <div class="ver-center">
-                    <el-switch v-if="datasource" v-model="datasource.enabled"></el-switch>
+                <div class="ver-center" v-if="datasource">
+                    <el-switch v-model="datasource.enabled" @change="$emit('statusChange', datasource.enabled)"></el-switch>
                 </div>
             </div>
             <el-form v-if="datasource">
@@ -29,6 +29,7 @@
                     <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" :value="cur['right']" ></el-input>
                     <el-input v-else disabled ></el-input>
                 </div>
+                <el-button v-if="index === 0" type="text" @click="datasource.command.insertcloases()">添加</el-button>
                 <el-button v-if="index > 0" type="text" @click="datasource.command.delcloases(index)">删除</el-button>
             </div>
         </div>
@@ -67,11 +68,15 @@ export default {
         ElButton,
         ElSwitch
     },
+    // updated() {
     mounted() {
         this.datasource = new PhFilterStep(this.step)
+        this.$emit('statusChange', this.datasource.enabled)
     },
     methods: {
-
+        revertsCloases() {
+            return this.datasource.revert2Defs()
+        }
     },
     computed: {
 

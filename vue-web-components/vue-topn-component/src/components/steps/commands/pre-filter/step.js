@@ -19,4 +19,12 @@ export default class PhFilterStep {
         if (this.command.validations())
             this.command.exec()
     }
+
+    revert2Defs() {
+        const newPreFilterExpression = this.command.revert2Defs()
+        console.log(newPreFilterExpression)
+        // eslint-disable-next-line no-debugger
+        debugger
+    }
+
 }
