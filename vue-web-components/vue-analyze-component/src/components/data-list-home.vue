@@ -192,8 +192,10 @@ export default {
                 "delete_script": "删除了脚本",
                 "delete_dataset": "删除了dataset",
                 "project_file_to_DS": "导入了数据",
-                "create_scenario": "更新了scenario",
-                "create_catalog": "创建了caatalog",
+                "create_scenario": "创建了scenario",
+                "update_scenario": "更新了scenario",
+                "scenario_trigger": "触发了scenario",
+                "create_catalog": "创建了数据目录",
                 "run_dag": "运行了dag",
                 "stop_dag": "停止了dag"
             },
@@ -269,7 +271,9 @@ export default {
         dealActions() {
             this.actions.data.map(mapItem => {
                 //过滤掉dag_refresh
-                if(mapItem.attributes["job-cat"] === "dag_refresh") {
+                if (mapItem.attributes["job-cat"] === "dag_refresh") {
+                    return false
+                } else if (!this.isJSON(mapItem.attributes["message"])) {
                     return false
                 }
                 // 第一条数据直接存入actionsShow数组
