@@ -6,7 +6,7 @@
                     <!-- <p class="el-icon-s-operation" >{{index}}</p> -->
                     <span><b>运行</b></span>
                     <span style="flex-grow: 1"><b>{{item.name}}</b></span>
-                    <el-button class="el-icon-delete-solid" @click="deleteStep" ></el-button>
+                    <el-button class="el-icon-delete-solid border-none" @click="deleteStep" ></el-button>
                 </li>
             </ul>
             <el-button
@@ -25,7 +25,7 @@
                 <el-form-item label="数据集">
                     <div class="scenario-step-ds-item">
                         <span><b>{{selectStep.ds}}</b></span>
-                        <el-button class="el-icon-delete-solid" @click="deleteStepDatasetName" />
+                        <el-button class="el-icon-delete-solid border-none" @click="deleteStepDatasetName" />
                     </div>
                 </el-form-item>
                 <el-form-item label="">
@@ -40,16 +40,16 @@
                                 :value="iter.cat">
                         </el-option>
                     </el-select> -->
-					<select 
-						class="select-pattern"
-						v-model="selectStep.recursive"
-						@change="selectStep.edited = true">
-						<option v-for="iter in options"
-							:key="iter.index"
-							:label="iter.desc"
-							:value="iter.cat">
-						</option>
-					</select>
+                    <select 
+                        class="select-pattern"
+                        v-model="selectStep.recursive"
+                        @change="selectStep.edited = true">
+                        <option v-for="iter in options"
+                            :key="iter.index"
+                            :label="iter.desc"
+                            :value="iter.cat">
+                        </option>
+                    </select>
                 </el-form-item>
                 <el-form-item label="忽略失败">
                     <el-checkbox v-model="selectStep['ignore-error']" @change="selectStep.edited = true">失败的脚本不会标记Scenario 运行失败</el-checkbox>
@@ -63,15 +63,15 @@
             <el-form label-width="120px">
                 <el-form-item label="数据集名称">
                     <!-- <el-input v-model="dsName" ></el-input> -->
-					<select 
-						class="select-pattern"
-						v-model="dsName">
-						<option v-for="iter in datasets"
-							:key="iter.name"
-							:label="iter.name"
-							:value="iter.name">
-						</option>
-					</select>
+                    <select 
+                        class="select-pattern"
+                        v-model="dsName">
+                        <option v-for="iter in datasets"
+                            :key="iter.name"
+                            :label="iter.name"
+                            :value="iter.name">
+                        </option>
+                    </select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -97,7 +97,7 @@ import ElDialog from "element-ui/packages/dialog/index"
 export default {
     data() {
         return {
-			add_icon: `${staticFilePath}` + "/add.svg",
+            add_icon: `${staticFilePath}` + "/add.svg",
             dialogVisible: false,
             dsName: '',
             selectStep: {},
@@ -119,7 +119,7 @@ export default {
     props: {
         steps: Array,
         scenarioId: String,
-		datasets: Array
+        datasets: Array
     },
     components: {
         ElButton,
@@ -165,18 +165,19 @@ export default {
             this.dialogVisible = false
         },
         addNewStep() {
-			let stepsArr = this.steps.filter(it => it.deleted === false)
-			if(stepsArr.length > 0) {
-				return false
-			}
-			const idx = this.steps.length > 0 ? 1 + Math.max(...this.steps.map(x => x.index)) : 0
+            // let stepsArr = this.steps.filter(it => it.deleted === false)
+            // if(stepsArr.length > 0) {
+            //     return false
+            // }
+            const idx = this.steps.length > 0 ? 1 + Math.max(...this.steps.map(x => x.index)) : 0
             const result = {}
+            const num = this.steps.length + 1
             result["recursive"] = false
             result["ignore-error"] = false
             result["type"] = "dataset"
             result["ds"] = ""
             result["mode"] = "dataset"
-            result["name"] = "change me"
+            result["name"] = "step" + num
             result["scenarioId"] = this.scenarioId
             result["index"] = idx
             result["traceId"] = this.genId()
@@ -185,7 +186,7 @@ export default {
             result["id"] = this.genId()
             this.steps.push(result)
         },
-		genId(len=16, radix=16) {
+        genId(len=16, radix=16) {
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
             let uuid = [], i;
             radix = radix || chars.length;
@@ -235,14 +236,18 @@ export default {
         justify-content: center;
         font-size: 12px;
         color: #000000;
-		.add {
-			height: 12px;
-		}
+        .add {
+            height: 12px;
+        }
     }
 
     .scenario-steps-container {
         display: flex;
         flex-direction: row;
+
+        .border-none {
+            border: none;
+        }
 
         .divider {
             height: auto;
@@ -258,9 +263,11 @@ export default {
 
             .scenario-step-lst-item {
                 display: flex;
-				align-items: center;
+                align-items: center;
                 flex-direction: row;
                 border: 1px solid grey;
+                margin-bottom: 10px;
+                height: 40px;
             }
         }
 
@@ -271,29 +278,29 @@ export default {
             padding: 14px 36px;
             max-width: 800px;
 
-			.el-form-item {
-				margin-top: 20px;
-			}
+            .el-form-item {
+                margin-top: 20px;
+            }
 
-			.select-pattern {
-				width: 120px;
-				height: 40px;
-				border: 1px solid #dcdfe6;
-			}
+            .select-pattern {
+                width: 120px;
+                height: 40px;
+                border: 1px solid #dcdfe6;
+            }
 
-			.add-ds {
-				width: 120px;
-				height: 30px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
+            .add-ds {
+                width: 120px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
             .scenario-step-ds-item {
                 display: flex;
                 flex-direction: row;
                 border: 1px solid #dcdfe6;
-				height: 40px;
+                height: 40px;
                 span {
                     flex-grow: 1;
                 }

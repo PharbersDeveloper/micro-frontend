@@ -5,7 +5,8 @@
             <scenario-nav 
 				:scenario="datasource.scenario" 
 				@active="activeChange" 
-				@save="saveAll"></scenario-nav>
+				@save="saveAll"
+				@trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
@@ -151,7 +152,10 @@ export default {
                 return result
             })
         },
-        saveAll() {
+		trigger() {
+			this.saveAll("trigger")
+		},
+        saveAll(type) {
             let result = true
 			let stepDisplay = []
 			let triggerDisplay = []
@@ -168,7 +172,8 @@ export default {
                     scenarioName: this.allData.scenarioName,
                     scenarioId: this.allData.scenarioId,
 					triggerDisplay: triggerDisplay,
-					stepDisplay: stepDisplay
+					stepDisplay: stepDisplay,
+					type: type
                 }
             }
 			console.log(event)

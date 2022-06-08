@@ -7,7 +7,7 @@ export default class PhScenarioDetailDatasource {
         this.id = id
         this.projectId = projectId
         this.scenarioId = scenarioId
-        this.debugToken = "e7462a20745975a04d47a1e6c10513472b1ef29d4cc528f9056d68e74286d020"
+        this.debugToken = "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20"
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
