@@ -139,7 +139,7 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 				required: true
 			},
 			scenario: {
-				id: params.scenarioId,
+				scenarioId: params.scenarioId,
 				runtime: "manual"
 			}
 		}

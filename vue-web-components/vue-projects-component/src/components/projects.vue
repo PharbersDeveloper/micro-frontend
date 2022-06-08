@@ -193,7 +193,7 @@ export default {
             if (arr === document.cookie.match(reg))
                 return (arr[2]);
             else
-                return "118d038fddcc70ed5bb66365e7d0335022cf4e9dfab0c0cc1fe1f3e4310c82e1";
+                return "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20";
         },
         showSelectOption(data) {
             console.log(data)
