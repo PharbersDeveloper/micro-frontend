@@ -17,7 +17,15 @@ export default class PhPreFilterCmd {
             this.action = "AND"
             this.cloases = [preFilterExpression]
         }
-        this.cloases2Struct()
+        if (this.cloases.length > 0) {
+            this.cloases2Struct()
+        } else {
+            this.cloases = [{
+                "left": "",
+                "op": "CONTAINS",
+                "right": ""
+            }]
+        }
         console.log(this.cloases)
     }
 
@@ -30,8 +38,8 @@ export default class PhPreFilterCmd {
                 this.tryContainsCloases(strArr[idx])
                 this.tryEqualsCloases(strArr[idx])
                 this.tryNotEqualsCloases(strArr[idx])
-                this.tryNotExistsCloases(strArr[idx])
                 this.tryExistsCloases(strArr[idx])
+                this.tryNotExistsCloases(strArr[idx])
                 this.tryColEqualsCloases(strArr[idx])
                 this.tryColNotEqualsCloases(strArr[idx])
 
@@ -42,9 +50,28 @@ export default class PhPreFilterCmd {
         this.cloases = result
     }
 
+    tryContainsCloases(c) {
+        const tmp = {}
+        if (c.includes(" like ")) {
+            tmp["status"] = "ok"
+            tmp["result"] = {
+                "left": c.substring(0, c.indexOf(" ")),
+                "op": "CONTAINS",
+                "right": c.substring(c.indexOf("%"), c.lastIndexOf("%"))
+            }
+            throw tmp;
+        }
+    }
+
+    tryRevertContainsCloases(t) {
+        if (t.op === "CONTAINS") {
+            throw t.left + " like %" + t.right + "%"
+        }
+    }
+
     tryNotExistsCloases(c) {
         const tmp = {}
-        if (c.includes("is not null")) {
+        if (c.includes("is null")) {
             tmp["status"] = "ok"
             tmp["result"] = {
                 "left": c.substring(0, c.indexOf(" ")),
@@ -55,9 +82,15 @@ export default class PhPreFilterCmd {
         }
     }
 
+    tryRevertNotExistsCloases(t) {
+        if (t.op === "NOT-EXISTS") {
+            throw t.left + " is not null"
+        }
+    }
+
     tryExistsCloases(c) {
         const tmp = {}
-        if (c.include("is null")) {
+        if (c.includes("is not null")) {
             tmp["status"] = "ok"
             tmp["result"] = {
                 "left": c.substring(0, c.indexOf(" ")),
@@ -65,6 +98,12 @@ export default class PhPreFilterCmd {
                 "right": undefined
             }
             throw tmp
+        }
+    }
+
+    tryRevertExistsCloases(t) {
+        if (t.op === "EXISTS") {
+            throw t.left + " is not null"
         }
     }
 
@@ -81,6 +120,12 @@ export default class PhPreFilterCmd {
         }
     }
 
+    tryRevertEqualsCloases(t) {
+        if (t.op === "EQUALS") {
+            throw t.left + " == '" + t.right + "'"
+        }
+    }
+
     tryNotEqualsCloases(c) {
         const tmp = {}
         if (c.includes("'") && c.includes("!=")) {
@@ -91,6 +136,12 @@ export default class PhPreFilterCmd {
                 "right": c.substring(c.indexOf("'") + 1, c.lastIndexOf("'"))
             }
             throw tmp
+        }
+    }
+
+    tryRevertNotEqualsCloases(t) {
+        if (t.op === "NOT-EQUALS") {
+            throw t.left + " != '" + t.right + "'"
         }
     }
 
@@ -107,6 +158,12 @@ export default class PhPreFilterCmd {
         }
     }
 
+    tryRevertColEqualsCloases(t) {
+        if (t.op === "COL-EQUALS") {
+            throw t.left + " == " + t.right
+        }
+    }
+
     tryColNotEqualsCloases(c) {
         const tmp = {}
         if (c.includes("!=")) {
@@ -120,21 +177,22 @@ export default class PhPreFilterCmd {
         }
     }
 
-    tryContainsCloases(c) {
-        const tmp = {}
-        if (c.includes("like")) {
-            tmp["status"] = "ok"
-            tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
-                "op": "CONTAINS",
-                "right": c.substring(c.indexOf("%"), c.lastIndexOf("%"))
-            }
-            throw tmp;
+    tryRevertColNotEqualsCloases(t) {
+        if (t.op === "COL-NOT-EQUALS") {
+            throw t.left + " != " + t.right
         }
     }
 
     delcloases(idx) {
-        console.log(idx)
+        this.cloases.splice(idx, 1)
+    }
+
+    insertcloases() {
+        this.cloases.push({
+            "left": "",
+            "op": "CONTAINS",
+            "right": ""
+        })
     }
 
     exec() {
@@ -146,20 +204,23 @@ export default class PhPreFilterCmd {
     }
 
     revert2Defs() {
-        const params = {
-            values: this.values,
-            matchingMode: this.matchingMode,
-            normalizationMode: this.normalizationMode,
-            action: this.action,
-            booleanMode: this.booleanMode,
-            appliesTo: this.appliesTo,
-            columns: this.columns
+        const result = []
+        for (let idx = 0; idx < this.cloases.length; ++idx) {
+            try {
+                const tmp = this.cloases[idx]
+                if (tmp["left"].length > 0) {
+                    this.tryRevertContainsCloases(tmp)
+                    this.tryRevertExistsCloases(tmp)
+                    this.tryRevertNotExistsCloases(tmp)
+                    this.tryRevertEqualsCloases(tmp)
+                    this.tryRevertNotEqualsCloases(tmp)
+                    this.tryRevertColEqualsCloases(tmp)
+                    this.tryRevertColNotEqualsCloases(tmp)
+                }
+            } catch(e) {
+                result.push(e)
+            }
         }
-
-        return {
-            type: this.name,
-            code: this.code,
-            params: params
-        }
+        return result.join(this.action === "AND" ? " and " : " or ")
     }
 }
