@@ -15,16 +15,30 @@
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
-                            <el-button type="text" @click="active = item.index" >item.title</el-button>
+                            <el-button type="text" @click="active = item.index" >{{item.title}}</el-button>
                         </template>
                     </el-step>
                 </el-steps>
             </div>
-            <div class="topn_right" v-if="datasource.isReady">
-                <pre-filter v-if="active === 1"
+            <div class="topn_right" v-if="datasource.isReady && datasource.isMetaReady">
+                <pre-filter v-show="active === 1"
                             ref="filter"
                             :step="datasource.step"
-                            @statusChange="preFilterStatus"></pre-filter>
+                            :schema="datasource.dataset.schema"
+                            @statusChange="preFilterStatus" />
+                <computed v-show="active === 2"
+                            ref="computed"
+                            :step="datasource.step"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="computedStatus" />
+                <top-n v-show="active === 3"
+                          ref="topn"
+                          :step="datasource.step"
+                          :schema="datasource.dataset.schema"
+                          @statusChange="topnStatus" />
+            </div>
+            <div v-if="datasource.hasNoSchema">
+                Schema 不对，找产品处理
             </div>
         </div>
     </div>
@@ -36,13 +50,17 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
+import Computed from './steps/commands/computed/view'
+import TopN from './steps/commands/top-n/view'
 
 export default {
     components: {
         ElSteps,
         ElStep,
         ElButton,
-        PreFilter
+        PreFilter,
+        Computed,
+        TopN
     },
     data() {
         return {
@@ -120,22 +138,68 @@ export default {
                 this.stepsDefs[0].status = "error"
             }
         },
+        computedStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[1].status = "success"
+            } else {
+                this.stepsDefs[1].status = "error"
+            }
+        },
+        topnStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[1].status = "success"
+            } else {
+                this.stepsDefs[1].status = "error"
+            }
+        },
         save() {
-            this.$refs.filter.revertsCloases()
+            const params = {
+                "firstRows": 0,
+                "lastRows": 0,
+                "keys": [],
+                "preFilter": this.$refs.filter.datasource.revert2Defs(),
+                "orders": [
+                    {"column": "xx", "desc": true},
+                    {"column": "xxxx", "desc": false}
+                ],
+                "denseRank": true,
+                "duplicateCount": true,
+                "rank": true,
+                "rowNumber": true,
+                "retrievedColumns": ["xx", "xxx"],
+                "computedColumns": [
+                    {
+                        "expr": "'姓名'+'学号'",
+                        "name": "AAA",
+                        "type": "double"
+                    }
+                ]
+            }
+
+            console.log(params)
         },
     },
     mounted() {
-        // this.projectId = this.getUrlParam("projectId")
-        // this.projectName = this.getUrlParam("projectName")
-        this.projectId = "alfredtest"
+        this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
+        this.projectIdTest = "alfredtest"
         // this.jobName = this.getJobName()
         this.jobName = "alfredtest"
         // this.inputDsName = this.getUrlParam("inputName")
-        this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasetId = this.getUrlParam("datasetId")
+        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshMateData(this.projectId, this.datasetId)
     },
     updated() {
 
+    },
+    watch: {
+        active() {
+            this.$refs.filter.validate()
+            this.$refs.computed.validate()
+        }
     }
 }
 </script>

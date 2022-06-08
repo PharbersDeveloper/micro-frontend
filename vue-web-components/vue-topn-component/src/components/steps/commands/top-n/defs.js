@@ -1,4 +1,4 @@
-export const PhFilterStepDefs = {
+export const PhTopNDefs = {
     actions: [
         {
             desc: "只保留匹配行",
@@ -90,7 +90,7 @@ export const PhInitialFOVStepDefs = {
     id: "",
     type: "steps"
 }
- 
+
 export function step2SaveObj(step) {
     return {
         pjName: step['pj-name'],

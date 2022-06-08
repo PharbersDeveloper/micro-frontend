@@ -21,10 +21,12 @@ export default class PhFilterStep {
     }
 
     revert2Defs() {
-        const newPreFilterExpression = this.command.revert2Defs()
-        console.log(newPreFilterExpression)
-        // eslint-disable-next-line no-debugger
-        debugger
+        const result = this.enabled ? this.command.revert2Defs() : ""
+        return {
+            "distinct": false,
+            "enabled": this.enabled,
+            "expression": result
+        }
     }
 
 }
