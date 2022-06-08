@@ -55,7 +55,7 @@ export default class PhPreFilterCmd {
         if (c.includes(" like ")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "CONTAINS",
                 "right": c.substring(c.indexOf("%"), c.lastIndexOf("%"))
             }
@@ -65,7 +65,7 @@ export default class PhPreFilterCmd {
 
     tryRevertContainsCloases(t) {
         if (t.op === "CONTAINS") {
-            throw t.left + " like %" + t.right + "%"
+            throw "`" + t.left + "`" + " like %" + t.right + "%"
         }
     }
 
@@ -74,7 +74,7 @@ export default class PhPreFilterCmd {
         if (c.includes("is null")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "NOT-EXISTS",
                 "right": undefined
             }
@@ -84,7 +84,7 @@ export default class PhPreFilterCmd {
 
     tryRevertNotExistsCloases(t) {
         if (t.op === "NOT-EXISTS") {
-            throw t.left + " is not null"
+            throw "`" + t.left + "`" + " is not null"
         }
     }
 
@@ -93,7 +93,7 @@ export default class PhPreFilterCmd {
         if (c.includes("is not null")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "EXISTS",
                 "right": undefined
             }
@@ -103,7 +103,7 @@ export default class PhPreFilterCmd {
 
     tryRevertExistsCloases(t) {
         if (t.op === "EXISTS") {
-            throw t.left + " is not null"
+            throw "`" + t.left + "`" + " is not null"
         }
     }
 
@@ -112,7 +112,7 @@ export default class PhPreFilterCmd {
         if (c.includes("'") && c.includes("==")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "EQUALS",
                 "right": c.substring(c.indexOf("'") + 1, c.lastIndexOf("'"))
             }
@@ -122,7 +122,7 @@ export default class PhPreFilterCmd {
 
     tryRevertEqualsCloases(t) {
         if (t.op === "EQUALS") {
-            throw t.left + " == '" + t.right + "'"
+            throw "`" + t.left + "`" + " == '" + t.right + "'"
         }
     }
 
@@ -131,7 +131,7 @@ export default class PhPreFilterCmd {
         if (c.includes("'") && c.includes("!=")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "NOT-EQUALS",
                 "right": c.substring(c.indexOf("'") + 1, c.lastIndexOf("'"))
             }
@@ -141,7 +141,7 @@ export default class PhPreFilterCmd {
 
     tryRevertNotEqualsCloases(t) {
         if (t.op === "NOT-EQUALS") {
-            throw t.left + " != '" + t.right + "'"
+            throw "`" + t.left + "`" + " != '" + t.right + "'"
         }
     }
 
@@ -150,9 +150,9 @@ export default class PhPreFilterCmd {
         if (c.includes("==")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "COL-EQUALS",
-                "right": c.substring(c.indexOf(" ") + 1)
+                "right": c.substring(c.lastIndexOf(" ") + 1, c.lastIndexOf("`"))
             }
             throw tmp
         }
@@ -160,7 +160,7 @@ export default class PhPreFilterCmd {
 
     tryRevertColEqualsCloases(t) {
         if (t.op === "COL-EQUALS") {
-            throw t.left + " == " + t.right
+            throw "`" + t.left + "`" + " == " + "`" + t.right + "`"
         }
     }
 
@@ -169,9 +169,9 @@ export default class PhPreFilterCmd {
         if (c.includes("!=")) {
             tmp["status"] = "ok"
             tmp["result"] = {
-                "left": c.substring(0, c.indexOf(" ")),
+                "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "COL-NOT-EQUALS",
-                "right": c.substring(c.indexOf(" ") + 1)
+                "right": c.substring(c.lastIndexOf(" ") + 1, c.lastIndexOf("`"))
             }
             throw tmp
         }
@@ -179,7 +179,7 @@ export default class PhPreFilterCmd {
 
     tryRevertColNotEqualsCloases(t) {
         if (t.op === "COL-NOT-EQUALS") {
-            throw t.left + " != " + t.right
+            throw "`" + t.left + "`" + " != " + "`" + t.right + "`"
         }
     }
 

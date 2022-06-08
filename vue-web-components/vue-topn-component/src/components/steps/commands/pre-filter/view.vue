@@ -20,8 +20,7 @@
             <div class="condition-selection-item" v-for="(cur, index) in datasource.command.cloases" :key="index">
                 <div class="condition-selection-content">
                     <select v-model="cur['left']">
-                        <!--                    <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />-->
-                        <option value="age" label="age" />
+                         <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
                     </select>
                     <select v-model="cur['op']">
                         <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
@@ -29,9 +28,11 @@
                     <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" :value="cur['right']" ></el-input>
                     <el-input v-else disabled ></el-input>
                 </div>
-                <el-button v-if="index === 0" type="text" @click="datasource.command.insertcloases()">添加</el-button>
-                <el-button v-if="index > 0" type="text" @click="datasource.command.delcloases(index)">删除</el-button>
+                <el-button type="text" @click="datasource.command.delcloases(index)">删除</el-button>
             </div>
+        </div>
+        <div class="condition-add-button">
+            <el-button type="primary" @click="datasource.command.insertcloases()">添加</el-button>
         </div>
     </div>
 </template>
@@ -51,9 +52,8 @@ export default {
         }
     },
     props: {
-        step: {
-            type: Object
-        },
+        step: Object,
+        schema: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -74,8 +74,8 @@ export default {
         this.$emit('statusChange', this.datasource.enabled)
     },
     methods: {
-        revertsCloases() {
-            return this.datasource.revert2Defs()
+        validate() {
+            this.$emit('statusChange', this.datasource.enabled)
         }
     },
     computed: {
@@ -128,6 +128,13 @@ export default {
                 flex-direction: row;
 
             }
+        }
+
+        .condition-add-button {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            margin-top: 80px;
         }
     }
 </style>
