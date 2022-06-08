@@ -7,14 +7,8 @@ export default class PhDataSource {
     constructor(id) {
         this.id = id
         this.store = new JsonApiDataStore()
-        // this.currentPageToken = ""
         this.resetData()
-        // this.isReady = false
-        // this.isMetaReady = false
-        // this.hasNoSchema = false
-        // this.step = null
-        // this.dataset = null
-        this.debugToken = "08f0e5530dec4088ee76fbe5a452a7714834023ff75f16c7627ed17f842df5f1"
+        this.debugToken = "d8117bd5b4703b2116c491282d1aa7f67f448626880deff89a9957c19c87dcd5"
     }
 
     resetData() {

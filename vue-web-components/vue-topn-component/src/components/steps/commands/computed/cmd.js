@@ -28,16 +28,6 @@ export default class PhComputedCmd {
     }
 
     revert2Defs() {
-        // const params = {
-        //     mapping: this.mapping,
-        //     columns: this.columns,
-        //     matchingMode: this.matchingMode
-        // }
-        //
-        // return {
-        //     type: this.name,
-        //     code: this.code,
-        //     params: params
-        // }
+        return this.computedCols
     }
 }

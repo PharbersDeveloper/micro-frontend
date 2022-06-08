@@ -11,6 +11,7 @@ export default class PhTopNCmd {
         this.rank = defs["rank"]
         this.duplicateCount = defs["duplicateCount"]
         this.rowNumber = defs["rowNumber"]
+        this.isAllCols = this.keys.length === 0
     }
 
     exec() {
@@ -21,21 +22,26 @@ export default class PhTopNCmd {
         return true
     }
 
+    insertSortCloase(col) {
+        this.orders.push({
+            "column": col,
+            "desc": false
+        })
+    }
+
+    deleteSortCloase(idx) {
+        this.orders.splice(idx, 1)
+    }
+
+    insertKeyCloase(col) {
+        this.keys.push(col)
+    }
+
+    deleteKeyCloase(idx) {
+        this.keys.splice(idx, 1)
+    }
+
     revert2Defs() {
-        // const params = {
-        //     values: this.values,
-        //     matchingMode: this.matchingMode,
-        //     normalizationMode: this.normalizationMode,
-        //     action: this.action,
-        //     booleanMode: this.booleanMode,
-        //     appliesTo: this.appliesTo,
-        //     columns: this.columns
-        // }
-        //
-        // return {
-        //     type: this.name,
-        //     code: this.code,
-        //     params: params
-        // }
+        return this
     }
 }

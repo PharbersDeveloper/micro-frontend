@@ -36,6 +36,16 @@
                           :step="datasource.step"
                           :schema="datasource.dataset.schema"
                           @statusChange="topnStatus" />
+                <retrieved-cols v-show="active === 4"
+                       ref="retrieved"
+                       :step="datasource.step"
+                       :schema="datasource.dataset.schema"
+                       @statusChange="retrievedStatus" />
+                <outputs v-show="active === 5"
+                                ref="outputs"
+                                :step="datasource.step"
+                                :schema="datasource.dataset.schema"
+                                @statusChange="retrievedStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -52,6 +62,8 @@ import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
 import Computed from './steps/commands/computed/view'
 import TopN from './steps/commands/top-n/view'
+import RetrievedCols from './steps/commands/retrieved-cols/view'
+import Outputs from './steps/commands/output/view'
 
 export default {
     components: {
@@ -60,7 +72,9 @@ export default {
         ElButton,
         PreFilter,
         Computed,
-        TopN
+        TopN,
+        RetrievedCols,
+        Outputs
     },
     data() {
         return {
@@ -149,33 +163,32 @@ export default {
         topnStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[1].status = "success"
+                this.stepsDefs[2].status = "success"
             } else {
-                this.stepsDefs[1].status = "error"
+                this.stepsDefs[2].status = "error"
+            }
+        },
+        retrievedStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[3].status = "success"
+            } else {
+                this.stepsDefs[3].status = "error"
             }
         },
         save() {
             const params = {
-                "firstRows": 0,
-                "lastRows": 0,
-                "keys": [],
+                "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
+                "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
+                "keys": this.$refs.topn.datasource.revert2Defs().keys,
                 "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                "orders": [
-                    {"column": "xx", "desc": true},
-                    {"column": "xxxx", "desc": false}
-                ],
-                "denseRank": true,
-                "duplicateCount": true,
-                "rank": true,
-                "rowNumber": true,
-                "retrievedColumns": ["xx", "xxx"],
-                "computedColumns": [
-                    {
-                        "expr": "'姓名'+'学号'",
-                        "name": "AAA",
-                        "type": "double"
-                    }
-                ]
+                "orders": this.$refs.topn.datasource.revert2Defs().orders,
+                "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
+                "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
+                "rank": this.$refs.topn.datasource.revert2Defs().rank,
+                "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
+                "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
+                "computedColumns": this.$refs.computed.datasource.revert2Defs()
             }
 
             console.log(params)
@@ -199,6 +212,8 @@ export default {
         active() {
             this.$refs.filter.validate()
             this.$refs.computed.validate()
+            this.$refs.topn.validate()
+            this.$refs.retrieved.validate()
         }
     }
 }

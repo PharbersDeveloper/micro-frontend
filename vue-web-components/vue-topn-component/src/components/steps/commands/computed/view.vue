@@ -10,7 +10,7 @@
             <div class="computed-item"
                  v-for="(item, index) in datasource.command.computedCols"
                  :key="index"
-                 @click="computedClicked(item)">
+                 @click="computedClicked(item, index)">
                 <span>新建列名</span>
                 <el-input class="computed-item-title" v-model="item.name"></el-input>
                 <span>保存为</span>
@@ -76,8 +76,9 @@ export default {
         itemClicked(v) {
             this.currentExpr += "`" + v + "`"
         },
-        computedClicked(it) {
+        computedClicked(it, idx) {
             this.currentExpr = it.expr
+            this.currentIdx = idx
         },
         validate() {
             this.$emit('statusChange', this.datasource.validate())
@@ -87,8 +88,8 @@ export default {
 
     },
     watch: {
-        currentIdx(n) {
-            this.currentExpr = this.datasource.command.computedCols[n]["expr"]
+        currentExpr(n) {
+            this.datasource.command.computedCols[this.currentIdx]["expr"] = n
         }
     }
 }
