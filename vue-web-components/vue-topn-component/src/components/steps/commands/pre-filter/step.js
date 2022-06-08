@@ -19,4 +19,14 @@ export default class PhFilterStep {
         if (this.command.validations())
             this.command.exec()
     }
+
+    revert2Defs() {
+        const result = this.enabled ? this.command.revert2Defs() : ""
+        return {
+            "distinct": false,
+            "enabled": this.enabled,
+            "expression": result
+        }
+    }
+
 }

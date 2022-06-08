@@ -12,36 +12,43 @@
         </div>
         <div class="topn_area">
             <div class="topn_left">
-                <el-steps direction="vertical" :active="active" align-center>
-                    <el-step >
+                <el-steps direction="vertical" :active="active" align-center >
+                    <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
-                            <el-button type="text" @click="active = 1">Pre-Filter</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 2">Computed Columns</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 3">Top N</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 4">Retrieved Columns</el-button>
-                        </template>
-                    </el-step>
-                    <el-step >
-                        <template slot="title">
-                            <el-button type="text" @click="active = 5">Outputs</el-button>
+                            <el-button type="text" @click="active = item.index" >{{item.title}}</el-button>
                         </template>
                     </el-step>
                 </el-steps>
             </div>
-            <div class="topn_right" v-if="datasource.isReady">
-                <pre-filter v-if="active === 1" :step="datasource.step"></pre-filter>
+            <div class="topn_right" v-if="datasource.isReady && datasource.isMetaReady">
+                <pre-filter v-show="active === 1"
+                            ref="filter"
+                            :step="datasource.step"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="preFilterStatus" />
+                <computed v-show="active === 2"
+                            ref="computed"
+                            :step="datasource.step"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="computedStatus" />
+                <top-n v-show="active === 3"
+                          ref="topn"
+                          :step="datasource.step"
+                          :schema="datasource.dataset.schema"
+                          @statusChange="topnStatus" />
+                <retrieved-cols v-show="active === 4"
+                       ref="retrieved"
+                       :step="datasource.step"
+                       :schema="datasource.dataset.schema"
+                       @statusChange="retrievedStatus" />
+                <outputs v-show="active === 5"
+                                ref="outputs"
+                                :step="datasource.step"
+                                :schema="datasource.dataset.schema"
+                                @statusChange="retrievedStatus" />
+            </div>
+            <div v-if="datasource.hasNoSchema">
+                Schema 不对，找产品处理
             </div>
         </div>
     </div>
@@ -53,17 +60,52 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
+import Computed from './steps/commands/computed/view'
+import TopN from './steps/commands/top-n/view'
+import RetrievedCols from './steps/commands/retrieved-cols/view'
+import Outputs from './steps/commands/output/view'
 
 export default {
     components: {
         ElSteps,
         ElStep,
         ElButton,
-        PreFilter
+        PreFilter,
+        Computed,
+        TopN,
+        RetrievedCols,
+        Outputs
     },
     data() {
         return {
-            active: 1
+            active: 1,
+            stepsDefs: [
+                {
+                    title: "Pre-Filter",
+                    index: 1,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Computed Columns",
+                    index: 2,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Top N",
+                    index: 3,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Retrieved Columns",
+                    index: 4,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Outputs",
+                    index: 5,
+                    status: "wait"  // wait / process / finish / error / success
+                }
+            ]
         }
     },
     props: {
@@ -102,24 +144,77 @@ export default {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-
-        save() {
-
+        preFilterStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[0].status = "success"
+            } else {
+                this.stepsDefs[0].status = "error"
+            }
         },
+        computedStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[1].status = "success"
+            } else {
+                this.stepsDefs[1].status = "error"
+            }
+        },
+        topnStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[2].status = "success"
+            } else {
+                this.stepsDefs[2].status = "error"
+            }
+        },
+        retrievedStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[3].status = "success"
+            } else {
+                this.stepsDefs[3].status = "error"
+            }
+        },
+        save() {
+            const params = {
+                "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
+                "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
+                "keys": this.$refs.topn.datasource.revert2Defs().keys,
+                "preFilter": this.$refs.filter.datasource.revert2Defs(),
+                "orders": this.$refs.topn.datasource.revert2Defs().orders,
+                "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
+                "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
+                "rank": this.$refs.topn.datasource.revert2Defs().rank,
+                "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
+                "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
+                "computedColumns": this.$refs.computed.datasource.revert2Defs()
+            }
 
+            console.log(params)
+        },
     },
     mounted() {
-        // this.projectId = this.getUrlParam("projectId")
-        // this.projectName = this.getUrlParam("projectName")
-        this.projectId = "alfredtest"
+        this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
+        this.projectIdTest = "alfredtest"
         // this.jobName = this.getJobName()
         this.jobName = "alfredtest"
         // this.inputDsName = this.getUrlParam("inputName")
-        this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasetId = this.getUrlParam("datasetId")
+        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshMateData(this.projectId, this.datasetId)
     },
     updated() {
 
+    },
+    watch: {
+        active() {
+            this.$refs.filter.validate()
+            this.$refs.computed.validate()
+            this.$refs.topn.validate()
+            this.$refs.retrieved.validate()
+        }
     }
 }
 </script>

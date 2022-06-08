@@ -1,21 +1,22 @@
-import PhFilterOnValueCmd from "./cmd"
+import PhRetrievedColsCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
  */
-export default class PhFilterStep {
+export default class PhRetrievedColsStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        this.command = new PhFilterOnValueCmd(this.expressions)
-        dbstep.callback = this
-        // this.groupName = dbstep["group-name"]
-        // this.groupId = dbstep["group-id"]
-        // this.isGrouped = len(this.groupName) > 0
+        const defs = this.expressions["parmas"]["retrievedColumns"]
+        this.command = new PhRetrievedColsCmd(defs)
     }
 
     exec() {
         if (this.command.validations())
             this.command.exec()
+    }
+
+    revert2Defs() {
+        return this.command.revert2Defs()
     }
 }

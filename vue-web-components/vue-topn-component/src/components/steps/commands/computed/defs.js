@@ -1,25 +1,36 @@
-export const PhFilterStepDefs = {
-    pattern: [
+export const PhComputedDefs = {
+    typeDefs: [
         {
-            desc: "完全匹配",
-            cal: "FULL_STRING"
+            desc: "整型",
+            cal: "int"
         },
         {
-            desc: "不完全匹配",
-            cal: "SUBSTRING"
+            desc: "大整型",
+            cal: "bigint"
         },
         {
-            desc: "正则表达式",
-            cal: "REGX"
+            desc: "浮点",
+            cal: "float"
+        },
+        {
+            desc: "双浮点",
+            cal: "double"
+        },
+        {
+            desc: "布尔类型",
+            cal: "boolean"
+        },
+        {
+            desc: "字符串",
+            cal: "string"
         }
     ],
-    stepNameDesc: {
-        patternDesc: {
-            "FULL_STRING": "等于",
-            "SUBSTRING": "包含",
-            "REGX": "符合"
+    pattern: [
+        {
+            desc: "SQL Expression",
+            cal: "SQL Expression"
         }
-    }
+    ]
 }
 
 const PhInitialRVExpressions = {
