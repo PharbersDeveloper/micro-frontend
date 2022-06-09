@@ -21,6 +21,7 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 				const url = `${hostName}/phscenariostrigger`
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
+
 				let body = {
 					common: {
 						traceId: traceId,
