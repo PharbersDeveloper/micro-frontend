@@ -37,15 +37,14 @@
                           :schema="datasource.dataset.schema"
                           @statusChange="topnStatus" />
                 <retrieved-cols v-show="active === 4"
-                       ref="retrieved"
-                       :step="datasource.step"
-                       :schema="datasource.dataset.schema"
-                       @statusChange="retrievedStatus" />
+                                ref="retrieved"
+                                :step="datasource.step"
+                                :schema="computedSchema"
+                                @statusChange="retrievedStatus" />
                 <outputs v-show="active === 5"
                                 ref="outputs"
-                                :step="datasource.step"
-                                :schema="datasource.dataset.schema"
-                                @statusChange="retrievedStatus" />
+                                :schema="outputsSchema"
+                                @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -78,6 +77,8 @@ export default {
     },
     data() {
         return {
+            computedSchema: [],
+            outputsSchema: [],
             active: 1,
             stepsDefs: [
                 {
@@ -176,6 +177,41 @@ export default {
                 this.stepsDefs[3].status = "error"
             }
         },
+        outputsStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[4].status = "success"
+            } else {
+                this.stepsDefs[4].status = "error"
+            }
+        },
+        computeSchema() {
+            const result = []
+            for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
+                result.push({
+                    "type": this.datasource.dataset.schema[idx]["type"].toLowerCase(),
+                    "title": this.datasource.dataset.schema[idx]["src"]
+                })
+            }
+            const addCols = this.$refs.computed.datasource.revert2Defs()
+            for (let idx = 0; idx < addCols.length; ++idx) {
+                result.push({
+                    "type": addCols[idx]["type"].toLowerCase(),
+                    "title": addCols[idx]["name"]
+                })
+            }
+            return result
+        },
+        genOutputsSchema() {
+            const retrieved = this.$refs.retrieved.datasource.revert2Defs()
+            let result = []
+            if (retrieved.length === 0) {
+                result = this.computedSchema
+            } else {
+                result = this.computedSchema.filter(x => retrieved.includes(x.title))
+            }
+            return result
+        },
         save() {
             const params = {
                 "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
@@ -192,6 +228,7 @@ export default {
             }
 
             console.log(params)
+            this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
         },
     },
     mounted() {
@@ -209,11 +246,20 @@ export default {
 
     },
     watch: {
-        active() {
+        active(n) {
             this.$refs.filter.validate()
             this.$refs.computed.validate()
             this.$refs.topn.validate()
             this.$refs.retrieved.validate()
+            this.$refs.outputs.validate()
+
+            if (n === 4 || n === 5) {
+                this.computedSchema = this.computeSchema()
+            }
+
+            if (n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
         }
     }
 }

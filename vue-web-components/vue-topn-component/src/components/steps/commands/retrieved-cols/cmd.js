@@ -3,6 +3,7 @@
  */
 export default class PhRetrievedColsCmd {
     constructor(defs) {
+        console.log(defs)
         this.retrievedCols = defs
     }
 
