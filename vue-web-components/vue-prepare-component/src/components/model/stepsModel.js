@@ -3,7 +3,7 @@ import { hostName } from "../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
 export default class PhStepsDyModel {
-    constructor(id, datasource, schema) {
+    constructor(id, datasource, schema, parent) {
         this.id = id
         this.flowVersion = "developer"
         this.projectId = this.getUrlParam("projectId")
@@ -17,6 +17,7 @@ export default class PhStepsDyModel {
         this.isReady = false
         this.datasource = datasource
         this.schema = schema
+		this.parent = parent
         // this.isError = false
         // this.error = null
     }
@@ -72,6 +73,7 @@ export default class PhStepsDyModel {
                 that.currentPageToken = response.meta.start_key
                 that.store.sync(response)
                 that.data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
+				
                 that.genQueryView()
             })
     }
@@ -116,6 +118,7 @@ export default class PhStepsDyModel {
                     that.schema.name = response["view_name"]
                     that.isReady = true
                 } else {
+					that.parent.sampleVisible = response.error.indexOf("exist") > 0
                     console.log(response)
                     // eslint-disable-next-line no-debugger
                     // debugger
