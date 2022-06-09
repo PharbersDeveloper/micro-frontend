@@ -94,7 +94,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .retrieved {
+    .distinct {
         margin-top: 4px;
         /*width: 100%;*/
         min-width: 800px;
@@ -102,11 +102,11 @@ export default {
         display: flex;
         flex-direction: column;
 
-        .retrieved-title {
+        .distinct-title {
             display: flex;
             flex-direction: column;
 
-            .retrieved-title-p {
+            .distinct-title-p {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
