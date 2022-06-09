@@ -8,7 +8,7 @@ export default class PhDataSource {
         this.id = id
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "d8117bd5b4703b2116c491282d1aa7f67f448626880deff89a9957c19c87dcd5"
+        this.debugToken = "e4da3ad093da0c4aa80b752310f333af76f35c2ae10de7ea517e028dcdd858ba"
     }
 
     resetData() {
@@ -19,7 +19,6 @@ export default class PhDataSource {
         this.step = null
         this.dataset = null
     }
-
 
     getCookie(name) {
         let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
@@ -106,6 +105,47 @@ export default class PhDataSource {
                 } else {
                     that.isMetaReady = true
                 }
+            })
+    }
+
+    buildSaveQuery(projectId, jobName, param) {
+        // @wodelu 这里改成code gen 逻辑
+        const url = `${hostName}/phdydatasource/put_item`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            table: "step",
+            item: {
+                pjName: this.step["pj-name"],
+                stepId: this.step["step-id"],
+                ctype: this.step["ctype"],
+                expressions: JSON.stringify({ "parmas": param }),
+                expressionsValue: this.step["expressions-value"],
+                groupIndex: this.step["group-index"],
+                groupName: this.step["group-name"],
+                id: this.step["id"],
+                index: this.step["index"],
+                runtime : this.step["runtime"],
+                stepName: this.step["step-name"]
+            }
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    saveAndGenCode(projectId, jobName, parame) {
+        this.buildSaveQuery(projectId, jobName, parame)
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response)
             })
     }
 }

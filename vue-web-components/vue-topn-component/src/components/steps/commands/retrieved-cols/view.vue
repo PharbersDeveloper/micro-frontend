@@ -22,7 +22,7 @@
             <div class="retrieved-keys" v-if="!isAllCols">
                 <el-transfer
                         v-model="datasource.command.retrievedCols"
-                        :data="data">
+                        :data="candiData">
                 </el-transfer>
             </div>
         </div>
@@ -39,7 +39,8 @@ export default {
     data() {
         return {
             datasource: null,
-            isAllCols: true
+            isAllCols: true,
+            // candiData: []
         }
     },
     props: {
@@ -60,6 +61,10 @@ export default {
     mounted() {
         this.datasource = new PhRetrievedColsStep(this.step)
         this.isAllCols = this.datasource.command.retrievedCols.length === 0
+        console.log(this.datasource.command.retrievedCols)
+    },
+    updated() {
+
     },
     methods: {
         validate() {
@@ -67,12 +72,12 @@ export default {
         }
     },
     computed: {
-        data() {
+        candiData() {
             const result = []
             for (let idx = 0; idx < this.schema.length; ++idx) {
                 result.push({
-                    key: this.schema[idx].src,
-                    label: this.schema[idx].src
+                    key: this.schema[idx].title,
+                    label: this.schema[idx].title
                 })
             }
             return result
@@ -80,7 +85,7 @@ export default {
     },
     watch: {
         isAllCols(n) {
-            if (!n) {
+            if (n) {
                 this.datasource.command.retrievedCols = []
             }
         }

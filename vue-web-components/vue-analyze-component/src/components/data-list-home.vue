@@ -193,7 +193,9 @@ export default {
                 "delete_dataset": "删除了dataset",
                 "project_file_to_DS": "导入了数据",
                 "create_scenario": "创建了scenario",
-                "create_catalog": "创建了caatalog",
+                "update_scenario": "更新了scenario",
+                "scenario_trigger": "触发了scenario",
+                "create_catalog": "创建了数据目录",
                 "run_dag": "运行了dag",
                 "stop_dag": "停止了dag"
             },
@@ -210,7 +212,7 @@ export default {
     },
     async mounted() {
         //actions数据
-        const accessToken = this.getCookie("access_token") || "118d038fddcc70ed5bb66365e7d0335022cf4e9dfab0c0cc1fe1f3e4310c82e1"
+        const accessToken = this.getCookie("access_token") || "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20"
         const acurl = `${hostName}/phdydatasource/query`
         // href param
         const href = window.location.href.split("?")[1]
@@ -269,7 +271,9 @@ export default {
         dealActions() {
             this.actions.data.map(mapItem => {
                 //过滤掉dag_refresh
-                if(mapItem.attributes["job-cat"] === "dag_refresh") {
+                if (mapItem.attributes["job-cat"] === "dag_refresh") {
+                    return false
+                } else if (!this.isJSON(mapItem.attributes["message"])) {
                     return false
                 }
                 // 第一条数据直接存入actionsShow数组
@@ -315,7 +319,7 @@ export default {
             }
         },
         async getActions(value) {
-            const accessToken = this.getCookie("access_token") || "118d038fddcc70ed5bb66365e7d0335022cf4e9dfab0c0cc1fe1f3e4310c82e1"
+            const accessToken = this.getCookie("access_token") || "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20"
             const acurl = `${hostName}/phdydatasource/query`
             let acbody = {
                 "table": "action",

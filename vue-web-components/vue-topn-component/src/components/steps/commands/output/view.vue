@@ -5,6 +5,13 @@
             <div class="outputs-title-p">
                 <h2>Outputs Column Names</h2>
             </div>
+            <div class="outputs-content">
+                <div class="outputs-content-item" v-for="(item, index) in schema" :key="index">
+                    <span class="outputs-content-item-index">{{index}}</span>
+                    <span class="outputs-content-item-type">({{item.type}})</span>
+                    <span class="outputs-content-item-title">{{item.title}}</span>
+                </div>
+            </div>
         </div>
         <div v-if="datasource">
         </div>
@@ -16,7 +23,7 @@
 // import { staticFilePath } from '../../../../config/envConfig'
 // import ElButton from 'element-ui/packages/button/index'
 import { PhOutputsDefs } from "./defs"
-import PhOutputsStep from "./step"
+// import PhOutputsStep from "./step"
 
 export default {
     data() {
@@ -25,7 +32,7 @@ export default {
         }
     },
     props: {
-        step: Object,
+        // step: Object,
         schema: Array,
         concretDefs: {
             type: Object,
@@ -40,10 +47,13 @@ export default {
         // ElInput
     },
     mounted() {
-        this.datasource = new PhOutputsStep(this.step)
+        // this.datasource = new PhOutputsStep(this.step)
+        // this.$emit('schemaCompute', true)
     },
     methods: {
-
+        validate() {
+            this.$emit('statusChange', true)
+        }
     },
     computed: {
 
@@ -77,6 +87,30 @@ export default {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
+                }
+            }
+        }
+
+        .outputs-content {
+            display: flex;
+            flex-direction: column;
+
+            .outputs-content-item {
+                display: flex;
+                flex-direction: row;
+
+                .outputs-content-item-index {
+
+                }
+
+                .outputs-content-item-type {
+                    margin-left: 10px;
+
+                }
+
+                .outputs-content-item-title {
+                    margin-left: 10px;
+
                 }
             }
         }

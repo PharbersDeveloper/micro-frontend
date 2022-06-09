@@ -8,12 +8,6 @@
             <el-form-item label="运行用户名">
                 <el-input v-model="scenario['show-name']"></el-input>
             </el-form-item>
-            <el-form-item label="配置参数">
-                <el-input type="textarea" v-model="scenario.args"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="saveScenario">Save</el-button>
-            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -24,7 +18,6 @@ import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import ElSwitch from "element-ui/packages/switch/index"
 import ElInput from "element-ui/packages/input/index"
-import ElButton from "element-ui/packages/button/index"
 import ScenarioPolicy from "./policy/scenario-policy"
 
 export default {
@@ -32,8 +25,7 @@ export default {
         ElForm,
         ElFormItem,
         ElSwitch,
-        ElInput,
-        ElButton
+        ElInput
     },
     data() {
         return {
