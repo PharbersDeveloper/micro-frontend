@@ -2,7 +2,9 @@
 import { hostName, actionTableName } from "../config/envConfig"
 
 export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
-	let params = e.detail[0].args.param
+	const params = e.detail[0].args.param
+	const tenantId = route.cookies.read("company_id")
+	const accessToken = route.cookies.read("access_token")
 	let uri = ""
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
@@ -17,8 +19,6 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 				const traceId = guid()
 				const scenarioId = guid()
 				const url = `${hostName}/phscenariostrigger`
-				const accessToken = route.cookies.read("access_token")
-				const tenantId = route.cookies.read("company_id")
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
 				let body = {
@@ -37,7 +37,7 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 						desc: "create or update scenario",
 						comments: "something need to say",
 						message: JSON.stringify({
-							optionName: "create_scenario",
+							optionName: "update_scenario",
 							cat: "scenario",
 							actionName: params.scenarioName
 						}),
@@ -99,13 +99,69 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "success") {
-			alert("更新scenario成功！")
-			route.router.transitionTo("shell", route.scenarioListUri)
+			if (params.type === "trigger") {
+				triggerScenario()
+			} else {
+				alert("更新scenario成功！")
+				route.router.transitionTo("shell", route.scenarioListUri)
+			}
 		} else if (status == "failed") {
 			alert("更新失败")
 			console.log(error)
 		}
 		route.loadingService.loading.style.display = "none"
+	}
+
+	async function triggerScenario() {
+		const traceId = guid()
+		const url = `${hostName}/phscenarioexecutiontrigger`
+		const body = {
+			common: {
+				traceId: traceId,
+				projectId: params.projectId,
+				projectName: params.projectName,
+				owner: route.cookies.read("account_id"),
+				showName: decodeURI(route.cookies.read("user_name_show")),
+				tenantId: tenantId
+			},
+			action: {
+				cat: "scenarioTrigger",
+				desc: "scenario trigger",
+				comments: "something need to say",
+				message: JSON.stringify({
+					optionName: "scenario_trigger",
+					cat: "scenario",
+					actionName: params.scenarioName
+				}),
+				required: true
+			},
+			notification: {
+				required: true
+			},
+			scenario: {
+				scenarioId: params.scenarioId,
+				runtime: "manual"
+			}
+		}
+		let options = {
+			method: "POST",
+			headers: {
+				Authorization: accessToken,
+				"Content-Type":
+					"application/x-www-form-urlencoded; charset=UTF-8",
+				accept: "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		let triggerScenarioResult = await fetch(url, options).then((res) =>
+			res.json()
+		)
+		if (triggerScenarioResult.status === "succeed") {
+			const uri = `executions?projectName=${params.projectName}&projectId=${params.projectId}`
+			route.router.transitionTo("shell", uri)
+		} else {
+			alert("运行失败，请重新操作！")
+		}
 	}
 
 	function guid() {

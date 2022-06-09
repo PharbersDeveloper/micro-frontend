@@ -2,15 +2,6 @@
     <div class="scenario-triggers">
         <div class="scenario-trigger-create">
             <h2>Triggers</h2>
-            <!-- <el-select placeholder="ADD Trigger" value="ADD Trigger" @change="addNewTrigger">
-                <el-option
-                        v-for="item in options"
-                        :key="item.index"
-                        :label="item.desc"
-                        :value="item.cat"
-                        :disabled="item.disable">
-                </el-option>
-            </el-select> -->
 			<select 
 				class="add-trigger-select"
 				ref="addNewTriggerSelect"
@@ -85,27 +76,15 @@
 </template>
 
 <script>
-// import CreateScenarioDlg from "./create-scenario-dlg"
 import ElCollapse from "element-ui/packages/collapse/index"
 import ElCollapseItem from "element-ui/packages/collapse-item/index"
-// import ElSelect from "element-ui/packages/select/index"
-// import ElOption from "element-ui/packages/option/index"
 import ElSwitch from "element-ui/packages/switch/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import ElInput from "element-ui/packages/input/index"
 import ElCol from "element-ui/packages/col/index"
-// import ElDatePicker from "element-ui/packages/date-picker/index"
 import ElButton from "element-ui/packages/button/index"
 import moment from 'moment'
-// // Main JS (in UMD format)
-// import VueTimepicker from 'vue2-timepicker'
-
-// // CSS
-// import 'vue2-timepicker/dist/VueTimepicker.css'
-
-// import Datepicker from 'vuejs-datepicker';
-
 import datetime from 'vuejs-datetimepicker';
 
 export default {

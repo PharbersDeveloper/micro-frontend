@@ -1,15 +1,6 @@
 <template>
-    <div class="schema-item box" :style="{width: itemWidth +'px'}" >
+    <div class="schema-item box" :style="style" >
         <span class="schema-title">{{title}}</span>
-        <!-- <bp-select-vue v-if="isNeedPopmenu" 
-            class="schema-type" 
-            :src="selectIcon" 
-            :choosedValue="itemValueType" 
-            @showSelectOption="showSelectOption" 
-            :closeTosts="closeTosts">
-            <bp-option-vue class="schema-select-item" text="Text" @click="selectScript(1)"></bp-option-vue>
-            <bp-option-vue class="schema-select-item" text="Number" @click="selectScript(2)"></bp-option-vue>
-        </bp-select-vue> -->
         <select name="" id="" v-model="itemValueType" class="schema-type" ref="schemaType" @change="selectScript" v-if="isNeedPopmenu">
             <option class="schema-select-item" value="Text"  @click="selectScript(1)">Text</option>
             <option class="schema-select-item" value="Number" @click="selectScript(2)">Number</option>
@@ -19,8 +10,6 @@
     </div>
 </template>
 <script>
-import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 export default {
     data() {
         return {
@@ -31,9 +20,17 @@ export default {
             itemValueType: "Text"
         }
     },
+    computed: {
+        style: function() {
+            let tmp = ""
+            tmp = "width: " + this.itemWidth + 'px;'
+            if (this.title === "__match") {
+                tmp += "display: none;"
+            }
+            return tmp
+        }
+    },
     components: {
-        bpSelectVue,
-        bpOptionVue
     },
     props: {
         valueType: {
@@ -101,9 +98,9 @@ export default {
             font-size: 13px;
             color: #333333;
             margin-left: 8px;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .schema-type {
             color: #666666;
