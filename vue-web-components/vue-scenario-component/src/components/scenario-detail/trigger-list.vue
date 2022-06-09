@@ -62,8 +62,6 @@
                         </el-col>
                     </el-form-item>
                     <el-form-item class="time" label="开始时间">
-						<!-- <datepicker v-model="item.start" format="yyyy-MM-dd HH:mm:ss"></datepicker> -->
-						<!-- <vue-timepicker v-model="item.start" format="HH:mm:ss"></vue-timepicker> -->
 						<datetime @change="item.edited = true" format="YYYY-MM-DD H:i:s" width="300px" v-model="item.start"></datetime>
                     </el-form-item>
                     <el-form-item label="时区">

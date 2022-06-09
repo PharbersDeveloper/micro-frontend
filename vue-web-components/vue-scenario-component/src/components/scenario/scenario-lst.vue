@@ -149,22 +149,33 @@
         </div>
         <!-- 添加tag -->
         <create-tags-dialog
-                v-if="showCreateTagsDialog"
-                :scenarioCheckedIds="scenarioCheckedIds"
-                :scenarioCheckedNames="scenarioCheckedNames"
-                :scenarios="allData.scenarios"
-                :tagsArray="allData.tagsArray"
-                :tagsColorArray="tagsColorArray"
-                @addTagsEvent="addTagsEvent"
-                @closeCreateDialog="closeCreateDialog">
+			v-if="showCreateTagsDialog"
+			:scenarioCheckedIds="scenarioCheckedIds"
+			:scenarioCheckedNames="scenarioCheckedNames"
+			:scenarios="allData.scenarios"
+			:tagsArray="allData.tagsArray"
+			:tagsColorArray="tagsColorArray"
+			@addTagsEvent="addTagsEvent"
+			@closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
-        <create-scenario-dlg :dialog-visible="showCreateScenarioDialog"
-                             :project-id="allData.projectId"
-                             :project-name="allData.projectNam"
-                             :index="nextIndexValue" owner="alfred"
-                             @cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
+        <create-scenario-dlg 
+			:dialog-visible="showCreateScenarioDialog"
+			:project-id="allData.projectId"
+			:project-name="allData.projectNam"
+			:index="nextIndexValue" owner="alfred"
+			@cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
+		<el-dialog
+            title="数据样本配置"
+            :visible.sync="deleteScenarioDialog"
+            width="800px">
+            <div>确定删除以下scenario吗？</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="deleteScenarioDialog = false">取消</el-button>
+                <el-button type="primary" @click="on_clickDeleteScenarioDialog">确认</el-button>
+            </span>
+        </el-dialog>
     </div>
 
 </template>
@@ -178,6 +189,8 @@ import { staticFilePath } from '../../config/envConfig'
 import ElSwitch from "element-ui/packages/switch/index"
 import CreateScenarioDlg from "./create-scenario-dlg"
 import PhDagDefinitions from "../policy/definitions/definitions";
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElButton from 'element-ui/packages/button/index'
 
 export default {
     data() {
@@ -217,7 +230,8 @@ export default {
             // about render
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-			searchData: []
+			searchData: [],
+			deleteScenarioDialog: false
         }
     },
     props: {
@@ -245,7 +259,9 @@ export default {
         bpSelectVue,
         bpOptionVue,
         ElSwitch,
-        CreateScenarioDlg
+        CreateScenarioDlg,
+        ElButton,
+        ElDialog
     },
     computed: {
         nextIndexValue() {
@@ -276,6 +292,22 @@ export default {
         }
     },
     methods: {
+		on_clickDeleteScenarioDialog() {
+			const event = new Event("event")
+            event.args = {
+                callback: "deleteScenarios",
+                element: this,
+                param: {
+                    name: "deleteScenarios",
+                    selectedScenarios: this.scenarioCheckedIds,
+					scenarioArray: this.allData.scenarios,
+					projectName: this.allData.projectName,
+					projectId: this.allData.projectId
+                }
+            }
+            this.deleteScenarioDialog = false
+            this.$emit('event', event)
+		},
         checkName(data) {
             let arr = this.allData.scenarios.filter(it => it.name === data)
             return arr.length === 0
@@ -435,6 +467,7 @@ export default {
         //打开删除数据集弹框
         deleteCurrentScenario() {
             // TODO: 删除
+			this.deleteScenarioDialog = true
         },
         openCreateScenarioDialog() {
             this.showCreateScenarioDialog = !this.showCreateScenarioDialog
