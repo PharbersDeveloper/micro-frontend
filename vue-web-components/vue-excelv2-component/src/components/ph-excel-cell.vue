@@ -23,6 +23,9 @@ export default {
             if (dtype === "Text") {
                 tmp += "text-align: left;"
             }
+            if(this.state === "reverse") {
+                tmp += "color: #bbb"
+            }
             return tmp
         }
     },

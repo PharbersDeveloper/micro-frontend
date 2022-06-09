@@ -18,7 +18,7 @@ export default {
     computed: {
         style: function() {
         	if (this.rowState === "reverse") {
-        	    return "background-color: red"
+        	    return "background-color: #aaa"
             } else return ""
         }
     },

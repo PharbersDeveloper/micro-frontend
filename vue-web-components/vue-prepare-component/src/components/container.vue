@@ -72,7 +72,10 @@
             </div>
             <div class="prepare_area_right">
                 <div class="main_container">
-                    <bp-excel v-if="steps.isReady" ref="excel" viewHeight="calc(100vh - 300px)"
+                    <bp-excel 
+						v-if="steps.isReady" 
+						ref="excel" 
+						viewHeight="calc(100vh - 300px)"
                         :isNeedPopmenu="false"
 						@sample="sample"
                         v-on:countIsReady="totalCountIsReady"
