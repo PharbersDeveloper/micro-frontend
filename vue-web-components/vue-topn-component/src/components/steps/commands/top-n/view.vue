@@ -22,7 +22,7 @@
                 <h3>排序</h3>
                 <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.orders" :key="index">
                     <div class="topn-sort-item">
-                        <span lass="topn-sort-title">{{item.column}}</span>
+                        <span class="topn-sort-title">{{item.column}}</span>
                         <div topn-sort-btn-group>
                             <el-switch
                                     class="topn-sort-desc-btn"

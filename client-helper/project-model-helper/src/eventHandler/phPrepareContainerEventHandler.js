@@ -2,7 +2,8 @@ import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phPrepareContainerEventHandler(e, route) {
-	let params = e.detail[0].args.param
+	const params = e.detail[0].args.param
+	const element = e.detail[0].args.element
 	let uri = ""
 	route.msg = "新建"
 	switch (e.detail[0].args.callback) {
@@ -153,11 +154,15 @@ export async function phPrepareContainerEventHandler(e, route) {
 			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed") {
-			alert(`${route.msg}脚本成功！`)
-			route.router.transitionTo(
-				"shell",
-				`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
-			)
+			if (params.type === "preview") {
+				element.steps.refreshData()
+			} else {
+				alert(`${route.msg}脚本成功！`)
+				route.router.transitionTo(
+					"shell",
+					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+				)
+			}
 		} else {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =

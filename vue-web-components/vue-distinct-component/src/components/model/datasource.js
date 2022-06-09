@@ -64,24 +64,21 @@ export default class PhDataSource {
                     that.step = {
                         pjName: "-".join(projectId, jobName),
                         stepId: "1",
-                        ctype: "TopN",
+                        ctype: "Distinct",
                         expressions: JSON.stringify({
                             "parmas": {
-                                "firstRows": 0,
-                                "lastRows": 0,
                                 "keys": [],
                                 "preFilter": {
                                     "distinct": false,
                                     "enabled": true,
                                     "expression": ""
                                 },
-                                "orders": [],
-                                "denseRank": false,
-                                "duplicateCount": false,
-                                "rank": false,
-                                "rowNumber": false,
-                                "retrievedColumns": [],
-                                "computedColumns": []
+                                "postFilter": {
+                                    "distinct": false,
+                                    "enabled": true,
+                                    "expression": ""
+                                },
+                                "globalCount": true
                             }
                         }),
                         expressionsValue: "JSON",
@@ -89,8 +86,8 @@ export default class PhDataSource {
                         groupName: "",
                         id: "-".join(projectId, jobName, "1"),
                         index: "1",
-                        runtime : "topn",
-                        stepName: "topn"
+                        runtime : "distinct",
+                        stepName: "distinct"
                     }
                 } else {
                     that.step = data[0]

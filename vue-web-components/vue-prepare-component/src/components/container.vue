@@ -62,22 +62,28 @@
                             </li>
                         </ul>
                     </div>
-                    <el-button
-                        class="add_new_step"
-                        @click="showOpFactories">
-                        <img :src="defs.iconsByName('add')" alt="" />
-                        添加一个新算子
-                    </el-button>
+                    <div class="opt-btn">
+                        <el-button
+                            class="add_new_step preview"
+                            @click="previewExcel">
+                            Apply for Preview
+                        </el-button>
+                        <el-button
+                            class="add_new_step"
+                            @click="showOpFactories">
+                            <img :src="defs.iconsByName('add')" alt="" />
+                            添加一个新算子
+                        </el-button>
+                    </div>
                 </div>
             </div>
             <div class="prepare_area_right">
                 <div class="main_container">
                     <bp-excel 
-						v-if="steps.isReady" 
-						ref="excel" 
-						viewHeight="calc(100vh - 300px)"
+                        v-if="steps.isReady" 
+                        ref="excel" 
+                        viewHeight="calc(100vh - 300px)"
                         :isNeedPopmenu="false"
-						@sample="sample"
                         v-on:countIsReady="totalCountIsReady"
                         @countIsReady="totalCountIsReady"
                         :datasource="datasource" :schema="schema" class="excel" />
@@ -85,11 +91,11 @@
             </div>
         </div>
         <op-factories ref="opFactories" class="op-factories" :visible="drawer" @newStep="newStep"/>
-		<el-dialog
+        <el-dialog
             title="数据样本配置"
             :visible.sync="sampleVisible"
             width="800px">
-			<div>请先进行数据样本配置</div>
+            <div>请先进行数据样本配置</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="sampleVisible = false">确认</el-button>
             </span>
@@ -189,27 +195,9 @@ export default {
         this.steps.refreshData()
     },
     methods: {
-        sample() {
-            this.sampleVisible = true
-            // let sel = confirm("是否进行数据样本配置？")
-            // if (sel) {
-            //     const event = new Event("event")
-            //     event.args = {
-            //         callback: "clickSample",
-            //         element: this,
-            //         param: {
-            //             "name": "clickSample",
-            //             "projectName": this.allData.projectName,
-            //             "projectId": this.allData.projectId,
-            //             "targetDataset": this.allData.targetDataset,
-            //             "sample": "F_1",
-            //             "datasetId": this.allData.datasetId,
-            //             "datasetType": this.allData.datasetCat
-            //         }
-            //     }
-            //     console.log(event)
-            //     this.$emit('event', event)
-            // }
+        previewExcel () {
+            this.save("preview")
+            // this.steps.refreshData()
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
@@ -312,7 +300,8 @@ export default {
             const result = await fetch(url, options)
             return result.status === 200
         },
-        async save() {
+        async save(type) {
+            
             //删除算子
             for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
                 // await this.deleteStepsArray[idx].delete(this)
@@ -356,7 +345,8 @@ export default {
                     projectName: this.projectName,
                     itemArr: expressionsArr,
                     stepsArr: itemArr,
-                    message: this.allData.message
+                    message: this.allData.message,
+                    type: type
                 }
             }
             this.$emit('event', event)
@@ -401,7 +391,7 @@ export default {
         font-display: "auto";
         font-style: normal
     }
-	.el-dialog__wrapper {
+    .el-dialog__wrapper {
         background: rgba(0, 0, 0, 0.31);
     }
     .prepare {
@@ -474,7 +464,7 @@ export default {
                 font-size: 14px;
                 color: #000000;
                 .left_title {
-                    height: 40px;
+                    // height: 40px;
                     display: flex;
                     align-items: center;
                     padding-left: 50px;
@@ -555,17 +545,26 @@ export default {
                             }
                         }
                     }
-                    .add_new_step {
-                        margin-top: 30px;
-                        width: 216px;
-                        height: 25px;
-                        background: #F8D634;
-                        box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.5);
+                    .opt-btn {
                         display: flex;
+                        flex-direction: column;
                         align-items: center;
-                        justify-content: center;
-                        font-size: 12px;
-                        color: #000000;
+                        // padding-top: 30px;
+                        .add_new_step {
+                            margin: 10px 0;
+                            width: 216px;
+                            height: 25px;
+                            background: #F8D634;
+                            box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.5);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 12px;
+                            color: #000000;
+                        }
+                        .preview {
+                            background: #32C5FF;
+                        }
                     }
                 }
             }
