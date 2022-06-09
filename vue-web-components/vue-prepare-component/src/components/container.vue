@@ -62,22 +62,29 @@
                             </li>
                         </ul>
                     </div>
-                    <el-button
-                        class="add_new_step"
-                        @click="showOpFactories">
-                        <img :src="defs.iconsByName('add')" alt="" />
-                        添加一个新算子
-                    </el-button>
+                    <div class="opt-btn">
+                        <el-button
+                            class="add_new_step preview"
+                            @click="previewExcel">
+                            Apply for Preview
+                        </el-button>
+                        <el-button
+                            class="add_new_step"
+                            @click="showOpFactories">
+                            <img :src="defs.iconsByName('add')" alt="" />
+                            添加一个新算子
+                        </el-button>
+                    </div>
                 </div>
             </div>
             <div class="prepare_area_right">
                 <div class="main_container">
                     <bp-excel 
-						v-if="steps.isReady" 
-						ref="excel" 
-						viewHeight="calc(100vh - 300px)"
+                        v-if="steps.isReady" 
+                        ref="excel" 
+                        viewHeight="calc(100vh - 300px)"
                         :isNeedPopmenu="false"
-						@sample="sample"
+                        @sample="sample"
                         v-on:countIsReady="totalCountIsReady"
                         @countIsReady="totalCountIsReady"
                         :datasource="datasource" :schema="schema" class="excel" />
@@ -85,11 +92,11 @@
             </div>
         </div>
         <op-factories ref="opFactories" class="op-factories" :visible="drawer" @newStep="newStep"/>
-		<el-dialog
+        <el-dialog
             title="数据样本配置"
             :visible.sync="sampleVisible"
             width="800px">
-			<div>请先进行数据样本配置</div>
+            <div>请先进行数据样本配置</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="sampleVisible = false">确认</el-button>
             </span>
@@ -211,6 +218,10 @@ export default {
             //     this.$emit('event', event)
             // }
         },
+        previewExcel () {
+            this.save()
+            // this.steps.refreshData()
+        },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
@@ -328,22 +339,6 @@ export default {
                 itemArr.push(step2SaveObj(item))
             }
             itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
-            // const body = {
-            //     table: "step",
-            //     item: itemArr
-            // }
-            // const url = `${hostName}/phdydatasource/put_item`
-            // let headers = {
-            //     Authorization: this.getCookie("access_token") || this.debugToken,
-            //     "Content-Type": "application/vnd.api+json",
-            //     Accept: "application/vnd.api+json"
-            // }
-            // let options = {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(body)
-            // }
-            // await fetch(url, options)
 
             // 保存脚本
             const event = new Event("event")
@@ -401,7 +396,7 @@ export default {
         font-display: "auto";
         font-style: normal
     }
-	.el-dialog__wrapper {
+    .el-dialog__wrapper {
         background: rgba(0, 0, 0, 0.31);
     }
     .prepare {
@@ -474,7 +469,7 @@ export default {
                 font-size: 14px;
                 color: #000000;
                 .left_title {
-                    height: 40px;
+                    // height: 40px;
                     display: flex;
                     align-items: center;
                     padding-left: 50px;
@@ -555,17 +550,26 @@ export default {
                             }
                         }
                     }
-                    .add_new_step {
-                        margin-top: 30px;
-                        width: 216px;
-                        height: 25px;
-                        background: #F8D634;
-                        box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.5);
+                    .opt-btn {
                         display: flex;
+                        flex-direction: column;
                         align-items: center;
-                        justify-content: center;
-                        font-size: 12px;
-                        color: #000000;
+                        // padding-top: 30px;
+                        .add_new_step {
+                            margin: 10px 0;
+                            width: 216px;
+                            height: 25px;
+                            background: #F8D634;
+                            box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.5);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 12px;
+                            color: #000000;
+                        }
+                        .preview {
+                            background: #32C5FF;
+                        }
                     }
                 }
             }
