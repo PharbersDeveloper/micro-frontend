@@ -84,7 +84,6 @@
                         ref="excel" 
                         viewHeight="calc(100vh - 300px)"
                         :isNeedPopmenu="false"
-                        @sample="sample"
                         v-on:countIsReady="totalCountIsReady"
                         @countIsReady="totalCountIsReady"
                         :datasource="datasource" :schema="schema" class="excel" />
@@ -196,28 +195,6 @@ export default {
         this.steps.refreshData()
     },
     methods: {
-        sample() {
-            this.sampleVisible = true
-            // let sel = confirm("是否进行数据样本配置？")
-            // if (sel) {
-            //     const event = new Event("event")
-            //     event.args = {
-            //         callback: "clickSample",
-            //         element: this,
-            //         param: {
-            //             "name": "clickSample",
-            //             "projectName": this.allData.projectName,
-            //             "projectId": this.allData.projectId,
-            //             "targetDataset": this.allData.targetDataset,
-            //             "sample": "F_1",
-            //             "datasetId": this.allData.datasetId,
-            //             "datasetType": this.allData.datasetCat
-            //         }
-            //     }
-            //     console.log(event)
-            //     this.$emit('event', event)
-            // }
-        },
         previewExcel () {
             this.save("preview")
             // this.steps.refreshData()
@@ -324,6 +301,7 @@ export default {
             return result.status === 200
         },
         async save(type) {
+            
             //删除算子
             for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
                 // await this.deleteStepsArray[idx].delete(this)
