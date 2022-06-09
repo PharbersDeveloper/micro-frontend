@@ -15,4 +15,8 @@ export default class PhTopNStep {
         if (this.command.validations())
             this.command.exec()
     }
+
+    revert2Defs() {
+        return this.command.revert2Defs()
+    }
 }

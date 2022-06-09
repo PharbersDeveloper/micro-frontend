@@ -36,6 +36,15 @@
                           :step="datasource.step"
                           :schema="datasource.dataset.schema"
                           @statusChange="topnStatus" />
+                <retrieved-cols v-show="active === 4"
+                                ref="retrieved"
+                                :step="datasource.step"
+                                :schema="computedSchema"
+                                @statusChange="retrievedStatus" />
+                <outputs v-show="active === 5"
+                                ref="outputs"
+                                :schema="outputsSchema"
+                                @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -52,6 +61,8 @@ import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
 import Computed from './steps/commands/computed/view'
 import TopN from './steps/commands/top-n/view'
+import RetrievedCols from './steps/commands/retrieved-cols/view'
+import Outputs from './steps/commands/output/view'
 
 export default {
     components: {
@@ -60,10 +71,14 @@ export default {
         ElButton,
         PreFilter,
         Computed,
-        TopN
+        TopN,
+        RetrievedCols,
+        Outputs
     },
     data() {
         return {
+            computedSchema: [],
+            outputsSchema: [],
             active: 1,
             stepsDefs: [
                 {
@@ -149,36 +164,71 @@ export default {
         topnStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[1].status = "success"
+                this.stepsDefs[2].status = "success"
             } else {
-                this.stepsDefs[1].status = "error"
+                this.stepsDefs[2].status = "error"
             }
+        },
+        retrievedStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[3].status = "success"
+            } else {
+                this.stepsDefs[3].status = "error"
+            }
+        },
+        outputsStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[4].status = "success"
+            } else {
+                this.stepsDefs[4].status = "error"
+            }
+        },
+        computeSchema() {
+            const result = []
+            for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
+                result.push({
+                    "type": this.datasource.dataset.schema[idx]["type"].toLowerCase(),
+                    "title": this.datasource.dataset.schema[idx]["src"]
+                })
+            }
+            const addCols = this.$refs.computed.datasource.revert2Defs()
+            for (let idx = 0; idx < addCols.length; ++idx) {
+                result.push({
+                    "type": addCols[idx]["type"].toLowerCase(),
+                    "title": addCols[idx]["name"]
+                })
+            }
+            return result
+        },
+        genOutputsSchema() {
+            const retrieved = this.$refs.retrieved.datasource.revert2Defs()
+            let result = []
+            if (retrieved.length === 0) {
+                result = this.computedSchema
+            } else {
+                result = this.computedSchema.filter(x => retrieved.includes(x.title))
+            }
+            return result
         },
         save() {
             const params = {
-                "firstRows": 0,
-                "lastRows": 0,
-                "keys": [],
+                "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
+                "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
+                "keys": this.$refs.topn.datasource.revert2Defs().keys,
                 "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                "orders": [
-                    {"column": "xx", "desc": true},
-                    {"column": "xxxx", "desc": false}
-                ],
-                "denseRank": true,
-                "duplicateCount": true,
-                "rank": true,
-                "rowNumber": true,
-                "retrievedColumns": ["xx", "xxx"],
-                "computedColumns": [
-                    {
-                        "expr": "'姓名'+'学号'",
-                        "name": "AAA",
-                        "type": "double"
-                    }
-                ]
+                "orders": this.$refs.topn.datasource.revert2Defs().orders,
+                "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
+                "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
+                "rank": this.$refs.topn.datasource.revert2Defs().rank,
+                "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
+                "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
+                "computedColumns": this.$refs.computed.datasource.revert2Defs()
             }
 
             console.log(params)
+            this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
         },
     },
     mounted() {
@@ -196,9 +246,20 @@ export default {
 
     },
     watch: {
-        active() {
+        active(n) {
             this.$refs.filter.validate()
             this.$refs.computed.validate()
+            this.$refs.topn.validate()
+            this.$refs.retrieved.validate()
+            this.$refs.outputs.validate()
+
+            if (n === 4 || n === 5) {
+                this.computedSchema = this.computeSchema()
+            }
+
+            if (n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
         }
     }
 }

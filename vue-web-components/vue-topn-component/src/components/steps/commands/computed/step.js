@@ -19,4 +19,8 @@ export default class PhComputedStep {
     validate() {
         return true
     }
+
+    revert2Defs() {
+        return this.command.revert2Defs()
+    }
 }
