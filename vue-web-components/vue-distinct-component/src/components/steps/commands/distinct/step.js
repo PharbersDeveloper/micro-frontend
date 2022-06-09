@@ -1,14 +1,15 @@
-import PhTopNCmd from "./cmd"
+import PhDistinctCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
  */
-export default class PhTopNStep {
+export default class PhDistinctStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["parmas"]
-        this.command = new PhTopNCmd(defs)
+        const defs = this.expressions["parmas"]["keys"]
+        this.globalCount = this.expressions["parmas"]["globalCount"]
+        this.command = new PhDistinctCmd(defs)
     }
 
     exec() {
@@ -17,6 +18,9 @@ export default class PhTopNStep {
     }
 
     revert2Defs() {
-        return this.command.revert2Defs()
+        return {
+            keys: this.command.revert2Defs(),
+            globalCount: this.globalCount
+        }
     }
 }

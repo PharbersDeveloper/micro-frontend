@@ -25,7 +25,7 @@
                     <select v-model="cur['op']">
                         <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
                     </select>
-                    <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" :value="cur['right']" ></el-input>
+                    <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" ></el-input>
                     <el-input v-else disabled ></el-input>
                 </div>
                 <el-button type="text" @click="datasource.command.delcloases(index)">删除</el-button>

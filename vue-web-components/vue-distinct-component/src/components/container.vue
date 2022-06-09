@@ -4,7 +4,7 @@
         <div class="topn_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('topn')" alt="" />
-                <span>Top N</span>
+                <span>Distinct</span>
             </div>
             <div class="header_right">
                 <el-button class="save" @click="save">保存</el-button>
@@ -165,21 +165,14 @@ export default {
         },
         save() {
             const params = {
-                "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
-                "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
-                "keys": this.$refs.topn.datasource.revert2Defs().keys,
-                "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                "orders": this.$refs.topn.datasource.revert2Defs().orders,
-                "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
-                "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
-                "rank": this.$refs.topn.datasource.revert2Defs().rank,
-                "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
-                "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
-                "computedColumns": this.$refs.computed.datasource.revert2Defs()
+                "keys": this.$refs.distinct.datasource.revert2Defs().keys,
+                "preFilter": this.$refs.prefilter.datasource.revert2Defs(),
+                "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
+                "globalCount": this.$refs.distinct.datasource.revert2Defs().globalCount
             }
 
             console.log(params)
-            this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            // this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
         }
     },
     mounted() {
@@ -187,7 +180,7 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.projectIdTest = "alfredtest"
         // this.jobName = this.getJobName()
-        this.jobName = "alfredtest"
+        this.jobName = "distinct"
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectIdTest, this.jobName)
