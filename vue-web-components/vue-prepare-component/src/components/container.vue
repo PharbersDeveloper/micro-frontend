@@ -219,7 +219,7 @@ export default {
             // }
         },
         previewExcel () {
-            this.save()
+            this.save("preview")
             // this.steps.refreshData()
         },
         getJobName() {
@@ -323,7 +323,7 @@ export default {
             const result = await fetch(url, options)
             return result.status === 200
         },
-        async save() {
+        async save(type) {
             //删除算子
             for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
                 // await this.deleteStepsArray[idx].delete(this)
@@ -339,6 +339,22 @@ export default {
                 itemArr.push(step2SaveObj(item))
             }
             itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
+            // const body = {
+            //     table: "step",
+            //     item: itemArr
+            // }
+            // const url = `${hostName}/phdydatasource/put_item`
+            // let headers = {
+            //     Authorization: this.getCookie("access_token") || this.debugToken,
+            //     "Content-Type": "application/vnd.api+json",
+            //     Accept: "application/vnd.api+json"
+            // }
+            // let options = {
+            //     method: "POST",
+            //     headers: headers,
+            //     body: JSON.stringify(body)
+            // }
+            // await fetch(url, options)
 
             // 保存脚本
             const event = new Event("event")
@@ -351,7 +367,8 @@ export default {
                     projectName: this.projectName,
                     itemArr: expressionsArr,
                     stepsArr: itemArr,
-                    message: this.allData.message
+                    message: this.allData.message,
+                    type: type
                 }
             }
             this.$emit('event', event)

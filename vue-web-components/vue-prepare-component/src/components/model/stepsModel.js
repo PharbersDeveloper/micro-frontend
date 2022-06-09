@@ -107,6 +107,7 @@ export default class PhStepsDyModel {
 
     genQueryView() {
         const that = this
+		this.isReady = false
         this.buildGenViewBaseOnStepsQuery()
             .then((response) => response.json())
             .then((response) => {
@@ -117,7 +118,7 @@ export default class PhStepsDyModel {
                 } else {
                     console.log(response)
                     // eslint-disable-next-line no-debugger
-                    debugger
+                    // debugger
                 }
             })
     }
