@@ -58,11 +58,11 @@ import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
-import PreFilter from './steps/commands/pre-filter/view'
-import Computed from './steps/commands/computed/view'
-import TopN from './steps/commands/top-n/view'
-import RetrievedCols from './steps/commands/retrieved-cols/view'
-import Outputs from './steps/commands/output/view'
+import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Computed from './steps/commands/computed/computedView'
+import TopN from './steps/commands/top-n/topnView'
+import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
+import Outputs from './steps/commands/output/outputView'
 
 export default {
     components: {
