@@ -51,6 +51,8 @@ export default class ApplicationRoute extends Route {
 			routeValue = "flow"
 		} else if(urlName.indexOf("/prepare") > -1) {
 			routeValue = "recipes"
+		} else if(urlName.indexOf("/topn") > -1) {
+			routeValue = "recipes"
 		}
 		return routeValue
 	}

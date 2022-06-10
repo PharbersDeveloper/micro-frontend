@@ -37,27 +37,19 @@ export async function phTopnContainerEventHandler(e, route) {
 			}
 			route.router.transitionTo(uri)
 			break
-		case "prepare":
+		case "saveTopn":
 			if (params) {
-				let createPrepareData = await route.store.peekRecord(
-					"tempdata",
-					"createPrepare"
-				)
 				let editPrepareData = await route.store.peekRecord(
 					"tempdata",
-					"editPrepare"
+					"topn"
 				)
 				let scriptsParams = {}
 				let inputs = []
 				let outputs = []
 				if (editPrepareData) {
-					scriptsParams = editPrepareData.jsondata.scripts
+					scriptsParams = editPrepareData.jsondata
 					inputs = scriptsParams.inputs
 					outputs.push(scriptsParams.outputs)
-				} else if (createPrepareData) {
-					scriptsParams = createPrepareData.jsondata
-					inputs = scriptsParams.inputs[0]["name"]
-					outputs = scriptsParams.outputs[0]["name"]
 				} else {
 					route.router.transitionTo(
 						"shell",
@@ -72,7 +64,7 @@ export async function phTopnContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				let job_cat_name = "prepare_edit"
+				let job_cat_name = "topn_edit"
 				let scriptBody = {
 					common: {
 						traceId: uuid,
@@ -86,13 +78,13 @@ export async function phTopnContainerEventHandler(e, route) {
 						)
 					},
 					action: {
-						cat: "createSteps",
-						desc: "create prepare steps",
+						cat: "eaitTopn",
+						desc: "edit topn steps",
 						comments: "something need to say",
 						message: JSON.stringify({
-							optionName: "prepare_edit",
+							optionName: "topn_edit",
 							cat: "intermediate",
-							runtime: "prepare",
+							runtime: "topn",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName
@@ -107,7 +99,7 @@ export async function phTopnContainerEventHandler(e, route) {
 						jobPath: "",
 						inputs: inputs,
 						outputs: outputs,
-						runtime: "prepare"
+						runtime: "topn"
 					},
 					steps: params.stepsArr,
 					notification: {
@@ -115,6 +107,7 @@ export async function phTopnContainerEventHandler(e, route) {
 					},
 					oldImage: []
 				}
+				console.log(scriptBody)
 				let scriptOptions = {
 					method: "POST",
 					headers: {

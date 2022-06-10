@@ -5,12 +5,6 @@ export async function phTopnContainerRouteModel(route, parseParams) {
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
-		message: parseParams.query.message,
-		operatorParameters: parseParams.query.operatorParameters
-			? JSON.parse(
-					unescape(decodeURI(parseParams.query.operatorParameters))
-			  )
-			: [],
 		_isVue: true,
 		popupBack: true
 	}
