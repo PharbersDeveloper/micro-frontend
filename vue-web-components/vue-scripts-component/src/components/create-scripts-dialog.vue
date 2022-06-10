@@ -167,7 +167,9 @@ export default {
                 "pyspark": "PySpark",
                 "r": "R",
                 "sparkr": "SparkR",
-                "prepare": "Prepare"
+                "prepare": "Prepare",
+                "distinct": "Distinct",
+                "sort": "Sort"
             }
         }
     },

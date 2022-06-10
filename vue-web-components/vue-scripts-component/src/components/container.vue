@@ -61,9 +61,17 @@
                                     <img :src="defs.iconsByName('sync')" alt="">
                                     <p  class="">Sync</p>
                                 </div>
-                                <div class="list last" @click="selectScripts('topn')">
+                                <div class="list" @click="selectScripts('topn')">
                                     <img :src="defs.iconsByName('topn')" alt="">
                                     <p  class="">TopN</p>
+                                </div>
+								<div class="list" @click="selectScripts('distinct')">
+                                    <img :src="defs.iconsByName('distinct')" alt="">
+                                    <p  class="">Distinct</p>
+                                </div>
+								<div class="list last" @click="selectScripts('sort')">
+                                    <img :src="defs.iconsByName('sort')" alt="">
+                                    <p  class="">Sort</p>
                                 </div>
                             </div>
                         </div>
@@ -574,6 +582,10 @@ export default {
                 return this.defs.iconsByName("sync")
             case "topn":
                 return this.defs.iconsByName("topn")
+            case "sort":
+                return this.defs.iconsByName("sort")
+            case "distinct":
+                return this.defs.iconsByName("distinct")
             default:
                 return this.script_icon
             }

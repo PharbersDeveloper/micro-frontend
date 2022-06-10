@@ -53,10 +53,10 @@ import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
-import PreFilter from './steps/commands/pre-filter/view'
-import PostFilter from './steps/commands/post-filter/view'
-import Distinct from './steps/commands/distinct/view'
-import Outputs from './steps/commands/output/view'
+import PreFilter from './steps/commands/pre-filter/preFilterView'
+import PostFilter from './steps/commands/post-filter/postFilterView'
+import Distinct from './steps/commands/distinct/distinctView'
+import Outputs from './steps/commands/output/outputView'
 
 export default {
     components: {
@@ -71,6 +71,7 @@ export default {
     data() {
         return {
             active: 1,
+            flowVersion: "developer",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -116,7 +117,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -172,7 +173,7 @@ export default {
             }
 
             console.log(params)
-            // this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
         }
     },
     mounted() {
@@ -180,10 +181,11 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.projectIdTest = "alfredtest"
         // this.jobName = this.getJobName()
-        this.jobName = "distinct"
+        // this.jobName = "distinct"
+		this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasetId)
     },
     updated() {

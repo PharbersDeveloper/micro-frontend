@@ -37,6 +37,96 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.projectId
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "sort"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "sort_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "sort",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"sort?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
+			} else if (
+				params.name === "codeditor" &&
+				params.recipt.runtime === "distinct"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "distinct_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "distinct",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"distinct?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "topn"
 			) {
 				let recipt = params.recipt
@@ -249,6 +339,48 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					})
 					preUrl =
 						"topn?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "distinct") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "distinct",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"distinct?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "sort") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "sort",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"sort?projectName=" +
 						params.projectName +
 						"&projectId=" +
 						params.projectId +
@@ -484,7 +616,12 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				error
 			}
 		} = JSON.parse(message)
-		if (runtime === "prepare" || runtime === "topn") {
+		if (
+			runtime === "prepare" ||
+			runtime === "topn" ||
+			runtime === "distinct" ||
+			runtime === "sort"
+		) {
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
 			alert("新建脚本成功！")
