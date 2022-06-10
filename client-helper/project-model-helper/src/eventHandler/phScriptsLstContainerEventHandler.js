@@ -81,12 +81,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&jobShowName=" +
 					recipt.jobShowName +
 					"&inputName=" +
-					inputName
-				// +
-				// "&operatorParameters=" +
-				// escape(recipt.operatorParameters) +
-				// "&message=" +
-				// encodeURI(JSON.stringify(scripts))
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "sync"
