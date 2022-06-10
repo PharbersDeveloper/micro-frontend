@@ -6,43 +6,42 @@
                 <h2>Computed Columns</h2>
             </div>
         </div>
-        <div class="computed-list" v-if="datasource">
-            <div class="computed-item"
-                 v-for="(item, index) in datasource.command.computedCols"
-                 :key="index"
-                 @click="computedClicked(item, index)">
-                <span>新建列名</span>
-                <el-input class="computed-item-title" v-model="item.name"></el-input>
-                <span>保存为</span>
-                <select v-model="item.type">
-                    <option v-for="(op, opi) in concretDefs.typeDefs" :key="opi" :value="op.cal" :label="op.desc" />
-                </select>
-                <span>模式</span>
-                <select v-model="datasource.command.pattern">
-                    <option v-for="(op, opi) in concretDefs.pattern" :key="opi" :value="op.cal" :label="op.desc" />
-                </select>
-                <el-button type="text" @click="datasource.command.removeComputedCol(index)">删除</el-button>
-            </div>
-        </div>
-        <div class="computed-expression" v-if="datasource">
-            <ul class="computed-schema-list">
-                <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
-            </ul>
-            <el-input class="computed-expression-expr"
-                      type="textarea"
-                      :rows="10"
-                      v-model="currentExpr"
-                      placeholder="Please input" />
-        </div>
+        <div class="multi-computed-c" v-if="datasource">
+            <div class="multi-computed-item" v-for="(item, index) in datasource.commands" :key="index">
+                <div class="computed-ds-item-title">
+                    <h3>{{item.meta.name}}</h3>
+                </div>
 
-        <div class="computed-add-button">
-            <el-button type="primary" @click="datasource.command.insertComputedCol()">添加</el-button>
+                <el-divider></el-divider>
+
+                <div class="computed-ds-item-col-list" >
+                    <div class="computed-item" v-for="(cur, index) in item.detail.computedCols" :key="index">
+                        <div class="computed-item-detail">
+                            <span>列名:</span>
+                            <span>{{cur.name}}</span>
+                            <span>类型:</span>
+                            <span>{{cur.type}}</span>
+                        </div>
+                        <div class="computed-item-operator">
+                            <el-button type="text" >修改</el-button>
+                            <el-button type="text" >删除</el-button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="computed-add-button">
+                    <el-button type="primary" >添加</el-button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
-import ElInput from 'element-ui/packages/input/index'
+// import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
+import ElDivider from 'element-ui/packages/divider/index'
+// import ElDescriptions from 'element-ui/packages/descriptions/index'
+// import ElDescriptionsItem from 'element-ui/packages/descriptions-item/index'
 import { PhComputedDefs } from "./defs"
 import PhComputedStep from "./step"
 
@@ -56,7 +55,7 @@ export default {
     },
     props: {
         step: Object,
-        schema: Array,
+        schema: Object,
         concretDefs: {
             type: Object,
             default: () => {
@@ -65,12 +64,15 @@ export default {
         }
     },
     components: {
-        ElInput,
-        ElButton
+        ElDivider,
+        // ElInput,
+        ElButton,
+        // ElDescriptions,
+        // ElDescriptionsItem
     },
     mounted() {
         this.datasource = new PhComputedStep(this.step)
-        this.currentExpr = this.datasource.command.computedCols[0]["expr"]
+        // this.currentExpr = this.datasource.command.computedCols[0]["expr"]
     },
     methods: {
         itemClicked(v) {
@@ -102,8 +104,8 @@ export default {
     }
     .computed {
         margin-top: 4px;
-        /*width: 100%;*/
-        min-width: 800px;
+        width: 100%;
+        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
@@ -133,20 +135,17 @@ export default {
         .computed-item {
             display: flex;
             flex-direction: row;
-            cursor: pointer;
+            justify-content: space-between;
             border: 1px solid greenyellow;
 
-
-            .computed-item-title {
-                width: 100px;
+            .computed-item-detail {
+                display: flex;
+                flex-direction: row;
             }
 
-            .computed-item-type {
-
-            }
-
-            .computed-item-mode {
-
+            .computed-item-operator {
+                display: flex;
+                flex-direction: row;
             }
         }
 
@@ -168,6 +167,29 @@ export default {
 
             .computed-expression-expr {
                 margin: 30px 0 0 20px;
+            }
+        }
+
+        .multi-computed-c {
+            display: flex;
+            flex-direction: row;
+
+            .multi-computed-item {
+                display: flex;
+                flex-direction: column;
+                width: 500px;
+
+                border: 1px solid grey;
+            }
+
+            .computed-ds-item-col-list {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+
+                .computed-ds-item-col-item {
+
+                }
             }
         }
 

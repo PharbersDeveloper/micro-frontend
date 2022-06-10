@@ -17,7 +17,7 @@ export default class PhDataSource {
         this.isMetaReady = false
         this.hasNoSchema = false
         this.step = null
-        this.dataset = null
+        this.datasets = []
     }
 
     getCookie(name) {
@@ -100,14 +100,26 @@ export default class PhDataSource {
                 that.store.sync(response)
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
+                    const defaultPreFilter = this.datasets.map(x => { return {
+                        "ds": x,
+                        "preFilter": {
+                            "distinct": false,
+                            "enabled": true,
+                            "expr": ""
+                        }
+                    }})
+                    const defaultPreComputed = this.datasets.map(x => { return {
+                        "ds": x,
+                        "computedColumns": []
+                    }})
                     that.step = {
-                        pjName: "-".join(projectId, jobName),
+                        pjName: [projectId, jobName].join("_"),
                         stepId: "1",
                         ctype: "Join",
                         expressions: JSON.stringify({
                             "params": {
-                                "preFilters": [],
-                                "preJoinComputedColumns": [],
+                                "preFilters": defaultPreFilter,
+                                "preJoinComputedColumns": defaultPreComputed,
                                 "joins": [],
                                 "selectedColumns": [],
                                 "postJoinComputedColumns": [],
@@ -117,7 +129,7 @@ export default class PhDataSource {
                         expressionsValue: "JSON",
                         groupIndex: "0",
                         groupName: "",
-                        id: "-".join(projectId, jobName, "1"),
+                        id: [projectId, jobName, "1"].join("_"),
                         index: "1",
                         runtime : "join",
                         stepName: "join"
@@ -165,14 +177,14 @@ export default class PhDataSource {
 
         Promise.all(ps).then(() => {
             const data = that.store.findAll("datasets")
-            that.schema = data.map(ds => { return {
-                name: ds["name"],
-                schema: ds["schema"]
-            }})
+            that.schema = {}
+            data.forEach(ds => {
+                that.schema[ds["name"]] = JSON.parse(ds["schema"])
+            })
 
-            that.schema.forEach(x => that.schema | x["schema"].length === 0)
+            Object.keys(that.schema).forEach(x => that.hasNoSchema | that.schema[x].length === 0)
 
-            if (that.schema.length !== dsNames.length) {
+            if (Object.keys(that.schema).length !== dsNames.length) {
                 that.hasNoSchema = true
             } else {
                 that.isMetaReady = true
