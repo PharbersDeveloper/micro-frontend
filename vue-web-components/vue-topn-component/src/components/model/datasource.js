@@ -212,11 +212,6 @@ export default class PhDataSource {
 
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-				this.parent.dealsaveAndGenCode(response)
-            })
     }
 
 	guid() {

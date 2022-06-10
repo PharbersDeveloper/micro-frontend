@@ -48,8 +48,14 @@ export async function phTopnContainerEventHandler(e, route) {
 				let outputs = []
 				if (editPrepareData) {
 					scriptsParams = editPrepareData.jsondata
-					inputs = scriptsParams.inputs
-					outputs.push(scriptsParams.outputs)
+					let inputsData = scriptsParams.inputs[0].name
+						? scriptsParams.inputs[0].name
+						: scriptsParams.inputs[0]
+					inputs.push(inputsData)
+					let outputsData = scriptsParams.outputs[0].name
+						? scriptsParams.outputs[0].name
+						: scriptsParams.outputs
+					outputs.push(outputsData)
 				} else {
 					route.router.transitionTo(
 						"shell",
