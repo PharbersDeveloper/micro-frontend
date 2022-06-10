@@ -7,7 +7,7 @@ export default class PhRetrievedColsStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["parmas"]["retrievedColumns"]
+        const defs = this.expressions["params"]["retrievedColumns"]
         this.command = new PhRetrievedColsCmd(defs)
     }
 

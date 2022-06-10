@@ -55,18 +55,14 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "topn_edit"
 				}
-				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
 						{
 							type: "tempdatas",
-							id: "editTopN",
+							id: "topn",
 							attributes: {
-								jsondata: {
-									scripts: scripts,
-									operatorParameters: {}
-								}
+								jsondata: scripts
 							}
 						}
 					]
@@ -104,7 +100,6 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "sync_edit"
 				}
-				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
@@ -131,11 +126,6 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					recipt.jobShowName +
 					"&inputName=" +
 					inputName
-				// +
-				// "&operatorParameters=" +
-				// escape(recipt.operatorParameters) +
-				// "&message=" +
-				// encodeURI(JSON.stringify(scripts))
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "prepare"
@@ -246,6 +236,27 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.jobName +
 						"&inputName=" +
 						params.inputs[0]["name"] +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "topn") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "topn",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"topn?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
 						"&datasetId=" +
 						params.inputs[0]["id"]
 				}
@@ -476,7 +487,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				error
 			}
 		} = JSON.parse(message)
-		if (runtime === "prepare") {
+		if (runtime === "prepare" || runtime === "topn") {
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
 			alert("新建脚本成功！")
