@@ -1,7 +1,7 @@
 import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
-export async function phPrepareContainerEventHandler(e, route) {
+export async function phTopnContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
 	let uri = ""
