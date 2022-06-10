@@ -129,14 +129,15 @@ export default class PhDataSource {
             })
     }
 
-    buildDsMetaQuery(projectId, dsId) {
+    buildDsMetaQuery(projectId, dsName) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "dataset",
+            "index_name": "dataset-projectId-name-index",
             "conditions": {
                 "projectId": ["=", projectId],
-                "id": ["=", dsId]
+                "name": ["=", dsName]
             },
             "limit": 1,
             "start_key": {}
@@ -154,22 +155,29 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshMateData(projectId, dsId) {
+    async refreshMateData(projectId, dsNames) {
         const that = this
-        this.buildDsMetaQuery(projectId, dsId)
+        const ps = dsNames.map(x => this.buildDsMetaQuery(projectId, x)
             .then((response) => response.json())
             .then((response) => {
-                // that.currentPageToken = response.meta.start_key
                 that.store.sync(response)
-                const data = that.store.findAll("datasets")
-                that.dataset = data[0]
-                that.dataset.schema = JSON.parse(that.dataset["schema"])
-                if (that.dataset.schema.length === 0) {
-                    that.hasNoSchema = true
-                } else {
-                    that.isMetaReady = true
-                }
-            })
+            }))
+
+        Promise.all(ps).then(() => {
+            const data = that.store.findAll("datasets")
+            that.schema = data.map(ds => { return {
+                name: ds["name"],
+                schema: ds["schema"]
+            }})
+
+            that.schema.forEach(x => that.schema | x["schema"].length === 0)
+
+            if (that.schema.length !== dsNames.length) {
+                that.hasNoSchema = true
+            } else {
+                that.isMetaReady = true
+            }
+        })
     }
 
     buildSaveQuery(projectId, jobName, param) {

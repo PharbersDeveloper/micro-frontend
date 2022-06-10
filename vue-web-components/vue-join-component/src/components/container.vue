@@ -24,18 +24,18 @@
                 <pre-filter v-show="active === 1"
                             ref="prefilter"
                             :step="datasource.step"
-                            :schema="datasource.dataset.schema"
+                            :schema="datasource.schema[0]['schema']"
                             @statusChange="preFilterStatus" />
                 <pre-computed v-show="active === 2"
                             ref="percomputed"
                             :step="datasource.step"
-                            :schema="datasource.dataset.schema"
+                              :schema="datasource.schema[0]['schema']"
                             @statusChange="preComputedStatus" />
                 <join v-show="active === 3"
-                          ref="join"
-                          :step="datasource.step"
-                          :schema="datasource.dataset.schema"
-                          @statusChange="joinStatus" />
+                      ref="join"
+                      :step="datasource.step"
+                      :schema="datasource.schema[0]['schema']"
+                      @statusChange="joinStatus" />
                 <select-cols v-show="active === 4"
                                 ref="select"
                                 :step="datasource.step"
@@ -44,7 +44,7 @@
                 <post-computed v-show="active === 5"
                                ref="postcomputed"
                                :step="datasource.step"
-                               :schema="datasource.dataset.schema"
+                               :schema="datasource.schema[0]['schema']"
                                @statusChange="postComputedStatus" />
                 <outputs v-show="active === 6"
                                 ref="outputs"
@@ -261,10 +261,10 @@ export default {
         // this.datasetId = this.getUrlParam("datasetId")
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
-        console.log(this.datasource.job)
-        console.log(this.datasource.datasets)
-        // this.datasource.refreshData(this.projectIdTest, this.jobName)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
+        // console.log(this.datasource.job)
+        // console.log(this.datasource.datasets)
+        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
     },
     updated() {
 
