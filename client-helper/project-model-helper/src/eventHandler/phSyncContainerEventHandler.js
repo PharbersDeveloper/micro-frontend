@@ -1,8 +1,9 @@
-// import { hostName } from "../config/envConfig"
+import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phSyncContainerEventHandler(e, route) {
-	let params = e.detail[0].args.param
+	const params = e.detail[0].args.param
+	const element = e.detail[0].args.element
 	let uri = ""
 	route.msg = "新建"
 	switch (e.detail[0].args.callback) {

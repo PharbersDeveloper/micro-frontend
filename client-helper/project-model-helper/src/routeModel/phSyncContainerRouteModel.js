@@ -2,10 +2,7 @@
 
 // eslint-disable-next-line no-unused-vars
 export async function phSyncContainerRouteModel(route, parseParams) {
-	let createsyncData = await route.store.peekRecord(
-		"tempdata",
-		"sync"
-	)
+	let createsyncData = await route.store.peekRecord("tempdata", "sync")
 	let outputs = []
 	if (createsyncData) {
 		let scriptsParams = createsyncData.jsondata
