@@ -40,6 +40,8 @@ import { phScenarioScenarioDetailContainerRouteModel } from "./routeModel/phScen
 import { phScenarioScenarioDetailContainerEventHandler } from "./eventHandler/phScenarioScenarioDetailContainerEventHandler"
 import { phSyncContainerRouteModel } from "./routeModel/phSyncContainerRouteModel"
 import { phSyncContainerEventHandler } from "./eventHandler/phSyncContainerEventHandler"
+import { phTopnContainerRouteModel } from "./routeModel/phTopnContainerRouteModel"
+import { phTopnContainerEventHandler } from "./eventHandler/phTopnContainerEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -83,5 +85,7 @@ export {
 	phScenarioScenarioDetailContainerEventHandler,
 	phScenarioScenarioDetailContainerRouteModel,
 	phSyncContainerRouteModel,
-	phSyncContainerEventHandler
+	phSyncContainerEventHandler,
+	phTopnContainerRouteModel,
+	phTopnContainerEventHandler
 }

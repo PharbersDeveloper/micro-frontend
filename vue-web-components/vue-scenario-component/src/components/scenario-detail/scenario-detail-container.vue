@@ -159,8 +159,15 @@ export default {
             let result = true
 			let stepDisplay = []
 			let triggerDisplay = []
-			triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay)
-			stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay)
+
+			triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
+
+			stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
+
+			// triggerDisplayDelete = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => it.deleted))
+
+			// stepDisplayDelete = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => it.deleted))
+
 			const event = new Event("event")
             event.args = {
                 callback: "saveScenario",
@@ -173,6 +180,8 @@ export default {
                     scenarioId: this.datasource.scenarioId,
 					triggerDisplay: triggerDisplay,
 					stepDisplay: stepDisplay,
+					// triggerDisplayDelete: triggerDisplayDelete,
+					// stepDisplayDelete: stepDisplayDelete,
 					type: type
                 }
             }

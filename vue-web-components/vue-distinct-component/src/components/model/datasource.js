@@ -66,7 +66,7 @@ export default class PhDataSource {
                         stepId: "1",
                         ctype: "Distinct",
                         expressions: JSON.stringify({
-                            "parmas": {
+                            "params": {
                                 "keys": [],
                                 "preFilter": {
                                     "distinct": false,
@@ -149,7 +149,7 @@ export default class PhDataSource {
                 pjName: this.step["pj-name"],
                 stepId: this.step["step-id"],
                 ctype: this.step["ctype"],
-                expressions: JSON.stringify({ "parmas": param }),
+                expressions: JSON.stringify({ "params": param }),
                 expressionsValue: this.step["expressions-value"],
                 groupIndex: this.step["group-index"],
                 groupName: this.step["group-name"],
