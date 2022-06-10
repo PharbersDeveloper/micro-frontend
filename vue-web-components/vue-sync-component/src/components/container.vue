@@ -107,7 +107,7 @@ export default {
         this.inputDsName = this.getUrlParam("inputName")
     },
     updated() {
-        this.outputDsName = this.allData.scriptsParams.outputs
+        this.outputDsName = this.allData.outputs[0]
     }
 }
 </script>

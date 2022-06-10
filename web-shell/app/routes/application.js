@@ -53,6 +53,8 @@ export default class ApplicationRoute extends Route {
 			routeValue = "recipes"
 		} else if(urlName.indexOf("/topn") > -1) {
 			routeValue = "recipes"
+		} else if(urlName.indexOf("/sync") > -1) {
+			routeValue = "recipes"
 		}
 		return routeValue
 	}

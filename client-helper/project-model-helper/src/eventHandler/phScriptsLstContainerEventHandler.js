@@ -105,12 +105,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					data: [
 						{
 							type: "tempdatas",
-							id: "editSync",
+							id: "sync",
 							attributes: {
-								jsondata: {
-									scripts: scripts,
-									operatorParameters: {}
-								}
+								jsondata: scripts
 							}
 						}
 					]
