@@ -91,7 +91,17 @@ export default {
         },
 
         save() {
-
+			const event = new Event("event")
+			event.args = {
+				callback: "saveSync",
+				element: this,
+				param: {
+					name: "saveSync",
+					projectId: this.projectId,
+					projectName: this.projectName
+				}
+			}
+			this.$emit('event', event)
         },
         changeInputDsName() {
 

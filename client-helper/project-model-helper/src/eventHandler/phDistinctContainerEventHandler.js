@@ -90,7 +90,7 @@ export async function phDistinctContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "distinct_edit",
 							cat: "intermediate",
-							runtime: "topn",
+							runtime: "distinct",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName

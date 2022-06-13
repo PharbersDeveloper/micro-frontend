@@ -302,6 +302,31 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				route.projectName = params.projectName
 				route.store.unloadAll("tempdata")
 
+				let datasets = []
+				let dsNames = []
+				params.inputs.forEach((item) => {
+					datasets.push({
+						name: item.name,
+						cat: item.cat,
+						format: "parquet",
+						schema: []
+					})
+					dsNames.push(item.name)
+				})
+				datasets.push({
+					name: params.outputs[0].name,
+					cat: "intermediate",
+					format: "parquet",
+					schema: []
+				})
+				let script = {
+					name: params.jobName,
+					flowVersion: "developer",
+					runtime: params.runtime,
+					inputs: JSON.stringify(dsNames),
+					output: params.outputs[0].name
+				}
+
 				if (params.runtime === "prepare") {
 					route.store.pushPayload({
 						data: [
@@ -388,24 +413,32 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.jobName +
 						"&datasetId=" +
 						params.inputs[0]["id"]
-				}
-				let datasets = []
-				let dsNames = []
-				params.inputs.forEach((item) => {
-					datasets.push({
-						name: item.name,
-						cat: item.cat,
-						format: "parquet",
-						schema: []
+				} else if (params.runtime === "sync") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "sync",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
 					})
-					dsNames.push(item.name)
-				})
-				datasets.push({
-					name: params.outputs[0].name,
-					cat: "intermediate",
-					format: "parquet",
-					schema: []
-				})
+
+					preUrl =
+						"sync?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+
+					script.version = []
+				}
+
 				let message = {
 					common: {
 						traceId: uuid,
@@ -425,19 +458,13 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "create_script",
 							cat: "intermediate",
-							runtime: "python3",
+							runtime: params.runtime,
 							actionName: params.jobName
 						}),
 						required: true
 					},
 					datasets: datasets,
-					script: {
-						name: params.jobName,
-						flowVersion: "developer",
-						runtime: params.runtime,
-						inputs: JSON.stringify(dsNames),
-						output: params.outputs[0].name
-					},
+					script: script,
 					notification: {
 						required: true
 					},
@@ -620,7 +647,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			runtime === "prepare" ||
 			runtime === "topn" ||
 			runtime === "distinct" ||
-			runtime === "sort"
+			runtime === "sort" ||
+			runtime === "sync"
 		) {
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {

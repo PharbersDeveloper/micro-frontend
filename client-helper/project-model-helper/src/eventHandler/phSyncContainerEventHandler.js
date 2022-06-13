@@ -84,7 +84,7 @@ export async function phSyncContainerEventHandler(e, route) {
 						)
 					},
 					action: {
-						cat: "eaitSync",
+						cat: "editSync",
 						desc: "edit sync steps",
 						comments: "something need to say",
 						message: JSON.stringify({
@@ -107,7 +107,7 @@ export async function phSyncContainerEventHandler(e, route) {
 						outputs: outputs,
 						runtime: "sync"
 					},
-					steps: params.stepsArr,
+					steps: [],
 					notification: {
 						required: true
 					},

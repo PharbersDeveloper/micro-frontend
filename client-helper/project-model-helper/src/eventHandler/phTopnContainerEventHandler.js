@@ -84,7 +84,7 @@ export async function phTopnContainerEventHandler(e, route) {
 						)
 					},
 					action: {
-						cat: "eaitTopn",
+						cat: "editTopn",
 						desc: "edit topn steps",
 						comments: "something need to say",
 						message: JSON.stringify({
