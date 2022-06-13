@@ -236,38 +236,7 @@ export default {
             const params = {
                 "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                 "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
-                "joins": [
-                    {
-                        "datasets": [
-                            {
-                                "name": "ds name",
-                                "index": 0
-                            },
-                            {
-                                "name": "ds name",
-                                "index": 2
-                            }
-                        ],
-                        "caseInsensitive": false,
-                        "normalizeText": false,
-                        "type": "LEFT",
-                        "on": [
-                            {
-                                "type": "=",
-                                "conditions": [
-                                    {
-                                        "ds": "ds name",
-                                        "column": "`col`"
-                                    },
-                                    {
-                                        "ds": "ds name",
-                                        "column": "`col`"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
+                "joins": this.$refs.join.datasource.revert2Defs(),
                 // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                 // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
                 // "keys": this.$refs.topn.datasource.revert2Defs().keys,
@@ -306,8 +275,8 @@ export default {
     watch: {
         active() {
             this.$refs.prefilter.validate()
-            // this.$refs.precomputed.validate()
-            // this.$refs.join.validate()
+            this.$refs.percomputed.validate()
+            this.$refs.join.validate()
             // this.$refs.select.validate()
             // this.$refs.postcomputed.validate()
             // this.$refs.outputs.validate()

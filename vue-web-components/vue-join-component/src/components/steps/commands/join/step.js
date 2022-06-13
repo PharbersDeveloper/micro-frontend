@@ -70,5 +70,6 @@ export default class PhJoinStep {
 
     revert2Defs() {
         // return this.command.revert2Defs()
+        return this.commands.map(x => x.revert2Defs())
     }
 }

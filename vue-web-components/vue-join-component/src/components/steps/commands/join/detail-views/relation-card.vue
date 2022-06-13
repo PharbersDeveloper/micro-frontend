@@ -52,7 +52,7 @@
                             </select>
                         </div>
                         <div class="relation-edit-op">
-                            <el-button type="text" >删除</el-button>
+                            <el-button type="text" @click="joinDetail.deleteJoinCloase(index)">删除</el-button>
                         </div>
                     </div>
                 </div>

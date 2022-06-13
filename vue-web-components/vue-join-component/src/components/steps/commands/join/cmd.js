@@ -34,19 +34,19 @@ export default class PhJoinCmd {
         })
     }
 
-    // deleteSortCloase(idx) {
-    //     // this.orders.splice(idx, 1)
-    // }
-    //
-    // insertKeyCloase(col) {
-    //     // this.keys.push(col)
-    // }
-    //
-    // deleteKeyCloase(idx) {
-    //     this.keys.splice(idx, 1)
-    // }
+    deleteJoinCloase(idx) {
+        this.on.splice(idx, 1)
+    }
 
     revert2Defs() {
-        return this
+        return {
+            datasets: this.datasets,
+            normalizeText: this.normalizeText,
+            caseInsensitive: this.caseInsensitive,
+            on: this.on.map(x => { return {
+                type: x["type"],
+                conditions: x["conditions"]
+            }})
+        }
     }
 }

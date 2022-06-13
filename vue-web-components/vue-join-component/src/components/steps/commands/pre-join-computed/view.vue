@@ -130,7 +130,7 @@ export default {
             this.currentIdx = idx
         },
         validate() {
-            this.$emit('statusChange', this.datasource.validate())
+            this.$emit('statusChange', true)
         },
         handleClose() {
             this.currentItem = null
