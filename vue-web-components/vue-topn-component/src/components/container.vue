@@ -58,11 +58,11 @@ import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
-import PreFilter from './steps/commands/pre-filter/view'
-import Computed from './steps/commands/computed/view'
-import TopN from './steps/commands/top-n/view'
-import RetrievedCols from './steps/commands/retrieved-cols/view'
-import Outputs from './steps/commands/output/view'
+import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Computed from './steps/commands/computed/computedView'
+import TopN from './steps/commands/top-n/topnView'
+import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
+import Outputs from './steps/commands/output/outputView'
 
 export default {
     components: {
@@ -80,6 +80,7 @@ export default {
             computedSchema: [],
             outputsSchema: [],
             active: 1,
+            flowVersion: "developer",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -130,7 +131,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -229,21 +230,19 @@ export default {
 
             console.log(params)
             this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
-        },
+        }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
-        this.jobName = "alfredtest"
+
+        // this.projectIdTest = "alfredtest"
+        // this.jobName = "alfredtest"
+		this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasetId)
-    },
-    updated() {
-
     },
     watch: {
         active(n) {

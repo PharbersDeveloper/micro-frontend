@@ -7,7 +7,7 @@ export default class PhTopNStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["parmas"]
+        const defs = this.expressions["params"]
         this.command = new PhTopNCmd(defs)
     }
 
