@@ -4,8 +4,9 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 
 
 export default class PhDataSource {
-    constructor(id) {
+    constructor(id, parent) {
         this.id = id
+		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
         this.debugToken = "e4da3ad093da0c4aa80b752310f333af76f35c2ae10de7ea517e028dcdd858ba"
@@ -62,8 +63,8 @@ export default class PhDataSource {
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
                     that.step = {
-                        pjName: "-".join(projectId, jobName),
-                        stepId: "1",
+                        "pj-name": [projectId, jobName].join("_"),
+                        "step-id": "1",
                         ctype: "Sort",
                         expressions: JSON.stringify({
                             "parmas": {
@@ -75,13 +76,13 @@ export default class PhDataSource {
                                 "computedColumns": []
                             }
                         }),
-                        expressionsValue: "JSON",
-                        groupIndex: "0",
-                        groupName: "",
-                        id: "-".join(projectId, jobName, "1"),
+                        "expressions-value": "JSON",
+                        "group-index": "0",
+                        "group-name": "",
+                        id: [projectId, jobName, "1"].join("_"),
                         index: "1",
                         runtime : "sort",
-                        stepName: "sort"
+                        "step-name": "sort"
                     }
                 } else {
                     that.step = data[0]
@@ -134,43 +135,72 @@ export default class PhDataSource {
     }
 
     buildSaveQuery(projectId, jobName, param) {
+		const steps = [{
+			pjName: this.step["pj-name"],
+			stepId: this.step["step-id"],
+			ctype: this.step["ctype"],
+			expressions: {
+				"type": "topn",
+				"code": "pyspark",
+				"params": param
+			},
+			expressionsValue: this.step["expressions-value"],
+			groupIndex: this.step["group-index"],
+			groupName: this.step["group-name"],
+			id: this.step["id"],
+			index: this.step["index"],
+			runtime : this.step["runtime"],
+			stepName: this.step["step-name"]
+		}]
+		const event = new Event("event")
+		event.args = {
+			callback: "saveTopn",
+			element: this,
+			param: {
+				name: "saveTopn",
+				projectId: this.parent.projectId,
+				projectName: this.parent.projectName,
+				stepsArr: steps
+			}
+		}
+		this.parent.$emit('event', event)
         // @wodelu 这里改成code gen 逻辑
-        const url = `${hostName}/phdydatasource/put_item`
-        const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        let body = {
-            table: "step",
-            item: {
-                pjName: this.step["pj-name"],
-                stepId: this.step["step-id"],
-                ctype: this.step["ctype"],
-                expressions: JSON.stringify({ "parmas": param }),
-                expressionsValue: this.step["expressions-value"],
-                groupIndex: this.step["group-index"],
-                groupName: this.step["group-name"],
-                id: this.step["id"],
-                index: this.step["index"],
-                runtime : this.step["runtime"],
-                stepName: this.step["step-name"]
-            }
-        }
+        // const url = `${hostName}/phdydatasource/put_item`
+        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        // let body = {
+        //     table: "step",
+        //     item: {
+        //         pjName: this.step["pj-name"],
+        //         stepId: this.step["step-id"],
+        //         ctype: this.step["ctype"],
+        //         expressions: JSON.stringify({ "parmas": param }),
+        //         expressionsValue: this.step["expressions-value"],
+        //         groupIndex: this.step["group-index"],
+        //         groupName: this.step["group-name"],
+        //         id: this.step["id"],
+        //         index: this.step["index"],
+        //         runtime : this.step["runtime"],
+        //         stepName: this.step["step-name"]
+        //     }
+        // }
 
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        return fetch(url, options)
+        // let options = {
+        //     method: "POST",
+        //     headers: {
+        //         "Authorization": accessToken,
+        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        //         "accept": "application/json"
+        //     },
+        //     body: JSON.stringify(body)
+        // }
+        // return fetch(url, options)
     }
 
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-            })
+            // .then((response) => response.json())
+            // .then((response) => {
+            //     console.log(response)
+            // })
     }
 }

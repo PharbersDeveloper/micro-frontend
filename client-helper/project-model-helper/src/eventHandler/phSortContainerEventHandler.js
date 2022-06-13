@@ -37,11 +37,11 @@ export async function phSortContainerEventHandler(e, route) {
 			}
 			route.router.transitionTo(uri)
 			break
-		case "saveTopn":
+		case "saveSort":
 			if (params) {
 				let editPrepareData = await route.store.peekRecord(
 					"tempdata",
-					"topn"
+					"sort"
 				)
 				let scriptsParams = {}
 				let inputs = []
@@ -70,7 +70,7 @@ export async function phSortContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				let job_cat_name = "topn_edit"
+				let job_cat_name = "sort_edit"
 				let scriptBody = {
 					common: {
 						traceId: uuid,
@@ -84,13 +84,13 @@ export async function phSortContainerEventHandler(e, route) {
 						)
 					},
 					action: {
-						cat: "editTopn",
-						desc: "edit topn steps",
+						cat: "editSort",
+						desc: "edit sort steps",
 						comments: "something need to say",
 						message: JSON.stringify({
-							optionName: "topn_edit",
+							optionName: "sort_edit",
 							cat: "intermediate",
-							runtime: "topn",
+							runtime: "orderby",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName
@@ -105,7 +105,7 @@ export async function phSortContainerEventHandler(e, route) {
 						jobPath: "",
 						inputs: inputs,
 						outputs: outputs,
-						runtime: "topn"
+						runtime: "orderby"
 					},
 					steps: params.stepsArr,
 					notification: {

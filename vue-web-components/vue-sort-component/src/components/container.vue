@@ -53,10 +53,10 @@ import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
-import PreFilter from './steps/commands/pre-filter/view'
-import Computed from './steps/commands/computed/view'
-import Outputs from './steps/commands/output/view'
-import Sort from './steps/commands/sort/view'
+import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Computed from './steps/commands/computed/computedView'
+import Outputs from './steps/commands/output/outputView'
+import Sort from './steps/commands/sort/sortView'
 
 export default {
     components: {
@@ -72,6 +72,7 @@ export default {
         return {
             computedSchema: [],
             active: 1,
+            flowVersion: "developer",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -117,7 +118,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -190,20 +191,18 @@ export default {
                 "rowNumber": this.$refs.sort.datasource.revert2Defs().rowNumber,
                 "computedColumns": this.$refs.computed.datasource.revert2Defs()
             }
-
-            console.log(params)
-            // this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
         }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
-        this.jobName = "sort"
+        // this.projectIdTest = "alfredtest"
+        this.jobName = this.getJobName()
+        // this.jobName = "sort"
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasetId)
     },
     updated() {

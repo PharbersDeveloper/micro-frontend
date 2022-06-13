@@ -171,16 +171,13 @@ export default {
                 "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
                 "globalCount": this.$refs.distinct.datasource.revert2Defs().globalCount
             }
-
-            console.log(params)
-            this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
         }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
+        // this.projectIdTest = "alfredtest"
         // this.jobName = "distinct"
 		this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")

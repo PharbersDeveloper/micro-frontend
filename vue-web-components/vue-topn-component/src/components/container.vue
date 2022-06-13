@@ -229,7 +229,7 @@ export default {
             }
 
             console.log(params)
-            this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
         }
     },
     mounted() {
