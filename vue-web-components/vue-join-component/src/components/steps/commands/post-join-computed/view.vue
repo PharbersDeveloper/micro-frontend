@@ -25,14 +25,15 @@
             </div>
         </div>
         <div class="computed-expression" v-if="datasource">
-            <ul class="computed-schema-list">
-                <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
+            <ul class="computed-schema-list" v-if="datasource.command.computedCols.length > 0">
+                <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item)">{{item}}</li>
             </ul>
             <el-input class="computed-expression-expr"
                       type="textarea"
                       :rows="10"
                       v-model="currentExpr"
-                      placeholder="Please input" />
+                      placeholder="Please input"
+                      v-if="datasource.command.computedCols.length > 0"/>
         </div>
 
         <div class="computed-add-button">
@@ -70,7 +71,8 @@ export default {
     },
     mounted() {
         this.datasource = new PhComputedStep(this.step)
-        this.currentExpr = this.datasource.command.computedCols[0]["expr"]
+        if (this.datasource.command.computedCols.length > 0)
+            this.currentExpr = this.datasource.command.computedCols[0]["expr"]
     },
     methods: {
         itemClicked(v) {

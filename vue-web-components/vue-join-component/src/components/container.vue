@@ -41,11 +41,11 @@
                                 :step="datasource.step"
                                 :schema="datasource.schema"
                                 @statusChange="selectStatus" />
-<!--                <post-computed v-show="active === 5"-->
-<!--                               ref="postcomputed"-->
-<!--                               :step="datasource.step"-->
-<!--                               :schema="datasource.schema[0]['schema']"-->
-<!--                               @statusChange="postComputedStatus" />-->
+                <post-computed v-show="active === 5"
+                               ref="postcomputed"
+                               :step="datasource.step"
+                               :schema="computedSchema"
+                               @statusChange="postComputedStatus" />
 <!--                <outputs v-show="active === 6"-->
 <!--                                ref="outputs"-->
 <!--                                :schema="outputsSchema"-->
@@ -67,7 +67,7 @@ import PreFilter from './steps/commands/pre-filter/view'
 import PreComputed from './steps/commands/pre-join-computed/view'
 import Join from './steps/commands/join/view'
 import SelectCols from './steps/commands/select-cols/view'
-// import PostComputed from './steps/commands/post-join-computed/view'
+import PostComputed from './steps/commands/post-join-computed/view'
 // import Outputs from './steps/commands/output/view'
 
 export default {
@@ -79,7 +79,7 @@ export default {
         PreComputed,
         Join,
         SelectCols,
-        // PostComputed,
+        PostComputed,
         // Outputs
     },
     data() {
@@ -207,18 +207,11 @@ export default {
         },
         computeSchema() {
             const result = []
-            for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
-                result.push({
-                    "type": this.datasource.dataset.schema[idx]["type"].toLowerCase(),
-                    "title": this.datasource.dataset.schema[idx]["src"]
-                })
-            }
-            const addCols = this.$refs.computed.datasource.revert2Defs()
-            for (let idx = 0; idx < addCols.length; ++idx) {
-                result.push({
-                    "type": addCols[idx]["type"].toLowerCase(),
-                    "title": addCols[idx]["name"]
-                })
+            const selectCols = this.$refs.select.datasource.revert2Defs()
+            for (let idx = 0; idx < selectCols.length; ++idx) {
+                for (let idn = 0; idn < selectCols[idx]["columns"].length; ++idn) {
+                    result.push(selectCols[idx]["prefix"] + selectCols[idx]["columns"][idn])
+                }
             }
             return result
         },
@@ -238,6 +231,7 @@ export default {
                 "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
                 "joins": this.$refs.join.datasource.revert2Defs(),
                 "selectedColumns": this.$refs.select.datasource.revert2Defs(),
+                "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
                 // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                 // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
                 // "keys": this.$refs.topn.datasource.revert2Defs().keys,
@@ -274,21 +268,18 @@ export default {
 
     },
     watch: {
-        active() {
+        active(n) {
             this.$refs.prefilter.validate()
             this.$refs.percomputed.validate()
             this.$refs.join.validate()
             this.$refs.select.validate()
-            // this.$refs.postcomputed.validate()
+            this.$refs.postcomputed.validate()
             // this.$refs.outputs.validate()
 
-            // if (n === 4 || n === 5) {
-            //     this.computedSchema = this.computeSchema()
-            // }
-            //
-            // if (n === 5) {
-            //     this.outputsSchema = this.genOutputsSchema()
-            // }
+            if (n === 5) {
+                this.computedSchema = this.computeSchema()
+                // this.outputsSchema = this.genOutputsSchema()
+            }
         }
     }
 }

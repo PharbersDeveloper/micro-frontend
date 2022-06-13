@@ -7,7 +7,7 @@ export default class PhComputedStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["params"]["computedColumns"]
+        const defs = this.expressions["params"]["postJoinComputedColumns"]
         this.command = new PhComputedCmd(defs)
     }
 
