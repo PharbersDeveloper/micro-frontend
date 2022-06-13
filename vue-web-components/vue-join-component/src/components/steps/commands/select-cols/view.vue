@@ -3,93 +3,47 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="retrieved-title">
             <div class="retrieved-title-p">
-                <h2>Retrieved Columns</h2>
+                <h2>Select Columns</h2>
             </div>
         </div>
-        <div v-if="datasource">
-            <div class="retrieved-select" >
-                <el-radio-group v-model="isAllCols">
-                    <el-radio :label="true">全部列</el-radio>
-                    <el-radio :label="false">选中列</el-radio>
-                </el-radio-group>
-            </div>
-<!--            <div class="retrieved-keys disabled" v-if="isAllCols" >-->
-<!--                <el-transfer-->
-<!--                        v-model="datasource.command.retrievedCols"-->
-<!--                        :data="data">-->
-<!--                </el-transfer>-->
-<!--            </div>-->
-            <div class="retrieved-keys" v-if="!isAllCols">
-                <el-transfer
-                        v-model="datasource.command.retrievedCols"
-                        :data="candiData">
-                </el-transfer>
-            </div>
+        <div class="retrieved-lst" v-if="datasource">
+            <selected-card v-for="(item, index) in datasource.commands" :key="index"
+                           :index="index" :command="item" :schema="schema[item.ds]" />
         </div>
     </div>
 </template>
 <script>
-import ElTransfer from 'element-ui/packages/transfer/index'
-import ElRadioGroup from 'element-ui/packages/radio-group/index'
-import ElRadio from 'element-ui/packages/radio/index'
-import { PhRetrievedColsDefs } from "./defs"
-import PhRetrievedColsStep from "./step"
+import SelectedCard from './detail-view/select-card'
+import { PhSelectedColsDefs } from "./defs"
+import PhSelectedColsStep from "./step"
 
 export default {
     data() {
         return {
             datasource: null,
-            isAllCols: true,
-            // candiData: []
         }
     },
     props: {
         step: Object,
-        schema: Array,
+        schema: Object,
         concretDefs: {
             type: Object,
             default: () => {
-                return PhRetrievedColsDefs
+                return PhSelectedColsDefs
             }
         }
     },
     components: {
-        ElRadioGroup,
-        ElRadio,
-        ElTransfer
+        SelectedCard
     },
     mounted() {
-        this.datasource = new PhRetrievedColsStep(this.step)
-        this.isAllCols = this.datasource.command.retrievedCols.length === 0
-        console.log(this.datasource.command.retrievedCols)
-    },
-    updated() {
-
+        this.datasource = new PhSelectedColsStep(this.step)
     },
     methods: {
         validate() {
             this.$emit('statusChange', true)
         }
     },
-    computed: {
-        candiData() {
-            const result = []
-            for (let idx = 0; idx < this.schema.length; ++idx) {
-                result.push({
-                    key: this.schema[idx].title,
-                    label: this.schema[idx].title
-                })
-            }
-            return result
-        }
-    },
-    watch: {
-        isAllCols(n) {
-            if (n) {
-                this.datasource.command.retrievedCols = []
-            }
-        }
-    }
 }
 </script>
 <style lang="scss" scoped>
@@ -100,8 +54,8 @@ export default {
     }
     .retrieved {
         margin-top: 4px;
-        /*width: 100%;*/
-        min-width: 800px;
+        width: 100%;
+        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
@@ -122,6 +76,11 @@ export default {
                 }
             }
         }
+    }
+
+    .retrieved-lst {
+        display: flex;
+        flex-direction: row;
     }
 
     .disabled {

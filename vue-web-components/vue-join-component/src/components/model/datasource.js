@@ -122,6 +122,12 @@ export default class PhDataSource {
                         "type": "LEFT",
                         "on": []
                     }]
+                    const defaultSelectCols = this.datasets.map(x => { return {
+                        "ds": x,
+                        "prefix": "",
+                        "type": "select",
+                        "columns": []
+                    }})
 
                     that.step = {
                         pjName: [projectId, jobName].join("_"),
@@ -132,7 +138,7 @@ export default class PhDataSource {
                                 "preFilters": defaultPreFilter,
                                 "preJoinComputedColumns": defaultPreComputed,
                                 "joins": defaultJoin,
-                                "selectedColumns": [],
+                                "selectedColumns": defaultSelectCols,
                                 "postJoinComputedColumns": [],
                                 "postFilter": {}
                             }

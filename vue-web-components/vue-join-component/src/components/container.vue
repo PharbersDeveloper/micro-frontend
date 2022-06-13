@@ -36,11 +36,11 @@
                       :step="datasource.step"
                       :schema="datasource.schema"
                       @statusChange="joinStatus" />
-<!--                <select-cols v-show="active === 4"-->
-<!--                                ref="select"-->
-<!--                                :step="datasource.step"-->
-<!--                                :schema="computedSchema"-->
-<!--                                @statusChange="selectStatus" />-->
+                <select-cols v-show="active === 4"
+                                ref="select"
+                                :step="datasource.step"
+                                :schema="datasource.schema"
+                                @statusChange="selectStatus" />
 <!--                <post-computed v-show="active === 5"-->
 <!--                               ref="postcomputed"-->
 <!--                               :step="datasource.step"-->
@@ -66,7 +66,7 @@ import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
 import PreComputed from './steps/commands/pre-join-computed/view'
 import Join from './steps/commands/join/view'
-// import SelectCols from './steps/commands/select-cols/view'
+import SelectCols from './steps/commands/select-cols/view'
 // import PostComputed from './steps/commands/post-join-computed/view'
 // import Outputs from './steps/commands/output/view'
 
@@ -78,7 +78,7 @@ export default {
         PreFilter,
         PreComputed,
         Join,
-        // SelectCols,
+        SelectCols,
         // PostComputed,
         // Outputs
     },
@@ -237,6 +237,7 @@ export default {
                 "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                 "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
                 "joins": this.$refs.join.datasource.revert2Defs(),
+                "selectedColumns": this.$refs.select.datasource.revert2Defs(),
                 // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                 // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
                 // "keys": this.$refs.topn.datasource.revert2Defs().keys,
@@ -277,7 +278,7 @@ export default {
             this.$refs.prefilter.validate()
             this.$refs.percomputed.validate()
             this.$refs.join.validate()
-            // this.$refs.select.validate()
+            this.$refs.select.validate()
             // this.$refs.postcomputed.validate()
             // this.$refs.outputs.validate()
 

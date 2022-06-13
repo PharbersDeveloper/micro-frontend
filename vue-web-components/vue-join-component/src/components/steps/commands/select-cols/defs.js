@@ -1,1 +1,1 @@
-export const PhRetrievedColsDefs = {}
+export const PhSelectedColsDefs = {}

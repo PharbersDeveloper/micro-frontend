@@ -1,10 +1,13 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhRetrievedColsCmd {
+export default class PhSelectedColsCmd {
     constructor(defs) {
         console.log(defs)
-        this.retrievedCols = defs
+        this.retrievedCols = defs["columns"]
+        this.ds = defs["ds"]
+        this.prefix = defs["prefix"]
+        this.type = defs["type"]
     }
 
     exec() {
@@ -16,6 +19,11 @@ export default class PhRetrievedColsCmd {
     }
 
     revert2Defs() {
-        return this.retrievedCols
+        return {
+            ds: this.ds,
+            prefix: this.prefix,
+            type: this.type,
+            columns: this.retrievedCols
+        }
     }
 }
