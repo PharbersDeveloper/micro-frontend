@@ -3,15 +3,11 @@
  */
 export default class PhJoinCmd {
     constructor(defs) {
-        // this.firstRows = defs["firstRows"]
-        // this.lastRows = defs["lastRows"]
-        // this.keys = defs["keys"]
-        // this.orders = defs["orders"]
-        // this.denseRank = defs["denseRank"]
-        // this.rank = defs["rank"]
-        // this.duplicateCount = defs["duplicateCount"]
-        // this.rowNumber = defs["rowNumber"]
-        // this.isAllCols = this.keys.length === 0
+        this.datasets = defs["datasets"].sort(x => x.index)
+        this.caseInsensitive = defs["caseInsensitive"]
+        this.normalizeText = defs["normalizeText"]
+        this.type = defs["type"]
+        this.on = defs["on"]
     }
 
     exec() {
@@ -22,13 +18,22 @@ export default class PhJoinCmd {
         return true
     }
 
-    // insertSortCloase(col) {
-    //     // this.orders.push({
-    //     //     "column": col,
-    //     //     "desc": false
-    //     // })
-    // }
-    //
+    insertJoinCloase(left, right) {
+        this.on.push({
+            "type": "=",
+            "conditions": [
+                {
+                    "ds": left,
+                    "column": ""
+                },
+                {
+                    "ds": right,
+                    "column": "`col`"
+                }
+            ]
+        })
+    }
+
     // deleteSortCloase(idx) {
     //     // this.orders.splice(idx, 1)
     // }

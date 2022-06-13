@@ -1,20 +1,37 @@
 export const PhJoinDefs = {
     actions: [
         {
-            desc: "只保留匹配行",
-            cal: "KEEP_ROW"
+            avatar: "",
+            desc: "左连接",
+            cal: "LEFT"
         },
         {
-            desc: "去除匹配行",
-            cal: "REMOVE_ROW"
+            avatar: "",
+            desc: "右连接",
+            cal: "RIGHT"
         },
         {
-            desc: "清除匹配单元格",
-            cal: "CLEAR_CELL"
+            avatar: "",
+            desc: "内连接",
+            cal: "INNER"
         },
         {
-            desc: "清除不匹配单元格",
-            cal: "DONTCLEAR_CELL"
+            avatar: "",
+            desc: "笛卡尔积",
+            cal: "CROSS"
+        }
+    ],
+    conditions: [
+        {
+            desc: "=",
+            cal: "="
+        }
+    ],
+    pattern: [
+        {
+            desc: "符合所有条件进行匹配",
+            cal: "AND"
         }
     ]
+
 }

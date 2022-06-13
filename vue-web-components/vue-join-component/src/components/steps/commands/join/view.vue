@@ -6,7 +6,24 @@
                 <h2>Join</h2>
             </div>
         </div>
-
+        <div class="join-content" v-if="datasource">
+            <div class="join-dataset-list" >
+                <join-dataset-card v-for="(item, index) in datasource.datasets"
+                           :key="index"
+                           :index="index"
+                           :step="datasource"
+                           :dataset="item"/>
+            </div>
+            <div class="join-join-list" v-if="datasource" :style="joinListStyle">
+                <div v-for="(item, index) in datasource.commands" :key="index">
+                    <join-relation-card
+                            :join-detail="item"
+                            :step="datasource"
+                            :schema="schema"
+                            :index="index" />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -19,6 +36,8 @@
 // import ElInputNumber from 'element-ui/packages/input-number/index'
 // import ElForm from 'element-ui/packages/form/index'
 // import ElFormItem from 'element-ui/packages/form-item/index'
+import JoinDatasetCard from './detail-views/dataset-card'
+import JoinRelationCard from './detail-views/relation-card'
 import { PhJoinDefs } from "./defs"
 import PhJoinStep from "./step"
 
@@ -30,7 +49,7 @@ export default {
     },
     props: {
         step: Object,
-        schema: Array,
+        schema: Object,
         concretDefs: {
             type: Object,
             default: () => {
@@ -39,6 +58,8 @@ export default {
         }
     },
     components: {
+        JoinDatasetCard,
+        JoinRelationCard,
         // ElFormItem,
         // ElForm,
         // ElInputNumber,
@@ -72,7 +93,9 @@ export default {
         }
     },
     computed: {
-
+        joinListStyle() {
+            return "width: " + this.datasource.hitWidth() + "px; height: " + this.datasource.hitHeight() + "px"
+        }
     }
 }
 </script>
@@ -82,19 +105,19 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .topn-container {
+    .join-container {
         margin-top: 4px;
-        /*width: 100%;*/
-        min-width: 800px;
+        width: 100%;
+        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
 
-        .topn-title {
+        .join-title {
             display: flex;
             flex-direction: column;
 
-            .topn-title-p {
+            .join-title-p {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -106,57 +129,23 @@ export default {
                 }
             }
         }
+    }
 
-        .topn-content {
+    .join-content {
+        position: relative;
+    }
 
-        }
+    .join-dataset-list {
+        display: flex;
+        flex-direction: row;
+    }
 
-        .topn-sort-item-list {
-            display: flex;
-            flex-direction: column;
-
-            .topn-sort-item {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-
-                .topn-sort-btn-group {
-                    display: flex;
-                    flex-direction: row;
-                }
-            }
-        }
-        .topn-add-btn {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-        }
-
-        .topn-container-group {
-            display: flex;
-            flex-direction: column;
-
-        }
-
-        .disabled {
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
-        .topn-sort-title {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .topn-sort-del-btn {
-            margin-left: 30px;
-        }
-
-        .topn-additional {
-            margin-top: 30px;
-
-            display: flex;
-            flex-direction: column;
-        }
+    .join-join-list {
+        position: absolute;
+        left: 0;
+        top: 50px;
+        border: 1px solid green;
+        display: flex;
+        flex-direction: column;
     }
 </style>
