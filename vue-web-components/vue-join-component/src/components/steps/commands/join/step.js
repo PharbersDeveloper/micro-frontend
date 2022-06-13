@@ -1,14 +1,14 @@
-import PhTopNCmd from "./cmd"
+import PhJoinCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
  */
-export default class PhTopNStep {
+export default class PhJoinStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["parmas"]
-        this.command = new PhTopNCmd(defs)
+        this.command = new PhJoinCmd(defs)
     }
 
     exec() {

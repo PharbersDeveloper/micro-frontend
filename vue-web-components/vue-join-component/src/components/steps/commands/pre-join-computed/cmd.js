@@ -12,11 +12,17 @@ export default class PhComputedCmd {
     }
 
     insertComputedCol() {
-        this.computedCols.push({
+        const res = {
             "expr": "",
             "name": "",
             "type": "int"
-        })
+        }
+        this.computedCols.push(res)
+        return res
+    }
+
+    count() {
+        return this.computedCols.length
     }
 
     removeComputedCol(idx) {

@@ -31,11 +31,11 @@
                               :step="datasource.step"
                               :schema="datasource.schema"
                               @statusChange="preComputedStatus" />
-<!--                <join v-show="active === 3"-->
-<!--                      ref="join"-->
-<!--                      :step="datasource.step"-->
-<!--                      :schema="datasource.schema[0]['schema']"-->
-<!--                      @statusChange="joinStatus" />-->
+                <join v-show="active === 3"
+                      ref="join"
+                      :step="datasource.step"
+                      :schema="datasource.schema"
+                      @statusChange="joinStatus" />
 <!--                <select-cols v-show="active === 4"-->
 <!--                                ref="select"-->
 <!--                                :step="datasource.step"-->
@@ -65,7 +65,7 @@ import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
 import PreComputed from './steps/commands/pre-join-computed/view'
-// import Join from './steps/commands/join/view'
+import Join from './steps/commands/join/view'
 // import SelectCols from './steps/commands/select-cols/view'
 // import PostComputed from './steps/commands/post-join-computed/view'
 // import Outputs from './steps/commands/output/view'
@@ -77,7 +77,7 @@ export default {
         ElButton,
         PreFilter,
         PreComputed,
-        // Join,
+        Join,
         // SelectCols,
         // PostComputed,
         // Outputs
@@ -234,6 +234,40 @@ export default {
         },
         save() {
             const params = {
+                "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+                "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
+                "joins": [
+                    {
+                        "datasets": [
+                            {
+                                "name": "ds name",
+                                "index": 0
+                            },
+                            {
+                                "name": "ds name",
+                                "index": 2
+                            }
+                        ],
+                        "caseInsensitive": false,
+                        "normalizeText": false,
+                        "type": "LEFT",
+                        "on": [
+                            {
+                                "type": "=",
+                                "conditions": [
+                                    {
+                                        "ds": "ds name",
+                                        "column": "`col`"
+                                    },
+                                    {
+                                        "ds": "ds name",
+                                        "column": "`col`"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
                 // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                 // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
                 // "keys": this.$refs.topn.datasource.revert2Defs().keys,

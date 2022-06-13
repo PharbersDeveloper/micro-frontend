@@ -1,4 +1,4 @@
-export const PhTopNDefs = {
+export const PhJoinDefs = {
     actions: [
         {
             desc: "只保留匹配行",

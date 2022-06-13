@@ -26,6 +26,9 @@ export default class PhComputedStep {
     }
 
     revert2Defs() {
-        return this.command.revert2Defs()
+        return this.commands.map(x => { return {
+                "ds": x["meta"]["name"],
+                "computedColumns": x["detail"].revert2Defs()
+        }})
     }
 }

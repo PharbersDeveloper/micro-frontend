@@ -24,22 +24,58 @@
                         </div>
                         <div class="computed-item-operator">
                             <el-button type="text" >修改</el-button>
-                            <el-button type="text" >删除</el-button>
+                            <el-button type="text" @click="removeComputedCol(item)">删除</el-button>
                         </div>
                     </div>
                 </div>
 
                 <div class="computed-add-button">
-                    <el-button type="primary" >添加</el-button>
+                    <el-button type="primary" @click="createNewComputedItem(item)">添加</el-button>
                 </div>
             </div>
+            <el-dialog
+                    title="Tips"
+                    :visible.sync="showEditDialog"
+                    width="30%"
+                    @closed="handleClose">
+                <div class="computed-list" v-if="dialogEditing">
+                    <div class="computed-item">
+                        <span>新建列名</span>
+                        <el-input class="computed-item-title" v-model="dialogEditing.name"></el-input>
+                        <span>保存为</span>
+                        <select v-model="dialogEditing.type">
+                            <option v-for="(op, opi) in concretDefs.typeDefs" :key="opi" :value="op.cal" :label="op.desc" />
+                        </select>
+                        <span>模式</span>
+                        <select v-model="pattern">
+                            <option v-for="(op, opi) in concretDefs.pattern" :key="opi" :value="op.cal" :label="op.desc" />
+                        </select>
+                    </div>
+                </div>
+                <div class="computed-expression" v-if="dialogEditing">
+                    <ul class="computed-schema-list">
+                        <li v-for="(item, index) in dialogSchema" :key="index" @click="dlgSchemaItemClicked(item.src)">{{item.src}}</li>
+                    </ul>
+                    <el-input class="computed-expression-expr"
+                              type="textarea"
+                              :rows="10"
+                              v-model="dialogEditing.expr"
+                              placeholder="Please input" />
+                </div>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="cancelEditing">Cancel</el-button>
+                    <el-button type="primary" @click="showEditDialog = false">Confirm</el-button>
+                </span>
+            </el-dialog>
         </div>
     </div>
 </template>
 <script>
-// import ElInput from 'element-ui/packages/input/index'
+import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElDivider from 'element-ui/packages/divider/index'
+import ElDialog from 'element-ui/packages/dialog/index'
 // import ElDescriptions from 'element-ui/packages/descriptions/index'
 // import ElDescriptionsItem from 'element-ui/packages/descriptions-item/index'
 import { PhComputedDefs } from "./defs"
@@ -50,7 +86,17 @@ export default {
         return {
             datasource: null,
             currentIdx: 0,
-            currentExpr: ""
+            // currentExpr: "",
+            currentEdit: null,
+            currentItem: null,
+            dialogSchema: [],
+            dialogEditing: {
+                name: "",
+                expr: "",
+                type: "int"
+            },
+            pattern: "SQL Expression",
+            showEditDialog: false
         }
     },
     props: {
@@ -65,8 +111,9 @@ export default {
     },
     components: {
         ElDivider,
-        // ElInput,
+        ElInput,
         ElButton,
+        ElDialog,
         // ElDescriptions,
         // ElDescriptionsItem
     },
@@ -84,15 +131,40 @@ export default {
         },
         validate() {
             this.$emit('statusChange', this.datasource.validate())
+        },
+        handleClose() {
+            this.currentItem = null
+            this.dialogSchema = []
+            this.dialogEditing = {
+                name: "",
+                    expr: "",
+                    type: "int"
+            }
+        },
+        createNewComputedItem(item) {
+            this.currentItem = item
+            this.dialogSchema = this.schema[item.meta.name]
+            this.dialogEditing = item.detail.insertComputedCol()
+            this.showEditDialog = true
+        },
+        dlgSchemaItemClicked(col) {
+            this.dialogEditing.expr = "`" + col + "`"
+        },
+        cancelEditing() {
+            this.currentItem.detail.removeComputedCol(this.currentItem.detail.count() - 1)
+            this.showEditDialog = false
+        },
+        removeComputedCol(item) {
+            item.detail.removeComputedCol(item.detail.count() - 1)
         }
     },
     computed: {
 
     },
     watch: {
-        currentExpr(n) {
-            this.datasource.command.computedCols[this.currentIdx]["expr"] = n
-        }
+        // currentExpr(n) {
+        //     this.datasource.command.computedCols[this.currentIdx]["expr"] = n
+        // }
     }
 }
 </script>

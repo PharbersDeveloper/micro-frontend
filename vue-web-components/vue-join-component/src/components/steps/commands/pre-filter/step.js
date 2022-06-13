@@ -25,12 +25,14 @@ export default class PhFilterStep {
     }
 
     revert2Defs() {
-        // const result = this.enabled ? this.command.revert2Defs() : ""
-        // return {
-        //     "distinct": false,
-        //     "enabled": this.enabled,
-        //     "expression": result
-        // }
+        return this.commands.map(x => { return {
+            ds: x["meta"]["name"],
+            preFilter: {
+                distinct: x["meta"]["distinct"],
+                enabled: x["meta"]["enabled"],
+                expr: x["detail"].revert2Defs()
+            }
+        }})
     }
 
 }
