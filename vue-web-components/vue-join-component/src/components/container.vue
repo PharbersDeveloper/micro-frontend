@@ -46,10 +46,15 @@
                                :step="datasource.step"
                                :schema="computedSchema"
                                @statusChange="postComputedStatus" />
-<!--                <outputs v-show="active === 6"-->
-<!--                                ref="outputs"-->
-<!--                                :schema="outputsSchema"-->
-<!--                                @statusChange="outputsStatus" />-->
+                <post-filter v-show="active === 6"
+                             ref="postfilter"
+                             :step="datasource.step"
+                             :schema="computedSchema"
+                         @statusChange="postFilterStatus" />
+                <outputs v-show="active === 7"
+                                ref="outputs"
+                                :schema="computedSchema"
+                                @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -68,7 +73,8 @@ import PreComputed from './steps/commands/pre-join-computed/view'
 import Join from './steps/commands/join/view'
 import SelectCols from './steps/commands/select-cols/view'
 import PostComputed from './steps/commands/post-join-computed/view'
-// import Outputs from './steps/commands/output/view'
+import PostFilter from './steps/commands/post-filter/view'
+import Outputs from './steps/commands/output/view'
 
 export default {
     components: {
@@ -80,12 +86,12 @@ export default {
         Join,
         SelectCols,
         PostComputed,
-        // Outputs
+        PostFilter,
+        Outputs
     },
     data() {
         return {
             computedSchema: [],
-            outputsSchema: [],
             active: 1,
             stepsDefs: [
                 {
@@ -114,8 +120,13 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 },
                 {
-                    title: "Outputs",
+                    title: "Post Filter",
                     index: 6,
+                    status: "wait"  // wait / process / finish / error / success
+                },
+                {
+                    title: "Outputs",
+                    index: 7,
                     status: "wait"  // wait / process / finish / error / success
                 }
             ]
@@ -192,17 +203,25 @@ export default {
         postComputedStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[3].status = "success"
+                this.stepsDefs[4].status = "success"
             } else {
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[4].status = "error"
+            }
+        },
+        postFilterStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[5].status = "success"
+            } else {
+                this.stepsDefs[5].status = "error"
             }
         },
         outputsStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[4].status = "success"
+                this.stepsDefs[6].status = "success"
             } else {
-                this.stepsDefs[4].status = "error"
+                this.stepsDefs[6].status = "error"
             }
         },
         computeSchema() {
@@ -213,6 +232,15 @@ export default {
                     result.push(selectCols[idx]["prefix"] + selectCols[idx]["columns"][idn])
                 }
             }
+            return result
+        },
+        computePostFilterSchema() {
+            const result = this.computeSchema()
+            const computedCols = this.$refs.postcomputed.datasource.revert2Defs()
+            for (let idx = 0; idx < computedCols.length; ++idx) {
+                result.push(computedCols[idx]["name"])
+            }
+            console.log(result)
             return result
         },
         genOutputsSchema() {
@@ -232,17 +260,7 @@ export default {
                 "joins": this.$refs.join.datasource.revert2Defs(),
                 "selectedColumns": this.$refs.select.datasource.revert2Defs(),
                 "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
-                // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
-                // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
-                // "keys": this.$refs.topn.datasource.revert2Defs().keys,
-                // "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                // "orders": this.$refs.topn.datasource.revert2Defs().orders,
-                // "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
-                // "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
-                // "rank": this.$refs.topn.datasource.revert2Defs().rank,
-                // "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
-                // "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
-                // "computedColumns": this.$refs.computed.datasource.revert2Defs()
+                "postFilter": this.$refs.postfilter.datasource.revert2Defs()
             }
 
             console.log(params)
@@ -274,11 +292,16 @@ export default {
             this.$refs.join.validate()
             this.$refs.select.validate()
             this.$refs.postcomputed.validate()
-            // this.$refs.outputs.validate()
+            this.$refs.postfilter.validate()
+            this.$refs.outputs.validate()
 
             if (n === 5) {
                 this.computedSchema = this.computeSchema()
                 // this.outputsSchema = this.genOutputsSchema()
+            }
+
+            if (n === 6 || n === 7) {
+                this.computedSchema = this.computePostFilterSchema()
             }
         }
     }

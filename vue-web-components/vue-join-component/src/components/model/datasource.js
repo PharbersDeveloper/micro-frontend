@@ -140,7 +140,11 @@ export default class PhDataSource {
                                 "joins": defaultJoin,
                                 "selectedColumns": defaultSelectCols,
                                 "postJoinComputedColumns": [],
-                                "postFilter": {}
+                                "postFilter": {
+                                    "distinct": false,
+                                    "enabled": false,
+                                    "expr": ""
+                                }
                             }
                         }),
                         expressionsValue: "JSON",

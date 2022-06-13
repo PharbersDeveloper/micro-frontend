@@ -20,7 +20,7 @@
             <div class="condition-selection-item" v-for="(cur, index) in datasource.command.cloases" :key="index">
                 <div class="condition-selection-content">
                     <select v-model="cur['left']">
-                         <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                         <option v-for="(item, index) in schema" :value="item" :key="index" :label="item" />
                     </select>
                     <select v-model="cur['op']">
                         <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
