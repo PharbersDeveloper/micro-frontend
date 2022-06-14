@@ -46,15 +46,10 @@
                             :step="datasource.step"
                             :schema="datasource.dataset.schema"
                             @statusChange="postFilterStatus" />
-<!--                <retrieved-cols v-show="active === 4"-->
-<!--                                ref="retrieved"-->
-<!--                                :step="datasource.step"-->
-<!--                                :schema="computedSchema"-->
-<!--                                @statusChange="retrievedStatus" />-->
-<!--                <outputs v-show="active === 5"-->
-<!--                                ref="outputs"-->
-<!--                                :schema="outputsSchema"-->
-<!--                                @statusChange="outputsStatus" />-->
+                <outputs v-show="active === 6"
+                                ref="outputs"
+                                :schema="datasource.dataset.schema"
+                                @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -73,7 +68,7 @@ import Computed from './steps/commands/computed/view'
 import Group from './steps/commands/group/view'
 import CustomAgg from './steps/commands/custom-agg/view'
 import PostFilter from './steps/commands/post-filter/view'
-// import Outputs from './steps/commands/output/view'
+import Outputs from './steps/commands/output/view'
 
 export default {
     components: {
@@ -85,7 +80,7 @@ export default {
         Group,
         CustomAgg,
         PostFilter,
-        // Outputs
+        Outputs
     },
     data() {
         return {
@@ -244,17 +239,6 @@ export default {
                 "keys": this.$refs.group.datasource.revert2Defs().keys,
                 "values": this.$refs.group.datasource.revert2Defs().values,
                 "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
-                // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
-                // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
-                // "keys": this.$refs.topn.datasource.revert2Defs().keys,
-                // "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                // "orders": this.$refs.topn.datasource.revert2Defs().orders,
-                // "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
-                // "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
-                // "rank": this.$refs.topn.datasource.revert2Defs().rank,
-                // "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
-                // "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
-                // "computedColumns": this.$refs.computed.datasource.revert2Defs()
             }
 
             console.log(params)
@@ -282,6 +266,7 @@ export default {
             this.$refs.group.validate()
             this.$refs.customagg.validate()
             this.$refs.postFilter.validate()
+            this.$refs.output.validate()
             //
             // if (n === 4 || n === 5) {
             //     this.computedSchema = this.computeSchema()
