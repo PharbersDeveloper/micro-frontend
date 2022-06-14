@@ -9,7 +9,6 @@ export default class PhGroupStep {
         this.expressions = JSON.parse(dbstep["expressions"])
         this.keys = this.expressions["params"]["keys"]
         const defs = this.expressions["params"]["values"].filter(x => !Object.keys(x).includes("customExpr"))
-        // this.commands = defs.map(x => new PhGroupCmd(x))
         this.commands = schema.map(x => {
             const tmp = new PhGroupCmd()
             const par = defs.filter(x => x["column"] === x.src)
@@ -39,5 +38,9 @@ export default class PhGroupStep {
 
     revert2Defs() {
         // return this.command.revert2Defs()
+        return {
+            keys: this.keys,
+            values: this.commands.filter(x => x.isUsed).map(x => x.revert2Defs())
+        }
     }
 }

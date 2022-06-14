@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="condition-title">
             <div class="condition-title-p">
-                <h2>Pre Filter</h2>
+                <h2>Post Filter</h2>
                 <div class="ver-center" v-if="datasource">
                     <el-switch v-model="datasource.enabled" @change="$emit('statusChange', datasource.enabled)"></el-switch>
                 </div>
@@ -37,13 +37,13 @@
     </div>
 </template>
 <script>
-import { PhPreFilterDefs } from "./defs"
+import { PhPostFilterDefs } from "./defs"
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElSwitch from 'element-ui/packages/switch/index'
-import PhFilterStep from "./step"
+import PhPostFilterStep from "./step"
 
 export default {
     data() {
@@ -57,7 +57,7 @@ export default {
         concretDefs: {
             type: Object,
             default: () => {
-                return PhPreFilterDefs
+                return PhPostFilterDefs
             }
         }
     },
@@ -68,9 +68,8 @@ export default {
         ElButton,
         ElSwitch
     },
-    // updated() {
     mounted() {
-        this.datasource = new PhFilterStep(this.step)
+        this.datasource = new PhPostFilterStep(this.step)
         this.$emit('statusChange', this.datasource.enabled)
     },
     methods: {
@@ -78,9 +77,6 @@ export default {
             this.$emit('statusChange', this.datasource.enabled)
         }
     },
-    computed: {
-
-    }
 }
 </script>
 <style lang="scss" scoped>

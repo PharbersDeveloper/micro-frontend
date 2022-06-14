@@ -1,7 +1,7 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhPreFilterCmd {
+export default class PhPostFilterCmd {
     constructor(preFilterExpression) {
         // if (preFilterExpression.length > 0) {
         //     this.enabled = true

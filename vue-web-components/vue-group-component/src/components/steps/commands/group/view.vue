@@ -31,15 +31,6 @@
                 <h3>Aggregation</h3>
             </div>
             <div class="group-agg-op">
-<!--                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全部选中</el-checkbox>-->
-<!--                <div style="margin: 15px 0;"></div>-->
-<!--                <el-checkbox-group v-model="checkedKeys" @change="handleCheckedChange" class="group-agg-list">-->
-<!--                    <div class="group-agg-item" v-for="(aggkey, index) in notGroupedKeys" :key="index">-->
-<!--                        <el-checkbox :label="aggkey" >{{aggkey}}</el-checkbox>-->
-<!--                        <span>{{notGroupedTypes[index]}}</span>-->
-<!--                    </div>-->
-<!--                </el-checkbox-group>-->
-
                 <el-table :data="notGroupedCommands"
                           ref="table"
                           style="width: 100%"
@@ -58,7 +49,7 @@
                             prop="type"
                             width="120">
                     </el-table-column>
-                    <el-table-column width="800">
+                    <el-table-column width="400">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
@@ -66,6 +57,12 @@
                                 <el-checkbox-button v-model="scope.row.max">Max</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="400">
+                        <template slot-scope="scope">
+                            <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.first">First</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.last">Last</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
@@ -76,7 +73,26 @@
                     <el-table-column width="120">
                         <template slot-scope="scope">
                             <div class="group-check-box">
-                                <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
+                                <el-popover
+                                        placement="top-start"
+                                        width="500"
+                                        trigger="hover">
+                                    <el-form label-width="200px">
+                                        <el-form-item label="Order first/last by">
+                                            <el-input v-model="scope.row.orderColumn"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="First/last not null">
+                                            <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+                                        </el-form-item>
+                                        <el-form-item label="Concat separator">
+                                            <el-input v-model="scope.row.concatSeparator"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="Concat distinct">
+                                            <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+                                        </el-form-item>
+                                    </el-form>
+                                    <el-button slot="reference">option</el-button>
+                                </el-popover>
                             </div>
                         </template>
                     </el-table-column>
@@ -89,14 +105,10 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
-// import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
-// import ElDivider from 'element-ui/packages/divider/index'
-// import ElRadioGroup from 'element-ui/packages/radio-group/index'
-// import ElRadio from 'element-ui/packages/radio/index'
-// import ElSwitch from 'element-ui/packages/switch/index'
-// import ElInputNumber from 'element-ui/packages/input-number/index'
-// import ElForm from 'element-ui/packages/form/index'
-// import ElFormItem from 'element-ui/packages/form-item/index'
+import ElPopover from 'element-ui/packages/popover/index'
+import ElInput from 'element-ui/packages/input/index'
+import ElForm from 'element-ui/packages/form/index'
+import ElFormItem from 'element-ui/packages/form-item/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import { PhGroupDefs } from "./defs"
@@ -127,19 +139,15 @@ export default {
         }
     },
     components: {
-        // ElFormItem,
-        // ElForm,
-        // ElInputNumber,
+        ElFormItem,
+        ElForm,
+        ElInput,
         ElButton,
         ElTable,
         ElTableColumn,
         ElCheckbox,
         ElCheckboxButton,
-        // ElCheckboxGroup,
-        // ElRadioGroup,
-        // ElRadio,
-        // ElSwitch,
-        // ElDivider
+        ElPopover,
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
@@ -195,15 +203,6 @@ export default {
                 this.ignoredClearMsg = false
             }
         },
-        // handleCheckAllChange(val) {
-        //     this.checkedKeys = val ? this.notGroupedKeys : [];
-        //     this.isIndeterminate = false;
-        // },
-        // handleCheckedChange(value) {
-        //     let checkedCount = value.length;
-        //     this.checkAll = checkedCount === this.notGroupedKeys.length;
-        //     this.isIndeterminate = checkedCount > 0 && checkedCount < this.notGroupedKeys.length;
-        // }
     },
     computed: {
 

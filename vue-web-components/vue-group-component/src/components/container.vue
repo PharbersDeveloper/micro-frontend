@@ -36,6 +36,16 @@
                           :step="datasource.step"
                           :schema="datasource.dataset.schema"
                           @statusChange="groupStatus" />
+                <custom-agg v-show="active === 4"
+                       ref="customagg"
+                       :step="datasource.step"
+                       :schema="datasource.dataset.schema"
+                       @statusChange="customAggStatus" />
+                <post-filter v-show="active === 5"
+                            ref="postfilter"
+                            :step="datasource.step"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="postFilterStatus" />
 <!--                <retrieved-cols v-show="active === 4"-->
 <!--                                ref="retrieved"-->
 <!--                                :step="datasource.step"-->
@@ -61,7 +71,8 @@ import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
 import Computed from './steps/commands/computed/view'
 import Group from './steps/commands/group/view'
-// import RetrievedCols from './steps/commands/retrieved-cols/view'
+import CustomAgg from './steps/commands/custom-agg/view'
+import PostFilter from './steps/commands/post-filter/view'
 // import Outputs from './steps/commands/output/view'
 
 export default {
@@ -72,7 +83,8 @@ export default {
         PreFilter,
         Computed,
         Group,
-        // RetrievedCols,
+        CustomAgg,
+        PostFilter,
         // Outputs
     },
     data() {
@@ -177,33 +189,25 @@ export default {
         customAggStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[2].status = "success"
+                this.stepsDefs[3].status = "success"
             } else {
-                this.stepsDefs[2].status = "error"
+                this.stepsDefs[3].status = "error"
             }
         },
         postFilterStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[3].status = "success"
+                this.stepsDefs[4].status = "success"
             } else {
-                this.stepsDefs[3].status = "error"
-            }
-        },
-        retrievedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[4].status = "error"
             }
         },
         outputsStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[4].status = "success"
+                this.stepsDefs[5].status = "success"
             } else {
-                this.stepsDefs[4].status = "error"
+                this.stepsDefs[5].status = "error"
             }
         },
         computeSchema() {
@@ -237,6 +241,9 @@ export default {
             const params = {
                 "preFilter": this.$refs.filter.datasource.revert2Defs(),
                 "computedColumns": this.$refs.computed.datasource.revert2Defs(),
+                "keys": this.$refs.group.datasource.revert2Defs().keys,
+                "values": this.$refs.group.datasource.revert2Defs().values,
+                "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
                 // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                 // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
                 // "keys": this.$refs.topn.datasource.revert2Defs().keys,
@@ -272,9 +279,9 @@ export default {
         active() {
             this.$refs.filter.validate()
             this.$refs.computed.validate()
-            // this.$refs.topn.validate()
-            // this.$refs.retrieved.validate()
-            // this.$refs.outputs.validate()
+            this.$refs.group.validate()
+            this.$refs.customagg.validate()
+            this.$refs.postFilter.validate()
             //
             // if (n === 4 || n === 5) {
             //     this.computedSchema = this.computeSchema()

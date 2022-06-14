@@ -23,7 +23,7 @@ export default class PhGroupCmd {
         this.firstLastNotNull = false
         this.orderColumn = ""
         this.concatSeparator = ","
-        this.concatDistinct = ""
+        this.concatDistinct = false
 
         this.isUsed = false
     }
@@ -60,6 +60,25 @@ export default class PhGroupCmd {
     }
 
     revert2Defs() {
-        return this
+        // return this
+        return {
+            countDistinct: this.countDistinct,
+            min: this.min,
+            avg: this.avg,
+            last: this.last,
+            max: this.max,
+            column: this.column,
+            count: this.count,
+            concat: this.concat,
+            sum: this.sum,
+            type: this.type,
+            stddev: this.stddev,
+            first: this.first,
+            index: this.index,
+            firstLastNotNull: this.firstLastNotNull,
+            orderColumn: this.orderColumn,
+            concatSeparator: this.concatSeparator,
+            concatDistinct: this.concatDistinct
+        }
     }
 }

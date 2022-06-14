@@ -1,4 +1,4 @@
-export const PhPreFilterDefs = {
+export const PhPostFilterDefs = {
     actions: [
         {
             desc: "符合左右条件的列",
@@ -65,51 +65,4 @@ export const PhPreFilterDefs = {
             cal: "REGX"
         }
     ]
-}
-
-const PhInitialFOVExpressions = {
-    type: "FilterOnValue",
-    code: "pyspark",
-    params: {
-        values: [""],
-        matchingMode: "FULL_STRING",
-        normalizationMode: "EXACT",
-        action: "KEEP_ROW",
-        booleanMode: "AND",
-        appliesTo: "COLUMNS",
-        columns: [""]
-    }
-}
-
-export const PhInitialFOVStepDefs = {
-    attributes: {
-        "pj-name": "",
-        "step-id": "",
-        index: 0,
-        ctype: "FilterOnValue",
-        expressions: JSON.stringify(PhInitialFOVExpressions),
-        runtime: "prepare",
-        "group-name": "",
-        "group-index": 0,
-        "expressions-value": "JSON",
-        "step-name": "Initial Filter On Value"
-    },
-    id: "",
-    type: "steps"
-}
-
-export function step2SaveObj(step) {
-    return {
-        pjName: step['pj-name'],
-        stepId: step['step-id'],
-        index: step['index'],
-        ctype: step['ctype'],
-        expressions: step['expressions'],
-        runtime: step['runtime'],
-        groupName: step['group-name'],
-        groupIndex: step['group-index'],
-        expressionsValue: step['expressions-value'],
-        stepName: step['step-name'],
-        id: step['id']
-    }
 }
