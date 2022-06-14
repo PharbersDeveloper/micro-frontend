@@ -96,11 +96,12 @@ export default {
     }
     .distinct {
         margin-top: 4px;
-        /*width: 100%;*/
         min-width: 800px;
-        padding: 4px;
         display: flex;
         flex-direction: column;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .distinct-title {
             display: flex;

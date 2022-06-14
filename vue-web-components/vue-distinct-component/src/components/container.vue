@@ -164,6 +164,18 @@ export default {
                 this.stepsDefs[3].status = "error"
             }
         },
+
+        // genOutputsSchema() {
+        //     const retrieved = this.$refs.retrieved.datasource.revert2Defs()
+        //     let result = []
+        //     if (retrieved.length === 0) {
+        //         result = this.computedSchema
+        //     } else {
+        //         result = this.computedSchema.filter(x => retrieved.includes(x.title))
+        //     }
+        //     return result
+        // },
+
         save() {
             const params = {
                 "keys": this.$refs.distinct.datasource.revert2Defs().keys,
@@ -194,6 +206,10 @@ export default {
             this.$refs.distinct.validate()
             this.$refs.postfilter.validate()
             this.$refs.outputs.validate()
+
+			// if (n === 4) {
+            //     this.outputsSchema = this.genOutputsSchema()
+            // }
         }
     }
 }
@@ -216,6 +232,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+			border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -252,12 +269,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
 
             .topn_left {
                 display: flex;
                 flex-direction: row;
-                margin-left: 80px;
+                padding: 40px;
                 justify-content: space-around;
+				border-right: 1px solid #ccc;
             }
 
             .topn_right {
@@ -265,7 +284,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-
+				background: #f2f2f2;
+				padding: 20px;
             }
         }
     }
