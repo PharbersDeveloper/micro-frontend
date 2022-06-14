@@ -67,13 +67,23 @@ export default class PhDataSource {
                         "step-id": "1",
                         ctype: "Sort",
                         expressions: JSON.stringify({
-                            "parmas": {
-                                "preFilter": {},
+                            "params": {
+                                "preFilter": {
+                                    "distinct": false,
+                                    "enabled": true,
+                                    "expression": ""
+                                },
                                 "orders": [],
                                 "denseRank": false,
                                 "rank": false,
                                 "rowNumber": false,
-                                "computedColumns": []
+                                "computedColumns": [
+									{
+										"expr": "",
+										"name": "",
+										"type": "int"
+									}
+								]
                             }
                         }),
                         "expressions-value": "JSON",
@@ -140,7 +150,7 @@ export default class PhDataSource {
 			stepId: this.step["step-id"],
 			ctype: this.step["ctype"],
 			expressions: {
-				"type": "topn",
+				"type": "sort",
 				"code": "pyspark",
 				"params": param
 			},
@@ -154,10 +164,10 @@ export default class PhDataSource {
 		}]
 		const event = new Event("event")
 		event.args = {
-			callback: "saveTopn",
+			callback: "saveSort",
 			element: this,
 			param: {
-				name: "saveTopn",
+				name: "saveSort",
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
 				stepsArr: steps
@@ -173,7 +183,7 @@ export default class PhDataSource {
         //         pjName: this.step["pj-name"],
         //         stepId: this.step["step-id"],
         //         ctype: this.step["ctype"],
-        //         expressions: JSON.stringify({ "parmas": param }),
+        //         expressions: JSON.stringify({ "params": param }),
         //         expressionsValue: this.step["expressions-value"],
         //         groupIndex: this.step["group-index"],
         //         groupName: this.step["group-name"],

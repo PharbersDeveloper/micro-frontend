@@ -7,12 +7,12 @@ export default class PhSortStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["parmas"]["orders"]
+        const defs = this.expressions["params"]["orders"]
         this.command = new PhDistinctCmd(defs)
 
-        this.denseRank = this.expressions["parmas"]["denseRank"]
-        this.rank = this.expressions["parmas"]["rank"]
-        this.rowNumber = this.expressions["parmas"]["rowNumber"]
+        this.denseRank = this.expressions["params"]["denseRank"]
+        this.rank = this.expressions["params"]["rank"]
+        this.rowNumber = this.expressions["params"]["rowNumber"]
     }
 
     exec() {

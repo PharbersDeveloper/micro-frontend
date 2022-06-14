@@ -84,8 +84,8 @@ export default class PhDataSource {
                                 "retrievedColumns": [],
                                 "computedColumns": [
 									{
-										"expr": "`姓名`+`学号`+`运单号`",
-										"name": "AAA",
+										"expr": "",
+										"name": "",
 										"type": "int"
 									}
 								]

@@ -212,7 +212,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&jobShowName=" +
 					recipt.jobShowName +
 					"&inputName=" +
-					inputName
+					inputName +
+					"&outputName=" +
+					recipt.outputs
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "prepare"
@@ -434,7 +436,11 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&inputName=" +
+						params.inputs[0]["name"] +
+						"&outputName=" +
+						params.outputs[0].name
 
 					script.version = []
 				}
