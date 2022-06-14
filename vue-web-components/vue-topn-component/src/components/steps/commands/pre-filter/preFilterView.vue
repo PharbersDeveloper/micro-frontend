@@ -91,9 +91,10 @@ export default {
     }
     .pre-filter {
         margin-top: 4px;
-        /*width: 100%;*/
         min-width: 800px;
-        padding: 4px;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
         display: flex;
         flex-direction: column;
 
@@ -120,7 +121,7 @@ export default {
             .condition-selection-item {
                 display: flex;
                 flex-direction: row;
-
+				padding-bottom: 10px;
             }
 
             .condition-selection-content {
