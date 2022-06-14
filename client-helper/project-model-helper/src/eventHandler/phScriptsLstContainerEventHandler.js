@@ -37,6 +37,96 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.projectId
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "sort"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "sort_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "sort",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"sort?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
+			} else if (
+				params.name === "codeditor" &&
+				params.recipt.runtime === "distinct"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "distinct_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "distinct",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"distinct?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "topn"
 			) {
 				let recipt = params.recipt
@@ -55,18 +145,14 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "topn_edit"
 				}
-				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
 						{
 							type: "tempdatas",
-							id: "editTopN",
+							id: "topn",
 							attributes: {
-								jsondata: {
-									scripts: scripts,
-									operatorParameters: {}
-								}
+								jsondata: scripts
 							}
 						}
 					]
@@ -81,12 +167,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&jobShowName=" +
 					recipt.jobShowName +
 					"&inputName=" +
-					inputName
-				// +
-				// "&operatorParameters=" +
-				// escape(recipt.operatorParameters) +
-				// "&message=" +
-				// encodeURI(JSON.stringify(scripts))
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "sync"
@@ -107,18 +190,14 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "sync_edit"
 				}
-				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
 						{
 							type: "tempdatas",
-							id: "editSync",
+							id: "sync",
 							attributes: {
-								jsondata: {
-									scripts: scripts,
-									operatorParameters: {}
-								}
+								jsondata: scripts
 							}
 						}
 					]
@@ -134,11 +213,6 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					recipt.jobShowName +
 					"&inputName=" +
 					inputName
-				// +
-				// "&operatorParameters=" +
-				// escape(recipt.operatorParameters) +
-				// "&message=" +
-				// encodeURI(JSON.stringify(scripts))
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "prepare"
@@ -228,6 +302,31 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				route.projectName = params.projectName
 				route.store.unloadAll("tempdata")
 
+				let datasets = []
+				let dsNames = []
+				params.inputs.forEach((item) => {
+					datasets.push({
+						name: item.name,
+						cat: item.cat,
+						format: "parquet",
+						schema: []
+					})
+					dsNames.push(item.name)
+				})
+				datasets.push({
+					name: params.outputs[0].name,
+					cat: "intermediate",
+					format: "parquet",
+					schema: []
+				})
+				let script = {
+					name: params.jobName,
+					flowVersion: "developer",
+					runtime: params.runtime,
+					inputs: JSON.stringify(dsNames),
+					output: params.outputs[0].name
+				}
+
 				if (params.runtime === "prepare") {
 					route.store.pushPayload({
 						data: [
@@ -251,24 +350,95 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.inputs[0]["name"] +
 						"&datasetId=" +
 						params.inputs[0]["id"]
-				}
-				let datasets = []
-				let dsNames = []
-				params.inputs.forEach((item) => {
-					datasets.push({
-						name: item.name,
-						cat: item.cat,
-						format: "parquet",
-						schema: []
+				} else if (params.runtime === "topn") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "topn",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
 					})
-					dsNames.push(item.name)
-				})
-				datasets.push({
-					name: params.outputs[0].name,
-					cat: "intermediate",
-					format: "parquet",
-					schema: []
-				})
+					preUrl =
+						"topn?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "distinct") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "distinct",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"distinct?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "sort") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "sort",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"sort?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "sync") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "sync",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+
+					preUrl =
+						"sync?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+
+					script.version = []
+				}
+
 				let message = {
 					common: {
 						traceId: uuid,
@@ -288,19 +458,13 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "create_script",
 							cat: "intermediate",
-							runtime: "python3",
+							runtime: params.runtime,
 							actionName: params.jobName
 						}),
 						required: true
 					},
 					datasets: datasets,
-					script: {
-						name: params.jobName,
-						flowVersion: "developer",
-						runtime: params.runtime,
-						inputs: JSON.stringify(dsNames),
-						output: params.outputs[0].name
-					},
+					script: script,
 					notification: {
 						required: true
 					},
@@ -479,7 +643,13 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				error
 			}
 		} = JSON.parse(message)
-		if (runtime === "prepare") {
+		if (
+			runtime === "prepare" ||
+			runtime === "topn" ||
+			runtime === "distinct" ||
+			runtime === "sort" ||
+			runtime === "sync"
+		) {
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
 			alert("新建脚本成功！")

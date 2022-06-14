@@ -7,8 +7,8 @@ export default class PhDistinctStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["parmas"]["keys"]
-        this.globalCount = this.expressions["parmas"]["globalCount"]
+        const defs = this.expressions["params"]["keys"]
+        this.globalCount = this.expressions["params"]["globalCount"]
         this.command = new PhDistinctCmd(defs)
     }
 

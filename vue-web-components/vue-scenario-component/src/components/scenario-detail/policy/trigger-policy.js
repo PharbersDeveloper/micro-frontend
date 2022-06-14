@@ -33,7 +33,6 @@ export default class PhScenarioTriggerPolicy {
 				id: trigger.id,
 				index: trigger.index,
 				active: trigger.active,
-				// detail: JSON.stringify(detail),
 				detail: detail,
 				mode: trigger.mode,
 				traceId: trigger.traceId

@@ -3,6 +3,8 @@ import { hostName, actionTableName } from "../config/envConfig"
 
 export async function phScenarioScenarioLstEventHandler(e, route) {
 	let params = e.detail[0].args.param
+	const accessToken = route.cookies.read("access_token")
+	const deleteScenarioEventName = "deleteScenarios"
 	let uri = ""
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
@@ -24,7 +26,6 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						new Set(targetscenario.label.concat(selectedTags))
 					)
 					const url = `${hostName}/phdydatasource/put_item`
-					const accessToken = route.cookies.read("access_token")
 					let body = {
 						table: "scenario",
 						item: {
@@ -57,76 +58,10 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 				window.location.reload()
 			}
 			break
-		//删除脚本
-		case "deletescenarios":
-			// TODO: ... @wodelu
-			// if (params) {
-			// 	route.loadingService.loading.style.display = "flex"
-			// 	route.loadingService.loading.style["z-index"] = 2
-			// 	let selectedscenariosDel = params.selectedscenarios //需要更新的scenario
-			// 	let scenarioArrayDel = params.scenarioArray //发送请求的参数在这取
-			// 	let msgArr = []
-			// 	selectedscenariosDel.forEach(async (targetId) => {
-			// 		let targetscenario = scenarioArrayDel.filter(
-			// 			(it) => it.id == targetId
-			// 		)[0]
-			// 		msgArr.push({
-			// 			actionName: targetscenario.jobShowName,
-			// 			projectName: params.projectName,
-			// 			targetId: targetscenario.jobId,
-			// 			jobName: targetscenario.jobName,
-			// 			flowVersion: "developer"
-			// 		})
-			// 	})
-			// 	let body = {
-			// 		table: actionTableName,
-			// 		item: {
-			// 			projectId: params.projectId,
-			// 			code: 0,
-			// 			comments: "delete_scenario",
-			// 			jobCat: "remove_Job",
-			// 			jobDesc: deletescenariosEventName,
-			// 			message: JSON.stringify(msgArr),
-			// 			date: String(new Date().getTime()),
-			// 			owner: route.cookies.read("account_id"),
-			// 			showName: decodeURI(
-			// 				route.cookies.read("user_name_show")
-			// 			)
-			// 		}
-			// 	}
-			// 	const urldel = `${hostName}/phdydatasource/put_item`
-			// 	const accessTokendel = route.cookies.read("access_token")
-			// 	let options = {
-			// 		method: "POST",
-			// 		headers: {
-			// 			Authorization: accessTokendel,
-			// 			"Content-Type":
-			// 				"application/x-www-form-urlencoded; charset=UTF-8",
-			// 			accept: "application/json"
-			// 		},
-			// 		body: JSON.stringify(body)
-			// 	}
-			// 	let result = await fetch(urldel, options).then((res) =>
-			// 		res.json()
-			// 	)
-			//
-			// 	route.noticeService.defineAction({
-			// 		type: "iot",
-			// 		remoteResource: "notification",
-			// 		runnerId: "",
-			// 		id: result.data.id,
-			// 		eventName: deletescenariosEventName,
-			// 		projectId: params.projectId,
-			// 		ownerId: route.cookies.read("account_id"),
-			// 		callBack: deletescenariosNoticeCallback
-			// 	})
-			// }
-			break
 		case "resetScenario":
 			if (params) {
 				const targetscenario = params.scenario //需要更新的scenario
 				const url = `${hostName}/phdydatasource/put_item`
-				const accessToken = route.cookies.read("access_token")
 				let body = {
 					table: "scenario",
 					item: {
@@ -162,7 +97,6 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				const targetscenario = params.scenario //需要更新的scenario
 				const url = `${hostName}/phscenariostrigger`
-				const accessToken = route.cookies.read("access_token")
 				const tenantId = route.cookies.read("company_id")
 				const traceId = guid()
 				const scenarioId = guid()
@@ -236,8 +170,101 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 				// }
 			}
 			break
+		case "deleteScenarios":
+			if (params) {
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				const selectedScenarioDel = params.selectedScenarios
+				const scenarioArrayDel = params.scenarioArray
+				const deluuid = guid()
+				const delUri = `${hostName}/phscenariosdeletiontrigger`
+				selectedScenarioDel.forEach(async (item) => {
+					let targetscenario = scenarioArrayDel.filter(
+						(it) => it.id === item
+					)[0]
+					let body = {
+						common: {
+							traceId: deluuid,
+							projectId: params.projectId,
+							projectName: params.projectName,
+							flowVersion: "developer",
+							owner: route.cookies.read("account_id"),
+							showName: decodeURI(
+								route.cookies.read("user_name_show")
+							),
+							tenantId: route.cookies.read("company_id")
+						},
+						action: {
+							cat: "deleteScenario",
+							desc: "delete scenario",
+							comments: "something need to say",
+							message: JSON.stringify({
+								optionName: "delete_scenario",
+								cat: "scenario",
+								actionName: targetscenario.scenarioName
+							}),
+							required: true
+						},
+						scenario: {
+							id: targetscenario.id,
+							active: true,
+							scenarioName: targetscenario.scenarioName,
+							deletion: false,
+							index: 0
+						},
+						triggers: [],
+						steps: [],
+						notification: {
+							required: true
+						},
+						result: {}
+					}
+					let options = {
+						method: "POST",
+						headers: {
+							Authorization: accessToken,
+							"Content-Type":
+								"application/x-www-form-urlencoded; charset=UTF-8",
+							accept: "application/json"
+						},
+						body: JSON.stringify(body)
+					}
+					await fetch(delUri, options).then((res) => res.json())
+					route.noticeService.defineAction({
+						type: "iot",
+						remoteResource: "notification",
+						runnerId: "",
+						id: deluuid,
+						eventName: deleteScenarioEventName,
+						projectId: params.projectId,
+						ownerId: route.cookies.read("account_id"),
+						callBack: deleteScenariosNoticeCallback
+					})
+				})
+			}
+			break
 		default:
 			console.log("other click event!")
+	}
+
+	function deleteScenariosNoticeCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		console.log(message, status)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "succeed") {
+			alert("删除scenario成功！")
+			window.location.reload()
+		} else if (status == "failed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
+			let msg =
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
+					: "删除scenario失败，请重新操作！"
+			alert(msg)
+		}
+		route.loadingService.loading.style.display = "none"
 	}
 
 	function createScenarioCallback(param, payload) {
