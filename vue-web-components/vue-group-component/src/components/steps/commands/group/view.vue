@@ -248,9 +248,12 @@ export default {
             .group-key-container {
                 display: flex;
                 flex-direction: column;
+                /*overflow: auto;*/
+                /*height: 100vh;*/
 
                 border: 1px solid green;
             }
+
 
             .group-key-list {
                 display: flex;
@@ -274,11 +277,18 @@ export default {
             margin-top: 30px;
             display: flex;
             flex-direction: column;
+            /*flex-grow: 1;*/
 
             .group-agg-title {
                 display: flex;
 
             }
+
+            .group-agg-op {
+                overflow: auto;
+                /*flex-grow: 1;*/
+            }
+
 
             .group-agg-list {
                 display: flex;
