@@ -7,10 +7,10 @@ export default class PhFilterStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["parmas"]["preFilter"]
+        const defs = this.expressions["params"]["preFilter"]
         this.distinct = defs["distinct"]
         this.enabled = defs["enabled"]
-        this.preFilterExpression = defs["expression"]
+        this.preFilterExpression = defs["expr"]
         this.command = new PhPreFilterCmd(this.preFilterExpression)
         console.log(this.command.cloases)
     }
@@ -25,7 +25,7 @@ export default class PhFilterStep {
         return {
             "distinct": false,
             "enabled": this.enabled,
-            "expression": result
+            "expr": result
         }
     }
 

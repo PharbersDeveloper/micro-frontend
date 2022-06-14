@@ -1,110 +1,119 @@
 <template>
-    <div class="topn-container">
+    <div class="group-container">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="topn-title">
-            <div class="topn-title-p">
-                <h2>Top N</h2>
+        <div class="group-title">
+            <div class="group-title-p">
+                <h2>Group</h2>
             </div>
         </div>
-        <div class="topn-content" v-if="datasource">
-            <div class="topn-container-rows">
-                <h3>检索</h3>
-                <el-form label-width="120px" >
-                    <el-form-item label="顶部行">
-                        <el-input-number v-model="datasource.command.firstRows"></el-input-number>
-                    </el-form-item>
-                    <el-form-item label="底部行">
-                        <el-input-number v-model="datasource.command.lastRows"></el-input-number>
-                    </el-form-item>
-                </el-form>
+        <div class="group-keys">
+            <div class="group-key-title">
+                <h3>Group Keys</h3>
             </div>
-            <div class="topn-container-sort">
-                <h3>排序</h3>
-                <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.orders" :key="index">
-                    <div class="topn-sort-item">
-                        <span class="topn-sort-title">{{item.column}}</span>
-                        <div topn-sort-btn-group>
-                            <el-switch
-                                    class="topn-sort-desc-btn"
-                                    v-model="item.desc"
-                                    active-text="降序"
-                                    active-color="#13ce66" />
-                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(index)" />
-                        </div>
+            <div class="group-key-container" v-if="datasource">
+                <div class="group-key-list" >
+                    <div class="group-key-item" v-for="(item, index) in datasource.keys" :key="index">
+                        <p class="group-key-item-col">{{item}}</p>
+                        <el-button type="text" >删除</el-button>
                     </div>
                 </div>
-                <div class="topn-add-btn">
-                    <select v-model="placeholderSort" @change="sortInserted">
-                        <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
-                        <option value="选择列" label="选择列" />
+                <div class="group-key-add-btn" >
+                    <select v-model="selectedAdd" @change="addSelectedColToKey">
+                        <option label="选中添加" value="选中添加" />
+                        <option v-for="(item, index) in schema" :label="item.src" :key="index" :value="item.src" />
                     </select>
                 </div>
-            </div>
-            <div class="topn-container-group">
-                <h3>分组</h3>
-                <el-radio-group v-model="datasource.command.isAllCols">
-                    <el-radio :label="true">全数据集</el-radio>
-                    <el-radio :label="false">按照分组计算</el-radio>
-                </el-radio-group>
-                <div class="topn-keys disabled" v-if="datasource.command.isAllCols" >
-                    <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.keys" :key="index">
-                        <div class="topn-sort-item">
-                            <span class="topn-sort-title">{{item}}</span>
-                        </div>
-                    </div>
-                    <div class="topn-add-btn">
-                        <select v-model="placeholderKey" >
-                            <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
-                            <option value="选择列" label="选择列" />
-                        </select>
-                    </div>
-                </div>
-                <div class="topn-keys" v-else >
-                    <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.keys" :key="index">
-                        <div class="topn-sort-item">
-                            <span class="topn-sort-title">{{item}}</span>
-                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="keyDeletion(index)" />
-                        </div>
-                    </div>
-                    <div class="topn-add-btn">
-                        <select v-model="placeholderKey" @change="keyInserted">
-                            <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
-                            <option value="选择列" label="选择列" />
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <el-divider></el-divider>
-            <div class="topn-additional">
-                <h3>对每一行进行</h3>
-                <el-checkbox v-model="datasource.command.duplicateCount">总行数计数</el-checkbox>
-                <el-checkbox v-model="datasource.command.rowNumber">显示行号</el-checkbox>
-                <el-checkbox v-model="datasource.command.rank">排序</el-checkbox>
-                <el-checkbox v-model="datasource.command.denseRank">密集排序</el-checkbox>
+                <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
         </div>
+        <div class="group-agg-container" v-if="datasource">
+            <div class="group-agg-title">
+                <h3>Aggregation</h3>
+            </div>
+            <div class="group-agg-op">
+<!--                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全部选中</el-checkbox>-->
+<!--                <div style="margin: 15px 0;"></div>-->
+<!--                <el-checkbox-group v-model="checkedKeys" @change="handleCheckedChange" class="group-agg-list">-->
+<!--                    <div class="group-agg-item" v-for="(aggkey, index) in notGroupedKeys" :key="index">-->
+<!--                        <el-checkbox :label="aggkey" >{{aggkey}}</el-checkbox>-->
+<!--                        <span>{{notGroupedTypes[index]}}</span>-->
+<!--                    </div>-->
+<!--                </el-checkbox-group>-->
 
+                <el-table :data="notGroupedCommands"
+                          ref="table"
+                          style="width: 100%"
+                          @selection-change="handleSelectionChange">
+                    <el-table-column
+                            type="selection"
+                            width="55">
+                    </el-table-column>
+                    <el-table-column
+                            label="列名"
+                            prop="column"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            label="类型"
+                            prop="type"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column width="800">
+                        <template slot-scope="scope">
+                            <div class="group-check-box">
+                                <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.min">Min</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.max">Max</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.first">First</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.last">Last</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.concat">Concat</el-checkbox-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="120">
+                        <template slot-scope="scope">
+                            <div class="group-check-box">
+                                <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
-import ElDivider from 'element-ui/packages/divider/index'
-import ElRadioGroup from 'element-ui/packages/radio-group/index'
-import ElRadio from 'element-ui/packages/radio/index'
-import ElSwitch from 'element-ui/packages/switch/index'
-import ElInputNumber from 'element-ui/packages/input-number/index'
-import ElForm from 'element-ui/packages/form/index'
-import ElFormItem from 'element-ui/packages/form-item/index'
-import { PhTopNDefs } from "./defs"
-import PhTopNStep from "./step"
+import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
+// import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index'
+// import ElDivider from 'element-ui/packages/divider/index'
+// import ElRadioGroup from 'element-ui/packages/radio-group/index'
+// import ElRadio from 'element-ui/packages/radio/index'
+// import ElSwitch from 'element-ui/packages/switch/index'
+// import ElInputNumber from 'element-ui/packages/input-number/index'
+// import ElForm from 'element-ui/packages/form/index'
+// import ElFormItem from 'element-ui/packages/form-item/index'
+import ElTable from 'element-ui/packages/table/index'
+import ElTableColumn from 'element-ui/packages/table-column/index'
+import { PhGroupDefs } from "./defs"
+import PhGroupStep from "./step"
 
 export default {
     data() {
         return {
             datasource: null,
-            placeholderSort: "选择列",
-            placeholderKey: "选择列"
+            selectedAdd: "选中添加",
+            computedGroupCount: true,
+            isIndeterminate: false,
+            checkAll: false,
+            notGroupedCommands: [],
+            // notGroupedTypes: [],
+            checkedKeys: [],
+            ignoredClearMsg: false
         }
     },
     props: {
@@ -113,42 +122,88 @@ export default {
         concretDefs: {
             type: Object,
             default: () => {
-                return PhTopNDefs
+                return PhGroupDefs
             }
         }
     },
     components: {
-        ElFormItem,
-        ElForm,
-        ElInputNumber,
+        // ElFormItem,
+        // ElForm,
+        // ElInputNumber,
         ElButton,
+        ElTable,
+        ElTableColumn,
         ElCheckbox,
-        ElRadioGroup,
-        ElRadio,
-        ElSwitch,
-        ElDivider
+        ElCheckboxButton,
+        // ElCheckboxGroup,
+        // ElRadioGroup,
+        // ElRadio,
+        // ElSwitch,
+        // ElDivider
     },
     mounted() {
-        this.datasource = new PhTopNStep(this.step)
+        this.datasource = new PhGroupStep(this.step, this.schema)
+        this.computedGroupCount = this.datasource.isComputedGroupCount()
+        this.notGroupedCommands = this.resetSelectGroupKeys()
+        this.ignoredClearMsg = false
     },
     methods: {
-        sortInserted() {
-            this.datasource.command.insertSortCloase(this.placeholderSort)
-            this.placeholderSort = "选择列"
-        },
-        sortDeletion(idx) {
-            this.datasource.command.deleteSortCloase(idx)
-        },
-        keyInserted() {
-            this.datasource.command.insertKeyCloase(this.placeholderKey)
-            this.placeholderKey = "选择列"
-        },
-        keyDeletion(idx) {
-            this.datasource.command.deleteKeyCloase(idx)
-        },
         validate() {
             this.$emit('statusChange', true)
-        }
+        },
+        resetSelectGroupKeys() {
+            const res = []
+            for (let idx = 0; idx < this.datasource.commands.length; ++idx) {
+                if (!this.datasource.keys.includes(this.datasource.commands[idx].column)) {
+                    res.push(this.datasource.commands[idx])
+                } else {
+                    this.datasource.commands[idx].isUsed = false
+                }
+            }
+
+            console.log(1)
+            this.ignoredClearMsg = true
+            const that = this
+            this.$nextTick(() => {
+                console.log(2)
+                res.forEach(x => {
+                    if (x.isUsed) {
+                        console.log(x)
+                        that.$refs.table.toggleRowSelection(x)
+                    }
+                })
+            })
+            return res
+        },
+        addSelectedColToKey() {
+            this.datasource.addCol2Key(this.selectedAdd)
+            this.selectedAdd = "选中添加"
+
+            this.notGroupedCommands = this.resetSelectGroupKeys()
+        },
+        changeComputedGroupCount() {
+            this.datasource.changeComputedGroupCount(this.computedGroupCount)
+        },
+        handleSelectionChange(val) {
+            console.log(3)
+            console.log(this.ignoredClearMsg)
+            if (!this.ignoredClearMsg) {
+                this.datasource.commands.forEach(x => {
+                    x.isUsed = val.includes(x);
+                })
+            } else {
+                this.ignoredClearMsg = false
+            }
+        },
+        // handleCheckAllChange(val) {
+        //     this.checkedKeys = val ? this.notGroupedKeys : [];
+        //     this.isIndeterminate = false;
+        // },
+        // handleCheckedChange(value) {
+        //     let checkedCount = value.length;
+        //     this.checkAll = checkedCount === this.notGroupedKeys.length;
+        //     this.isIndeterminate = checkedCount > 0 && checkedCount < this.notGroupedKeys.length;
+        // }
     },
     computed: {
 
@@ -161,19 +216,19 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .topn-container {
+    .group-container {
         margin-top: 4px;
         /*width: 100%;*/
-        min-width: 800px;
+        min-width: 1600px;
         padding: 4px;
         display: flex;
         flex-direction: column;
 
-        .topn-title {
+        .group-title {
             display: flex;
             flex-direction: column;
 
-            .topn-title-p {
+            .group-title-p {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -186,56 +241,55 @@ export default {
             }
         }
 
-        .topn-content {
+        .group-keys {
+            .group-key-title {
 
+            }
+
+            .group-key-container {
+                display: flex;
+                flex-direction: column;
+
+                border: 1px solid green;
+            }
+
+            .group-key-list {
+                display: flex;
+                flex-direction: column;
+
+                .group-key-item {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+            }
+
+            .group-key-add-btn {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
         }
 
-        .topn-sort-item-list {
+        .group-agg-container {
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
 
-            .topn-sort-item {
+            .group-agg-title {
                 display: flex;
-                flex-direction: row;
-                justify-content: space-between;
 
-                .topn-sort-btn-group {
+            }
+
+            .group-agg-list {
+                display: flex;
+                flex-direction: column;
+
+                .group-agg-item {
                     display: flex;
                     flex-direction: row;
                 }
             }
-        }
-        .topn-add-btn {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-        }
-
-        .topn-container-group {
-            display: flex;
-            flex-direction: column;
-
-        }
-
-        .disabled {
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
-        .topn-sort-title {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .topn-sort-del-btn {
-            margin-left: 30px;
-        }
-
-        .topn-additional {
-            margin-top: 30px;
-
-            display: flex;
-            flex-direction: column;
         }
     }
 </style>

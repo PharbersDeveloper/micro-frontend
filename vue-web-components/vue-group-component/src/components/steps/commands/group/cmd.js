@@ -1,17 +1,54 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhTopNCmd {
-    constructor(defs) {
-        this.firstRows = defs["firstRows"]
-        this.lastRows = defs["lastRows"]
-        this.keys = defs["keys"]
-        this.orders = defs["orders"]
-        this.denseRank = defs["denseRank"]
-        this.rank = defs["rank"]
-        this.duplicateCount = defs["duplicateCount"]
-        this.rowNumber = defs["rowNumber"]
-        this.isAllCols = this.keys.length === 0
+export default class PhGroupCmd {
+    constructor() {
+
+    }
+
+    initWithSchema(col, tp) {
+        this.countDistinct = false
+        this.min = false
+        this.avg = false
+        this.last = false
+        this.max = false
+        this.column = col
+        this.count = false
+        this.concat = false
+        this.sum = false
+        this.type = tp
+        this.stddev = false
+        this.first = false
+        this.index = 0
+        this.firstLastNotNull = false
+        this.orderColumn = ""
+        this.concatSeparator = ","
+        this.concatDistinct = ""
+
+        this.isUsed = false
+    }
+
+    initWithDefs(defs) {
+        console.log(defs)
+        this.countDistinct = defs["countDistinct"]
+        this.min = defs["min"]
+        this.avg = defs["avg"]
+        this.last = defs["last"]
+        this.max = defs["max"]
+        this.column = defs["column"]
+        this.count = defs["count"]
+        this.concat = defs["concat"]
+        this.sum = defs["sum"]
+        this.type = defs["type"]
+        this.stddev = defs["stddev"]
+        this.first = defs["first"]
+        this.index = defs["index"]
+        this.firstLastNotNull = defs["firstLastNotNull"]
+        this.orderColumn = defs["orderColumn"]
+        this.concatSeparator = defs["concatSeparator"]
+        this.concatDistinct = defs["concatDistinct"]
+
+        this.isUsed = true
     }
 
     exec() {
@@ -20,25 +57,6 @@ export default class PhTopNCmd {
 
     validations() {
         return true
-    }
-
-    insertSortCloase(col) {
-        this.orders.push({
-            "column": col,
-            "desc": false
-        })
-    }
-
-    deleteSortCloase(idx) {
-        this.orders.splice(idx, 1)
-    }
-
-    insertKeyCloase(col) {
-        this.keys.push(col)
-    }
-
-    deleteKeyCloase(idx) {
-        this.keys.splice(idx, 1)
     }
 
     revert2Defs() {

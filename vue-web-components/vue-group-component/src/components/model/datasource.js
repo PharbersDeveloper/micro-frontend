@@ -8,7 +8,7 @@ export default class PhDataSource {
         this.id = id
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "e4da3ad093da0c4aa80b752310f333af76f35c2ae10de7ea517e028dcdd858ba"
+        this.debugToken = "959165157859ab897a69fe6abb0080e7d4d042ab0dcafaecfb972d3c2097f041"
     }
 
     resetData() {
@@ -62,7 +62,7 @@ export default class PhDataSource {
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
                     that.step = {
-                        pjName: "-".join([projectId, jobName]),
+                        pjName: [projectId, jobName].join("_"),
                         stepId: "1",
                         ctype: "Group",
                         expressions: JSON.stringify({
@@ -85,7 +85,7 @@ export default class PhDataSource {
                         expressionsValue: "JSON",
                         groupIndex: "0",
                         groupName: "",
-                        id: "-".join([projectId, jobName, "1"]),
+                        id: [projectId, jobName, "1"].join("_"),
                         index: "1",
                         runtime : "group",
                         stepName: "group"

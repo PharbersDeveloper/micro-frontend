@@ -1,7 +1,7 @@
 <template>
-    <div class="topn">
+    <div class="group">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="topn_header">
+        <div class="group_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('group')" alt="" />
                 <span>Group</span>
@@ -10,8 +10,8 @@
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="topn_area">
-            <div class="topn_left">
+        <div class="group_area">
+            <div class="group_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
@@ -20,22 +20,22 @@
                     </el-step>
                 </el-steps>
             </div>
-            <div class="topn_right" v-if="datasource.isReady && datasource.isMetaReady">
+            <div class="group_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
                             ref="filter"
                             :step="datasource.step"
                             :schema="datasource.dataset.schema"
                             @statusChange="preFilterStatus" />
-<!--                <computed v-show="active === 2"-->
-<!--                            ref="computed"-->
-<!--                            :step="datasource.step"-->
-<!--                            :schema="datasource.dataset.schema"-->
-<!--                            @statusChange="computedStatus" />-->
-<!--                <top-n v-show="active === 3"-->
-<!--                          ref="topn"-->
-<!--                          :step="datasource.step"-->
-<!--                          :schema="datasource.dataset.schema"-->
-<!--                          @statusChange="topnStatus" />-->
+                <computed v-show="active === 2"
+                            ref="computed"
+                            :step="datasource.step"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="computedStatus" />
+                <group v-show="active === 3"
+                          ref="group"
+                          :step="datasource.step"
+                          :schema="datasource.dataset.schema"
+                          @statusChange="groupStatus" />
 <!--                <retrieved-cols v-show="active === 4"-->
 <!--                                ref="retrieved"-->
 <!--                                :step="datasource.step"-->
@@ -59,8 +59,8 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/view'
-// import Computed from './steps/commands/computed/view'
-// import TopN from './steps/commands/top-n/view'
+import Computed from './steps/commands/computed/view'
+import Group from './steps/commands/group/view'
 // import RetrievedCols from './steps/commands/retrieved-cols/view'
 // import Outputs from './steps/commands/output/view'
 
@@ -70,8 +70,8 @@ export default {
         ElStep,
         ElButton,
         PreFilter,
-        // Computed,
-        // TopN,
+        Computed,
+        Group,
         // RetrievedCols,
         // Outputs
     },
@@ -235,6 +235,8 @@ export default {
         },
         save() {
             const params = {
+                "preFilter": this.$refs.filter.datasource.revert2Defs(),
+                "computedColumns": this.$refs.computed.datasource.revert2Defs(),
                 // "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                 // "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
                 // "keys": this.$refs.topn.datasource.revert2Defs().keys,
@@ -267,26 +269,26 @@ export default {
 
     },
     watch: {
-        active(n) {
+        active() {
             this.$refs.filter.validate()
             this.$refs.computed.validate()
-            this.$refs.topn.validate()
-            this.$refs.retrieved.validate()
-            this.$refs.outputs.validate()
-
-            if (n === 4 || n === 5) {
-                this.computedSchema = this.computeSchema()
-            }
-
-            if (n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
+            // this.$refs.topn.validate()
+            // this.$refs.retrieved.validate()
+            // this.$refs.outputs.validate()
+            //
+            // if (n === 4 || n === 5) {
+            //     this.computedSchema = this.computeSchema()
+            // }
+            //
+            // if (n === 5) {
+            //     this.outputsSchema = this.genOutputsSchema()
+            // }
         }
     }
 }
 </script>
 <style lang="scss">
-    .topn {
+    .group {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -296,7 +298,7 @@ export default {
             // background: red;
         }
 
-        .topn_header {
+        .group_header {
             height: 48px;
             padding: 0 15px;
             border-bottom: 1px solid #cccccc;
@@ -334,20 +336,20 @@ export default {
             }
         }
 
-        .topn_area {
+        .group_area {
             width: 100%;
             flex-grow: 1;
             display: flex;
             flex-direction: row;
 
-            .topn_left {
+            .group_left {
                 display: flex;
                 flex-direction: row;
                 margin-left: 80px;
                 justify-content: space-around;
             }
 
-            .topn_right {
+            .group_right {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: row;
