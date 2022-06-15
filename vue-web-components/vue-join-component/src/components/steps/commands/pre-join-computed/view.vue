@@ -208,8 +208,9 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            border: 1px solid greenyellow;
-
+            // border: 1px solid #ccc;
+			align-items: center;
+			
             .computed-item-detail {
                 display: flex;
                 flex-direction: row;

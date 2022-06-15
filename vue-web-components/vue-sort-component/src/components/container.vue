@@ -240,6 +240,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+			border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -276,12 +277,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
 
             .topn_left {
                 display: flex;
                 flex-direction: row;
-                margin-left: 80px;
+                padding: 40px;
                 justify-content: space-around;
+				border-right: 1px solid #ccc;
             }
 
             .topn_right {
@@ -289,6 +292,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
+				background: #f2f2f2;
+				padding: 20px;
 
             }
         }
