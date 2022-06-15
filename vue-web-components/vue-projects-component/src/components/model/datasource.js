@@ -7,7 +7,7 @@ export default class PhProjectDatasource {
         this.debugToken = '6445aa0d7c3cc866c8501dc0df4b9ca1a181de0d0fa0015a99bdaf5588d79bc2'
         this.traceId = ""
         this.statusCode = 0
-        this.status = "stoped"
+        this.status = "started"
         this.resetSwitch()
     }
 
@@ -42,8 +42,8 @@ export default class PhProjectDatasource {
         const accessToken = this.getCookie("access_token")
 		console.log(tenantId)
         let body = {
-            // "tenantId": tenantId
-            "tenantId": "alfredtest"
+            "tenantId": tenantId
+            // "tenantId": "alfredtest"
         }
         let options = {
             method: "POST",
@@ -84,8 +84,8 @@ export default class PhProjectDatasource {
         const accessToken = this.getCookie("access_token")
 		const traceId = this.guid()
         let body = {
-            // "tenantId": tenantId
-            "tenantId": "alfredtest",
+            "tenantId": tenantId,
+            // "tenantId": "alfredtest",
 			"traceId": traceId,
 			"owner": this.getCookie("account_id"),
 			"showName":  decodeURI(
@@ -121,8 +121,8 @@ export default class PhProjectDatasource {
         const accessToken = this.getCookie("access_token")
 		const traceId = this.getCookie("tenantTraceId")
         let body = {
-            // "tenantId": tenantId
-            "tenantId": "alfredtest",
+            "tenantId": tenantId,
+            // "tenantId": "alfredtest",
 			"traceId": traceId,
 			"owner": this.getCookie("account_id"),
 			"showName":  decodeURI(

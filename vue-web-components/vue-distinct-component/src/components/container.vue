@@ -53,10 +53,10 @@ import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
-import PreFilter from './steps/commands/pre-filter/view'
-import PostFilter from './steps/commands/post-filter/view'
-import Distinct from './steps/commands/distinct/view'
-import Outputs from './steps/commands/output/view'
+import PreFilter from './steps/commands/pre-filter/preFilterView'
+import PostFilter from './steps/commands/post-filter/postFilterView'
+import Distinct from './steps/commands/distinct/distinctView'
+import Outputs from './steps/commands/output/outputView'
 
 export default {
     components: {
@@ -71,6 +71,7 @@ export default {
     data() {
         return {
             active: 1,
+            flowVersion: "developer",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -116,7 +117,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -163,6 +164,18 @@ export default {
                 this.stepsDefs[3].status = "error"
             }
         },
+
+        // genOutputsSchema() {
+        //     const retrieved = this.$refs.retrieved.datasource.revert2Defs()
+        //     let result = []
+        //     if (retrieved.length === 0) {
+        //         result = this.computedSchema
+        //     } else {
+        //         result = this.computedSchema.filter(x => retrieved.includes(x.title))
+        //     }
+        //     return result
+        // },
+
         save() {
             const params = {
                 "keys": this.$refs.distinct.datasource.revert2Defs().keys,
@@ -170,20 +183,18 @@ export default {
                 "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
                 "globalCount": this.$refs.distinct.datasource.revert2Defs().globalCount
             }
-
-            console.log(params)
-            // this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
         }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
-        this.jobName = "distinct"
+        // this.projectIdTest = "alfredtest"
+        // this.jobName = "distinct"
+		this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasetId)
     },
     updated() {
@@ -195,6 +206,10 @@ export default {
             this.$refs.distinct.validate()
             this.$refs.postfilter.validate()
             this.$refs.outputs.validate()
+
+			// if (n === 4) {
+            //     this.outputsSchema = this.genOutputsSchema()
+            // }
         }
     }
 }
@@ -217,6 +232,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+			border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -253,12 +269,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
 
             .topn_left {
                 display: flex;
                 flex-direction: row;
-                margin-left: 80px;
+                padding: 40px;
                 justify-content: space-around;
+				border-right: 1px solid #ccc;
             }
 
             .topn_right {
@@ -266,7 +284,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-
+				background: #f2f2f2;
+				padding: 20px;
             }
         }
     }

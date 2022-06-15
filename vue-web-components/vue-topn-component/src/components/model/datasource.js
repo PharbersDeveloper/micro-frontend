@@ -9,7 +9,7 @@ export default class PhDataSource {
         this.store = new JsonApiDataStore()
         this.resetData()
 		this.parent = parent
-        this.debugToken = "e4da3ad093da0c4aa80b752310f333af76f35c2ae10de7ea517e028dcdd858ba"
+        this.debugToken = "50e4cefbb79b1d0c8a9d28f968a0f86ab7ee721baef1427a2a86e79515c632b6"
     }
 
     resetData() {
@@ -84,8 +84,8 @@ export default class PhDataSource {
                                 "retrievedColumns": [],
                                 "computedColumns": [
 									{
-										"expr": "`姓名`+`学号`+`运单号`",
-										"name": "AAA",
+										"expr": "",
+										"name": "",
 										"type": "int"
 									}
 								]
@@ -179,44 +179,10 @@ export default class PhDataSource {
 			}
 		}
 		this.parent.$emit('event', event)
-        // @wodelu 这里改成code gen 逻辑
-        // const url = `${hostName}/phresourcecodegentrigger`
-        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        // let body = {
-        //     table: "step",
-        //     item: {
-        //         pjName: this.step["pj-name"],
-        //         stepId: this.step["step-id"],
-        //         ctype: this.step["ctype"],
-        //         expressions: JSON.stringify({ "params": param }),
-        //         expressionsValue: this.step["expressions-value"],
-        //         groupIndex: this.step["group-index"],
-        //         groupName: this.step["group-name"],
-        //         id: this.step["id"],
-        //         index: this.step["index"],
-        //         runtime : this.step["runtime"],
-        //         stepName: this.step["step-name"]
-        //     }
-        // }
-        // let options = {
-        //     method: "POST",
-        //     headers: {
-        //         "Authorization": accessToken,
-        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         "accept": "application/json"
-        //     },
-        //     body: JSON.stringify(body)
-        // }
-        // return fetch(url, options)
     }
 
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-				this.parent.dealsaveAndGenCode(response)
-            })
     }
 
 	guid() {

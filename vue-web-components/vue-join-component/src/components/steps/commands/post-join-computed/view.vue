@@ -136,8 +136,8 @@ export default {
             display: flex;
             flex-direction: row;
             cursor: pointer;
-            border: 1px solid greenyellow;
-
+            // border: 1px solid #ccc;
+			align-items: center;
 
             .computed-item-title {
                 width: 100px;

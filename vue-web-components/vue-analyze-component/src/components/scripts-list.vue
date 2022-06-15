@@ -395,8 +395,8 @@ export default {
         },
         //点击dataset name
         clickReciptName(recipt) {
-			const inputName = JSON.parse(recipt.inputs)[0]
-			const inputDS = this.allData.dss.filter(it => it.name === inputName)
+            const inputName = JSON.parse(recipt.inputs)[0]
+            const inputDS = this.allData.dss.filter(it => it.name === inputName)
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -406,7 +406,7 @@ export default {
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId,
                     recipt: recipt,
-					inputDS: inputDS
+                    inputDS: inputDS
                 }
             }
             this.$emit('event', event)

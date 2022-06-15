@@ -42,6 +42,10 @@ import { phSyncContainerRouteModel } from "./routeModel/phSyncContainerRouteMode
 import { phSyncContainerEventHandler } from "./eventHandler/phSyncContainerEventHandler"
 import { phTopnContainerRouteModel } from "./routeModel/phTopnContainerRouteModel"
 import { phTopnContainerEventHandler } from "./eventHandler/phTopnContainerEventHandler"
+import { phDistinctContainerRouteModel } from "./routeModel/phDistinctContainerRouteModel"
+import { phDistinctContainerEventHandler } from "./eventHandler/phDistinctContainerEventHandler"
+import { phSortContainerRouteModel } from "./routeModel/phSortContainerRouteModel"
+import { phSortContainerEventHandler } from "./eventHandler/phSortContainerEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -87,5 +91,9 @@ export {
 	phSyncContainerRouteModel,
 	phSyncContainerEventHandler,
 	phTopnContainerRouteModel,
-	phTopnContainerEventHandler
+	phTopnContainerEventHandler,
+	phDistinctContainerRouteModel,
+	phDistinctContainerEventHandler,
+	phSortContainerRouteModel,
+	phSortContainerEventHandler
 }

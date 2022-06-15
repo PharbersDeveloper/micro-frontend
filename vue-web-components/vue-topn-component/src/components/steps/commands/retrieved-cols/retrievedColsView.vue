@@ -105,6 +105,9 @@ export default {
         padding: 4px;
         display: flex;
         flex-direction: column;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .retrieved-title {
             display: flex;

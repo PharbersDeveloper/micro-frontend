@@ -167,7 +167,10 @@ export default {
         min-width: 800px;
         padding: 4px;
         display: flex;
-        flex-direction: column;
+        flex-direction: column;    
+        background: #fff;
+        height: fit-content;
+        padding: 20px;
 
         .topn-title {
             display: flex;

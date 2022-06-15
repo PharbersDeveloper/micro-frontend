@@ -55,7 +55,7 @@ export default {
     data() {
         return {
             inputDsName: this.getUrlParam("inputName"),
-            outputDsName: ""
+            outputDsName: this.getUrlParam("outputName")
             // schema: ["1", "2", "3"],
         }
     },
@@ -91,7 +91,17 @@ export default {
         },
 
         save() {
-
+			const event = new Event("event")
+			event.args = {
+				callback: "saveSync",
+				element: this,
+				param: {
+					name: "saveSync",
+					projectId: this.projectId,
+					projectName: this.projectName
+				}
+			}
+			this.$emit('event', event)
         },
         changeInputDsName() {
 
@@ -105,10 +115,10 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
         this.inputDsName = this.getUrlParam("inputName")
-    },
-    updated() {
-        this.outputDsName = this.allData.scriptsParams.outputs
     }
+    // updated() {
+    //     this.outputDsName = this.allData.outputs[0]
+    // }
 }
 </script>
 <style lang="scss">

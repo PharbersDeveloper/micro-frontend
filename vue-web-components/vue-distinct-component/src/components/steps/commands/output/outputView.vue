@@ -9,7 +9,7 @@
                 <div class="outputs-content-item" v-for="(item, index) in schema" :key="index">
                     <span class="outputs-content-item-index">{{index}}</span>
                     <span class="outputs-content-item-type">({{item.type}})</span>
-                    <span class="outputs-content-item-title">{{item.title}}</span>
+                    <span class="outputs-content-item-title">{{item.src}}</span>
                 </div>
             </div>
         </div>
@@ -68,11 +68,12 @@ export default {
     }
     .outputs {
         margin-top: 4px;
-        /*width: 100%;*/
         min-width: 800px;
-        padding: 4px;
         display: flex;
         flex-direction: column;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .outputs-title {
             display: flex;

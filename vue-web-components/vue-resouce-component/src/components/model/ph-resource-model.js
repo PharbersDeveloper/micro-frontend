@@ -80,8 +80,8 @@ export default class PhResourceModel {
 		const traceId = this.guid()
 		console.log(tenantId)
         let body = {
-            // "tenantId": tenantId
-            "tenantId": "alfredtest",
+            "tenantId": tenantId,
+            // "tenantId": "alfredtest",
 			"traceId": traceId,
 			"owner": this.getCookie("account_id"),
 			"showName":  decodeURI(
@@ -118,8 +118,8 @@ export default class PhResourceModel {
 		const traceId = this.getCookie("jupyterTraceId")
 		console.log(tenantId)
         let body = {
-            // "tenantId": tenantId
-            "tenantId": "alfredtest",
+            "tenantId": tenantId,
+            // "tenantId": "alfredtest",
 			"traceId": traceId,
 			"owner": this.getCookie("account_id"),
 			"showName":  decodeURI(
