@@ -1,33 +1,48 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhComputedCmd {
-    constructor(defs) {
-        this.computedCols = defs
-        this.pattern = "SQL Expression"
+export default class PhSelectColsCmd {
+    constructor(columns, matches) {
+        this.columns = columns
+        this.ds = matches.map(x => x["ds"])
+        for (let idx = 0; idx < matches.length; ++idx) {
+            this[matches[idx]["ds"]] = matches[idx]["columns"]
+        }
     }
 
     exec() {
 
     }
 
-    insertComputedCol() {
-        this.computedCols.push({
-            "expr": "",
-            "name": "",
-            "type": "int"
+    removeStackDs(item, index) {
+        this.ds.splice(index, 1)
+        delete this[item]
+    }
+
+    addSelectColumn() {
+        this.columns.push("")
+        this.ds.forEach(x => {
+            this[x].push(null)
         })
     }
 
-    removeComputedCol(idx) {
-        this.computedCols.splice(idx, 1)
-    }
+    // insertComputedCol() {
+    //     this.computedCols.push({
+    //         "expr": "",
+    //         "name": "",
+    //         "type": "int"
+    //     })
+    // }
+    //
+    // removeComputedCol(idx) {
+    //     this.computedCols.splice(idx, 1)
+    // }
 
     validations() {
         return true
     }
 
     revert2Defs() {
-        return this.computedCols
+        // return this.computedCols
     }
 }

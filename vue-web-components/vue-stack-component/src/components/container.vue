@@ -26,11 +26,11 @@
                             :step="datasource.step"
                             :schema="datasource.schema"
                             @statusChange="preFilterStatus" />
-<!--                <computed v-show="active === 2"-->
-<!--                          ref="computed"-->
-<!--                          :step="datasource.step"-->
-<!--                          :schema="datasource.dataset.schema"-->
-<!--                          @statusChange="computedStatus" />-->
+                <select-cols v-show="active === 2"
+                             ref="computed"
+                             :step="datasource.step"
+                             :schema="datasource.schema"
+                             @statusChange="selectColsStatus" />
 <!--                <sort v-show="active === 3"-->
 <!--                            ref="sort"-->
 <!--                            :step="datasource.step"-->
@@ -54,7 +54,7 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
-// import Computed from './steps/commands/computed/computedView'
+import SelectCols from './steps/commands/select-cols/selectColsView'
 // import Outputs from './steps/commands/output/outputView'
 // import Sort from './steps/commands/sort/sortView'
 
@@ -64,7 +64,7 @@ export default {
         ElStep,
         ElButton,
         PreFilter,
-        // Computed,
+        SelectCols,
         // Outputs,
         // Sort
     },
@@ -146,7 +146,7 @@ export default {
                 this.stepsDefs[0].status = "error"
             }
         },
-        computedStatus(status) {
+        selectColsStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
                 this.stepsDefs[1].status = "success"
@@ -189,7 +189,7 @@ export default {
         },
         save() {
             const params = {
-                // "preFilter": this.$refs.prefilter.datasource.revert2Defs(),
+                "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                 // "orders": this.$refs.sort.datasource.revert2Defs().orders,
                 // "denseRank": this.$refs.sort.datasource.revert2Defs().denseRank,
                 // "rank": this.$refs.sort.datasource.revert2Defs().rank,

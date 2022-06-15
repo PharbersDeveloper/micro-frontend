@@ -1,96 +1,87 @@
 <template>
-    <div class="computed">
+    <div class="stack-select">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="computed-title">
-            <div class="computed-title-p">
-                <h2>Computed Columns</h2>
+        <div class="stack-select-title">
+            <div class="stack-select-title-p">
+                <h2>Select Columns</h2>
             </div>
         </div>
-        <div class="computed-list" v-if="datasource">
-            <div class="computed-item"
-                 v-for="(item, index) in datasource.command.computedCols"
-                 :key="index"
-                 @click="computedClicked(item, index)">
-                <span>新建列名</span>
-                <el-input class="computed-item-title" v-model="item.name"></el-input>
-                <span>保存为</span>
-                <select v-model="item.type">
-                    <option v-for="(op, opi) in concretDefs.typeDefs" :key="opi" :value="op.cal" :label="op.desc" />
-                </select>
-                <span>模式</span>
-                <select v-model="datasource.command.pattern">
-                    <option v-for="(op, opi) in concretDefs.pattern" :key="opi" :value="op.cal" :label="op.desc" />
-                </select>
-                <el-button type="text" @click="datasource.command.removeComputedCol(index)">删除</el-button>
+        <div class="stack-select-ds-panel" v-if="datasource">
+            <div class="stack-select-ds-lst">
+                <div class="stack-select-ds-item"
+                     v-for="(item, index) in datasource.command.ds"
+                     :key="index" >
+                    <div class="stack-select-ver">
+                        <div class="stack-select-ds-left">
+                            <span>{{index}}</span>
+                            &nbsp;
+                            <span>{{item}}</span>
+                            &nbsp;
+                        </div>
+                    </div>
+                    <el-button type="text" @click="removeStackDs(item, index)">删除</el-button>
+                </div>
             </div>
-        </div>
-        <div class="computed-expression" v-if="datasource">
-            <ul class="computed-schema-list">
-                <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
-            </ul>
-            <el-input class="computed-expression-expr"
-                      type="textarea"
-                      :rows="10"
-                      v-model="currentExpr"
-                      placeholder="Please input" />
-        </div>
 
-        <div class="computed-add-button">
-            <el-button type="primary" @click="datasource.command.insertComputedCol()">添加</el-button>
+            <div class="stack-select-hor">
+                <el-button type="primary" >添加数据集</el-button>
+            </div>
+        </div>
+        <el-divider></el-divider>
+        <div class="stack-select-matches-panel" v-if="datasource">
+            <output-cols
+                    :columns="datasource.command.columns"
+                    :command="datasource.command" />
         </div>
     </div>
 </template>
 <script>
-import ElInput from 'element-ui/packages/input/index'
+// import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
-import { PhComputedDefs } from "./defs"
-import PhComputedStep from "./step"
+import ElDivider from 'element-ui/packages/divider/index'
+import OutputCols from './detail-view/output-cols'
+import { PhSelectColsDefs } from "./defs"
+import PhSelectColsStep from "./step"
 
 export default {
     data() {
         return {
             datasource: null,
-            currentIdx: 0,
-            currentExpr: ""
         }
     },
     props: {
         step: Object,
-        schema: Array,
+        schema: Object,
         concretDefs: {
             type: Object,
             default: () => {
-                return PhComputedDefs
+                return PhSelectColsDefs
             }
         }
     },
     components: {
-        ElInput,
-        ElButton
+        // ElInput,
+        ElButton,
+        ElDivider,
+        OutputCols
     },
     mounted() {
-        this.datasource = new PhComputedStep(this.step)
-        this.currentExpr = this.datasource.command.computedCols[0]["expr"]
+        this.datasource = new PhSelectColsStep(this.step)
+        // this.currentExpr = this.datasource.command.computedCols[0]["expr"]
     },
     methods: {
-        itemClicked(v) {
-            this.currentExpr += "`" + v + "`"
-        },
-        computedClicked(it, idx) {
-            this.currentExpr = it.expr
-            this.currentIdx = idx
-        },
         validate() {
             this.$emit('statusChange', this.datasource.validate())
+        },
+        removeStackDs(item, index) {
+            this.datasource.command.removeStackDs(item, index)
         }
     },
     computed: {
 
     },
     watch: {
-        currentExpr(n) {
-            this.datasource.command.computedCols[this.currentIdx]["expr"] = n
-        }
+
     }
 }
 </script>
@@ -100,20 +91,21 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .computed {
+    .stack-select {
         margin-top: 4px;
-        min-width: 800px;
+        width: 100%;
+        /*min-width: 800px;*/
         display: flex;
         flex-direction: column;
 		background: #fff;
 		height: fit-content;
 		padding: 20px;
 
-        .computed-title {
+        .stack-select-title {
             display: flex;
             flex-direction: column;
 
-            .computed-title-p {
+            .stack-select-title-p {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -126,55 +118,45 @@ export default {
             }
         }
 
-        .computed-list {
+        .stack-select-ds-panel {
             display: flex;
             flex-direction: column;
-        }
 
-        .computed-item {
-            display: flex;
-            flex-direction: row;
-            cursor: pointer;
-            // border: 1px solid #ccc;
-			align-items: center;
-
-            .computed-item-title {
-                width: 100px;
+            .stack-select-ds-lst {
+                display: flex;
+                flex-direction: row;
             }
 
-            .computed-item-type {
+            .stack-select-ds-item {
+                display: flex;
+                flex-direction: row;
+                min-width: 200px;
+                border: 1px solid green;
+                margin: 5px;
+                justify-content: space-between;
 
-            }
-
-            .computed-item-mode {
-
-            }
-        }
-
-        .computed-expression {
-            display: flex;
-            flex-direction: row;
-
-
-            .computed-schema-list {
-                border: 1px solid grey;
-                height: 500px;
-                width: 400px;
-                overflow: auto;
-
-                li {
-                    cursor: pointer;
+                .stack-select-ds-left {
+                    display: flex;
+                    flex-direction: row;
                 }
             }
-
-            .computed-expression-expr {
-                margin: 30px 0 0 20px;
-            }
         }
 
-        .computed-add-button {
+        .stack-select-matches-panel {
             display: flex;
             flex-direction: row;
+
+        }
+
+        .stack-select-hor {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+
+        .stack-select-ver {
+            display: flex;
+            flex-direction: column;
             justify-content: space-around;
         }
     }

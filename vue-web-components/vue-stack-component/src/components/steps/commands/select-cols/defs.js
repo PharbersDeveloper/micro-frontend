@@ -1,4 +1,4 @@
-export const PhComputedDefs = {
+export const PhSelectColsDefs = {
     typeDefs: [
         {
             desc: "整型",

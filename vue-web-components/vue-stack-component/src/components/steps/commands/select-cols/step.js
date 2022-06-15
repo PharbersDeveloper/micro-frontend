@@ -1,14 +1,16 @@
-import PhComputedCmd from "./cmd"
+import PhSelectColsCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
  */
-export default class PhComputedStep {
+export default class PhSelectColsStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["params"]["computedColumns"]
-        this.command = new PhComputedCmd(defs)
+        // const defs = this.expressions["params"]["computedColumns"]
+        const columns = this.expressions["params"]["selectedColumns"]
+        const matches = this.expressions["params"]["columnsMatches"]
+        this.command = new PhSelectColsCmd(columns, matches)
     }
 
     exec() {

@@ -109,6 +109,10 @@ export default class PhDataSource {
                             "expr": ""
                         }
                     }})
+                    const defaultColumnMatches = this.datasets.map(x => { return {
+                        "ds": x,
+                        "columns": []
+                    }})
                     that.step = {
                         "pj-name": [projectId, jobName].join("_"),
                         "step-id": "1",
@@ -117,10 +121,10 @@ export default class PhDataSource {
                             "params": {
                                 "preFilters": defaultPreFilter,
                                 "selectedColumns": [],
-                                "columnsMatchs": [],
+                                "columnsMatches": defaultColumnMatches,
                                 "originColumn": {
                                     "enabled": false,
-                                    "columnName": "original_dataset",
+                                    "columnName": "provider",
                                     "originDatasets": [
                                         {
                                             "ds": "ds name",
