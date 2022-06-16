@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'c14c48799300292a82001fe6ce6582afdd33650eed34d14e58c3a033d6e1eac8'
+        this.debugToken = '04e86af3bb4473ddc9275225b75ae03b45cc53b00fc37530035adc377522b37b'
         this.sizeHit = [0, 0]
         // this.hitWidthStep = 300
         // this.hitHeightStep = 500
@@ -120,6 +120,14 @@ export default class PhDagDatasource {
                         result = "r"
                     } else if (cat === "job" && runtime === "prepare") {
                         result = "prepare"
+                    } else if (cat === "job" && runtime === "sort") {
+                        result = "sort"
+                    } else if (cat === "job" && runtime === "sync") {
+                        result = "sync"
+                    } else if (cat === "job" && runtime === "distinct") {
+                        result = "distinct"
+                    } else if (cat === "job" && runtime === "topn") {
+                        result = "topn"
                     } else if (cat === "dataset") {
                         result = "dataset"
                     } else if (cat === "job") {

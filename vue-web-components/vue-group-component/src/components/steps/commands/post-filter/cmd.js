@@ -57,7 +57,7 @@ export default class PhPostFilterCmd {
             tmp["result"] = {
                 "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "CONTAINS",
-                "right": c.substring(c.indexOf("%"), c.lastIndexOf("%"))
+                "right": c.substring(c.indexOf("%") + 1, c.lastIndexOf("%"))
             }
             throw tmp;
         }

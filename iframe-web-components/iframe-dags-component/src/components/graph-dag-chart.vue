@@ -54,6 +54,11 @@
                     <img :src="defs.iconsByName('pyspark')" alt="" />
                     <img :src="defs.iconsByName('r')" alt="" />
                     <img :src="defs.iconsByName('sparkr')" alt="" />
+                    <img :src="defs.iconsByName('prepare')" alt="" />
+                    <img :src="defs.iconsByName('sort')" alt="" />
+                    <img :src="defs.iconsByName('distinct')" alt="" />
+                    <img :src="defs.iconsByName('sync')" alt="" />
+                    <img :src="defs.iconsByName('topn')" alt="" />
                 </div>
             </div>
         </div>
@@ -534,9 +539,11 @@ export default {
                 margin-top: 20px;
                 display: flex;
                 justify-content: space-between;
+				flex-wrap: wrap;
                 img {
                     width: 40px;
                     height: 40px;
+					margin: 5px;
                 }
             }
         }
