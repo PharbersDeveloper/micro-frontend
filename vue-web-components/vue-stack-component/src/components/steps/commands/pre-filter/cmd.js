@@ -26,7 +26,7 @@ export default class PhPreFilterCmd {
                 "right": ""
             }]
         }
-        console.log(this.cloases)
+        
     }
 
     cloases2Struct() {

@@ -26,7 +26,7 @@ export default class PhPostFilterCmd {
                 "right": ""
             }]
         }
-        console.log(this.cloases)
+        
     }
 
     cloases2Struct() {
