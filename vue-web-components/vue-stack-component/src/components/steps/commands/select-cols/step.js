@@ -7,7 +7,6 @@ export default class PhSelectColsStep {
     constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        // const defs = this.expressions["params"]["computedColumns"]
         const columns = this.expressions["params"]["selectedColumns"]
         const matches = this.expressions["params"]["columnsMatches"]
         this.command = new PhSelectColsCmd(columns, matches)

@@ -1,4 +1,4 @@
-import PhDistinctCmd from "./cmd"
+import PhSortCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
@@ -8,7 +8,7 @@ export default class PhSortStep {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["orders"]
-        this.command = new PhDistinctCmd(defs)
+        this.command = new PhSortCmd(defs)
 
         this.denseRank = this.expressions["params"]["denseRank"]
         this.rank = this.expressions["params"]["rank"]

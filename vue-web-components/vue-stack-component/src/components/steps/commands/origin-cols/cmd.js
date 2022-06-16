@@ -1,25 +1,18 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhDistinctCmd {
+export default class PhStackOriginCmd {
     constructor(defs) {
-        console.log(defs)
-        this.orders = defs
+        this.enabled = defs["enabled"]
+        this.columnName = defs["columnName"]
+        this.originDatasets = defs["originDatasets"].map(x => { return {
+            ds: x["ds"],
+            value: x["value"]
+        }})
     }
 
     exec() {
 
-    }
-
-    insertSortCloase(col) {
-        this.orders.push({
-            "column": col,
-            "desc": false
-        })
-    }
-
-    deleteSortCloase(idx) {
-        this.orders.splice(idx, 1)
     }
 
     validations() {
@@ -27,6 +20,13 @@ export default class PhDistinctCmd {
     }
 
     revert2Defs() {
-        return this.orders
+        return {
+            enabled: this.enabled,
+            columnName: this.columnName,
+            originDatasets: this.originDatasets.map(x => { return {
+                ds: x["ds"],
+                value: x["value"]
+            }})
+        }
     }
 }

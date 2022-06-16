@@ -1,7 +1,7 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhPreFilterCmd {
+export default class PhPostFilterCmd {
     constructor(preFilterExpression) {
         // if (preFilterExpression.length > 0) {
         //     this.enabled = true
@@ -57,7 +57,7 @@ export default class PhPreFilterCmd {
             tmp["result"] = {
                 "left": c.substring(1, c.indexOf("`", 1)),
                 "op": "CONTAINS",
-                "right": c.substring(c.indexOf("%"), c.lastIndexOf("%"))
+                "right": c.substring(c.indexOf("%") + 1, c.lastIndexOf("%"))
             }
             throw tmp;
         }
@@ -65,7 +65,7 @@ export default class PhPreFilterCmd {
 
     tryRevertContainsCloases(t) {
         if (t.op === "CONTAINS") {
-            throw "`" + t.left + "`" + " like '%" + t.right + "%'"
+            throw "`" + t.left + "`" + " like %" + t.right + "%"
         }
     }
 

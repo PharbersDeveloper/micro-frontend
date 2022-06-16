@@ -27,19 +27,23 @@
                             :schema="datasource.schema"
                             @statusChange="preFilterStatus" />
                 <select-cols v-show="active === 2"
-                             ref="computed"
+                             ref="select"
                              :step="datasource.step"
                              :schema="datasource.schema"
                              @statusChange="selectColsStatus" />
-<!--                <sort v-show="active === 3"-->
-<!--                            ref="sort"-->
-<!--                            :step="datasource.step"-->
-<!--                            :schema="datasource.dataset.schema"-->
-<!--                            @statusChange="sortStatus" />-->
-<!--                <outputs v-show="active === 4"-->
-<!--                                ref="outputs"-->
-<!--                                :schema="computedSchema"-->
-<!--                                @statusChange="outputsStatus" />-->
+                <origin-cols v-show="active === 3"
+                             ref="origin"
+                             :step="datasource.step"
+                             @statusChange="originStatus" />
+                <post-filter v-show="active === 4"
+                            ref="postfilter"
+                            :step="datasource.step"
+                            :schema="computedSchema"
+                            @statusChange="preFilterStatus" />
+                <outputs v-show="active === 5"
+                                ref="outputs"
+                                :schema="computedSchema"
+                                @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -55,8 +59,9 @@ import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
 import SelectCols from './steps/commands/select-cols/selectColsView'
-// import Outputs from './steps/commands/output/outputView'
-// import Sort from './steps/commands/sort/sortView'
+import OriginCols from './steps/commands/origin-cols/originColsView'
+import PostFilter from './steps/commands/post-filter/postFilterView'
+import Outputs from './steps/commands/output/outputView'
 
 export default {
     components: {
@@ -65,8 +70,9 @@ export default {
         ElButton,
         PreFilter,
         SelectCols,
-        // Outputs,
-        // Sort
+        OriginCols,
+        PostFilter,
+        Outputs,
     },
     data() {
         return {
@@ -154,7 +160,7 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        sortStatus(status) {
+        originStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
                 this.stepsDefs[2].status = "success"
@@ -172,17 +178,10 @@ export default {
         },
         computeSchema() {
             const result = []
-            for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
+            const tmp = this.$refs.select.datasource.revert2Defs().selectedColumns
+            for (let idx = 0; idx < tmp.length; ++idx) {
                 result.push({
-                    "type": this.datasource.dataset.schema[idx]["type"].toLowerCase(),
-                    "title": this.datasource.dataset.schema[idx]["src"]
-                })
-            }
-            const addCols = this.$refs.computed.datasource.revert2Defs()
-            for (let idx = 0; idx < addCols.length; ++idx) {
-                result.push({
-                    "type": addCols[idx]["type"].toLowerCase(),
-                    "title": addCols[idx]["name"]
+                    "title": tmp[idx]
                 })
             }
             return result
@@ -190,11 +189,10 @@ export default {
         save() {
             const params = {
                 "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
-                // "orders": this.$refs.sort.datasource.revert2Defs().orders,
-                // "denseRank": this.$refs.sort.datasource.revert2Defs().denseRank,
-                // "rank": this.$refs.sort.datasource.revert2Defs().rank,
-                // "rowNumber": this.$refs.sort.datasource.revert2Defs().rowNumber,
-                // "computedColumns": this.$refs.computed.datasource.revert2Defs()
+                "selectedColumns": this.$refs.select.datasource.revert2Defs().selectedColumns,
+                "columnsMatches": this.$refs.select.datasource.revert2Defs().columnsMatches,
+                "originColumn": this.$refs.origin.datasource.revert2Defs(),
+                "postFilter": this.$refs.postfilter.datasource.revert2Defs()
             }
             console.log(params)
             // this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
@@ -217,15 +215,16 @@ export default {
 
     },
     watch: {
-        active() {
+        active(n) {
             this.$refs.prefilter.validate()
-            // this.$refs.computed.validate()
-            // this.$refs.sort.validate()
-            // this.$refs.outputs.validate()
+            this.$refs.select.validate()
+            this.$refs.origin.validate()
+            this.$refs.postfilter.validate()
+            this.$refs.outputs.validate()
 
-            // if (n === 4) {
-            //     this.computedSchema = this.computeSchema()
-            // }
+            if (n === 4 || n === 5) {
+                this.computedSchema = this.computeSchema()
+            }
         }
     }
 }

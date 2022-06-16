@@ -8,7 +8,7 @@
             <div class="outputs-content">
                 <div class="outputs-content-item" v-for="(item, index) in schema" :key="index">
                     <span class="outputs-content-item-index">{{index}}</span>
-                    <span class="outputs-content-item-type">({{item.type}})</span>
+<!--                    <span class="outputs-content-item-type">({{item.type}})</span>-->
                     <span class="outputs-content-item-title">{{item.title}}</span>
                 </div>
             </div>

@@ -32,6 +32,11 @@
             <output-cols
                     :columns="datasource.command.columns"
                     :command="datasource.command" />
+            <ds-cols v-for="(item, index) in datasource.command.ds" :key="index"
+                     :dataset-name="item"
+                     :columns="datasource.command[item]"
+                     :schema="schema[item]"
+                     :command="datasource.command" />
         </div>
     </div>
 </template>
@@ -40,6 +45,7 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElDivider from 'element-ui/packages/divider/index'
 import OutputCols from './detail-view/output-cols'
+import DsCols from './detail-view/ds-cols'
 import { PhSelectColsDefs } from "./defs"
 import PhSelectColsStep from "./step"
 
@@ -63,7 +69,8 @@ export default {
         // ElInput,
         ElButton,
         ElDivider,
-        OutputCols
+        OutputCols,
+        DsCols
     },
     mounted() {
         this.datasource = new PhSelectColsStep(this.step)
