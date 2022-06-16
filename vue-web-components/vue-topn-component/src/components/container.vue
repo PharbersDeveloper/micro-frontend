@@ -60,7 +60,7 @@
                 <div class="input-selected" v-show="!selectInput">
                     <div class="name" 
                         :key="item+index"
-                        v-for="(item,index) in allData.inputs">{{item}}</div>
+                        v-for="(item,index) in inputs">{{item}}</div>
                     <el-button 
                         @click="selectInput=!selectInput"
                         type="primary">更换</el-button>
@@ -95,7 +95,7 @@
                 <div class="input-selected"  v-show="!selectOutput">
                     <div class="name" 
                         :key="item+index"
-                        v-for="(item,index) in allData.outputs">{{item}}</div>
+                        v-for="(item,index) in outputs">{{item}}</div>
                     <el-button 
                         @click="selectOutput=!selectOutput"
                         type="primary">更换</el-button>
@@ -116,10 +116,10 @@
                         <li 
                             @click="selectOutputItem(item)"
                             class="addInput pointer" 
-                            :key="item+'input'" 
-                            v-for="item in inputs">
+                            :key="item.id+'output'" 
+                            v-for="item in datasetArray">
                             <i class="el-icon-plus pointer mr-4"></i>
-                            {{item}}
+                            {{item.name}}
                         </li>
                     </ul>
                 </div>
@@ -171,6 +171,8 @@ export default {
             selectInput: false,
             selectOutput: false,
             datasetArray: [],
+            outputs: [],
+            inputs: [],
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -207,8 +209,6 @@ export default {
                 return {
                     projectId: "YZYijD17N9L6LXx",
                     projectName: "autorawdata2021",
-                    scriptsParams: null,
-                    dss: [],
                     outputs: [],
                     inputs: []
                 }
@@ -230,9 +230,15 @@ export default {
     methods: {
         selectInputItem(data) {
             console.log(data)
+            this.inputs = []
+            this.inputs.push(data.name)
+            this.selectInput = !this.selectInput
         },
         selectOutputItem(data) {
             console.log(data)
+            this.outputs = []
+            this.outputs.push(data.name)
+            this.selectOutput = !this.selectOutput
         },
         getUrlParam(value) {
             let href = window.location.href
@@ -328,17 +334,61 @@ export default {
                 }
                 this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
             } else {
+                let inputNameOld = this.allData.inputs[0]
+                let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+                let inputNameNew = this.inputs[0]
+                let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+                let dssInputs = {
+                    old: [{
+                        name: inputNameOld,
+                        cat: inputCatOld
+                    }],
+                    new: [{
+                        name: inputNameNew,
+                        cat: inputCatNew
+                    }]
+                }
+                let outputNameOld = this.allData.outputs[0]
+                let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+                let outputNameNew = this.outputs[0]
+                let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+                let dssOutputs = {
+                    old: {
+                        name: outputNameOld,
+                        cat: outputCatOld
+                    },
+                    new: {
+                        name: outputNameNew,
+                        cat: outputCatNew
+                    }
+                }
+                let script = {
+                    old: {
+                        name: this.allData.jobName,
+                        id: this.allData.jobId
+                    },
+                    new: {
+                        "name": `compute_${this.outputs[0]}`,
+                        "runtime": "topn",
+                        "inputs": JSON.stringify(this.inputs),
+                        "output": this.outputs[0]
+                    }
+                }
+                
                 const event = new Event("event")
                 event.args = {
                     callback: "changeTopnInputOutput",
                     element: this,
                     param: {
                         name: "changeTopnInputOutput",
-                        projectId: this.parent.projectId,
-                        projectName: this.parent.projectName
+                        projectId: this.projectId,
+                        projectName: this.projectName,
+                        dssOutputs: dssOutputs,
+                        dssInputs: dssInputs,
+                        script: script
                     }
                 }
-                this.parent.$emit('event', event)
+                this.$emit('event', event)
             }
             
         }
@@ -374,6 +424,10 @@ export default {
         },
         activeName(n) {
             this.$emit("active", n)
+        },
+        "allData.inputs": function(n) {
+            this.inputs = n
+            this.outputs = this.allData.outputs
         }
     }
 }

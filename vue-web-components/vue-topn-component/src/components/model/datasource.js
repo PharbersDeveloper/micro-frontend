@@ -151,7 +151,7 @@ export default class PhDataSource {
 
 	refreshDataset(projectId, dsId) {
         const that = this
-        this.buildDatasetQuery(projectId, dsId)
+        this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
 				console.log(response)
@@ -159,6 +159,7 @@ export default class PhDataSource {
                 const data = that.store.findAll("datasets")
 				that.parent.datasetArray = data
                 that.dataset = data.filter(it => it.id === dsId)[0]
+                that.dataset.schema = JSON.parse(that.dataset["schema"])
 				if (that.dataset.schema.length === 0) {
                     that.hasNoSchema = true
                 } else {
@@ -167,16 +168,16 @@ export default class PhDataSource {
             })
     }
 
-	buildDatasetQuery(projectId, dsId) {
+	buildDatasetQuery(projectId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "dataset",
             "conditions": {
-                "projectId": ["=", projectId],
-                "id": ["=", dsId]
+                "projectId": ["=", projectId]
             },
-            "limit": 1,
+			index_name: "dataset-projectId-name-index",
+            "limit": 1000,
             "start_key": {}
         }
 
