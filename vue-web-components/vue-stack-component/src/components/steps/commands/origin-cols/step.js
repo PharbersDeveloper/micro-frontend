@@ -9,10 +9,6 @@ export default class PhStackOriginStep {
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["originColumn"]
         this.command = new PhStackOriginCmd(defs)
-        //
-        // this.denseRank = this.expressions["params"]["denseRank"]
-        // this.rank = this.expressions["params"]["rank"]
-        // this.rowNumber = this.expressions["params"]["rowNumber"]
     }
 
     exec() {
@@ -21,11 +17,6 @@ export default class PhStackOriginStep {
     }
 
     revert2Defs() {
-        return {
-            orders: this.command.revert2Defs(),
-            denseRank: this.denseRank,
-            rank: this.rank,
-            rowNumber: this.rowNumber
-        }
+        return this.command.revert2Defs()
     }
 }

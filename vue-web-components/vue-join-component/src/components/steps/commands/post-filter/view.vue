@@ -1,5 +1,5 @@
 <template>
-    <div class="pre-filter">
+    <div class="post-filter">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="condition-title">
             <div class="condition-title-p">
@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-import { PhPreFilterDefs } from "./defs"
+import { PhPostFilterDefs } from "./defs"
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
 import ElInput from 'element-ui/packages/input/index'
@@ -57,7 +57,7 @@ export default {
         concretDefs: {
             type: Object,
             default: () => {
-                return PhPreFilterDefs
+                return PhPostFilterDefs
             }
         }
     },
@@ -68,7 +68,6 @@ export default {
         ElButton,
         ElSwitch
     },
-    // updated() {
     mounted() {
         this.datasource = new PhFilterStep(this.step)
         this.$emit('statusChange', this.datasource.enabled)
@@ -89,7 +88,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pre-filter {
+    .post-filter {
         margin-top: 4px;
         /*width: 100%;*/
         min-width: 800px;

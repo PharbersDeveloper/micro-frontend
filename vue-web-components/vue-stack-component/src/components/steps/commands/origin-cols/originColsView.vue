@@ -1,18 +1,36 @@
 <template>
     <div class="origin">
-        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
+<!--        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">-->
         <div class="origin-title">
             <div class="origin-title-p">
                 <h2>Origin Columns</h2>
             </div>
         </div>
-
+        <div class="origin-container" v-if="datasource">
+            <div class="origin-container-header">
+                <div class="origin-container-title">
+                    <h3>标记原始数据集</h3>
+                </div>
+                <div class="origin-container-op">
+                    <el-switch v-model="datasource.command.enabled" ></el-switch>
+                </div>
+            </div>
+            <el-form ref="form" label-width="200px">
+                <el-form-item label="Column Name">
+                    <el-input v-model="datasource.command.columnName"></el-input>
+                </el-form-item>
+                <el-form-item v-for="(item, index) in datasource.command.originDatasets" :label="item.ds" :key="index">
+                    <el-input v-model="item.value"></el-input>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 </template>
 <script>
-// import ElSwitch from 'element-ui/packages/switch/index'
-// import ElButton from 'element-ui/packages/button/index'
-// import ElCheckbox from 'element-ui/packages/checkbox/index'
+import ElInput from 'element-ui/packages/input/index'
+import ElForm from 'element-ui/packages/form/index'
+import ElFormItem from 'element-ui/packages/form-item/index'
+import ElSwitch from 'element-ui/packages/switch/index'
 import { PhStackOriginDefs } from "./defs"
 import PhStackOriginStep from "./step"
 
@@ -20,13 +38,11 @@ export default {
     data() {
         return {
             datasource: null,
-            // placeholderSort: "选择列"
-            // candiData: []
         }
     },
     props: {
         step: Object,
-        schema: Array,
+        // schema: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -37,7 +53,11 @@ export default {
     components: {
         // ElSwitch,
         // ElButton,
-        // ElCheckbox
+        // ElCheckbox,
+        ElSwitch,
+        ElFormItem,
+        ElForm,
+        ElInput
     },
     mounted() {
         this.datasource = new PhStackOriginStep(this.step)
@@ -89,6 +109,26 @@ export default {
                     justify-content: space-around;
                 }
             }
+        }
+
+        .origin-container {
+            display: flex;
+            flex-direction: column;
+
+            .origin-container-header {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .origin-container-title {
+
+                }
+
+                .origin-container-op {
+
+                }
+            }
+
         }
     }
 </style>
