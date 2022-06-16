@@ -4,6 +4,7 @@ import { hostName } from "../config/envConfig"
 export async function phTopnContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
+	const accessToken = route.cookies.read("access_token")
 	let uri = ""
 	route.msg = "新建"
 	switch (e.detail[0].args.callback) {
@@ -62,9 +63,7 @@ export async function phTopnContainerEventHandler(e, route) {
 						`recipes?projectId=${params.projectId}&projectName=${params.projectName}`
 					)
 				}
-				console.log(scriptsParams)
 				const url = `${hostName}/phresourcecodegentrigger`
-				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2

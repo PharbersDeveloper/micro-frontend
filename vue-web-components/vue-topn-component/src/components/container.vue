@@ -7,10 +7,10 @@
                 <span>Top N</span>
             </div>
             <div class="header_right">
-				<el-radio-group v-model="activeName" class="content">
-					<el-radio-button label="Setting"></el-radio-button>
-					<el-radio-button label="input/output"></el-radio-button>
-				</el-radio-group>
+                <el-radio-group v-model="activeName" class="content">
+                    <el-radio-button label="Setting"></el-radio-button>
+                    <el-radio-button label="input/output"></el-radio-button>
+                </el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
@@ -54,24 +54,77 @@
                 Schema 不对，找产品处理
             </div>
         </div>
-		<div class="input-output">
-			<div class="left">
-				<div class="input-selected">
-					<div class="name" 
-						:key="item+index"
-						v-for="(item,index) in inputs">{{item}}</div>
-					<el-button type="primary">更换</el-button>
-				</div>
-				<div class="input-for-select">
-					<div class="search">
-						
-					</div>
-				</div>
-			</div>
-			<div class="right">
-				
-			</div>
-		</div>
+        <div class="input-output" v-show="activeName === 'input/output'">
+            <div class="left">
+                <div class="title">Input</div>
+                <div class="input-selected" v-show="!selectInput">
+                    <div class="name" 
+                        :key="item+index"
+                        v-for="(item,index) in allData.inputs">{{item}}</div>
+                    <el-button 
+                        @click="selectInput=!selectInput"
+                        type="primary">更换</el-button>
+                </div>
+                <div class="input-for-select" v-show="selectInput">
+                    <div class="search">
+                        <el-form label-width="60px">
+                            <el-form-item label="搜索">
+                                <el-input
+                                    placeholder="搜索"
+                                    v-model="searchInputName"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <i 
+                            @click="selectInput=!selectInput"
+                            class="el-icon-close pointer"></i>
+                    </div>
+                    <ul class="list">
+                        <li 
+                            @click="selectInputItem(item)"
+                            class="addInput pointer" 
+                            :key="item.id+'input'" 
+                            v-for="item in datasetArray">
+                            <i class="el-icon-plus pointer mr-4"></i>
+                            {{item.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right">
+                <div class="title">Output</div>
+                <div class="input-selected"  v-show="!selectOutput">
+                    <div class="name" 
+                        :key="item+index"
+                        v-for="(item,index) in allData.outputs">{{item}}</div>
+                    <el-button 
+                        @click="selectOutput=!selectOutput"
+                        type="primary">更换</el-button>
+                </div>
+                <div class="input-for-select" v-show="selectOutput">
+                    <div class="search">
+                        <el-form label-width="60px">
+                            <el-form-item label="搜索">
+                                <el-input
+                                    placeholder="搜索"
+                                    v-model="searchInputName"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <i class="el-icon-close pointer" 			
+                            @click="selectOutput=!selectOutput"></i>
+                    </div>
+                     <ul class="list">
+                        <li 
+                            @click="selectOutputItem(item)"
+                            class="addInput pointer" 
+                            :key="item+'input'" 
+                            v-for="item in inputs">
+                            <i class="el-icon-plus pointer mr-4"></i>
+                            {{item}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -84,9 +137,12 @@ import PreFilter from './steps/commands/pre-filter/preFilterView'
 import Computed from './steps/commands/computed/computedView'
 import TopN from './steps/commands/top-n/topnView'
 import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
+import ElInput from "element-ui/packages/input/index"
 import Outputs from './steps/commands/output/outputView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
+import ElForm from "element-ui/packages/form/index"
+import ElFormItem from "element-ui/packages/form-item/index"
 
 export default {
     components: {
@@ -99,15 +155,22 @@ export default {
         RetrievedCols,
         Outputs,
         ElRadioGroup,
-        ElRadioButton
+        ElForm,
+        ElFormItem,
+        ElRadioButton,
+        ElInput
     },
     data() {
         return {
             computedSchema: [],
             outputsSchema: [],
+            searchInputName: "",
             active: 1,
             flowVersion: "developer",
-			activeName: "Setting",
+            activeName: "input/output",
+            selectInput: false,
+            selectOutput: false,
+            datasetArray: [],
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -145,7 +208,9 @@ export default {
                     projectId: "YZYijD17N9L6LXx",
                     projectName: "autorawdata2021",
                     scriptsParams: null,
-                    dss: []
+                    dss: [],
+                    outputs: [],
+                    inputs: []
                 }
             }
         },
@@ -163,6 +228,12 @@ export default {
         }
     },
     methods: {
+        selectInputItem(data) {
+            console.log(data)
+        },
+        selectOutputItem(data) {
+            console.log(data)
+        },
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -241,22 +312,35 @@ export default {
             return result
         },
         save() {
-            const params = {
-                "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
-                "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
-                "keys": this.$refs.topn.datasource.revert2Defs().keys,
-                "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                "orders": this.$refs.topn.datasource.revert2Defs().orders,
-                "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
-                "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
-                "rank": this.$refs.topn.datasource.revert2Defs().rank,
-                "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
-                "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
-                "computedColumns": this.$refs.computed.datasource.revert2Defs()
+            if (this.activeName === "Setting") {
+                const params = {
+                    "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
+                    "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
+                    "keys": this.$refs.topn.datasource.revert2Defs().keys,
+                    "preFilter": this.$refs.filter.datasource.revert2Defs(),
+                    "orders": this.$refs.topn.datasource.revert2Defs().orders,
+                    "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
+                    "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
+                    "rank": this.$refs.topn.datasource.revert2Defs().rank,
+                    "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
+                    "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
+                    "computedColumns": this.$refs.computed.datasource.revert2Defs()
+                }
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+            } else {
+                const event = new Event("event")
+                event.args = {
+                    callback: "changeTopnInputOutput",
+                    element: this,
+                    param: {
+                        name: "changeTopnInputOutput",
+                        projectId: this.parent.projectId,
+                        projectName: this.parent.projectName
+                    }
+                }
+                this.parent.$emit('event', event)
             }
-
-            console.log(params)
-            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+            
         }
     },
     mounted() {
@@ -265,11 +349,12 @@ export default {
 
         // this.projectIdTest = "alfredtest"
         // this.jobName = "alfredtest"
-		this.jobName = this.getJobName()
+        this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        this.datasource.refreshMateData(this.projectId, this.datasetId)
+        // this.datasource.refreshMateData(this.projectId, this.datasetId)
+        this.datasource.refreshDataset(this.projectId, this.datasetId)
     },
     watch: {
         active(n) {
@@ -287,7 +372,7 @@ export default {
                 this.outputsSchema = this.genOutputsSchema()
             }
         },
-		activeName(n) {
+        activeName(n) {
             this.$emit("active", n)
         }
     }
@@ -311,7 +396,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-			border: 1px solid #ccc;
+            border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -333,8 +418,87 @@ export default {
 
             .header_right {
                 .content {
-					margin-right: 30px;
-				}
+                    margin-right: 30px;
+                }
+            }
+        }
+
+        .input-output {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 100px);
+            background: #f2f2f2;
+            .pointer {
+                cursor: pointer;
+            }
+            .left {
+                flex: 1;
+                padding: 20px;
+            }
+            .right {
+                flex: 1;
+                padding: 20px;
+            }
+            .title {
+                margin-bottom: 10px;
+            }
+
+            .input-selected {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                .name {
+                    height: initial;
+                    line-height: 41px;
+                    padding: 10px 15px;
+                    margin: 2px 15px -2px 15px;
+                    background: #ffffff;
+                    box-shadow: 1px 1px 4px -1px #dddddd;
+                    margin: 5px 0px 5px 0px;
+                }
+
+                button {
+                    margin: 20px auto;
+                    width: 250px;
+                }
+            }
+
+            .input-for-select {
+
+                .search {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid #ccc;
+
+                    .el-form-item {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .list {
+                    padding: 0;
+                    margin: 0;
+                    font-size: 15px;
+                    color: #666666;
+
+                    .addInput {
+                        list-style: none;
+                        height: 41px;
+                        line-height: 41px;
+                        padding: 0px 28px 0px 28px;
+                        box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+                        border-bottom: 1px solid #ccc;
+                    }
+
+                    .mr-4 {
+                        margin-right: 4px;
+                    }
+                }
             }
         }
 
@@ -343,15 +507,15 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
-			height: calc(100vh - 100px);
+            height: calc(100vh - 100px);
 
             .topn_left {
                 display: flex;
                 flex-direction: row;
                 // margin-left: 80px;
-				padding: 40px;
+                padding: 40px;
                 justify-content: space-around;
-				border-right: 1px solid #ccc;
+                border-right: 1px solid #ccc;
             }
 
             .topn_right {
@@ -359,8 +523,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-				background: #f2f2f2;
-				padding: 20px;
+                background: #f2f2f2;
+                padding: 20px;
             }
         }
     }

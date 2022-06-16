@@ -149,6 +149,49 @@ export default class PhDataSource {
             })
     }
 
+	refreshDataset(projectId, dsId) {
+        const that = this
+        this.buildDatasetQuery(projectId, dsId)
+            .then((response) => response.json())
+            .then((response) => {
+				console.log(response)
+				that.store.sync(response)
+                const data = that.store.findAll("datasets")
+				that.parent.datasetArray = data
+                that.dataset = data.filter(it => it.id === dsId)[0]
+				if (that.dataset.schema.length === 0) {
+                    that.hasNoSchema = true
+                } else {
+                    that.isMetaReady = true
+                }
+            })
+    }
+
+	buildDatasetQuery(projectId, dsId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "dataset",
+            "conditions": {
+                "projectId": ["=", projectId],
+                "id": ["=", dsId]
+            },
+            "limit": 1,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
     buildSaveQuery(projectId, jobName, param) {
 		const steps = [{
 			pjName: this.step["pj-name"],
