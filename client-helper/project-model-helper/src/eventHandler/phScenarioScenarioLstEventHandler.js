@@ -253,7 +253,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (status == "success") {
 			alert("删除scenario成功！")
 			window.location.reload()
 		} else if (status == "failed") {
