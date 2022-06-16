@@ -7,10 +7,14 @@
                 <span>Top N</span>
             </div>
             <div class="header_right">
+				<el-radio-group v-model="activeName" class="content">
+					<el-radio-button label="Setting"></el-radio-button>
+					<el-radio-button label="input/output"></el-radio-button>
+				</el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="topn_area">
+        <div class="topn_area" v-show="activeName === 'Setting'">
             <div class="topn_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
@@ -50,6 +54,24 @@
                 Schema 不对，找产品处理
             </div>
         </div>
+		<div class="input-output">
+			<div class="left">
+				<div class="input-selected">
+					<div class="name" 
+						:key="item+index"
+						v-for="(item,index) in inputs">{{item}}</div>
+					<el-button type="primary">更换</el-button>
+				</div>
+				<div class="input-for-select">
+					<div class="search">
+						
+					</div>
+				</div>
+			</div>
+			<div class="right">
+				
+			</div>
+		</div>
     </div>
 </template>
 <script>
@@ -63,6 +85,8 @@ import Computed from './steps/commands/computed/computedView'
 import TopN from './steps/commands/top-n/topnView'
 import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
 import Outputs from './steps/commands/output/outputView'
+import ElRadioGroup from "element-ui/packages/radio-group/index"
+import ElRadioButton from "element-ui/packages/radio-button/index"
 
 export default {
     components: {
@@ -73,7 +97,9 @@ export default {
         Computed,
         TopN,
         RetrievedCols,
-        Outputs
+        Outputs,
+        ElRadioGroup,
+        ElRadioButton
     },
     data() {
         return {
@@ -81,6 +107,7 @@ export default {
             outputsSchema: [],
             active: 1,
             flowVersion: "developer",
+			activeName: "Setting",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -259,6 +286,9 @@ export default {
             if (n === 5) {
                 this.outputsSchema = this.genOutputsSchema()
             }
+        },
+		activeName(n) {
+            this.$emit("active", n)
         }
     }
 }
@@ -302,14 +332,9 @@ export default {
             }
 
             .header_right {
-                /*button {*/
-                /*    width: 65px;*/
-                /*    height: 26px;*/
-                /*    border: 1px solid #57565F;*/
-                /*    border-radius: 2px;*/
-                /*    background: none;*/
-                /*    cursor: pointer;*/
-                /*}*/
+                .content {
+					margin-right: 30px;
+				}
             }
         }
 
