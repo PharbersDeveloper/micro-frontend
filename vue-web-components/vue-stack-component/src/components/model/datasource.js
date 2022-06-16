@@ -9,7 +9,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "04e86af3bb4473ddc9275225b75ae03b45cc53b00fc37530035adc377522b37b"
+        this.debugToken = "74c791b26de28fc7fb6731bd98c2336a0d60917c9b58f50838064b9c7076affe"
     }
 
     resetData() {
@@ -113,6 +113,15 @@ export default class PhDataSource {
                         "ds": x,
                         "columns": []
                     }})
+                    const defaultOriginColumns = {
+                        "enabled": false,
+                        "columnName": "provider",
+                        "originDatasets": this.datasets.map(x => { return {
+                            "ds": x,
+                            "value": x
+                        }})
+                    }
+
                     that.step = {
                         "pj-name": [projectId, jobName].join("_"),
                         "step-id": "1",
@@ -122,20 +131,7 @@ export default class PhDataSource {
                                 "preFilters": defaultPreFilter,
                                 "selectedColumns": [],
                                 "columnsMatches": defaultColumnMatches,
-                                "originColumn": {
-                                    "enabled": false,
-                                    "columnName": "provider",
-                                    "originDatasets": [
-                                        {
-                                            "ds": "ds name",
-                                            "value": "withColumn后的值"
-                                        },
-                                        {
-                                            "ds": "ds name",
-                                            "value": "withColumn后的值"
-                                        }
-                                    ]
-                                },
+                                "originColumn": defaultOriginColumns,
                                 "postFilter": {
                                     "distinct": false,
                                     "enabled": false,

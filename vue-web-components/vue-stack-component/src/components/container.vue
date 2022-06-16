@@ -27,15 +27,15 @@
                             :schema="datasource.schema"
                             @statusChange="preFilterStatus" />
                 <select-cols v-show="active === 2"
-                             ref="computed"
+                             ref="select"
                              :step="datasource.step"
                              :schema="datasource.schema"
                              @statusChange="selectColsStatus" />
-<!--                <sort v-show="active === 3"-->
-<!--                            ref="sort"-->
-<!--                            :step="datasource.step"-->
-<!--                            :schema="datasource.dataset.schema"-->
-<!--                            @statusChange="sortStatus" />-->
+                <origin-cols v-show="active === 3"
+                             ref="origin"
+                             :step="datasource.step"
+                             :schema="datasource.schema"
+                             @statusChange="originStatus" />
 <!--                <outputs v-show="active === 4"-->
 <!--                                ref="outputs"-->
 <!--                                :schema="computedSchema"-->
@@ -55,8 +55,8 @@ import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
 import SelectCols from './steps/commands/select-cols/selectColsView'
+import OriginCols from './steps/commands/origin-cols/originColsView'
 // import Outputs from './steps/commands/output/outputView'
-// import Sort from './steps/commands/sort/sortView'
 
 export default {
     components: {
@@ -65,8 +65,8 @@ export default {
         ElButton,
         PreFilter,
         SelectCols,
+        OriginCols,
         // Outputs,
-        // Sort
     },
     data() {
         return {
@@ -154,7 +154,7 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        sortStatus(status) {
+        originStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
                 this.stepsDefs[2].status = "success"
@@ -190,6 +190,8 @@ export default {
         save() {
             const params = {
                 "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+                "selectedColumns": this.$refs.select.datasource.revert2Defs().selectedColumns,
+                "columnsMatches": this.$refs.select.datasource.revert2Defs().columnsMatches,
                 // "orders": this.$refs.sort.datasource.revert2Defs().orders,
                 // "denseRank": this.$refs.sort.datasource.revert2Defs().denseRank,
                 // "rank": this.$refs.sort.datasource.revert2Defs().rank,
@@ -219,8 +221,8 @@ export default {
     watch: {
         active() {
             this.$refs.prefilter.validate()
-            // this.$refs.computed.validate()
-            // this.$refs.sort.validate()
+            this.$refs.select.validate()
+            this.$refs.origin.validate()
             // this.$refs.outputs.validate()
 
             // if (n === 4) {

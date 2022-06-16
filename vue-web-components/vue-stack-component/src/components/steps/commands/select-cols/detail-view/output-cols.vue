@@ -11,7 +11,8 @@
         <div class="stack-output-list">
             <div class="stack-output-item" v-for="(item, index) in columns" :key="index">
                 <span>{{index}}</span>
-                <span>{{item}}</span>
+                <el-input v-model="item.name"></el-input>
+                <el-button type="text" @click="deleteSelectColumn(index)">删除</el-button>
             </div>
         </div>
     </div>
@@ -19,6 +20,7 @@
 <script>
 import ElButton from 'element-ui/packages/button/index'
 import ElDivider from 'element-ui/packages/divider/index'
+import ElInput from 'element-ui/packages/input/index'
 
 export default {
     data() {
@@ -31,13 +33,16 @@ export default {
         command: Object
     },
     components: {
-        // ElInput,
+        ElInput,
         ElButton,
         ElDivider
     },
     methods: {
         addSelectColumn() {
             this.command.addSelectColumn()
+        },
+        deleteSelectColumn(index) {
+            this.command.deleteSelectColumn(index)
         }
     }
 }
@@ -71,7 +76,8 @@ export default {
             flex-direction: column;
 
             .stack-output-item {
-
+                display: flex;
+                flex-direction: row;
             }
         }
     }
