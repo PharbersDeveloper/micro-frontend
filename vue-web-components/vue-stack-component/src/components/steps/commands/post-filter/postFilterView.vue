@@ -1,9 +1,9 @@
 <template>
-    <div class="pre-filter">
+    <div class="post-filter">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="condition-title">
             <div class="condition-title-p">
-                <h2>Pre Filter</h2>
+                <h2>Post Filter</h2>
                 <div class="ver-center" v-if="datasource">
                     <el-switch v-model="datasource.enabled" @change="$emit('statusChange', datasource.enabled)"></el-switch>
                 </div>
@@ -20,7 +20,7 @@
             <div class="condition-selection-item" v-for="(cur, index) in datasource.command.cloases" :key="index">
                 <div class="condition-selection-content">
                     <select v-model="cur['left']">
-                         <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                         <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
                     </select>
                     <select v-model="cur['op']">
                         <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-import { PhPreFilterDefs } from "./defs"
+import { PhPostFilterDefs } from "./defs"
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
 import ElInput from 'element-ui/packages/input/index'
@@ -57,7 +57,7 @@ export default {
         concretDefs: {
             type: Object,
             default: () => {
-                return PhPreFilterDefs
+                return PhPostFilterDefs
             }
         }
     },
@@ -89,14 +89,13 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pre-filter {
+    .post-filter {
         margin-top: 4px;
+        /*width: 100%;*/
         min-width: 800px;
+        padding: 4px;
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
 
         .condition-title {
             display: flex;

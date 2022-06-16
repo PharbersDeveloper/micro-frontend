@@ -1,7 +1,7 @@
 /**
  * 这个就是我所说的Command Instance
  */
-export default class PhDistinctCmd {
+export default class PhSortCmd {
     constructor(defs) {
         console.log(defs)
         this.orders = defs
