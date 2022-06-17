@@ -10,20 +10,8 @@
                 <button class="save" @click="save">保存</button>
             </div>
         </div>
-        <div class="prepare_tab">
-            <span class="tab">
-                设置
-            </span>
-            <span>|</span>
-            <span class="tab">
-                输入/输出
-            </span>
-        </div>
         <div class="prepare_area">
             <div class="prepare_area_left">
-                <div class="left_title">
-                    脚本
-                </div>
                 <div class="tab_content">
                     <div class="no_operator" v-if="steps.data.length === 0">
                         当前脚本无算子
@@ -396,9 +384,6 @@ export default {
     }
     .prepare {
         box-sizing: border-box;
-        .op-factories {
-            // background: red;
-        }
         .prepare_header {
             height: 48px;
             padding: 0 15px;
@@ -450,7 +435,7 @@ export default {
         .prepare_area {
             display: flex;
             position: absolute !important;
-            top: 123px;
+            top: 88px;
             bottom: 0;
             left: 0;
             right: 0;
@@ -464,7 +449,6 @@ export default {
                 font-size: 14px;
                 color: #000000;
                 .left_title {
-                    // height: 40px;
                     display: flex;
                     align-items: center;
                     padding-left: 50px;
