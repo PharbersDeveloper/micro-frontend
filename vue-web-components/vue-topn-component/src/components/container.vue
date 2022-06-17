@@ -59,6 +59,8 @@
 				ref="changeInputOutput"
 				:inputs="inputs"	
 				:outputs="outputs"
+				:inArray="inArray"
+				:outArray="outArray"
 				@changeTopnInputOutput="changeTopnInputOutput"
 				:datasetArray="datasetArray"
 			/>
@@ -79,6 +81,8 @@ import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
+import { Message } from 'element-ui'
+
 export default {
     components: {
         ElSteps,
@@ -100,7 +104,9 @@ export default {
         return {
             computedSchema: [],
             outputsSchema: [],
-            // searchInputName: "",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
 			outputs: [],
             inputs: [],
             active: 1,
@@ -172,6 +178,7 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(status) {
@@ -281,6 +288,7 @@ export default {
 			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
 			let outputNameNew = data.args.param.outputsArray[0]
 			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
 			let dssOutputs = {
 				old: {
 					name: outputNameOld,
@@ -291,6 +299,7 @@ export default {
 					cat: outputCatNew
 				}
 			}
+
 			let script = {
 				old: {
 					name: this.allData.jobName,
@@ -302,6 +311,11 @@ export default {
 					"inputs": JSON.stringify(data.args.param.inputsArray),
 					"output": outputNameNew
 				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
 			}
 			
 			const event = new Event("event")
@@ -332,6 +346,7 @@ export default {
         this.datasource.refreshData(this.projectId, this.jobName)
         // this.datasource.refreshMateData(this.projectId, this.datasetId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {

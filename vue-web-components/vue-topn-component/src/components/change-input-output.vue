@@ -27,10 +27,10 @@
                     <li 
                         @click="selectInputItem(item)"
                         class="addInput pointer" 
-                        :key="item.id+'input'" 
-                        v-for="item in datasetArray">
+                        :key="item+'input'" 
+                        v-for="item in inArray">
                         <i class="el-icon-plus pointer mr-4"></i>
-                        {{item.name}}
+                        {{item}}
                     </li>
                 </ul>
             </div>
@@ -57,14 +57,14 @@
                     <i class="el-icon-close pointer" 			
                         @click="selectOutput=!selectOutput"></i>
                 </div>
-                    <ul class="list">
+                <ul class="list">
                     <li 
                         @click="selectOutputItem(item)"
                         class="addInput pointer" 
-                        :key="item.id+'output'" 
-                        v-for="item in datasetArray">
+                        :key="item+'output'" 
+                        v-for="item in outArray">
                         <i class="el-icon-plus pointer mr-4"></i>
-                        {{item.name}}
+                        {{item}}
                     </li>
                 </ul>
             </div>
@@ -88,7 +88,6 @@ export default {
         return {
             outputsArray: [],
             inputsArray: [],
-            // datasetArray: [],
             searchInputName: "",
             selectInput: false,
             selectOutput: false
@@ -97,19 +96,18 @@ export default {
     props: {
         outputs: Array,
         inputs: Array,
-        datasetArray: Array
+        inArray: Array,
+        outArray: Array
     },
     methods: {
         selectInputItem(data) {
-            console.log(data)
             this.inputsArray = []
-            this.inputsArray.push(data.name)
+            this.inputsArray.push(data)
             this.selectInput = !this.selectInput
         },
         selectOutputItem(data) {
-            console.log(data)
             this.outputsArray = []
-            this.outputsArray.push(data.name)
+            this.outputsArray.push(data)
             this.selectOutput = !this.selectOutput
         },
         save() {
