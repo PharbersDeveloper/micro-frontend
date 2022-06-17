@@ -54,76 +54,14 @@
                 Schema 不对，找产品处理
             </div>
         </div>
-        <div class="input-output" v-show="activeName === 'input/output'">
-            <div class="left">
-                <div class="title">Input</div>
-                <div class="input-selected" v-show="!selectInput">
-                    <div class="name" 
-                        :key="item+index"
-                        v-for="(item,index) in inputs">{{item}}</div>
-                    <el-button 
-                        @click="selectInput=!selectInput"
-                        type="primary">更换</el-button>
-                </div>
-                <div class="input-for-select" v-show="selectInput">
-                    <div class="search">
-                        <el-form label-width="60px">
-                            <el-form-item label="搜索">
-                                <el-input
-                                    placeholder="搜索"
-                                    v-model="searchInputName"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <i 
-                            @click="selectInput=!selectInput"
-                            class="el-icon-close pointer"></i>
-                    </div>
-                    <ul class="list">
-                        <li 
-                            @click="selectInputItem(item)"
-                            class="addInput pointer" 
-                            :key="item.id+'input'" 
-                            v-for="item in datasetArray">
-                            <i class="el-icon-plus pointer mr-4"></i>
-                            {{item.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="right">
-                <div class="title">Output</div>
-                <div class="input-selected"  v-show="!selectOutput">
-                    <div class="name" 
-                        :key="item+index"
-                        v-for="(item,index) in outputs">{{item}}</div>
-                    <el-button 
-                        @click="selectOutput=!selectOutput"
-                        type="primary">更换</el-button>
-                </div>
-                <div class="input-for-select" v-show="selectOutput">
-                    <div class="search">
-                        <el-form label-width="60px">
-                            <el-form-item label="搜索">
-                                <el-input
-                                    placeholder="搜索"
-                                    v-model="searchInputName"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <i class="el-icon-close pointer" 			
-                            @click="selectOutput=!selectOutput"></i>
-                    </div>
-                     <ul class="list">
-                        <li 
-                            @click="selectOutputItem(item)"
-                            class="addInput pointer" 
-                            :key="item.id+'output'" 
-                            v-for="item in datasetArray">
-                            <i class="el-icon-plus pointer mr-4"></i>
-                            {{item.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div v-show="activeName === 'input/output'">
+			<change-input-output
+				ref="changeInputOutput"
+				:inputs="inputs"	
+				:outputs="outputs"
+				@changeTopnInputOutput="changeTopnInputOutput"
+				:datasetArray="datasetArray"
+			/>
         </div>
     </div>
 </template>
@@ -134,16 +72,13 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Outputs from './steps/commands/output/outputView'
 import Computed from './steps/commands/computed/computedView'
 import TopN from './steps/commands/top-n/topnView'
 import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
-import ElInput from "element-ui/packages/input/index"
-import Outputs from './steps/commands/output/outputView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
-import ElForm from "element-ui/packages/form/index"
-import ElFormItem from "element-ui/packages/form-item/index"
-
+import changeInputOutput from "./change-input-output"
 export default {
     components: {
         ElSteps,
@@ -155,24 +90,25 @@ export default {
         RetrievedCols,
         Outputs,
         ElRadioGroup,
-        ElForm,
-        ElFormItem,
+        // ElForm,
+        // ElFormItem,
         ElRadioButton,
-        ElInput
+        // ElInput,
+		changeInputOutput
     },
     data() {
         return {
             computedSchema: [],
             outputsSchema: [],
-            searchInputName: "",
+            // searchInputName: "",
+			outputs: [],
+            inputs: [],
             active: 1,
             flowVersion: "developer",
             activeName: "input/output",
-            selectInput: false,
-            selectOutput: false,
+            // selectInput: false,
+            // selectOutput: false,
             datasetArray: [],
-            outputs: [],
-            inputs: [],
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -228,18 +164,6 @@ export default {
         }
     },
     methods: {
-        selectInputItem(data) {
-            console.log(data)
-            this.inputs = []
-            this.inputs.push(data.name)
-            this.selectInput = !this.selectInput
-        },
-        selectOutputItem(data) {
-            console.log(data)
-            this.outputs = []
-            this.outputs.push(data.name)
-            this.selectOutput = !this.selectOutput
-        },
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -334,64 +258,67 @@ export default {
                 }
                 this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
             } else {
-                let inputNameOld = this.allData.inputs[0]
-                let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
-                let inputNameNew = this.inputs[0]
-                let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
-                let dssInputs = {
-                    old: [{
-                        name: inputNameOld,
-                        cat: inputCatOld
-                    }],
-                    new: [{
-                        name: inputNameNew,
-                        cat: inputCatNew
-                    }]
-                }
-                let outputNameOld = this.allData.outputs[0]
-                let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
-                let outputNameNew = this.outputs[0]
-                let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
-                let dssOutputs = {
-                    old: {
-                        name: outputNameOld,
-                        cat: outputCatOld
-                    },
-                    new: {
-                        name: outputNameNew,
-                        cat: outputCatNew
-                    }
-                }
-                let script = {
-                    old: {
-                        name: this.allData.jobName,
-                        id: this.allData.jobId
-                    },
-                    new: {
-                        "name": `compute_${this.outputs[0]}`,
-                        "runtime": "topn",
-                        "inputs": JSON.stringify(this.inputs),
-                        "output": this.outputs[0]
-                    }
-                }
-                
-                const event = new Event("event")
-                event.args = {
-                    callback: "changeTopnInputOutput",
-                    element: this,
-                    param: {
-                        name: "changeTopnInputOutput",
-                        projectId: this.projectId,
-                        projectName: this.projectName,
-                        dssOutputs: dssOutputs,
-                        dssInputs: dssInputs,
-                        script: script
-                    }
-                }
-                this.$emit('event', event)
+				this.$refs.changeInputOutput.save()
             }
             
-        }
+        },
+		changeTopnInputOutput(data) {
+			let inputNameOld = this.allData.inputs[0]
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = data.args.param.inputsArray[0]
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.allData.outputs[0]
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = data.args.param.outputsArray[0]
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify(data.args.param.inputsArray),
+					"output": outputNameNew
+				}
+			}
+			
+			const event = new Event("event")
+			event.args = {
+				callback: "changeTopnInputOutput",
+				element: this,
+				param: {
+					name: "changeTopnInputOutput",
+					projectId: this.projectId,
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
+				}
+			}
+			this.$emit('event', event)
+		}
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
@@ -427,8 +354,10 @@ export default {
         },
         "allData.inputs": function(n) {
             this.inputs = n
-            this.outputs = this.allData.outputs
-        }
+        },
+		"allData.outputs": function(n) {
+            this.outputs = n
+		}
     }
 }
 </script>
