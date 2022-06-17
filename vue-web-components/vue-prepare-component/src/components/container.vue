@@ -7,10 +7,14 @@
                 <span>Prepare</span>
             </div>
             <div class="header_right">
+				<el-radio-group v-model="activeName" class="content">
+					<el-radio-button label="Setting"></el-radio-button>
+					<el-radio-button label="input/output"></el-radio-button>
+				</el-radio-group>
                 <button class="save" @click="save">保存</button>
             </div>
         </div>
-        <div class="prepare_area">
+        <div class="prepare_area" v-show="activeName === 'Setting'">
             <div class="prepare_area_left">
                 <div class="tab_content">
                     <div class="no_operator" v-if="steps.data.length === 0">
@@ -78,6 +82,17 @@
                 </div>
             </div>
         </div>
+		<div v-show="activeName === 'input/output'">
+			<change-input-output
+				ref="changeInputOutput"
+				:inputs="inputs"	
+				:outputs="outputs"
+				:inArray="inArray"
+				:outArray="outArray"
+				@changeTopnInputOutput="changeTopnInputOutput"
+				:datasetArray="datasetArray"
+			/>
+        </div>
         <op-factories ref="opFactories" class="op-factories" :visible="drawer" @newStep="newStep"/>
         <el-dialog
             title="数据样本配置"
@@ -108,6 +123,10 @@ import { PhInitialFEWVEStepDefs } from "./steps/commands/fill-empty-with-value/d
 import PhDagDefinitions from "./policy/definitions/definitions";
 import ElDialog from 'element-ui/packages/dialog/src/component'
 
+import ElRadioGroup from "element-ui/packages/radio-group/index"
+import ElRadioButton from "element-ui/packages/radio-button/index"
+import changeInputOutput from "./change-input-output"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -127,7 +146,14 @@ export default {
             uriMessage: null,
             dragging: null, //正在拖拽的 元素
             handleDragNewItemsDst: 0,
-            sampleVisible: false
+            sampleVisible: false,
+            activeName: "input/output",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+			outputs: [],
+            inputs: [],
+            datasetArray: []
         }
     },
     components: {
@@ -137,7 +163,10 @@ export default {
         ElCheckbox,
         ElInput,
         OpFactories,
-        ElDialog
+        ElDialog,
+        ElRadioGroup,
+        ElRadioButton,
+		changeInputOutput
     },
     props: {
         allData: {
@@ -154,7 +183,7 @@ export default {
         datasource: {
             type: Object,
             default: function () {
-                return new PhStepDataSource('1')
+                return new PhStepDataSource('1', this)
             }
         },
         schema: {
@@ -181,7 +210,20 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
         this.steps.refreshData()
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+		this.datasource.refreshDataset(this.projectId)
     },
+	watch: {
+        activeName(n) {
+            this.$emit("active", n)
+        },
+        "allData.inputs": function(n) {
+            this.inputs = n
+        },
+		"allData.outputs": function(n) {
+            this.outputs = n
+		}
+	},
     methods: {
         previewExcel () {
             this.save("preview")
@@ -189,6 +231,7 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         getUrlParam(value) {
@@ -289,56 +332,107 @@ export default {
             return result.status === 200
         },
         async save(type) {
-            
-            //删除算子
-            for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
-                // await this.deleteStepsArray[idx].delete(this)
-                await this.deleteStep(this.deleteStepsArray[idx])
-            }
-            // 保存算子
-            let itemArr = []
-            let expressionsArr = []
-            for (let index = 0; index < this.steps.data.length; ++index) {
-                const item = this.steps.data[index]
-                item.expressions = item.callback.command.revert2Defs()
-                expressionsArr.push(item.expressions)
-                itemArr.push(step2SaveObj(item))
-            }
-            itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
-            // const body = {
-            //     table: "step",
-            //     item: itemArr
-            // }
-            // const url = `${hostName}/phdydatasource/put_item`
-            // let headers = {
-            //     Authorization: this.getCookie("access_token") || this.debugToken,
-            //     "Content-Type": "application/vnd.api+json",
-            //     Accept: "application/vnd.api+json"
-            // }
-            // let options = {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(body)
-            // }
-            // await fetch(url, options)
+			if (this.activeName === "Setting") {
+               //删除算子
+				for (let idx = 0; idx< this.deleteStepsArray.length; ++idx) {
+					// await this.deleteStepsArray[idx].delete(this)
+					await this.deleteStep(this.deleteStepsArray[idx])
+				}
+				// 保存算子
+				let itemArr = []
+				let expressionsArr = []
+				for (let index = 0; index < this.steps.data.length; ++index) {
+					const item = this.steps.data[index]
+					item.expressions = item.callback.command.revert2Defs()
+					expressionsArr.push(item.expressions)
+					itemArr.push(step2SaveObj(item))
+				}
+				itemArr = itemArr.sort((l, r) => l["index"] - r["index"])
 
-            // 保存脚本
-            const event = new Event("event")
-            event.args = {
-                callback: "prepare",
-                element: this,
-                param: {
-                    name: "prepare",
-                    projectId: this.projectId,
-                    projectName: this.projectName,
-                    itemArr: expressionsArr,
-                    stepsArr: itemArr,
-                    message: this.allData.message,
-                    type: type
-                }
+				// 保存脚本
+				const event = new Event("event")
+				event.args = {
+					callback: "prepare",
+					element: this,
+					param: {
+						name: "prepare",
+						projectId: this.projectId,
+						projectName: this.projectName,
+						itemArr: expressionsArr,
+						stepsArr: itemArr,
+						message: this.allData.message,
+						type: type
+					}
+				}
+				this.$emit('event', event)
+            } else {
+				this.$refs.changeInputOutput.save()
             }
-            this.$emit('event', event)
         },
+		changeTopnInputOutput(data) {
+			let inputNameOld = this.allData.inputs[0]
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = data.args.param.inputsArray[0]
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.allData.outputs[0]
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = data.args.param.outputsArray[0]
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify(data.args.param.inputsArray),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
+			const event = new Event("event")
+			event.args = {
+				callback: "changeTopnInputOutput",
+				element: this,
+				param: {
+					name: "changeTopnInputOutput",
+					projectId: this.projectId,
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
+				}
+			}
+			this.$emit('event', event)
+		},
         // 新建算子
         newStep(stepType) {
             let indexNum = this.steps.data.length > 0 ? Math.max(...this.steps.data.map(x => x.index)) + 1 : 1
@@ -414,6 +508,9 @@ export default {
                     border-radius: 2px;
                     background: none;
                     cursor: pointer;
+                }
+				.content {
+                    margin-right: 30px;
                 }
             }
         }

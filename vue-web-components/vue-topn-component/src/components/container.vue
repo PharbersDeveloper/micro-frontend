@@ -383,10 +383,6 @@ export default {
         flex-direction: column;
         height: 100%;
 
-        .op-factories {
-            // background: red;
-        }
-
         .topn_header {
             height: 48px;
             padding: 0 15px;

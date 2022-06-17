@@ -8,12 +8,12 @@ export async function phTopnContainerEventHandler(e, route) {
 	let uri = ""
 	route.msg = "新建"
 
-	let editPrepareData = await route.store.peekRecord("tempdata", "topn")
+	let topnData = await route.store.peekRecord("tempdata", "topn")
 	let scriptsParams = {}
 	let inputs = []
 	let outputs = []
-	if (editPrepareData) {
-		scriptsParams = editPrepareData.jsondata
+	if (topnData) {
+		scriptsParams = topnData.jsondata
 		let inputsData = scriptsParams.inputs[0].name
 			? scriptsParams.inputs[0].name
 			: scriptsParams.inputs[0]
@@ -22,11 +22,6 @@ export async function phTopnContainerEventHandler(e, route) {
 			? scriptsParams.outputs[0].name
 			: scriptsParams.outputs
 		outputs.push(outputsData)
-	} else {
-		route.router.transitionTo(
-			"shell",
-			`recipes?projectId=${params.projectId}&projectName=${params.projectName}`
-		)
 	}
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":

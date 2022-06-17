@@ -24,16 +24,6 @@ export async function phTopnContainerRouteModel(route, parseParams) {
 
 	const jobId = scriptsParams.jobId
 
-	console.log({
-		projectName: parseParams.query.projectName,
-		projectId: parseParams.query.projectId,
-		inputs: inputs,
-		outputs: outputs,
-		jobName: jobName,
-		jobId: jobId,
-		_isVue: true,
-		popupBack: true
-	})
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,

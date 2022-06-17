@@ -235,18 +235,14 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					projectId: params.projectId,
 					jobCat: "prepare_edit"
 				}
-				// let operatorParameters = recipt.operatorParameters
 				route.store.unloadAll("tempdata")
 				route.store.pushPayload({
 					data: [
 						{
 							type: "tempdatas",
-							id: "editPrepare",
+							id: "prepare",
 							attributes: {
-								jsondata: {
-									scripts: scripts,
-									operatorParameters: {}
-								}
+								jsondata: scripts
 							}
 						}
 					]
@@ -262,11 +258,6 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					recipt.jobShowName +
 					"&inputName=" +
 					inputName
-				// +
-				// "&operatorParameters=" +
-				// escape(recipt.operatorParameters) +
-				// "&message=" +
-				// encodeURI(JSON.stringify(scripts))
 			} else if (params.name === "codeditor") {
 				uri =
 					"codeditor?projectName=" +
@@ -334,7 +325,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						data: [
 							{
 								type: "tempdatas",
-								id: "createPrepare",
+								id: "prepare",
 								attributes: {
 									jsondata: params
 								}
