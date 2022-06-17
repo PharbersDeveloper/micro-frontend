@@ -246,7 +246,7 @@ export async function phTopnContainerEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "success") {
+		if (status == "success" || status == "succeed") {
 			if (params.type === "preview") {
 				element.steps.refreshData()
 			} else {

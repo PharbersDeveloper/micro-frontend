@@ -244,7 +244,7 @@ export async function phPrepareContainerEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "success") {
+		if (status == "success" || status == "succeed") {
 			alert(`${route.msg}脚本成功！`)
 			route.router.transitionTo(
 				"shell",
