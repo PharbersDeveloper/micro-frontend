@@ -55,30 +55,6 @@ export async function phDistinctContainerEventHandler(e, route) {
 			break
 		case "saveDistinct":
 			if (params) {
-				let editPrepareData = await route.store.peekRecord(
-					"tempdata",
-					"distinct"
-				)
-				let scriptsParams = {}
-				let inputs = []
-				let outputs = []
-				if (editPrepareData) {
-					scriptsParams = editPrepareData.jsondata
-					let inputsData = scriptsParams.inputs[0].name
-						? scriptsParams.inputs[0].name
-						: scriptsParams.inputs[0]
-					inputs.push(inputsData)
-					let outputsData = scriptsParams.outputs[0].name
-						? scriptsParams.outputs[0].name
-						: scriptsParams.outputs
-					outputs.push(outputsData)
-				} else {
-					route.router.transitionTo(
-						"shell",
-						`recipes?projectId=${params.projectId}&projectName=${params.projectName}`
-					)
-				}
-				console.log(scriptsParams)
 				const url = `${hostName}/phresourcecodegentrigger`
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
@@ -128,7 +104,6 @@ export async function phDistinctContainerEventHandler(e, route) {
 					},
 					oldImage: []
 				}
-				console.log(scriptBody)
 				let scriptOptions = {
 					method: "POST",
 					headers: {
