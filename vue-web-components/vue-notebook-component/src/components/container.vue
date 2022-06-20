@@ -34,7 +34,7 @@
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="showCreationDialog = true">新建编译器</button>
+                            <button class="upload_btn" @click.stop="showCreationDialog = true">新建编译器</button>
                         </div>
 
                         <div class="tag_selected">
