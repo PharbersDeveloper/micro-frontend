@@ -138,6 +138,83 @@ export default {
 }
 </script>
 <style lang="scss">
+.input-output {
+	width: 100%;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: row;
+	height: calc(100vh - 100px);
+	background: #f2f2f2;
+	.pointer {
+		cursor: pointer;
+	}
+	.left {
+		flex: 1;
+		padding: 20px;
+	}
+	.right {
+		flex: 1;
+		padding: 20px;
+	}
+	.title {
+		margin-bottom: 10px;
+	}
 
+	.input-selected {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+
+		.name {
+			height: initial;
+			line-height: 41px;
+			padding: 10px 15px;
+			margin: 2px 15px -2px 15px;
+			background: #ffffff;
+			box-shadow: 1px 1px 4px -1px #dddddd;
+			margin: 5px 0px 5px 0px;
+		}
+
+		button {
+			margin: 20px auto;
+			width: 250px;
+		}
+	}
+
+	.input-for-select {
+
+		.search {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #ccc;
+
+			.el-form-item {
+				margin-bottom: 0;
+			}
+		}
+
+		.list {
+			padding: 0;
+			margin: 0;
+			font-size: 15px;
+			color: #666666;
+
+			.addInput {
+				list-style: none;
+				height: 41px;
+				line-height: 41px;
+				padding: 0px 28px 0px 28px;
+				box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+				border-bottom: 1px solid #ccc;
+			}
+
+			.mr-4 {
+				margin-right: 4px;
+			}
+		}
+	}
+}
 </style>
 

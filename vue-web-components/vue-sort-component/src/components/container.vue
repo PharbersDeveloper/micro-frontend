@@ -84,7 +84,6 @@ export default {
         ElButton,
         PreFilter,
         Computed,
-        Outputs,
         Sort,
         Outputs,
 		ElRadioGroup,
