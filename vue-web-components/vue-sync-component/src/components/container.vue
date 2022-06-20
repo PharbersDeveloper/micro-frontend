@@ -84,11 +84,17 @@
 import PhDagDefinitions from './policy/definitions/definitions'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
+import PhDataSource from './model/datasource'
+import ElForm from "element-ui/packages/form/index"
+import ElFormItem from "element-ui/packages/form-item/index"
+import { Message } from 'element-ui'
 
 export default {
     components: {
         ElButton,
         ElInput,
+        ElForm,
+        ElFormItem
     },
     data() {
         return {
@@ -96,9 +102,11 @@ export default {
             outputDsName: this.getUrlParam("outputName"),
             selectInput: false,
             selectOutput: false,
-            outputsArray: [],
-            inputsArray: [],
-            searchInputName: ""
+            searchInputName: "",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+            datasetArray: []
         }
     },
     props: {
@@ -119,10 +127,12 @@ export default {
                 return new PhDagDefinitions(1)
             }
         },
-        outputs: Array,
-        inputs: Array,
-        inArray: Array,
-        outArray: Array
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource(1, this)
+            }
+        }
     },
     methods: {
         getUrlParam(value) {
@@ -133,18 +143,99 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-
+        selectInputItem(data) {
+            this.inputDsName = data
+            this.selectInput = !this.selectInput
+        },
+        selectOutputItem(data) {
+            this.outputDsName = data
+            this.selectOutput = !this.selectOutput
+        },
         save() {
+		// 	const event = new Event("event")
+		// 	event.args = {
+		// 		callback: "saveSync",
+		// 		element: this,
+		// 		param: {
+		// 			name: "saveSync",
+		// 			projectId: this.projectId,
+		// 			projectName: this.projectName
+		// 		}
+		// 	}
+		// 	this.$emit('event', event)
+			// const event = new Event("event")
+            // event.args = {
+            //     callback: "changScriptInputOutput",
+            //     element: this,
+            //     param: {
+            //         outputsArray: [this.inputDsName],
+            //         inputsArray: [this.outputDsName],
+            //     }
+            // }
+            // this.$emit('changScriptInputOutput', event)
+
+			let inputNameOld = this.getUrlParam("inputName")
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = this.inputDsName
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.getUrlParam("outputName")
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = this.outputDsName
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify([this.outputDsName]),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
 			const event = new Event("event")
 			event.args = {
-				callback: "saveSync",
+				callback: "changScriptInputOutput",
 				element: this,
 				param: {
-					name: "saveSync",
+					name: "changScriptInputOutput",
 					projectId: this.projectId,
-					projectName: this.projectName
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
 				}
 			}
 			this.$emit('event', event)
@@ -161,15 +252,11 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
         this.inputDsName = this.getUrlParam("inputName")
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+		this.datasource.refreshDataset(this.projectId)
     },
 
     watch: {
-        "inputs": function(n) {
-            this.inputsArray = n
-        },
-		"outputs": function(n) {
-            this.outputsArray = n
-		}
     }
 }
 </script>
@@ -178,7 +265,7 @@ export default {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        height: 100%;\
+        height: 100%;
 
 		.pointer {
 			cursor: pointer;

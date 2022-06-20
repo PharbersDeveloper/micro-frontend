@@ -61,7 +61,7 @@
 				:outputs="outputs"
 				:inArray="inArray"
 				:outArray="outArray"
-				@changeTopnInputOutput="changeTopnInputOutput"
+				@changScriptInputOutput="changScriptInputOutput"
 				:datasetArray="datasetArray"
 			/>
         </div>
@@ -269,7 +269,7 @@ export default {
             }
             
         },
-		changeTopnInputOutput(data) {
+		changScriptInputOutput(data) {
 			let inputNameOld = this.allData.inputs[0]
 			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
 			let inputNameNew = data.args.param.inputsArray[0]
@@ -320,10 +320,10 @@ export default {
 			
 			const event = new Event("event")
 			event.args = {
-				callback: "changeTopnInputOutput",
+				callback: "changScriptInputOutput",
 				element: this,
 				param: {
-					name: "changeTopnInputOutput",
+					name: "changScriptInputOutput",
 					projectId: this.projectId,
 					projectName: this.projectName,
 					dssOutputs: dssOutputs,

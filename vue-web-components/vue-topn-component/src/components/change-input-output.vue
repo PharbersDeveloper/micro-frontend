@@ -113,14 +113,14 @@ export default {
         save() {
             const event = new Event("event")
             event.args = {
-                callback: "changeTopnInputOutput",
+                callback: "changScriptInputOutput",
                 element: this,
                 param: {
                     outputsArray: this.outputsArray,
                     inputsArray: this.inputsArray,
                 }
             }
-            this.$emit('changeTopnInputOutput', event)
+            this.$emit('changScriptInputOutput', event)
         }
     },
     mounted() {

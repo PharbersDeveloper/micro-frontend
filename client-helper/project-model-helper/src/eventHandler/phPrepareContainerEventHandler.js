@@ -128,7 +128,7 @@ export async function phPrepareContainerEventHandler(e, route) {
 				})
 			}
 			break
-		case "changeTopnInputOutput":
+		case "changScriptInputOutput":
 			if (params) {
 				const changeurl = `${hostName}/phchangeresourcepositiontrigger`
 				const changeuuid = guid()
@@ -155,7 +155,7 @@ export async function phPrepareContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "changeInputOutput",
 							cat: "intermediate",
-							runtime: "topn",
+							runtime: "prepare",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName

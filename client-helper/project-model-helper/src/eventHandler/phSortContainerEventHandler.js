@@ -129,7 +129,7 @@ export async function phSortContainerEventHandler(e, route) {
 				})
 			}
 			break
-		case "changeTopnInputOutput":
+		case "changScriptInputOutput":
 			if (params) {
 				const changeurl = `${hostName}/phchangeresourcepositiontrigger`
 				const changeuuid = guid()
@@ -156,7 +156,7 @@ export async function phSortContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "changeInputOutput",
 							cat: "intermediate",
-							runtime: "topn",
+							runtime: "sort",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName

@@ -130,7 +130,7 @@ export async function phTopnContainerEventHandler(e, route) {
 				})
 			}
 			break
-		case "changeTopnInputOutput":
+		case "changScriptInputOutput":
 			if (params) {
 				const changeurl = `${hostName}/phchangeresourcepositiontrigger`
 				const changeuuid = guid()
