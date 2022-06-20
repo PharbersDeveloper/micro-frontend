@@ -34,14 +34,8 @@
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="toggle">新建脚本</button>
-                            <div class="dialog" v-show="showDialog">
-                                <div class="list" @click="selectScripts('python3')">
-                                    <img :src="defs.iconsByName('python')" alt="">
-                                    <p class="">Python</p>
-									<!-- class=dis 灰掉某一项 -->
-                                </div>
-                            </div>
+                            <button class="upload_btn" @click="showCreationDialog = true">新建编译器</button>
+
                         </div>
 
                         <div class="tag_selected">
@@ -156,13 +150,11 @@
             <!-- 管理标签 -->
             <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
             <!-- 新建NoteBook -->
-            <create-scripts-dialog
-                v-if="showCreateScriptsDialog"
-                :notebookss="allData.dss"
-                :runtime="runtime"
-                @createScripts="createScripts"
-                @closeCreateDialog="closeScriptDialog">
-            </create-scripts-dialog>
+            <create-notebook-dialog
+                    :dialog-visible="showCreationDialog"
+                    @cancel="showCreationDialog = false"
+                    @confirm="showCreationDialog = false">
+            </create-notebook-dialog>
         </div>
     </div>
 </template>
@@ -171,7 +163,7 @@
 import clearDelete from './delete-dialog-script.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
-import createScriptsDialog from './create-scripts-dialog.vue'
+import createNotebookDialog from './create-notebook-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 // import ElButton from 'element-ui/packages/option/index'
@@ -204,7 +196,7 @@ export default {
             R_icon: `${staticFilePath}` + "/R_icon.svg",
             sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
             script_icon_show: "",
-            showDialog: false,
+            // showDialog: false,
             state: '',
             editShow: false,
             dropDialogShow: false,
@@ -214,7 +206,7 @@ export default {
             showSelectOptionParam: false,
             closeTosts: false,
             showCreateTagsDialog: false, //添加tag弹框
-            showCreateScriptsDialog: false,
+            showCreationDialog: false,
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
@@ -255,7 +247,7 @@ export default {
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
-        createScriptsDialog,
+        createNotebookDialog,
         bpSelectVue,
         bpOptionVue,
         // ElButton
@@ -297,9 +289,9 @@ export default {
         },
         //打开script弹框
         selectScripts(data) {
-            this.showDialog = false
+            // this.showDialog = false
             this.runtime = data
-            this.showCreateScriptsDialog = true
+            this.showCreationDialog = true
         },
         //增加tag
         addTagsEvent(data) {
@@ -428,7 +420,7 @@ export default {
         },
         //关闭scripts弹框
         closeScriptDialog() {
-            this.showCreateScriptsDialog = false
+            this.showCreationDialog = false
         },
         //增加scripts
         createScripts(data) {
@@ -436,7 +428,7 @@ export default {
             data.args.param.projectId = this.allData.projectId
             data.args.param.runtime = this.runtime
             this.$emit('event', data)
-            this.showCreateScriptsDialog = false
+            this.showCreationDialog = false
         },
         //关闭删除脚本弹框
         closeDeleteDialog() {
@@ -479,9 +471,9 @@ export default {
             }
             this.$emit('event', event)
         },
-        toggle() {
-            this.showDialog = !this.showDialog
-        },
+        // toggle() {
+        //     this.showDialog = !this.showDialog
+        // },
     }
 }
 </script>
