@@ -2,7 +2,7 @@
     <div class="data-list-home">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="data-home-container">
-               <div class="content">  
+               <div class="content">
                 <div class="left-area">
                     <div class="projectInfo">
                         <div class="left">
@@ -13,8 +13,8 @@
                             </div>
                         </div>
                         <div class="right">
-							<button class="delete" 
-								@click="dialogDeleteProject = true" 
+							<button class="delete"
+								@click="dialogDeleteProject = true"
 								:disabled="!showStartButton"
 								:class="{disButton: !showStartButton}">删除项目
 							</button>
@@ -24,7 +24,7 @@
                         <div class="item">
                             <div class="flow">
                                 <p class="flow_word">主流程</p>
-                                <div class="flow_item"> 
+                                <div class="flow_item">
 									<div class="flow_item_cell" @click="linkToPage('datasets')">
 										<div>
 											<img :src="dataset_icon" alt="">
@@ -56,8 +56,8 @@
                             </div>
                             <div class="flow flow_two">
                                 <p class="flow_word">实验室</p>
-                                <div class="flow_item"> 
-									<div class="flow_item_cell" >
+                                <div class="flow_item">
+                                    <div class="flow_item_cell" @click="linkToPage('notebooks')">
 										<div>
 											<img :src="notebook_icon" alt="">
 										</div>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="flow flow_three">
                                 <p class="flow_word">数据看板</p>
-                                <div class="flow_item"> 
+                                <div class="flow_item">
 									<div class="flow_item_cell" @click="linkToPage('dashboard')">
 										<div>
 											<img :src="dashboard_icon" alt="">
@@ -93,7 +93,7 @@
                             </div>
                             <div class="flow flow_four">
                                 <p class="flow_word">维基</p>
-                                <div class="flow_item"> 
+                                <div class="flow_item">
 									<div class="flow_item_cell" @click="linkToPage('slide')">
 										<div>
 											<img :src="article_icon" alt="">
@@ -110,7 +110,7 @@
                             <button @click="linkToPage('flow')">数据流程</button>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="right_area">
                     <div class="hearder">
@@ -313,7 +313,7 @@ export default {
             let scrollTop = e.target.scrollTop || document.body.scrollTop;
             let clientHeight = e.target.clientHeight;
             let scrollHeight = e.target.scrollHeight;
-            if (scrollTop + clientHeight >= scrollHeight) { 
+            if (scrollTop + clientHeight >= scrollHeight) {
                 //滚动到底部
                 this.getActions(this.actionsKey)
             }
@@ -377,7 +377,7 @@ export default {
         },
         //操作对象的名称
         showActionName(data) {
-            if(this.isJSON(data)) { 
+            if(this.isJSON(data)) {
             	let msg = JSON.parse(data)
                 return msg["actionName"]
             } else {
@@ -485,7 +485,7 @@ export default {
     height: calc(100vh - 40px);
     width: 100vw;
     background: #f2f2f2;
-    
+
     .dataset_header {
         height: 48px;
         background: #ffffff;
@@ -629,7 +629,7 @@ export default {
             }
             .flow_item {
                 display: flex;
-               
+
                 .flow_item_cell {
                     width: 110px;
                     height: 80px;
@@ -668,15 +668,15 @@ export default {
                     color: #f28c38;
                     font-size: 12px;
                 }
-                
+
                 }
-                
-            } 
-           
+
+            }
+
         }
         .flow_two {
             width: 320px;
-           
+
         }
         .flow_three {
             width: 180px;
@@ -723,7 +723,7 @@ export default {
                 .icon {
                     width: 20px;
                     height: 20px;
-                    
+
                     img {
                         width: 100%;
                         border-radius: 10px;
@@ -732,7 +732,7 @@ export default {
                 .cell_info {
                     width: 100%;
                     padding-left: 10px;
-                    font-size: 14px; 
+                    font-size: 14px;
                     .top_info {
                         position: relative;
                         .time {
