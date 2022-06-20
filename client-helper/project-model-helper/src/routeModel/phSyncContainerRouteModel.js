@@ -2,20 +2,34 @@
 
 // eslint-disable-next-line no-unused-vars
 export async function phSyncContainerRouteModel(route, parseParams) {
-	let createsyncData = await route.store.peekRecord("tempdata", "sync")
-	let outputs = []
-	if (createsyncData) {
-		let scriptsParams = createsyncData.jsondata
-		let outputsData = scriptsParams.outputs[0].name
-			? scriptsParams.outputs[0].name
-			: scriptsParams.outputs
-		outputs.push(outputsData)
-	}
+	const syncData = await route.store.peekRecord("tempdata", "sync")
+
+	const scriptsParams = syncData.jsondata
+	const inputsData = scriptsParams.inputs[0].name
+		? scriptsParams.inputs[0].name
+		: scriptsParams.inputs[0]
+
+	const inputs = [inputsData]
+
+	const outputsData = scriptsParams.outputs[0].name
+		? scriptsParams.outputs[0].name
+		: scriptsParams.outputs
+
+	const outputs = [outputsData]
+
+	const jobName = scriptsParams.jobShowName
+		? scriptsParams.jobShowName
+		: scriptsParams.jobName
+
+	const jobId = scriptsParams.jobId
 
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
 		outputs: outputs,
+		inputs: inputs,
+		jobName: jobName,
+		jobId: jobId,
 		_isVue: true,
 		popupBack: true
 	}

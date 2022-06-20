@@ -3,7 +3,6 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="sync_header">
             <div class="header_left">
-                <!-- 需要一个sync 的icon @wodelu -->
                 <img :src="defs.iconsByName('prepare')" alt="" />
                 <span>Sync</span>
             </div>
@@ -13,31 +12,70 @@
         </div>
         <div class="sync_area">
             <div class="sync_left">
-                <div class="content">
+                <div class="content"  v-show="!selectInput">
                     <div class="content-column">
                         <span>Input</span>
                         <el-input readonly v-model="inputDsName"></el-input>
-                        <el-button type="primary" @click="changeInputDsName" disabled>更改数据集</el-button>
-<!--                        <span class="content-bottom">Version Selection</span>-->
-<!--                        <div class="version-tags-container">-->
-
-<!--                        </div>-->
-<!--                        <el-input v-model="search"></el-input>-->
-<!--                        <div class="version-ds-list">-->
-
-<!--                        </div>-->
+                        <el-button type="primary" @click="selectInput=!selectInput">更改数据集</el-button>
                     </div>
                 </div>
+				<div class="input-for-select" v-show="selectInput">
+					<div class="search">
+						<el-form label-width="60px">
+							<el-form-item label="搜索">
+								<el-input
+									placeholder="搜索"
+									v-model="searchInputName"></el-input>
+							</el-form-item>
+						</el-form>
+						<i 
+							@click="selectInput=!selectInput"
+							class="el-icon-close pointer"></i>
+					</div>
+					<ul class="list">
+						<li 
+							@click="selectInputItem(item)"
+							class="addInput pointer" 
+							:key="item+'input'" 
+							v-for="item in inArray">
+							<i class="el-icon-plus pointer mr-4"></i>
+							{{item}}
+						</li>
+					</ul>
+				</div>
             </div>
             <div class="sync_divider"></div>
             <div class="sync_right">
-                <div class="content">
+                <div class="content" v-show="!selectOutput">
                     <div class="content-column">
                         <span>Output</span>
                         <el-input readonly v-model="outputDsName"></el-input>
-                        <el-button type="primary" @click="changeOutputDsName" disabled>更改数据集</el-button>
+                        <el-button type="primary" @click="selectOutput=!selectOutput">更改数据集</el-button>
                     </div>
                 </div>
+				<div class="input-for-select" v-show="selectOutput">
+					<div class="search">
+						<el-form label-width="60px">
+							<el-form-item label="搜索">
+								<el-input
+									placeholder="搜索"
+									v-model="searchInputName"></el-input>
+							</el-form-item>
+						</el-form>
+						<i class="el-icon-close pointer" 			
+							@click="selectOutput=!selectOutput"></i>
+					</div>
+					<ul class="list">
+						<li 
+							@click="selectOutputItem(item)"
+							class="addInput pointer" 
+							:key="item+'output'" 
+							v-for="item in outArray">
+							<i class="el-icon-plus pointer mr-4"></i>
+							{{item}}
+						</li>
+					</ul>
+				</div>
             </div>
         </div>
     </div>
@@ -46,17 +84,29 @@
 import PhDagDefinitions from './policy/definitions/definitions'
 import ElButton from 'element-ui/packages/button/index'
 import ElInput from 'element-ui/packages/input/index'
+import PhDataSource from './model/datasource'
+import ElForm from "element-ui/packages/form/index"
+import ElFormItem from "element-ui/packages/form-item/index"
+import { Message } from 'element-ui'
 
 export default {
     components: {
         ElButton,
         ElInput,
+        ElForm,
+        ElFormItem
     },
     data() {
         return {
             inputDsName: this.getUrlParam("inputName"),
-            outputDsName: this.getUrlParam("outputName")
-            // schema: ["1", "2", "3"],
+            outputDsName: this.getUrlParam("outputName"),
+            selectInput: false,
+            selectOutput: false,
+            searchInputName: "",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+            datasetArray: []
         }
     },
     props: {
@@ -76,6 +126,12 @@ export default {
             default: function() {
                 return new PhDagDefinitions(1)
             }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource(1, this)
+            }
         }
     },
     methods: {
@@ -87,18 +143,99 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-
+        selectInputItem(data) {
+            this.inputDsName = data
+            this.selectInput = !this.selectInput
+        },
+        selectOutputItem(data) {
+            this.outputDsName = data
+            this.selectOutput = !this.selectOutput
+        },
         save() {
+		// 	const event = new Event("event")
+		// 	event.args = {
+		// 		callback: "saveSync",
+		// 		element: this,
+		// 		param: {
+		// 			name: "saveSync",
+		// 			projectId: this.projectId,
+		// 			projectName: this.projectName
+		// 		}
+		// 	}
+		// 	this.$emit('event', event)
+			// const event = new Event("event")
+            // event.args = {
+            //     callback: "changScriptInputOutput",
+            //     element: this,
+            //     param: {
+            //         outputsArray: [this.inputDsName],
+            //         inputsArray: [this.outputDsName],
+            //     }
+            // }
+            // this.$emit('changScriptInputOutput', event)
+
+			let inputNameOld = this.getUrlParam("inputName")
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = this.inputDsName
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.getUrlParam("outputName")
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = this.outputDsName
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify([this.outputDsName]),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
 			const event = new Event("event")
 			event.args = {
-				callback: "saveSync",
+				callback: "changScriptInputOutput",
 				element: this,
 				param: {
-					name: "saveSync",
+					name: "changScriptInputOutput",
 					projectId: this.projectId,
-					projectName: this.projectName
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
 				}
 			}
 			this.$emit('event', event)
@@ -115,10 +252,12 @@ export default {
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
         this.inputDsName = this.getUrlParam("inputName")
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+		this.datasource.refreshDataset(this.projectId)
+    },
+
+    watch: {
     }
-    // updated() {
-    //     this.outputDsName = this.allData.outputs[0]
-    // }
 }
 </script>
 <style lang="scss">
@@ -127,6 +266,21 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
+
+		.pointer {
+			cursor: pointer;
+		}
+		.left {
+			flex: 1;
+			padding: 20px;
+		}
+		.right {
+			flex: 1;
+			padding: 20px;
+		}
+		.title {
+			margin-bottom: 10px;
+		}
 
         .op-factories {
             // background: red;
@@ -171,16 +325,55 @@ export default {
         }
 
         .sync_area {
-            width: 100%;
+            // width: 100%;
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
+			background: #f2f2f2;
+			padding: 40px;
+
+			.input-for-select {
+				width: 100%;
+				.search {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					padding-bottom: 10px;
+					border-bottom: 1px solid #ccc;
+
+					.el-form-item {
+						margin-bottom: 0;
+					}
+				}
+
+				.list {
+					padding: 0;
+					margin: 0;
+					font-size: 15px;
+					color: #666666;
+
+					.addInput {
+						list-style: none;
+						height: 41px;
+						line-height: 41px;
+						padding: 0px 28px 0px 28px;
+						box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+						border-bottom: 1px solid #ccc;
+					}
+
+					.mr-4 {
+						margin-right: 4px;
+					}
+				}
+			}
 
             .sync_left {
                 flex-grow: 1;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-around;
+				padding: 40px;
             }
 
             .sync_divider {
@@ -192,6 +385,7 @@ export default {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-around;
+				padding: 40px;
 
             }
 

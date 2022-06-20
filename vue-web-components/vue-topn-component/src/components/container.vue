@@ -7,10 +7,14 @@
                 <span>Top N</span>
             </div>
             <div class="header_right">
+                <el-radio-group v-model="activeName" class="content">
+                    <el-radio-button label="Setting"></el-radio-button>
+                    <el-radio-button label="input/output"></el-radio-button>
+                </el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="topn_area">
+        <div class="topn_area" v-show="activeName === 'Setting'">
             <div class="topn_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
@@ -50,6 +54,17 @@
                 Schema 不对，找产品处理
             </div>
         </div>
+        <div v-show="activeName === 'input/output'">
+			<change-input-output
+				ref="changeInputOutput"
+				:inputs="inputs"	
+				:outputs="outputs"
+				:inArray="inArray"
+				:outArray="outArray"
+				@changScriptInputOutput="changScriptInputOutput"
+				:datasetArray="datasetArray"
+			/>
+        </div>
     </div>
 </template>
 <script>
@@ -59,10 +74,14 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Outputs from './steps/commands/output/outputView'
 import Computed from './steps/commands/computed/computedView'
 import TopN from './steps/commands/top-n/topnView'
 import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
-import Outputs from './steps/commands/output/outputView'
+import ElRadioGroup from "element-ui/packages/radio-group/index"
+import ElRadioButton from "element-ui/packages/radio-button/index"
+import changeInputOutput from "./change-input-output"
+import { Message } from 'element-ui'
 
 export default {
     components: {
@@ -73,14 +92,29 @@ export default {
         Computed,
         TopN,
         RetrievedCols,
-        Outputs
+        Outputs,
+        ElRadioGroup,
+        // ElForm,
+        // ElFormItem,
+        ElRadioButton,
+        // ElInput,
+		changeInputOutput
     },
     data() {
         return {
             computedSchema: [],
             outputsSchema: [],
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+			outputs: [],
+            inputs: [],
             active: 1,
             flowVersion: "developer",
+            activeName: "input/output",
+            // selectInput: false,
+            // selectOutput: false,
+            datasetArray: [],
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -117,8 +151,8 @@ export default {
                 return {
                     projectId: "YZYijD17N9L6LXx",
                     projectName: "autorawdata2021",
-                    scriptsParams: null,
-                    dss: []
+                    outputs: [],
+                    inputs: []
                 }
             }
         },
@@ -144,6 +178,7 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(status) {
@@ -214,23 +249,90 @@ export default {
             return result
         },
         save() {
-            const params = {
-                "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
-                "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
-                "keys": this.$refs.topn.datasource.revert2Defs().keys,
-                "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                "orders": this.$refs.topn.datasource.revert2Defs().orders,
-                "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
-                "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
-                "rank": this.$refs.topn.datasource.revert2Defs().rank,
-                "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
-                "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
-                "computedColumns": this.$refs.computed.datasource.revert2Defs()
+            if (this.activeName === "Setting") {
+                const params = {
+                    "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
+                    "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
+                    "keys": this.$refs.topn.datasource.revert2Defs().keys,
+                    "preFilter": this.$refs.filter.datasource.revert2Defs(),
+                    "orders": this.$refs.topn.datasource.revert2Defs().orders,
+                    "denseRank": this.$refs.topn.datasource.revert2Defs().denseRank,
+                    "duplicateCount": this.$refs.topn.datasource.revert2Defs().duplicateCount,
+                    "rank": this.$refs.topn.datasource.revert2Defs().rank,
+                    "rowNumber": this.$refs.topn.datasource.revert2Defs().rowNumber,
+                    "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
+                    "computedColumns": this.$refs.computed.datasource.revert2Defs()
+                }
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+            } else {
+				this.$refs.changeInputOutput.save()
             }
+            
+        },
+		changScriptInputOutput(data) {
+			let inputNameOld = this.allData.inputs[0]
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = data.args.param.inputsArray[0]
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.allData.outputs[0]
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = data.args.param.outputsArray[0]
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
 
-            console.log(params)
-            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-        }
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify(data.args.param.inputsArray),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
+			const event = new Event("event")
+			event.args = {
+				callback: "changScriptInputOutput",
+				element: this,
+				param: {
+					name: "changScriptInputOutput",
+					projectId: this.projectId,
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
+				}
+			}
+			this.$emit('event', event)
+		}
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
@@ -238,11 +340,13 @@ export default {
 
         // this.projectIdTest = "alfredtest"
         // this.jobName = "alfredtest"
-		this.jobName = this.getJobName()
+        this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        this.datasource.refreshMateData(this.projectId, this.datasetId)
+        // this.datasource.refreshMateData(this.projectId, this.datasetId)
+        this.datasource.refreshDataset(this.projectId, this.datasetId)
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {
@@ -259,7 +363,16 @@ export default {
             if (n === 5) {
                 this.outputsSchema = this.genOutputsSchema()
             }
-        }
+        },
+        activeName(n) {
+            this.$emit("active", n)
+        },
+        "allData.inputs": function(n) {
+            this.inputs = n
+        },
+		"allData.outputs": function(n) {
+            this.outputs = n
+		}
     }
 }
 </script>
@@ -270,10 +383,6 @@ export default {
         flex-direction: column;
         height: 100%;
 
-        .op-factories {
-            // background: red;
-        }
-
         .topn_header {
             height: 48px;
             padding: 0 15px;
@@ -281,7 +390,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-			border: 1px solid #ccc;
+            border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -302,14 +411,88 @@ export default {
             }
 
             .header_right {
-                /*button {*/
-                /*    width: 65px;*/
-                /*    height: 26px;*/
-                /*    border: 1px solid #57565F;*/
-                /*    border-radius: 2px;*/
-                /*    background: none;*/
-                /*    cursor: pointer;*/
-                /*}*/
+                .content {
+                    margin-right: 30px;
+                }
+            }
+        }
+
+        .input-output {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 100px);
+            background: #f2f2f2;
+            .pointer {
+                cursor: pointer;
+            }
+            .left {
+                flex: 1;
+                padding: 20px;
+            }
+            .right {
+                flex: 1;
+                padding: 20px;
+            }
+            .title {
+                margin-bottom: 10px;
+            }
+
+            .input-selected {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                .name {
+                    height: initial;
+                    line-height: 41px;
+                    padding: 10px 15px;
+                    margin: 2px 15px -2px 15px;
+                    background: #ffffff;
+                    box-shadow: 1px 1px 4px -1px #dddddd;
+                    margin: 5px 0px 5px 0px;
+                }
+
+                button {
+                    margin: 20px auto;
+                    width: 250px;
+                }
+            }
+
+            .input-for-select {
+
+                .search {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid #ccc;
+
+                    .el-form-item {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .list {
+                    padding: 0;
+                    margin: 0;
+                    font-size: 15px;
+                    color: #666666;
+
+                    .addInput {
+                        list-style: none;
+                        height: 41px;
+                        line-height: 41px;
+                        padding: 0px 28px 0px 28px;
+                        box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+                        border-bottom: 1px solid #ccc;
+                    }
+
+                    .mr-4 {
+                        margin-right: 4px;
+                    }
+                }
             }
         }
 
@@ -318,15 +501,15 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
-			height: calc(100vh - 100px);
+            height: calc(100vh - 100px);
 
             .topn_left {
                 display: flex;
                 flex-direction: row;
                 // margin-left: 80px;
-				padding: 40px;
+                padding: 40px;
                 justify-content: space-around;
-				border-right: 1px solid #ccc;
+                border-right: 1px solid #ccc;
             }
 
             .topn_right {
@@ -334,8 +517,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-				background: #f2f2f2;
-				padding: 20px;
+                background: #f2f2f2;
+                padding: 20px;
             }
         }
     }

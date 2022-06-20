@@ -4,6 +4,22 @@ import { hostName } from "../config/envConfig"
 export async function phSortContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
+	const accessToken = route.cookies.read("access_token")
+	let sortData = await route.store.peekRecord("tempdata", "sort")
+	let scriptsParams = {}
+	let inputs = []
+	let outputs = []
+	if (sortData) {
+		scriptsParams = sortData.jsondata
+		let inputsData = scriptsParams.inputs[0].name
+			? scriptsParams.inputs[0].name
+			: scriptsParams.inputs[0]
+		inputs.push(inputsData)
+		let outputsData = scriptsParams.outputs[0].name
+			? scriptsParams.outputs[0].name
+			: scriptsParams.outputs
+		outputs.push(outputsData)
+	}
 	let uri = ""
 	route.msg = "新建"
 	switch (e.detail[0].args.callback) {
@@ -39,32 +55,7 @@ export async function phSortContainerEventHandler(e, route) {
 			break
 		case "saveSort":
 			if (params) {
-				let editPrepareData = await route.store.peekRecord(
-					"tempdata",
-					"sort"
-				)
-				let scriptsParams = {}
-				let inputs = []
-				let outputs = []
-				if (editPrepareData) {
-					scriptsParams = editPrepareData.jsondata
-					let inputsData = scriptsParams.inputs[0].name
-						? scriptsParams.inputs[0].name
-						: scriptsParams.inputs[0]
-					inputs.push(inputsData)
-					let outputsData = scriptsParams.outputs[0].name
-						? scriptsParams.outputs[0].name
-						: scriptsParams.outputs
-					outputs.push(outputsData)
-				} else {
-					route.router.transitionTo(
-						"shell",
-						`recipes?projectId=${params.projectId}&projectName=${params.projectName}`
-					)
-				}
-				console.log(scriptsParams)
 				const url = `${hostName}/phresourcecodegentrigger`
-				const accessToken = route.cookies.read("access_token")
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
@@ -138,6 +129,76 @@ export async function phSortContainerEventHandler(e, route) {
 				})
 			}
 			break
+		case "changScriptInputOutput":
+			if (params) {
+				const changeurl = `${hostName}/phchangeresourcepositiontrigger`
+				const changeuuid = guid()
+				route.loadingService.loading.style.display = "flex"
+				route.loadingService.loading.style["z-index"] = 2
+				route.projectId = params.projectId
+				route.projectName = params.projectName
+				route.msg = "修改"
+				let change_job_cat_name = "changeInputOutput"
+				let changeScriptBody = {
+					common: {
+						traceId: changeuuid,
+						projectId: params.projectId,
+						projectName: params.projectName,
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					},
+					action: {
+						cat: "changeResourcePosition",
+						desc: "change resource position",
+						comments: "something need to say",
+						message: JSON.stringify({
+							optionName: "changeInputOutput",
+							cat: "intermediate",
+							runtime: "sort",
+							actionName: scriptsParams.jobShowName
+								? scriptsParams.jobShowName
+								: scriptsParams.jobName
+						}),
+						required: true
+					},
+					datasets: {
+						inputs: params.dssInputs,
+						output: params.dssOutputs
+					},
+					script: params.script,
+					notification: {
+						required: true
+					}
+				}
+				console.log(changeScriptBody)
+				let changeScriptOptions = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(changeScriptBody)
+				}
+				await fetch(changeurl, changeScriptOptions).then((res) =>
+					res.json()
+				)
+
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: changeuuid,
+					eventName: change_job_cat_name,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: changeInputOutputNoticeCallback
+				})
+			}
+			break
 		default:
 			console.log("submit event to parent")
 	}
@@ -158,7 +219,7 @@ export async function phSortContainerEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (status == "succeed" || status == "success") {
 			if (params.type === "preview") {
 				element.steps.refreshData()
 			} else {
@@ -175,6 +236,23 @@ export async function phSortContainerEventHandler(e, route) {
 					? errorObj["message"]["zh"]
 					: `${route.msg}脚本失败，请重新操作！`
 			alert(msg)
+		}
+		route.loadingService.loading.style.display = "none"
+	}
+
+	function changeInputOutputNoticeCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+		if (status == "success" || status == "succeed") {
+			alert(`${route.msg}脚本成功！`)
+			route.router.transitionTo(
+				"shell",
+				`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+			)
+		} else {
+			alert(error)
 		}
 		route.loadingService.loading.style.display = "none"
 	}
