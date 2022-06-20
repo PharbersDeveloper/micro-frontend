@@ -64,10 +64,10 @@ export default {
     },
     computed: {},
     mounted() {
-        this.tagsArrayShow = this.tagsArray.filter(it => it != '')
-        if(this.datasetcheckedIds.length == 1) {
+        this.tagsArrayShow = this.tagsArray.filter(it => it !== '')
+        if(this.datasetcheckedIds.length === 1) {
             let selDatasetId = this.datasetcheckedIds[0]
-            let selDataset = this.datasets.filter(item => item.id == selDatasetId)[0]
+            let selDataset = this.datasets.filter(item => item.id === selDatasetId)[0]
             this.selectedTags = selDataset.label
         }
     },

@@ -7,7 +7,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 	let preUrl = ""
 	const createScriptsEventName = "createScripts"
 	// const deleteDatasetsEventName = "deleteDatasets"
-	const deleteScriptsEventName = "deleteResource"
+	// const deleteScriptsEventName = "deleteResource"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "localUpload") {
@@ -503,28 +503,32 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			break
 		case "addTags":
 			if (params) {
-				let selectedDatasets = params.selectedDatasets //需要更新的dataset
-				let datasetArray = params.datasetArray //发送请求的参数在这取
+				let selectedNotebooks = params.selectednotebooks //需要更新的dataset
+				let notebooksArray = params.notebooksArray //发送请求的参数在这取
 				let selectedTags = params.selectedTags //选中的tag数组
-				selectedDatasets.forEach(async (targetId) => {
-					let targetDataset = datasetArray.filter(
-						(it) => it.id == targetId
+				for (const targetId of selectedNotebooks) {
+					let targetNotebook = notebooksArray.filter(
+						(it) => it.id === targetId
 					)[0]
 					let targetLabels = Array.from(
-						new Set(targetDataset.label.concat(selectedTags))
+						new Set(targetNotebook.label.concat(selectedTags))
 					)
 					const url = `${hostName}/phdydatasource/put_item`
 					const accessToken = route.cookies.read("access_token")
 					let body = {
-						table: "dataset",
+						table: "resource",
 						item: {
-							id: targetDataset.id,
-							projectId: params.projectId,
+							id: targetNotebook.id,
+							name: targetNotebook.name,
 							label: JSON.stringify(targetLabels),
-							schema: targetDataset.schema,
-							date: new Date().getTime(),
-							version: targetDataset.version,
-							name: targetDataset.name
+							tenantId: targetNotebook.tenantId,
+							ctype: targetNotebook.ctype,
+							owner: targetNotebook.owner,
+							ownership: targetNotebook.ownership,
+							platform: targetNotebook.platform,
+							properties: targetNotebook.properties,
+							resoultPath: targetNotebook.resultPath,
+							role: targetNotebook.role
 						}
 					}
 
@@ -540,105 +544,105 @@ export async function phNotebooksContainerEventHandler(e, route) {
 					}
 					await fetch(url, options)
 					window.location.reload()
-				})
+				}
 			}
 			break
 		//删除脚本
-		case "deleteScripts":
-			if (params) {
-				route.loadingService.loading.style.display = "flex"
-				route.loadingService.loading.style["z-index"] = 2
-				let selectedScriptsDel = params.selectedScripts //需要更新的dataset
-				let scriptArrayDel = params.scriptArray //发送请求的参数在这取
-				let msgArr = []
-				selectedScriptsDel.forEach(async (targetId) => {
-					let targetDataset = scriptArrayDel.filter(
-						(it) => it.id == targetId
-					)[0]
-					msgArr.push({
-						actionName: targetDataset.jobShowName,
-						jobName: targetDataset.jobName
-					})
-				})
-				const deluuid = guid()
-				let body = {
-					common: {
-						traceId: deluuid,
-						projectId: params.projectId,
-						projectName: params.projectName,
-						flowVersion: "developer",
-						owner: route.cookies.read("account_id"),
-						showName: decodeURI(
-							route.cookies.read("user_name_show")
-						),
-						tenantId: route.cookies.read("company_id")
-					},
-					action: {
-						cat: "deleteResource",
-						desc: "delete script",
-						comments: "something need to say",
-						message: JSON.stringify({
-							optionName: "delete_script",
-							cat: "intermediate",
-							runtime: "python3",
-							actionName: msgArr[0].actionName
-						}),
-						required: true
-					},
-					datasets: [],
-					scripts: msgArr,
-					notification: {
-						required: true
-					},
-					result: {}
-				}
-				const urldel = `${hostName}/phresdeletiontrigger`
-				const accessTokendel = route.cookies.read("access_token")
-				let options = {
-					method: "POST",
-					headers: {
-						Authorization: accessTokendel,
-						"Content-Type":
-							"application/x-www-form-urlencoded; charset=UTF-8",
-						accept: "application/json"
-					},
-					body: JSON.stringify(body)
-				}
-				await fetch(urldel, options).then((res) => res.json())
-				route.noticeService.defineAction({
-					type: "iot",
-					remoteResource: "notification",
-					runnerId: "",
-					id: deluuid,
-					eventName: deleteScriptsEventName,
-					projectId: params.projectId,
-					ownerId: route.cookies.read("account_id"),
-					callBack: deleteDatasetsNoticeCallback
-				})
-			}
-			break
+		// case "deleteScripts":
+		// 	if (params) {
+		// 		route.loadingService.loading.style.display = "flex"
+		// 		route.loadingService.loading.style["z-index"] = 2
+		// 		let selectedScriptsDel = params.selectedScripts //需要更新的dataset
+		// 		let scriptArrayDel = params.scriptArray //发送请求的参数在这取
+		// 		let msgArr = []
+		// 		selectedScriptsDel.forEach(async (targetId) => {
+		// 			let targetDataset = scriptArrayDel.filter(
+		// 				(it) => it.id == targetId
+		// 			)[0]
+		// 			msgArr.push({
+		// 				actionName: targetDataset.jobShowName,
+		// 				jobName: targetDataset.jobName
+		// 			})
+		// 		})
+		// 		const deluuid = guid()
+		// 		let body = {
+		// 			common: {
+		// 				traceId: deluuid,
+		// 				projectId: params.projectId,
+		// 				projectName: params.projectName,
+		// 				flowVersion: "developer",
+		// 				owner: route.cookies.read("account_id"),
+		// 				showName: decodeURI(
+		// 					route.cookies.read("user_name_show")
+		// 				),
+		// 				tenantId: route.cookies.read("company_id")
+		// 			},
+		// 			action: {
+		// 				cat: "deleteResource",
+		// 				desc: "delete script",
+		// 				comments: "something need to say",
+		// 				message: JSON.stringify({
+		// 					optionName: "delete_script",
+		// 					cat: "intermediate",
+		// 					runtime: "python3",
+		// 					actionName: msgArr[0].actionName
+		// 				}),
+		// 				required: true
+		// 			},
+		// 			datasets: [],
+		// 			scripts: msgArr,
+		// 			notification: {
+		// 				required: true
+		// 			},
+		// 			result: {}
+		// 		}
+		// 		const urldel = `${hostName}/phresdeletiontrigger`
+		// 		const accessTokendel = route.cookies.read("access_token")
+		// 		let options = {
+		// 			method: "POST",
+		// 			headers: {
+		// 				Authorization: accessTokendel,
+		// 				"Content-Type":
+		// 					"application/x-www-form-urlencoded; charset=UTF-8",
+		// 				accept: "application/json"
+		// 			},
+		// 			body: JSON.stringify(body)
+		// 		}
+		// 		await fetch(urldel, options).then((res) => res.json())
+		// 		route.noticeService.defineAction({
+		// 			type: "iot",
+		// 			remoteResource: "notification",
+		// 			runnerId: "",
+		// 			id: deluuid,
+		// 			eventName: deleteScriptsEventName,
+		// 			projectId: params.projectId,
+		// 			ownerId: route.cookies.read("account_id"),
+		// 			callBack: deleteDatasetsNoticeCallback
+		// 		})
+		// 	}
+		// 	break
 		default:
 			console.log("other click event!")
 	}
 
-	function deleteDatasetsNoticeCallback(param, payload) {
-		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
-		if (status == "succeed") {
-			alert("删除脚本成功！")
-			window.location.reload()
-		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "删除脚本失败，请重新操作！"
-			alert(msg)
-		}
-		route.loadingService.loading.style.display = "none"
-	}
+	// function deleteDatasetsNoticeCallback(param, payload) {
+	// 	const { message, status } = JSON.parse(payload)
+	// 	const {
+	// 		cnotification: { error }
+	// 	} = JSON.parse(message)
+	// 	if (status == "succeed") {
+	// 		alert("删除脚本成功！")
+	// 		window.location.reload()
+	// 	} else if (status == "failed") {
+	// 		let errorObj = error !== "" ? JSON.parse(error) : ""
+	// 		let msg =
+	// 			errorObj["message"]["zh"] !== ""
+	// 				? errorObj["message"]["zh"]
+	// 				: "删除脚本失败，请重新操作！"
+	// 		alert(msg)
+	// 	}
+	// 	route.loadingService.loading.style.display = "none"
+	// }
 
 	function createScriptNoticeCallback(param, payload) {
 		console.log(payload)

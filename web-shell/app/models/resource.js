@@ -10,4 +10,5 @@ export default class ResourceModel extends Model {
     @attr("string") resultPath
     @attr("string") role
     @attr("string") label
+    @attr("string") name
 }
