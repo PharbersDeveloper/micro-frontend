@@ -46,6 +46,8 @@ import { phDistinctContainerRouteModel } from "./routeModel/phDistinctContainerR
 import { phDistinctContainerEventHandler } from "./eventHandler/phDistinctContainerEventHandler"
 import { phSortContainerRouteModel } from "./routeModel/phSortContainerRouteModel"
 import { phSortContainerEventHandler } from "./eventHandler/phSortContainerEventHandler"
+import { phNotebooksContainerRouteModel } from "./routeModel/phNotebooksContainerRouteModel"
+import { phNotebooksContainerEventHandler } from "./eventHandler/phNotebooksContainerEventHandler"
 
 export {
 	phAnalyzeUploadDatasetEventHandler,
@@ -95,5 +97,7 @@ export {
 	phDistinctContainerRouteModel,
 	phDistinctContainerEventHandler,
 	phSortContainerRouteModel,
-	phSortContainerEventHandler
+	phSortContainerEventHandler,
+	phNotebooksContainerRouteModel,
+	phNotebooksContainerEventHandler
 }

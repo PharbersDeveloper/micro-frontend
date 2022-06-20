@@ -9,13 +9,13 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 	let argsCallback = e.detail[0].args.callback
 	switch (argsCallback) {
 		case "linkToPage":
-			if (params.name == "datasets") {
+			if (params.name === "datasets") {
 				uri =
 					"dataset-lst?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "project") {
+			} else if (params.name === "project") {
 				uri = "projects/" + params.projectId
 			} else if (params.name === "scripts") {
 				//recipe页面
@@ -37,23 +37,29 @@ export async function phAnalyzeDataListHomeEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "projects") {
+			} else if (params.name === "projects") {
 				uri = "projects"
-			} else if (params.name == "airflow") {
+			} else if (params.name === "airflow") {
 				uri =
 					"airflow?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "dashboard") {
+			} else if (params.name === "dashboard") {
 				uri =
 					"dashboards?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name == "slide") {
+			} else if (params.name === "slide") {
 				uri =
 					"slide?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId
+			} else if (params.name === "notebooks") {
+				uri =
+					"notebooks?projectName=" +
 					params.projectName +
 					"&projectId=" +
 					params.projectId
