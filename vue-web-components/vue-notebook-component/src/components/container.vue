@@ -34,8 +34,7 @@
                                    </div>
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
-                            <button class="upload_btn" @click="showCreationDialog = true">新建编译器</button>
-
+                            <button class="upload_btn" @click.stop="showCreationDialog = true">新建编译器</button>
                         </div>
 
                         <div class="tag_selected">
@@ -64,40 +63,47 @@
                                         </div>
                                     </div>
                                     <div class="management">
-                                        <div class="manage_label">管理标签</div>
+                                        <div class="manage_label" @click="createTagsOpen">管理标签</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="notebooks_number">
-                                <p>{{allData.dns.length}} 条脚本</p>
+                                <p>{{allData.dns.length}} 条</p>
                             </div>
                         </div>
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(notebook,index) in searchData" :key="index" ref="content" :class="{bg: notebookscheckedIds.indexOf(notebook.id) > -1}" @click="clickOnlyOne(notebook, index)">
-                            <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.id) > -1" @click.stop="checkedOnenotebooks(notebook)">
-                            <div class="item_list">
+                            <div class="content-left">
+                                <div style="display: flex; flex-direction: column; justify-content: space-around">
+                                    <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.id) > -1" @click.stop="checkedOnenotebooks(notebook)">
+                                </div>
+                                <div class="item_list">
                                 <span class="script_icon">
-                                    <img :src="selectScriptIcon(notebook.runtime)" alt="">
+                                    <img :src="defs.iconsByName(notebook.ctype)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.jobShowName">{{notebook.jobShowName}}</p>
-                                <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in notebook.label" :key="inx">
+                                    <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.name">{{notebook.name}}</p>
+                                    <div class="tag_area" ref="tagsArea">
+                                        <div v-for="(tag, inx) in notebook.label" :key="inx">
                                         <span v-if="notebook.label !== ''">
                                             <p
-                                                :title="tag"
-                                                class="tag_bg"
-                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                                    :title="tag"
+                                                    class="tag_bg"
+                                                    :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
                                             </p>
                                         </span>
+                                        </div>
+                                        <!-- tag的更多按钮，暂时隐藏 -->
+                                        <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                     </div>
-                                    <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
+                            <el-switch
+                                    v-model="alfredtest"
+                                    active-color="#13ce66" />
                         </div>
-                        <div class="word" v-if="allData.dns === ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -113,11 +119,15 @@
                             </div>
                            <div class="show-name">
                                <p class="project_name_info" v-if="notebookscheckedIds.length > 1">
-                                    {{notebookscheckedIds.length}} 条脚本
+                                    {{notebookscheckedIds.length}} 条
                                 </p>
                            </div>
                         </div>
                         <div class="view_func">
+                            <span @click="createTagsOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="label_icon" alt="">
+                                <span class='tags_func'>标签</span>
+                            </span>
                             <span  @click='deletedialogopen' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
@@ -127,91 +137,62 @@
                     <p v-if="notebookscheckedIds.length === 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
-            <!-- 删除 NoteBook -->
-            <clear-delete
-                v-if="deletedialogshow"
-                :notebookscheckedIds="notebookscheckedIds"
-                :notebookscheckedNames="notebookscheckedNames"
-                @deleteScriptsEvent="deleteScript"
-                @closeDeleteDialog="closeDeleteDialog">
-            </clear-delete>
-
             <!-- 添加tag -->
             <create-tags-dialog
                 v-if="showCreateTagsDialog"
-                :notebookscheckedIds="notebookscheckedIds"
-                :notebookscheckedNames="notebookscheckedNames"
-                :notebookss="allData.dns"
+                :datasetchecked-ids="notebookscheckedIds"
+                :datasetchecked-names="notebookscheckedNames"
+                :datasets="allData.dns"
                 :tagsArray="allData.tagsArray"
                 :tagsColorArray="tagsColorArray"
                 @addTagsEvent="addTagsEvent"
                 @closeCreateDialog="closeCreateDialog">
             </create-tags-dialog>
-            <!-- 管理标签 -->
-            <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
             <!-- 新建NoteBook -->
             <create-notebook-dialog
                     :dialog-visible="showCreationDialog"
                     @cancel="showCreationDialog = false"
-                    @confirm="showCreationDialog = false">
+                    @confirm="createNotebook">
             </create-notebook-dialog>
         </div>
     </div>
 </template>
 
 <script>
-import clearDelete from './delete-dialog-script.vue'
 import createTagsDialog from './create-tags-dialog.vue'
-import deleteTagsDialog from './delete-tags-dialog.vue'
 import createNotebookDialog from './create-notebook-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 // import ElButton from 'element-ui/packages/option/index'
+// import { MessageBox, Message } from 'element-ui'
+import { MessageBox } from 'element-ui'
 import { staticFilePath } from '../config/envConfig'
-import PhDagDefinitions from "./policy/definitions/definitions";
+import PhDagDefinitions from "./policy/definitions/definitions"
+import ElSwitch from "element-ui/packages/switch/index"
 
 export default {
     data() {
         return {
-            hide_icon: `${staticFilePath}` + "/%E9%9A%90%E8%97%8F.svg",
-            copy_icon: `${staticFilePath}` + "/copy.svg",
-            star_icon: `${staticFilePath}` + "/%E6%94%B6%E8%97%8F.svg",
-            run_icon: `${staticFilePath}` + "/%E5%BC%80%E5%A7%8B1.svg",
-            edit_icon: `${staticFilePath}` + "/edit.svg",
             label_icon: `${staticFilePath}` + "/tag.svg",
             search_icon: `${staticFilePath}` + "/search.png",
             dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
             delete_icon: `${staticFilePath}` + "/delete.png",
-            clear_data_icon: `${staticFilePath}` + "/clear_data.png",
             selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
-            // delete_icon: `${staticFilePath}` + "/delete_r.svg",
-            // clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
             ascending_order: `${staticFilePath}` + "/down.svg",
             descending_order: `${staticFilePath}` + "/top.svg",
             script_icon: `${staticFilePath}` + "/script_select.svg",
-            prepare_icon: `${staticFilePath}` + "/script_select.svg",
-            // prepare_icon: `${staticFilePath}` + "/prepare_icon.svg",
-            pyspark_icon: `${staticFilePath}` + "/pyspark_icon.svg",
-            python_icon: `${staticFilePath}` + "/python_icon.svg",
-            R_icon: `${staticFilePath}` + "/R_icon.svg",
-            sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
             script_icon_show: "",
             // showDialog: false,
             state: '',
-            editShow: false,
             dropDialogShow: false,
             labelShowDialog: false,
-            cleardialogshow: false,
-            deletedialogshow: false,
             showSelectOptionParam: false,
             closeTosts: false,
             showCreateTagsDialog: false, //添加tag弹框
             showCreationDialog: false,
-            deleteTagsDia: false,
             searchValue: '',
             ascending: false,
             tags: ['name','description','啦啦啦'],
-            ary: [],
             checked: false,
             manual: true,
             scriptValue: "名称",
@@ -220,9 +201,7 @@ export default {
             notebookscheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            value: '',
-            dialogVisible: false,
-            runtime: ""
+            alfredtest: false
         }
     },
     props: {
@@ -244,12 +223,12 @@ export default {
         }
     },
     components: {
-        clearDelete,
         createTagsDialog,
-        deleteTagsDialog,
+        // deleteTagsDialog,
         createNotebookDialog,
         bpSelectVue,
         bpOptionVue,
+        ElSwitch
         // ElButton
     },
     computed: {
@@ -258,7 +237,7 @@ export default {
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dns.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                return this.allData.dns.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
             return this.allData.dns
@@ -287,46 +266,31 @@ export default {
                 done();
             }).catch(() => {});
         },
-        //打开script弹框
-        selectScripts(data) {
-            // this.showDialog = false
-            this.runtime = data
-            this.showCreationDialog = true
-        },
-        //增加tag
         addTagsEvent(data) {
-            data.args.param.selectednotebookss = this.notebookscheckedIds
+            data.args.param.selectednotebooks = this.notebookscheckedIds
             data.args.param.notebooksArray = this.allData.dns
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
-        //清除脚本中数据
-        clearTags(data) {
-            data.args.param.selectednotebookss = this.notebookscheckedIds
-            data.args.param.notebooksArray = this.allData.dns
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
-            this.$emit('event', data)
-            this.cleardialogshow = false;
-        },
         //删除脚本
         deleteScript(data) {
-            data.args.param.selectedScripts = this.notebookscheckedIds
-            data.args.param.scriptArray = this.allData.dns
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
-            this.$emit('event', data)
-            this.deletedialogshow = false;
+            console.log(data)
+        //     data.args.param.selectedScripts = this.notebookscheckedIds
+        //     data.args.param.scriptArray = this.allData.dns
+        //     data.args.param.projectName = this.allData.projectName,
+        //     data.args.param.projectId = this.allData.projectId
+        //     this.$emit('event', data)
+        //     this.deletedialogshow = false;
         },
         //点击list主体
         clickOnlyOne(notebook) {
-            this.script_icon_show = this.selectScriptIcon(notebook.runtime)
+            this.script_icon_show = this.defs.iconsByName(notebook.ctype)
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
             this.notebookscheckedIds.push(notebook.id)
-            this.notebookscheckedNames.push(notebook.jobShowName)
+            this.notebookscheckedNames.push(notebook.name)
         },
         //点击list多选框
         checkedOnenotebooks(notebook) {
@@ -360,10 +324,7 @@ export default {
         },
         //全选list
         chechedAllnotebooks() {
-            this.isCheckedAllnotebooks = true
-            if(this.notebookscheckedIds.length === this.allData.dns.length) {
-                this.isCheckedAllnotebooks = false
-            }
+            this.isCheckedAllnotebooks = this.notebookscheckedIds.length !== this.allData.dns.length;
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
             //全选状态
@@ -393,7 +354,6 @@ export default {
                         if(param1.jobName) {
                             return param1.jobName.localeCompare(param2.name);
                         }
-                        return
                     }
                 )
             }else if (val === 'descending') {
@@ -406,10 +366,6 @@ export default {
         selectScript() {
             this.scriptValue = "名称"
         },
-        //关闭tag删除弹框
-        closeDeleteTags() {
-            this.deleteTagsDia = false;
-        },
         //打开tag添加弹框
         createTagsOpen() {
             this.showCreateTagsDialog = true;
@@ -419,14 +375,12 @@ export default {
             this.showCreateTagsDialog = false;
         },
         //关闭scripts弹框
-        closeScriptDialog() {
-            this.showCreationDialog = false
-        },
-        //增加scripts
-        createScripts(data) {
-            data.args.param.projectName = this.allData.projectName
+        // closeScriptDialog() {
+        //     this.showCreationDialog = false
+        // },
+        //增加 notebook
+        createNotebook (data) {
             data.args.param.projectId = this.allData.projectId
-            data.args.param.runtime = this.runtime
             this.$emit('event', data)
             this.showCreationDialog = false
         },
@@ -436,7 +390,24 @@ export default {
         },
         //打开删除脚本弹框
         deletedialogopen() {
-            this.deletedialogshow = true;
+            // this.deletedialogshow = true;
+            MessageBox.confirm('释放删除资源将丢失所有数据！ 是否继续?', '警告', {
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            }).then(() => {
+                // 调用启动前，强制更新一下状态，以免竞争机制
+                // this.datasource.refreshStatus(this.tenantId)
+                // if (this.datasource.switch) {
+                //     // MessageBox.alert("现在不支持自动删除，请联系管理员")
+                // 	this.datasource.resourceStop(this.tenantId)
+                // } else {
+                //     // 通过新的 trace ID 持续访问状态
+                //     Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
+                // }
+                // this.datasource.resourceStop(this.tenantId, row)
+            }).catch(() => {
+            })
         },
         //关闭清除脚本弹框
         closeClearDialog() {
@@ -471,9 +442,6 @@ export default {
             }
             this.$emit('event', event)
         },
-        // toggle() {
-        //     this.showDialog = !this.showDialog
-        // },
     }
 }
 </script>
@@ -896,6 +864,7 @@ export default {
 
                 .data_content {
                     display: flex;
+                    justify-content: space-between;
                     width: 100%;
                     box-sizing: border-box;
                     // height: 60px;
@@ -1012,7 +981,7 @@ export default {
                     margin-top: 20px;
                     display: flex;
                     flex-wrap: wrap;
-                    justify-content: space-between;
+                    /*justify-content: space-;*/
                     // padding: 0 30px;
                     .view_list {
                         display: flex;
@@ -1107,19 +1076,6 @@ export default {
                             color: #000000;
                             font-weight: 600;
                         }
-
-                        .edit_icon {
-                            position: absolute;
-                            right: 140px;
-                            top: 12px;
-                            width: 20px;
-                            height: 20px;
-
-                            img {
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
                     }
                 }
 
@@ -1167,6 +1123,11 @@ export default {
                 }
             }
         }
+    }
+
+    .content-left {
+        display: flex;
+        flex-direction: row;
     }
 }
 .tags_imgs_tag {
