@@ -4,10 +4,20 @@
                 title="Tips"
                 :visible.sync="dialogVisible"
                 width="30%" >
-            <span>This is a message</span>
+            <el-form label-width="120px">
+                <el-form-item label="编译器名称">
+                    <el-input v-model="name"></el-input>
+                </el-form-item>
+                <el-form-item label="集群名称">
+                    <el-input value="本集群" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="集群环境">
+                    <el-input value="默认环境" disabled></el-input>
+                </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="$emit('cancel')">Cancel</el-button>
-                <el-button type="primary" @click="$emit('confirm')">Confirm</el-button>
+                <el-button type="primary" @click="confirmCreation">Confirm</el-button>
             </span>
         </el-dialog>
     </div>
@@ -17,24 +27,24 @@
 import ElButton from "element-ui/packages/button/index"
 // import ElInput from "element-ui/packages/input/index"
 import ElDialog from "element-ui/packages/dialog/index"
-import PhDagDefinitions from "./policy/definitions/definitions";
+import ElForm from "element-ui/packages/form/index"
+import ElFormItem from "element-ui/packages/form-item/index"
+import PhDagDefinitions from "./policy/definitions/definitions"
 
 export default {
     data() {
         return {
-
+            name: "test"
         }
     },
     components: {
         ElButton,
-        // ElInput,
-        // bpSelectVue,
-        // bpOptionVue,
-        ElDialog
+        ElDialog,
+        ElForm,
+        ElFormItem
     },
     props: {
-        // datasets: Array,
-        // runtime: String,
+        initialName: String,
         dialogVisible: Boolean,
         defs: {
             type: Object,
@@ -47,10 +57,19 @@ export default {
 
     },
     mounted() {
-
+        this.name = this.initialName
     },
     methods: {
-
+        confirmCreation() {
+            const event = new Event("event")
+            event.args = {
+                callback: "createNotebook",
+                param: {
+                    name: this.name
+                }
+            }
+            this.$emit("confirm", event)
+        }
     }
 }
 </script>
