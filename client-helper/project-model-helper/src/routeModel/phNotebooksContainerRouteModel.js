@@ -53,7 +53,6 @@ export async function phNotebooksContainerRouteModel(route, parseParams) {
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
-		uploadType: parseParams.query.uploadType,
 		dns: notebooks,
 		tagsArray: tagsArray,
 		_isVue: true
