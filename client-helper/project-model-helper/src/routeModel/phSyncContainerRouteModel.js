@@ -22,7 +22,16 @@ export async function phSyncContainerRouteModel(route, parseParams) {
 		: scriptsParams.jobName
 
 	const jobId = scriptsParams.jobId
-
+	console.log({
+		projectName: parseParams.query.projectName,
+		projectId: parseParams.query.projectId,
+		outputs: outputs,
+		inputs: inputs,
+		jobName: jobName,
+		jobId: jobId,
+		_isVue: true,
+		popupBack: true
+	})
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,

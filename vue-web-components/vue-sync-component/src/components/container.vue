@@ -98,8 +98,8 @@ export default {
     },
     data() {
         return {
-            inputDsName: this.getUrlParam("inputName"),
-            outputDsName: this.getUrlParam("outputName"),
+            inputDsName: "",
+            outputDsName: "",
             selectInput: false,
             selectOutput: false,
             searchInputName: "",
@@ -215,7 +215,7 @@ export default {
 				new: {
 					"name": `compute_${outputNameNew}`,
 					"runtime": "topn",
-					"inputs": JSON.stringify([this.outputDsName]),
+					"inputs": JSON.stringify([inputNameNew]),
 					"output": outputNameNew
 				}
 			}
@@ -255,8 +255,11 @@ export default {
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
 		this.datasource.refreshDataset(this.projectId)
     },
-
     watch: {
+		"allData": function(n) {
+			this.inputDsName = n["inputs"][0]
+			this.outputDsName = n["outputs"][0]
+		}
     }
 }
 </script>
