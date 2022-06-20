@@ -205,16 +205,7 @@ export default {
         }
     },
     props: {
-        allData: {
-            type: Object,
-            default: () => ({
-                "projectName": "ETL_Iterator",
-                "projectId": "JfSmQBYUpyb4jsei",
-                "dns": [],
-                "tagsArray": [],
-                "_isVue": true
-            })
-        },
+        allData: Object,
         defs: {
             type: Object,
             default: function () {
