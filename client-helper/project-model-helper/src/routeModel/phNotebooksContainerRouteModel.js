@@ -49,6 +49,7 @@ export async function phNotebooksContainerRouteModel(route, parseParams) {
 	})
 	let tagsArray = Array.from(tags)
 	console.log(notebooks)
+	console.log(tagsArray)
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
