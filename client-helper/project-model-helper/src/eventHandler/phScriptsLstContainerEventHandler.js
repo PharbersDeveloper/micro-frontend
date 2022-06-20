@@ -123,8 +123,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					recipt.jobShowName +
 					"&inputName=" +
 					inputName +
-					"&datasetId=" +
-					params.inputDS[0]["id"]
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "distinct"

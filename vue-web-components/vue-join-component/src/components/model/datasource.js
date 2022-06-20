@@ -4,8 +4,9 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 
 
 export default class PhDataSource {
-    constructor(id) {
+    constructor(id, parent) {
         this.id = id
+		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
         this.debugToken = "01fd7265fb086fe622224fada621ce778b454ee862926426638502dcb9d4061b"
@@ -72,7 +73,6 @@ export default class PhDataSource {
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", this.projectId + "_" + this.jobName]
                 "pjName": ["=", projectId + "_" + jobName]
             },
             "limit": 1,
@@ -130,8 +130,8 @@ export default class PhDataSource {
                     }})
 
                     that.step = {
-                        pjName: [projectId, jobName].join("_"),
-                        stepId: "1",
+                        "pj-name": [projectId, jobName].join("_"),
+                        "step-id": "1",
                         ctype: "Join",
                         expressions: JSON.stringify({
                             "params": {
@@ -147,13 +147,13 @@ export default class PhDataSource {
                                 }
                             }
                         }),
-                        expressionsValue: "JSON",
-                        groupIndex: "0",
-                        groupName: "",
+                        "expressions-value": "JSON",
+                        "group-index": "0",
+                        "group-name": "",
                         id: [projectId, jobName, "1"].join("_"),
                         index: "1",
                         runtime : "join",
-                        stepName: "join"
+                        "step-name": "join"
                     }
                 } else {
                     that.step = data[0]
@@ -215,42 +215,67 @@ export default class PhDataSource {
 
     buildSaveQuery(projectId, jobName, param) {
         // @wodelu 这里改成code gen 逻辑
-        const url = `${hostName}/phdydatasource/put_item`
-        const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        let body = {
-            table: "step",
-            item: {
-                pjName: this.step["pj-name"],
-                stepId: this.step["step-id"],
-                ctype: this.step["ctype"],
-                expressions: JSON.stringify({ "parmas": param }),
-                expressionsValue: this.step["expressions-value"],
-                groupIndex: this.step["group-index"],
-                groupName: this.step["group-name"],
-                id: this.step["id"],
-                index: this.step["index"],
-                runtime : this.step["runtime"],
-                stepName: this.step["step-name"]
-            }
-        }
+        // const url = `${hostName}/phdydatasource/put_item`
+        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        // let body = {
+        //     table: "step",
+        //     item: {
+        //         pjName: this.step["pj-name"],
+        //         stepId: this.step["step-id"],
+        //         ctype: this.step["ctype"],
+        //         expressions: JSON.stringify({ "params": param }),
+        //         expressionsValue: this.step["expressions-value"],
+        //         groupIndex: this.step["group-index"],
+        //         groupName: this.step["group-name"],
+        //         id: this.step["id"],
+        //         index: this.step["index"],
+        //         runtime : this.step["runtime"],
+        //         stepName: this.step["step-name"]
+        //     }
+        // }
 
-        let options = {
-            method: "POST",
-            headers: {
-                "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                "accept": "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        return fetch(url, options)
+        // let options = {
+        //     method: "POST",
+        //     headers: {
+        //         "Authorization": accessToken,
+        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        //         "accept": "application/json"
+        //     },
+        //     body: JSON.stringify(body)
+        // }
+        // return fetch(url, options)
+		const steps = [{
+			pjName: this.step["pj-name"],
+			stepId: this.step["step-id"],
+			ctype: this.step["ctype"],
+			expressions: {
+				"type": "join",
+				"code": "pyspark",
+				"params": param
+			},
+			expressionsValue: this.step["expressions-value"],
+			groupIndex: this.step["group-index"],
+			groupName: this.step["group-name"],
+			id: this.step["id"],
+			index: this.step["index"],
+			runtime : this.step["runtime"],
+			stepName: this.step["step-name"]
+		}]
+		const event = new Event("event")
+		event.args = {
+			callback: "saveJoin",
+			element: this,
+			param: {
+				name: "saveJoin",
+				projectId: this.parent.projectId,
+				projectName: this.parent.projectName,
+				stepsArr: steps
+			}
+		}
+		this.parent.$emit('event', event)
     }
 
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-            })
     }
 }

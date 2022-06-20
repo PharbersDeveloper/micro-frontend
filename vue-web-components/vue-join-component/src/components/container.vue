@@ -93,6 +93,7 @@ export default {
         return {
             computedSchema: [],
             active: 1,
+			flowVersion: "developer",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -129,7 +130,8 @@ export default {
                     index: 7,
                     status: "wait"  // wait / process / finish / error / success
                 }
-            ]
+            ],
+			jobShowName: ""
         }
     },
     props: {
@@ -153,7 +155,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -166,6 +168,7 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(status) {
@@ -263,27 +266,19 @@ export default {
                 "postFilter": this.$refs.postfilter.datasource.revert2Defs()
             }
 
-            console.log(params)
-            // this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+            // console.log(params)
+            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
         },
     },
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
-        this.jobName = "join"
-        // this.inputDsName = this.getUrlParam("inputName")
-        // this.datasetId = this.getUrlParam("datasetId")
+        // this.projectIdTest = "alfredtest"
+        this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
-        // console.log(this.datasource.job)
-        // console.log(this.datasource.datasets)
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
-    },
-    updated() {
-
     },
     watch: {
         active(n) {
@@ -325,6 +320,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+			border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -361,12 +357,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
 
             .join_left {
                 display: flex;
                 flex-direction: row;
-                margin-left: 80px;
+				padding: 40px;
                 justify-content: space-around;
+				border-right: 1px solid #ccc;
             }
 
             .join_right {
@@ -374,7 +372,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-
+				background: #f2f2f2;
+				padding: 20px;
             }
         }
     }

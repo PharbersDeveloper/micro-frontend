@@ -60,7 +60,7 @@ export default class ApplicationRoute extends Route {
 		} else if(urlName.indexOf("/distinct") > -1) {
 			routeValue = "recipes"
 		} else if(urlName.indexOf("/join") > -1) {
-			routeValue = "join"
+			routeValue = "recipes"
 		}
 		return routeValue
 	}
