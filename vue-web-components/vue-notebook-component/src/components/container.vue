@@ -35,7 +35,6 @@
                                    <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click="showCreationDialog = true">新建编译器</button>
-
                         </div>
 
                         <div class="tag_selected">
@@ -70,7 +69,7 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="notebooks_number">
-                                <p>{{allData.dns.length}} 条脚本</p>
+                                <p>{{allData.dns.length}} 条</p>
                             </div>
                         </div>
                     </div>
@@ -79,11 +78,11 @@
                             <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.id) > -1" @click.stop="checkedOnenotebooks(notebook)">
                             <div class="item_list">
                                 <span class="script_icon">
-                                    <img :src="selectScriptIcon(notebook.runtime)" alt="">
+                                    <img :src="defs.iconsByName(notebook.ctype)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.jobShowName">{{notebook.jobShowName}}</p>
+                                <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.name">{{notebook.name}}</p>
                                 <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in notebook.label" :key="inx">
+                                    <div v-for="(tag, inx) in notebook.label" :key="inx">
                                         <span v-if="notebook.label !== ''">
                                             <p
                                                 :title="tag"
@@ -97,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dns === ''">当前项目无数据</div>
+                        <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -113,11 +112,15 @@
                             </div>
                            <div class="show-name">
                                <p class="project_name_info" v-if="notebookscheckedIds.length > 1">
-                                    {{notebookscheckedIds.length}} 条脚本
+                                    {{notebookscheckedIds.length}} 条
                                 </p>
                            </div>
                         </div>
                         <div class="view_func">
+                            <span @click="createTagsOpen" class="view_list">
+                                <img class='tags_imgs_tag' :src="label_icon" alt="">
+                                <span class='tags_func'>标签</span>
+                            </span>
                             <span  @click='deletedialogopen' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
@@ -139,9 +142,9 @@
             <!-- 添加tag -->
             <create-tags-dialog
                 v-if="showCreateTagsDialog"
-                :notebookscheckedIds="notebookscheckedIds"
-                :notebookscheckedNames="notebookscheckedNames"
-                :notebookss="allData.dns"
+                :datasetchecked-ids="notebookscheckedIds"
+                :datasetchecked-names="notebookscheckedNames"
+                :datasets="allData.dns"
                 :tagsArray="allData.tagsArray"
                 :tagsColorArray="tagsColorArray"
                 @addTagsEvent="addTagsEvent"
@@ -258,7 +261,7 @@ export default {
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dns.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                return this.allData.dns.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
             return this.allData.dns
@@ -295,7 +298,7 @@ export default {
         },
         //增加tag
         addTagsEvent(data) {
-            data.args.param.selectednotebookss = this.notebookscheckedIds
+            data.args.param.selectednotebooks = this.notebookscheckedIds
             data.args.param.notebooksArray = this.allData.dns
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
@@ -306,7 +309,7 @@ export default {
         clearTags(data) {
             data.args.param.selectednotebookss = this.notebookscheckedIds
             data.args.param.notebooksArray = this.allData.dns
-            data.args.param.projectName = this.allData.projectName,
+            data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
@@ -322,11 +325,11 @@ export default {
         },
         //点击list主体
         clickOnlyOne(notebook) {
-            this.script_icon_show = this.selectScriptIcon(notebook.runtime)
+            this.script_icon_show = this.defs.iconsByName(notebook.ctype)
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
             this.notebookscheckedIds.push(notebook.id)
-            this.notebookscheckedNames.push(notebook.jobShowName)
+            this.notebookscheckedNames.push(notebook.name)
         },
         //点击list多选框
         checkedOnenotebooks(notebook) {
@@ -1012,7 +1015,7 @@ export default {
                     margin-top: 20px;
                     display: flex;
                     flex-wrap: wrap;
-                    justify-content: space-between;
+                    /*justify-content: space-;*/
                     // padding: 0 30px;
                     .view_list {
                         display: flex;
