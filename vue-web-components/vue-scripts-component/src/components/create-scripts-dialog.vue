@@ -169,7 +169,12 @@ export default {
                 "sparkr": "SparkR",
                 "prepare": "Prepare",
                 "distinct": "Distinct",
-                "sort": "Sort"
+                "sort": "Sort",
+				"topn": "topn",
+				"sync": "sync",
+				"join": "join",
+				"stack": "stack",
+				"group": "group"
             }
         }
     },

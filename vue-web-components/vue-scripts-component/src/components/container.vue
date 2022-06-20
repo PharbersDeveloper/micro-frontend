@@ -36,42 +36,13 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                                <div class="list" @click="selectScripts('python3')">
-                                    <img :src="defs.iconsByName('python')" alt="">
-                                    <p class="">Python</p>
-									<!-- class=dis 灰掉某一项 -->
-                                </div>
-                                <div class="list" @click="selectScripts('pyspark')">
-                                    <img :src="defs.iconsByName('pyspark')" alt="">
-                                    <p>PySpark</p>
-                                </div>
-                                <div class="list" @click="selectScripts('r')">
-                                    <img :src="defs.iconsByName('r')" alt="">
-                                    <p  class="">R</p>
-                                </div>
-                                <div class="list" @click="selectScripts('sparkr')">
-                                    <img :src="defs.iconsByName('sparkr')" alt="">
-                                    <p  class="">SparkR</p>
-                                </div>
-                                <div class="list" @click="selectScripts('prepare')">
-                                    <img :src="defs.iconsByName('prepare')" alt="">
-                                    <p  class="">Prepare</p>
-                                </div>
-                                <div class="list" @click="selectScripts('sync')">
-                                    <img :src="defs.iconsByName('sync')" alt="">
-                                    <p  class="">Sync</p>
-                                </div>
-                                <div class="list" @click="selectScripts('topn')">
-                                    <img :src="defs.iconsByName('topn')" alt="">
-                                    <p  class="">TopN</p>
-                                </div>
-								<div class="list" @click="selectScripts('distinct')">
-                                    <img :src="defs.iconsByName('distinct')" alt="">
-                                    <p  class="">Distinct</p>
-                                </div>
-								<div class="list last" @click="selectScripts('sort')">
-                                    <img :src="defs.iconsByName('sort')" alt="">
-                                    <p  class="">Sort</p>
+                                <div 
+									class="list"
+									v-for="script in scriptList"
+									:key="script.name+'script'"
+									@click="selectScripts(script.scriptName)">
+                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <p class="">{{script.name}}</p>
                                 </div>
                             </div>
                         </div>
@@ -130,8 +101,6 @@
                                             </p>
                                         </span>
                                     </div>
-                                    <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                 </div>
                             </div>
                         </div>
@@ -244,15 +213,11 @@ export default {
             label_icon: `${staticFilePath}` + "/tag.svg",
             search_icon: `${staticFilePath}` + "/search.png",
             dropDownIcon: `${staticFilePath}` + "/drop_down_icon.svg",
-            delete_icon: `${staticFilePath}` + "/delete.png",
-            clear_data_icon: `${staticFilePath}` + "/clear_data.png",
             selectIcon: `${staticFilePath}` + "/drop_down_icon.svg",
             delete_icon: `${staticFilePath}` + "/delete_r.svg",
-            clear_data_icon: `${staticFilePath}` + "/delete_b.svg",
             ascending_order: `${staticFilePath}` + "/down.svg",
             descending_order: `${staticFilePath}` + "/top.svg",
             script_icon: `${staticFilePath}` + "/script_select.svg",
-            prepare_icon: `${staticFilePath}` + "/script_select.svg",
             prepare_icon: `${staticFilePath}` + "/prepare_icon.svg",
             pyspark_icon: `${staticFilePath}` + "/pyspark_icon.svg",
             python_icon: `${staticFilePath}` + "/python_icon.svg",
@@ -304,6 +269,60 @@ export default {
             type: Object,
             default: function () {
                 return new PhDagDefinitions("1");
+            }
+        },
+        scriptList: {
+            type: Array,
+            default: function() {
+                return [{
+                    scriptName: "python3",
+                    iconName: "python",
+                    name: "Python"
+                }, {
+                    scriptName: "pyspark",
+                    iconName: "pyspark",
+                    name: "Pyspark"
+                }, {
+                    scriptName: "r",
+                    iconName: "r",
+                    name: "R"
+                }, {
+                    scriptName: "sparkr",
+                    iconName: "sparkr",
+                    name: "SparkR"
+                }, {
+                    scriptName: "prepare",
+                    iconName: "prepare",
+                    name: "Prepare"
+                }, {
+                    scriptName: "sync",
+                    iconName: "sync",
+                    name: "Sync"
+                }, {
+                    scriptName: "topn",
+                    iconName: "topn",
+                    name: "Topn"
+                }, {
+                    scriptName: "distinct",
+                    iconName: "distinct",
+                    name: "Distinct"
+                }, {
+                    scriptName: "sort",
+                    iconName: "sort",
+                    name: "Sort"
+                }, {
+                    scriptName: "join",
+                    iconName: "join",
+                    name: "Join"
+                }, {
+                    scriptName: "stack",
+                    iconName: "stack",
+                    name: "Stack"
+                }, {
+                    scriptName: "group",
+                    iconName: "group",
+                    name: "Group"
+                }]
             }
         }
     },
@@ -586,6 +605,8 @@ export default {
                 return this.defs.iconsByName("sort")
             case "distinct":
                 return this.defs.iconsByName("distinct")
+            case "join":
+                return this.defs.iconsByName("join")
             default:
                 return this.script_icon
             }
@@ -643,9 +664,6 @@ export default {
             width: 20px;
             height: 20px;
         }
-		.dis {
-			color: #ccc;
-		}
     }
     .last {
         border-bottom: none;

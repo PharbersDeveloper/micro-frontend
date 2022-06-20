@@ -82,6 +82,51 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.inputDS[0]["id"]
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "join"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "join_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "join",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"join?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "distinct"
 			) {
 				let recipt = params.recipt
@@ -434,6 +479,27 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.outputs[0].name
 
 					script.version = []
+				} else if (params.runtime === "join") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "join",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"join?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
 				}
 
 				let message = {
@@ -641,11 +707,10 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			}
 		} = JSON.parse(message)
 		if (
-			runtime === "prepare" ||
-			runtime === "topn" ||
-			runtime === "distinct" ||
-			runtime === "sort" ||
-			runtime === "sync"
+			runtime !== "python3" ||
+			runtime !== "pyspark" ||
+			runtime !== "r" ||
+			runtime !== "sparkr"
 		) {
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
