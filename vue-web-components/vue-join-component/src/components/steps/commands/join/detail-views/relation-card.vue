@@ -11,7 +11,7 @@
                 <div class="relation-condition-item" v-for="(item, index) in joinDetail.on" :key="index">
                     <span class="relation-condition-left">{{item.conditions[0].column}}</span>
                     <div class="relation-condition-type">
-                        <span >{{item.type}}</span>
+                        <div class="relation-condition-type-name">{{item.type}}</div>
                     </div>
                     <span class="realtion-condition-right">{{item.conditions[1].column}}</span>
                 </div>
@@ -119,7 +119,7 @@ export default {
         computedWidth() {
             if (this.joinDetail) {
                 const rightIdx = Math.max(...this.joinDetail.datasets.map(x => x.index))
-                return (500 + 3) * (rightIdx + 1) - 20
+                return (500 + 3) * (rightIdx + 1) - 80
             } else return 0
         },
         computedHeight() {
@@ -152,14 +152,19 @@ export default {
 
         .relation-card-item {
             position: absolute;
-
             display: flex;
             flex-direction: column;
+			padding: 20px;
 
             .relation-card-types {
                 display: flex;
                 flex-direction: row;
-
+				select {
+					width: 100px;
+					height: 30px;
+					border: 1px solid #666;
+					color: #666;
+				}
             }
 
             .relation-card-btn {
@@ -172,15 +177,22 @@ export default {
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
+				padding: 30px 60px;
+				font-size: 13px;
+				line-height: 20px;
+				color: #333333;
 
                 .relation-condition-item {
                     display: flex;
                     flex-direction: row;
                     justify-content: space-around;
+					padding: 5px;
 
                     .relation-condition-left {
-                        flex-grow: 1;
-
+                        // flex-grow: 1;
+						min-width: 100px;
+						width: 100px;
+						overflow: hidden;
                     }
 
                     .relation-condition-type {
@@ -188,10 +200,21 @@ export default {
                         flex-direction: row;
                         justify-content: space-around;
                         min-width: 100px;
+
+						.relation-condition-type-name {
+							width: 24px;
+							height: 24px;
+							border: 1px solid #ccc;
+							border-radius: 50%;
+							display: flex;
+							justify-content: center;
+						}
                     }
 
                     .realtion-condition-right {
-
+						min-width: 100px;
+						width: 100px;
+						overflow: hidden;
                     }
                 }
             }

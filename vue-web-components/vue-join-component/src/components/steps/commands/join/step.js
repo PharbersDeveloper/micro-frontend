@@ -36,7 +36,7 @@ export default class PhJoinStep {
     }
 
     hitWidth() {
-        return (500 + 3) * this.datasets.length
+        return (500 + 3) * this.datasets.length - 60
     }
 
     computeTop(idx) {
