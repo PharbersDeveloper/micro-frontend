@@ -300,20 +300,30 @@ export default {
 			}
         },
 		changScriptInputOutput(data) {
-			let inputNameOld = this.allData.inputs[0]
-			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
-			let inputNameNew = data.args.param.inputsArray[0]
-			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
-			let dssInputs = {
-				old: [{
+			let dssInputsOld = []
+			let dssInputsNew = []
+			let dssInputs = {}
+
+			this.allData.inputs.forEach(item => {
+				let inputNameOld = item
+				let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+				dssInputsOld.push({
 					name: inputNameOld,
 					cat: inputCatOld
-				}],
-				new: [{
+				})
+			})
+			dssInputs.old = dssInputsOld
+
+			data.args.param.inputsArray.forEach(item => {
+				let inputNameNew = item
+				let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+				dssInputsNew.push({
 					name: inputNameNew,
 					cat: inputCatNew
-				}]
-			}
+				})
+			})
+			dssInputs.new = dssInputsNew
+
 			let outputNameOld = this.allData.outputs[0]
 			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
 			let outputNameNew = data.args.param.outputsArray[0]
@@ -343,7 +353,7 @@ export default {
 				}
 			}
 
-			if (inputNameNew === outputNameNew) {
+			if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
 				Message.error("input和output不能相同", { duration: 3000} )
 				return false
 			}

@@ -135,7 +135,7 @@ export default {
             const top = this.computedTop()
             const width = this.computedWidth()
             const height = this.computedHeight()
-            return "left: " + left + "px; top: " + top + "px; width: " + width + "px; height: " + height + "px; background-color: green"
+            return "left: " + left + "px; top: " + top + "px; width: " + width + "px; height: " + height + "px; background-color: #fff"
         }
     }
 }

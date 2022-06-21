@@ -11,10 +11,14 @@ export async function phJoinContainerEventHandler(e, route) {
 	let outputs = []
 	if (joinData) {
 		scriptsParams = joinData.jsondata
-		let inputsData = scriptsParams.inputs[0].name
-			? scriptsParams.inputs[0].name
-			: scriptsParams.inputs[0]
-		inputs.push(inputsData)
+
+		inputs = scriptsParams.inputs[0].name
+			? scriptsParams.inputs
+					.map((it) => it.name)
+					.join(",")
+					.split(",")
+			: scriptsParams.inputs
+
 		let outputsData = scriptsParams.outputs[0].name
 			? scriptsParams.outputs[0].name
 			: scriptsParams.outputs

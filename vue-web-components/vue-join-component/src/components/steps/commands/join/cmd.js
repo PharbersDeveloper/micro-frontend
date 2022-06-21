@@ -3,6 +3,8 @@
  */
 export default class PhJoinCmd {
     constructor(defs) {
+		console.log("______________________________")
+		console.log(defs)
         this.datasets = defs["datasets"].sort(x => x.index)
         this.caseInsensitive = defs["caseInsensitive"]
         this.normalizeText = defs["normalizeText"]
@@ -42,6 +44,7 @@ export default class PhJoinCmd {
         return {
             datasets: this.datasets,
             normalizeText: this.normalizeText,
+			type: this.type,
             caseInsensitive: this.caseInsensitive,
             on: this.on.map(x => { return {
                 type: x["type"],
