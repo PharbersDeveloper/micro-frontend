@@ -500,8 +500,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.jobName +
 						"&datasetId=" +
 						params.inputs[0]["id"] +
-						"&jobId=" +
-						recipt.jobId
+						"&jobId="
 				}
 
 				let message = {
@@ -704,7 +703,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: {
-				data: { jobName, runtime },
+				data: { jobName, runtime, jobId },
 				error
 			}
 		} = JSON.parse(message)
@@ -714,6 +713,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			runtime !== "r" ||
 			runtime !== "sparkr"
 		) {
+			if (runtime === "join") {
+				preUrl = preUrl + jobId
+			}
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
 			alert("新建脚本成功！")
