@@ -51,7 +51,7 @@ export default class PhDataSource {
             .then((response) => {
                 response["data"].forEach(x => {
                     const tmp = that.model.find(it => it.resourceId === x.id)
-                    if (tmp && tmp.status !== -99) {
+                    if (tmp && tmp.status !== -99 && tmp.status !== 0) {
                         tmp.status = x.status
                         tmp.switch = x.status === 1 || x.status === 2
                         tmp.editable = x.status === 0 || x.status === 2
@@ -91,31 +91,32 @@ export default class PhDataSource {
     }
 
     resourceStart(tenantId, model) {
-        model.editable = false
-        model.status = 1
-        model.resetMessage()
         const that = this
         this.buildStartQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
-                console.log(model)
-                that.parent.dealResourceStart(model, (param, payload) => {
-                    console.log("resource start callback")
-                    const { status } = JSON.parse(payload)
-                    const tmp = that.model.find(x => x.traceId === param.id)
+                if (response.status === "succeed") {
+                    model.editable = false
+                    model.status = 1
+                    model.resetMessage()
 
-                    if (tmp) {
-                        if (status === "started") {
-                            tmp.status = 2
+                    that.parent.dealResourceStart(model, (param, payload) => {
+                        console.log("resource start callback")
+                        const { status } = JSON.parse(payload)
+                        const tmp = that.model.find(x => x.traceId === param.id)
+
+                        if (tmp) {
+                            if (status === "started") {
+                                tmp.status = 2
+                            }
+                            tmp.switch = tmp.status === 1 || tmp.status === 2
+                            tmp.editable = tmp.status === 0 || tmp.status === 2
+                            tmp.resetMessage()
                         }
-                        // eslint-disable-next-line no-debugger
-                        debugger
-                        tmp.switch = tmp.status === 1 || tmp.status === 2
-                        tmp.editable = tmp.status === 0 || tmp.status === 2
-                        tmp.resetMessage()
-                    }
-                })
+                    })
+                } else {
+                    alert("启动失败")
+                }
             })
     }
 
@@ -147,29 +148,32 @@ export default class PhDataSource {
     }
 
     resourceStop(tenantId, model) {
-        model.editable = false
-        const that = this
-        model.status = 4
-        model.resetMessage()
         this.buildStopQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
-                console.log(model)
-                that.parent.dealResourceStop(model, (param, payload) => {
-                    console.log("resource stop callback")
-                    const { status } = JSON.parse(payload)
-                    const tmp = that.model.find(x => x.traceId === param.id)
+                if (response.status === "succeed") {
+                    model.editable = false
+                    const that = this
+                    model.status = 4
+                    model.resetMessage()
 
-                    if (tmp) {
-                        if (status === "stopped") {
-                            tmp.status = 0
+                    that.parent.dealResourceStop(model, (param, payload) => {
+                        console.log("resource stop callback")
+                        const { status } = JSON.parse(payload)
+                        const tmp = that.model.find(x => x.traceId === param.id)
+
+                        if (tmp) {
+                            if (status === "stopped") {
+                                tmp.status = 0
+                            }
+                            tmp.switch = tmp.status === 1 || tmp.status === 2
+                            tmp.editable = tmp.status === 0 || tmp.status === 2
+                            tmp.resetMessage()
                         }
-                        tmp.switch = tmp.status === 1 || tmp.status === 2
-                        tmp.editable = tmp.status === 0 || tmp.status === 2
-                        tmp.resetMessage()
-                    }
-                })
+                    })
+                } else {
+                    alert("停止失败")
+                }
             })
     }
 
