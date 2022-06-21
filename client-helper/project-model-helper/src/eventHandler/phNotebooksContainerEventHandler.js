@@ -409,7 +409,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				route.customCallbackFuncs = {}
 			}
 
-			route.customCallbackFuncs[params.traceId] = params.func
+			route.customCallbackFuncs[params.traceId] = params.callback
 
 			route.noticeService.defineAction({
 				type: "iot",
@@ -428,7 +428,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				route.customCallbackFuncs = {}
 			}
 
-			route.customCallbackFuncs[params.traceId] = params.func
+			route.customCallbackFuncs[params.traceId] = params.callback
 
 			route.noticeService.defineAction({
 				type: "iot",
@@ -579,9 +579,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status === "started") {
-			route.customCallbackFuncs[payload.id](payload)
-			// element.codeeditors[0]["switch"] = true
-			// element.codeeditors[0]["status"] = 2
+			route.customCallbackFuncs[param.id](param, payload)
+			delete route.customCallbackFuncs[param.id]
 			alert("启动资源成功")
 		} else if (status === "startfailed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
@@ -602,9 +601,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status === "stopped") {
-			route.customCallbackFuncs[payload.id](payload)
-			// element.codeeditors[0]["switch"] = false
-			// element.codeeditors[0]["status"] = 0
+			route.customCallbackFuncs[param.id](param, payload)
+			delete route.customCallbackFuncs[param.id]
 			alert("关闭资源成功")
 		} else if (status === "stopfailed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""

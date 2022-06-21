@@ -100,13 +100,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-switch v-if="notebook.editable"
-                                    v-model="notebook.switch"
-                                    active-color="#13ce66"
-                                    @change="resetStatus(notebook)"/>
-                            <el-switch v-else disabled
-                                       v-model="notebook.switch"
-                                       active-color="#13ce66" />
+                            <div>
+                                <span>{{notebook.message}}</span>
+                                <el-switch v-if="notebook.editable"
+                                           v-model="notebook.switch"
+                                           active-color="#13ce66"
+                                           @change="resetStatus(notebook)"/>
+                                <el-switch v-else disabled
+                                           v-model="notebook.switch"
+                                           active-color="#13ce66" />
+                            </div>
+
                         </div>
                         <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
                     </div>
@@ -468,7 +472,6 @@ export default {
                     callback: func
                 }
             }
-            console.log(event)
             this.$emit('event', event)
         },
         dealResourceStop(data, func) {
