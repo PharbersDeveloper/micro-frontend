@@ -500,8 +500,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.jobName +
 						"&datasetId=" +
 						params.inputs[0]["id"] +
-						"&jobId=" +
-						recipt.jobId
+						"&jobId="
+					// recipt.jobId
 				}
 
 				let message = {

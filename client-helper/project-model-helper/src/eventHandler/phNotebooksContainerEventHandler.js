@@ -564,8 +564,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status === "started") {
-			element.codeeditors[0]["switch"] = true
-			element.codeeditors[0]["status"] = 2
+			// element.codeeditors[0]["switch"] = true
+			// element.codeeditors[0]["status"] = 2
 			alert("启动资源成功")
 		} else if (status === "startfailed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
@@ -583,11 +583,11 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			cnotification: { error }
 		} = JSON.parse(message)
 
-		if (status == "stopped") {
-			element.codeeditors[0]["switch"] = false
-			element.codeeditors[0]["status"] = 0
+		if (status === "stopped") {
+			// element.codeeditors[0]["switch"] = false
+			// element.codeeditors[0]["status"] = 0
 			alert("关闭资源成功")
-		} else if (status == "stopfailed") {
+		} else if (status === "stopfailed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
 				errorObj["message"]["zh"] !== ""
