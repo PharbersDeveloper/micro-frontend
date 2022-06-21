@@ -6,7 +6,7 @@ export default class PhDataSource {
     constructor(id) {
         this.id = id
         this.status = {}
-        this.debugToken = "01fd7265fb086fe622224fada621ce778b454ee862926426638502dcb9d4061b"
+        this.debugToken = "956c2519cddd8c76a896b85018d89892440afc31b896546b21293cb5d306937f"
     }
 
     getCookie(name) {

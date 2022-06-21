@@ -96,7 +96,7 @@ export async function phJoinContainerEventHandler(e, route) {
 						jobPath: "",
 						inputs: inputs,
 						outputs: outputs,
-						runtime: "orderby"
+						runtime: "join"
 					},
 					steps: params.stepsArr,
 					notification: {

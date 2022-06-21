@@ -7,10 +7,14 @@
                 <span>Join</span>
             </div>
             <div class="header_right">
+				<el-radio-group v-model="activeName" class="content">
+					<el-radio-button label="Setting"></el-radio-button>
+					<el-radio-button label="input/output"></el-radio-button>
+				</el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="join_area">
+        <div class="join_area" v-show="activeName === 'Setting'">
             <div class="join_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
@@ -60,6 +64,17 @@
                 Schema 不对，找产品处理
             </div>
         </div>
+		<div v-show="activeName === 'input/output'">
+			<change-input-output
+				ref="changeInputOutput"
+				:inputs="inputs"	
+				:outputs="outputs"
+				:inArray="inArray"
+				:outArray="outArray"
+				@changScriptInputOutput="changScriptInputOutput"
+				:datasetArray="datasetArray"
+			/>
+        </div>
     </div>
 </template>
 <script>
@@ -75,6 +90,10 @@ import SelectCols from './steps/commands/select-cols/selectColsView'
 import PostComputed from './steps/commands/post-join-computed/postJoinComputedView'
 import PostFilter from './steps/commands/post-filter/postFilterView'
 import Outputs from './steps/commands/output/outputView'
+import ElRadioGroup from "element-ui/packages/radio-group/index"
+import ElRadioButton from "element-ui/packages/radio-button/index"
+import changeInputOutput from "./change-input-output"
+import { Message } from 'element-ui'
 
 export default {
     components: {
@@ -87,7 +106,10 @@ export default {
         SelectCols,
         PostComputed,
         PostFilter,
-        Outputs
+        Outputs,
+		ElRadioGroup,
+        ElRadioButton,
+		changeInputOutput
     },
     data() {
         return {
@@ -131,7 +153,13 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			jobShowName: ""
+			activeName: "input/output",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+			outputs: [],
+            inputs: [],
+            datasetArray: []
         }
     },
     props: {
@@ -257,28 +285,95 @@ export default {
             return result
         },
         save() {
-            const params = {
-                "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
-                "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
-                "joins": this.$refs.join.datasource.revert2Defs(),
-                "selectedColumns": this.$refs.select.datasource.revert2Defs(),
-                "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
-                "postFilter": this.$refs.postfilter.datasource.revert2Defs()
-            }
-
-            // console.log(params)
-            this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+			if (this.activeName === "Setting") {
+				const params = {
+					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+					"preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
+					"joins": this.$refs.join.datasource.revert2Defs(),
+					"selectedColumns": this.$refs.select.datasource.revert2Defs(),
+					"postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
+					"postFilter": this.$refs.postfilter.datasource.revert2Defs()
+				}
+				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+			} else {
+				this.$refs.changeInputOutput.save()
+			}
         },
+		changScriptInputOutput(data) {
+			let inputNameOld = this.allData.inputs[0]
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = data.args.param.inputsArray[0]
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.allData.outputs[0]
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = data.args.param.outputsArray[0]
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify(data.args.param.inputsArray),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
+			const event = new Event("event")
+			event.args = {
+				callback: "changScriptInputOutput",
+				element: this,
+				param: {
+					name: "changScriptInputOutput",
+					projectId: this.projectId,
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
+				}
+			}
+			this.$emit('event', event)
+		}
     },
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        // this.projectIdTest = "alfredtest"
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
         this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+		this.datasource.refreshDataset(this.projectId)
     },
     watch: {
         active(n) {
@@ -298,7 +393,16 @@ export default {
             if (n === 6 || n === 7) {
                 this.computedSchema = this.computePostFilterSchema()
             }
-        }
+        },
+		activeName(n) {
+            this.$emit("active", n)
+        },
+        "allData.inputs": function(n) {
+            this.inputs = n
+        },
+		"allData.outputs": function(n) {
+            this.outputs = n
+		}
     }
 }
 </script>
@@ -349,6 +453,9 @@ export default {
                 /*    background: none;*/
                 /*    cursor: pointer;*/
                 /*}*/
+				.content {
+					margin-right: 30px;
+				}
             }
         }
 
