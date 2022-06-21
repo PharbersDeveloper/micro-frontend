@@ -34,7 +34,9 @@ export async function phNotebooksContainerRouteModel(route, parseParams) {
 				resolve(that.store.peekAll("resource"))
 			})
 		})
-	const notebooks = tmp.filter(
+
+	let notebooks = tmp.filter((it) => it)
+	notebooks = notebooks.filter(
 		(it) => it.ctype === "jupyter" || it.ctype === "c9"
 	)
 	// let dss = ds.filter((it) => it)

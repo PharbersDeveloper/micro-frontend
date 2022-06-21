@@ -6,7 +6,7 @@ export default class PhDataSource {
     constructor(id, parent) {
         this.id = id
         this.status = {}
-        this.debugToken = "01fd7265fb086fe622224fada621ce778b454ee862926426638502dcb9d4061b"
+        this.debugToken = "dfdf526d4d9d56b4ef30f4d6b344158aec3726e2dd65b9587e732c7b7efcd8a4"
         this.isReady = false
         this.parent = parent
         this.model = []
@@ -20,7 +20,7 @@ export default class PhDataSource {
     }
 
     refreshPlaceholders(dns) {
-        this.model = dns.map(x => { return new PhStatusModel(x.id, 0, this.guid()) })
+        dns.forEach(x => { this.model.push(new PhStatusModel(x.id, 0, this.guid(), x)) })
     }
 
     buildStatusQuery(tenantId, resourceIds) {
@@ -49,17 +49,16 @@ export default class PhDataSource {
         this.buildStatusQuery(tenantId, resourceIds)
             .then((response) => response.json())
             .then((response) => {
-                console.log(that)
-                console.log(response)
                 response["data"].forEach(x => {
-                    const tmp = this.model.find(x => x.resourceId === x.id)
-                    if (tmp) {
+                    const tmp = that.model.find(x => x.resourceId === x.id)
+                    if (tmp && tmp.status !== 0) {
                         tmp.status = x.status
+                        tmp.switch = x.status === 0 || x.status === 4
+                        tmp.editable = x.status === 0 || x.status === 2
                         tmp.traceId = x.traceId
                     }
                 })
                 this.isReady = true
-                // that.parent.dealResourceStop(response, row)
             })
     }
 
@@ -67,7 +66,6 @@ export default class PhDataSource {
         const url = `${hostName}/phjupyterboottrigger`
         const accessToken = this.getCookie("access_token")
         const traceId = this.guid()
-        console.log(tenantId)
         let body = {
             "tenantId": tenantId,
             // "tenantId": "alfredtest",
@@ -93,6 +91,7 @@ export default class PhDataSource {
     }
 
     resourceStart(tenantId, model) {
+        model.editable = false
         const that = this
         this.buildStartQuery(tenantId, model)
             .then((response) => response.json())
@@ -105,10 +104,8 @@ export default class PhDataSource {
         const url = `${hostName}/phjupyterstoptrigger`
         const accessToken = this.getCookie("access_token")
         const traceId = this.getCookie("jupyterTraceId")
-        console.log(tenantId)
         let body = {
             "tenantId": tenantId,
-            // "tenantId": "alfredtest",
             "traceId": traceId,
             "owner": this.getCookie("account_id"),
             "showName":  decodeURI(
@@ -131,6 +128,7 @@ export default class PhDataSource {
     }
 
     resourceStop(tenantId, model) {
+        model.editable = false
         const that = this
         this.buildStopQuery(tenantId, model)
             .then((response) => response.json())
