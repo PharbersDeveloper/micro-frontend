@@ -73,7 +73,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="upload_bottom">
+<!--                    <div class="upload_bottom" v-if="datasource.isReady">-->
+                    <div class="upload_bottom" >
                         <div class="data_content" v-for="(notebook,index) in searchData" :key="index" ref="content" :class="{bg: notebookscheckedIds.indexOf(notebook.id) > -1}" @click="clickOnlyOne(notebook, index)">
                             <div class="content-left">
                                 <div style="display: flex; flex-direction: column; justify-content: space-around">
@@ -169,6 +170,7 @@ import { MessageBox } from 'element-ui'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions"
 import ElSwitch from "element-ui/packages/switch/index"
+import PhDataSource from "./model/datasource"
 
 export default {
     data() {
@@ -220,6 +222,12 @@ export default {
             default: function () {
                 return new PhDagDefinitions("1");
             }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource("1", this)
+            }
         }
     },
     components: {
@@ -250,6 +258,10 @@ export default {
                 item.style["height"] = "40px"
             })
         }
+    },
+    updated() {
+        this.datasource.refreshPlaceholders(this.allData.dns)
+        this.datasource.refreshStatus(this.allData.tenantId, this.allData.projectId)
     },
     watch: {
         "allData.tagsArray": function() {
@@ -442,6 +454,12 @@ export default {
             }
             this.$emit('event', event)
         },
+        dealResourceStart(data) {
+            this.$emit('event', data)
+        },
+        dealResourceStop(data) {
+            this.$emit('event', data)
+        }
     }
 }
 </script>

@@ -8,6 +8,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 	// const createScriptsEventName = "createScripts"
 	// const deleteDatasetsEventName = "deleteDatasets"
 	// const deleteScriptsEventName = "deleteResource"
+	const dealResourceStartEventName = "dealJupyterStart"
+	const dealResourceStopEventName = "dealJupyterStop"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "localUpload") {
@@ -394,6 +396,36 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				}
 			}
 			break
+		case "dealResourceStart":
+			// route.cookies.write(
+			// 	"jupyterTraceId",
+			// 	params.traceId,
+			// 	cookiesOptions
+			// )
+			route.noticeService.defineAction({
+				type: "iot",
+				remoteResource: "notification",
+				runnerId: "",
+				id: params.traceId,
+				eventName: dealResourceStartEventName,
+				projectId: "projectid",
+				ownerId: route.cookies.read("account_id"),
+				callBack: dealResourceStartCallback
+			})
+			break
+		case "dealResourceStop":
+			// route.cookies.clear("jupyterTraceId", cookiesOptions)
+			route.noticeService.defineAction({
+				type: "iot",
+				remoteResource: "notification",
+				runnerId: "",
+				id: params.traceId,
+				eventName: dealResourceStopEventName,
+				projectId: "projectid",
+				ownerId: route.cookies.read("account_id"),
+				callBack: dealResourceStopCallback
+			})
+			break
 		//删除脚本
 		// case "deleteScripts":
 		// 	if (params) {
@@ -524,6 +556,47 @@ export async function phNotebooksContainerEventHandler(e, route) {
 	// 	}
 	// 	route.loadingService.loading.style.display = "none"
 	// }
+
+	function dealResourceStartCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+
+		if (status === "started") {
+			element.codeeditors[0]["switch"] = true
+			element.codeeditors[0]["status"] = 2
+			alert("启动资源成功")
+		} else if (status === "startfailed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
+			let msg =
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
+					: "启动资源失败，请重新操作！"
+			alert(msg)
+		}
+		route.loadingService.loading.style.display = "none"
+	}
+	function dealResourceStopCallback(param, payload) {
+		const { message, status } = JSON.parse(payload)
+		const {
+			cnotification: { error }
+		} = JSON.parse(message)
+
+		if (status == "stopped") {
+			element.codeeditors[0]["switch"] = false
+			element.codeeditors[0]["status"] = 0
+			alert("关闭资源成功")
+		} else if (status == "stopfailed") {
+			let errorObj = error !== "" ? JSON.parse(error) : ""
+			let msg =
+				errorObj["message"]["zh"] !== ""
+					? errorObj["message"]["zh"]
+					: "关闭资源失败，请重新操作！"
+			alert(msg)
+		}
+		route.loadingService.loading.style.display = "none"
+	}
 
 	function guid() {
 		return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
