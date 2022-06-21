@@ -459,15 +459,37 @@ export default {
             }
             this.$emit('event', event)
         },
-        dealResourceStart(data) {
-            this.$emit('event', data)
+        dealResourceStart(data, func) {
+            const event = new Event("event")
+            event.args = {
+                callback: "dealResourceStart",
+                param: {
+                    traceId: data.traceId,
+                    callback: func
+                }
+            }
+            console.log(event)
+            this.$emit('event', event)
         },
-        dealResourceStop(data) {
-            this.$emit('event', data)
+        dealResourceStop(data, func) {
+            const event = new Event("event")
+            event.args = {
+                callback: "dealResourceStop",
+                param: {
+                    traceId: data.traceId,
+                    callback: func
+                }
+            }
+            this.$emit('event', event)
         },
         // 启停
         resetStatus(notebook) {
-            this.datasource.resourceStart(this.allData.tenantId, notebook)
+            console.log(notebook.switch)
+            if (notebook.switch) {
+                this.datasource.resourceStart(this.allData.tenantId, notebook)
+            } else {
+                this.datasource.resourceStop(this.allData.tenantId, notebook)
+            }
         }
     }
 }

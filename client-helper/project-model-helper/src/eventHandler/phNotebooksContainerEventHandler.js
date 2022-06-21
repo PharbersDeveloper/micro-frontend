@@ -4,6 +4,7 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phNotebooksContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = "projects"
+
 	// let preUrl = ""
 	// const createScriptsEventName = "createScripts"
 	// const deleteDatasetsEventName = "deleteDatasets"
@@ -332,7 +333,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 						platform: "AWS",
 						properties: JSON.stringify(properties),
 						resultPath: "codeeditor[]",
-						role: "codeeditor"
+						role: "codeeditor",
+						priority: 100
 					}
 				}
 
@@ -377,7 +379,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 							platform: targetNotebook.platform,
 							properties: targetNotebook.properties,
 							resultPath: targetNotebook.resultPath,
-							role: targetNotebook.role
+							role: targetNotebook.role,
+							priority: targetNotebook.priority
 						}
 					}
 
@@ -402,6 +405,12 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			// 	params.traceId,
 			// 	cookiesOptions
 			// )
+			if (!route.customCallbackFuncs) {
+				route.customCallbackFuncs = {}
+			}
+
+			route.customCallbackFuncs[params.traceId] = params.func
+
 			route.noticeService.defineAction({
 				type: "iot",
 				remoteResource: "notification",
@@ -415,6 +424,12 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			break
 		case "dealResourceStop":
 			// route.cookies.clear("jupyterTraceId", cookiesOptions)
+			if (!route.customCallbackFuncs) {
+				route.customCallbackFuncs = {}
+			}
+
+			route.customCallbackFuncs[params.traceId] = params.func
+
 			route.noticeService.defineAction({
 				type: "iot",
 				remoteResource: "notification",
@@ -564,6 +579,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 
 		if (status === "started") {
+			route.customCallbackFuncs[payload.id](payload)
 			// element.codeeditors[0]["switch"] = true
 			// element.codeeditors[0]["status"] = 2
 			alert("启动资源成功")
@@ -578,12 +594,15 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		route.loadingService.loading.style.display = "none"
 	}
 	function dealResourceStopCallback(param, payload) {
+		console.log(payload)
+		console.log(param)
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
 
 		if (status === "stopped") {
+			route.customCallbackFuncs[payload.id](payload)
 			// element.codeeditors[0]["switch"] = false
 			// element.codeeditors[0]["status"] = 0
 			alert("关闭资源成功")

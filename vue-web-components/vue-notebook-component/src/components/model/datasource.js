@@ -65,11 +65,10 @@ export default class PhDataSource {
     buildStartQuery(tenantId, model) {
         const url = `${hostName}/phjupyterboottrigger`
         const accessToken = this.getCookie("access_token")
-        const traceId = this.guid()
+        // const traceId = this.guid()
         let body = {
             "tenantId": tenantId,
-            // "tenantId": "alfredtest",
-            "traceId": traceId,
+            "traceId": model.traceId,
             "owner": this.getCookie("account_id"),
             "showName":  decodeURI(
                 decodeURI(
@@ -96,17 +95,27 @@ export default class PhDataSource {
         this.buildStartQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
-                that.parent.dealResourceStart(response, model)
+                console.log(response)
+                console.log(model)
+                that.parent.dealResourceStart(model, this.resourceStartCallback)
             })
+    }
+
+    resourceStartCallback(payload) {
+        console.log(payload)
+    }
+
+    resourceStopCallback(payload) {
+        console.log(payload)
     }
 
     buildStopQuery(tenantId, model) {
         const url = `${hostName}/phjupyterstoptrigger`
         const accessToken = this.getCookie("access_token")
-        const traceId = this.getCookie("jupyterTraceId")
+        // const traceId = this.getCookie("jupyterTraceId")
         let body = {
             "tenantId": tenantId,
-            "traceId": traceId,
+            "traceId": model.traceId,
             "owner": this.getCookie("account_id"),
             "showName":  decodeURI(
                 decodeURI(
@@ -133,7 +142,9 @@ export default class PhDataSource {
         this.buildStopQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
-                that.parent.dealResourceStop(response, model)
+                console.log(response)
+                console.log(model)
+                that.parent.dealResourceStop(model, this.resourceStopCallback)
             })
     }
 
@@ -142,7 +153,7 @@ export default class PhDataSource {
             /[xy]/g,
             function (c) {
                 var r = (Math.random() * 16) | 0,
-                    v = c == "x" ? r : (r & 0x3) | 0x8
+                    v = c === "x" ? r : (r & 0x3) | 0x8
                 return v.toString(16)
             }
         )
