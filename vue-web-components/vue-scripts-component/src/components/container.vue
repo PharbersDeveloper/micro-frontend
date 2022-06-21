@@ -493,7 +493,7 @@ export default {
         //编辑脚本
         edit() {
             let tid = this.reciptcheckedIds[0]
-            let recipt = this.allData.dcs.filter(it => it.id == tid)
+            let recipt = this.allData.dcs.filter(it => it.id === tid)
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
