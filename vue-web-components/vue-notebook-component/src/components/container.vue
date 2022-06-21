@@ -78,15 +78,15 @@
                         <div class="data_content" v-for="(notebook,index) in searchData" :key="index" ref="content" :class="{bg: notebookscheckedIds.indexOf(notebook.id) > -1}" @click="clickOnlyOne(notebook, index)">
                             <div class="content-left">
                                 <div style="display: flex; flex-direction: column; justify-content: space-around">
-                                    <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.id) > -1" @click.stop="checkedOnenotebooks(notebook)">
+                                    <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1" @click.stop="checkedOnenotebooks(notebook.detail)">
                                 </div>
                                 <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="defs.iconsByName(notebook.ctype)" alt="">
                                 </span>
-                                    <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.name">{{notebook.name}}</p>
+                                    <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.name">{{notebook.detail.name}}</p>
                                     <div class="tag_area" ref="tagsArea">
-                                        <div v-for="(tag, inx) in notebook.label" :key="inx">
+                                        <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
                                         <span v-if="notebook.label !== ''">
                                             <p
                                                     :title="tag"
@@ -100,9 +100,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-switch
-                                    v-model="alfredtest"
-                                    active-color="#13ce66" />
+                            <el-switch v-if="notebook.editable"
+                                    v-model="notebook.switch"
+                                    active-color="#13ce66"
+                                    @change="resetStatus(notebook)"/>
+                            <el-switch v-else disabled
+                                       v-model="notebook.switch"
+                                       active-color="#13ce66" />
                         </div>
                         <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
                     </div>
@@ -203,7 +207,6 @@ export default {
             notebookscheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            alfredtest: false
         }
     },
     props: {
@@ -245,10 +248,11 @@ export default {
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             this.state = 'search'
             if(searchValue) {
-                return this.allData.dns.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                // return this.allData.dns.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+                return this.datasource.model.filter(item => item.detail.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
-            return this.allData.dns
+            return this.datasource.model
         }
     },
     mounted() {
@@ -259,11 +263,6 @@ export default {
             })
         }
     },
-    updated() {
-        this.datasource.refreshPlaceholders(this.allData.dns)
-        const dnsIds = this.allData.dns.map(x => x.id)
-        this.datasource.refreshStatus(this.allData.tenantId, dnsIds)
-    },
     watch: {
         "allData.tagsArray": function() {
             this.tagsColorArray = []
@@ -271,6 +270,11 @@ export default {
                 // this.allData.tagsArray.forEach((item, index) => {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
+        },
+        "allData.dns": function() {
+            this.datasource.refreshPlaceholders(this.allData.dns)
+            const dnsIds = this.allData.dns.map(x => x.id)
+            this.datasource.refreshStatus(this.allData.tenantId, dnsIds)
         }
     },
     methods: {
@@ -460,6 +464,10 @@ export default {
         },
         dealResourceStop(data) {
             this.$emit('event', data)
+        },
+        // 启停
+        resetStatus(notebook) {
+            this.datasource.resourceStart(this.allData.tenantId, notebook)
         }
     }
 }
