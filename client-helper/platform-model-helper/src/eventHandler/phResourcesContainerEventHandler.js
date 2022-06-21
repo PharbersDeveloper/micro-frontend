@@ -54,11 +54,11 @@ export async function phResourcesContainerEventHandler(e, route) {
             cnotification: { error }
         } = JSON.parse(message)
 
-        if (status == "started") {
+        if (status === "started") {
             element.codeeditors[0]["switch"] = true
             element.codeeditors[0]["status"] = 2
             alert("启动资源成功")
-        } else if (status == "startfailed") {
+        } else if (status === "startfailed") {
             let errorObj = error !== "" ? JSON.parse(error) : ""
             let msg =
                 errorObj["message"]["zh"] !== ""
@@ -74,7 +74,7 @@ export async function phResourcesContainerEventHandler(e, route) {
             cnotification: { error }
         } = JSON.parse(message)
 
-        if (status == "stopped") {
+        if (status === "stopped") {
             element.codeeditors[0]["switch"] = false
             element.codeeditors[0]["status"] = 0
             alert("关闭资源成功")

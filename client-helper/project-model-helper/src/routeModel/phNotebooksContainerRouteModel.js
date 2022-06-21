@@ -51,6 +51,7 @@ export async function phNotebooksContainerRouteModel(route, parseParams) {
 	console.log(notebooks)
 	console.log(tagsArray)
 	return {
+		tenantId: tenantId,
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
 		dns: notebooks,
