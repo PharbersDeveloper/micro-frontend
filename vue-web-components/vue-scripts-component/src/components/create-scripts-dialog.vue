@@ -169,7 +169,12 @@ export default {
                 "sparkr": "SparkR",
                 "prepare": "Prepare",
                 "distinct": "Distinct",
-                "sort": "Sort"
+                "sort": "Sort",
+                "topn": "topn",
+                "sync": "sync",
+                "join": "join",
+                "stack": "stack",
+                "group": "group"
             }
         }
     },
@@ -379,7 +384,7 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 9999;
+    z-index: 10;
     justify-content: center;
     align-items: center;
     background: rgba(0,0,0,0.31);

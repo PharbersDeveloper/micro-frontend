@@ -1,12 +1,15 @@
 
-// import { hostName } from "../../config/envConfig"
-
+import { hostName } from "../../config/envConfig"
+import PhStatusModel from "./status-model"
 
 export default class PhDataSource {
-    constructor(id) {
+    constructor(id, parent) {
         this.id = id
         this.status = {}
-        this.debugToken = "01fd7265fb086fe622224fada621ce778b454ee862926426638502dcb9d4061b"
+        this.debugToken = "dfdf526d4d9d56b4ef30f4d6b344158aec3726e2dd65b9587e732c7b7efcd8a4"
+        this.isReady = false
+        this.parent = parent
+        this.model = []
     }
 
     getCookie(name) {
@@ -16,46 +19,172 @@ export default class PhDataSource {
         else return null
     }
 
-    buildStatusQuery(tenantId, resourceId) {
-        console.log(tenantId)
-        console.log(resourceId)
-        // TODO: refreshStatus 逻辑
-        // const url = `${hostName}/phdydatasource/put_item`
-        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        // let body = {
-        //     table: "step",
-        //     item: {
-        //         pjName: this.step["pj-name"],
-        //         stepId: this.step["step-id"],
-        //         ctype: this.step["ctype"],
-        //         expressions: JSON.stringify({ "parmas": param }),
-        //         expressionsValue: this.step["expressions-value"],
-        //         groupIndex: this.step["group-index"],
-        //         groupName: this.step["group-name"],
-        //         id: this.step["id"],
-        //         index: this.step["index"],
-        //         runtime : this.step["runtime"],
-        //         stepName: this.step["step-name"]
-        //     }
-        // }
-        //
-        // let options = {
-        //     method: "POST",
-        //     headers: {
-        //         "Authorization": accessToken,
-        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         "accept": "application/json"
-        //     },
-        //     body: JSON.stringify(body)
-        // }
-        // return fetch(url, options)
+    refreshPlaceholders(dns) {
+        dns.forEach(x => { this.model.push(new PhStatusModel(x.id, 0, this.guid(), x)) })
     }
 
-    refreshStatus(tenantId, resourceId) {
-        this.buildStatusQuery(tenantId, resourceId)
+    buildStatusQuery(tenantId, resourceIds) {
+        console.log(tenantId)
+        console.log(resourceIds)
+        const url = `${hostName}/phjupyterstatus`
+        const accessToken = this.getCookie("access_token")
+        let body = {
+            "tenantId": tenantId,
+            "resourceIds": resourceIds
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    refreshStatus(tenantId, resourceIds) {
+        const that = this
+        this.buildStatusQuery(tenantId, resourceIds)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
+                response["data"].forEach(x => {
+                    const tmp = that.model.find(it => it.resourceId === x.id)
+                    if (tmp && tmp.status !== -99 && tmp.status !== 0) {
+                        tmp.status = x.status
+                        tmp.switch = x.status === 1 || x.status === 2
+                        tmp.editable = x.status === 0 || x.status === 2
+                        tmp.traceId = x.traceId
+                        tmp.resetMessage()
+                    }
+                })
+                this.isReady = true
             })
+    }
+
+    buildStartQuery(tenantId, model) {
+        const url = `${hostName}/phjupyterboottrigger`
+        const accessToken = this.getCookie("access_token")
+        // const traceId = this.guid()
+        let body = {
+            "tenantId": tenantId,
+            "traceId": model.traceId,
+            "owner": this.getCookie("account_id"),
+            "showName":  decodeURI(
+                decodeURI(
+                    this.getCookie("user_name_show")
+                )
+            ),
+            "resourceId": model.resourceId
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    resourceStart(tenantId, model) {
+        const that = this
+        this.buildStartQuery(tenantId, model)
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.status === "succeed") {
+                    model.editable = false
+                    model.status = 1
+                    model.resetMessage()
+
+                    that.parent.dealResourceStart(model, (param, payload) => {
+                        console.log("resource start callback")
+                        const { status } = JSON.parse(payload)
+                        const tmp = that.model.find(x => x.traceId === param.id)
+
+                        if (tmp) {
+                            if (status === "started") {
+                                tmp.status = 2
+                            }
+                            tmp.switch = tmp.status === 1 || tmp.status === 2
+                            tmp.editable = tmp.status === 0 || tmp.status === 2
+                            tmp.resetMessage()
+                        }
+                    })
+                } else {
+                    alert("启动失败")
+                }
+            })
+    }
+
+    buildStopQuery(tenantId, model) {
+        const url = `${hostName}/phjupyterstoptrigger`
+        const accessToken = this.getCookie("access_token")
+        // const traceId = this.getCookie("jupyterTraceId")
+        let body = {
+            "tenantId": tenantId,
+            "traceId": model.traceId,
+            "owner": this.getCookie("account_id"),
+            "showName":  decodeURI(
+                decodeURI(
+                    this.getCookie("user_name_show")
+                )
+            ),
+            "resourceId": model.resourceId
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    resourceStop(tenantId, model) {
+        this.buildStopQuery(tenantId, model)
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.status === "succeed") {
+                    model.editable = false
+                    const that = this
+                    model.status = 4
+                    model.resetMessage()
+
+                    that.parent.dealResourceStop(model, (param, payload) => {
+                        console.log("resource stop callback")
+                        const { status } = JSON.parse(payload)
+                        const tmp = that.model.find(x => x.traceId === param.id)
+
+                        if (tmp) {
+                            if (status === "stopped") {
+                                tmp.status = 0
+                            }
+                            tmp.switch = tmp.status === 1 || tmp.status === 2
+                            tmp.editable = tmp.status === 0 || tmp.status === 2
+                            tmp.resetMessage()
+                        }
+                    })
+                } else {
+                    alert("停止失败")
+                }
+            })
+    }
+
+    guid() {
+        return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (c) {
+                var r = (Math.random() * 16) | 0,
+                    v = c === "x" ? r : (r & 0x3) | 0x8
+                return v.toString(16)
+            }
+        )
     }
 }

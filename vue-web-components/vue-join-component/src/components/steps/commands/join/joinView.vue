@@ -27,15 +27,6 @@
     </div>
 </template>
 <script>
-// import ElButton from 'element-ui/packages/button/index'
-// import ElCheckbox from 'element-ui/packages/checkbox/index'
-// import ElDivider from 'element-ui/packages/divider/index'
-// import ElRadioGroup from 'element-ui/packages/radio-group/index'
-// import ElRadio from 'element-ui/packages/radio/index'
-// import ElSwitch from 'element-ui/packages/switch/index'
-// import ElInputNumber from 'element-ui/packages/input-number/index'
-// import ElForm from 'element-ui/packages/form/index'
-// import ElFormItem from 'element-ui/packages/form-item/index'
 import JoinDatasetCard from './detail-views/dataset-card'
 import JoinRelationCard from './detail-views/relation-card'
 import { PhJoinDefs } from "./defs"
@@ -59,16 +50,7 @@ export default {
     },
     components: {
         JoinDatasetCard,
-        JoinRelationCard,
-        // ElFormItem,
-        // ElForm,
-        // ElInputNumber,
-        // ElButton,
-        // ElCheckbox,
-        // ElRadioGroup,
-        // ElRadio,
-        // ElSwitch,
-        // ElDivider
+        JoinRelationCard
     },
     mounted() {
         this.datasource = new PhJoinStep(this.step)
@@ -112,6 +94,9 @@ export default {
         padding: 4px;
         display: flex;
         flex-direction: column;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .join-title {
             display: flex;

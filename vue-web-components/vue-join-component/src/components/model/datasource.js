@@ -4,11 +4,12 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 
 
 export default class PhDataSource {
-    constructor(id) {
+    constructor(id, parent) {
         this.id = id
+		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "01fd7265fb086fe622224fada621ce778b454ee862926426638502dcb9d4061b"
+        this.debugToken = "956c2519cddd8c76a896b85018d89892440afc31b896546b21293cb5d306937f"
     }
 
     resetData() {
@@ -72,7 +73,6 @@ export default class PhDataSource {
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", this.projectId + "_" + this.jobName]
                 "pjName": ["=", projectId + "_" + jobName]
             },
             "limit": 1,
@@ -130,8 +130,8 @@ export default class PhDataSource {
                     }})
 
                     that.step = {
-                        pjName: [projectId, jobName].join("_"),
-                        stepId: "1",
+                        "pj-name": [projectId, jobName].join("_"),
+                        "step-id": "1",
                         ctype: "Join",
                         expressions: JSON.stringify({
                             "params": {
@@ -147,13 +147,13 @@ export default class PhDataSource {
                                 }
                             }
                         }),
-                        expressionsValue: "JSON",
-                        groupIndex: "0",
-                        groupName: "",
+                        "expressions-value": "JSON",
+                        "group-index": "0",
+                        "group-name": "",
                         id: [projectId, jobName, "1"].join("_"),
                         index: "1",
                         runtime : "join",
-                        stepName: "join"
+                        "step-name": "join"
                     }
                 } else {
                     that.step = data[0]
@@ -213,25 +213,29 @@ export default class PhDataSource {
         })
     }
 
-    buildSaveQuery(projectId, jobName, param) {
-        // @wodelu 这里改成code gen 逻辑
-        const url = `${hostName}/phdydatasource/put_item`
+	refreshDataset(projectId) {
+        const that = this
+        this.buildDatasetQuery(projectId)
+            .then((response) => response.json())
+            .then((response) => {
+				console.log(response)
+				that.store.sync(response)
+                const data = that.store.findAll("datasets")
+				that.parent.datasetArray = data
+            })
+    }
+
+	buildDatasetQuery(projectId) {
+        const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
-            table: "step",
-            item: {
-                pjName: this.step["pj-name"],
-                stepId: this.step["step-id"],
-                ctype: this.step["ctype"],
-                expressions: JSON.stringify({ "parmas": param }),
-                expressionsValue: this.step["expressions-value"],
-                groupIndex: this.step["group-index"],
-                groupName: this.step["group-name"],
-                id: this.step["id"],
-                index: this.step["index"],
-                runtime : this.step["runtime"],
-                stepName: this.step["step-name"]
-            }
+            "table": "dataset",
+            "conditions": {
+                "projectId": ["=", projectId]
+            },
+			index_name: "dataset-projectId-name-index",
+            "limit": 1000,
+            "start_key": {}
         }
 
         let options = {
@@ -246,11 +250,70 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    saveAndGenCode(projectId, jobName, parame) {
-        this.buildSaveQuery(projectId, jobName, parame)
+	refreshInOut(projectId, jobName) {
+        const that = this
+        this.buildInOutQuery(projectId, jobName)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
+				console.log(response)
+				that.parent.inArray = response.input
+				that.parent.outArray = response.output
             })
+    }
+
+	buildInOutQuery(projectId, jobName) {
+        const url = `${hostName}/phcheckinout`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+			"name": jobName,
+			"projectId": projectId
+		}
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildSaveQuery(projectId, jobName, param) {
+		const steps = [{
+			pjName: this.step["pj-name"],
+			stepId: this.step["step-id"],
+			ctype: this.step["ctype"],
+			expressions: {
+				"type": "join",
+				"code": "pyspark",
+				"params": param
+			},
+			expressionsValue: this.step["expressions-value"],
+			groupIndex: this.step["group-index"],
+			groupName: this.step["group-name"],
+			id: this.step["id"],
+			index: this.step["index"],
+			runtime : this.step["runtime"],
+			stepName: this.step["step-name"]
+		}]
+		const event = new Event("event")
+		event.args = {
+			callback: "saveJoin",
+			element: this,
+			param: {
+				name: "saveJoin",
+				projectId: this.parent.projectId,
+				projectName: this.parent.projectName,
+				stepsArr: steps
+			}
+		}
+		this.parent.$emit('event', event)
+    }
+
+    saveAndGenCode(projectId, jobName, parame) {
+        this.buildSaveQuery(projectId, jobName, parame)
     }
 }

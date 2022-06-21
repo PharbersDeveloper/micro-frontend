@@ -11,4 +11,5 @@ export default class ResourceModel extends Model {
     @attr("string") role
     @attr("string") label
     @attr("string") name
+    @attr("number") priority
 }

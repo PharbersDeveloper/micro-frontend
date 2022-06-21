@@ -104,6 +104,9 @@ export default {
         display: flex;
         flex-direction: column;
         overflow: auto;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .condition-title {
             display: flex;

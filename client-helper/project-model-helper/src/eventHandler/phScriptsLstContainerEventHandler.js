@@ -82,6 +82,51 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.inputDS[0]["id"]
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "join"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "join_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "join",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"join?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&jobId=" +
+					recipt.jobId
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "distinct"
 			) {
 				let recipt = params.recipt
@@ -434,6 +479,28 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						params.outputs[0].name
 
 					script.version = []
+				} else if (params.runtime === "join") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "join",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"join?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"] +
+						"&jobId="
 				}
 
 				let message = {
@@ -621,12 +688,12 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			alert("删除脚本成功！")
 			window.location.reload()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "删除脚本失败，请重新操作！"
-			alert(msg)
+			let errorObj = error !== "" ? error : "删除脚本失败，请重新操作！"
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// : "删除脚本失败，请重新操作！"
+			alert(errorObj)
 		}
 		route.loadingService.loading.style.display = "none"
 	}
@@ -636,17 +703,19 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: {
-				data: { jobName, runtime },
+				data: { jobName, runtime, jobId },
 				error
 			}
 		} = JSON.parse(message)
 		if (
-			runtime === "prepare" ||
-			runtime === "topn" ||
-			runtime === "distinct" ||
-			runtime === "sort" ||
-			runtime === "sync"
+			runtime !== "python3" ||
+			runtime !== "pyspark" ||
+			runtime !== "r" ||
+			runtime !== "sparkr"
 		) {
+			if (runtime === "join") {
+				preUrl = preUrl + jobId
+			}
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
 			alert("新建脚本成功！")
