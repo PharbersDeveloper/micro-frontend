@@ -201,6 +201,7 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import ElButton from 'element-ui/packages/option/index'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions";
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -521,9 +522,18 @@ export default {
         },
         //增加scripts
         createScripts(data) {
+            let multiInputs = ["join", "stack"]
+            if (
+                data.args.param.inputs.length != 2 &&
+				multiInputs.includes(this.runtime)
+            ) {
+                Message.error("请选择两个输入数据！", { duration: 3000} )
+                return false
+            }
+
             data.args.param.projectName = this.allData.projectName
             data.args.param.projectId = this.allData.projectId
-            data.args.param.runtime = this.runtime
+            data.args.param.runtime = this.runtime			
             this.$emit('event', data)
             this.showCreateScriptsDialog = false
         },

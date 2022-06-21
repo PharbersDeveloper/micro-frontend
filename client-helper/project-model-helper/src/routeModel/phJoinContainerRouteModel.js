@@ -5,12 +5,7 @@ export async function phJoinContainerRouteModel(route, parseParams) {
 	const joinData = await route.store.peekRecord("tempdata", "join")
 
 	const scriptsParams = joinData.jsondata
-
-	const inputsData = scriptsParams.inputs[0].name
-		? scriptsParams.inputs[0].name
-		: scriptsParams.inputs[0]
-
-	const inputs = [inputsData]
+	const inputs = scriptsParams.inputs
 
 	const outputsData = scriptsParams.outputs[0].name
 		? scriptsParams.outputs[0].name

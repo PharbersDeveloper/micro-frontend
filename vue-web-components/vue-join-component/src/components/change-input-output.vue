@@ -123,10 +123,7 @@ export default {
             this.$emit('changScriptInputOutput', event)
         }
     },
-    mounted() {
-        // this.inputsArray = this.inputs 
-        // this.outputsArray = this.outputs
-    },
+    mounted() { },
     watch: {
         "inputs": function(n) {
             this.inputsArray = n

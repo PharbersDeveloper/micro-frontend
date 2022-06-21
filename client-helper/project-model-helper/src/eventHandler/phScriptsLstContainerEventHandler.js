@@ -499,7 +499,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId=" +
+						recipt.jobId
 				}
 
 				let message = {
@@ -687,12 +689,12 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			alert("删除脚本成功！")
 			window.location.reload()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "删除脚本失败，请重新操作！"
-			alert(msg)
+			let errorObj = error !== "" ? error : "删除脚本失败，请重新操作！"
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// : "删除脚本失败，请重新操作！"
+			alert(errorObj)
 		}
 		route.loadingService.loading.style.display = "none"
 	}
