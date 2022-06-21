@@ -261,7 +261,8 @@ export default {
     },
     updated() {
         this.datasource.refreshPlaceholders(this.allData.dns)
-        this.datasource.refreshStatus(this.allData.tenantId, this.allData.projectId)
+        const dnsIds = this.allData.dns.map(x => x.id)
+        this.datasource.refreshStatus(this.allData.tenantId, dnsIds)
     },
     watch: {
         "allData.tagsArray": function() {
