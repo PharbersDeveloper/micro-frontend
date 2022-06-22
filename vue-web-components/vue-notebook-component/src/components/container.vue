@@ -19,7 +19,7 @@
                                             </span>
                                             <p>标签</p>
                                         </div>
-                                        <div class="label_icon border_none" @click="deletedialogopen">
+                                        <div class="label_icon border_none" @click="deleteNotebook">
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
@@ -84,7 +84,7 @@
                                 <span class="script_icon">
                                     <img :src="defs.iconsByName(notebook.ctype)" alt="">
                                 </span>
-                                    <p class="data_name" @click.stop="clicknotebooksName(notebook)" :title="notebook.name">{{notebook.detail.name}}</p>
+                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">{{notebook.detail.name}}</p>
                                     <div class="tag_area" ref="tagsArea">
                                         <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
                                         <span v-if="notebook.label !== ''">
@@ -137,7 +137,7 @@
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span  @click='deletedialogopen' class="view_list">
+                            <span @click='deleteNotebook' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
                             </span>
@@ -294,16 +294,6 @@ export default {
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
-        //删除脚本
-        deleteScript(data) {
-            console.log(data)
-        //     data.args.param.selectedScripts = this.notebookscheckedIds
-        //     data.args.param.scriptArray = this.allData.dns
-        //     data.args.param.projectName = this.allData.projectName,
-        //     data.args.param.projectId = this.allData.projectId
-        //     this.$emit('event', data)
-        //     this.deletedialogshow = false;
-        },
         //点击list主体
         clickOnlyOne(notebook) {
             this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
@@ -324,23 +314,23 @@ export default {
             }
         },
         //点击notebooks name
-        clicknotebooksName(notebook) {
+        clickNotebooksName(notebook) {
             console.log(notebook)
-            // const inputName = JSON.parse(notebooks.inputs)[0]
-            // const inputDS = this.allData.dss.filter(it => it.name === inputName)
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "linkToPage",
-            //     element: this,
-            //     param: {
-            //         name: "codeditor",
-            //         projectName: this.allData.projectName,
-            //         projectId: this.allData.projectId,
-            //         notebooks: notebooks,
-            //         inputDS: inputDS
-            //     }
-            // }
-            // this.$emit('event', event)
+            if (notebook.status !== 2) {
+                Message.error("只有已经启动的编译器才能进入", { duration: 0, showClose: true} )
+                return
+            }
+
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    name: "notebook-" + notebook.detail.ctype,
+                    resourceId: notebook.resourceId
+                }
+            }
+            this.$emit('event', event)
         },
         //全选list
         chechedAllnotebooks() {
@@ -394,10 +384,6 @@ export default {
         closeCreateDialog() {
             this.showCreateTagsDialog = false;
         },
-        //关闭scripts弹框
-        // closeScriptDialog() {
-        //     this.showCreationDialog = false
-        // },
         //增加 notebook
         createNotebook (data) {
             data.args.param.projectId = this.allData.projectId
@@ -409,7 +395,7 @@ export default {
             this.deletedialogshow = false;
         },
         //打开删除脚本弹框
-        deletedialogopen() {
+        deleteNotebook() {
             if (this.notebookscheckedIds.length !== 1) {
                 Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true} )
                 return
