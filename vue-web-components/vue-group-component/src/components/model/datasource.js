@@ -4,8 +4,9 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 
 
 export default class PhDataSource {
-    constructor(id) {
+    constructor(id, parent) {
         this.id = id
+		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
         this.debugToken = "959165157859ab897a69fe6abb0080e7d4d042ab0dcafaecfb972d3c2097f041"
@@ -33,7 +34,6 @@ export default class PhDataSource {
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", this.projectId + "_" + this.jobName]
                 "pjName": ["=", projectId + "_" + jobName]
             },
             "limit": 1,

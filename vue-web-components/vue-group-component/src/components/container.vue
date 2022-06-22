@@ -6,7 +6,7 @@
                 <img :src="defs.iconsByName('group')" alt="" />
                 <span>Group</span>
             </div>
-            <div class="header_right" v-show="activeName === 'Setting'">
+            <div class="header_right">
 				<el-radio-group v-model="activeName" class="content">
 					<el-radio-button label="Setting"></el-radio-button>
 					<el-radio-button label="input/output"></el-radio-button>
@@ -14,7 +14,7 @@
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="group_area">
+        <div class="group_area" v-show="activeName === 'Setting'">
             <div class="group_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
@@ -171,7 +171,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -350,7 +350,7 @@ export default {
         // this.jobName = "group"
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        // this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         // this.datasource.refreshMateData(this.projectId, this.datasetId)
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
 		this.datasource.refreshDataset(this.projectId, this.datasetId)
@@ -437,12 +437,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
 
             .group_left {
-                display: flex;
-                flex-direction: row;
-                margin-left: 80px;
-                justify-content: space-around;
+				display: flex;
+				flex-direction: row;
+				padding: 40px;
+				justify-content: space-around;
+				border-right: 1px solid #ccc;
             }
 
             .group_right {
@@ -450,6 +452,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
+				background: #f2f2f2;
+				padding: 20px;
 
             }
         }
