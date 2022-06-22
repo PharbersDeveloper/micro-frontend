@@ -3,8 +3,6 @@
  */
 export default class PhJoinCmd {
     constructor(defs) {
-		console.log("______________________________")
-		console.log(defs)
         this.datasets = defs["datasets"].sort(x => x.index)
         this.caseInsensitive = defs["caseInsensitive"]
         this.normalizeText = defs["normalizeText"]

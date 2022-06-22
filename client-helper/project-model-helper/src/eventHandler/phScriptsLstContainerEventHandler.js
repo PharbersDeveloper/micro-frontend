@@ -127,6 +127,51 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "stack"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "stack_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "stack",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"stack?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&jobId=" +
+					recipt.jobId
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "distinct"
 			) {
 				let recipt = params.recipt
@@ -501,6 +546,28 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&datasetId=" +
 						params.inputs[0]["id"] +
 						"&jobId="
+				} else if (params.runtime === "stack") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "stack",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"stack?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"] +
+						"&jobId="
 				}
 
 				let message = {
@@ -699,7 +766,6 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 	}
 
 	function createScriptNoticeCallback(param, payload) {
-		console.log(payload)
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: {
@@ -707,13 +773,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				error
 			}
 		} = JSON.parse(message)
-		if (
-			runtime !== "python3" ||
-			runtime !== "pyspark" ||
-			runtime !== "r" ||
-			runtime !== "sparkr"
-		) {
-			if (runtime === "join") {
+		const codeditorArr = ["python3", "pyspark", "sparkr", "r"]
+		if (!codeditorArr.includes(runtime)) {
+			if (runtime === "join" || runtime === "stack") {
 				preUrl = preUrl + jobId
 			}
 			route.router.transitionTo("shell", preUrl)
@@ -729,7 +791,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			// 	errorObj["message"]["zh"] !== ""
 			// 		? errorObj["message"]["zh"]
 			// 		: "新建脚本失败，请重新操作！"
-			alert(error)
+			console.log(error)
+			alert("新建脚本失败，请重新操作！")
 		}
 		route.loadingService.loading.style.display = "none"
 	}
