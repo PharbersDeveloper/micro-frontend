@@ -52,6 +52,8 @@ import { phJoinContainerRouteModel } from "./routeModel/phJoinContainerRouteMode
 import { phJoinContainerEventHandler } from "./eventHandler/phJoinContainerEventHandler"
 import { phStackContainerEventHandler } from "./eventHandler/phStackContainerEventHandler"
 import { phStackContainerRouteModel } from "./routeModel/phStackContainerRouteModel"
+import { phNotebookEditorContainerEventHandler } from "./eventHandler/phNotebookEditorContainerEventHandler"
+import { phNotebookEditorContainerRouteModel } from "./routeModel/phNotebookEditorContainerRouteModel"
 import { phGroupContainerRouteModel } from "./routeModel/phGroupContainerRouteModel"
 import { phGroupContainerEventHandler } from "./eventHandler/phGroupContainerEventHandler"
 
@@ -109,6 +111,9 @@ export {
 	phJoinContainerEventHandler,
 	phJoinContainerRouteModel,
 	phStackContainerEventHandler,
+	phStackContainerRouteModel,
+	phNotebookEditorContainerEventHandler,
+	phNotebookEditorContainerRouteModel
 	phStackContainerRouteModel,
 	phGroupContainerRouteModel,
 	phGroupContainerEventHandler

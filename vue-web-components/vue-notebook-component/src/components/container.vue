@@ -327,7 +327,9 @@ export default {
                 element: this,
                 param: {
                     name: "notebook-" + notebook.detail.ctype,
-                    resourceId: notebook.resourceId
+                    resourceId: notebook.resourceId,
+                    projectName: this.allData.projectName,
+                    projectId: this.allData.projectId
                 }
             }
             this.$emit('event', event)
