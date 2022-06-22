@@ -173,8 +173,7 @@ import createNotebookDialog from './create-notebook-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 // import ElButton from 'element-ui/packages/option/index'
-// import { MessageBox, Message } from 'element-ui'
-import { MessageBox } from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions"
 import ElSwitch from "element-ui/packages/switch/index"
@@ -411,22 +410,25 @@ export default {
         },
         //打开删除脚本弹框
         deletedialogopen() {
+            if (this.notebookscheckedIds.length !== 1) {
+                Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true} )
+                return
+            }
+
             // this.deletedialogshow = true;
             MessageBox.confirm('释放删除资源将丢失所有数据！ 是否继续?', '警告', {
                 confirmButtonText: 'OK',
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                // 调用启动前，强制更新一下状态，以免竞争机制
-                // this.datasource.refreshStatus(this.tenantId)
-                // if (this.datasource.switch) {
-                //     // MessageBox.alert("现在不支持自动删除，请联系管理员")
-                // 	this.datasource.resourceStop(this.tenantId)
-                // } else {
-                //     // 通过新的 trace ID 持续访问状态
-                //     Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
-                // }
-                // this.datasource.resourceStop(this.tenantId, row)
+                const event = new Event("event")
+                event.args = {
+                    callback: "deleteNotebook",
+                    param: {
+                        resourceId: this.notebookscheckedIds[0]
+                    }
+                }
+                this.$emit('event', event)
             }).catch(() => {
             })
         },
