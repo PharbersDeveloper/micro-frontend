@@ -1,66 +1,15 @@
-import PhJoinCmd from "./cmd"
+import PhPivotCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
  */
-export default class PhJoinStep {
-    constructor(dbstep) {
+export default class PhPivotStep {
+    constructor(dbstep, schema) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["params"]["joins"]
-        this.commands = defs.map(x => { return new PhJoinCmd(x) })
-        this.datasets = this.queryDatasets()
-    }
-
-    queryDatasets() {
-        const res = []
-        for (let idx = 0; idx < this.commands.length; ++idx) {
-            for (let idn = 0; idn < this.commands[idx]["datasets"].length; ++idn) {
-                const tmp = this.commands[idx]["datasets"][idn]["name"]
-                if (!res.includes(tmp))
-                    res.push(tmp)
-            }
-        }
-        return res
-    }
-
-    hitHeight() {
-        let res = 0
-        for (let idx = 0; idx < this.commands.length; ++idx) {
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
-            res += 20
-        }
-        return Math.max(320, res)
-    }
-
-    hitWidth() {
-        return (500 + 3) * this.datasets.length - 60
-    }
-
-    computeTop(idx) {
-        let res = 0
-        for (let iter = 0; iter < this.commands.length; ++iter) {
-            if (iter === idx) break
-
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
-        }
-        return res
-    }
-
-    computeHeight(idx) {
-        let res = 0
-        for (let iter = 0; iter < this.commands.length; ++iter) {
-            if (iter !== idx) continue
-
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
-        }
-        return Math.max(300, res)
+        const defs = this.expressions["params"]["pivot"]
+        const identifiers = this.expressions["params"]["identifiers"]
+        this.commands = new PhPivotCmd(defs, identifiers, schema)
     }
 
     exec() {

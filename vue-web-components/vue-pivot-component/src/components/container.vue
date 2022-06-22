@@ -30,16 +30,16 @@
                             :step="datasource.step"
                             :schema="datasource.schema"
                             @statusChange="preFilterStatus" />
-<!--                <pre-computed v-show="active === 2"-->
-<!--                              ref="percomputed"-->
-<!--                              :step="datasource.step"-->
-<!--                              :schema="datasource.schema"-->
-<!--                              @statusChange="preComputedStatus" />-->
-<!--                <join v-show="active === 3"-->
-<!--                      ref="join"-->
-<!--                      :step="datasource.step"-->
-<!--                      :schema="datasource.schema"-->
-<!--                      @statusChange="joinStatus" />-->
+                <computed v-show="active === 2"
+                              ref="computed"
+                              :step="datasource.step"
+                              :schema="datasource.schema"
+                              @statusChange="computedStatus" />
+                <pivot v-show="active === 3"
+                      ref="pivot"
+                      :step="datasource.step"
+                      :schema="datasource.schema"
+                      @statusChange="pivotStatus" />
 <!--                <select-cols v-show="active === 4"-->
 <!--                                ref="select"-->
 <!--                                :step="datasource.step"-->
@@ -84,8 +84,9 @@ import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Computed from './steps/commands/computed/computedView'
+import Pivot from './steps/commands/pivot/pivotView'
 // import PreComputed from './steps/commands/pre-join-computed/preJoinComputedView'
-// import Join from './steps/commands/join/joinView'
 // import SelectCols from './steps/commands/select-cols/selectColsView'
 // import PostComputed from './steps/commands/post-join-computed/postJoinComputedView'
 // import PostFilter from './steps/commands/post-filter/postFilterView'
@@ -101,8 +102,8 @@ export default {
         ElStep,
         ElButton,
         PreFilter,
-        // PreComputed,
-        // Join,
+        Computed,
+        Pivot,
         // SelectCols,
         // PostComputed,
         // PostFilter,
@@ -197,7 +198,7 @@ export default {
                 this.stepsDefs[0].status = "error"
             }
         },
-        preComputedStatus(status) {
+        computedStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
                 this.stepsDefs[1].status = "success"
@@ -205,36 +206,12 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        joinStatus(status) {
+        pivotStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[2].status = "success"
+                this.stepsDefs[1].status = "success"
             } else {
-                this.stepsDefs[2].status = "error"
-            }
-        },
-        selectStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
-                this.stepsDefs[3].status = "error"
-            }
-        },
-        postComputedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
-            } else {
-                this.stepsDefs[4].status = "error"
-            }
-        },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[5].status = "success"
-            } else {
-                this.stepsDefs[5].status = "error"
+                this.stepsDefs[1].status = "error"
             }
         },
         outputsStatus(status) {
@@ -278,13 +255,15 @@ export default {
 			if (this.activeName === "Setting") {
 				const params = {
 					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+                    "computedColumns": this.$refs.computed.datasource.revert2Defs(),
 					// "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
 					// "joins": this.$refs.join.datasource.revert2Defs(),
 					// "selectedColumns": this.$refs.select.datasource.revert2Defs(),
 					// "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
 					// "postFilter": this.$refs.postfilter.datasource.revert2Defs()
 				}
-				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+				console.log(params)
+				// this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
 			} else {
 				this.$refs.changeInputOutput.save()
 			}
@@ -382,7 +361,7 @@ export default {
     watch: {
         active() {
             this.$refs.prefilter.validate()
-            // this.$refs.percomputed.validate()
+            this.$refs.computed.validate()
             // this.$refs.join.validate()
             // this.$refs.select.validate()
             // this.$refs.postcomputed.validate()
@@ -391,7 +370,7 @@ export default {
             //
             // if (n === 5) {
             //     this.computedSchema = this.computeSchema()
-                this.outputsSchema = this.genOutputsSchema()
+            //     this.outputsSchema = this.genOutputsSchema()
             // }
             //
             // if (n === 6 || n === 7) {

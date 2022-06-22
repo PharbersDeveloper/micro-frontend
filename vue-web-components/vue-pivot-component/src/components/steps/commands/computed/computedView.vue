@@ -70,7 +70,8 @@ export default {
     },
     mounted() {
         this.datasource = new PhComputedStep(this.step)
-        this.currentExpr = this.datasource.command.computedCols[0]["expr"]
+        if (this.datasource.command.computedCols.length > 0)
+            this.currentExpr = this.datasource.command.computedCols[0]["expr"]
     },
     methods: {
         itemClicked(v) {

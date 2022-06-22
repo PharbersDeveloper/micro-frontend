@@ -1,25 +1,9 @@
-export const PhJoinDefs = {
-    actions: [
-        {
-            avatar: "",
-            desc: "左连接",
-            cal: "LEFT"
-        },
-        {
-            avatar: "",
-            desc: "右连接",
-            cal: "RIGHT"
-        },
-        {
-            avatar: "",
-            desc: "内连接",
-            cal: "INNER"
-        },
-        {
-            avatar: "",
-            desc: "笛卡尔积",
-            cal: "CROSS"
-        }
+export const PhPivotDefs = {
+    sampleData: [
+        { "col": "Pivot Table" },
+        { "col": "Pivot Value" },
+        { "col": "Frequency Table" },
+        { "col": "Various Statistics" },
     ],
     conditions: [
         {
