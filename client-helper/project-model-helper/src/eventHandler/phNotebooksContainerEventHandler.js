@@ -292,8 +292,12 @@ export async function phNotebooksContainerEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId
-			} else if (params.name === "notebook-jupyter") {
-				uri = `notebook-jupyter?resourceId=${params.resourceId}`
+			} else if (
+				params.name === "notebook-jupyter" ||
+				params.name === "notebook-c9"
+			) {
+				const tenantId = route.cookies.read("company_id")
+				uri = `notebook-editor?tenantId=${tenantId}&resourceId=${params.resourceId}&projectId=${params.projectId}&projectName=${params.projectName}`
 			}
 			route.router.transitionTo("shell", encodeURI(uri))
 			break
