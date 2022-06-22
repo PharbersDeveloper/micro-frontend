@@ -100,13 +100,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-switch v-if="notebook.editable"
-                                    v-model="notebook.switch"
-                                    active-color="#13ce66"
-                                    @change="resetStatus(notebook)"/>
-                            <el-switch v-else disabled
-                                       v-model="notebook.switch"
-                                       active-color="#13ce66" />
+                            <div>
+                                <span>{{notebook.message}}</span>
+                                <el-switch v-if="notebook.editable"
+                                           v-model="notebook.switch"
+                                           active-color="#13ce66"
+                                           @change="resetStatus(notebook)"/>
+                                <el-switch v-else disabled
+                                           v-model="notebook.switch"
+                                           active-color="#13ce66" />
+                            </div>
+
                         </div>
                         <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
                     </div>
@@ -459,15 +463,36 @@ export default {
             }
             this.$emit('event', event)
         },
-        dealResourceStart(data) {
-            this.$emit('event', data)
+        dealResourceStart(data, func) {
+            const event = new Event("event")
+            event.args = {
+                callback: "dealResourceStart",
+                param: {
+                    traceId: data.traceId,
+                    callback: func
+                }
+            }
+            this.$emit('event', event)
         },
-        dealResourceStop(data) {
-            this.$emit('event', data)
+        dealResourceStop(data, func) {
+            const event = new Event("event")
+            event.args = {
+                callback: "dealResourceStop",
+                param: {
+                    traceId: data.traceId,
+                    callback: func
+                }
+            }
+            this.$emit('event', event)
         },
         // 启停
         resetStatus(notebook) {
-            this.datasource.resourceStart(this.allData.tenantId, notebook)
+            console.log(notebook.switch)
+            if (notebook.switch) {
+                this.datasource.resourceStart(this.allData.tenantId, notebook)
+            } else {
+                this.datasource.resourceStop(this.allData.tenantId, notebook)
+            }
         }
     }
 }

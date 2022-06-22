@@ -50,12 +50,13 @@ export default class PhDataSource {
             .then((response) => response.json())
             .then((response) => {
                 response["data"].forEach(x => {
-                    const tmp = that.model.find(x => x.resourceId === x.id)
-                    if (tmp && tmp.status !== 0) {
+                    const tmp = that.model.find(it => it.resourceId === x.id)
+                    if (tmp && tmp.status !== -99 && tmp.status !== 0) {
                         tmp.status = x.status
-                        tmp.switch = x.status === 0 || x.status === 4
+                        tmp.switch = x.status === 1 || x.status === 2
                         tmp.editable = x.status === 0 || x.status === 2
                         tmp.traceId = x.traceId
+                        tmp.resetMessage()
                     }
                 })
                 this.isReady = true
@@ -65,11 +66,10 @@ export default class PhDataSource {
     buildStartQuery(tenantId, model) {
         const url = `${hostName}/phjupyterboottrigger`
         const accessToken = this.getCookie("access_token")
-        const traceId = this.guid()
+        // const traceId = this.guid()
         let body = {
             "tenantId": tenantId,
-            // "tenantId": "alfredtest",
-            "traceId": traceId,
+            "traceId": model.traceId,
             "owner": this.getCookie("account_id"),
             "showName":  decodeURI(
                 decodeURI(
@@ -91,22 +91,42 @@ export default class PhDataSource {
     }
 
     resourceStart(tenantId, model) {
-        model.editable = false
         const that = this
         this.buildStartQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
-                that.parent.dealResourceStart(response, model)
+                if (response.status === "succeed") {
+                    model.editable = false
+                    model.status = 1
+                    model.resetMessage()
+
+                    that.parent.dealResourceStart(model, (param, payload) => {
+                        console.log("resource start callback")
+                        const { status } = JSON.parse(payload)
+                        const tmp = that.model.find(x => x.traceId === param.id)
+
+                        if (tmp) {
+                            if (status === "started") {
+                                tmp.status = 2
+                            }
+                            tmp.switch = tmp.status === 1 || tmp.status === 2
+                            tmp.editable = tmp.status === 0 || tmp.status === 2
+                            tmp.resetMessage()
+                        }
+                    })
+                } else {
+                    alert("启动失败")
+                }
             })
     }
 
     buildStopQuery(tenantId, model) {
         const url = `${hostName}/phjupyterstoptrigger`
         const accessToken = this.getCookie("access_token")
-        const traceId = this.getCookie("jupyterTraceId")
+        // const traceId = this.getCookie("jupyterTraceId")
         let body = {
             "tenantId": tenantId,
-            "traceId": traceId,
+            "traceId": model.traceId,
             "owner": this.getCookie("account_id"),
             "showName":  decodeURI(
                 decodeURI(
@@ -128,12 +148,32 @@ export default class PhDataSource {
     }
 
     resourceStop(tenantId, model) {
-        model.editable = false
-        const that = this
         this.buildStopQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
-                that.parent.dealResourceStop(response, model)
+                if (response.status === "succeed") {
+                    model.editable = false
+                    const that = this
+                    model.status = 4
+                    model.resetMessage()
+
+                    that.parent.dealResourceStop(model, (param, payload) => {
+                        console.log("resource stop callback")
+                        const { status } = JSON.parse(payload)
+                        const tmp = that.model.find(x => x.traceId === param.id)
+
+                        if (tmp) {
+                            if (status === "stopped") {
+                                tmp.status = 0
+                            }
+                            tmp.switch = tmp.status === 1 || tmp.status === 2
+                            tmp.editable = tmp.status === 0 || tmp.status === 2
+                            tmp.resetMessage()
+                        }
+                    })
+                } else {
+                    alert("停止失败")
+                }
             })
     }
 
@@ -142,7 +182,7 @@ export default class PhDataSource {
             /[xy]/g,
             function (c) {
                 var r = (Math.random() * 16) | 0,
-                    v = c == "x" ? r : (r & 0x3) | 0x8
+                    v = c === "x" ? r : (r & 0x3) | 0x8
                 return v.toString(16)
             }
         )
