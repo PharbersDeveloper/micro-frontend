@@ -41,7 +41,7 @@ export default {
     computed: {
         style() {
             if (this.step) {
-                return "height: " + this.step.hitHeight() + "px; background-color: red;"
+                return "height: " + this.step.hitHeight() + "px; background-color: #f2f2f2;border: 1px dashed #aaa;"
             } else return ""
         }
     }

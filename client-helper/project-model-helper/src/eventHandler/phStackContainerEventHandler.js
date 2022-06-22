@@ -1,16 +1,16 @@
 import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
-export async function phJoinContainerEventHandler(e, route) {
+export async function phStackContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
 	const accessToken = route.cookies.read("access_token")
-	let joinData = await route.store.peekRecord("tempdata", "join")
+	let stackData = await route.store.peekRecord("tempdata", "stack")
 	let scriptsParams = {}
 	let inputs = []
 	let outputs = []
-	if (joinData) {
-		scriptsParams = joinData.jsondata
+	if (stackData) {
+		scriptsParams = stackData.jsondata
 
 		inputs = scriptsParams.inputs[0].name
 			? scriptsParams.inputs
@@ -57,7 +57,7 @@ export async function phJoinContainerEventHandler(e, route) {
 			}
 			route.router.transitionTo(uri)
 			break
-		case "saveJoin":
+		case "saveStack":
 			if (params) {
 				const url = `${hostName}/phresourcecodegentrigger`
 				const uuid = guid()
@@ -65,7 +65,7 @@ export async function phJoinContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				let job_cat_name = "join_edit"
+				let job_cat_name = "stack_edit"
 				let scriptBody = {
 					common: {
 						traceId: uuid,
@@ -79,11 +79,11 @@ export async function phJoinContainerEventHandler(e, route) {
 						)
 					},
 					action: {
-						cat: "editJoin",
-						desc: "edit join steps",
+						cat: "editStack",
+						desc: "edit stack steps",
 						comments: "something need to say",
 						message: JSON.stringify({
-							optionName: "join_edit",
+							optionName: "stack_edit",
 							cat: "intermediate",
 							runtime: "orderby",
 							actionName: scriptsParams.jobShowName
@@ -100,7 +100,7 @@ export async function phJoinContainerEventHandler(e, route) {
 						jobPath: "",
 						inputs: inputs,
 						outputs: outputs,
-						runtime: "join"
+						runtime: "stack"
 					},
 					steps: params.stepsArr,
 					notification: {
@@ -160,7 +160,7 @@ export async function phJoinContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "changeInputOutput",
 							cat: "intermediate",
-							runtime: "join",
+							runtime: "stack",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName

@@ -205,13 +205,81 @@ export default class PhDataSource {
         })
     }
 
+	refreshDataset(projectId) {
+        const that = this
+        this.buildDatasetQuery(projectId)
+            .then((response) => response.json())
+            .then((response) => {
+				console.log(response)
+				that.store.sync(response)
+                const data = that.store.findAll("datasets")
+				that.parent.datasetArray = data
+            })
+    }
+
+	buildDatasetQuery(projectId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "dataset",
+            "conditions": {
+                "projectId": ["=", projectId]
+            },
+			index_name: "dataset-projectId-name-index",
+            "limit": 1000,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+	refreshInOut(projectId, jobName) {
+        const that = this
+        this.buildInOutQuery(projectId, jobName)
+            .then((response) => response.json())
+            .then((response) => {
+				console.log(response)
+				that.parent.inArray = response.input
+				that.parent.outArray = response.output
+            })
+    }
+
+	buildInOutQuery(projectId, jobName) {
+        const url = `${hostName}/phcheckinout`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+			"name": jobName,
+			"projectId": projectId
+		}
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
     buildSaveQuery(projectId, jobName, param) {
 		const steps = [{
 			pjName: this.step["pj-name"],
 			stepId: this.step["step-id"],
 			ctype: this.step["ctype"],
 			expressions: {
-				"type": "sort",
+				"type": "stack",
 				"code": "pyspark",
 				"params": param
 			},
@@ -225,53 +293,19 @@ export default class PhDataSource {
 		}]
 		const event = new Event("event")
 		event.args = {
-			callback: "saveSort",
+			callback: "saveStack",
 			element: this,
 			param: {
-				name: "saveSort",
+				name: "saveStack",
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
 				stepsArr: steps
 			}
 		}
 		this.parent.$emit('event', event)
-        // @wodelu 这里改成code gen 逻辑
-        // const url = `${hostName}/phdydatasource/put_item`
-        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        // let body = {
-        //     table: "step",
-        //     item: {
-        //         pjName: this.step["pj-name"],
-        //         stepId: this.step["step-id"],
-        //         ctype: this.step["ctype"],
-        //         expressions: JSON.stringify({ "params": param }),
-        //         expressionsValue: this.step["expressions-value"],
-        //         groupIndex: this.step["group-index"],
-        //         groupName: this.step["group-name"],
-        //         id: this.step["id"],
-        //         index: this.step["index"],
-        //         runtime : this.step["runtime"],
-        //         stepName: this.step["step-name"]
-        //     }
-        // }
-
-        // let options = {
-        //     method: "POST",
-        //     headers: {
-        //         "Authorization": accessToken,
-        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         "accept": "application/json"
-        //     },
-        //     body: JSON.stringify(body)
-        // }
-        // return fetch(url, options)
     }
 
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
-            // .then((response) => response.json())
-            // .then((response) => {
-            //     console.log(response)
-            // })
     }
 }

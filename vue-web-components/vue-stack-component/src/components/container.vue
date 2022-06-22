@@ -4,13 +4,17 @@
         <div class="stack_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('stack')" alt="" />
-                <span>Sort</span>
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
+				<el-radio-group v-model="activeName" class="content">
+					<el-radio-button label="Setting"></el-radio-button>
+					<el-radio-button label="input/output"></el-radio-button>
+				</el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="stack_area">
+        <div class="stack_area"  v-show="activeName === 'Setting'">
             <div class="stack_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
@@ -49,6 +53,17 @@
                 Schema 不对，找产品处理
             </div>
         </div>
+		<div v-show="activeName === 'input/output'">
+			<change-input-output
+				ref="changeInputOutput"
+				:inputs="inputs"	
+				:outputs="outputs"
+				:inArray="inArray"
+				:outArray="outArray"
+				@changScriptInputOutput="changScriptInputOutput"
+				:datasetArray="datasetArray"
+			/>
+        </div>
     </div>
 </template>
 <script>
@@ -62,6 +77,10 @@ import SelectCols from './steps/commands/select-cols/selectColsView'
 import OriginCols from './steps/commands/origin-cols/originColsView'
 import PostFilter from './steps/commands/post-filter/postFilterView'
 import Outputs from './steps/commands/output/outputView'
+import ElRadioGroup from "element-ui/packages/radio-group/index"
+import ElRadioButton from "element-ui/packages/radio-button/index"
+import changeInputOutput from "./change-input-output"
+import { Message } from 'element-ui'
 
 export default {
     components: {
@@ -73,6 +92,9 @@ export default {
         OriginCols,
         PostFilter,
         Outputs,
+		ElRadioGroup,
+        ElRadioButton,
+		changeInputOutput
     },
     data() {
         return {
@@ -105,7 +127,14 @@ export default {
                     index: 5,
                     status: "wait"  // wait / process / finish / error / success
                 }
-            ]
+            ],
+			activeName: "Setting",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+			outputs: [],
+            inputs: [],
+            datasetArray: []
         }
     },
     props: {
@@ -142,6 +171,7 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(status) {
@@ -187,29 +217,99 @@ export default {
             return result
         },
         save() {
-            const params = {
-                "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
-                "selectedColumns": this.$refs.select.datasource.revert2Defs().selectedColumns,
-                "columnsMatches": this.$refs.select.datasource.revert2Defs().columnsMatches,
-                "originColumn": this.$refs.origin.datasource.revert2Defs(),
-                "postFilter": this.$refs.postfilter.datasource.revert2Defs()
-            }
-            console.log(params)
-            // this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-        }
+			if (this.activeName === "Setting") {
+				const params = {
+					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+					"selectedColumns": this.$refs.select.datasource.revert2Defs().selectedColumns,
+					"columnsMatches": this.$refs.select.datasource.revert2Defs().columnsMatches,
+					"originColumn": this.$refs.origin.datasource.revert2Defs(),
+					"postFilter": this.$refs.postfilter.datasource.revert2Defs()
+				}
+				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+			} else {
+				this.$refs.changeInputOutput.save()
+			}
+        },
+		changScriptInputOutput(data) {
+			let inputNameOld = this.allData.inputs[0]
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = data.args.param.inputsArray[0]
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.allData.outputs[0]
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = data.args.param.outputsArray[0]
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify(data.args.param.inputsArray),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
+			const event = new Event("event")
+			event.args = {
+				callback: "changScriptInputOutput",
+				element: this,
+				param: {
+					name: "changScriptInputOutput",
+					projectId: this.projectId,
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
+				}
+			}
+			this.$emit('event', event)
+		}
     },
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
+		this.jobName = this.getJobName()
+        // this.projectIdTest = "alfredtest"
         // this.jobName = this.getJobName()
-        this.jobName = "stack"
+        // this.jobName = "stack"
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
         // console.log(this.datasource.job)
         // console.log(this.datasource.datasets)
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+		this.datasource.refreshDataset(this.projectId)
     },
     updated() {
 
@@ -225,7 +325,16 @@ export default {
             if (n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
             }
-        }
+        },
+		activeName(n) {
+            this.$emit("active", n)
+        },
+        "allData.inputs": function(n) {
+            this.inputs = n
+        },
+		"allData.outputs": function(n) {
+            this.outputs = n
+		}
     }
 }
 </script>
@@ -276,6 +385,9 @@ export default {
                 /*    background: none;*/
                 /*    cursor: pointer;*/
                 /*}*/
+				.content {
+					margin-right: 30px;
+				}
             }
         }
 

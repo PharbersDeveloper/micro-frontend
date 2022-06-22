@@ -50,8 +50,8 @@ export default class PhDataSource {
             .then((response) => response.json())
             .then((response) => {
                 response["data"].forEach(x => {
-                    const tmp = that.model.find(it => it.resourceId === x.id)
-                    if (tmp && tmp.status !== -99 && tmp.status !== 0) {
+                    if (x && x.status !== -99 && x.status !== 0) {
+                        const tmp = that.model.find(it => it.resourceId === x.id)
                         tmp.status = x.status
                         tmp.switch = x.status === 1 || x.status === 2
                         tmp.editable = x.status === 0 || x.status === 2

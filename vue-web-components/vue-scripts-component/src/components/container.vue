@@ -617,6 +617,10 @@ export default {
                 return this.defs.iconsByName("distinct")
             case "join":
                 return this.defs.iconsByName("join")
+            case "stack":
+                return this.defs.iconsByName("stack")
+            case "group":
+                return this.defs.iconsByName("group")
             default:
                 return this.script_icon
             }

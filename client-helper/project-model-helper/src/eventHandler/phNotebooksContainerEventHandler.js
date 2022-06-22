@@ -292,11 +292,26 @@ export async function phNotebooksContainerEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId
+			} else if (
+				params.name === "notebook-jupyter" ||
+				params.name === "notebook-c9"
+			) {
+				const tenantId = route.cookies.read("company_id")
+				uri = `notebook-editor?tenantId=${tenantId}&resourceId=${params.resourceId}&projectId=${params.projectId}&projectName=${params.projectName}`
 			}
 			route.router.transitionTo("shell", encodeURI(uri))
 			break
 		case "createNotebook":
 			if (params) {
+				// const priority = 100
+				const { status, priority, message } =
+					await queryCreateValidate()
+
+				if (status !== "ok") {
+					alert(message)
+					return
+				}
+
 				const name = params.name
 				const projectId = params.projectId
 				const accessToken = route.cookies.read("access_token")
@@ -315,7 +330,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 						parameters: {
 							EC2User: owner,
 							InstanceType: "t3.small",
-							Priority: "16",
+							Priority: priority.toString(),
 							ExportPort: "8888"
 						}
 					}
@@ -334,7 +349,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 						properties: JSON.stringify(properties),
 						resultPath: "codeeditor[]",
 						role: "codeeditor",
-						priority: 100
+						priority: priority
 					}
 				}
 
@@ -442,79 +457,35 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			})
 			break
 		//删除脚本
-		// case "deleteScripts":
-		// 	if (params) {
-		// 		route.loadingService.loading.style.display = "flex"
-		// 		route.loadingService.loading.style["z-index"] = 2
-		// 		let selectedScriptsDel = params.selectedScripts //需要更新的dataset
-		// 		let scriptArrayDel = params.scriptArray //发送请求的参数在这取
-		// 		let msgArr = []
-		// 		selectedScriptsDel.forEach(async (targetId) => {
-		// 			let targetDataset = scriptArrayDel.filter(
-		// 				(it) => it.id == targetId
-		// 			)[0]
-		// 			msgArr.push({
-		// 				actionName: targetDataset.jobShowName,
-		// 				jobName: targetDataset.jobName
-		// 			})
-		// 		})
-		// 		const deluuid = guid()
-		// 		let body = {
-		// 			common: {
-		// 				traceId: deluuid,
-		// 				projectId: params.projectId,
-		// 				projectName: params.projectName,
-		// 				flowVersion: "developer",
-		// 				owner: route.cookies.read("account_id"),
-		// 				showName: decodeURI(
-		// 					route.cookies.read("user_name_show")
-		// 				),
-		// 				tenantId: route.cookies.read("company_id")
-		// 			},
-		// 			action: {
-		// 				cat: "deleteResource",
-		// 				desc: "delete script",
-		// 				comments: "something need to say",
-		// 				message: JSON.stringify({
-		// 					optionName: "delete_script",
-		// 					cat: "intermediate",
-		// 					runtime: "python3",
-		// 					actionName: msgArr[0].actionName
-		// 				}),
-		// 				required: true
-		// 			},
-		// 			datasets: [],
-		// 			scripts: msgArr,
-		// 			notification: {
-		// 				required: true
-		// 			},
-		// 			result: {}
-		// 		}
-		// 		const urldel = `${hostName}/phresdeletiontrigger`
-		// 		const accessTokendel = route.cookies.read("access_token")
-		// 		let options = {
-		// 			method: "POST",
-		// 			headers: {
-		// 				Authorization: accessTokendel,
-		// 				"Content-Type":
-		// 					"application/x-www-form-urlencoded; charset=UTF-8",
-		// 				accept: "application/json"
-		// 			},
-		// 			body: JSON.stringify(body)
-		// 		}
-		// 		await fetch(urldel, options).then((res) => res.json())
-		// 		route.noticeService.defineAction({
-		// 			type: "iot",
-		// 			remoteResource: "notification",
-		// 			runnerId: "",
-		// 			id: deluuid,
-		// 			eventName: deleteScriptsEventName,
-		// 			projectId: params.projectId,
-		// 			ownerId: route.cookies.read("account_id"),
-		// 			callBack: deleteDatasetsNoticeCallback
-		// 		})
-		// 	}
-		// 	break
+		case "deleteNotebook":
+			if (params) {
+				const resourceId = params.resourceId
+				const accessToken = route.cookies.read("access_token")
+				const tenantId = route.cookies.read("company_id")
+				const url = `${hostName}/phdydatasource/delete_item`
+
+				let body = {
+					table: "resource",
+					conditions: {
+						tenantId: tenantId,
+						id: resourceId
+					}
+				}
+
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(url, options)
+				window.location.reload()
+			}
+			break
 		default:
 			console.log("other click event!")
 	}
@@ -620,9 +591,40 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			/[xy]/g,
 			function (c) {
 				var r = (Math.random() * 16) | 0,
-					v = c == "x" ? r : (r & 0x3) | 0x8
+					v = c === "x" ? r : (r & 0x3) | 0x8
 				return v.toString(16)
 			}
 		)
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	async function queryCreateValidate() {
+		const accessToken = route.cookies.read("access_token")
+		const tenantId = route.cookies.read("company_id")
+		const url = `${hostName}/phgetjupyternumber`
+
+		let body = {
+			tenantId: tenantId
+		}
+
+		let options = {
+			method: "POST",
+			headers: {
+				Authorization: accessToken,
+				"Content-Type":
+					"application/x-www-form-urlencoded; charset=UTF-8",
+				accept: "application/json"
+			},
+			body: JSON.stringify(body)
+		}
+		const p = await fetch(url, options)
+			.then((response) => response.json())
+			.then((response) => {
+				return response
+			})
+		const fp = await p
+		if (fp.code === 0)
+			return { status: "ok", priority: fp.priority, message: null }
+		else return { status: "error", priority: -99, message: fp.message }
 	}
 }

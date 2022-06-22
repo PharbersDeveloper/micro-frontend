@@ -94,9 +94,10 @@ export default {
         padding: 4px;
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
+        background: #fff;
+        height: fit-content;
+        padding: 20px;
+        height: calc( 100vh - 150px);
 
         .join-title {
             display: flex;
@@ -118,6 +119,8 @@ export default {
 
     .join-content {
         position: relative;
+        display: flex;
+        flex-grow: 1;
     }
 
     .join-dataset-list {
@@ -127,9 +130,9 @@ export default {
 
     .join-join-list {
         position: absolute;
-        left: 0;
-        top: 50px;
-        border: 1px solid green;
+        left: 30px;
+        top: 100px;
+        border: 1px solid #f2f2f2;
         display: flex;
         flex-direction: column;
     }

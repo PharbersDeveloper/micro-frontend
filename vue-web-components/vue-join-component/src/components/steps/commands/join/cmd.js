@@ -42,6 +42,7 @@ export default class PhJoinCmd {
         return {
             datasets: this.datasets,
             normalizeText: this.normalizeText,
+			type: this.type,
             caseInsensitive: this.caseInsensitive,
             on: this.on.map(x => { return {
                 type: x["type"],

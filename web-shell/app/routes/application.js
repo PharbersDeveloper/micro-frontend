@@ -44,22 +44,12 @@ export default class ApplicationRoute extends Route {
 		let routeValue = ""
 		let urlName = window.location.href.split("?")[0]
 		let name = urlName.split("/").pop()
-
-		if(name == "dataset") {
+		const scriptArray = ["prepare", "topn", "sync", "distinct", "join", "stack", "group", "prepare-set"]
+		if (name == "dataset") {
 			routeValue = "dataset-lst"
-		} else if(urlName.indexOf("/flow") > -1) {
+		} else if (urlName.indexOf("/flow") > -1) {
 			routeValue = "flow"
-		} else if(urlName.indexOf("/prepare") > -1) {
-			routeValue = "recipes"
-		} else if(urlName.indexOf("/topn") > -1) {
-			routeValue = "recipes"
-		} else if(urlName.indexOf("/sync") > -1) {
-			routeValue = "recipes"
-		} else if(urlName.indexOf("/sort") > -1) {
-			routeValue = "recipes"
-		} else if(urlName.indexOf("/distinct") > -1) {
-			routeValue = "recipes"
-		} else if(urlName.indexOf("/join") > -1) {
+		} else if (scriptArray.indexOf(name) > -1) {
 			routeValue = "recipes"
 		}
 		return routeValue

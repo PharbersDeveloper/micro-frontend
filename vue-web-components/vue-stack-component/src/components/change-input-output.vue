@@ -11,10 +11,10 @@
                         @click="delInputItem(item)"
                         class="el-icon-delete red pointer"></i>
                 </div>
-                <el-button 
+                <!-- <el-button 
                     disabled
                     @click="selectInput=!selectInput"
-                    type="primary">添加</el-button>
+                    type="primary">添加</el-button> -->
             </div>
             <div class="input-for-select" v-show="selectInput">
                 <div class="search">
