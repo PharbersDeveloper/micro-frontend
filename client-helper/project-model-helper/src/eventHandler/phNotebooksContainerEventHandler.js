@@ -297,12 +297,14 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			break
 		case "createNotebook":
 			if (params) {
-				const priority = 100
-				// const { status, priority, message } = queryCreateValidate()
-				// if (status !== "ok") {
-				// 	alert(message)
-				// 	return
-				// }
+				// const priority = 100
+				const { status, priority, message } =
+					await queryCreateValidate()
+
+				if (status !== "ok") {
+					alert(message)
+					return
+				}
 
 				const name = params.name
 				const projectId = params.projectId
@@ -612,7 +614,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		const p = await fetch(url, options)
 			.then((response) => response.json())
 			.then((response) => {
-				console.log(response)
+				return response
 			})
 		const fp = await p
 		if (fp.code === 0)
