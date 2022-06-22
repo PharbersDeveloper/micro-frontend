@@ -8,7 +8,7 @@
                         <div class="selected_search">
                             <div class="selected"
                                 :class="[{'bg_disabled': notebookscheckedIds.length === 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllnotebooks()' :checked="notebookscheckedIds.length === allData.dns.length">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllnotebooks()' :checked="notebookscheckedIds.length === searchData.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -306,11 +306,11 @@ export default {
         },
         //点击list主体
         clickOnlyOne(notebook) {
-            this.script_icon_show = this.defs.iconsByName(notebook.ctype)
+            this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
-            this.notebookscheckedIds.push(notebook.id)
-            this.notebookscheckedNames.push(notebook.name)
+            this.notebookscheckedIds.push(notebook.detail.id)
+            this.notebookscheckedNames.push(notebook.detail.name)
         },
         //点击list多选框
         checkedOnenotebooks(notebook) {
