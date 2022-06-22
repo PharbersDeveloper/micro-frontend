@@ -82,6 +82,51 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.inputDS[0]["id"]
 			} else if (
 				params.name === "codeditor" &&
+				params.recipt.runtime === "group"
+			) {
+				let recipt = params.recipt
+				let inputName = JSON.parse(recipt.inputs)[0]
+				let scripts = {
+					name: "editScripts",
+					jobName: recipt.jobName,
+					jobId: recipt.jobId,
+					targetJobId: recipt.targetJobId,
+					inputs: JSON.parse(recipt.inputs),
+					outputs: recipt.outputs,
+					jobVersion: recipt.jobVersion,
+					projectName: params.projectName,
+					jobDisplayName: recipt.jobDisplayName,
+					jobShowName: recipt.jobShowName,
+					projectId: params.projectId,
+					jobCat: "group_edit"
+				}
+				route.store.unloadAll("tempdata")
+				route.store.pushPayload({
+					data: [
+						{
+							type: "tempdatas",
+							id: "group",
+							attributes: {
+								jsondata: scripts
+							}
+						}
+					]
+				})
+				uri =
+					"group?projectName=" +
+					params.projectName +
+					"&projectId=" +
+					params.projectId +
+					"&jobName=" +
+					recipt.jobName +
+					"&jobShowName=" +
+					recipt.jobShowName +
+					"&inputName=" +
+					inputName +
+					"&datasetId=" +
+					params.inputDS[0]["id"]
+			} else if (
+				params.name === "codeditor" &&
 				params.recipt.runtime === "join"
 			) {
 				let recipt = params.recipt
@@ -489,6 +534,27 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					})
 					preUrl =
 						"sort?projectName=" +
+						params.projectName +
+						"&projectId=" +
+						params.projectId +
+						"&jobName=" +
+						params.jobName +
+						"&datasetId=" +
+						params.inputs[0]["id"]
+				} else if (params.runtime === "group") {
+					route.store.pushPayload({
+						data: [
+							{
+								type: "tempdatas",
+								id: "group",
+								attributes: {
+									jsondata: params
+								}
+							}
+						]
+					})
+					preUrl =
+						"group?projectName=" +
 						params.projectName +
 						"&projectId=" +
 						params.projectId +
