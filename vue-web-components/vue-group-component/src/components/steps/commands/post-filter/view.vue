@@ -87,11 +87,12 @@ export default {
     }
     .pre-filter {
         margin-top: 4px;
-        /*width: 100%;*/
         min-width: 800px;
-        padding: 4px;
         display: flex;
         flex-direction: column;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .condition-title {
             display: flex;

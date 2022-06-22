@@ -97,13 +97,13 @@
         box-sizing: border-box;
     }
     .pre-filter {
-        margin-top: 4px;
-        width: 100%;
-        /*min-width: 800px;*/
-        padding: 4px;
+       margin-top: 4px;
+        min-width: 800px;
         display: flex;
         flex-direction: column;
-        overflow: auto;
+		background: #fff;
+		height: fit-content;
+		padding: 20px;
 
         .condition-title {
             display: flex;
