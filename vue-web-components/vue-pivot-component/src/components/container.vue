@@ -219,10 +219,11 @@ export default {
         },
         genOutputsSchema() {
             const identifiers = this.$refs.pivot.datasource.revert2Defs().identifiers
-            const pivotColumns = this.$refs.pivot.datasource.revert2Defs().pivot.keyColumns.map(x => x.column)
+            const pivotColumns = this.$refs.pivot.datasource.revert2Defs().pivot.keyColumns
+            const valueColumns = this.$refs.pivot.datasource.revert2Defs().pivot.valueColumns.map(x => x.column)
             const otherColumns = this.$refs.other.datasource.revert2Defs().map(x => x.column)
 
-            return identifiers.concat(pivotColumns).concat(otherColumns)
+            return identifiers.concat(pivotColumns).concat(valueColumns).concat(otherColumns)
         },
         save() {
 			if (this.activeName === "Setting") {

@@ -170,8 +170,6 @@ export default {
                 }
             }
 
-            console.log(1)
-            console.log(this.datasource.commands)
             this.ignoredClearMsg = true
             const that = this
             this.$nextTick(() => {
@@ -197,9 +195,6 @@ export default {
             this.datasource.changeComputedGroupCount(this.computedGroupCount)
         },
         handleSelectionChange(val) {
-            console.log(3)
-            console.log(this.ignoredClearMsg)
-            console.log(this.datasource.commands)
             if (!this.ignoredClearMsg) {
                 this.datasource.commands.forEach(x => {
                     x.isUsed = val.includes(x);
@@ -215,7 +210,6 @@ export default {
     watch: {
         "datasource.needRefresh": function() {
             this.notGroupedCommands = this.resetSelectGroupKeys()
-            // this.ignoredClearMsg = true
         }
     }
 }
