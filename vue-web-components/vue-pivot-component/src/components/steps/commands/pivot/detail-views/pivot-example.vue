@@ -3,7 +3,7 @@
         <div class="pivot-example-content" >
             <div class="pivot-example-sample">
                 <el-table
-                        height="260"
+                        height="230"
                         :cell-style="tableNoBorder"
                         :header-cell-style="tableNoBorder"
                         @cell-click="cellClicked"
@@ -16,10 +16,137 @@
                 </el-table>
             </div>
             <div class="pivot-example-setting">
-
+                <el-table
+                        height="230"
+                        :cell-style="tableNoBorder"
+                        :header-cell-style="tableNoBorder"
+                        :data="defs.settingData[selected]">
+                    <el-table-column
+                            prop="data"
+                            label="Setting"
+                            width="180">
+                    </el-table-column>
+                </el-table>
             </div>
             <div class="pivot-example-display">
+                <div>
+                    <el-table v-if="selected !== 'Pivot Value'"
+                            style="width: 300px; margin-top: 5px"
+                            :data="defs.condData[selected]">
+                        <el-table-column
+                                prop="id"
+                                label="Id">
+                        </el-table-column>
+                        <el-table-column
+                                prop="country"
+                                label="country">
+                        </el-table-column>
+                        <el-table-column
+                                prop="year"
+                                label="year">
+                        </el-table-column>
+                        <el-table-column
+                                prop="qty"
+                                label="qty">
+                        </el-table-column>
+                    </el-table>
+                    <el-table v-else
+                              style="width: 300px; margin-top: 5px"
+                              :data="defs.condData[selected]">
+                        <el-table-column
+                                prop="id"
+                                label="Id">
+                        </el-table-column>
+                        <el-table-column
+                                prop="metric"
+                                label="metric">
+                        </el-table-column>
+                        <el-table-column
+                                prop="values"
+                                label="values">
+                        </el-table-column>
+                    </el-table>
+                </div>
 
+                <div class="hor-center">
+                    <svg width="180" height="200">
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10"
+                                    refX='0' refY='2' orient="auto"
+                                    markerUnits="strokeWidth" viewBox="0 0 20 20">
+                                <path d="M0,0 L0,6 L9,3 z" fill="red" />
+                            </marker>
+                        </defs>
+                        <line x1="0" y1="100" :x2="150" y2="100" stroke="green" stroke-width="5" marker-end="url(#arrow)" />
+                    </svg>
+                </div>
+                <div>
+                    <el-table v-if="selected === 'Pivot Table'"
+                            style="width: 300px; margin-top: 5px"
+                            :data="defs.pivotData[selected]">
+                        <el-table-column
+                                prop="country" >
+                        </el-table-column>
+                        <el-table-column
+                                prop="2016"
+                                label="2016">
+                        </el-table-column>
+                        <el-table-column
+                                prop="2017"
+                                label="2017">
+                        </el-table-column>
+                    </el-table>
+                    <el-table v-if="selected === 'Pivot Value'"
+                              style="width: 300px; margin-top: 5px"
+                              :data="defs.pivotData[selected]">
+                        <el-table-column
+                                prop="id" >
+                        </el-table-column>
+                        <el-table-column
+                                prop="weight"
+                                label="weight">
+                        </el-table-column>
+                        <el-table-column
+                                prop="height"
+                                label="height">
+                        </el-table-column>
+                    </el-table>
+                    <el-table v-if="selected === 'Frequency Table'"
+                              style="width: 300px; margin-top: 5px"
+                              :data="defs.pivotData[selected]">
+                        <el-table-column
+                                prop="country" >
+                        </el-table-column>
+                        <el-table-column
+                                prop="2016"
+                                label="2016">
+                        </el-table-column>
+                        <el-table-column
+                                prop="2017"
+                                label="2017">
+                        </el-table-column>
+                    </el-table>
+                    <el-table v-if="selected === 'Various Statistics'"
+                              style="width: 320px; margin-top: 5px"
+                              :data="defs.pivotData[selected]">
+                        <el-table-column
+                                prop="country" >
+                        </el-table-column>
+                        <el-table-column
+                                prop="2016"
+                                label="2016">
+                        </el-table-column>
+                        <el-table-column
+                                prop="2017"
+                                label="2017">
+                        </el-table-column>
+                        <el-table-column
+                                width="100"
+                                prop="avg(qty)"
+                                label="avg(qty)">
+                        </el-table-column>
+                    </el-table>
+                </div>
             </div>
         </div>
     </div>
@@ -32,7 +159,7 @@ import { PhPivotDefs } from '../defs'
 export default {
     data() {
         return {
-
+            selected: "Pivot Table"
         }
     },
     props: {
@@ -60,11 +187,14 @@ export default {
             return 'border: none';
         },
         cellClicked(row) {
-            console.log(row)
+            this.selected = row.col
         }
     },
     computed: {
-
+        lineLength: function() {
+            console.log(1)
+            return 150
+        }
     }
 }
 </script>
@@ -100,11 +230,20 @@ export default {
         .pivot-example-display {
             flex: 0 0 100%;
             background-color: #2c3e50;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
         }
     }
 
     .no-border-class {
         border-bottom: none !important;
+    }
+
+    .hor-center {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
     }
 
 
