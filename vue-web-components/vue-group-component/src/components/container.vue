@@ -51,7 +51,7 @@
                             :schema="datasource.dataset.schema"
                             @statusChange="postFilterStatus" />
                 <outputs v-show="active === 6"
-                                ref="outputs"
+                                ref="output"
                                 :schema="datasource.dataset.schema"
                                 @statusChange="outputsStatus" />
             </div>
@@ -66,7 +66,7 @@
 				:outputs="outputs"
 				:inArray="inArray"
 				:outArray="outArray"
-				@changeTopnInputOutput="changeTopnInputOutput"
+				@changScriptInputOutput="changScriptInputOutput"
 				:datasetArray="datasetArray"
 			/>
         </div>
@@ -147,7 +147,8 @@ export default {
             jobShowName: "",
 			outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
+            flowVersion: "developer"
         }
     },
     props: {
@@ -264,7 +265,12 @@ export default {
         },
         save() {
 			if (this.activeName === "Setting") {
+				let globalCount = true
+				if (this.$refs.group.datasource.commands.length > 0) {
+					globalCount =  this.$refs.group.datasource.commands[0].count
+				}
 				const params = {
+					"globalCount": globalCount,
 					"preFilter": this.$refs.filter.datasource.revert2Defs(),
 					"computedColumns": this.$refs.computed.datasource.revert2Defs(),
 					"keys": this.$refs.group.datasource.revert2Defs().keys,
@@ -277,7 +283,7 @@ export default {
 				this.$refs.changeInputOutput.save()
 			}
         },
-		changeTopnInputOutput(data) {
+		changScriptInputOutput(data) {
 			let inputNameOld = this.allData.inputs[0]
 			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
 			let inputNameNew = data.args.param.inputsArray[0]
@@ -328,10 +334,10 @@ export default {
 			
 			const event = new Event("event")
 			event.args = {
-				callback: "changeTopnInputOutput",
+				callback: "changScriptInputOutput",
 				element: this,
 				param: {
-					name: "changeTopnInputOutput",
+					name: "changScriptInputOutput",
 					projectId: this.projectId,
 					projectName: this.projectName,
 					dssOutputs: dssOutputs,
@@ -364,7 +370,7 @@ export default {
             this.$refs.computed.validate()
             this.$refs.group.validate()
             this.$refs.customagg.validate()
-            this.$refs.postFilter.validate()
+            this.$refs.postfilter.validate()
             this.$refs.output.validate()
             //
             // if (n === 4 || n === 5) {
@@ -393,11 +399,7 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-
-        .op-factories {
-            // background: red;
-        }
-
+		
         .group_header {
             height: 48px;
             padding: 0 15px;

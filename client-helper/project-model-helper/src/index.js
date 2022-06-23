@@ -113,8 +113,7 @@ export {
 	phStackContainerEventHandler,
 	phStackContainerRouteModel,
 	phNotebookEditorContainerEventHandler,
-	phNotebookEditorContainerRouteModel
-	phStackContainerRouteModel,
+	phNotebookEditorContainerRouteModel,
 	phGroupContainerRouteModel,
 	phGroupContainerEventHandler
 }

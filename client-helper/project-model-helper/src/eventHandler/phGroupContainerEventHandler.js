@@ -81,7 +81,7 @@ export async function phGroupContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "group_edit",
 							cat: "intermediate",
-							runtime: "orderby",
+							runtime: "group",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName
@@ -96,7 +96,7 @@ export async function phGroupContainerEventHandler(e, route) {
 						jobPath: "",
 						inputs: inputs,
 						outputs: outputs,
-						runtime: "orderby"
+						runtime: "group"
 					},
 					steps: params.stepsArr,
 					notification: {
