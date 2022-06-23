@@ -40,11 +40,12 @@
                        :step="datasource.step"
                        :schema="datasource.dataset.schema"
                        @statusChange="pivotStatus" />
-<!--                <select-cols v-show="active === 4"-->
-<!--                                ref="select"-->
-<!--                                :step="datasource.step"-->
-<!--                                :schema="datasource.schema"-->
-<!--                                @statusChange="selectStatus" />-->
+                <other-cols v-show="active === 4"
+                            ref="other"
+                            :step="datasource.step"
+                            :selection="selection"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="otherStatus" />
 <!--                <post-computed v-show="active === 5"-->
 <!--                               ref="postcomputed"-->
 <!--                               :step="datasource.step"-->
@@ -86,10 +87,7 @@ import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
 import Computed from './steps/commands/computed/computedView'
 import Pivot from './steps/commands/pivot/pivotView'
-// import PreComputed from './steps/commands/pre-join-computed/preJoinComputedView'
-// import SelectCols from './steps/commands/select-cols/selectColsView'
-// import PostComputed from './steps/commands/post-join-computed/postJoinComputedView'
-// import PostFilter from './steps/commands/post-filter/postFilterView'
+import OtherCols from './steps/commands/other-cols/view'
 // import Outputs from './steps/commands/output/outputView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
@@ -104,9 +102,7 @@ export default {
         PreFilter,
         Computed,
         Pivot,
-        // SelectCols,
-        // PostComputed,
-        // PostFilter,
+        OtherCols,
         // Outputs,
 		ElRadioGroup,
         ElRadioButton,
@@ -151,6 +147,7 @@ export default {
 			outputs: [],
             inputs: [],
             datasetArray: [],
+            selection: []
         }
     },
     props: {
@@ -226,6 +223,14 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
+        otherStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[1].status = "success"
+            } else {
+                this.stepsDefs[1].status = "error"
+            }
+        },
         outputsStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
@@ -269,6 +274,7 @@ export default {
 					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs(),
                     "pivot": this.$refs.pivot.datasource.revert2Defs(),
+                    "otherColumns": this.$refs.other.datasource.revert2Defs(),
 					// "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
 					// "joins": this.$refs.join.datasource.revert2Defs(),
 					// "selectedColumns": this.$refs.select.datasource.revert2Defs(),
@@ -372,11 +378,15 @@ export default {
         // this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
-        active() {
+        active(n) {
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
-            // this.$refs.join.validate()
-            // this.$refs.select.validate()
+            this.$refs.pivot.validate()
+            this.$refs.other.validate()
+
+            if (n === 4) {
+                this.selection = this.$refs.pivot.datasource.command.selection
+            }
             // this.$refs.postcomputed.validate()
             // this.$refs.postfilter.validate()
             // this.$refs.outputs.validate()
