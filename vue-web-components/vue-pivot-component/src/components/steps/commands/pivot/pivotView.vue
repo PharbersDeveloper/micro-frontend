@@ -7,18 +7,28 @@
             </div>
         </div>
 
-        <div class="pivot-content-container">
+        <div class="pivot-content-container" v-if="datasource">
             <div class="pivot-example-c">
                 <pivot-example></pivot-example>
             </div>
             <div class="pivot-pivot-c">
-
+                <pivot-column :command="datasource.command"
+                              :kc="datasource.command.keyColumns"
+                              :selection="datasource.command.selection"
+                              :pivoted-column-type="datasource.command.pivotedColumnType"
+                              @selectionChanged="selectionChanged" />
             </div>
             <div class="pivot-column-c">
-
+                <pivot-row :command="datasource.command"
+                           :idf="datasource.command.identifiers"
+                           :selection="datasource.command.selection"
+                           @selectionChanged="selectionChanged" />
             </div>
             <div class="pivot-aggregation-c">
-
+                <pivot-aggregation :command="datasource.command"
+                                   :value-columns="datasource.command.valueColumns"
+                                   :selection="datasource.command.selection"
+                                   @selectionChanged="selectionChanged" />
             </div>
         </div>
     </div>
@@ -27,6 +37,9 @@
 import { PhPivotDefs } from "./defs"
 import PhPivotStep from "./step"
 import PivotExample from './detail-views/pivot-example'
+import PivotColumn from './detail-views/pivot-column'
+import PivotRow from './detail-views/pivot-row'
+import PivotAggregation from './detail-views/pivot-aggregation'
 
 export default {
     data() {
@@ -36,7 +49,7 @@ export default {
     },
     props: {
         step: Object,
-        schema: Object,
+        schema: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -47,7 +60,10 @@ export default {
     components: {
         // JoinDatasetCard,
         // JoinRelationCard
-        PivotExample
+        PivotExample,
+        PivotColumn,
+        PivotRow,
+        PivotAggregation
     },
     mounted() {
         this.datasource = new PhPivotStep(this.step, this.schema)
@@ -55,6 +71,9 @@ export default {
     methods: {
         validate() {
             this.$emit('statusChange', true)
+        },
+        selectionChanged() {
+            this.datasource.command.resetCandiSelection()
         }
     },
     computed: {

@@ -191,10 +191,7 @@ export default {
         }
     },
     computed: {
-        lineLength: function() {
-            console.log(1)
-            return 150
-        }
+
     }
 }
 </script>

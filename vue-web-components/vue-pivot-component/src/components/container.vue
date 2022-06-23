@@ -1,7 +1,7 @@
 <template>
-    <div class="join">
+    <div class="pivot">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="join_header">
+        <div class="pivot_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('pivot')" alt="" />
                 <span>Pivot</span>
@@ -14,8 +14,8 @@
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="join_area" v-show="activeName === 'Setting'">
-            <div class="join_left">
+        <div class="pivot_area" v-show="activeName === 'Setting'">
+            <div class="pivot_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
@@ -24,22 +24,22 @@
                     </el-step>
                 </el-steps>
             </div>
-            <div class="join_right" v-if="datasource.isReady && datasource.isMetaReady">
+            <div class="pivot_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
                             ref="prefilter"
                             :step="datasource.step"
-                            :schema="datasource.schema"
+                            :schema="datasource.dataset.schema"
                             @statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
                               ref="computed"
                               :step="datasource.step"
-                              :schema="datasource.schema"
+                              :schema="datasource.dataset.schema"
                               @statusChange="computedStatus" />
                 <pivot v-show="active === 3"
-                      ref="pivot"
-                      :step="datasource.step"
-                      :schema="datasource.schema"
-                      @statusChange="pivotStatus" />
+                       ref="pivot"
+                       :step="datasource.step"
+                       :schema="datasource.dataset.schema"
+                       @statusChange="pivotStatus" />
 <!--                <select-cols v-show="active === 4"-->
 <!--                                ref="select"-->
 <!--                                :step="datasource.step"-->
@@ -150,7 +150,7 @@ export default {
             jobShowName: "",
 			outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
         }
     },
     props: {
@@ -179,6 +179,18 @@ export default {
         }
     },
     methods: {
+        // selectionChanged() {
+        //     const kc =  this.$refs.pivot ? this.$refs.pivot.datasource.command.keyColumns : []
+        //     const kc =  this.$refs.pivot ? this.$refs.pivot.datasource.command.keyColumns : []
+        //     this.selection = []
+        //     for (let idx = 0; idx < this.schema.length; ++idx) {
+        //         const tmp = this.schema[idx].src
+        //         if (!other.includes(tmp) && !this.keyColumns.includes(tmp)) {
+        //         // if (!this.identifiers.includes(tmp) && !this.keyColumns.includes(tmp)) {
+        //             this.selection.push(tmp)
+        //         }
+        //     }
+        // },
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -256,6 +268,7 @@ export default {
 				const params = {
 					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs(),
+                    "pivot": this.$refs.pivot.datasource.revert2Defs(),
 					// "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
 					// "joins": this.$refs.join.datasource.revert2Defs(),
 					// "selectedColumns": this.$refs.select.datasource.revert2Defs(),
@@ -390,7 +403,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    .join {
+    .pivot {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -400,7 +413,7 @@ export default {
             // background: red;
         }
 
-        .join_header {
+        .pivot_header {
             height: 48px;
             padding: 0 15px;
             border-bottom: 1px solid #cccccc;
@@ -442,14 +455,14 @@ export default {
             }
         }
 
-        .join_area {
+        .pivot_area {
             width: 100%;
             flex-grow: 1;
             display: flex;
             flex-direction: row;
 			height: calc(100vh - 100px);
 
-            .join_left {
+            .pivot_left {
                 display: flex;
                 flex-direction: row;
 				padding: 40px;
@@ -457,7 +470,7 @@ export default {
 				border-right: 1px solid #ccc;
             }
 
-            .join_right {
+            .pivot_right {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: row;
