@@ -153,8 +153,8 @@ export default {
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.selection, this.schema)
         this.computedGroupCount = this.datasource.isComputedGroupCount()
-        this.notGroupedCommands = this.resetSelectGroupKeys()
-        this.ignoredClearMsg = false
+        // this.notGroupedCommands = this.resetSelectGroupKeys()
+        // this.ignoredClearMsg = false
     },
     methods: {
         validate() {
@@ -163,7 +163,7 @@ export default {
         resetSelectGroupKeys() {
             const res = []
             for (let idx = 0; idx < this.datasource.commands.length; ++idx) {
-                if (!this.datasource.keys.includes(this.datasource.commands[idx].column)) {
+                if (this.datasource.keys.includes(this.datasource.commands[idx].column)) {
                     res.push(this.datasource.commands[idx])
                 } else {
                     this.datasource.commands[idx].isUsed = false
@@ -171,13 +171,15 @@ export default {
             }
 
             console.log(1)
+            console.log(this.datasource.commands)
             this.ignoredClearMsg = true
             const that = this
             this.$nextTick(() => {
                 console.log(2)
                 res.forEach(x => {
+                    console.log(x)
+                    console.log(x.isUsed)
                     if (x.isUsed) {
-                        console.log(x)
                         that.$refs.table.toggleRowSelection(x)
                     }
                 })
@@ -196,6 +198,7 @@ export default {
         handleSelectionChange(val) {
             console.log(3)
             console.log(this.ignoredClearMsg)
+            console.log(this.datasource.commands)
             if (!this.ignoredClearMsg) {
                 this.datasource.commands.forEach(x => {
                     x.isUsed = val.includes(x);
@@ -207,6 +210,12 @@ export default {
     },
     computed: {
 
+    },
+    watch: {
+        "datasource.needRefresh": function() {
+            this.notGroupedCommands = this.resetSelectGroupKeys()
+            // this.ignoredClearMsg = true
+        }
     }
 }
 </script>

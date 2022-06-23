@@ -179,11 +179,7 @@ export default {
 
     },
     methods: {
-        tableNoBorder({row, column, rowIndex, columnIndex}) {
-            console.log(row)
-            console.log(column)
-            console.log(rowIndex)
-            console.log(columnIndex)
+        tableNoBorder() {
             return 'border: none';
         },
         cellClicked(row) {
