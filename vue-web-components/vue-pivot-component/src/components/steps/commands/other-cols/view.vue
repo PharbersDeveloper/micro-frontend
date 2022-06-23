@@ -180,6 +180,7 @@ export default {
                     console.log(x)
                     console.log(x.isUsed)
                     if (x.isUsed) {
+                        this.ignoredClearMsg = true
                         that.$refs.table.toggleRowSelection(x)
                     }
                 })
