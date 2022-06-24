@@ -9,7 +9,7 @@ export default class PhPivotStep {
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["pivot"]
         const identifiers = this.expressions["params"]["identifiers"]
-        this.commands = new PhPivotCmd(defs, identifiers, schema)
+        this.command = new PhPivotCmd(defs, identifiers,  schema)
     }
 
     exec() {
@@ -18,7 +18,7 @@ export default class PhPivotStep {
     }
 
     revert2Defs() {
-        // return this.command.revert2Defs()
-        return this.commands.map(x => x.revert2Defs())
+        return this.command.revert2Defs()
+        // return this.commands.map(x => x.revert2Defs())
     }
 }

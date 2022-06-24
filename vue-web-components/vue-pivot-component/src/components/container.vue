@@ -1,7 +1,7 @@
 <template>
-    <div class="join">
+    <div class="pivot">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="join_header">
+        <div class="pivot_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('pivot')" alt="" />
                 <span>Pivot</span>
@@ -14,8 +14,8 @@
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="join_area" v-show="activeName === 'Setting'">
-            <div class="join_left">
+        <div class="pivot_area" v-show="activeName === 'Setting'">
+            <div class="pivot_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
@@ -24,41 +24,32 @@
                     </el-step>
                 </el-steps>
             </div>
-            <div class="join_right" v-if="datasource.isReady && datasource.isMetaReady">
+            <div class="pivot_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
                             ref="prefilter"
                             :step="datasource.step"
-                            :schema="datasource.schema"
+                            :schema="datasource.dataset.schema"
                             @statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
                               ref="computed"
                               :step="datasource.step"
-                              :schema="datasource.schema"
+                              :schema="datasource.dataset.schema"
                               @statusChange="computedStatus" />
                 <pivot v-show="active === 3"
-                      ref="pivot"
-                      :step="datasource.step"
-                      :schema="datasource.schema"
-                      @statusChange="pivotStatus" />
-<!--                <select-cols v-show="active === 4"-->
-<!--                                ref="select"-->
-<!--                                :step="datasource.step"-->
-<!--                                :schema="datasource.schema"-->
-<!--                                @statusChange="selectStatus" />-->
-<!--                <post-computed v-show="active === 5"-->
-<!--                               ref="postcomputed"-->
-<!--                               :step="datasource.step"-->
-<!--                               :schema="computedSchema"-->
-<!--                               @statusChange="postComputedStatus" />-->
-<!--                <post-filter v-show="active === 6"-->
-<!--                             ref="postfilter"-->
-<!--                             :step="datasource.step"-->
-<!--                             :schema="computedSchema"-->
-<!--                         @statusChange="postFilterStatus" />-->
-<!--                <outputs v-show="active === 7"-->
-<!--                                ref="outputs"-->
-<!--                                :schema="computedSchema"-->
-<!--                                @statusChange="outputsStatus" />-->
+                       ref="pivot"
+                       :step="datasource.step"
+                       :schema="datasource.dataset.schema"
+                       @statusChange="pivotStatus" />
+                <other-cols v-show="active === 4"
+                            ref="other"
+                            :step="datasource.step"
+                            :selection="selection"
+                            :schema="datasource.dataset.schema"
+                            @statusChange="otherStatus" />
+                <outputs v-show="active === 5"
+                                ref="outputs"
+                                :schema="outputsSchema"
+                                @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -86,11 +77,8 @@ import PhDataSource from './model/datasource'
 import PreFilter from './steps/commands/pre-filter/preFilterView'
 import Computed from './steps/commands/computed/computedView'
 import Pivot from './steps/commands/pivot/pivotView'
-// import PreComputed from './steps/commands/pre-join-computed/preJoinComputedView'
-// import SelectCols from './steps/commands/select-cols/selectColsView'
-// import PostComputed from './steps/commands/post-join-computed/postJoinComputedView'
-// import PostFilter from './steps/commands/post-filter/postFilterView'
-// import Outputs from './steps/commands/output/outputView'
+import OtherCols from './steps/commands/other-cols/view'
+import Outputs from './steps/commands/output/outputView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
@@ -104,17 +92,15 @@ export default {
         PreFilter,
         Computed,
         Pivot,
-        // SelectCols,
-        // PostComputed,
-        // PostFilter,
-        // Outputs,
+        OtherCols,
+        Outputs,
 		ElRadioGroup,
         ElRadioButton,
 		changeInputOutput
     },
     data() {
         return {
-            computedSchema: [],
+            outputsSchema: [],
             active: 1,
 			flowVersion: "developer",
             stepsDefs: [
@@ -150,7 +136,8 @@ export default {
             jobShowName: "",
 			outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
+            selection: []
         }
     },
     props: {
@@ -209,58 +196,43 @@ export default {
         pivotStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[1].status = "success"
+                this.stepsDefs[2].status = "success"
             } else {
-                this.stepsDefs[1].status = "error"
+                this.stepsDefs[2].status = "error"
+            }
+        },
+        otherStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[3].status = "success"
+            } else {
+                this.stepsDefs[3].status = "error"
             }
         },
         outputsStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[6].status = "success"
+                this.stepsDefs[4].status = "success"
             } else {
-                this.stepsDefs[6].status = "error"
+                this.stepsDefs[4].status = "error"
             }
-        },
-        computeSchema() {
-            const result = []
-            const selectCols = this.$refs.select.datasource.revert2Defs()
-            for (let idx = 0; idx < selectCols.length; ++idx) {
-                for (let idn = 0; idn < selectCols[idx]["columns"].length; ++idn) {
-                    result.push(selectCols[idx]["prefix"] + selectCols[idx]["columns"][idn])
-                }
-            }
-            return result
-        },
-        computePostFilterSchema() {
-            const result = this.computeSchema()
-            const computedCols = this.$refs.postcomputed.datasource.revert2Defs()
-            for (let idx = 0; idx < computedCols.length; ++idx) {
-                result.push(computedCols[idx]["name"])
-            }
-            console.log(result)
-            return result
         },
         genOutputsSchema() {
-            const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            let result = []
-            if (retrieved.length === 0) {
-                result = this.computedSchema
-            } else {
-                result = this.computedSchema.filter(x => retrieved.includes(x.title))
-            }
-            return result
+            const identifiers = this.$refs.pivot.datasource.revert2Defs().identifiers
+            const pivotColumns = this.$refs.pivot.datasource.revert2Defs().pivot.keyColumns
+            const valueColumns = this.$refs.pivot.datasource.revert2Defs().pivot.valueColumns.map(x => x.column)
+            const otherColumns = this.$refs.other.datasource.revert2Defs().map(x => x.column)
+
+            return identifiers.concat(pivotColumns).concat(valueColumns).concat(otherColumns)
         },
         save() {
 			if (this.activeName === "Setting") {
 				const params = {
 					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs(),
-					// "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
-					// "joins": this.$refs.join.datasource.revert2Defs(),
-					// "selectedColumns": this.$refs.select.datasource.revert2Defs(),
-					// "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
-					// "postFilter": this.$refs.postfilter.datasource.revert2Defs()
+                    "identifiers": this.$refs.pivot.datasource.revert2Defs().identifiers,
+                    "pivot": this.$refs.pivot.datasource.revert2Defs().pivot,
+                    "otherColumns": this.$refs.other.datasource.revert2Defs(),
 				}
 				console.log(params)
 				// this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
@@ -359,23 +331,21 @@ export default {
         // this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
-        active() {
+        active(n) {
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
-            // this.$refs.join.validate()
-            // this.$refs.select.validate()
-            // this.$refs.postcomputed.validate()
-            // this.$refs.postfilter.validate()
-            // this.$refs.outputs.validate()
-            //
-            // if (n === 5) {
-            //     this.computedSchema = this.computeSchema()
-            //     this.outputsSchema = this.genOutputsSchema()
-            // }
-            //
-            // if (n === 6 || n === 7) {
-            //     this.computedSchema = this.computePostFilterSchema()
-            // }
+            this.$refs.pivot.validate()
+            this.$refs.other.validate()
+            this.$refs.outputs.validate()
+
+            if (n === 4) {
+                this.selection = this.$refs.pivot.datasource.command.selection
+                this.$refs.other.datasource.refreshCols(this.selection)
+            }
+
+            if (n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
         },
 		activeName(n) {
             this.$emit("active", n)
@@ -390,7 +360,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    .join {
+    .pivot {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -400,7 +370,7 @@ export default {
             // background: red;
         }
 
-        .join_header {
+        .pivot_header {
             height: 48px;
             padding: 0 15px;
             border-bottom: 1px solid #cccccc;
@@ -442,14 +412,14 @@ export default {
             }
         }
 
-        .join_area {
+        .pivot_area {
             width: 100%;
             flex-grow: 1;
             display: flex;
             flex-direction: row;
 			height: calc(100vh - 100px);
 
-            .join_left {
+            .pivot_left {
                 display: flex;
                 flex-direction: row;
 				padding: 40px;
@@ -457,7 +427,7 @@ export default {
 				border-right: 1px solid #ccc;
             }
 
-            .join_right {
+            .pivot_right {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: row;

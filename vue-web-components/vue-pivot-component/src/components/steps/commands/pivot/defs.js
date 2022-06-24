@@ -72,11 +72,60 @@ export const PhPivotDefs = {
             { "country": "FR", "2016": null, "2017": 8, "avg(qty)": 8 },
         ],
     },
-    pattern: [
+    pivotTypes: [
         {
-            desc: "符合所有条件进行匹配",
-            cal: "AND"
-        }
+            desc: "全部",
+            cal: "all"
+        },
+        {
+            desc: "最频繁的",
+            cal: "topnLimt"
+        },
+        {
+            desc: "出现次数多余",
+            cal: "minOccLimit"
+        },
+        {
+            desc: "explicitValues",
+            cal: "explicitValues"
+        },
+    ],
+    aggregationMethods: [
+        {
+            "desc": "avg",
+            "cal": "avg"
+        },
+        {
+            "desc": "concat",
+            "cal": "concat"
+        },
+        {
+            "desc": "count",
+            "cal": "count"
+        },
+        {
+            "desc": "first",
+            "cal": "first"
+        },
+        {
+            "desc": "last",
+            "cal": "last"
+        },
+        {
+            "desc": "max",
+            "cal": "max"
+        },
+        {
+            "desc": "min",
+            "cal": "min"
+        },
+        {
+            "desc": "stddev",
+            "cal": "stddev"
+        },
+        {
+            "desc": "sum",
+            "cal": "sum"
+        },
     ]
-
 }

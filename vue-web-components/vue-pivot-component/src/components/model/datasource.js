@@ -76,7 +76,7 @@ export default class PhDataSource {
                                 "computedColumns":  [],
                                 "identifiers": [],
                                 "pivot": {
-                                    "globalCount": false,
+                                    "globalCount": true,
                                     "keyColumns": [],
                                     "pivotedColumnType": "all",
                                     "topnLimit": 0,

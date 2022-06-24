@@ -179,11 +179,7 @@ export default {
 
     },
     methods: {
-        tableNoBorder({row, column, rowIndex, columnIndex}) {
-            console.log(row)
-            console.log(column)
-            console.log(rowIndex)
-            console.log(columnIndex)
+        tableNoBorder() {
             return 'border: none';
         },
         cellClicked(row) {
@@ -191,10 +187,7 @@ export default {
         }
     },
     computed: {
-        lineLength: function() {
-            console.log(1)
-            return 150
-        }
+
     }
 }
 </script>
