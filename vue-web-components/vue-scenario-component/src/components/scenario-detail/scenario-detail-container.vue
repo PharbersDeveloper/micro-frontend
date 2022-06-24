@@ -36,7 +36,7 @@ import datasource from "./model/datasource"
 export default {
     data() {
         return {
-            activeName: "Setting",
+            activeName: "input/output",
             triggerDisplay: [],
             stepDisplay: [],
 			datasetsDisplay: []

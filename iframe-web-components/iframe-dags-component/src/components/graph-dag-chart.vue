@@ -29,9 +29,9 @@
                         v-if="!isRunning"
                         :src="defs.iconsByName('run')"
                         alt=""
-						@click="triggerPolicy.runDagSelect()"
+                        @click="triggerPolicy.runDagSelect()"
                     />
-					<img
+                    <img
                         v-if="isRunning"
                         :src="defs.iconsByName('run', 'disabled')"
                         alt=""
@@ -41,7 +41,7 @@
                         :src="defs.iconsByName('stop')"
                         @click="triggerPolicy.stopDag()"
                     />
-					<img
+                    <img
                         v-if="!isRunning"
                         :src="defs.iconsByName('stop', 'disabled')"
                     />
@@ -50,22 +50,17 @@
             <div class="scripts_area">
                 <div class="script_title">脚本</div>
                 <div class="scripts">
-                    <img :src="defs.iconsByName('python')" alt="" />
-                    <img :src="defs.iconsByName('pyspark')" alt="" />
-                    <img :src="defs.iconsByName('r')" alt="" />
-                    <img :src="defs.iconsByName('sparkr')" alt="" />
-                    <img :src="defs.iconsByName('prepare')" alt="" />
-                    <img :src="defs.iconsByName('sort')" alt="" />
-                    <img :src="defs.iconsByName('distinct')" alt="" />
-                    <img :src="defs.iconsByName('sync')" alt="" />
-                    <img :src="defs.iconsByName('topn')" alt="" />
+                    <img 
+                        v-for="scriptIcon in scriptIconArray"
+                        :key="scriptIcon+'icon'"
+                        :src="defs.iconsByName(scriptIcon)" alt="" />
                 </div>
             </div>
         </div>
 
         <run-dag-dialog
             v-if="showRunJson"
-			:selectRecursive="selectRecursive"
+            :selectRecursive="selectRecursive"
             :textConf="textConf"
             :projectId="projectId"
             @confirmeRunDag="confirmeRunDag"
@@ -108,34 +103,34 @@
         >
         </progress-bar>
 
-		<el-dialog
+        <el-dialog
             :title="getSelectItemName()"
             :visible.sync="runDagSelectVisible"
             width="800px">
-			<div class="run-dag-select-dialog">
-				<div class="select-area">
-					<div class="select-item"
-						@click="selectRecursive = 'nonRecursive'"
-						:class="[{'run-dag-active': selectRecursive === 'nonRecursive'}]">
-						<div class="title">Non recursive</div>
-						<div class="desc">只运行当前脚本</div>
-					</div>
-					<div class="select-item"
-						@click="selectRecursive = 'recursive'"
-						:class="[{'run-dag-active': selectRecursive === 'recursive'}]">
-						<div class="title">Recursive</div>
-						<div class="desc">运行上游所有脚本</div>
-					</div>
-				</div>
-				<div class="img">
-					<img 
-						v-if="selectRecursive === 'nonRecursive'" 
-						:src="defs.iconsByName('runDag', 'nonRecursive')" alt="">
-					<img 
-						v-if="selectRecursive === 'recursive'"
-						:src="defs.iconsByName('runDag', 'recursive')" alt="">
-				</div>
-			</div>
+            <div class="run-dag-select-dialog">
+                <div class="select-area">
+                    <div class="select-item"
+                        @click="selectRecursive = 'nonRecursive'"
+                        :class="[{'run-dag-active': selectRecursive === 'nonRecursive'}]">
+                        <div class="title">Non recursive</div>
+                        <div class="desc">只运行当前脚本</div>
+                    </div>
+                    <div class="select-item"
+                        @click="selectRecursive = 'recursive'"
+                        :class="[{'run-dag-active': selectRecursive === 'recursive'}]">
+                        <div class="title">Recursive</div>
+                        <div class="desc">运行上游所有脚本</div>
+                    </div>
+                </div>
+                <div class="img">
+                    <img 
+                        v-if="selectRecursive === 'nonRecursive'" 
+                        :src="defs.iconsByName('runDag', 'nonRecursive')" alt="">
+                    <img 
+                        v-if="selectRecursive === 'recursive'"
+                        :src="defs.iconsByName('runDag', 'recursive')" alt="">
+                </div>
+            </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="runDagSelectVisible = false">取消</el-button>
                 <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
@@ -239,6 +234,12 @@ export default {
                 } else {
                     return new PhAlfredPolicy("1", this);
                 }
+            }
+        },
+        scriptIconArray: {
+            type: Array,
+            default: function () {
+                return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
             }
         }
     },
@@ -362,42 +363,42 @@ export default {
     // height: calc(100vh - 40px);
     background: #f7f7f7;
     box-sizing: border-box;
-	.run-dag-select-dialog {
-		display: flex;
-		flex-direction: column;
-		.select-area {
-			display: flex;
-			width: 100%;
-    		justify-content: center;
-			.run-dag-active {
-				border: 1px solid #7163C5 !important;
-			}
-			.select-item {
-				width: 260px;
-				height: 65px;
-				border: 1px solid #eee;
-				margin: 0 5px;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-				.title {
-					font-size: 16px;
-					margin-bottom: 5px;
-					color: #000;
-				}
-				.desc {
-					font-size: 12px;
-				}
-			}
-		}
-		.img {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			margin-top: 20px;
-		}
-	}
+    .run-dag-select-dialog {
+        display: flex;
+        flex-direction: column;
+        .select-area {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            .run-dag-active {
+                border: 1px solid #7163C5 !important;
+            }
+            .select-item {
+                width: 260px;
+                height: 65px;
+                border: 1px solid #eee;
+                margin: 0 5px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                .title {
+                    font-size: 16px;
+                    margin-bottom: 5px;
+                    color: #000;
+                }
+                .desc {
+                    font-size: 12px;
+                }
+            }
+        }
+        .img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
     .job_status_area {
         position: absolute;
         bottom: 60px;
@@ -539,11 +540,11 @@ export default {
                 margin-top: 20px;
                 display: flex;
                 justify-content: space-between;
-				flex-wrap: wrap;
+                flex-wrap: wrap;
                 img {
                     width: 40px;
                     height: 40px;
-					margin: 5px;
+                    margin: 5px;
                 }
             }
         }

@@ -141,7 +141,7 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			activeName: "Setting",
+			activeName: "input/output",
 			inArray: [],
 			outArray: [],
             jobShowName: "",
