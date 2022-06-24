@@ -30,6 +30,7 @@ export default class WcContextComponent extends Component {
 	async registerListener(element) {
 		this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
+		console.log(element.allData)
 		element.addEventListener("event", this.listener)
 	}
 

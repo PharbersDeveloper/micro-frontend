@@ -60,6 +60,7 @@
             </div>
         </div>
 		<div v-show="activeName === 'input/output'">
+			{{allData}}
 			<change-input-output
 				ref="changeInputOutput"
 				:inputs="inputs"	
@@ -148,7 +149,8 @@ export default {
 			outputs: [],
             inputs: [],
             datasetArray: [],
-            flowVersion: "developer"
+            flowVersion: "developer",
+            needRefresh: 0
         }
     },
     props: {
@@ -351,18 +353,14 @@ export default {
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        // this.projectIdTest = "alfredtest"
         this.jobName = this.getJobName()
-        // this.jobName = "group"
-        // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
 		this.datasource.refreshDataset(this.projectId, this.datasetId)
     },
     updated() {
-
+		console.log("update")
     },
     watch: {
         active() {
@@ -384,12 +382,11 @@ export default {
 		activeName(n) {
             this.$emit("active", n)
         },
-        "allData.inputs": function(n) {
-            this.inputs = n
-        },
-		"allData.outputs": function(n) {
-            this.outputs = n
-		}
+        "allData.random": function(n) {
+			console.log(n)
+            this.inputs = this.allData.inputs
+            this.outputs = this.allData.outputs
+        }
     }
 }
 </script>

@@ -459,6 +459,7 @@ export default {
                 callback: "dealResourceStart",
                 param: {
                     traceId: data.traceId,
+					owner: data.detail.owner,
                     callback: func
                 }
             }
@@ -470,6 +471,7 @@ export default {
                 callback: "dealResourceStop",
                 param: {
                     traceId: data.traceId,
+					owner: data.detail.owner,
                     callback: func
                 }
             }
