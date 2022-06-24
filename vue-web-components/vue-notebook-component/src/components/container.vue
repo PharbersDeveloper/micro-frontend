@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="item_list">
                                 <span class="script_icon">
-                                    <img :src="defs.iconsByName(notebook.ctype)" alt="">
+                                    <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
                                 </span>
                                     <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">{{notebook.detail.name}}</p>
                                     <div class="tag_area" ref="tagsArea">
