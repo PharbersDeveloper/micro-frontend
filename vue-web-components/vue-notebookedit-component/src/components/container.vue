@@ -125,7 +125,7 @@ export default {
         .content {
             flex-grow: 1;
             height: calc(100vh - 80px);
-            background-color: red;
+            background-color: #ccc;
         }
     }
 </style>

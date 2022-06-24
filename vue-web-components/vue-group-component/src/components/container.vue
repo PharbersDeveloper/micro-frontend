@@ -7,10 +7,14 @@
                 <span>Group</span>
             </div>
             <div class="header_right">
+				<el-radio-group v-model="activeName" class="content">
+					<el-radio-button label="Setting"></el-radio-button>
+					<el-radio-button label="input/output"></el-radio-button>
+				</el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="group_area">
+        <div class="group_area" v-show="activeName === 'Setting'">
             <div class="group_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
@@ -47,13 +51,25 @@
                             :schema="datasource.dataset.schema"
                             @statusChange="postFilterStatus" />
                 <outputs v-show="active === 6"
-                                ref="outputs"
+                                ref="output"
                                 :schema="datasource.dataset.schema"
                                 @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
             </div>
+        </div>
+		<div v-show="activeName === 'input/output'">
+			{{allData}}
+			<change-input-output
+				ref="changeInputOutput"
+				:inputs="inputs"	
+				:outputs="outputs"
+				:inArray="inArray"
+				:outArray="outArray"
+				@changScriptInputOutput="changScriptInputOutput"
+				:datasetArray="datasetArray"
+			/>
         </div>
     </div>
 </template>
@@ -63,12 +79,16 @@ import ElSteps from 'element-ui/packages/steps/index'
 import ElStep from 'element-ui/packages/step/index'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from './model/datasource'
-import PreFilter from './steps/commands/pre-filter/view'
-import Computed from './steps/commands/computed/view'
-import Group from './steps/commands/group/view'
-import CustomAgg from './steps/commands/custom-agg/view'
-import PostFilter from './steps/commands/post-filter/view'
-import Outputs from './steps/commands/output/view'
+import PreFilter from './steps/commands/pre-filter/preFilterView'
+import Computed from './steps/commands/computed/computedView'
+import Group from './steps/commands/group/groupView'
+import CustomAgg from './steps/commands/custom-agg/customAggView'
+import PostFilter from './steps/commands/post-filter/postFilterView'
+import Outputs from './steps/commands/output/outputView'
+import ElRadioGroup from "element-ui/packages/radio-group/index"
+import ElRadioButton from "element-ui/packages/radio-button/index"
+import changeInputOutput from "./change-input-output"
+import { Message } from 'element-ui'
 
 export default {
     components: {
@@ -80,7 +100,10 @@ export default {
         Group,
         CustomAgg,
         PostFilter,
-        Outputs
+        Outputs,
+		ElRadioGroup,
+        ElRadioButton,
+		changeInputOutput
     },
     data() {
         return {
@@ -118,7 +141,16 @@ export default {
                     index: 6,
                     status: "wait"  // wait / process / finish / error / success
                 }
-            ]
+            ],
+			activeName: "Setting",
+			inArray: [],
+			outArray: [],
+            jobShowName: "",
+			outputs: [],
+            inputs: [],
+            datasetArray: [],
+            flowVersion: "developer",
+            needRefresh: 0
         }
     },
     props: {
@@ -142,7 +174,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDataSource(1)
+                return new PhDataSource(1, this)
             }
         }
     },
@@ -155,6 +187,7 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
+			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(status) {
@@ -233,31 +266,101 @@ export default {
             return result
         },
         save() {
-            const params = {
-                "preFilter": this.$refs.filter.datasource.revert2Defs(),
-                "computedColumns": this.$refs.computed.datasource.revert2Defs(),
-                "keys": this.$refs.group.datasource.revert2Defs().keys,
-                "values": this.$refs.group.datasource.revert2Defs().values,
-                "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
-            }
+			if (this.activeName === "Setting") {
+				let globalCount = true
+				if (this.$refs.group.datasource.commands.length > 0) {
+					globalCount =  this.$refs.group.datasource.commands[0].count
+				}
+				const params = {
+					"globalCount": globalCount,
+					"preFilter": this.$refs.filter.datasource.revert2Defs(),
+					"computedColumns": this.$refs.computed.datasource.revert2Defs(),
+					"keys": this.$refs.group.datasource.revert2Defs().keys,
+					"values": this.$refs.group.datasource.revert2Defs().values,
+					"postFilter": this.$refs.postfilter.datasource.revert2Defs(),
+				}
 
-            console.log(params)
-            // this.datasource.saveAndGenCode(this.projectIdTest, this.jobName, params)
+				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+			} else {
+				this.$refs.changeInputOutput.save()
+			}
         },
+		changScriptInputOutput(data) {
+			let inputNameOld = this.allData.inputs[0]
+			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+			let inputNameNew = data.args.param.inputsArray[0]
+			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+			let dssInputs = {
+				old: [{
+					name: inputNameOld,
+					cat: inputCatOld
+				}],
+				new: [{
+					name: inputNameNew,
+					cat: inputCatNew
+				}]
+			}
+			let outputNameOld = this.allData.outputs[0]
+			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+			let outputNameNew = data.args.param.outputsArray[0]
+			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+			
+			let dssOutputs = {
+				old: {
+					name: outputNameOld,
+					cat: outputCatOld
+				},
+				new: {
+					name: outputNameNew,
+					cat: outputCatNew
+				}
+			}
+
+			let script = {
+				old: {
+					name: this.allData.jobName,
+					id: this.allData.jobId
+				},
+				new: {
+					"name": `compute_${outputNameNew}`,
+					"runtime": "topn",
+					"inputs": JSON.stringify(data.args.param.inputsArray),
+					"output": outputNameNew
+				}
+			}
+
+			if (inputNameNew === outputNameNew) {
+				Message.error("input和output不能相同", { duration: 3000} )
+				return false
+			}
+			
+			const event = new Event("event")
+			event.args = {
+				callback: "changScriptInputOutput",
+				element: this,
+				param: {
+					name: "changScriptInputOutput",
+					projectId: this.projectId,
+					projectName: this.projectName,
+					dssOutputs: dssOutputs,
+					dssInputs: dssInputs,
+					script: script
+				}
+			}
+			this.$emit('event', event)
+		}
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
-        this.jobName = "group"
-        // this.inputDsName = this.getUrlParam("inputName")
+        this.jobName = this.getJobName()
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
-        this.datasource.refreshMateData(this.projectId, this.datasetId)
+        this.datasource.refreshData(this.projectId, this.jobName)
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+		this.datasource.refreshDataset(this.projectId, this.datasetId)
     },
     updated() {
-
+		console.log("update")
     },
     watch: {
         active() {
@@ -265,7 +368,7 @@ export default {
             this.$refs.computed.validate()
             this.$refs.group.validate()
             this.$refs.customagg.validate()
-            this.$refs.postFilter.validate()
+            this.$refs.postfilter.validate()
             this.$refs.output.validate()
             //
             // if (n === 4 || n === 5) {
@@ -275,6 +378,14 @@ export default {
             // if (n === 5) {
             //     this.outputsSchema = this.genOutputsSchema()
             // }
+        },
+		activeName(n) {
+            this.$emit("active", n)
+        },
+        "allData.random": function(n) {
+			console.log(n)
+            this.inputs = this.allData.inputs
+            this.outputs = this.allData.outputs
         }
     }
 }
@@ -285,11 +396,7 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-
-        .op-factories {
-            // background: red;
-        }
-
+		
         .group_header {
             height: 48px;
             padding: 0 15px;
@@ -297,6 +404,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+			border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -317,14 +425,9 @@ export default {
             }
 
             .header_right {
-                /*button {*/
-                /*    width: 65px;*/
-                /*    height: 26px;*/
-                /*    border: 1px solid #57565F;*/
-                /*    border-radius: 2px;*/
-                /*    background: none;*/
-                /*    cursor: pointer;*/
-                /*}*/
+				.content {
+					margin-right: 30px;
+				}
             }
         }
 
@@ -333,12 +436,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
+			height: calc(100vh - 100px);
 
             .group_left {
-                display: flex;
-                flex-direction: row;
-                margin-left: 80px;
-                justify-content: space-around;
+				display: flex;
+				flex-direction: row;
+				padding: 40px;
+				justify-content: space-around;
+				border-right: 1px solid #ccc;
             }
 
             .group_right {
@@ -346,6 +451,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
+				background: #f2f2f2;
+				padding: 20px;
 
             }
         }

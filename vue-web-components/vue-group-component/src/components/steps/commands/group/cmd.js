@@ -13,7 +13,7 @@ export default class PhGroupCmd {
         this.last = false
         this.max = false
         this.column = col
-        this.count = false
+        this.count = true
         this.concat = false
         this.sum = false
         this.type = tp

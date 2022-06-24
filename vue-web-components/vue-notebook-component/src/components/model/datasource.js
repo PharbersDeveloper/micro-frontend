@@ -70,7 +70,8 @@ export default class PhDataSource {
         let body = {
             "tenantId": tenantId,
             "traceId": model.traceId,
-            "owner": this.getCookie("account_id"),
+            // "owner": this.getCookie("account_id"),
+			owner: model.detail.owner,
             "showName":  decodeURI(
                 decodeURI(
                     this.getCookie("user_name_show")
@@ -127,7 +128,8 @@ export default class PhDataSource {
         let body = {
             "tenantId": tenantId,
             "traceId": model.traceId,
-            "owner": this.getCookie("account_id"),
+            // "owner": this.getCookie("account_id"),
+			owner: model.detail.owner,
             "showName":  decodeURI(
                 decodeURI(
                     this.getCookie("user_name_show")

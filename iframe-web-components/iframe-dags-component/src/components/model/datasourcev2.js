@@ -128,6 +128,12 @@ export default class PhDagDatasource {
                         result = "distinct"
                     } else if (cat === "job" && runtime === "topn") {
                         result = "topn"
+                    } else if (cat === "job" && runtime === "join") {
+                        result = "join"
+                    } else if (cat === "job" && runtime === "stack") {
+                        result = "stack"
+                    } else if (cat === "job" && runtime === "group") {
+                        result = "group"
                     } else if (cat === "dataset") {
                         result = "dataset"
                     } else if (cat === "job") {

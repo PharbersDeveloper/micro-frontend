@@ -316,7 +316,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				const projectId = params.projectId
 				const accessToken = route.cookies.read("access_token")
 				const tenantId = route.cookies.read("company_id")
-				const owner = route.cookies.read("user_name")
+				const owner = route.cookies.read("account_id")
 				const url = `${hostName}/phdydatasource/put_item`
 				const properties = [
 					{
@@ -328,7 +328,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 						dependencies: [],
 						cfn: "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/jupyterec2cfn-05-19.yaml",
 						parameters: {
-							EC2User: owner,
+							EC2User: name,
 							InstanceType: "t3.small",
 							Priority: priority.toString(),
 							ExportPort: "8888"
@@ -425,7 +425,6 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			}
 
 			route.customCallbackFuncs[params.traceId] = params.callback
-
 			route.noticeService.defineAction({
 				type: "iot",
 				remoteResource: "notification",
@@ -433,7 +432,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				id: params.traceId,
 				eventName: dealResourceStartEventName,
 				projectId: "projectid",
-				ownerId: route.cookies.read("account_id"),
+				// ownerId: route.cookies.read("account_id"),
+				ownerId: params.owner,
 				callBack: dealResourceStartCallback
 			})
 			break
@@ -444,7 +444,6 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			}
 
 			route.customCallbackFuncs[params.traceId] = params.callback
-
 			route.noticeService.defineAction({
 				type: "iot",
 				remoteResource: "notification",
@@ -452,7 +451,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				id: params.traceId,
 				eventName: dealResourceStopEventName,
 				projectId: "projectid",
-				ownerId: route.cookies.read("account_id"),
+				// ownerId: route.cookies.read("account_id"),
+				ownerId: params.owner,
 				callBack: dealResourceStopCallback
 			})
 			break

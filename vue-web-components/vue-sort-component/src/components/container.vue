@@ -117,7 +117,7 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			activeName: "input/output",
+			activeName: "Setting",
 			inArray: [],
 			outArray: [],
             jobShowName: "",
@@ -300,7 +300,7 @@ export default {
         // this.jobName = "sort"
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        // this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         // this.datasource.refreshMateData(this.projectId, this.datasetId)
 
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
@@ -393,10 +393,10 @@ export default {
 			height: calc(100vh - 100px);
 
             .topn_left {
-                display: flex;
-                flex-direction: row;
-                padding: 40px;
-                justify-content: space-around;
+				display: flex;
+				flex-direction: row;
+				padding: 40px;
+				justify-content: space-around;
 				border-right: 1px solid #ccc;
             }
 

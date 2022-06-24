@@ -24,7 +24,7 @@
                                         <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
                                     </div>
                                 </div>
-                                <el-button class="add" type="primary" v-if="runtime === 'prepare' && addDatasetList.length > 0" @click="on_clickAddInput">更改</el-button>
+                                <el-button class="add" type="primary" v-if="singleInputRuntime.includes(runtime) && addDatasetList.length > 0" @click="on_clickAddInput">更改</el-button>
                                 <el-button class="add" type="primary" v-else @click="on_clickAddInput">增加</el-button>
                             </div>
                             <!-- 未选的input -->
@@ -175,7 +175,8 @@ export default {
                 "join": "join",
                 "stack": "stack",
                 "group": "group"
-            }
+            },
+            singleInputRuntime: ["group", "sync", "topn", "sort", "distinct", "prepare"]
         }
     },
     components: {
@@ -246,15 +247,6 @@ export default {
                  * 2. 若新增，生成一个id,创建一个dataset，否则直接3
                  * 3. 调用赵的接口，往action里面插数据
                 */
-                // let inputsArr = []
-                // this.addDatasetList.forEach(item => {
-                //     inputsArr.push({
-                //         "name": item.name,
-                // 		"cat": item.cat,
-                //         "id": item.id
-                //     })
-                // })
-                // console.log(inputsArr)
                 const event = new Event("event")
                 event.args = {
                     callback: "createScripts",
@@ -329,13 +321,13 @@ export default {
         },
         addDataset(data) {
             this.datasetListShow = false
-            //增加dataset list
-            //正常流程
-            if(this.runtime !== "prepare") {
+			
+            // 可多选input流程
+            if(!this.singleInputRuntime.includes(this.runtime)) {
                 this.addDatasetList.unshift(data)
                 this.remainDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
             } else {
-                //prepare流程
+                // 只能选择一个input流程
                 if(this.addDatasetList.length > 0) {
                     let selData = this.addDatasetList[0]
                     this.remainDatasetList.unshift(selData)

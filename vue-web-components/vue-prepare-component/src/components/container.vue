@@ -147,7 +147,7 @@ export default {
             dragging: null, //正在拖拽的 元素
             handleDragNewItemsDst: 0,
             sampleVisible: false,
-            activeName: "input/output",
+            activeName: "Setting",
 			inArray: [],
 			outArray: [],
             jobShowName: "",

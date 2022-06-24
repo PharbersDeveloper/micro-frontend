@@ -111,7 +111,7 @@ export default {
             inputs: [],
             active: 1,
             flowVersion: "developer",
-            activeName: "input/output",
+            activeName: "Setting",
             // selectInput: false,
             // selectOutput: false,
             datasetArray: [],
