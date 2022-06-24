@@ -3,6 +3,7 @@ import { inject as service } from "@ember/service"
 import RSVP from "rsvp"
 import { camelize } from "@ember/string"
 import ENV from "web-shell/config/environment"
+import Model  from '@ember-data/model';
 
 export default class ShellRoute extends Route {
 	@service oauthService
@@ -73,10 +74,10 @@ export default class ShellRoute extends Route {
 
 		let tmp = {}
 		if (data) {
-			const tmp = this.deepCopy(data)
-			delete tmp._isVue
+			tmp = this.deepCopy(data)
 		}
 
+		console.log(tmp)
 		return RSVP.hash({
 			page: curPage,
 			data: tmp
@@ -85,6 +86,12 @@ export default class ShellRoute extends Route {
 	}
 
 	deepCopy(obj, cache = []) {
+		if (obj instanceof Model) {
+			const id = obj.id
+			obj = obj.toJSON()
+			obj.id = id
+		}
+
 		function find(list, f) {
 			return list.filter(f)[0]
 		}
