@@ -71,15 +71,15 @@ export default class ShellRoute extends Route {
 			curPage
 		)
 
+		let tmp = {}
 		if (data) {
 			const tmp = this.deepCopy(data)
-			console.log("alfredtest")
-			console.log(tmp)
+			delete tmp._isVue
 		}
 
 		return RSVP.hash({
 			page: curPage,
-			data: data ? data : {},
+			data: tmp
 			// _isVue: true
 		})
 	}
