@@ -4,7 +4,6 @@ import { inject as service } from "@ember/service"
 import { camelize } from "@ember/string"
 import ENV from "web-shell/config/environment"
 
-
 export default class WcContextComponent extends Component {
 	@service router
 	@service store
@@ -28,7 +27,7 @@ export default class WcContextComponent extends Component {
 
 	@action
 	async registerListener(element) {
-		this.args.allData.data._isVue = true
+		// this.args.allData.data._isVue = true
 		element.allData = this.args.allData.data
 		console.log(element.allData)
 		element.addEventListener("event", this.listener)
