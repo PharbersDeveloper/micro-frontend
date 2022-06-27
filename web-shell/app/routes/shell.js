@@ -72,54 +72,10 @@ export default class ShellRoute extends Route {
 			curPage
 		)
 
-		let tmp = {}
-		if (data) {
-			tmp = this.deepCopy(data)
-			delete tmp._isVue
-		}
-
-		console.log(tmp)
 		return RSVP.hash({
 			page: curPage,
-			data: tmp
-			// _isVue: true
+			data: data ? data : {},
+			_isVue: true
 		})
-	}
-
-	deepCopy(obj, cache = []) {
-		if (obj instanceof Model) {
-			const id = obj.id
-			obj = obj.toJSON()
-			obj.id = id
-		}
-
-		function find(list, f) {
-			return list.filter(f)[0]
-		}
-
-		// just return if obj is immutable value
-		if (obj === null || typeof obj !== "object") {
-			return obj
-		}
-
-		// if obj is hit, it is in circular structure
-		const hit = find(cache, (c) => c.original === obj)
-		if (hit) {
-			return hit.copy
-		}
-
-		const copy = Array.isArray(obj) ? [] : {}
-		// put the copy into cache at first
-		// because we want to refer it in recursive deepCopy
-		cache.push({
-			original: obj,
-			copy
-		})
-
-		Object.keys(obj).forEach((key) => {
-			copy[key] = this.deepCopy(obj[key], cache)
-		})
-
-		return copy
 	}
 }
