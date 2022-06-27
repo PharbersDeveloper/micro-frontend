@@ -64,6 +64,7 @@ export default class ShellRoute extends Route {
 		 */
 		if (curPage.uri) await this.jsl.loadRemoteJsSync(curPage.uri)
 		if (curPage.cat) await this.jsl.loadRemoteJsSync(curPage.cat)
+		// if (curPage.cat) await this.jsl.loadRemoteJs(curPage.cat)
 		const clientName = curPage.clientName
 		const modelName = camelize(curPage.name) + "RouteModel"
 		const data = await window[clientName][modelName](
