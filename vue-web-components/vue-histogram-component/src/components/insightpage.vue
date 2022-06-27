@@ -37,6 +37,7 @@ import PhSlideModel from "./slide-model/slide-model"
 import "element-ui/lib/theme-chalk/index.css"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
+import StackPolicy from "../components/render-policy/stack-policy"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import { staticFilePath } from '../config/envConfig'
@@ -104,6 +105,16 @@ export default {
             }
             else if (content.policyName === "pie") {
                 return new PiePolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "stack") {
+                return new StackPolicy(content.index,
                     new PhHistogramDatasource(content.index,
                         this.allData.projectId,
                         content.datasetName),

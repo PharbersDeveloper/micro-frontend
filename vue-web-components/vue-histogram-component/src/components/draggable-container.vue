@@ -132,15 +132,8 @@ export default {
                     this.rect.width = this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex])
                 })
             }
-
-            // this.positionChanged([this.left, this.top, this.right, this.bottom])
-        },
-        adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
         },
-        // positionChanged(param) {
-        //     this.activeContent.position = param
-        // },
         resize(newRect) {
             this.rect.width = newRect.width
             this.rect.height = newRect.height
