@@ -23,14 +23,11 @@
             <div v-if="isMounted" class="high-container" >
                 <div class="histogram-container" v-if="contentModel" :style="draggableLayout()" >
                     <Histogram v-for="(item, index) in contentModel.content"
-                        :key="index"
-                        :editable="isEditable()"
-                        :left="item.position[0]"
-                        :top="item.position[1]"
-                        :right="item.position[2]"
-                        :bottom="item.position[3]"
-                        :active-content="item"
-                        @selected="insightSelected"/>
+                               :key="index"
+                               :editable="isEditable()"
+                               :position="item.position"
+                               :active-content="item"
+                               @selected="insightSelected"/>
                 </div>
             </div>
         </div>

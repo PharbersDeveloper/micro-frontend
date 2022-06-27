@@ -11,7 +11,7 @@ export default class PhExcelDataSchema {
         this.cols = this.schema
         this.projectId = projectId
         this.name = datasetName
-        this.debugToken = "c332c1ff0fc63558f2c987a8ac0364f8dbc1f0a60886fda6e575a1ebc68c5687"
+        this.debugToken = "943a2d87af3d5ff226830189339db32e4f8d2c2a5664f5c2b1cf30294b065782"
     }
 
     resetSchema(schema, dtype, cellWidth) {
@@ -40,7 +40,7 @@ export default class PhExcelDataSchema {
             // "query": "SELECT `name`, `type` FROM system.columns where database='phmax' and table='ma';",
             "schema": ["name", "type"],
             "projectId": this.projectId,
-			"tenantId": tenantId
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",
