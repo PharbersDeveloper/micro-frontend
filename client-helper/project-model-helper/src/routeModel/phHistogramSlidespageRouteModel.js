@@ -72,7 +72,7 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 	const slides = slidesQuery.filter((it) => it)
 
 	// 请求dataset
-	route.store.unloadAll("dataset")
+	// route.store.unloadAll("dataset")
 	const dsurl = `${hostName}/phdydatasource/query`
 	const dsaccessToken = route.cookies.read("access_token") || debugToken
 	let dsbody = {
@@ -104,7 +104,7 @@ export async function phHistogramSlidespageRouteModel(route, parseParams) {
 		})
 
 	let dss = dstmp.filter(
-		(it) => it.cat != "catalog" && it.cat.indexOf("index") == -1
+		(it) => it.cat !== "catalog" && it.cat.indexOf("index") === -1
 	)
 	return {
 		projectName: projectName,

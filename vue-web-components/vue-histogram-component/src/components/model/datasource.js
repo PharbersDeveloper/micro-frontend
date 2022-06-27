@@ -13,7 +13,7 @@ export default class PhDataSource {
         this.batch_size = 100
         if (!adapter)
             this.adapter = this.defaultAdapter
-        this.debugToken = "c332c1ff0fc63558f2c987a8ac0364f8dbc1f0a60886fda6e575a1ebc68c5687"
+        this.debugToken = "943a2d87af3d5ff226830189339db32e4f8d2c2a5664f5c2b1cf30294b065782"
     }
 
     defaultAdapter(row, cols) {
@@ -32,13 +32,13 @@ export default class PhDataSource {
             "query": query,
             "schema": schema,
             "projectId": this.projectId,
-			"tenantId": tenantId
+            "tenantId": tenantId
         }
         let options = {
             method: "POST",
             headers: {
                 "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8',
                 "accept": "application/json"
             },
             body: JSON.stringify(body)

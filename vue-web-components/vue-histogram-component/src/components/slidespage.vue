@@ -49,7 +49,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogDeleteSlideVisible = false">取消</el-button>
-                <el-button type="primary" 
+                <el-button type="primary"
                     @click="on_clickDeleteSlideConfirm">
                     确认
                 </el-button>
@@ -105,8 +105,8 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="saveDialog = false">取消</el-button>
                 <el-button @click="saveDialog = false">不保存并继续</el-button>
-                <el-button type="primary" 
-                    @click="on_clickSaveDialodConfirm">
+                <el-button type="primary"
+                    @click="saveSlideContent">
                     保存并继续
                 </el-button>
             </span>
@@ -306,10 +306,10 @@ export default {
         },
         /**
          * 防抖
-         * @param {Function} func 要执行的回调函数 
+         * @param {Function} func 要执行的回调函数
          * @param {Number} wait 延时的时间
-         * @param {Boolean} immediate 是否立即执行 
-         * @return null  
+         * @param {Boolean} immediate 是否立即执行
+         * @return null
          */
         Debounce(func, wait=300, immediate = false) {
         // 清除定时器
