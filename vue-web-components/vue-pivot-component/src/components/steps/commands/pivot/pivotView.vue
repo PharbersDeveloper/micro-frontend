@@ -94,7 +94,7 @@ export default {
         padding: 4px;
         display: flex;
         flex-direction: column;
-        background: #fff;
+        // background: #fff;
         height: fit-content;
         padding: 20px;
         /*height: calc( 100vh - 150px);*/
@@ -124,16 +124,22 @@ export default {
 
         .pivot-example-c {
             flex: 0 0 50%;
+			flex-grow: 1;
             height: calc( 50vh - 100px);
-            background-color: red;
-            padding: 10px;
+            // background-color: red;
+            margin: 10px;
+			height: 400px;
+			border: 1px solid #ccc;
         }
 
         .pivot-pivot-c {
             flex: 0 0 50%;
+			flex-grow: 1;
             height: calc( 50vh - 100px);
-            background-color: green;
-            padding: 10px;
+            background-color: #fff;
+            margin: 10px;
+			border: 1px solid #ccc;
+			height: 400px;
         }
 
         .pivot-column-c {
