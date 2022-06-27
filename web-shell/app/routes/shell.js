@@ -75,6 +75,7 @@ export default class ShellRoute extends Route {
 		let tmp = {}
 		if (data) {
 			tmp = this.deepCopy(data)
+			delete tmp._isVue
 		}
 
 		console.log(tmp)
