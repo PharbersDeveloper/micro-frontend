@@ -57,8 +57,8 @@
                         <span class="axis-title">图表类型</span>
                         <select v-model="tmpPolicyName"
                                 style="width:200px;height: 30px;margin-top: 5px;margin-bottom: 5px;margin-left: 10px">
-                            <option 
-								v-for="(item,index) in policyCandidate" 
+                            <option
+								v-for="(item,index) in policyCandidate"
 								v-bind:value="item" v-text="item"
 								:key="index+'type'" ></option>
                         </select>
@@ -126,7 +126,7 @@ export default {
     },
     data: () => {
         return {
-            policyCandidate: ["bar", "pie"],
+            policyCandidate: ["bar", "pie", "stack"],
             draggingItem: null,
             needRefresh: 0,
             schemaRefresh: 0,
