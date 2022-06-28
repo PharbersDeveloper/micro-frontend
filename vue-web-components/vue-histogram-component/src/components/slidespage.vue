@@ -49,7 +49,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogDeleteSlideVisible = false">取消</el-button>
-                <el-button type="primary" 
+                <el-button type="primary"
                     @click="on_clickDeleteSlideConfirm">
                     确认
                 </el-button>
@@ -105,8 +105,8 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="saveDialog = false">取消</el-button>
                 <el-button @click="saveDialog = false">不保存并继续</el-button>
-                <el-button type="primary" 
-                    @click="on_clickSaveDialodConfirm">
+                <el-button type="primary"
+                    @click="saveSlideContent">
                     保存并继续
                 </el-button>
             </span>
@@ -124,6 +124,8 @@ import "element-ui/lib/theme-chalk/index.css"
 import PhSlideModel from './slide-model/slide-model'
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
+import StackPolicy from "../components/render-policy/stack-policy"
+import ScatterplotPolicy from "../components/render-policy/scatterplot-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import { staticFilePath } from '../config/envConfig'
@@ -299,6 +301,26 @@ export default {
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
             }
+            else if (content.policyName === "stack") {
+                return new StackPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "scatterplot") {
+                return new ScatterplotPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
         },
         clickSlideFooterTab(data) {
             this.edit = false
@@ -306,10 +328,10 @@ export default {
         },
         /**
          * 防抖
-         * @param {Function} func 要执行的回调函数 
+         * @param {Function} func 要执行的回调函数
          * @param {Number} wait 延时的时间
-         * @param {Boolean} immediate 是否立即执行 
-         * @return null  
+         * @param {Boolean} immediate 是否立即执行
+         * @return null
          */
         Debounce(func, wait=300, immediate = false) {
         // 清除定时器

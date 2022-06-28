@@ -24,22 +24,7 @@ export default {
                 return null
             }
         },
-        top: {
-            type: Number,
-            default: 0
-        },
-        bottom: {
-            type: Number,
-            default: 1
-        },
-        left: {
-            type: Number,
-            default: 0
-        },
-        right: {
-            type: Number,
-            default: 1
-        },
+        position: Array,
         editable: {
             type: Boolean,
             default: true
@@ -55,7 +40,11 @@ export default {
             name: "draggable-container",
             rect: null,
             timer: null,
-            stopTimer: null
+            stopTimer: null,
+            leftIndex: 0,
+            topIndex: 1,
+            rightIndex: 2,
+            bottomIndex: 3
         }
     },
     components: {
@@ -64,10 +53,10 @@ export default {
     },
     mounted () {
         this.isMounted++
-        this.rect = this.computedRect
+        this.rect = this.computedRect()
     },
     updated() {
-        this.rect = this.computedRect
+
     },
     methods: {
         adjustLeft(l) {
@@ -116,41 +105,32 @@ export default {
             const stepW = (w - margin) / columns - margin
             const stepH = (h - margin) / lines - margin
 
-            if (this.adjustRange(top, this.adjustTop(this.top))) {
-                this.top = Math.floor(top / stepH)
+            if (this.adjustRange(top, this.adjustTop(this.position[this.topIndex]))) {
+                this.position[this.topIndex] = Math.floor(top / stepH)
                 this.$nextTick(() => {
-                    this.rect.top = this.adjustTop(this.top)
+                    this.rect.top = this.adjustTop(this.position[this.topIndex])
+                })
+            } else if (this.adjustRange(height, this.adjustHeight(this.position[this.topIndex], this.position[this.bottomIndex]))) {
+                // this.position[this.bottomIndex] = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
+                this.position[this.bottomIndex] = Math.min(Math.floor((top + height - 2 * margin - 1) / stepH), 12)
+                this.$nextTick(() => {
+                    this.rect.height = this.adjustHeight(this.position[this.topIndex], this.position[this.bottomIndex])
+                })
+            } else if (this.adjustRange(left, this.adjustLeft(this.position[this.leftIndex]))) {
+                this.position[this.leftIndex] = Math.floor(left / stepW)
+                this.$nextTick(() => {
+                    this.rect.left = this.adjustLeft(this.position[this.leftIndex])
+                })
+            } else if (this.adjustRange(width, this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex]))) {
+                // this.position[this.rightIndex] = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
+                this.position[this.rightIndex] = Math.min(Math.floor((left + width - 2 * margin - 1) / stepW), 12)
+                this.$nextTick(() => {
+                    this.rect.width = this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex])
                 })
             }
-
-            else if (this.adjustRange(height, this.adjustHeight(this.top, this.bottom))) {
-                this.bottom = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
-                this.$nextTick(() => {
-                    this.rect.height = this.adjustHeight(this.top, this.bottom)
-                })
-            }
-
-            else if (this.adjustRange(left, this.adjustLeft(this.left))) {
-                this.left = Math.floor(left / stepW)
-                this.$nextTick(() => {
-                    this.rect.left = this.adjustLeft(this.left)
-                })
-            }
-
-            else if (this.adjustRange(width, this.adjustWidth(this.left, this.right))) {
-                this.right = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
-                this.$nextTick(() => {
-                    this.rect.width = this.adjustWidth(this.left, this.right)
-                })
-            }
-
-            this.positionChanged([this.left, this.top, this.right, this.bottom])
         },
         adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
-        },
-        positionChanged(param) {
-            this.activeContent.position = param
         },
         resize(newRect) {
             this.rect.width = newRect.width
@@ -185,20 +165,18 @@ export default {
                 contentIdx: this.activeContent.index
             }
             this.$emit("selected", event)
+        },
+        computedRect() {
+            return {
+                top: this.adjustTop(this.position[this.topIndex]),
+                left: this.adjustLeft(this.position[this.leftIndex]),
+                width: this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex]),
+                height: this.adjustHeight(this.position[this.topIndex], this.position[this.bottomIndex])
+            }
         }
     },
     watch: {
 
-    },
-    computed: {
-        computedRect: function() {
-            return {
-                top: this.adjustTop(this.top),
-                left: this.adjustLeft(this.left),
-                width: this.adjustWidth(this.left, this.right),
-                height: this.adjustHeight(this.top, this.bottom)
-            }
-        }
     }
 }
 </script>

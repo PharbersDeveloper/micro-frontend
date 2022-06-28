@@ -81,10 +81,14 @@
                                     <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1" @click.stop="checkedOnenotebooks(notebook.detail)">
                                 </div>
                                 <div class="item_list">
-                                <span class="script_icon">
-                                    <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
-                                </span>
-                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">{{notebook.detail.name}}</p>
+                                    <span class="script_icon">
+                                        <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
+                                    </span>
+                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">
+                                        {{notebook.detail.name}}
+                                    </p>
+                                    <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
+
                                     <div class="tag_area" ref="tagsArea">
                                         <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
                                         <span v-if="notebook.label !== ''">
@@ -102,7 +106,7 @@
                             </div>
                             <div>
                                 <span>{{notebook.message}}</span>
-                                <el-switch v-if="notebook.editable"
+                                <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
                                            v-model="notebook.switch"
                                            active-color="#13ce66"
                                            @change="resetStatus(notebook)"/>
@@ -172,11 +176,11 @@ import createTagsDialog from './create-tags-dialog.vue'
 import createNotebookDialog from './create-notebook-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-// import ElButton from 'element-ui/packages/option/index'
 import { MessageBox, Message } from 'element-ui'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions"
 import ElSwitch from "element-ui/packages/switch/index"
+import ElTag from "element-ui/packages/tag/index"
 import PhDataSource from "./model/datasource"
 
 export default {
@@ -210,6 +214,7 @@ export default {
             notebookscheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            owner: ""
         }
     },
     props: {
@@ -238,12 +243,11 @@ export default {
     },
     components: {
         createTagsDialog,
-        // deleteTagsDialog,
         createNotebookDialog,
         bpSelectVue,
         bpOptionVue,
-        ElSwitch
-        // ElButton
+        ElSwitch,
+        ElTag
     },
     computed: {
         searchData: function() {
@@ -265,6 +269,7 @@ export default {
                 item.style["height"] = "40px"
             })
         }
+        this.owner = this.datasource.getCookie("account_id")
     },
     watch: {
         "allData.tagsArray": function() {
