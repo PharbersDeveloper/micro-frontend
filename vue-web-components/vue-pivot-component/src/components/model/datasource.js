@@ -226,7 +226,7 @@ export default class PhDataSource {
             stepId: this.step["step-id"],
             ctype: this.step["ctype"],
             expressions: {
-                "type": "topn",
+                "type": "pivot",
                 "code": "pyspark",
                 "params": param
             },
@@ -240,10 +240,10 @@ export default class PhDataSource {
         }]
         const event = new Event("event")
         event.args = {
-            callback: "saveTopn",
+            callback: "savePivot",
             element: this,
             param: {
-                name: "saveTopn",
+                name: "savePivot",
                 projectId: this.parent.projectId,
                 projectName: this.parent.projectName,
                 stepsArr: steps

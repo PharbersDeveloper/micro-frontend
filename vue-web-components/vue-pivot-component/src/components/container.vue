@@ -228,14 +228,13 @@ export default {
         save() {
 			if (this.activeName === "Setting") {
 				const params = {
-					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+					"preFilter": this.$refs.prefilter.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs(),
                     "identifiers": this.$refs.pivot.datasource.revert2Defs().identifiers,
                     "pivot": this.$refs.pivot.datasource.revert2Defs().pivot,
                     "otherColumns": this.$refs.other.datasource.revert2Defs(),
 				}
-				console.log(params)
-				// this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
 			} else {
 				this.$refs.changeInputOutput.save()
 			}
@@ -288,7 +287,7 @@ export default {
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
+					"runtime": "pivot",
 					"inputs": JSON.stringify(data.args.param.inputsArray),
 					"output": outputNameNew
 				}
@@ -319,16 +318,15 @@ export default {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
 
-        this.projectIdTest = "alfredtest"
-        this.jobName = "pivot"
-        // this.jobName = this.getJobName()
+        // this.projectIdTest = "alfredtest"
+        // this.jobName = "pivot"
+        this.jobName = this.getJobName()
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
-        // this.datasource.refreshData(this.projectId, this.jobName)
-        this.datasource.refreshData(this.projectIdTest, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName)
         // this.datasource.refreshMateData(this.projectId, this.datasetId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
-        // this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {

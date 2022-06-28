@@ -44,7 +44,7 @@ export default class ApplicationRoute extends Route {
 		let routeValue = ""
 		let urlName = window.location.href.split("?")[0]
 		let name = urlName.split("/").pop()
-		const scriptArray = ["prepare", "topn", "sync", "distinct", "join", "stack", "group", "prepare-set", "sort"]
+		const scriptArray = ["prepare", "topn", "sync", "distinct", "join", "stack", "group", "prepare-set", "sort", "pivot"]
 		if (name == "dataset") {
 			routeValue = "dataset-lst"
 		} else if (urlName.indexOf("/flow") > -1) {

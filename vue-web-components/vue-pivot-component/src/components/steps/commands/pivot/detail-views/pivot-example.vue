@@ -3,7 +3,7 @@
         <div class="pivot-example-content" >
             <div class="pivot-example-sample">
                 <el-table
-                        height="230"
+                        height="160"
                         :cell-style="tableNoBorder"
                         :header-cell-style="tableNoBorder"
                         @cell-click="cellClicked"
@@ -17,7 +17,7 @@
             </div>
             <div class="pivot-example-setting">
                 <el-table
-                        height="230"
+                        height="160"
                         :cell-style="tableNoBorder"
                         :header-cell-style="tableNoBorder"
                         :data="defs.settingData[selected]">
@@ -29,7 +29,7 @@
                 </el-table>
             </div>
             <div class="pivot-example-display">
-                <div>
+                <div class="left-table">
                     <el-table v-if="selected !== 'Pivot Value'"
                             style="width: 300px; margin-top: 5px"
                             :data="defs.condData[selected]">
@@ -68,19 +68,27 @@
                     </el-table>
                 </div>
 
-                <div class="hor-center">
-                    <svg width="180" height="200">
+                <!-- <div class="hor-center">
+                    <svg width="80" height="200">
                         <defs>
                             <marker id="arrow" markerWidth="10" markerHeight="10"
                                     refX='0' refY='2' orient="auto"
                                     markerUnits="strokeWidth" viewBox="0 0 20 20">
-                                <path d="M0,0 L0,6 L9,3 z" fill="red" />
+                                <path d="M0,0 L0,6 L9,3 z" fill="#ccc" />
                             </marker>
                         </defs>
-                        <line x1="0" y1="100" :x2="150" y2="100" stroke="green" stroke-width="5" marker-end="url(#arrow)" />
+                        <line x1="0" y1="100" :x2="150" y2="100" stroke="#ccc" stroke-width="2" marker-end="url(#arrow)" />
                     </svg>
+                </div> -->
+
+                <div class="line-area">
+                    <div class="center-children">
+                        <div class="line"></div>
+                    </div>
+                    <span class="output-marker">•</span>
                 </div>
-                <div>
+
+                <div class="right-table">
                     <el-table v-if="selected === 'Pivot Table'"
                             style="width: 300px; margin-top: 5px"
                             :data="defs.pivotData[selected]">
@@ -200,15 +208,27 @@ export default {
     .pivot-example {
         /*margin-top: 4px;*/
     }
-
+    
     .pivot-example-content {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        
+        /deep/td.el-table__cell {
+            padding: 0 !important;
+        }
+        /deep/.el-table {
+            background-color: #f2f2f2;
+        }
+        /deep/tr {
+            background-color: #f2f2f2;
+        }
+        /deep/th {
+            background-color: #f2f2f2;
+        }
 
         .pivot-example-sample {
             flex: 0 0 50%;
-            background-color: #00b8d9;
 
             td {
                 border: none !important;
@@ -217,15 +237,44 @@ export default {
 
         .pivot-example-setting {
             flex: 0 0 50%;
-            background-color: #0D3349;
+            background-color: #f2f2f2;
         }
 
         .pivot-example-display {
             flex: 0 0 100%;
-            background-color: #2c3e50;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
+            width: 400px;
+            max-height: 170px;
+            .left-table {
+                border: 1px solid #ccc;
+                width: 170px;
+            }
+            .right-table {
+                width: 170px;
+                border: 1px solid #ccc;
+            }
+            .line-area {
+                width: 100px;
+                display: flex;
+                align-items: center;
+                .center-children {
+                    width: 100px;
+                    .line {
+                        width: 100%;
+                        height: 1px;
+                        border-top: 1px solid #dddddd;
+                    }
+                }
+                .output-marker {
+                    color: #bbbbbb;
+                    font-size: 20px;
+                    line-height: 20px;
+                    margin-top: -3px;
+                    margin-left: -1px;
+                }
+            }
         }
     }
 

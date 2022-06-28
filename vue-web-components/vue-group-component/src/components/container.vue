@@ -60,7 +60,6 @@
             </div>
         </div>
 		<div v-show="activeName === 'input/output'">
-			{{allData}}
 			<change-input-output
 				ref="changeInputOutput"
 				:inputs="inputs"	

@@ -323,6 +323,10 @@ export default {
                     scriptName: "group",
                     iconName: "group",
                     name: "Group"
+                }, {
+                    scriptName: "pivot",
+                    iconName: "pivot",
+                    name: "Pivot"
                 }]
             }
         }
@@ -621,6 +625,8 @@ export default {
                 return this.defs.iconsByName("stack")
             case "group":
                 return this.defs.iconsByName("group")
+            case "pivot":
+                return this.defs.iconsByName("pivot")
             default:
                 return this.script_icon
             }
