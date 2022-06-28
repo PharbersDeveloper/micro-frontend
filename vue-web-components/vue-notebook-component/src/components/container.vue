@@ -87,10 +87,7 @@
                                     <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">
                                         {{notebook.detail.name}}
                                     </p>
-                                    <p
-                                            class="tag_bg"
-                                            style="background: #94be8e">我的编译器
-                                    </p>
+                                    <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
 
                                     <div class="tag_area" ref="tagsArea">
                                         <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
@@ -183,6 +180,7 @@ import { MessageBox, Message } from 'element-ui'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions"
 import ElSwitch from "element-ui/packages/switch/index"
+import ElTag from "element-ui/packages/tag/index"
 import PhDataSource from "./model/datasource"
 
 export default {
@@ -216,6 +214,7 @@ export default {
             notebookscheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            owner: ""
         }
     },
     props: {
@@ -248,6 +247,7 @@ export default {
         bpSelectVue,
         bpOptionVue,
         ElSwitch,
+        ElTag
     },
     computed: {
         searchData: function() {
@@ -269,6 +269,7 @@ export default {
                 item.style["height"] = "40px"
             })
         }
+        this.owner = this.datasource.getCookie("account_id")
     },
     watch: {
         "allData.tagsArray": function() {

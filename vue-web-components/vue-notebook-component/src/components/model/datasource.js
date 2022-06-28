@@ -28,8 +28,6 @@ export default class PhDataSource {
     }
 
     buildStatusQuery(tenantId, resourceIds) {
-        console.log(tenantId)
-        console.log(resourceIds)
         const url = `${hostName}/phjupyterstatus`
         const accessToken = this.getCookie("access_token")
         let body = {
