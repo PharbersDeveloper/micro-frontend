@@ -20,17 +20,21 @@ export default class RemoteLoadingService extends Service {
 	}
 
 	loadRemoteJsSync(source) {
+		let that = this
 		return new Promise((resolve, reject) => {
 			const script = document.createElement("script")
-			script.src = source
 			script.onload = () => {
+				that.loadedJs.push(source)
 				resolve()
 			}
 			script.onerror = () => {
 				reject("cannot load script " + source)
 			}
 			if (this.loadedJs.indexOf(source) === -1) {
-				document.body.appendChild(script)
+				script.src = source
+				document.head.appendChild(script)
+			} else {
+				resolve()
 			}
 		})
 	}
