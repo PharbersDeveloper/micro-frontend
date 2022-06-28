@@ -126,7 +126,7 @@ export default {
     },
     data: () => {
         return {
-            policyCandidate: ["bar", "pie", "stack"],
+            policyCandidate: ["bar", "pie", "stack", "scatterplot"],
             draggingItem: null,
             needRefresh: 0,
             schemaRefresh: 0,
