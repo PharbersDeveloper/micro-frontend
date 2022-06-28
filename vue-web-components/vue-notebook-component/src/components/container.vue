@@ -106,7 +106,7 @@
                             </div>
                             <div>
                                 <span>{{notebook.message}}</span>
-                                <el-switch v-if="notebook.editable"
+                                <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
                                            v-model="notebook.switch"
                                            active-color="#13ce66"
                                            @change="resetStatus(notebook)"/>

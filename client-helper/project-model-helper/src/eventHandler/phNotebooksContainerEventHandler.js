@@ -304,8 +304,13 @@ export async function phNotebooksContainerEventHandler(e, route) {
 		case "createNotebook":
 			if (params) {
 				// const priority = 100
-				const { status, priority, message } =
+				const { status, priority, message, exist } =
 					await queryCreateValidate()
+
+				if (exist) {
+					alert("一个用户只能创建一个线上编译器")
+					return
+				}
 
 				if (status !== "ok") {
 					alert(message)
@@ -601,10 +606,12 @@ export async function phNotebooksContainerEventHandler(e, route) {
 	async function queryCreateValidate() {
 		const accessToken = route.cookies.read("access_token")
 		const tenantId = route.cookies.read("company_id")
+		const accountId = route.cookies.read("account_id")
 		const url = `${hostName}/phgetjupyternumber`
 
 		let body = {
-			tenantId: tenantId
+			tenantId: tenantId,
+			ownerId: accountId
 		}
 
 		let options = {
@@ -624,7 +631,18 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			})
 		const fp = await p
 		if (fp.code === 0)
-			return { status: "ok", priority: fp.priority, message: null }
-		else return { status: "error", priority: -99, message: fp.message }
+			return {
+				status: "ok",
+				priority: fp.priority,
+				message: null,
+				exist: fp.exist
+			}
+		else
+			return {
+				status: "error",
+				priority: -99,
+				message: fp.message,
+				exist: false
+			}
 	}
 }
