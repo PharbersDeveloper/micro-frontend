@@ -20,15 +20,13 @@ export default class PhDataSource {
     }
 
     refreshPlaceholders(dns) {
-        dns.forEach(x => { 
+        dns.forEach(x => {
 			let statusModel =  new PhStatusModel(x.id, 0, this.guid(), x)
-			this.model.push(statusModel) 
+			this.model.push(statusModel)
 		})
     }
 
     buildStatusQuery(tenantId, resourceIds) {
-        console.log(tenantId)
-        console.log(resourceIds)
         const url = `${hostName}/phjupyterstatus`
         const accessToken = this.getCookie("access_token")
         let body = {
