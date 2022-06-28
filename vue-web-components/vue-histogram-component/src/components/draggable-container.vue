@@ -110,28 +110,26 @@ export default {
                 this.$nextTick(() => {
                     this.rect.top = this.adjustTop(this.position[this.topIndex])
                 })
-            }
-
-            else if (this.adjustRange(height, this.adjustHeight(this.position[this.topIndex], this.position[this.bottomIndex]))) {
-                this.position[this.bottomIndex] = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
+            } else if (this.adjustRange(height, this.adjustHeight(this.position[this.topIndex], this.position[this.bottomIndex]))) {
+                // this.position[this.bottomIndex] = Math.floor((top + height - 2 * margin - 1) / stepH) - 1
+                this.position[this.bottomIndex] = Math.min(Math.floor((top + height - 2 * margin - 1) / stepH), 12)
                 this.$nextTick(() => {
                     this.rect.height = this.adjustHeight(this.position[this.topIndex], this.position[this.bottomIndex])
                 })
-            }
-
-            else if (this.adjustRange(left, this.adjustLeft(this.position[this.leftIndex]))) {
+            } else if (this.adjustRange(left, this.adjustLeft(this.position[this.leftIndex]))) {
                 this.position[this.leftIndex] = Math.floor(left / stepW)
                 this.$nextTick(() => {
                     this.rect.left = this.adjustLeft(this.position[this.leftIndex])
                 })
-            }
-
-            else if (this.adjustRange(width, this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex]))) {
-                this.position[this.rightIndex] = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
+            } else if (this.adjustRange(width, this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex]))) {
+                // this.position[this.rightIndex] = Math.floor((left + width - 2 * margin - 1) / stepW) - 1
+                this.position[this.rightIndex] = Math.min(Math.floor((left + width - 2 * margin - 1) / stepW), 12)
                 this.$nextTick(() => {
                     this.rect.width = this.adjustWidth(this.position[this.leftIndex], this.position[this.rightIndex])
                 })
             }
+        },
+        adjustRange(l, r, s = 1) {
             return l - r > s || r - l > s
         },
         resize(newRect) {

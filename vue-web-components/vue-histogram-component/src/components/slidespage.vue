@@ -125,6 +125,7 @@ import PhSlideModel from './slide-model/slide-model'
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import StackPolicy from "../components/render-policy/stack-policy"
+import ScatterplotPolicy from "../components/render-policy/scatterplot-policy"
 import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import { staticFilePath } from '../config/envConfig'
@@ -302,6 +303,16 @@ export default {
             }
             else if (content.policyName === "stack") {
                 return new StackPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "scatterplot") {
+                return new ScatterplotPolicy(content.index,
                     new PhHistogramDatasource(content.index,
                         this.allData.projectId,
                         content.datasetName),
