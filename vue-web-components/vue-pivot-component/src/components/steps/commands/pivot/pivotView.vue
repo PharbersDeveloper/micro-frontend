@@ -8,28 +8,32 @@
         </div>
 
         <div class="pivot-content-container" v-if="datasource">
-            <div class="pivot-example-c">
-                <pivot-example></pivot-example>
-            </div>
-            <div class="pivot-pivot-c">
-                <pivot-column :command="datasource.command"
-                              :kc="datasource.command.keyColumns"
-                              :selection="datasource.command.selection"
-                              :pivoted-column-type="datasource.command.pivotedColumnType"
-                              @selectionChanged="selectionChanged" />
-            </div>
-            <div class="pivot-column-c">
-                <pivot-row :command="datasource.command"
-                           :idf="datasource.command.identifiers"
-                           :selection="datasource.command.selection"
-                           @selectionChanged="selectionChanged" />
-            </div>
-            <div class="pivot-aggregation-c">
-                <pivot-aggregation :command="datasource.command"
-                                   :value-columns="datasource.command.valueColumns"
-                                   :selection="datasource.command.selection"
-                                   @selectionChanged="selectionChanged" />
-            </div>
+			<div class="pivot-flex-1">
+				<div class="pivot-example-c">
+					<pivot-example></pivot-example>
+				</div>
+				<div class="pivot-pivot-c">
+					<pivot-column :command="datasource.command"
+								:kc="datasource.command.keyColumns"
+								:selection="datasource.command.selection"
+								:pivoted-column-type="datasource.command.pivotedColumnType"
+								@selectionChanged="selectionChanged" />
+				</div>
+			</div>
+			<div class="pivot-flex-2">
+				<div class="pivot-column-c">
+					<pivot-row :command="datasource.command"
+							:idf="datasource.command.identifiers"
+							:selection="datasource.command.selection"
+							@selectionChanged="selectionChanged" />
+				</div>
+				<div class="pivot-aggregation-c">
+					<pivot-aggregation :command="datasource.command"
+									:value-columns="datasource.command.valueColumns"
+									:selection="datasource.command.selection"
+									@selectionChanged="selectionChanged" />
+				</div>
+			</div>
         </div>
     </div>
 </template>
@@ -119,8 +123,12 @@ export default {
 
     .pivot-content-container {
         display: flex;
-        flex-direction: row;
-        flex-flow: wrap;
+		flex-direction: column;
+        // flex-flow: wrap;
+
+		.pivot-flex-1, .pivot-flex-2 {
+			display: flex;
+		}
 
         .pivot-example-c {
             flex: 0 0 50%;
@@ -128,7 +136,9 @@ export default {
             height: calc( 50vh - 100px);
             // background-color: red;
             margin: 10px;
+			padding: 10px;
 			height: 400px;
+			max-width: 500px;
 			border: 1px solid #ccc;
         }
 
@@ -138,22 +148,29 @@ export default {
             height: calc( 50vh - 100px);
             background-color: #fff;
             margin: 10px;
+			padding: 10px;
 			border: 1px solid #ccc;
 			height: 400px;
         }
 
         .pivot-column-c {
-            flex: 0 0 50%;
-            height: calc( 50vh - 100px);
-            background-color: grey;
-            padding: 10px;
+			flex: 0 0 50%;
+			height: calc(50vh - 100px);
+			background-color: #fff;
+			margin: 10px;
+			padding: 10px;
+			max-width: 500px;
+			border: 1px solid #ccc;
         }
 
         .pivot-aggregation-c {
-            flex: 0 0 50%;
-            height: calc( 50vh - 100px);
-            background-color: yellow;
-            padding: 10px;
+			flex: 0 0 50%;
+			height: calc(50vh - 100px);
+			background-color: #fff;
+			margin: 10px;
+			padding: 10px;
+			flex-grow: 1;
+			border: 1px solid #ccc;
         }
     }
 </style>
