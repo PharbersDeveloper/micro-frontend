@@ -267,8 +267,7 @@ export default {
             datasetcheckedNames: [], //选中项name
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            selectCatalogVisible: false,
-            searchData: []
+            selectCatalogVisible: false
         }
     },
     props: {
@@ -306,7 +305,17 @@ export default {
         fitMaxOutputDialog,
         selectCatalog
     },
-    computed: { },
+    computed: { 
+        searchData: function() {
+            let searchValue = this.searchValue
+            this.state = 'search'
+            if(searchValue) {
+                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+            }
+            this.sort("ascending")
+            return this.allData.dss
+        }
+    },
     mounted() { },
     watch: {
         "allData.tagsArray": function() {
@@ -314,21 +323,21 @@ export default {
             this.allData.tagsArray.forEach((item, index) => {
                 this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
             })
-        },
-        "allData.dss": function(n, o) {
-            console.log(n)
-            this.searchData = Array.from(n)
-        },
-        searchValue: function() {
-            let searchValue = this.searchValue
-            this.state = 'search'
-            if(searchValue) {
-                this.searchData = this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            } else {
-                this.searchData = this.allData.dss
-            }
-            this.sort("ascending")
         }
+        // "allData.dss": function(n, o) {
+        //     console.log(n)
+        //     this.searchData = Array.from(n)
+        // },
+        // searchValue: function() {
+        //     let searchValue = this.searchValue
+        //     this.state = 'search'
+        //     if(searchValue) {
+        //         this.searchData = this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+        //     } else {
+        //         this.searchData = this.allData.dss
+        //     }
+        //     this.sort("ascending")
+        // }
     },
     methods: {
         confirmeCreateCatalog(data) {
@@ -482,7 +491,7 @@ export default {
             if(val == 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                this.searchData.sort(
+                this.allData.dss.sort(
                     function compareFunction(param1, param2) {
                         return param1.name.localeCompare(param2.name);
                     }
@@ -490,7 +499,7 @@ export default {
             }else if (val == 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.searchData.reverse()
+                this.allData.dss.reverse()
             }
         },
         //排序条件下拉框

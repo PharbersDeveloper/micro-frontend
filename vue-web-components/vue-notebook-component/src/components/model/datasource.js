@@ -20,10 +20,8 @@ export default class PhDataSource {
     }
 
     refreshPlaceholders(dns) {
-		let that = this
-        dns.forEach(x => { 
-			let statusModel =  new PhStatusModel(x.id, 0, that.guid(), x)
-			that.model.push(statusModel) 
+        dns.forEach(x => {
+			this.model.push(new PhStatusModel(x.id, 0, this.guid(), x)) 
 		})
     }
 
