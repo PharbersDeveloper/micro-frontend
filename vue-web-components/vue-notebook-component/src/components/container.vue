@@ -81,10 +81,17 @@
                                     <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1" @click.stop="checkedOnenotebooks(notebook.detail)">
                                 </div>
                                 <div class="item_list">
-                                <span class="script_icon">
-                                    <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
-                                </span>
-                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">{{notebook.detail.name}}</p>
+                                    <span class="script_icon">
+                                        <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
+                                    </span>
+                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">
+                                        {{notebook.detail.name}}
+                                    </p>
+                                    <p
+                                            class="tag_bg"
+                                            style="background: #94be8e">我的编译器
+                                    </p>
+
                                     <div class="tag_area" ref="tagsArea">
                                         <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
                                         <span v-if="notebook.label !== ''">
@@ -172,7 +179,6 @@ import createTagsDialog from './create-tags-dialog.vue'
 import createNotebookDialog from './create-notebook-dialog.vue'
 import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
 import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
-// import ElButton from 'element-ui/packages/option/index'
 import { MessageBox, Message } from 'element-ui'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions"
@@ -238,12 +244,10 @@ export default {
     },
     components: {
         createTagsDialog,
-        // deleteTagsDialog,
         createNotebookDialog,
         bpSelectVue,
         bpOptionVue,
-        ElSwitch
-        // ElButton
+        ElSwitch,
     },
     computed: {
         searchData: function() {
