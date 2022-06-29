@@ -13,12 +13,6 @@
                     <el-radio :label="false">选中列</el-radio>
                 </el-radio-group>
             </div>
-<!--            <div class="retrieved-keys disabled" v-if="isAllCols" >-->
-<!--                <el-transfer-->
-<!--                        v-model="datasource.command.retrievedCols"-->
-<!--                        :data="data">-->
-<!--                </el-transfer>-->
-<!--            </div>-->
             <div class="retrieved-keys" v-if="!isAllCols">
                 <el-transfer
                         v-model="datasource.command.retrievedCols"
@@ -39,8 +33,7 @@ export default {
     data() {
         return {
             datasource: null,
-            isAllCols: true,
-            // candiData: []
+            isAllCols: true
         }
     },
     props: {
@@ -61,14 +54,16 @@ export default {
     mounted() {
         this.datasource = new PhRetrievedColsStep(this.step)
         this.isAllCols = this.datasource.command.retrievedCols.length === 0
-        console.log(this.datasource.command.retrievedCols)
+        const ErrorVales = !this.isAllCols && this.datasource.command.retrievedCols.length === 0
+		this.$emit('statusChange', ErrorVales)
     },
     updated() {
 
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+			const ErrorVales = !this.isAllCols && this.datasource.command.retrievedCols.length === 0
+            this.$emit('statusChange', ErrorVales)
         }
     },
     computed: {

@@ -204,20 +204,18 @@ export default {
                 this.stepsDefs[2].status = "success"
             }
         },
-        retrievedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+        retrievedStatus(errors) {
+            if (errors) {
                 this.stepsDefs[3].status = "error"
+            } else {
+                this.stepsDefs[3].status = "success"
             }
         },
-        outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
-            } else {
+        outputsStatus(errors) {
+            if (errors) {
                 this.stepsDefs[4].status = "error"
+            } else {
+                this.stepsDefs[4].status = "success"
             }
         },
         computeSchema() {
@@ -239,16 +237,27 @@ export default {
         },
         genOutputsSchema() {
             const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            let result = []
-            if (retrieved.length === 0) {
-                result = this.computedSchema
+			const retrievedType = this.$refs.retrieved.datasource.command.retrievedCols.length === 0
+            if (retrievedType) {
+                return this.computedSchema
             } else {
-                result = this.computedSchema.filter(x => retrieved.includes(x.title))
+                return this.computedSchema.filter(x => retrieved.includes(x.title))
             }
-            return result
         },
         save() {
             if (this.activeName === "Setting") {
+				
+				this.$refs.filter.validate()
+				this.$refs.computed.validate()
+				this.$refs.topn.validate()
+				this.$refs.retrieved.validate()
+				this.$refs.outputs.validate()
+
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+				if(errors.length > 0) {
+					Message.error("请修改参数！", { duration: 3000} )
+					return false
+				}
                 const params = {
                     "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                     "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
@@ -336,32 +345,27 @@ export default {
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-
-        // this.projectIdTest = "alfredtest"
-        // this.jobName = "alfredtest"
         this.jobName = this.getJobName()
-        // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {
+			if (n === 4 || n === 5) {
+                this.computedSchema = this.computeSchema()
+            }
+
+            if (n === 4 || n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
+
             this.$refs.filter.validate()
             this.$refs.computed.validate()
             this.$refs.topn.validate()
             this.$refs.retrieved.validate()
             this.$refs.outputs.validate()
-
-            if (n === 4 || n === 5) {
-                this.computedSchema = this.computeSchema()
-            }
-
-            if (n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
         },
         activeName(n) {
             this.$emit("active", n)

@@ -134,6 +134,11 @@ export default {
     },
     mounted() {
         this.datasource = new PhTopNStep(this.step)
+		const ErrorVales = 
+			(this.datasource.command.firstRows < 1 && this.datasource.command.lastRows < 1) || 
+			this.datasource.command.orders.length === 0 || 
+			(!this.datasource.command.isAllCols && this.datasource.command.keys.length === 0)
+		this.$emit('statusChange', ErrorVales)
     },
     methods: {
         sortInserted() {

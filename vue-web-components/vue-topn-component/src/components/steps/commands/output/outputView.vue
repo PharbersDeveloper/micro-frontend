@@ -18,12 +18,7 @@
     </div>
 </template>
 <script>
-// import ElCheckbox from 'element-ui/packages/checkbox/index'
-// import ElInput from 'element-ui/packages/input/index'
-// import { staticFilePath } from '../../../../config/envConfig'
-// import ElButton from 'element-ui/packages/button/index'
 import { PhOutputsDefs } from "./defs"
-// import PhOutputsStep from "./step"
 
 export default {
     data() {
@@ -32,7 +27,6 @@ export default {
         }
     },
     props: {
-        // step: Object,
         schema: Array,
         concretDefs: {
             type: Object,
@@ -42,17 +36,14 @@ export default {
         }
     },
     components: {
-        // ElCheckbox,
-        // ElButton,
-        // ElInput
     },
     mounted() {
-        // this.datasource = new PhOutputsStep(this.step)
-        // this.$emit('schemaCompute', true)
+		this.$emit('statusChange', false)
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+			console.log("outputs")
+            this.$emit('statusChange', false)
         }
     },
     computed: {
