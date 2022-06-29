@@ -197,12 +197,11 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        topnStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+        topnStatus(errors) {
+            if (errors) {
                 this.stepsDefs[2].status = "error"
+            } else {
+                this.stepsDefs[2].status = "success"
             }
         },
         retrievedStatus(status) {
@@ -519,6 +518,7 @@ export default {
                 justify-content: space-around;
                 background: #f2f2f2;
                 padding: 20px;
+				overflow: auto;
             }
         }
     }

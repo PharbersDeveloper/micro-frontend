@@ -8,18 +8,22 @@
         </div>
         <div class="topn-content" v-if="datasource">
             <div class="topn-container-rows">
-                <h3>检索</h3>
-                <el-form label-width="120px" >
+                <h3 class="title">检索</h3>
+                <el-form label-width="60px" >
                     <el-form-item label="顶部行">
-                        <el-input-number v-model="datasource.command.firstRows"></el-input-number>
+                        <el-input-number 
+							:min="0"
+							v-model="datasource.command.firstRows"></el-input-number>
                     </el-form-item>
                     <el-form-item label="底部行">
-                        <el-input-number v-model="datasource.command.lastRows"></el-input-number>
+                        <el-input-number 
+							:min="0"
+							v-model="datasource.command.lastRows"></el-input-number>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="topn-container-sort">
-                <h3>排序</h3>
+                <h3 class="title">排序</h3>
                 <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.orders" :key="index">
                     <div class="topn-sort-item">
                         <span class="topn-sort-title">{{item.column}}</span>
@@ -41,7 +45,7 @@
                 </div>
             </div>
             <div class="topn-container-group">
-                <h3>分组</h3>
+                <h3 class="title">分组</h3>
                 <el-radio-group v-model="datasource.command.isAllCols">
                     <el-radio :label="true">全数据集</el-radio>
                     <el-radio :label="false">按照分组计算</el-radio>
@@ -76,7 +80,7 @@
             </div>
             <el-divider></el-divider>
             <div class="topn-additional">
-                <h3>对每一行进行</h3>
+                <h3  class="title">对每一行进行</h3>
                 <el-checkbox v-model="datasource.command.duplicateCount">总行数计数</el-checkbox>
                 <el-checkbox v-model="datasource.command.rowNumber">显示行号</el-checkbox>
                 <el-checkbox v-model="datasource.command.rank">排序</el-checkbox>
@@ -147,12 +151,23 @@ export default {
             this.datasource.command.deleteKeyCloase(idx)
         },
         validate() {
-            this.$emit('statusChange', true)
+			const ErrorVales = 
+				(this.datasource.command.firstRows < 1 && this.datasource.command.lastRows < 1) || 
+				this.datasource.command.orders.length === 0 || 
+				(!this.datasource.command.isAllCols && this.datasource.command.keys.length === 0)
+            this.$emit('statusChange', ErrorVales)
         }
     },
     computed: {
 
-    }
+    },
+	watch: {
+		"datasource.command.isAllCols": function(n) {
+			if (n) { 
+				this.datasource.command.keys = []
+			}
+		}
+	}
 }
 </script>
 <style lang="scss" scoped>
@@ -190,7 +205,15 @@ export default {
         }
 
         .topn-content {
-
+			/deep/input.el-input__inner {
+				height: 23px;
+			}
+			.title {
+				margin: 10px 0;
+			}
+			.el-form-item {
+				margin-bottom: 0;
+			}
         }
 
         .topn-sort-item-list {
@@ -199,8 +222,9 @@ export default {
 
             .topn-sort-item {
                 display: flex;
-                flex-direction: row;
-                justify-content: space-between;
+				flex-direction: row;
+				// justify-content: space-between;
+				align-items: center;
 
                 .topn-sort-btn-group {
                     display: flex;
@@ -211,7 +235,13 @@ export default {
         .topn-add-btn {
             display: flex;
             flex-direction: row;
-            justify-content: space-around;
+			margin-top: 10px;
+			select {
+				width: 300px;
+				height: 26px;
+				border: 1px solid #ccc;
+				color: #ccc;
+			}
         }
 
         .topn-container-group {
@@ -226,8 +256,17 @@ export default {
         }
 
         .topn-sort-title {
-            text-align: center;
+            // text-align: center;
             vertical-align: middle;
+			vertical-align: middle;
+			padding: 3px 10px;
+			min-width: 200px;
+			max-width: 400px;
+			border-radius: 4px;
+			background-color: #c4e0fe;
+			font-size: 13px;
+			color: #333;
+			margin-right: 30px;
         }
 
         .topn-sort-del-btn {
