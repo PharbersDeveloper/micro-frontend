@@ -82,13 +82,7 @@ export default class PhDataSource {
                                 "rank": false,
                                 "rowNumber": false,
                                 "retrievedColumns": [],
-                                "computedColumns": [
-									{
-										"expr": "",
-										"name": "",
-										"type": "int"
-									}
-								]
+                                "computedColumns": []
                             }
                         }),
                         "expressions-value": "JSON",
