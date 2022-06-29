@@ -33,7 +33,7 @@ export default class PhStackChartPolicy extends policy{
     }
 
     policyName() {
-        return "pie"
+        return "stack"
     }
 
     resetPolicyConstraints(option) {
