@@ -3,6 +3,7 @@
         <el-dialog
                 title="Tips"
                 :visible.sync="dialogVisible"
+				@close='close()'
                 width="30%" >
             <el-form label-width="120px">
                 <el-form-item label="编译器名称">
@@ -34,7 +35,8 @@ import PhDagDefinitions from "./policy/definitions/definitions"
 export default {
     data() {
         return {
-            name: "test"
+            name: "test",
+			visible: false
         }
     },
     components: {
@@ -60,6 +62,9 @@ export default {
         this.name = this.initialName
     },
     methods: {
+		close() {
+			this.$emit("cancel")
+		},
         confirmCreation() {
             const event = new Event("event")
             event.args = {
@@ -70,7 +75,9 @@ export default {
             }
             this.$emit("confirm", event)
         }
-    }
+    },
+	watch: {
+	}
 }
 </script>
 
