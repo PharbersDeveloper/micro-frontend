@@ -9,18 +9,18 @@
         <div class="join-content" v-if="datasource">
             <div class="join-dataset-list" >
                 <join-dataset-card v-for="(item, index) in datasource.datasets"
-                           :key="index"
-                           :index="index"
-                           :step="datasource"
-                           :dataset="item"/>
+					:key="index"
+					:index="index"
+					:step="datasource"
+					:dataset="item"/>
             </div>
             <div class="join-join-list" v-if="datasource" :style="joinListStyle">
                 <div v-for="(item, index) in datasource.commands" :key="index">
                     <join-relation-card
-                            :join-detail="item"
-                            :step="datasource"
-                            :schema="schema"
-                            :index="index" />
+						:join-detail="item"
+						:step="datasource"
+						:schema="schema"
+						:index="index" />
                 </div>
             </div>
         </div>

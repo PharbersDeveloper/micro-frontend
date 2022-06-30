@@ -121,6 +121,15 @@ export default class PhDataSource {
                         "normalizeText": false,
                         "type": "LEFT",
                         "on": []
+                    },{
+                        "datasets": this.datasets.map((x, i) => { return {
+                            name: x,
+                            index: i
+                        }}),
+                        "caseInsensitive": false,
+                        "normalizeText": false,
+                        "type": "LEFT",
+                        "on": []
                     }]
                     const defaultSelectCols = this.datasets.map(x => { return {
                         "ds": x,

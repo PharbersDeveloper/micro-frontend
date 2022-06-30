@@ -99,14 +99,6 @@ export default {
 
     },
     methods: {
-        // computedLeftCol(item) {
-        //     const tmp = item.conditions.filter(x => x.ds === this.joinDetail.datasets[0])[0]
-        //     return tmp.column
-        // },
-        // computedRightCol(item) {
-        //     const tmp = item.conditions.filter(x => x.ds === this.joinDetail.datasets[1])[0]
-        //     return tmp.column
-        // },
         computedLeft() {
             if (this.joinDetail) {
                 const leftIdx = Math.min(...this.joinDetail.datasets.map(x => x.index))
