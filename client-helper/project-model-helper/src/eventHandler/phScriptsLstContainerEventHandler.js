@@ -712,7 +712,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
 							route.cookies.read("user_name_show")
-						)
+						),
+						tenantId: route.cookies.read("company_id")
 					},
 					action: {
 						cat: "createScript",
