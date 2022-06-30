@@ -1,7 +1,7 @@
 export const PhPreFilterDefs = {
     actions: [
         {
-            desc: "符合左右条件的列",
+            desc: "符合所有条件的列",
             cal: "AND"
         },
         {
