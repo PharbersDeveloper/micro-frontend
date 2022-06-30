@@ -9,6 +9,7 @@
         <div class="topn-content" v-if="datasource">
             <div class="topn-container-rows">
                 <h3 class="title">检索</h3>
+				<div class="error-msg" v-show="datasource.command.firstRows === 0 && datasource.command.lastRows === 0">请选择检索行数！</div>
                 <el-form label-width="60px" >
                     <el-form-item label="顶部行">
                         <el-input-number 
@@ -24,6 +25,7 @@
             </div>
             <div class="topn-container-sort">
                 <h3 class="title">排序</h3>
+				<div class="error-msg" v-show="datasource.command.orders.length === 0">请选择至少一个排序条件列！</div>
                 <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.orders" :key="index">
                     <div class="topn-sort-item">
                         <span class="topn-sort-title">{{item.column}}</span>
@@ -50,6 +52,7 @@
                     <el-radio :label="true">全数据集</el-radio>
                     <el-radio :label="false">按照分组计算</el-radio>
                 </el-radio-group>
+				<div class="error-msg" v-show="!datasource.command.isAllCols && datasource.command.keys.length === 0">请选择至少一个分组条件列！</div>
                 <div class="topn-keys disabled" v-if="datasource.command.isAllCols" >
                     <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.keys" :key="index">
                         <div class="topn-sort-item">
@@ -218,6 +221,10 @@ export default {
 			}
 			.el-form-item {
 				margin-bottom: 0;
+			}
+			.error-msg {
+				font-size: 13px;
+				color: #ce1228;
 			}
         }
 

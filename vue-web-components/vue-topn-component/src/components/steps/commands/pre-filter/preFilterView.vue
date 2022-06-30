@@ -17,6 +17,7 @@
             </el-form>
         </div>
         <div class="condition-selection" v-if="datasource && datasource.enabled">
+			<div class="error-msg" v-show="datasource.command.cloases && datasource.command.cloases.length === 0">需要添加至少一个Filter条件！</div>
             <div class="condition-selection-item" v-for="(cur, index) in datasource.command.cloases" :key="index">
                 <div class="condition-selection-content">
                     <select v-model="cur['left']">
@@ -25,7 +26,9 @@
                     <select v-model="cur['op']">
                         <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
                     </select>
-                    <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" ></el-input>
+                    <el-input 
+						v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" 
+						:class="[{'el-input-error': cur['right'] === ''}]"></el-input>
                     <el-input v-else disabled ></el-input>
                 </div>
                 <el-button type="text" @click="datasource.command.delcloases(index)">删除</el-button>
@@ -116,6 +119,12 @@ export default {
         display: flex;
         flex-direction: column;
 
+		.el-input-error {
+			/deep/input.el-input__inner {
+				border-color: #ce1228;
+			}
+		}
+
         .condition-title {
             display: flex;
             flex-direction: column;
@@ -135,6 +144,11 @@ export default {
 
         .condition-selection {
             margin-top: 30px;
+
+			.error-msg {
+				font-size: 13px;
+				color: #ce1228;
+			}
 
             .condition-selection-item {
                 display: flex;
