@@ -110,7 +110,10 @@ export default {
         },
         computedWidth() {
             if (this.joinDetail) {
-                const rightIdx = Math.max(...this.joinDetail.datasets.map(x => x.index))
+                // const rightIdx = Math.max(...this.joinDetail.datasets.map(x => x.index))
+				const maxNum = Math.max(...this.joinDetail.datasets.map(x => x.index))
+				const minNum = Math.min(...this.joinDetail.datasets.map(x => x.index))
+				const rightIdx = maxNum - minNum
                 return (500 + 3) * (rightIdx + 1) - 80
             } else return 0
         },

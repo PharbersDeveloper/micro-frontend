@@ -17,8 +17,8 @@ export default class PhJoinStep {
         for (let idx = 0; idx < this.commands.length; ++idx) {
             for (let idn = 0; idn < this.commands[idx]["datasets"].length; ++idn) {
                 const tmp = this.commands[idx]["datasets"][idn]["name"]
-                if (!res.includes(tmp))
-                    res.push(tmp)
+                // if (!res.includes(tmp))
+				res.push(tmp)
             }
         }
         return res
@@ -27,11 +27,12 @@ export default class PhJoinStep {
     hitHeight() {
         let res = 0
         for (let idx = 0; idx < this.commands.length; ++idx) {
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
-            res += 20
+            // for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
+            //     res += 30
+            // }
+            res += 330
         }
+		this.hitHeightValue = Math.max(320, res)
         return Math.max(320, res)
     }
 
@@ -44,9 +45,11 @@ export default class PhJoinStep {
         for (let iter = 0; iter < this.commands.length; ++iter) {
             if (iter === idx) break
 
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
+            // for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
+            //     res += 30
+            // }
+
+			res += 330
         }
         return res
     }

@@ -50,6 +50,7 @@ import JoinDatasetCard from './detail-views/dataset-card'
 import JoinRelationCard from './detail-views/relation-card'
 import { PhJoinDefs } from "./defs"
 import PhJoinStep from "./step"
+import PhJoinCmd from "./cmd"
 
 export default {
     data() {
@@ -96,19 +97,44 @@ export default {
         validate() {
             this.$emit('statusChange', true)
         },
-        addDataset(ds) {
+        addDataset(ds, index) {
             this.showAddDialog = true
             this.leftDsName = ds
+            this.leftIndex = index
         },
         addDatasetConfirm() {
-            console.log(this.datasource.commands0
+            this.datasource.datasets.push(this.newDsName)
+
+            const newData = {
+                name: this.newDsName,
+                index: this.datasource.datasets.length - 1
+            }
+            const oldData = {
+                name: this.leftDsName,
+                index: this.leftIndex
+            }
+            
+            this.datasource.commands.push(new PhJoinCmd({
+                "datasets": [oldData, newData],
+                "caseInsensitive": false,
+                "normalizeText": false,
+                "type": "LEFT",
+                "on": []
+            }))
+            this.showAddDialog = false
         }
     },
     computed: {
         joinListStyle() {
             return "width: " + this.datasource.hitWidth() + "px; height: " + this.datasource.hitHeight() + "px"
         }
-    }
+    },
+    watch: {
+		"step.hitHeightValue": function(n) {
+            console.log(n)
+			this.hitHeightValue = n
+		}
+	}
 }
 </script>
 <style lang="scss" scoped>
@@ -162,6 +188,7 @@ export default {
         position: relative;
         display: flex;
         flex-grow: 1;
+        overflow: auto;
     }
 
     .join-dataset-list {

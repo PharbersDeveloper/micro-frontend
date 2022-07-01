@@ -7,7 +7,7 @@
                 <span>{{dataset}}</span>
             </div>
             <div class="join-card-op">
-                <el-button type="text" @click="$emit('addDataset', dataset)">添加</el-button>
+                <el-button type="text" @click="$emit('addDataset', dataset, index)">添加</el-button>
                 <el-button type="text" >删除</el-button>
             </div>
         </div>
@@ -21,7 +21,9 @@ import ElButton from 'element-ui/packages/button/index'
 
 export default {
     data() {
-        return {}
+        return {
+			hitHeightValue: 330
+		}
     },
     props: {
         index: Number,
@@ -42,10 +44,15 @@ export default {
         style() {
             if (this.step) {
                 const bgc = this.index % 2 === 0 ? "#f2f2f2" : "fff"
-                return "height: " + this.step.hitHeight() + "px; background-color: " + bgc + ";border: 1px dashed #aaa;"
+                return "height: " + this.hitHeightValue + "px; background-color: " + bgc + ";border: 1px dashed #aaa;"
             } else return ""
         }
-    }
+    },
+	watch: {
+		step: function(n) {
+			console.log(n)
+		}
+	}
 }
 </script>
 <style lang="scss" scoped>
