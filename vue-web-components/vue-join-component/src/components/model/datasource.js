@@ -219,9 +219,9 @@ export default class PhDataSource {
             .then((response) => response.json())
             .then((response) => {
 				console.log(response)
-				// that.store.sync(response)
-                // const data = that.store.findAll("datasets")
-				that.parent.datasetArray = response.data
+				that.store.sync(response)
+                const data = that.store.findAll("datasets")
+				that.parent.datasetArray = data
             })
     }
 
