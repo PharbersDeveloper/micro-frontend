@@ -526,7 +526,7 @@ export default {
         },
         //增加scripts
         createScripts(data) {
-            let multiInputs = ["stack"]
+            let multiInputs = ["join", "stack"]
             if (
                 data.args.param.inputs.length != 2 &&
 				multiInputs.includes(this.runtime)

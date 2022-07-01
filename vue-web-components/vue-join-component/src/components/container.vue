@@ -4,7 +4,7 @@
         <div class="join_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('join')" alt="" />
-                <span>Join</span>
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
 				<el-radio-group v-model="activeName" class="content">
@@ -26,39 +26,40 @@
             </div>
             <div class="join_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-                            ref="prefilter"
-                            :step="datasource.step"
-                            :schema="datasource.schema"
-                            @statusChange="preFilterStatus" />
+					ref="prefilter"
+					:step="datasource.step"
+					:schema="datasource.schema"
+					@statusChange="preFilterStatus" />
                 <pre-computed v-show="active === 2"
-                              ref="percomputed"
-                              :step="datasource.step"
-                              :schema="datasource.schema"
-                              @statusChange="preComputedStatus" />
+					ref="percomputed"
+					:step="datasource.step"
+					:schema="datasource.schema"
+					@statusChange="preComputedStatus" />
                 <join v-show="active === 3"
-                      ref="join"
-                      :step="datasource.step"
-                      :schema="datasource.schema"
-                      @statusChange="joinStatus" />
+					ref="join"
+					:datasetArray="datasetArray"
+					:step="datasource.step"
+					:schema="datasource.schema"
+					@statusChange="joinStatus" />
                 <select-cols v-show="active === 4"
-                                ref="select"
-                                :step="datasource.step"
-                                :schema="datasource.schema"
-                                @statusChange="selectStatus" />
+					ref="select"
+					:step="datasource.step"
+					:schema="datasource.schema"
+					@statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
-                               ref="postcomputed"
-                               :step="datasource.step"
-                               :schema="computedSchema"
-                               @statusChange="postComputedStatus" />
+					ref="postcomputed"
+					:step="datasource.step"
+					:schema="computedSchema"
+					@statusChange="postComputedStatus" />
                 <post-filter v-show="active === 6"
-                             ref="postfilter"
-                             :step="datasource.step"
-                             :schema="computedSchema"
-                         @statusChange="postFilterStatus" />
+					ref="postfilter"
+					:step="datasource.step"
+					:schema="computedSchema"
+					@statusChange="postFilterStatus" />
                 <outputs v-show="active === 7"
-                                ref="outputs"
-                                :schema="computedSchema"
-                                @statusChange="outputsStatus" />
+					ref="outputs"
+					:schema="computedSchema"
+					@statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -114,7 +115,7 @@ export default {
     data() {
         return {
             computedSchema: [],
-            active: 1,
+            active: 3,
 			flowVersion: "developer",
             stepsDefs: [
                 {
@@ -490,7 +491,7 @@ export default {
                 flex-direction: row;
                 justify-content: space-around;
 				background: #f2f2f2;
-				padding: 20px;
+				// padding: 20px;
             }
         }
     }

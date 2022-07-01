@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="condition-title">
             <div class="condition-title-p">
-                <h2>Pre Join Filter</h2>
+                <h2>Pre Filter</h2>
             </div>
         </div>
         <div class="condition-ds-container" v-if="datasource">

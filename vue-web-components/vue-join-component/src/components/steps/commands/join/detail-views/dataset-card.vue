@@ -7,7 +7,7 @@
                 <span>{{dataset}}</span>
             </div>
             <div class="join-card-op">
-                <el-button type="text" >添加</el-button>
+                <el-button type="text" @click="$emit('addDataset', dataset)">添加</el-button>
                 <el-button type="text" >删除</el-button>
             </div>
         </div>
@@ -41,7 +41,8 @@ export default {
     computed: {
         style() {
             if (this.step) {
-                return "height: " + this.step.hitHeight() + "px; background-color: #f2f2f2;border: 1px dashed #aaa;"
+                const bgc = this.index % 2 === 0 ? "#f2f2f2" : "fff"
+                return "height: " + this.step.hitHeight() + "px; background-color: " + bgc + ";border: 1px dashed #aaa;"
             } else return ""
         }
     }
@@ -65,6 +66,9 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            border: 1px solid #ddd;
 
             .join-card-ds {
 

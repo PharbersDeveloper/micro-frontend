@@ -8,21 +8,40 @@
         </div>
         <div class="join-content" v-if="datasource">
             <div class="join-dataset-list" >
-                <join-dataset-card v-for="(item, index) in datasource.datasets"
-					:key="index"
-					:index="index"
-					:step="datasource"
-					:dataset="item"/>
+                <join-dataset-card 
+                    v-for="(item, index) in datasource.datasets"
+                    @addDataset="addDataset"
+                    :key="index"
+                    :index="index"
+                    :step="datasource"
+                    :dataset="item"/>
             </div>
             <div class="join-join-list" v-if="datasource" :style="joinListStyle">
                 <div v-for="(item, index) in datasource.commands" :key="index">
                     <join-relation-card
-						:join-detail="item"
-						:step="datasource"
-						:schema="schema"
-						:index="index" />
+                        :join-detail="item"
+                        :step="datasource"
+                        :schema="schema"
+                        :index="index" />
                 </div>
             </div>
+            <el-dialog
+                title="Add an input dataset"
+                :visible.sync="showAddDialog"
+                width="30%" >
+                <div class="add-ds-content">
+                    <div class="con">
+                        <span>dataset</span>
+                        <select v-model="newDsName">
+                            <option v-for="(op, opi) in datasource.datasetArray" :key="opi+'addds'" :value="op" :label="op" />
+                        </select>
+                    </div>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="showAddDialog = false">Cancel</el-button>
+                        <el-button type="primary" @click="addDatasetConfirm">Confirm</el-button>
+                    </span>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -36,11 +55,15 @@ export default {
     data() {
         return {
             datasource: null,
+            color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            newDsName: "",
+            showAddDialog: false
         }
     },
     props: {
         step: Object,
         schema: Object,
+        datasetArray: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -72,6 +95,13 @@ export default {
         },
         validate() {
             this.$emit('statusChange', true)
+        },
+        addDataset(ds) {
+            console.log(ds)
+            this.showAddDialog = true
+        },
+        addDatasetConfirm() {
+            
         }
     },
     computed: {
@@ -88,7 +118,7 @@ export default {
         box-sizing: border-box;
     }
     .join-container {
-        margin-top: 4px;
+        // margin-top: 4px;
         width: 100%;
         /*min-width: 800px;*/
         padding: 4px;
@@ -97,7 +127,7 @@ export default {
         background: #fff;
         height: fit-content;
         padding: 20px;
-        height: calc( 100vh - 150px);
+        height: calc( 100vh - 100px);
 
         .join-title {
             display: flex;
@@ -132,7 +162,6 @@ export default {
         position: absolute;
         left: 30px;
         top: 100px;
-        border: 1px solid #f2f2f2;
         display: flex;
         flex-direction: column;
     }

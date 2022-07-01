@@ -147,6 +147,7 @@ export default {
             display: flex;
             flex-direction: column;
 			padding: 20px;
+			border: 1px solid #dddddd;
 
             .relation-card-types {
                 display: flex;
