@@ -29,11 +29,11 @@
                 title="Add an input dataset"
                 :visible.sync="showAddDialog"
                 width="30%" >
-                <div class="add-ds-content">
-                    <div class="con">
+                <div>
+                    <div class="add-ds-content">
                         <span>dataset</span>
                         <select v-model="newDsName">
-                            <option v-for="(op, opi) in datasource.datasetArray" :key="opi+'addds'" :value="op" :label="op" />
+                            <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
                         </select>
                     </div>
                     <span slot="footer" class="dialog-footer">
@@ -97,11 +97,11 @@ export default {
             this.$emit('statusChange', true)
         },
         addDataset(ds) {
-            console.log(ds)
             this.showAddDialog = true
+            this.leftDsName = ds
         },
         addDatasetConfirm() {
-            
+            console.log(this.datasource.commands0
         }
     },
     computed: {
@@ -128,6 +128,17 @@ export default {
         height: fit-content;
         padding: 20px;
         height: calc( 100vh - 100px);
+
+        .add-ds-content {
+            margin-bottom: 40px;
+            span {
+                margin-right: 40px;
+            }
+        }
+        .dialog-footer {
+            display: flex;
+            flex-direction: row-reverse;
+        }
 
         .join-title {
             display: flex;
