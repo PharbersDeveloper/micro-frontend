@@ -183,6 +183,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 				let catamessage = {
 					common: {
 						traceId: cataloguuid,
+						tenantId: route.cookies.read("company_id"),
 						projectId: params.projectId,
 						projectName: params.projectName,
 						flowVersion: "developer",

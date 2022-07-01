@@ -15,7 +15,7 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 					params.projectId
 			} else if (
 				params.name === "linkToProject" ||
-				params.name == "project"
+				params.name === "project"
 			) {
 				uri = `projects/` + params.projectId
 			} else if (params.name === "datasets") {
@@ -97,6 +97,7 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 			let message = {
 				common: {
 					traceId: param.uuid,
+					tenantId: route.cookies.read("company_id"),
 					projectId: param.projectId,
 					projectName: param.projectName,
 					flowVersion: "developer",
