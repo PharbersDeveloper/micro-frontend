@@ -66,6 +66,7 @@ export async function phTopnContainerEventHandler(e, route) {
 				let scriptBody = {
 					common: {
 						traceId: uuid,
+						tenantId: route.cookies.read("company_id"),
 						projectId: params.projectId,
 						projectName: params.projectName,
 						flowVersion: "developer",
@@ -143,6 +144,7 @@ export async function phTopnContainerEventHandler(e, route) {
 				let changeScriptBody = {
 					common: {
 						traceId: changeuuid,
+						tenantId: route.cookies.read("company_id"),
 						projectId: params.projectId,
 						projectName: params.projectName,
 						owner: route.cookies.read("account_id"),
