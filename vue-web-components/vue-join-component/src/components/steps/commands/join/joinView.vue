@@ -110,8 +110,10 @@ export default {
 
             const newData = {
                 name: this.newDsName,
-                index: this.datasource.datasets.length - 1
+                index: Math.max(...this.datasource.dsIdxArr)
+                // index: this.datasource.datasets.length - 1
             }
+
             const oldData = {
                 name: this.leftDsName,
                 index: this.leftIndex
@@ -127,9 +129,9 @@ export default {
             this.showAddDialog = false
             this.hitHeightValue = this.datasource.hitHeight()
         },
-        delDataset(ds, index) {
-            
-        }
+        // delDataset(ds, index) {
+
+        // }
     },
     computed: {
         joinListStyle() {

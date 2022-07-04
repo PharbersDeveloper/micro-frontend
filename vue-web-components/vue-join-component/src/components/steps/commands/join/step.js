@@ -9,8 +9,8 @@ export default class PhJoinStep {
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["joins"]
         this.commands = defs.map(x => { return new PhJoinCmd(x, schema) })
-        this.datasets = this.queryDatasets()
 		this.dsIdxArr = []
+        this.datasets = this.queryDatasets()
     }
 
     queryDatasets() {

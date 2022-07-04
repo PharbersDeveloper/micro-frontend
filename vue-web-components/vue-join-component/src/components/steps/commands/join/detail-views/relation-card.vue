@@ -113,7 +113,9 @@ export default {
                 // const rightIdx = Math.max(...this.joinDetail.datasets.map(x => x.index))
                 const maxNum = Math.max(...this.joinDetail.datasets.map(x => x.index))
                 const minNum = Math.min(...this.joinDetail.datasets.map(x => x.index))
-                const rightIdx = maxNum - minNum
+                const maxNumIdx = this.step.dsIdxArr.indexOf(maxNum)
+                const minNumIdx = this.step.dsIdxArr.indexOf(minNum)
+                const rightIdx = maxNumIdx - minNumIdx
                 return (500 + 3) * (rightIdx + 1) - 80
             } else return 0
         },
