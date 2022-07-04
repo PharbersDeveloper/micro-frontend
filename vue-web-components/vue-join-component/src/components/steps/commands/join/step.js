@@ -15,6 +15,7 @@ export default class PhJoinStep {
 
     queryDatasets() {
         const res = []
+		this.dsIdxArr = []
         for (let idx = 0; idx < this.commands.length; ++idx) {
             for (let idn = 0; idn < this.commands[idx]["datasets"].length; ++idn) {
                 const tmp = this.commands[idx]["datasets"][idn]["name"]

@@ -101,7 +101,8 @@ export default {
     methods: {
         computedLeft() {
             if (this.joinDetail) {
-                const leftIdx = Math.min(...this.joinDetail.datasets.map(x => x.index))
+                const leftNum = Math.min(...this.joinDetail.datasets.map(x => x.index))
+                const leftIdx = this.step.dsIdxArr.indexOf(leftNum)
                 return 10 + (500 + 3) * leftIdx
             } else return 0
         },

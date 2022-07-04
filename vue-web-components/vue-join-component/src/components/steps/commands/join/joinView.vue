@@ -11,9 +11,11 @@
                 <join-dataset-card 
                     v-for="(item, index) in datasource.datasets"
                     @addDataset="addDataset"
+                    @delDataset="delDataset"
                     :hitHeightValue="hitHeightValue"
                     :key="index"
-                    :index="index"
+                    :index="datasource.dsIdxArr[index]"
+                    :idx="index"
                     :step="datasource"
                     :dataset="item"/>
             </div>
@@ -110,7 +112,7 @@ export default {
 
             const newData = {
                 name: this.newDsName,
-                index: Math.max(...this.datasource.dsIdxArr)
+                index: Math.max(...this.datasource.dsIdxArr) + 1
                 // index: this.datasource.datasets.length - 1
             }
 
@@ -128,10 +130,24 @@ export default {
             }))
             this.showAddDialog = false
             this.hitHeightValue = this.datasource.hitHeight()
+            this.datasource.dsIdxArr.push(Math.max(...this.datasource.dsIdxArr) + 1)
         },
-        // delDataset(ds, index) {
+        delDataset(ds, index) {
+            var arr = this.datasource.commands
+            var len = arr.length-1;
+            for (var i=len; i>=0; i--) {
+                let cons = arr[i].datasets.filter(its => its.name === ds && its.index === index)
 
-        // }
+                // let cons = false
+                // let its = arr[i].datasets[0]
+                // if(its.name === ds && its.index === index) cons = true
+
+                let conIs = arr[i].datasets[0].index > index
+
+                if(cons.length > 0 || conIs)  arr.splice(i, 1)
+            }
+            this.datasource.datasets = this.datasource.queryDatasets()
+        }
     },
     computed: {
         joinListStyle() {

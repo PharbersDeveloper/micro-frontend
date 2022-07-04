@@ -382,7 +382,7 @@ export default {
         await this.datasource.queryJob(this.projectId, this.jobId)
         this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
-        this.datasource.refreshDataset(this.projectId)
+        // this.datasource.refreshDataset(this.projectId, this.datasource.datasets)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
     },
     watch: {

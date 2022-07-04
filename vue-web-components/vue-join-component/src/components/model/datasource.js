@@ -210,6 +210,8 @@ export default class PhDataSource {
             } else {
                 that.isMetaReady = true
             }
+
+			that.refreshDataset(projectId)
         })
     }
 

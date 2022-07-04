@@ -26,6 +26,7 @@ export default {
     },
     props: {
         index: Number,
+		idx: Number,
         count: Number,
         step: Object,
         dataset: String,
@@ -43,7 +44,7 @@ export default {
     computed: {
         style() {
             if (this.step) {
-                const bgc = this.index % 2 === 0 ? "#f2f2f2" : "fff"
+                const bgc = this.idx % 2 === 0 ? "#f2f2f2" : "fff"
                 return "height: " + this.hitHeightValue + "px; background-color: " + bgc + ";border: 1px dashed #aaa;"
             } else return ""
         }
