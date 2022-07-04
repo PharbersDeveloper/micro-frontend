@@ -11,6 +11,7 @@
                 <join-dataset-card 
                     v-for="(item, index) in datasource.datasets"
                     @addDataset="addDataset"
+                    :hitHeightValue="hitHeightValue"
                     :key="index"
                     :index="index"
                     :step="datasource"
@@ -58,7 +59,8 @@ export default {
             datasource: null,
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             newDsName: "",
-            showAddDialog: false
+            showAddDialog: false,
+            hitHeightValue: 0
         }
     },
     props: {
@@ -77,7 +79,8 @@ export default {
         JoinRelationCard
     },
     mounted() {
-        this.datasource = new PhJoinStep(this.step)
+        this.datasource = new PhJoinStep(this.step, this.schema)
+        this.hitHeightValue = this.datasource.hitHeight()
     },
     methods: {
         sortInserted() {
@@ -122,6 +125,10 @@ export default {
                 "on": []
             }))
             this.showAddDialog = false
+            this.hitHeightValue = this.datasource.hitHeight()
+        },
+        delDataset(ds, index) {
+            
         }
     },
     computed: {
@@ -130,10 +137,6 @@ export default {
         }
     },
     watch: {
-		"step.hitHeightValue": function(n) {
-            console.log(n)
-			this.hitHeightValue = n
-		}
 	}
 }
 </script>
@@ -144,16 +147,16 @@ export default {
         box-sizing: border-box;
     }
     .join-container {
-        // margin-top: 4px;
         width: 100%;
-        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
         background: #fff;
         height: fit-content;
         padding: 20px;
-        height: calc( 100vh - 100px);
+        // min-height: calc( 100vh - 100px);
+        width: calc(100vw - 300px);
+        overflow: hidden;
 
         .add-ds-content {
             margin-bottom: 40px;
@@ -188,7 +191,9 @@ export default {
         position: relative;
         display: flex;
         flex-grow: 1;
-        overflow: auto;
+        // overflow: auto;
+        overflow-x: auto;
+        overflow-y: hidden;
     }
 
     .join-dataset-list {

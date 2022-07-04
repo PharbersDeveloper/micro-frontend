@@ -2,8 +2,9 @@
  * 这个就是我所说的Command Instance
  */
 export default class PhJoinCmd {
-    constructor(defs) {
+    constructor(defs, schema) {
         this.datasets = defs["datasets"].sort(x => x.index)
+		this.schema = schema
         this.caseInsensitive = defs["caseInsensitive"]
         this.normalizeText = defs["normalizeText"]
         this.type = defs["type"]
@@ -24,11 +25,11 @@ export default class PhJoinCmd {
             "conditions": [
                 {
                     "ds": left,
-                    "column": ""
+                    "column": this.schema[left][0]["src"]
                 },
                 {
                     "ds": right,
-                    "column": "`col`"
+                    "column": this.schema[right][0]["src"]
                 }
             ]
         })

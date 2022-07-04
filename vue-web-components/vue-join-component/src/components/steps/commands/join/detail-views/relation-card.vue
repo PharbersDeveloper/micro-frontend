@@ -61,7 +61,7 @@
                     <el-button type="primary" @click="addJoinCondition">添加条件</el-button>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="text" @click="showEditDialog = false">Ok</el-button>
+                    <el-button type="text" @click="showEditDialog = false">确定</el-button>
                 </span>
             </div>
         </el-dialog>
@@ -111,9 +111,9 @@ export default {
         computedWidth() {
             if (this.joinDetail) {
                 // const rightIdx = Math.max(...this.joinDetail.datasets.map(x => x.index))
-				const maxNum = Math.max(...this.joinDetail.datasets.map(x => x.index))
-				const minNum = Math.min(...this.joinDetail.datasets.map(x => x.index))
-				const rightIdx = maxNum - minNum
+                const maxNum = Math.max(...this.joinDetail.datasets.map(x => x.index))
+                const minNum = Math.min(...this.joinDetail.datasets.map(x => x.index))
+                const rightIdx = maxNum - minNum
                 return (500 + 3) * (rightIdx + 1) - 80
             } else return 0
         },
@@ -129,8 +129,8 @@ export default {
             const left = this.computedLeft()
             const top = this.computedTop()
             const width = this.computedWidth()
-            const height = this.computedHeight()
-            return "left: " + left + "px; top: " + top + "px; width: " + width + "px; height: " + height + "px; background-color: #fff"
+            // const height = this.computedHeight()
+            return "left: " + left + "px; top: " + top + "px; width: " + width + "px; height: " + 300 + "px; background-color: #fff"
         }
     }
 }
@@ -149,18 +149,18 @@ export default {
             position: absolute;
             display: flex;
             flex-direction: column;
-			padding: 20px;
-			border: 1px solid #dddddd;
+            padding: 20px;
+            border: 1px solid #dddddd;
 
             .relation-card-types {
                 display: flex;
                 flex-direction: row;
-				select {
-					width: 100px;
-					height: 30px;
-					border: 1px solid #666;
-					color: #666;
-				}
+                select {
+                    width: 100px;
+                    height: 30px;
+                    border: 1px solid #666;
+                    color: #666;
+                }
             }
 
             .relation-card-btn {
@@ -173,22 +173,24 @@ export default {
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
-				padding: 30px 60px;
-				font-size: 13px;
-				line-height: 20px;
-				color: #333333;
+                margin: 20px;
+                font-size: 13px;
+                line-height: 20px;
+                color: #333333;
+                overflow: auto;
+                height: 180px;
 
                 .relation-condition-item {
                     display: flex;
                     flex-direction: row;
                     justify-content: space-around;
-					padding: 5px;
+                    padding: 5px;
 
                     .relation-condition-left {
                         // flex-grow: 1;
-						min-width: 100px;
-						width: 100px;
-						overflow: hidden;
+                        min-width: 100px;
+                        width: 100px;
+                        overflow: hidden;
                     }
 
                     .relation-condition-type {
@@ -197,20 +199,20 @@ export default {
                         justify-content: space-around;
                         min-width: 100px;
 
-						.relation-condition-type-name {
-							width: 24px;
-							height: 24px;
-							border: 1px solid #ccc;
-							border-radius: 50%;
-							display: flex;
-							justify-content: center;
-						}
+                        .relation-condition-type-name {
+                            width: 24px;
+                            height: 24px;
+                            border: 1px solid #ccc;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                        }
                     }
 
                     .realtion-condition-right {
-						min-width: 100px;
-						width: 100px;
-						overflow: hidden;
+                        min-width: 100px;
+                        width: 100px;
+                        overflow: hidden;
                     }
                 }
             }
@@ -227,8 +229,10 @@ export default {
         .relation-edit-expression {
             display: flex;
             flex-direction: column;
-
             flex-grow: 1;
+            margin: 30px 0;
+            max-height: 400px;
+            overflow: auto;
 
             .relation-edit-item {
                 display: flex;
@@ -248,6 +252,10 @@ export default {
                     justify-content: space-around;
                     min-width: 100px;
                     min-height: 28px;
+
+                    select {
+                        height: 20px;
+                    }
                 }
 
                 .relation-edit-right {

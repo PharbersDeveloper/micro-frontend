@@ -4,12 +4,13 @@ import PhJoinCmd from "./cmd"
  * 这个就是我所说的Command
  */
 export default class PhJoinStep {
-    constructor(dbstep) {
+    constructor(dbstep, schema) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["joins"]
-        this.commands = defs.map(x => { return new PhJoinCmd(x) })
+        this.commands = defs.map(x => { return new PhJoinCmd(x, schema) })
         this.datasets = this.queryDatasets()
+		this.dsIdxArr = []
     }
 
     queryDatasets() {
@@ -17,8 +18,11 @@ export default class PhJoinStep {
         for (let idx = 0; idx < this.commands.length; ++idx) {
             for (let idn = 0; idn < this.commands[idx]["datasets"].length; ++idn) {
                 const tmp = this.commands[idx]["datasets"][idn]["name"]
-                // if (!res.includes(tmp))
-				res.push(tmp)
+                const tmpI = this.commands[idx]["datasets"][idn]["index"]
+                if (!this.dsIdxArr.includes(tmpI)) {
+					this.dsIdxArr.push(tmpI)
+					res.push(tmp)
+				}
             }
         }
         return res
@@ -30,9 +34,8 @@ export default class PhJoinStep {
             // for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
             //     res += 30
             // }
-            res += 330
+            res += 350
         }
-		this.hitHeightValue = Math.max(320, res)
         return Math.max(320, res)
     }
 
