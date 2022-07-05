@@ -11,33 +11,47 @@
                 <div class="condition-ds-item-title">
                     <h3>{{item.meta.name}}</h3>
                     <div class="ver-center" >
-                        <el-switch v-model="item.meta.enabled" ></el-switch>
+                        <!-- <el-switch v-model="item.meta.enabled" ></el-switch> -->
+                        <el-button type="text" @click="$emit('addDataset', item.meta.name)">添加</el-button>
+                        <el-button type="text" @click="$emit('delDataset', item.meta.name)">删除</el-button>
                     </div>
                 </div>
-                <el-form >
-                    <el-form-item label="保留符合条件的列">
-                        <select v-model="item.detail.action">
-                            <option v-for="(it, index) in concretDefs.actions" :value="it.cal" :key="index" :label="it.desc" />
-                        </select>
-                    </el-form-item>
-                </el-form>
-                <div class="condition-selection" >
-                    <div class="condition-selection-item" v-for="(cur, index) in item.detail.cloases" :key="index">
-                        <div class="condition-selection-content">
-                            <select v-model="cur['left']">
-                                <option v-for="(it, index) in schema[item.meta.name]" :value="it.src" :key="index" :label="it.src" />
-                            </select>
-                            <select v-model="cur['op']">
-                                <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
-                            </select>
-                            <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" ></el-input>
-                            <el-input v-else disabled ></el-input>
+                <div class="condition-ds-item-content">
+                    <div class="switch">
+                        <div class="item">
+                            <div class="title">Distinct</div>
+                            <el-switch v-model="item.meta.distinct"></el-switch>
                         </div>
-                        <el-button type="text" @click="item.detail.delcloases(index)">删除</el-button>
+                        <div class="item">
+                            <div class="title">Filter</div>
+                            <el-switch v-model="item.meta.enabled"></el-switch>
+                        </div>
                     </div>
-                </div>
-                <div class="condition-add-button">
-                    <el-button type="primary" @click="item.detail.insertcloases()">添加</el-button>
+                    <el-form class="show-filter" v-show="item.meta.enabled">
+                        <el-form-item label="保留符合条件的列">
+                            <select v-model="item.detail.action">
+                                <option v-for="(it, index) in concretDefs.actions" :value="it.cal" :key="index" :label="it.desc" />
+                            </select>
+                        </el-form-item>
+                    </el-form>
+                    <div class="condition-selection" v-show="item.meta.enabled">
+                        <div class="condition-selection-item" v-for="(cur, index) in item.detail.cloases" :key="index">
+                            <div class="condition-selection-content">
+                                <select v-model="cur['left']">
+                                    <option v-for="(it, index) in schema[item.meta.name]" :value="it.src" :key="index" :label="it.src" />
+                                </select>
+                                <select v-model="cur['op']">
+                                    <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
+                                </select>
+                                <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" ></el-input>
+                                <el-input v-else disabled ></el-input>
+                            </div>
+                            <el-button type="text" @click="item.detail.delcloases(index)">删除</el-button>
+                        </div>
+                    </div>
+                    <div class="condition-add-button">
+                        <el-button type="primary" @click="addFilter(item)">添加</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,6 +65,7 @@ import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
 import ElSwitch from 'element-ui/packages/switch/index'
 import PhFilterStep from "./step"
+import PhPreFilterCmd from "./cmd"
 
 export default {
     data() {
@@ -61,6 +76,7 @@ export default {
     props: {
         step: Object,
         schema: Object,
+        datasetArray: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -83,6 +99,38 @@ export default {
     methods: {
         validate() {
             this.$emit('statusChange', this.datasource.enabled)
+        },
+        addFilter(item) {
+            const leftDs = this.datasetArray.filter(it => it.name === item.meta.name)[0]
+            const ls = JSON.parse(leftDs["schema"])
+            item.detail.insertcloases(ls[0].src)
+        },
+        updateData(name, oname, unreset) {
+            console.log(name, oname)
+            if (!unreset) {
+                this.datasource.commands.push({
+                    meta: {
+                        "name": oname,
+                        "distinct": false,
+                        "enabled": false,
+                    },
+                    detail: new PhPreFilterCmd("")
+                })
+            }
+            this.datasource.commands.push({
+                 meta: {
+                    "name": name,
+                    "distinct": false,
+                    "enabled": false,
+                },
+                detail: new PhPreFilterCmd("")
+            })
+        },
+        deleteData(idxArr) {
+            idxArr.forEach(it => {
+                delete this.datasource.commands[it]
+            })
+            this.datasource.commands = this.datasource.commands.filter(it => it)
         }
     },
     computed: {
@@ -97,16 +145,13 @@ export default {
         box-sizing: border-box;
     }
     .pre-filter {
-        margin-top: 4px;
         width: 100%;
-        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
-        overflow: auto;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
+        background: #fff;
+        padding: 20px;
+        flex-grow: 1;
 
         .condition-title {
             display: flex;
@@ -125,7 +170,7 @@ export default {
             .condition-selection-item {
                 display: flex;
                 flex-direction: row;
-
+                margin-bottom: 10px;
             }
 
             .condition-selection-content {
@@ -138,22 +183,61 @@ export default {
         .condition-ds-container {
             display: flex;
             flex-direction: row;
+            flex-grow: 1;
         }
-
+        .condition-ds-item:nth-child(odd) {
+            background-color: rgb(242, 242, 242)
+        }
         .condition-ds-item {
             width: 500px;
-            border: 1px solid grey;
             margin: 1px;
+            border: 1px dashed #aaa;
+            border-top: none;
 
             .condition-ds-item-title {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+                align-items: center;
+                padding: 0 10px;
+                border: 1px solid #ddd;
+                height: 40px;
+                background: #fff;
 
                 .ver-center {
                     display: flex;
+                }
+            }
+
+            .condition-ds-item-content {
+                padding: 32px;
+                .switch {
+                    display: flex;
                     flex-direction: column;
-                    justify-content: space-around;
+
+                    .title {
+                        font-size: 16px;
+                        font-weight: bold;
+                    }
+
+                    .item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid #ccc;
+                    }
+                }
+
+                .show-filter {
+                    margin-top: 40px;
+                }
+
+                .el-input {
+                    /deep/input.el-input__inner {
+                        height: 48px;
+                    }
                 }
             }
 

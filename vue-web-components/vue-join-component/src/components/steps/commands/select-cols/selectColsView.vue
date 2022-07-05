@@ -16,6 +16,7 @@
 import SelectedCard from './detail-view/select-card'
 import { PhSelectedColsDefs } from "./defs"
 import PhSelectedColsStep from "./step"
+import PhSelectedColsCmd from "./cmd"
 
 export default {
     data() {
@@ -42,6 +43,29 @@ export default {
     methods: {
         validate() {
             this.$emit('statusChange', true)
+        },
+        updateData(name, oname, unreset) {
+            console.log(name, oname)
+            if (!unreset) {
+                this.datasource.commands.push(new PhSelectedColsCmd({
+                    "ds": oname,
+                    "prefix": "",
+                    "type": "select",
+                    "columns": []
+                }))
+            }
+            this.datasource.commands.push(new PhSelectedColsCmd({
+                "ds": name,
+                "prefix": "",
+                "type": "select",
+                "columns": []
+            }))
+        },
+        deleteData(idxArr) {
+            idxArr.forEach(it => {
+                delete this.datasource.commands[it]
+            })
+            this.datasource.commands = this.datasource.commands.filter(it => it)
         }
     },
 }
@@ -59,9 +83,9 @@ export default {
         padding: 4px;
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
+        background: #fff;
+        height: fit-content;
+        padding: 20px;
 
         .retrieved-title {
             display: flex;

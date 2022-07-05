@@ -28,18 +28,24 @@
                 <pre-filter v-show="active === 1"
                     ref="prefilter"
                     :step="datasource.step"
+                    :datasetArray="datasetArray"
                     :schema="datasource.schema"
+					@addDataset="addDataset"
+					@delDataset="delDataset"
                     @statusChange="preFilterStatus" />
                 <pre-computed v-show="active === 2"
                     ref="percomputed"
                     :step="datasource.step"
                     :schema="datasource.schema"
                     @statusChange="preComputedStatus" />
-                <join v-show="active === 3"
+                <join 
+					v-show="active === 3"
                     ref="join"
                     :datasetArray="datasetArray"
                     :step="datasource.step"
                     :schema="datasource.schema"
+					@addDatasetFromJoin="addDatasetFromJoin"
+					@delDatasetFromJoin="delDatasetFromJoin"
                     @statusChange="joinStatus" />
                 <select-cols v-show="active === 4"
                     ref="select"
@@ -188,6 +194,26 @@ export default {
         }
     },
     methods: {
+		addDatasetFromJoin(data) {
+			const event = data.args.param
+			this.$refs.prefilter.updateData(event.newData.name, event.oldData.name,event.unreset)
+			this.$refs.percomputed.updateData(event.newData.name, event.oldData.name, event.unreset)
+			this.$refs.select.updateData(event.newData.name, event.oldData.name, event.unreset)
+		},
+		delDatasetFromJoin(data) {
+			const event = data.args.param
+			this.$refs.prefilter.deleteData(event.idxArr)
+			this.$refs.percomputed.deleteData(event.idxArr)
+			this.$refs.select.deleteData(event.idxArr)
+		},
+		addDataset(name) {
+			this.active = 3
+			this.$refs.join.addDataset(name)
+		},
+		delDataset(name) {
+			this.active = 3
+			this.$refs.join.delDataset(name)
+		},
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")

@@ -4,11 +4,11 @@ import PhJoinCmd from "./cmd"
  * 这个就是我所说的Command
  */
 export default class PhJoinStep {
-    constructor(dbstep, schema) {
+    constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["joins"]
-        this.commands = defs.map(x => { return new PhJoinCmd(x, schema) })
+        this.commands = defs.map(x => { return new PhJoinCmd(x) })
 		this.dsIdxArr = []
         this.datasets = this.queryDatasets()
     }

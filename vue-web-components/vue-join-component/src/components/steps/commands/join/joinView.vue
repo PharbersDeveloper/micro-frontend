@@ -92,13 +92,10 @@ export default {
         JoinRelationCard
     },
     mounted() {
-        this.datasource = new PhJoinStep(this.step, this.datasetArray)
+        this.datasource = new PhJoinStep(this.step)
         this.hitHeightValue = this.datasource.hitHeight()
     },
     methods: {
-        selectInputDs() {
-
-        },
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
             this.placeholderSort = "选择列"
@@ -117,79 +114,104 @@ export default {
             this.$emit('statusChange', true)
         },
         addDataset(ds, index) {
+            const dsidx = this.datasource.datasets.indexOf(ds)
+            const iidx = this.datasource.dsIdxArr[dsidx]
             this.showAddDialog = true
             this.leftDsName = ds
-            this.leftIndex = index
+            this.leftIndex = index ? index : iidx
         },
         addDatasetConfirm() {
+            let newData = {}
+            let oldData = {}
+            const i = Math.max(...this.datasource.dsIdxArr) + 1
             if (this.datasource.datasets.length > 0) {
-				
-				const i = Math.max(...this.datasource.dsIdxArr) + 1
-                this.datasource.datasets.push(this.newDsName)
-                this.datasource.dsIdxArr.push(i)
 
-                const newData = {
+                newData = {
                     name: this.newDsName,
                     index: i
                 }
 
-                const oldData = {
+                oldData = {
                     name: this.leftDsName,
                     index: this.leftIndex
                 }
-                
-                this.datasource.commands.push(new PhJoinCmd({
-                    "datasets": [oldData, newData],
-                    "caseInsensitive": false,
-                    "normalizeText": false,
-                    "type": "LEFT",
-                    "on": []
-                }))
-                this.showAddDialog = false
-                this.hitHeightValue = this.datasource.hitHeight()
-
             } else {
-
-                this.datasource.datasets.push(this.newDsName, this.newDsNameSecond)
-                this.datasource.dsIdxArr.push(0, 1)
-
-				const input1 = {
+                oldData = {
                     name: this.newDsName,
                     index: 0
                 }
 
-				const input2 = {
+                newData = {
                     name: this.newDsNameSecond,
                     index: 1
                 }
-
-                this.datasource.commands.push(new PhJoinCmd({
-                    "datasets": [input1, input2],
-                    "caseInsensitive": false,
-                    "normalizeText": false,
-                    "type": "LEFT",
-                    "on": []
-                }))
-                this.showAddDialog = false
-                this.hitHeightValue = this.datasource.hitHeight()
-
             }
+
+            this.datasource.commands.push(new PhJoinCmd({
+                "datasets": [oldData, newData],
+                "caseInsensitive": false,
+                "normalizeText": false,
+                "type": "LEFT",
+                "on": []
+            }))
+
+            this.showAddDialog = false
+            this.hitHeightValue = this.datasource.hitHeight()
+            
+            const event = new Event("event")
+            event.args = {
+                callback: "addDatasetFromJoin",
+                element: this,
+                param: {
+                    name: "addDatasetFromJoin",
+                    unreset: this.datasource.datasets.length > 0,
+                    oldData,
+                    newData
+                }
+            }
+            this.$emit("addDatasetFromJoin", event)
+
+             if (this.datasource.datasets.length > 0) {
+                this.datasource.datasets.push(this.newDsName)
+                this.datasource.dsIdxArr.push(i)
+             } else {
+                this.datasource.datasets.push(this.newDsName, this.newDsNameSecond)
+                this.datasource.dsIdxArr.push(0, 1)
+             }
         },
         delDataset(ds, index) {
-            var arr = this.datasource.commands
-            var len = arr.length-1;
-            for (var i=len; i>=0; i--) {
-                let cons = arr[i].datasets.filter(its => its.name === ds && its.index === index)
+            const dsidx = this.datasource.datasets.indexOf(ds)
+            const iidx = this.datasource.dsIdxArr[dsidx]
+            const ix = index ? index : iidx
 
-                // let cons = false
-                // let its = arr[i].datasets[0]
-                // if(its.name === ds && its.index === index) cons = true
+            const arr = this.datasource.commands
+            const len = arr.length-1;
 
-                let conIs = arr[i].datasets[0].index > index
+            let idxArr = new Set()
+            
+            for (let i=len; i>=0; i--) {
+                const cons = arr[i].datasets.filter(its => its.name === ds && its.index === ix)
+                const conIs = arr[i].datasets[0].index > ix
 
-                if(cons.length > 0 || conIs)  arr.splice(i, 1)
+                if(cons.length > 0 || conIs) {
+                    arr[i].datasets.forEach(itds => {
+                        idxArr.add(this.datasource.datasets.indexOf(itds.name))
+                    })
+                    arr.splice(i, 1)
+                }
             }
             this.datasource.datasets = this.datasource.queryDatasets()
+
+            const event = new Event("event")
+            event.args = {
+                callback: "delDatasetFromJoin",
+                element: this,
+                param: {
+                    name: "delDatasetFromJoin",
+                    idxArr: Array.from(idxArr)
+                }
+            }
+            this.$emit("delDatasetFromJoin", event)
         }
     },
     computed: {
@@ -198,7 +220,7 @@ export default {
         }
     },
     watch: {
-	}
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -256,16 +278,16 @@ export default {
         overflow-x: auto;
         overflow-y: hidden;
 
-		.sel-ds {
-			margin: 10px auto;
-			display: flex;
-			flex-direction: column;
-			.title {
-				color: #666666;
-				font-size: 13px;
-				margin-bottom: 20px;
-			}
-		}
+        .sel-ds {
+            margin: 10px auto;
+            display: flex;
+            flex-direction: column;
+            .title {
+                color: #666666;
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
+        }
     }
 
     .join-dataset-list {

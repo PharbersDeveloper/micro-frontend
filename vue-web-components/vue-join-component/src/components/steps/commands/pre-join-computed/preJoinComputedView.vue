@@ -80,6 +80,7 @@ import ElDialog from 'element-ui/packages/dialog/index'
 // import ElDescriptionsItem from 'element-ui/packages/descriptions-item/index'
 import { PhComputedDefs } from "./defs"
 import PhComputedStep from "./step"
+import PhComputedCmd from "./cmd"
 
 export default {
     data() {
@@ -156,6 +157,29 @@ export default {
         },
         removeComputedCol(item) {
             item.detail.removeComputedCol(item.detail.count() - 1)
+        },
+        updateData(name, oname, unreset) {
+            console.log(name, oname)
+            if (!unreset) {
+                this.datasource.commands.push({
+                    meta: {
+                        name: oname,
+                    },
+                    detail: new PhComputedCmd([])
+                })
+            }
+            this.datasource.commands.push({
+                meta: {
+                    name: name,
+                },
+                detail: new PhComputedCmd([])
+            })
+        },
+        deleteData(idxArr) {
+            idxArr.forEach(it => {
+                delete this.datasource.commands[it]
+            })
+            this.datasource.commands = this.datasource.commands.filter(it => it)
         }
     },
     computed: {
@@ -181,9 +205,9 @@ export default {
         padding: 4px;
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
+        background: #fff;
+        height: fit-content;
+        padding: 20px;
 
         .computed-title {
             display: flex;
@@ -212,8 +236,8 @@ export default {
             flex-direction: row;
             justify-content: space-between;
             // border: 1px solid #ccc;
-			align-items: center;
-			
+            align-items: center;
+            
             .computed-item-detail {
                 display: flex;
                 flex-direction: row;

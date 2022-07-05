@@ -72,6 +72,7 @@ export default {
             align-items: center;
             padding: 0 10px;
             border: 1px solid #ddd;
+			height: 50px;
 
             .join-card-ds {
 
