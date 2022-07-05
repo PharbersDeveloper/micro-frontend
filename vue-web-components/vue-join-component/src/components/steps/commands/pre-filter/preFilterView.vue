@@ -105,12 +105,13 @@ export default {
             const ls = JSON.parse(leftDs["schema"])
             item.detail.insertcloases(ls[0].src)
         },
-        updateData(name, oname, unreset) {
-            console.log(name, oname)
+        updateData(n, o, unreset) {
+            console.log(n, o)
             if (!unreset) {
                 this.datasource.commands.push({
                     meta: {
-                        "name": oname,
+                        "name": o.name,
+                        "index": o.index,
                         "distinct": false,
                         "enabled": false,
                     },
@@ -119,7 +120,8 @@ export default {
             }
             this.datasource.commands.push({
                  meta: {
-                    "name": name,
+                    "name": n.name,
+                    "index": n.index,
                     "distinct": false,
                     "enabled": false,
                 },
@@ -128,7 +130,11 @@ export default {
         },
         deleteData(idxArr) {
             idxArr.forEach(it => {
-                delete this.datasource.commands[it]
+                this.datasource.commands.forEach((itds, i) => {
+                    if(it.name === itds.meta.name && it.index === itds.meta.index) {
+                        delete this.datasource.commands[i]
+                    }
+                })
             })
             this.datasource.commands = this.datasource.commands.filter(it => it)
         }

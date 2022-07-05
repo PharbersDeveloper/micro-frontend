@@ -10,7 +10,8 @@ export default class PhComputedStep {
         const defs = this.expressions["params"]["preJoinComputedColumns"]
         this.commands = defs.map(x => { return {
             meta: {
-                name: x["ds"],
+                "name": x["ds"],
+				"index": x["index"],
             },
             detail: new PhComputedCmd(x["computedColumns"])
         }})

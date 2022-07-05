@@ -195,7 +195,7 @@ export default {
 
                 if(cons.length > 0 || conIs) {
                     arr[i].datasets.forEach(itds => {
-                        idxArr.add(this.datasource.datasets.indexOf(itds.name))
+                        idxArr.add(itds)
                     })
                     arr.splice(i, 1)
                 }
@@ -212,6 +212,8 @@ export default {
                 }
             }
             this.$emit("delDatasetFromJoin", event)
+
+           
         }
     },
     computed: {

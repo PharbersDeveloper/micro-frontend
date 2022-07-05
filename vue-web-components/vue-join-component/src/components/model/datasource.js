@@ -99,16 +99,18 @@ export default class PhDataSource {
                 that.store.sync(response)
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
-                    const defaultPreFilter = this.datasets.map(x => { return {
+                    const defaultPreFilter = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "preFilter": {
                             "distinct": false,
                             "enabled": true,
                             "expr": ""
                         }
                     }})
-                    const defaultPreComputed = this.datasets.map(x => { return {
+                    const defaultPreComputed = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "computedColumns": []
                     }})
                     const defaultJoin = [{
@@ -121,8 +123,9 @@ export default class PhDataSource {
                         "type": "LEFT",
                         "on": []
                     }]
-                    const defaultSelectCols = this.datasets.map(x => { return {
+                    const defaultSelectCols = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "prefix": "",
                         "type": "select",
                         "columns": []

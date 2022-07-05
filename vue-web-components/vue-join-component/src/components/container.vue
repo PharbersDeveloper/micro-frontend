@@ -196,9 +196,9 @@ export default {
     methods: {
 		addDatasetFromJoin(data) {
 			const event = data.args.param
-			this.$refs.prefilter.updateData(event.newData.name, event.oldData.name,event.unreset)
-			this.$refs.percomputed.updateData(event.newData.name, event.oldData.name, event.unreset)
-			this.$refs.select.updateData(event.newData.name, event.oldData.name, event.unreset)
+			this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
+			this.$refs.percomputed.updateData(event.newDat, event.oldData, event.unreset)
+			this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
 		},
 		delDatasetFromJoin(data) {
 			const event = data.args.param
