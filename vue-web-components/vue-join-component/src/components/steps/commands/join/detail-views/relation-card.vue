@@ -38,7 +38,7 @@
                     <div class="relation-edit-item" v-for="(item, index) in joinDetail.on" :key="index">
                         <div class="relation-edit-left" >
                             <select v-model="item.conditions[0].column" >
-                                <option v-for="(op, it) in schema[item.conditions[0].ds]" :key="it" :value="op.src" :label="op.src" />
+                                <option v-for="(op, it) in ls" :key="it" :value="op.src" :label="op.src" />
                             </select>
                         </div>
                         <div class="relation-edit-type">
@@ -48,7 +48,7 @@
                         </div>
                         <div class="relation-edit-right">
                             <select v-model="item.conditions[1].column" class="relation-edit-right">
-                                <option v-for="(op, it) in schema[item.conditions[1].ds]" :key="it" :value="op.src" :label="op.src" />
+                                <option v-for="(op, it) in rs" :key="it" :value="op.src" :label="op.src" />
                             </select>
                         </div>
                         <div class="relation-edit-op">
@@ -76,7 +76,9 @@ export default {
     data() {
         return {
             showEditDialog: false,
-            pattern: "AND"
+            pattern: "AND",
+			ls: [],
+			rs: []
         }
     },
     props: {
@@ -84,6 +86,7 @@ export default {
         index: Number,
         step: Object,
         schema: Object,
+		datasetArray: Array,
         defs: {
             type: Object,
             default: () => {
@@ -96,7 +99,7 @@ export default {
         ElDialog
     },
     mounted() {
-
+		
     },
     methods: {
         computedLeft() {
@@ -124,7 +127,11 @@ export default {
             return this.step.computeHeight(this.index)
         },
         addJoinCondition() {
-            this.joinDetail.insertJoinCloase(this.joinDetail.datasets[0].name, this.joinDetail.datasets[1].name)
+			const leftDs = this.datasetArray.filter(it => it.name === this.joinDetail.datasets[0]["name"])[0]
+			const rightDs = this.datasetArray.filter(it => it.name === this.joinDetail.datasets[1]["name"])[0]
+			this.ls = JSON.parse(leftDs["schema"])
+			this.rs = JSON.parse(rightDs["schema"])
+            this.joinDetail.insertJoinCloase(this.joinDetail.datasets[0].name, this.joinDetail.datasets[1].name, this.ls[0], this.rs[0])
         }
     },
     computed: {

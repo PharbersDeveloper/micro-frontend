@@ -2,7 +2,6 @@
 import { hostName } from "../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
-
 export default class PhDataSource {
     constructor(id, parent) {
         this.id = id

@@ -19,12 +19,16 @@
                     :step="datasource"
                     :dataset="item"/>
             </div>
+            <div class="sel-ds" v-show="datasource.datasets.length === 0">
+                <div class="title">no input dataset</div>
+                <el-button @click="showAddDialog = true">请选择</el-button>
+            </div>
             <div class="join-join-list" v-if="datasource" :style="joinListStyle">
                 <div v-for="(item, index) in datasource.commands" :key="index">
                     <join-relation-card
                         :join-detail="item"
                         :step="datasource"
-                        :schema="schema"
+                        :datasetArray="datasetArray"
                         :index="index" />
                 </div>
             </div>
@@ -36,6 +40,12 @@
                     <div class="add-ds-content">
                         <span>dataset</span>
                         <select v-model="newDsName">
+                            <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
+                        </select>
+                    </div>
+                    <div class="add-ds-content" v-show="datasource.datasets.length === 0">
+                        <span>dataset</span>
+                        <select v-model="newDsNameSecond">
                             <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
                         </select>
                     </div>
@@ -61,6 +71,7 @@ export default {
             datasource: null,
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             newDsName: "",
+            newDsNameSecond: "",
             showAddDialog: false,
             hitHeightValue: 0
         }
@@ -81,10 +92,13 @@ export default {
         JoinRelationCard
     },
     mounted() {
-        this.datasource = new PhJoinStep(this.step, this.schema)
+        this.datasource = new PhJoinStep(this.step, this.datasetArray)
         this.hitHeightValue = this.datasource.hitHeight()
     },
     methods: {
+        selectInputDs() {
+
+        },
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
             this.placeholderSort = "选择列"
@@ -108,29 +122,58 @@ export default {
             this.leftIndex = index
         },
         addDatasetConfirm() {
-            this.datasource.datasets.push(this.newDsName)
+            if (this.datasource.datasets.length > 0) {
+				
+				const i = Math.max(...this.datasource.dsIdxArr) + 1
+                this.datasource.datasets.push(this.newDsName)
+                this.datasource.dsIdxArr.push(i)
 
-            const newData = {
-                name: this.newDsName,
-                index: Math.max(...this.datasource.dsIdxArr) + 1
-                // index: this.datasource.datasets.length - 1
-            }
+                const newData = {
+                    name: this.newDsName,
+                    index: i
+                }
 
-            const oldData = {
-                name: this.leftDsName,
-                index: this.leftIndex
+                const oldData = {
+                    name: this.leftDsName,
+                    index: this.leftIndex
+                }
+                
+                this.datasource.commands.push(new PhJoinCmd({
+                    "datasets": [oldData, newData],
+                    "caseInsensitive": false,
+                    "normalizeText": false,
+                    "type": "LEFT",
+                    "on": []
+                }))
+                this.showAddDialog = false
+                this.hitHeightValue = this.datasource.hitHeight()
+
+            } else {
+
+                this.datasource.datasets.push(this.newDsName, this.newDsNameSecond)
+                this.datasource.dsIdxArr.push(0, 1)
+
+				const input1 = {
+                    name: this.newDsName,
+                    index: 0
+                }
+
+				const input2 = {
+                    name: this.newDsNameSecond,
+                    index: 1
+                }
+
+                this.datasource.commands.push(new PhJoinCmd({
+                    "datasets": [input1, input2],
+                    "caseInsensitive": false,
+                    "normalizeText": false,
+                    "type": "LEFT",
+                    "on": []
+                }))
+                this.showAddDialog = false
+                this.hitHeightValue = this.datasource.hitHeight()
+
             }
-            
-            this.datasource.commands.push(new PhJoinCmd({
-                "datasets": [oldData, newData],
-                "caseInsensitive": false,
-                "normalizeText": false,
-                "type": "LEFT",
-                "on": []
-            }))
-            this.showAddDialog = false
-            this.hitHeightValue = this.datasource.hitHeight()
-            this.datasource.dsIdxArr.push(Math.max(...this.datasource.dsIdxArr) + 1)
         },
         delDataset(ds, index) {
             var arr = this.datasource.commands
@@ -212,6 +255,17 @@ export default {
         // overflow: auto;
         overflow-x: auto;
         overflow-y: hidden;
+
+		.sel-ds {
+			margin: 10px auto;
+			display: flex;
+			flex-direction: column;
+			.title {
+				color: #666666;
+				font-size: 13px;
+				margin-bottom: 20px;
+			}
+		}
     }
 
     .join-dataset-list {

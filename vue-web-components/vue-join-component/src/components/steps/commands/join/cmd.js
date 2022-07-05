@@ -1,10 +1,11 @@
 /**
  * 这个就是我所说的Command Instance
  */
+
 export default class PhJoinCmd {
-    constructor(defs, schema) {
+    constructor(defs) {
         this.datasets = defs["datasets"].sort(x => x.index)
-		this.schema = schema
+		this.schema = []
         this.caseInsensitive = defs["caseInsensitive"]
         this.normalizeText = defs["normalizeText"]
         this.type = defs["type"]
@@ -19,17 +20,17 @@ export default class PhJoinCmd {
         return true
     }
 
-    insertJoinCloase(left, right) {
+    insertJoinCloase(left, right, ls, rs) {
         this.on.push({
             "type": "=",
             "conditions": [
                 {
                     "ds": left,
-                    "column": this.schema[left][0]["src"]
+                    "column": ls.src
                 },
                 {
                     "ds": right,
-                    "column": this.schema[right][0]["src"]
+                    "column": rs.src
                 }
             ]
         })
