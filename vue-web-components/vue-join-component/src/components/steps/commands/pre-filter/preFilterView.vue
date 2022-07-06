@@ -12,8 +12,8 @@
                     <h3>{{item.meta.name}}</h3>
                     <div class="ver-center" >
                         <!-- <el-switch v-model="item.meta.enabled" ></el-switch> -->
-                        <el-button type="text" @click="$emit('addDataset', item.meta.name)">添加</el-button>
-                        <el-button type="text" @click="$emit('delDataset', item.meta.name)">删除</el-button>
+                        <el-button type="text" @click="$emit('addDataset', item.meta.name, item.meta.index)">添加</el-button>
+                        <el-button type="text" @click="$emit('delDataset', item.meta.name, item.meta.index)">删除</el-button>
                     </div>
                 </div>
                 <div class="condition-ds-item-content">
@@ -49,7 +49,7 @@
                             <el-button type="text" @click="item.detail.delcloases(index)">删除</el-button>
                         </div>
                     </div>
-                    <div class="condition-add-button">
+                    <div class="condition-add-button" v-show="item.meta.enabled">
                         <el-button type="primary" @click="addFilter(item)">添加</el-button>
                     </div>
                 </div>
@@ -128,13 +128,11 @@ export default {
                 detail: new PhPreFilterCmd("")
             })
         },
-        deleteData(idxArr) {
-            idxArr.forEach(it => {
-                this.datasource.commands.forEach((itds, i) => {
-                    if(it.name === itds.meta.name && it.index === itds.meta.index) {
-                        delete this.datasource.commands[i]
-                    }
-                })
+        deleteData(dss, ids) {
+            this.datasource.commands.forEach((itds, i) => {
+                if(!dss.includes(itds.meta.name) || !ids.includes(itds.meta.index)) {
+                    delete this.datasource.commands[i]
+                }
             })
             this.datasource.commands = this.datasource.commands.filter(it => it)
         }

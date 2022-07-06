@@ -186,17 +186,12 @@ export default {
 
             const arr = this.datasource.commands
             const len = arr.length-1;
-
-            let idxArr = new Set()
             
             for (let i=len; i>=0; i--) {
                 const cons = arr[i].datasets.filter(its => its.name === ds && its.index === ix)
                 const conIs = arr[i].datasets[0].index > ix
 
                 if(cons.length > 0 || conIs) {
-                    arr[i].datasets.forEach(itds => {
-                        idxArr.add(itds)
-                    })
                     arr.splice(i, 1)
                 }
             }
@@ -208,12 +203,13 @@ export default {
                 element: this,
                 param: {
                     name: "delDatasetFromJoin",
-                    idxArr: Array.from(idxArr)
+                    datasets: this.datasource.datasets,
+                    dsIdxArr: this.datasource.dsIdxArr
                 }
             }
             this.$emit("delDatasetFromJoin", event)
 
-           
+            //TODO：可以改成 生成datasets之后去各个页面匹配不在这个列表的就删掉
         }
     },
     computed: {

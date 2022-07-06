@@ -202,17 +202,17 @@ export default {
 		},
 		delDatasetFromJoin(data) {
 			const event = data.args.param
-			this.$refs.prefilter.deleteData(event.idxArr)
-			this.$refs.percomputed.deleteData(event.idxArr)
-			this.$refs.select.deleteData(event.idxArr)
+			this.$refs.prefilter.deleteData(event.datasets, event.dsIdxArr)
+			this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
+			this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
 		},
-		addDataset(name) {
+		addDataset(name, index) {
 			this.active = 3
-			this.$refs.join.addDataset(name)
+			this.$refs.join.addDataset(name, index)
 		},
-		delDataset(name) {
+		delDataset(name, index) {
 			this.active = 3
-			this.$refs.join.delDataset(name)
+			this.$refs.join.delDataset(name, index)
 		},
         getUrlParam(value) {
             let href = window.location.href
