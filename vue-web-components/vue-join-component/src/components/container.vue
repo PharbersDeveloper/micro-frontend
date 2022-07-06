@@ -285,11 +285,12 @@ export default {
                 this.stepsDefs[4].status = "error"
             }
         },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[5].status = "success"
-            } else {
+        postFilterStatus(data) {
+			const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[5].status = "success"
+            if (!status) {
+                this.stepsDefs[5].status = "wait"
+            } else if (errors){
                 this.stepsDefs[5].status = "error"
             }
         },
