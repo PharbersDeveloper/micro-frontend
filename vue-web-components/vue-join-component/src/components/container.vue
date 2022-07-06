@@ -208,7 +208,11 @@ export default {
 		},
 		addDataset(name, index) {
 			this.active = 3
-			this.$refs.join.addDataset(name, index)
+			if (name) {
+				this.$refs.join.addDataset(name, index)
+			} else {
+				this.$refs.join.showAddDialog = true
+			}
 		},
 		delDataset(name, index) {
 			this.active = 3
@@ -225,11 +229,18 @@ export default {
             this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+        preFilterStatus(data) {
+			/**
+			 * 1. only dis open ==> success
+			 * 2. no open ==> wait
+			 * 3. open filter ===> 判断对错
+			 */
+            const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[0].status = "success"
+			if (status) {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },

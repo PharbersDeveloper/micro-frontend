@@ -7,6 +7,10 @@
             </div>
         </div>
         <div class="condition-ds-container" v-if="datasource">
+            <div class="sel-ds" v-show="datasource.commands.length === 0">
+                <div class="title">no input dataset</div>
+                <el-button @click="$emit('addDataset')">请选择</el-button>
+            </div>
             <div class="condition-ds-item" v-for="(item, index) in datasource.commands" :key="index">
                 <div class="condition-ds-item-title">
                     <h3>{{item.meta.name}}</h3>
@@ -20,37 +24,44 @@
                     <div class="switch">
                         <div class="item">
                             <div class="title">Distinct</div>
-                            <el-switch v-model="item.meta.distinct"></el-switch>
+                            <el-switch v-model="item.meta.distinct"  @change="validate()"></el-switch>
                         </div>
                         <div class="item">
                             <div class="title">Filter</div>
-                            <el-switch v-model="item.meta.enabled"></el-switch>
+                            <el-switch v-model="item.meta.enabled"  @change="validate()"></el-switch>
                         </div>
                     </div>
-                    <el-form class="show-filter" v-show="item.meta.enabled">
-                        <el-form-item label="保留符合条件的列">
-                            <select v-model="item.detail.action">
-                                <option v-for="(it, index) in concretDefs.actions" :value="it.cal" :key="index" :label="it.desc" />
-                            </select>
-                        </el-form-item>
-                    </el-form>
-                    <div class="condition-selection" v-show="item.meta.enabled">
-                        <div class="condition-selection-item" v-for="(cur, index) in item.detail.cloases" :key="index">
-                            <div class="condition-selection-content">
-                                <select v-model="cur['left']">
-                                    <option v-for="(it, index) in schema[item.meta.name]" :value="it.src" :key="index" :label="it.src" />
+                    <div v-show="item.meta.enabled">
+                        <div class="error-msg" v-show="item.detail.cloases && item.detail.cloases.length === 0">需要添加至少一个Filter条件！</div>
+                        <el-form class="show-filter">
+                            <el-form-item label="保留符合条件的列">
+                                <select v-model="item.detail.action">
+                                    <option v-for="(it, index) in concretDefs.actions" :value="it.cal" :key="index" :label="it.desc" />
                                 </select>
-                                <select v-model="cur['op']">
-                                    <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
-                                </select>
-                                <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" ></el-input>
-                                <el-input v-else disabled ></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div class="condition-selection">
+                            <div class="condition-selection-item" v-for="(cur, index) in item.detail.cloases" :key="index">
+                                <div class="condition-selection-content">
+                                    <select v-model="cur['left']">
+                                        <option v-for="(it, index) in schema[item.meta.name]" :value="it.src" :key="index" :label="it.src" />
+                                    </select>
+                                    <select v-model="cur['op']">
+                                        <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
+                                    </select>
+                                    <el-input 
+                                        v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" 
+                                        v-model="cur['right']" 
+                                        :class="[{'el-input-error': cur['right'] === ''}]">
+                                    </el-input>
+                                    <el-input v-else disabled ></el-input>
+                                </div>
+                                <el-button type="text" @click="item.detail.delcloases(index)">删除</el-button>
                             </div>
-                            <el-button type="text" @click="item.detail.delcloases(index)">删除</el-button>
                         </div>
-                    </div>
-                    <div class="condition-add-button" v-show="item.meta.enabled">
-                        <el-button type="primary" @click="addFilter(item)">添加</el-button>
+                        <div class="condition-add-button">
+                            <el-button type="primary" @click="addFilter(item)">添加</el-button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,11 +105,36 @@ export default {
     // updated() {
     mounted() {
         this.datasource = new PhFilterStep(this.step)
-        this.$emit('statusChange', true)
+        this.validate()
     },
     methods: {
         validate() {
-            this.$emit('statusChange', this.datasource.enabled)
+            const enabled = this.datasource.commands.filter(it => it.meta.enabled).length > 0
+            const distinct = this.datasource.commands.filter(it => it.meta.distinct).length > 0
+            let ErrorVales = false
+            let error = 0
+            if (enabled) {
+                this.datasource.commands.forEach(item => {
+                    if(item.meta.enabled) {
+                        const len1 = item.detail.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+                        error = error + len1.length
+                        const len2 = item.detail.cloases.length === 0
+                        if (len2) error = error + 1
+                    }
+                })
+                ErrorVales = error > 0
+            }
+
+            const event = new Event("event")
+            event.args = {
+                element: this,
+                param: {
+                    onlyDistinct: distinct && !enabled,
+                    status: !enabled && !distinct,
+                    errors: ErrorVales
+                }
+            }
+            this.$emit('statusChange', event)
         },
         addFilter(item) {
             const leftDs = this.datasetArray.filter(it => it.name === item.meta.name)[0]
@@ -156,6 +192,17 @@ export default {
         background: #fff;
         padding: 20px;
         flex-grow: 1;
+
+        .sel-ds {
+            margin: 10px auto;
+            display: flex;
+            flex-direction: column;
+            .title {
+                color: #666666;
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
+        }
 
         .condition-title {
             display: flex;
@@ -215,6 +262,17 @@ export default {
 
             .condition-ds-item-content {
                 padding: 32px;
+
+                .el-input-error {
+                    /deep/input.el-input__inner {
+                        border-color: #ce1228;
+                    }
+                }
+                
+                .error-msg {
+                    font-size: 13px;
+                    color: #ce1228;
+                }
                 .switch {
                     display: flex;
                     flex-direction: column;
