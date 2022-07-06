@@ -253,14 +253,16 @@ export default {
             if (status) {
                 this.stepsDefs[1].status = "wait"
             } else if (errors){
-                this.stepsDefs[0].status = "error"
+                this.stepsDefs[1].status = "error"
             }
         },
-        joinStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        joinStatus(data) {
+           const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[2].status = "success"
             if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+                this.stepsDefs[2].status = "wait"
+            } else if (errors){
                 this.stepsDefs[2].status = "error"
             }
         },

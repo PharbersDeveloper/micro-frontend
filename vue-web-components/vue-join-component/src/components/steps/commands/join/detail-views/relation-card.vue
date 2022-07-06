@@ -8,6 +8,8 @@
             </div>
 
             <div class="relation-condition-lst">
+                 <div class="error-msg" v-show="joinDetail.on && joinDetail.on.length === 0">缺少join条件！</div>
+                 
                 <div class="relation-condition-item" v-for="(item, index) in joinDetail.on" :key="index">
                     <span class="relation-condition-left">{{item.conditions[0].column}}</span>
                     <div class="relation-condition-type">
@@ -77,8 +79,8 @@ export default {
         return {
             showEditDialog: false,
             pattern: "AND",
-			ls: [],
-			rs: []
+            ls: [],
+            rs: []
         }
     },
     props: {
@@ -86,7 +88,7 @@ export default {
         index: Number,
         step: Object,
         schema: Object,
-		datasetArray: Array,
+        datasetArray: Array,
         defs: {
             type: Object,
             default: () => {
@@ -99,7 +101,7 @@ export default {
         ElDialog
     },
     mounted() {
-		
+        
     },
     methods: {
         computedLeft() {
@@ -127,10 +129,10 @@ export default {
             return this.step.computeHeight(this.index)
         },
         addJoinCondition() {
-			const leftDs = this.datasetArray.filter(it => it.name === this.joinDetail.datasets[0]["name"])[0]
-			const rightDs = this.datasetArray.filter(it => it.name === this.joinDetail.datasets[1]["name"])[0]
-			this.ls = JSON.parse(leftDs["schema"])
-			this.rs = JSON.parse(rightDs["schema"])
+            const leftDs = this.datasetArray.filter(it => it.name === this.joinDetail.datasets[0]["name"])[0]
+            const rightDs = this.datasetArray.filter(it => it.name === this.joinDetail.datasets[1]["name"])[0]
+            this.ls = JSON.parse(leftDs["schema"])
+            this.rs = JSON.parse(rightDs["schema"])
             this.joinDetail.insertJoinCloase(this.joinDetail.datasets[0].name, this.joinDetail.datasets[1].name, this.ls[0], this.rs[0])
         }
     },
@@ -189,6 +191,12 @@ export default {
                 color: #333333;
                 overflow: auto;
                 height: 180px;
+
+                .error-msg {
+                    font-size: 13px;
+                    color: #ce1228;
+                    margin: 0 auto;
+                }
 
                 .relation-condition-item {
                     display: flex;

@@ -94,6 +94,7 @@ export default {
     mounted() {
         this.datasource = new PhJoinStep(this.step)
         this.hitHeightValue = this.datasource.hitHeight()
+		this.validate()
     },
     methods: {
         sortInserted() {
@@ -111,7 +112,19 @@ export default {
             this.datasource.command.deleteKeyCloase(idx)
         },
         validate() {
-            this.$emit('statusChange', true)
+			let err = 0
+			this.datasource.commands.forEach(item => {
+				err = err + item.on.length
+			})
+            const event = new Event("event")
+            event.args = {
+                element: this,
+                param: {
+                    status: false,
+                    errors: err === 0
+                }
+            }
+            this.$emit('statusChange', event)
         },
         addDataset(ds, index) {
             const dsidx = this.datasource.datasets.indexOf(ds)
