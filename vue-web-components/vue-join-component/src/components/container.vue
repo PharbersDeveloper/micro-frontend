@@ -266,11 +266,13 @@ export default {
                 this.stepsDefs[2].status = "error"
             }
         },
-        selectStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        selectStatus(data) {
+           const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[3].status = "success"
             if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+                this.stepsDefs[3].status = "wait"
+            } else if (errors){
                 this.stepsDefs[3].status = "error"
             }
         },

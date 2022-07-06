@@ -4,6 +4,8 @@
         <div class="retrieved-title">
             <div class="retrieved-title-p">
                 <h2>Select Columns</h2>
+				<div v-show="noCol" class="error-msg"> 请至少选择一列 </div>
+				<div v-show="rep" class="error-msg"> 不能选择重复列 </div>
             </div>
         </div>
         <div class="retrieved-lst" v-if="datasource">
@@ -22,6 +24,8 @@ export default {
     data() {
         return {
             datasource: null,
+			noCol: false,
+			rep: false
         }
     },
     props: {
@@ -39,10 +43,37 @@ export default {
     },
     mounted() {
         this.datasource = new PhSelectedColsStep(this.step)
+		this.validate()
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+			let nameArr = []
+			let ErrorVales = false
+			this.datasource.commands.forEach(item => {
+				const names = item.retrievedCols.map(it => it)
+				nameArr = nameArr.concat(names)
+			})
+			const newNameArr = new Set(nameArr)
+
+			this.noCol = false
+			this.rep = false
+			if(nameArr.length === 0) {
+				ErrorVales = true
+				this.noCol = true
+			} else if (newNameArr.size !== nameArr.length) {
+				ErrorVales = true
+				this.rep = true
+			}
+			
+			const event = new Event("event")
+            event.args = {
+                element: this,
+                param: {
+                    status: false,
+                    errors: ErrorVales
+                }
+            }
+            this.$emit('statusChange', event)
         },
         updateData(name, oname, unreset) {
             console.log(name, oname)
@@ -77,15 +108,13 @@ export default {
         box-sizing: border-box;
     }
     .retrieved {
-        margin-top: 4px;
         width: 100%;
-        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
         background: #fff;
-        height: fit-content;
         padding: 20px;
+		flex-grow: 1;
 
         .retrieved-title {
             display: flex;
@@ -93,8 +122,17 @@ export default {
 
             .retrieved-title-p {
                 display: flex;
-                flex-direction: row;
-                justify-content: space-between;
+                flex-direction: column;
+
+				h2 {
+					margin-bottom: 0;
+				}
+
+				.error-msg {
+					font-size: 13px;
+					color: #ce1228;
+					margin: 10px 0;
+                }
 
                 .ver-center {
                     display: flex;
@@ -108,6 +146,10 @@ export default {
     .retrieved-lst {
         display: flex;
         flex-direction: row;
+		flex-grow: 1;
+		.select-card-container:nth-child(even) {
+            background-color:rgb(242, 242, 242); 
+        }
     }
 
     .disabled {

@@ -2,19 +2,17 @@
     <div class="select-card-container">
         <div class="select-card-title" >
             <div class="select-card-ds">
-                <span>{{index}}</span>
+                <!-- <span>{{index}}</span> -->
                 &nbsp;
                 <span>{{command.ds}}</span>
             </div>
         </div>
-        <el-divider></el-divider>
-        <el-form label-width="80px">
+        <el-form class="fil" label-width="80px">
             <el-form-item label="前缀">
                 <el-input v-model="command.prefix"></el-input>
             </el-form-item>
         </el-form>
-        <el-divider></el-divider>
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Check all</el-checkbox>
+        <el-checkbox class="check-all" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Check all</el-checkbox>
         <el-divider></el-divider>
         <el-checkbox-group v-model="command.retrievedCols" @change="handleCheckedChange" class="select-card-checkbox">
             <el-checkbox v-for="(item) in schema" :label="item.src" :key="item.src">{{item.src}}</el-checkbox>
@@ -80,12 +78,18 @@ export default {
         overflow: auto;
         width: 500px;
         margin-right: 3px;
-        border: 1px solid red;
+        border: 1px dashed #aaa;
+        border-top: none;
 
         .select-card-title {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            border: 1px solid #ddd;
+            height: 40px;
+            background: #fff;
 
             .select-card-ds {
 
@@ -97,9 +101,19 @@ export default {
 
         }
 
+        .fil {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .check-all {
+            padding-left: 40px;
+        }
+
         .select-card-checkbox {
             display: flex;
             flex-direction: column;
+            padding-left: 40px;
         }
 
         .select-card-content {
