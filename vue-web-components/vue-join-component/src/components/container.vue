@@ -37,6 +37,8 @@
                     ref="percomputed"
                     :step="datasource.step"
                     :schema="datasource.schema"
+					@addDataset="addDataset"
+					@delDataset="delDataset"
                     @statusChange="preComputedStatus" />
                 <join 
 					v-show="active === 3"
@@ -197,7 +199,7 @@ export default {
 		addDatasetFromJoin(data) {
 			const event = data.args.param
 			this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
-			this.$refs.percomputed.updateData(event.newDat, event.oldData, event.unreset)
+			this.$refs.percomputed.updateData(event.newData, event.oldData, event.unreset)
 			this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
 		},
 		delDatasetFromJoin(data) {
@@ -244,12 +246,14 @@ export default {
                 this.stepsDefs[0].status = "error"
             }
         },
-        preComputedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        preComputedStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[1].status = "success"
             if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
-                this.stepsDefs[1].status = "error"
+                this.stepsDefs[1].status = "wait"
+            } else if (errors){
+                this.stepsDefs[0].status = "error"
             }
         },
         joinStatus(status) {
