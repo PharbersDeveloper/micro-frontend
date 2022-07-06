@@ -276,11 +276,12 @@ export default {
                 this.stepsDefs[3].status = "error"
             }
         },
-        postComputedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
-            } else {
+        postComputedStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[4].status = "success"
+            if (!status) {
+                this.stepsDefs[4].status = "wait"
+            } else if (errors){
                 this.stepsDefs[4].status = "error"
             }
         },
