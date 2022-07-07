@@ -235,6 +235,7 @@ export default {
         background: #fff;
         padding: 20px;
         flex-grow: 1;
+		width: calc(100vw - 300px);
         
         .computed-title {
             display: flex;
@@ -326,6 +327,7 @@ export default {
             display: flex;
             flex-direction: row;
             flex-grow: 1;
+			overflow: auto;
 
             .sel-ds {
                 margin: 10px auto;
@@ -345,6 +347,7 @@ export default {
                 display: flex;
                 flex-direction: column;
                 width: 500px;
+				min-width: 500px;
                 border: 1px dashed #aaa;
                 border-top: none;
                 margin: 1px;

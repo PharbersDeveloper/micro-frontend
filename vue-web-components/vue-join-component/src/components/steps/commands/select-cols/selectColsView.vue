@@ -119,6 +119,7 @@ export default {
         background: #fff;
         padding: 20px;
 		flex-grow: 1;
+		width: calc(100vw - 300px);
 
         .retrieved-title {
             display: flex;
@@ -151,6 +152,8 @@ export default {
         display: flex;
         flex-direction: row;
 		flex-grow: 1;
+		overflow: auto;
+		
 		.select-card-container:nth-child(even) {
             background-color:rgb(242, 242, 242); 
         }

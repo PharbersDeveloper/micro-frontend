@@ -192,6 +192,7 @@ export default {
         background: #fff;
         padding: 20px;
         flex-grow: 1;
+		width: calc(100vw - 300px);
 
         .sel-ds {
             margin: 10px auto;
@@ -235,6 +236,7 @@ export default {
             display: flex;
             flex-direction: row;
             flex-grow: 1;
+			overflow-x: scroll;
         }
         .condition-ds-item:nth-child(odd) {
             background-color: rgb(242, 242, 242)
@@ -244,6 +246,7 @@ export default {
             margin: 1px;
             border: 1px dashed #aaa;
             border-top: none;
+			min-width: 500px;
 
             .condition-ds-item-title {
                 display: flex;

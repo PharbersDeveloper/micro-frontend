@@ -80,6 +80,7 @@ export default {
         margin-right: 3px;
         border: 1px dashed #aaa;
         border-top: none;
+		min-width: 500px;
 
         .select-card-title {
             display: flex;

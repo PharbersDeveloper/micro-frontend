@@ -344,6 +344,21 @@ export default {
 		},
         save() {
             if (this.activeName === "Setting") {
+
+				this.$refs.prefilter.validate()
+				this.$refs.percomputed.validate()
+				this.$refs.join.validate()
+				this.$refs.select.validate()
+				this.$refs.postcomputed.validate()
+				this.$refs.postfilter.validate()
+				this.$refs.outputs.validate()
+				
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+				if(errors.length > 0) {
+					Message.error("请修改参数！", { duration: 3000} )
+					return false
+				}
+
 				if (this.changeDs) {
 					this.resetInputs()
 				}
