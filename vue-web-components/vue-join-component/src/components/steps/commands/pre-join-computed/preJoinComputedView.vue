@@ -39,7 +39,7 @@
                 </div>
             </div>
             <el-dialog
-                    title="Tips"
+                    title="Computed Columns"
                     :visible.sync="showEditDialog"
                     width="30%"
                     @closed="handleClose">
@@ -168,7 +168,7 @@ export default {
             this.showEditDialog = true
         },
         dlgSchemaItemClicked(col) {
-            this.dialogEditing.expr = "`" + col + "`"
+            this.dialogEditing.expr = this.dialogEditing.expr + "`" + col + "`"
         },
         editComputedCol(item, idx) {
             this.currentItem = item
