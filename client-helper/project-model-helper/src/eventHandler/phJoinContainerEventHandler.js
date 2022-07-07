@@ -66,6 +66,7 @@ export async function phJoinContainerEventHandler(e, route) {
 				route.projectId = params.projectId
 				route.projectName = params.projectName
 				let job_cat_name = "join_edit"
+				route.msg = "修改"
 				let scriptBody = {
 					common: {
 						traceId: uuid,
@@ -130,7 +131,7 @@ export async function phJoinContainerEventHandler(e, route) {
 					eventName: job_cat_name,
 					projectId: scriptsParams.projectId,
 					ownerId: route.cookies.read("account_id"),
-					callBack: createScriptNoticeCallback
+					callBack: editScriptNoticeCallback
 				})
 			}
 			break
@@ -220,21 +221,21 @@ export async function phJoinContainerEventHandler(e, route) {
 		)
 	}
 
-	function createScriptNoticeCallback(param, payload) {
+	function editScriptNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed" || status == "success") {
-			if (params.type === "preview") {
-				element.steps.refreshData()
-			} else {
+			if (!element.parent.changeDs) {
 				alert(`${route.msg}脚本成功！`)
 				route.router.transitionTo(
 					"shell",
 					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
 				)
+				return false
 			}
+			element.parent.$refs.changeInputOutput.save()
 		} else {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =

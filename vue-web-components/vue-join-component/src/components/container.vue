@@ -53,8 +53,6 @@
                     ref="select"
                     :step="datasource.step"
                     :schema="datasource.schema"
-					@addDatasetFromJoin="addDatasetFromJoin"
-					@delDatasetFromJoin="delDatasetFromJoin"
                     @statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
                     ref="postcomputed"
@@ -169,7 +167,8 @@ export default {
             jobShowName: "",
             outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
+			changeDs: false
         }
     },
     props: {
@@ -199,18 +198,21 @@ export default {
     },
     methods: {
 		addDatasetFromJoin(data) {
+			this.changeDs = true
 			const event = data.args.param
 			this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
 			this.$refs.percomputed.updateData(event.newData, event.oldData, event.unreset)
 			this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
 		},
 		delDatasetFromJoin(data) {
+			this.changeDs = true
 			const event = data.args.param
 			this.$refs.prefilter.deleteData(event.datasets, event.dsIdxArr)
 			this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
 			this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
 		},
 		addDataset(name, index) {
+			this.changeDs = true
 			this.active = 3
 			if (name) {
 				this.$refs.join.addDataset(name, index)
@@ -219,6 +221,7 @@ export default {
 			}
 		},
 		delDataset(name, index) {
+			this.changeDs = true
 			this.active = 3
 			this.$refs.join.delDataset(name, index)
 		},
@@ -333,8 +336,17 @@ export default {
             }
             return result
         },
+		resetInputs() {
+			this.inputs = []
+			this.$refs.join.datasource.datasets.forEach(item => {
+				this.inputs = this.inputs.concat(item)
+			})
+		},
         save() {
             if (this.activeName === "Setting") {
+				if (this.changeDs) {
+					this.resetInputs()
+				}
                 const params = {
                     "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
                     "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
@@ -343,7 +355,7 @@ export default {
                     "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
                     "postFilter": this.$refs.postfilter.datasource.revert2Defs()
                 }
-                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params, this.changeDs)
             } else {
                 this.$refs.changeInputOutput.save()
             }
@@ -455,7 +467,10 @@ export default {
             }
         },
         activeName(n) {
-            this.$emit("active", n)
+			if (n === "input/output") {
+				this.resetInputs()
+			}
+            // this.$emit("active", n)
         },
         "allData.inputs": function(n) {
             this.inputs = n

@@ -285,7 +285,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
+    buildSaveQuery(projectId, jobName, param, changeDs) {
 		const steps = [{
 			pjName: this.step["pj-name"],
 			stepId: this.step["step-id"],
@@ -309,6 +309,7 @@ export default class PhDataSource {
 			element: this,
 			param: {
 				name: "saveJoin",
+				changeDs: changeDs,
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
 				stepsArr: steps
