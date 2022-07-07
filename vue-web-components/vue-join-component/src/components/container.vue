@@ -431,6 +431,7 @@ export default {
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
         // this.datasource.refreshDataset(this.projectId, this.datasource.datasets)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
+		
     },
     watch: {
         active(n) {
