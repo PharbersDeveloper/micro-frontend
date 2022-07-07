@@ -75,26 +75,30 @@ export default {
             }
             this.$emit('statusChange', event)
         },
-        updateData(name, oname, unreset) {
-            console.log(name, oname)
+		updateData(n, o, unreset) {
+            console.log(n, o)
             if (!unreset) {
                 this.datasource.commands.push(new PhSelectedColsCmd({
-                    "ds": oname,
+                    "ds": n.name,
+                    "index": n.index,
                     "prefix": "",
                     "type": "select",
                     "columns": []
                 }))
             }
             this.datasource.commands.push(new PhSelectedColsCmd({
-                "ds": name,
+                "ds": n.name,
+				"index": n.index,
                 "prefix": "",
                 "type": "select",
                 "columns": []
             }))
         },
-        deleteData(idxArr) {
-            idxArr.forEach(it => {
-                delete this.datasource.commands[it]
+        deleteData(dss, ids) {
+            this.datasource.commands.forEach((itds, i) => {
+                if(!dss.includes(itds.ds) || !ids.includes(itds.index)) {
+                    delete this.datasource.commands[i]
+                }
             })
             this.datasource.commands = this.datasource.commands.filter(it => it)
         }

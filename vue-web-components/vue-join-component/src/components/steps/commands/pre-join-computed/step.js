@@ -22,13 +22,10 @@ export default class PhComputedStep {
             this.command.exec()
     }
 
-    validate() {
-        return true
-    }
-
     revert2Defs() {
         return this.commands.map(x => { return {
                 "ds": x["meta"]["name"],
+				"index": x["meta"]["index"],
                 "computedColumns": x["detail"].revert2Defs()
         }})
     }

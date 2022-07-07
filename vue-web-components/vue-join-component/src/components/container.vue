@@ -53,6 +53,8 @@
                     ref="select"
                     :step="datasource.step"
                     :schema="datasource.schema"
+					@addDatasetFromJoin="addDatasetFromJoin"
+					@delDatasetFromJoin="delDatasetFromJoin"
                     @statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
                     ref="postcomputed"
