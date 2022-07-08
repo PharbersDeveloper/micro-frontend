@@ -82,6 +82,7 @@
                 :inArray="inArray"
                 :outArray="outArray"
                 @changScriptInputOutput="changScriptInputOutput"
+				:datasetArray="datasetArray"
             />
         </div>
     </div>

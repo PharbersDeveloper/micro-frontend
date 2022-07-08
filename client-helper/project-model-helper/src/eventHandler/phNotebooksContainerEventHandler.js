@@ -331,7 +331,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 							jupyter: "3.0.2"
 						},
 						dependencies: [],
-						cfn: "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/jupyterec2cfn-05-19.yaml",
+						cfn: "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/jupyterec2cfn-07-08.yaml",
 						parameters: {
 							EC2User: name,
 							InstanceType: "t3.small",

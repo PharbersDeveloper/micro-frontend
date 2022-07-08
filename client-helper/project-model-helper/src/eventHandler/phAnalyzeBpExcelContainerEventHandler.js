@@ -188,14 +188,14 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 			alert("数据样本配置成功")
 			window.location.reload()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "数据样本配置失败，请重新操作！"
+			console.log(error)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "数据样本配置失败，请重新操作！"
+			alert("数据样本配置失败，请重新操作！")
 			route.loadingService.loading.style.display = "none"
-			alert(msg)
-			// TODO:刷新页面数据
 		}
 	}
 }

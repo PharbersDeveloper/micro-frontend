@@ -11,6 +11,7 @@ export default class PhFilterStep {
         this.commands = defs.map(x => { return {
             meta: {
                 "name": x["ds"],
+				"index": x["index"],
                 "distinct": x["preFilter"]["distinct"],
                 "enabled": x["preFilter"]["enabled"],
             },
@@ -26,6 +27,7 @@ export default class PhFilterStep {
     revert2Defs() {
         return this.commands.map(x => { return {
             ds: x["meta"]["name"],
+			index: x["meta"]["index"],
             preFilter: {
                 distinct: x["meta"]["distinct"],
                 enabled: x["meta"]["enabled"],

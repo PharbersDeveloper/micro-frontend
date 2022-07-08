@@ -101,24 +101,27 @@ export default class PhDataSource {
                 that.store.sync(response)
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
-                    const defaultPreFilter = this.datasets.map(x => { return {
+                    const defaultPreFilter = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "preFilter": {
                             "distinct": false,
                             "enabled": true,
                             "expr": ""
                         }
                     }})
-                    const defaultColumnMatches = this.datasets.map(x => { return {
+                    const defaultColumnMatches = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "columns": []
                     }})
                     const defaultOriginColumns = {
                         "enabled": false,
                         "columnName": "provider",
-                        "originDatasets": this.datasets.map(x => { return {
+                        "originDatasets": this.datasets.map((x, i) => { return {
                             "ds": x,
-                            "value": x
+							"index": i,
+							"value": x
                         }})
                     }
 
@@ -202,6 +205,8 @@ export default class PhDataSource {
             } else {
                 that.isMetaReady = true
             }
+
+			that.refreshDataset(projectId)
         })
     }
 
@@ -210,7 +215,6 @@ export default class PhDataSource {
         this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
-				console.log(response)
 				that.store.sync(response)
                 const data = that.store.findAll("datasets")
 				that.parent.datasetArray = data
