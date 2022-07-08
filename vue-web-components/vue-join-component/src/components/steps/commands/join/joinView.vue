@@ -55,6 +55,18 @@
                     </span>
                 </div>
             </el-dialog>
+			<el-dialog
+                title="add schema"
+                :visible.sync="showAddSchemaDialog"
+                width="30%" >
+                <div>
+                    当前dataset没有schema，是否要进行配置？
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="showAddSchemaDialog = false">Cancel</el-button>
+                        <el-button type="primary" @click="addSchematConfirm">Confirm</el-button>
+                    </span>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -73,6 +85,7 @@ export default {
             newDsName: "",
             newDsNameSecond: "",
             showAddDialog: false,
+			showAddSchemaDialog: false,
             hitHeightValue: 0
         }
     },
@@ -133,7 +146,27 @@ export default {
             this.leftDsName = ds
             this.leftIndex = index ? index : iidx
         },
+		addSchematConfirm() {
+			this.$parent.datasource.hasNoSchema = true
+			this.$parent.datasource.isMetaReady = false
+			this.showAddSchemaDialog = false
+			this.showAddDialog = false
+		},
         addDatasetConfirm() {
+			let nds = this.datasetArray.filter(it => it.name === this.newDsName)[0]
+			let nsc = JSON.parse(nds["schema"])
+			
+			if (nsc.length === 0) {
+				this.showAddSchemaDialog = true
+				return false
+			} else if (this.newDsNameSecond !== "") {
+				let ods = this.datasetArray.filter(it => it.name === this.newDsNameSecond)[0]
+				let osc = JSON.parse(ods["schema"])
+				if (osc.length === 0) {
+					this.showAddSchemaDialog = true
+					return false
+				}
+			}
             let newData = {}
             let oldData = {}
             const i = Math.max(...this.datasource.dsIdxArr) + 1
