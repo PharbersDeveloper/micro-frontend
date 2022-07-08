@@ -39,7 +39,7 @@
         <div class="main_container">
             <bp-excel ref="excel" 
                 viewHeight="calc(100vh - 300px)"
-                :isNeedPopmenu="false"
+                :isNeedPopmenu="true"
                 @countIsReady="totalCountIsReady"
                 @sample="sample"
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
