@@ -705,6 +705,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 				let message = {
 					common: {
 						traceId: uuid,
+						tenantId: route.cookies.read("company_id"),
 						projectId: params.projectId,
 						projectName: params.projectName,
 						flowVersion: "developer",
@@ -883,10 +884,10 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
-		if (status == "succeed") {
+		if (status === "succeed") {
 			alert("删除脚本成功！")
 			window.location.reload()
-		} else if (status == "failed") {
+		} else if (status === "failed") {
 			let errorObj = error !== "" ? error : "删除脚本失败，请重新操作！"
 			alert(errorObj)
 		}

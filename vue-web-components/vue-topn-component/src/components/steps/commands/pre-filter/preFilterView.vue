@@ -5,10 +5,10 @@
             <div class="condition-title-p">
                 <h2>Pre Filter</h2>
                 <div class="ver-center" v-if="datasource">
-                    <el-switch v-model="datasource.enabled" @change="$emit('statusChange', datasource.enabled)"></el-switch>
+                    <el-switch v-model="datasource.enabled" @change="validate()"></el-switch>
                 </div>
             </div>
-            <el-form v-if="datasource">
+            <el-form v-if="datasource && datasource.enabled">
                 <el-form-item label="保留符合条件的列">
                     <select v-model="datasource.command.action">
                         <option v-for="(item, index) in concretDefs.actions" :value="item.cal" :key="index" :label="item.desc" />
@@ -16,7 +16,8 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="condition-selection" v-if="datasource">
+        <div class="condition-selection" v-if="datasource && datasource.enabled">
+			<div class="error-msg" v-show="datasource.command.cloases && datasource.command.cloases.length === 0">需要添加至少一个Filter条件！</div>
             <div class="condition-selection-item" v-for="(cur, index) in datasource.command.cloases" :key="index">
                 <div class="condition-selection-content">
                     <select v-model="cur['left']">
@@ -25,13 +26,15 @@
                     <select v-model="cur['op']">
                         <option v-for="(item, index) in concretDefs.includes" :value="item.cal" :key="index" :label="item.desc" />
                     </select>
-                    <el-input v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" ></el-input>
+                    <el-input 
+						v-if="cur['op'] !== 'EXISTS' && cur['op'] !== 'NOT-EXISTS'" v-model="cur['right']" 
+						:class="[{'el-input-error': cur['right'] === ''}]"></el-input>
                     <el-input v-else disabled ></el-input>
                 </div>
                 <el-button type="text" @click="datasource.command.delcloases(index)">删除</el-button>
             </div>
         </div>
-        <div class="condition-add-button">
+        <div class="condition-add-button" v-if="datasource && datasource.enabled">
             <el-button type="primary" @click="datasource.command.insertcloases()">添加</el-button>
         </div>
     </div>
@@ -70,12 +73,31 @@ export default {
     },
     // updated() {
     mounted() {
-        this.datasource = new PhFilterStep(this.step)
-        this.$emit('statusChange', this.datasource.enabled)
+        this.datasource = new PhFilterStep(this.step, this.schema)
+		this.validate()
+		// const ErrorVales = this.datasource.command.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+		// const event = new Event("event")
+		// event.args = {
+		// 	element: this,
+		// 	param: {
+		// 		status: this.datasource.enabled,
+		// 		errors: this.datasource.command.cloases.length === 0 || ErrorVales.length > 0
+		// 	}
+		// }
+        // this.$emit('statusChange', event)
     },
     methods: {
         validate() {
-            this.$emit('statusChange', this.datasource.enabled)
+			const ErrorVales = this.datasource.command.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+			const event = new Event("event")
+			event.args = {
+				element: this,
+				param: {
+					status: this.datasource.enabled,
+					errors: this.datasource.command.cloases.length === 0 || ErrorVales.length > 0
+				}
+			}
+            this.$emit('statusChange', event)
         }
     },
     computed: {
@@ -98,6 +120,12 @@ export default {
         display: flex;
         flex-direction: column;
 
+		.el-input-error {
+			/deep/input.el-input__inner {
+				border-color: #ce1228;
+			}
+		}
+
         .condition-title {
             display: flex;
             flex-direction: column;
@@ -118,6 +146,11 @@ export default {
         .condition-selection {
             margin-top: 30px;
 
+			.error-msg {
+				font-size: 13px;
+				color: #ce1228;
+			}
+
             .condition-selection-item {
                 display: flex;
                 flex-direction: row;
@@ -127,6 +160,12 @@ export default {
             .condition-selection-content {
                 display: flex;
                 flex-direction: row;
+
+				.el-input {
+					/deep/input.el-input__inner {
+						height: 48px;
+					}
+				}
 
             }
         }

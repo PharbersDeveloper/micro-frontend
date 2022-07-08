@@ -4,13 +4,13 @@
         <div class="join_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('join')" alt="" />
-                <span>Join</span>
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
-				<el-radio-group v-model="activeName" class="content">
-					<el-radio-button label="Setting"></el-radio-button>
-					<el-radio-button label="input/output"></el-radio-button>
-				</el-radio-group>
+                <el-radio-group v-model="activeName" class="content">
+                    <el-radio-button label="Setting"></el-radio-button>
+                    <el-radio-button label="input/output"></el-radio-button>
+                </el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
@@ -26,54 +26,64 @@
             </div>
             <div class="join_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-                            ref="prefilter"
-                            :step="datasource.step"
-                            :schema="datasource.schema"
-                            @statusChange="preFilterStatus" />
+                    ref="prefilter"
+                    :step="datasource.step"
+                    :datasetArray="datasetArray"
+                    :schema="datasource.schema"
+					@addDataset="addDataset"
+					@delDataset="delDataset"
+                    @statusChange="preFilterStatus" />
                 <pre-computed v-show="active === 2"
-                              ref="percomputed"
-                              :step="datasource.step"
-                              :schema="datasource.schema"
-                              @statusChange="preComputedStatus" />
-                <join v-show="active === 3"
-                      ref="join"
-                      :step="datasource.step"
-                      :schema="datasource.schema"
-                      @statusChange="joinStatus" />
+                    ref="percomputed"
+                    :step="datasource.step"
+                    :schema="datasource.schema"
+					@addDataset="addDataset"
+					@delDataset="delDataset"
+                    @statusChange="preComputedStatus" />
+                <join 
+					v-show="active === 3"
+                    ref="join"
+                    :datasetArray="datasetArray"
+                    :step="datasource.step"
+                    :schema="datasource.schema"
+					@addDatasetFromJoin="addDatasetFromJoin"
+					@delDatasetFromJoin="delDatasetFromJoin"
+                    @statusChange="joinStatus" />
                 <select-cols v-show="active === 4"
-                                ref="select"
-                                :step="datasource.step"
-                                :schema="datasource.schema"
-                                @statusChange="selectStatus" />
+                    ref="select"
+                    :step="datasource.step"
+                    :schema="datasource.schema"
+					:datasetArray="datasetArray"
+                    @statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
-                               ref="postcomputed"
-                               :step="datasource.step"
-                               :schema="computedSchema"
-                               @statusChange="postComputedStatus" />
+                    ref="postcomputed"
+                    :step="datasource.step"
+                    :schema="computedSchema"
+                    @statusChange="postComputedStatus" />
                 <post-filter v-show="active === 6"
-                             ref="postfilter"
-                             :step="datasource.step"
-                             :schema="computedSchema"
-                         @statusChange="postFilterStatus" />
+                    ref="postfilter"
+                    :step="datasource.step"
+                    :schema="computedSchema"
+                    @statusChange="postFilterStatus" />
                 <outputs v-show="active === 7"
-                                ref="outputs"
-                                :schema="computedSchema"
-                                @statusChange="outputsStatus" />
+                    ref="outputs"
+                    :schema="computedSchema"
+                    @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
             </div>
         </div>
-		<div v-show="activeName === 'input/output'">
-			<change-input-output
-				ref="changeInputOutput"
-				:inputs="inputs"	
-				:outputs="outputs"
-				:inArray="inArray"
-				:outArray="outArray"
-				@changScriptInputOutput="changScriptInputOutput"
+        <div v-show="activeName === 'input/output'">
+            <change-input-output
+                ref="changeInputOutput"
+                :inputs="inputs"	
+                :outputs="outputs"
+                :inArray="inArray"
+                :outArray="outArray"
+                @changScriptInputOutput="changScriptInputOutput"
 				:datasetArray="datasetArray"
-			/>
+            />
         </div>
     </div>
 </template>
@@ -107,15 +117,15 @@ export default {
         PostComputed,
         PostFilter,
         Outputs,
-		ElRadioGroup,
+        ElRadioGroup,
         ElRadioButton,
-		changeInputOutput
+        changeInputOutput
     },
     data() {
         return {
             computedSchema: [],
-            active: 1,
-			flowVersion: "developer",
+            active: 3,
+            flowVersion: "developer",
             stepsDefs: [
                 {
                     title: "Pre-Filter",
@@ -153,13 +163,14 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			activeName: "Setting",
-			inArray: [],
-			outArray: [],
+            activeName: "Setting",
+            inArray: [],
+            outArray: [],
             jobShowName: "",
-			outputs: [],
+            outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
+			changeDs: false
         }
     },
     props: {
@@ -188,6 +199,44 @@ export default {
         }
     },
     methods: {
+		addDatasetFromJoin(data) {
+			this.changeDs = true
+			const event = data.args.param
+			let ns = Object.keys(this.datasource.schema).includes(event.newData.name)
+			let os = Object.keys(this.datasource.schema).includes(event.oldData.name)
+			if (!os) {
+				let obj = this.datasetArray.filter(it => it.name === event.oldData.name)[0]
+				this.datasource.schema[event.oldData.name] = JSON.parse(obj["schema"])
+			} else if (!ns) {
+				let obj = this.datasetArray.filter(it => it.name === event.newData.name)[0]
+				this.datasource.schema[event.newData.name] = JSON.parse(obj["schema"])
+			}
+
+			this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
+			this.$refs.percomputed.updateData(event.newData, event.oldData, event.unreset)
+			this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
+		},
+		delDatasetFromJoin(data) {
+			this.changeDs = true
+			const event = data.args.param
+			this.$refs.prefilter.deleteData(event.datasets, event.dsIdxArr)
+			this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
+			this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
+		},
+		addDataset(name, index) {
+			this.changeDs = true
+			this.active = 3
+			if (name) {
+				this.$refs.join.addDataset(name, index)
+			} else {
+				this.$refs.join.showAddDialog = true
+			}
+		},
+		delDataset(name, index) {
+			this.changeDs = true
+			this.active = 3
+			this.$refs.join.delDataset(name, index)
+		},
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -196,54 +245,69 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
-			this.jobShowName = jobShowName
+            this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+        preFilterStatus(data) {
+			/**
+			 * 1. only dis open ==> success
+			 * 2. no open ==> wait
+			 * 3. open filter ===> 判断对错
+			 */
+            const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[0].status = "success"
+			if (status) {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },
-        preComputedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        preComputedStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[1].status = "success"
             if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
+                this.stepsDefs[1].status = "wait"
+            } else if (errors){
                 this.stepsDefs[1].status = "error"
             }
         },
-        joinStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        joinStatus(data) {
+           const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[2].status = "success"
             if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+                this.stepsDefs[2].status = "wait"
+            } else if (errors){
                 this.stepsDefs[2].status = "error"
             }
         },
-        selectStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        selectStatus(data) {
+           const status = data.args.param.status, errors = data.args.param.errors
+
+			this.stepsDefs[3].status = "success"
             if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+                this.stepsDefs[3].status = "wait"
+            } else if (errors){
                 this.stepsDefs[3].status = "error"
             }
         },
-        postComputedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
-            } else {
+        postComputedStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[4].status = "success"
+            if (!status) {
+                this.stepsDefs[4].status = "wait"
+            } else if (errors){
                 this.stepsDefs[4].status = "error"
             }
         },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[5].status = "success"
-            } else {
+        postFilterStatus(data) {
+			const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[5].status = "success"
+            if (!status) {
+                this.stepsDefs[5].status = "wait"
+            } else if (errors){
                 this.stepsDefs[5].status = "error"
             }
         },
@@ -284,95 +348,119 @@ export default {
             }
             return result
         },
+		resetInputs() {
+			this.inputs = []
+			this.$refs.join.datasource.datasets.forEach(item => {
+				this.inputs = this.inputs.concat(item)
+			})
+		},
         save() {
-			if (this.activeName === "Setting") {
-				const params = {
-					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
-					"preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
-					"joins": this.$refs.join.datasource.revert2Defs(),
-					"selectedColumns": this.$refs.select.datasource.revert2Defs(),
-					"postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
-					"postFilter": this.$refs.postfilter.datasource.revert2Defs()
+            if (this.activeName === "Setting") {
+
+				this.$refs.prefilter.validate()
+				this.$refs.percomputed.validate()
+				this.$refs.join.validate()
+				this.$refs.select.validate()
+				this.$refs.postcomputed.validate()
+				this.$refs.postfilter.validate()
+				this.$refs.outputs.validate()
+
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+				if(errors.length > 0) {
+					Message.error("请修改参数！", { duration: 3000} )
+					return false
 				}
-				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-			} else {
-				this.$refs.changeInputOutput.save()
-			}
+
+				if (this.changeDs) {
+					this.resetInputs()
+				}
+                const params = {
+                    "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+                    "preJoinComputedColumns": this.$refs.percomputed.datasource.revert2Defs(),
+                    "joins": this.$refs.join.datasource.revert2Defs(),
+                    "selectedColumns": this.$refs.select.datasource.revert2Defs(),
+                    "postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
+                    "postFilter": this.$refs.postfilter.datasource.revert2Defs()
+                }
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params, this.changeDs)
+            } else {
+                this.$refs.changeInputOutput.save()
+            }
         },
-		changScriptInputOutput(data) {
-			let dssInputsOld = []
-			let dssInputsNew = []
-			let dssInputs = {}
+        changScriptInputOutput(data) {
+            let dssInputsOld = []
+            let dssInputsNew = []
+            let dssInputs = {}
 
-			this.allData.inputs.forEach(item => {
-				let inputNameOld = item
-				let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
-				dssInputsOld.push({
-					name: inputNameOld,
-					cat: inputCatOld
-				})
-			})
-			dssInputs.old = dssInputsOld
+            this.allData.inputs.forEach(item => {
+                let inputNameOld = item
+                let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+                dssInputsOld.push({
+                    name: inputNameOld,
+                    cat: inputCatOld
+                })
+            })
+            dssInputs.old = dssInputsOld
 
-			data.args.param.inputsArray.forEach(item => {
-				let inputNameNew = item
-				let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
-				dssInputsNew.push({
-					name: inputNameNew,
-					cat: inputCatNew
-				})
-			})
-			dssInputs.new = dssInputsNew
+            data.args.param.inputsArray.forEach(item => {
+                let inputNameNew = item
+                let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+                dssInputsNew.push({
+                    name: inputNameNew,
+                    cat: inputCatNew
+                })
+            })
+            dssInputs.new = dssInputsNew
 
-			let outputNameOld = this.allData.outputs[0]
-			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
-			let outputNameNew = data.args.param.outputsArray[0]
-			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
-			
-			let dssOutputs = {
-				old: {
-					name: outputNameOld,
-					cat: outputCatOld
-				},
-				new: {
-					name: outputNameNew,
-					cat: outputCatNew
-				}
-			}
+            let outputNameOld = this.allData.outputs[0]
+            let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+            let outputNameNew = data.args.param.outputsArray[0]
+            let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+            
+            let dssOutputs = {
+                old: {
+                    name: outputNameOld,
+                    cat: outputCatOld
+                },
+                new: {
+                    name: outputNameNew,
+                    cat: outputCatNew
+                }
+            }
 
-			let script = {
-				old: {
-					name: this.allData.jobName,
-					id: this.allData.jobId
-				},
-				new: {
-					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
-					"inputs": JSON.stringify(data.args.param.inputsArray),
-					"output": outputNameNew
-				}
-			}
+            let script = {
+                old: {
+                    name: this.allData.jobName,
+                    id: this.allData.jobId
+                },
+                new: {
+                    "name": `compute_${outputNameNew}`,
+                    "runtime": "topn",
+                    "inputs": JSON.stringify(data.args.param.inputsArray),
+                    "output": outputNameNew
+                }
+            }
 
-			if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
-				Message.error("input和output不能相同", { duration: 3000} )
-				return false
-			}
-			
-			const event = new Event("event")
-			event.args = {
-				callback: "changScriptInputOutput",
-				element: this,
-				param: {
-					name: "changScriptInputOutput",
-					projectId: this.projectId,
-					projectName: this.projectName,
-					dssOutputs: dssOutputs,
-					dssInputs: dssInputs,
-					script: script
-				}
-			}
-			this.$emit('event', event)
-		}
+            if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
+                Message.error("input和output不能相同", { duration: 3000} )
+                return false
+            }
+            
+            const event = new Event("event")
+            event.args = {
+                callback: "changScriptInputOutput",
+                element: this,
+                param: {
+                    name: "changScriptInputOutput",
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    dssOutputs: dssOutputs,
+                    dssInputs: dssInputs,
+                    script: script
+                }
+            }
+            this.$emit('event', event)
+        }
     },
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
@@ -381,9 +469,10 @@ export default {
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
         this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        // this.datasource.refreshDataset(this.projectId, this.datasource.datasets)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
-		this.datasource.refreshInOut(this.projectId, this.jobShowName)
-		this.datasource.refreshDataset(this.projectId)
+		
     },
     watch: {
         active(n) {
@@ -404,15 +493,18 @@ export default {
                 this.computedSchema = this.computePostFilterSchema()
             }
         },
-		activeName(n) {
-            this.$emit("active", n)
+        activeName(n) {
+			if (n === "input/output") {
+				this.resetInputs()
+			}
+            // this.$emit("active", n)
         },
         "allData.inputs": function(n) {
             this.inputs = n
         },
-		"allData.outputs": function(n) {
+        "allData.outputs": function(n) {
             this.outputs = n
-		}
+        }
     }
 }
 </script>
@@ -422,6 +514,9 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        // overflow: hidden;
 
         .op-factories {
             // background: red;
@@ -434,7 +529,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-			border: 1px solid #ccc;
+            border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -463,9 +558,9 @@ export default {
                 /*    background: none;*/
                 /*    cursor: pointer;*/
                 /*}*/
-				.content {
-					margin-right: 30px;
-				}
+                .content {
+                    margin-right: 30px;
+                }
             }
         }
 
@@ -474,14 +569,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
-			height: calc(100vh - 100px);
+            height: calc(100vh - 100px);
 
             .join_left {
                 display: flex;
                 flex-direction: row;
-				padding: 40px;
+                padding: 40px;
                 justify-content: space-around;
-				border-right: 1px solid #ccc;
+                border-right: 1px solid #ccc;
             }
 
             .join_right {
@@ -489,8 +584,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-				background: #f2f2f2;
-				padding: 20px;
+                background: #f2f2f2;
+                // padding: 20px;
             }
         }
     }

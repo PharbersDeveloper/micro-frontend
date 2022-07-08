@@ -11,6 +11,16 @@ export default class PhComputedCmd {
 
     }
 
+	editComputedCol(idx) {
+		const res = {
+            "expr": "",
+            "name": "",
+            "type": "int"
+        }
+        this.computedCols.splice(idx, 1, res)
+        return res
+    }
+
     insertComputedCol() {
         const res = {
             "expr": "",

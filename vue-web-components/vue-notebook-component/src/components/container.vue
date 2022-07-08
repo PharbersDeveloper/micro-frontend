@@ -710,6 +710,7 @@ export default {
                     font-weight: 600;
                     color: #7163C5;
                     margin-bottom: 16px;
+					cursor: pointer;
                 }
 
                 .upload_btn_new {

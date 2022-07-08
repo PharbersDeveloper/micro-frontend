@@ -4,7 +4,7 @@
         <div class="topn_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('topn')" alt="" />
-                <span>Top N</span>
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
                 <el-radio-group v-model="activeName" class="content">
@@ -109,11 +109,9 @@ export default {
             jobShowName: "",
 			outputs: [],
             inputs: [],
-            active: 1,
+            active: 3,
             flowVersion: "developer",
             activeName: "Setting",
-            // selectInput: false,
-            // selectOutput: false,
             datasetArray: [],
             stepsDefs: [
                 {
@@ -181,44 +179,43 @@ export default {
 			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+        preFilterStatus(data) {
+			const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[0].status = "success"
+            if (!status) {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },
-        computedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
+        computedStatus(data) {
+           const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[1].status = "success"
+            if (!status) {
+                this.stepsDefs[1].status = "wait"
+            } else if (errors){
                 this.stepsDefs[1].status = "error"
             }
         },
-        topnStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+        topnStatus(errors) {
+            if (errors) {
                 this.stepsDefs[2].status = "error"
+            } else {
+                this.stepsDefs[2].status = "success"
             }
         },
-        retrievedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+        retrievedStatus(errors) {
+            if (errors) {
                 this.stepsDefs[3].status = "error"
+            } else {
+                this.stepsDefs[3].status = "success"
             }
         },
-        outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
-            } else {
+        outputsStatus(errors) {
+            if (errors) {
                 this.stepsDefs[4].status = "error"
+            } else {
+                this.stepsDefs[4].status = "success"
             }
         },
         computeSchema() {
@@ -240,16 +237,27 @@ export default {
         },
         genOutputsSchema() {
             const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            let result = []
-            if (retrieved.length === 0) {
-                result = this.computedSchema
+			const retrievedType = this.$refs.retrieved.datasource.command.retrievedCols.length === 0
+            if (retrievedType) {
+                return this.computedSchema
             } else {
-                result = this.computedSchema.filter(x => retrieved.includes(x.title))
+                return this.computedSchema.filter(x => retrieved.includes(x.title))
             }
-            return result
         },
         save() {
             if (this.activeName === "Setting") {
+				
+				this.$refs.filter.validate()
+				this.$refs.computed.validate()
+				this.$refs.topn.validate()
+				this.$refs.retrieved.validate()
+				this.$refs.outputs.validate()
+
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+				if(errors.length > 0) {
+					Message.error("请修改参数！", { duration: 3000} )
+					return false
+				}
                 const params = {
                     "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                     "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
@@ -337,32 +345,27 @@ export default {
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-
-        // this.projectIdTest = "alfredtest"
-        // this.jobName = "alfredtest"
         this.jobName = this.getJobName()
-        // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {
+			if (n === 4 || n === 5) {
+                this.computedSchema = this.computeSchema()
+            }
+
+            if (n === 4 || n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
+
             this.$refs.filter.validate()
             this.$refs.computed.validate()
             this.$refs.topn.validate()
             this.$refs.retrieved.validate()
             this.$refs.outputs.validate()
-
-            if (n === 4 || n === 5) {
-                this.computedSchema = this.computeSchema()
-            }
-
-            if (n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
         },
         activeName(n) {
             this.$emit("active", n)
@@ -519,6 +522,7 @@ export default {
                 justify-content: space-around;
                 background: #f2f2f2;
                 padding: 20px;
+				overflow: auto;
             }
         }
     }

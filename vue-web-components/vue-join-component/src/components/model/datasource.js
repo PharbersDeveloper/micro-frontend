@@ -2,7 +2,6 @@
 import { hostName } from "../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
-
 export default class PhDataSource {
     constructor(id, parent) {
         this.id = id
@@ -100,16 +99,18 @@ export default class PhDataSource {
                 that.store.sync(response)
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
-                    const defaultPreFilter = this.datasets.map(x => { return {
+                    const defaultPreFilter = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "preFilter": {
                             "distinct": false,
                             "enabled": true,
                             "expr": ""
                         }
                     }})
-                    const defaultPreComputed = this.datasets.map(x => { return {
+                    const defaultPreComputed = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "computedColumns": []
                     }})
                     const defaultJoin = [{
@@ -122,8 +123,9 @@ export default class PhDataSource {
                         "type": "LEFT",
                         "on": []
                     }]
-                    const defaultSelectCols = this.datasets.map(x => { return {
+                    const defaultSelectCols = this.datasets.map((x, i) => { return {
                         "ds": x,
+						"index": i,
                         "prefix": "",
                         "type": "select",
                         "columns": []
@@ -210,6 +212,8 @@ export default class PhDataSource {
             } else {
                 that.isMetaReady = true
             }
+
+			that.refreshDataset(projectId)
         })
     }
 
@@ -281,7 +285,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
+    buildSaveQuery(projectId, jobName, param, changeDs) {
 		const steps = [{
 			pjName: this.step["pj-name"],
 			stepId: this.step["step-id"],
@@ -305,6 +309,7 @@ export default class PhDataSource {
 			element: this,
 			param: {
 				name: "saveJoin",
+				changeDs: changeDs,
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
 				stepsArr: steps

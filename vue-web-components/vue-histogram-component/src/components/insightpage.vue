@@ -39,6 +39,7 @@ import PhHistogramDatasource from "../components/model/datasource"
 import PhHistogramSchema from "../components/model/schema"
 import StackPolicy from "../components/render-policy/stack-policy"
 import ScatterplotPolicy from "../components/render-policy/scatterplot-policy"
+import LinesPolicy from "../components/render-policy/lines-policy"
 import BarPolicy from "../components/render-policy/bar-policy"
 import PiePolicy from "../components/render-policy/pie-policy"
 import { staticFilePath } from '../config/envConfig'
@@ -133,6 +134,17 @@ export default {
                         this.allData.projectId,
                         content.datasetName),
                     { xProperty: content.x, yProperty: content.y })
+            }
+            else if (content.policyName === "lines") {
+                return new LinesPolicy(content.index,
+                    new PhHistogramDatasource(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    new PhHistogramSchema(content.index,
+                        this.allData.projectId,
+                        content.datasetName),
+                    {xProperty: content.x, yProperty: content.y})
+
             }
             else {
                 // TODO: other histogrm

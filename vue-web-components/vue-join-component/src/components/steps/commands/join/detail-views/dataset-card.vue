@@ -7,8 +7,8 @@
                 <span>{{dataset}}</span>
             </div>
             <div class="join-card-op">
-                <el-button type="text" >添加</el-button>
-                <el-button type="text" >删除</el-button>
+                <el-button type="text" @click="$emit('addDataset', dataset, index)">添加</el-button>
+                <el-button type="text" @click="$emit('delDataset', dataset, index)">删除</el-button>
             </div>
         </div>
         <div class="join-card-content" :style="style">
@@ -21,13 +21,16 @@ import ElButton from 'element-ui/packages/button/index'
 
 export default {
     data() {
-        return {}
+        return {
+		}
     },
     props: {
         index: Number,
+		idx: Number,
         count: Number,
         step: Object,
         dataset: String,
+		hitHeightValue: Number
     },
     components: {
         ElButton
@@ -41,7 +44,8 @@ export default {
     computed: {
         style() {
             if (this.step) {
-                return "height: " + this.step.hitHeight() + "px; background-color: #f2f2f2;border: 1px dashed #aaa;"
+                const bgc = this.idx % 2 === 0 ? "#f2f2f2" : "fff"
+                return "height: " + this.hitHeightValue + "px; background-color: " + bgc + ";border: 1px dashed #aaa;"
             } else return ""
         }
     }
@@ -65,6 +69,10 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            border: 1px solid #ddd;
+			height: 50px;
 
             .join-card-ds {
 

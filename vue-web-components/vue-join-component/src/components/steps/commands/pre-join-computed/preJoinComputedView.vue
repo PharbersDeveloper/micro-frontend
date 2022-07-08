@@ -7,15 +7,20 @@
             </div>
         </div>
         <div class="multi-computed-c" v-if="datasource">
+            <div class="sel-ds" v-show="datasource.commands.length === 0">
+                <div class="title">no input dataset</div>
+                <el-button @click="$emit('addDataset')">请选择</el-button>
+            </div>
             <div class="multi-computed-item" v-for="(item, index) in datasource.commands" :key="index">
                 <div class="computed-ds-item-title">
                     <h3>{{item.meta.name}}</h3>
+                     <div class="ver-center" >
+                        <el-button type="text" @click="$emit('addDataset', item.meta.name, item.meta.index)">添加</el-button>
+                        <el-button type="text" @click="$emit('delDataset', item.meta.name, item.meta.index)">删除</el-button>
+                    </div>
                 </div>
-
-                <el-divider></el-divider>
-
                 <div class="computed-ds-item-col-list" >
-                    <div class="computed-item" v-for="(cur, index) in item.detail.computedCols" :key="index">
+                    <div class="computed-item" v-for="(cur, idx) in item.detail.computedCols" :key="idx">
                         <div class="computed-item-detail">
                             <span>列名:</span>
                             <span>{{cur.name}}</span>
@@ -23,23 +28,23 @@
                             <span>{{cur.type}}</span>
                         </div>
                         <div class="computed-item-operator">
-                            <el-button type="text" >修改</el-button>
-                            <el-button type="text" @click="removeComputedCol(item)">删除</el-button>
+                            <el-button type="text" @click="editComputedCol(item, idx)">修改</el-button>
+                            <el-button type="text" @click="removeComputedCol(item, idx)">删除</el-button>
                         </div>
                     </div>
                 </div>
 
                 <div class="computed-add-button">
-                    <el-button type="primary" @click="createNewComputedItem(item)">添加</el-button>
+                    <el-button @click="createNewComputedItem(item)">添加</el-button>
                 </div>
             </div>
             <el-dialog
-                    title="Tips"
+                    title="Computed Columns"
                     :visible.sync="showEditDialog"
                     width="30%"
                     @closed="handleClose">
                 <div class="computed-list" v-if="dialogEditing">
-                    <div class="computed-item">
+                    <div class="computed-items">
                         <span>新建列名</span>
                         <el-input class="computed-item-title" v-model="dialogEditing.name"></el-input>
                         <span>保存为</span>
@@ -64,8 +69,7 @@
                 </div>
 
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="cancelEditing">Cancel</el-button>
-                    <el-button type="primary" @click="showEditDialog = false">Confirm</el-button>
+                    <el-button type="primary" @click="confirm">Confirm</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -74,12 +78,11 @@
 <script>
 import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
-import ElDivider from 'element-ui/packages/divider/index'
 import ElDialog from 'element-ui/packages/dialog/index'
-// import ElDescriptions from 'element-ui/packages/descriptions/index'
-// import ElDescriptionsItem from 'element-ui/packages/descriptions-item/index'
 import { PhComputedDefs } from "./defs"
 import PhComputedStep from "./step"
+import PhComputedCmd from "./cmd"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -110,18 +113,23 @@ export default {
         }
     },
     components: {
-        ElDivider,
         ElInput,
         ElButton,
-        ElDialog,
-        // ElDescriptions,
-        // ElDescriptionsItem
+        ElDialog
     },
     mounted() {
         this.datasource = new PhComputedStep(this.step)
+        this.validate()
         // this.currentExpr = this.datasource.command.computedCols[0]["expr"]
     },
     methods: {
+        confirm() {
+            if (this.dialogEditing.name.length === 0 || this.dialogEditing.expr.length === 0) {
+                Message.error("请填写列名和表达式", { duration: 3000} )
+				return false
+            }
+            this.showEditDialog = false
+        },
         itemClicked(v) {
             this.currentExpr += "`" + v + "`"
         },
@@ -130,7 +138,19 @@ export default {
             this.currentIdx = idx
         },
         validate() {
-            this.$emit('statusChange', true)
+            let len = 0
+            this.datasource.commands.forEach(item => {
+                len = len + item.detail.computedCols.length
+            })
+            const event = new Event("event")
+            event.args = {
+                element: this,
+                param: {
+                    status: len === 0,
+                    errors: false
+                }
+            }
+            this.$emit('statusChange', event)
         },
         handleClose() {
             this.currentItem = null
@@ -148,14 +168,47 @@ export default {
             this.showEditDialog = true
         },
         dlgSchemaItemClicked(col) {
-            this.dialogEditing.expr = "`" + col + "`"
+            this.dialogEditing.expr = this.dialogEditing.expr + "`" + col + "`"
         },
-        cancelEditing() {
-            this.currentItem.detail.removeComputedCol(this.currentItem.detail.count() - 1)
-            this.showEditDialog = false
+        editComputedCol(item, idx) {
+            this.currentItem = item
+            this.dialogSchema = this.schema[item.meta.name]
+            this.dialogEditing = item.detail.editComputedCol(idx)       
+            this.showEditDialog = true
         },
-        removeComputedCol(item) {
-            item.detail.removeComputedCol(item.detail.count() - 1)
+        removeComputedCol(item, idx) {
+            item.detail.removeComputedCol(idx)
+        },
+        updateData(n, o, unreset) {
+            console.log(n, o)
+            if (!unreset) {
+                this.datasource.commands.push({
+                    meta: {
+                        "name": o.name,
+                        "index": o.index,
+                        "distinct": false,
+                        "enabled": false,
+                    },
+                    detail: new PhComputedCmd([])
+                })
+            }
+            this.datasource.commands.push({
+                 meta: {
+                    "name": n.name,
+                    "index": n.index,
+                    "distinct": false,
+                    "enabled": false,
+                },
+                detail: new PhComputedCmd([])
+            })
+        },
+        deleteData(dss, ids) {
+            this.datasource.commands.forEach((itds, i) => {
+                if(!dss.includes(itds.meta.name) || !ids.includes(itds.meta.index)) {
+                    delete this.datasource.commands[i]
+                }
+            })
+            this.datasource.commands = this.datasource.commands.filter(it => it)
         }
     },
     computed: {
@@ -175,16 +228,15 @@ export default {
         box-sizing: border-box;
     }
     .computed {
-        margin-top: 4px;
         width: 100%;
-        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
-
+        background: #fff;
+        padding: 20px;
+        flex-grow: 1;
+		width: calc(100vw - 300px);
+        
         .computed-title {
             display: flex;
             flex-direction: column;
@@ -205,18 +257,43 @@ export default {
         .computed-list {
             display: flex;
             flex-direction: column;
+
+            .computed-items {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .computed-item-title {
+                    width: 200px;
+                    margin-right: 20px;
+                }
+
+                select {
+                    height: 40px;
+                    margin-right: 20px;
+                }
+
+                span {
+                    margin-right: 10px;
+                }
+            }
         }
 
         .computed-item {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            // border: 1px solid #ccc;
-			align-items: center;
-			
+            align-items: center;
+
+            .computed-item-title {
+                width: 200px;
+                margin-right: 20px;
+            }
+            
             .computed-item-detail {
                 display: flex;
                 flex-direction: row;
+                font-size: 16px;
             }
 
             .computed-item-operator {
@@ -249,19 +326,48 @@ export default {
         .multi-computed-c {
             display: flex;
             flex-direction: row;
+            flex-grow: 1;
+			overflow: auto;
 
+            .sel-ds {
+                margin: 10px auto;
+                display: flex;
+                flex-direction: column;
+                .title {
+                    color: #666666;
+                    font-size: 13px;
+                    margin-bottom: 20px;
+                }
+            }
+
+            .multi-computed-item:nth-child(odd) {
+                background-color: rgb(242, 242, 242)
+            }
             .multi-computed-item {
                 display: flex;
                 flex-direction: column;
                 width: 500px;
+				min-width: 500px;
+                border: 1px dashed #aaa;
+                border-top: none;
+                margin: 1px;
 
-                border: 1px solid grey;
+                .computed-ds-item-title {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0 10px;
+                    border: 1px solid #ddd;
+                    height: 40px;
+                    background: #fff;
+                }
             }
 
             .computed-ds-item-col-list {
                 display: flex;
                 flex-direction: column;
-                flex-grow: 1;
+                padding: 20px;
 
                 .computed-ds-item-col-item {
 
@@ -273,6 +379,10 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-around;
+
+            button {
+                width: 180px;
+            }
         }
     }
 </style>

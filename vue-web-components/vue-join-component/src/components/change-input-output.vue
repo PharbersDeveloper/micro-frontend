@@ -1,46 +1,17 @@
 <template>
    <div class="input-output">
+
        <div class="left">
             <div class="title">Input</div>
-            <div class="input-selected" v-show="!selectInput">
+            <div class="input-selected">
                 <div class="name" 
                     :key="item+index"
                     v-for="(item,index) in inputsArray">
                     {{item}}
-                    <i 
-                        @click="delInputItem(item)"
-                        class="el-icon-delete red pointer"></i>
                 </div>
-                <el-button 
-                    disabled
-                    @click="selectInput=!selectInput"
-                    type="primary">添加</el-button>
-            </div>
-            <div class="input-for-select" v-show="selectInput">
-                <div class="search">
-                    <el-form label-width="60px">
-                        <el-form-item label="搜索">
-                            <el-input
-                                placeholder="搜索"
-                                v-model="searchInputName"></el-input>
-                        </el-form-item>
-                    </el-form>
-                    <i 
-                        @click="selectInput=!selectInput"
-                        class="el-icon-close pointer"></i>
-                </div>
-                <ul class="list">
-                    <li 
-                        @click="selectInputItem(item)"
-                        class="addInput pointer" 
-                        :key="item+'input'" 
-                        v-for="item in inArray">
-                        <i class="el-icon-plus pointer mr-4"></i>
-                        {{item}}
-                    </li>
-                </ul>
             </div>
         </div>
+
         <div class="right">
             <div class="title">Output</div>
             <div class="input-selected"  v-show="!selectOutput">
@@ -75,6 +46,7 @@
                 </ul>
             </div>
         </div>
+		
    </div>
 </template>
 <script>
@@ -95,7 +67,6 @@ export default {
             outputsArray: [],
             inputsArray: [],
             searchInputName: "",
-            selectInput: false,
             selectOutput: false
         }
     },
@@ -106,11 +77,6 @@ export default {
         outArray: Array
     },
     methods: {
-        selectInputItem(data) {
-            this.inputsArray = []
-            this.inputsArray.push(data)
-            this.selectInput = !this.selectInput
-        },
         selectOutputItem(data) {
             this.outputsArray = []
             this.outputsArray.push(data)
@@ -127,10 +93,6 @@ export default {
                 }
             }
             this.$emit('changScriptInputOutput', event)
-        },
-        delInputItem(name) {
-            console.log(name)
-            // this.inputsArray.splice(this.inputsArray.indexOf(name), 1)
         }
     },
     mounted() { },

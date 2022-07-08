@@ -31,7 +31,11 @@ export const PhJoinDefs = {
         {
             desc: "符合所有条件进行匹配",
             cal: "AND"
-        }
+        },
+		{
+			desc: "符合任意条件进行匹配",
+			cal: "OR"
+		}
     ]
 
 }

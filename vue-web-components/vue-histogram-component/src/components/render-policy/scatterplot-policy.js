@@ -33,7 +33,7 @@ export default class PhScatterplotChartPolicy extends policy{
     }
 
     policyName() {
-        return "pie"
+        return "scatterplot"
     }
 
     resetPolicyConstraints(option) {

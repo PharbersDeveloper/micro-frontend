@@ -9,16 +9,21 @@ export default class PhJoinStep {
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["joins"]
         this.commands = defs.map(x => { return new PhJoinCmd(x) })
+		this.dsIdxArr = []
         this.datasets = this.queryDatasets()
     }
 
     queryDatasets() {
         const res = []
+		this.dsIdxArr = []
         for (let idx = 0; idx < this.commands.length; ++idx) {
             for (let idn = 0; idn < this.commands[idx]["datasets"].length; ++idn) {
                 const tmp = this.commands[idx]["datasets"][idn]["name"]
-                if (!res.includes(tmp))
-                    res.push(tmp)
+                const tmpI = this.commands[idx]["datasets"][idn]["index"]
+                if (!this.dsIdxArr.includes(tmpI)) {
+					this.dsIdxArr.push(tmpI)
+					res.push(tmp)
+				}
             }
         }
         return res
@@ -27,10 +32,10 @@ export default class PhJoinStep {
     hitHeight() {
         let res = 0
         for (let idx = 0; idx < this.commands.length; ++idx) {
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
-            res += 20
+            // for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
+            //     res += 30
+            // }
+            res += 350
         }
         return Math.max(320, res)
     }
@@ -44,9 +49,11 @@ export default class PhJoinStep {
         for (let iter = 0; iter < this.commands.length; ++iter) {
             if (iter === idx) break
 
-            for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
-                res += 30
-            }
+            // for (let idn = 0; idn < this.commands[idx]["on"].length; ++idn) {
+            //     res += 30
+            // }
+
+			res += 330
         }
         return res
     }

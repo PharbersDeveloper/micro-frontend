@@ -6,6 +6,7 @@ export default class PhSelectedColsCmd {
         console.log(defs)
         this.retrievedCols = defs["columns"]
         this.ds = defs["ds"]
+		this.index = defs["index"]
         this.prefix = defs["prefix"]
         this.type = defs["type"]
     }
@@ -21,6 +22,7 @@ export default class PhSelectedColsCmd {
     revert2Defs() {
         return {
             ds: this.ds,
+			index: this.index,
             prefix: this.prefix,
             type: this.type,
             columns: this.retrievedCols

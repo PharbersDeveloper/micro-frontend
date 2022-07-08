@@ -3,10 +3,6 @@
  */
 export default class PhPreFilterCmd {
     constructor(preFilterExpression) {
-        // if (preFilterExpression.length > 0) {
-        //     this.enabled = true
-        // }
-
         if (preFilterExpression.includes(" and ")) {
             this.action = "AND"
             this.cloases = preFilterExpression.split(" and ")
@@ -65,7 +61,7 @@ export default class PhPreFilterCmd {
 
     tryRevertContainsCloases(t) {
         if (t.op === "CONTAINS") {
-            throw "`" + t.left + "`" + " like %" + t.right + "%"
+            throw "`" + t.left + "`" + " like '%" + t.right + "%'"
         }
     }
 
@@ -187,9 +183,9 @@ export default class PhPreFilterCmd {
         this.cloases.splice(idx, 1)
     }
 
-    insertcloases() {
+    insertcloases(ls) {
         this.cloases.push({
-            "left": "",
+            "left": ls,
             "op": "CONTAINS",
             "right": ""
         })
