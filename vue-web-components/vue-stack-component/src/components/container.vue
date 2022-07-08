@@ -7,10 +7,10 @@
                 <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
-				<el-radio-group v-model="activeName" class="content">
-					<el-radio-button label="Setting"></el-radio-button>
-					<el-radio-button label="input/output"></el-radio-button>
-				</el-radio-group>
+                <el-radio-group v-model="activeName" class="content">
+                    <el-radio-button label="Setting"></el-radio-button>
+                    <el-radio-button label="input/output"></el-radio-button>
+                </el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
@@ -28,12 +28,16 @@
                 <pre-filter v-show="active === 1"
                             ref="prefilter"
                             :step="datasource.step"
+                            :datasetArray="datasetArray"
                             :schema="datasource.schema"
+                            @addDataset="addDataset"
+                            @delDataset="delDataset"
                             @statusChange="preFilterStatus" />
                 <select-cols v-show="active === 2"
                              ref="select"
                              :step="datasource.step"
                              :schema="datasource.schema"
+                             :datasetArray="datasetArray"
                              @statusChange="selectColsStatus" />
                 <origin-cols v-show="active === 3"
                              ref="origin"
@@ -43,26 +47,26 @@
                             ref="postfilter"
                             :step="datasource.step"
                             :schema="computedSchema"
-                            @statusChange="preFilterStatus" />
+                            @statusChange="postFilterStatus" />
                 <outputs v-show="active === 5"
-                                ref="outputs"
-                                :schema="computedSchema"
-                                @statusChange="outputsStatus" />
+                            ref="outputs"
+                            :schema="computedSchema"
+                            @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
             </div>
         </div>
-		<div v-show="activeName === 'input/output'">
-			<change-input-output
-				ref="changeInputOutput"
-				:inputs="inputs"	
-				:outputs="outputs"
-				:inArray="inArray"
-				:outArray="outArray"
-				@changScriptInputOutput="changScriptInputOutput"
-				:datasetArray="datasetArray"
-			/>
+        <div v-show="activeName === 'input/output'">
+            <change-input-output
+                ref="changeInputOutput"
+                :inputs="inputs"	
+                :outputs="outputs"
+                :inArray="inArray"
+                :outArray="outArray"
+                @changScriptInputOutput="changScriptInputOutput"
+                :datasetArray="datasetArray"
+            />
         </div>
     </div>
 </template>
@@ -92,14 +96,14 @@ export default {
         OriginCols,
         PostFilter,
         Outputs,
-		ElRadioGroup,
+        ElRadioGroup,
         ElRadioButton,
-		changeInputOutput
+        changeInputOutput
     },
     data() {
         return {
             computedSchema: [],
-            active: 1,
+            active: 3,
             flowVersion: "developer",
             stepsDefs: [
                 {
@@ -128,13 +132,14 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			activeName: "Setting",
-			inArray: [],
-			outArray: [],
+            activeName: "Setting",
+            inArray: [],
+            outArray: [],
             jobShowName: "",
-			outputs: [],
+            outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
+            changeDs: false
         }
     },
     props: {
@@ -163,6 +168,44 @@ export default {
         }
     },
     methods: {
+        addDatasetFromJoin(data) {
+            this.changeDs = true
+            const event = data.args.param
+            let ns = Object.keys(this.datasource.schema).includes(event.newData.name)
+            let os = Object.keys(this.datasource.schema).includes(event.oldData.name)
+            if (!os) {
+                let obj = this.datasetArray.filter(it => it.name === event.oldData.name)[0]
+                this.datasource.schema[event.oldData.name] = JSON.parse(obj["schema"])
+            } else if (!ns) {
+                let obj = this.datasetArray.filter(it => it.name === event.newData.name)[0]
+                this.datasource.schema[event.newData.name] = JSON.parse(obj["schema"])
+            }
+
+            this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
+            this.$refs.percomputed.updateData(event.newData, event.oldData, event.unreset)
+            this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
+        },
+        delDatasetFromJoin(data) {
+            this.changeDs = true
+            const event = data.args.param
+            this.$refs.prefilter.deleteData(event.datasets, event.dsIdxArr)
+            this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
+            this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
+        },
+        addDataset(name, index) {
+            this.changeDs = true
+            this.active = 3
+            if (name) {
+                this.$refs.join.addDataset(name, index)
+            } else {
+                this.$refs.join.showAddDialog = true
+            }
+        },
+        delDataset(name, index) {
+            this.changeDs = true
+            this.active = 3
+            this.$refs.join.delDataset(name, index)
+        },
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -171,24 +214,34 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
-			this.jobShowName = jobShowName
+            this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        preFilterStatus(data) {
+               /**
+             * 1. only dis open ==> success
+             * 2. no open ==> wait
+             * 3. open filter ===> 判断对错
+             */
+            const status = data.args.param.status, errors = data.args.param.errors
+
+            this.stepsDefs[0].status = "success"
             if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },
-        selectColsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
-                this.stepsDefs[1].status = "error"
-            }
+        selectColsStatus(data) {
+            console.log(data)
+            // const status = data.args.param.status, errors = data.args.param.errors
+
+            // this.stepsDefs[1].status = "success"
+            // if (status) {
+            //     this.stepsDefs[1].status = "wait"
+            // } else if (errors){
+            //     this.stepsDefs[1].status = "error"
+            // }
         },
         originStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
@@ -206,6 +259,14 @@ export default {
                 this.stepsDefs[3].status = "error"
             }
         },
+        postFilterStatus(status) {
+            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+            if (status) {
+                this.stepsDefs[3].status = "success"
+            } else {
+                this.stepsDefs[3].status = "error"
+            }
+        },
         computeSchema() {
             const result = []
             const tmp = this.$refs.select.datasource.revert2Defs().selectedColumns
@@ -216,111 +277,129 @@ export default {
             }
             return result
         },
-        save() {
-			if (this.activeName === "Setting") {
-				const params = {
-					"preFilters": this.$refs.prefilter.datasource.revert2Defs(),
-					"selectedColumns": this.$refs.select.datasource.revert2Defs().selectedColumns,
-					"columnsMatches": this.$refs.select.datasource.revert2Defs().columnsMatches,
-					"originColumn": this.$refs.origin.datasource.revert2Defs(),
-					"postFilter": this.$refs.postfilter.datasource.revert2Defs()
-				}
-				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-			} else {
-				this.$refs.changeInputOutput.save()
-			}
+        resetInputs() {
+            this.inputs = []
+            this.$refs.join.datasource.datasets.forEach(item => {
+                this.inputs = this.inputs.concat(item)
+            })
         },
-		changScriptInputOutput(data) {
-			let dssInputsOld = []
-			let dssInputsNew = []
-			let dssInputs = {}
+        save() {
+            if (this.activeName === "Setting") {
 
-			this.allData.inputs.forEach(item => {
-				let inputNameOld = item
-				let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
-				dssInputsOld.push({
-					name: inputNameOld,
-					cat: inputCatOld
-				})
-			})
-			dssInputs.old = dssInputsOld
+                this.$refs.prefilter.validate()
+                this.$refs.select.validate()
+                this.$refs.origin.validate()
+                this.$refs.postfilter.validate()
+                this.$refs.outputs.validate()
 
-			data.args.param.inputsArray.forEach(item => {
-				let inputNameNew = item
-				let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
-				dssInputsNew.push({
-					name: inputNameNew,
-					cat: inputCatNew
-				})
-			})
-			dssInputs.new = dssInputsNew
+                let errors = this.stepsDefs.filter(it => it.status === "error")
+                if(errors.length > 0) {
+                    Message.error("请修改参数！", { duration: 3000} )
+                    return false
+                }
 
-			let outputNameOld = this.allData.outputs[0]
-			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
-			let outputNameNew = data.args.param.outputsArray[0]
-			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
-			
-			let dssOutputs = {
-				old: {
-					name: outputNameOld,
-					cat: outputCatOld
-				},
-				new: {
-					name: outputNameNew,
-					cat: outputCatNew
-				}
-			}
-			
-			if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
-				Message.error("input和output不能相同", { duration: 3000} )
-				return false
-			}
+                if (this.changeDs) {
+                    this.resetInputs()
+                }
+
+                const params = {
+                    "preFilters": this.$refs.prefilter.datasource.revert2Defs(),
+                    "selectedColumns": this.$refs.select.datasource.revert2Defs().selectedColumns,
+                    "columnsMatches": this.$refs.select.datasource.revert2Defs().columnsMatches,
+                    "originColumn": this.$refs.origin.datasource.revert2Defs(),
+                    "postFilter": this.$refs.postfilter.datasource.revert2Defs()
+                }
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+            } else {
+                this.$refs.changeInputOutput.save()
+            }
+        },
+        changScriptInputOutput(data) {
+            let dssInputsOld = []
+            let dssInputsNew = []
+            let dssInputs = {}
+
+            this.allData.inputs.forEach(item => {
+                let inputNameOld = item
+                let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+                dssInputsOld.push({
+                    name: inputNameOld,
+                    cat: inputCatOld
+                })
+            })
+            dssInputs.old = dssInputsOld
+
+            data.args.param.inputsArray.forEach(item => {
+                let inputNameNew = item
+                let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+                dssInputsNew.push({
+                    name: inputNameNew,
+                    cat: inputCatNew
+                })
+            })
+            dssInputs.new = dssInputsNew
+
+            let outputNameOld = this.allData.outputs[0]
+            let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+            let outputNameNew = data.args.param.outputsArray[0]
+            let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+            
+            let dssOutputs = {
+                old: {
+                    name: outputNameOld,
+                    cat: outputCatOld
+                },
+                new: {
+                    name: outputNameNew,
+                    cat: outputCatNew
+                }
+            }
+            
+            if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
+                Message.error("input和output不能相同", { duration: 3000} )
+                return false
+            }
 
 
-			let script = {
-				old: {
-					name: this.allData.jobName,
-					id: this.allData.jobId
-				},
-				new: {
-					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
-					"inputs": JSON.stringify(data.args.param.inputsArray),
-					"output": outputNameNew
-				}
-			}
-			
-			const event = new Event("event")
-			event.args = {
-				callback: "changScriptInputOutput",
-				element: this,
-				param: {
-					name: "changScriptInputOutput",
-					projectId: this.projectId,
-					projectName: this.projectName,
-					dssOutputs: dssOutputs,
-					dssInputs: dssInputs,
-					script: script
-				}
-			}
-			this.$emit('event', event)
-		}
+            let script = {
+                old: {
+                    name: this.allData.jobName,
+                    id: this.allData.jobId
+                },
+                new: {
+                    "name": `compute_${outputNameNew}`,
+                    "runtime": "topn",
+                    "inputs": JSON.stringify(data.args.param.inputsArray),
+                    "output": outputNameNew
+                }
+            }
+            
+            const event = new Event("event")
+            event.args = {
+                callback: "changScriptInputOutput",
+                element: this,
+                param: {
+                    name: "changScriptInputOutput",
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    dssOutputs: dssOutputs,
+                    dssInputs: dssInputs,
+                    script: script
+                }
+            }
+            this.$emit('event', event)
+        }
     },
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-		this.jobName = this.getJobName()
-        // this.projectIdTest = "alfredtest"
-        // this.jobName = this.getJobName()
-        // this.jobName = "stack"
+        this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
-        // console.log(this.datasource.job)
-        // console.log(this.datasource.datasets)
         this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
-		this.datasource.refreshInOut(this.projectId, this.jobShowName)
-		this.datasource.refreshDataset(this.projectId)
+        this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        // this.datasource.refreshDataset(this.projectId)
     },
     updated() {
 
@@ -337,15 +416,17 @@ export default {
                 this.computedSchema = this.computeSchema()
             }
         },
-		activeName(n) {
-            this.$emit("active", n)
+        activeName(n) {
+            if (n === "input/output") {
+                this.resetInputs()
+            }
         },
         "allData.inputs": function(n) {
             this.inputs = n
         },
-		"allData.outputs": function(n) {
+        "allData.outputs": function(n) {
             this.outputs = n
-		}
+        }
     }
 }
 </script>
@@ -355,10 +436,8 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-
-        .op-factories {
-            // background: red;
-        }
+        overflow-y: auto;
+        overflow-x: hidden;
 
         .stack_header {
             height: 48px;
@@ -367,7 +446,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-			border: 1px solid #ccc;
+            border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -396,9 +475,9 @@ export default {
                 /*    background: none;*/
                 /*    cursor: pointer;*/
                 /*}*/
-				.content {
-					margin-right: 30px;
-				}
+                .content {
+                    margin-right: 30px;
+                }
             }
         }
 
@@ -407,14 +486,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
-			height: calc(100vh - 100px);
+            height: calc(100vh - 100px);
 
             .stack_left {
                 display: flex;
                 flex-direction: row;
                 padding: 40px;
                 justify-content: space-around;
-				border-right: 1px solid #ccc;
+                border-right: 1px solid #ccc;
             }
 
             .stack_right {
@@ -422,9 +501,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-				background: #f2f2f2;
-				padding: 20px;
-
+                background: #f2f2f2;
+                // padding: 20px;
             }
         }
     }
