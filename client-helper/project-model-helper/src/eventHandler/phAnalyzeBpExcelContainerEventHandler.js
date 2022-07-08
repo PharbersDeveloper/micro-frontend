@@ -4,6 +4,7 @@ import { hostName, actionTableName } from "../config/envConfig"
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let params = e.detail[0].args.param
 	let uri = ""
+	const element = e.detail[0].args.element
 	// const editSampleEventName = "editSampleEventName"
 	const eventName = "changeSchemaType"
 	switch (e.detail[0].args.callback) {
@@ -41,45 +42,21 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 		case "changeSchemaType":
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
-				let cstParam = e.detail[0].args.param
-				route.vueComponentEnv = e.detail[0].args.element
-				route.vueComponentEnvType = cstParam.itemValueType
-				// let type =
-				// 	cstParam.itemValueType === "Number"
-				// 		? "Double"
-				// 		: cstParam.itemValueType
-				let type =
-					cstParam.itemValueType === "Number" ? "Double" : "String"
-				const url = `${hostName}/phdydatasource/put_item`
-				let body = {
-					table: actionTableName,
-					item: {
-						projectId: cstParam.projectId,
-						code: 0,
-						comments: "transform_schema",
-						jobCat: "transform_schema",
-						jobDesc: eventName,
-						message: JSON.stringify({
-							actionName: cstParam.datasetName,
-							dsid: cstParam.datasetId,
-							destination: cstParam.datasetName,
-							projectName: cstParam.projectName,
-							opname: route.cookies.read("account_id"),
-							schema: [
-								{
-									src: cstParam.title,
-									des: cstParam.title,
-									type: type
-								}
-							]
-						}),
-						date: String(new Date().getTime()),
-						owner: route.cookies.read("account_id"),
-						showName: decodeURI(
-							route.cookies.read("user_name_show")
-						)
-					}
-				}
+				const url = `${hostname}/phconvertdatatypeofcache`
+				const body = JSON.stringify({
+					common: {
+						projectId: params.projectId,
+						tenantId: route.cookies.read("company_id"),
+						datasetName: params.datasetName
+					},
+					mappings: [
+						{
+							column: params.title,
+            				from: params.originalType,
+            				to: params.itemValueType
+						}
+					]
+				})
 				let options = {
 					method: "POST",
 					headers: {
@@ -88,21 +65,20 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 							"application/x-www-form-urlencoded; charset=UTF-8",
 						accept: "application/json"
 					},
-					body: JSON.stringify(body)
+					body
 				}
-				const result = await fetch(url, options).then((res) =>
-					res.json()
-				)
-				route.noticeService.defineAction({
-					type: "iot",
-					remoteResource: "notification",
-					runnerId: "",
-					id: result.data.id,
-					eventName: eventName,
-					projectId: params.projectId,
-					ownerId: route.cookies.read("account_id"),
-					callBack: changeSchemaTypeCallback
-				})
+				const result = await fetch(url, options).then((res) => res.json())
+
+				const { status, message } = result
+
+				if (status == "success") {
+					alert("修改成功")
+				} else {
+					alert(message)
+					element.itemValueType = params.originalType
+				}
+				route.loadingService.loading.style.display = "none"
+
 			}
 			break
 		case "clickSample":
@@ -200,31 +176,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 		const i = d.indexOf(".")
 		d = d.substring(0, i) + "+00:00"
 		return [projectName, projectName, flowVersion, d].join("_")
-	}
-
-	function changeSchemaTypeCallback(param, payload) {
-		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
-
-		if (status == "succeed") {
-			alert("修改成功")
-		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "修改失败，请重新检查数据！"
-			alert(msg)
-			//刷新页面数据
-			if (route.vueComponentEnvType === "Number") {
-				route.vueComponentEnv.itemValueType = "Text"
-			} else {
-				route.vueComponentEnv.itemValueType = "Number"
-			}
-		}
-		route.loadingService.loading.style.display = "none"
 	}
 
 	function editSampleCallback(param, payload) {
