@@ -90,6 +90,7 @@ export default {
             padding: 0 10px;
             border: 1px solid #ddd;
             height: 40px;
+			min-height: 40px;
             background: #fff;
 
             .select-card-ds {
@@ -115,6 +116,7 @@ export default {
             display: flex;
             flex-direction: column;
             padding-left: 40px;
+			overflow: auto;
         }
 
         .select-card-content {

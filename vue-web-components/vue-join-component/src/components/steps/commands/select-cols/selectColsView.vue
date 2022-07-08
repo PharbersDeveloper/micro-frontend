@@ -10,7 +10,7 @@
         </div>
         <div class="retrieved-lst" v-if="datasource">
             <selected-card v-for="(item, index) in datasource.commands" :key="index"
-                           :index="index" :command="item" :schema="schema[item.ds]" />
+				:index="index" :command="item" :schema="schema[item.ds]" />
         </div>
     </div>
 </template>
@@ -153,7 +153,7 @@ export default {
         flex-direction: row;
 		flex-grow: 1;
 		overflow: auto;
-		
+
 		.select-card-container:nth-child(even) {
             background-color:rgb(242, 242, 242); 
         }

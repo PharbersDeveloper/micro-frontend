@@ -53,6 +53,7 @@
                     ref="select"
                     :step="datasource.step"
                     :schema="datasource.schema"
+					:datasetArray="datasetArray"
                     @statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
                     ref="postcomputed"
@@ -200,6 +201,16 @@ export default {
 		addDatasetFromJoin(data) {
 			this.changeDs = true
 			const event = data.args.param
+			let ns = Object.keys(this.datasource.schema).includes(event.newData.name)
+			let os = Object.keys(this.datasource.schema).includes(event.oldData.name)
+			if (!os) {
+				let obj = this.datasetArray.filter(it => it.name === event.oldData.name)[0]
+				this.datasource.schema[event.oldData.name] = JSON.parse(obj["schema"])
+			} else if (!ns) {
+				let obj = this.datasetArray.filter(it => it.name === event.newData.name)[0]
+				this.datasource.schema[event.newData.name] = JSON.parse(obj["schema"])
+			}
+
 			this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
 			this.$refs.percomputed.updateData(event.newData, event.oldData, event.unreset)
 			this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
@@ -352,7 +363,7 @@ export default {
 				this.$refs.postcomputed.validate()
 				this.$refs.postfilter.validate()
 				this.$refs.outputs.validate()
-				
+
 				let errors = this.stepsDefs.filter(it => it.status === "error")
 				if(errors.length > 0) {
 					Message.error("请修改参数！", { duration: 3000} )
