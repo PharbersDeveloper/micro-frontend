@@ -9,14 +9,12 @@
         <div class="condition-ds-container" v-if="datasource">
             <div class="sel-ds" v-show="datasource.commands.length === 0">
                 <div class="title">no input dataset</div>
-                <el-button @click="$emit('addDataset')">请选择</el-button>
+                <el-button @click="$emit('addDataset', 0)">请选择</el-button>
             </div>
             <div class="condition-ds-item" v-for="(item, index) in datasource.commands" :key="index">
                 <div class="condition-ds-item-title">
                     <h3>{{item.meta.name}}</h3>
                     <div class="ver-center" >
-                        <!-- <el-switch v-model="item.meta.enabled" ></el-switch> -->
-                        <!-- <el-button type="text" @click="$emit('addDataset', item.meta.name, item.meta.index)">添加</el-button> -->
                         <el-button type="text" @click="$emit('delDataset', item.meta.name, item.meta.index)">删除</el-button>
                     </div>
                 </div>
@@ -65,7 +63,9 @@
                     </div>
                 </div>
             </div>
-			<el-button class="add-ds-input" type="primary" @click="$emit('addDataset')">+ ADD INPUT</el-button>
+			<el-button class="add-ds-input" type="primary" @click="$emit('addDataset')">
+				+ ADD INPUT
+			</el-button>
         </div>
     </div>
 </template>
@@ -142,23 +142,11 @@
                 const ls = JSON.parse(leftDs["schema"])
                 item.detail.insertcloases(ls[0].src)
             },
-            updateData(n, o, unreset) {
-                console.log(n, o)
-                if (!unreset) {
-                    this.datasource.commands.push({
-                        meta: {
-                            "name": o.name,
-                            "index": o.index,
-                            "distinct": false,
-                            "enabled": false,
-                        },
-                        detail: new PhPreFilterCmd("")
-                    })
-                }
+            updateData(name, index) {
                 this.datasource.commands.push({
                     meta: {
-                        "name": n.name,
-                        "index": n.index,
+                        "name": name,
+                        "index": index,
                         "distinct": false,
                         "enabled": false,
                     },
@@ -245,8 +233,10 @@
         }
 
 		.add-ds-input {
+			margin-left: 20px;
+			height: 40px;
 			display: flex;
-			padding-left: 20px;
+			align-items: center;
 		}
 
         .condition-ds-item:nth-child(odd) {

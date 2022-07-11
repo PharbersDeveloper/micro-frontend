@@ -211,12 +211,14 @@ export default {
             this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
             this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
         },
-        addDataset(name, index) {
+        addDataset() {
             this.changeDs = true
 			this.showAddDialog = true
         },
 		addDatasetConfirm() {
-			console.log(this.newDsName)
+			const index = Math.max(this.$refs.prefilter.datasource.commands.map(it => it.meta.index)) + 1
+			this.$refs.prefilter.updateData(this.newDsName, index)
+			// this.$refs.select.updateData(this.newDsName, index)
 		},
         delDataset(name, index) {
             this.changeDs = true
@@ -521,6 +523,18 @@ export default {
                 background: #f2f2f2;
                 // padding: 20px;
             }
+        }
+
+		.add-ds-content {
+            margin-bottom: 40px;
+            span {
+                margin-right: 40px;
+            }
+        }
+
+		.dialog-footer {
+            display: flex;
+            flex-direction: row-reverse;
         }
     }
 </style>

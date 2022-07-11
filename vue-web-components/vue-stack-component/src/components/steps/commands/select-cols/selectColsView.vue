@@ -82,7 +82,16 @@ export default {
         },
         removeStackDs(item, index) {
             this.datasource.command.removeStackDs(item, index)
-        }
+        },
+		updateData(name, index) {
+            this.datasource.commands.push(new PhSelectedColsCmd({
+                "ds": n.name,
+				"index": n.index,
+                "prefix": "",
+                "type": "select",
+                "columns": []
+            }))
+        },
     },
     computed: {
 
