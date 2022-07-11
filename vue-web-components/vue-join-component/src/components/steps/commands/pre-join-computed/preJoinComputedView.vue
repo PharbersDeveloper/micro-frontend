@@ -173,7 +173,8 @@ export default {
         editComputedCol(item, idx) {
             this.currentItem = item
             this.dialogSchema = this.schema[item.meta.name]
-            this.dialogEditing = item.detail.editComputedCol(idx)       
+			const it = item.detail.computedCols[idx]
+            this.dialogEditing = item.detail.editComputedCol(idx, it)       
             this.showEditDialog = true
         },
         removeComputedCol(item, idx) {
