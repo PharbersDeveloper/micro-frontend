@@ -120,7 +120,7 @@ export default {
     data() {
         return {
             computedSchema: [],
-            active: 3,
+            active: 2,
             flowVersion: "developer",
             stepsDefs: [
                 {

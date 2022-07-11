@@ -48,6 +48,7 @@ import OutputCols from './detail-view/output-cols'
 import DsCols from './detail-view/ds-cols'
 import { PhSelectColsDefs } from "./defs"
 import PhSelectColsStep from "./step"
+import PhSelectColsCmd from "./cmd"
 
 export default {
     data() {
@@ -84,14 +85,14 @@ export default {
             this.datasource.command.removeStackDs(item, index)
         },
 		updateData(name, index) {
-            this.datasource.commands.push(new PhSelectedColsCmd({
-                "ds": n.name,
-				"index": n.index,
+            this.datasource.commands.push(new PhSelectColsCmd({
+                "ds": name,
+				"index": index,
                 "prefix": "",
                 "type": "select",
                 "columns": []
             }))
-        },
+        }
     },
     computed: {
 
