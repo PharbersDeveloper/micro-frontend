@@ -2,10 +2,10 @@
 export async function phAssetsAssetsListRouteModel(route, parseParams) {
     let tab = parseParams.query.tab || "mine"
 
-    let database = await route.store.query("db", {})
+    // let database = await route.store.query("db", {})
     return {
         tab: tab,
-        database: database.filter((it) => it),
+        // database: database.filter((it) => it),
         _isVue: true
     }
 }
