@@ -68,6 +68,23 @@
                 :datasetArray="datasetArray"
             />
         </div>
+		<el-dialog
+			title="Add an input dataset"
+			:visible.sync="showAddDialog"
+			width="30%" >
+			<div>
+				<div class="add-ds-content">
+					<span>dataset</span>
+					<select v-model="newDsName">
+						<option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
+					</select>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="showAddDialog = false">Cancel</el-button>
+					<el-button type="primary" @click="addDatasetConfirm">Confirm</el-button>
+				</span>
+			</div>
+		</el-dialog>
     </div>
 </template>
 <script>
@@ -139,7 +156,9 @@ export default {
             outputs: [],
             inputs: [],
             datasetArray: [],
-            changeDs: false
+            changeDs: false,
+			showAddDialog: false,
+			newDsName: ""
         }
     },
     props: {
@@ -194,13 +213,11 @@ export default {
         },
         addDataset(name, index) {
             this.changeDs = true
-            this.active = 3
-            if (name) {
-                this.$refs.join.addDataset(name, index)
-            } else {
-                this.$refs.join.showAddDialog = true
-            }
+			this.showAddDialog = true
         },
+		addDatasetConfirm() {
+			console.log(this.newDsName)
+		},
         delDataset(name, index) {
             this.changeDs = true
             this.active = 3

@@ -4,7 +4,6 @@
         <div class="condition-title">
             <div class="condition-title-p">
                 <h2>Pre Filter</h2>
-                <el-button class="add-input" type="text" @click="$emit('addDataset', item.meta.name, item.meta.index)">+ ADD INPUT</el-button>
             </div>
         </div>
         <div class="condition-ds-container" v-if="datasource">
@@ -66,6 +65,7 @@
                     </div>
                 </div>
             </div>
+			<el-button class="add-ds-input" type="primary" @click="$emit('addDataset')">+ ADD INPUT</el-button>
         </div>
     </div>
 </template>
@@ -243,6 +243,11 @@
             flex-grow: 1;
             overflow-x: scroll;
         }
+
+		.add-ds-input {
+			display: flex;
+			padding-left: 20px;
+		}
 
         .condition-ds-item:nth-child(odd) {
             background-color: rgb(242, 242, 242)

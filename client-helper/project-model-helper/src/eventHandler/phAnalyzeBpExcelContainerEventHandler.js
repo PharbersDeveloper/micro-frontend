@@ -1,4 +1,4 @@
-import { hostName, actionTableName } from "../config/envConfig"
+import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
@@ -6,7 +6,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 	let uri = ""
 	const element = e.detail[0].args.element
 	// const editSampleEventName = "editSampleEventName"
-	const eventName = "changeSchemaType"
+	// const eventName = "changeSchemaType"
 	switch (e.detail[0].args.callback) {
 		case "linkToPage":
 			if (params.name === "project") {
@@ -42,7 +42,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 		case "changeSchemaType":
 			if (params) {
 				route.loadingService.loading.style.display = "flex"
-				const url = `${hostname}/phconvertdatatypeofcache`
+				const url = `${hostName}/phconvertdatatypeofcache`
 				const body = JSON.stringify({
 					common: {
 						projectId: params.projectId,
@@ -52,8 +52,8 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					mappings: [
 						{
 							column: params.title,
-            				from: params.originalType,
-            				to: params.itemValueType
+							from: params.originalType,
+							to: params.itemValueType
 						}
 					]
 				})
@@ -67,7 +67,9 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					},
 					body
 				}
-				const result = await fetch(url, options).then((res) => res.json())
+				const result = await fetch(url, options).then((res) =>
+					res.json()
+				)
 
 				const { status, message } = result
 
@@ -78,7 +80,6 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 					element.itemValueType = params.originalType
 				}
 				route.loadingService.loading.style.display = "none"
-
 			}
 			break
 		case "clickSample":
