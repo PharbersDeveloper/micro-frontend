@@ -21,7 +21,6 @@ import ElDivider from 'element-ui/packages/divider/index'
 export default {
     data() {
         return {
-
         }
     },
     props: {
@@ -57,29 +56,33 @@ export default {
         min-width: 165px;
 		width: 165px;
 		border-right: 1px solid #ddd;
+		border-top: 1px solid #ddd;
 
         .stack-ds-title {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
 			margin: 0 10px;
+			height: 50px;
 
 			h3 {
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
+				font-size: 13px;
+                font-weight: normal;
 			}
         }
 
 		.divider {
-			margin-top: 0;
+			margin: 0;
 		}
 
         .stack-ds-list {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-			margin: 0 10px;
+			margin: 10px;
 
             .stack-ds-item {
                 display: flex;

@@ -3,12 +3,11 @@
  */
 export default class PhSelectColsCmd {
     constructor(columns, matches) {
-		if (columns) {
-			this.columns = columns.map(x => { return { name: x }})
-		}
+		this.dscols = {}
+		this.columns = columns.map(x => { return { name: x }})
         this.ds = matches.map(x => x["ds"])
         for (let idx = 0; idx < matches.length; ++idx) {
-            this[matches[idx]["ds"]] = matches[idx]["columns"].map(x => { return { name: x }})
+            this["dscols"][matches[idx]["ds"]] = matches[idx]["columns"].map(x => { return { name: x }})
         }
     }
 
@@ -24,16 +23,23 @@ export default class PhSelectColsCmd {
     addSelectColumn() {
         this.columns.push({ name: "" })
         this.ds.forEach(x => {
-            this[x].push({ name: null })
+            this["dscols"][x].push({ name: null })
         })
     }
 
     deleteSelectColumn(index) {
         this.columns.splice(index, 1)
         this.ds.forEach(x => {
-            this[x].splice(index, 1)
+            this["dscols"][x].splice(index, 1)
         })
     }
+
+	deleteAllSelectColumn() {
+		this.columns = []
+		this.ds.forEach(x => {
+            this["dscols"][x] = []
+        })
+	}
 
     validations() {
         return true

@@ -19,9 +19,9 @@
                     </div>
                     <el-button type="text" @click="removeStackDs(item, index)">删除</el-button>
                 </div>
-				<div class="stack-select-hor">
-					<el-button type="primary" >添加数据集</el-button>
-				</div>
+                <div class="stack-select-hor">
+                    <el-button type="primary" @click="$emit('addDataset')">添加数据集</el-button>
+                </div>
             </div>
         </div>
         <div class="stack-select-matches-panel" v-if="datasource">
@@ -30,7 +30,7 @@
                     :command="datasource.command" />
             <ds-cols v-for="(item, index) in datasource.command.ds" :key="index"
                      :dataset-name="item"
-                     :columns="datasource.command[item]"
+                     :columns="datasource.command.dscols[item]"
                      :schema="schema[item]"
                      :command="datasource.command" />
         </div>
@@ -54,6 +54,7 @@ export default {
     props: {
         step: Object,
         schema: Object,
+        datasetArray: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -73,13 +74,27 @@ export default {
     },
     methods: {
         validate() {
-            this.$emit('statusChange', this.datasource.validate())
+            let errorValues = false
+            if (this.datasource.command.columns.length === 0) {
+                errorValues = true
+            } else {
+                const val = this.datasource.command.columns.filter(it => it.name === "")
+                errorValues = val.length > 0
+            }
+            const event = new Event("event")
+                event.args = {
+                    element: this,
+                    param: {
+                        errors: errorValues
+                    }
+                }
+                this.$emit('statusChange', event)
         },
         removeStackDs(item, index) {
             this.datasource.command.removeStackDs(item, index)
         },
-		updateData(name, index) {
-			this.datasource.refreshData(name, index)
+        updateData(name, index) {
+            this.datasource.refreshData(name, index)
         }
     },
     computed: {
@@ -101,19 +116,19 @@ export default {
         /*min-width: 800px;*/
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
+        background: #fff;
+        height: fit-content;
+        padding: 20px;
 
         .stack-select-title {
             display: flex;
             flex-direction: column;
 
-			h3 {
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-			}
+            h3 {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
 
             .stack-select-title-p {
                 display: flex;
@@ -135,16 +150,17 @@ export default {
             .stack-select-ds-lst {
                 display: flex;
                 flex-direction: row;
-				border-bottom: 1px solid #ddd;
-				border-top: 1px solid #ddd;
-				align-items: center;
+                border-bottom: 1px solid #ddd;
+                border-top: 1px solid #ddd;
+                align-items: center;
+                margin-bottom: 100px;
             }
 
             .stack-select-ds-item {
                 display: flex;
                 flex-direction: row;
                 min-width: 300px;
-				width: 300px;
+                width: 300px;
                 margin-right: 40px;
                 justify-content: space-between;
 
@@ -165,13 +181,13 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-around;
-			height: 40px;
+            height: 40px;
 
-			button {
-				height: 40px;
-				display: flex;
-				align-items: center;
-			}
+            button {
+                height: 40px;
+                display: flex;
+                align-items: center;
+            }
         }
 
         .stack-select-ver {

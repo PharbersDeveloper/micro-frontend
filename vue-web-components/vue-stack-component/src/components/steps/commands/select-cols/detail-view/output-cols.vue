@@ -4,17 +4,20 @@
             <h3>Output Columns</h3>
             <div class="stack-output-op">
                 <el-button type="text" @click="addSelectColumn">添加</el-button>
-                <el-button type="text" >删除全部</el-button>
+                <el-button type="text" @click="delAll">删除全部</el-button>
             </div>
         </div>
         <el-divider class="divider"></el-divider>
-        <div class="stack-output-list">
+        <div class="stack-output-list" v-show="columns.length > 0">
             <div class="stack-output-item" v-for="(item, index) in columns" :key="index">
                 <!-- <span>{{index}}</span> -->
-                <el-input v-model="item.name"></el-input>
+                <el-input 
+                    v-model="item.name" 
+                    :class="[{'el-input-error': item.name === ''}]"></el-input>
                 <el-button type="text" @click="deleteSelectColumn(index)">删除</el-button>
             </div>
         </div>
+        <div class="error-msg" v-show="columns.length === 0">no output columns</div>
     </div>
 </template>
 <script>
@@ -43,6 +46,9 @@ export default {
         },
         deleteSelectColumn(index) {
             this.command.deleteSelectColumn(index)
+        },
+        delAll() {
+            this.command.deleteAllSelectColumn()
         }
     }
 }
@@ -59,12 +65,25 @@ export default {
         flex-direction: column;
         min-width: 300px;
         border-right: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+
+        .error-msg {
+            font-size: 13px;
+            color: #ce1228;
+            margin: 10px 0;
+        }
 
         .stack-output-title {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             margin-right: 10px;
+            height: 50px;
+
+            h3 {
+                font-size: 13px;
+                font-weight: normal;
+            }
 
             .stack-output-op {
                 display: flex;
@@ -73,7 +92,7 @@ export default {
         }
 
         .divider {
-            margin-top: 0;
+            margin: 0;
         }
 
         .stack-output-list {
@@ -81,12 +100,19 @@ export default {
             display: flex;
             flex-direction: column;
             margin-right: 10px;
+            margin-top: 10px;
 
             .stack-output-item {
                 display: flex;
                 flex-direction: row;
                 height: 50px;
                 align-items: center;
+
+                .el-input-error {
+                    /deep/input.el-input__inner {
+                        border-color: #ce1228;
+                    }
+                }
             }
         }
     }

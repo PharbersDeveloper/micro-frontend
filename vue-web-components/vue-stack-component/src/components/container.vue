@@ -34,15 +34,15 @@
                             @delDataset="delDataset"
                             @statusChange="preFilterStatus" />
                 <select-cols v-show="active === 2"
-                             ref="select"
-                             :step="datasource.step"
-                             :schema="datasource.schema"
-                             :datasetArray="datasetArray"
-                             @statusChange="selectColsStatus" />
+							ref="select"
+							:step="datasource.step"
+							:schema="datasource.schema"
+							@addDataset="addDataset"
+							@statusChange="selectColsStatus" />
                 <origin-cols v-show="active === 3"
-                             ref="origin"
-                             :step="datasource.step"
-                             @statusChange="originStatus" />
+							ref="origin"
+							:step="datasource.step"
+							@statusChange="originStatus" />
                 <post-filter v-show="active === 4"
                             ref="postfilter"
                             :step="datasource.step"
@@ -217,6 +217,8 @@ export default {
         },
 		addDatasetConfirm() {
 			const index = Math.max(this.$refs.prefilter.datasource.commands.map(it => it.meta.index)) + 1
+			const ds = this.datasetArray.filter(it => it.name === this.newDsName)[0]
+			this.datasource.schema[this.newDsName] =  JSON.parse(ds["schema"])
 			this.$refs.prefilter.updateData(this.newDsName, index)
 			this.$refs.select.updateData(this.newDsName, index)
 			this.showAddDialog = false
@@ -253,15 +255,12 @@ export default {
             }
         },
         selectColsStatus(data) {
-            console.log(data)
-            // const status = data.args.param.status, errors = data.args.param.errors
+            const errors = data.args.param.errors
 
-            // this.stepsDefs[1].status = "success"
-            // if (status) {
-            //     this.stepsDefs[1].status = "wait"
-            // } else if (errors){
-            //     this.stepsDefs[1].status = "error"
-            // }
+            this.stepsDefs[1].status = "success"
+            if (errors){
+                this.stepsDefs[1].status = "error"
+            }
         },
         originStatus(status) {
             // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
@@ -521,7 +520,7 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-                background: #fff;
+                background: #f2f2f2;
             }
         }
 
