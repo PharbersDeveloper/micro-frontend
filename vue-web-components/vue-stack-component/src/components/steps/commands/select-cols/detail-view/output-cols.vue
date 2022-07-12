@@ -7,10 +7,10 @@
                 <el-button type="text" >删除全部</el-button>
             </div>
         </div>
-        <el-divider></el-divider>
+        <el-divider class="divider"></el-divider>
         <div class="stack-output-list">
             <div class="stack-output-item" v-for="(item, index) in columns" :key="index">
-                <span>{{index}}</span>
+                <!-- <span>{{index}}</span> -->
                 <el-input v-model="item.name"></el-input>
                 <el-button type="text" @click="deleteSelectColumn(index)">删除</el-button>
             </div>
@@ -58,11 +58,13 @@ export default {
         display: flex;
         flex-direction: column;
         min-width: 300px;
+        border-right: 1px solid #ddd;
 
         .stack-output-title {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            margin-right: 10px;
 
             .stack-output-op {
                 display: flex;
@@ -70,14 +72,21 @@ export default {
             }
         }
 
+        .divider {
+            margin-top: 0;
+        }
+
         .stack-output-list {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            margin-right: 10px;
 
             .stack-output-item {
                 display: flex;
                 flex-direction: row;
+                height: 50px;
+                align-items: center;
             }
         }
     }

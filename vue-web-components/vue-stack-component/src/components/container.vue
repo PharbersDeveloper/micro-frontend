@@ -218,7 +218,7 @@ export default {
 		addDatasetConfirm() {
 			const index = Math.max(this.$refs.prefilter.datasource.commands.map(it => it.meta.index)) + 1
 			this.$refs.prefilter.updateData(this.newDsName, index)
-			// this.$refs.select.updateData(this.newDsName, index)
+			this.$refs.select.updateData(this.newDsName, index)
 		},
         delDataset(name, index) {
             this.changeDs = true
@@ -520,8 +520,7 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-                background: #f2f2f2;
-                // padding: 20px;
+                background: #fff;
             }
         }
 

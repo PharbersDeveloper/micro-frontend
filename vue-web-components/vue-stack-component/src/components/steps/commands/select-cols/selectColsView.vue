@@ -13,21 +13,17 @@
                      :key="index" >
                     <div class="stack-select-ver">
                         <div class="stack-select-ds-left">
-                            <span>{{index}}</span>
-                            &nbsp;
                             <span>{{item}}</span>
                             &nbsp;
                         </div>
                     </div>
                     <el-button type="text" @click="removeStackDs(item, index)">删除</el-button>
                 </div>
-            </div>
-
-            <div class="stack-select-hor">
-                <el-button type="primary" >添加数据集</el-button>
+				<div class="stack-select-hor">
+					<el-button type="primary" >添加数据集</el-button>
+				</div>
             </div>
         </div>
-        <el-divider></el-divider>
         <div class="stack-select-matches-panel" v-if="datasource">
             <output-cols
                     :columns="datasource.command.columns"
@@ -43,7 +39,7 @@
 <script>
 // import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
-import ElDivider from 'element-ui/packages/divider/index'
+// import ElDivider from 'element-ui/packages/divider/index'
 import OutputCols from './detail-view/output-cols'
 import DsCols from './detail-view/ds-cols'
 import { PhSelectColsDefs } from "./defs"
@@ -69,13 +65,12 @@ export default {
     components: {
         // ElInput,
         ElButton,
-        ElDivider,
+        // ElDivider,
         OutputCols,
         DsCols
     },
     mounted() {
         this.datasource = new PhSelectColsStep(this.step)
-        // this.currentExpr = this.datasource.command.computedCols[0]["expr"]
     },
     methods: {
         validate() {
@@ -109,7 +104,6 @@ export default {
         box-sizing: border-box;
     }
     .stack-select {
-        margin-top: 4px;
         width: 100%;
         /*min-width: 800px;*/
         display: flex;
@@ -121,6 +115,12 @@ export default {
         .stack-select-title {
             display: flex;
             flex-direction: column;
+
+			h3 {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
 
             .stack-select-title-p {
                 display: flex;
@@ -142,14 +142,17 @@ export default {
             .stack-select-ds-lst {
                 display: flex;
                 flex-direction: row;
+				border-bottom: 1px solid #ddd;
+				border-top: 1px solid #ddd;
+				align-items: center;
             }
 
             .stack-select-ds-item {
                 display: flex;
                 flex-direction: row;
-                min-width: 200px;
-                border: 1px solid green;
-                margin: 5px;
+                min-width: 300px;
+				width: 300px;
+                margin-right: 40px;
                 justify-content: space-between;
 
                 .stack-select-ds-left {
@@ -169,6 +172,13 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-around;
+			height: 40px;
+
+			button {
+				height: 40px;
+				display: flex;
+				align-items: center;
+			}
         }
 
         .stack-select-ver {
