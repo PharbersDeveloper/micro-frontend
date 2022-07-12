@@ -125,9 +125,9 @@ export default {
 		}
 
 		.error-msg {
-				font-size: 13px;
-				color: #ce1228;
-			}
+			font-size: 13px;
+			color: #ce1228;
+		}
 
         .condition-title {
             display: flex;
@@ -159,6 +159,9 @@ export default {
                 display: flex;
                 flex-direction: row;
 
+				select {
+					min-width: 100px;
+				}
             }
         }
 
