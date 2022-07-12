@@ -270,20 +270,20 @@ export default {
                 this.stepsDefs[2].status = "wait"
             }
         },
-        outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+        postFilterStatus(data) {
+			const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[3].status = "success"
+            if (!status) {
+                this.stepsDefs[3].status = "wait"
+            } else if (errors){
                 this.stepsDefs[3].status = "error"
             }
         },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        outputsStatus(status) {
             if (status) {
-                this.stepsDefs[3].status = "success"
+                this.stepsDefs[4].status = "success"
             } else {
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[4].status = "error"
             }
         },
         computeSchema() {
