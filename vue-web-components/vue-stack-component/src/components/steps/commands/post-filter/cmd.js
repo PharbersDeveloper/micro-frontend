@@ -186,7 +186,7 @@ export default class PhPostFilterCmd {
 
     insertcloases(schema) {
         this.cloases.push({
-            "left": schema.length > 0 ? schema[0] : "",
+            "left": schema.length > 0 ? schema[0].title : "",
             "op": "CONTAINS",
             "right": ""
         })

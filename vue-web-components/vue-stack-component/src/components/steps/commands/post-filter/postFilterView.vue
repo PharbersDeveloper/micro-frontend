@@ -159,6 +159,10 @@ export default {
                 display: flex;
                 flex-direction: row;
 
+				select {
+					min-width: 100px;
+				}
+
             }
         }
 
