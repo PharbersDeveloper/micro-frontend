@@ -580,6 +580,8 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			route.customCallbackFuncs[param.id](param, payload)
 			delete route.customCallbackFuncs[param.id]
 			alert("关闭资源成功")
+			// TODO: 以后在改
+			window.location.reload()
 		} else if (status === "stopfailed") {
 			let errorObj = error !== "" ? JSON.parse(error) : ""
 			let msg =
