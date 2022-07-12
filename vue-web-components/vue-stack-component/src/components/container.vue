@@ -219,6 +219,7 @@ export default {
 			const index = Math.max(this.$refs.prefilter.datasource.commands.map(it => it.meta.index)) + 1
 			this.$refs.prefilter.updateData(this.newDsName, index)
 			this.$refs.select.updateData(this.newDsName, index)
+			this.showAddDialog = false
 		},
         delDataset(name, index) {
             this.changeDs = true

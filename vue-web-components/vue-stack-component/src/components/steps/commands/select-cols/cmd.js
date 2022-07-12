@@ -3,7 +3,9 @@
  */
 export default class PhSelectColsCmd {
     constructor(columns, matches) {
-        this.columns = columns.map(x => { return { name: x }})
+		if (columns) {
+			this.columns = columns.map(x => { return { name: x }})
+		}
         this.ds = matches.map(x => x["ds"])
         for (let idx = 0; idx < matches.length; ++idx) {
             this[matches[idx]["ds"]] = matches[idx]["columns"].map(x => { return { name: x }})

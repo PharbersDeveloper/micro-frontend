@@ -103,7 +103,6 @@
             ElButton,
             ElSwitch
         },
-        // updated() {
         mounted() {
             this.datasource = new PhFilterStep(this.step)
             this.validate()

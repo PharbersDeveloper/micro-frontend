@@ -12,10 +12,14 @@ export default class PhSelectColsStep {
         this.command = new PhSelectColsCmd(columns, matches)
     }
 
-	refreshData() {
-		const columns = this.expressions["params"]["selectedColumns"]
+	refreshData(name, i) {
         const matches = this.expressions["params"]["columnsMatches"]
-        this.command = new PhSelectColsCmd(columns, matches)
+		matches.push({
+			"ds": name,
+			"index": i,
+			"columns": []
+		})
+        this.command = new PhSelectColsCmd(null, matches)
 	}
 
     exec() {
