@@ -155,28 +155,6 @@ export default {
             this.selectOutput = !this.selectOutput
         },
         save() {
-		// 	const event = new Event("event")
-		// 	event.args = {
-		// 		callback: "saveSync",
-		// 		element: this,
-		// 		param: {
-		// 			name: "saveSync",
-		// 			projectId: this.projectId,
-		// 			projectName: this.projectName
-		// 		}
-		// 	}
-		// 	this.$emit('event', event)
-			// const event = new Event("event")
-            // event.args = {
-            //     callback: "changScriptInputOutput",
-            //     element: this,
-            //     param: {
-            //         outputsArray: [this.inputDsName],
-            //         inputsArray: [this.outputDsName],
-            //     }
-            // }
-            // this.$emit('changScriptInputOutput', event)
-
 			let inputNameOld = this.getUrlParam("inputName")
 			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
 			let inputNameNew = this.inputDsName
@@ -214,7 +192,7 @@ export default {
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
+					"runtime": "sync",
 					"inputs": JSON.stringify([inputNameNew]),
 					"output": outputNameNew
 				}
