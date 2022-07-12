@@ -113,12 +113,11 @@ export default {
     }
     .stack-select {
         width: 100%;
-        /*min-width: 800px;*/
         display: flex;
         flex-direction: column;
         background: #fff;
-        height: fit-content;
         padding: 20px;
+        flex-grow: 1;
 
         .stack-select-title {
             display: flex;

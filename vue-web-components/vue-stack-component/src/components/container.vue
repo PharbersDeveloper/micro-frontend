@@ -246,8 +246,8 @@ export default {
              * 3. open filter ===> 判断对错
              */
             const status = data.args.param.status, errors = data.args.param.errors
-
             this.stepsDefs[0].status = "success"
+
             if (status) {
                 this.stepsDefs[0].status = "wait"
             } else if (errors){
@@ -262,12 +262,12 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        originStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        originStatus(data) {
+			const status = data.args.param.status
+			this.stepsDefs[2].status = "success"
+
             if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
-                this.stepsDefs[2].status = "error"
+                this.stepsDefs[2].status = "wait"
             }
         },
         outputsStatus(status) {

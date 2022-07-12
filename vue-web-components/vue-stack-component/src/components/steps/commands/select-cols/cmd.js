@@ -51,15 +51,18 @@ export default class PhSelectColsCmd {
         const keys = Object.keys(this)
         for (let idx = 0; idx < keys.length; ++idx) {
             const key = keys[idx]
-            if (key === "ds") { // TODO: @wodelu 肯定会是一个bug
+            if (key === "ds") {
                 result["selectedColumns"] = this["columns"].map(x => x.name)
             } else if (key === "columns") {
                 result["selectedColumns"] = this["columns"].map(x => x.name)
-            } else {
-                result["columnsMatches"].push({
-                    "ds": key,
-                    "columns": this[key].map(x => x.name)
-                })
+            } else if (key === "dscols"){
+				const dscolskeys = Object.keys(this.dscols)
+				dscolskeys.forEach(it => {
+					result["columnsMatches"].push({
+						"ds": it,
+						"columns": this["dscols"][it].map(x => x.name)
+					})
+				})
             }
         }
         return result
