@@ -46,7 +46,6 @@ export default class PhSelectColsCmd {
     }
 
     revert2Defs() {
-        // return this.computedCols
         const result = { "columnsMatches": [] }
         const keys = Object.keys(this)
         for (let idx = 0; idx < keys.length; ++idx) {

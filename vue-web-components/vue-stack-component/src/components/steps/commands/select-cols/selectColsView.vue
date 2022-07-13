@@ -17,7 +17,7 @@
                             &nbsp;
                         </div>
                     </div>
-                    <el-button type="text" @click="removeStackDs(item, index)">删除</el-button>
+                    <el-button type="text" @click="$emit('delDataset', item, index)">删除</el-button>
                 </div>
                 <div class="stack-select-hor">
                     <el-button type="primary" @click="$emit('addDataset')">添加数据集</el-button>
@@ -37,9 +37,7 @@
     </div>
 </template>
 <script>
-// import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
-// import ElDivider from 'element-ui/packages/divider/index'
 import OutputCols from './detail-view/output-cols'
 import DsCols from './detail-view/ds-cols'
 import { PhSelectColsDefs } from "./defs"
@@ -48,7 +46,7 @@ import PhSelectColsStep from "./step"
 export default {
     data() {
         return {
-            datasource: null,
+            datasource: null
         }
     },
     props: {
@@ -90,12 +88,12 @@ export default {
                 }
                 this.$emit('statusChange', event)
         },
-        removeStackDs(item, index) {
-            this.datasource.command.removeStackDs(item, index)
-        },
         updateData(name, index) {
             this.datasource.refreshData(name, index)
-        }
+        },
+		deleteData(name, i) {
+			this.datasource.command.ds.splice(i, 1)
+		}
     },
     computed: {
 

@@ -10,7 +10,6 @@
         <el-divider class="divider"></el-divider>
         <div class="stack-output-list" v-show="columns.length > 0">
             <div class="stack-output-item" v-for="(item, index) in columns" :key="index">
-                <!-- <span>{{index}}</span> -->
                 <el-input 
                     v-model="item.name" 
                     :class="[{'el-input-error': item.name === ''}]"></el-input>
