@@ -85,7 +85,7 @@ export default class PhExcelFormat {
         const ht = [...tmp.data[tmp.headerLine]]
         for (let htIdx = 0; htIdx < header.length; ++htIdx) {
             if (htIdx < ht.length) {
-                header[htIdx] = ht[htIdx]
+                header[htIdx] = ht[htIdx].replace(/["'“”‘’]/g, "_")
             } else {
                 header[htIdx] = "col_" + (htIdx - ht.length).toString()
             }
