@@ -34,15 +34,15 @@
                             @delDataset="delDataset"
                             @statusChange="preFilterStatus" />
                 <select-cols v-show="active === 2"
-                             ref="select"
-                             :step="datasource.step"
-                             :schema="datasource.schema"
-                             :datasetArray="datasetArray"
-                             @statusChange="selectColsStatus" />
+							ref="select"
+							:step="datasource.step"
+							:schema="datasource.schema"
+							@addDataset="addDataset"
+							@statusChange="selectColsStatus" />
                 <origin-cols v-show="active === 3"
-                             ref="origin"
-                             :step="datasource.step"
-                             @statusChange="originStatus" />
+							ref="origin"
+							:step="datasource.step"
+							@statusChange="originStatus" />
                 <post-filter v-show="active === 4"
                             ref="postfilter"
                             :step="datasource.step"
@@ -68,6 +68,23 @@
                 :datasetArray="datasetArray"
             />
         </div>
+		<el-dialog
+			title="Add an input dataset"
+			:visible.sync="showAddDialog"
+			width="30%" >
+			<div>
+				<div class="add-ds-content">
+					<span>dataset</span>
+					<select v-model="newDsName">
+						<option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
+					</select>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="showAddDialog = false">Cancel</el-button>
+					<el-button type="primary" @click="addDatasetConfirm">Confirm</el-button>
+				</span>
+			</div>
+		</el-dialog>
     </div>
 </template>
 <script>
@@ -103,7 +120,7 @@ export default {
     data() {
         return {
             computedSchema: [],
-            active: 3,
+            active: 2,
             flowVersion: "developer",
             stepsDefs: [
                 {
@@ -139,7 +156,9 @@ export default {
             outputs: [],
             inputs: [],
             datasetArray: [],
-            changeDs: false
+            changeDs: false,
+			showAddDialog: false,
+			newDsName: ""
         }
     },
     props: {
@@ -192,15 +211,18 @@ export default {
             this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
             this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
         },
-        addDataset(name, index) {
+        addDataset() {
             this.changeDs = true
-            this.active = 3
-            if (name) {
-                this.$refs.join.addDataset(name, index)
-            } else {
-                this.$refs.join.showAddDialog = true
-            }
+			this.showAddDialog = true
         },
+		addDatasetConfirm() {
+			const index = Math.max(this.$refs.prefilter.datasource.commands.map(it => it.meta.index)) + 1
+			const ds = this.datasetArray.filter(it => it.name === this.newDsName)[0]
+			this.datasource.schema[this.newDsName] =  JSON.parse(ds["schema"])
+			this.$refs.prefilter.updateData(this.newDsName, index)
+			this.$refs.select.updateData(this.newDsName, index)
+			this.showAddDialog = false
+		},
         delDataset(name, index) {
             this.changeDs = true
             this.active = 3
@@ -224,8 +246,8 @@ export default {
              * 3. open filter ===> 判断对错
              */
             const status = data.args.param.status, errors = data.args.param.errors
-
             this.stepsDefs[0].status = "success"
+
             if (status) {
                 this.stepsDefs[0].status = "wait"
             } else if (errors){
@@ -233,38 +255,35 @@ export default {
             }
         },
         selectColsStatus(data) {
-            console.log(data)
-            // const status = data.args.param.status, errors = data.args.param.errors
+            const errors = data.args.param.errors
 
-            // this.stepsDefs[1].status = "success"
-            // if (status) {
-            //     this.stepsDefs[1].status = "wait"
-            // } else if (errors){
-            //     this.stepsDefs[1].status = "error"
-            // }
+            this.stepsDefs[1].status = "success"
+            if (errors){
+                this.stepsDefs[1].status = "error"
+            }
         },
-        originStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
+        originStatus(data) {
+			const status = data.args.param.status
+			this.stepsDefs[2].status = "success"
+
             if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
-                this.stepsDefs[2].status = "error"
+                this.stepsDefs[2].status = "wait"
+            }
+        },
+        postFilterStatus(data) {
+			const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[3].status = "success"
+            if (!status) {
+                this.stepsDefs[3].status = "wait"
+            } else if (errors){
+                this.stepsDefs[3].status = "error"
             }
         },
         outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
-                this.stepsDefs[3].status = "success"
+                this.stepsDefs[4].status = "success"
             } else {
-                this.stepsDefs[3].status = "error"
-            }
-        },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[4].status = "error"
             }
         },
         computeSchema() {
@@ -502,8 +521,19 @@ export default {
                 flex-direction: row;
                 justify-content: space-around;
                 background: #f2f2f2;
-                // padding: 20px;
             }
+        }
+
+		.add-ds-content {
+            margin-bottom: 40px;
+            span {
+                margin-right: 40px;
+            }
+        }
+
+		.dialog-footer {
+            display: flex;
+            flex-direction: row-reverse;
         }
     }
 </style>

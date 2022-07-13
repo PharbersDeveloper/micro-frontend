@@ -1,4 +1,4 @@
-import PhPreFilterCmd from "./cmd"
+import PhPostFilterCmd from "./cmd"
 
 /**
  * 这个就是我所说的Command
@@ -11,7 +11,7 @@ export default class PhFilterStep {
         this.distinct = defs["distinct"]
         this.enabled = defs["enabled"]
         this.preFilterExpression = defs["expr"]
-        this.command = new PhPreFilterCmd(this.preFilterExpression, schema)
+        this.command = new PhPostFilterCmd(this.preFilterExpression, schema)
         console.log(this.command.cloases)
     }
 

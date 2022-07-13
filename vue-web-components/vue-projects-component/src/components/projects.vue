@@ -8,6 +8,7 @@
         </div>
         <div class="data-main-container">
             <ph-status-pane 
+				ref="statusPane"
 				v-if="allData.tenantId" 
 				:tenant-name="allData.company_name_show" 
 				:tenant-id="allData.tenantId"
@@ -205,7 +206,7 @@ export default {
             this.toggle = true
         },
         linkToPage(params) {
-			if(this.datasource.status !== "started") {
+			if(this.$refs.statusPane.datasource.status !== "started") {
 				Message.error("请先启动项目资源！", { duration: 3000} )
 				return false
 			}

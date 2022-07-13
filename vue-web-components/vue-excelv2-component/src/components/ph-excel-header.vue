@@ -2,8 +2,9 @@
     <div class="schema-item box" :style="style" >
         <span class="schema-title">{{title}}</span>
         <select name="" id="" v-model="itemValueType" class="schema-type" ref="schemaType" @change="selectScript" v-if="isNeedPopmenu">
-            <option class="schema-select-item" value="Text"  @click="selectScript(1)">Text</option>
-            <option class="schema-select-item" value="Number" @click="selectScript(2)">Number</option>
+            <option class="schema-select-item" value="String" >String</option>
+            <option class="schema-select-item" value="Double" >Double</option>
+            <option class="schema-select-item" value="Bigint" >Bigint</option>
         </select>
         <span v-else class="schema-type">&nbsp&nbsp&nbsp</span>
         <span class="split">&nbsp;&nbsp;</span>
@@ -14,10 +15,10 @@ export default {
     data() {
         return {
             selectIcon: "https://general.pharbers.com/drop_down_icon.svg",
-            selectValue: "Text",
+            selectValue: "String",
             showSelectOptionParam: false,
             closeTosts: false,
-            itemValueType: "Text"
+            itemValueType: "String"
         }
     },
     computed: {
@@ -35,7 +36,7 @@ export default {
     props: {
         valueType: {
             type: String,
-            default: "Text"
+            default: "String"
         },
         isNeedPopmenu: {
             type: Boolean,
@@ -55,28 +56,25 @@ export default {
         },
         dataGuess: {
             type: String,
-            default: "Text"
+            default: "String"
         }
     },
     mounted() {
-        if(this.valueType === "Double") {
-            this.itemValueType = "Number"
-        } else if(this.valueType === "String"){
-            this.itemValueType = "Text"
-        }
+        this.itemValueType = this.valueType
     },
     methods: {
         selectScript() {
-            this.itemValueType = this.$refs.schemaType.value
             const event = new Event("event")
             event.args = {
                 callback: "changeSchemaType",
                 element: this,
                 param: {
                     title: this.title,
+                    originalType: this.selectValue,
                     itemValueType: this.itemValueType
                 }
             }
+            this.selectValue = this.itemValueType
             this.$emit('changeSchemaTypeEvent', event)
         },
         showSelectOption() {

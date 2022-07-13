@@ -1,6 +1,5 @@
 <template>
     <div class="origin">
-<!--        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">-->
         <div class="origin-title">
             <div class="origin-title-p">
                 <h2>Origin Columns</h2>
@@ -9,7 +8,7 @@
         <div class="origin-container" v-if="datasource">
             <div class="origin-container-header">
                 <div class="origin-container-title">
-                    <h3>标记原始数据集</h3>
+                    <p>标记原始数据集</p>
                 </div>
                 <div class="origin-container-op">
                     <el-switch v-model="datasource.command.enabled" ></el-switch>
@@ -67,7 +66,14 @@ export default {
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+            const event = new Event("event")
+			event.args = {
+				element: this,
+				param: {
+					status: !this.datasource.command.enabled
+				}
+			}
+			this.$emit('statusChange', event)
         }
     },
     computed: {
@@ -86,8 +92,7 @@ export default {
     }
     .origin {
         margin-top: 4px;
-        min-width: 100%;
-        /*min-width: 800px;*/
+        min-width: 800px;
         display: flex;
         flex-direction: column;
 		background: #fff;

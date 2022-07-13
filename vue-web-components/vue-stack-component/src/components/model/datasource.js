@@ -101,6 +101,7 @@ export default class PhDataSource {
                 that.store.sync(response)
                 const data = that.store.findAll("steps").sort((l, r) => l["index"] - r["index"])
                 if (data.length === 0) {
+
                     const defaultPreFilter = this.datasets.map((x, i) => { return {
                         "ds": x,
 						"index": i,
@@ -110,11 +111,13 @@ export default class PhDataSource {
                             "expr": ""
                         }
                     }})
+
                     const defaultColumnMatches = this.datasets.map((x, i) => { return {
                         "ds": x,
 						"index": i,
                         "columns": []
                     }})
+					
                     const defaultOriginColumns = {
                         "enabled": false,
                         "columnName": "provider",
@@ -150,6 +153,7 @@ export default class PhDataSource {
                         runtime : "stack",
                         "step-name": "stack"
                     }
+
                 } else {
                     that.step = data[0]
                 }

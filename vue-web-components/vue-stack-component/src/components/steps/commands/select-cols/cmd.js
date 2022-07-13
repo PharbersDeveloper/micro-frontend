@@ -3,10 +3,11 @@
  */
 export default class PhSelectColsCmd {
     constructor(columns, matches) {
-        this.columns = columns.map(x => { return { name: x }})
+		this.dscols = {}
+		this.columns = columns.map(x => { return { name: x }})
         this.ds = matches.map(x => x["ds"])
         for (let idx = 0; idx < matches.length; ++idx) {
-            this[matches[idx]["ds"]] = matches[idx]["columns"].map(x => { return { name: x }})
+            this["dscols"][matches[idx]["ds"]] = matches[idx]["columns"].map(x => { return { name: x }})
         }
     }
 
@@ -22,16 +23,23 @@ export default class PhSelectColsCmd {
     addSelectColumn() {
         this.columns.push({ name: "" })
         this.ds.forEach(x => {
-            this[x].push({ name: null })
+            this["dscols"][x].push({ name: null })
         })
     }
 
     deleteSelectColumn(index) {
         this.columns.splice(index, 1)
         this.ds.forEach(x => {
-            this[x].splice(index, 1)
+            this["dscols"][x].splice(index, 1)
         })
     }
+
+	deleteAllSelectColumn() {
+		this.columns = []
+		this.ds.forEach(x => {
+            this["dscols"][x] = []
+        })
+	}
 
     validations() {
         return true
@@ -43,15 +51,18 @@ export default class PhSelectColsCmd {
         const keys = Object.keys(this)
         for (let idx = 0; idx < keys.length; ++idx) {
             const key = keys[idx]
-            if (key === "ds") { // TODO: @wodelu 肯定会是一个bug
+            if (key === "ds") {
                 result["selectedColumns"] = this["columns"].map(x => x.name)
             } else if (key === "columns") {
                 result["selectedColumns"] = this["columns"].map(x => x.name)
-            } else {
-                result["columnsMatches"].push({
-                    "ds": key,
-                    "columns": this[key].map(x => x.name)
-                })
+            } else if (key === "dscols"){
+				const dscolskeys = Object.keys(this.dscols)
+				dscolskeys.forEach(it => {
+					result["columnsMatches"].push({
+						"ds": it,
+						"columns": this["dscols"][it].map(x => x.name)
+					})
+				})
             }
         }
         return result
