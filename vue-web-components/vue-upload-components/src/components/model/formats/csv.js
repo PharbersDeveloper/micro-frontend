@@ -129,6 +129,7 @@ export default class PhCsvFormat {
         if (!to) {
             to = this.file.name
         }
+
         const that = this
         const reader = this.file.stream().getReader()
         let left = ""
@@ -144,25 +145,27 @@ export default class PhCsvFormat {
             }
         }
 
-        async function stepDataProcessor(v) {
+        async function stepDataProcessor(v, n=0) {
             const text = left + new TextDecoder("utf-8").decode(v.value)
             text2Data(text, stepData)
 
             if (stepData.length > that.destinationBufferSize) {
+                // TODO: @wodelu 加入skip lines 的逻辑
+                if (n === 0) {
+                    const startPos = that.skipFirstLines + 1 + that.skipNextLines
+                    // const endPos = that.skipFirstLines + 1 + that.skipNextLines + that.batchSize
+                    const endPos = stepData.length
+                    stepData = stepData.slice(startPos, endPos)
+                }
                 await destination.upload(stepData, to, new Date().getTime())
                 stepData = []
             }
 
             if (!v.done) {
                 that.proxy.uploadProgress("uploading")
-                reader.read().then(x => stepDataProcessor(x))
+                reader.read().then(x => stepDataProcessor(x, ++n))
             } else {
                 text2Data(left, stepData)
-                // const startPos = that.skipFirstLines + 1 + that.skipNextLines
-                const startPos = that.skipFirstLines + 1 + that.skipNextLines + 1
-                // const endPos = that.skipFirstLines + 1 + that.skipNextLines + that.batchSize
-                const endPos = stepData.length
-                stepData = stepData.slice(startPos, endPos)
                 await destination.upload(stepData, to, new Date().getTime())
                 that.proxy.uploadProgress("uploading ended")
             }
