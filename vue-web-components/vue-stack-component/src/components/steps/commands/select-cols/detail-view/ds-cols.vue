@@ -39,7 +39,10 @@ export default {
         },
         deleteSelectColumn() {
             this.command.deleteSelectColumn()
-        }
+        },
+		initData() {
+			console.log(this.columns)
+		}
     }
 }
 </script>

@@ -29,11 +29,13 @@
                     :columns="datasource.command.columns"
                     :command="datasource.command"
 					@addSelectColumn="addSelectColumn" />
-            <ds-cols v-for="(item, index) in datasource.command.ds" :key="index"
-                     :dataset-name="item"
-                     :columns="datasource.command.dscols[item]"
-                     :schema="schema[item]"
-                     :command="datasource.command" />
+            <ds-cols v-for="(item, index) in datasource.command.ds" 
+					:key="index"
+					ref="dscols"
+					:dataset-name="item"
+					:columns="datasource.command.dscols[item]"
+					:schema="schema[item]"
+					:command="datasource.command" />
         </div>
     </div>
 </template>
@@ -74,6 +76,9 @@ export default {
     methods: {
 		addSelectColumn() {
 			this.datasource.command.addSelectColumn()
+			this.$nextTick(() => {
+				this.$refs.dscols.initData();
+			})
 		},
         validate() {
             let errorValues = false
