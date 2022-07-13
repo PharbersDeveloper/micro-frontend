@@ -135,19 +135,22 @@ export default class PhCsvFormat {
         let left = ""
         let stepData = []
 
-        function text2Data(t, d) {
+        function text2Data(t, d, n) {
             const lastIndex = t.lastIndexOf("\n")
             left = t.substring(lastIndex + 1)
             const lines = t.substring(0, lastIndex).split(/\r\n|\n/)
             for (let idx = 0; idx < lines.length; ++idx) {
                 const tmp = lines[idx].split(that.delimiter)
+                if (n === 0 && idx === 0)
+                    tmp.forEach(x => x.replace("\"", "_"))
                 d.push(tmp)
             }
         }
 
-        async function stepDataProcessor(v) {
+        async function stepDataProcessor(v, n=0) {
             const text = left + new TextDecoder("utf-8").decode(v.value)
-            text2Data(text, stepData)
+            text2Data(text, stepData, n)
+            n++
 
             if (stepData.length > that.destinationBufferSize) {
                 await destination.upload(stepData, to, new Date().getTime())
@@ -156,7 +159,7 @@ export default class PhCsvFormat {
 
             if (!v.done) {
                 that.proxy.uploadProgress("uploading")
-                reader.read().then(x => stepDataProcessor(x))
+                reader.read().then(x => stepDataProcessor(x, n))
             } else {
                 text2Data(left, stepData)
                 const startPos = that.skipFirstLines + 1 + that.skipNextLines
