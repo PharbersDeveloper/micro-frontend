@@ -76,9 +76,6 @@ export default {
     methods: {
 		addSelectColumn() {
 			this.datasource.command.addSelectColumn()
-			this.$nextTick(() => {
-				this.$refs.dscols.initData();
-			})
 		},
         validate() {
             let errorValues = false
