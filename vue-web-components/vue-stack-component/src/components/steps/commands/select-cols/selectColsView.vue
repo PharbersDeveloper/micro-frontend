@@ -27,7 +27,8 @@
         <div class="stack-select-matches-panel" v-if="datasource">
             <output-cols
                     :columns="datasource.command.columns"
-                    :command="datasource.command" />
+                    :command="datasource.command"
+					@addSelectColumn="addSelectColumn" />
             <ds-cols v-for="(item, index) in datasource.command.ds" :key="index"
                      :dataset-name="item"
                      :columns="datasource.command.dscols[item]"
@@ -71,6 +72,9 @@ export default {
         this.datasource = new PhSelectColsStep(this.step)
     },
     methods: {
+		addSelectColumn() {
+			this.datasource.command.addSelectColumn()
+		},
         validate() {
             let errorValues = false
             if (this.datasource.command.columns.length === 0) {
@@ -93,6 +97,7 @@ export default {
         },
 		deleteData(name, i) {
 			this.datasource.command.ds.splice(i, 1)
+			delete this.datasource.command.dscols[name]
 		}
     },
     computed: {
