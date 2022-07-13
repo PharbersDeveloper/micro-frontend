@@ -159,11 +159,12 @@ export default class PhCsvFormat {
                 }
                 await destination.upload(stepData, to, new Date().getTime())
                 stepData = []
+                ++n
             }
 
             if (!v.done) {
                 that.proxy.uploadProgress("uploading")
-                reader.read().then(x => stepDataProcessor(x, ++n))
+                reader.read().then(x => stepDataProcessor(x, n))
             } else {
                 text2Data(left, stepData)
                 await destination.upload(stepData, to, new Date().getTime())
