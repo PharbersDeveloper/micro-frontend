@@ -88,8 +88,8 @@ export default class PhCsvFormat {
         this.schemaArray = []
         header.forEach(item => {
             this.schemaArray.push({
-                src: item,
-                des: item,
+                src: item.replace(/["'“”‘’]/g, "_"),
+                des: item.replace(/["'“”‘’]/g, "_"),
                 type: "String"
             })
         })
@@ -129,7 +129,6 @@ export default class PhCsvFormat {
         if (!to) {
             to = this.file.name
         }
-        // TODO: @wodelu 加入skip lines 的逻辑
         const that = this
         const reader = this.file.stream().getReader()
         let left = ""
