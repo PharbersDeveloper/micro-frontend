@@ -11,9 +11,7 @@
                 <el-button type="text" @click="$emit('delDataset', dataset, index)">删除</el-button>
             </div>
         </div>
-        <div class="join-card-content" :style="style">
-
-        </div>
+        <div class="join-card-content" :style="style"></div>
     </div>
 </template>
 <script>
