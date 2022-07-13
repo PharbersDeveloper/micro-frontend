@@ -15,6 +15,11 @@ export default class PhSelectColsCmd {
 
     }
 
+	refreshData(name) {
+		this.ds.push(name)
+		this.dscols[name] = new Array(this.columns.length).fill({name: null})
+	}
+
     removeStackDs(item, index) {
         this.ds.splice(index, 1)
         delete this[item]
@@ -23,7 +28,7 @@ export default class PhSelectColsCmd {
     addSelectColumn() {
         this.columns.push({ name: "" })
         this.ds.forEach(x => {
-            this["dscols"][x].push({ name: null })
+            this.dscols[x].push({ name: null })
         })
     }
 

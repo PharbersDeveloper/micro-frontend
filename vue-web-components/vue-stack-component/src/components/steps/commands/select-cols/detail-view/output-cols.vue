@@ -41,7 +41,8 @@ export default {
     },
     methods: {
         addSelectColumn() {
-            this.command.addSelectColumn()
+            // this.command.addSelectColumn()
+			this.$emit("addSelectColumn")
         },
         deleteSelectColumn(index) {
             this.command.deleteSelectColumn(index)
