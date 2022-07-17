@@ -87,7 +87,7 @@ export async function phJoinContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "join_edit",
 							cat: "intermediate",
-							runtime: "orderby",
+							runtime: "join",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName

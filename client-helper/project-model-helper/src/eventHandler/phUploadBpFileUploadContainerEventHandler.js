@@ -78,6 +78,7 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 			// 	errorObj["message"]["zh"] !== ""
 			// 		? errorObj["message"]["zh"]
 			// : "导入失败，请重新上传！"
+			console.log(error)
 			alert("导入失败，请重新上传！")
 			route.loadingService.loading.style.display = "none"
 		} else if (status == "running") {

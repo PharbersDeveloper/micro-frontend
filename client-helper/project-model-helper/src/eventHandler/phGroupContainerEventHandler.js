@@ -238,7 +238,7 @@ export async function phGroupContainerEventHandler(e, route) {
 			// 		? errorObj["message"]["zh"]
 			// 		: `${route.msg}脚本失败，请重新操作！`
 			console.log(error)
-			alert( `${route.msg}脚本失败，请重新操作！`)
+			alert(`${route.msg}脚本失败，请重新操作！`)
 		}
 		route.loadingService.loading.style.display = "none"
 	}

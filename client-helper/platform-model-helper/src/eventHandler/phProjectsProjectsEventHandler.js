@@ -102,7 +102,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
             //     errorObj["message"]["zh"] !== ""
             //         ? errorObj["message"]["zh"]
             //         : "启动资源失败，请重新操作！"
-			console.log(error)
+            console.log(error)
             alert("启动资源失败，请重新操作！")
         }
         route.loadingService.loading.style.display = "none"
@@ -124,7 +124,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
             //     errorObj["message"]["zh"] !== ""
             //         ? errorObj["message"]["zh"]
             //         : "关闭资源失败，请重新操作！"
-			console.log(error)
+            console.log(error)
             alert("关闭资源失败，请重新操作！")
         }
         route.loadingService.loading.style.display = "none"

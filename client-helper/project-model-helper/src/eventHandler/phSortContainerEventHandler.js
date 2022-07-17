@@ -82,7 +82,7 @@ export async function phSortContainerEventHandler(e, route) {
 						message: JSON.stringify({
 							optionName: "sort_edit",
 							cat: "intermediate",
-							runtime: "orderby",
+							runtime: "sort",
 							actionName: scriptsParams.jobShowName
 								? scriptsParams.jobShowName
 								: scriptsParams.jobName
@@ -97,7 +97,7 @@ export async function phSortContainerEventHandler(e, route) {
 						jobPath: "",
 						inputs: inputs,
 						outputs: outputs,
-						runtime: "orderby"
+						runtime: "sort"
 					},
 					steps: params.stepsArr,
 					notification: {
