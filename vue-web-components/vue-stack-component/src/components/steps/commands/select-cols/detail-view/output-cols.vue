@@ -1,5 +1,5 @@
 <template>
-    <div class="stack-output">
+    <div class="stack-output-v">
         <div class="stack-output-title">
             <h3>Output Columns</h3>
             <div class="stack-output-op">
@@ -10,7 +10,6 @@
         <el-divider class="divider"></el-divider>
         <div class="stack-output-list" v-show="columns.length > 0">
             <div class="stack-output-item" v-for="(item, index) in columns" :key="index">
-                <!-- <span>{{index}}</span> -->
                 <el-input 
                     v-model="item.name" 
                     :class="[{'el-input-error': item.name === ''}]"></el-input>
@@ -42,7 +41,7 @@ export default {
     },
     methods: {
         addSelectColumn() {
-            this.command.addSelectColumn()
+			this.$emit("addSelectColumn")
         },
         deleteSelectColumn(index) {
             this.command.deleteSelectColumn(index)
@@ -60,7 +59,7 @@ export default {
         box-sizing: border-box;
     }
 
-    .stack-output {
+    .stack-output-v {
         display: flex;
         flex-direction: column;
         min-width: 300px;

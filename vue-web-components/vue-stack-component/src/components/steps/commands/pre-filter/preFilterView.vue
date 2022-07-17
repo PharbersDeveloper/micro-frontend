@@ -152,13 +152,8 @@
                     detail: new PhPreFilterCmd("")
                 })
             },
-            deleteData(dss, ids) {
-                this.datasource.commands.forEach((itds, i) => {
-                    if(!dss.includes(itds.meta.name) || !ids.includes(itds.meta.index)) {
-                        delete this.datasource.commands[i]
-                    }
-                })
-                this.datasource.commands = this.datasource.commands.filter(it => it)
+            deleteData(name, i) {
+                this.datasource.commands.splice(i, 1)
             }
         },
         computed: {

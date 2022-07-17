@@ -17,7 +17,7 @@
                             &nbsp;
                         </div>
                     </div>
-                    <el-button type="text" @click="removeStackDs(item, index)">删除</el-button>
+                    <el-button type="text" @click="$emit('delDataset', item, index)">删除</el-button>
                 </div>
                 <div class="stack-select-hor">
                     <el-button type="primary" @click="$emit('addDataset')">添加数据集</el-button>
@@ -27,19 +27,20 @@
         <div class="stack-select-matches-panel" v-if="datasource">
             <output-cols
                     :columns="datasource.command.columns"
-                    :command="datasource.command" />
-            <ds-cols v-for="(item, index) in datasource.command.ds" :key="index"
-                     :dataset-name="item"
-                     :columns="datasource.command.dscols[item]"
-                     :schema="schema[item]"
-                     :command="datasource.command" />
+                    :command="datasource.command"
+					@addSelectColumn="addSelectColumn" />
+            <ds-cols v-for="(item, index) in datasource.command.ds" 
+					:key="index"
+					ref="dscols"
+					:dataset-name="item"
+					:columns="datasource.command.dscols[item]"
+					:schema="schema[item]"
+					:command="datasource.command" />
         </div>
     </div>
 </template>
 <script>
-// import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
-// import ElDivider from 'element-ui/packages/divider/index'
 import OutputCols from './detail-view/output-cols'
 import DsCols from './detail-view/ds-cols'
 import { PhSelectColsDefs } from "./defs"
@@ -48,7 +49,7 @@ import PhSelectColsStep from "./step"
 export default {
     data() {
         return {
-            datasource: null,
+            datasource: null
         }
     },
     props: {
@@ -73,6 +74,9 @@ export default {
         this.datasource = new PhSelectColsStep(this.step)
     },
     methods: {
+		addSelectColumn() {
+			this.datasource.command.addSelectColumn()
+		},
         validate() {
             let errorValues = false
             if (this.datasource.command.columns.length === 0) {
@@ -90,12 +94,13 @@ export default {
                 }
                 this.$emit('statusChange', event)
         },
-        removeStackDs(item, index) {
-            this.datasource.command.removeStackDs(item, index)
-        },
         updateData(name, index) {
             this.datasource.refreshData(name, index)
-        }
+        },
+		deleteData(name, i) {
+			this.datasource.command.ds.splice(i, 1)
+			delete this.datasource.command.dscols[name]
+		}
     },
     computed: {
 

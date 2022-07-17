@@ -88,8 +88,8 @@ export default class PhCsvFormat {
         this.schemaArray = []
         header.forEach(item => {
             this.schemaArray.push({
-                src: item,
-                des: item,
+                src: item.replace(/["'“”‘’]/g, "_"),
+                des: item.replace(/["'“”‘’]/g, "_"),
                 type: "String"
             })
         })
@@ -129,7 +129,7 @@ export default class PhCsvFormat {
         if (!to) {
             to = this.file.name
         }
-        // TODO: @wodelu 加入skip lines 的逻辑
+
         const that = this
         const reader = this.file.stream().getReader()
         let left = ""
@@ -145,24 +145,28 @@ export default class PhCsvFormat {
             }
         }
 
-        async function stepDataProcessor(v) {
+        async function stepDataProcessor(v, n=0) {
             const text = left + new TextDecoder("utf-8").decode(v.value)
             text2Data(text, stepData)
 
             if (stepData.length > that.destinationBufferSize) {
+                // TODO: @wodelu 加入skip lines 的逻辑
+                if (n === 0) {
+                    const startPos = that.skipFirstLines + 1 + that.skipNextLines
+                    // const endPos = that.skipFirstLines + 1 + that.skipNextLines + that.batchSize
+                    const endPos = stepData.length
+                    stepData = stepData.slice(startPos, endPos)
+                }
                 await destination.upload(stepData, to, new Date().getTime())
                 stepData = []
+                ++n
             }
 
             if (!v.done) {
                 that.proxy.uploadProgress("uploading")
-                reader.read().then(x => stepDataProcessor(x))
+                reader.read().then(x => stepDataProcessor(x, n))
             } else {
                 text2Data(left, stepData)
-                const startPos = that.skipFirstLines + 1 + that.skipNextLines
-                // const endPos = that.skipFirstLines + 1 + that.skipNextLines + that.batchSize
-                const endPos = stepData.length
-                stepData = stepData.slice(startPos, endPos)
                 await destination.upload(stepData, to, new Date().getTime())
                 that.proxy.uploadProgress("uploading ended")
             }

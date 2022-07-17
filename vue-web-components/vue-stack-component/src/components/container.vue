@@ -38,6 +38,7 @@
 							:step="datasource.step"
 							:schema="datasource.schema"
 							@addDataset="addDataset"
+							@delDataset="delDataset"
 							@statusChange="selectColsStatus" />
                 <origin-cols v-show="active === 3"
 							ref="origin"
@@ -223,11 +224,10 @@ export default {
 			this.$refs.select.updateData(this.newDsName, index)
 			this.showAddDialog = false
 		},
-        delDataset(name, index) {
-            this.changeDs = true
-            this.active = 3
-            this.$refs.join.delDataset(name, index)
-        },
+		delDataset(name, index) {
+			this.$refs.prefilter.deleteData(name, index)
+			this.$refs.select.deleteData(name, index)
+		},
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
