@@ -1,5 +1,5 @@
 <template>
-    <div class="stack-output">
+    <div class="stack-output-v">
         <div class="stack-output-title">
             <h3>Output Columns</h3>
             <div class="stack-output-op">
@@ -41,7 +41,6 @@ export default {
     },
     methods: {
         addSelectColumn() {
-            // this.command.addSelectColumn()
 			this.$emit("addSelectColumn")
         },
         deleteSelectColumn(index) {
@@ -60,7 +59,7 @@ export default {
         box-sizing: border-box;
     }
 
-    .stack-output {
+    .stack-output-v {
         display: flex;
         flex-direction: column;
         min-width: 300px;

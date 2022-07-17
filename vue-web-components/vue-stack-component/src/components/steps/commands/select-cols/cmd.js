@@ -27,8 +27,9 @@ export default class PhSelectColsCmd {
 
     addSelectColumn() {
         this.columns.push({ name: "" })
+		let arr = new Array({name: null})
         this.ds.forEach(x => {
-            this.dscols[x].push({ name: null })
+            this.dscols[x] = this.dscols[x].concat(arr)
         })
     }
 
