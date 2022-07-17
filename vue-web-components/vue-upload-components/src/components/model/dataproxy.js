@@ -71,8 +71,8 @@ export default class PhExcelPreviewProxy {
         let schemaArray = []
         schemas.schema.forEach(item => {
             schemaArray.push({
-                src: item.replace(/["'“”‘’]/g, "_"),
-                des: item.replace(/["'“”‘’]/g, "_"),
+                src: item ? item.replace(/["'“”‘’]/g, "_") : item,
+                des: item ? item.replace(/["'“”‘’]/g, "_") : item,
                 type: "String"
             })
         })
