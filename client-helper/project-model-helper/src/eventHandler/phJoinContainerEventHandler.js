@@ -237,12 +237,13 @@ export async function phJoinContainerEventHandler(e, route) {
 			}
 			element.parent.$refs.changeInputOutput.save()
 		} else {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: `${route.msg}脚本失败，请重新操作！`
-			alert(msg)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: `${route.msg}脚本失败，请重新操作！`
+			console.log(error)
+			alert(`${route.msg}脚本失败，请重新操作！`)
 		}
 		route.loadingService.loading.style.display = "none"
 	}
