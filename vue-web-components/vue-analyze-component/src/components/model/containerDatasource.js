@@ -191,6 +191,9 @@ export default class PhContainerDataSource {
         return ele.datasource.buildCountQuery(ele)
             .then((response) => response.json())
             .then((response) => {
+                if (response.status && response.status === "failed") {
+                    return response.message
+                }
                 return response[0]["count"]
             })
     }
