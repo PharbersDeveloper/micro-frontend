@@ -43,7 +43,9 @@
                 @countIsReady="totalCountIsReady"
                 @sample="sample"
                 @changeSchemaTypeEvent="changeSchemaTypeEvent"
-                :datasource="datasource" :schema="schema" class="excel" />
+                :datasource="datasource" 
+				:schema="schema" 
+				class="excel" />
         </div>
         <el-dialog
                 title="显示列"
