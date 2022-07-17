@@ -9,7 +9,7 @@ export default class DownloadFileService extends Service {
 		let source = param
 		let bucket = ""
 		let key = ""
-		const url = "https://apiv2.pharbers.com/entry/download"
+		const url = "https://api.pharbers.com/entry/download"
 		if (source.indexOf("s3a://") != -1) {
 			let str = source.slice(6, source.length)
 			let num = str.indexOf("/")

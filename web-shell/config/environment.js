@@ -25,9 +25,10 @@ module.exports = function (environment) {
 			pharbersUri: "https://www.pharbers.com",
 			accountsUri: "https://accounts.pharbers.com",
 			host: "https://oauth.pharbers.com",
-			apiUri: "https://apiv2.pharbers.com",
+			// apiUri: "https://api.pharbers.com",
+			apiUri: "https://api.pharbers.com",
 			apiUriDev: "https://apidev.pharbers.com",
-			apiHost: "apiv2.pharbers.com",
+			apiHost: "api.pharbers.com",
 			/* offweb */
 			// clientId: "fjjnl2uSalHTdrppHG9u",
 			// clientName: "offweb",

@@ -10,7 +10,7 @@ function PhMQTT(config, callBack, destroyQueue) {
 	const topic = config.topic
 	const endpoint = config.endpoint
 	const timeout = config.timeout
-	const uri = endpoint // https://apiv2.pharbers.com/phnotification/ TODO:整体测试结束后提出到env.js中
+	const uri = endpoint // https://api.pharbers.com/phnotification/ TODO:整体测试结束后提出到env.js中
 
 
 	const __getCookie = (name) => {

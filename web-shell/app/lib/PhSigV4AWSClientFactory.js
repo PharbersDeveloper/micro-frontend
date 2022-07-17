@@ -209,11 +209,11 @@ PhSigV4AWSClientFactory.newClient = function (config) {
 		if(ENV.environment === "development") {
 			headers[HOST] = "apidev.pharbers.com"
 		} else {
-			headers[HOST] = "apiv2.pharbers.com"
+			headers[HOST] = "api.pharbers.com"
 		}
 		console.log(headers[HOST])
 
-		// headers[HOST] = "apiv2.pharbers.com"
+		// headers[HOST] = "api.pharbers.com"
 		
 		const canonicalRequest = buildCanonicalRequest(verb, path, queryParams, headers, body);
         const hashedCanonicalRequest = hashCanonicalRequest(canonicalRequest);
