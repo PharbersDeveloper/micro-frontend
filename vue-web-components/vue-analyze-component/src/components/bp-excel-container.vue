@@ -584,7 +584,7 @@ export default {
             this.datasource.name = decodeURI(this.allData.datasetName)
             this.datasource.projectId = this.allData.projectId
             if (this.datasource.projectId.length > 0)
-                this.datasource.resetUrl(`${hostName}/phdadatasource`)
+                this.datasource.resetUrl(`${hostName}/pholapdatasource`)
         },
         // 首次加载触发，请求Excel数据
         'allData.schemaArr'(n, o) {

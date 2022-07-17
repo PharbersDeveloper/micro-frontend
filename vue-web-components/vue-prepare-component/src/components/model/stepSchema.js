@@ -56,7 +56,7 @@ export default class PhStepSchema {
     }
 
     buildSchemaQuery() {
-        const url = `${hostName}/phdadatasource`
+        const url = `${hostName}/pholapdatasource`
         const accessToken = this.getCookie("access_token") || this.debugToken
         const tenantId = this.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let body = {
