@@ -62,7 +62,7 @@ export default class NoticeServiceService {
                         "projectId": ["begins_with", that.projectName]
                     }
                 })
-                let url = "https://apiv2.pharbers.com/phdydatasource/query"
+                let url = "https://api.pharbers.com/phdydatasource/query"
                 let headers = {
                     "Authorization": that.getCookie( "access_token" ) || that.debugToken,
                     "Content-Type": "application/vnd.api+json",

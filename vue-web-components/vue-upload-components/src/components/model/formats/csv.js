@@ -88,8 +88,8 @@ export default class PhCsvFormat {
         this.schemaArray = []
         header.forEach(item => {
             this.schemaArray.push({
-                src: item.replace(/["'“”‘’]/g, "_"),
-                des: item.replace(/["'“”‘’]/g, "_"),
+                src: item ? item.replace(/["'“”‘’]/g, "_") : item,
+                des: item ? item.replace(/["'“”‘’]/g, "_") : item,
                 type: "String"
             })
         })

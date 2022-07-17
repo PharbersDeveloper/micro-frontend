@@ -559,12 +559,13 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			delete route.customCallbackFuncs[param.id]
 			alert("启动资源成功")
 		} else if (status === "startfailed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "启动资源失败，请重新操作！"
-			alert(msg)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "启动资源失败，请重新操作！"
+			console.log(error)
+			alert("启动资源失败，请重新操作！")
 		}
 		route.loadingService.loading.style.display = "none"
 	}
@@ -583,12 +584,13 @@ export async function phNotebooksContainerEventHandler(e, route) {
 			// TODO: 以后在改
 			window.location.reload()
 		} else if (status === "stopfailed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "关闭资源失败，请重新操作！"
-			alert(msg)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "关闭资源失败，请重新操作！"
+			console.log(error)
+			alert("关闭资源失败，请重新操作！")
 		}
 		route.loadingService.loading.style.display = "none"
 	}

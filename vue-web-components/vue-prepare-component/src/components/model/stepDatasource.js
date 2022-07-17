@@ -18,7 +18,7 @@ export default class PhStepDataSource {
         // this.schema = []
         // this.cols = this.schema
         if (!url)
-            this.url= `${hostName}/phdadatasource`
+            this.url= `${hostName}/pholapdatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
         this.debugToken = "27a68748c55abfadcab0a85e012b1c73f7380ed319cf734a6cb179d45b1ea24d"
@@ -281,6 +281,9 @@ export default class PhStepDataSource {
         return ele.datasource.buildCountQuery(ele)
             .then((response) => response.json())
             .then((response) => {
+				if (response.status && response.status === "failed") {
+					return response.message
+				}
                 return response[0]["count"]
             })
     }

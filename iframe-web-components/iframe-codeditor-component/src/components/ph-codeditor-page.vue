@@ -137,7 +137,7 @@ export default {
             return data ? decodeURI(data).split("=")[1] : undefined
         },
         async queryData() {
-            let url = `${hostName}/phdadataquery`
+            let url = `${hostName}/phqueryjobcode`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "bucket": "ph-platform",
@@ -164,7 +164,7 @@ export default {
                 return null;
         },
         async saveCode() {
-            let url = `${hostName}/phdadataupdata`
+            let url = `${hostName}/phupdatejobcode`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
                 "bucket": "ph-platform",

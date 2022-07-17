@@ -84,7 +84,7 @@ export default class PhDagTriggerPolicy {
         this.parent.loading = true
         this.parent.showProgress = false
         const recursive = this.parent.selectRecursive === "recursive"
-        const url = `${hostName}/statemachinetrigger`
+        const url = `${hostName}/phstatemachinetrigger`
         const accessToken = this.parent.getCookie("access_token") || this.parent.datasource.debugToken
         const tenantId = this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let confData = data.args.param.jsonValue

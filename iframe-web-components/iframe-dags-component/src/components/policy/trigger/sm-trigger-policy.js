@@ -102,7 +102,7 @@ export default class PhDagTriggerPolicy {
         this.parent.loading = true
         this.parent.showProgress = false
         const recursive = this.parent.selectRecursive === "recursive"
-        const url = `${hostName}/statemachinetrigger`
+        const url = `${hostName}/phstatemachinetrigger`
         let confData = data.args.param.jsonValue
         confData.ownerId = this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
         confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境"

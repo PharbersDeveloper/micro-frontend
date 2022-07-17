@@ -53,9 +53,4 @@ export async function pharbersActivityListRouteModel(route) {
 		)
 	}
 	return this.allData
-	// return {
-	// 	galleryIds: results[2].filter((it) => it),
-	// 	data: results[0].filter((it) => it.language === lang),
-	// 	galleryList: results[1].filter((it) => it)
-	// }
 }
