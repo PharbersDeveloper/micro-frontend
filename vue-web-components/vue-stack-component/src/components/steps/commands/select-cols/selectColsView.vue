@@ -35,6 +35,7 @@
 					ref="dscols"
 					:dataset-name="item"
 					:columns="datasource.command.dscols[item]"
+					:colnameArr="datasource.command.dscols[item].map(it => it.name)"
 					:schema="schema[item]"
 					:command="datasource.command" />
         </div>
