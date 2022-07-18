@@ -297,6 +297,7 @@ export default {
             return result
         },
         resetInputs() {
+			console.log(this.inputs)
             this.inputs = []
             this.$refs.join.datasource.datasets.forEach(item => {
                 this.inputs = this.inputs.concat(item)

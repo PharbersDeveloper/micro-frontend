@@ -24,6 +24,7 @@
                 </div>
             </div>
         </div>
+		{{datasource.command.dscols}}
         <div class="stack-select-matches-panel" v-if="datasource">
             <output-cols
                     :columns="datasource.command.columns"
