@@ -176,7 +176,6 @@
             <iconLine v-if="!response" class="case-icon-contaniner"></iconLine>
             <iconLineRes v-if="response" class="case-icon-contaniner-response"></iconLineRes>
         </div>
-        <!-- <bp-page-bottom @submitClientData='submitClientData' @toMax='toMax' @toRW='toRW' @toConsulting='toConsulting' @toAboutUs='toAboutUs'></bp-page-bottom> -->
     </div>
 </template>
 <script>

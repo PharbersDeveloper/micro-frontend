@@ -25,7 +25,7 @@ export default class PhDataSource {
     }
 
     buildPolicyQuery(ele, query, schema) {
-        const url = `${hostName}/phdadatasource`
+        const url = `${hostName}/pholapdatasource`
         const accessToken = ele.getCookie("access_token") || this.debugToken
         const tenantId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
         let body = {

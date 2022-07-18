@@ -464,13 +464,14 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			alert("新建数据集成功！")
 			window.location.reload()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "新建数据集失败！"
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "新建数据集失败！"
+			console.log(error)
+			alert("新建数据集失败！")
 			route.loadingService.loading.style.display = "none"
-			alert(msg)
 		}
 	}
 
@@ -495,12 +496,13 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			alert("清除数据成功！")
 			window.location.reload()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "清除数据失败，请重新操作！"
-			alert(msg)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "清除数据失败，请重新操作！"
+			console.log(error)
+			alert("清除数据失败，请重新操作！")
 		}
 		route.loadingService.loading.style.display = "none"
 	}
@@ -515,12 +517,13 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 			alert("删除数据集成功！")
 			window.location.reload()
 		} else if (status == "failed") {
-			let errorObj = error !== "" ? JSON.parse(error) : ""
-			let msg =
-				errorObj["message"]["zh"] !== ""
-					? errorObj["message"]["zh"]
-					: "删除数据集失败，请重新操作！"
-			alert(msg)
+			// let errorObj = error !== "" ? JSON.parse(error) : ""
+			// let msg =
+			// 	errorObj["message"]["zh"] !== ""
+			// 		? errorObj["message"]["zh"]
+			// 		: "删除数据集失败，请重新操作！"
+			console.log(error)
+			alert("删除数据集失败，请重新操作！")
 		}
 		route.loadingService.loading.style.display = "none"
 	}

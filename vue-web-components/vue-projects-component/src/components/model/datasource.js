@@ -38,7 +38,7 @@ export default class PhProjectDatasource {
 	}
 
     buildQuery(tenantId) {
-        const url = `${hostName}/tenantstatus`
+        const url = `${hostName}/phtenantstatus`
         const accessToken = this.getCookie("access_token")
 		console.log(tenantId)
         let body = {

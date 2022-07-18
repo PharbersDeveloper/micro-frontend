@@ -13,7 +13,7 @@ export default class PhContainerDataSource {
         // this.schema = []
         // this.cols = this.schema
         if (!url)
-            this.url= `${hostName}/phdadatasource`
+            this.url= `${hostName}/pholapdatasource`
         if (!adapter)
             this.adapter = this.defaultAdapter
         this.debugToken = "531b7999f8c1ec0739de4574d810168db08d2090c1695226efa2682cff080bb9"
@@ -191,6 +191,9 @@ export default class PhContainerDataSource {
         return ele.datasource.buildCountQuery(ele)
             .then((response) => response.json())
             .then((response) => {
+                if (response.status && response.status === "failed") {
+                    return response.message
+                }
                 return response[0]["count"]
             })
     }
