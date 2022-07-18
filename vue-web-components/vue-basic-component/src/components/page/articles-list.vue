@@ -74,10 +74,10 @@ export default {
         },
         formatDateStandard(...params) {
             if (params.length === 2) {
-				let num = Number(params[0])
-				if (String(num).length === 10) {
-					num = num * 1000
-				}
+                let num = Number(params[0])
+                if (String(num).length === 10) {
+                    num = num * 1000
+                }
                 let date = new Date(num),
                     Y = date.getFullYear(),
                     M =

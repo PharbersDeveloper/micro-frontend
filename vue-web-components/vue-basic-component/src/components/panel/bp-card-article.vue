@@ -51,10 +51,10 @@ export default {
     },
     methods: {
         transDate() {
-			let num = this.date
-			if (String(num).length === 10) {
-				num = num * 1000
-			}
+            let num = this.date
+            if (String(num).length === 10) {
+                num = num * 1000
+            }
             let date = new Date(num)
 
             let y = date.getUTCFullYear()
