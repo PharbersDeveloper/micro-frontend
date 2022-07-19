@@ -188,30 +188,6 @@ export default {
         }
     },
     methods: {
-        addDatasetFromJoin(data) {
-            this.changeDs = true
-            const event = data.args.param
-            let ns = Object.keys(this.datasource.schema).includes(event.newData.name)
-            let os = Object.keys(this.datasource.schema).includes(event.oldData.name)
-            if (!os) {
-                let obj = this.datasetArray.filter(it => it.name === event.oldData.name)[0]
-                this.datasource.schema[event.oldData.name] = JSON.parse(obj["schema"])
-            } else if (!ns) {
-                let obj = this.datasetArray.filter(it => it.name === event.newData.name)[0]
-                this.datasource.schema[event.newData.name] = JSON.parse(obj["schema"])
-            }
-
-            this.$refs.prefilter.updateData(event.newData, event.oldData, event.unreset)
-            this.$refs.percomputed.updateData(event.newData, event.oldData, event.unreset)
-            this.$refs.select.updateData(event.newData, event.oldData, event.unreset)
-        },
-        delDatasetFromJoin(data) {
-            this.changeDs = true
-            const event = data.args.param
-            this.$refs.prefilter.deleteData(event.datasets, event.dsIdxArr)
-            this.$refs.percomputed.deleteData(event.datasets, event.dsIdxArr)
-            this.$refs.select.deleteData(event.datasets, event.dsIdxArr)
-        },
         addDataset() {
             this.changeDs = true
 			this.showAddDialog = true
@@ -222,11 +198,14 @@ export default {
 			this.datasource.schema[this.newDsName] =  JSON.parse(ds["schema"])
 			this.$refs.prefilter.updateData(this.newDsName, index)
 			this.$refs.select.updateData(this.newDsName, index)
+			this.$refs.origin.updateData(this.newDsName, index)
 			this.showAddDialog = false
 		},
 		delDataset(name, index) {
+            this.changeDs = true
 			this.$refs.prefilter.deleteData(name, index)
 			this.$refs.select.deleteData(name, index)
+			this.$refs.origin.deleteData(name, index)
 		},
         getUrlParam(value) {
             let href = window.location.href
@@ -240,7 +219,7 @@ export default {
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(data) {
-               /**
+			/**
              * 1. only dis open ==> success
              * 2. no open ==> wait
              * 3. open filter ===> 判断对错
@@ -298,10 +277,10 @@ export default {
         },
         resetInputs() {
 			console.log(this.inputs)
-            this.inputs = []
-            this.$refs.join.datasource.datasets.forEach(item => {
-                this.inputs = this.inputs.concat(item)
-            })
+            this.inputs = this.$refs.select.datasource.command.ds
+            // this.$refs.select.datasource..command.ds.forEach(item => {
+            //     this.inputs = this.inputs.concat(item)
+            // })
         },
         save() {
             if (this.activeName === "Setting") {
@@ -384,7 +363,7 @@ export default {
             let script = {
                 old: {
                     name: this.allData.jobName,
-                    id: this.allData.jobId
+                    id: this.jobId
                 },
                 new: {
                     "name": `compute_${outputNameNew}`,

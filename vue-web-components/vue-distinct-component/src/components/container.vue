@@ -254,7 +254,7 @@ export default {
 			let script = {
 				old: {
 					name: this.allData.jobName,
-					id: this.allData.jobId
+					id: this.jobId
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
@@ -291,6 +291,7 @@ export default {
         // this.projectIdTest = "alfredtest"
         // this.jobName = "distinct"
 		this.jobName = this.getJobName()
+        this.jobId = this.getUrlParam("jobId")
         // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)

@@ -24,7 +24,6 @@
                 </div>
             </div>
         </div>
-		{{datasource.command.dscols}}
         <div class="stack-select-matches-panel" v-if="datasource">
             <output-cols
                     :columns="datasource.command.columns"
@@ -88,13 +87,13 @@ export default {
                 errorValues = val.length > 0
             }
             const event = new Event("event")
-                event.args = {
-                    element: this,
-                    param: {
-                        errors: errorValues
-                    }
-                }
-                this.$emit('statusChange', event)
+			event.args = {
+				element: this,
+				param: {
+					errors: errorValues
+				}
+			}
+			this.$emit('statusChange', event)
         },
         updateData(name, index) {
             this.datasource.refreshData(name, index)

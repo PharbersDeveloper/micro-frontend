@@ -5,7 +5,6 @@
         </div>
         <el-divider class="divider"></el-divider>
         <div class="stack-ds-list">
-			{{columns}}
             <div class="stack-ds-item" v-for="(item, index) in columns" :key="datasetName+index">
                 <select v-model="colnameArr[index]" @change="selectCol($event, index)">
                     <option value="null" label="None" />
@@ -52,7 +51,6 @@ export default {
 			console.log(this.columns)
 		},
 		selectCol(e, i) {
-			console.log(e, i)
             this.command.updateSelectColumnValue(this.datasetName, i, e.target.value)
 		}
     },
