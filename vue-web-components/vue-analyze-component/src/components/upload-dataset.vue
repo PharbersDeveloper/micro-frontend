@@ -430,6 +430,7 @@ export default {
         },
         //点击list主体
         clickOnlyOne(dataset) {
+            console.log(dataset,1111111)
             this.database_icon = this.selectDatasetIcon(dataset.cat)
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
