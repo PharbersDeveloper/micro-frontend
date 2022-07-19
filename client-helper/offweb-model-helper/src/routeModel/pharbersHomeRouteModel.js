@@ -27,7 +27,7 @@ export async function pharbersHomeRouteModel(route) {
 
 	const homeArticles = [
 		"第五轮VBP，内外资企业不同之伤！",
-		"4+7城市药品集中采购政策影响回顾",
+		"法伯科技重磅发布《VBP政策下的用药分析》",
 		"看国谈已执行品种是否获益，新版医保谈判目录如何变化"
 	]
 
