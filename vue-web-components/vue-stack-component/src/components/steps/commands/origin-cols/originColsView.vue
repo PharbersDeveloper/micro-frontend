@@ -74,7 +74,17 @@ export default {
 				}
 			}
 			this.$emit('statusChange', event)
-        }
+        },
+		updateData(name) {
+			this.datasource.command.originDatasets.push({
+				ds: name,
+                value: name
+			})
+		},
+		deleteData(name, i) {
+			this.datasource.command.originDatasets.splice(i, 1)
+		}
+			
     },
     computed: {
 

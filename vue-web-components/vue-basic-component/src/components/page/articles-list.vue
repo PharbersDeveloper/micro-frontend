@@ -73,15 +73,18 @@ export default {
             this.$emit('event', event)
         },
         formatDateStandard(...params) {
-            if(params.length === 2) {
-                let date = new Date( Number(params[0]) ),
+            if (params.length === 2) {
+                let num = Number(params[0])
+                if (String(num).length === 10) {
+                    num = num * 1000
+                }
+                let date = new Date(num),
                     Y = date.getFullYear(),
                     M =
                         ( date.getMonth() + 1 < 10 ?
                             `0${date.getMonth() + 1}` :
                             date.getMonth() + 1 ),
                     D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
-                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
 
                     h =
                         ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),

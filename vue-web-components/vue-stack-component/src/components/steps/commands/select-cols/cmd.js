@@ -40,6 +40,12 @@ export default class PhSelectColsCmd {
         })
     }
 
+	updateSelectColumnValue(dsname, index, name) {
+		this["dscols"][dsname][index] = {
+			"name": name
+		}
+	}
+
 	deleteAllSelectColumn() {
 		this.columns = []
 		this.ds.forEach(x => {

@@ -431,7 +431,7 @@ export default {
             let script = {
                 old: {
                     name: this.allData.jobName,
-                    id: this.allData.jobId
+                    id: this.jobId 
                 },
                 new: {
                     "name": `compute_${outputNameNew}`,
