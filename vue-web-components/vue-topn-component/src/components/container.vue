@@ -189,7 +189,7 @@ export default {
             }
         },
         computedStatus(data) {
-           const status = data.args.param.status, errors = data.args.param.errors
+           	const status = data.args.param.status, errors = data.args.param.errors
 			this.stepsDefs[1].status = "success"
             if (!status) {
                 this.stepsDefs[1].status = "wait"
