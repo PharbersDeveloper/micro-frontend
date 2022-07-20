@@ -281,7 +281,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
+    buildSaveQuery(projectId, jobName, param, inputs) {
 		const steps = [{
 			pjName: this.step["pj-name"],
 			stepId: this.step["step-id"],
@@ -307,13 +307,14 @@ export default class PhDataSource {
 				name: "saveStack",
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
-				stepsArr: steps
+				stepsArr: steps,
+				inputs: inputs
 			}
 		}
 		this.parent.$emit('event', event)
     }
 
-    saveAndGenCode(projectId, jobName, parame) {
-        this.buildSaveQuery(projectId, jobName, parame)
+    saveAndGenCode(projectId, jobName, parame, inputs) {
+        this.buildSaveQuery(projectId, jobName, parame, inputs)
     }
 }

@@ -78,6 +78,7 @@ export async function phAnalyzeBpExcelContainerEventHandler(e, route) {
 				} else {
 					alert(message)
 					element.itemValueType = params.originalType
+					element.selectValue = params.originalType
 				}
 				route.loadingService.loading.style.display = "none"
 			}

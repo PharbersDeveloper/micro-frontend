@@ -189,7 +189,7 @@ export default {
             }
         },
         computedStatus(data) {
-           const status = data.args.param.status, errors = data.args.param.errors
+           	const status = data.args.param.status, errors = data.args.param.errors
 			this.stepsDefs[1].status = "success"
             if (!status) {
                 this.stepsDefs[1].status = "wait"
@@ -311,7 +311,7 @@ export default {
 			let script = {
 				old: {
 					name: this.allData.jobName,
-					id: this.allData.jobId
+					id: this.jobId
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
@@ -346,6 +346,7 @@ export default {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
+        this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
         this.datasource.refreshDataset(this.projectId, this.datasetId)

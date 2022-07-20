@@ -431,11 +431,11 @@ export default {
             let script = {
                 old: {
                     name: this.allData.jobName,
-                    id: this.allData.jobId
+                    id: this.jobId 
                 },
                 new: {
                     "name": `compute_${outputNameNew}`,
-                    "runtime": "topn",
+                    "runtime": "join",
                     "inputs": JSON.stringify(data.args.param.inputsArray),
                     "output": outputNameNew
                 }

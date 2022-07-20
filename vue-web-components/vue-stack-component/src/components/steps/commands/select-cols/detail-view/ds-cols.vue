@@ -5,10 +5,15 @@
         </div>
         <el-divider class="divider"></el-divider>
         <div class="stack-ds-list">
-            <div class="stack-ds-item" v-for="(item, index) in columns" :key="index">
-                <select v-model="item.name">
+            <div class="stack-ds-item" v-for="(item, index) in columns" :key="datasetName+index">
+                <select v-model="colnameArr[index]" @change="selectCol($event, index)">
                     <option value="null" label="None" />
-                    <option v-for="(op, it) in schema" :value="op.src" :label="op.src" :key="it" />
+                    <option 
+						v-for="(op, it) in schema" 
+						:value="op.src" 
+						:label="op.src" 
+						:selected="op.src === item.name"
+						:key="it" />
                 </select>
             </div>
         </div>
@@ -21,13 +26,15 @@ import ElDivider from 'element-ui/packages/divider/index'
 export default {
     data() {
         return {
+			colname: []
         }
     },
     props: {
         datasetName: String,
         schema: Array,
         columns: Array,
-        command: Object
+        command: Object,
+		colnameArr: Array,
     },
     components: {
         // ElInput,
@@ -42,8 +49,13 @@ export default {
         },
 		initData() {
 			console.log(this.columns)
+		},
+		selectCol(e, i) {
+            this.command.updateSelectColumnValue(this.datasetName, i, e.target.value)
 		}
-    }
+    },
+	watch: {
+	}
 }
 </script>
 <style lang="scss" scoped>

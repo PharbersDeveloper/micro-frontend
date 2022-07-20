@@ -4,7 +4,7 @@
         <div class="pivot_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('pivot')" alt="" />
-                <span>Pivot</span>
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
 				<el-radio-group v-model="activeName" class="content">
@@ -101,7 +101,7 @@ export default {
     data() {
         return {
             outputsSchema: [],
-            active: 1,
+            active: 3,
 			flowVersion: "developer",
             stepsDefs: [
                 {
@@ -177,28 +177,29 @@ export default {
 			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+        preFilterStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[0].status = "success"
+            if (!status) {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },
-        computedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
+        computedStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[1].status = "success"
+            if (!status) {
+                this.stepsDefs[1].status = "wait"
+            } else if (errors){
                 this.stepsDefs[1].status = "error"
             }
         },
-        pivotStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+        pivotStatus(errors) {
+            if (errors) {
                 this.stepsDefs[2].status = "error"
+            } else {
+                this.stepsDefs[2].status = "success"
             }
         },
         otherStatus(status) {
@@ -227,6 +228,19 @@ export default {
         },
         save() {
 			if (this.activeName === "Setting") {
+
+				this.$refs.filter.validate()
+				this.$refs.computed.validate()
+				this.$refs.topn.validate()
+				this.$refs.retrieved.validate()
+				this.$refs.outputs.validate()
+
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+				if(errors.length > 0) {
+					Message.error("请修改参数！", { duration: 3000} )
+					return false
+				}
+				
 				const params = {
 					"preFilter": this.$refs.prefilter.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs(),
@@ -283,7 +297,7 @@ export default {
 			let script = {
 				old: {
 					name: this.allData.jobName,
-					id: this.allData.jobId
+					id: this.jobId
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
@@ -317,33 +331,28 @@ export default {
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-
-        // this.projectIdTest = "alfredtest"
-        // this.jobName = "pivot"
         this.jobName = this.getJobName()
-        // this.inputDsName = this.getUrlParam("inputName")
+        this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {
+			if (n === 4) {
+                this.selection = this.$refs.pivot.datasource.command.selection
+                this.$refs.other.datasource.refreshCols(this.selection)
+            }
+            if (n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
+			
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
             this.$refs.pivot.validate()
             this.$refs.other.validate()
             this.$refs.outputs.validate()
-
-            if (n === 4) {
-                this.selection = this.$refs.pivot.datasource.command.selection
-                this.$refs.other.datasource.refreshCols(this.selection)
-            }
-
-            if (n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
         },
 		activeName(n) {
             this.$emit("active", n)
@@ -363,10 +372,6 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-
-        .op-factories {
-            // background: red;
-        }
 
         .pivot_header {
             height: 48px;

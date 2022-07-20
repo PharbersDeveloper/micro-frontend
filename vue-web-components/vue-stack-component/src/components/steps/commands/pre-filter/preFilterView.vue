@@ -116,7 +116,7 @@
                 if (enabled) {
                     this.datasource.commands.forEach(item => {
                         if(item.meta.enabled) {
-                            const len1 = item.detail.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+                            const len1 = item.detail.cloases.filter(it => it.right && it.right.replace(/\s*/g,"").length === 0)
                             error = error + len1.length
                             const len2 = item.detail.cloases.length === 0
                             if (len2) error = error + 1

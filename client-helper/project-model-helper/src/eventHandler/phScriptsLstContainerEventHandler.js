@@ -522,7 +522,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&inputName=" +
 						params.inputs[0]["name"] +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId="
 				} else if (params.runtime === "topn") {
 					route.store.pushPayload({
 						data: [
@@ -543,7 +544,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId="
 				} else if (params.runtime === "distinct") {
 					route.store.pushPayload({
 						data: [
@@ -564,7 +566,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId="
 				} else if (params.runtime === "sort") {
 					route.store.pushPayload({
 						data: [
@@ -585,7 +588,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId="
 				} else if (params.runtime === "group") {
 					route.store.pushPayload({
 						data: [
@@ -606,7 +610,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId="
 				} else if (params.runtime === "pivot") {
 					route.store.pushPayload({
 						data: [
@@ -627,7 +632,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&jobName=" +
 						params.jobName +
 						"&datasetId=" +
-						params.inputs[0]["id"]
+						params.inputs[0]["id"] +
+						"&jobId="
 				} else if (params.runtime === "sync") {
 					route.store.pushPayload({
 						data: [
@@ -653,7 +659,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						"&inputName=" +
 						params.inputs[0]["name"] +
 						"&outputName=" +
-						params.outputs[0].name
+						params.outputs[0].name +
+						"&jobId="
 
 					script.version = []
 				} else if (params.runtime === "join") {
@@ -904,9 +911,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 		const codeditorArr = ["python3", "pyspark", "sparkr", "r"]
 		if (!codeditorArr.includes(runtime)) {
-			if (runtime === "join" || runtime === "stack") {
-				preUrl = preUrl + jobId
-			}
+			preUrl = preUrl + jobId
 			route.router.transitionTo("shell", preUrl)
 		} else if (status == "succeed") {
 			alert("新建脚本成功！")

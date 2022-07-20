@@ -318,11 +318,11 @@ export default {
 			let script = {
 				old: {
 					name: this.allData.jobName,
-					id: this.allData.jobId
+					id: this.jobId
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
+					"runtime": "group",
 					"inputs": JSON.stringify(data.args.param.inputsArray),
 					"output": outputNameNew
 				}
@@ -353,6 +353,7 @@ export default {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
+        this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)

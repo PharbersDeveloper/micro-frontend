@@ -24,6 +24,7 @@ export async function phStackContainerEventHandler(e, route) {
 			: scriptsParams.outputs
 		outputs.push(outputsData)
 	}
+	console.log(inputs)
 	let uri = ""
 	route.msg = "新建"
 	switch (e.detail[0].args.callback) {
@@ -59,14 +60,19 @@ export async function phStackContainerEventHandler(e, route) {
 			break
 		case "saveStack":
 			if (params) {
+				route.msg = "修改"
 				const url = `${hostName}/phresourcecodegentrigger`
 				const uuid = guid()
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				let job_cat_name = "stack_edit"
-				let scriptBody = {
+				const job_cat_name = "stack_edit"
+				const inputsArray =
+					params.inputs && params.inputs.length > 0
+						? params.inputs
+						: inputs
+				const scriptBody = {
 					common: {
 						traceId: uuid,
 						tenantId: route.cookies.read("company_id"),
@@ -99,7 +105,7 @@ export async function phStackContainerEventHandler(e, route) {
 							? scriptsParams.jobShowName
 							: scriptsParams.jobName,
 						jobPath: "",
-						inputs: inputs,
+						inputs: inputsArray,
 						outputs: outputs,
 						runtime: "stack"
 					},
@@ -109,8 +115,7 @@ export async function phStackContainerEventHandler(e, route) {
 					},
 					oldImage: []
 				}
-				console.log(scriptBody)
-				let scriptOptions = {
+				const scriptOptions = {
 					method: "POST",
 					headers: {
 						Authorization: accessToken,
@@ -130,7 +135,7 @@ export async function phStackContainerEventHandler(e, route) {
 					eventName: job_cat_name,
 					projectId: scriptsParams.projectId,
 					ownerId: route.cookies.read("account_id"),
-					callBack: createScriptNoticeCallback
+					callBack: editScriptNoticeCallback
 				})
 			}
 			break
@@ -220,21 +225,21 @@ export async function phStackContainerEventHandler(e, route) {
 		)
 	}
 
-	function createScriptNoticeCallback(param, payload) {
+	function editScriptNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "succeed" || status == "success") {
-			if (params.type === "preview") {
-				element.steps.refreshData()
-			} else {
+			if (!element.parent.changeDs) {
 				alert(`${route.msg}脚本成功！`)
 				route.router.transitionTo(
 					"shell",
 					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
 				)
+				return false
 			}
+			element.parent.$refs.changeInputOutput.save()
 		} else {
 			// let errorObj = error !== "" ? JSON.parse(error) : ""
 			// let msg =

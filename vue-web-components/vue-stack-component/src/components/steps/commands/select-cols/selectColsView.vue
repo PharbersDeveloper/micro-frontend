@@ -34,6 +34,7 @@
 					ref="dscols"
 					:dataset-name="item"
 					:columns="datasource.command.dscols[item]"
+					:colnameArr="datasource.command.dscols[item].map(it => it.name)"
 					:schema="schema[item]"
 					:command="datasource.command" />
         </div>
@@ -86,13 +87,13 @@ export default {
                 errorValues = val.length > 0
             }
             const event = new Event("event")
-                event.args = {
-                    element: this,
-                    param: {
-                        errors: errorValues
-                    }
-                }
-                this.$emit('statusChange', event)
+			event.args = {
+				element: this,
+				param: {
+					errors: errorValues
+				}
+			}
+			this.$emit('statusChange', event)
         },
         updateData(name, index) {
             this.datasource.refreshData(name, index)
