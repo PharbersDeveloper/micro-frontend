@@ -273,6 +273,9 @@ export default {
                     "title": tmp[idx]
                 })
             }
+			result.push({
+				title: this.$refs.origin.datasource.command.columnName
+			})
             return result
         },
         resetInputs() {
