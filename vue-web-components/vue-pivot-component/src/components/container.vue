@@ -331,34 +331,28 @@ export default {
     async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-
-        // this.projectIdTest = "alfredtest"
-        // this.jobName = "pivot"
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
-        // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {
+			if (n === 4) {
+                this.selection = this.$refs.pivot.datasource.command.selection
+                this.$refs.other.datasource.refreshCols(this.selection)
+            }
+            if (n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
+			
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
             this.$refs.pivot.validate()
             this.$refs.other.validate()
             this.$refs.outputs.validate()
-
-            if (n === 4) {
-                this.selection = this.$refs.pivot.datasource.command.selection
-                this.$refs.other.datasource.refreshCols(this.selection)
-            }
-
-            if (n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
         },
 		activeName(n) {
             this.$emit("active", n)
@@ -378,10 +372,6 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-
-        .op-factories {
-            // background: red;
-        }
 
         .pivot_header {
             height: 48px;
