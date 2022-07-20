@@ -273,14 +273,13 @@ export default {
                     "title": tmp[idx]
                 })
             }
+			result.push({
+				title: this.$refs.origin.datasource.command.columnName
+			})
             return result
         },
         resetInputs() {
-			console.log(this.inputs)
             this.inputs = this.$refs.select.datasource.command.ds
-            // this.$refs.select.datasource..command.ds.forEach(item => {
-            //     this.inputs = this.inputs.concat(item)
-            // })
         },
         save() {
             if (this.activeName === "Setting") {
@@ -308,7 +307,7 @@ export default {
                     "originColumn": this.$refs.origin.datasource.revert2Defs(),
                     "postFilter": this.$refs.postfilter.datasource.revert2Defs()
                 }
-                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params, this.inputs)
             } else {
                 this.$refs.changeInputOutput.save()
             }
@@ -367,7 +366,7 @@ export default {
                 },
                 new: {
                     "name": `compute_${outputNameNew}`,
-                    "runtime": "topn",
+                    "runtime": "stack",
                     "inputs": JSON.stringify(data.args.param.inputsArray),
                     "output": outputNameNew
                 }

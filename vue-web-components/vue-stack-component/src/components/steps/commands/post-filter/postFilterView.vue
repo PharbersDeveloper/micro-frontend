@@ -78,7 +78,7 @@ export default {
     },
     methods: {
        validate() {
-            const ErrorVales = this.datasource.command.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+            const ErrorVales = this.datasource.command.cloases.filter(it => it.op !== "NOT-EXISTS" && it.op !== "EXISTS" && it.right && it.right.replace(/\s*/g,"").length === 0)
 			const event = new Event("event")
 			event.args = {
 				element: this,

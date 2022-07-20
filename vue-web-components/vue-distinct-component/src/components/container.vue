@@ -258,7 +258,7 @@ export default {
 				},
 				new: {
 					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
+					"runtime": "distinct",
 					"inputs": JSON.stringify(data.args.param.inputsArray),
 					"output": outputNameNew
 				}

@@ -24,6 +24,7 @@ export async function phStackContainerEventHandler(e, route) {
 			: scriptsParams.outputs
 		outputs.push(outputsData)
 	}
+	console.log(inputs)
 	let uri = ""
 	route.msg = "新建"
 	switch (e.detail[0].args.callback) {
@@ -66,8 +67,12 @@ export async function phStackContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
-				let job_cat_name = "stack_edit"
-				let scriptBody = {
+				const job_cat_name = "stack_edit"
+				const inputsArray =
+					params.inputs && params.inputs.length > 0
+						? params.inputs
+						: inputs
+				const scriptBody = {
 					common: {
 						traceId: uuid,
 						tenantId: route.cookies.read("company_id"),
@@ -100,7 +105,7 @@ export async function phStackContainerEventHandler(e, route) {
 							? scriptsParams.jobShowName
 							: scriptsParams.jobName,
 						jobPath: "",
-						inputs: inputs,
+						inputs: inputsArray,
 						outputs: outputs,
 						runtime: "stack"
 					},
@@ -110,8 +115,7 @@ export async function phStackContainerEventHandler(e, route) {
 					},
 					oldImage: []
 				}
-				console.log(scriptBody)
-				let scriptOptions = {
+				const scriptOptions = {
 					method: "POST",
 					headers: {
 						Authorization: accessToken,
