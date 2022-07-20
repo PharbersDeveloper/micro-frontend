@@ -224,6 +224,7 @@ import selectCatalog from './select-catalog'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
 
+
 export default {
     data() {
         return {
@@ -240,7 +241,7 @@ export default {
             input_index_icon: `${staticFilePath}` + "/input_index.svg",
             output_index_icon: `${staticFilePath}` + "/output_index.svg",
             intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
-            database_icon: "",
+            database_icon: `${staticFilePath}` + "/icons/all_dataset.svg",
             catalog_icon: `${staticFilePath}` + "/icons/catalog/normal.svg",
             showDialog: false,
             state: '',
@@ -430,7 +431,6 @@ export default {
         },
         //点击list主体
         clickOnlyOne(dataset) {
-            console.log(dataset,1111111)
             this.database_icon = this.selectDatasetIcon(dataset.cat)
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
@@ -440,12 +440,17 @@ export default {
         //点击list多选框
         checkedOneDataset(dataset) {
             let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
-            if(idIndex >= 0) {
+            if(idIndex >= 0) { 
                 this.datasetcheckedIds.splice(idIndex, 1)
                 this.datasetcheckedNames.splice(idIndex, 1)
             } else {
                 this.datasetcheckedIds.push(dataset.id)
                 this.datasetcheckedNames.push(dataset.name)
+            }
+            if(this.datasetcheckedIds.length == 1){
+                this.database_icon = this.selectDatasetIcon(dataset.cat)
+            }else{
+                this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             }
         },
         //点击dataset name
@@ -465,6 +470,7 @@ export default {
         },
         //全选list
         chechedAllDataset() {
+            // this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             this.isCheckedAllDataset = true
             if(this.datasetcheckedIds.length == this.allData.dss.length) {
                 this.isCheckedAllDataset = false
@@ -473,6 +479,7 @@ export default {
             this.datasetcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
+                this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
                 this.allData.dss.forEach(item => {
                     this.datasetcheckedIds.push(item.id)
                     this.datasetcheckedNames.push(item.name)

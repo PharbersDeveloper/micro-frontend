@@ -224,7 +224,7 @@ export default {
             python_icon: `${staticFilePath}` + "/python_icon.svg",
             R_icon: `${staticFilePath}` + "/R_icon.svg",
             sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
-            script_icon_show: "",
+            script_icon_show: `${staticFilePath}` + "/icons/all_script.svg",
             showDialog: false,
             state: '',
             editShow: false,
@@ -424,6 +424,11 @@ export default {
                 this.reciptcheckedIds.push(recipt.id)
                 this.reciptcheckedNames.push(recipt.name)
             }
+            if(this.reciptcheckedIds.length == 1){
+                this.script_icon_show = this.selectScriptIcon(recipt.runtime)
+            }else{
+                this.script_icon_show  = `${staticFilePath}` + "/icons/all_script.svg"
+            }
         },
         //点击dataset name
         clickReciptName(recipt) {
@@ -453,6 +458,7 @@ export default {
             this.reciptcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
+                this.script_icon_show  = `${staticFilePath}` + "/icons/all_script.svg"
                 this.allData.dcs.forEach(item => {
                     this.reciptcheckedIds.push(item.id)
                     this.reciptcheckedNames.push(item.name)
