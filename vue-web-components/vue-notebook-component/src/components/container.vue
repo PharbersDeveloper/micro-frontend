@@ -215,8 +215,7 @@ export default {
             notebookscheckedOwners:[],//选中项owner
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            owner: "",
-            // checkedOwner:""
+            owner: ""
         }
     },
     props: {
@@ -321,12 +320,6 @@ export default {
                 this.notebookscheckedNames.push(notebook.name)
                 this.notebookscheckedOwners.push(notebook.owner)
             }
-            // 没有是-1，
-            // if(this.notebookscheckedOwners.indexOf(this.owner) >= 0 && this.notebookscheckedOwners.length == 1){
-            //     this.checkedOwner = this.owner
-            // }else{
-            //     this.checkedOwner = notebook.owner
-            // }
         },
         //点击notebooks name
         clickNotebooksName(notebook) {
@@ -420,11 +413,6 @@ export default {
                 Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true} )
                 return
             }
-            // if(this.checkedOwner !== this.owner){
-            //     Message.error("无法删除其他用户的Jupyter！", { duration: 0, showClose: true} )
-            //     return
-            // }
-            // 有一个不是我的owner就返回false
             const _that = this
             var result = this.notebookscheckedOwners.every(function(item){
                 return item === _that.owner
