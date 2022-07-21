@@ -8,8 +8,8 @@
         <div class="pivot-agg-content" >
             <div class="pivot-agg-lst">
                 <div v-for="(item, index) in valueColumns" :key="index" class="pivot-column-item">
-                    <span>{{index}}</span>
-                    &nbsp;
+                    <!-- <span>{{index}}</span> -->
+                    <!-- &nbsp; -->
                     <span>{{displayValueColumn(item)}}</span>
                     &nbsp;
                     <el-button type="text" @click="editAggCondition(item)">编辑</el-button>
