@@ -229,10 +229,10 @@ export default {
         save() {
 			if (this.activeName === "Setting") {
 
-				this.$refs.filter.validate()
+				this.$refs.prefilter.validate()
 				this.$refs.computed.validate()
-				this.$refs.topn.validate()
-				this.$refs.retrieved.validate()
+				this.$refs.pivot.validate()
+				this.$refs.other.validate()
 				this.$refs.outputs.validate()
 
 				let errors = this.stepsDefs.filter(it => it.status === "error")
@@ -334,7 +334,7 @@ export default {
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
