@@ -6,11 +6,11 @@
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
-                            <div class="selected"
-                                :class="[{'bg_disabled': notebookscheckedIds.length === 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllnotebooks()' :checked="notebookscheckedIds.length === searchData.length">
+                            <div class="selected" :class="[{ 'bg_disabled': notebookscheckedIds.length === 0 }]">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllnotebooks()'
+                                    :checked="notebookscheckedIds.length === searchData.length">
                                 <div class="opt-area" @click="dropShow">
-                                    <span class="action" >选项</span>
+                                    <span class="action">选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
                                     <div class="drop_dialog" v-if="dropDialogShow">
                                         <div class="label_icon" @click="createTagsOpen">
@@ -23,16 +23,16 @@
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除脚本</p>
+                                            <p>删除</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="search_area">
-                                   <div class="search_icon">
-                                       <img :src="search_icon">
-                                   </div>
-                                   <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                                <div class="search_icon">
+                                    <img :src="search_icon">
+                                </div>
+                                <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click.stop="showCreationDialog = true">新建编译器</button>
                         </div>
@@ -44,22 +44,24 @@
                                 <!-- 降序(默认) -->
                                 <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
-                            <div class="down_sel" >
-                                <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                            <div class="down_sel">
+                                <bp-select-vue :src="selectIcon" :choosedValue="scriptValue"
+                                    @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
                             <div class="line">|</div>
-                            <div class="down_sel tags_down_sel" >
+                            <div class="down_sel tags_down_sel">
                                 <p class="sel" @click="labelShow">标签</p>
                                 <span class="drop_icon" @click="labelShow">
                                     <img :src="dropDownIcon" alt="">
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
-                                            <span  :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
-                                            <div class="tags_name">{{item}}</div>
+                                        <div class="label_name" v-for="(item, index) in allData.tagsArray" :key="index">
+                                            <span
+                                                :style="{ background: tagsColorArray[allData.tagsArray.indexOf(item)] }"></span>
+                                            <div class="tags_name">{{ item }}</div>
                                         </div>
                                     </div>
                                     <div class="management">
@@ -69,35 +71,39 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="notebooks_number">
-                                <p>{{allData.dns.length}} 条</p>
+                                <p>{{ allData.dns.length }} 条</p>
                             </div>
                         </div>
                     </div>
-<!--                    <div class="upload_bottom" v-if="datasource.isReady">-->
-                    <div class="upload_bottom" >
-                        <div class="data_content" v-for="(notebook,index) in searchData" :key="index" ref="content" :class="{bg: notebookscheckedIds.indexOf(notebook.id) > -1}" @click="clickOnlyOne(notebook, index)">
+                    <!--                    <div class="upload_bottom" v-if="datasource.isReady">-->
+                    <div class="upload_bottom">
+                        <div class="data_content" v-for="(notebook, index) in searchData" :key="index" ref="content"
+                            :class="{ bg: notebookscheckedIds.indexOf(notebook.id) > -1 }"
+                            @click="clickOnlyOne(notebook, index)">
                             <div class="content-left">
                                 <div style="display: flex; flex-direction: column; justify-content: space-around">
-                                    <input type="checkbox" ref="data" name="notebooksList" :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1" @click.stop="checkedOnenotebooks(notebook.detail)">
+                                    <input type="checkbox" ref="data" name="notebooksList"
+                                        :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
+                                        @click.stop="checkedOnenotebooks(notebook.detail)">
                                 </div>
                                 <div class="item_list">
                                     <span class="script_icon">
                                         <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
                                     </span>
-                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)" :title="notebook.name">
-                                        {{notebook.detail.name}}
+                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)"
+                                        :title="notebook.name">
+                                        {{ notebook.detail.name }}
                                     </p>
                                     <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
 
                                     <div class="tag_area" ref="tagsArea">
                                         <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
-                                        <span v-if="notebook.label !== ''">
-                                            <p
-                                                    :title="tag"
-                                                    class="tag_bg"
-                                                    :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
-                                            </p>
-                                        </span>
+                                            <span v-if="notebook.label !== ''">
+                                                <p :title="tag" class="tag_bg"
+                                                    :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
+                                                    {{ tag }}
+                                                </p>
+                                            </span>
                                         </div>
                                         <!-- tag的更多按钮，暂时隐藏 -->
                                         <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
@@ -105,14 +111,10 @@
                                 </div>
                             </div>
                             <div>
-                                <span>{{notebook.message}}</span>
+                                <span>{{ notebook.message }}</span>
                                 <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
-                                           v-model="notebook.switch"
-                                           active-color="#13ce66"
-                                           @change="resetStatus(notebook)"/>
-                                <el-switch v-else disabled
-                                           v-model="notebook.switch"
-                                           active-color="#13ce66" />
+                                    v-model="notebook.switch" active-color="#13ce66" @change="resetStatus(notebook)" />
+                                <el-switch v-else disabled v-model="notebook.switch" active-color="#13ce66" />
                             </div>
 
                         </div>
@@ -120,28 +122,28 @@
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="notebookscheckedIds.length > 0" >
+                    <div class="view_content" v-if="notebookscheckedIds.length > 0">
                         <div class="project_name_view">
                             <span class="space">
                                 <img :src="script_icon_show" alt="">
                             </span>
                             <div class="show-name" v-if="notebookscheckedIds.length === 1">
                                 <p class="project_name_info" :title="notebookscheckedNames[0]">
-                                {{notebookscheckedNames[0]}}
+                                    {{ notebookscheckedNames[0] }}
                                 </p>
                             </div>
-                           <div class="show-name">
-                               <p class="project_name_info" v-if="notebookscheckedIds.length > 1">
-                                    {{notebookscheckedIds.length}} 条
+                            <div class="show-name">
+                                <p class="project_name_info" v-if="notebookscheckedIds.length > 1">
+                                    {{ notebookscheckedIds.length }} 条
                                 </p>
-                           </div>
+                            </div>
                         </div>
                         <div class="view_func">
                             <span @click="createTagsOpen" class="view_list">
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span @click='deleteNotebook' class="view_list">
+                            <span @click='deleteNotebook()' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
                             </span>
@@ -151,21 +153,13 @@
                 </div>
             </div>
             <!-- 添加tag -->
-            <create-tags-dialog
-                v-if="showCreateTagsDialog"
-                :datasetchecked-ids="notebookscheckedIds"
-                :datasetchecked-names="notebookscheckedNames"
-                :datasets="allData.dns"
-                :tagsArray="allData.tagsArray"
-                :tagsColorArray="tagsColorArray"
-                @addTagsEvent="addTagsEvent"
-                @closeCreateDialog="closeCreateDialog">
+            <create-tags-dialog v-if="showCreateTagsDialog" :datasetchecked-ids="notebookscheckedIds"
+                :datasetchecked-names="notebookscheckedNames" :datasets="allData.dns" :tagsArray="allData.tagsArray"
+                :tagsColorArray="tagsColorArray" @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
             </create-tags-dialog>
             <!-- 新建NoteBook -->
-            <create-notebook-dialog
-                    :dialog-visible="showCreationDialog"
-                    @cancel="showCreationDialog = false"
-                    @confirm="createNotebook">
+            <create-notebook-dialog :dialog-visible="showCreationDialog" @cancel="showCreationDialog = false"
+                @confirm="createNotebook">
             </create-notebook-dialog>
         </div>
     </div>
@@ -205,15 +199,16 @@ export default {
             showCreationDialog: false,
             searchValue: '',
             ascending: false,
-            tags: ['name','description','啦啦啦'],
+            tags: ['name', 'description', '啦啦啦'],
             checked: false,
             manual: true,
             scriptValue: "名称",
             isCheckedAllnotebooks: false,
             notebookscheckedIds: [], //选中项id
             notebookscheckedNames: [], //选中项name
-            color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            notebookscheckedOwners: [],//选中项owner
+            color: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             owner: ""
         }
     },
@@ -236,7 +231,7 @@ export default {
         },
         datasource: {
             type: Object,
-            default: function() {
+            default: function () {
                 return new PhDataSource("1", this)
             }
         }
@@ -250,11 +245,11 @@ export default {
         ElTag
     },
     computed: {
-        searchData: function() {
+        searchData: function () {
             let searchValue = this.searchValue
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             this.state = 'search'
-            if(searchValue) {
+            if (searchValue) {
                 // return this.allData.dns.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
                 return this.datasource.model.filter(item => item.detail.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
@@ -264,7 +259,7 @@ export default {
     },
     mounted() {
         // let that = this
-        if(this.$refs.tagsArea) {
+        if (this.$refs.tagsArea) {
             this.$refs.tagsArea.forEach((item) => {
                 item.style["height"] = "40px"
             })
@@ -272,14 +267,14 @@ export default {
         this.owner = this.datasource.getCookie("account_id")
     },
     watch: {
-        "allData.tagsArray": function() {
+        "allData.tagsArray": function () {
             this.tagsColorArray = []
             this.allData.tagsArray.forEach(() => {
                 // this.allData.tagsArray.forEach((item, index) => {
-                this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
+                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
             })
         },
-        "allData.dns": function() {
+        "allData.dns": function () {
             this.datasource.refreshPlaceholders(this.allData.dns)
             const dnsIds = this.allData.dns.map(x => x.id)
             this.datasource.refreshStatus(this.allData.tenantId, dnsIds)
@@ -289,7 +284,7 @@ export default {
         handleClose(done) {
             this.$confirm('确认关闭？').then(() => {
                 done();
-            }).catch(() => {});
+            }).catch(() => { });
         },
         addTagsEvent(data) {
             data.args.param.selectednotebooks = this.notebookscheckedIds
@@ -310,19 +305,24 @@ export default {
         //点击list多选框
         checkedOnenotebooks(notebook) {
             let idIndex = this.notebookscheckedIds.indexOf(notebook.id)
-            if(idIndex >= 0) {
+            if (idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
+                this.notebookscheckedOwners.splice(idIndex, 1)
             } else {
                 this.notebookscheckedIds.push(notebook.id)
                 this.notebookscheckedNames.push(notebook.name)
+                this.notebookscheckedOwners.push(notebook.owner)
             }
         },
         //点击notebooks name
         clickNotebooksName(notebook) {
             console.log(notebook)
-            if (notebook.status !== 2) {
-                Message.error("只有已经启动的编译器才能进入", { duration: 0, showClose: true} )
+            if (notebook.detail.owner !== this.owner) {
+                Message.error("抱歉,您没有权限操作当前Jupyter!", { duration: 0, showClose: true })
+                return
+            } else if (notebook.status !== 2) {
+                Message.error("只有已经启动的编译器才能进入", { duration: 0, showClose: true })
                 return
             }
 
@@ -345,7 +345,7 @@ export default {
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
             //全选状态
-            if(this.isCheckedAllnotebooks) {
+            if (this.isCheckedAllnotebooks) {
                 this.allData.dns.forEach(item => {
                     this.notebookscheckedIds.push(item.id)
                     this.notebookscheckedNames.push(item.name)
@@ -362,18 +362,18 @@ export default {
         },
         //排序
         sort(val) {
-            if(val === 'ascending') {
+            if (val === 'ascending') {
                 // 升序->降序
                 this.ascending = false
                 // this.allData.dns.sort()
                 this.allData.dns.sort(
                     function compareFunction(param1, param2) {
-                        if(param1.jobName) {
+                        if (param1.jobName) {
                             return param1.jobName.localeCompare(param2.name);
                         }
                     }
                 )
-            }else if (val === 'descending') {
+            } else if (val === 'descending') {
                 // 降序->升序
                 this.ascending = true
                 this.allData.dns.reverse()
@@ -392,7 +392,7 @@ export default {
             this.showCreateTagsDialog = false;
         },
         //增加 notebook
-        createNotebook (data) {
+        createNotebook(data) {
             data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreationDialog = false
@@ -404,10 +404,17 @@ export default {
         //打开删除脚本弹框
         deleteNotebook() {
             if (this.notebookscheckedIds.length !== 1) {
-                Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true} )
+                Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true })
                 return
             }
-
+            const _that = this
+            var result = this.notebookscheckedOwners.every(function (item) {
+                return item === _that.owner
+            })
+            if (!result) {
+                Message.error("无法删除其他用户的Jupyter!", { duration: 0, showClose: true })
+                return
+            }
             // this.deletedialogshow = true;
             MessageBox.confirm('释放删除资源将丢失所有数据！ 是否继续?', '警告', {
                 confirmButtonText: 'OK',
@@ -437,7 +444,7 @@ export default {
         },
         //左上角选项下拉框
         dropShow() {
-            if(this.notebookscheckedIds.length < 1) {
+            if (this.notebookscheckedIds.length < 1) {
                 this.dropDialogShow = false
             } else {
                 this.dropDialogShow = !this.dropDialogShow
@@ -464,7 +471,7 @@ export default {
                 callback: "dealResourceStart",
                 param: {
                     traceId: data.traceId,
-					owner: data.detail.owner,
+                    owner: data.detail.owner,
                     callback: func
                 }
             }
@@ -476,7 +483,7 @@ export default {
                 callback: "dealResourceStop",
                 param: {
                     traceId: data.traceId,
-					owner: data.detail.owner,
+                    owner: data.detail.owner,
                     callback: func
                 }
             }
@@ -501,9 +508,11 @@ export default {
     margin: 0;
     box-sizing: border-box;
 }
+
 .bg {
     background: #dfe7ff;
 }
+
 .name {
     position: absolute;
     top: 25px;
@@ -517,7 +526,8 @@ export default {
     padding-left: 10px;
     font-size: 14px;
 }
- .dialog {
+
+.dialog {
     position: absolute;
     top: 30px;
     right: 40px;
@@ -527,8 +537,10 @@ export default {
     background: #fff;
     z-index: 9999;
     cursor: pointer;
+
     div {
         border-bottom: 1px solid #979797;
+
         p {
             margin-left: 10px;
             font-family: PingFangSC-Medium;
@@ -537,38 +549,47 @@ export default {
             font-weight: 600;
         }
     }
+
     .list {
         display: flex;
         padding: 5px;
+
         img {
             width: 20px;
             height: 20px;
         }
-		.dis {
-			color: #ccc;
-		}
+
+        .dis {
+            color: #ccc;
+        }
     }
+
     .last {
         border-bottom: none;
     }
 
 }
+
 .script-opt {
     padding: 0 10px;
     border-bottom: 1px solid #ccc;
 }
+
 .script-opt-last {
     border-bottom: none;
 }
+
 .upload_notebooks_container {
     width: 100vw;
     height: calc(100vh - 40px);
+
     // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;
         width: 100%;
         // background: rgba(0,0,0,.2);
         border-bottom: 1px solid #dddddd;
+
         .project_name {
             // width: 200px;
             margin-left: 30px;
@@ -580,6 +601,7 @@ export default {
             cursor: pointer;
         }
     }
+
     .info {
         display: flex;
         width: 100%;
@@ -600,9 +622,11 @@ export default {
                 .selected_search {
                     display: flex;
                     position: relative;
+
                     .bg_disabled {
                         background: #eee !important;
                     }
+
                     .selected {
                         position: relative;
                         width: 90px;
@@ -612,9 +636,11 @@ export default {
                         cursor: pointer;
                         display: flex;
                         align-items: center;
+
                         .opt-area {
                             display: flex;
                         }
+
                         .checkbox {
                             margin-left: 10px;
                         }
@@ -638,6 +664,7 @@ export default {
                             width: 120px;
                             height: 90px;
                             background: #fff;
+
                             // border: 1px solid #000;
                             .label_icon {
                                 display: flex;
@@ -710,7 +737,7 @@ export default {
                     font-weight: 600;
                     color: #7163C5;
                     margin-bottom: 16px;
-					cursor: pointer;
+                    cursor: pointer;
                 }
 
                 .upload_btn_new {
@@ -719,9 +746,11 @@ export default {
                     right: 40px;
                     width: 100px;
                     height: 26px;
+
                     /deep/.el-input {
                         height: 26px !important;
                     }
+
                     /deep/.el-input__inner {
                         height: 26px !important;
                         box-sizing: border-box;
@@ -738,6 +767,7 @@ export default {
                         border: 1px solid #cccccc;
                         padding-right: 10px;
                     }
+
                     /deep/input::placeholder {
                         color: #333;
                     }
@@ -765,6 +795,7 @@ export default {
                         width: 25px;
                         height: 25px;
                         cursor: pointer;
+
                         img {
                             width: 100%;
                         }
@@ -791,6 +822,7 @@ export default {
                         }
 
                         cursor: pointer;
+
                         // border-right: 1px solid #c0cfe4;
                         .sel {
                             font-size: 14px;
@@ -817,6 +849,7 @@ export default {
                         border: 0;
                         margin-left: 10px;
                         width: 50px;
+
                         .label_selected {
                             box-shadow: 2px 4px 6px #dddddd;
                             // display: flex;
@@ -829,16 +862,19 @@ export default {
                             background: #fff;
                             padding-top: 10px;
                             z-index: 3333;
+
                             .tag_arr {
                                 height: 150px;
                                 overflow: auto;
                             }
+
                             .management {
                                 margin-top: 5px;
                                 width: 150px;
                                 height: 30px;
                                 border-top: 1px solid #dddddd;
                                 background: #e6e6e6;
+
                                 .manage_label {
                                     font-size: 14px;
                                     // text-align: center;
@@ -896,6 +932,7 @@ export default {
             .upload_bottom {
                 height: calc(100vh - 280px);
                 overflow: auto;
+
                 .word {
                     width: 100%;
                     height: 618px;
@@ -921,11 +958,13 @@ export default {
                     border-bottom: 1px solid #dddddd;
                     padding: 10px 0 10px 10px;
                     align-items: center;
-                    input{
+
+                    input {
                         cursor: pointer;
                     }
+
                     .tag_bg:hover::after {
-                        content: attr(data-title);    //取到data-title属性的值
+                        content: attr(data-title); //取到data-title属性的值
                         display: inline-block;
                         padding: 10px 14px;
                         border: 1px solid #ddd;
@@ -934,6 +973,7 @@ export default {
                         top: -50px;
                         left: -30px;
                     }
+
                     .tag_bg {
                         position: relative;
                         // top: -8px;
@@ -955,9 +995,11 @@ export default {
                         text-overflow: ellipsis;
                         padding: 0 10px;
                     }
+
                     .item_list {
                         display: flex;
                     }
+
                     .script_icon {
                         margin-left: 27px;
                         width: 30px;
@@ -969,6 +1011,7 @@ export default {
                             height: 30px;
                         }
                     }
+
                     .data_name {
                         margin-left: 27px;
                         font-family: PingFangSC-Medium;
@@ -983,14 +1026,17 @@ export default {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                     }
+
                     .tag_area {
                         display: flex;
                         flex-wrap: wrap;
                         overflow: hidden;
+
                         img {
                             width: 20px;
                             height: 20px;
                         }
+
                         .more_tags {
                             display: none;
                             position: relative;
@@ -1031,6 +1077,7 @@ export default {
                     margin-top: 20px;
                     display: flex;
                     flex-wrap: wrap;
+
                     /*justify-content: space-;*/
                     // padding: 0 30px;
                     .view_list {
@@ -1053,6 +1100,7 @@ export default {
                     height: 60px;
                     border-bottom: 1px solid #979797;
                     height: 44px;
+
                     .space {
                         display: flex;
                         width: 60px;
@@ -1065,13 +1113,16 @@ export default {
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
+
                         img {
                             width: 40px;
                             height: 40px;
                         }
                     }
+
                     .show-name {
                         line-height: 44px;
+
                         .project_name_info {
                             margin-left: 20px;
                             font-family: PingFangSC-Medium;
@@ -1180,6 +1231,7 @@ export default {
         flex-direction: row;
     }
 }
+
 .tags_imgs_tag {
     width: 20px;
     height: 20px;
