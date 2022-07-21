@@ -186,7 +186,7 @@ export default class PhPreFilterCmd {
 
     insertcloases() {
         this.cloases.push({
-            "left": "",
+            "left": this.schema.length > 0 ? this.schema[0]["src"] : "",
             "op": "CONTAINS",
             "right": ""
         })
