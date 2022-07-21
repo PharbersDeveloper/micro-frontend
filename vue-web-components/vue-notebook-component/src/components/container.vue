@@ -216,7 +216,7 @@ export default {
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             owner: "",
-            chechOwner:""
+            // checkedOwner:""
         }
     },
     props: {
@@ -315,22 +315,26 @@ export default {
             if(idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
-                this.notebookscheckedOwner.splice(idIndex,1)
+                this.notebookscheckedOwners.splice(idIndex,1)
             } else {
                 this.notebookscheckedIds.push(notebook.id)
                 this.notebookscheckedNames.push(notebook.name)
                 this.notebookscheckedOwners.push(notebook.owner)
             }
-            if(this.notebookscheckedOwners.indexOf(this.owner) >= 0 && this.notebookscheckedOwners.length == 1){
-                this.chechOwner=this.owner
-            }else{
-                this.chechOwner = notebook.owner
-            }
+            // 没有是-1，
+            // if(this.notebookscheckedOwners.indexOf(this.owner) >= 0 && this.notebookscheckedOwners.length == 1){
+            //     this.checkedOwner = this.owner
+            // }else{
+            //     this.checkedOwner = notebook.owner
+            // }
         },
         //点击notebooks name
         clickNotebooksName(notebook) {
             console.log(notebook)
-            if (notebook.status !== 2) {
+            if(notebook.detail.owner !==this.owner){
+                Message.error("只有自己的编译器才能进入", { duration: 0, showClose: true} )
+                return
+            }else if (notebook.status !== 2) {
                 Message.error("只有已经启动的编译器才能进入", { duration: 0, showClose: true} )
                 return
             }
@@ -415,7 +419,17 @@ export default {
             if (this.notebookscheckedIds.length !== 1) {
                 Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true} )
                 return
-            }else if(this.owner !== this.chechOwner){
+            }
+            // if(this.checkedOwner !== this.owner){
+            //     Message.error("无法删除其他用户的Jupyter！", { duration: 0, showClose: true} )
+            //     return
+            // }
+            // 有一个不是我的owner就返回false
+            const _that = this
+            var result = this.notebookscheckedOwners.every(function(item){
+                return item === _that.owner
+            })
+            if(!result){
                 Message.error("无法删除其他用户的Jupyter！", { duration: 0, showClose: true} )
                 return
             }
