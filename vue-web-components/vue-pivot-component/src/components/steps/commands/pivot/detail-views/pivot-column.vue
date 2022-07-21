@@ -65,6 +65,8 @@ export default {
         },
         selectDeleteDeyColumn(idx) {
             this.command.removeKeyColumn(idx)
+            this.$emit("selectionChanged")
+
         }
     },
     computed: {

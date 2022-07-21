@@ -8,17 +8,15 @@
         <div class="pivot-agg-content" >
             <div class="pivot-agg-lst">
                 <div v-for="(item, index) in valueColumns" :key="index" class="pivot-column-item">
-                    <!-- <span>{{index}}</span> -->
-                    <!-- &nbsp; -->
                     <span>{{displayValueColumn(item)}}</span>
-                    &nbsp;
-                    <el-button type="text" @click="editAggCondition(item)">编辑</el-button>
-                    &nbsp;
-                    <el-button type="text" @click="selectRemoveValueColumn(index)">删除</el-button>
+                    <div class="btn-group">
+						<el-button type="text" @click="editAggCondition(item)">编辑</el-button>
+						<el-button type="text" @click="selectRemoveValueColumn(index)">删除</el-button>
+					</div>
                 </div>
             </div>
             <div>
-                <select v-model="selectValue" @change="selectInsertValueColumn">
+                <select class="sel" v-model="selectValue" @change="selectInsertValueColumn">
                     <option label="选择添加" value="选择添加" ></option>
                     <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
                 </select>
@@ -28,8 +26,7 @@
                 title="Aggregation"
                 :visible.sync="showEditDialog"
                 width="30%"
-                :before-close="handleClose">
-
+                @close="showEditDialog = false">
             <div v-if="currentItem">
                 <h3>列名</h3>
                 <span>{{currentItem.column}}</span>
@@ -42,7 +39,7 @@
                 <div class="order" v-if="aggMethod === 'first' || aggMethod === 'last'">
                     <h3>Order by</h3>
                     <select v-model="orderColumn" >
-                        <option v-for="(item, index) in selection" :key="index" :label="item" :value="item" />
+                        <option v-for="(item, index) in schemasArray" :key="index" :label="item" :value="item" />
                     </select>
                 </div>
                 <div class="concat" v-if="aggMethod === 'concat'">
@@ -89,7 +86,8 @@ export default {
         },
         command: Object,
         valueColumns: Array,
-        selection: Array
+        selection: Array,
+		schemasArray: Array
     },
     components: {
         ElButton,
@@ -108,6 +106,7 @@ export default {
         },
         selectRemoveValueColumn(idx) {
             this.command.removeValueColumn(idx)
+            this.$emit("selectionChanged")
         },
         editAggCondition(item) {
             console.log(item)
@@ -181,17 +180,40 @@ export default {
         flex-direction: column;
         overflow: auto;
         flex-grow: 1;
+		margin-top: 20px;
     }
 
     .pivot-agg-op {
         display: flex;
         flex-direction: row;
-        /*justify-content: space-around;*/
     }
+
+	.sel {
+		width: 220px;
+		height: 26px;
+		border: 1px solid #ccc;
+		color: #666;
+		margin-right: 2px;
+	}
 
     .pivot-agg-lst {
         display: flex;
         flex-direction: column;
+
+		.pivot-column-item {
+			display: flex;
+			flex-direction: row;
+			width: 300px;
+			justify-content: space-between;
+			align-items: center;
+			background: #c4e0fe;
+			margin-bottom: 10px;
+			margin-right: 20px;
+			font-size: 14px;
+			height: 26px;
+			padding: 0 20px;
+			border-radius: 6px;
+		}
 
         .pivot-agg-item {
             display: flex;

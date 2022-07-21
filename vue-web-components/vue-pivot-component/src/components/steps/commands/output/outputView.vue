@@ -2,23 +2,23 @@
     <div class="outputs">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="outputs-title">
-            <div class="outputs-title-p">
+			<el-empty description="无数据"></el-empty>
+            <!-- <div class="outputs-title-p">
                 <h2>Outputs Column Names</h2>
             </div>
             <div class="outputs-content">
                 <div class="outputs-content-item" v-for="(item, index) in schema" :key="index">
                     <span class="outputs-content-item-index">{{index}}</span>
-<!--                    <span class="outputs-content-item-type">({{item.type}})</span>-->
                     <span class="outputs-content-item-title">{{item}}</span>
                 </div>
-            </div>
+            </div> -->
         </div>
-<!--        <div v-if="datasource">-->
-<!--        </div>-->
     </div>
 </template>
 <script>
 import { PhOutputsDefs } from "./defs"
+import ElEmpty from 'element-ui/packages/empty/index'
+
 
 export default {
     data() {
@@ -27,7 +27,6 @@ export default {
         }
     },
     props: {
-        // step: Object,
         schema: Array,
         concretDefs: {
             type: Object,
@@ -41,8 +40,8 @@ export default {
             this.$emit('statusChange', true)
         }
     },
-    computed: {
-
+    components: {
+        ElEmpty
     }
 }
 </script>

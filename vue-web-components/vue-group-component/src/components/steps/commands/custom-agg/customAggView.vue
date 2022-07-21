@@ -6,7 +6,6 @@
                 <h2>Custom Aggregation</h2>
             </div>
         </div>
-        <!-- TODO: @wodelu -->
         <el-empty description="TODO: ... @wodelu"></el-empty>
     </div>
 </template>
