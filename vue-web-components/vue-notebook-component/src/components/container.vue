@@ -23,7 +23,7 @@
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除脚本</p>
+                                            <p >删除</p>
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +141,7 @@
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span @click='deleteNotebook' class="view_list">
+                            <span @click='deleteNotebook()' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
                             </span>
@@ -212,9 +212,11 @@ export default {
             isCheckedAllnotebooks: false,
             notebookscheckedIds: [], //选中项id
             notebookscheckedNames: [], //选中项name
+            notebookscheckedOwners:[],//选中项owner
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            owner: ""
+            owner: "",
+            chechOwner:""
         }
     },
     props: {
@@ -313,9 +315,16 @@ export default {
             if(idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
+                this.notebookscheckedOwner.splice(idIndex,1)
             } else {
                 this.notebookscheckedIds.push(notebook.id)
                 this.notebookscheckedNames.push(notebook.name)
+                this.notebookscheckedOwners.push(notebook.owner)
+            }
+            if(this.notebookscheckedOwners.indexOf(this.owner) >= 0 && this.notebookscheckedOwners.length == 1){
+                this.chechOwner=this.owner
+            }else{
+                this.chechOwner = notebook.owner
             }
         },
         //点击notebooks name
@@ -406,8 +415,10 @@ export default {
             if (this.notebookscheckedIds.length !== 1) {
                 Message.error("暂时不支持同时删除多种资源的操作!!", { duration: 0, showClose: true} )
                 return
+            }else if(this.owner !== this.chechOwner){
+                Message.error("无法删除其他用户的Jupyter！", { duration: 0, showClose: true} )
+                return
             }
-
             // this.deletedialogshow = true;
             MessageBox.confirm('释放删除资源将丢失所有数据！ 是否继续?', '警告', {
                 confirmButtonText: 'OK',
