@@ -62,7 +62,7 @@ export default class PhPostFilterCmd {
 
     tryRevertContainsCloases(t) {
         if (t.op === "CONTAINS") {
-            throw "`" + t.left + "`" + " like %" + t.right + "%"
+            throw "`" + t.left + "`" + " like '%" + t.right + "%'"
         }
     }
 
