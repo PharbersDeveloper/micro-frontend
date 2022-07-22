@@ -6,30 +6,7 @@
                 <h2>Other Columns</h2>
             </div>
         </div>
-<!--        <div class="group-keys">-->
-<!--            <div class="group-key-title">-->
-<!--                <h3>Group Keys</h3>-->
-<!--            </div>-->
-<!--            <div class="group-key-container" v-if="datasource">-->
-<!--                <div class="group-key-list" >-->
-<!--                    <div class="group-key-item" v-for="(item, index) in datasource.keys" :key="index">-->
-<!--                        <p class="group-key-item-col">{{item}}</p>-->
-<!--                        <el-button type="text" >删除</el-button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="group-key-add-btn" >-->
-<!--                    <select v-model="selectedAdd" @change="addSelectedColToKey">-->
-<!--                        <option label="选中添加" value="选中添加" />-->
-<!--                        <option v-for="(item, index) in schema" :label="item.src" :key="index" :value="item.src" />-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>-->
-<!--            </div>-->
-<!--        </div>-->
         <div class="group-agg-container" v-if="datasource">
-<!--            <div class="group-agg-title">-->
-<!--                <h3>Aggregation</h3>-->
-<!--            </div>-->
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
                           ref="table"
@@ -222,8 +199,6 @@ export default {
     }
     .group-container {
         margin-top: 4px;
-        /*width: 100%;*/
-        min-width: 1600px;
         padding: 4px;
         display: flex;
         flex-direction: column;
@@ -291,6 +266,8 @@ export default {
 
             .group-agg-op {
                 overflow: auto;
+				height: calc(100vh - 300px);
+				width: calc(100vw - 400px);
                 /*flex-grow: 1;*/
             }
 

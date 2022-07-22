@@ -28,16 +28,17 @@ export default class PhDataSource {
         else return null
     }
 
-    buildQuery(projectId, jobName) {
+    buildQuery(projectId, jobName, jobId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", this.projectId + "_" + this.jobName]
-                "pjName": ["=", projectId + "_" + jobName]
+                // "pjName": ["=", projectId + "_" + jobName]
+                "id": ["=", projectId + "_" + jobId]
             },
-            "limit": 1,
+			"index_name": "id-index-index",
+			"limit": 1,
             "start_key": {}
         }
 
@@ -53,9 +54,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(projectId, jobName) {
+    refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName)
+        this.buildQuery(projectId, jobName, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -90,7 +91,7 @@ export default class PhDataSource {
                         "expressions-value": "JSON",
                         "group-index": "0",
                         "group-name": "",
-                        id: [projectId, jobName].join("_"),
+                        id: [projectId, jobId].join("_"),
                         index: "1",
                         runtime : "pivot",
                         "step-name": "pivot"
@@ -101,49 +102,6 @@ export default class PhDataSource {
                 that.isReady = true
             })
     }
-
-    // buildDsMetaQuery(projectId, dsId) {
-    //     const url = `${hostName}/phdydatasource/query`
-    //     const accessToken = this.getCookie( "access_token" ) || this.debugToken
-    //     let body = {
-    //         "table": "dataset",
-    //         "conditions": {
-    //             "projectId": ["=", projectId],
-    //             "id": ["=", dsId]
-    //         },
-    //         "limit": 1,
-    //         "start_key": {}
-    //     }
-
-    //     let options = {
-    //         method: "POST",
-    //         headers: {
-    //             "Authorization": accessToken,
-    //             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    //             "accept": "application/json"
-    //         },
-    //         body: JSON.stringify(body)
-    //     }
-    //     return fetch(url, options)
-    // }
-
-    // refreshMateData(projectId, dsId) {
-    //     const that = this
-    //     this.buildDsMetaQuery(projectId, dsId)
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             // that.currentPageToken = response.meta.start_key
-    //             that.store.sync(response)
-    //             const data = that.store.findAll("datasets")
-    //             that.dataset = data[0]
-    //             that.dataset.schema = JSON.parse(that.dataset["schema"])
-    //             if (that.dataset.schema.length === 0) {
-    //                 that.hasNoSchema = true
-    //             } else {
-    //                 that.isMetaReady = true
-    //             }
-    //         })
-    // }
 
     refreshDataset(projectId, dsId) {
         const that = this

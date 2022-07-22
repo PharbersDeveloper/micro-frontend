@@ -79,18 +79,7 @@ export default {
         if (this.datasource.command.computedCols.length > 0) {
             this.currentExpr = this.datasource.command.computedCols[0]["expr"]
         }
-        const nameArr = this.datasource.command.computedCols.filter(it => it.name.replace(/\s*/g,"").length === 0)
-        const exprArr = this.datasource.command.computedCols.filter(it => it.expr.replace(/\s*/g,"").length === 0)
-        let ErrorVales = nameArr.length > 0 || exprArr.length > 0
-        const event = new Event("event")
-        event.args = {
-            element: this,
-            param: {
-                status: this.datasource.command.computedCols.length > 0,
-                errors: ErrorVales
-            }
-        }
-        this.$emit('statusChange', event)
+        this.validate()
     },
     methods: {
         itemClicked(v) {
@@ -185,7 +174,6 @@ export default {
             display: flex;
             flex-direction: row;
             cursor: pointer;
-            // border: 1px solid #ccc;
             align-items: center;
 
             .computed-item-title {

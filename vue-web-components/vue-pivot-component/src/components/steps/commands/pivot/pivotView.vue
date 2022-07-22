@@ -6,7 +6,6 @@
                 <h2>Pivot</h2>
             </div>
         </div>
-
         <div class="pivot-content-container" v-if="datasource">
 			<div class="pivot-flex-1">
 				<div class="pivot-example-c">
@@ -14,24 +13,26 @@
 				</div>
 				<div class="pivot-pivot-c">
 					<pivot-column :command="datasource.command"
-								:kc="datasource.command.keyColumns"
-								:selection="datasource.command.selection"
-								:pivoted-column-type="datasource.command.pivotedColumnType"
-								@selectionChanged="selectionChanged" />
+						:kc="datasource.command.keyColumns"
+						:selection="datasource.command.selection"
+						:pivoted-column-type="datasource.command.pivotedColumnType"
+						@selectionChanged="selectionChanged" />
 				</div>
 			</div>
 			<div class="pivot-flex-2">
 				<div class="pivot-column-c">
 					<pivot-row :command="datasource.command"
-							:idf="datasource.command.identifiers"
-							:selection="datasource.command.selection"
-							@selectionChanged="selectionChanged" />
+						:idf="datasource.command.identifiers"
+						:selection="datasource.command.selection"
+						@selectionChanged="selectionChanged" />
 				</div>
 				<div class="pivot-aggregation-c">
-					<pivot-aggregation :command="datasource.command"
-									:value-columns="datasource.command.valueColumns"
-									:selection="datasource.command.selection"
-									@selectionChanged="selectionChanged" />
+					<pivot-aggregation 
+						:command="datasource.command"
+						:schemasArray="schemasArray"
+						:value-columns="datasource.command.valueColumns"
+						:selection="datasource.command.selection"
+						@selectionChanged="selectionChanged" />
 				</div>
 			</div>
         </div>
@@ -49,6 +50,7 @@ export default {
     data() {
         return {
             datasource: null,
+			schemasArray: []
         }
     },
     props: {
@@ -71,10 +73,20 @@ export default {
     },
     mounted() {
         this.datasource = new PhPivotStep(this.step, this.schema)
+		this.schemasArray = this.datasource.command.selection
+		this.validate()
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+            const ErrorVales = this.datasource.command.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+			const event = new Event("event")
+			event.args = {
+				element: this,
+				param: {
+					errors: this.datasource.command.cloases.length === 0 || ErrorVales.length > 0
+				}
+			}
+            this.$emit('statusChange', event)
         },
         selectionChanged() {
             this.datasource.command.resetCandiSelection()
@@ -93,15 +105,12 @@ export default {
     }
     .pivot-container {
         margin-top: 4px;
-        width: 100%;
-        /*min-width: 800px;*/
         padding: 4px;
         display: flex;
         flex-direction: column;
-        // background: #fff;
         height: fit-content;
         padding: 20px;
-        /*height: calc( 100vh - 150px);*/
+		width: 100%;
 
         .pivot-title {
             display: flex;

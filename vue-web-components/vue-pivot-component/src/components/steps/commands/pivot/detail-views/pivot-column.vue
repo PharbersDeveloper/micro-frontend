@@ -6,15 +6,13 @@
         <div class="pivot-column-content" >
             <div class="pivot-column-lst">
                 <div v-for="(item, index) in kc" :key="index" class="pivot-column-item">
-                    <span>{{index}}</span>
-                    &nbsp;
+                    <!-- <span>{{index}}</span>
+                    &nbsp; -->
                     <span>{{item}}</span>
                     &nbsp;
                     <el-button type="text" @click="selectDeleteDeyColumn(index)">删除</el-button>
                 </div>
-            </div>
-            <div>
-                <select v-model="selectValue" @change="selectAddKeyColumn">
+				<select class="sel" v-model="selectValue" @change="selectAddKeyColumn">
                     <option label="选择添加" value="选择添加" ></option>
                     <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
                 </select>
@@ -22,10 +20,10 @@
         </div>
         <div class="pivot-column-op" >
             <span>Pivot Values: &nbsp;</span>
-            <select v-model="pivotedColumnType" disabled>
+            <select class="sel" v-model="pivotedColumnType" disabled>
                 <option v-for="(item, index) in defs.pivotTypes" :key="index" :label="item.desc" :value="item.cal" />
             </select>
-            <el-input style="width: 100px"></el-input>
+            <el-input disabled style="width: 220px;"></el-input>
         </div>
     </div>
 </template>
@@ -67,6 +65,8 @@ export default {
         },
         selectDeleteDeyColumn(idx) {
             this.command.removeKeyColumn(idx)
+            this.$emit("selectionChanged")
+
         }
     },
     computed: {
@@ -94,20 +94,40 @@ export default {
     }
 
     .pivot-column-op {
-        display: flex;
-        flex-direction: row;
-        /*justify-content: space-around;*/
+		display: flex;
+		align-items: center;
+		font-size: 14px;
+		color: #666;
+		margin-top: 20px;
     }
 
     .pivot-column-lst {
         display: flex;
-        flex-direction: column;
+		flex-wrap: wrap;
 
         .pivot-column-item {
             display: flex;
-            flex-direction: row;
+			flex-direction: row;
+			width: 220px;
+			justify-content: space-between;
+			align-items: center;
+			background: #c4e0fe;
+			margin-bottom: 10px;
+			margin-right: 20px;
+			font-size: 14px;
+			height: 26px;
+			padding: 0 20px;
+			border-radius: 6px;
         }
     }
+
+	.sel {
+		width: 220px;
+		height: 26px;
+		border: 1px solid #ccc;
+		color: #666;
+		margin-right: 2px;
+	}
 
     .ver-mid {
         display: flex;

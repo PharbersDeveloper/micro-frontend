@@ -6,13 +6,17 @@
                 <h2>Computed Columns</h2>
             </div>
         </div>
-        <div class="computed-list" v-if="datasource">
+        <div class="computed-list" v-if="datasource && datasource.command.computedCols.length > 0">
             <div class="computed-item"
                  v-for="(item, index) in datasource.command.computedCols"
                  :key="index"
                  @click="computedClicked(item, index)">
                 <span>新建列名</span>
-                <el-input class="computed-item-title" v-model="item.name"></el-input>
+                <el-input 
+					class="computed-item-title" 
+					@blur="blurColName(item)"
+					:class="[{'el-input-error': item.name === ''}]"
+					v-model="item.name"></el-input>
                 <span>保存为</span>
                 <select v-model="item.type">
                     <option v-for="(op, opi) in concretDefs.typeDefs" :key="opi" :value="op.cal" :label="op.desc" />
@@ -24,15 +28,15 @@
                 <el-button type="text" @click="datasource.command.removeComputedCol(index)">删除</el-button>
             </div>
         </div>
-        <div class="computed-expression" v-if="datasource">
+        <div class="computed-expression" v-if="datasource && datasource.command.computedCols.length > 0">
             <ul class="computed-schema-list">
                 <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
             </ul>
             <el-input class="computed-expression-expr"
-                      type="textarea"
-                      :rows="10"
-                      v-model="currentExpr"
-                      placeholder="Please input" />
+				type="textarea"
+				:rows="10"
+				v-model="currentExpr"
+				placeholder="Please input" />
         </div>
 
         <div class="computed-add-button">
@@ -45,6 +49,7 @@ import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
 import { PhComputedDefs } from "./defs"
 import PhComputedStep from "./step"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -70,8 +75,10 @@ export default {
     },
     mounted() {
         this.datasource = new PhComputedStep(this.step)
-        if (this.datasource.command.computedCols.length > 0)
-            this.currentExpr = this.datasource.command.computedCols[0]["expr"]
+        if (this.datasource.command.computedCols.length > 0) {
+			this.currentExpr = this.datasource.command.computedCols[0]["expr"]
+		}
+        this.validate()
     },
     methods: {
         itemClicked(v) {
@@ -81,8 +88,28 @@ export default {
             this.currentExpr = it.expr
             this.currentIdx = idx
         },
+		blurColName(item) {
+			const schemaRepeat = this.schema.filter(it => it.src === item.name)
+			const newColRepeat = this.datasource.command.computedCols.filter(it => it.name === item.name)
+			if (schemaRepeat.length > 0 || newColRepeat.length > 1) {
+				item.name = ""
+				Message.error("列名与现有schema不能重复！", { duration: 3000} )
+			}
+		},
         validate() {
-            this.$emit('statusChange', this.datasource.validate())
+            const nameArr = this.datasource.command.computedCols.filter(it => it.name.replace(/\s*/g,"").length === 0)
+            const exprArr = this.datasource.command.computedCols.filter(it => it.expr.replace(/\s*/g,"").length === 0)
+            let ErrorVales = nameArr.length > 0 || exprArr.length > 0
+
+            const event = new Event("event")
+            event.args = {
+                element: this,
+                param: {
+                    status: this.datasource.command.computedCols.length > 0,
+                    errors: ErrorVales
+                }
+            }
+            this.$emit('statusChange', event)
         }
     },
     computed: {
@@ -111,6 +138,15 @@ export default {
 		height: fit-content;
 		padding: 20px;
 
+		.el-input-error {
+			/deep/input.el-input__inner {
+				border-color: #ce1228;
+			}
+			/deep/textarea.el-textarea__inner {
+				border-color: #ce1228;
+			}
+		}
+
         .computed-title {
             display: flex;
             flex-direction: column;
@@ -137,7 +173,6 @@ export default {
             display: flex;
             flex-direction: row;
             cursor: pointer;
-            // border: 1px solid #ccc;
 			align-items: center;
 
             .computed-item-title {
@@ -145,11 +180,11 @@ export default {
             }
 
             .computed-item-type {
-
+                height: 40px;
             }
 
             .computed-item-mode {
-
+                height: 40px;
             }
         }
 
