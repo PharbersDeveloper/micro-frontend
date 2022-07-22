@@ -6,12 +6,11 @@
         <div class="pivot-column-content" >
             <div class="pivot-column-lst">
                 <div v-for="(item, index) in kc" :key="index" class="pivot-column-item">
-                    <!-- <span>{{index}}</span>
-                    &nbsp; -->
                     <span>{{item}}</span>
                     &nbsp;
                     <el-button type="text" @click="selectDeleteDeyColumn(index)">删除</el-button>
                 </div>
+				<span class="error-msg" v-show="kc.length === 0">需要添加至少一个列定义!</span>
 				<select class="sel" v-model="selectValue" @change="selectAddKeyColumn">
                     <option label="选择添加" value="选择添加" ></option>
                     <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
@@ -104,6 +103,12 @@ export default {
     .pivot-column-lst {
         display: flex;
 		flex-wrap: wrap;
+
+		.error-msg {
+			font-size: 13px;
+			color: #ce1228;
+			margin-right: 20px;
+		}
 
         .pivot-column-item {
             display: flex;

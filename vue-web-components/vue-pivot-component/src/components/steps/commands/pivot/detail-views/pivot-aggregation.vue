@@ -15,6 +15,9 @@
 					</div>
                 </div>
             </div>
+			<span class="error-msg" v-show="valueColumns.length === 0">
+				需要添加至少一个聚合条件!
+			</span>
             <div>
                 <select class="sel" v-model="selectValue" @change="selectInsertValueColumn">
                     <option label="选择添加" value="选择添加" ></option>
@@ -194,6 +197,12 @@ export default {
 		border: 1px solid #ccc;
 		color: #666;
 		margin-right: 2px;
+	}
+
+	.error-msg {
+		font-size: 13px;
+		color: #ce1228;
+		margin-bottom: 20px;
 	}
 
     .pivot-agg-lst {

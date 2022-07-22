@@ -78,12 +78,12 @@ export default {
     },
     methods: {
         validate() {
-            const ErrorVales = this.datasource.command.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
+            const ErrorVales = this.datasource.command.keyColumns.length === 0 || this.datasource.command.valueColumns.length === 0
 			const event = new Event("event")
 			event.args = {
 				element: this,
 				param: {
-					errors: this.datasource.command.cloases.length === 0 || ErrorVales.length > 0
+					errors: ErrorVales
 				}
 			}
             this.$emit('statusChange', event)

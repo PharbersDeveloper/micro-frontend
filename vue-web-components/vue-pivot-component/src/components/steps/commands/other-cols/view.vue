@@ -130,8 +130,7 @@ export default {
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.selection, this.schema)
         this.computedGroupCount = this.datasource.isComputedGroupCount()
-        // this.notGroupedCommands = this.resetSelectGroupKeys()
-        // this.ignoredClearMsg = false
+		this.validate()
     },
     methods: {
         validate() {
@@ -150,10 +149,7 @@ export default {
             this.ignoredClearMsg = true
             const that = this
             this.$nextTick(() => {
-                console.log(2)
                 res.forEach(x => {
-                    console.log(x)
-                    console.log(x.isUsed)
                     if (x.isUsed) {
                         this.ignoredClearMsg = true
                         that.$refs.table.toggleRowSelection(x)

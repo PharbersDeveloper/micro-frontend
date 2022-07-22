@@ -479,6 +479,7 @@ export default {
                 element: this,
                 param: {
                     projectId: this.allData.projectId,
+                    projectName: this.allData.projectName,
                     scenario: scenario
                 }
             }

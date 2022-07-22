@@ -13,6 +13,7 @@
                     <el-button type="text" @click="selectRemoveIdfColumn(index)">删除</el-button>
                 </div>
             </div>
+			<span class="warning-msg" v-show="idf.length === 0">若无行定义，结果数据将为单行数据!</span>
             <div>
                 <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn">
                     <option label="选择添加" value="选择添加" ></option>
@@ -92,6 +93,12 @@ export default {
         flex-direction: row;
         /*justify-content: space-around;*/
     }
+
+	.warning-msg {
+		font-size: 13px;
+		color: #c05b0a;
+		margin-bottom: 20px;
+	}
 
     .pivot-row-lst {
         display: flex;

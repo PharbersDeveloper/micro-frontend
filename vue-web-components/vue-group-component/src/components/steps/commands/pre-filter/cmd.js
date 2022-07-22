@@ -65,7 +65,7 @@ export default class PhPreFilterCmd {
 
     tryRevertContainsCloases(t) {
         if (t.op === "CONTAINS") {
-            throw "`" + t.left + "`" + " like %" + t.right + "%"
+            throw "`" + t.left + "`" + " like '%" + t.right + "%'"
         }
     }
 

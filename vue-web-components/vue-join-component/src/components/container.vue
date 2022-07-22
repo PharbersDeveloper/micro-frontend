@@ -324,7 +324,9 @@ export default {
             const selectCols = this.$refs.select.datasource.revert2Defs()
             for (let idx = 0; idx < selectCols.length; ++idx) {
                 for (let idn = 0; idn < selectCols[idx]["columns"].length; ++idn) {
-                    result.push(selectCols[idx]["prefix"] + '_' + selectCols[idx]["columns"][idn])
+					const prefix = selectCols[idx]["prefix"]
+					const val = !prefix || prefix === "" ? selectCols[idx]["columns"][idn] : prefix + '_' + selectCols[idx]["columns"][idn]
+                    result.push(val)
                 }
             }
             return result
