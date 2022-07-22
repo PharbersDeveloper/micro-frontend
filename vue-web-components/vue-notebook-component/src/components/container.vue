@@ -84,7 +84,7 @@
                                 <div style="display: flex; flex-direction: column; justify-content: space-around">
                                     <input type="checkbox" ref="data" name="notebooksList"
                                         :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
-                                        @click.stop="checkedOnenotebooks(notebook.detail)">
+                                        @click.stop="checkedOnenotebooks(notebook)">
                                 </div>
                                 <div class="item_list">
                                     <span class="script_icon">
@@ -143,7 +143,7 @@
                                 <img class='tags_imgs_tag' :src="label_icon" alt="">
                                 <span class='tags_func'>标签</span>
                             </span>
-                            <span @click='deleteNotebook()' class="view_list">
+                            <span @click='deleteNotebook' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
                             </span>
@@ -206,7 +206,9 @@ export default {
             isCheckedAllnotebooks: false,
             notebookscheckedIds: [], //选中项id
             notebookscheckedNames: [], //选中项name
-            notebookscheckedOwners: [],//选中项owner
+            notebookscheckedOwners: [], //选中项owner
+            notebookscheckedStatus: [], //选中项状态
+            isStopStatus: true, //是否是已停止状态
             color: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             owner: ""
@@ -299,30 +301,45 @@ export default {
             this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
+            this.notebookscheckedOwners = []
+            this.notebookscheckedStatus = []
             this.notebookscheckedIds.push(notebook.detail.id)
             this.notebookscheckedNames.push(notebook.detail.name)
+            this.notebookscheckedOwners.push(notebook.detail.owner)
+            this.notebookscheckedStatus.push(notebook.status)
+            if(this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] == 0){
+                this.isStopStatus = true
+            }else{
+                this.isStopStatus = false
+            }
         },
         //点击list多选框
         checkedOnenotebooks(notebook) {
-            let idIndex = this.notebookscheckedIds.indexOf(notebook.id)
+            let idIndex = this.notebookscheckedIds.indexOf(notebook.detail.id)
             if (idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
                 this.notebookscheckedOwners.splice(idIndex, 1)
+                this.notebookscheckedStatus.splice(idIndex, 1)
             } else {
-                this.notebookscheckedIds.push(notebook.id)
-                this.notebookscheckedNames.push(notebook.name)
-                this.notebookscheckedOwners.push(notebook.owner)
+                this.notebookscheckedIds.push(notebook.detail.id)
+                this.notebookscheckedNames.push(notebook.detail.name)
+                this.notebookscheckedOwners.push(notebook.detail.owner)
+                this.notebookscheckedStatus.push(notebook.status)
+            }
+            if(this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] == 0){
+                this.isStopStatus = true
+            }else{
+                this.isStopStatus = false
             }
         },
         //点击notebooks name
         clickNotebooksName(notebook) {
-            console.log(notebook)
             if (notebook.detail.owner !== this.owner) {
                 Message.error("抱歉,您没有权限操作当前Jupyter!", { duration: 0, showClose: true })
                 return
             } else if (notebook.status !== 2) {
-                Message.error("只有已经启动的编译器才能进入", { duration: 0, showClose: true })
+                Message.error("请先启动资源!", { duration: 0, showClose: true })
                 return
             }
 
@@ -344,11 +361,13 @@ export default {
             this.isCheckedAllnotebooks = this.notebookscheckedIds.length !== this.allData.dns.length;
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
+            this.notebookscheckedOwners = []
             //全选状态
             if (this.isCheckedAllnotebooks) {
                 this.allData.dns.forEach(item => {
                     this.notebookscheckedIds.push(item.id)
                     this.notebookscheckedNames.push(item.name)
+                    this.notebookscheckedOwners.push(item.owner)
                 })
             }
         },
@@ -413,6 +432,10 @@ export default {
             })
             if (!result) {
                 Message.error("无法删除其他用户的Jupyter!", { duration: 0, showClose: true })
+                return
+            }
+            if (this.isStopStatus !== true || this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] !== 0) {
+                Message.error("请先关闭Jupyter资源!", { duration: 0, showClose: true })
                 return
             }
             // this.deletedialogshow = true;
@@ -491,7 +514,7 @@ export default {
         },
         // 启停
         resetStatus(notebook) {
-            console.log(notebook.switch)
+            this.isStopStatus = false
             if (notebook.switch) {
                 this.datasource.resourceStart(this.allData.tenantId, notebook)
             } else {
