@@ -195,7 +195,8 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        pivotStatus(errors) {
+        pivotStatus(data) {
+            const errors = data.args.param.errors
             if (errors) {
                 this.stepsDefs[2].status = "error"
             } else {
