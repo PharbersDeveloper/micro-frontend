@@ -307,6 +307,11 @@ export default {
             this.notebookscheckedNames.push(notebook.detail.name)
             this.notebookscheckedOwners.push(notebook.detail.owner)
             this.notebookscheckedStatus.push(notebook.status)
+            if(this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] == 0){
+                this.isStopStatus = true
+            }else{
+                this.isStopStatus = false
+            }
         },
         //点击list多选框
         checkedOnenotebooks(notebook) {
@@ -321,6 +326,11 @@ export default {
                 this.notebookscheckedNames.push(notebook.detail.name)
                 this.notebookscheckedOwners.push(notebook.detail.owner)
                 this.notebookscheckedStatus.push(notebook.status)
+            }
+            if(this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] == 0){
+                this.isStopStatus = true
+            }else{
+                this.isStopStatus = false
             }
         },
         //点击notebooks name
@@ -424,7 +434,7 @@ export default {
                 Message.error("无法删除其他用户的Jupyter!", { duration: 0, showClose: true })
                 return
             }
-            if (this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] !== 0 || this.isStopStatus !== true) {
+            if (this.isStopStatus !== true || this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] !== 0) {
                 Message.error("请先关闭Jupyter资源!", { duration: 0, showClose: true })
                 return
             }
@@ -504,11 +514,11 @@ export default {
         },
         // 启停
         resetStatus(notebook) {
+            this.isStopStatus = false
             if (notebook.switch) {
                 this.datasource.resourceStart(this.allData.tenantId, notebook)
             } else {
                 this.datasource.resourceStop(this.allData.tenantId, notebook)
-
             }
         }
     }
