@@ -211,13 +211,8 @@ export default {
                 this.stepsDefs[3].status = "error"
             }
         },
-        outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
-            } else {
-                this.stepsDefs[4].status = "error"
-            }
+        outputsStatus() {
+			this.stepsDefs[4].status = "wait"
         },
         genOutputsSchema() {
             const identifiers = this.$refs.pivot.datasource.revert2Defs().identifiers
@@ -342,7 +337,8 @@ export default {
     watch: {
         active(n) {
 			if (n === 4) {
-                this.selection = this.$refs.pivot.datasource.command.selection
+                // this.selection = this.$refs.pivot.datasource.command.selection
+				this.selection = this.$refs.pivot.schemasArray
                 this.$refs.other.datasource.refreshCols(this.selection)
             }
             if (n === 5) {
