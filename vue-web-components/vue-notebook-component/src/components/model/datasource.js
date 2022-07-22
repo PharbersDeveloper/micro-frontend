@@ -99,6 +99,7 @@ export default class PhDataSource {
                 if (response.status === "succeed") {
                     model.editable = false
                     model.status = 1
+                    that.parent.isStopStatus = false
                     model.resetMessage()
 
                     that.parent.dealResourceStart(model, (param, payload) => {
@@ -109,6 +110,7 @@ export default class PhDataSource {
                         if (tmp) {
                             if (status === "started") {
                                 tmp.status = 2
+                                that.parent.isStopStatus = false
                             }
                             tmp.switch = tmp.status === 1 || tmp.status === 2
                             tmp.editable = tmp.status === 0 || tmp.status === 2
@@ -157,6 +159,7 @@ export default class PhDataSource {
                     model.editable = false
                     const that = this
                     model.status = 4
+                    that.parent.isStopStatus = false
                     model.resetMessage()
 
                     that.parent.dealResourceStop(model, (param, payload) => {
@@ -167,6 +170,7 @@ export default class PhDataSource {
                         if (tmp) {
                             if (status === "stopped") {
                                 tmp.status = 0
+                                that.parent.isStopStatus = true
                             }
                             tmp.switch = tmp.status === 1 || tmp.status === 2
                             tmp.editable = tmp.status === 0 || tmp.status === 2

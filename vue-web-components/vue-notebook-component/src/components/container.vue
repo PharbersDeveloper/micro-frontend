@@ -208,6 +208,7 @@ export default {
             notebookscheckedNames: [], //选中项name
             notebookscheckedOwners: [], //选中项owner
             notebookscheckedStatus: [], //选中项状态
+            isStopStatus: true, //是否是已停止状态
             color: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             owner: ""
@@ -423,7 +424,7 @@ export default {
                 Message.error("无法删除其他用户的Jupyter!", { duration: 0, showClose: true })
                 return
             }
-            if(this.notebookscheckedStatus[0] !== 0){
+            if (this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] !== 0 || this.isStopStatus !== true) {
                 Message.error("请先关闭Jupyter资源!", { duration: 0, showClose: true })
                 return
             }
@@ -503,11 +504,11 @@ export default {
         },
         // 启停
         resetStatus(notebook) {
-            this.notebookscheckedStatus = notebook.status
             if (notebook.switch) {
                 this.datasource.resourceStart(this.allData.tenantId, notebook)
             } else {
                 this.datasource.resourceStop(this.allData.tenantId, notebook)
+
             }
         }
     }
