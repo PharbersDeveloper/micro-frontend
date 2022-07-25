@@ -76,7 +76,6 @@ export default {
             this.$emit('statusChange', event)
         },
 		updateData(n, o, unreset) {
-            console.log(n, o)
             if (!unreset) {
                 this.datasource.commands.push(new PhSelectedColsCmd({
                     "ds": n.name,

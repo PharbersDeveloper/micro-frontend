@@ -6,15 +6,16 @@
         <div class="pivot-row-content" >
             <div class="pivot-row-lst">
                 <div v-for="(item, index) in idf" :key="index" class="pivot-column-item">
-                    <span>{{index}}</span>
-                    &nbsp;
+                    <!-- <span>{{index}}</span>
+                    &nbsp; -->
                     <span>{{item}}</span>
                     &nbsp;
                     <el-button type="text" @click="selectRemoveIdfColumn(index)">删除</el-button>
                 </div>
             </div>
+			<span class="warning-msg" v-show="idf.length === 0">若无行定义，结果数据将为单行数据!</span>
             <div>
-                <select v-model="selectValue" @change="selectInsertIdfColumn">
+                <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn">
                     <option label="选择添加" value="选择添加" ></option>
                     <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
                 </select>
@@ -43,6 +44,7 @@ export default {
         command: Object,
         idf: Array,
         selection: Array
+		
     },
     components: {
         ElButton,
@@ -59,6 +61,7 @@ export default {
         },
         selectRemoveIdfColumn(idx) {
             this.command.removeIdfColumn(idx)
+            this.$emit("selectionChanged")
         }
     },
     computed: {
@@ -91,15 +94,44 @@ export default {
         /*justify-content: space-around;*/
     }
 
+	.warning-msg {
+		font-size: 13px;
+		color: #c05b0a;
+		margin-bottom: 20px;
+	}
+
     .pivot-row-lst {
         display: flex;
         flex-direction: column;
+
+		.pivot-column-item {
+			display: flex;
+			flex-direction: row;
+			width: 220px;
+			justify-content: space-between;
+			align-items: center;
+			background: #c4e0fe;
+			margin-bottom: 10px;
+			margin-right: 20px;
+			font-size: 14px;
+			height: 26px;
+			padding: 0 20px;
+			border-radius: 6px;
+		}
 
         .pivot-row-item {
             display: flex;
             flex-direction: row;
         }
     }
+
+	.sel {
+		width: 220px;
+		height: 26px;
+		border: 1px solid #ccc;
+		color: #666;
+		margin-right: 2px;
+	}
 
     .ver-mid {
         display: flex;

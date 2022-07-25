@@ -79,7 +79,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"]
+					params.inputDS[0]["id"] +
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "group"
@@ -124,7 +126,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"]
+					params.inputDS[0]["id"] +
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "pivot"
@@ -169,7 +173,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"]
+					params.inputDS[0]["id"] +
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "join"
@@ -304,7 +310,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"]
+					params.inputDS[0]["id"] +
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "topn"
@@ -349,7 +357,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"]
+					params.inputDS[0]["id"] +
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "sync"
@@ -437,7 +447,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&jobShowName=" +
 					recipt.jobShowName +
 					"&inputName=" +
-					inputName
+					inputName +
+					"&jobId=" +
+					recipt.jobId
 			} else if (params.name === "codeditor") {
 				uri =
 					"codeditor?projectName=" +

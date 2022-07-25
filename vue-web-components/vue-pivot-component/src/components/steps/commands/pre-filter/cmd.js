@@ -2,11 +2,8 @@
  * 这个就是我所说的Command Instance
  */
 export default class PhPreFilterCmd {
-    constructor(preFilterExpression) {
-        // if (preFilterExpression.length > 0) {
-        //     this.enabled = true
-        // }
-
+    constructor(preFilterExpression, schema) {
+        this.schema = schema
         if (preFilterExpression.includes(" and ")) {
             this.action = "AND"
             this.cloases = preFilterExpression.split(" and ")
@@ -189,7 +186,7 @@ export default class PhPreFilterCmd {
 
     insertcloases() {
         this.cloases.push({
-            "left": "",
+            "left": this.schema.length > 0 ? this.schema[0]["src"] : "",
             "op": "CONTAINS",
             "right": ""
         })
