@@ -10,7 +10,7 @@ export default class PhDagDatasource {
         this.projectId = "ggjpDje0HUC2JW"
         this.runnerId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20'
+        this.debugToken = 'cb319b8522f324d6f477a87c234e028511fd466bf00660d413c4140a08b98753'
         this.cal = { calculate: {}, selected: [] }
         this.isChanged = false
     }
@@ -47,6 +47,22 @@ export default class PhDagDatasource {
                 result = "r"
             } else if (cat === "job" && runtime === "prepare") {
                 result = "prepare"
+            } else if (cat === "job" && runtime === "pivot"){
+                result = "pivot"
+            } else if (cat === "job" && runtime === "topn"){
+                result = "topn"
+            } else if (cat === "job" && runtime === "sort"){
+                result = "sort"
+            } else if (cat === "job" && runtime === "sync"){
+                result = "sync"
+            } else if (cat === "job" && runtime === "distinct"){
+                result = "distinct"
+            } else if (cat === "job" && runtime === "join"){
+                result = "join"
+            } else if (cat === "job" && runtime === "stack"){
+                result = "stack"
+            } else if (cat === "job" && runtime === "group"){
+                result = "group"
             } else if (cat === "dataset") {
                 result = "dataset"
             } else if (cat === "job") {
