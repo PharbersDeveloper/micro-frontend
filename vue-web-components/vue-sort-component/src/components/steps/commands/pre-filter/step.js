@@ -4,15 +4,14 @@ import PhPreFilterCmd from "./cmd"
  * 这个就是我所说的Command
  */
 export default class PhFilterStep {
-    constructor(dbstep) {
+    constructor(dbstep, schema) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
         const defs = this.expressions["params"]["preFilter"]
         this.distinct = defs["distinct"]
         this.enabled = defs["enabled"]
         this.preFilterExpression = defs["expression"]
-        this.command = new PhPreFilterCmd(this.preFilterExpression)
-        console.log(this.command.cloases)
+        this.command = new PhPreFilterCmd(this.preFilterExpression, schema)
     }
 
     exec() {
