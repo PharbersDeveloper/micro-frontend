@@ -210,6 +210,16 @@ export default {
                     "title": addCols[idx]["name"]
                 })
             }
+			result.push({
+				"type": "bigint",
+				"title": "rank"
+			}, {
+				"type": "bigint",
+				"title": "denseRank"
+			}, {
+				"type": "bigint",
+				"title": "rowNumber"
+			})
             return result
         },
         save() {
