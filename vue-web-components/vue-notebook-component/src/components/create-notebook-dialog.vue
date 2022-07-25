@@ -15,6 +15,11 @@
                 <el-form-item label="集群环境">
                     <el-input value="默认环境" disabled></el-input>
                 </el-form-item>
+                <el-form-item label="编译器类型">
+                    <select name="time" id="" v-model="selectCodeeditorType">
+                        <option v-for="(item, index) in codeeditors" :value="item" :key="index">{{item}}</option>
+                    </select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="$emit('cancel')">Cancel</el-button>
@@ -36,7 +41,9 @@ export default {
     data() {
         return {
             name: "test",
-			visible: false
+			visible: false,
+            selectCodeeditorType: "jupyter",
+            codeeditors: ["jupyter", "c9"]
         }
     },
     components: {
@@ -70,7 +77,8 @@ export default {
             event.args = {
                 callback: "createNotebook",
                 param: {
-                    name: this.name
+                    name: this.name,
+                    type: this.selectCodeeditorType
                 }
             }
             this.$emit("confirm", event)

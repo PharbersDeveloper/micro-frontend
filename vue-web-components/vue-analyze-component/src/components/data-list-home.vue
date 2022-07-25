@@ -720,6 +720,7 @@ export default {
                 padding-left: 10px;
                 padding-top: 10px;
                 margin-bottom: 10px;
+				overflow: auto;
                 .icon {
                     width: 20px;
                     height: 20px;
