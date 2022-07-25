@@ -53,7 +53,7 @@ export default class PhDataSource {
                 if (tmp === "jupyter") {
                     this.data["uri"] = "https://" + tmp["attributes"]["name"] + ".ide.pharbers.com/lab?token=f0f7a8476e7ca7d724a24f756ac3533dc1dc67dcb3be3cbb376c11a3d382d397"
                 } else {
-                    this.data["uri"] = "https://" + tmp["attributes"]["name"] + ".ide.pharbers.com/"
+                    this.data["uri"] = "https://" + tmp["attributes"]["name"] + ".ide.pharbers.com/ide.html"
                 }
                 this.isReady = true
             })
