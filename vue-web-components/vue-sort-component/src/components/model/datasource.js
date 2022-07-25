@@ -28,16 +28,16 @@ export default class PhDataSource {
         else return null
     }
 
-    buildQuery(projectId, jobName) {
+    buildQuery(projectId, jobName, jobId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", this.projectId + "_" + this.jobName]
-                "pjName": ["=", projectId + "_" + jobName]
+                "pjName": ["=", projectId + "_" + jobId]
             },
             "limit": 1,
+			"index_name": "id-index-index",
             "start_key": {}
         }
 
@@ -53,9 +53,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(projectId, jobName) {
+    refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName)
+        this.buildQuery(projectId, jobName, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -77,13 +77,7 @@ export default class PhDataSource {
                                 "denseRank": false,
                                 "rank": false,
                                 "rowNumber": false,
-                                "computedColumns": [
-									{
-										"expr": "",
-										"name": "",
-										"type": "int"
-									}
-								]
+                                "computedColumns": []
                             }
                         }),
                         "expressions-value": "JSON",
@@ -101,55 +95,11 @@ export default class PhDataSource {
             })
     }
 
-    // buildDsMetaQuery(projectId, dsId) {
-    //     const url = `${hostName}/phdydatasource/query`
-    //     const accessToken = this.getCookie( "access_token" ) || this.debugToken
-    //     let body = {
-    //         "table": "dataset",
-    //         "conditions": {
-    //             "projectId": ["=", projectId],
-    //             "id": ["=", dsId]
-    //         },
-    //         "limit": 1,
-    //         "start_key": {}
-    //     }
-
-    //     let options = {
-    //         method: "POST",
-    //         headers: {
-    //             "Authorization": accessToken,
-    //             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    //             "accept": "application/json"
-    //         },
-    //         body: JSON.stringify(body)
-    //     }
-    //     return fetch(url, options)
-    // }
-
-    // refreshMateData(projectId, dsId) {
-    //     const that = this
-    //     this.buildDsMetaQuery(projectId, dsId)
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             // that.currentPageToken = response.meta.start_key
-    //             that.store.sync(response)
-    //             const data = that.store.findAll("datasets")
-    //             that.dataset = data[0]
-    //             that.dataset.schema = JSON.parse(that.dataset["schema"])
-    //             if (that.dataset.schema.length === 0) {
-    //                 that.hasNoSchema = true
-    //             } else {
-    //                 that.isMetaReady = true
-    //             }
-    //         })
-    // }
-
 	refreshDataset(projectId, dsId) {
         const that = this
         this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
-				console.log(response)
 				that.store.sync(response)
                 const data = that.store.findAll("datasets")
 				that.parent.datasetArray = data
@@ -249,43 +199,9 @@ export default class PhDataSource {
 			}
 		}
 		this.parent.$emit('event', event)
-        // @wodelu 这里改成code gen 逻辑
-        // const url = `${hostName}/phdydatasource/put_item`
-        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        // let body = {
-        //     table: "step",
-        //     item: {
-        //         pjName: this.step["pj-name"],
-        //         stepId: this.step["step-id"],
-        //         ctype: this.step["ctype"],
-        //         expressions: JSON.stringify({ "params": param }),
-        //         expressionsValue: this.step["expressions-value"],
-        //         groupIndex: this.step["group-index"],
-        //         groupName: this.step["group-name"],
-        //         id: this.step["id"],
-        //         index: this.step["index"],
-        //         runtime : this.step["runtime"],
-        //         stepName: this.step["step-name"]
-        //     }
-        // }
-
-        // let options = {
-        //     method: "POST",
-        //     headers: {
-        //         "Authorization": accessToken,
-        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         "accept": "application/json"
-        //     },
-        //     body: JSON.stringify(body)
-        // }
-        // return fetch(url, options)
     }
 
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
-            // .then((response) => response.json())
-            // .then((response) => {
-            //     console.log(response)
-            // })
     }
 }
