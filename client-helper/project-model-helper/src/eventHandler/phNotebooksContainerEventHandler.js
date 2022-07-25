@@ -323,6 +323,14 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				const tenantId = route.cookies.read("company_id")
 				const owner = route.cookies.read("account_id")
 				const url = `${hostName}/phdydatasource/put_item`
+				const cfn =
+					params.type === "jupyter"
+						? "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/jupyterec2cfn-07-08.yaml"
+						: "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/cloud9cfn-07-25.yaml"
+				const ExportPort =
+					params.type === "jupyter"
+						? "8888"
+						: "8181"
 				const properties = [
 					{
 						type: "jupyter",
@@ -331,12 +339,12 @@ export async function phNotebooksContainerEventHandler(e, route) {
 							jupyter: "3.0.2"
 						},
 						dependencies: [],
-						cfn: "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/jupyterec2cfn-07-08.yaml",
+						cfn: cfn,
 						parameters: {
 							EC2User: name,
 							InstanceType: "t3.small",
 							Priority: priority.toString(),
-							ExportPort: "8888"
+							ExportPort: ExportPort
 						}
 					}
 				]
