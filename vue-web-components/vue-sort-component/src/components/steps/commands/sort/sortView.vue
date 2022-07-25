@@ -23,7 +23,7 @@
             </div>
             <div class="sort-add-btn">
                 <select v-model="placeholderSort" @change="sortInserted">
-                    <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                    <option v-for="(item, index) in schemaArray" :value="item.src" :key="index" :label="item.src" />
                     <option value="选择列" label="选择列" />
                 </select>
             </div>
@@ -49,8 +49,8 @@ export default {
     data() {
         return {
             datasource: null,
-            placeholderSort: "选择列"
-            // candiData: []
+            placeholderSort: "选择列",
+            schemaArray: []
         }
     },
     props: {
@@ -77,13 +77,15 @@ export default {
     methods: {
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
+			this.schemaArray = this.schemaArray.filter(it => it.src !== this.placeholderSort)
             this.placeholderSort = "选择列"
         },
         sortDeletion(idx) {
             this.datasource.command.deleteSortCloase(idx)
         },
         validate() {
-            this.$emit('statusChange', true)
+            const ErrorVales = this.datasource.command.orders.length === 0
+            this.$emit('statusChange', ErrorVales)
         }
     },
     computed: {
@@ -94,7 +96,12 @@ export default {
             if (n) {
                 this.datasource.command.retrievedCols = []
             }
-        }
+        },
+		schema(n) {
+			if (n) {
+				this.schemaArray = n
+			}
+		}
     }
 }
 </script>
@@ -139,10 +146,13 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+			align-items: center;
+    		font-size: 16px;
 
             .sort-btn-group {
                 display: flex;
                 flex-direction: row;
+				align-items: center;
             }
         }
     }
@@ -150,7 +160,13 @@ export default {
     .sort-add-btn {
          display: flex;
          flex-direction: row;
-         justify-content: space-around;
+
+		 select {
+			width: 200px;
+			height: 26px;
+			border: 1px solid #ccc;
+			color: #ccc;
+		 }
      }
 
 
