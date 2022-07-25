@@ -106,7 +106,6 @@ export default class PhDataSource {
         this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
-				console.log(response)
 				that.store.sync(response)
                 const data = that.store.findAll("datasets")
 				that.parent.datasetArray = data
@@ -211,15 +210,4 @@ export default class PhDataSource {
     saveAndGenCode(projectId, jobName, parame) {
         this.buildSaveQuery(projectId, jobName, parame)
     }
-
-	guid() {
-		return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
-			/[xy]/g,
-			function (c) {
-				var r = (Math.random() * 16) | 0,
-					v = c == "x" ? r : (r & 0x3) | 0x8
-				return v.toString(16)
-			}
-		)
-	}
 }
