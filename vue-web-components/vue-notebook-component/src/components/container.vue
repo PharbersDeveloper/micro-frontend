@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
+                            <div @click.stop>
                                 <span>{{ notebook.message }}</span>
                                 <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
                                     v-model="notebook.switch" active-color="#13ce66" @change="resetStatus(notebook)" />
@@ -307,9 +307,9 @@ export default {
             this.notebookscheckedNames.push(notebook.detail.name)
             this.notebookscheckedOwners.push(notebook.detail.owner)
             this.notebookscheckedStatus.push(notebook.status)
-            if(this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] == 0){
+            if (this.notebookscheckedStatus.every(item => item == 0)) {
                 this.isStopStatus = true
-            }else{
+            } else {
                 this.isStopStatus = false
             }
         },
@@ -327,9 +327,9 @@ export default {
                 this.notebookscheckedOwners.push(notebook.detail.owner)
                 this.notebookscheckedStatus.push(notebook.status)
             }
-            if(this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] == 0){
+            if (this.notebookscheckedStatus.every(item => item == 0)) {
                 this.isStopStatus = true
-            }else{
+            } else {
                 this.isStopStatus = false
             }
         },
@@ -434,7 +434,7 @@ export default {
                 Message.error("无法删除其他用户的Jupyter!", { duration: 0, showClose: true })
                 return
             }
-            if (this.isStopStatus !== true || this.notebookscheckedStatus[this.notebookscheckedStatus.length - 1] !== 0) {
+            if (this.isStopStatus !== true) {
                 Message.error("请先关闭Jupyter资源!", { duration: 0, showClose: true })
                 return
             }
