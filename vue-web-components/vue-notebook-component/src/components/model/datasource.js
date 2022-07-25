@@ -98,6 +98,7 @@ export default class PhDataSource {
             .then((response) => {
                 if (response.status === "succeed") {
                     model.editable = false
+                    that.parent.isStopStatus = false
                     model.status = 1
                     model.resetMessage()
 
@@ -108,6 +109,7 @@ export default class PhDataSource {
 
                         if (tmp) {
                             if (status === "started") {
+                                that.parent.isStopStatus = false
                                 tmp.status = 2
                             }
                             tmp.switch = tmp.status === 1 || tmp.status === 2
@@ -156,6 +158,7 @@ export default class PhDataSource {
                 if (response.status === "succeed") {
                     model.editable = false
                     const that = this
+                    that.parent.isStopStatus = false
                     model.status = 4
                     model.resetMessage()
 
@@ -166,6 +169,7 @@ export default class PhDataSource {
 
                         if (tmp) {
                             if (status === "stopped") {
+                                that.parent.isStopStatus = true
                                 tmp.status = 0
                             }
                             tmp.switch = tmp.status === 1 || tmp.status === 2
