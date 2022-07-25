@@ -6,7 +6,7 @@
                 <h2>Custom Aggregation</h2>
             </div>
         </div>
-        <el-empty description="TODO: ... @wodelu"></el-empty>
+        <el-empty description="暂无数据"></el-empty>
     </div>
 </template>
 <script>

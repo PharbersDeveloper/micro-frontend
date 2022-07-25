@@ -15,7 +15,7 @@
 					</div>
                 </div>
             </div>
-			<span class="error-msg" v-show="valueColumns.length === 0">
+			<span class="error-msg" v-show="valueColumns.length === 0 && !command.globalCount">
 				需要添加至少一个聚合条件!
 			</span>
             <div>

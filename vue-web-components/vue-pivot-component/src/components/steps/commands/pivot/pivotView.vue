@@ -78,7 +78,7 @@ export default {
     },
     methods: {
         validate() {
-            const ErrorVales = this.datasource.command.keyColumns.length === 0 || this.datasource.command.valueColumns.length === 0
+            const ErrorVales = this.datasource.command.keyColumns.length === 0 || (this.datasource.command.valueColumns.length === 0 && !this.datasource.command.globalCount)
 			const event = new Event("event")
 			event.args = {
 				element: this,
