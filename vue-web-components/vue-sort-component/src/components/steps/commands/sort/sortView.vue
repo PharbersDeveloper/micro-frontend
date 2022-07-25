@@ -17,7 +17,7 @@
                                 v-model="item.desc"
                                 active-text="降序"
                                 active-color="#13ce66" />
-                        <el-button class="sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(index)" />
+                        <el-button class="sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(item, index)" />
                     </div>
                 </div>
             </div>
@@ -70,9 +70,8 @@ export default {
     },
     mounted() {
         this.datasource = new PhSortStep(this.step)
-    },
-    updated() {
-
+		this.schemaArray = this.schema
+		this.validate()
     },
     methods: {
         sortInserted() {
@@ -80,8 +79,9 @@ export default {
 			this.schemaArray = this.schemaArray.filter(it => it.src !== this.placeholderSort)
             this.placeholderSort = "选择列"
         },
-        sortDeletion(idx) {
+        sortDeletion(item, idx) {
             this.datasource.command.deleteSortCloase(idx)
+			this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.src === item.column))
         },
         validate() {
             const ErrorVales = this.datasource.command.orders.length === 0
@@ -96,12 +96,7 @@ export default {
             if (n) {
                 this.datasource.command.retrievedCols = []
             }
-        },
-		schema(n) {
-			if (n) {
-				this.schemaArray = n
-			}
-		}
+        }
     }
 }
 </script>
@@ -143,11 +138,11 @@ export default {
         flex-direction: column;
 
         .sort-sort-item {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
 			align-items: center;
-    		font-size: 16px;
+			font-size: 16px;
 
             .sort-btn-group {
                 display: flex;
@@ -158,16 +153,16 @@ export default {
     }
 
     .sort-add-btn {
-         display: flex;
-         flex-direction: row;
+		display: flex;
+		flex-direction: row;
 
-		 select {
-			width: 200px;
-			height: 26px;
-			border: 1px solid #ccc;
-			color: #ccc;
-		 }
-     }
+		select {
+		width: 200px;
+		height: 26px;
+		border: 1px solid #ccc;
+		color: #ccc;
+		}
+	}
 
 
     .sort-del-btn {

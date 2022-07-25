@@ -50,7 +50,7 @@ export default class PhDataSource {
             .then((response) => {
                 console.log(response)
                 const tmp = response.data[0]
-                if (tmp === "jupyter") {
+                if (tmp["attributes"]["ctype"] === "jupyter") {
                     this.data["uri"] = "https://" + tmp["attributes"]["name"] + ".ide.pharbers.com/lab?token=f0f7a8476e7ca7d724a24f756ac3533dc1dc67dcb3be3cbb376c11a3d382d397"
                 } else {
                     this.data["uri"] = "https://" + tmp["attributes"]["name"] + ".ide.pharbers.com/ide.html"
