@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+            this.$emit('statusChange', false)
         }
     },
     computed: {

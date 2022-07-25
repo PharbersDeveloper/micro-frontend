@@ -163,7 +163,7 @@ export default {
 			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
+        preFilterStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
 			this.stepsDefs[0].status = "success"
             if (!status) {
@@ -172,7 +172,7 @@ export default {
                 this.stepsDefs[0].status = "error"
             }
         },
-        computedStatus(status) {
+        computedStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
 			this.stepsDefs[1].status = "success"
             if (!status) {
@@ -181,18 +181,18 @@ export default {
                 this.stepsDefs[1].status = "error"
             }
         },
-        sortStatus(status) {
+        sortStatus(errors) {
             if (errors) {
                 this.stepsDefs[2].status = "error"
             } else {
                 this.stepsDefs[2].status = "success"
             }
         },
-        outputsStatus(status) {
+        outputsStatus(errors) {
            if (errors) {
-                this.stepsDefs[4].status = "error"
+                this.stepsDefs[3].status = "error"
             } else {
-                this.stepsDefs[4].status = "success"
+                this.stepsDefs[3].status = "success"
             }
         },
         computeSchema() {
@@ -210,16 +210,24 @@ export default {
                     "title": addCols[idx]["name"]
                 })
             }
-			result.push({
-				"type": "bigint",
-				"title": "rank"
-			}, {
-				"type": "bigint",
-				"title": "denseRank"
-			}, {
-				"type": "bigint",
-				"title": "rowNumber"
-			})
+			if (this.$refs.sort.datasource.rowNumber) {
+				result.push({
+					"type": "bigint",
+					"title": "rowNumber"
+				})
+			}
+			if (this.$refs.sort.datasource.rank) {
+				result.push({
+					"type": "bigint",
+					"title": "rank"
+				})
+			}
+			if (this.$refs.sort.datasource.denseRank) {
+				result.push({
+					"type": "bigint",
+					"title": "denseRank"
+				})
+			}
             return result
         },
         save() {
