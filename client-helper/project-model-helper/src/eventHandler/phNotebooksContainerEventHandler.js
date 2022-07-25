@@ -327,16 +327,14 @@ export async function phNotebooksContainerEventHandler(e, route) {
 					params.type === "jupyter"
 						? "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/jupyterec2cfn-07-08.yaml"
 						: "https://ph-platform.s3.cn-northwest-1.amazonaws.com.cn/2020-11-11/automation/cloud9cfn-07-25.yaml"
-				const ExportPort =
-					params.type === "jupyter"
-						? "8888"
-						: "8181"
+				const ExportPort = params.type === "jupyter" ? "8888" : "8181"
 				const properties = [
 					{
-						type: "jupyter",
-						version: "alfred-0.0.1",
+						type: params.type,
+						version: params.type + "-0.0.1",
 						label: {
-							jupyter: "3.0.2"
+							jupyter: "3.0.2",
+							cloud9: "3.0.2"
 						},
 						dependencies: [],
 						cfn: cfn,
