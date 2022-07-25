@@ -21,8 +21,8 @@ export default class PhDataSource {
 
     refreshPlaceholders(dns) {
         dns.forEach(x => {
-			this.model.push(new PhStatusModel(x.id, 0, this.guid(), x)) 
-		})
+            this.model.push(new PhStatusModel(x.id, 0, this.guid(), x))
+        })
     }
 
     buildStatusQuery(tenantId, resourceIds) {
@@ -46,6 +46,7 @@ export default class PhDataSource {
 
     refreshStatus(tenantId, resourceIds) {
         const that = this
+        that.parent.loading = true
         this.buildStatusQuery(tenantId, resourceIds)
             .then((response) => response.json())
             .then((response) => {
@@ -60,6 +61,7 @@ export default class PhDataSource {
                     }
                 })
                 this.isReady = true
+                that.parent.loading = false
             })
     }
 
@@ -71,8 +73,8 @@ export default class PhDataSource {
             "tenantId": tenantId,
             "traceId": model.traceId,
             // "owner": this.getCookie("account_id"),
-			owner: model.detail.owner,
-            "showName":  decodeURI(
+            owner: model.detail.owner,
+            "showName": decodeURI(
                 decodeURI(
                     this.getCookie("user_name_show")
                 )
@@ -96,11 +98,13 @@ export default class PhDataSource {
         this.buildStartQuery(tenantId, model)
             .then((response) => response.json())
             .then((response) => {
+                that.parent.loading = true
                 if (response.status === "succeed") {
                     model.editable = false
                     that.parent.isStopStatus = false
                     model.status = 1
                     model.resetMessage()
+                    that.parent.loading = false
 
                     that.parent.dealResourceStart(model, (param, payload) => {
                         console.log("resource start callback")
@@ -131,8 +135,8 @@ export default class PhDataSource {
             "tenantId": tenantId,
             "traceId": model.traceId,
             // "owner": this.getCookie("account_id"),
-			owner: model.detail.owner,
-            "showName":  decodeURI(
+            owner: model.detail.owner,
+            "showName": decodeURI(
                 decodeURI(
                     this.getCookie("user_name_show")
                 )
@@ -161,6 +165,7 @@ export default class PhDataSource {
                     that.parent.isStopStatus = false
                     model.status = 4
                     model.resetMessage()
+                    that.parent.loading = false
 
                     that.parent.dealResourceStop(model, (param, payload) => {
                         console.log("resource stop callback")
