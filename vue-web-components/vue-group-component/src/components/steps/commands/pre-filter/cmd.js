@@ -3,6 +3,7 @@
  */
 export default class PhPreFilterCmd {
     constructor(preFilterExpression, schema) {
+		this.schema = schema
         if (preFilterExpression.includes(" and ")) {
             this.action = "AND"
             this.cloases = preFilterExpression.split(" and ")

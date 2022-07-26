@@ -70,7 +70,7 @@ export default {
         ElSwitch
     },
     mounted() {
-        this.datasource = new PhFilterStep(this.step)
+        this.datasource = new PhFilterStep(this.step, this.schema)
 		this.validate()
     },
     methods: {

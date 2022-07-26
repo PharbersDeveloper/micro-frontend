@@ -249,10 +249,8 @@ export default {
             .group-key-container {
                 display: flex;
                 flex-direction: column;
-                /*overflow: auto;*/
-                /*height: 100vh;*/
-
-                border: 1px solid green;
+				padding: 10px;
+                border: 1px solid #ccc;
             }
 
 
@@ -282,7 +280,12 @@ export default {
 
             .group-agg-title {
                 display: flex;
+				flex-direction: column;
 
+				.el-checkbox {
+					margin-left: 10px;
+					margin-bottom: 10px;
+				}
             }
 
             .group-agg-op {

@@ -373,7 +373,7 @@ export default {
 		console.log("update")
     },
     watch: {
-        active() {
+        active(n) {
 			if (n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
             }

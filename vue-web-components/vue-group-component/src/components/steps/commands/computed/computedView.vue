@@ -50,6 +50,7 @@ import ElInput from 'element-ui/packages/input/index'
 import ElButton from 'element-ui/packages/button/index'
 import { PhComputedDefs } from "./defs"
 import PhComputedStep from "./step"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -171,7 +172,6 @@ export default {
             display: flex;
             flex-direction: row;
             cursor: pointer;
-            border: 1px solid greenyellow;
 
 
             .computed-item-title {
