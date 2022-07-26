@@ -122,7 +122,6 @@ export default {
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.jobName = this.getUrlParam(paramArr, "jobName")
         this.runtime = this.getUrlParam(paramArr, "runtime")
-        console.log(this.runtime,1111)
         //父组件传进来的值
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
