@@ -297,7 +297,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				params.name === "notebook-c9"
 			) {
 				const tenantId = route.cookies.read("company_id")
-				uri = `notebook-editor?tenantId=${tenantId}&resourceId=${params.resourceId}&projectId=${params.projectId}&projectName=${params.projectName}`
+				uri = `notebook-editor?tenantId=${tenantId}&resourceId=${params.resourceId}&projectId=${params.projectId}&projectName=${params.projectName}&detailName=${params.detailName}`
 			}
 			route.router.transitionTo("shell", encodeURI(uri))
 			break

@@ -362,6 +362,7 @@ export default {
                 element: this,
                 param: {
                     name: "notebook-" + notebook.detail.ctype,
+                    detailName: notebook.detail.name,
                     resourceId: notebook.resourceId,
                     projectName: this.allData.projectName,
                     projectId: this.allData.projectId
