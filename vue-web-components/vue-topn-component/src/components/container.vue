@@ -510,7 +510,6 @@ export default {
             .topn_left {
                 display: flex;
                 flex-direction: row;
-                // margin-left: 80px;
                 padding: 40px;
                 justify-content: space-around;
                 border-right: 1px solid #ccc;

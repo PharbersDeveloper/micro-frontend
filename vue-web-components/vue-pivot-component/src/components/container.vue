@@ -204,7 +204,6 @@ export default {
             }
         },
         otherStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
                 this.stepsDefs[3].status = "success"
             } else {
@@ -398,14 +397,6 @@ export default {
             }
 
             .header_right {
-                /*button {*/
-                /*    width: 65px;*/
-                /*    height: 26px;*/
-                /*    border: 1px solid #57565F;*/
-                /*    border-radius: 2px;*/
-                /*    background: none;*/
-                /*    cursor: pointer;*/
-                /*}*/
 				.content {
 					margin-right: 30px;
 				}
