@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-dialog
-                title="Tips"
+                title="新建编译器"
                 :visible.sync="dialogVisible"
 				@close='close()'
                 width="30%" >
