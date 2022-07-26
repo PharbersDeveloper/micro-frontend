@@ -24,15 +24,11 @@ export async function phPivotContainerRouteModel(route, parseParams) {
 
 	const jobId = scriptsParams.jobId
 
-	let random = Math.random()
-	console.log(random)
-
 	return {
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
 		inputs: inputs,
 		outputs: outputs,
-		random: random,
 		jobName: jobName,
 		jobId: jobId,
 		_isVue: true,

@@ -23,12 +23,12 @@
                         <option v-for="(item, index) in schema" :label="item.src" :key="index" :value="item.src" />
                     </select>
                 </div>
-                <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
         </div>
         <div class="group-agg-container" v-if="datasource">
             <div class="group-agg-title">
                 <h3>Aggregation</h3>
+                <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"

@@ -4,7 +4,7 @@
         <div class="group_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('group')" alt="" />
-                <span>Group</span>
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
 				<el-radio-group v-model="activeName" class="content">
@@ -26,34 +26,34 @@
             </div>
             <div class="group_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-                            ref="filter"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="preFilterStatus" />
+						ref="filter"
+						:step="datasource.step"
+						:schema="datasource.dataset.schema"
+						@statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
-                            ref="computed"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="computedStatus" />
+						ref="computed"
+						:step="datasource.step"
+						:schema="datasource.dataset.schema"
+						@statusChange="computedStatus" />
                 <group v-show="active === 3"
-                          ref="group"
-                          :step="datasource.step"
-                          :schema="datasource.dataset.schema"
-                          @statusChange="groupStatus" />
+						ref="group"
+						:step="datasource.step"
+						:schema="datasource.dataset.schema"
+						@statusChange="groupStatus" />
                 <custom-agg v-show="active === 4"
                        ref="customagg"
                        :step="datasource.step"
                        :schema="datasource.dataset.schema"
                        @statusChange="customAggStatus" />
                 <post-filter v-show="active === 5"
-                            ref="postfilter"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="postFilterStatus" />
+						ref="postfilter"
+						:step="datasource.step"
+						:schema="datasource.dataset.schema"
+						@statusChange="postFilterStatus" />
                 <outputs v-show="active === 6"
-                                ref="output"
-                                :schema="datasource.dataset.schema"
-                                @statusChange="outputsStatus" />
+						ref="output"
+						:schema="datasource.dataset.schema"
+						@statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -189,52 +189,50 @@ export default {
 			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+        preFilterStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[0].status = "success"
+            if (!status) {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },
-        computedStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
+        computedStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[1].status = "success"
+            if (!status) {
+                this.stepsDefs[1].status = "wait"
+            } else if (errors){
                 this.stepsDefs[1].status = "error"
             }
         },
-        groupStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+        groupStatus(errors) {
+            if (errors) {
                 this.stepsDefs[2].status = "error"
+            } else {
+                this.stepsDefs[2].status = "success"
             }
         },
-        customAggStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+        customAggStatus(errors) {
+            if (errors) {
                 this.stepsDefs[3].status = "error"
+            } else {
+                this.stepsDefs[3].status = "success"
             }
         },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[4].status = "success"
+        postFilterStatus(errors) {
+            if (errors) {
+                this.stepsDefs[3].status = "error"
             } else {
-                this.stepsDefs[4].status = "error"
+                this.stepsDefs[3].status = "success"
             }
         },
-        outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[5].status = "success"
+        outputsStatus(errors) {
+            if (errors) {
+                this.stepsDefs[3].status = "error"
             } else {
-                this.stepsDefs[5].status = "error"
+                this.stepsDefs[3].status = "success"
             }
         },
         computeSchema() {
@@ -256,16 +254,28 @@ export default {
         },
         genOutputsSchema() {
             const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            let result = []
             if (retrieved.length === 0) {
-                result = this.computedSchema
+                return this.computedSchema
             } else {
-                result = this.computedSchema.filter(x => retrieved.includes(x.title))
+                return this.computedSchema.filter(x => retrieved.includes(x.title))
             }
-            return result
         },
         save() {
 			if (this.activeName === "Setting") {
+
+				this.$refs.filter.validate()
+				this.$refs.computed.validate()
+				this.$refs.group.validate()
+				this.$refs.customagg.validate()
+				this.$refs.postfilter.validate()
+				this.$refs.output.validate()
+
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+				if(errors.length > 0) {
+					Message.error("请修改参数！", { duration: 3000} )
+					return false
+				}
+
 				let globalCount = true
 				if (this.$refs.group.datasource.commands.length > 0) {
 					globalCount =  this.$refs.group.datasource.commands[0].count
@@ -364,29 +374,31 @@ export default {
     },
     watch: {
         active() {
+			if (n === 4 || n === 5) {
+                this.computedSchema = this.computeSchema()
+            }
+            
+            if (n === 5) {
+                this.outputsSchema = this.genOutputsSchema()
+            }
+
             this.$refs.filter.validate()
             this.$refs.computed.validate()
             this.$refs.group.validate()
             this.$refs.customagg.validate()
             this.$refs.postfilter.validate()
             this.$refs.output.validate()
-            //
-            // if (n === 4 || n === 5) {
-            //     this.computedSchema = this.computeSchema()
-            // }
-            //
-            // if (n === 5) {
-            //     this.outputsSchema = this.genOutputsSchema()
-            // }
+            
         },
 		activeName(n) {
             this.$emit("active", n)
         },
-        "allData.random": function(n) {
-			console.log(n)
-            this.inputs = this.allData.inputs
-            this.outputs = this.allData.outputs
-        }
+        "allData.inputs": function(n) {
+            this.inputs = n
+        },
+		"allData.outputs": function(n) {
+            this.outputs = n
+		}
     }
 }
 </script>
