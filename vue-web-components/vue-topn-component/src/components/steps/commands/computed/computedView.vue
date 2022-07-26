@@ -131,7 +131,6 @@ export default {
     }
     .computed {
         margin-top: 4px;
-        /*width: 100%;*/
         min-width: 800px;
         display: flex;
         flex-direction: column;
