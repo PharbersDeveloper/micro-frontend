@@ -14,21 +14,21 @@
                 <div class="group-key-list" >
                     <div class="group-key-item" v-for="(item, index) in datasource.keys" :key="index">
                         <p class="group-key-item-col">{{item}}</p>
-                        <el-button type="text" >删除</el-button>
+                        <el-button type="text" @click="delSelectCol(item, index)">删除</el-button>
                     </div>
                 </div>
                 <div class="group-key-add-btn" >
                     <select v-model="selectedAdd" @change="addSelectedColToKey">
                         <option label="选中添加" value="选中添加" />
-                        <option v-for="(item, index) in schema" :label="item.src" :key="index" :value="item.src" />
+                        <option v-for="(item, index) in schemaArray" :label="item.src" :key="index" :value="item.src" />
                     </select>
                 </div>
-                <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
         </div>
         <div class="group-agg-container" v-if="datasource">
             <div class="group-agg-title">
                 <h3>Aggregation</h3>
+                <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
@@ -125,7 +125,8 @@ export default {
             notGroupedCommands: [],
             // notGroupedTypes: [],
             checkedKeys: [],
-            ignoredClearMsg: false
+            ignoredClearMsg: false,
+            schemaArray: []
         }
     },
     props: {
@@ -154,10 +155,16 @@ export default {
         this.computedGroupCount = this.datasource.isComputedGroupCount()
         this.notGroupedCommands = this.resetSelectGroupKeys()
         this.ignoredClearMsg = false
+        this.schemaArray = this.schema
     },
     methods: {
         validate() {
             this.$emit('statusChange', true)
+        },
+        delSelectCol(item, index) {
+            this.datasource.keys.splice(index, 1)
+            this.notGroupedCommands = this.resetSelectGroupKeys()
+            this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.src === item))
         },
         resetSelectGroupKeys() {
             const res = []
@@ -168,12 +175,9 @@ export default {
                     this.datasource.commands[idx].isUsed = false
                 }
             }
-
-            console.log(1)
             this.ignoredClearMsg = true
             const that = this
             this.$nextTick(() => {
-                console.log(2)
                 res.forEach(x => {
                     if (x.isUsed) {
                         console.log(x)
@@ -185,8 +189,8 @@ export default {
         },
         addSelectedColToKey() {
             this.datasource.addCol2Key(this.selectedAdd)
+            this.schemaArray = this.schemaArray.filter(it => it.src !== this.selectedAdd)
             this.selectedAdd = "选中添加"
-
             this.notGroupedCommands = this.resetSelectGroupKeys()
         },
         changeComputedGroupCount() {
@@ -202,7 +206,7 @@ export default {
             } else {
                 this.ignoredClearMsg = false
             }
-        },
+        }
     },
     computed: {
 
@@ -218,11 +222,12 @@ export default {
     .group-container {
         margin-top: 4px;
         min-width: 1600px;
+        width: 1600px;
         display: flex;
         flex-direction: column;
-		background: #fff;
-		height: fit-content;
-		padding: 20px;
+        background: #fff;
+        height: fit-content;
+        padding: 20px;
 
         .group-title {
             display: flex;
@@ -249,21 +254,27 @@ export default {
             .group-key-container {
                 display: flex;
                 flex-direction: column;
-                /*overflow: auto;*/
-                /*height: 100vh;*/
-
-                border: 1px solid green;
+                padding: 10px;
             }
 
 
             .group-key-list {
                 display: flex;
-                flex-direction: column;
+                flex-wrap: wrap;
+                max-height: 140px;
+                overflow: auto;
 
                 .group-key-item {
+                    width: 220px;
+                    height: 30px;
                     display: flex;
-                    flex-direction: row;
+                    align-items: center;
                     justify-content: space-between;
+                    margin: 0 14px 10px 0;
+                    background-color: #f2f2f2;
+                    padding: 0 10px;
+                    font-size: 14px;
+                    border-radius: 4px;
                 }
             }
 
@@ -271,6 +282,7 @@ export default {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-around;
+                margin-top: 10px;
             }
         }
 
@@ -282,7 +294,13 @@ export default {
 
             .group-agg-title {
                 display: flex;
+                flex-direction: column;
+                border-top: 1px solid #ccc;
 
+                .el-checkbox {
+                    margin-left: 10px;
+                    margin-bottom: 10px;
+                }
             }
 
             .group-agg-op {

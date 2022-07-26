@@ -55,15 +55,15 @@
             </div>
         </div>
         <div v-show="activeName === 'input/output'">
-			<change-input-output
-				ref="changeInputOutput"
-				:inputs="inputs"	
-				:outputs="outputs"
-				:inArray="inArray"
-				:outArray="outArray"
-				@changScriptInputOutput="changScriptInputOutput"
-				:datasetArray="datasetArray"
-			/>
+            <change-input-output
+                ref="changeInputOutput"
+                :inputs="inputs"	
+                :outputs="outputs"
+                :inArray="inArray"
+                :outArray="outArray"
+                @changScriptInputOutput="changScriptInputOutput"
+                :datasetArray="datasetArray"
+            />
         </div>
     </div>
 </template>
@@ -98,16 +98,16 @@ export default {
         // ElFormItem,
         ElRadioButton,
         // ElInput,
-		changeInputOutput
+        changeInputOutput
     },
     data() {
         return {
             computedSchema: [],
             outputsSchema: [],
-			inArray: [],
-			outArray: [],
+            inArray: [],
+            outArray: [],
             jobShowName: "",
-			outputs: [],
+            outputs: [],
             inputs: [],
             active: 3,
             flowVersion: "developer",
@@ -176,12 +176,12 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
-			this.jobShowName = jobShowName
+            this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(data) {
-			const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[0].status = "success"
+            const status = data.args.param.status, errors = data.args.param.errors
+            this.stepsDefs[0].status = "success"
             if (!status) {
                 this.stepsDefs[0].status = "wait"
             } else if (errors){
@@ -189,8 +189,8 @@ export default {
             }
         },
         computedStatus(data) {
-           	const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[1].status = "success"
+               const status = data.args.param.status, errors = data.args.param.errors
+            this.stepsDefs[1].status = "success"
             if (!status) {
                 this.stepsDefs[1].status = "wait"
             } else if (errors){
@@ -237,7 +237,7 @@ export default {
         },
         genOutputsSchema() {
             const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-			const retrievedType = this.$refs.retrieved.datasource.command.retrievedCols.length === 0
+            const retrievedType = this.$refs.retrieved.datasource.command.retrievedCols.length === 0
             if (retrievedType) {
                 return this.computedSchema
             } else {
@@ -246,18 +246,18 @@ export default {
         },
         save() {
             if (this.activeName === "Setting") {
-				
-				this.$refs.filter.validate()
-				this.$refs.computed.validate()
-				this.$refs.topn.validate()
-				this.$refs.retrieved.validate()
-				this.$refs.outputs.validate()
+                
+                this.$refs.filter.validate()
+                this.$refs.computed.validate()
+                this.$refs.topn.validate()
+                this.$refs.retrieved.validate()
+                this.$refs.outputs.validate()
 
-				let errors = this.stepsDefs.filter(it => it.status === "error")
-				if(errors.length > 0) {
-					Message.error("请修改参数！", { duration: 3000} )
-					return false
-				}
+                let errors = this.stepsDefs.filter(it => it.status === "error")
+                if(errors.length > 0) {
+                    Message.error("请修改参数！", { duration: 3000} )
+                    return false
+                }
                 const params = {
                     "firstRows": this.$refs.topn.datasource.revert2Defs().firstRows,
                     "lastRows": this.$refs.topn.datasource.revert2Defs().lastRows,
@@ -273,74 +273,74 @@ export default {
                 }
                 this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
             } else {
-				this.$refs.changeInputOutput.save()
+                this.$refs.changeInputOutput.save()
             }
             
         },
-		changScriptInputOutput(data) {
-			let inputNameOld = this.allData.inputs[0]
-			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
-			let inputNameNew = data.args.param.inputsArray[0]
-			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
-			let dssInputs = {
-				old: [{
-					name: inputNameOld,
-					cat: inputCatOld
-				}],
-				new: [{
-					name: inputNameNew,
-					cat: inputCatNew
-				}]
-			}
-			let outputNameOld = this.allData.outputs[0]
-			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
-			let outputNameNew = data.args.param.outputsArray[0]
-			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
-			
-			let dssOutputs = {
-				old: {
-					name: outputNameOld,
-					cat: outputCatOld
-				},
-				new: {
-					name: outputNameNew,
-					cat: outputCatNew
-				}
-			}
+        changScriptInputOutput(data) {
+            let inputNameOld = this.allData.inputs[0]
+            let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+            let inputNameNew = data.args.param.inputsArray[0]
+            let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+            let dssInputs = {
+                old: [{
+                    name: inputNameOld,
+                    cat: inputCatOld
+                }],
+                new: [{
+                    name: inputNameNew,
+                    cat: inputCatNew
+                }]
+            }
+            let outputNameOld = this.allData.outputs[0]
+            let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+            let outputNameNew = data.args.param.outputsArray[0]
+            let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+            
+            let dssOutputs = {
+                old: {
+                    name: outputNameOld,
+                    cat: outputCatOld
+                },
+                new: {
+                    name: outputNameNew,
+                    cat: outputCatNew
+                }
+            }
 
-			let script = {
-				old: {
-					name: this.allData.jobName,
-					id: this.jobId
-				},
-				new: {
-					"name": `compute_${outputNameNew}`,
-					"runtime": "topn",
-					"inputs": JSON.stringify(data.args.param.inputsArray),
-					"output": outputNameNew
-				}
-			}
+            let script = {
+                old: {
+                    name: this.allData.jobName,
+                    id: this.jobId
+                },
+                new: {
+                    "name": `compute_${outputNameNew}`,
+                    "runtime": "topn",
+                    "inputs": JSON.stringify(data.args.param.inputsArray),
+                    "output": outputNameNew
+                }
+            }
 
-			if (inputNameNew === outputNameNew) {
-				Message.error("input和output不能相同", { duration: 3000} )
-				return false
-			}
-			
-			const event = new Event("event")
-			event.args = {
-				callback: "changScriptInputOutput",
-				element: this,
-				param: {
-					name: "changScriptInputOutput",
-					projectId: this.projectId,
-					projectName: this.projectName,
-					dssOutputs: dssOutputs,
-					dssInputs: dssInputs,
-					script: script
-				}
-			}
-			this.$emit('event', event)
-		}
+            if (inputNameNew === outputNameNew) {
+                Message.error("input和output不能相同", { duration: 3000} )
+                return false
+            }
+            
+            const event = new Event("event")
+            event.args = {
+                callback: "changScriptInputOutput",
+                element: this,
+                param: {
+                    name: "changScriptInputOutput",
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    dssOutputs: dssOutputs,
+                    dssInputs: dssInputs,
+                    script: script
+                }
+            }
+            this.$emit('event', event)
+        }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
@@ -350,11 +350,11 @@ export default {
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
-		this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     watch: {
         active(n) {
-			if (n === 4 || n === 5) {
+            if (n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
             }
 
@@ -374,9 +374,9 @@ export default {
         "allData.inputs": function(n) {
             this.inputs = n
         },
-		"allData.outputs": function(n) {
+        "allData.outputs": function(n) {
             this.outputs = n
-		}
+        }
     }
 }
 </script>
@@ -510,7 +510,6 @@ export default {
             .topn_left {
                 display: flex;
                 flex-direction: row;
-                // margin-left: 80px;
                 padding: 40px;
                 justify-content: space-around;
                 border-right: 1px solid #ccc;
@@ -523,7 +522,7 @@ export default {
                 justify-content: space-around;
                 background: #f2f2f2;
                 padding: 20px;
-				overflow: auto;
+                overflow: auto;
             }
         }
     }

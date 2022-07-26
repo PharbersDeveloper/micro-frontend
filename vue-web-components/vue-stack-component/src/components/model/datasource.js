@@ -67,14 +67,14 @@ export default class PhDataSource {
             })
     }
 
-    buildQuery(projectId, jobName) {
+    buildQuery(projectId, jobName, jobId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "step",
             "conditions": {
                 // "pjName": ["=", this.projectId + "_" + this.jobName]
-                "pjName": ["=", projectId + "_" + jobName]
+				"id": ["=", projectId + "_" + jobId]
             },
             "limit": 1,
             "start_key": {}
@@ -92,9 +92,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(projectId, jobName) {
+    refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName)
+        this.buildQuery(projectId, jobName, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -148,7 +148,7 @@ export default class PhDataSource {
                         "expressions-value": "JSON",
                         "group-index": "0",
                         "group-name": "",
-                        id: [projectId, jobName, "1"].join("_"),
+						id: [projectId, jobId].join("_"),
                         index: "1",
                         runtime : "stack",
                         "step-name": "stack"

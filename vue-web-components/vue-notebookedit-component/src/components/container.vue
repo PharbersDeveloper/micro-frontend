@@ -2,8 +2,8 @@
     <div class="page-container">
         <div class="header">
             <div class="title">
-                <img :src="defs.iconsByName('python')" class="title_icon" alt="">
-                <span class="name">{{allData.projectName}}</span>
+                <img :src="defs.iconsByName('jupyter')" class="title_icon" alt="">
+                <span class="name">{{allData.detailName}}</span>
             </div>
             <div class="coding-title">
                 <button class="button" >操作</button>

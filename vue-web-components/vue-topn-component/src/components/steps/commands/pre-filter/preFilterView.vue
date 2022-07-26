@@ -71,20 +71,9 @@ export default {
         ElButton,
         ElSwitch
     },
-    // updated() {
     mounted() {
         this.datasource = new PhFilterStep(this.step, this.schema)
 		this.validate()
-		// const ErrorVales = this.datasource.command.cloases.filter(it => it.right.replace(/\s*/g,"").length === 0)
-		// const event = new Event("event")
-		// event.args = {
-		// 	element: this,
-		// 	param: {
-		// 		status: this.datasource.enabled,
-		// 		errors: this.datasource.command.cloases.length === 0 || ErrorVales.length > 0
-		// 	}
-		// }
-        // this.$emit('statusChange', event)
     },
     methods: {
         validate() {
