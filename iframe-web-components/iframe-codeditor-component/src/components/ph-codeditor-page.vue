@@ -2,7 +2,7 @@
     <div class="page_container">
         <div class="header">
              <div class="title">
-                <img :src="defs.iconsByName('python')" class="title_icon" alt="">
+                <img :src="defs.iconsByName(runtime)" class="title_icon" alt="">
                 <span class="name">computed_{{datasource.outputs}}</span>
             </div>
             <div class="coding-title">
@@ -110,7 +110,8 @@ export default {
             downloadCode: 0,
             jobName: "",
             projectId: "",
-            jobPath: ""
+            jobPath: "",
+            runtime: ""
         }
     },
     mounted() {
@@ -120,6 +121,7 @@ export default {
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.jobName = this.getUrlParam(paramArr, "jobName")
+        this.runtime = this.getUrlParam(paramArr, "runtime")
         //父组件传进来的值
         this.datasource.jobName = decodeURI(this.jobName)
         this.datasource.projectId = this.projectId

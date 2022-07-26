@@ -45,7 +45,7 @@ export default class OauthServiceService extends Service {
 			const secret = this.clientSecret
 			const grantType = "authorization_code"
 			const code = queryParams.code
-			const url = "https://api.pharbers.com/oauth/token"
+			const url = "https://api.pharbers.com/phoauth/token"
 			const body = `code=${code}&grant_type=${grantType}&redirect_uri=${redirectUri}`
 			const b64 = window.btoa(`${clientId}:${secret}`)
 			const authorization = `Basic ${b64}`

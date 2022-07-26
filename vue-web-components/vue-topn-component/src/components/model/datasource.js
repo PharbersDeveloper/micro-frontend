@@ -35,7 +35,8 @@ export default class PhDataSource {
             "table": "step",
             "conditions": {
                 // "pjName": ["=", this.projectId + "_" + this.jobName]
-                "pjName": ["=", projectId + "_" + jobId]
+				"id": ["=", projectId + "_" + jobId]
+
             },
             "limit": 1,
 			"index_name": "id-index-index",

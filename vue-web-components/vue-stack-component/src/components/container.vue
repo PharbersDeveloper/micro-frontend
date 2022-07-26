@@ -394,7 +394,7 @@ export default {
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
-        this.datasource.refreshData(this.projectId, this.jobName)
+        this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
         // this.datasource.refreshDataset(this.projectId)
