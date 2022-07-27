@@ -1,16 +1,17 @@
 <template>
     <div class="group-container">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="group-title">
+        <!-- <div class="group-title">
             <div class="group-title-p">
                 <h2>Group</h2>
             </div>
-        </div>
+        </div> -->
         <div class="group-keys">
             <div class="group-key-title">
                 <h3>Group Keys</h3>
             </div>
             <div class="group-key-container" v-if="datasource">
+                <span class="warning-msg" v-show="datasource.keys.length === 0">未选择分组条件，将以整个数据集为单位进行聚合！</span>
                 <div class="group-key-list" >
                     <div class="group-key-item" v-for="(item, index) in datasource.keys" :key="index">
                         <p class="group-key-item-col">{{item}}</p>
@@ -30,9 +31,11 @@
                 <h3>Aggregation</h3>
                 <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
+			<div class="error-msg" v-show="!computedGroupCount && !checkGroupedKeys()">需要添加至少一个Filter条件！</div>
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
                           ref="table"
+                          height="calc(100vh - 580px)"
                           style="width: 100%"
                           @selection-change="handleSelectionChange">
                     <el-table-column
@@ -73,26 +76,26 @@
                     <el-table-column width="120">
                         <template slot-scope="scope">
                             <div class="group-check-box">
-                                <el-popover
+                                <!-- <el-popover
                                         placement="top-start"
                                         width="500"
-                                        trigger="hover">
-                                    <el-form label-width="200px">
-                                        <el-form-item label="Order first/last by">
-                                            <el-input v-model="scope.row.orderColumn"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="First/last not null">
-                                            <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
-                                        </el-form-item>
-                                        <el-form-item label="Concat separator">
-                                            <el-input v-model="scope.row.concatSeparator"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="Concat distinct">
-                                            <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
-                                        </el-form-item>
-                                    </el-form>
-                                    <el-button slot="reference">option</el-button>
-                                </el-popover>
+                                        trigger="hover"> -->
+								<el-form label-width="200px" v-show="showOptionPopover">
+									<el-form-item label="Order first/last by">
+										<el-input v-model="scope.row.orderColumn"></el-input>
+									</el-form-item>
+									<el-form-item label="First/last not null">
+										<el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+									</el-form-item>
+									<el-form-item label="Concat separator">
+										<el-input v-model="scope.row.concatSeparator"></el-input>
+									</el-form-item>
+									<el-form-item label="Concat distinct">
+										<el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+									</el-form-item>
+								</el-form>
+								<el-button slot="reference">option</el-button>
+                                <!-- </el-popover> -->
                             </div>
                         </template>
                     </el-table-column>
@@ -105,7 +108,7 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
-import ElPopover from 'element-ui/packages/popover/index'
+// import ElPopover from 'element-ui/packages/popover/index'
 import ElInput from 'element-ui/packages/input/index'
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
@@ -126,7 +129,8 @@ export default {
             // notGroupedTypes: [],
             checkedKeys: [],
             ignoredClearMsg: false,
-            schemaArray: []
+            schemaArray: [],
+			showOptionPopover: false
         }
     },
     props: {
@@ -148,7 +152,7 @@ export default {
         ElTableColumn,
         ElCheckbox,
         ElCheckboxButton,
-        ElPopover,
+        // ElPopover,
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
@@ -158,6 +162,9 @@ export default {
         this.schemaArray = this.schema
     },
     methods: {
+		showOptionPopoverClick() {
+			this.showOptionPopover = !this.showOptionPopover
+		},
         validate() {
             this.$emit('statusChange', true)
         },
@@ -180,13 +187,21 @@ export default {
             this.$nextTick(() => {
                 res.forEach(x => {
                     if (x.isUsed) {
-                        console.log(x)
                         that.$refs.table.toggleRowSelection(x)
                     }
                 })
             })
             return res
         },
+		checkGroupedKeys() {
+			let num = 0
+			this.notGroupedCommands.forEach(it => {
+				if (Object.values(it).includes(true)) {
+					num = num + 1
+				}
+			})
+			return num > 0
+		},
         addSelectedColToKey() {
             this.datasource.addCol2Key(this.selectedAdd)
             this.schemaArray = this.schemaArray.filter(it => it.src !== this.selectedAdd)
@@ -221,8 +236,8 @@ export default {
     }
     .group-container {
         margin-top: 4px;
-        min-width: 1600px;
-        width: 1600px;
+        min-width: calc(100vw - 300px);
+        width: calc(100vw - 300px);
         display: flex;
         flex-direction: column;
         background: #fff;
@@ -255,6 +270,12 @@ export default {
                 display: flex;
                 flex-direction: column;
                 padding: 10px;
+
+                .warning-msg {
+                    font-size: 13px;
+                    color: #c05b0a;
+                    margin-bottom: 20px;
+                }
             }
 
 
@@ -290,7 +311,11 @@ export default {
             margin-top: 30px;
             display: flex;
             flex-direction: column;
-            /*flex-grow: 1;*/
+
+			.error-msg {
+				font-size: 13px;
+				color: #ce1228;
+			}
 
             .group-agg-title {
                 display: flex;

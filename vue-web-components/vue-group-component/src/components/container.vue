@@ -214,25 +214,26 @@ export default {
                 this.stepsDefs[2].status = "success"
             }
         },
-        customAggStatus(errors) {
-            if (errors) {
-                this.stepsDefs[3].status = "error"
-            } else {
-                this.stepsDefs[3].status = "success"
-            }
+        customAggStatus() {
+			this.stepsDefs[4].status = "wait"
+            // if (errors) {
+            //     this.stepsDefs[4].status = "error"
+            // } else {
+            //     this.stepsDefs[4].status = "success"
+            // }
         },
         postFilterStatus(errors) {
             if (errors) {
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[5].status = "error"
             } else {
-                this.stepsDefs[3].status = "success"
+                this.stepsDefs[5].status = "success"
             }
         },
         outputsStatus(errors) {
             if (errors) {
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[6].status = "error"
             } else {
-                this.stepsDefs[3].status = "success"
+                this.stepsDefs[6].status = "success"
             }
         },
         computeSchema() {
@@ -368,9 +369,6 @@ export default {
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
 		this.datasource.refreshInOut(this.projectId, this.jobShowName)
 		this.datasource.refreshDataset(this.projectId, this.datasetId)
-    },
-    updated() {
-		console.log("update")
     },
     watch: {
         active(n) {
