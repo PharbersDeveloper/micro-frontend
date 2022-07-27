@@ -31,7 +31,7 @@
                 <h3>Aggregation</h3>
                 <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
-			<div class="error-msg" v-show="!computedGroupCount && !checkGroupedKeys()">需要添加至少一个Filter条件！</div>
+            <div class="error-msg" v-show="!computedGroupCount && !checkGroupedKeys()">需要添加至少一个Filter条件！</div>
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
                           ref="table"
@@ -52,7 +52,7 @@
                             prop="type"
                             width="120">
                     </el-table-column>
-                    <el-table-column width="400">
+                    <el-table-column width="500">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
@@ -60,15 +60,15 @@
                                 <el-checkbox-button v-model="scope.row.max">Max</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="400">
+                    <el-table-column width="300">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.first">First</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.last">Last</el-checkbox-button>
-                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.concat">Concat</el-checkbox-button>
                             </div>
                         </template>
@@ -80,21 +80,21 @@
                                         placement="top-start"
                                         width="500"
                                         trigger="hover"> -->
-								<el-form label-width="200px" v-show="showOptionPopover">
-									<el-form-item label="Order first/last by">
-										<el-input v-model="scope.row.orderColumn"></el-input>
-									</el-form-item>
-									<el-form-item label="First/last not null">
-										<el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
-									</el-form-item>
-									<el-form-item label="Concat separator">
-										<el-input v-model="scope.row.concatSeparator"></el-input>
-									</el-form-item>
-									<el-form-item label="Concat distinct">
-										<el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
-									</el-form-item>
-								</el-form>
-								<el-button slot="reference">option</el-button>
+                                <el-form label-width="200px" v-show="showOptionPopover">
+                                    <el-form-item label="Order first/last by">
+                                        <el-input v-model="scope.row.orderColumn"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="First/last not null">
+                                        <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+                                    </el-form-item>
+                                    <el-form-item label="Concat separator">
+                                        <el-input v-model="scope.row.concatSeparator"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="Concat distinct">
+                                        <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+                                    </el-form-item>
+                                </el-form>
+                                <el-button slot="reference">option</el-button>
                                 <!-- </el-popover> -->
                             </div>
                         </template>
@@ -130,7 +130,7 @@ export default {
             checkedKeys: [],
             ignoredClearMsg: false,
             schemaArray: [],
-			showOptionPopover: false
+            showOptionPopover: false
         }
     },
     props: {
@@ -162,11 +162,12 @@ export default {
         this.schemaArray = this.schema
     },
     methods: {
-		showOptionPopoverClick() {
-			this.showOptionPopover = !this.showOptionPopover
-		},
+        showOptionPopoverClick() {
+            this.showOptionPopover = !this.showOptionPopover
+        },
         validate() {
-            this.$emit('statusChange', true)
+               const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
+            this.$emit('statusChange', ErrorVales)
         },
         delSelectCol(item, index) {
             this.datasource.keys.splice(index, 1)
@@ -193,15 +194,15 @@ export default {
             })
             return res
         },
-		checkGroupedKeys() {
-			let num = 0
-			this.notGroupedCommands.forEach(it => {
-				if (Object.values(it).includes(true)) {
-					num = num + 1
-				}
-			})
-			return num > 0
-		},
+        checkGroupedKeys() {
+            let num = 0
+            this.notGroupedCommands.forEach(it => {
+                if (Object.values(it).includes(true)) {
+                    num = num + 1
+                }
+            })
+            return num > 0
+        },
         addSelectedColToKey() {
             this.datasource.addCol2Key(this.selectedAdd)
             this.schemaArray = this.schemaArray.filter(it => it.src !== this.selectedAdd)
@@ -312,10 +313,10 @@ export default {
             display: flex;
             flex-direction: column;
 
-			.error-msg {
-				font-size: 13px;
-				color: #ce1228;
-			}
+            .error-msg {
+                font-size: 13px;
+                color: #ce1228;
+            }
 
             .group-agg-title {
                 display: flex;

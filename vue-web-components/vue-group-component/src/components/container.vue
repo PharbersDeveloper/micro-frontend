@@ -215,7 +215,7 @@ export default {
             }
         },
         customAggStatus() {
-			this.stepsDefs[4].status = "wait"
+			this.stepsDefs[3].status = "wait"
             // if (errors) {
             //     this.stepsDefs[4].status = "error"
             // } else {
@@ -224,17 +224,13 @@ export default {
         },
         postFilterStatus(errors) {
             if (errors) {
-                this.stepsDefs[5].status = "error"
+                this.stepsDefs[4].status = "error"
             } else {
-                this.stepsDefs[5].status = "success"
+                this.stepsDefs[4].status = "success"
             }
         },
-        outputsStatus(errors) {
-            if (errors) {
-                this.stepsDefs[6].status = "error"
-            } else {
-                this.stepsDefs[6].status = "success"
-            }
+        outputsStatus() {
+			this.stepsDefs[5].status = "success"
         },
         computeSchema() {
             const result = []
