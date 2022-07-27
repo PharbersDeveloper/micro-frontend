@@ -76,26 +76,23 @@
                     <el-table-column width="120">
                         <template slot-scope="scope">
                             <div class="group-check-box">
-                                <!-- <el-popover
-                                        placement="top-start"
-                                        width="500"
-                                        trigger="hover"> -->
-                                <el-form label-width="200px" v-show="showOptionPopover">
-                                    <el-form-item label="Order first/last by">
-                                        <el-input v-model="scope.row.orderColumn"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="First/last not null">
-                                        <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
-                                    </el-form-item>
-                                    <el-form-item label="Concat separator">
-                                        <el-input v-model="scope.row.concatSeparator"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="Concat distinct">
-                                        <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
-                                    </el-form-item>
-                                </el-form>
-                                <el-button slot="reference">option</el-button>
-                                <!-- </el-popover> -->
+                                <div class="popover" v-show="showOptionPopover">
+                                    <el-form label-width="200px" >
+                                        <el-form-item label="Order first/last by">
+                                            <el-input v-model="scope.row.orderColumn"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="First/last not null">
+                                            <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+                                        </el-form-item>
+                                        <el-form-item label="Concat separator">
+                                            <el-input v-model="scope.row.concatSeparator"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="Concat distinct">
+                                            <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+                                        </el-form-item>
+                                    </el-form>
+                                </div>
+                                <el-button slot="reference" >option</el-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -166,7 +163,7 @@ export default {
             this.showOptionPopover = !this.showOptionPopover
         },
         validate() {
-               const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
+            const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
             this.$emit('statusChange', ErrorVales)
         },
         delSelectCol(item, index) {
@@ -213,8 +210,6 @@ export default {
             this.datasource.changeComputedGroupCount(this.computedGroupCount)
         },
         handleSelectionChange(val) {
-            console.log(3)
-            console.log(this.ignoredClearMsg)
             if (!this.ignoredClearMsg) {
                 this.datasource.commands.forEach(x => {
                     x.isUsed = val.includes(x);
@@ -332,6 +327,13 @@ export default {
             .group-agg-op {
                 overflow: auto;
                 /*flex-grow: 1;*/
+
+                .group-check-box {
+                    .popover {
+                        position: absolute;
+                        box-shadow: 0 2px 12px 0  rgba(0, 0, 0, 0.1);
+                    }
+                }
             }
 
 

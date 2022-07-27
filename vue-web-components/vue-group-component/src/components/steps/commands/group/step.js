@@ -40,7 +40,7 @@ export default class PhGroupStep {
         // return this.command.revert2Defs()
         return {
             keys: this.keys,
-            values: this.commands.filter(x => x.isUsed).map(x => x.revert2Defs())
+            values: this.commands.filter(x => Object.values(x).includes(true)).map(x => x.revert2Defs())
         }
     }
 }

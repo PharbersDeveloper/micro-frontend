@@ -29,7 +29,6 @@ export default class PhGroupCmd {
     }
 
     initWithDefs(defs) {
-        console.log(defs)
         this.countDistinct = defs["countDistinct"]
         this.min = defs["min"]
         this.avg = defs["avg"]
