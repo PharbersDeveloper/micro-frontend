@@ -297,7 +297,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				params.name === "notebook-c9"
 			) {
 				const tenantId = route.cookies.read("company_id")
-				uri = `notebook-editor?tenantId=${tenantId}&resourceId=${params.resourceId}&projectId=${params.projectId}&projectName=${params.projectName}&detailName=${params.detailName}`
+				uri = `notebook-editor?tenantId=${tenantId}&resourceId=${params.resourceId}&projectId=${params.projectId}&projectName=${params.projectName}&detailName=${params.detailName}&type=${params.name}`
 			}
 			route.router.transitionTo("shell", encodeURI(uri))
 			break
@@ -353,7 +353,7 @@ export async function phNotebooksContainerEventHandler(e, route) {
 						name: name,
 						label: "[]",
 						tenantId: tenantId,
-						ctype: "jupyter",
+						ctype: params.type === "jupyter" ? "jupyter" : "c9",
 						owner: owner,
 						ownership: projectId,
 						platform: "AWS",

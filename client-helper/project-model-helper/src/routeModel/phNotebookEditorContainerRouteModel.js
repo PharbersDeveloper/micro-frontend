@@ -5,6 +5,7 @@ export async function phNotebookEditorContainerRouteModel(route, parseParams) {
 	return {
 		tenantId: tenantId,
 		detailName: parseParams.query.detailName,
+		type: parseParams.query.type,
 		projectName: parseParams.query.projectName,
 		projectId: parseParams.query.projectId,
 		resourceId: parseParams.query.resourceId,
