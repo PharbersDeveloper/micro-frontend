@@ -3,8 +3,8 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="sync_header">
             <div class="header_left">
-                <img :src="defs.iconsByName('prepare')" alt="" />
-                <span>Sync</span>
+                <img :src="defs.iconsByName('sync')" alt="" />
+                <span>compute_{{allData.outputs[0]}}</span>
             </div>
             <div class="header_right">
                 <el-button class="save" @click="save">保存</el-button>

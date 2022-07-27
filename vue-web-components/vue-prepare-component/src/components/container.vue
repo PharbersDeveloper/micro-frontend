@@ -4,7 +4,7 @@
         <div class="prepare_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('prepare')" alt="" />
-                <span>Prepare</span>
+                <span>compute_{{allData.outputs[0]}}</span>
             </div>
             <div class="header_right">
 				<el-radio-group v-model="activeName" class="content">
