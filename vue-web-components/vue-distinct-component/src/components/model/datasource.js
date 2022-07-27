@@ -37,6 +37,7 @@ export default class PhDataSource {
                 // "pjName": ["=", this.projectId + "_" + this.jobName]
 				"id": ["=", projectId + "_" + jobId]
             },
+			"index_name": "id-index-index",
             "limit": 1,
             "start_key": {}
         }
