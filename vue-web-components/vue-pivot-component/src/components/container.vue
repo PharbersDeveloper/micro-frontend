@@ -336,7 +336,6 @@ export default {
     watch: {
         active(n) {
 			if (n === 4) {
-                // this.selection = this.$refs.pivot.datasource.command.selection
 				this.selection = this.$refs.pivot.schemasArray
                 this.$refs.other.datasource.refreshCols(this.selection)
             }

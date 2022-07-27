@@ -222,11 +222,13 @@ export default {
             //     this.stepsDefs[4].status = "success"
             // }
         },
-        postFilterStatus(errors) {
-            if (errors) {
+        postFilterStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[4].status = "success"
+            if (!status) {
+                this.stepsDefs[4].status = "wait"
+            } else if (errors){
                 this.stepsDefs[4].status = "error"
-            } else {
-                this.stepsDefs[4].status = "success"
             }
         },
         outputsStatus() {
@@ -250,12 +252,12 @@ export default {
             return result
         },
         genOutputsSchema() {
-            const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            if (retrieved.length === 0) {
-                return this.computedSchema
-            } else {
-                return this.computedSchema.filter(x => retrieved.includes(x.title))
-            }
+            // const retrieved = this.$refs.retrieved.datasource.revert2Defs()
+            // if (retrieved.length === 0) {
+            //     return this.computedSchema
+            // } else {
+            //     return this.computedSchema.filter(x => retrieved.includes(x.title))
+            // }
         },
         save() {
 			if (this.activeName === "Setting") {
