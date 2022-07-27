@@ -2,7 +2,7 @@
     <div class="page-container">
         <div class="header">
             <div class="title">
-                <img :src="defs.iconsByName('jupyter')" class="title_icon" alt="">
+                <img :src="defs.iconsByName(allData.type.split('-')[1])" class="title_icon" alt="">
                 <span class="name">{{allData.detailName}}</span>
             </div>
             <div class="coding-title">
@@ -57,7 +57,7 @@ export default {
             projectId: String,
             projectName: String,
             tenantId: String,
-            resourceId: String
+            resourceId: String,
         }
     },
     mounted() {

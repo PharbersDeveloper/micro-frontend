@@ -328,6 +328,7 @@ export default {
         },
         //点击list多选框
         checkedOnenotebooks(notebook) {
+            this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
             let idIndex = this.notebookscheckedIds.indexOf(notebook.detail.id)
             if (idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
