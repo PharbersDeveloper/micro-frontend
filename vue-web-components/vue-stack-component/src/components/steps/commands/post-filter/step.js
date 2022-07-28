@@ -12,7 +12,6 @@ export default class PhFilterStep {
         this.enabled = defs["enabled"]
         this.preFilterExpression = defs["expr"]
         this.command = new PhPostFilterCmd(this.preFilterExpression, schema)
-        console.log(this.command.cloases)
     }
 
     exec() {

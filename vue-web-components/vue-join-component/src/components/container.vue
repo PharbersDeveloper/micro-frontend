@@ -340,16 +340,6 @@ export default {
             console.log(result)
             return result
         },
-        genOutputsSchema() {
-            const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            let result = []
-            if (retrieved.length === 0) {
-                result = this.computedSchema
-            } else {
-                result = this.computedSchema.filter(x => retrieved.includes(x.title))
-            }
-            return result
-        },
 		resetInputs() {
 			this.inputs = []
 			this.$refs.join.datasource.datasets.forEach(item => {
@@ -487,7 +477,6 @@ export default {
 
             if (n === 5) {
                 this.computedSchema = this.computeSchema()
-                // this.outputsSchema = this.genOutputsSchema()
             }
 
             if (n === 6 || n === 7) {
