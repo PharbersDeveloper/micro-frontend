@@ -57,9 +57,9 @@ export default class PhProjectDatasource {
         return fetch(url, options)
     }
 
-    refreshStatus(tenantId) {
+    refreshStatus(tenantId, callback=null) {
         const that = this
-		// const traceId = this.getCookie("tenantTraceId")
+        // const traceId = this.getCookie("tenantTraceId")
         this.buildQuery(tenantId)
             .then((response) => response.json())
             .then((response) => {
@@ -75,6 +75,8 @@ export default class PhProjectDatasource {
 				// 	that.setCookie("tenantTraceId", response.traceId, cookiesOptions)
 				// }
                 that.resetSwitch()
+                if (callback)
+                    callback()
             })
     }
 

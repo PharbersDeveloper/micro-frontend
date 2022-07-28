@@ -90,7 +90,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
         const {
             cnotification: { error }
         } = JSON.parse(message)
-
+        element.datasource.status = status
         if (status == "started") {
             element.datasource.statusCode = 2
             element.datasource.switch = true
@@ -112,7 +112,7 @@ export async function phProjectsProjectsEventHandler(e, route) {
         const {
             cnotification: { error }
         } = JSON.parse(message)
-
+        element.datasource.status = status
         if (status == "stopped") {
             element.datasource.statusCode = 0
             element.datasource.switch = false
