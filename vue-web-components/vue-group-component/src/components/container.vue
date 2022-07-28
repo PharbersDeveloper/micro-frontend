@@ -38,6 +38,7 @@
                 <group v-show="active === 3"
                         ref="group"
                         :step="datasource.step"
+                        :schemaDafault="datasource.dataset.schema"
                         :schema="datasource.dataset.schema"
                         @statusChange="groupStatus" />
                 <custom-agg v-show="active === 4"

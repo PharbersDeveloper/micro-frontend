@@ -75,24 +75,33 @@
                     </el-table-column>
                     <el-table-column width="120">
                         <template slot-scope="scope">
-                            <div class="group-check-box">
-                                <div class="popover" v-show="showOptionPopover">
-                                    <el-form label-width="200px" >
-                                        <el-form-item label="Order first/last by">
-                                            <el-input v-model="scope.row.orderColumn"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="First/last not null">
-                                            <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
-                                        </el-form-item>
-                                        <el-form-item label="Concat separator">
-                                            <el-input v-model="scope.row.concatSeparator"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="Concat distinct">
-                                            <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
-                                        </el-form-item>
-                                    </el-form>
+                            <div class="popover" v-show="scope.row.showPopover">
+                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                    <div class="label">Order first/last by</div>
+                                    <!-- <el-input v-model="scope.row.orderColumn"></el-input> -->
+                                    <select 
+                                        v-model="scope.row.orderColumn">
+                                        <option v-for="(item, index) in schemaDafault" :label="item.src" :key="index" :value="item.src" />
+                                    </select>
                                 </div>
-                                <el-button slot="reference" >option</el-button>
+                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                    <div class="label">First/last not null</div>
+                                    <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+                                </div>
+                                <div class="popitem" v-show="scope.row.concat">
+                                    <div class="label">Concat separator</div>
+                                    <el-input v-model="scope.row.concatSeparator"></el-input>
+                                </div>
+                                <div class="popitem" v-show="scope.row.concat">
+                                    <div class="label">Concat distinct</div>
+                                    <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+                                </div>
+                            </div>
+                            <div class="group-check-box">
+                                <el-button 
+                                    :disabled="!scope.row.first && !scope.row.last && !scope.row.concat"
+                                    @click="showOptionPopoverClick(scope.row)">option
+                                </el-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -105,10 +114,9 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
-// import ElPopover from 'element-ui/packages/popover/index'
 import ElInput from 'element-ui/packages/input/index'
-import ElForm from 'element-ui/packages/form/index'
-import ElFormItem from 'element-ui/packages/form-item/index'
+// import ElForm from 'element-ui/packages/form/index'
+// import ElFormItem from 'element-ui/packages/form-item/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import { PhGroupDefs } from "./defs"
@@ -133,6 +141,7 @@ export default {
     props: {
         step: Object,
         schema: Array,
+        schemaDafault: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -141,15 +150,14 @@ export default {
         }
     },
     components: {
-        ElFormItem,
-        ElForm,
+        // ElFormItem,
+        // ElForm,
         ElInput,
         ElButton,
         ElTable,
         ElTableColumn,
         ElCheckbox,
-        ElCheckboxButton,
-        // ElPopover,
+        ElCheckboxButton
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
@@ -159,8 +167,9 @@ export default {
         this.schemaArray = this.schema
     },
     methods: {
-        showOptionPopoverClick() {
-            this.showOptionPopover = !this.showOptionPopover
+        showOptionPopoverClick(data) {
+            data.showPopover = !data.showPopover
+            this.$refs.table.doLayout()
         },
         validate() {
             const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
@@ -326,12 +335,30 @@ export default {
 
             .group-agg-op {
                 overflow: auto;
-                /*flex-grow: 1;*/
+                .popover {
+                    position: absolute;
+                    border: 1px solid #aaa;
+                    box-shadow: 0 2px 12px 0  rgba(0, 0, 0, 0.1);
+                    z-index: 1;
+                    background: #fff;
+                    width: 300px;
+                    right: 30px;
+                    top: 60px;
+                    padding: 10px;
 
-                .group-check-box {
-                    .popover {
-                        position: absolute;
-                        box-shadow: 0 2px 12px 0  rgba(0, 0, 0, 0.1);
+                    .popitem {
+                        display: flex;
+                        align-items: center;
+
+                        .label {
+                            width: 150px;
+                            max-width: 150px;
+                            padding-right: 16px;
+                        }
+
+                        /deep/.el-input {
+                            width: 120px;
+                        }
                     }
                 }
             }
