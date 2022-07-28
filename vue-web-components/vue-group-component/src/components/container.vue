@@ -7,10 +7,10 @@
                 <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
-				<el-radio-group v-model="activeName" class="content">
-					<el-radio-button label="Setting"></el-radio-button>
-					<el-radio-button label="input/output"></el-radio-button>
-				</el-radio-group>
+                <el-radio-group v-model="activeName" class="content">
+                    <el-radio-button label="Setting"></el-radio-button>
+                    <el-radio-button label="input/output"></el-radio-button>
+                </el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
@@ -26,49 +26,49 @@
             </div>
             <div class="group_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-						ref="filter"
-						:step="datasource.step"
-						:schema="datasource.dataset.schema"
-						@statusChange="preFilterStatus" />
+                        ref="filter"
+                        :step="datasource.step"
+                        :schema="datasource.dataset.schema"
+                        @statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
-						ref="computed"
-						:step="datasource.step"
-						:schema="datasource.dataset.schema"
-						@statusChange="computedStatus" />
+                        ref="computed"
+                        :step="datasource.step"
+                        :schema="datasource.dataset.schema"
+                        @statusChange="computedStatus" />
                 <group v-show="active === 3"
-						ref="group"
-						:step="datasource.step"
-						:schema="datasource.dataset.schema"
-						@statusChange="groupStatus" />
+                        ref="group"
+                        :step="datasource.step"
+                        :schema="datasource.dataset.schema"
+                        @statusChange="groupStatus" />
                 <custom-agg v-show="active === 4"
                        ref="customagg"
                        :step="datasource.step"
                        :schema="datasource.dataset.schema"
                        @statusChange="customAggStatus" />
                 <post-filter v-show="active === 5"
-						ref="postfilter"
-						:step="datasource.step"
-						:schema="datasource.dataset.schema"
-						@statusChange="postFilterStatus" />
+                        ref="postfilter"
+                        :step="datasource.step"
+                        :schema="outputsSchema"
+                        @statusChange="postFilterStatus" />
                 <outputs v-show="active === 6"
-						ref="output"
-						:schema="datasource.dataset.schema"
-						@statusChange="outputsStatus" />
+                        ref="output"
+                        :schema="outputsSchema"
+                        @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
             </div>
         </div>
-		<div v-show="activeName === 'input/output'">
-			<change-input-output
-				ref="changeInputOutput"
-				:inputs="inputs"	
-				:outputs="outputs"
-				:inArray="inArray"
-				:outArray="outArray"
-				@changScriptInputOutput="changScriptInputOutput"
-				:datasetArray="datasetArray"
-			/>
+        <div v-show="activeName === 'input/output'">
+            <change-input-output
+                ref="changeInputOutput"
+                :inputs="inputs"	
+                :outputs="outputs"
+                :inArray="inArray"
+                :outArray="outArray"
+                @changScriptInputOutput="changScriptInputOutput"
+                :datasetArray="datasetArray"
+            />
         </div>
     </div>
 </template>
@@ -100,9 +100,9 @@ export default {
         CustomAgg,
         PostFilter,
         Outputs,
-		ElRadioGroup,
+        ElRadioGroup,
         ElRadioButton,
-		changeInputOutput
+        changeInputOutput
     },
     data() {
         return {
@@ -141,11 +141,11 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			activeName: "Setting",
-			inArray: [],
-			outArray: [],
+            activeName: "Setting",
+            inArray: [],
+            outArray: [],
             jobShowName: "",
-			outputs: [],
+            outputs: [],
             inputs: [],
             datasetArray: [],
             flowVersion: "developer",
@@ -186,12 +186,12 @@ export default {
         },
         getJobName() {
             let jobShowName = this.getUrlParam("jobShowName") ? this.getUrlParam("jobShowName") : this.getUrlParam("jobName")
-			this.jobShowName = jobShowName
+            this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
         preFilterStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[0].status = "success"
+            this.stepsDefs[0].status = "success"
             if (!status) {
                 this.stepsDefs[0].status = "wait"
             } else if (errors){
@@ -200,7 +200,7 @@ export default {
         },
         computedStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[1].status = "success"
+            this.stepsDefs[1].status = "success"
             if (!status) {
                 this.stepsDefs[1].status = "wait"
             } else if (errors){
@@ -215,16 +215,11 @@ export default {
             }
         },
         customAggStatus() {
-			this.stepsDefs[3].status = "wait"
-            // if (errors) {
-            //     this.stepsDefs[4].status = "error"
-            // } else {
-            //     this.stepsDefs[4].status = "success"
-            // }
+            this.stepsDefs[3].status = "wait"
         },
         postFilterStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[4].status = "success"
+            this.stepsDefs[4].status = "success"
             if (!status) {
                 this.stepsDefs[4].status = "wait"
             } else if (errors){
@@ -232,7 +227,7 @@ export default {
             }
         },
         outputsStatus() {
-			this.stepsDefs[5].status = "success"
+            this.stepsDefs[5].status = "success"
         },
         computeSchema() {
             const result = []
@@ -252,111 +247,131 @@ export default {
             return result
         },
         genOutputsSchema() {
-            // const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-            // if (retrieved.length === 0) {
-            //     return this.computedSchema
-            // } else {
-            //     return this.computedSchema.filter(x => retrieved.includes(x.title))
-            // }
+            const groupedCommands = this.$refs.group.notGroupedCommands
+            const keys = this.$refs.group.datasource.keys
+            this.outputsSchema = this.datasource.dataset.schema.filter(it => keys.includes(it.src))
+
+            // "concatDistinct", "count", "firstLastNotNull"
+            const vals = ["avg", "concat", "first", "countDistinct", "last", "max", "min", "stddev", "sum"]
+            groupedCommands.forEach(item => {
+                for (const i in item) {
+                    if (vals.includes(i) && item[i]) {
+                        this.outputsSchema.push({
+                            des: item.column + '_' + i,
+                            src: item.column + '_' + i,
+                            type: item.type,
+                        })
+                    }
+                } 
+            })
+
+            if (this.$refs.group.computedGroupCount) {
+                this.outputsSchema.push({
+                    des: "count",
+                    src: "count",
+                    type: "bigint",
+                })
+            }
+            return this.outputsSchema
         },
         save() {
-			if (this.activeName === "Setting") {
+            if (this.activeName === "Setting") {
 
-				this.$refs.filter.validate()
-				this.$refs.computed.validate()
-				this.$refs.group.validate()
-				this.$refs.customagg.validate()
-				this.$refs.postfilter.validate()
-				this.$refs.output.validate()
+                this.$refs.filter.validate()
+                this.$refs.computed.validate()
+                this.$refs.group.validate()
+                this.$refs.customagg.validate()
+                this.$refs.postfilter.validate()
+                this.$refs.output.validate()
 
-				let errors = this.stepsDefs.filter(it => it.status === "error")
-				if(errors.length > 0) {
-					Message.error("请修改参数！", { duration: 3000} )
-					return false
-				}
+                let errors = this.stepsDefs.filter(it => it.status === "error")
+                if(errors.length > 0) {
+                    Message.error("请修改参数！", { duration: 3000} )
+                    return false
+                }
 
-				let globalCount = true
-				if (this.$refs.group.datasource.commands.length > 0) {
-					globalCount =  this.$refs.group.datasource.commands[0].count
-				}
-				const params = {
-					"globalCount": globalCount,
-					"preFilter": this.$refs.filter.datasource.revert2Defs(),
-					"computedColumns": this.$refs.computed.datasource.revert2Defs(),
-					"keys": this.$refs.group.datasource.revert2Defs().keys,
-					"values": this.$refs.group.datasource.revert2Defs().values,
-					"postFilter": this.$refs.postfilter.datasource.revert2Defs(),
-				}
+                let globalCount = true
+                if (this.$refs.group.datasource.commands.length > 0) {
+                    globalCount =  this.$refs.group.datasource.commands[0].count
+                }
+                const params = {
+                    "globalCount": globalCount,
+                    "preFilter": this.$refs.filter.datasource.revert2Defs(),
+                    "computedColumns": this.$refs.computed.datasource.revert2Defs(),
+                    "keys": this.$refs.group.datasource.revert2Defs().keys,
+                    "values": this.$refs.group.datasource.revert2Defs().values,
+                    "postFilter": this.$refs.postfilter.datasource.revert2Defs(),
+                }
 
-				this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-			} else {
-				this.$refs.changeInputOutput.save()
-			}
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+            } else {
+                this.$refs.changeInputOutput.save()
+            }
         },
-		changScriptInputOutput(data) {
-			let inputNameOld = this.allData.inputs[0]
-			let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
-			let inputNameNew = data.args.param.inputsArray[0]
-			let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
-			let dssInputs = {
-				old: [{
-					name: inputNameOld,
-					cat: inputCatOld
-				}],
-				new: [{
-					name: inputNameNew,
-					cat: inputCatNew
-				}]
-			}
-			let outputNameOld = this.allData.outputs[0]
-			let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
-			let outputNameNew = data.args.param.outputsArray[0]
-			let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
-			
-			let dssOutputs = {
-				old: {
-					name: outputNameOld,
-					cat: outputCatOld
-				},
-				new: {
-					name: outputNameNew,
-					cat: outputCatNew
-				}
-			}
+        changScriptInputOutput(data) {
+            let inputNameOld = this.allData.inputs[0]
+            let inputCatOld = this.datasetArray.filter(it => it.name === inputNameOld)[0]["cat"]
+            let inputNameNew = data.args.param.inputsArray[0]
+            let inputCatNew = this.datasetArray.filter(it => it.name === inputNameNew)[0]["cat"]
+            let dssInputs = {
+                old: [{
+                    name: inputNameOld,
+                    cat: inputCatOld
+                }],
+                new: [{
+                    name: inputNameNew,
+                    cat: inputCatNew
+                }]
+            }
+            let outputNameOld = this.allData.outputs[0]
+            let outputCatOld = this.datasetArray.filter(it => it.name === outputNameOld)[0]["cat"]
+            let outputNameNew = data.args.param.outputsArray[0]
+            let outputCatNew = this.datasetArray.filter(it => it.name === outputNameNew)[0]["cat"]
+            
+            let dssOutputs = {
+                old: {
+                    name: outputNameOld,
+                    cat: outputCatOld
+                },
+                new: {
+                    name: outputNameNew,
+                    cat: outputCatNew
+                }
+            }
 
-			let script = {
-				old: {
-					name: this.allData.jobName,
-					id: this.jobId
-				},
-				new: {
-					"name": `compute_${outputNameNew}`,
-					"runtime": "group",
-					"inputs": JSON.stringify(data.args.param.inputsArray),
-					"output": outputNameNew
-				}
-			}
+            let script = {
+                old: {
+                    name: this.allData.jobName,
+                    id: this.jobId
+                },
+                new: {
+                    "name": `compute_${outputNameNew}`,
+                    "runtime": "group",
+                    "inputs": JSON.stringify(data.args.param.inputsArray),
+                    "output": outputNameNew
+                }
+            }
 
-			if (inputNameNew === outputNameNew) {
-				Message.error("input和output不能相同", { duration: 3000} )
-				return false
-			}
-			
-			const event = new Event("event")
-			event.args = {
-				callback: "changScriptInputOutput",
-				element: this,
-				param: {
-					name: "changScriptInputOutput",
-					projectId: this.projectId,
-					projectName: this.projectName,
-					dssOutputs: dssOutputs,
-					dssInputs: dssInputs,
-					script: script
-				}
-			}
-			this.$emit('event', event)
-		}
+            if (inputNameNew === outputNameNew) {
+                Message.error("input和output不能相同", { duration: 3000} )
+                return false
+            }
+            
+            const event = new Event("event")
+            event.args = {
+                callback: "changScriptInputOutput",
+                element: this,
+                param: {
+                    name: "changScriptInputOutput",
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    dssOutputs: dssOutputs,
+                    dssInputs: dssInputs,
+                    script: script
+                }
+            }
+            this.$emit('event', event)
+        }
     },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
@@ -365,16 +380,16 @@ export default {
         this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
-		this.datasource.refreshInOut(this.projectId, this.jobShowName)
-		this.datasource.refreshDataset(this.projectId, this.datasetId)
+        this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        this.datasource.refreshDataset(this.projectId, this.datasetId)
     },
     watch: {
         active(n) {
-			if (n === 4 || n === 5) {
+            if (n === 3) {
                 this.computedSchema = this.computeSchema()
             }
             
-            if (n === 5) {
+            if (n === 5 || n === 6) {
                 this.outputsSchema = this.genOutputsSchema()
             }
 
@@ -386,15 +401,15 @@ export default {
             this.$refs.output.validate()
             
         },
-		activeName(n) {
+        activeName(n) {
             this.$emit("active", n)
         },
         "allData.inputs": function(n) {
             this.inputs = n
         },
-		"allData.outputs": function(n) {
+        "allData.outputs": function(n) {
             this.outputs = n
-		}
+        }
     }
 }
 </script>
@@ -404,7 +419,7 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-		
+        
         .group_header {
             height: 48px;
             padding: 0 15px;
@@ -412,7 +427,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-			border: 1px solid #ccc;
+            border: 1px solid #ccc;
 
             .header_left {
                 display: flex;
@@ -433,9 +448,9 @@ export default {
             }
 
             .header_right {
-				.content {
-					margin-right: 30px;
-				}
+                .content {
+                    margin-right: 30px;
+                }
             }
         }
 
@@ -444,14 +459,14 @@ export default {
             flex-grow: 1;
             display: flex;
             flex-direction: row;
-			height: calc(100vh - 100px);
+            height: calc(100vh - 100px);
 
             .group_left {
-				display: flex;
-				flex-direction: row;
-				padding: 40px;
-				justify-content: space-around;
-				border-right: 1px solid #ccc;
+                display: flex;
+                flex-direction: row;
+                padding: 40px;
+                justify-content: space-around;
+                border-right: 1px solid #ccc;
             }
 
             .group_right {
@@ -459,8 +474,8 @@ export default {
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
-				background: #f2f2f2;
-				padding: 20px;
+                background: #f2f2f2;
+                padding: 20px;
 
             }
         }

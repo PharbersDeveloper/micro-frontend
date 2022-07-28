@@ -7,7 +7,7 @@
             </div>
             <div class="outputs-content">
                 <div class="outputs-content-item" v-for="(item, index) in schema" :key="index">
-                    <span class="outputs-content-item-index">{{index}}</span>
+                    <!-- <span class="outputs-content-item-index">{{index}}</span> -->
                     <span class="outputs-content-item-type">({{item.type}})</span>
                     <span class="outputs-content-item-title">{{item.src}}</span>
                 </div>
@@ -18,12 +18,7 @@
     </div>
 </template>
 <script>
-// import ElCheckbox from 'element-ui/packages/checkbox/index'
-// import ElInput from 'element-ui/packages/input/index'
-// import { staticFilePath } from '../../../../config/envConfig'
-// import ElButton from 'element-ui/packages/button/index'
 import { PhOutputsDefs } from "./defs"
-// import PhOutputsStep from "./step"
 
 export default {
     data() {
