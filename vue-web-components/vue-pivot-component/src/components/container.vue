@@ -336,7 +336,7 @@ export default {
     watch: {
         active(n) {
 			if (n === 4) {
-				this.selection = this.$refs.pivot.schemasArray
+				this.selection = this.$refs.pivot.schemasArray.filter(it => !this.$refs.pivot.datasource.command.identifiers.includes(it))
                 this.$refs.other.datasource.refreshCols(this.selection)
             }
             if (n === 5) {

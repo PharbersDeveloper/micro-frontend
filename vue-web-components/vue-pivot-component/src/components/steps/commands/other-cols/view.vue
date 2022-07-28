@@ -130,6 +130,7 @@ export default {
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.selection, this.schema)
         this.computedGroupCount = this.datasource.isComputedGroupCount()
+		// this.notGroupedCommands = this.resetSelectGroupKeys()
 		this.validate()
     },
     methods: {

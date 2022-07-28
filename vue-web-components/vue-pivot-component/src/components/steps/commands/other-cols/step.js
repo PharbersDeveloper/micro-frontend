@@ -14,7 +14,7 @@ export default class PhGroupStep {
         this.needRefresh = 0
         this.commands = this.schema.map(x => {
             const tmp = new PhGroupCmd()
-            const par = this.defs.filter(x => x["column"] === x.src)
+            const par = this.defs.filter(xi => xi["column"] === x.src)
             if (par.length > 0) tmp.initWithDefs(par[0])
             else tmp.initWithSchema(x.src, x.type)
             return tmp
@@ -52,6 +52,6 @@ export default class PhGroupStep {
     }
 
     revert2Defs() {
-        return this.commands.filter(x => x.isUsed).map(x => x.revert2Defs())
+        return this.commands.filter(x => Object.values(x).includes(true)).map(x => x.revert2Defs())
     }
 }
