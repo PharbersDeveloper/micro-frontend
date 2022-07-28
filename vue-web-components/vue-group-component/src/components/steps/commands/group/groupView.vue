@@ -1,16 +1,17 @@
 <template>
     <div class="group-container">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="group-title">
+        <!-- <div class="group-title">
             <div class="group-title-p">
                 <h2>Group</h2>
             </div>
-        </div>
+        </div> -->
         <div class="group-keys">
             <div class="group-key-title">
                 <h3>Group Keys</h3>
             </div>
             <div class="group-key-container" v-if="datasource">
+                <span class="warning-msg" v-show="datasource.keys.length === 0">未选择分组条件，将以整个数据集为单位进行聚合！</span>
                 <div class="group-key-list" >
                     <div class="group-key-item" v-for="(item, index) in datasource.keys" :key="index">
                         <p class="group-key-item-col">{{item}}</p>
@@ -30,9 +31,11 @@
                 <h3>Aggregation</h3>
                 <el-checkbox v-model="computedGroupCount" @change="changeComputedGroupCount">计算每个分组的总数</el-checkbox>
             </div>
+            <div class="error-msg" v-show="!computedGroupCount && !checkGroupedKeys()">需要添加至少一个Filter条件！</div>
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
                           ref="table"
+                          height="calc(100vh - 580px)"
                           style="width: 100%"
                           @selection-change="handleSelectionChange">
                     <el-table-column
@@ -49,7 +52,7 @@
                             prop="type"
                             width="120">
                     </el-table-column>
-                    <el-table-column width="400">
+                    <el-table-column width="500">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
@@ -57,42 +60,48 @@
                                 <el-checkbox-button v-model="scope.row.max">Max</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="400">
+                    <el-table-column width="300">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.first">First</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.last">Last</el-checkbox-button>
-                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.concat">Concat</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
                     <el-table-column width="120">
                         <template slot-scope="scope">
+                            <div class="popover" v-show="scope.row.showPopover">
+                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                    <div class="label">Order first/last by</div>
+                                    <!-- <el-input v-model="scope.row.orderColumn"></el-input> -->
+                                    <select 
+                                        v-model="scope.row.orderColumn">
+                                        <option v-for="(item, index) in schemaDafault" :label="item.src" :key="index" :value="item.src" />
+                                    </select>
+                                </div>
+                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                    <div class="label">First/last not null</div>
+                                    <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+                                </div>
+                                <div class="popitem" v-show="scope.row.concat">
+                                    <div class="label">Concat separator</div>
+                                    <el-input v-model="scope.row.concatSeparator"></el-input>
+                                </div>
+                                <div class="popitem" v-show="scope.row.concat">
+                                    <div class="label">Concat distinct</div>
+                                    <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+                                </div>
+                            </div>
                             <div class="group-check-box">
-                                <el-popover
-                                        placement="top-start"
-                                        width="500"
-                                        trigger="hover">
-                                    <el-form label-width="200px">
-                                        <el-form-item label="Order first/last by">
-                                            <el-input v-model="scope.row.orderColumn"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="First/last not null">
-                                            <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
-                                        </el-form-item>
-                                        <el-form-item label="Concat separator">
-                                            <el-input v-model="scope.row.concatSeparator"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="Concat distinct">
-                                            <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
-                                        </el-form-item>
-                                    </el-form>
-                                    <el-button slot="reference">option</el-button>
-                                </el-popover>
+                                <el-button 
+                                    :disabled="!scope.row.first && !scope.row.last && !scope.row.concat"
+                                    @click="showOptionPopoverClick(scope.row)">option
+                                </el-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -105,10 +114,9 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
-import ElPopover from 'element-ui/packages/popover/index'
 import ElInput from 'element-ui/packages/input/index'
-import ElForm from 'element-ui/packages/form/index'
-import ElFormItem from 'element-ui/packages/form-item/index'
+// import ElForm from 'element-ui/packages/form/index'
+// import ElFormItem from 'element-ui/packages/form-item/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import { PhGroupDefs } from "./defs"
@@ -126,12 +134,14 @@ export default {
             // notGroupedTypes: [],
             checkedKeys: [],
             ignoredClearMsg: false,
-            schemaArray: []
+            schemaArray: [],
+            showOptionPopover: false
         }
     },
     props: {
         step: Object,
         schema: Array,
+        schemaDafault: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -140,15 +150,14 @@ export default {
         }
     },
     components: {
-        ElFormItem,
-        ElForm,
+        // ElFormItem,
+        // ElForm,
         ElInput,
         ElButton,
         ElTable,
         ElTableColumn,
         ElCheckbox,
-        ElCheckboxButton,
-        ElPopover,
+        ElCheckboxButton
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
@@ -158,8 +167,13 @@ export default {
         this.schemaArray = this.schema
     },
     methods: {
+        showOptionPopoverClick(data) {
+            data.showPopover = !data.showPopover
+            this.$refs.table.doLayout()
+        },
         validate() {
-            this.$emit('statusChange', true)
+            const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
+            this.$emit('statusChange', ErrorVales)
         },
         delSelectCol(item, index) {
             this.datasource.keys.splice(index, 1)
@@ -180,12 +194,20 @@ export default {
             this.$nextTick(() => {
                 res.forEach(x => {
                     if (x.isUsed) {
-                        console.log(x)
                         that.$refs.table.toggleRowSelection(x)
                     }
                 })
             })
             return res
+        },
+        checkGroupedKeys() {
+            let num = 0
+            this.notGroupedCommands.forEach(it => {
+                if (Object.values(it).includes(true)) {
+                    num = num + 1
+                }
+            })
+            return num > 0
         },
         addSelectedColToKey() {
             this.datasource.addCol2Key(this.selectedAdd)
@@ -197,8 +219,6 @@ export default {
             this.datasource.changeComputedGroupCount(this.computedGroupCount)
         },
         handleSelectionChange(val) {
-            console.log(3)
-            console.log(this.ignoredClearMsg)
             if (!this.ignoredClearMsg) {
                 this.datasource.commands.forEach(x => {
                     x.isUsed = val.includes(x);
@@ -221,8 +241,8 @@ export default {
     }
     .group-container {
         margin-top: 4px;
-        min-width: 1600px;
-        width: 1600px;
+        min-width: calc(100vw - 300px);
+        width: calc(100vw - 300px);
         display: flex;
         flex-direction: column;
         background: #fff;
@@ -255,6 +275,12 @@ export default {
                 display: flex;
                 flex-direction: column;
                 padding: 10px;
+
+                .warning-msg {
+                    font-size: 13px;
+                    color: #c05b0a;
+                    margin-bottom: 20px;
+                }
             }
 
 
@@ -290,7 +316,11 @@ export default {
             margin-top: 30px;
             display: flex;
             flex-direction: column;
-            /*flex-grow: 1;*/
+
+            .error-msg {
+                font-size: 13px;
+                color: #ce1228;
+            }
 
             .group-agg-title {
                 display: flex;
@@ -305,7 +335,32 @@ export default {
 
             .group-agg-op {
                 overflow: auto;
-                /*flex-grow: 1;*/
+                .popover {
+                    position: absolute;
+                    border: 1px solid #aaa;
+                    box-shadow: 0 2px 12px 0  rgba(0, 0, 0, 0.1);
+                    z-index: 1;
+                    background: #fff;
+                    width: 300px;
+                    right: 30px;
+                    top: 60px;
+                    padding: 10px;
+
+                    .popitem {
+                        display: flex;
+                        align-items: center;
+
+                        .label {
+                            width: 150px;
+                            max-width: 150px;
+                            padding-right: 16px;
+                        }
+
+                        /deep/.el-input {
+                            width: 120px;
+                        }
+                    }
+                }
             }
 
 
