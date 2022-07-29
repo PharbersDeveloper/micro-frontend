@@ -215,11 +215,12 @@ export default {
             .activity-logs {
                 display: flex;
                 flex-direction: column;
-                height: 70%;
+                height: 60%;
                 width: 50%;
                 .logs {
-                    height: 100%;
-                    overflow: auto;
+                    height: 500px;
+                    overflow-x: auto;
+                    overflow-y: scroll;
                     font-family: SFProText-Thin;
                     font-size: 14px;
                     color: #25232D;
