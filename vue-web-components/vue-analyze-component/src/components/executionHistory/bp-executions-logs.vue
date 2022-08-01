@@ -29,12 +29,14 @@
                         <span>{{ getTimes(executionItem) }}</span>
                     </div>
                 </div>
-                <div class="activity-logs">
+                <div class="activity-logs" >
                     <div class="title">
                         Activity Log
                     </div>
-                    <div class="logs">
-                        {{ logsMessage }}
+                    <div class="logs" style="height: 100px">
+                        <div class="logs-container">
+                            {{ logsMessage }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,10 +94,9 @@ export default {
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2]);
+            else return null;
         },
         dealBuildLogsQuery(response) {
             if (response.status === 0) {
@@ -135,13 +136,15 @@ export default {
 
 <style lang="scss" scoped>
 * {
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
 .executions-logs {
     display: flex;
     flex-direction: column;
-    // height: calc(100vh - 40px);
+    height: calc(100vh - 40px);
     flex-grow: 1;
 
     .job-state-change {
@@ -163,29 +166,25 @@ export default {
     }
 
     .job {
-        width: 100%;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
 
         .job-flow {
-            flex: 1;
-            width: 100%;
-            min-height: 350px;
             overflow: hidden;
+            flex-grow: 1;
 
             .executions-iframe {
                 height: 100%;
-                min-height: 350px;
+                // min-height: 350px;
                 width: 100%;
                 overflow-y: scroll;
             }
         }
 
         .job-activities-logs {
-            flex: 1;
+            flex-grow: 1;
             display: flex;
-            min-height: 350px;
             border-top: 1px solid #ddd;
 
             .title {
@@ -197,10 +196,9 @@ export default {
                 display: flex;
                 flex-direction: column;
                 border-right: 1px solid #ddd;
-                // width: 50%;
                 flex: 1;
                 height: 100%;
-                min-height: 350px;
+                // min-height: 350px;
 
                 .job-activities__header {
                     background: #f2f2f2;
@@ -231,7 +229,6 @@ export default {
 
             .activity-logs {
                 height: 100%;
-                // width: 50%;
                 flex: 1;
                 display: flex;
                 flex-direction: column;
@@ -239,7 +236,6 @@ export default {
 
                 .logs {
                     flex-grow: 1;
-                    min-height: 280px;
                     overflow-x: auto;
                     overflow-y: scroll;
                     font-family: SFProText-Thin;
