@@ -206,20 +206,23 @@ export default {
             this.toggle = true
         },
         linkToPage(params) {
-			if(this.$refs.statusPane.datasource.status !== "started") {
-				Message.error("请先启动项目资源！", { duration: 3000} )
-				return false
-			}
-            const event = new Event("event")
-            event.args = {
-                callback: "linkToPage",
-                element: this,
-                param: {
-                    name: params["name"],
-                    pid: params.id
+            this.$refs.statusPane.datasource.refreshStatus(this.allData.tenantId, () => {
+                if(this.$refs.statusPane.datasource.status !== "started") {
+                    Message.error("请先启动项目资源！", { duration: 3000} )
+                } else {
+                    const event = new Event("event")
+                    event.args = {
+                        callback: "linkToPage",
+                        element: this,
+                        param: {
+                            name: params["name"],
+                            pid: params.id
+                        }
+                    }
+                    this.$emit('event', event)
                 }
-            }
-            this.$emit('event', event)
+                
+            })
         },
         // 验证输入字符串时候的特殊字符
         inputStrChecked(value, ref, name) {

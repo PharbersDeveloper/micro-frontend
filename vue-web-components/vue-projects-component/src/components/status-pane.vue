@@ -115,11 +115,15 @@ export default {
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    // 调用启动前，强制更新一下状态，以免竞争机制
-                    this.datasource.refreshStatus(this.tenantId)
                     if (this.datasource.switch) {
                         // MessageBox.alert("现在不支持自动删除，请联系管理员")
-						this.datasource.resourceStop(this.tenantId)
+                        // 调用启动前，强制更新一下状态，以免竞争机制
+                        // this.datasource.refreshStatus(this.tenantId)
+                        if (this.datasource.status === "started"){
+                            this.datasource.resourceStop(this.tenantId)
+                        } else {
+                            this.datasource.refreshStatus(this.tenantId)
+                        }
                     } else {
                         // 通过新的 trace ID 持续访问状态
                         Message.error("平台已经被另一进程关闭，请等待！！", { duration: 3000} )
@@ -134,11 +138,14 @@ export default {
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    // 调用启动前，强制更新一下状态，以免竞争机制
-                    this.datasource.refreshStatus(this.tenantId)
                     if (!this.datasource.switch) {
-						this.datasource.resourceStart(this.tenantId)
-
+                        // 调用启动前，强制更新一下状态，以免竞争机制
+                        // this.datasource.refreshStatus(this.tenantId)
+                        if(this.datasource.status == "stoped"){
+                            this.datasource.resourceStart(this.tenantId)
+                        } else {
+                            this.datasource.refreshStatus(this.tenantId)
+                        }
                     } else {
                         // 通过新的 trace ID 持续访问状态
                         Message.error("平台已经被另一进程启动，请等待！！", { duration: 3000} )
