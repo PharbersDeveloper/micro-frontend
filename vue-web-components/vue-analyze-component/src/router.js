@@ -9,7 +9,6 @@ import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
 import scripts from './components/scripts-list'
-import prepare from './components/prepareCal/bp-prepare-container'
 import executionHistory from './components/executionHistory/bp-executions-history'
 import executionsLogs from './components/executionHistory/bp-executions-logs'
 
@@ -33,11 +32,6 @@ export default new Router({
             path: '/datasets',
             name: 'datasets',
             component: datasets
-        },
-        {
-            path: '/prepare',
-            name: 'prepare',
-            component: prepare
         },
         {
             path: '/data-list',

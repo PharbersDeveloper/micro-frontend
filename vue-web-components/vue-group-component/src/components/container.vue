@@ -109,7 +109,7 @@ export default {
         return {
             computedSchema: [],
             outputsSchema: [],
-            active: 1,
+            active: 3,
             stepsDefs: [
                 {
                     title: "Pre-Filter",
