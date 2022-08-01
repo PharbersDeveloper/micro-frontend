@@ -315,7 +315,7 @@ export default class PhDataSource {
 		this.parent.$emit('event', event)
     }
 
-    saveAndGenCode(projectId, jobName, parame, inputs) {
-        this.buildSaveQuery(projectId, jobName, parame, inputs)
+    saveAndGenCode(projectId, jobName, param, inputs) {
+        this.buildSaveQuery(projectId, jobName, param, inputs)
     }
 }
