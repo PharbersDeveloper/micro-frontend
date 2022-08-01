@@ -279,7 +279,7 @@ export default class PhDataSource {
         // return fetch(url, options)
     }
 
-    saveAndGenCode(projectId, jobName, parame) {
-        this.buildSaveQuery(projectId, jobName, parame)
+    saveAndGenCode(projectId, jobName, param) {
+        this.buildSaveQuery(projectId, jobName, param)
     }
 }

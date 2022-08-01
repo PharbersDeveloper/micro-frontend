@@ -1,10 +1,10 @@
 <template>
-    <div class="topn">
+    <div class="distinct">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="topn_header">
+        <div class="distinct_header">
             <div class="header_left">
-                <img :src="defs.iconsByName('topn')" alt="" />
-                <span>Distinct</span>
+                <img :src="defs.iconsByName('distinct')" alt="" />
+                <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
 				<el-radio-group v-model="activeName" class="content">
@@ -14,8 +14,8 @@
                 <el-button class="save" @click="save">保存</el-button>
             </div>
         </div>
-        <div class="topn_area" v-show="activeName === 'Setting'">
-            <div class="topn_left">
+        <div class="distinct_area" v-show="activeName === 'Setting'">
+            <div class="distinct_left">
                 <el-steps direction="vertical" :active="active" align-center >
                     <el-step v-for="(item, index) in stepsDefs" :key="index" :status="item.status">
                         <template slot="title">
@@ -24,7 +24,7 @@
                     </el-step>
                 </el-steps>
             </div>
-            <div class="topn_right" v-if="datasource.isReady && datasource.isMetaReady">
+            <div class="distinct_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
                             ref="prefilter"
                             :step="datasource.step"
@@ -92,7 +92,7 @@ export default {
     },
     data() {
         return {
-            active: 1,
+            active: 3,
             flowVersion: "developer",
             stepsDefs: [
                 {
@@ -162,52 +162,49 @@ export default {
 			this.jobShowName = jobShowName
             return [this.projectName, this.projectName, this.flowVersion, jobShowName].join("_")
         },
-        preFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[0].status = "success"
-            } else {
+        preFilterStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+            this.stepsDefs[0].status = "success"
+            if (!status) {
+                this.stepsDefs[0].status = "wait"
+            } else if (errors){
                 this.stepsDefs[0].status = "error"
             }
         },
-        distinctStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[1].status = "success"
-            } else {
-                this.stepsDefs[1].status = "error"
-            }
-        },
-        postFilterStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[2].status = "success"
-            } else {
+        distinctStatus(errors) {
+            if (errors) {
                 this.stepsDefs[2].status = "error"
+            } else {
+                this.stepsDefs[2].status = "success"
             }
         },
-        outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
-            if (status) {
-                this.stepsDefs[3].status = "success"
-            } else {
+        postFilterStatus(data) {
+            const status = data.args.param.status, errors = data.args.param.errors
+			this.stepsDefs[3].status = "success"
+            if (!status) {
+                this.stepsDefs[3].status = "wait"
+            } else if (errors){
                 this.stepsDefs[3].status = "error"
             }
         },
-
-        // genOutputsSchema() {
-        //     const retrieved = this.$refs.retrieved.datasource.revert2Defs()
-        //     let result = []
-        //     if (retrieved.length === 0) {
-        //         result = this.computedSchema
-        //     } else {
-        //         result = this.computedSchema.filter(x => retrieved.includes(x.title))
-        //     }
-        //     return result
-        // },
+        outputsStatus() {
+			this.stepsDefs[4].status = "success"
+        },
 
         save() {
 			if (this.activeName === "Setting") {
+
+				this.$refs.prefilter.validate()
+				this.$refs.distinct.validate()
+				this.$refs.postfilter.validate()
+				this.$refs.outputs.validate()
+
+				let errors = this.stepsDefs.filter(it => it.status === "error")
+                if(errors.length > 0) {
+                    Message.error("请修改参数！", { duration: 3000} )
+                    return false
+                }
+
 				const params = {
 					"keys": this.$refs.distinct.datasource.revert2Defs().keys,
 					"preFilter": this.$refs.prefilter.datasource.revert2Defs(),
@@ -288,16 +285,12 @@ export default {
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
-        // this.projectIdTest = "alfredtest"
-        // this.jobName = "distinct"
 		this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
-        // this.inputDsName = this.getUrlParam("inputName")
         this.datasetId = this.getUrlParam("datasetId")
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
-        // this.datasource.refreshMateData(this.projectId, this.datasetId)
-		this.datasource.refreshInOut(this.projectId, this.jobShowName)
 		this.datasource.refreshDataset(this.projectId, this.datasetId)
+		this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
     updated() {
 
@@ -308,10 +301,6 @@ export default {
             this.$refs.distinct.validate()
             this.$refs.postfilter.validate()
             this.$refs.outputs.validate()
-
-			// if (n === 4) {
-            //     this.outputsSchema = this.genOutputsSchema()
-            // }
         }, 
 		activeName(n) {
             this.$emit("active", n)
@@ -326,17 +315,13 @@ export default {
 }
 </script>
 <style lang="scss">
-    .topn {
+    .distinct {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         height: 100%;
 
-        .op-factories {
-            // background: red;
-        }
-
-        .topn_header {
+        .distinct_header {
             height: 48px;
             padding: 0 15px;
             border-bottom: 1px solid #cccccc;
@@ -364,28 +349,20 @@ export default {
             }
 
             .header_right {
-                /*button {*/
-                /*    width: 65px;*/
-                /*    height: 26px;*/
-                /*    border: 1px solid #57565F;*/
-                /*    border-radius: 2px;*/
-                /*    background: none;*/
-                /*    cursor: pointer;*/
-                /*}*/
 				.content {
                     margin-right: 30px;
                 }
             }
         }
 
-        .topn_area {
+        .distinct_area {
             width: 100%;
             flex-grow: 1;
             display: flex;
             flex-direction: row;
 			height: calc(100vh - 100px);
 
-            .topn_left {
+            .distinct_left {
                 display: flex;
                 flex-direction: row;
                 padding: 40px;
@@ -393,13 +370,14 @@ export default {
 				border-right: 1px solid #ccc;
             }
 
-            .topn_right {
+            .distinct_right {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: row;
                 justify-content: space-around;
 				background: #f2f2f2;
 				padding: 20px;
+                overflow: auto;
             }
         }
     }
