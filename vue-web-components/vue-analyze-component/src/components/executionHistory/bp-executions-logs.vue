@@ -142,8 +142,7 @@ export default {
 .executions-logs {
     display: flex;
     flex-direction: column;
-    /*height: calc(100vh - 40px);*/
-    height: calc(100vh);
+    height: calc(100vh - 40px);
     flex-grow: 1;
 
     .job-state-change {
@@ -170,7 +169,6 @@ export default {
         flex-direction: column;
 
         .job-flow {
-            /*min-height: 350px;*/
             overflow: hidden;
             flex-grow: 1;
 
@@ -185,7 +183,6 @@ export default {
         .job-activities-logs {
             flex-grow: 1;
             display: flex;
-            /*min-height: 350px;*/
             border-top: 1px solid #ddd;
 
             .title {
@@ -197,7 +194,6 @@ export default {
                 display: flex;
                 flex-direction: column;
                 border-right: 1px solid #ddd;
-                // width: 50%;
                 flex: 1;
                 height: 100%;
                 min-height: 350px;
@@ -231,7 +227,6 @@ export default {
 
             .activity-logs {
                 height: 100%;
-                // width: 50%;
                 flex: 1;
                 display: flex;
                 flex-direction: column;
@@ -239,7 +234,6 @@ export default {
 
                 .logs {
                     flex-grow: 1;
-                    min-height: 280px;
                     overflow-x: auto;
                     overflow-y: scroll;
                     font-family: SFProText-Thin;
