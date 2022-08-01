@@ -136,6 +136,8 @@ export default {
 
 <style lang="scss" scoped>
 * {
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -174,7 +176,7 @@ export default {
 
             .executions-iframe {
                 height: 100%;
-                min-height: 350px;
+                // min-height: 350px;
                 width: 100%;
                 overflow-y: scroll;
             }
@@ -196,7 +198,7 @@ export default {
                 border-right: 1px solid #ddd;
                 flex: 1;
                 height: 100%;
-                min-height: 350px;
+                // min-height: 350px;
 
                 .job-activities__header {
                     background: #f2f2f2;
