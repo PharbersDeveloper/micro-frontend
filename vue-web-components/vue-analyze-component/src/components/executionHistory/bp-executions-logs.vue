@@ -10,13 +10,13 @@
             </span>
         </div>
         <div class="job">
-            <div class="job-flow" ref="jobFlow" style="height: 350px;">
+            <div class="job-flow">
                 <!-- <div v-if="!jsonMessage">暂无数据</div>
             <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
                 <iframe class="executions-iframe" :src="iframeUrl" frameborder="0"></iframe>
             </div>
-            <div class="job-activities-logs" ref="jobActivitiesLogs" style="height: 350px;">
-                <div class="job-activities" ref="jobActivities" style="height: 350px;">
+            <div class="job-activities-logs">
+                <div class="job-activities">
                     <div class="title job-activities__header">
                         Activity
                     </div>
@@ -33,7 +33,7 @@
                     <div class="title">
                         Activity Log
                     </div>
-                    <div class="logs" ref="logs" style="height: 290px;">
+                    <div class="logs">
                         {{ logsMessage }}
                     </div>
                 </div>
@@ -84,15 +84,6 @@ export default {
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.datasource.buildExecutionQuery(this)
-
-        var screenHeight = window.innerHeight
-        var height = (screenHeight - 88) / 2
-        var jobFlow = this.$refs.jobFlow
-        var jobActivitiesLogs = this.$refs.jobActivitiesLogs
-        var jobActivities = this.$refs.jobActivities
-        var logs = this.$refs.logs
-        jobFlow.style.height = jobActivitiesLogs.style.height = jobActivities.style.height = height + "px"
-        logs.style.height = height + "px" - "60px"
     },
     methods: {
         getUrlParam(arr, value) {
@@ -178,21 +169,23 @@ export default {
         flex-direction: column;
 
         .job-flow {
-            // flex: 1;
+            flex: 1;
             width: 100%;
             min-height: 350px;
             overflow: hidden;
 
             .executions-iframe {
                 height: 100%;
+                min-height: 350px;
                 width: 100%;
                 overflow-y: scroll;
             }
         }
 
         .job-activities-logs {
-            // flex: 1;
+            flex: 1;
             display: flex;
+            min-height: 350px;
             border-top: 1px solid #ddd;
 
             .title {
@@ -204,9 +197,10 @@ export default {
                 display: flex;
                 flex-direction: column;
                 border-right: 1px solid #ddd;
-                min-width: 400px;
-                width: 50%;
+                // width: 50%;
+                flex: 1;
                 height: 100%;
+                min-height: 350px;
 
                 .job-activities__header {
                     background: #f2f2f2;
@@ -237,10 +231,15 @@ export default {
 
             .activity-logs {
                 height: 100%;
-                width: 50%;
+                // width: 50%;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
 
                 .logs {
-                    height: 300px;
+                    flex-grow: 1;
+                    min-height: 280px;
                     overflow-x: auto;
                     overflow-y: scroll;
                     font-family: SFProText-Thin;
