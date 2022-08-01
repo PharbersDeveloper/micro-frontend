@@ -42,7 +42,7 @@
                                 @statusChange="postFilterStatus" />
                 <outputs v-show="active === 4"
                                 ref="outputs"
-                                :schema="datasource.dataset.schema"
+                                :schema="computedSchema"
                                 @statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
@@ -92,7 +92,7 @@ export default {
     },
     data() {
         return {
-            active: 3,
+            active: 2,
             flowVersion: "developer",
             stepsDefs: [
                 {
@@ -122,7 +122,8 @@ export default {
             jobShowName: "",
 			outputs: [],
             inputs: [],
-            datasetArray: []
+            datasetArray: [],
+			computedSchema: []
         }
     },
     props: {
@@ -173,24 +174,39 @@ export default {
         },
         distinctStatus(errors) {
             if (errors) {
-                this.stepsDefs[2].status = "error"
+                this.stepsDefs[1].status = "error"
             } else {
-                this.stepsDefs[2].status = "success"
+                this.stepsDefs[1].status = "success"
             }
         },
         postFilterStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[3].status = "success"
+			this.stepsDefs[2].status = "success"
             if (!status) {
-                this.stepsDefs[3].status = "wait"
+                this.stepsDefs[2].status = "wait"
             } else if (errors){
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[2].status = "error"
             }
         },
         outputsStatus() {
-			this.stepsDefs[4].status = "success"
+			this.stepsDefs[3].status = "success"
         },
+        computeSchema() {
+			let result = []
+			if (this.$refs.distinct.isAllCols) {
+				result = this.datasource.dataset.schema
+			} else {
+				result = this.datasource.dataset.schema.filter(it => this.$refs.distinct.datasource.command.retrievedCols.includes(it.src))
+			}
 
+			if (this.$refs.distinct.datasource.globalCount) {
+				result.push({
+					src: "count",
+					type: "bigint"
+				})
+			}
+            return result
+        },
         save() {
 			if (this.activeName === "Setting") {
 
@@ -296,7 +312,10 @@ export default {
 
     },
     watch: {
-        active() {
+        active(n) {
+			if (n === 4) {
+                this.computedSchema = this.computeSchema()
+            }
             this.$refs.prefilter.validate()
             this.$refs.distinct.validate()
             this.$refs.postfilter.validate()

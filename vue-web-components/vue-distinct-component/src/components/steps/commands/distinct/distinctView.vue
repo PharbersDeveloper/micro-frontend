@@ -15,8 +15,8 @@
             </div>
             <div class="retrieved-keys" v-if="!isAllCols">
                 <el-transfer
-                        v-model="datasource.command.retrievedCols"
-                        :data="candiData">
+					v-model="datasource.command.retrievedCols"
+					:data="candiData">
                 </el-transfer>
             </div>
             <el-checkbox v-model="datasource.globalCount">计算源数据重复行数量</el-checkbox>
@@ -64,7 +64,8 @@ export default {
     },
     methods: {
         validate() {
-            this.$emit('statusChange', true)
+            const ErrorVales = !this.isAllCols && this.datasource.command.retrievedCols.length === 0
+            this.$emit('statusChange', ErrorVales)
         }
     },
     computed: {
