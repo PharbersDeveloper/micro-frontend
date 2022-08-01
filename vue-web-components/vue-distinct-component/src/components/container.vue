@@ -92,7 +92,7 @@ export default {
     },
     data() {
         return {
-            active: 3,
+            active: 1,
             flowVersion: "developer",
             stepsDefs: [
                 {
@@ -116,7 +116,7 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-			activeName: "input/output",
+			activeName: "Setting",
 			inArray: [],
 			outArray: [],
             jobShowName: "",
@@ -173,22 +173,22 @@ export default {
         },
         distinctStatus(errors) {
             if (errors) {
-                this.stepsDefs[2].status = "error"
+                this.stepsDefs[1].status = "error"
             } else {
-                this.stepsDefs[2].status = "success"
+                this.stepsDefs[1].status = "success"
             }
         },
         postFilterStatus(data) {
             const status = data.args.param.status, errors = data.args.param.errors
-			this.stepsDefs[3].status = "success"
+			this.stepsDefs[2].status = "success"
             if (!status) {
-                this.stepsDefs[3].status = "wait"
+                this.stepsDefs[2].status = "wait"
             } else if (errors){
-                this.stepsDefs[3].status = "error"
+                this.stepsDefs[2].status = "error"
             }
         },
         outputsStatus() {
-			this.stepsDefs[4].status = "success"
+			this.stepsDefs[3].status = "success"
         },
 
         save() {

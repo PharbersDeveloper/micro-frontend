@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="condition-add-button" v-if="datasource && datasource.enabled">
-            <el-button type="primary" @click="datasource.command.insertcloases()">添加</el-button>
+            <el-button type="primary" @click="datasource.command.insertcloases(schema)">添加</el-button>
         </div>
     </div>
 </template>
