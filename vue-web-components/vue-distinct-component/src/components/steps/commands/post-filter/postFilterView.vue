@@ -5,10 +5,13 @@
             <div class="condition-title-p">
                 <h2>Pre Filter</h2>
                 <div class="ver-center" v-if="datasource">
-                    <el-switch v-model="datasource.enabled" @change="$emit('statusChange', datasource.enabled)"></el-switch>
+                    <el-switch 
+						v-model="datasource.enabled" 
+						@change="validate()">
+					</el-switch>
                 </div>
             </div>
-            <el-form v-if="datasource">
+            <el-form v-if="datasource && datasource.enabled">
                 <el-form-item label="保留符合条件的列">
                     <select v-model="datasource.command.action">
                         <option v-for="(item, index) in concretDefs.actions" :value="item.cal" :key="index" :label="item.desc" />
