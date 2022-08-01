@@ -6,39 +6,36 @@
                 <img :src="job_img" alt="" class="">
             </div>
             <span class="job-name">
-                {{executionItem["job-show-name"]}}
+                {{ executionItem["job-show-name"] }}
             </span>
         </div>
-        <div class="job-flow">
-            <!-- <div v-if="!jsonMessage">暂无数据</div>
+        <div class="job">
+            <div class="job-flow" ref="jobFlow" style="height: 350px;">
+                <!-- <div v-if="!jsonMessage">暂无数据</div>
             <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
-            <iframe 
-                class="executions-iframe"  
-                :src="iframeUrl"
-                frameborder="0"></iframe>
-        </div>
-        <div class="job-activities-logs">
-            <div class="job-activities">
-                <div class="title job-activities__header">
-                    Activity
-                </div>
-                <div class="activity-item">
-                    <span class="job-name">
-                        <p 
-                            v-if="executionItem.status==='success'" 
-                            class="el-icon-success status-icon" />
-                        <p v-else class="el-icon-error status-icon" />
-                        {{executionItem["job-show-name"]}}
-                    </span>
-                    <span>{{getTimes(executionItem)}}</span>
-                </div>
+                <iframe class="executions-iframe" :src="iframeUrl" frameborder="0"></iframe>
             </div>
-            <div class="activity-logs">
-                <div class="title">
-                    Activity Log 
+            <div class="job-activities-logs" ref="jobActivitiesLogs" style="height: 350px;">
+                <div class="job-activities" ref="jobActivities" style="height: 350px;">
+                    <div class="title job-activities__header">
+                        Activity
+                    </div>
+                    <div class="activity-item">
+                        <span class="job-name">
+                            <p v-if="executionItem.status === 'success'" class="el-icon-success status-icon" />
+                            <p v-else class="el-icon-error status-icon" />
+                            {{ executionItem["job-show-name"] }}
+                        </span>
+                        <span>{{ getTimes(executionItem) }}</span>
+                    </div>
                 </div>
-                <div class="logs">
-                    {{logsMessage}}
+                <div class="activity-logs">
+                    <div class="title">
+                        Activity Log
+                    </div>
+                    <div class="logs" ref="logs" style="height: 290px;">
+                        {{ logsMessage }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,7 +47,7 @@ import PhExecutionHistory from "./datasource"
 import viewJson from "./bp-view-json.vue"
 
 export default {
-    data () {
+    data() {
         return {
             job_img: `${staticFilePath}` + "/job_button.svg",
             jobIndex: "",
@@ -67,13 +64,13 @@ export default {
     props: {
         allData: {
             type: Object,
-            default: function() {
-                return { }
+            default: function () {
+                return {}
             }
         },
         datasource: {
             type: Object,
-            default: function() {
+            default: function () {
                 return new PhExecutionHistory('1')
             }
         }
@@ -87,13 +84,22 @@ export default {
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.datasource.buildExecutionQuery(this)
+
+        var screenHeight = window.innerHeight
+        var height = (screenHeight - 88) / 2
+        var jobFlow = this.$refs.jobFlow
+        var jobActivitiesLogs = this.$refs.jobActivitiesLogs
+        var jobActivities = this.$refs.jobActivities
+        var logs = this.$refs.logs
+        jobFlow.style.height = jobActivitiesLogs.style.height = jobActivities.style.height = height + "px"
+        logs.style.height = height + "px" - "60px"
     },
     methods: {
-        getUrlParam (arr, value) {
+        getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
         },
-        getCookie (name) {
+        getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
                 return (arr[2]);
@@ -120,12 +126,12 @@ export default {
                 this.datasource.buildFlowQuery(this)
             }
         },
-        getTimes (data) {
-            if(data["end-at"] === "") {
+        getTimes(data) {
+            if (data["end-at"] === "") {
                 return "0" + " s"
             }
             let timeDiff = (data["end-at"] - data["start-at"]) / 1000
-            if(timeDiff > 60) {
+            if (timeDiff > 60) {
                 let min = Math.floor(timeDiff / 60)
                 let s = Math.floor(timeDiff % 60)
                 return String(min) + " min " + s + " s "
@@ -137,61 +143,76 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    * {
-        box-sizing: border-box;
+* {
+    box-sizing: border-box;
+}
+
+.executions-logs {
+    display: flex;
+    flex-direction: column;
+    // height: calc(100vh - 40px);
+    flex-grow: 1;
+
+    .job-state-change {
+        height: 48px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+
+        .title-img {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background: #8541aa;
+            margin-right: 10px;
+        }
     }
-    .executions-logs {
+
+    .job {
+        width: 100%;
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 40px);
-        flex-grow: 1;
-        overflow: hidden;
-        .job-state-change {
-            height: 48px;
-            min-height: 48px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            .title-img {
-                width: 48px;
-                height: 48px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                background: #8541aa;
-                margin-right: 10px;
-            }
-        }
+
         .job-flow {
-            height: 600px;
-            max-height: 350px;
+            // flex: 1;
+            width: 100%;
             min-height: 350px;
-            overflow: auto;
+            overflow: hidden;
+
             .executions-iframe {
-                width: 100vw;
-                // height: 500px;
                 height: 100%;
+                width: 100%;
+                overflow-y: scroll;
             }
         }
+
         .job-activities-logs {
+            // flex: 1;
             display: flex;
             border-top: 1px solid #ddd;
-            height: 100%;
+
             .title {
                 height: 60px;
                 padding: 20px;
             }
+
             .job-activities {
                 display: flex;
                 flex-direction: column;
                 border-right: 1px solid #ddd;
                 min-width: 400px;
                 width: 50%;
+                height: 100%;
+
                 .job-activities__header {
                     background: #f2f2f2;
                     border-bottom: 1px solid #ddd;
                 }
+
                 .activity-item {
                     height: 48px;
                     padding: 0 20px;
@@ -199,6 +220,7 @@ export default {
                     justify-content: space-between;
                     align-items: center;
                     border-bottom: 1px solid #f2f2f2;
+
                     .status-icon {
                         margin-right: 24px;
                     }
@@ -212,13 +234,13 @@ export default {
                     }
                 }
             }
+
             .activity-logs {
-                display: flex;
-                flex-direction: column;
-                height: 60%;
+                height: 100%;
                 width: 50%;
+
                 .logs {
-                    height: 500px;
+                    height: 300px;
                     overflow-x: auto;
                     overflow-y: scroll;
                     font-family: SFProText-Thin;
@@ -233,4 +255,6 @@ export default {
             }
         }
     }
+
+}
 </style>
