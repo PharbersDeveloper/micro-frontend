@@ -36,11 +36,65 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                                <div 
+                                <div class="list" @mouseenter="showVisual" @mouseleave="hide" >
+                                    <img :src="defs.iconsByName('visual')" alt="">
+                                    <p class="">Visual</p>
+                                    <img :src="defs.iconsByName('path')" class="path" ref="pathVisual" alt="">
+                                </div>
+                                <div class="list" @mouseenter="showCode" @mouseleave="hide">
+                                    <img :src="defs.iconsByName('code')" alt="">
+                                    <p class="">Code</p>
+                                    <img :src="defs.iconsByName('path')" class="path" ref="pathCode" alt="">
+                                </div>
+                                <div class="list" @mouseenter="showSpark" @mouseleave="hide">
+                                    <img :src="defs.iconsByName('spark')" alt="">
+                                    <p class="">Hadoop&Spark</p>
+                                    <img :src="defs.iconsByName('path')" class="path" ref="pathSpark" alt="">
+                                </div>
+                                <!-- <div 
 									class="list"
 									v-for="script in scriptList"
 									:key="script.name+'script'"
 									@click="selectScripts(script.scriptName)">
+                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <p class="">{{script.name}}</p>
+                                </div> -->
+                            </div>
+                            <div class="dialog visual">
+                                <div 
+                                    class="list"
+                                    v-show="showVisualAll"
+                                    v-for="script in scriptList.slice(0,9)"
+                                    :key="script.name+'script'"
+                                    @mouseenter="showVisual"
+                                    @mouseleave="hide"
+                                    @click="selectScripts(script.scriptName)">
+                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <p class="">{{script.name}}</p>
+                                </div>
+                            </div>
+                            <div class="dialog code">
+                                <div 
+                                    class="list"
+                                    v-show="showCodeAll"
+                                    v-for="script in scriptList.slice(9,11)"
+                                    :key="script.name+'script'"
+                                    @mouseenter="showCode"
+                                    @mouseleave="hide"
+                                    @click="selectScripts(script.scriptName)">
+                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <p class="">{{script.name}}</p>
+                                </div>
+                            </div>
+                            <div class="dialog spark">
+                                <div 
+                                    class="list"
+                                    v-show="showSparkAll"
+                                    v-for="script in scriptList.slice(11,14)"
+                                    :key="script.name+'script'"
+                                    @mouseenter="showSpark"
+                                    @mouseleave="hide"
+                                    @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
                                     <p class="">{{script.name}}</p>
                                 </div>
@@ -251,7 +305,10 @@ export default {
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             value: '',
             dialogVisible: false,
-            runtime: ""
+            runtime: "",
+            showVisualAll: false,
+            showCodeAll: false,
+            showSparkAll: false
         }
     },
     props: {
@@ -276,29 +333,13 @@ export default {
             type: Array,
             default: function() {
                 return [{
-                    scriptName: "python3",
-                    iconName: "python",
-                    name: "Python"
-                }, {
-                    scriptName: "pyspark",
-                    iconName: "pyspark",
-                    name: "Pyspark"
-                }, {
-                    scriptName: "r",
-                    iconName: "r",
-                    name: "R"
-                }, {
-                    scriptName: "sparkr",
-                    iconName: "sparkr",
-                    name: "SparkR"
-                }, {
-                    scriptName: "prepare",
-                    iconName: "prepare",
-                    name: "Prepare"
-                }, {
                     scriptName: "sync",
                     iconName: "sync",
                     name: "Sync"
+                }, {
+                    scriptName: "group",
+                    iconName: "group",
+                    name: "Group"
                 }, {
                     scriptName: "topn",
                     iconName: "topn",
@@ -320,13 +361,29 @@ export default {
                     iconName: "stack",
                     name: "Stack"
                 }, {
-                    scriptName: "group",
-                    iconName: "group",
-                    name: "Group"
+                    scriptName: "prepare",
+                    iconName: "prepare",
+                    name: "Prepare"
                 }, {
                     scriptName: "pivot",
                     iconName: "pivot",
                     name: "Pivot"
+                }, {
+                    scriptName: "python3",
+                    iconName: "python",
+                    name: "Python"
+                },  {
+                    scriptName: "r",
+                    iconName: "r",
+                    name: "R"
+                }, {
+                    scriptName: "sparkr",
+                    iconName: "sparkr",
+                    name: "SparkR"
+                }, {
+                    scriptName: "pyspark",
+                    iconName: "pyspark",
+                    name: "Pyspark"
                 }]
             }
         }
@@ -378,6 +435,9 @@ export default {
             this.showDialog = false
             this.runtime = data
             this.showCreateScriptsDialog = true
+            this.showVisualAll = false
+            this.showCodeAll = false
+            this.showSparkAll = false
         },
         //增加tag
         addTagsEvent(data) {
@@ -605,6 +665,37 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
+        showVisual(e){
+            this.showVisualAll = true
+            e.currentTarget.className = 'list active'
+            this.$refs.pathVisual.src = this.defs.iconsByName('pathHide')
+            this.$refs.pathCode.src = this.defs.iconsByName('path')
+            this.$refs.pathSpark.src = this.defs.iconsByName('path')
+        },
+        hide(e){
+            this.showVisualAll = false
+            this.showCodeAll = false
+            this.showSparkAll = false
+            e.currentTarget.className = 'list'
+            this.$refs.pathVisual.src = this.defs.iconsByName('path')
+            this.$refs.pathSpark.src = this.defs.iconsByName('path')
+            this.$refs.pathCode.src = this.defs.iconsByName('path')
+        },
+        showCode(e){
+            this.showCodeAll = true
+            e.currentTarget.className = 'list active'
+            this.$refs.pathCode.src = this.defs.iconsByName('pathHide')
+            this.$refs.pathVisual.src = this.defs.iconsByName('path')
+            this.$refs.pathSpark.src = this.defs.iconsByName('path')
+        },
+        // 显示spark详情
+        showSpark(e){
+            this.showSparkAll = true
+            e.currentTarget.className = 'list active'
+            this.$refs.pathSpark.src = this.defs.iconsByName('pathHide')
+            this.$refs.pathVisual.src = this.defs.iconsByName('path')
+            this.$refs.pathCode.src = this.defs.iconsByName('path')
+        },
         selectScriptIcon(runtime) {
             switch (runtime) {
             case "python3":
@@ -667,14 +758,14 @@ export default {
     position: absolute;
     top: 30px;
     right: 40px;
-    width: 150px;
+    width: 160px;
     // height: 130px;
-    border: 1px solid #333;
+    // border-bottom: 1px solid #333;
     background: #fff;
     z-index: 9999;
     cursor: pointer;
     div {
-        border-bottom: 1px solid #979797;
+        // border-bottom: 1px solid #979797;
         p {
             margin-left: 10px;
             font-family: PingFangSC-Medium;
@@ -686,15 +777,50 @@ export default {
     .list {
         display: flex;
         padding: 5px;
+        // background-color: red;
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        position: relative;
+
         img {
             width: 20px;
             height: 20px;
         }
+        .path {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: 5px;
+            top: 10px;
+            z-index: 999;
+        }
+    }
+    .list:last-of-type{
+        border-bottom: 1px solid #ccc;
     }
     .last {
         border-bottom: none;
     }
 
+}
+.visual{
+    position: absolute;
+    top: 30px;
+    right: 200px;
+}
+.code{
+    position: absolute;
+    top: 62px;
+    right: 200px;
+}
+.spark{
+    position: absolute;
+    top: 95px;
+    right: 200px;
+}
+.active{
+    background-color: #ccc;
 }
 .script-opt {
     padding: 0 10px;
