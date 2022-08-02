@@ -7,6 +7,7 @@ export default class PhGroupStep {
     constructor(dbstep, schema) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
+		this.globalCount = this.expressions["params"]["globalCount"]
         this.keys = this.expressions["params"]["keys"]
         const defs = this.expressions["params"]["values"].filter(x => !Object.keys(x).includes("customExpr"))
         this.commands = schema.map(x => {
@@ -22,13 +23,14 @@ export default class PhGroupStep {
         this.keys.push(col)
     }
 
-    isComputedGroupCount() {
-        if (this.commands.length > 0) return this.commands[0].count
-        return false
-    }
+    // isComputedGroupCount() {
+    //     if (this.commands.length > 0) return this.commands[0].count
+    //     return false
+    // }
 
     changeComputedGroupCount(v) {
-        this.commands.forEach(x => x.count = v)
+        // this.commands.forEach(x => x.count = v)
+		this.globalCount = v
     }
 
     exec() {
@@ -38,6 +40,7 @@ export default class PhGroupStep {
 
     revert2Defs() {
         return {
+			globalCount: this.globalCount,
             keys: this.keys,
             values: this.commands.filter(x => Object.values(x).includes(true)).map(x => x.revert2Defs())
         }

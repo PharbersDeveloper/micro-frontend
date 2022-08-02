@@ -291,12 +291,12 @@ export default {
                     return false
                 }
 
-                let globalCount = true
-                if (this.$refs.group.datasource.commands.length > 0) {
-                    globalCount =  this.$refs.group.datasource.commands[0].count
-                }
+                // let globalCount = true
+                // if (this.$refs.group.datasource.commands.length > 0) {
+                //     globalCount =  this.$refs.group.datasource.commands[0].count
+                // }
                 const params = {
-                    "globalCount": globalCount,
+                    "globalCount": this.$refs.group.datasource.revert2Defs().globalCount,
                     "preFilter": this.$refs.filter.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs(),
                     "keys": this.$refs.group.datasource.revert2Defs().keys,
