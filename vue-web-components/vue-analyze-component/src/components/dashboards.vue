@@ -1012,19 +1012,19 @@ export default {
                     height: 44px;
                     .space {
                         display: flex;
-                        width: 60px;
-                        height: 60px;
+                        // width: 60px;
+                        // height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 2px solid #979797;
-                        border-right: 2px solid #979797;
+                        // border-bottom: 2px solid #979797;
+                        // border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 40px;
-                            height: 40px;
+                            width: 44px;
+                            height: 44px;
                         }
                     }
                     .show-name {

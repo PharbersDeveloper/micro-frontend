@@ -209,7 +209,7 @@ export default {
             input_index_icon: `${staticFilePath}` + "/input_index.svg",
             output_index_icon: `${staticFilePath}` + "/output_index.svg",
             intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
-            database_icon: `${staticFilePath}` + "/Database.svg",
+            database_icon: `${staticFilePath}` + "/Databases.svg",
             catalog_icon: `${staticFilePath}` + "/icons/catalog/normal.svg",
             // about select
             ascending: false,
@@ -1018,19 +1018,15 @@ export default {
                         height: 44px;
                         .space {
                             display: flex;
-                            width: 60px;
-                            height: 60px;
                             background: #dfe7ff;
-                            border-bottom: 2px solid #979797;
-                            border-right: 2px solid #979797;
                             height: 44px;
                             width: 44px;
                             min-width: 44px;
                             justify-content: center;
                             align-items: center;
                             img {
-                                width: 24px;
-                                height: 24px;
+                                width: 44px;
+                                height: 44px;
                             }
                         }
                         .show-name {
