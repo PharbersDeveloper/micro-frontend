@@ -38,7 +38,7 @@
                 <top-n v-show="active === 3"
                           ref="topn"
                           :step="datasource.step"
-                          :schema="datasource.dataset.schema"
+                          :schema="computedSchema"
                           @statusChange="topnStatus" />
                 <retrieved-cols v-show="active === 4"
                                 ref="retrieved"
@@ -94,10 +94,7 @@ export default {
         RetrievedCols,
         Outputs,
         ElRadioGroup,
-        // ElForm,
-        // ElFormItem,
         ElRadioButton,
-        // ElInput,
         changeInputOutput
     },
     data() {
@@ -354,7 +351,7 @@ export default {
     },
     watch: {
         active(n) {
-            if (n === 4 || n === 5) {
+            if (n === 3 || n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
             }
 
