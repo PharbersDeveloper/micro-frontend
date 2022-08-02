@@ -16,6 +16,8 @@ export default class PhS3Destination {
     }
 
     async upload(data, to, timestamp) {
+        // PBDP-3261: 将分隔符换成31
+        // const lines = data.map(x => x.join(String.fromCharCode(31)))
         const lines = data.map(x => x.join(","))
         const body = lines.join("\n")
         const params = {

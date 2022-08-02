@@ -178,68 +178,72 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 				const scenarioArrayDel = params.scenarioArray
 				const deluuid = guid()
 				const delUri = `${hostName}/phscenariosdeletiontrigger`
-				selectedScenarioDel.forEach(async (item) => {
-					let targetscenario = scenarioArrayDel.filter(
-						(it) => it.id === item
-					)[0]
-					let body = {
-						common: {
-							traceId: deluuid,
-							projectId: params.projectId,
-							projectName: params.projectName,
-							flowVersion: "developer",
-							owner: route.cookies.read("account_id"),
-							showName: decodeURI(
-								route.cookies.read("user_name_show")
-							),
-							tenantId: route.cookies.read("company_id")
-						},
-						action: {
-							cat: "deleteScenario",
-							desc: "delete scenario",
-							comments: "something need to say",
-							message: JSON.stringify({
-								optionName: "delete_scenario",
-								cat: "scenario",
-								actionName: targetscenario.scenarioName
-							}),
-							required: true
-						},
-						scenario: {
-							id: targetscenario.id,
-							active: true,
-							scenarioName: targetscenario.scenarioName,
+				let scenarios = []
+				scenarioArrayDel.forEach((item) => {
+					if (selectedScenarioDel.includes(item.id)) {
+						scenarios.push({
+							id: item.id,
+							active: item.active,
+							scenarioName: item.scenarioName,
 							deletion: false,
-							index: 0
-						},
-						triggers: [],
-						steps: [],
-						notification: {
-							required: true
-						},
-						result: {}
+							index: item.index
+						})
 					}
-					let options = {
-						method: "POST",
-						headers: {
-							Authorization: accessToken,
-							"Content-Type":
-								"application/x-www-form-urlencoded; charset=UTF-8",
-							accept: "application/json"
-						},
-						body: JSON.stringify(body)
-					}
-					await fetch(delUri, options).then((res) => res.json())
-					route.noticeService.defineAction({
-						type: "iot",
-						remoteResource: "notification",
-						runnerId: "",
-						id: deluuid,
-						eventName: deleteScenarioEventName,
+				})
+				const scenarioNames = scenarios
+					.map((it) => it.scenarioName)
+					.toString()
+				let body = {
+					common: {
+						traceId: deluuid,
 						projectId: params.projectId,
-						ownerId: route.cookies.read("account_id"),
-						callBack: deleteScenariosNoticeCallback
-					})
+						projectName: params.projectName,
+						flowVersion: "developer",
+						owner: route.cookies.read("account_id"),
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						),
+						tenantId: route.cookies.read("company_id")
+					},
+					action: {
+						cat: "deleteScenario",
+						desc: "delete scenario",
+						comments: "something need to say",
+						message: JSON.stringify({
+							optionName: "delete_scenario",
+							cat: "scenario",
+							actionName: scenarioNames
+						}),
+						required: true
+					},
+					scenario: scenarios,
+					triggers: [],
+					steps: [],
+					notification: {
+						required: true
+					},
+					result: {}
+				}
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(delUri, options).then((res) => res.json())
+				route.noticeService.defineAction({
+					type: "iot",
+					remoteResource: "notification",
+					runnerId: "",
+					id: deluuid,
+					eventName: deleteScenarioEventName,
+					projectId: params.projectId,
+					ownerId: route.cookies.read("account_id"),
+					callBack: deleteScenariosNoticeCallback
 				})
 			}
 			break
