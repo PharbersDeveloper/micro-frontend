@@ -52,7 +52,7 @@
                             prop="type"
                             width="120">
                     </el-table-column>
-                    <el-table-column width="500">
+                    <el-table-column width="700">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
@@ -61,6 +61,7 @@
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
+								<el-checkbox-button v-model="scope.row.count">count</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -161,7 +162,7 @@ export default {
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
-        this.computedGroupCount = this.datasource.isComputedGroupCount()
+        this.computedGroupCount = this.datasource.globalCount
         this.notGroupedCommands = this.resetSelectGroupKeys()
         this.ignoredClearMsg = false
         this.schemaArray = this.schema
