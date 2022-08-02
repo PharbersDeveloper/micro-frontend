@@ -7,6 +7,7 @@
             </div>
         </div>
         <div v-if="datasource">
+			<div class="error-msg" v-show="!isAllCols && datasource.command.retrievedCols.length === 0">请选择至少一个条件列！</div>
             <div class="distinct-select" >
                 <el-radio-group v-model="isAllCols">
                     <el-radio :label="true">去除所有列的重复数据</el-radio>
@@ -120,6 +121,11 @@ export default {
                 }
             }
         }
+		
+		.error-msg {
+			font-size: 13px;
+			color: #ce1228;
+		}
     }
 
     .disabled {

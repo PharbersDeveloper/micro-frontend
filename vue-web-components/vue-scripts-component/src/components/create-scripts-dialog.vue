@@ -21,7 +21,7 @@
                                             <img :src="sel_dataset_icon" alt="" class="sel_dataset_icon">
                                             <span :title="item.name" class="title title_name">{{item.name}}</span>
                                         </div>
-                                        <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item)" alt="">
+                                        <img :src="del_icon" class="del_icon" @click="on_clickdeldataset(item, index)" alt="">
                                     </div>
                                 </div>
                                 <el-button class="add" type="primary" v-if="singleInputRuntime.includes(runtime) && addDatasetList.length > 0" @click="on_clickAddInput">更改</el-button>
@@ -321,26 +321,25 @@ export default {
         },
         addDataset(data) {
             this.datasetListShow = false
-			
             // 可多选input流程
             if(!this.singleInputRuntime.includes(this.runtime)) {
-                this.addDatasetList.unshift(data)
+                this.addDatasetList.push(data)
                 this.remainDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
             } else {
                 // 只能选择一个input流程
                 if(this.addDatasetList.length > 0) {
                     let selData = this.addDatasetList[0]
-                    this.remainDatasetList.unshift(selData)
+                    this.remainDatasetList.push(selData)
                     this.addDatasetList = []
                 }
-                this.addDatasetList.unshift(data)
+                this.addDatasetList.push(data)
                 this.remainDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
             }
         },
-        on_clickdeldataset(data) {
+        on_clickdeldataset(data, index) {
             //删除dataset
-            this.remainDatasetList.unshift(data)
-            this.addDatasetList.splice(this.remainDatasetList.indexOf(data), 1)
+            this.remainDatasetList.push(data)
+            this.addDatasetList.splice(index, 1)
         },
         satasetTab(data) {
             //切换tab

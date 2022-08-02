@@ -82,7 +82,9 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(dashboard,index) in searchData" :key="index" ref="content" :class="{bg: dashboardCheckedIds.indexOf(dashboard.id) > -1}" @click="clickOnlyOne(dashboard, index)">
-                            <input type="checkbox" ref="data" :checked="dashboardCheckedIds.indexOf(dashboard.id) > -1" @click.stop="checkedOneDashboard(dashboard)">
+                            <div class="data_input" @click.stop="checkedMore(dashboard)">
+                                <input type="checkbox" ref="data" :checked="dashboardCheckedIds.indexOf(dashboard.id) > -1" @click.stop="checkedOneDashboard(dashboard)">
+                            </div>
                             <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="selectDashboardsetIcon(dashboard.cat)" alt="">
@@ -329,6 +331,19 @@ export default {
             this.dashboardcheckedNames = []
             this.dashboardCheckedIds.push(dashboard.id)
             this.dashboardcheckedNames.push(dashboard.title)
+        },
+        checkedMore(dashboard){
+            this.checked = !this.checked
+            let idIndex = this.dashboardCheckedIds.indexOf(dashboard.id)
+            if(idIndex >= 0) { 
+                this.dashboardCheckedIds.splice(idIndex, 1)
+                this.dashboardcheckedNames.splice(idIndex, 1)
+                this.checked = false
+            } else {
+                this.checked = true
+                this.dashboardCheckedIds.push(dashboard.id)
+                this.dashboardcheckedNames.push(dashboard.name)
+            }
         },
         //点击list多选框
         checkedOneDashboard(dashboard) {
@@ -880,8 +895,13 @@ export default {
                     border-bottom: 1px solid #dddddd;
                     padding: 10px 0 10px 10px;
                     align-items: center;
-                    input{
-                        cursor: pointer;
+                    .data_input {
+                        width: 40px;
+                        height: 40px;
+                        input {
+                            height: 40px;
+                            cursor: pointer;
+                        }
                     }
                     .tag_bg:hover::after {
                         content: attr(data-title);    //取到data-title属性的值
@@ -918,7 +938,7 @@ export default {
                         display: flex;
                     }
                     .script_icon {
-                        margin-left: 27px;
+                        // margin-left: 27px;
                         width: 30px;
                         max-width: 30px;
                         height: 30px;
@@ -1012,19 +1032,19 @@ export default {
                     height: 44px;
                     .space {
                         display: flex;
-                        width: 60px;
-                        height: 60px;
+                        // width: 60px;
+                        // height: 60px;
                         background: #dfe7ff;
-                        border-bottom: 2px solid #979797;
-                        border-right: 2px solid #979797;
+                        // border-bottom: 2px solid #979797;
+                        // border-right: 2px solid #979797;
                         height: 44px;
                         width: 44px;
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 40px;
-                            height: 40px;
+                            width: 44px;
+                            height: 44px;
                         }
                     }
                     .show-name {
