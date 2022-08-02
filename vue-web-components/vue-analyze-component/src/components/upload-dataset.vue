@@ -1187,8 +1187,8 @@ export default {
                         justify-content: center;
                         align-items: center;
                         img {
-                            width: 40px;
-                            height: 40px;
+                            width: 44px;
+                            height: 44px;
                         }
                     }
                     .show-name {
