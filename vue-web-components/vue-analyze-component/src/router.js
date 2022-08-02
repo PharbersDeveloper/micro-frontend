@@ -8,7 +8,6 @@ import bpNavMax from './components/bp-nav-top-max'
 import dataList from './components/data-list-home'
 import dashboards from './components/dashboards'
 import datasets from './components/upload-dataset'
-import scripts from './components/scripts-list'
 import executionHistory from './components/executionHistory/bp-executions-history'
 import executionsLogs from './components/executionHistory/bp-executions-logs'
 
@@ -22,11 +21,6 @@ export default new Router({
             path: '/',
             name: 'bpExcelContainer',
             component: bpExcelContainer
-        },
-        {
-            path: '/scripts',
-            name: 'scripts',
-            component: scripts
         },
         {
             path: '/datasets',
