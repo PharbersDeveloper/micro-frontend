@@ -101,7 +101,9 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
-                            <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
+                            <div class="data_input" @click.stop="checkedMore(dataset)">
+                                <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
+                            </div>
                             <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="selectDatasetIcon(dataset.cat)" alt="">
@@ -223,6 +225,7 @@ import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
+import { MessageBox, Message } from 'element-ui'
 
 
 export default {
@@ -437,6 +440,24 @@ export default {
             this.datasetcheckedIds.push(dataset.id)
             this.datasetcheckedNames.push(dataset.name)
         },
+        checkedMore(dataset){
+            this.checked = !this.checked
+            let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
+            if(idIndex >= 0) { 
+                this.datasetcheckedIds.splice(idIndex, 1)
+                this.datasetcheckedNames.splice(idIndex, 1)
+                this.checked = false
+            } else {
+                this.checked = true
+                this.datasetcheckedIds.push(dataset.id)
+                this.datasetcheckedNames.push(dataset.name)
+            }
+            if(this.datasetcheckedIds.length == 1){
+                this.database_icon = this.selectDatasetIcon(dataset.cat)
+            }else{
+                this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
+            }
+        },
         //点击list多选框
         checkedOneDataset(dataset) {
             let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
@@ -536,6 +557,10 @@ export default {
              * 1. 先请求phcomputedeletionimpact，找到关联关系
              * 2. 返回空数组 原来流程；不是空数组，原来流程 + 新流程
              */
+            if(this.datasetcheckedIds.length > 10){
+                Message.error("超出数量上限,单次最多同时删除10个数据集!", { duration: 0, showClose: true })
+                return
+            }
             let that = this
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
             const checkUrl = `${hostName}/phcomputedeletionimpact`
@@ -1044,9 +1069,15 @@ export default {
                     border-bottom: 1px solid #dddddd;
                     padding: 10px 0 10px 10px;
                     align-items: center;
-                    input{
-                        cursor: pointer;
+                    .data_input{
+                        width: 40px;
+                        height: 40px;
+                        input{
+                            height: 40px;
+                            cursor: pointer;
+                        }
                     }
+                    
                     .tag_bg:hover::after {
                         content: attr(data-title);    //取到data-title属性的值
                         display: inline-block;
@@ -1082,7 +1113,7 @@ export default {
                         display: flex;
                     }
                     .script_icon {
-                        margin-left: 27px;
+                        // margin-left: 27px;
                         width: 30px;
                         max-width: 30px;
                         height: 30px;

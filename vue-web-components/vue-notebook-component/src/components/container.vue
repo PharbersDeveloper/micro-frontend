@@ -82,9 +82,11 @@
                             @click="clickOnlyOne(notebook, index)">
                             <div class="content-left">
                                 <div style="display: flex; flex-direction: column; justify-content: space-around">
-                                    <input type="checkbox" ref="data" name="notebooksList"
+                                    <div class="data_input" @click.stop="checkedMore(notebook)">
+                                        <input type="checkbox" ref="data" name="notebooksList"
                                         :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
                                         @click.stop="checkedOnenotebooks(notebook)">
+                                    </div>
                                 </div>
                                 <div class="item_list">
                                     <span class="script_icon">
@@ -326,9 +328,26 @@ export default {
                 this.isStopStatus = false
             }
         },
+        checkedMore(notebook){
+            this.checked = !this.checked
+            let idIndex = this.notebookscheckedIds.indexOf(notebook.id)
+            if(idIndex >= 0) { 
+                this.notebookscheckedIds.splice(idIndex, 1)
+                this.notebookscheckedNames.splice(idIndex, 1)
+                this.checked = false
+            } else {
+                this.checked = true
+                this.notebookscheckedIds.push(notebook.id)
+                this.notebookscheckedNames.push(notebook.name)
+            }
+            if(this.notebookscheckedIds.length == 1){
+                this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
+            }else{
+                this.script_icon_show = `${staticFilePath}` + "/icons/all_jupyter.svg"
+            }
+        },
         //点击list多选框
         checkedOnenotebooks(notebook) {
-            this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
             let idIndex = this.notebookscheckedIds.indexOf(notebook.detail.id)
             if (idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
@@ -345,6 +364,11 @@ export default {
                 this.isStopStatus = true
             } else {
                 this.isStopStatus = false
+            }
+            if (this.notebookscheckedIds.length == 1){
+                this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
+            }else{
+                this.script_icon_show = `${staticFilePath}` + "/icons/all_jupyter.svg"
             }
         },
         //点击notebooks name
@@ -379,6 +403,7 @@ export default {
             this.notebookscheckedOwners = []
             //全选状态
             if (this.isCheckedAllnotebooks) {
+                this.script_icon_show = `${staticFilePath}` + "/icons/all_jupyter.svg"
                 this.allData.dns.forEach(item => {
                     this.notebookscheckedIds.push(item.id)
                     this.notebookscheckedNames.push(item.name)
@@ -998,8 +1023,13 @@ export default {
                     padding: 10px 0 10px 10px;
                     align-items: center;
 
-                    input {
-                        cursor: pointer;
+                    .data_input {
+                        width: 40px;
+                        height: 40px;
+                        input {
+                            height: 40px;
+                            cursor: pointer;
+                        }
                     }
 
                     .tag_bg:hover::after {
@@ -1040,7 +1070,7 @@ export default {
                     }
 
                     .script_icon {
-                        margin-left: 27px;
+                        // margin-left: 27px;
                         width: 30px;
                         max-width: 30px;
                         height: 30px;

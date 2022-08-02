@@ -82,7 +82,9 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(scenario,index) in searchData" :key="index" ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}" @click="clickOnlyOne(scenario, index)">
-                            <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
+                            <div class="data_input" @click="checkedMore(scenario)">
+                                <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
+                            </div>
                             <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="defs.iconsByName('scenario')" alt="">
@@ -335,6 +337,19 @@ export default {
             this.scenarioCheckedNames = []
             this.scenarioCheckedIds.push(scenario.id)
             this.scenarioCheckedNames.push(scenario.scenarioName)
+        },
+        checkedMore(scenario){
+            this.checked = !this.checked
+            let idIndex = this.scenarioCheckedIds.indexOf(scenario.id)
+            if(idIndex >= 0) { 
+                this.scenarioCheckedIds.splice(idIndex, 1)
+                this.scenarioCheckedNames.splice(idIndex, 1)
+                this.checked = false
+            } else {
+                this.checked = true
+                this.scenarioCheckedIds.push(scenario.id)
+                this.scenarioCheckedNames.push(scenario.name)
+            }
         },
         //点击list多选框
         checkedOneScenario(scenario) {
@@ -876,8 +891,13 @@ export default {
                         border-bottom: 1px solid #dddddd;
                         padding: 10px 0 10px 10px;
                         align-items: center;
-                        input{
-                            cursor: pointer;
+                        .data_input {
+                            width: 40px;
+                            height: 40px;
+                            input {
+                                height: 40px;
+                                cursor: pointer;
+                            }
                         }
                         .tag_bg:hover::after {
                             content: attr(data-title);    //取到data-title属性的值
@@ -916,7 +936,7 @@ export default {
 							align-items: center;
                         }
                         .script_icon {
-                            margin-left: 27px;
+                            // margin-left: 27px;
                             width: 30px;
                             max-width: 30px;
 

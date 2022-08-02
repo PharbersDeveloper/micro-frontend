@@ -139,7 +139,9 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(recipt,index) in searchData" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
-                            <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
+                            <div class="data_input" @click.stop="checkedMore(recipt)">
+                                <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
+                            </div>
                             <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="selectScriptIcon(recipt.runtime)" alt="">
@@ -473,6 +475,24 @@ export default {
             this.reciptcheckedNames = []
             this.reciptcheckedIds.push(recipt.id)
             this.reciptcheckedNames.push(recipt.jobShowName)
+        },
+        checkedMore(recipt){
+            this.checked = !this.checked
+            let idIndex = this.reciptcheckedIds.indexOf(recipt.id)
+            if(idIndex >= 0) { 
+                this.reciptcheckedIds.splice(idIndex, 1)
+                this.reciptcheckedNames.splice(idIndex, 1)
+                this.checked = false
+            } else {
+                this.checked = true
+                this.reciptcheckedIds.push(recipt.id)
+                this.reciptcheckedNames.push(recipt.name)
+            }
+            if(this.reciptcheckedIds.length == 1){
+                this.script_icon_show = this.selectDatasetIcon(recipt.cat)
+            }else{
+                this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
+            }
         },
         //点击list多选框
         checkedOneDataset(recipt) {
@@ -1188,8 +1208,13 @@ export default {
                     border-bottom: 1px solid #dddddd;
                     padding: 10px 0 10px 10px;
                     align-items: center;
-                    input{
-                        cursor: pointer;
+                    .data_input {
+                        width: 40px;
+                        height: 40px;
+                        input{
+                            height: 40px;
+                            cursor: pointer;
+                        }
                     }
                     .tag_bg:hover::after {
                         content: attr(data-title);    //取到data-title属性的值
@@ -1226,7 +1251,7 @@ export default {
                         display: flex;
                     }
                     .script_icon {
-                        margin-left: 27px;
+                        // margin-left: 27px;
                         width: 30px;
                         max-width: 30px;
                         height: 30px;
