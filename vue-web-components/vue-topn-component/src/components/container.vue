@@ -225,10 +225,12 @@ export default {
             }
             const addCols = this.$refs.computed.datasource.revert2Defs()
             for (let idx = 0; idx < addCols.length; ++idx) {
-                result.push({
-                    "type": addCols[idx]["type"].toLowerCase(),
-                    "title": addCols[idx]["name"]
-                })
+				if (addCols[idx]["name"] !== "") {
+					result.push({
+						"type": addCols[idx]["type"].toLowerCase(),
+						"title": addCols[idx]["name"]
+					})
+				}
             }
             return result
         },
@@ -349,15 +351,20 @@ export default {
         this.datasource.refreshDataset(this.projectId, this.datasetId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
     },
+	// updated() {
+	// 	this.computedSchema = this.computeSchema()
+	// 	this.$refs.topn.deleteOrders(this.computedSchema)
+	// },
     watch: {
         active(n) {
             if (n === 3 || n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
-            }
-
-            if (n === 4 || n === 5) {
                 this.outputsSchema = this.genOutputsSchema()
             }
+
+			if (n === 3) {
+				this.$refs.topn.deleteOrders(this.computedSchema)
+			}
 
             this.$refs.filter.validate()
             this.$refs.computed.validate()

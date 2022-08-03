@@ -35,13 +35,13 @@
                                     v-model="item.desc"
                                     active-text="降序"
                                     active-color="#13ce66" />
-                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(index)" />
+                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(item, index)" />
                         </div>
                     </div>
                 </div>
                 <div class="topn-add-btn">
                     <select v-model="placeholderSort" @change="sortInserted">
-                        <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
+                        <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                         <option value="选择列" label="选择列" />
                     </select>
                 </div>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="topn-add-btn">
                         <select v-model="placeholderKey" >
-                            <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
+                            <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                             <option value="选择列" label="选择列" />
                         </select>
                     </div>
@@ -70,12 +70,12 @@
                     <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.keys" :key="index">
                         <div class="topn-sort-item">
                             <span class="topn-sort-title">{{item}}</span>
-                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="keyDeletion(index)" />
+                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="keyDeletion(item, index)" />
                         </div>
                     </div>
                     <div class="topn-add-btn">
                         <select v-model="placeholderKey" @change="keyInserted">
-                            <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
+                            <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                             <option value="选择列" label="选择列" />
                         </select>
                     </div>
@@ -111,12 +111,14 @@ export default {
         return {
             datasource: null,
             placeholderSort: "选择列",
-            placeholderKey: "选择列"
+            placeholderKey: "选择列",
+			schemaArray: [],
+			schema: []
         }
     },
     props: {
         step: Object,
-        schema: Array,
+        // schema: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -137,26 +139,41 @@ export default {
     },
     mounted() {
         this.datasource = new PhTopNStep(this.step)
-		const ErrorVales = 
-			(this.datasource.command.firstRows < 1 && this.datasource.command.lastRows < 1) || 
-			this.datasource.command.orders.length === 0 || 
-			(!this.datasource.command.isAllCols && this.datasource.command.keys.length === 0)
-		this.$emit('statusChange', ErrorVales)
+		this.schemaArray = this.$parent.computeSchema()
+		this.schema = this.schemaArray
+		this.validate()
     },
     methods: {
+		deleteOrders(schema) {
+			this.schemaArray = schema
+			this.schema = this.schemaArray
+			const columns = schema.map(it => it.title)
+			this.datasource.command.orders = this.datasource.command.orders.filter(it => columns.includes(it.column))
+			this.datasource.command.keys = this.datasource.command.keys.filter(it => columns.includes(it.column))
+		},
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
+			this.schemaArray = this.schemaArray.filter(it => it.title !== this.placeholderSort)
             this.placeholderSort = "选择列"
         },
-        sortDeletion(idx) {
+        sortDeletion(item, idx) {
             this.datasource.command.deleteSortCloase(idx)
+			const schemaItem = this.schema.filter(it => it.title === item.column)
+			if (schemaItem.length > 0) {
+				this.schemaArray = this.schemaArray.concat(schemaItem)
+			}
         },
         keyInserted() {
             this.datasource.command.insertKeyCloase(this.placeholderKey)
+			this.schemaArray = this.schemaArray.filter(it => it.title !== this.placeholderKey)
             this.placeholderKey = "选择列"
         },
-        keyDeletion(idx) {
+        keyDeletion(item, idx) {
             this.datasource.command.deleteKeyCloase(idx)
+			const schemaItem = this.schema.filter(it => it.title === item.column)
+			if (schemaItem.length > 0) {
+				this.schemaArray = this.schemaArray.concat(schemaItem)
+			}
         },
         validate() {
 			const ErrorVales = 

@@ -91,7 +91,7 @@ export default {
         delComputedColumns(index) {
             this.datasource.command.removeComputedCol(index)
             const len = this.datasource.command.computedCols.length - 1
-            if (len > 0) 
+            if (len > 0)
                 this.computedClicked(this.datasource.command.computedCols[len], len)
         },
         itemClicked(v) {
