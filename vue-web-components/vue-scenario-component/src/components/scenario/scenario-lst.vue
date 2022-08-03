@@ -82,7 +82,7 @@
                     </div>
                     <div class="upload_bottom">
                         <div class="data_content" v-for="(scenario,index) in searchData" :key="index" ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}" @click="clickOnlyOne(scenario, index)">
-                            <div class="data_input" @click="checkedMore(scenario)">
+                            <div class="data_input" @click.stop="checkedMore(scenario)">
                                 <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
                             </div>
                             <div class="item_list">
