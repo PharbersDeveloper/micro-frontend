@@ -1,5 +1,5 @@
 <template>
-    <div class="outputs">
+    <div class="sort-outputs">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="outputs-title">
             <div class="outputs-title-p">
@@ -66,7 +66,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .outputs {
+    .sort-outputs {
         margin-top: 4px;
         min-width: 800px;
         display: flex;

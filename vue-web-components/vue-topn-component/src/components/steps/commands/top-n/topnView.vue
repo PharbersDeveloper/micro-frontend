@@ -41,7 +41,7 @@
                 </div>
                 <div class="topn-add-btn">
                     <select v-model="placeholderSort" @change="sortInserted">
-                        <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                        <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
                         <option value="选择列" label="选择列" />
                     </select>
                 </div>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="topn-add-btn">
                         <select v-model="placeholderKey" >
-                            <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                            <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
                             <option value="选择列" label="选择列" />
                         </select>
                     </div>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="topn-add-btn">
                         <select v-model="placeholderKey" @change="keyInserted">
-                            <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                            <option v-for="(item, index) in schema" :value="item.title" :key="index" :label="item.title" />
                             <option value="选择列" label="选择列" />
                         </select>
                     </div>
@@ -166,9 +166,7 @@ export default {
             this.$emit('statusChange', ErrorVales)
         }
     },
-    computed: {
-
-    },
+    computed: {},
 	watch: {
 		"datasource.command.isAllCols": function(n) {
 			if (n) { 

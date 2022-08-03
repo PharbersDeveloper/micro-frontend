@@ -1,5 +1,5 @@
 <template>
-    <div class="computed">
+    <div class="sort-computed">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="computed-title">
             <div class="computed-title-p">
@@ -129,7 +129,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .computed {
+    .sort-computed {
         margin-top: 4px;
         min-width: 800px;
         display: flex;

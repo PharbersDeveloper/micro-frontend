@@ -1,5 +1,5 @@
 <template>
-    <div class="sort">
+    <div class="sort-sort">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="sort-title">
             <div class="sort-title-p">
@@ -106,7 +106,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .sort {
+    .sort-sort {
         margin-top: 4px;
         min-width: 800px;
         display: flex;
