@@ -13,10 +13,10 @@
                  @click="computedClicked(item, index)">
                 <span>新建列名</span>
                 <el-input 
-					class="computed-item-title" 
-					@blur="blurColName(item)"
-					:class="[{'el-input-error': item.name === ''}]"
-					v-model="item.name"></el-input>
+                    class="computed-item-title" 
+                    @blur="blurColName(item)"
+                    :class="[{'el-input-error': item.name === ''}]"
+                    v-model="item.name"></el-input>
                 <span>保存为</span>
                 <select class="computed-item-type" v-model="item.type">
                     <option v-for="(op, opi) in concretDefs.typeDefs" :key="opi" :value="op.cal" :label="op.desc" />
@@ -33,15 +33,15 @@
                 <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
             </ul>
             <el-input class="computed-expression-expr"
-					:class="[{'el-input-error': currentExpr === ''}]"
-					type="textarea"
-					:rows="10"
-					v-model="currentExpr"
-					placeholder="Please input" />
+                    :class="[{'el-input-error': currentExpr === ''}]"
+                    type="textarea"
+                    :rows="10"
+                    v-model="currentExpr"
+                    placeholder="Please input" />
         </div>
 
         <div class="computed-add-button">
-            <el-button type="primary" @click="datasource.command.insertComputedCol()">添加</el-button>
+            <el-button type="primary" @click="addComputedColumns()">添加</el-button>
         </div>
     </div>
 </template>
@@ -82,6 +82,11 @@ export default {
         this.validate()
     },
     methods: {
+        addComputedColumns() {
+            this.datasource.command.insertComputedCol()
+            const len = this.datasource.command.computedCols.length - 1
+            this.computedClicked(this.datasource.command.computedCols[len], len)
+        },
         itemClicked(v) {
             this.currentExpr += "`" + v + "`"
         },
@@ -89,14 +94,14 @@ export default {
             this.currentExpr = it.expr
             this.currentIdx = idx
         },
-		blurColName(item) {
-			const schemaRepeat = this.schema.filter(it => it.src === item.name)
-			const newColRepeat = this.datasource.command.computedCols.filter(it => it.name === item.name)
-			if (schemaRepeat.length > 0 || newColRepeat.length > 1) {
-				item.name = ""
-				Message.error("列名与现有schema不能重复！", { duration: 3000} )
-			}
-		},
+        blurColName(item) {
+            const schemaRepeat = this.schema.filter(it => it.src === item.name)
+            const newColRepeat = this.datasource.command.computedCols.filter(it => it.name === item.name)
+            if (schemaRepeat.length > 0 || newColRepeat.length > 1) {
+                item.name = ""
+                Message.error("列名与现有schema不能重复！", { duration: 3000} )
+            }
+        },
         validate() {
             const nameArr = this.datasource.command.computedCols.filter(it => it.name.replace(/\s*/g,"").length === 0)
             const exprArr = this.datasource.command.computedCols.filter(it => it.expr.replace(/\s*/g,"").length === 0)
@@ -138,14 +143,14 @@ export default {
         height: fit-content;
         padding: 20px;
 
-		.el-input-error {
-			/deep/input.el-input__inner {
-				border-color: #ce1228;
-			}
-			/deep/textarea.el-textarea__inner {
-				border-color: #ce1228;
-			}
-		}
+        .el-input-error {
+            /deep/input.el-input__inner {
+                border-color: #ce1228;
+            }
+            /deep/textarea.el-textarea__inner {
+                border-color: #ce1228;
+            }
+        }
 
         .computed-title {
             display: flex;
