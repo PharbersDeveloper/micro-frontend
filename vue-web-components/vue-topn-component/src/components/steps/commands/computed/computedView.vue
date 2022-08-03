@@ -8,9 +8,10 @@
         </div>
         <div class="computed-list" v-if="datasource && datasource.command.computedCols.length > 0">
             <div class="computed-item"
-                 v-for="(item, index) in datasource.command.computedCols"
-                 :key="index"
-                 @click="computedClicked(item, index)">
+                :class="[{'active-item': index === currentIdx}]"
+                v-for="(item, index) in datasource.command.computedCols"
+                :key="index"
+                @click="computedClicked(item, index)">
                 <span>新建列名</span>
                 <el-input 
                     class="computed-item-title" 
@@ -25,7 +26,7 @@
                 <select class="computed-item-mode" v-model="datasource.command.pattern">
                     <option v-for="(op, opi) in concretDefs.pattern" :key="opi" :value="op.cal" :label="op.desc" />
                 </select>
-                <el-button type="text" @click="datasource.command.removeComputedCol(index)">删除</el-button>
+                <el-button type="text" @click.stop="delComputedColumns(index)">删除</el-button>
             </div>
         </div>
         <div class="computed-expression" v-if="datasource && datasource.command.computedCols.length > 0">
@@ -41,7 +42,7 @@
         </div>
 
         <div class="computed-add-button">
-            <el-button type="primary" @click="addComputedColumns()">添加</el-button>
+            <el-button type="primary" @click.stop="addComputedColumns()">添加</el-button>
         </div>
     </div>
 </template>
@@ -87,8 +88,15 @@ export default {
             const len = this.datasource.command.computedCols.length - 1
             this.computedClicked(this.datasource.command.computedCols[len], len)
         },
+        delComputedColumns(index) {
+            this.datasource.command.removeComputedCol(index)
+            const len = this.datasource.command.computedCols.length - 1
+            if (len > 0) 
+                this.computedClicked(this.datasource.command.computedCols[len], len)
+        },
         itemClicked(v) {
             this.currentExpr += "`" + v + "`"
+            this.datasource.command.computedCols[this.currentIdx]["expr"] = this.currentExpr
         },
         computedClicked(it, idx) {
             this.currentExpr = it.expr
@@ -122,9 +130,9 @@ export default {
 
     },
     watch: {
-        currentExpr(n) {
-            this.datasource.command.computedCols[this.currentIdx]["expr"] = n
-        }
+        // currentExpr(n) {
+        //     this.datasource.command.computedCols[this.currentIdx]["expr"] = n
+        // }
     }
 }
 </script>
@@ -174,11 +182,17 @@ export default {
             flex-direction: column;
         }
 
+        .active-item {
+            background: rgba(230, 230, 230, 0.5);
+            border-radius: 4px;
+        }
+
         .computed-item {
             display: flex;
             flex-direction: row;
             cursor: pointer;
             align-items: center;
+            padding: 0 10px;
 
             .computed-item-title {
                 width: 100px;
