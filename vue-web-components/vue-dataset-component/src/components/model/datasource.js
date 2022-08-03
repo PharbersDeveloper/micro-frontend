@@ -11,7 +11,7 @@ export default class PhDataSource {
         this.batch_size = 20
         this.curPage = 0
         this.store = new JsonApiDataStore()
-        this.dubbgerToken = "531b7999f8c1ec0739de4574d810168db08d2090c1695226efa2682cff080bb9"
+        this.dubbgerToken = "df8578e46fff0258f95195704e38f14ee98488c3b31f43199fd6225a8dba739a"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -77,5 +77,5 @@ export default class PhDataSource {
             })
     }
 
-    
+
 }
