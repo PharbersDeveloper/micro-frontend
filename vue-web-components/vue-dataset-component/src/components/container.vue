@@ -71,10 +71,11 @@
                                 <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
                             <div class="down_sel">
-                                <bp-select-vue :src="selectIcon" :choosedValue="scriptValue"
+                                <!-- TODO: @hfzhang -->
+                                <!-- <bp-select-vue :src="selectIcon" :choosedValue="scriptValue"
                                     @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
-                                </bp-select-vue>
+                                </bp-select-vue> -->
                             </div>
                             <div class="line">|</div>
                             <div class="down_sel tags_down_sel">
@@ -208,16 +209,16 @@ import clearDatasetDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
-import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
-import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+// import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
+// import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
 import { MessageBox, Message } from 'element-ui'
-import { valueEquals } from '../../../vue-resouce-component/dist/ph-resources'
-import { PhUploadDatasource } from './model/uploadDatasource'
+import PhDataSource from './model/datasource'
+// import { valueEquals } from '../../../vue-resouce-component/dist/ph-resources'
 
 
 export default {
@@ -267,7 +268,7 @@ export default {
             // currentPage: 1,
             actionsKey: "",
             preKey: "",
-            searchData: [],
+            // searchData: [],
             disabledUp: false,
             disabledForword: false
         }
@@ -277,28 +278,28 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss: [{
-                    "projectId": "",
-                    "schema": "[]",
-                    "version": "",
-                    "name": "",
-                    "label": "",
-                    "cat": "",
-                    "path": ""
-                }],
+                // dss: [{
+                //     "projectId": "",
+                //     "schema": "[]",
+                //     "version": "",
+                //     "name": "",
+                //     "label": "",
+                //     "cat": "",
+                //     "path": ""
+                // }],
                 tagsArray: []
             })
         },
         defs: {
             type: Object,
             default: function () {
-                return new PhUploadDatasource("1");
+                return new PhDagDefinitions("1");
             }
         },
-        datasource: {
+        dss: {
             type: Object,
             default: function() {
-                return new PhDataSource(1, this)
+                return new PhDataSource('1')
             }
         }
     },
@@ -307,24 +308,33 @@ export default {
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
-        bpSelectVue,
-        bpOptionVue,
+        // bpSelectVue,
+        // bpOptionVue,
         fitMaxInputDialog,
         fitMaxOutputDialog,
         selectCatalog
     },
     computed: {
-        // searchData: function () {
-        //     let searchValue = this.searchValue
-        //     this.state = 'search'
-        //     if (searchValue) {
-        //         return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-        //     }
-        //     this.sort("ascending")
-        //     return this.allData.dss
-        // }
+        searchData: function () {
+            let searchValue = this.searchValue
+            this.state = 'search'
+            if (searchValue) {
+                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+            }
+            this.sort("ascending")
+            return this.allData.dss
+        }
     },
-    mounted(){},
+    mounted() {
+        const hrefParam = href.split("&")
+        // TODO: @hfzhang 
+        const projectId = hrefParam[1].split("=")[1]
+        const projectName = hrefParam[0].split("=")[1]
+
+        if (projectId) {
+            this.datasource.refreshData(projectId)
+        }
+    },
     watch: {
         "allData.tagsArray": function () {
             this.tagsColorArray = []
@@ -356,38 +366,6 @@ export default {
         // goUp(){
         //     this.getDatasets(this.actionsKey)
         // },
-        // async getDatasets(value) {
-        //     const accessToken = this.getCookie("access_token") || "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20"
-        //     const acurl = `${hostName}/phdydatasource/query`
-        //     let acbody = {
-        //         "table": "action",
-        //         "conditions": {
-        //             "projectId": ["=", this.allData.projectId]
-        //         },
-        //         "limit": 20,
-        //         "start_key": value
-        //     }
-        //     let acoptions = {
-        //         method: "POST",
-        //         headers: {
-        //             "Authorization": accessToken,
-        //             'Content-Type': 'application/json; charset=UTF-8',
-        //             "accept": "application/json"
-        //         },
-        //         body: JSON.stringify(acbody)
-        //     }
-        //     this.actions = await fetch(acurl, acoptions).then(res=>res.json())
-        //     this.actionsKey = this.actions.meta.start_key
-        //     if(this.actionsKey == ''){
-        //         this.disabledUp = true
-        //     }
-        //     this.preKey = this.actions.meta.pre_key
-        //     if(this.preKey == ''){
-        //         this.disabledForword = true
-        //     }
-        //     this.searchDatas = this.actions.data.attributes
-        //     // this.dealActions() //处理actions数据
-        // },
         confirmeCreateCatalog(data) {
             let bool = this.checkName(data.args.param.dsName)
             if (!bool) {
@@ -395,7 +373,7 @@ export default {
                 return false
             }
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
             data.args.param.datasetArray = this.allData.dss
             data.args.param.tableName = data.args.param.dsName
@@ -417,7 +395,7 @@ export default {
         // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
             data.args.param.datasetArray = this.allData.dss
             let creatDS = true
@@ -443,7 +421,7 @@ export default {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
@@ -472,7 +450,7 @@ export default {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.deletedialogshow = false;
         },
@@ -722,16 +700,16 @@ export default {
         },
         selectDatasetIcon(cat) {
             switch (cat) {
-                case "input_index":
-                    return this.input_index_icon
-                case "output_index":
-                    return this.output_index_icon
-                case "intermediate":
-                    return this.intermediate_icon
-                case "catalog":
-                    return this.catalog_icon
-                default:
-                    return this.dataset_icon
+            case "input_index":
+                return this.input_index_icon
+            case "output_index":
+                return this.output_index_icon
+            case "intermediate":
+                return this.intermediate_icon
+            case "catalog":
+                return this.catalog_icon
+            default:
+                return this.dataset_icon
             }
         }
     }
