@@ -124,7 +124,7 @@ export async function phAnalyzeUploadDatasetEventHandler(e, route) {
 					common: {
 						traceId: deluuid,
 						projectId: params.projectId,
-						projectName: "demo",
+						projectName: params.projectName,
 						flowVersion: "developer",
 						owner: route.cookies.read("account_id"),
 						showName: decodeURI(
